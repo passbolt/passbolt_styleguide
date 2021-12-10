@@ -1,6 +1,14 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
+import {
+  mockAccountRecoveryDisableWithOrganisationKey,
+  mockAccountRecoveryEmpty,
+  mockAccountRecoveryMandatory,
+  mockAccountRecoveryMandatoryWithOrganisationKey,
+  mockAccountRecoveryOptIn, mockAccountRecoveryOptInWithOrganisationKey,
+  mockAccountRecoveryOptOut, mockAccountRecoveryOptOutWithOrganisationKey
+} from "./ManageAccountRecoveryAdministrationSettings.test.data";
 
 export default {
   title: 'Passbolt/Administration/ManageAccountRecoveryAdministrationSettings',
@@ -23,56 +31,49 @@ const Template = args =>
 export const Default = Template.bind({});
 Default.args = {
   context: {
-    locale: 'en-US'
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryEmpty
+    }
   },
-  accountRecovery: {
-    policy: 'Disable',
-  }
 };
 
 export const Mandatory = Template.bind({});
 Mandatory.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Mandatory',
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryMandatory
+    }
   }
 };
 
 export const OptOut = Template.bind({});
 OptOut.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Opt-out',
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryOptOut
+    }
   }
 };
 
 export const OptIn = Template.bind({});
 OptIn.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Opt-in',
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryOptIn
+    }
   }
 };
 
 export const DefaultWithOrganisationRecoveryKey = Template.bind({});
 DefaultWithOrganisationRecoveryKey.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Disable',
-    organisationRecoveryKey: {
-      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
-      algorithm: "RSA",
-      keyLength: 4096,
-      created: "2021-08-05T02:50:34.12",
-      expires: "Never"
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryDisableWithOrganisationKey
     }
   }
 };
@@ -80,16 +81,9 @@ DefaultWithOrganisationRecoveryKey.args = {
 export const MandatoryWithOrganisationRecoveryKey = Template.bind({});
 MandatoryWithOrganisationRecoveryKey.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Mandatory',
-    organisationRecoveryKey: {
-      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
-      algorithm: "RSA",
-      keyLength: 4096,
-      created: "2021-08-05T02:50:34.12",
-      expires: "Never"
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryMandatoryWithOrganisationKey
     }
   }
 };
@@ -97,16 +91,9 @@ MandatoryWithOrganisationRecoveryKey.args = {
 export const OptOutWithOrganisationRecoveryKey = Template.bind({});
 OptOutWithOrganisationRecoveryKey.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Opt-out',
-    organisationRecoveryKey: {
-      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
-      algorithm: "RSA",
-      keyLength: 4096,
-      created: "2021-08-05T02:50:34.12",
-      expires: "Never"
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryOptOutWithOrganisationKey
     }
   }
 };
@@ -114,16 +101,9 @@ OptOutWithOrganisationRecoveryKey.args = {
 export const OptInWithOrganisationRecoveryKey = Template.bind({});
 OptInWithOrganisationRecoveryKey.args = {
   context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: 'Opt-in',
-    organisationRecoveryKey: {
-      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
-      algorithm: "RSA",
-      keyLength: 4096,
-      created: "2021-08-05T02:50:34.12",
-      expires: "Never"
+    locale: 'en-US',
+    port: {
+      request: () => mockAccountRecoveryOptInWithOrganisationKey
     }
   }
 };
