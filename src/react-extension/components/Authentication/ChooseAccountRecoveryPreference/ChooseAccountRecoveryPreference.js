@@ -134,7 +134,7 @@ class ChooseAccountRecoveryPreference extends Component {
               <label htmlFor="statusRecoverAccountReject">
                 <span className="name"><Trans>Reject</Trans></span>
                 <span className="info">
-                  <Trans>I do not agree to share this info with my organisation recovery contacts</Trans>
+                  <Trans>I do not agree to share this info with my organization recovery contacts</Trans>
                 </span>
               </label>
             </div>
@@ -150,7 +150,7 @@ class ChooseAccountRecoveryPreference extends Component {
               <label htmlFor="statusRecoverAccountAccept">
                 <span className="name"><Trans>Accept</Trans></span>
                 <span className="info">
-                  <Trans>I agree to share this info with my organisation recovery contacts</Trans>
+                  <Trans>I agree to share this info with my organization recovery contacts</Trans>
                 </span>
               </label>
             </div>

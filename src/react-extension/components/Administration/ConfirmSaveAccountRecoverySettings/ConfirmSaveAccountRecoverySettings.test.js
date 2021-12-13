@@ -19,8 +19,8 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {
-  defaultProps, formatDateTimeAgo,
-  mockAccountRecoveryMandatoryWithOrganisationKey, mockAccountRecoveryOptInWithOrganisationKey
+  defaultProps, formatDateTimeAgo, formatDate,
+  mockAccountRecoveryMandatoryWithOrganizationKey, mockAccountRecoveryOptInWithOrganizationKey
 } from "./ConfirmSaveAccountRecoverySettings.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import ConfirmSaveAccountRecoverySettingsPage from "./ConfirmSaveAccountRecoverySettings.test.page";
@@ -51,7 +51,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.accountRecoveryPolicy).toBe('Disable');
       expect(page.accountRecoveryPolicyInfo).toBe(props.accountRecovery.policy.info);
 
-      // organisation recovery key
+      // organization recovery key
       expect(page.recoveryKeyDetailsExists()).toBeFalsy();
 
       // Save button exists
@@ -61,25 +61,26 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.cancelButton.textContent).toBe("Cancel");
     });
 
-    it('As a logged in administrator in the administration workspace, I can preview policy and organisation recovery key', async() => {
-      const props = defaultProps(mockAccountRecoveryMandatoryWithOrganisationKey);
+    it('As a logged in administrator in the administration workspace, I can preview policy and organization recovery key', async() => {
+      const props = defaultProps(mockAccountRecoveryMandatoryWithOrganizationKey);
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});
       // Policy label
       expect(page.accountRecoveryPolicy).toBe('Mandatory');
       expect(page.accountRecoveryPolicyInfo).toBe(props.accountRecovery.policy.info);
 
-      // organisation recovery key
+      // organization recovery key
       expect(page.recoveryKeyDetailsExists()).toBeTruthy();
       expect(page.recoveryKeyDetailsFingerprint).toBe("848E 95CC 7493 129A D8625831 29B8 1CA8 9360 23DD ");
-      expect(page.recoveryKeyDetailsAlgorithm).toBe(props.accountRecovery.organisationRecoveryKey.value.algorithm);
+      expect(page.recoveryKeyDetailsAlgorithm).toBe(props.accountRecovery.organizationRecoveryKey.value.algorithm);
       expect(page.recoveryKeyDetailsKeyLength).toBe("4096");
-      expect(page.recoveryKeyDetailsCreated).toBe(formatDateTimeAgo(props.accountRecovery.organisationRecoveryKey.value.created));
-      expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.accountRecovery.organisationRecoveryKey.value.expires));
+      expect(page.recoveryKeyDetailsUserIds).toBe("ada<ada@passbolt.com>betty<betty@passbolt.com>");
+      expect(page.recoveryKeyDetailsCreated).toBe(formatDate(props.accountRecovery.organizationRecoveryKey.value.created));
+      expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.accountRecovery.organizationRecoveryKey.value.expires));
     });
 
-    it('As a logged in administrator in the administration workspace, if the previous Account recovery settings state was "Disabled" I can save the Account recovery settings to enable my policy without entering the Organisation recovery key', async() => {
-      const props = defaultProps(mockAccountRecoveryOptInWithOrganisationKey); // The props to pass
+    it('As a logged in administrator in the administration workspace, if the previous Account recovery settings state was "Disabled" I can save the Account recovery settings to enable my policy without entering the Organization recovery key', async() => {
+      const props = defaultProps(mockAccountRecoveryOptInWithOrganizationKey); // The props to pass
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});
 
@@ -88,14 +89,14 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       mockContextRequest(requestMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      const accountRecoveryOrganisationPolicyDto = {
+      const accountRecoveryOrganizationPolicyDto = {
         policy: props.accountRecovery.policy.value,
-        account_recovery_organization_key: props.accountRecovery.organisationRecoveryKey.value
+        account_recovery_organization_key: props.accountRecovery.organizationRecoveryKey.value
       };
 
       await page.save();
 
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.organization.save-settings", accountRecoveryOrganisationPolicyDto);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.organization.save-settings", accountRecoveryOrganizationPolicyDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.onClose).toBeCalled();
     });

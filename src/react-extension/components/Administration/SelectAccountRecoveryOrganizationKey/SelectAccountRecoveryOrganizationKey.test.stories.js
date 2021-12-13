@@ -1,6 +1,6 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import CreateRecoverAccount from "./CreateRecoverAccount";
+import SelectAccountRecoveryOrganizationKey from "./SelectAccountRecoveryOrganizationKey";
 import "../../../../css/themes/default/api_main.css";
 import AppContext from "../../../contexts/AppContext";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
@@ -8,8 +8,8 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 
 
 export default {
-  title: 'Passbolt/Administration/CreateRecoverAccount',
-  component: CreateRecoverAccount
+  title: 'Passbolt/Administration/SelectAccountRecoveryOrganizationKey',
+  component: SelectAccountRecoveryOrganizationKey
 };
 
 const context = {
@@ -23,7 +23,7 @@ const Template = args =>
         <div className="panel middle">
           <div className="workspace-main">
             <div className="grid grid-responsive-12">
-              <Route component={routerProps => <CreateRecoverAccount {...args} {...routerProps}/>}></Route>
+              <Route component={routerProps => <SelectAccountRecoveryOrganizationKey {...args} {...routerProps}/>}></Route>
             </div>
           </div>
         </div>

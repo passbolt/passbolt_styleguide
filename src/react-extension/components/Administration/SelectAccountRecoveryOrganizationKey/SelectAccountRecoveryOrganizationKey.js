@@ -23,7 +23,7 @@ import GenerateOrganizationKey from "./GenerateOrganizationKey";
 /**
  * This component allows to display the create recover account for the administration
  */
-class CreateRecoverAccount extends React.Component {
+class SelectAccountRecoveryOrganizationKey extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -49,6 +49,7 @@ class CreateRecoverAccount extends React.Component {
    */
   bindCallbacks() {
     this.handleCloseClick = this.handleCloseClick.bind(this);
+    this.handleApplyChanges = this.handleApplyChanges.bind(this);
   }
 
   /**
@@ -56,6 +57,14 @@ class CreateRecoverAccount extends React.Component {
    */
   handleCloseClick() {
     this.props.onClose();
+  }
+
+  /**
+   * Handle apply button click.
+   */
+  handleApplyChanges(public_key, private_key) {
+    this.handleCloseClick();
+    this.props.handleUpdateOrganizationKey(public_key, private_key);
   }
 
   /**
@@ -83,14 +92,18 @@ class CreateRecoverAccount extends React.Component {
             name='Import'
             type='Import'>
             <ImportOrganizationKey
-              onClose={this.handleCloseClick}/>
+              {...this.props}
+              onClose={this.handleCloseClick}
+              onUpdateOrganizationKey={this.handleApplyChanges} />
           </Tab>
           <Tab
             key='Generate'
             name='Generate'
             type='Generate'>
             <GenerateOrganizationKey
-              onClose={this.handleCloseClick}/>
+              {...this.props}
+              onClose={this.handleCloseClick}
+              onUpdateOrganizationKey={this.handleApplyChanges} />
           </Tab>
         </Tabs>
       </DialogWrapper>
@@ -98,9 +111,10 @@ class CreateRecoverAccount extends React.Component {
   }
 }
 
-CreateRecoverAccount.propTypes = {
+SelectAccountRecoveryOrganizationKey.propTypes = {
+  handleUpdateOrganizationKey: PropTypes.func,
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(CreateRecoverAccount);
+export default withTranslation('common')(SelectAccountRecoveryOrganizationKey);

@@ -260,7 +260,7 @@ class FilterResourcesByTagsList extends React.Component {
    * @returns {boolean}
    */
   showDropFocus(tag) {
-    return tag.id === this.state.draggingOverTagId && !this.isDisabled(tag)
+    return tag.id === this.state.draggingOverTagId && !this.isDisabled(tag);
   }
 
   /**

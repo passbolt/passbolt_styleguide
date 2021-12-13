@@ -78,7 +78,8 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDrop;
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951db"], resources: [], folderParentId: null});
-      expect(props.dragContext.onDragEnd).toHaveBeenCalled();    });
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+    });
 
     it('As LU I should be able to drag and drop a folder on another folder', async() => {
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);

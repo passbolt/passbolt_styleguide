@@ -68,26 +68,26 @@ class ConfirmSaveAccountRecoverySettings extends Component {
     event.preventDefault();
     await this.toggleProcessing();
     try {
-      await this.saveAccountRecoveryOrganisationSettings();
+      await this.saveAccountRecoveryOrganizationSettings();
       await this.handleSaveSuccess();
     } catch (error) {
       await this.handleSaveError(error);
     }
   }
 
-  async saveAccountRecoveryOrganisationSettings() {
-    const accountRecoveryOrganisationPolicyDto = {
+  async saveAccountRecoveryOrganizationSettings() {
+    const accountRecoveryOrganizationPolicyDto = {
       policy: this.props.accountRecovery.policy.value,
-      account_recovery_organization_key: this.props.accountRecovery.organisationRecoveryKey.value
+      account_recovery_organization_key: this.props.accountRecovery.organizationRecoveryKey.value
     };
-    await this.props.context.port.request('passbolt.account-recovery.organization.save-settings', accountRecoveryOrganisationPolicyDto);
+    await this.props.context.port.request('passbolt.account-recovery.organization.save-settings', accountRecoveryOrganizationPolicyDto);
   }
 
   /**
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery organisation settings has been updated successfully"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery organization settings has been updated successfully"));
     this.props.onClose();
   }
 
@@ -133,15 +133,15 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   }
 
   /**
-   * Has new account recovery organisation key
+   * Has new account recovery organization key
    * @returns {boolean}
    */
-  hasNewOrganisationRecoveryKey() {
-    return this.props.accountRecovery.organisationRecoveryKey.hasChanged;
+  hasNewOrganizationRecoveryKey() {
+    return this.props.accountRecovery.organizationRecoveryKey.hasChanged;
   }
 
   /**
-   * get fingerprint
+   * format fingerprint
    * @param fingerprint
    * @returns {JSX.Element}
    */
@@ -149,6 +149,16 @@ class ConfirmSaveAccountRecoverySettings extends Component {
     fingerprint = fingerprint || "";
     const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
     return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+  }
+
+  /**
+   * format user ids
+   * @param user_ids
+   * @returns {JSX.Element}
+   */
+  formatUserIds(user_ids) {
+    user_ids = user_ids || [];
+    return user_ids.map(user => <>{user.name}&lt;{user.email}&gt;<br/></>);
   }
 
   /**
@@ -163,6 +173,15 @@ class ConfirmSaveAccountRecoverySettings extends Component {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
     return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+  }
+
+  /**
+   * Format date
+   * @param {string} date The date to format
+   * @return {string}
+   */
+  formatDate(date) {
+    return DateTime.fromJSDate(new Date(date)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
   }
 
   get policy() {
@@ -211,31 +230,35 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                 </div>
               </>
             }
-            {this.hasNewOrganisationRecoveryKey() &&
+            {this.hasNewOrganizationRecoveryKey() &&
               <>
-                <label><Trans>New Organisation Recovery Key</Trans></label>
+                <label><Trans>New Organization Recovery Key</Trans></label>
                 <div className="recovery-key-details">
                   <table className="table-info recovery-key">
                     <tbody>
+                      <tr className="user-ids">
+                        <td className="label"><Trans>Uid</Trans></td>
+                        <td className="value">{this.formatUserIds(this.props.accountRecovery.organizationRecoveryKey.value.user_ids)}</td>
+                      </tr>
                       <tr className="fingerprint">
                         <td className="label"><Trans>Fingerprint</Trans></td>
-                        <td className="value">{this.formatFingerprint(this.props.accountRecovery.organisationRecoveryKey.value.fingerprint)}</td>
+                        <td className="value">{this.formatFingerprint(this.props.accountRecovery.organizationRecoveryKey.value.fingerprint)}</td>
                       </tr>
                       <tr className="algorithm">
                         <td className="label"><Trans>Algorithm</Trans></td>
-                        <td className="value">{this.props.accountRecovery.organisationRecoveryKey.value.algorithm}</td>
+                        <td className="value">{this.props.accountRecovery.organizationRecoveryKey.value.algorithm}</td>
                       </tr>
                       <tr className="key-length">
                         <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{this.props.accountRecovery.organisationRecoveryKey.value.keyLength}</td>
+                        <td className="value">{this.props.accountRecovery.organizationRecoveryKey.value.length}</td>
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.props.accountRecovery.organisationRecoveryKey.value.created)}</td>
+                        <td className="value">{this.formatDate(this.props.accountRecovery.organizationRecoveryKey.value.created)}</td>
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.props.accountRecovery.organisationRecoveryKey.value.expires)}</td>
+                        <td className="value">{this.formatDateTimeAgo(this.props.accountRecovery.organizationRecoveryKey.value.expires)}</td>
                       </tr>
                     </tbody>
                   </table>

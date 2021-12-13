@@ -97,6 +97,13 @@ export default class ConfirmSaveAccountRecoverySettingsPage {
   }
 
   /**
+   * Returns the recovery key details user ids element
+   */
+  get recoveryKeyDetailsUserIds() {
+    return this._page.container.querySelector('.save-recovery-account-settings-dialog .form-content .recovery-key-details .user-ids .value').textContent;
+  }
+
+  /**
    * Returns the recovery key details created element
    */
   get recoveryKeyDetailsCreated() {
