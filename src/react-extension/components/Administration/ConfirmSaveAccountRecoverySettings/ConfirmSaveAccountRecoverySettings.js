@@ -1,15 +1,15 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.4.0
+ * @since         3.5.0
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
@@ -19,7 +19,6 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 
 class ConfirmSaveAccountRecoverySettings extends Component {
@@ -47,6 +46,13 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   }
 
   /**
+   * Handle close button click.
+   */
+  handleClose() {
+    this.props.onClose();
+  }
+
+  /**
    * Toggle the processing mode
    */
   async toggleProcessing() {
@@ -67,61 +73,60 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     await this.toggleProcessing();
-    try {
-      await this.saveAccountRecoveryOrganizationSettings();
-      await this.handleSaveSuccess();
-    } catch (error) {
-      await this.handleSaveError(error);
-    }
+    await this.saveAccountRecoveryOrganizationSettings();
+    this.props.onClose();
   }
 
   async saveAccountRecoveryOrganizationSettings() {
-    const accountRecoveryOrganizationPolicyDto = {
-      policy: this.props.accountRecovery.policy.value,
-      account_recovery_organization_key: this.props.accountRecovery.organizationRecoveryKey.value
-    };
-    await this.props.context.port.request('passbolt.account-recovery.organization.save-settings', accountRecoveryOrganizationPolicyDto);
+    await this.props.accountRecoveryPolicy.confirmSaveRequested();
   }
 
   /**
-   * Handle save operation success.
+   * Get the current account recovery settings
+   * @returns {null|*}
    */
-  async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery organization settings has been updated successfully"));
-    this.props.onClose();
+  get currentAccountRecoverySettings() {
+    return this.props.accountRecoveryPolicy.currentPolicy;
   }
 
   /**
-   * Handle save operation error.
-   * @param {object} error The returned error
+   * Get the current account recovery organization key
+   * @returns {null|*}
    */
-  async handleSaveError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
-    } else {
-      // Unexpected error occurred.
-      console.error(error);
-      await this.handleError(error);
-      this.setState({processing: false});
-    }
+  get currentOrganizationKey() {
+    return this.currentAccountRecoverySettings.account_recovery_organization_public_key;
   }
 
   /**
-   * handle error to display the error dialog
-   * @param error
+   * Get the current account recovery policy
+   * @returns {null|*}
    */
-  handleError(error) {
-    const errorDialogProps = {
-      title: this.translate("There was an unexpected error..."),
-      message: error.message
-    };
-    this.props.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(NotifyError);
+  get currentPolicy() {
+    return this.currentAccountRecoverySettings.policy;
   }
 
-  handleClose() {
-    this.props.onClose();
+  /**
+   * Get the new account recovery settings
+   * @returns {null|*}
+   */
+  get newAccountRecoverySettings() {
+    return this.props.accountRecoveryPolicy.newPolicy;
+  }
+
+  /**
+   * Get the new account recovery organization key
+   * @returns {null|*}
+   */
+  get newOrganizationKey() {
+    return this.newAccountRecoverySettings.account_recovery_organization_public_key;
+  }
+
+  /**
+   * Get the new account recovery policy
+   * @returns {null|*}
+   */
+  get newPolicy() {
+    return this.newAccountRecoverySettings.policy;
   }
 
   /**
@@ -129,7 +134,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * @returns {boolean}
    */
   hasNewAccountRecoveryPolicy() {
-    return this.props.accountRecovery.policy.hasChanged;
+    return this.newPolicy !== this.currentPolicy;
   }
 
   /**
@@ -137,7 +142,8 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * @returns {boolean}
    */
   hasNewOrganizationRecoveryKey() {
-    return this.props.accountRecovery.organizationRecoveryKey.hasChanged;
+    const hasCurrentOrganizationKey =  Boolean(this.currentOrganizationKey);
+    return hasCurrentOrganizationKey ? this.newOrganizationKey.fingerprint !== this.currentOrganizationKey.fingerprint : Boolean(this.newOrganizationKey);
   }
 
   /**
@@ -185,11 +191,25 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   }
 
   get policy() {
-    switch (this.props.accountRecovery.policy.value) {
+    switch (this.newPolicy) {
       case 'mandatory': return this.translate('Mandatory');
       case 'opt-out': return this.translate('Optional, Opt-out');
       case 'opt-in': return this.translate('Optional, Opt-in');
       case 'disabled': return this.translate('Disable');
+      default: return '';
+    }
+  }
+
+  /**
+   * Get the policy info to inform the admin user
+   * @returns {string}
+   */
+  get policyInfo() {
+    switch (this.newPolicy) {
+      case 'mandatory': return `${this.translate("Every user is required to provide a copy of their private key and passphrase during setup.")}\n${this.translate("Warning: You should inform your users not to store personal passwords.")}`;
+      case 'opt-out': return this.translate("Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.");
+      case 'opt-in': return this.translate("Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.");
+      case 'disabled': return `${this.translate("Backup of the private key and passphrase will not be stored. This is the safest option.")}\n${this.translate("Warning: If users lose their private key and passphrase they will not be able to recover their account.")}`;
       default: return '';
     }
   }
@@ -223,7 +243,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                     <label htmlFor="accountPolicy">
                       <span className="name">{this.policy}</span>
                       <span className="info">
-                        {this.props.accountRecovery.policy.info}
+                        {this.policyInfo}
                       </span>
                     </label>
                   </div>
@@ -238,27 +258,27 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                     <tbody>
                       <tr className="user-ids">
                         <td className="label"><Trans>Uid</Trans></td>
-                        <td className="value">{this.formatUserIds(this.props.accountRecovery.organizationRecoveryKey.value.user_ids)}</td>
+                        <td className="value">{this.formatUserIds(this.newOrganizationKey.user_ids)}</td>
                       </tr>
                       <tr className="fingerprint">
                         <td className="label"><Trans>Fingerprint</Trans></td>
-                        <td className="value">{this.formatFingerprint(this.props.accountRecovery.organizationRecoveryKey.value.fingerprint)}</td>
+                        <td className="value">{this.formatFingerprint(this.newOrganizationKey.fingerprint)}</td>
                       </tr>
                       <tr className="algorithm">
                         <td className="label"><Trans>Algorithm</Trans></td>
-                        <td className="value">{this.props.accountRecovery.organizationRecoveryKey.value.algorithm}</td>
+                        <td className="value">{this.newOrganizationKey.algorithm}</td>
                       </tr>
                       <tr className="key-length">
                         <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{this.props.accountRecovery.organizationRecoveryKey.value.length}</td>
+                        <td className="value">{this.newOrganizationKey.length}</td>
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        <td className="value">{this.formatDate(this.props.accountRecovery.organizationRecoveryKey.value.created)}</td>
+                        <td className="value">{this.formatDate(this.newOrganizationKey.created)}</td>
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.props.accountRecovery.organizationRecoveryKey.value.expires)}</td>
+                        <td className="value">{this.formatDateTimeAgo(this.newOrganizationKey.expires)}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -295,7 +315,7 @@ ConfirmSaveAccountRecoverySettings.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func, // The close callback
   dialogContext: PropTypes.any, // The dialog context
-  accountRecovery: PropTypes.any, // The account recovery
+  accountRecoveryPolicy: PropTypes.any, // The account recovery
   actionFeedbackContext: PropTypes.object, // the action feeedback context
   t: PropTypes.func, // The translation function
 };

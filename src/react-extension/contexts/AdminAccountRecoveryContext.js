@@ -24,6 +24,8 @@ export const AdminAccountRecoveryContext = React.createContext({
   }, // Whenever the account recovery policy is requested
   changePolicy: () => {
   }, // Whenever the policy has changed
+  resetPolicy: () => {
+  }, // Whenever the policy needs to be reset
   initiateSaveRequested: () => {
   }, // Whenever the initialization of the save is requested
   confirmSaveRequested: () => {
@@ -42,7 +44,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = Object.assign(this.defaultState, props.value);
+    this.state = this.defaultState;
   }
 
   /**
@@ -53,12 +55,13 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       currentPolicy: null, // The current policy
       newPolicy: null, // The new policy
       hasChanged: false, // If the policy has changed
-      step: AdminAccountRecoveryContextState.INITIAL_STATE, // Step for the save process
+      step: AdminAccountRecoveryContextStep.INITIAL_STATE, // Step for the save process
       findAccountRecoveryPolicy: this.findAccountRecoveryPolicy.bind(this), // Whenever the account recovery policy is requested
       changePolicy: this.changePolicy.bind(this), // Whenever the policy has changed
+      resetPolicy: this.resetPolicy.bind(this), // Whenever the policy needs to be reset
       initiateSaveRequested: this.initiateSaveRequested.bind(this), // Whenever the initialization of the save is requested
       confirmSaveRequested: this.confirmSaveRequested.bind(this), // Whenever the confirmation of save is requested
-      save: this.save.bind(this) // Whenever the save is requested
+      save: this.save.bind(this), // Whenever the save is requested
     };
   }
 
@@ -67,15 +70,13 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   async findAccountRecoveryPolicy() {
     const currentPolicy = await this.props.context.port.request('passbolt.account-recovery.get');
-    await this.setState({currentPolicy});
+    await this.setState({currentPolicy, newPolicy: currentPolicy});
   }
-
 
   /**
    * Change the policy
    *
    * @param newPolicy
-   * @returns {Promise<void>}
    */
   async changePolicy(newPolicy) {
     const hasChanged = this.checkDiffBetweenPolicy(this.state.currentPolicy, newPolicy);
@@ -90,22 +91,34 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   checkDiffBetweenPolicy(currentPolicy, newPolicy) {
     if (currentPolicy.policy !== newPolicy.policy) {
-      return true;
+      const isPolicyDisabled = newPolicy.policy === 'disabled';
+      const hasOrganisationKey = Boolean(newPolicy.account_recovery_organization_public_key);
+      // If policy is not disabled, the new policy needs to have an organization public key
+      return isPolicyDisabled || hasOrganisationKey;
     } else if (currentPolicy.account_recovery_organization_public_key && newPolicy.account_recovery_organization_public_key) {
       if (currentPolicy.account_recovery_organization_public_key.fingerprint !==  newPolicy.account_recovery_organization_public_key.fingerprint) {
         return true;
       }
-    } else if (newPolicy.account_recovery_organization_public_key) {
+    } else if (newPolicy.account_recovery_organization_public_key && newPolicy.policy !== 'disabled') {
       return true;
     }
     return false;
   }
 
   /**
+   * Reset the policy
+   *
+   */
+  async resetPolicy() {
+    const hasChanged = false;
+    await this.setState({newPolicy: this.state.currentPolicy, hasChanged});
+  }
+
+  /**
    * Whenever the initiate save is requested
    */
   async initiateSaveRequested() {
-    const step = AdminAccountRecoveryContextState.DISPLAY_SUMMARY;
+    const step = AdminAccountRecoveryContextStep.DISPLAY_SUMMARY;
     await this.setState({step});
   }
 
@@ -113,17 +126,23 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * Whenever the confirm save is requested
    */
   async confirmSaveRequested() {
-    const step = AdminAccountRecoveryContextState.ENTER_CURRENT_ORK;
-    await this.setState({step});
+    if (this.state.currentPolicy.account_recovery_organization_public_key) {
+      const step = AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK;
+      await this.setState({step});
+    } else {
+      await this.save();
+    }
   }
 
   /**
    * Whenever the save has been requested
    */
   async save() {
+    // TODO maybe to adapt the save parameters
     await this.props.context.port.request('passbolt.account-recovery.save-organization-settings', this.state.newPolicy);
     const currentPolicy = this.state.newPolicy;
-    await this.setState({currentPolicy});
+    const step = AdminAccountRecoveryContextStep.INITIAL_STATE;
+    await this.setState({currentPolicy, step});
   }
 
   /**
@@ -141,7 +160,6 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
 
 AdminAccountRecoveryContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  value: PropTypes.any, // The initial value of the context
   children: PropTypes.any // The children components
 };
 export default withAppContext(AdminAccountRecoveryContextProvider);
@@ -156,7 +174,7 @@ export function withAdminAccountRecovery(WrappedComponent) {
       return (
         <AdminAccountRecoveryContext.Consumer>
           {
-            AdminAccountRecoveryContext => <WrappedComponent adminAccountRecoveryContext={AdminAccountRecoveryContext} {...this.props} />
+            adminAccountRecoveryContext => <WrappedComponent adminAccountRecoveryContext={adminAccountRecoveryContext} {...this.props} />
           }
         </AdminAccountRecoveryContext.Consumer>
       );
@@ -167,7 +185,7 @@ export function withAdminAccountRecovery(WrappedComponent) {
 /**
  * The admin account recovery types of state
  */
-export const AdminAccountRecoveryContextState = {
+export const AdminAccountRecoveryContextStep = {
   INITIAL_STATE: 'Initial State',
   DISPLAY_SUMMARY: 'Display summary',
   ENTER_CURRENT_ORK: 'Enter current ork',

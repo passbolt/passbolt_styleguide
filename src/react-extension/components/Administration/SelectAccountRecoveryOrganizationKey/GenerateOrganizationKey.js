@@ -317,7 +317,7 @@ class GenerateOrganizationKey extends React.Component {
       password: this.state.password,
     };
 
-    return await this.props.context.port.request("passbolt.account-recovery.organization.generate-key", generateGpgKeyDto);
+    return await this.props.context.port.request("passbolt.account-recovery.generate-organization-key", generateGpgKeyDto);
   }
 
   /**

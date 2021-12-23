@@ -2,12 +2,9 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ManageAccountRecoveryAdministrationSettings from "./ManageAccountRecoveryAdministrationSettings";
 import {
-  mockAccountRecoveryDisableWithOrganizationKey,
-  mockAccountRecoveryEmpty,
-  mockAccountRecoveryMandatory,
-  mockAccountRecoveryMandatoryWithOrganizationKey,
-  mockAccountRecoveryOptIn, mockAccountRecoveryOptInWithOrganizationKey,
-  mockAccountRecoveryOptOut, mockAccountRecoveryOptOutWithOrganizationKey
+  disabledPolicyProps, disabledPolicyPropsWithOrganisationKey,
+  mandatoryPolicyProps, mandatoryPolicyPropsWithOrganisationKey, optInPolicyProps, optInPolicyPropsWithOrganisationKey,
+  optOutPolicyProps, optOutPolicyPropsWithOrganisationKey
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
 
 export default {
@@ -29,81 +26,25 @@ const Template = args =>
   </MemoryRouter>;
 
 export const Default = Template.bind({});
-Default.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryEmpty
-    }
-  },
-};
+Default.args = disabledPolicyProps();
 
 export const Mandatory = Template.bind({});
-Mandatory.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryMandatory
-    }
-  }
-};
+Mandatory.args = mandatoryPolicyProps();
 
 export const OptOut = Template.bind({});
-OptOut.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryOptOut
-    }
-  }
-};
+OptOut.args = optOutPolicyProps();
 
 export const OptIn = Template.bind({});
-OptIn.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryOptIn
-    }
-  }
-};
+OptIn.args = optInPolicyProps();
 
-export const DefaultWithOrganizationRecoveryKey = Template.bind({});
-DefaultWithOrganizationRecoveryKey.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryDisableWithOrganizationKey
-    }
-  }
-};
+export const DefaultWithOrganisationRecoveryKey = Template.bind({});
+DefaultWithOrganisationRecoveryKey.args = disabledPolicyPropsWithOrganisationKey();
 
-export const MandatoryWithOrganizationRecoveryKey = Template.bind({});
-MandatoryWithOrganizationRecoveryKey.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryMandatoryWithOrganizationKey
-    }
-  }
-};
+export const MandatoryWithOrganisationRecoveryKey = Template.bind({});
+MandatoryWithOrganisationRecoveryKey.args = mandatoryPolicyPropsWithOrganisationKey();
 
-export const OptOutWithOrganizationRecoveryKey = Template.bind({});
-OptOutWithOrganizationRecoveryKey.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryOptOutWithOrganizationKey
-    }
-  }
-};
+export const OptOutWithOrganisationRecoveryKey = Template.bind({});
+OptOutWithOrganisationRecoveryKey.args = optOutPolicyPropsWithOrganisationKey();
 
-export const OptInWithOrganizationRecoveryKey = Template.bind({});
-OptInWithOrganizationRecoveryKey.args = {
-  context: {
-    locale: 'en-US',
-    port: {
-      request: () => mockAccountRecoveryOptInWithOrganizationKey
-    }
-  }
-};
+export const OptInWithOrganisationRecoveryKey = Template.bind({});
+OptInWithOrganisationRecoveryKey.args = optInPolicyPropsWithOrganisationKey();

@@ -13,7 +13,7 @@
  */
 
 import {defaultProps} from "./AdminAccountRecoveryContext.test.data";
-import {AdminAccountRecoveryContextProvider, AdminAccountRecoveryContextState} from "./AdminAccountRecoveryContext";
+import {AdminAccountRecoveryContextProvider, AdminAccountRecoveryContextStep} from "./AdminAccountRecoveryContext";
 import {clear} from 'jest-useragent-mock';
 
 beforeEach(() => {
@@ -36,7 +36,7 @@ describe("AdminAccountRecovery Context", () => {
     });
 
     it('As AD I should start with the state INITIAL_STATE', () => {
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextState.INITIAL_STATE);
+      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
     });
 
     it('As AD I should get the current policy', async() => {
@@ -55,7 +55,14 @@ describe("AdminAccountRecovery Context", () => {
         policy: "disabled"
       };
       const newPolicy = {
-        policy: "mandatory"
+        policy: "mandatory",
+        account_recovery_organization_public_key: {
+          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+          algorithm: "RSA",
+          length: "4096",
+          created: "2020-09-01T13:11:08+00:00",
+          expires: "Never"
+        }
       };
       const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
       jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
@@ -65,16 +72,34 @@ describe("AdminAccountRecovery Context", () => {
       await adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);
       expect(adminAccountRecoveryContext.state.hasChanged).toBeTruthy();
+      await adminAccountRecoveryContext.confirmSaveRequested();
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-settings", newPolicy);
+      expect(adminAccountRecoveryContext.state.currentPolicy).toBe(newPolicy);
+      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
     });
 
     it('As AD I should initiate the save with the DISPLAY_SUMMARY step', async() => {
       await adminAccountRecoveryContext.initiateSaveRequested();
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextState.DISPLAY_SUMMARY);
+      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.DISPLAY_SUMMARY);
     });
 
     it('As AD I should confirm the save with the DISPLAY_SUMMARY step', async() => {
+      const currentPolicy = {
+        policy: "mandatory",
+        account_recovery_organization_public_key: {
+          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+          algorithm: "RSA",
+          length: "4096",
+          created: "2020-09-01T13:11:08+00:00",
+          expires: "Never"
+        }
+      };
+      const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
+      jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
+      await adminAccountRecoveryContext.findAccountRecoveryPolicy();
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get");
       await adminAccountRecoveryContext.confirmSaveRequested();
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextState.ENTER_CURRENT_ORK);
+      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK);
     });
 
     it('As AD I should save my new policy', async() => {
@@ -101,6 +126,7 @@ describe("AdminAccountRecovery Context", () => {
       await adminAccountRecoveryContext.save();
       expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-settings", newPolicy);
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(newPolicy);
+      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
     });
   });
 });

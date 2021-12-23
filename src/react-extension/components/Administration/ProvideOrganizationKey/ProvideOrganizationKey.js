@@ -21,6 +21,9 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import {withAppContext} from "../../../contexts/AppContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../contexts/DialogContext";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -47,8 +50,8 @@ class ProvideOrganizationKey extends React.Component {
   get defaultState() {
     return {
       processing: false, // component is processing or not
-      key: "", // The subscription key
-      keyError: "", // The error subscription key
+      key: "", // The organization recovery key
+      keyError: "", // The error organization recovery key
       password: "",
       passwordError: "",
       passwordWarning: "",
@@ -274,6 +277,51 @@ class ProvideOrganizationKey extends React.Component {
       this.handleValidateError();
       await this.toggleProcessing();
       return;
+    } else {
+      /*
+       * const privateGpgKeyDto = {
+       *   armored_key: this.state.key,
+       *   passphrase: this.state.password
+       * };
+       */
+      try {
+        /*
+         *  TODO maybe to adapt the validate parameters
+         * await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', privateGpgKeyDto, this.props.accountRecoveryPolicy.account_recovery_organization_public_key);
+         */
+        await this.props.accountRecoveryPolicy.save();
+        await this.handleSaveSuccess();
+      } catch (error) {
+        await this.handleSaveError(error);
+      }
+    }
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The organization recovery policy has been updated successfully"));
+    this.props.onClose();
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   */
+  async handleSaveError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      this.setState({processing: false});
+    } else {
+      // Unexpected error occurred.
+      console.error(error);
+      const errorDialogProps = {
+        title: this.translate("There was an unexpected error..."),
+        message: error.message
+      };
+      this.props.context.setContext({errorDialogProps});
+      this.props.dialogContext.open(NotifyError);
     }
   }
 
@@ -433,7 +481,10 @@ class ProvideOrganizationKey extends React.Component {
 ProvideOrganizationKey.propTypes = {
   context: PropTypes.any, // The application context provider
   onClose: PropTypes.func,
+  actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.any, // The dialog context
+  accountRecoveryPolicy: PropTypes.any, // The account recovery policy
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ProvideOrganizationKey));
+export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(ProvideOrganizationKey))));
