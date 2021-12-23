@@ -46,7 +46,7 @@ export class UserSettingsContextProvider extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = Object.assign(this.defaultState, props.value);
+    this.state = this.defaultState;
   }
 
   /**
@@ -144,7 +144,6 @@ export class UserSettingsContextProvider extends React.Component {
 
 UserSettingsContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  value: PropTypes.any, // The initial value of the context
   children: PropTypes.any // The children components
 };
 export default withAppContext(UserSettingsContextProvider);

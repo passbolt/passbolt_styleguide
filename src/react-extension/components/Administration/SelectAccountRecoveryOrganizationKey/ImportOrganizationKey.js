@@ -104,7 +104,7 @@ class ImportOrganizationKey extends React.Component {
     if (key === "") {
       return Promise.reject(new Error(this.translate("The key can't be empty.")));
     }
-    return await this.props.context.port.request('passbolt.account-recovery.organization.validate-key', {armored_key: key});
+    return await this.props.context.port.request('passbolt.account-recovery.validate-organization-key', {armored_key: key});
   }
 
   /**

@@ -33,12 +33,8 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
     );
   }
 
-  rerender(props) {
-    this._page.rerender(
-      <MockTranslationProvider>
-        <ManageAccountRecoveryAdministrationSettings {...props}/>
-      </MockTranslationProvider>
-    );
+  unmount() {
+    this._page.unmount();
   }
 
   /**

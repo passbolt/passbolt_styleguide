@@ -2,8 +2,8 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ConfirmSaveAccountRecoverySettings from "./ConfirmSaveAccountRecoverySettings";
 import {
-  mockAccountRecoveryDisableWithOrganizationKey,
-  mockAccountRecoveryMandatory
+  disabledPolicyProps, mandatoryPolicyPropsWithOrganisationKey,
+  optInPolicyPropsWithOrganisationKey, optOutPolicyPropsWithOrganisationKey
 } from "./ConfirmSaveAccountRecoverySettings.test.data";
 
 
@@ -17,42 +17,14 @@ const Template = args =>
     <Route component={routerProps => <ConfirmSaveAccountRecoverySettings {...args} {...routerProps}/>}></Route>
   </MemoryRouter>;
 
-export const Mandatory = Template.bind({});
-Mandatory.args = {
-  context: {
-    locale: 'en-US'
-  },
-  mockAccountRecoveryMandatory
-};
+export const Disabled = Template.bind({});
+Disabled.args = disabledPolicyProps();
 
 export const MandatoryWithOrganizationKey = Template.bind({});
-MandatoryWithOrganizationKey.args = {
-  context: {
-    locale: 'en-US'
-  },
-  mockAccountRecoveryDisableWithOrganizationKey
-};
+MandatoryWithOrganizationKey.args = mandatoryPolicyPropsWithOrganisationKey();
 
-export const OrganizationRecoveryKey = Template.bind({});
-OrganizationRecoveryKey.args = {
-  context: {
-    locale: 'en-US'
-  },
-  accountRecovery: {
-    policy: {
-      value: 'mandatory',
-      info: "",
-      hasChanged: false
-    },
-    organizationRecoveryKey: {
-      value: {
-        fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
-        algorithm: "RSA",
-        keyLength: 4096,
-        created: "2021-08-05T02:50:34.12",
-        expires: "Never"
-      },
-      hasChanged: true
-    }
-  }
-};
+export const OptInWithOrganizationKey = Template.bind({});
+OptInWithOrganizationKey.args = optInPolicyPropsWithOrganisationKey();
+
+export const OptOutWithOrganizationKey = Template.bind({});
+OptOutWithOrganizationKey.args = optOutPolicyPropsWithOrganisationKey();

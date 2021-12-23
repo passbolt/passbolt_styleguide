@@ -16,6 +16,8 @@ import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import DisplayAdministrationWorkspaceActions
+  from "../components/Administration/DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -34,6 +36,9 @@ export const AdministrationWorkspaceContext = React.createContext({
     editSubscriptionKey: false, // Must edit subscription key
     refreshSubscriptionKey: false // Must refresh the subscription key
   },
+  administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
+  setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
+  resetDisplayAdministrationWorkspaceAction: () => {}, // Whenever the reset of the display workspace action is requested
   onGetMfaRequested: () => {}, // Whenever the user access to the Mfa page
   onSaveMfaRequested: () => {}, // Whenever the user wants save Mfa settings
   onGetUsersDirectoryRequested: () => {}, // Whenever the user access to the users directory page
@@ -89,6 +94,9 @@ class AdministrationWorkspaceContextProvider extends React.Component {
         editSubscriptionKey: false, // Must edit subscription key
         refreshSubscriptionKey: false // Must refresh the susbcription key
       },
+      administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
+      setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
+      resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
       onGetMfaRequested: this.onGetMfaRequested.bind(this), // Whenever the user access to the Mfa page
       onSaveMfaRequested: this.onSaveMfaRequested.bind(this), // Whenever the user wants save the Mfa page
       onGetUsersDirectoryRequested: this.onGetUsersDirectoryRequested.bind(this), // Whenever the user access to the users directory page
@@ -248,6 +256,21 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
     }
     await this.setState({selectedAdministration, can, must});
+  }
+
+  /**
+   * Set the display of the administration workspace action
+   * @param administrationWorkspaceAction
+   */
+  setDisplayAdministrationWorkspaceAction(administrationWorkspaceAction) {
+    this.setState({administrationWorkspaceAction});
+  }
+
+  /**
+   * Reset the display of the administration workspace action
+   */
+  resetDisplayAdministrationWorkspaceAction() {
+    this.setState({administrationWorkspaceAction: DisplayAdministrationWorkspaceActions});
   }
 
   /**
