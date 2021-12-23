@@ -51,7 +51,7 @@ describe("As LU I should handle session expired", () => {
   });
 
 
-  it('As LU I should open a dialog if the session is expired',  async () => {
+  it('As LU I should open a dialog if the session is expired',  async() => {
     const requestMockImpl = () => false;
     mockContextRequest(requestMockImpl);
     // Fast-forward until all timers have been executed

@@ -87,7 +87,7 @@ describe("As LU I should see each folders", () => {
       await page.filterResourcesByFoldersItem.onDropFolder(3);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
-      expect(appContext.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951dc"], resources:[], folderParentId: foldersMock[1].id});
+      expect(appContext.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951dc"], resources: [], folderParentId: foldersMock[1].id});
     });
 
     it('As LU I should be able to close folder to hide the child folders', async() => {

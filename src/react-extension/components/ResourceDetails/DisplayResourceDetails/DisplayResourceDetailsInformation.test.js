@@ -23,6 +23,7 @@ import {
 import DisplayResourceDetailsInformationPage from "./DisplayResourceDetailsInformation.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/dom";
+import {DateTime} from "luxon";
 
 beforeEach(() => {
   jest.resetModules();
@@ -56,6 +57,8 @@ describe("See information", () => {
       page = new DisplayResourceDetailsInformationPage(context, props);
       await waitFor(() => {});
 
+      const modificationDate = DateTime.fromISO(props.resourceWorkspaceContext.details.resource.modified).toRelative();
+      const creationDate = DateTime.fromISO(props.resourceWorkspaceContext.details.resource.created).toRelative();
       expect(page.displayInformationList.usernameLabel).toBe('Username');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
       expect(page.displayInformationList.passwordLabel).toBe('Password');
@@ -63,11 +66,11 @@ describe("See information", () => {
       expect(page.displayInformationList.uriLabel).toBe('URI');
       expect(page.displayInformationList.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.uri);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
-      expect(page.displayInformationList.modified(1).textContent).toBe('1 year ago');
+      expect(page.displayInformationList.modified(1).textContent).toBe(modificationDate);
       expect(page.displayInformationList.modifiedByLabel(1)).toBe('Modified by');
       expect(page.displayInformationList.modifiedBy(1).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.modifiedLabel(2)).toBe('Created');
-      expect(page.displayInformationList.modified(2).textContent).toBe('1 year ago');
+      expect(page.displayInformationList.modified(2).textContent).toBe(creationDate);
       expect(page.displayInformationList.modifiedByLabel(2)).toBe('Created by');
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');

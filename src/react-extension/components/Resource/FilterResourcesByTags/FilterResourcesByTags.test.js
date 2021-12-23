@@ -77,7 +77,7 @@ describe("See tags", () => {
 
     it('As LU I should be able to drop a resource on tag', async() => {
       await page.sidebarTagFilterSection.onDropTag(3);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {"resources": [resource.id],"tag": tagsMock[1]});
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {"resources": [resource.id], "tag": tagsMock[1]});
     });
 
     it('As LU I should see tags disabled if a resource is dragging', async() => {

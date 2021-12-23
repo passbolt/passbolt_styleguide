@@ -132,7 +132,7 @@ class InFormCallToActionField {
     iframe.style.border = 0;
     iframe.style.width = '18px';
     iframe.style.height = '18px';
-    iframe.style.zIndex = "1000";  // For you Yahoo with love
+    iframe.style.zIndex = "123456";  // For you Yahoo with love
     iframe.contentWindow.location = `${browserExtensionUrl}data/passbolt-iframe-in-form-call-to-action.html?passbolt=passbolt-iframe-in-form-call-to-action`;
     return iframe;
   }
