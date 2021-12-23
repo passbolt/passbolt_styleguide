@@ -9,9 +9,9 @@ export default {
 };
 
 const Template = args =>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayProgress {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>;
+  <MemoryRouter initialEntries={['/']}>
+    <Route component={routerProps => <DisplayProgress {...args} {...routerProps}/>}></Route>
+  </MemoryRouter>;
 
 
 export const Initial = Template.bind({});

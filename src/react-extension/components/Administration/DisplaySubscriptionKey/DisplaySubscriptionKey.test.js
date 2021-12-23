@@ -185,7 +185,7 @@ describe("As AD I should see the subscription", () => {
       expect(page.email).toBe(mockSubscriptionUpdated.email);
       expect(page.users).toBe(`${mockSubscriptionUpdated.users} (currently: ${mockUsers.length})`);
       expect(page.created).toBe(`${formatDate(mockSubscriptionUpdated.created)}`);
-      expect(page.expiry).toBe(`${formatDate(mockSubscriptionUpdated.expiry)} (${DateTime.fromISO(mockSubscriptionUpdated.expiry).toRelative()})`);
+      expect(page.expiry).toBe(`${formatDate(mockSubscriptionUpdated.expiry)} (expired ${DateTime.fromISO(mockSubscriptionUpdated.expiry).toRelative()})`);
       expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
     });
   });
