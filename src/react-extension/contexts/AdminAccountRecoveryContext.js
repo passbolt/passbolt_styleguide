@@ -144,10 +144,12 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
   /**
    * Whenever the save has been requested
    */
-  async save() {
-    // TODO maybe to adapt the save parameters
-    await this.props.context.port.request('passbolt.account-recovery.save-organization-settings', this.state.newPolicy);
+  async save(privateGpgKeyDto) {
+    await this.props.context.port.request('passbolt.account-recovery.save-organization-settings', this.state.newPolicy, this.state.currentPolicy, privateGpgKeyDto);
     const currentPolicy = this.state.newPolicy;
+    if (currentPolicy.policy === "disabled") {
+      currentPolicy.account_recovery_organization_public_key = null;
+    }
     const step = AdminAccountRecoveryContextStep.INITIAL_STATE;
     this.setState({currentPolicy, step, hasChanged: false});
   }
