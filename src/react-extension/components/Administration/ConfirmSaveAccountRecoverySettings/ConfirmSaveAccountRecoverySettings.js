@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.5.0
  */
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -19,7 +19,6 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
 
 class ConfirmSaveAccountRecoverySettings extends Component {
   constructor(props) {
@@ -49,7 +48,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.props.onClose();
+    this.props.onCancel();
   }
 
   /**
@@ -74,11 +73,10 @@ class ConfirmSaveAccountRecoverySettings extends Component {
     event.preventDefault();
     await this.toggleProcessing();
     await this.saveAccountRecoveryOrganizationSettings();
-    this.props.onClose();
   }
 
   async saveAccountRecoveryOrganizationSettings() {
-    await this.props.accountRecoveryPolicy.confirmSaveRequested();
+    await this.props.confirmSaveRequested();
   }
 
   /**
@@ -164,7 +162,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   formatUserIds(user_ids) {
     user_ids = user_ids || [];
-    return user_ids.map(user => <>{user.name}&lt;{user.email}&gt;<br/></>);
+    return user_ids.map((user, id) => <Fragment key={id}>{user.name}&lt;{user.email}&gt;<br/></Fragment>);
   }
 
   /**
@@ -313,10 +311,10 @@ class ConfirmSaveAccountRecoverySettings extends Component {
 
 ConfirmSaveAccountRecoverySettings.propTypes = {
   context: PropTypes.any, // The application context
-  onClose: PropTypes.func, // The close callback
-  dialogContext: PropTypes.any, // The dialog context
-  accountRecoveryPolicy: PropTypes.any, // The account recovery
+  onCancel: PropTypes.func, // The cancel callback
+  confirmSaveRequested: PropTypes.func,
+  accountRecoveryPolicy: PropTypes.object, // The account recovery
   actionFeedbackContext: PropTypes.object, // the action feeedback context
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(ConfirmSaveAccountRecoverySettings))));
+export default withAppContext(withActionFeedback(withTranslation('common')(ConfirmSaveAccountRecoverySettings)));

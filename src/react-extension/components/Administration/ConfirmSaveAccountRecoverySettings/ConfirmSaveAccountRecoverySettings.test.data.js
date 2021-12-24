@@ -30,9 +30,9 @@ export function defaultProps() {
           expires: "Never"
         }
       },
-      confirmSaveRequested: jest.fn(),
     },
-    onClose: jest.fn()
+    onCancel: jest.fn(),
+    confirmSaveRequested: jest.fn(),
   };
 }
 
@@ -66,9 +66,9 @@ export function hasChangedPolicyProps() {
           expires: "Never"
         }
       },
-      confirmSaveRequested: jest.fn(),
     },
-    onClose: jest.fn()
+    onCancel: jest.fn(),
+    confirmSaveRequested: jest.fn(),
   };
 }
 
@@ -113,9 +113,9 @@ export function disabledPolicyProps() {
       newPolicy: {
         policy: 'disabled',
       },
-      confirmSaveRequested: () => {},
     },
-    onClose: () => {}
+    onCancel: jest.fn(),
+    confirmSaveRequested: jest.fn(),
   };
 }
 
@@ -142,9 +142,9 @@ export function mandatoryPolicyPropsWithOrganisationKey() {
           expires: "Never"
         }
       },
-      confirmSaveRequested: () => {},
     },
-    onClose: () => {}
+    onCancel: jest.fn(),
+    confirmSaveRequested: jest.fn(),
   };
 }
 
@@ -171,9 +171,9 @@ export function optInPolicyPropsWithOrganisationKey() {
           expires: "Never"
         }
       },
-      confirmSaveRequested: () => {},
     },
-    onClose: () => {}
+    onCancel: jest.fn(),
+    confirmSaveRequested: jest.fn(),
   };
 }
 
@@ -200,8 +200,8 @@ export function optOutPolicyPropsWithOrganisationKey() {
           expires: "Never"
         }
       },
-      confirmSaveRequested: () => {},
     },
-    onClose: () => {}
+    onCancel: jest.fn(),
+    confirmSaveRequested: jest.fn(),
   };
 }

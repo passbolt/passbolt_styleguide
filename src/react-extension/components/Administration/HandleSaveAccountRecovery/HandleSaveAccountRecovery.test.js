@@ -37,22 +37,34 @@ describe("As AD I can see the dialog of the different save step of account recov
   it('As AD I should see the confirm save account recovery settings', async() => {
     const props = defaultProps(AdminAccountRecoveryContextStep.DISPLAY_SUMMARY);
     new HandleSaveAccountRecoveryPage(props);
-    const accountRecoveryPolicy = {
-      currentPolicy: props.adminAccountRecoveryContext.currentPolicy,
-      newPolicy: props.adminAccountRecoveryContext.newPolicy,
-      confirmSaveRequested: props.adminAccountRecoveryContext.confirmSaveRequested
+
+    const expectDialogProps = {
+      accountRecoveryPolicy: {
+        currentPolicy: props.adminAccountRecoveryContext.currentPolicy,
+        newPolicy: props.adminAccountRecoveryContext.newPolicy,
+      },
+      onCancel: expect.any(Function),
+      onError: expect.any(Function),
+      confirmSaveRequested: expect.any(Function)
     };
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmSaveAccountRecoverySettings, {accountRecoveryPolicy});
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmSaveAccountRecoverySettings, expect.objectContaining(expectDialogProps));
   });
 
-  it('As AD I should see the provide ork', async() => {
+  it('As AD I should see the provided ork', async() => {
     const props = defaultProps(AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK);
     new HandleSaveAccountRecoveryPage(props);
-    const accountRecoveryPolicy = {
-      currentPolicy: props.adminAccountRecoveryContext.currentPolicy,
-      newPolicy: props.adminAccountRecoveryContext.newPolicy,
-      save: props.adminAccountRecoveryContext.save
+
+    const expectDialogProps = {
+      accountRecoveryPolicy: {
+        currentPolicy: props.adminAccountRecoveryContext.currentPolicy,
+        newPolicy: props.adminAccountRecoveryContext.newPolicy,
+      },
+      onCancel: expect.any(Function),
+      onError: expect.any(Function),
+      save:  expect.any(Function)
     };
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ProvideOrganizationKey, {accountRecoveryPolicy});
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ProvideOrganizationKey, expect.objectContaining(expectDialogProps));
   });
 });

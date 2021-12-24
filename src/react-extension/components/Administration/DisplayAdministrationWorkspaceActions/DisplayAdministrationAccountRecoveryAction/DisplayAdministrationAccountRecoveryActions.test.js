@@ -27,13 +27,13 @@ beforeEach(() => {
 describe("As AD I can see the administration account recovery action", () => {
   let page; // The page to test against
 
-  it('As AD I should see only the reset button enabled for administration account recovery action', async() => {
+  it('As AD I should see both the save and the reset buttons disabled for administration account recovery action', async() => {
     const props = defaultProps(false);
     page = new DisplayAdministrationAccountRecoveryActionsPage(props);
     expect(page.exists()).toBeTruthy();
     expect(page.count).toBe(2);
     expect(page.saveButton.className).toBe('button disabled');
-    expect(page.resetButton.className).toBe('button');
+    expect(page.resetButton.className).toBe('button disabled');
     await page.reset();
     expect(props.adminAccountRecoveryContext.resetPolicy).toHaveBeenCalled();
   });
@@ -44,7 +44,7 @@ describe("As AD I can see the administration account recovery action", () => {
     expect(page.exists()).toBeTruthy();
     expect(page.count).toBe(2);
     expect(page.saveButton.className).toBe('button ');
-    expect(page.resetButton.className).toBe('button');
+    expect(page.resetButton.className).toBe('button ');
     await page.save();
     expect(props.adminAccountRecoveryContext.initiateSaveRequested).toHaveBeenCalled();
   });
