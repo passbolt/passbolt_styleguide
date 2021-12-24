@@ -61,6 +61,14 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
+   * Is save button enable
+   */
+  isResetEnabled() {
+    return this.props.adminAccountRecoveryContext.hasChanged;
+  }
+
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -86,7 +94,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
           </div>
           <div>
             <li>
-              <a className="button" onClick={this.handleEditSubscriptionClick}>
+              <a className={`button ${this.isResetEnabled() ? "" : "disabled"}`} onClick={this.handleEditSubscriptionClick}>
                 <Icon name="edit"/>
                 <span><Trans>Reset settings</Trans></span>
               </a>

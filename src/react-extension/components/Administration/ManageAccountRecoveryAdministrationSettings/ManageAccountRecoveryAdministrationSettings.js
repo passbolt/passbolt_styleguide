@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.5.0
  */
-import React from "react";
+import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -24,7 +24,6 @@ import {withDialog} from "../../../contexts/DialogContext";
 import SelectAccountRecoveryOrganizationKey from "../SelectAccountRecoveryOrganizationKey/SelectAccountRecoveryOrganizationKey";
 import DownloadOrganizationKey from "../SelectAccountRecoveryOrganizationKey/DownloadOrganizationKey";
 import {withAdminAccountRecovery} from "../../../contexts/AdminAccountRecoveryContext";
-
 /**
  * This component allows to display the email notifications for the administration
  */
@@ -199,9 +198,11 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * @returns {JSX.Element}
    */
   formatFingerprint(fingerprint) {
-    fingerprint = fingerprint || "";
+    if (!fingerprint) {
+      return null;
+    }
     const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+    return <>{result.substr(0, 24)}<br />{result.substr(25)}</>;
   }
 
   /**
@@ -218,10 +219,28 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
   }
 
   /**
+   * Validate the organization recovery key.
+   * @returns {Boolean}
+   */
+  validateOrganizationRecoveryKey() {
+    if (this.state.accountRecoverySettings.policy !== 'disabled') {
+      return this.hasOrganizationRecoveryKey();
+    }
+    return false;
+  }
+
+  formatUserIds(user_ids) {
+    if (!user_ids) {
+      return null;
+    }
+    return user_ids.map((user, id) => <Fragment key={id}>{user.name}&lt;{user.email}&gt;<br/></Fragment>);
+  }
+
+  /**
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+    this.setState({processing: !this.state.processing});
   }
 
   /**
@@ -368,9 +387,9 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                 <div className="recovery-key-details">
                   <table className="table-info recovery-key">
                     <tbody>
-                      <tr className="fingerprint">
-                        <td className="label">Fingerprint</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatFingerprint(this.organizationKey.fingerprint)) || 'not available'}</td>
+                      <tr className="user-ids">
+                        <td className="label"><Trans>User ids</Trans></td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatUserIds(this.organizationKey.user_ids)) || this.translate('not available')}</td>
                         <td className="table-button">
                           <button className="button primary medium" type="button" disabled={this.hasAllInputDisabled()} onClick={this.handleRotateOrkClick}>
                             {this.hasOrganisationRecoveryKey() &&
@@ -382,21 +401,25 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                           </button>
                         </td>
                       </tr>
+                      <tr className="fingerprint">
+                        <td className="label"><Trans>Fingerprint</Trans></td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatFingerprint(this.organizationKey.fingerprint)) || this.translate('not available')}</td>
+                      </tr>
                       <tr className="algorithm">
-                        <td className="label">Algorithm</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.organizationKey.algorithm) || 'not available'}</td>
+                        <td className="label"><Trans>Algorithm</Trans></td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.organizationKey.algorithm) || this.translate('not available')}</td>
                       </tr>
                       <tr className="key-length">
-                        <td className="label">Key length</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.organizationKey.length) || 'not available'}</td>
+                        <td className="label"><Trans>Key length</Trans></td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.organizationKey.length) || this.translate('not available')}</td>
                       </tr>
                       <tr className="created">
-                        <td className="label">Created</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.organizationKey.created)) || 'not available'}</td>
+                        <td className="label"><Trans>Created</Trans></td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.organizationKey.created)) || this.translate('not available')}</td>
                       </tr>
                       <tr className="expires">
-                        <td className="label">Expires</td>
-                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.organizationKey.expires)) || 'not available'}</td>
+                        <td className="label"><Trans>Expires</Trans></td>
+                        <td className={`${this.hasOrganisationRecoveryKey() ? "value" : "empty-value"}`}>{(this.hasOrganisationRecoveryKey() && this.formatDateTimeAgo(this.organizationKey.expires)) || this.translate('not available')}</td>
                       </tr>
                     </tbody>
                   </table>

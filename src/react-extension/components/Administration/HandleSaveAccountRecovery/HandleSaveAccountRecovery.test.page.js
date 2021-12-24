@@ -33,8 +33,3 @@ export default class HandleSaveAccountRecoveryPage {
     );
   }
 }
-
-
-
-
-

@@ -251,7 +251,6 @@ class ImportOrganizationKey extends React.Component {
                   placeholder={this.translate("No file selected")}
                   defaultValue={this.selectedFilename} />
                 <a
-                  id="dialog-import-private-key-choose-file"
                   className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                   onClick={this.handleSelectFile}>
                   <Icon name="upload-a" />

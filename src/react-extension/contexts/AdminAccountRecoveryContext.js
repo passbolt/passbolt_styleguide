@@ -31,7 +31,9 @@ export const AdminAccountRecoveryContext = React.createContext({
   confirmSaveRequested: () => {
   }, // Whenever the confirmation of save is requested
   save: () => {
-  } // Whenever the save is requested
+  }, // Whenever the save is requested
+  cancelSaveOperation: () => {
+  }
 });
 
 /**
@@ -62,6 +64,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       initiateSaveRequested: this.initiateSaveRequested.bind(this), // Whenever the initialization of the save is requested
       confirmSaveRequested: this.confirmSaveRequested.bind(this), // Whenever the confirmation of save is requested
       save: this.save.bind(this), // Whenever the save is requested
+      cancelSaveOperation: this.cancelSaveOperation.bind(this), // Whenever the save process is canceled before reaching the final state
     };
   }
 
@@ -80,7 +83,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   async changePolicy(newPolicy) {
     const hasChanged = this.checkDiffBetweenPolicy(this.state.currentPolicy, newPolicy);
-    await this.setState({newPolicy, hasChanged});
+    this.setState({newPolicy, hasChanged});
   }
 
   /**
@@ -91,18 +94,22 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   checkDiffBetweenPolicy(currentPolicy, newPolicy) {
     if (currentPolicy.policy !== newPolicy.policy) {
-      const isPolicyDisabled = newPolicy.policy === 'disabled';
-      const hasOrganisationKey = Boolean(newPolicy.account_recovery_organization_public_key);
-      // If policy is not disabled, the new policy needs to have an organization public key
-      return isPolicyDisabled || hasOrganisationKey;
-    } else if (currentPolicy.account_recovery_organization_public_key && newPolicy.account_recovery_organization_public_key) {
-      if (currentPolicy.account_recovery_organization_public_key.fingerprint !==  newPolicy.account_recovery_organization_public_key.fingerprint) {
-        return true;
-      }
-    } else if (newPolicy.account_recovery_organization_public_key && newPolicy.policy !== 'disabled') {
       return true;
     }
-    return false;
+
+    if (newPolicy.policy === 'disabled') {
+      return false;
+    }
+
+    const currentOrkFingerprint = currentPolicy.account_recovery_organization_public_key
+      ? currentPolicy.account_recovery_organization_public_key.fingerprint
+      : null;
+
+    const newOrkFingerprint = newPolicy.account_recovery_organization_public_key
+      ? newPolicy.account_recovery_organization_public_key.fingerprint
+      : null;
+
+    return currentOrkFingerprint !== newOrkFingerprint;
   }
 
   /**
@@ -142,7 +149,11 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
     await this.props.context.port.request('passbolt.account-recovery.save-organization-settings', this.state.newPolicy);
     const currentPolicy = this.state.newPolicy;
     const step = AdminAccountRecoveryContextStep.INITIAL_STATE;
-    await this.setState({currentPolicy, step});
+    this.setState({currentPolicy, step, hasChanged: false});
+  }
+
+  cancelSaveOperation() {
+    this.setState({step: AdminAccountRecoveryContextStep.INITIAL_STATE});
   }
 
   /**

@@ -18,12 +18,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../Common/Icons/Icon";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import {withAppContext} from "../../../contexts/AppContext";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withDialog} from "../../../contexts/DialogContext";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -64,7 +59,8 @@ class ProvideOrganizationKey extends React.Component {
         color: this.props.context.userSettings.getSecurityTokenTextColor(),
       },
       viewPassword: false,
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted onc
+      selectedFile: null
     };
   }
 
@@ -80,6 +76,8 @@ class ProvideOrganizationKey extends React.Component {
     this.handlePasswordInputBlur = this.handlePasswordInputBlur.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
+    this.handleSelectFile = this.handleSelectFile.bind(this);
+    this.handleSelectOrganizationKeyFile = this.handleSelectOrganizationKeyFile.bind(this);
   }
 
   /**
@@ -109,6 +107,7 @@ class ProvideOrganizationKey extends React.Component {
     const [organizationFile] = event.target.files;
     const organizationKey = await this.readOrganizationKeyFile(organizationFile);
     await this.fillOrganizationKey(organizationKey);
+    this.setState({selectedFile: organizationFile});
     if (this.state.hasAlreadyBeenValidated) {
       await this.validate();
     }
@@ -254,6 +253,13 @@ class ProvideOrganizationKey extends React.Component {
   }
 
   /**
+   * Handle the selection of a file by file explorer
+   */
+  handleSelectFile() {
+    this.fileUploaderRef.current.click();
+  }
+
+  /**
    * Handle form submit event.
    * @params {ReactEvent} The react event
    * @return {Promise}
@@ -277,32 +283,19 @@ class ProvideOrganizationKey extends React.Component {
       this.handleValidateError();
       await this.toggleProcessing();
       return;
-    } else {
-      /*
-       * const privateGpgKeyDto = {
-       *   armored_key: this.state.key,
-       *   passphrase: this.state.password
-       * };
-       */
-      try {
-        /*
-         *  TODO maybe to adapt the validate parameters
-         * await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', privateGpgKeyDto, this.props.accountRecoveryPolicy.account_recovery_organization_public_key);
-         */
-        await this.props.accountRecoveryPolicy.save();
-        await this.handleSaveSuccess();
-      } catch (error) {
-        await this.handleSaveError(error);
-      }
     }
-  }
 
-  /**
-   * Handle save operation success.
-   */
-  async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The organization recovery policy has been updated successfully"));
-    this.props.onClose();
+    const privateGpgKeyDto = {
+      armored_key: this.state.key,
+      passphrase: this.state.password
+    };
+    try {
+      await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', this.props.accountRecoveryPolicy.currentPolicy, privateGpgKeyDto);
+      await this.props.save();
+    } catch (error) {
+      await this.handleSaveError(error);
+    }
+    await this.toggleProcessing();
   }
 
   /**
@@ -312,16 +305,14 @@ class ProvideOrganizationKey extends React.Component {
   async handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
+      return;
+    } else if (error.name === "WrongOrganizationRecoveryKeyError") {
+      this.setState({expectedFingerprintError: error.expectedFingerprint});
+    } else if (error.name === "InvalidMasterPasswordError") {
+      this.setState({passwordError: this.translate("This is not a valid passphrase.")});
     } else {
-      // Unexpected error occurred.
       console.error(error);
-      const errorDialogProps = {
-        title: this.translate("There was an unexpected error..."),
-        message: error.message
-      };
-      this.props.context.setContext({errorDialogProps});
-      this.props.dialogContext.open(NotifyError);
+      this.props.onError(error);
     }
   }
 
@@ -341,6 +332,7 @@ class ProvideOrganizationKey extends React.Component {
     this.setState({
       keyError: "",
       passwordError: "",
+      expectedFingerprintError: ""
     });
 
     // Validate the form inputs.
@@ -371,7 +363,27 @@ class ProvideOrganizationKey extends React.Component {
    * Handle close button click.
    */
   handleCloseClick() {
-    this.props.onClose();
+    this.props.onCancel();
+  }
+
+  /**
+   * format fingerprint
+   * @param fingerprint
+   * @returns {JSX.Element}
+   */
+  formatFingerprint(fingerprint) {
+    if (!fingerprint) {
+      return <></>;
+    }
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+  }
+
+  /**
+   * Returns the selected file's name
+   */
+  get selectedFilename() {
+    return this.state.selectedFile ? this.state.selectedFile.name : "";
   }
 
   /**
@@ -387,8 +399,6 @@ class ProvideOrganizationKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const passwordEntropy = SecretGenerator.entropy(this.state.password);
-    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
     /*
      * The parser can't find the translation for passwordStrength.label
      * To fix that we can use it in comment
@@ -415,14 +425,40 @@ class ProvideOrganizationKey extends React.Component {
                 placeholder='Paste the OpenPGP Private key here' required="required" autoComplete="off" autoFocus={true}/>
             </div>
             <div className="input-file-chooser-wrapper">
+              <input
+                type="file"
+                ref={this.fileUploaderRef}
+                disabled={this.hasAllInputDisabled()}
+                onChange={this.handleSelectOrganizationKeyFile} />
               <div className="input text">
-                <input
-                  type="file"
-                  ref={this.fileUploaderRef}
-                  disabled={this.hasAllInputDisabled()}
-                  onChange={this.handleSelectOrganizationKeyFile}/>
+                <label htmlFor="dialog-import-private-key">
+                  <Trans>Select a file to import</Trans>
+                </label>
+                <div className="input-file-inline">
+                  <input
+                    type="text"
+                    disabled={true}
+                    placeholder={this.translate("No file selected")}
+                    defaultValue={this.selectedFilename} />
+                  <a
+                    className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                    onClick={this.handleSelectFile}>
+                    <Icon name="upload-a" />
+                    <span><Trans>Choose a file</Trans></span>
+                  </a>
+                </div>
                 {this.state.keyError &&
-                <div className="key error-message">{this.state.keyError}</div>
+                  <div className="key error-message">{this.state.keyError}</div>
+                }
+                {this.state.expectedFingerprintError &&
+                  <div className="key error-message">
+                    <Trans>Error, this is not the current organization recovery key.</Trans><br/>
+                    <Trans>Expected fingerprint:</Trans><br/>
+                    <br/>
+                    <span className="fingerprint">
+                      {this.formatFingerprint(this.state.expectedFingerprintError)}
+                    </span>
+                  </div>
                 }
               </div>
             </div>
@@ -443,19 +479,6 @@ class ProvideOrganizationKey extends React.Component {
                 </a>
                 <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
               </div>
-              <div className={`password-complexity ${passwordStrength.id}`}>
-                <span className="progress">
-                  <span className={`progress-bar ${passwordStrength.id}`} />
-                </span>
-                <span className="complexity-text">
-                  <div>
-                    <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
-                  </div>
-                  <div>
-                    <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
-                  </div>
-                </span>
-              </div>
               {this.state.passwordError &&
               <div className="input text">
                 <div className="password error-message">{this.state.passwordError}</div>
@@ -470,7 +493,7 @@ class ProvideOrganizationKey extends React.Component {
           </div>
           <div className="submit-wrapper clearfix">
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Submit")}/>
-            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
+            <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
           </div>
         </form>
       </DialogWrapper>
@@ -480,11 +503,13 @@ class ProvideOrganizationKey extends React.Component {
 
 ProvideOrganizationKey.propTypes = {
   context: PropTypes.any, // The application context provider
-  onClose: PropTypes.func,
+  onCancel: PropTypes.func,
+  save: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   accountRecoveryPolicy: PropTypes.any, // The account recovery policy
   t: PropTypes.func, // The translation function
+  onError: PropTypes.func, // The unhandled error callback
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(ProvideOrganizationKey))));
+export default withAppContext(withTranslation('common')(ProvideOrganizationKey));
