@@ -322,7 +322,7 @@ class DisplayInFormMenu extends React.Component {
     try {
       await this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
     await this.setState({resourceIdProcessing: null});
   }

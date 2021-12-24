@@ -276,7 +276,7 @@ class ProvideOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    await this.setState({hasAlreadyBeenValidated: true});
+    this.setState({hasAlreadyBeenValidated: true});
     await this.toggleProcessing();
 
     if (!await this.validate()) {
@@ -291,7 +291,7 @@ class ProvideOrganizationKey extends React.Component {
     };
     try {
       await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', this.props.accountRecoveryPolicy.currentPolicy, privateGpgKeyDto);
-      await this.props.save();
+      await this.props.save(privateGpgKeyDto);
     } catch (error) {
       await this.handleSaveError(error);
     }

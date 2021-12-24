@@ -115,9 +115,13 @@ class HandleSaveAccountRecovery extends React.Component {
     this.props.adminAccountRecoveryContext.confirmSaveRequested();
   }
 
-  async handleSave() {
+  /**
+   * Handle the actual registration of the new ORK.
+   * @param {Object|null} privateGpgKeyDto the private ORK given by the admin if any.
+   */
+  async handleSave(privateGpgKeyDto) {
     try {
-      await this.props.adminAccountRecoveryContext.save();
+      await this.props.adminAccountRecoveryContext.save(privateGpgKeyDto);
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The organization recovery policy has been updated successfully"));
       this.props.dialogContext.close(this.state.currentOpenedDialog);
     } catch (error) {
