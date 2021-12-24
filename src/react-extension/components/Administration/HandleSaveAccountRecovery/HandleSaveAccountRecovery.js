@@ -76,7 +76,9 @@ class HandleSaveAccountRecovery extends React.Component {
   displayDialogForDisplaySummaryStep() {
     const accountRecoveryPolicy = {
       currentPolicy: this.props.adminAccountRecoveryContext.currentPolicy,
-      newPolicy: this.props.adminAccountRecoveryContext.newPolicy
+      newPolicy: this.props.adminAccountRecoveryContext.newPolicy,
+      currentKeyDetail: this.props.adminAccountRecoveryContext.currentKeyDetail,
+      newKeyDetail: this.props.adminAccountRecoveryContext.newKeyDetail
     };
 
     const currentOpenedDialog = this.props.dialogContext.open(ConfirmSaveAccountRecoverySettings, {

@@ -96,6 +96,14 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   }
 
   /**
+   * Get the current account recovery organization key
+   * @returns {null|*}
+   */
+  get currentOrganizationKeyDetail() {
+    return this.props.currentKeyDetail;
+  }
+
+  /**
    * Get the current account recovery policy
    * @returns {null|*}
    */
@@ -117,6 +125,14 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   get newOrganizationKey() {
     return this.newAccountRecoverySettings.account_recovery_organization_public_key;
+  }
+
+  /**
+   * Get the new account recovery organization key detail
+   * @returns {null|*}
+   */
+  get newOrganizationKeyDetail() {
+    return this.props.newKeyDetail;
   }
 
   /**
@@ -256,27 +272,27 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                     <tbody>
                       <tr className="user-ids">
                         <td className="label"><Trans>Uid</Trans></td>
-                        <td className="value">{this.formatUserIds(this.newOrganizationKey.user_ids)}</td>
+                        <td className="value">{this.formatUserIds(this.newOrganizationKeyDetail.user_ids)}</td>
                       </tr>
                       <tr className="fingerprint">
                         <td className="label"><Trans>Fingerprint</Trans></td>
-                        <td className="value">{this.formatFingerprint(this.newOrganizationKey.fingerprint)}</td>
+                        <td className="value">{this.formatFingerprint(this.newOrganizationKeyDetail.fingerprint)}</td>
                       </tr>
                       <tr className="algorithm">
                         <td className="label"><Trans>Algorithm</Trans></td>
-                        <td className="value">{this.newOrganizationKey.algorithm}</td>
+                        <td className="value">{this.newOrganizationKeyDetail.algorithm}</td>
                       </tr>
                       <tr className="key-length">
                         <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{this.newOrganizationKey.length}</td>
+                        <td className="value">{this.newOrganizationKeyDetail.length}</td>
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        <td className="value">{this.formatDate(this.newOrganizationKey.created)}</td>
+                        <td className="value">{this.formatDate(this.newOrganizationKeyDetail.created)}</td>
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.newOrganizationKey.expires)}</td>
+                        <td className="value">{this.formatDateTimeAgo(this.newOrganizationKeyDetail.expires)}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -315,6 +331,8 @@ ConfirmSaveAccountRecoverySettings.propTypes = {
   confirmSaveRequested: PropTypes.func,
   accountRecoveryPolicy: PropTypes.object, // The account recovery
   actionFeedbackContext: PropTypes.object, // the action feeedback context
+  currentKeyDetail: PropTypes.object, // the details of the current key
+  newKeyDetail: PropTypes.object, // the details of the new key
   t: PropTypes.func, // The translation function
 };
 export default withAppContext(withActionFeedback(withTranslation('common')(ConfirmSaveAccountRecoverySettings)));

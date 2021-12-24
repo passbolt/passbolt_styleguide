@@ -33,18 +33,18 @@ export function hasChangedPolicyProps() {
     },
     adminAccountRecoveryContext: {
       newPolicy: {
-        policy: 'mandatory',
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
+        policy: 'mandatory'
       },
       hasChanged: true,
       findAccountRecoveryPolicy: jest.fn(),
       changePolicy: jest.fn(),
+    },
+    newKeyDetail: {
+      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+      algorithm: "RSA",
+      length: "4096",
+      created: "2020-09-01T13:11:08+00:00",
+      expires: "Never"
     }
   };
 }
@@ -60,14 +60,14 @@ export function disabledPolicyPropsWithOrganisationKey() {
     },
     adminAccountRecoveryContext: {
       newPolicy: {
-        policy: 'disabled',
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
+        policy: 'disabled'
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       },
       hasChanged: true,
       findAccountRecoveryPolicy: () => {},
@@ -87,14 +87,21 @@ export function mandatoryPolicyPropsWithOrganisationKey() {
     },
     adminAccountRecoveryContext: {
       newPolicy: {
-        policy: 'mandatory',
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
+        policy: 'mandatory'
+      },
+      newKeyDetail: {
+        user_ids: [{
+          name: "ada",
+          email: "ada@passbolt.com"
+        }, {
+          name: "betty",
+          email: "betty@passbolt.com"
+        }],
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       },
       hasChanged: false,
       findAccountRecoveryPolicy: () => {},
@@ -114,14 +121,14 @@ export function optInPolicyPropsWithOrganisationKey() {
     },
     adminAccountRecoveryContext: {
       newPolicy: {
-        policy: 'opt-in',
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
+        policy: 'opt-in'
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       },
       hasChanged: false,
       findAccountRecoveryPolicy: () => {},
@@ -141,14 +148,14 @@ export function optOutPolicyPropsWithOrganisationKey() {
     },
     adminAccountRecoveryContext: {
       newPolicy: {
-        policy: 'opt-out',
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
+        policy: 'opt-out'
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       },
       hasChanged: false,
       findAccountRecoveryPolicy: () => {},
