@@ -17,6 +17,7 @@ import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import {fireEvent} from "@testing-library/dom/dist/events";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
+
 /**
  * Manages the in-form web integration including call-to-action and menu
  */
@@ -125,13 +126,39 @@ class InFormManager {
    * Whenever the DOM changes
    */
   handleDomChange() {
-    const updateAuthenticationFields = () => {
-      this.findAndSetAuthenticationFields();
-      this.handleInformCallToActionClickEvent();
+    const updateAuthenticationFields = (mutationsList) => {
+      // Check if a child node has been added or removed with type
+      const mutationChildNodes = mutation => mutation.type === 'childList';
+      // Check if the mutation is an iframe added or removed by us
+      const isMutationInformIframe = mutation => mutationChildNodes(mutation) && this.isInformIframe(mutation);
+      // Check if our iframe is in the mutation list
+      const hasNotMutationFromInformIframe = !mutationsList.some(isMutationInformIframe);
+      if (hasNotMutationFromInformIframe) {
+        this.findAndSetAuthenticationFields();
+        this.handleInformCallToActionClickEvent();
+      }
     }
     // Search again for authentication callToActionFields to attach when the DOM changes
     this.mutationObserver = new MutationObserver(updateAuthenticationFields);
     this.mutationObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
+  }
+
+  /**
+   * Check if the mutation is an iframe added or removed by us
+   * @param mutation
+   * @returns {boolean}
+   */
+  isInformIframe(mutation) {
+    const nodeList = mutation.addedNodes.length > 0 ? mutation.addedNodes : mutation.removedNodes;
+    let isInformIframe = false;
+    if (this.callToActionFields.length > 0) {
+      const isIdPresent = iframe => Array.prototype.some.call(nodeList, node => iframe.iframeId === node.id);
+      isInformIframe = this.callToActionFields.some(isIdPresent)
+    }
+    if (!isInformIframe && this.menuField) {
+      isInformIframe = Array.prototype.some.call(nodeList, node => this.menuField.iframeId === node.id);
+    }
+    return isInformIframe;
   }
 
   /**
