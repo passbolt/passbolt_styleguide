@@ -21,7 +21,6 @@ import browser from "webextension-polyfill";
  * in-form call-to-action and/or menu can be attached
  */
 class InFormCallToActionField {
-
   /**
    * Retrieve all the DOM elements which can be an in-form username fields
    */
@@ -121,10 +120,11 @@ class InFormCallToActionField {
    * @return {HTMLIFrameElement} The created iframe
    */
   createCallToActionIframe() {
+    // IMPORTANT: Calculate position before inserting iframe in document to avoid issue
+    const {top, left} = this.calculateFieldPosition();
     const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
-    const {top, left} = this.calculateFieldPosition();
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
     iframe.style.top = top + 'px'
@@ -145,18 +145,31 @@ class InFormCallToActionField {
     let x = 0;
     let y = 0;
     let currentElement = this.field;
-    const {height, width} = this.field.getBoundingClientRect();
+    let hasScroll = false;
+    const {top, left, height, width} = this.field.getBoundingClientRect();
     const {top: topBody, left: leftBody} = document.documentElement.getBoundingClientRect();
-    // We loop to calculate the cumulated position of the field
-    // from its ancestors and itself differential offset / scroll position
-    while(currentElement && !isNaN(currentElement.offsetLeft) && !isNaN(currentElement.offsetTop)) {
+    /*
+     * We loop to calculate the cumulated position of the field
+     * from its ancestors and itself differential offset / scroll position
+     */
+    while (currentElement && !isNaN(currentElement.offsetLeft) && !isNaN(currentElement.offsetTop)) {
+      hasScroll = hasScroll || currentElement.scrollLeft + currentElement.scrollTop > 0;
       x += currentElement.offsetLeft - currentElement.scrollLeft;
       y += currentElement.offsetTop - currentElement.scrollTop;
       currentElement = currentElement.offsetParent;
     }
-    // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
-    x = x + leftBody + width - 25;
-    y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
+    /*
+     * If there is no scroll on the page, we use the getBoundingClientRect to have the position of the field
+     * this avoid a position issue if there is a transform style in css
+     */
+    if (!hasScroll) {
+      x = left + width - 25;
+      y = top + Math.floor(height / 2) - 9;
+    } else {
+      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment )
+      x = x + leftBody + width - 25;
+      y = y + topBody + Math.floor(height / 2) - 9; // Calculate the middle position of the input, 9 is the half of the iframe height
+    }
     return {top: y, left: x};
   }
 
@@ -166,20 +179,22 @@ class InFormCallToActionField {
    * @param iframe The call-to-action iframe
    */
   handleCallToActionClicked(iframe) {
-    /* In case of click on iframe, the field lose the focus. Since it loses the focus, the iframe is removed.
+    /*
+     * In case of click on iframe, the field lose the focus. Since it loses the focus, the iframe is removed.
      * And so the call-to-action. So, we need to restore the focus on the input. In case, it did not have
      * previously the focus, no matter since a click on the call-to-action should be a way to focus on the input
      */
     this.callToActionClickWatcher = setInterval(() => {
       // Check if a click has been applied on some iframe
       const elem = document.activeElement;
-      if (elem && elem.tagName == 'IFRAME' && elem.id === this.iframeId) {
+      if (elem && elem.tagName === 'IFRAME' && elem.id === this.iframeId) {
         this.field.focus();
         this.callToActionClickCallback();
         clearInterval(this.callToActionClickWatcher);
       }
     }, 100);
-    /* We need to know which iframe the user click on. We cannot add a listener on iframe
+    /*
+     * We need to know which iframe the user click on. We cannot add a listener on iframe
      * since there are from different domains (target page vs extension pagemods)
      */
     iframe.addEventListener('mouseover', () => this.isCallToActionMousingOver = true);
@@ -259,5 +274,3 @@ class InFormCallToActionField {
 }
 
 export default InFormCallToActionField;
-
-
