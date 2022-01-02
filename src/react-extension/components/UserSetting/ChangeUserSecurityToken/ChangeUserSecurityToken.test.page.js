@@ -1,5 +1,6 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ChangeUserSecurityToken from "./ChangeUserSecurityToken";
 
 /**
@@ -13,7 +14,9 @@ export default class ChangeUserSecurityTokenPage {
    */
   constructor(props) {
     this._page = render(
-      <ChangeUserSecurityToken {...props}/>
+      <MockTranslationProvider>
+        <ChangeUserSecurityToken {...props}/>
+      </MockTranslationProvider>
     );
   }
 

@@ -11,6 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
  */
+import i18n from 'i18next';
+import {initReactI18next} from 'react-i18next';
+import enTranslations from "../../locales/en-UK/common.json";
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "./AppContext";
@@ -31,9 +34,39 @@ export default class UserWorkspaceContextPage {
    */
   constructor(appContext) {
     this.context = appContext;
+    this.configureTranslation();
     this.setup(appContext);
   }
 
+  /*
+   * Configuring i18n avoid some warning showing in the console during the test.
+   * A better choice would be to use MockTranslationProvider. But somehow, it breaks some unit tests.
+   * The reason seams that it influences in an unknown way the value of this.userWorkspaceContext.filter.type
+   * by making it equals to ALL instead of the desired value when the check is done.
+   */
+  configureTranslation() {
+    i18n
+      // pass the i18n instance to react-i18next.
+      .use(initReactI18next)
+      // init i18next, for all options read: https://www.i18next.com/overview/configuration-options
+      .init({
+        lng: 'en-UK',
+        resources: {
+          "en-UK": {
+            common: enTranslations
+          }
+        },
+        react: {
+          useSuspense: false,
+        },
+        fallbackLng: false,
+        ns: ['common'],
+        defaultNS: 'common',
+        keySeparator: false, // don't use the dot for separator of nested json object
+        nsSeparator: false, // allowed ':' in key to avoid namespace separator
+        debug: false
+      });
+  }
 
   /**
    * Returns the contextual filter

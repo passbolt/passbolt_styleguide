@@ -51,6 +51,7 @@ class ImportResourcesResult extends Component {
    */
   bindHandlers() {
     this.handleClose = this.handleClose.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleErrorDetailsToggle = this.handleErrorDetailsToggle.bind(this);
     this.handleReferenceFolderClick = this.handleReferenceFolderClick.bind(this);
     this.handleReferenceTagClick = this.handleReferenceTagClick.bind(this);
@@ -60,6 +61,11 @@ class ImportResourcesResult extends Component {
    * Whenever the user intends to close the dialog
    */
   handleClose() {
+    this.close();
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
     this.close();
   }
 
@@ -260,7 +266,7 @@ class ImportResourcesResult extends Component {
       <DialogWrapper
         title={this.resultHasErrors ? this.translate("Something went wrong!") : this.translate("Import success!")}
         onClose={this.handleClose}>
-        <form onSubmit={this.handleClose}>
+        <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             {!this.hasErrorsResources &&
             <p>

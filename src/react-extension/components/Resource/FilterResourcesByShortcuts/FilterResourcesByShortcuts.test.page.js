@@ -17,6 +17,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import FilterResourcesByShortcuts from "./FilterResourcesByShortcuts";
 import {BrowserRouter as Router} from 'react-router-dom';
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The FilterResourcesByShortcuts component represented as a page
@@ -31,7 +32,9 @@ export default class FilterResourcesByShortcutsPage {
     this._page = render(
       <Router>
         <AppContext.Provider value={appContext}>
-          <FilterResourcesByShortcuts.WrappedComponent {...props}/>
+          <MockTranslationProvider>
+            <FilterResourcesByShortcuts.WrappedComponent {...props}/>
+          </MockTranslationProvider>
         </AppContext.Provider>
       </Router>
     );

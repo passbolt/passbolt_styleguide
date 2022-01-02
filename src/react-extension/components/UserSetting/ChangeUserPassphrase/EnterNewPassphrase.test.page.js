@@ -14,6 +14,7 @@
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EnterNewPassphrase from "./EnterNewPassphrase";
 
 /**
@@ -26,7 +27,9 @@ export default class EnterNewPassphrasePage {
    */
   constructor(props) {
     this._page = render(
-      <EnterNewPassphrase {...props}/>
+      <MockTranslationProvider>
+        <EnterNewPassphrase {...props}/>
+      </MockTranslationProvider>
     );
   }
 

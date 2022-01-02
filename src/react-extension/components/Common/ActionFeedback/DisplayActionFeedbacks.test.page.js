@@ -16,6 +16,7 @@ import React from "react";
 import {fireEvent, render} from "@testing-library/react";
 import {waitFor} from "@testing-library/dom";
 import DisplayActionFeedbacks from "./DisplayActionFeedbacks";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayActionFeedbacks component represented as a page
@@ -26,7 +27,11 @@ export default class DisplayActionFeedbacksPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(<DisplayActionFeedbacks {...props}/>);
+    this._page = render(
+      <MockTranslationProvider>
+        <DisplayActionFeedbacks {...props}/>
+      </MockTranslationProvider>
+    );
   }
 
   /**
