@@ -18,6 +18,7 @@ import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
 import EditResourceTag from "./EditResourceTag";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The EditResourceTag component represented as a page
@@ -31,12 +32,14 @@ export default class EditResourceTagPage {
   constructor(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <DialogContextProvider>
-          <Router>
-            <ManageDialogs/>
-            <EditResourceTag {...props}/>
-          </Router>
-        </DialogContextProvider>
+        <MockTranslationProvider>
+          <DialogContextProvider>
+            <Router>
+              <ManageDialogs/>
+              <EditResourceTag {...props}/>
+            </Router>
+          </DialogContextProvider>
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
     this.setupPageObjects();

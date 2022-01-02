@@ -240,6 +240,7 @@ class AddResourceComment extends React.Component {
                 {
                   this.props.cancellable &&
                   <button
+                    type="button"
                     className="button cancel"
                     role="button"
                     onClick={this.handleCancelEvent}
