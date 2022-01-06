@@ -298,7 +298,7 @@ class TransferToMobile extends React.Component {
   async getQrCode(content) {
     try {
       return await QRCode.toDataURL([{
-        data: content,
+        data: content.buffer,
         mode: 'byte'
       }], {
         version: QRCODE_VERSION,
