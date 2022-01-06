@@ -210,12 +210,12 @@ class InFormManager {
       let username = null;
       let password = null;
       if (!isUsernameType) {
-        username = this.callToActionFields.find(field => field.fieldType === 'username')?.field.value;
+        username = this.callToActionFields.find(field => field.fieldType === 'username')?.field.value || "";
         password = this.lastCallToActionFieldClicked?.field.value;
       }
       if (!isPasswordType) {
         username = this.lastCallToActionFieldClicked?.field.value;
-        password = this.callToActionFields.find(field => field.fieldType === 'password')?.field.value;
+        password = this.callToActionFields.find(field => field.fieldType === 'password')?.field.value || "";
       }
       port.emit(requestId, 'SUCCESS', {username, password});
     });
@@ -231,13 +231,17 @@ class InFormManager {
       const isPasswordType = currentFieldType === 'password';
       if (!isUsernameType) {
         const usernameField = this.callToActionFields.find(field => field.fieldType === 'username')?.field;
-        fireEvent.input(usernameField, { target: { value: username } });
         fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: password } });
+        if (usernameField) {
+          fireEvent.input(usernameField, { target: { value: username } });
+        }
       }
       if (!isPasswordType) {
         const passwordField = this.callToActionFields.find(field => field.fieldType === 'password')?.field;
         fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: username } });
-        fireEvent.input(passwordField, { target: { value: password } });
+        if (passwordField) {
+          fireEvent.input(passwordField, { target: { value: password } });
+        }
       }
     });
   }

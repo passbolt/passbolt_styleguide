@@ -82,7 +82,6 @@ class InFormCredentialsFormField {
 
   /**
    * Whenever one must propose auto-save on the current credentials form
-   * @param callback Callback when the auto-save should be performed
    */
   handleAutoSaveEvent() {
     this.field.addEventListener('submit', this.autosave);
@@ -91,12 +90,12 @@ class InFormCredentialsFormField {
 
   /** Autosave current credentials in the page */
   autosave() {
-    const areFieldsFilled = Boolean(this.usernameField?.value?.trim()) && Boolean(this.passwordField?.value?.trim());
+    const areFieldsFilled = Boolean(this.usernameField?.value?.trim()) || Boolean(this.passwordField?.value?.trim());
     if (!this.hasAlreadySubmitted && areFieldsFilled) {
       this.hasAlreadySubmitted = true;
       port.emit('passbolt.web-integration.autosave', {
         name: document.title,
-        username: this.usernameField.value,
+        username: this.usernameField?.value || "",
         password:  this.passwordField.value,
         url: document.URL
       });
