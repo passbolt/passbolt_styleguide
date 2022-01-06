@@ -9,15 +9,28 @@ class MockPort {
     this.storage = storage;
     this.onListeners = {};
     this.requestListeners = {};
+    this.emitListener = {};
   }
 
-  emit(name, eventObject) {
+  async emit(name, eventObject) {
     console.debug(`PORT EMIT: ${name}`);
-    console.debug(eventObject);
+    console.debug('Arguments', eventObject);
+    let result;
+
+    if (this.emitListener[name]) {
+      result = await this.emitListener[name](eventObject);
+      console.debug(`response: `, result);
+    } else {
+      console.debug(`The emit ${name} has not been mocked`);
+    }
+
+    return delay(0, result);
   }
 
-  on(name) {
+  on(name, callback) {
     console.debug(`PORT ON: ${name}`);
+    console.debug('PORT ON PARAMETERS:', callback);
+    this.addOnListener(name, callback);
   }
 
   async request(name) {
@@ -45,9 +58,7 @@ class MockPort {
   }
 
   addOnListener(name, callback) {
-    // todo Implement a function to launch this on callbacks.
-    console.debug(`PORT ON: ${name}`);
-    console.debug('PORT ON PARAMETERS:', callback);
+    this.emitListener[name] = callback;
   }
 
   addRequestListener(name, callback) {

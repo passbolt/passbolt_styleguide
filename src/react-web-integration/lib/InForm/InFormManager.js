@@ -190,7 +190,7 @@ class InFormManager {
    * Handle the click on the in-form call-to-action (iframe)
    */
   handleInformCallToActionClickEvent() {
-    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => this.lastCallToActionFieldClicked = callToActionField);
+    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => {this.lastCallToActionFieldClicked = callToActionField});
     this.callToActionFields.forEach(setLastCallToActionFieldClicked);
   }
 
