@@ -13,13 +13,13 @@ export default [
         "properties": {
           "name": {
             "type": "string",
-            "maxLength": 64
+            "maxLength": 255
           },
           "username": {
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 64
+                "maxLength": 255
               },
               {
                 "type": "null"
@@ -72,13 +72,13 @@ export default [
         "properties": {
           "name": {
             "type": "string",
-            "maxLength": 64
+            "maxLength": 255
           },
           "username": {
             "anyOf": [
               {
                 "type": "string",
-                "maxLength": 64
+                "maxLength": 255
               },
               {
                 "type": "null"

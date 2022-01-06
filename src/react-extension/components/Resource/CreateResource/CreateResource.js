@@ -582,7 +582,7 @@ class CreateResource extends Component {
               <label htmlFor="create-password-form-name"><Trans>Name</Trans></label>
               <input id="create-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="64"
+                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
               {this.state.nameError &&
               <div className="name error-message">{this.state.nameError}</div>
@@ -599,7 +599,7 @@ class CreateResource extends Component {
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
               <label htmlFor="create-password-form-username"><Trans>Username</Trans></label>
-              <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="64"
+              <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
               {this.state.usernameError &&
