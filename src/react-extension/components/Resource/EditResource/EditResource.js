@@ -682,7 +682,7 @@ class EditResource extends Component {
               <label htmlFor="edit-password-form-name"><Trans>Name</Trans></label>
               <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="64"
+                disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true}/>
               {this.state.nameError &&
               <div className="name error-message">{this.state.nameError}</div>
@@ -699,7 +699,7 @@ class EditResource extends Component {
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
               <label htmlFor="edit-password-form-username"><Trans>Username</Trans></label>
-              <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="64"
+              <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="255"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.usernameError &&

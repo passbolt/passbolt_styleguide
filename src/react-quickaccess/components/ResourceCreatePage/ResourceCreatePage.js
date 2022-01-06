@@ -125,7 +125,7 @@ class ResourceCreatePage extends React.Component {
     try {
       const tabInfo = await this.props.context.port.request("passbolt.quickaccess.prepare-resource", this.props.context.tabId);
       if (!ignoreNames.includes(tabInfo["name"])) {
-        name = tabInfo["name"].substring(0, 64);
+        name = tabInfo["name"].substring(0, 255);
       }
       if (!ignoreUris.includes(tabInfo["uri"])) {
         uri = tabInfo["uri"];
@@ -329,7 +329,7 @@ class ResourceCreatePage extends React.Component {
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
                 <label htmlFor="name"><Trans>Name</Trans></label>
                 <input name="name" value={this.state.name} onChange={this.handleInputChange} disabled={this.state.processing}
-                  ref={this.nameInputRef} className="required fluid" maxLength="64" type="text" id="name" required="required" autoComplete="off" />
+                  ref={this.nameInputRef} className="required fluid" maxLength="255" type="text" id="name" required="required" autoComplete="off" />
                 {this.state.nameError &&
                 <div className="error-message">{this.state.nameError}</div>
                 }
@@ -345,7 +345,7 @@ class ResourceCreatePage extends React.Component {
               <div className="input text">
                 <label htmlFor="username"><Trans>Username</Trans></label>
                 <input name="username" value={this.state.username} onChange={this.handleInputChange} disabled={this.state.processing}
-                  ref={this.usernameInputRef} className="fluid" maxLength="64" type="text" id="username" autoComplete="off" />
+                  ref={this.usernameInputRef} className="fluid" maxLength="255" type="text" id="username" autoComplete="off" />
                 {this.state.usernameError &&
                 <div className="error-message">{this.state.usernameError}</div>
                 }

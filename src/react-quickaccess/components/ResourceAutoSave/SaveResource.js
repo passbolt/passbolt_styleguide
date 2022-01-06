@@ -167,7 +167,7 @@ class ResourceCreatePage extends React.Component {
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
                 <label htmlFor="name"><Trans>Name</Trans></label>
                 <input name="name" value={this.state.name} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="required fluid" maxLength="64" type="text" id="name" required="required" autoComplete="off" />
+                  className="required fluid" maxLength="255" type="text" id="name" required="required" autoComplete="off" />
                 {this.state.nameError &&
                 <div className="error-message">{this.state.nameError}</div>
                 }
@@ -183,7 +183,7 @@ class ResourceCreatePage extends React.Component {
               <div className="input text">
                 <label htmlFor="username"><Trans>Username</Trans></label>
                 <input name="username" value={this.state.username} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="fluid" maxLength="64" type="text" id="username" autoComplete="off" />
+                  className="fluid" maxLength="255" type="text" id="username" autoComplete="off" />
                 {this.state.usernameError &&
                 <div className="error-message">{this.state.usernameError}</div>
                 }
