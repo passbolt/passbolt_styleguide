@@ -25,7 +25,6 @@ export default {
   input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][autocomplete*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][autocomplete*='email' i]:not([hidden]):not([disabled]),
-  input[type='text' i][type='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][placeholder*='email' i]:not([hidden]):not([disabled]),
   input[type='email' i]:not([hidden]):not([disabled]),
