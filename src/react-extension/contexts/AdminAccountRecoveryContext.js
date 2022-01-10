@@ -56,6 +56,8 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
     return {
       currentPolicy: null, // The current policy
       newPolicy: null, // The new policy
+      currentKeyDetail: null, // The details of the current key
+      newKeyDetail: null, // The details of the new key
       hasChanged: false, // If the policy has changed
       step: AdminAccountRecoveryContextStep.INITIAL_STATE, // Step for the save process
       findAccountRecoveryPolicy: this.findAccountRecoveryPolicy.bind(this), // Whenever the account recovery policy is requested
@@ -73,7 +75,11 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   async findAccountRecoveryPolicy() {
     const currentPolicy = await this.props.context.port.request('passbolt.account-recovery.get');
-    await this.setState({currentPolicy, newPolicy: currentPolicy});
+    let currentKeyDetail = null;
+    if (currentPolicy.policy !== "disabled") {
+      currentKeyDetail = await this.getKeyDetail(currentPolicy.account_recovery_organization_public_key);
+    }
+    await this.setState({currentPolicy, currentKeyDetail, newPolicy: currentPolicy, newKeyDetail: currentKeyDetail});
   }
 
   /**
@@ -83,7 +89,17 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    */
   async changePolicy(newPolicy) {
     const hasChanged = this.checkDiffBetweenPolicy(this.state.currentPolicy, newPolicy);
-    this.setState({newPolicy, hasChanged});
+    const newKeyDetail = newPolicy.policy !== "disabled" && await this.getKeyDetail(newPolicy.account_recovery_organization_public_key);
+    this.setState({newPolicy, hasChanged, newKeyDetail});
+  }
+
+  /**
+   * Return the details of a given key
+   * @param {object} key
+   * @returns {object}
+   */
+  async getKeyDetail(key) {
+    return await this.props.context.port.request('passbolt.account-recovery.get-organization-key-details', {armored_key: key.armored_key});
   }
 
   /**
@@ -101,15 +117,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       return false;
     }
 
-    const currentOrkFingerprint = currentPolicy.account_recovery_organization_public_key
-      ? currentPolicy.account_recovery_organization_public_key.fingerprint
-      : null;
-
-    const newOrkFingerprint = newPolicy.account_recovery_organization_public_key
-      ? newPolicy.account_recovery_organization_public_key.fingerprint
-      : null;
-
-    return currentOrkFingerprint !== newOrkFingerprint;
+    return currentPolicy.account_recovery_organization_public_key !== newPolicy.account_recovery_organization_public_key;
   }
 
   /**
@@ -147,11 +155,12 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
   async save(privateGpgKeyDto) {
     await this.props.context.port.request('passbolt.account-recovery.save-organization-settings', this.state.newPolicy, this.state.currentPolicy, privateGpgKeyDto);
     const currentPolicy = this.state.newPolicy;
+    const currentKeyDetail = this.state.newKeyDetail;
     if (currentPolicy.policy === "disabled") {
       currentPolicy.account_recovery_organization_public_key = null;
     }
     const step = AdminAccountRecoveryContextStep.INITIAL_STATE;
-    this.setState({currentPolicy, step, hasChanged: false});
+    this.setState({currentPolicy, currentKeyDetail, step, hasChanged: false});
   }
 
   cancelSaveOperation() {
