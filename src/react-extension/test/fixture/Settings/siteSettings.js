@@ -1,8 +1,8 @@
 export default {
   "app": {
     "version": {
-      "number": "2.13.5",
-      "name": "Stomp"
+      "number": "3.5.0",
+      "name": "Wide Open"
     },
     "locale": "en-UK",
     "url": "http://127.0.0.1:3001",
@@ -103,11 +103,26 @@ export default {
       "locale": {
         "options": [
           {
+            "locale": "de-DE",
+            "label": "Deutsch"
+          }, {
             "locale": "en-UK",
             "label": "English"
           }, {
             "locale": "fr-FR",
             "label": "Français"
+          }, {
+            "locale": "ja-JP",
+            "label": "日本語"
+          }, {
+            "locale": "nl-NL",
+            "label": "Nederlands"
+          }, {
+            "locale": "pl-PL",
+            "label": "Polski"
+          }, {
+            "locale": "sv-SE",
+            "label": "Svenska"
           }
         ]
       },

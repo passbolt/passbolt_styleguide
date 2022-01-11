@@ -27,8 +27,13 @@ export const globalTypes = {
       icon: 'globe',
       items: [
         //TODO: this might be improve to dynamically generate the language list
+        { value: 'nl-NL', right: '🇳🇱', title: 'Nederlands' },
         { value: 'en-UK', right: '🇬🇧', title: 'English' },
-        { value: 'fr-FR', right: '🇫🇷', title: 'Français' }
+        { value: 'fr-FR', right: '🇫🇷', title: 'Français' },
+        { value: 'de-DE', right: '🇩🇪', title: 'Deutsch' },
+        { value: 'ja-JP', right: '🇯🇵', title: '日本語' },
+        { value: 'pl-PL', right: '🇵🇱', title: 'Polski' },
+        { value: 'sv-SE', right: '🇸🇪', title: 'Svenska' },
       ],
     },
   },
