@@ -38,8 +38,8 @@
     "jquery": "^3.5.0",
     "node-fetch": "^2.6.6",
     "webpack": "5.46.0",
-    "webpack-cli": "4.7.2",
-    "webpack-dev-server": "^4.6.0"
+    "webpack-cli": "4.9.1",
+    "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
     "@testing-library/dom": "^7.31.0",
