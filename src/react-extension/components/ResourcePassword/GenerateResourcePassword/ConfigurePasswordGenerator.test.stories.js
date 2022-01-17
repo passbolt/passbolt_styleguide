@@ -49,13 +49,12 @@ Initial.args = {
       {
         "name": "lower",
         "label": "a-z",
-        "characters": "abcdefghijklmnopqrstuvwxyz",
+        "characters": "abcdefghijklmnopqrstuvwxyz"
       },
       {
         "name": "digit",
         "label": "0-9",
-        "characters": "0123456789",
-        "required": true,
+        "characters": "0123456789"
       },
       {
         "name": "parenthesis",

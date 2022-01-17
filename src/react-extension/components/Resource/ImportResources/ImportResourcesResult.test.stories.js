@@ -33,5 +33,6 @@ Initial.args = {
         resourcesCount: 15
       }
     }
-  }
+  },
+  onClose: () => {}
 };

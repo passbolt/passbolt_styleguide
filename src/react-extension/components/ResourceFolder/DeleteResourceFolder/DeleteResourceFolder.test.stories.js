@@ -3,6 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteResourceFolder from "./DeleteResourceFolder";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -14,7 +15,9 @@ const defaultContext = {
   folders: [
     {id: 1, name: "My folder"}
   ],
-  folder: {id: 1}
+  folder: {id: 1},
+  port: new MockPort(),
+  setContext: () => {}
 };
 
 const Template = ({context, ...args}) =>
@@ -31,7 +34,8 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: defaultContext
+  context: defaultContext,
+  onClose: () => {}
 };
 
 Initial.argTypes = {

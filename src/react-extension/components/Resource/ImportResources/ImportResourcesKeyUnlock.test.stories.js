@@ -12,7 +12,8 @@ export default {
 const context = {
   siteSettings: {
     canIUse: () => true
-  }
+  },
+  setContext: () => {}
 };
 
 
@@ -25,3 +26,10 @@ const Template = args =>
 
 
 export const Initial = Template.bind({});
+Initial.args = {
+  onClose: () => {},
+  resourceWorkspaceContext: {
+    onResourceFileToImport: () => {},
+    resourceFileToImport: "test"
+  }
+};

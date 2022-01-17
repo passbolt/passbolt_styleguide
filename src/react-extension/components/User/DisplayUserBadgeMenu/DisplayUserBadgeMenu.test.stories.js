@@ -1,6 +1,5 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DisplayUserBadgeMenu from "./DisplayUserBadgeMenu";
 
@@ -10,15 +9,10 @@ export default {
   component: DisplayUserBadgeMenu
 };
 
-const context = {};
-
-
 const Template = args =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayUserBadgeMenu {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
-  </AppContext.Provider>;
+  <MemoryRouter initialEntries={['/']}>
+    <Route component={routerProps => <DisplayUserBadgeMenu {...args} {...routerProps}/>}></Route>
+  </MemoryRouter>;
 
 Template.propTypes = {
   context: PropTypes.object,
@@ -26,6 +20,7 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = {
+  baseUrl: (new URL(window.location.href)).origin,
   user: {
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
     "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
@@ -63,5 +58,8 @@ Initial.args = {
     },
     "__placeholder_last_logged_in__": "",
     "last_logged_in": ""
+  },
+  context: {
+    onLogoutRequested: () => {}
   }
 };

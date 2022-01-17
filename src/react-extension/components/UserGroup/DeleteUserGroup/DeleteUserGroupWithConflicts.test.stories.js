@@ -4,6 +4,7 @@ import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteUserGroupWithConflicts from "./DeleteUserGroupWithConflicts";
 import {mockGroups, mockResources, mockUsers} from "./DeleteUserGroupWithConflicts.test.data";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -24,10 +25,12 @@ const context = {
       }
     }
   },
+  setContext: () => {},
+  port: new MockPort()
 };
 
 
-const Template = args =>
+const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <DeleteUserGroupWithConflicts {...args} {...routerProps}/>}></Route>
@@ -39,3 +42,7 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  onClose: () => {}
+};

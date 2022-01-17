@@ -5,6 +5,8 @@
  */
 import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
+import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../react-extension/test/fixture/Settings/siteSettings";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {

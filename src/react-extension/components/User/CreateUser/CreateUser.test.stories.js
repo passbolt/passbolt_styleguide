@@ -3,6 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import CreateUser from "./CreateUser";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -10,10 +11,16 @@ export default {
   component: CreateUser
 };
 
-const context = {};
+const context = {
+  setContext: () => {},
+  roles: [
+    {name: "admin"},
+    {name: "user"}
+  ],
+  port: new MockPort()
+};
 
-
-const Template = args =>
+const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <CreateUser {...args} {...routerProps}/>}></Route>
@@ -25,6 +32,10 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  onClose: () => {}
+};
 Initial.parameters = {
   css: "api_main"
 };

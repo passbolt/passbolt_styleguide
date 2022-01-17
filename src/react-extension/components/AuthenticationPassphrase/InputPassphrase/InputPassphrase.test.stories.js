@@ -11,7 +11,7 @@ export default {
 
 const context = {
   userSettings: {
-    getTrustedDomain: () => 'some url',
+    getTrustedDomain: () => (new URL(window.location.href)).origin,
     getSecurityTokenBackgroundColor: () => '#a85632',
     getSecurityTokenTextColor: () => '#ffffff',
     getSecurityTokenCode: () => "ABC",

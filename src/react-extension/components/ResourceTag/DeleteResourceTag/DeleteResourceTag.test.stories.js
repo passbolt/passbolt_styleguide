@@ -3,6 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteResourceTag from "./DeleteResourceTag";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -14,7 +15,9 @@ const defaultContext = {
   tagToDelete: {
     id: 1,
     slug: "apache"
-  }
+  },
+  port: new MockPort(),
+  setContext: () => {}
 };
 
 
@@ -40,5 +43,6 @@ Initial.argTypes = {
     control: {
       type: 'object'
     }
-  }
+  },
+  onClose: () => {}
 };

@@ -3,6 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import EditResourceTag from "./EditResourceTag";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -14,7 +15,9 @@ const defaultContext = {
   tagToEdit: {
     id: 1,
     slug: "apache"
-  }
+  },
+  setContext: () => {},
+  port: new MockPort()
 };
 
 
@@ -32,7 +35,8 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: defaultContext
+  context: defaultContext,
+  onClose: () => {}
 };
 
 Initial.argTypes = {

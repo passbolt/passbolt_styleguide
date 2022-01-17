@@ -26,6 +26,7 @@ export const Initial = Template.bind({});
 Initial.args = {
   context: defaultAppContext(),
   loginSuccessCallback: () => {},
+  mfaRequiredCallback: () => {},
   canRememberMe: true,
 };
 Initial.parameters = {

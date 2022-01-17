@@ -12,7 +12,7 @@ export default {
 
 const context = {
   userSettings: {
-    getTrustedDomain: () => "some url"
+    getTrustedDomain: () => (new URL(window.location.href)).origin
   },
   siteSettings: {
     canIUse: () => true

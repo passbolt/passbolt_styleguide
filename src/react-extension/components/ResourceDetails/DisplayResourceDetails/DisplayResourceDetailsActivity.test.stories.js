@@ -37,7 +37,7 @@ const Template = args =>
   <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
     <AppContext.Provider value={context}>
       <MemoryRouter initialEntries={['/']}>
-        <div className="panel">
+        <div className="panel aside">
           <Route component={routerProps => <DisplayResourceDetailsActivity {...args} {...routerProps}/>}></Route>
         </div>
       </MemoryRouter>

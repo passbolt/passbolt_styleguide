@@ -6,6 +6,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
 import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -21,11 +22,12 @@ const context = {
     canIUse: () => true,
     settings: {
       app: {
-        url: 'some url'
+        url: (new URL(window.location.href)).origin
       }
     }
   },
-  resourceTypesSettings
+  resourceTypesSettings,
+  port: new MockPort()
 };
 
 
@@ -45,5 +47,6 @@ export const Initial = Template.bind({});
 Initial.args = {
   resource: {
     "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
-  }
+  },
+  onClose: () => {}
 };

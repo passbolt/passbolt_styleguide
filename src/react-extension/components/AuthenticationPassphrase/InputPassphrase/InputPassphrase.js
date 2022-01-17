@@ -156,11 +156,20 @@ class InputPassphrase extends Component {
    * Handle invalid passphrase.
    */
   handleInvalidPassphrase() {
-    const attempt = this.state.attempt + 1;
+    const isPassphraseEmpty = this.state.passphrase === "";
+    const passphraseError = isPassphraseEmpty
+      ? this.translate("The passphrase should not be empty.")
+      : this.translate("This is not a valid passphrase.");
+
+    let attempt = this.state.attempt;
+    if (!isPassphraseEmpty) {
+      attempt++;
+    }
+
     this.setState({
       processing: false,
       attempt: attempt,
-      passphraseError: this.translate("This is not a valid passphrase.")
+      passphraseError: passphraseError
     });
     if (attempt < 3) {
       // Force the passphrase input focus. The autoFocus attribute only works during the first rendering.
@@ -322,7 +331,7 @@ class InputPassphrase extends Component {
                     type={this.state.isObfuscated ? "password" : "text"}
                     name="passphrase"
                     placeholder={this.translate("Passphrase")}
-                    required="required" ref={this.passphraseInputRef}
+                    ref={this.passphraseInputRef}
                     className={`required ${this.state.passphraseError ? "error" : ""}`}
                     value={this.state.passphrase}
                     autoFocus={true}

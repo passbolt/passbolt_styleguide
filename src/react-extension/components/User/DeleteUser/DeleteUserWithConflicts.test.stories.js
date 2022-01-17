@@ -3,6 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteUserWithConflicts from "./DeleteUserWithConflicts";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -250,7 +251,9 @@ const context = {
         ]
       }
     }
-  }
+  },
+  setContext: () => {},
+  port: new MockPort()
 };
 
 
@@ -266,3 +269,6 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  onClose: () => {}
+};

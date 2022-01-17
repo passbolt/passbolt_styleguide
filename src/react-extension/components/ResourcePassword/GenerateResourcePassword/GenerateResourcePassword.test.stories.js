@@ -16,6 +16,7 @@ import AppContext from "../../../contexts/AppContext";
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import GenerateResourcePassword from "./GenerateResourcePassword";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -55,13 +56,12 @@ Initial.args = {
             {
               "name": "lower",
               "label": "a-z",
-              "characters": "abcdefghijklmnopqrstuvwxyz",
+              "characters": "abcdefghijklmnopqrstuvwxyz"
             },
             {
               "name": "digit",
               "label": "0-9",
-              "characters": "0123456789",
-              "required": true,
+              "characters": "0123456789"
             },
             {
               "name": "parenthesis",
@@ -108,5 +108,9 @@ Initial.args = {
         }
       ]
     }
+  },
+  onClose: () => {},
+  context: {
+    port: new MockPort()
   }
 };

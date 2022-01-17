@@ -45,6 +45,11 @@ class PassphraseDialog extends React.Component {
     event.preventDefault();
     this.setState({processing: true});
 
+    if (this.state.passphrase === "") {
+      this.handlePassphraseError();
+      return;
+    }
+
     try {
       await this.props.context.port.request('passbolt.keyring.private.checkpassphrase', this.state.passphrase);
       this.handlePassphraseSuccess();
@@ -63,11 +68,20 @@ class PassphraseDialog extends React.Component {
   }
 
   handlePassphraseError() {
-    const attempt = this.state.attempt + 1;
+    const isPassphraseEmpty = this.state.passphrase === "";
+    const errorMessage = isPassphraseEmpty
+      ? this.translate("The passphrase should not be empty.")
+      : this.translate("This is not a valid passphrase.")
+
+    let attempt = this.state.attempt;
+    if (!isPassphraseEmpty) {
+      attempt++;
+    }
+
     this.setState({
       processing: false,
       attempt: attempt,
-      passphraseError: "this is not a valid passphrase"
+      passphraseError: errorMessage
     });
     if (attempt < 3) {
       // Force the passphrase input focus. The autoFocus attribute only works during the first rendering.
@@ -154,7 +168,7 @@ class PassphraseDialog extends React.Component {
                 }
               </div>
               <div className="input checkbox small">
-                <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} />
+                <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing}/>
                 <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
               </div>
             </div>

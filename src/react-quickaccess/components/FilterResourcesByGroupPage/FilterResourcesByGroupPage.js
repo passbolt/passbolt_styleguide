@@ -230,7 +230,7 @@ class FilterResourcesByGroupPage extends React.Component {
 
   isReady() {
     return this.state.groups !== null
-      || this.state.resources != null;
+      || this.state.resources !== null;
   }
 
   render() {

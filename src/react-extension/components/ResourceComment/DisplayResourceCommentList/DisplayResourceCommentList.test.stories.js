@@ -14,7 +14,7 @@ const context = {
     canIUse: () => true,
     settings: {
       app: {
-        url: 'some url'
+        url: (new URL(window.location.href)).origin
       }
     },
   },
@@ -45,17 +45,17 @@ const context = {
       foreign_key: "f302754f-f290-42a6-9ea3-7049c6d4dbe3",
       foreign_model: "Resource",
       id: "9e56b21f-36f1-44a7-a363-1c6ccbbf09e2",
-      modified: "2020-09-01T13:13:19+00:00",
+      modified: "2020-09-02T13:13:19+00:00",
       modified_by: "5247399c-6c8a-47f0-8880-aa854e01e554",
       parent_id: null,
       user_id: "5247399c-6c8a-47f0-8880-aa854e01e554",
     }, {
       children: [],
       content: "This is another comment",
-      created: "2020-09-01T13:13:19+00:00",
-      created_by: "5247399c-6c8a-47f0-8880-aa854e01e554",
+      created: "2021-09-01T13:13:19+00:00",
+      created_by: "5247399c-6c8a-47f0-8880-aa854e01e555",
       creator: {
-        id: "5247399c-6c8a-47f0-8880-aa854e01e554",
+        id: "5247399c-6c8a-47f0-8880-aa854e01e555",
         role_id: "c4870358-e32f-41ce-999b-8f80c9b0d17f",
         active: true,
         deleted: false,
@@ -83,9 +83,9 @@ const context = {
       children: [],
       content: "This is a third comment",
       created: "2020-08-25T13:13:19+00:00",
-      created_by: "5247399c-6c8a-47f0-8880-aa854e01e554",
+      created_by: "5247399c-6c8a-47f0-8880-aa854e01e556",
       creator: {
-        id: "5247399c-6c8a-47f0-8880-aa854e01e554",
+        id: "5247399c-6c8a-47f0-8880-aa854e01e556",
         role_id: "c4870358-e32f-41ce-999b-8f80c9b0d17f",
         active: true,
         deleted: false,
@@ -113,7 +113,8 @@ const context = {
   },
   loggedInUser: {
     id: "5247399c-6c8a-47f0-8880-aa854e01e554"
-  }
+  },
+  setContext: () => {}
 };
 
 

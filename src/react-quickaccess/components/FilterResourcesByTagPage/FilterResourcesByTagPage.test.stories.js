@@ -10,11 +10,10 @@ export default {
   component: FilterResourcesByTagPage
 };
 
-const Template = ({context, initialEntries, ...args}) =>
+const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={initialEntries}>
-      <Route exact path="/" component={routerProps => <div className="container quickaccess"><FilterResourcesByTagPage {...args} {...routerProps}/></div>}/>
-      <Route path="/:id" component={routerProps => <div className="container quickaccess"><FilterResourcesByTagPage {...args} {...routerProps}/></div>}/>
+    <MemoryRouter initialEntries={['/']}>
+      <Route path={["/", "/:id"]} component={routerProps => <div className="container quickaccess"><FilterResourcesByTagPage {...args} {...routerProps}/></div>}/>
     </MemoryRouter>
   </AppContext.Provider>;
 
@@ -29,8 +28,7 @@ const parameters = {
 
 export const InitialLoad = Template.bind({});
 InitialLoad.args = {
-  context: defaultAppContext(),
-  initialEntries: ['/']
+  context: defaultAppContext()
 };
 InitialLoad.parameters = parameters;
 
@@ -41,8 +39,7 @@ const contextNoTag = {
 };
 export const NoTags = Template.bind({});
 NoTags.args = {
-  context: defaultAppContext(contextNoTag),
-  initialEntries: ['/']
+  context: defaultAppContext(contextNoTag)
 };
 NoTags.parameters = parameters;
 
@@ -53,7 +50,6 @@ const contextResourcesTags = {
 };
 export const TagsResourcesMatched = Template.bind({});
 TagsResourcesMatched.args = {
-  context: defaultAppContext(contextResourcesTags),
-  initialEntries: ['/']
+  context: defaultAppContext(contextResourcesTags)
 };
 TagsResourcesMatched.parameters = parameters;
