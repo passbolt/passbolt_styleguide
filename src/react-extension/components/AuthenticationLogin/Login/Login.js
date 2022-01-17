@@ -400,19 +400,36 @@ class Login extends Component {
               }
 
               <div className="form-actions">
-                <button
-                  type="submit"
-                  className={`button primary big full-width ${processingClassName}`}
-                  role="button"
-                  disabled={this.isProcessing}>
-                  <Trans>Sign in</Trans>
-                </button>
-                <Link
-                  to={{pathname: `${this.trustedDomain}/users/recover?locale=${this.props.context.locale}`}}
-                  target="_parent"
-                  rel="noopener noreferrer">
-                  <Trans>Or switch to another account.</Trans>
-                </Link>
+                {!this.props.displayAsAccountRecoveryForm && <>
+                  <button
+                    type="submit"
+                    className={`button primary big full-width ${processingClassName}`}
+                    role="button"
+                    disabled={this.isProcessing}>
+                    <Trans>Sign in</Trans>
+                  </button>
+                  <Link
+                    to={{pathname: `${this.trustedDomain}/users/recover?locale=${this.props.context.locale}`}}
+                    target="_parent"
+                    rel="noopener noreferrer">
+                    <Trans>Or switch to another account.</Trans>
+                  </Link>
+                </>}
+                {this.props.displayAsAccountRecoveryForm && <>
+                  <button
+                    type="submit"
+                    className={`button primary big full-width ${processingClassName}`}
+                    role="button"
+                    disabled={this.isProcessing}>
+                    <Trans>Complete recovery</Trans>
+                  </button>
+                  <Link
+                    to={{pathname: `${this.trustedDomain}/users/recover?locale=${this.props.context.locale}`}}
+                    target="_parent"
+                    rel="noopener noreferrer">
+                    <Trans>Help, I lost my passphrase.</Trans>
+                  </Link>
+                </>}
               </div>
             </form>
           </div>
@@ -428,5 +445,6 @@ Login.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
+  displayAsAccountRecoveryForm: PropTypes.bool, // Defines how the form should be displayed and behaves
 };
 export default withAppContext(withAuthenticationContext(withDialog(withTranslation('common')(Login))));
