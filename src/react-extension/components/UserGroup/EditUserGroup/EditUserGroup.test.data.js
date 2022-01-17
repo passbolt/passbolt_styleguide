@@ -27,7 +27,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
-    onClose: jest.fn(),
+    onClose: () => {},
     dialogContext: {
       open: () => {}
     },

@@ -67,6 +67,7 @@ class ExtQuickAccess extends React.Component {
     this.handlePassphraseDialogCompleted = this.handlePassphraseDialogCompleted.bind(this);
     this.loginSuccessCallback = this.loginSuccessCallback.bind(this);
     this.logoutSuccessCallback = this.logoutSuccessCallback.bind(this);
+    this.mfaRequiredCallback = this.mfaRequiredCallback.bind(this);
   }
 
   async componentDidMount() {
@@ -190,6 +191,11 @@ class ExtQuickAccess extends React.Component {
     this.setState({isAuthenticated: false});
   }
 
+  mfaRequiredCallback(url) {
+    browser.tabs.create({url});
+    window.close();
+  }
+
   handleKeyDown(event) {
     // Close the quickaccess popup when the user presses the "ESC" key.
     if (event.keyCode === 27) {
@@ -250,7 +256,10 @@ class ExtQuickAccess extends React.Component {
                   <PrepareResourceContextProvider>
                     <AnimatedSwitch>
                       <Route path="/data/quickaccess/login" render={() => (
-                        <LoginPage loginSuccessCallback={this.loginSuccessCallback} canRememberMe={this.canRememberMe}/>
+                        <LoginPage 
+                          loginSuccessCallback={this.loginSuccessCallback}
+                          mfaRequiredCallback={this.mfaRequiredCallback} 
+                          canRememberMe={this.canRememberMe}/>
                       )}/>
                       <PrivateRoute exact path="/data/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
                       <PrivateRoute path="/data/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>

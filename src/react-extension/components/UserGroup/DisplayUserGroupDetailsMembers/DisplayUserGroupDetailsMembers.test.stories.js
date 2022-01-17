@@ -64,6 +64,7 @@ Initial.args = {
           },
         ],
       },
-    }
+    },
+    onGroupToEdit: () => {}
   }
 };

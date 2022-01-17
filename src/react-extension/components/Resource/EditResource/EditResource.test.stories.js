@@ -1,7 +1,9 @@
-import {defaultAppContext} from "./EditResource.test.data";
+import React from "react";
+import {MemoryRouter, Route} from "react-router-dom";
+import {defaultProps} from "./EditResource.test.data";
 import EditResource from "./EditResource";
-import {EditResourcePageTemplate} from "./EditResource.test.page";
-
+import AppContext from "../../../contexts/AppContext";
+import PropTypes from "prop-types";
 
 /**
  * EditResource stories
@@ -11,7 +13,19 @@ export default {
   component: EditResource
 };
 
+const props = defaultProps();
+props.context.setContext = () => {};
 
-const Template = () => EditResourcePageTemplate(defaultAppContext(), {});
+const Template = ({context, ...args}) =>
+  <AppContext.Provider value={context}>
+    <MemoryRouter initialEntries={['/']}>
+      <Route component={routerProps => <EditResource {...args} {...routerProps}/>}></Route>
+    </MemoryRouter>
+  </AppContext.Provider>;
+
+Template.propTypes = {
+  context: PropTypes.object
+};
 
 export const Initial = Template.bind({});
+Initial.args = {...props};

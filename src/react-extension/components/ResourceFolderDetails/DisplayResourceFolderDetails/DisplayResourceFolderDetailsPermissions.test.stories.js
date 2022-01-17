@@ -40,7 +40,9 @@ const context = {
 const Template = args =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayResourceFolderDetailsPermissions {...args} {...routerProps}/>}></Route>
+      <div className="panel aside">
+        <Route component={routerProps => <DisplayResourceFolderDetailsPermissions {...args} {...routerProps}/>}></Route>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

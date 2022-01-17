@@ -3,7 +3,8 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import CreateResource from "./CreateResource";
-
+import MockPort from "../../../test/mock/MockPort";
+import {defaultProps} from "./CreateResource.test.data";
 
 export default {
   title: 'Passbolt/Resource/CreateResource',
@@ -18,6 +19,9 @@ export default {
   }
 };
 
+const mockedPort = new MockPort();
+mockedPort.addRequestListener("passbolt.resources.create", data => data);
+
 const context = {
   userSettings: {
     getSecurityTokenBackgroundColor: () => '#FFFF',
@@ -26,9 +30,18 @@ const context = {
   },
   resourceTypesSettings: {
     areResourceTypesEnabled: () => true,
-    isEncryptedDescriptionEnabled: () => true
+    isEncryptedDescriptionEnabled: () => true,
+    findResourceTypeIdBySlug: () => "type id",
+    DEFAULT_RESOURCE_TYPES_SLUGS: {
+      PASSWORD_AND_DESCRIPTION: "password and description"
+    },
+    isLegacyResourceTypeEnabled: () => true
+  },
+  resourceCreateDialogProps: {
+    folderParentId: "folder parent id test",
   },
   siteSettings: {
+    canIUse: () => true,
     generatorConfiguration: {
       "default_generator": "passphrase",
       "generators": [
@@ -83,7 +96,9 @@ const context = {
         }
       ]
     }
-  }
+  },
+  setContext: () => {},
+  port: mockedPort
 };
 
 
@@ -101,4 +116,5 @@ Template.propTypes = {
 export const Initial = Template.bind({});
 Initial.args = {
   context: context,
+  ...defaultProps()
 };

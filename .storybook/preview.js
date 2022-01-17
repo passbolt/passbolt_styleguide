@@ -1,10 +1,28 @@
 import React from 'react';
+import AppContext from '../src/react-extension/contexts/AppContext';
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 const withLocalProvider = (Story, context) =>
   <MockTranslationProvider language={context.globals.locale}>
     <Story/>
   </MockTranslationProvider>;
+
+const defaultContext = {
+  siteSettings: {
+    canIUse: () => true,
+    settings: {
+      app: {
+        url: (new URL(window.location.href)).origin,
+      }
+    }
+  },
+  trustedDomain: "http://localhost:6006",
+};
+
+const withAppContextProvider = (Story) =>
+  <AppContext.Provider value={defaultContext}>
+    <Story/>
+  </AppContext.Provider>;
 
 function withStylesheet(Story, context) {
   const themeName = context.globals.themes || "default";
@@ -61,4 +79,4 @@ export const parameters = {
   }
 };
 
-export const decorators = [withLocalProvider, withStylesheet];
+export const decorators = [withAppContextProvider, withLocalProvider, withStylesheet];

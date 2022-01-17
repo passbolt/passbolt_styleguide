@@ -23,6 +23,6 @@ const mockTabInfo = {
 };
 
 export const mockResults = {
-  "passbolt.resource.prepare-autosave": mockTabInfo,
+  "passbolt.quickaccess.prepare-autosave": mockTabInfo,
   "passbolt.resources.create": {}
 };

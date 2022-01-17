@@ -9,7 +9,7 @@ export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     userSettings: {
-      getTrustedDomain: () => "some url"
+      getTrustedDomain: () => (new URL(window.location.href)).origin
     },
     siteSettings: {
       getServerTimezone: () => ""

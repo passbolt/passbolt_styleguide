@@ -47,7 +47,7 @@ describe("Display Users Contextual Menu", () => {
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "some url/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "http://localhost/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });

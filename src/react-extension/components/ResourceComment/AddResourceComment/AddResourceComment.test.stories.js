@@ -1,6 +1,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
+import MockPort from "../../../test/mock/MockPort";
 import AddResourceComment from "./AddResourceComment";
 
 
@@ -14,15 +15,19 @@ const context = {
     canIUse: () => true,
     settings: {
       app: {
-        url: 'some url'
+        url: (new URL(window.location.href)).origin
       }
     }
-  }
+  },
+  loggedInUser: {
+
+  },
+  port: new MockPort()
 };
 
 
 const Template = args =>
-  <AppContext.Provider value={context}>
+  <AppContext.Provider value={args.context}>
     <MemoryRouter initialEntries={['/']}>
       <div className="panel aside">
         <div className="comments">
@@ -34,3 +39,10 @@ const Template = args =>
 
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  resource: {
+    id: "test"
+  },
+  onAdd: () => {}
+};

@@ -3,6 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import UploadUserProfileAvatar from "./UploadUserProfileAvatar";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -12,7 +13,7 @@ export default {
 
 const context = {
   userSettings: {
-    getTrustedDomain: () => "some url"
+    getTrustedDomain: () => (new URL(window.location.href)).origin
   },
   loggedInUser:  {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
@@ -41,11 +42,13 @@ const context = {
     },
     "is_mfa_enabled": false,
     "last_logged_in": null
-  }
+  },
+  port: new MockPort(),
+  setContext: () => {}
 };
 
 
-const Template = args =>
+const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <UploadUserProfileAvatar {...args} {...routerProps}/>}></Route>
@@ -57,3 +60,7 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  onClose: () => {}
+};

@@ -123,10 +123,13 @@ const settingsPasswordGenerator = {
 
 const mockTabInfo = {
   title: "test",
-  url: "www.test.com"
+  uri: "www.test.com",
+  name: "Tab test",
+  username: "test@passbolt.com",
+  secret_clear: "password test"
 };
 
 export const mockResults = {
-  "passbolt.resources.prepare-resource": mockTabInfo,
+  "passbolt.quickaccess.prepare-resource": mockTabInfo,
   "passbolt.resources.create": {}
 };

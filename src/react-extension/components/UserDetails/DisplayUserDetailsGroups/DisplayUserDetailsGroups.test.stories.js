@@ -14,7 +14,7 @@ export default {
 const context = {
   port: new MockPort(),
   userSettings: {
-    getTrustedDomain: () => "some url"
+    getTrustedDomain: () => (new URL(window.location.href)).origin
   },
   siteSettings: {
     getServerTimezone: () => ""

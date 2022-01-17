@@ -5,6 +5,7 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
 import TranslationProvider from "../../Common/Internationalisation/TranslationProvider";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -12,21 +13,26 @@ export default {
   component: DisplayResourceDetailsTag
 };
 
+const tags = [{
+  id: 1,
+  slug: 'apache'
+}];
+const mockedPort = new MockPort();
+mockedPort.addRequestListener("passbolt.tags.find-all", () => tags);
+
 const context = {
   siteSettings: {
     getServerTimezone: () => new Date().toDateString()
   },
   userSettings: new UserSettings(userSettingsFixture),
-  port: {
-    request: () => "A resource description"
-  }
+  port: mockedPort
 };
 
 const Template = args =>
   <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
     <AppContext.Provider value={context}>
       <MemoryRouter initialEntries={['/']}>
-        <div className="panel">
+        <div className="panel aside">
           <Route component={routerProps => <DisplayResourceDetailsTag {...args} {...routerProps}/>}></Route>
         </div>
       </MemoryRouter>
@@ -41,12 +47,7 @@ DecryptedDescription.args = {
         permission: {
           type: 15
         },
-        tags: [
-          {
-            id: 1,
-            slug: 'apache'
-          }
-        ]
+        tags: tags
       }
     }
   }

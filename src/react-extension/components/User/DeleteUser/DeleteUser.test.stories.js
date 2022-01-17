@@ -3,6 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteUser from "./DeleteUser";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -50,11 +51,13 @@ const context = {
       "__placeholder_last_logged_in__": "",
       "last_logged_in": ""
     }
-  }
+  },
+  setContext: () => {},
+  port: new MockPort()
 };
 
 
-const Template = args =>
+const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <DeleteUser {...args} {...routerProps}/>}></Route>
@@ -66,3 +69,7 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  onClose: () => {}
+};

@@ -21,7 +21,11 @@ const context = {
 const Template = args =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ChangeUserSecurityToken {...args} {...routerProps}/>}></Route>
+      <div className="page settings">
+        <div className="profile-choose-security-token">
+          <Route component={routerProps => <ChangeUserSecurityToken {...args} {...routerProps}/>}></Route>
+        </div>
+      </div>
     </MemoryRouter>
   </AppContext.Provider>;
 

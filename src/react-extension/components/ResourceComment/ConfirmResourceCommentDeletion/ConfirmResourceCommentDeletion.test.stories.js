@@ -14,15 +14,16 @@ const context = {
     canIUse: () => true,
     settings: {
       app: {
-        url: 'some url'
+        url: (new URL(window.location.href)).origin
       }
     }
-  }
+  },
+  setContext: () => {},
 };
 
 
 const Template = args =>
-  <AppContext.Provider value={context}>
+  <AppContext.Provider value={args.context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <ConfirmResourceCommentDeletion {...args} {...routerProps}/>}></Route>
     </MemoryRouter>
@@ -30,3 +31,7 @@ const Template = args =>
 
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  onClose: () => {},
+};

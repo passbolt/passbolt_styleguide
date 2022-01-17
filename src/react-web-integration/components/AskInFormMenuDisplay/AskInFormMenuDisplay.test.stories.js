@@ -16,6 +16,7 @@ import React, {useEffect} from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import ReactDOM from "react-dom";
 import AppContext from "../../contexts/AppContext";
+import MockPort from "../../../react-extension/test/mock/MockPort";
 
 export default {
   title: 'Passbolt/WebIntegration/AskInFormMenuDisplay',
@@ -60,32 +61,34 @@ const parameters = {
   css: "ext_in_form_cta"
 };
 
+const inactiveMockedPort = new MockPort();
+inactiveMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: false, isMfaRequired: false}));
 export const Inactive = Template.bind({});
 Inactive.args = {
   context: {
-    port: {
-      request: () => {throw {data: {code: 401}}}
-    }
+    port: inactiveMockedPort
   }
 };
 Inactive.parameters = parameters;
 
+const activeWithNoSuggestionMockedPort = new MockPort();
+activeWithNoSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: true, isMfaRequired: false}));
+activeWithNoSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.suggested-resources', () => 0);
 export const ActiveWithNoSuggestion = Template.bind({});
 ActiveWithNoSuggestion.args = {
   context: {
-    port: {
-      request: () => ({isActive: true, suggestedResourcesCount: 0})
-    }
+    port: activeWithNoSuggestionMockedPort
   }
 };
 ActiveWithNoSuggestion.parameters = parameters;
 
+const activeWithOneSuggestionMockedPort = new MockPort();
+activeWithOneSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: true, isMfaRequired: false}));
+activeWithOneSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.suggested-resources', () => 1);
 export const ActiveWithOneSuggestion = Template.bind({});
 ActiveWithOneSuggestion.args = {
   context: {
-    port: {
-      request: () => ({isActive: true, suggestedResourcesCount: 1})
-    }
+    port: activeWithOneSuggestionMockedPort
   }
 };
 ActiveWithOneSuggestion.parameters = parameters;
