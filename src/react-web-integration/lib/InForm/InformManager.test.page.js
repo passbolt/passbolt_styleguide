@@ -18,6 +18,7 @@
 
 import InFormManager from "./InFormManager";
 import {fireEvent, waitFor} from "@testing-library/react";
+import InFormFieldSelector from "./InFormFieldSelector";
 
 export default class InformManagerPage {
   /**
@@ -35,14 +36,14 @@ export default class InformManagerPage {
    * Returns the username element
    */
   get username() {
-    return document.querySelector('#username');
+    return document.querySelector(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
   }
 
   /**
    * Returns the password element
    */
   get password() {
-    return document.querySelector('#password');
+    return document.querySelector(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
   }
 
   /**
@@ -50,6 +51,13 @@ export default class InformManagerPage {
    */
   get search() {
     return document.querySelector('#search');
+  }
+
+  /**
+   * Returns the save button processing elements
+   */
+  get submitButton() {
+    return document.querySelector('[type=\"submit\"]');
   }
 
   /**
@@ -108,9 +116,38 @@ export default class InformManagerPage {
     await waitFor(() => {});
   }
 
-  async clickOnInformCallToAction() {
+  /**
+   * Save
+   */
+  async save() {
     const leftClick = {button: 0};
-    fireEvent.click(this.iframesCallToAction, leftClick);
+    fireEvent.click(this.submitButton, leftClick);
     await waitFor(() => {});
+  }
+
+  async clickOnInformCallToAction() {
+    InFormManager.lastCallToActionFieldClicked = InFormManager.callToActionFields[0];
+    await waitFor(() => {});
+  }
+
+  /**
+   * Autofill credentials
+   * @param username
+   * @param password
+   */
+  async autofillCredentials(username, password) {
+    await port.emit('passbolt.web-integration.fill-credentials', {username, password});
+  }
+
+  /**
+   * Autofill password
+   * @param password
+   */
+  async autofillPassword(password) {
+    InFormManager.menuField = {
+      removeMenuIframe: () => {},
+      destroy: () => {}
+    };
+    await port.emit('passbolt.web-integration.fill-password', password);
   }
 }

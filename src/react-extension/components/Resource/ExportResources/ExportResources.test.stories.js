@@ -52,7 +52,8 @@ const context = {
     {
       id: 2
     }
-  ]
+  ],
+  setContext: () => {}
 };
 
 
@@ -71,5 +72,6 @@ Initial.args = {
       foldersIds: [1, 2]
     },
     onResourcesToExport: () => {}
-  }
+  },
+  onClose: () => {}
 };

@@ -31,8 +31,6 @@ class InFormMenuField {
     this.iframeId = uuidv4();
     /** Flag telling if the user is mousing over the menu (iframe) */
     this.isMenuMousingOver = false;
-    /** In-form menu click watcher */
-    this.menuClickWatcher = null;
     /** The scrollable field parent */
     this.scrollableFieldParent = null;
 
@@ -72,18 +70,19 @@ class InFormMenuField {
    * @return {HTMLIFrameElement} The created iframe
    */
   createMenuIframe() {
+    // IMPORTANT: Calculate position before inserting iframe in document to avoid issue
+    const {top, left} = this.calculateIframePosition();
     const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
-    const {top, left} = this.calculateIframePosition();
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
-    iframe.style.top = top + 'px'
+    iframe.style.top = top + 'px';
     iframe.style.left =  left + 'px';
     iframe.style.border = 0;
     iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
     iframe.style.height = '220px'; // For 3 items in a row to be display
-    iframe.style.zIndex = "1000";
+    iframe.style.zIndex = "123456";
     iframe.contentWindow.location = `${browserExtensionUrl}data/passbolt-iframe-in-form-menu.html?passbolt=passbolt-iframe-in-form-menu`;
     return iframe;
   }
@@ -96,19 +95,32 @@ class InFormMenuField {
     let x = 0;
     let y = 0;
     let currentElement = this.field;
-    const {height, width} = this.field.getBoundingClientRect();
+    let hasScroll = false;
+    const {top, left, height, width} = this.field.getBoundingClientRect();
     const {top: topBody, left: leftBody} = document.documentElement.getBoundingClientRect();
-    // We loop to calculate the cumulated position of the field
-    // from its ancestors and itself differential offset / scroll position
-    while( currentElement && !isNaN( currentElement.offsetLeft ) && !isNaN( currentElement.offsetTop ) ) {
+    /*
+     * We loop to calculate the cumulated position of the field
+     * from its ancestors and itself differential offset / scroll position
+     */
+    while (currentElement && !isNaN(currentElement.offsetLeft) && !isNaN(currentElement.offsetTop)) {
+      hasScroll = hasScroll || currentElement.scrollLeft + currentElement.scrollTop > 0;
       x += currentElement.offsetLeft - currentElement.scrollLeft;
       y += currentElement.offsetTop - currentElement.scrollTop;
       currentElement = currentElement.offsetParent;
     }
-    // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment ) to align with the call to action icon
-    x = x + leftBody + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
-    y = y + topBody + height; // Calculate the middle position of the input, 8 is the half of the iframe height
-    return { top: y, left: x };
+    /*
+     * If there is no scroll on the page, we use the getBoundingClientRect to have the position of the field
+     * this avoid a position issue if there is a transform style in css
+     */
+    if (!hasScroll) {
+      x = left + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
+      y = top + height; // Calculate the bottom position of the input
+    } else {
+      // Then we add the body offset (notably in case of window scroll) + some local adjustments (margin / vertical aligment ) to align with the call to action icon
+      x = x + leftBody + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
+      y = y + topBody + height; // Calculate the bottom position of the input
+    }
+    return {top: y, left: x};
   }
 
   /**
@@ -116,7 +128,8 @@ class InFormMenuField {
    * @param iframe The menu iframe
    */
   handleMenuClicked(iframe) {
-    /* We need to know which iframe the user click on. We cannot add a listener on iframe
+    /*
+     * We need to know which iframe the user click on. We cannot add a listener on iframe
      * since there are from different domains (target page vs extension pagemods)
      */
     iframe.addEventListener('mouseover', () => this.isMenuMousingOver = true);
@@ -149,7 +162,7 @@ class InFormMenuField {
   removeMenuIframe() {
     const iframes = document.querySelectorAll('iframe');
     iframes.forEach(iframe => {
-      const identifierToMatch = this.iframeId
+      const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {
         iframe.parentNode.removeChild(iframe);
       }

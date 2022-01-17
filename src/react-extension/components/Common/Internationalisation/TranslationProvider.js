@@ -51,6 +51,9 @@ class TranslationProvider extends Component {
       .init({
         lng: this.locale,
         load: 'currentOnly',
+        interpolation: {
+          escapeValue: false, // not needed since react already escape - https://github.com/i18next/react-i18next/issues/277
+        },
         react: {
           useSuspense: false,
           /*

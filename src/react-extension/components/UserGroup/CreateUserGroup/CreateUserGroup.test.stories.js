@@ -13,7 +13,7 @@ export default {
 
 const context = {
   userSettings: {
-    getTrustedDomain: () => 'some url'
+    getTrustedDomain: () => (new URL(window.location.href)).origin
   },
   port: {
     request: () => mockGpgKey
@@ -43,3 +43,7 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  context: context,
+  onClose: () => {}
+};

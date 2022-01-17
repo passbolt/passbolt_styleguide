@@ -12,7 +12,7 @@ export function defaultAppContext(appContext) {
       canIUse: () => true
     },
     userSettings: {
-      getTrustedDomain: () => 'https://passbolt.local'
+      getTrustedDomain: () => (new URL(window.location.href)).origin
     },
     loggedInUser: {
       role: {

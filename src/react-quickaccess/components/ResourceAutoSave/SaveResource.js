@@ -76,6 +76,27 @@ class ResourceCreatePage extends React.Component {
     window.close();
   }
 
+  validateFields() {
+    const state = {
+      nameError: "",
+      passwordError: ""
+    };
+    let isValid = true;
+
+    if (this.state.name === "") {
+      state.nameError = this.translate("A name is required.");
+      isValid = false;
+    }
+
+    if (this.state.password === "") {
+      state.passwordError = this.translate("A password is required.");
+      isValid = false;
+    }
+
+    this.setState(state);
+    return isValid;
+  }
+
   async handleFormSubmit(event) {
     event.preventDefault();
     this.setState({
@@ -85,6 +106,11 @@ class ResourceCreatePage extends React.Component {
       usernameError: "",
       uriError: "",
     });
+
+    if (!this.validateFields()) {
+      this.setState({processing: false});
+      return;
+    }
 
     const resourceDto = {
       name: this.state.name,
@@ -167,7 +193,7 @@ class ResourceCreatePage extends React.Component {
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
                 <label htmlFor="name"><Trans>Name</Trans></label>
                 <input name="name" value={this.state.name} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="required fluid" maxLength="64" type="text" id="name" required="required" autoComplete="off" />
+                  className="required fluid" maxLength="255" type="text" id="name" autoComplete="off" />
                 {this.state.nameError &&
                 <div className="error-message">{this.state.nameError}</div>
                 }
@@ -183,7 +209,7 @@ class ResourceCreatePage extends React.Component {
               <div className="input text">
                 <label htmlFor="username"><Trans>Username</Trans></label>
                 <input name="username" value={this.state.username} onChange={this.handleInputChange} disabled={this.state.processing}
-                  className="fluid" maxLength="64" type="text" id="username" autoComplete="off" />
+                  className="fluid" maxLength="255" type="text" id="username" autoComplete="off" />
                 {this.state.usernameError &&
                 <div className="error-message">{this.state.usernameError}</div>
                 }
@@ -193,7 +219,7 @@ class ResourceCreatePage extends React.Component {
                 <div className="password-management">
                   <div className="flex-row">
                     <input name="password" maxLength="4096" value={this.state.password} onChange={this.handlePasswordChange} disabled={this.state.processing}
-                      type={this.state.viewPassword ? "text" : "password"} className="required" placeholder={this.translate('Password')} id="password" required="required"
+                      type={this.state.viewPassword ? "text" : "password"} className="required" placeholder={this.translate('Password')} id="password"
                       autoComplete="new-password"/>
                     <a onClick={this.handleViewPasswordButtonClick} className={`password-view button button-icon button-toggle ${this.state.viewPassword ? "selected" : ""}`}>
                       <span className="fa icon">
@@ -202,6 +228,9 @@ class ResourceCreatePage extends React.Component {
                       <span className="visually-hidden"><Trans>view</Trans></span>
                     </a>
                   </div>
+                    {this.state.passwordError &&
+                      <div className="error-message">{this.state.passwordError}</div>
+                    }
                   <div className="password-strength flex-row">
                     <span className="password-strength-bar"><span className={`password-strength-bar-value ${this.state.strengthClass}`}/></span>
                     <span className="password-strength-label"><Trans>Strength:</Trans></span>

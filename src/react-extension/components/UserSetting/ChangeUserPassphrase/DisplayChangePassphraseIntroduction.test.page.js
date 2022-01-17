@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
 import AppContext from "../../../contexts/AppContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The DisplayChangePassphraseIntroduction component represented as a page
@@ -28,7 +29,9 @@ export default class DisplayChangePassphraseIntroductionPage {
   constructor(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-        <DisplayChangePassphraseIntroduction {...props}/>
+        <MockTranslationProvider>
+          <DisplayChangePassphraseIntroduction {...props}/>
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
   }

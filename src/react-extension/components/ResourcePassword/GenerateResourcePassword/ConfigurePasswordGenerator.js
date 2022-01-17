@@ -153,7 +153,7 @@ class ConfigurePasswordGenerator extends React.Component {
               this.masks.map(mask => (
                 <button
                   key={mask.name}
-                  className={`button button-toggle ${(mask.active ? 'selected' : '')}`}
+                  className={`button button-toggle ${(mask.active || mask.required ? 'selected' : '')}`}
                   onClick={event => this.handleMaskToggled(mask.name, event)}>
                   {mask.label}
                 </button>

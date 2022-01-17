@@ -14,6 +14,7 @@
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
 
 /**
@@ -26,7 +27,9 @@ export default class DownloadRecoveryKitPage {
    */
   constructor(props) {
     this._page = render(
-      <DownloadRecoveryKit {...props}/>
+      <MockTranslationProvider>
+        <DownloadRecoveryKit {...props}/>
+      </MockTranslationProvider>
     );
   }
 

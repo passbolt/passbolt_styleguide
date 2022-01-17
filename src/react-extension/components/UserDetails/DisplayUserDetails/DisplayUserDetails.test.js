@@ -39,7 +39,7 @@ describe("Display User Details", () => {
     mockContextRequest(context, () => {});
     jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "some url/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
   });
 

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import AppContext from "../../contexts/AppContext";
 import PassphraseDialog from "./PassphraseDialog";
 import {defaultAppContext} from "./PassphraseDialog.test.data";
+import MockPort from "../../../react-extension/test/mock/MockPort";
 
 export default {
   title: 'Passbolt/QuickAccess/PassphraseDialog',
@@ -34,10 +35,11 @@ Initial.args = {
 };
 Initial.parameters = parameters;
 
+const mockedPort = new MockPort();
+mockedPort.addRequestListener("passbolt.keyring.private.checkpassphrase", () => {throw new Error();} );
+
 const contextRequestError = {
-  port: {
-    request: () => {throw new Error()}
-  }
+  port: mockedPort
 };
 export const ErrorPassphrase = Template.bind({});
 ErrorPassphrase.args = {

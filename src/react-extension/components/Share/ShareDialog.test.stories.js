@@ -12,7 +12,7 @@ export default {
 
 const context = {
   userSettings: {
-    getTrustedDomain: () => "some url"
+    getTrustedDomain: () => (new URL(window.location.href)).origin
   },
   shareDialogProps: {
     resourcesIds: resources.map(resource => resource.id)
@@ -26,7 +26,8 @@ const context = {
           return autocompleteResult;
       }
     }
-  }
+  },
+  setContext: () => {}
 };
 
 
@@ -40,7 +41,8 @@ const Template = args =>
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: context
+  context: context,
+  onClose: () => {}
 };
 
 export const Loading = Template.bind({});

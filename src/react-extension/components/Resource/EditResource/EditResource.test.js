@@ -29,6 +29,9 @@ beforeEach(() => {
 describe("See the Edit Resource", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
+  props.onClose = jest.fn();
+  props.dialogContext.open = jest.fn();
+
   const passwordEditDialogProps = {
     id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
   };

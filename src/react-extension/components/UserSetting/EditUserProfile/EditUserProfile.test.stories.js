@@ -12,10 +12,20 @@ export default {
 
 const context = {
   userSettings: {
-    getTrustedDomain: () => "some url"
+    getTrustedDomain: () => (new URL(window.location.href)).origin
   },
   siteSettings: {
-    canIUse: () => true
+    canIUse: () => true,
+    supportedLocales: [
+      {
+        locale: "fr-FR",
+        label: "French"
+      },
+      {
+        locale: "en-UK",
+        label: "English"
+      }
+    ]
   },
   loggedInUser:  {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
@@ -44,7 +54,8 @@ const context = {
     },
     "is_mfa_enabled": false,
     "last_logged_in": null
-  }
+  },
+  setContext: () => {},
 };
 
 
@@ -60,3 +71,6 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.args = {
+  onClose: () => {}
+};

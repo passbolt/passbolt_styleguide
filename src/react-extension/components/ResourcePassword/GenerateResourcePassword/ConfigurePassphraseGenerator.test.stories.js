@@ -26,5 +26,6 @@ Initial.args = {
       max_word: 40,
       separator: " "
     },
-  }
+  },
+  onChanged: () => {}
 };

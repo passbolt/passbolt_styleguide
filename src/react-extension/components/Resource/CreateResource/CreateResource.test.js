@@ -31,6 +31,8 @@ describe("See the Create Resource", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
+  props.onClose = jest.fn();
+  props.dialogContext.open = jest.fn();
   const resourceCreateDialogProps = {
     folderParentId: null
   };

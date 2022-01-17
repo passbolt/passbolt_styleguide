@@ -1,5 +1,5 @@
 export default {
-  "user.settings.trustedDomain": "http://localhost:3001",
+  "user.settings.trustedDomain": (new URL(window.location.href)).origin,
   "user.firstname": "Ada",
   "user.id": "f848277c-5398-58f8-a82a-72397af2d450",
   "user.lastname": "Lovelace",

@@ -15,8 +15,13 @@ import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import {Component} from "react";
 import PropTypes from "prop-types";
+import deTranslations from "../../../../../locales/de-DE/common.json";
 import enTranslations from "../../../../../locales/en-UK/common.json";
-import frTranslations from "../../../../../locales/fr/common.json";
+import frTranslations from "../../../../../locales/fr-FR/common.json";
+import jaTranslations from "../../../../../locales/ja-JP/common.json";
+import nlTranslations from "../../../../../locales/nl-NL/common.json";
+import plTranslations from "../../../../../locales/pl-PL/common.json";
+import svTranslations from "../../../../../locales/sv-SE/common.json";
 
 /**
  * This component set up the translation process
@@ -36,11 +41,26 @@ class MockTranslationProvider extends Component {
       .init({
         lng: props.language || 'en-UK',
         resources: {
+          "de-DE": {
+            common: deTranslations
+          },
           "en-UK": {
             common: enTranslations
           },
-          fr: {
+          "fr-FR": {
             common: frTranslations
+          },
+          "ja-JP": {
+            common: jaTranslations
+          },
+          "nl-NL": {
+            common: nlTranslations
+          },
+          "pl-PL": {
+            common: plTranslations
+          },
+          "sv-SE": {
+            common: svTranslations
           }
         },
         react: {

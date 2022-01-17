@@ -3,6 +3,7 @@ import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import ConfirmDisableUserMFA from "./ConfirmDisableUserMFA";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -73,5 +74,9 @@ Initial.args = {
       "last_logged_in": "",
       is_mfa_enabled: false
     }]
+  },
+  onClose: () => {},
+  context: {
+    port: new MockPort()
   }
 };

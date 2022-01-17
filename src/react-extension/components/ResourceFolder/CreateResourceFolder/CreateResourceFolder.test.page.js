@@ -16,6 +16,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateResourceFolder from "./CreateResourceFolder";
 
 /**
@@ -30,7 +31,9 @@ export default class CreateResourceFolderPage {
   constructor(appContext, props) {
     this._page = render(
       <AppContext.Provider  value={appContext}>
-        <CreateResourceFolder {...props}></CreateResourceFolder>
+        <MockTranslationProvider>
+          <CreateResourceFolder {...props}></CreateResourceFolder>
+        </MockTranslationProvider>
       </AppContext.Provider>
     );
   }

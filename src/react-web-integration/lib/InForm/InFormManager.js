@@ -17,6 +17,7 @@ import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import {fireEvent} from "@testing-library/dom/dist/events";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
+
 /**
  * Manages the in-form web integration including call-to-action and menu
  */
@@ -125,13 +126,39 @@ class InFormManager {
    * Whenever the DOM changes
    */
   handleDomChange() {
-    const updateAuthenticationFields = () => {
-      this.findAndSetAuthenticationFields();
-      this.handleInformCallToActionClickEvent();
+    const updateAuthenticationFields = (mutationsList) => {
+      // Check if a child node has been added or removed with type
+      const mutationChildNodes = mutation => mutation.type === 'childList';
+      // Check if the mutation is an iframe added or removed by us
+      const isMutationInformIframe = mutation => mutationChildNodes(mutation) && this.isInformIframe(mutation);
+      // Check if our iframe is in the mutation list
+      const hasNotMutationFromInformIframe = !mutationsList.some(isMutationInformIframe);
+      if (hasNotMutationFromInformIframe) {
+        this.findAndSetAuthenticationFields();
+        this.handleInformCallToActionClickEvent();
+      }
     }
     // Search again for authentication callToActionFields to attach when the DOM changes
     this.mutationObserver = new MutationObserver(updateAuthenticationFields);
     this.mutationObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
+  }
+
+  /**
+   * Check if the mutation is an iframe added or removed by us
+   * @param mutation
+   * @returns {boolean}
+   */
+  isInformIframe(mutation) {
+    const nodeList = mutation.addedNodes.length > 0 ? mutation.addedNodes : mutation.removedNodes;
+    let isInformIframe = false;
+    if (this.callToActionFields.length > 0) {
+      const isIdPresent = iframe => Array.prototype.some.call(nodeList, node => iframe.iframeId === node.id);
+      isInformIframe = this.callToActionFields.some(isIdPresent)
+    }
+    if (!isInformIframe && this.menuField) {
+      isInformIframe = Array.prototype.some.call(nodeList, node => this.menuField.iframeId === node.id);
+    }
+    return isInformIframe;
   }
 
   /**
@@ -163,7 +190,7 @@ class InFormManager {
    * Handle the click on the in-form call-to-action (iframe)
    */
   handleInformCallToActionClickEvent() {
-    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => this.lastCallToActionFieldClicked = callToActionField);
+    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => {this.lastCallToActionFieldClicked = callToActionField});
     this.callToActionFields.forEach(setLastCallToActionFieldClicked);
   }
 
@@ -183,12 +210,12 @@ class InFormManager {
       let username = null;
       let password = null;
       if (!isUsernameType) {
-        username = this.callToActionFields.find(field => field.fieldType === 'username')?.field.value;
+        username = this.callToActionFields.find(field => field.fieldType === 'username')?.field.value || "";
         password = this.lastCallToActionFieldClicked?.field.value;
       }
       if (!isPasswordType) {
         username = this.lastCallToActionFieldClicked?.field.value;
-        password = this.callToActionFields.find(field => field.fieldType === 'password')?.field.value;
+        password = this.callToActionFields.find(field => field.fieldType === 'password')?.field.value || "";
       }
       port.emit(requestId, 'SUCCESS', {username, password});
     });
@@ -204,13 +231,17 @@ class InFormManager {
       const isPasswordType = currentFieldType === 'password';
       if (!isUsernameType) {
         const usernameField = this.callToActionFields.find(field => field.fieldType === 'username')?.field;
-        fireEvent.input(usernameField, { target: { value: username } });
         fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: password } });
+        if (usernameField) {
+          fireEvent.input(usernameField, { target: { value: username } });
+        }
       }
       if (!isPasswordType) {
         const passwordField = this.callToActionFields.find(field => field.fieldType === 'password')?.field;
         fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: username } });
-        fireEvent.input(passwordField, { target: { value: password } });
+        if (passwordField) {
+          fireEvent.input(passwordField, { target: { value: password } });
+        }
       }
     });
   }

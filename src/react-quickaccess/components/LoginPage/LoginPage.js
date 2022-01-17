@@ -1,5 +1,3 @@
-
-import browser from "webextension-polyfill";
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -67,8 +65,7 @@ class LoginPage extends React.Component {
       this.props.loginSuccessCallback();
       this.props.history.push("/data/quickaccess.html");
     } else {
-      browser.tabs.create({url: this.props.context.userSettings.getTrustedDomain()});
-      window.close();
+      this.props.mfaRequiredCallback(this.props.context.userSettings.getTrustedDomain());
     }
   }
 
@@ -182,6 +179,7 @@ LoginPage.propTypes = {
   context: PropTypes.any, // The application context
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   loginSuccessCallback: PropTypes.func,
+  mfaRequiredCallback: PropTypes.func,
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -190,5 +188,3 @@ LoginPage.propTypes = {
 };
 
 export default withAppContext(withRouter(withTranslation('common')(LoginPage)));
-
-

@@ -12,7 +12,8 @@ export default {
 const context = {
   siteSettings: {
     canIUse: () => true
-  }
+  },
+  setContext: () => {}
 };
 
 
@@ -33,5 +34,6 @@ Initial.args = {
         resourcesCount: 15
       }
     }
-  }
+  },
+  onClose: () => {}
 };

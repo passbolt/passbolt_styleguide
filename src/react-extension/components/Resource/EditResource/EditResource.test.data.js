@@ -109,9 +109,9 @@ export function defaultProps() {
         ]
       }
     },
-    onClose: jest.fn(),
+    onClose: () => {},
     dialogContext: {
-      open: jest.fn()
+      open: () => {}
     }
   };
 }

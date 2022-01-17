@@ -2,6 +2,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import DeleteResource from "./DeleteResource";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -22,8 +23,13 @@ const singleContext = {
       {name: "My Password"}
     ]
   },
+  setContext: () => {},
+  port: new MockPort(),
 };
 export const SinglePassword = Template(singleContext).bind({});
+SinglePassword.args = {
+  onClose: () => {}
+};
 
 const multipleContext = {
   passwordDeleteDialogProps: {
@@ -32,5 +38,11 @@ const multipleContext = {
       {name: "My Another Password"}
     ]
   },
+  setContext: () => {},
+  port: new MockPort(),
 };
 export const MultiplePassword = Template(multipleContext).bind({});
+MultiplePassword.args = {
+  onClose: () => {}
+};
+

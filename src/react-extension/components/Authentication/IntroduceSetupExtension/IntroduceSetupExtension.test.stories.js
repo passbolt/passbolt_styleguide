@@ -10,7 +10,7 @@ export default {
 };
 
 const context = {
-  onCompletedIntroduceSetupExtension: jest.fn()
+  onCompletedIntroduceSetupExtension: () => {}
 };
 
 
