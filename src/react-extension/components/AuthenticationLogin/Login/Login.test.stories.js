@@ -39,3 +39,11 @@ export const Initial = Template.bind({});
 Initial.parameters = {
   css: "ext_authentication"
 };
+
+export const CompleteRecovery = Template.bind({});
+CompleteRecovery.args = {
+  displayAsAccountRecoveryForm: true
+};
+CompleteRecovery.parameters = {
+  css: "ext_authentication"
+};
