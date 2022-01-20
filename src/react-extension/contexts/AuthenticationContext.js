@@ -361,7 +361,12 @@ export class AuthenticationContextProvider extends React.Component {
    * Whenever the user lost his passphrase
    */
   async onPassphraseLost() {
-    await this.setState({state: AuthenticationContextState.PASSPHRASE_LOST});
+    const canRequestAccountRecoveryPolicy = this.state.recoverInfo?.user?.account_recovery_user_setting?.status === 'approved';
+    if (canRequestAccountRecoveryPolicy) {
+      await this.setState({state: AuthenticationContextState.REQUEST_ACCOUNT_RECOVERY});
+    } else {
+      await this.setState({state: AuthenticationContextState.CREDENTIALS_LOST});
+    }
   }
 
   /**
@@ -508,7 +513,8 @@ export const AuthenticationContextState = {
   RECOVERY_KIT_DOWNLOADED: 'Recovery Kit Downloaded',
   SECURITY_TOKEN_SAVED: 'Security Token Saved',
   SETUP_COMPLETE_REQUESTED: 'Setup Complete Requested',
-  PASSPHRASE_LOST: 'Passphrase lost',
+  CREDENTIALS_LOST: 'Credentials lost',
+  REQUEST_ACCOUNT_RECOVERY: 'Request account recovery',
   LOGIN_INITIALIZED: 'Login Initialized',
   LOGIN_SERVER_KEY_CHANGED: 'Login Server Key Changed',
   LOGIN_SERVER_KEY_CHECKED: 'Login Server Key Checked',

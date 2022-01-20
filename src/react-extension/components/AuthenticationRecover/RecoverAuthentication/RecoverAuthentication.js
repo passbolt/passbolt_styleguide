@@ -16,6 +16,7 @@ import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 import {withTranslation} from "react-i18next";
 import IntroduceSetupExtension from "../../Authentication/IntroduceSetupExtension/IntroduceSetupExtension";
+import RequestAccountRecovery from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
 
 /**
  * The component orchestrates the recover authentication process
@@ -84,8 +85,10 @@ class RecoverAuthentication extends Component {
         return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<HelpOnPassphraseLostSecondaryAction/>}/>;
       case AuthenticationContextState.GPG_KEY_IMPORTED:
         return <ChooseSecurityToken/>;
-      case AuthenticationContextState.PASSPHRASE_LOST:
+      case AuthenticationContextState.CREDENTIALS_LOST:
         return <AskForAuthenticationHelp/>;
+      case AuthenticationContextState.REQUEST_ACCOUNT_RECOVERY:
+        return <RequestAccountRecovery/>;
       case  AuthenticationContextState.RECOVER_COMPLETED:
         return <DisplayLoginInProgress/>;
       case AuthenticationContextState.UNEXPECTED_ERROR:
