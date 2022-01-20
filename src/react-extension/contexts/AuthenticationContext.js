@@ -22,6 +22,8 @@ export const AuthenticationContext = React.createContext({
   storage: null, // The context storage
   state: null, // The state in the authentication process
   process: null, // The authentication sub-process name
+  accountRecoveryPolicy: null, // The account recovery policy
+  isGpgKeyImported: false, // Is gpg key imported
   error: null, // An authentication error object
   onInitializeSetupRequested: () => {
   }, // Whenever the initialization of the setup is requested
@@ -43,6 +45,8 @@ export const AuthenticationContext = React.createContext({
   }, // Whenever the download of the recovery kit is requested
   onRecoveryKitDownloaded: () => {
   }, // Whenever the recovery kit has been downloaded
+  onSaveAccountRecoveryPreferenceRequested: () => {
+  }, // Whenever the account recovery preference save is requested
   onSaveSecurityTokenRequested: () => {
   }, // Whenever the security token save is requested
   onCompleteSetupRequested: () => {
@@ -86,6 +90,8 @@ export class AuthenticationContextProvider extends React.Component {
   get defaultState() {
     return {
       state: AuthenticationContextState.INITIAL_STATE,
+      accountRecoveryPolicy: null,
+      isGpgKeyImported: false,
       onInitializeSetupRequested: this.onInitializeSetupRequested.bind(this),
       onInitializeRecoverRequested: this.onInitializeRecoverRequested.bind(this),
       onInitializeLoginRequested: this.onInitializeLoginRequested.bind(this),
@@ -96,6 +102,7 @@ export class AuthenticationContextProvider extends React.Component {
       onImportGpgKeyRequested: this.onImportGpgKeyRequested.bind(this),
       onDownloadRecoveryKitRequested: this.onDownloadRecoveryKitRequested.bind(this),
       onRecoveryKitDownloaded: this.onRecoveryKitDownloaded.bind(this),
+      onSaveAccountRecoveryPreferenceRequested: this.onSaveAccountRecoveryPreferenceRequested.bind(this),
       onSaveSecurityTokenRequested: this.onSaveSecurityTokenRequested.bind(this),
       onCompleteSetupRequested: this.onCompleteSetupRequested.bind(this),
       onCompleteRecoverRequested: this.onCompleteRecoverRequested.bind(this),
@@ -120,6 +127,10 @@ export class AuthenticationContextProvider extends React.Component {
     const setupInfo = await this.state.port.request('passbolt.setup.info');
     // update the locale to use the user locale
     this.props.context.onRefreshLocaleRequested(setupInfo.locale);
+    // if account recovery enabled, get the organisation policy
+    if (this.isAccountRecoveryEnabled()) {
+      await this.findAccountRecoveryOrganizationPolicy();
+    }
     // In case of error the background page should just disconnect the extension setup application.
     await this.setState({
       state: isFirstInstall && isChromeBrowser ? AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED : AuthenticationContextState.SETUP_INITIALIZED,
@@ -225,7 +236,7 @@ export class AuthenticationContextProvider extends React.Component {
    * Whenever the user wants to go back to the key generation
    */
   async onGoToGenerateGpgKeyRequested() {
-    await this.setState({state: AuthenticationContextState.SETUP_INITIALIZED});
+    await this.setState({state: AuthenticationContextState.SETUP_INITIALIZED, isGpgKeyImported: false});
   }
 
   /**
@@ -259,7 +270,11 @@ export class AuthenticationContextProvider extends React.Component {
    * @param armoredKey The armored key to import
    */
   async onGpgKeyImported() {
-    await this.setState({state: AuthenticationContextState.GPG_KEY_IMPORTED});
+    if (this.state.accountRecoveryPolicy && this.state.accountRecoveryPolicy.policy !== 'disabled') {
+      await this.setState({state: AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_REQUESTED, isGpgKeyImported: true});
+    } else {
+      await this.setState({state: AuthenticationContextState.GPG_KEY_IMPORTED});
+    }
   }
 
   /**
@@ -273,7 +288,29 @@ export class AuthenticationContextProvider extends React.Component {
    * Whenever the recovery kit has been downloaded
    */
   async onRecoveryKitDownloaded() {
-    await this.setState({state: AuthenticationContextState.RECOVERY_KIT_DOWNLOADED});
+    if (this.state.accountRecoveryPolicy && this.state.accountRecoveryPolicy.policy !== 'disabled') {
+      await this.setState({state: AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_REQUESTED});
+    } else {
+      await this.setState({state: AuthenticationContextState.RECOVERY_KIT_DOWNLOADED});
+    }
+  }
+
+  /**
+   * Whenever the account recovery preference must be saved
+   * @param status the status choose by the user (accept or reject)
+   */
+  async onSaveAccountRecoveryPreferenceRequested(status) {
+    await this.setAccountRecoveryUserSetting(status);
+    await this.setState({state: AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_CONFIRMED});
+  }
+
+  /**
+   * Whenever the account recovery save must be requested
+   * @param status
+   * @returns {Promise<void>}
+   */
+  async setAccountRecoveryUserSetting(status) {
+    await this.state.port.request('passbolt.setup.set-account-recovery-user-setting', {status});
   }
 
   /**
@@ -390,6 +427,23 @@ export class AuthenticationContextProvider extends React.Component {
   }
 
   /**
+   * Is account recovery plugin enabled
+   * @returns {boolean}
+   */
+  isAccountRecoveryEnabled() {
+    return this.props.context.siteSettings.canIUse('accountRecovery');
+  }
+
+  /**
+   * Find account recovery organisation policy
+   * @returns {Promise<void>}
+   */
+  async findAccountRecoveryOrganizationPolicy() {
+    const accountRecoveryPolicy = await this.state.port.request('passbolt.setup.get-account-recovery-organization-policy');
+    this.setState({accountRecoveryPolicy});
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -463,5 +517,7 @@ export const AuthenticationContextState = {
   LOGIN_IN_PROGRESS: 'Login In Progress',
   LOGIN_FAILED: 'Login Failed',
   LOGIN_COMPLETED: 'Login Completed',
+  CONFIGURE_ACCOUNT_RECOVERY_REQUESTED: 'Configure Account Recovery Requested',
+  CONFIGURE_ACCOUNT_RECOVERY_CONFIRMED: 'Configure Account Recovery Confirmed',
   UNEXPECTED_ERROR: 'Unexpected Error',
 };

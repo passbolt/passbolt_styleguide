@@ -64,6 +64,7 @@ describe("Authentication Context", () => {
       await authenticationContext.onInitializeSetupRequested();
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.is-first-install");
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.info");
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.get-account-recovery-organization-policy");
       expect(authenticationContext.props.context.onRefreshLocaleRequested).toHaveBeenCalledWith(setupInfo.locale);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED);
       await authenticationContext.onCompleteIntroduceSetupExtension();
@@ -86,6 +87,27 @@ describe("Authentication Context", () => {
     it('As AN I should mention when the download recovery kit step is completed', async() => {
       await authenticationContext.onRecoveryKitDownloaded();
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.RECOVERY_KIT_DOWNLOADED);
+    });
+
+    it('As AN I should mention when the download recovery kit step is completed with account recovery not disabled', async() => {
+      // request "passbolt.setup.is-first-install"
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
+      // request "passbolt.setup.info"
+      const setupInfo = {
+        locale: "fr-FR"
+      };
+      const requestSetupInfoMock = jest.fn(() => setupInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(requestSetupInfoMock);
+      // request "passbolt.setup.get-account-recovery-organization-policy"
+      const accountRecoveryPolicy = {
+        policy: "mandatory"
+      };
+      const requestAccountRecoveryMock = jest.fn(() => accountRecoveryPolicy);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestAccountRecoveryMock);
+      await authenticationContext.onInitializeSetupRequested();
+      await authenticationContext.onRecoveryKitDownloaded();
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_REQUESTED);
+      expect(authenticationContext.state.isGpgKeyImported).toBeFalsy();
     });
 
     it('As AN I should request to save a security token', async() => {
@@ -123,17 +145,71 @@ describe("Authentication Context", () => {
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.GPG_KEY_VALIDATED);
     });
 
-    it('As AN I should check the passphrase of an importing gpg key ', async() => {
+    it('As AN I should check the passphrase of an importing gpg key', async() => {
+      // request "passbolt.setup.is-first-install"
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
+      // request "passbolt.setup.info"
       const setupInfo = {
         locale: "fr-FR"
       };
       const requestSetupInfoMock = jest.fn(() => setupInfo);
-      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestSetupInfoMock);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(requestSetupInfoMock);
+      // request "passbolt.setup.get-account-recovery-organization-policy"
+      const accountRecoveryPolicy = {
+        policy: "disabled"
+      };
+      const requestAccountRecoveryMock = jest.fn(() => accountRecoveryPolicy);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestAccountRecoveryMock);
       const passphrase = "passphrase";
       await authenticationContext.onInitializeSetupRequested();
       await authenticationContext.onCheckImportedGpgKeyPassphraseRequested(passphrase, true);
       expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.verify-passphrase", passphrase, true);
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.GPG_KEY_IMPORTED);
+    });
+
+    it('As AN I should check the passphrase of an importing gpg key with account recovery policy not disabled', async() => {
+      // request "passbolt.setup.is-first-install"
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
+      // request "passbolt.setup.info"
+      const setupInfo = {
+        locale: "fr-FR"
+      };
+      const requestSetupInfoMock = jest.fn(() => setupInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(requestSetupInfoMock);
+      // request "passbolt.setup.get-account-recovery-organization-policy"
+      const accountRecoveryPolicy = {
+        policy: "mandatory"
+      };
+      const requestAccountRecoveryMock = jest.fn(() => accountRecoveryPolicy);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestAccountRecoveryMock);
+      const passphrase = "passphrase";
+      await authenticationContext.onInitializeSetupRequested();
+      await authenticationContext.onCheckImportedGpgKeyPassphraseRequested(passphrase, true);
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith("passbolt.setup.verify-passphrase", passphrase, true);
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_REQUESTED);
+      expect(authenticationContext.state.isGpgKeyImported).toBeTruthy();
+    });
+
+    it('As AN I should request to import a gpg key instead of generating one', async() => {
+      // request "passbolt.setup.is-first-install"
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(jest.fn(() => false));
+      // request "passbolt.setup.info"
+      const setupInfo = {
+        locale: "fr-FR"
+      };
+      const requestSetupInfoMock = jest.fn(() => setupInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(requestSetupInfoMock);
+      // request "passbolt.setup.get-account-recovery-organization-policy"
+      const accountRecoveryPolicy = {
+        policy: 'mandatory',
+      };
+      const requestAccountRecoveryMock = jest.fn(() => accountRecoveryPolicy);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementationOnce(requestAccountRecoveryMock);
+      await authenticationContext.onInitializeSetupRequested();
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(jest.fn());
+      await authenticationContext.onSaveAccountRecoveryPreferenceRequested('approved');
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_CONFIRMED);
+      expect(authenticationContext.state.port.request).toHaveBeenCalledWith('passbolt.setup.set-account-recovery-user-setting', {status: 'approved'});
     });
 
     it('As AN I should complete the setup process', async() => {

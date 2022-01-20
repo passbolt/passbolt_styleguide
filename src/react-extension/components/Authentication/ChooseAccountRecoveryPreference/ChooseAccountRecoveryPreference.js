@@ -9,11 +9,12 @@
  * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.4.0
+ * @since         3.6.0
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 
 class ChooseAccountRecoveryPreference extends Component {
   constructor(props) {
@@ -27,21 +28,30 @@ class ChooseAccountRecoveryPreference extends Component {
    */
   getDefaultState() {
     return {
-      status: null,
+      status: null, // status
+      type: '', // type
       processing: false
     };
+  }
+
+  /**
+   * Get account recovery settings
+   * @returns {null|*}
+   */
+  get accountRecoveryPolicy() {
+    return this.props.authenticationContext.accountRecoveryPolicy && this.props.authenticationContext.accountRecoveryPolicy.policy;
   }
 
   /**
    * Whenever the component is mounted
    */
   componentDidMount() {
-    if (this.props.type === "Recommended") {
-      this.setState({status: "accept"});
-    } else if (this.props.type === "Optional") {
-      this.setState({status: "reject"});
+    if (this.accountRecoveryPolicy === "opt-out") {
+      this.setState({status: "approved", type: this.translate('Recommended')});
+    } else if (this.accountRecoveryPolicy === "opt-in") {
+      this.setState({status: "rejected", type: this.translate('Optional')});
     } else {
-      this.setState({status: "accept"});
+      this.setState({status: "approved", type: this.translate('Mandatory')});
     }
   }
 
@@ -51,6 +61,7 @@ class ChooseAccountRecoveryPreference extends Component {
   bindCallbacks() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleGoToGenerateKey = this.handleGoToGenerateKey.bind(this);
   }
 
   /**
@@ -75,6 +86,11 @@ class ChooseAccountRecoveryPreference extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
     await this.toggleProcessing();
+    this.save();
+  }
+
+  save() {
+    this.props.authenticationContext.onSaveAccountRecoveryPreferenceRequested(this.state.status);
   }
 
   /**
@@ -93,11 +109,26 @@ class ChooseAccountRecoveryPreference extends Component {
   }
 
   /**
+   * Go to generate key
+   */
+  handleGoToGenerateKey() {
+    this.props.authenticationContext.onGoToGenerateGpgKeyRequested();
+  }
+
+  /**
    * Can the user reject to join the account recovery program.
    * @returns {boolean}
    */
   canReject() {
     return this.props.type !== "Mandatory";
+  }
+
+  /**
+   * can generate key instead
+   * @returns {boolean|*}
+   */
+  get canGenerateKey() {
+    return this.props.authenticationContext.isGpgKeyImported;
   }
 
   /**
@@ -114,8 +145,8 @@ class ChooseAccountRecoveryPreference extends Component {
    */
   render() {
     return (
-      <div className="recover-account-setup-extension">
-        <h1><Trans>Account recovery ({this.props.type})</Trans></h1>
+      <div className="recovery-account-setup-extension">
+        <h1><Trans>Account recovery</Trans> ({this.state.type})</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
             <Trans>It is possible and recommended to share securely a copy of your private key and passphrase
@@ -123,12 +154,12 @@ class ChooseAccountRecoveryPreference extends Component {
           </p>
           <div className="radiolist-alt">
             {this.canReject() &&
-            <div className={`input radio ${this.state.status === "reject" ? "checked" : ""}`}>
+            <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
               <input type="radio"
-                value="reject"
+                value="rejected"
                 onChange={this.handleInputChange}
                 name="status"
-                checked={this.state.status === "reject"}
+                checked={this.state.status === "rejected"}
                 id="statusRecoverAccountReject"
                 disabled={this.isProcessing}/>
               <label htmlFor="statusRecoverAccountReject">
@@ -139,12 +170,12 @@ class ChooseAccountRecoveryPreference extends Component {
               </label>
             </div>
             }
-            <div className={`input radio ${this.state.status === "accept" ? "checked" : ""}`}>
+            <div className={`input radio ${this.state.status === "approved" ? "checked" : ""}`}>
               <input type="radio"
-                value="accept"
+                value="approved"
                 onChange={this.handleInputChange}
                 name="status"
-                checked={this.state.status === "accept"}
+                checked={this.state.status === "approved"}
                 id="statusRecoverAccountAccept"
                 disabled={this.isProcessing}/>
               <label htmlFor="statusRecoverAccountAccept">
@@ -163,8 +194,8 @@ class ChooseAccountRecoveryPreference extends Component {
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
             </button>
-            {this.props.canGenerateKey &&
-            <a className={`generate-new-key ${this.isProcessing ? "disabled" : ""}`} role="button"><Trans>Generate new key instead</Trans></a>
+            {this.canGenerateKey &&
+            <a className={`generate-new-key ${this.isProcessing ? "disabled" : ""}`} onClick={this.handleGoToGenerateKey} role="button"><Trans>Generate new key instead</Trans></a>
             }
           </div>
         </form>
@@ -174,8 +205,9 @@ class ChooseAccountRecoveryPreference extends Component {
 }
 
 ChooseAccountRecoveryPreference.propTypes = {
+  authenticationContext: PropTypes.any, // The authentication context
   type: PropTypes.string, // The type of recover account
   canGenerateKey: PropTypes.bool, // Can generate new key
   t: PropTypes.func, // The translation function
 };
-export default withTranslation("common")(ChooseAccountRecoveryPreference);
+export default withAuthenticationContext(withTranslation("common")(ChooseAccountRecoveryPreference));

@@ -18,6 +18,8 @@ import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/
 import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
 import {withTranslation} from "react-i18next";
 import IntroduceSetupExtension from "../../Authentication/IntroduceSetupExtension/IntroduceSetupExtension";
+import ChooseAccountRecoveryPreference
+  from "../../Authentication/ChooseAccountRecoveryPreference/ChooseAccountRecoveryPreference";
 
 /**
  * The component orchestrates the setup authentication process
@@ -81,8 +83,11 @@ class SetupAuthentication extends Component {
         return <CreateGpgKey/>;
       case AuthenticationContextState.GPG_KEY_GENERATED:
         return <DownloadRecoveryKit/>;
+      case AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_REQUESTED:
+        return <ChooseAccountRecoveryPreference/>;
       case AuthenticationContextState.RECOVERY_KIT_DOWNLOADED:
       case AuthenticationContextState.GPG_KEY_IMPORTED:
+      case AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_CONFIRMED:
         return <ChooseSecurityToken/>;
       case AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED:
         return <ImportGpgKey
