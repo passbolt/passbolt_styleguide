@@ -6,7 +6,10 @@ import MockPort from "../test/mock/MockPort";
 export function defaultProps() {
   return {
     context: {
-      onRefreshLocaleRequested: jest.fn()
+      onRefreshLocaleRequested: jest.fn(),
+      siteSettings: {
+        canIUse: () => true
+      }
     },
     value: {
       port: new MockPort(),

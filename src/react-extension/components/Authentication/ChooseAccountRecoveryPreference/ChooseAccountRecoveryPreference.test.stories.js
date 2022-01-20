@@ -3,6 +3,11 @@ import {MemoryRouter, Route} from "react-router-dom";
 import "../../../../css/themes/default/ext_authentication.css";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ChooseAccountRecoveryPreference from "./ChooseAccountRecoveryPreference";
+import {
+  mandatoryPolicyProps,
+  mandatoryPolicyPropsWithImportedKey, optInPolicyProps,
+  optInPolicyPropsWithImportedKey, optOutPolicyProps, optOutPolicyPropsWithImportedKey
+} from "./ChooseAccountRecoveryPreference.test.data";
 
 
 export default {
@@ -24,40 +29,20 @@ const Template = args =>
     </div>
   </MockTranslationProvider>;
 
-
-
-export const RecommendedWithLink = Template.bind({});
-RecommendedWithLink.args = {
-  type: 'Recommended',
-  canGenerateKey: true
-};
-
-export const OptionalWithLink = Template.bind({});
-OptionalWithLink.args = {
-  type: 'Optional',
-  canGenerateKey: true
-};
-
 export const MandatoryWithLink = Template.bind({});
-MandatoryWithLink.args = {
-  type: 'Mandatory',
-  canGenerateKey: true
-};
+MandatoryWithLink.args = mandatoryPolicyPropsWithImportedKey();
 
-export const RecommendedWithoutLink = Template.bind({});
-RecommendedWithoutLink.args = {
-  type: 'Recommended',
-  canGenerateKey: false
-};
+export const OptOutWithLink = Template.bind({});
+OptOutWithLink.args = optOutPolicyPropsWithImportedKey();
 
-export const OptionalWithoutLink = Template.bind({});
-OptionalWithoutLink.args = {
-  type: 'Optional',
-  canGenerateKey: false
-};
+export const OptInWithLink = Template.bind({});
+OptInWithLink.args = optInPolicyPropsWithImportedKey();
 
-export const MandatoryWithoutLink = Template.bind({});
-MandatoryWithoutLink.args = {
-  type: 'Mandatory',
-  canGenerateKey: false
-};
+export const Mandatory = Template.bind({});
+Mandatory.args = mandatoryPolicyProps();
+
+export const OptOut = Template.bind({});
+OptOut.args = optOutPolicyProps();
+
+export const OptIn = Template.bind({});
+OptIn.args = optInPolicyProps();

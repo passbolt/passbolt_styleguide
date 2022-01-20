@@ -97,7 +97,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(props.onCancel).toBeCalled();
     });
 
-    it('As LU I can stop creating a password by closing the dialog', async() => {
+    it('As LU I can stop saving an account recovery settings by closing the dialog', async() => {
       const props = defaultProps(); // The props to pass
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
       await waitFor(() => {});
