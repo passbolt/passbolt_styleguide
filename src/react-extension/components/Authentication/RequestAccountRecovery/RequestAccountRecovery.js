@@ -9,13 +9,13 @@
  * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.4.0
+ * @since         3.6.0
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
-class InitiateRecoverAccount extends Component {
+class RequestAccountRecovery extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
@@ -77,11 +77,11 @@ class InitiateRecoverAccount extends Component {
   render() {
     return (
       <div className="initiate-recover-account">
-        <h1><Trans>Initiate account recovery</Trans></h1>
+        <h1><Trans>Request account recovery</Trans></h1>
         <form onSubmit={this.handleSubmit}>
           <p>
-            <Trans>Both the private key and passphrase are required to perform an account recovery, if you do not have
-              access, you can request an account recovery.
+            <Trans>Both the private key and passphrase are required to recover your account, if you do not have access,
+              you can request an account recovery to an administrator.
             </Trans>
           </p>
           <div className="form-actions">
@@ -92,6 +92,9 @@ class InitiateRecoverAccount extends Component {
               disabled={this.isProcessing}>
               <Trans>Request account recovery</Trans>
             </button>
+            <a href="#">
+              <Trans>Learn more about account recovery</Trans>
+            </a>
           </div>
         </form>
       </div>
@@ -99,7 +102,7 @@ class InitiateRecoverAccount extends Component {
   }
 }
 
-InitiateRecoverAccount.propTypes = {
+RequestAccountRecovery.propTypes = {
   t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(InitiateRecoverAccount);
+export default withTranslation('common')(RequestAccountRecovery);

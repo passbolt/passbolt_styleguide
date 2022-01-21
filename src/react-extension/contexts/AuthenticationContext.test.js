@@ -283,6 +283,33 @@ describe("Authentication Context", () => {
       expect(authenticationContext.state.state).toBe(AuthenticationContextState.GPG_KEY_VALIDATED);
     });
 
+    it('As AN I should be able to request administrator help if I lose my passphrase or private key ', async() => {
+      const recoverInfo = {
+        locale: "fr-FR"
+      };
+      const requestRecoverInfoMock = jest.fn(() => recoverInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestRecoverInfoMock);
+      await authenticationContext.onInitializeRecoverRequested();
+      await authenticationContext.onPassphraseLost();
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.CREDENTIALS_LOST);
+    });
+
+    it('As AN I should be able to request an account recovery to an administrator help if I lose my passphrase or private key ', async() => {
+      const recoverInfo = {
+        locale: "fr-FR",
+        user: {
+          account_recovery_user_setting: {
+            status: "approved"
+          }
+        }
+      };
+      const requestRecoverInfoMock = jest.fn(() => recoverInfo);
+      jest.spyOn(authenticationContext.state.port, 'request').mockImplementation(requestRecoverInfoMock);
+      await authenticationContext.onInitializeRecoverRequested();
+      await authenticationContext.onPassphraseLost();
+      expect(authenticationContext.state.state).toBe(AuthenticationContextState.REQUEST_ACCOUNT_RECOVERY);
+    });
+
     it('As AN I should check the passphrase of an importing gpg key ', async() => {
       const recoverInfo = {
         locale: "fr-FR"
