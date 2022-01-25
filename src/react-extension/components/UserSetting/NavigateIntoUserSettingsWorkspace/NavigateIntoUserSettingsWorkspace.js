@@ -56,6 +56,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the account recovery feature.
+   * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
+   */
+  get canIUseAccountRecoveryCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -139,12 +147,13 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </li>
           }
+          {this.canIUseAccountRecoveryCapability &&
           <li>
             <div
               className={`row ${isSelected('account-recovery') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a>
+                  <a onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
                     <span>
                       <Trans>Account Recovery</Trans>
                       {this.props.pendingAccountRecovery &&
@@ -156,6 +165,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               </div>
             </div>
           </li>
+          }
           {this.canIUseMobileCapability &&
           <li>
             <div

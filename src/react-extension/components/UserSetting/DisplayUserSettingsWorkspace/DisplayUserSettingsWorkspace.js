@@ -31,6 +31,8 @@ import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import DisplayUserPassphrase from "../ChangeUserPassphrase/ChangeUserPassphrase";
 import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUserSecurityToken";
 import TransferToMobile from "../TransferToMobile/TransferToMobile";
+import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings';
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -50,6 +52,14 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseMobileTransferCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+  }
+
+  /**
+   * Can the user access the account recovery capability.
+   * @returns {bool}
+   */
+  get canIUseAccountRecoveryCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
   }
 
   /**
@@ -83,6 +93,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
             {this.canIUseMobileTransferCapability &&
             <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
             }
+            {this.canIUseAccountRecoveryCapability &&
+            <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
+            }
             <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
           </div>
         </div>
@@ -96,4 +109,4 @@ DisplayUserSettingsWorkspace.propTypes = {
   match: PropTypes.any,
 };
 
-export default withAppContext(withRouter(DisplayUserSettingsWorkspace));
+export default withAppContext(withAccountRecovery(withRouter(DisplayUserSettingsWorkspace)));

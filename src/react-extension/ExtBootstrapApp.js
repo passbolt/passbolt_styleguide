@@ -133,6 +133,7 @@ class ExtBootstrapApp extends Component {
               "/app/settings/passphrase",
               "/app/settings/security-token",
               "/app/settings/mobile",
+              "/app/settings/account-recovery",
               "/app/settings/theme",
               "/app/users/view/:selectedUserId",
               "/app/users",

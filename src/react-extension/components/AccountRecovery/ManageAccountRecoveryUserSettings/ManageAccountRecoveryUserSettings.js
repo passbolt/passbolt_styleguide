@@ -20,7 +20,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
 
-class ChooseAccountRecoveryPolicy extends Component {
+class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
@@ -49,7 +49,7 @@ class ChooseAccountRecoveryPolicy extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    if (this.props.type === "Opt-Out") {
+    if (this.props.organizationPolicy.policy === "opt-in") {
       this.setState({status: "reject"});
     } else {
       this.setState({status: "accept"});
@@ -94,7 +94,7 @@ class ChooseAccountRecoveryPolicy extends Component {
   }
 
   canReject() {
-    return this.props.type !== "Mandatory";
+    return this.props.organizationPolicy.policy !== "mandatory";
   }
 
   /**
@@ -122,7 +122,7 @@ class ChooseAccountRecoveryPolicy extends Component {
    * @returns {*}
    */
   get requestor() {
-    return this.props.requestor;
+    return this.props.organizationPolicy.creator;
   }
 
   /**
@@ -134,12 +134,22 @@ class ChooseAccountRecoveryPolicy extends Component {
   }
 
   /**
+   * Get the date at when the account recovery program subscription has been asked.
+   * @returns {*}
+   */
+  get date() {
+    return this.props.organizationPolicy.modified;
+  }
+
+  /**
    * Get the type
    * @returns {string}
    */
   get type() {
-    if (this.props.type === "Mandatory") {
-      return this.props.type;
+    if (this.props.organizationPolicy.policy === "mandatory") {
+      return "Mandatory";
+    } else if (this.props.organizationPolicy.policy === "opt-out") {
+      return "Recommanded";
     } else {
       return "Optional";
     }
@@ -168,7 +178,7 @@ class ChooseAccountRecoveryPolicy extends Component {
           <div className="form-content">
             <p>
               <Trans>It is possible and recommended to share securely your recovery kit with your organization recovery contacts.</Trans>&nbsp;
-              <Trans>They will be able to help you in case you loose it.</Trans>
+              <Trans>They will be able to help you in case you lose it.</Trans>
             </p>
             <ul>
               <li className="usercard-detailed-col-2">
@@ -183,7 +193,7 @@ class ChooseAccountRecoveryPolicy extends Component {
                       &nbsp;
                       <span className="name"><Trans>requested this operation</Trans></span>
                     </div>
-                    <div className="subinfo light">{this.formatDateTimeAgo(this.props.date)}</div>
+                    <div className="subinfo light">{this.formatDateTimeAgo(this.date)}</div>
                   </div>
                 </div>
                 <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
@@ -250,12 +260,10 @@ class ChooseAccountRecoveryPolicy extends Component {
   }
 }
 
-ChooseAccountRecoveryPolicy.propTypes = {
+ManageAccountRecoveryUserSettings.propTypes = {
   context: PropTypes.any, // The application context
+  organizationPolicy: PropTypes.object, // The organization policy details
   onClose: PropTypes.func, // The close callback
-  requestor: PropTypes.any, // The admin user at the origin of the request
-  type: PropTypes.string, // The type of recover account
-  date: PropTypes.string, // The date of the request
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(ChooseAccountRecoveryPolicy));
+export default withAppContext(withTranslation("common")(ManageAccountRecoveryUserSettings));
