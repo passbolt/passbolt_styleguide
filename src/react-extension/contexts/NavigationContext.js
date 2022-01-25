@@ -56,6 +56,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
+  onGoToUserSettingsAccountRecoveryRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace mobile section.
   onGoToNewTab: () => {
   }, // Whenever the user want to navigate to a new url.
 });
@@ -100,6 +102,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
+      onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
     };
   }
 
@@ -296,11 +299,19 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
-   * Whenever the user wants to navigate to the users settings workspace keys section.
+   * Whenever the user wants to navigate to the users settings workspace mobile section.
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMobileRequested() {
     await this.goTo("browser-extension", "/app/settings/mobile");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace account recovery section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsAccountRecoveryRequested() {
+    await this.goTo("browser-extension", "/app/settings/account-recovery");
   }
 
   /**

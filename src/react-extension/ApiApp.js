@@ -33,6 +33,8 @@ import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/M
 import ApiAppContextProvider from "./contexts/ApiAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AppContext from "./contexts/AppContext";
+import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
+import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
 
 /**
  * The passbolt application served by the API.
@@ -43,61 +45,64 @@ import AppContext from "./contexts/AppContext";
  */
 class ApiApp extends Component {
   render() {
+    const accountRecoveryUserService = new ApiAppAccountRecoveryUserService();
     return (
       <ApiAppContextProvider>
         <AppContext.Consumer>
           {appContext =>
             <TranslationProvider loadingPath={`${appContext.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-              <ActionFeedbackContextProvider>
-                <DialogContextProvider>
-                  <AnnouncementContextProvider>
-                    <ContextualMenuContextProvider>
-                      { /* Action Feedback Management */}
-                      <DisplayActionFeedbacks/>
-                      { /* Session expired handler */}
-                      <HandleSessionExpired/>
-                      { /* Announcement Management */}
-                      {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
-                      && appContext.siteSettings.canIUse('ee')
-                      && <HandleSubscriptionAnnouncement/>}
+              <AccountRecoveryUserContextProvider accountRecoveryUserService={accountRecoveryUserService}>
+                <ActionFeedbackContextProvider>
+                  <DialogContextProvider>
+                    <AnnouncementContextProvider>
+                      <ContextualMenuContextProvider>
+                        { /* Action Feedback Management */}
+                        <DisplayActionFeedbacks/>
+                        { /* Session expired handler */}
+                        <HandleSessionExpired/>
+                        { /* Announcement Management */}
+                        {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
+                        && appContext.siteSettings.canIUse('ee')
+                        && <HandleSubscriptionAnnouncement/>}
 
-                      <Router basename={appContext.basename}>
-                        <NavigationContextProvider>
-                          <Switch>
-                            { /* The following routes are not handled by the browser extension application. */}
-                            <Route exact path={[
-                              "/app/administration/subscription",
-                              "/app/administration/account-recovery"
-                            ]}/>
-                            <Route path="/app/administration">
-                              <AdministrationWorkspaceContextProvider>
+                        <Router basename={appContext.basename}>
+                          <NavigationContextProvider>
+                            <Switch>
+                              { /* The following routes are not handled by the browser extension application. */}
+                              <Route exact path={[
+                                "/app/administration/subscription",
+                                "/app/administration/account-recovery"
+                              ]}/>
+                              <Route path="/app/administration">
+                                <AdministrationWorkspaceContextProvider>
+                                  <ManageDialogs/>
+                                  <ManageContextualMenu/>
+                                  <ManageAnnouncements/>
+                                  <AdministrationWorkspace/>
+                                </AdministrationWorkspaceContextProvider>
+                              </Route>
+                              <Route path="/app/settings/mfa">
                                 <ManageDialogs/>
                                 <ManageContextualMenu/>
                                 <ManageAnnouncements/>
-                                <AdministrationWorkspace/>
-                              </AdministrationWorkspaceContextProvider>
-                            </Route>
-                            <Route path="/app/settings/mfa">
-                              <ManageDialogs/>
-                              <ManageContextualMenu/>
-                              <ManageAnnouncements/>
-                              <div id="container" className="page settings">
-                                <div id="app" className="app" tabIndex="1000">
-                                  <div className="header first">
-                                    <DisplayMainMenu/>
+                                <div id="container" className="page settings">
+                                  <div id="app" className="app" tabIndex="1000">
+                                    <div className="header first">
+                                      <DisplayMainMenu/>
+                                    </div>
+                                    <DisplayApiUserSettingsWorkspace/>
                                   </div>
-                                  <DisplayApiUserSettingsWorkspace/>
                                 </div>
-                              </div>
-                            </Route>
-                          </Switch>
-                        </NavigationContextProvider>
-                      </Router>
-                      <Footer/>
-                    </ContextualMenuContextProvider>
-                  </AnnouncementContextProvider>
-                </DialogContextProvider>
-              </ActionFeedbackContextProvider>
+                              </Route>
+                            </Switch>
+                          </NavigationContextProvider>
+                        </Router>
+                        <Footer/>
+                      </ContextualMenuContextProvider>
+                    </AnnouncementContextProvider>
+                  </DialogContextProvider>
+                </ActionFeedbackContextProvider>
+              </AccountRecoveryUserContextProvider>
             </TranslationProvider>
           }
         </AppContext.Consumer>
