@@ -51,11 +51,11 @@ class DisplayAccountRecoveryUserSettings extends Component {
   }
 
   /**
-   * Is the account recovery enabled?
+   * Is the account recovery approved?
    * @returns {boolean}
    */
-  hasNotEnabledStatus() {
-    return this.props.accountRecoveryContext.status !== "Enabled";
+  hasNotApprovedStatus() {
+    return this.props.accountRecoveryContext.status !== "approved";
   }
 
   /**
@@ -85,8 +85,8 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * Returns true if user has rejected the account recovery policy
    * @return {bool}
    */
-  isStatusEnabled() {
-    return this.props.accountRecoveryContext.status === "enabled";
+  isStatusApproved() {
+    return this.props.accountRecoveryContext.status === "approved";
   }
 
   handleReviewClick() {
@@ -173,11 +173,11 @@ class DisplayAccountRecoveryUserSettings extends Component {
                     <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`}/>
                     <span className="status">{this.props.accountRecoveryContext.status}</span>
                   </p>
-                  {this.hasNotEnabledStatus() && !this.isStatusEnabled() &&
+                  {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
                   <button type='button' className="button primary" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
                   }
                 </div>
-                {this.hasNotEnabledStatus() &&
+                {this.hasNotApprovedStatus() &&
                 <ul>
                   <li className="usercard-detailed-col-2">
                     <div className="content-wrapper">
