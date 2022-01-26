@@ -24,7 +24,11 @@ export default {
 
 const Template = args =>
   <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <DisplayUsers {...args} {...routerProps}/>}></Route>
+    <div className="page">
+      <div className="panel">
+        <Route component={routerProps => <DisplayUsers {...args} {...routerProps}/>}></Route>
+      </div>
+    </div>
   </MemoryRouter>;
 
 export const Initial = Template.bind({});
