@@ -127,6 +127,6 @@ export function defaultProps() {
  */
 export function propsWithUserTemporaryHasPendingAccountRecovery() {
   const props = defaultProps();
-  props.user.temporaryHasPendingAccountRecoveryRequest = true;
+  props.user.pending_account_recovery_user_request = true;
   return props;
 }

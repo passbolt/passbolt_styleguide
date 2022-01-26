@@ -62,6 +62,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
     this.handleCopyPermalinkEvent = this.handleCopyPermalinkEvent.bind(this);
     this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
+    this.handleReviewRecoveryRequestEvent = this.handleReviewRecoveryRequestEvent.bind(this);
   }
 
   /**
@@ -213,6 +214,13 @@ class DisplayUserWorkspaceActions extends React.Component {
   }
 
   /**
+   * Handle review recovery request click event
+   */
+  handleReviewRecoveryRequestEvent() {
+    // TODO the popup to approve or reject the account recovery request
+  }
+
+  /**
    * Get selected user
    * @returns {user|null}
    */
@@ -274,7 +282,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   hasPendingAccountRecoveryRequest() {
-    return this.selectedUser && this.selectedUser.temporaryHasPendingAccountRecoveryRequest;
+    return this.selectedUser && Boolean(this.selectedUser.pending_account_recovery_user_request);
   }
 
   /**
@@ -453,7 +461,12 @@ class DisplayUserWorkspaceActions extends React.Component {
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <a id="review-recovery" className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}><span><Trans>Review recovery request</Trans></span></a>
+                        <a
+                          id="review-recovery"
+                          onClick={this.handleReviewRecoveryRequestEvent}
+                          className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}>
+                          <span><Trans>Review recovery request</Trans></span>
+                        </a>
                       </div>
                     </div>
                   </div>

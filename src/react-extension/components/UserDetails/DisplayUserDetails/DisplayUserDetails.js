@@ -22,6 +22,7 @@ import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDet
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation} from "react-i18next";
+import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -81,6 +82,22 @@ class DisplayUserDetails extends React.Component {
   }
 
   /**
+   * Is the logged in user admin
+   * @returns {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
+   * Get attention required
+   * @returns {boolean}
+   */
+  get hasAttentionRequired() {
+    return Boolean(this.user.pending_account_recovery_user_request);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -89,10 +106,11 @@ class DisplayUserDetails extends React.Component {
       <div className="panel aside ready">
         <div className="sidebar user">
           <div className="sidebar-header">
-            <div className="teaser-image">
+            <div className={`teaser-image  ${this.hasAttentionRequired ? "attention-required" : ""}`}>
               <UserAvatar
                 user={this.user}
-                baseUrl={this.baseUrl}/>
+                baseUrl={this.baseUrl}
+                attentionRequired={this.hasAttentionRequired}/>
             </div>
             <h3>
               <div className="title-wrapper">
@@ -112,6 +130,7 @@ class DisplayUserDetails extends React.Component {
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}
           {this.user.active && <DisplayUserDetailsPublicKey/>}
+          {this.user.active && this.isLoggedInUserAdmin() && <DisplayUserDetailsAccountRecovery/>}
         </div>
       </div>
     );

@@ -76,6 +76,9 @@ export default class DisplayUsersPage {
       get username() {
         return element.querySelector('.username div').textContent;
       },
+      get attentionRequired() {
+        return Boolean(element.querySelector('.attention-required .exclamation'));
+      },
       async select() {
         const leftClick = {button: 0};
         fireEvent.click(element, leftClick);

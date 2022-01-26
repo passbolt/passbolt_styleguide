@@ -31,7 +31,7 @@ const Template = args =>
   <div className="panel aside ready">
     <div className="sidebar user">
       <div className="sidebar-header">
-        <div className={`teaser-image  ${args.pendingRecover ? "attention-required" : ""}`}>
+        <div className={`teaser-image  ${args.attentionRequired ? "attention-required" : ""}`}>
           <MemoryRouter initialEntries={['/']}>
             <Route component={routerProps => <UserAvatar {...args} {...routerProps}/>}></Route>
           </MemoryRouter>

@@ -45,6 +45,7 @@ class DisplayUsersContextualMenu extends React.Component {
     this.handleResendInviteClickEvent = this.handleResendInviteClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleDisableMfaEvent = this.handleDisableMfaEvent.bind(this);
+    this.handleReviewRecoveryRequestClickEvent = this.handleReviewRecoveryRequestClickEvent.bind(this);
   }
 
   /**
@@ -181,6 +182,13 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Handle review recovery request click event
+   */
+  handleReviewRecoveryRequestClickEvent() {
+    // TODO the popup to approve or reject the account recovery request
+  }
+
+  /**
    * Display error dialog
    * @param error
    */
@@ -229,7 +237,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   hasPendingAccountRecoveryRequest() {
-    return this.user && this.user.temporaryHasPendingAccountRecoveryRequest;
+    return this.user && Boolean(this.user.pending_account_recovery_user_request);
   }
 
   /**
@@ -392,7 +400,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="review-recovery" className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}><span><Trans>Review recovery request</Trans></span></a>
+                <a id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}><span><Trans>Review recovery request</Trans></span></a>
               </div>
             </div>
           </div>
