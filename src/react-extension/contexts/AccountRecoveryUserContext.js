@@ -25,6 +25,8 @@ export const AccountRecoveryUserContext = React.createContext({
   getPolicy: () => {},
 });
 
+const ACCOUNT_RECOVERY_STATUS_PENDING = 'pending';
+
 /**
  * The related context provider
  */
@@ -58,7 +60,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    */
   async findAccountRecoveryPolicy() {
     const accountRecoveryOrganizationPolicy = await this.props.accountRecoveryUserService.getOrganizationAccountRecoverySettings();
-    const status = this.props.context.loggedInUser.accountRecoveryStatus;
+    const status = this.props.context.loggedInUser.account_recovery_user_setting ? this.props.context.loggedInUser.account_recovery_user_setting : ACCOUNT_RECOVERY_STATUS_PENDING;
     this.setState({
       accountRecoveryOrganizationPolicy,
       status

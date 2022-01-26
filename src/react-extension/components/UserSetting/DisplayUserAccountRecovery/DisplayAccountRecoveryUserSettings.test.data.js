@@ -20,9 +20,7 @@
 export function defaultProps(props) {
   const defaultProps = {
     context: {
-      loggedInUser: {
-        accountRecoveryStatus: "pending"
-      },
+      loggedInUser: {},
       locale: "en-US",
       userSettings: {
         getTrustedDomain: () => new URL(window.location).origin
