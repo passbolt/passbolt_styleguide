@@ -18,7 +18,7 @@
 
 import {
   defaultAppContext,
-  defaultProps,
+  defaultProps, propsWithFirstUserAttentionRequired,
   propsWithNoUsersWithTextSearch,
   propsWithNullUsers
 } from "./DisplayUsers.test.data";
@@ -53,6 +53,13 @@ describe("Display Users", () => {
       expect(page.usersCount).toBe(2);
       expect(page.user(1).username).toBe('carol@passbolt.com');
       expect(page.user(2).username).toBe('dame@passbolt.com');
+    });
+
+    it('AS LU, I should see the appropriate filtered list of users with a user attention required', async() => {
+      page = new DisplayUsersPage(context, propsWithFirstUserAttentionRequired());
+      await waitFor(() => {});
+      expect(page.usersCount).toBe(2);
+      expect(page.user(1).attentionRequired).toBeTruthy();
     });
   });
 

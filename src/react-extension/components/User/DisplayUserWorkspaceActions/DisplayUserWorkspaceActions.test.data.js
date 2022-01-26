@@ -145,6 +145,6 @@ export function propsWithSelectedMFADisabledUser() {
  */
 export function propsWithSelectedUserTemporaryHasPendingAccountRecovery() {
   const props = propsWithSelectedUser();
-  props.userWorkspaceContext.selectedUsers[0].temporaryHasPendingAccountRecoveryRequest = true;
+  props.userWorkspaceContext.selectedUsers[0].pending_account_recovery_user_request = true;
   return props;
 }

@@ -266,7 +266,7 @@ class DisplayUsers extends React.Component {
     const roleName = this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id);
     const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
-    const hasUserAttentionRequired = user.hasUserAttentionRequired;
+    const hasUserAttentionRequired = Boolean(user.pending_account_recovery_user_request);
 
     return (
       <tr
@@ -378,6 +378,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     {this.isLoggedInUserAdmin() &&
                     <th className="s-cell attention-required">
+                      <Icon name="exclamation" baseline={true}/>
                     </th>
                     }
                     <th className="cell-name l-cell sortable">
