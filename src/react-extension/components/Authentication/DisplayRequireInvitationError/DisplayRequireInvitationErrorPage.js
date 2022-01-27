@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -24,8 +23,6 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class DisplayRequireInvitationErrorPage {
   /**
    * Default constructor
-   * @param appContext An app context
-   * @param props Props to attach
    */
   constructor() {
     this._page = render(

@@ -102,14 +102,6 @@ class InstallExtension extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -134,6 +126,5 @@ class InstallExtension extends Component {
 
 InstallExtension.propTypes = {
   context: PropTypes.any, // The application context
-  t: PropTypes.func, // The translation function
 };
 export default withAppContext(withTranslation('common')(InstallExtension));

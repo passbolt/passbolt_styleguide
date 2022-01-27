@@ -12,15 +12,20 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {Link} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../Common/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
+
+/**
+ * The component display variations.
+ * @type {Object}
+ */
+export const LoginVariations = {
+  SIGN_IN: 'Sign in',
+  ACCOUNT_RECOVERY: 'Account recovery'
+};
 
 /**
  * This component allows the user to log in with his account
@@ -36,7 +41,6 @@ class Login extends Component {
     this.bindEventHandlers();
     this.createReferences();
   }
-
 
   /**
    * Returns the default state
@@ -57,14 +61,6 @@ class Login extends Component {
         invalidGpgKey: false, // True if the gpg key is invalid
       }
     };
-  }
-
-  /**
-   * Returns true if there is data enough to be rendered
-   * @returns {boolean}
-   */
-  get isReady() {
-    return Boolean(this.props.authenticationContext.loginInfo);
   }
 
   /**
@@ -103,30 +99,29 @@ class Login extends Component {
    * Returns the user full name
    */
   get fullname() {
-    return this.props.authenticationContext.loginInfo.userSettings.fullName;
+    return this.props.userSettings.fullName;
   }
 
   /**
    * Returns the username
    */
   get username() {
-    return this.props.authenticationContext.loginInfo.userSettings.username;
+    return this.props.userSettings.username;
   }
 
   /**
    * Returns the security token code of the suer
    */
   get securityTokenCode() {
-    return this.props.authenticationContext.loginInfo.userSettings.getSecurityTokenCode();
+    return this.props.userSettings.getSecurityTokenCode();
   }
 
   /**
    * Returns the style of the security token (color and text color)
    */
   get securityTokenStyle() {
-    const {userSettings} = this.props.authenticationContext.loginInfo;
-    const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
-    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    const inverseStyle =  {background: this.props.userSettings.getSecurityTokenTextColor(), color: this.props.userSettings.getSecurityTokenBackgroundColor()};
+    const fullStyle =  {background: this.props.userSettings.getSecurityTokenBackgroundColor(), color: this.props.userSettings.getSecurityTokenTextColor()};
     return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
   }
 
@@ -135,9 +130,8 @@ class Login extends Component {
    * @return {Object}
    */
   get passphraseInputStyle() {
-    const {userSettings} = this.props.authenticationContext.loginInfo;
     const emptyStyle =  {background: "", color: ""};
-    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
+    const fullStyle =  {background: this.props.userSettings.getSecurityTokenBackgroundColor(), color: this.props.userSettings.getSecurityTokenTextColor()};
     return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
   }
 
@@ -145,7 +139,7 @@ class Login extends Component {
    * Returns the trusted domain
    */
   get trustedDomain() {
-    return this.props.authenticationContext.loginInfo.userSettings.getTrustedDomain();
+    return this.props.userSettings.getTrustedDomain();
   }
 
   /**
@@ -169,7 +163,7 @@ class Login extends Component {
 
   /**
    * Whenever the users submits his passphrase
-   * @param event Dom event
+   * @param {Event} event Dom event
    */
   async handleSubmit(event) {
     event.preventDefault();
@@ -177,8 +171,9 @@ class Login extends Component {
 
     if (this.isValid) {
       await this.toggleProcessing();
-      await this.check()
-        .then(this.login.bind(this));
+      if (await this.checkPassphrase()) {
+        await this.login();
+      }
     }
   }
 
@@ -212,7 +207,7 @@ class Login extends Component {
    * Whenever the user tosggles the remember me flag
    */
   async handleToggleRememberMe() {
-    await this.toggleRemmemberMe();
+    await this.toggleRememberMe();
   }
 
   /**
@@ -223,54 +218,42 @@ class Login extends Component {
   }
 
   /**
-   * Whenever the user needs help because he lost his passphrase
-   */
-  async onPassphraseLost() {
-    await this.props.authenticationContext.onPassphraseLost();
-  }
-
-  /**
    * Check the private gpg key passphrase
+   * @returns {Promise<boolean>}
    */
-  async check() {
-    await this.props.authenticationContext.onCheckLoginPassphraseRequested(this.state.passphrase)
-      .catch(this.onCheckFailure.bind(this));
+  async checkPassphrase() {
+    try {
+      await this.props.onCheckPassphrase(this.state.passphrase);
+      return true;
+    } catch (error) {
+      await this.onCheckPassphraseFailure(error);
+      return false;
+    }
   }
 
   /**
    * Whenever the passphrase check failed
-   * @param error The error
+   * @param {Error} error The error
+   * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError, GpgKeyError.
    */
-  onCheckFailure(error) {
+  onCheckPassphraseFailure(error) {
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({actions: {processing: false}, errors: {invalidPassphrase: true}});
     } else if (error.name === 'GpgKeyError') {
       this.setState({actions: {processing: false}, errors: {invalidGpgKey: true}});
     } else {
-      this.setState({actions: {processing: false}});
-      const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
+      // Only controlled errors should hit the component.
+      throw error;
     }
-    return Promise.reject(error);
   }
 
   /**
-   * Logs the user
+   * Sign in the user
    * @returns {Promise<void>}
    */
   async login() {
-    await this.props.authenticationContext.onLoginRequested(this.state.passphrase, this.state.rememberMe);
-  }
-
-  /**
-   * Whenever the login failed
-   * @param error The error
-   */
-  onLoginFailure(error) {
-    const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
-    return Promise.reject(error);
+    await this.props.onSignIn(this.state.passphrase, this.state.rememberMe);
   }
 
   /**
@@ -284,7 +267,7 @@ class Login extends Component {
   /**
    * Toggle the remember me flag value
    */
-  async toggleRemmemberMe() {
+  async toggleRememberMe() {
     await this.setState({rememberMe: !this.state.rememberMe});
   }
 
@@ -329,122 +312,121 @@ class Login extends Component {
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
-      <>
-        {this.isReady &&
-          <div className="login">
-            <div className="login-user">
-              <UserAvatar baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
-              <p className="login-user-name">{this.fullname}</p>
-              <p className="login-user-email">{this.username}</p>
+      <div className="login">
+        <div className="login-user">
+          <UserAvatar baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
+          <p className="login-user-name">{this.fullname}</p>
+          <p className="login-user-email">{this.username}</p>
+        </div>
+
+        <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
+          <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
+            <label htmlFor="passphrase">
+              <Trans>Passphrase</Trans>
+            </label>
+            <div className="password with-token">
+              <input
+                id="passphrase"
+                ref={this.passphraseInputRef}
+                type={this.state.isObfuscated ? "password" : "text"}
+                name="passphrase"
+                placeholder={this.translate('Passphrase')}
+                className="login-passphrase-input"
+                style={this.passphraseInputStyle}
+                value={this.state.passphrase}
+                onChange={this.handleChangePassphrase}
+                onFocus={this.handleFocusPassphrase}
+                onBlur={this.handleBlurPassphrase}
+                disabled={!this.areActionsAllowed}
+                autoFocus={true}
+                autoComplete="off"/>
+              <a
+                className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
+                role="button"
+                onClick={this.handleToggleObfuscate}>
+                <Icon name="eye-open"/>
+                <span className="visually-hidden">view</span>
+              </a>
+              <span className="security-token" style={this.securityTokenStyle}>
+                {this.securityTokenCode}
+              </span>
             </div>
-
-            <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
-              <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
-                <label htmlFor="passphrase">
-                  <Trans>Passphrase</Trans>
-                </label>
-                <div className="password with-token">
-                  <input
-                    id="passphrase"
-                    ref={this.passphraseInputRef}
-                    type={this.state.isObfuscated ? "password" : "text"}
-                    name="passphrase"
-                    placeholder={this.translate('Passphrase')}
-                    className="login-passphrase-input"
-                    style={this.passphraseInputStyle}
-                    value={this.state.passphrase}
-                    onChange={this.handleChangePassphrase}
-                    onFocus={this.handleFocusPassphrase}
-                    onBlur={this.handleBlurPassphrase}
-                    disabled={!this.areActionsAllowed}
-                    autoFocus={true}
-                    autoComplete="off"/>
-                  <a
-                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-                    role="button"
-                    onClick={this.handleToggleObfuscate}>
-                    <Icon name="eye-open"/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                  <span className="security-token" style={this.securityTokenStyle}>
-                    {this.securityTokenCode}
-                  </span>
-                </div>
-                {this.state.hasBeenValidated &&
-                <>
-                  {this.state.errors.emptyPassphrase &&
-                  <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
-                  }
-                  {this.state.errors.invalidPassphrase &&
-                  <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
-                  }
-                  {this.state.errors.invalidGpgKey &&
-                  <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
-                  }
-                </>
-                }
-              </div>
-              {this.props.canRememberMe &&
-                <div className="input checkbox">
-                  <input
-                    id="remember-me"
-                    type="checkbox"
-                    name="remember-me"
-                    value={this.state.rememberMe}
-                    onChange={this.handleToggleRememberMe}
-                    disabled={!this.areActionsAllowed}/>
-                  <label htmlFor="remember-me">
-                    <Trans>Remember until signed out.</Trans>
-                  </label>
-                </div>
+            {this.state.hasBeenValidated &&
+            <>
+              {this.state.errors.emptyPassphrase &&
+              <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
               }
-
-              <div className="form-actions">
-                {!this.props.displayAsAccountRecoveryForm && <>
-                  <button
-                    type="submit"
-                    className={`button primary big full-width ${processingClassName}`}
-                    role="button"
-                    disabled={this.isProcessing}>
-                    <Trans>Sign in</Trans>
-                  </button>
-                  <Link
-                    to={{pathname: `${this.trustedDomain}/users/recover?locale=${this.props.context.locale}`}}
-                    target="_parent"
-                    rel="noopener noreferrer">
-                    <Trans>Or switch to another account.</Trans>
-                  </Link>
-                </>}
-                {this.props.displayAsAccountRecoveryForm && <>
-                  <button
-                    type="submit"
-                    className={`button primary big full-width ${processingClassName}`}
-                    role="button"
-                    disabled={this.isProcessing}>
-                    <Trans>Complete recovery</Trans>
-                  </button>
-                  <Link
-                    to={{pathname: `${this.trustedDomain}/users/recover?locale=${this.props.context.locale}`}}
-                    target="_parent"
-                    rel="noopener noreferrer">
-                    <Trans>Help, I lost my passphrase.</Trans>
-                  </Link>
-                </>}
-              </div>
-            </form>
+              {this.state.errors.invalidPassphrase &&
+              <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
+              }
+              {this.state.errors.invalidGpgKey &&
+              <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
+              }
+            </>
+            }
           </div>
-        }
-      </>
+          {this.props.canRememberMe &&
+            <div className="input checkbox">
+              <input
+                id="remember-me"
+                type="checkbox"
+                name="remember-me"
+                value={this.state.rememberMe}
+                onChange={this.handleToggleRememberMe}
+                disabled={!this.areActionsAllowed}/>
+              <label htmlFor="remember-me">
+                <Trans>Remember until signed out.</Trans>
+              </label>
+            </div>
+          }
+
+          <div className="form-actions">
+            {this.props.displayAs === LoginVariations.SIGN_IN && <>
+              <button
+                type="submit"
+                className={`button primary big full-width ${processingClassName}`}
+                role="button"
+                disabled={this.isProcessing}>
+                <Trans>Sign in</Trans>
+              </button>
+              <a onClick={this.props.onSecondaryActionClick}>
+                <Trans>Or switch to another account.</Trans>
+              </a>
+            </>}
+            {this.props.displayAs === LoginVariations.ACCOUNT_RECOVERY && <>
+              <button
+                type="submit"
+                className={`button primary big full-width ${processingClassName}`}
+                role="button"
+                disabled={this.isProcessing}>
+                <Trans>Complete recovery</Trans>
+              </button>
+              <a onClick={this.props.onSecondaryActionClick}>
+                <Trans>Help, I lost my passphrase.</Trans>
+              </a>
+            </>}
+          </div>
+        </form>
+      </div>
     );
   }
 }
 
-Login.propTypes = {
-  context: PropTypes.any, // The application context
-  authenticationContext: PropTypes.any, // The authentication context
-  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
-  dialogContext: PropTypes.any, // The dialog context
-  t: PropTypes.func, // The translation function
-  displayAsAccountRecoveryForm: PropTypes.bool, // Defines how the form should be displayed and behaves
+Login.defaultProps = {
+  displayAs: LoginVariations.SIGN_IN,
 };
-export default withAppContext(withAuthenticationContext(withDialog(withTranslation('common')(Login))));
+
+Login.propTypes = {
+  displayAs: PropTypes.PropTypes.oneOf([
+    LoginVariations.SIGN_IN,
+    LoginVariations.ACCOUNT_RECOVERY,
+  ]), // Defines how the form should be displayed and behaves
+  context: PropTypes.any, // The application context
+  userSettings: PropTypes.object.isRequired, // The user settings
+  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
+  onSignIn: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to sign-in
+  onCheckPassphrase: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to check the passphrase
+  onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
+  t: PropTypes.func, // The translation function
+};
+export default withAppContext(withTranslation('common')(Login));

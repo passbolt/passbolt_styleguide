@@ -12,13 +12,10 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {CirclePicker} from "react-color";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
+import {CirclePicker} from "react-color";
+import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 
 class ChooseSecurityToken extends Component {
   /**
@@ -189,20 +186,9 @@ class ChooseSecurityToken extends Component {
       textcolor: this.textColor,
       code: this.state.code
     };
-    await this.props.authenticationContext.onSaveSecurityTokenRequested(securityTokenDto)
-      .catch(this.onSaveFailure.bind(this));
-  }
 
-  /**
-   * Whenever the gpg key generation failed
-   * @param error The error
-   */
-  async onSaveFailure(error) {
-    await this.toggleProcessing();
-    const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
+    await this.props.onComplete(securityTokenDto);
   }
-
 
   /**
    * Select a token color
@@ -286,14 +272,6 @@ class ChooseSecurityToken extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
@@ -368,9 +346,7 @@ class ChooseSecurityToken extends Component {
 }
 
 ChooseSecurityToken.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  dialogContext: PropTypes.any, // The dialog context
-  t: PropTypes.func, // The translation function
+  onComplete: PropTypes.func.isRequired, // The callback function to call when the form is submitted
 };
 
-export default withAuthenticationContext(withDialog(withTranslation('common')(ChooseSecurityToken)));
+export default withTranslation('common')(ChooseSecurityToken);

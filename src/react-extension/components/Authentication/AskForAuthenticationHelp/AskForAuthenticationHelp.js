@@ -13,50 +13,18 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
-import {
-  AuthenticationContextProcess,
-  withAuthenticationContext
-} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component propose to help the use who lost his gpg key or passphrase
  */
 class AskForAuthenticationHelp extends Component {
   /**
-   * Default contrustor
+   * When the user wants to try again.
    */
-  constructor(props) {
-    super(props);
-    this.bindEventHandlers();
-  }
-
-
-  /**
-   * Handle component event handlers
-   */
-  bindEventHandlers() {
-    this.onGoToImportGpgKeyRequested = this.onGoToImportGpgKeyRequested.bind(this);
-  }
-
-  /**
-   * When the user wants to enter its credentials again
-   */
-  onGoToImportGpgKeyRequested() {
-    if (this.props.authenticationContext.process === AuthenticationContextProcess.SETUP) {
-      this.props.authenticationContext.onGoToImportGpgKeyRequested();
-    } else {
-      this.props.authenticationContext.onInitializeRecoverRequested();
-    }
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
+  handleClickTryAgain() {
+    this.props.onTryAgain();
   }
 
   /**
@@ -79,7 +47,7 @@ class AskForAuthenticationHelp extends Component {
             rel="noopener noreferrer">
             <Trans>Request new account</Trans>
           </a>
-          <a onClick={this.onGoToImportGpgKeyRequested}>
+          <a onClick={this.handleClickTryAgain.bind(this)}>
             <Trans>I want to try again.</Trans>
           </a>
         </div>
@@ -89,9 +57,8 @@ class AskForAuthenticationHelp extends Component {
 }
 
 AskForAuthenticationHelp.propTypes = {
-  context: PropTypes.object, // The application context
-  authenticationContext: PropTypes.any, // The authentication context
-  t: PropTypes.func, // The translation function
+  context: PropTypes.object.isRequired, // The application context.
+  onTryAgain: PropTypes.func.isRequired, // The callback to trigger when the user wants to try again.
 };
 
-export default withAppContext(withAuthenticationContext(withTranslation('common')(AskForAuthenticationHelp)));
+export default withAppContext(withTranslation('common')(AskForAuthenticationHelp));

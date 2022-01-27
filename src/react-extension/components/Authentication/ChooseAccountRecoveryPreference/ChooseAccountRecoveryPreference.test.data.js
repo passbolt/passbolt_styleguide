@@ -1,17 +1,29 @@
 /**
- * Default props
- * @returns {*}
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.6.0
  */
-export function defaultProps() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'mandatory'
-      },
-      isGpgKeyImported: true,
-      onGoToGenerateGpgKeyRequested: jest.fn()
-    }
+
+/**
+ * Default props
+ * @returns {{}}
+ */
+export function defaultProps(props) {
+  const defaultProps = {
+    policy: 'mandatory',
+    onComplete: () => {},
+    canGenerateNewKeyInstead: true,
+    onGenerateNewKeyInstead: () => {}
   };
+  return Object.assign(defaultProps, props || {});
 }
 
 /**
@@ -19,15 +31,9 @@ export function defaultProps() {
  * @returns {*}
  */
 export function mandatoryPolicyProps() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'mandatory'
-      },
-      isGpgKeyImported: false,
-      onGoToGenerateGpgKeyRequested: () => {}
-    }
-  };
+  return defaultProps({
+    policy: 'mandatory',
+  });
 }
 
 /**
@@ -35,15 +41,9 @@ export function mandatoryPolicyProps() {
  * @returns {*}
  */
 export function optInPolicyProps() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'opt-in'
-      },
-      isGpgKeyImported: false,
-      onGoToGenerateGpgKeyRequested: () => {}
-    }
-  };
+  return defaultProps({
+    policy: 'opt-in',
+  });
 }
 
 /**
@@ -51,15 +51,9 @@ export function optInPolicyProps() {
  * @returns {*}
  */
 export function optOutPolicyProps() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'opt-out'
-      },
-      isGpgKeyImported: false,
-      onGoToGenerateGpgKeyRequested: () => {}
-    }
-  };
+  return defaultProps({
+    policy: 'opt-out',
+  });
 }
 
 /**
@@ -67,15 +61,10 @@ export function optOutPolicyProps() {
  * @returns {*}
  */
 export function mandatoryPolicyPropsWithImportedKey() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'mandatory'
-      },
-      isGpgKeyImported: true,
-      onGoToGenerateGpgKeyRequested: () => {}
-    }
-  };
+  return defaultProps({
+    policy: 'mandatory',
+    canGenerateNewKeyInstead: true,
+  });
 }
 
 /**
@@ -83,15 +72,10 @@ export function mandatoryPolicyPropsWithImportedKey() {
  * @returns {*}
  */
 export function optInPolicyPropsWithImportedKey() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'opt-in'
-      },
-      isGpgKeyImported: true,
-      onGoToGenerateGpgKeyRequested: () => {}
-    }
-  };
+  return defaultProps({
+    policy: 'opt-in',
+    canGenerateNewKeyInstead: true,
+  });
 }
 
 /**
@@ -99,13 +83,8 @@ export function optInPolicyPropsWithImportedKey() {
  * @returns {*}
  */
 export function optOutPolicyPropsWithImportedKey() {
-  return {
-    authenticationContext: {
-      accountRecoveryPolicy: {
-        policy: 'opt-out'
-      },
-      isGpgKeyImported: true,
-      onGoToGenerateGpgKeyRequested: () => {}
-    }
-  };
+  return defaultProps({
+    policy: 'opt-out',
+    canGenerateNewKeyInstead: true,
+  });
 }

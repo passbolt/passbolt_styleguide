@@ -1,108 +1,105 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
 import React, {Component} from "react";
+import PropTypes from "prop-types";
+import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
 import {
-  AuthenticationContextState,
-  withAuthenticationContext
-} from "../../../contexts/AuthenticationContext";
-import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
-import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
+  AuthenticationRecoverWorkflowStates,
+  withAuthenticationRecoverContext
+} from "../../../contexts/Authentication/AuthenticationRecoverContext";
+import ImportGpgKey, {ImportGpgKeyVariations} from "../../Authentication/ImportGpgKey/ImportGpgKey";
+import CheckPassphrase, {CheckPassphraseVariations} from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
 import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
-import PropTypes from "prop-types";
-import HelpOnPrivateKeyLostSecondaryAction from "../../Authentication/CheckPassphrase/HelpOnPrivateKeyLostSecondaryAction";
-import HelpOnPassphraseLostSecondaryAction
-  from "../../Authentication/CheckPassphrase/HelpOnPassphraseLostSecondaryAction";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
-import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
-import {withTranslation} from "react-i18next";
-import IntroduceSetupExtension from "../../Authentication/IntroduceSetupExtension/IntroduceSetupExtension";
-import RequestAccountRecovery from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
+import IntroduceExtension from "../../Authentication/IntroduceExtension/IntroduceExtension";
+import InitiateAccountRecovery from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
+import CreateGpgKey, {CreateGpgKeyVariation} from "../../Authentication/CreateGpgKey/CreateGpgKey";
+import CheckAccountRecoveryEmail from "../../Authentication/CheckAccountRecoveryEmail/CheckAccountRecoveryEmail";
 
 /**
  * The component orchestrates the recover authentication process
  */
 class RecoverAuthentication extends Component {
   /**
-   * Whenever the component is mounted
-   */
-  componentDidMount() {
-    this.initializeRecover();
-  }
-
-  /**
-   * Whenever the component is updated
-   */
-  componentDidUpdate() {
-    this.handleSecurityTokenSaved();
-  }
-
-  /**
-   * Can the user use the remember until I logout option
-   * @return {boolean}
-   */
-  get canRememberMe() {
-    return this.props.siteSettings.hasRememberMeUntilILogoutOption;
-  }
-
-
-  /**
-   * Whenever the security token has been saved
-   */
-  handleSecurityTokenSaved() {
-    if (this.props.authenticationContext.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
-      this.props.authenticationContext.onCompleteRecoverRequested();
-    }
-  }
-
-  /**
-   * Initialize the authentication recover process
-   */
-  initializeRecover() {
-    this.props.authenticationContext.onInitializeRecoverRequested();
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
-    switch (this.props.authenticationContext.state)  {
-      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED:
-        return <IntroduceSetupExtension/>;
-      case AuthenticationContextState.RECOVER_INITIALIZED:
-      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED:
+    switch (this.props.authenticationRecoverContext.state) {
+      case AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION:
+        return <IntroduceExtension
+          onComplete={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY:
         return <ImportGpgKey
-          title={this.translate("Welcome back, please enter your private key to begin the recovery process.")}
-          secondaryAction={<HelpOnPrivateKeyLostSecondaryAction/>}/>;
-      case AuthenticationContextState.GPG_KEY_VALIDATED:
-        return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<HelpOnPassphraseLostSecondaryAction/>}/>;
-      case AuthenticationContextState.GPG_KEY_IMPORTED:
-        return <ChooseSecurityToken/>;
-      case AuthenticationContextState.CREDENTIALS_LOST:
-        return <AskForAuthenticationHelp/>;
-      case AuthenticationContextState.REQUEST_ACCOUNT_RECOVERY:
-        return <RequestAccountRecovery/>;
-      case  AuthenticationContextState.RECOVER_COMPLETED:
-        return <DisplayLoginInProgress/>;
-      case AuthenticationContextState.UNEXPECTED_ERROR:
-        return <DisplayUnexpectedError error={this.props.authenticationContext.error}/>;
-      default:
+          displayAs={ImportGpgKeyVariations.RECOVER}
+          onComplete={this.props.authenticationRecoverContext.importGpgKey.bind(this)}
+          onSecondaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE:
+        return <CheckPassphrase
+          displayAs={CheckPassphraseVariations.RECOVER}
+          canRememberMe={this.props.context.siteSettings.hasRememberMeUntilILogoutOption}
+          onComplete={this.props.authenticationRecoverContext.checkPassphrase.bind(this)}
+          onSecondaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN:
+        return <ChooseSecurityToken
+          onComplete={this.props.authenticationRecoverContext.chooseSecurityToken.bind(this)}
+        />;
+      case  AuthenticationRecoverWorkflowStates.SIGNING_IN:
+        return <LoadingSpinner
+          title={<Trans>Signing in, please wait...</Trans>}
+        />;
+      case AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST:
+        return <AskForAuthenticationHelp
+          onTryAgain={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY:
+        return <InitiateAccountRecovery
+          onComplete={this.props.authenticationRecoverContext.initiateAccountRecovery.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY:
+        return <CreateGpgKey
+          displayAs={CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY}
+          onComplete={this.props.authenticationRecoverContext.generateAccountRecoveryGpgKey.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN:
+        return <ChooseSecurityToken
+          onComplete={this.props.authenticationRecoverContext.chooseAccountRecoverySecurityToken.bind(this)}
+        />;
+      case AuthenticationRecoverWorkflowStates.REQUESTING_ACCOUNT_RECOVERY:
+        return <LoadingSpinner
+          title={<Trans>Requesting administrator approval. Please wait...</Trans>}
+        />;
+      case AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL:
+        return <CheckAccountRecoveryEmail/>;
+      case AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR:
+        return <DisplayUnexpectedError
+          error={this.props.authenticationRecoverContext.error}
+        />;
+      case AuthenticationRecoverWorkflowStates.LOADING:
         return <LoadingSpinner/>;
     }
   }
 }
 
 RecoverAuthentication.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  siteSettings: PropTypes.object, // The site settings
-  t: PropTypes.func, // The translation function
+  context: PropTypes.any, // The application context
+  authenticationRecoverContext: PropTypes.any.isRequired, // The authentication recover context
 };
 
-export default withAuthenticationContext(withTranslation('common')(RecoverAuthentication));
+export default withAppContext(withAuthenticationRecoverContext(withTranslation('common')(RecoverAuthentication)));

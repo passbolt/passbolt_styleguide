@@ -25,7 +25,7 @@ beforeEach(() => {
 describe("As AN I should see the check mail box", () => {
   let page; // The page to test against
 
-  describe('As AN I should be notified that an email has been sent to me with a new registration link', () => {
+  describe("As AN I should be notified that an email has been sent to me with a new registration link", () => {
     /**
      * Given a AN
      * Then I should see the check mail box message
@@ -35,12 +35,12 @@ describe("As AN I should see the check mail box", () => {
       page = new CheckMailBoxTestPage();
     });
 
-    it('As AN I should see that an email has been sent', () => {
+    it("As AN I should see that an email has been sent", () => {
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Check your mailbox!");
       // message
-      expect(page.message).toBe('We sent you a link to verify your email.Check your spam folder if you do not hear from us after a while.');
+      expect(page.message).toBe("We sent you a link to verify your email.Check your spam folder if you do not hear from us after a while.");
     });
   });
 });

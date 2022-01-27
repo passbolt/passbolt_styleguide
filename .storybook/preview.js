@@ -2,6 +2,12 @@ import React from 'react';
 import AppContext from '../src/react-extension/contexts/AppContext';
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
+// Mock jest.fn to be able to use jest test data mock in storybook.
+// The benefit is too be able to keep consistent any changes on the Component props in order to keep the storybook stable.
+window.jest = {
+  fn: () => {}
+};
+
 const withLocalProvider = (Story, context) =>
   <MockTranslationProvider language={context.globals.locale}>
     <Story/>

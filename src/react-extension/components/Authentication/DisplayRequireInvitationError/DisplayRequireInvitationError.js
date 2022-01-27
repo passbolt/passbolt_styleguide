@@ -18,14 +18,6 @@ import {Trans, withTranslation} from "react-i18next";
 
 class DisplayRequireInvitationError extends Component {
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -44,6 +36,5 @@ class DisplayRequireInvitationError extends Component {
 
 DisplayRequireInvitationError.propTypes = {
   context: PropTypes.any, // The application context
-  t: PropTypes.func, // The translation function
 };
 export default withAppContext(withTranslation('common')(DisplayRequireInvitationError));

@@ -12,7 +12,6 @@
  * @since         3.4.0
  */
 import React, {Component} from "react";
-import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -66,14 +65,6 @@ class DisplayAccountRecoveryNotSupported extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -103,7 +94,4 @@ class DisplayAccountRecoveryNotSupported extends Component {
   }
 }
 
-DisplayAccountRecoveryNotSupported.propTypes = {
-  t: PropTypes.func, // The translation function
-};
 export default withTranslation('common')(DisplayAccountRecoveryNotSupported);

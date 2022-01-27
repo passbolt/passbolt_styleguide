@@ -18,14 +18,6 @@ import {Trans, withTranslation} from "react-i18next";
 
 class DisplayExpiredTokenError extends Component {
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -44,6 +36,5 @@ class DisplayExpiredTokenError extends Component {
 
 DisplayExpiredTokenError.propTypes = {
   context: PropTypes.any, // The application context
-  t: PropTypes.func, // The translation function
 };
 export default withAppContext(withTranslation('common')(DisplayExpiredTokenError));

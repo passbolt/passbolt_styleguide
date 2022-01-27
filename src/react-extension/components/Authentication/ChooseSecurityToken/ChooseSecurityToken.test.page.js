@@ -1,6 +1,19 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
+
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AuthenticationContextProvider from "../../../contexts/AuthenticationContext";
 import ChooseSecurityToken from "./ChooseSecurityToken";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -10,15 +23,12 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class ChooseSecurityTokenPage {
   /**
    * Default constructor
-   * @param context Context value
    * @param props Props to attach
    */
-  constructor(context, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AuthenticationContextProvider value={context}>
-          <ChooseSecurityToken {...props}/>
-        </AuthenticationContextProvider>
+        <ChooseSecurityToken {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -51,14 +61,12 @@ export default class ChooseSecurityTokenPage {
     return this._page.container.querySelector('.randomize-button-wrapper a');
   }
 
-
   /**
    * Returns the next button element
    */
   get nextButton() {
     return this._page.container.querySelector('.button.primary');
   }
-
 
   /**
    * Returns true if the user can change something like the token code
@@ -80,7 +88,6 @@ export default class ChooseSecurityTokenPage {
   get hasEmptyCodeError() {
     return Boolean(this._page.container.querySelector('.empty-code'));
   }
-
 
   /**
    * Returns true if the not good code length error message is displayed

@@ -1,113 +1,100 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
 import React, {Component} from "react";
-import CreateGpgKey from "../../Authentication/CreateGpgKey/CreateGpgKey";
-import {
-  AuthenticationContextState,
-  withAuthenticationContext
-} from "../../../contexts/AuthenticationContext";
-import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit";
-import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
-import ImportGpgKey from "../../Authentication/ImportGpgKey/ImportGpgKey";
-import CheckPassphrase from "../../Authentication/CheckPassphrase/CheckPassphrase";
-import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import PropTypes from "prop-types";
-import GenerateKeyOnPassphraseLostSecondaryAction
-  from "../../Authentication/CheckPassphrase/GenerateKeyOnPassphraseLostSecondaryAction";
-import GenerateKeySecondaryAction
-  from "../../Authentication/ImportGpgKey/GenerateKeySecondaryAction";
-import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
-import DisplayLoginInProgress from "../../AuthenticationLogin/DisplayLoginInProgress/DisplayLoginInProgress";
-import {withTranslation} from "react-i18next";
-import IntroduceSetupExtension from "../../Authentication/IntroduceSetupExtension/IntroduceSetupExtension";
+import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
+import {
+  AuthenticationSetupWorkflowStates,
+  withAuthenticationSetupContext
+} from "../../../contexts/Authentication/AuthenticationSetupContext";
+import CheckPassphrase, {CheckPassphraseVariations} from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseAccountRecoveryPreference
   from "../../Authentication/ChooseAccountRecoveryPreference/ChooseAccountRecoveryPreference";
+import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
+import CreateGpgKey, {CreateGpgKeyVariation} from "../../Authentication/CreateGpgKey/CreateGpgKey";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
+import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit";
+import ImportGpgKey, {ImportGpgKeyVariations} from "../../Authentication/ImportGpgKey/ImportGpgKey";
+import IntroduceExtension from "../../Authentication/IntroduceExtension/IntroduceExtension";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 
 /**
  * The component orchestrates the setup authentication process
  */
 class SetupAuthentication extends Component {
   /**
-   * Whenever the component is mounted
-   */
-  componentDidMount() {
-    this.initializeSetup();
-  }
-
-  /**
-   * Whenever the component is updated
-   */
-  componentDidUpdate() {
-    this.handleSecurityTokenSaved();
-  }
-
-  /**
-   * Can the user use the remember until I logout option
-   * @return {boolean}
-   */
-  get canRememberMe() {
-    return this.props.siteSettings.hasRememberMeUntilILogoutOption;
-  }
-
-  /**
-   * Whenever the security token has been saved
-   */
-  handleSecurityTokenSaved() {
-    if (this.props.authenticationContext.state === AuthenticationContextState.SECURITY_TOKEN_SAVED) {
-      this.props.authenticationContext.onCompleteSetupRequested();
-    }
-  }
-
-  /**
-   * Initialize the authentication setup process
-   */
-  initializeSetup() {
-    this.props.authenticationContext.onInitializeSetupRequested();
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
-    switch (this.props.authenticationContext.state)  {
-      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_INITIALIZED:
-        return <IntroduceSetupExtension/>;
-      case AuthenticationContextState.SETUP_INITIALIZED:
-      case AuthenticationContextState.INTRODUCE_SETUP_EXTENSION_COMPLETED:
-        return <CreateGpgKey/>;
-      case AuthenticationContextState.GPG_KEY_GENERATED:
-        return <DownloadRecoveryKit/>;
-      case AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_REQUESTED:
-        return <ChooseAccountRecoveryPreference/>;
-      case AuthenticationContextState.RECOVERY_KIT_DOWNLOADED:
-      case AuthenticationContextState.GPG_KEY_IMPORTED:
-      case AuthenticationContextState.CONFIGURE_ACCOUNT_RECOVERY_CONFIRMED:
-        return <ChooseSecurityToken/>;
-      case AuthenticationContextState.GPG_KEY_TO_IMPORT_REQUESTED:
+    switch (this.props.authenticationSetupContext.state)  {
+      case AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION:
+        return <IntroduceExtension
+          onComplete={this.props.authenticationSetupContext.goToGenerateGpgKey}
+        />;
+      case AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY:
+        return <CreateGpgKey
+          displayAs={CreateGpgKeyVariation.SETUP}
+          onComplete={this.props.authenticationSetupContext.generateGpgKey}
+          onSecondaryActionClick={this.props.authenticationSetupContext.goToImportGpgKey}
+        />;
+      case AuthenticationSetupWorkflowStates.DOWNLOAD_RECOVERY_KIT:
+        return <DownloadRecoveryKit
+          onDownload={this.props.authenticationSetupContext.downloadRecoveryKit}
+          onComplete={this.props.authenticationSetupContext.handleRecoveryKitDownloaded}
+        />;
+      case AuthenticationSetupWorkflowStates.IMPORT_GPG_KEY:
         return <ImportGpgKey
-          title={this.translate("Welcome, please enter your private key to continue.")}
-          secondaryAction={<GenerateKeySecondaryAction/>}/>;
-      case AuthenticationContextState.GPG_KEY_VALIDATED:
-        return <CheckPassphrase canRememberMe={this.canRememberMe} secondaryAction={<GenerateKeyOnPassphraseLostSecondaryAction/>}/>;
-      case  AuthenticationContextState.SETUP_COMPLETED:
-        return <DisplayLoginInProgress/>;
-      case AuthenticationContextState.UNEXPECTED_ERROR:
-        return <DisplayUnexpectedError error={this.props.authenticationContext.error}/>;
-      default:
+          displayAs={ImportGpgKeyVariations.SETUP}
+          onComplete={this.props.authenticationSetupContext.importGpgKey}
+          onSecondaryActionClick={this.props.authenticationSetupContext.goToGenerateGpgKey}
+        />;
+      case AuthenticationSetupWorkflowStates.VALIDATE_PASSPHRASE:
+        return <CheckPassphrase
+          displayAs={CheckPassphraseVariations.SETUP}
+          canRememberMe={this.props.context.siteSettings.hasRememberMeUntilILogoutOption}
+          onComplete={this.props.authenticationSetupContext.checkPassphrase}
+          onSecondaryActionClick={this.props.authenticationSetupContext.goToGenerateGpgKey}
+        />;
+      case AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE:
+        return <ChooseAccountRecoveryPreference
+          policy={this.props.authenticationSetupContext.setupInfo?.account_recovery_organization_policy?.policy}
+          onComplete={this.props.authenticationSetupContext.chooseAccountRecoveryPreference}
+          canGenerateNewKeyInstead={!this.props.authenticationSetupContext.gpgKeyGenerated}
+          onGenerateNewKeyInstead={this.props.authenticationSetupContext.goToGenerateGpgKey}
+        />;
+      case AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN:
+        return <ChooseSecurityToken
+          onComplete={this.props.authenticationSetupContext.chooseSecurityToken}
+        />;
+      case AuthenticationSetupWorkflowStates.SIGNING_IN:
+        return <LoadingSpinner
+          title={<Trans>Signing in, please wait...</Trans>}
+        />;
+      case AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR:
+        return <DisplayUnexpectedError
+          error={this.props.authenticationSetupContext.error}
+        />;
+      case AuthenticationSetupWorkflowStates.LOADING:
         return <LoadingSpinner/>;
     }
   }
 }
 
 SetupAuthentication.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  siteSettings: PropTypes.object, // The site settings
-  t: PropTypes.func, // The translation function
+  context: PropTypes.any, // The application context
+  authenticationSetupContext: PropTypes.any.isRequired, // The authentication setup context
 };
-export default withAuthenticationContext(withTranslation('common')(SetupAuthentication));
+
+export default withAppContext(withAuthenticationSetupContext(withTranslation('common')(SetupAuthentication)));

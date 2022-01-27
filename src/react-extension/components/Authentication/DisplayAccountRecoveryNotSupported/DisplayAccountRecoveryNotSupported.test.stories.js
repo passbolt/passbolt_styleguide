@@ -27,7 +27,7 @@ const Template = args =>
       <div className="content">
         <div className="login-form">
           <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <DisplayAccountRecoveryNotSupported {...args} {...routerProps}/>}></Route>
+            <Route component={routerProps => <DisplayAccountRecoveryNotSupported {...args} {...routerProps}/>}/>
           </MemoryRouter>
         </div>
       </div>

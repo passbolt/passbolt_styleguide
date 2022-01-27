@@ -39,11 +39,11 @@ class MockPort {
     let result;
 
     if (this.requestListeners[name]) {
-      const listenerArguments = Array.prototype.slice.call(arguments, 1);
+      const listenerArguments = Array.prototype.slice.call(arguments, 1, arguments.length);
       console.debug('listenerArguments', listenerArguments);
       listenerArguments.push(this.storage);
       console.debug('listenerArguments', listenerArguments);
-      result = await this.requestListeners[name].apply(null, listenerArguments);
+      result = await this.requestListeners[name](...listenerArguments);
       console.debug(`response: `, result);
     } else {
       console.debug(`The request ${name} has not been mocked`);

@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,6 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -25,17 +23,14 @@ import NotifyExpiredSession from "./NotifyExpiredSession";
 export default class NotifyExpiredSessionPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <Router>
-            <NotifyExpiredSession {...props}/>
-          </Router>
-        </AppContext.Provider>
+        <Router>
+          <NotifyExpiredSession {...props}/>
+        </Router>
       </MockTranslationProvider>
     );
   }

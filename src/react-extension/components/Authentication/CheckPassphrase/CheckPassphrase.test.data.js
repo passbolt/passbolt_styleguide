@@ -1,41 +1,29 @@
-import MockPort from "../../../test/mock/MockPort";
-
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
  */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    onCheckImportedGpgKeyPassphraseRequested: jest.fn()
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
 
-/**
- * Default props
- * @returns {{}}
- */
-export function defaultProps() {
-  return {
-    canRememberMe: true,
-    dialogContext: {
-      open: jest.fn()
-    }
-  };
-}
-
+import {CheckPassphraseVariations} from "./CheckPassphrase";
 
 /**
  * Default props
  * @returns {{}}
  */
-export function propsWithCannotRememberMe() {
-  return {
+export function defaultProps(props) {
+  const defaultProps = {
+    displayAs: CheckPassphraseVariations.SETUP,
     canRememberMe: false,
-    dialogContext: {
-      open: jest.fn()
-    }
+    onComplete: jest.fn(() => Promise.resolve()),
+    onSecondaryActionClick: jest.fn(() => Promise.resolve()),
   };
+  return Object.assign(defaultProps, props || {});
 }

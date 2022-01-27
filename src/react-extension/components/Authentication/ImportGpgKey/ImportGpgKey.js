@@ -12,11 +12,17 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+
+/**
+ * The component display variations.
+ * @type {Object}
+ */
+export const ImportGpgKeyVariations = {
+  SETUP: 'Setup',
+  RECOVER: 'Recover'
+};
 
 /**
  * This component allows the user to import his Gpg key
@@ -139,13 +145,14 @@ class ImportGpgKey extends Component {
    * Verify and save the private gpg key
    */
   async save() {
-    await this.props.authenticationContext.onImportGpgKeyRequested(this.state.privateKey)
+    await this.props.onComplete(this.state.privateKey)
       .catch(this.onSaveFailure.bind(this));
   }
 
   /**
    * Whenever the gpg key import failed
-   * @param error The error
+   * @param {Error} error The error
+   * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError.
    */
   async onSaveFailure(error) {
     // It can happen when some key validation went wrong.
@@ -153,8 +160,7 @@ class ImportGpgKey extends Component {
     if (error.name === "GpgKeyError") {
       this.setState({errors: {invalidPrivateKey: true}, errorMessage: error.message});
     } else {
-      const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
+      throw error;
     }
   }
 
@@ -220,7 +226,12 @@ class ImportGpgKey extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     return (
       <div className="import-private-key">
-        <h1>{this.props.title}</h1>
+        <h1>
+          {{
+            [ImportGpgKeyVariations.SETUP]: <Trans>Please enter your private key to continue.</Trans>,
+            [ImportGpgKeyVariations.RECOVER]: <Trans>Welcome back, please enter your private key to begin the recovery process.</Trans>
+          }[this.props.displayAs]}
+        </h1>
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
@@ -262,7 +273,14 @@ class ImportGpgKey extends Component {
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
             </button>
-            {this.props.secondaryAction}
+            {this.props.onSecondaryActionClick &&
+            <a onClick={this.props.onSecondaryActionClick}>
+              {{
+                [ImportGpgKeyVariations.SETUP]: <Trans>Or generate a new private key.</Trans>,
+                [ImportGpgKeyVariations.RECOVER]: <Trans>Help, I lost my private key.</Trans>,
+              }[this.props.displayAs]}
+            </a>
+            }
           </div>
         </form>
       </div>
@@ -270,11 +288,17 @@ class ImportGpgKey extends Component {
   }
 }
 
+ImportGpgKey.defaultProps = {
+  displayAs: ImportGpgKeyVariations.SETUP
+};
+
 ImportGpgKey.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  title: PropTypes.string, // title
-  dialogContext: PropTypes.any, // The dialog context
-  secondaryAction: PropTypes.any, // Secondary action to display
+  onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to import its gpg key
+  displayAs: PropTypes.PropTypes.oneOf([
+    ImportGpgKeyVariations.SETUP,
+    ImportGpgKeyVariations.RECOVER
+  ]), // Defines how the form should be displayed and behaves
+  onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
 };
-export default withAuthenticationContext(withDialog(withTranslation('common')(ImportGpgKey)));
+export default withTranslation('common')(ImportGpgKey);
