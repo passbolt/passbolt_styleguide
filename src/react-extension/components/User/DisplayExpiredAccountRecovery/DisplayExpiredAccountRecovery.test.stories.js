@@ -1,6 +1,5 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_app.css";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayExpiredAccountRecovery from "./DisplayExpiredAccountRecovery";
 
@@ -18,7 +17,4 @@ const Template = args =>
     </MemoryRouter>
   </MockTranslationProvider>;
 
-
-
 export const Initial = Template.bind({});
-
