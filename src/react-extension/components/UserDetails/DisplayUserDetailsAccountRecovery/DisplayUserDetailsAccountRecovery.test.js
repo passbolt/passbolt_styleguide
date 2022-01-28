@@ -107,7 +107,6 @@ describe("See account recovery", () => {
       expect(page.previousRecoveryRequest).toBe('Never');
       expect(page.numberOfRecovery).toBe('0');
     });
-
   });
 
   describe(' As LU I see a loading state when the activity are not loaded', () => {

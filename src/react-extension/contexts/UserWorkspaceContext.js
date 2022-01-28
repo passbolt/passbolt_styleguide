@@ -98,7 +98,8 @@ class UserWorkspaceContextProvider extends React.Component {
       onUserSelected: {
         single: this.handleUserSelected.bind(this)// Whenever a single user has been selected
       },
-      onGroupToEdit: this.handleGroupToEdit.bind(this) // Whenever a group will be edited
+      onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
+      isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
     };
   }
 
@@ -336,6 +337,15 @@ class UserWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Returns true if the given user requires attention from an admin.
+   * @param {User} user
+   * @returns {Boolean}
+   */
+  isAttentionRequired(user) {
+    return Boolean(user.pending_account_recovery_user_request);
+  }
+
+  /**
    * Populate the context with initial data such as users and groups
    */
   populate() {
@@ -540,16 +550,20 @@ class UserWorkspaceContextProvider extends React.Component {
     const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
     const roleNameSorter = (roleIdU1, roleIdU2) => this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
     const dateOrStringSorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
+    const attentionRequireSorter = (u1, u2) => (this.isAttentionRequired(u2) === this.isAttentionRequired(u1)) ? 0 : this.isAttentionRequired(u2) ? 1 : -1;
 
     const isNameProperty = this.state.sorter.propertyName === 'name';
     const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
     const isRoleNameProperty = this.state.sorter.propertyName === 'role.name';
+    const isAttentionRequiredProperty = this.state.sorter.propertyName === 'attentionRequired';
 
     let propertySorter;
     if (isNameProperty) {
       propertySorter = plainObjectSorter(nameSorter);
     } else if (isMfaProperty) {
       propertySorter = plainObjectSorter(mfaSorter);
+    } else if (isAttentionRequiredProperty) {
+      propertySorter = plainObjectSorter(attentionRequireSorter);
     } else if (isRoleNameProperty) {
       propertySorter = keySorter("role_id", roleNameSorter);
     } else {
