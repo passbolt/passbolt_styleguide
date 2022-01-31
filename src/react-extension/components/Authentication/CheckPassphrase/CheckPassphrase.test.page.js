@@ -1,6 +1,19 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
+
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AuthenticationContextProvider from "../../../contexts/AuthenticationContext";
 import CheckPassphrase from "./CheckPassphrase";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -10,15 +23,12 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class CheckPassphrasePage {
   /**
    * Default constructor
-   * @param context Context value
    * @param props Props to attach
    */
-  constructor(context, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AuthenticationContextProvider value={context}>
-          <CheckPassphrase {...props}/>
-        </AuthenticationContextProvider>
+        <CheckPassphrase {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -62,14 +72,20 @@ export default class CheckPassphrasePage {
     return this._page.container.querySelector('.button.primary');
   }
 
+  /**
+   * Returns the secondary action link element
+   */
+  get secondaryActionLink() {
+    return this._page.container.querySelector('.form-actions a');
+  }
 
   /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {
     const cannotChangePassphrase = this.passphraseInput.hasAttribute('disabled');
-    const cannotChangeRememberMer = this.rememberMeInput.hasAttribute('disabled');
-    return !cannotChangePassphrase && !cannotChangeRememberMer;
+    const cannotChangeRememberMe = this.rememberMeInput?.hasAttribute('disabled');
+    return !cannotChangePassphrase && !cannotChangeRememberMe;
   }
 
   /**
@@ -95,7 +111,6 @@ export default class CheckPassphrasePage {
 
   /**
    * Toggle the remember me value
-   * @param color A token color
    */
   async toggleRememberMe() {
     const leftClick = {button: 0};
@@ -112,7 +127,6 @@ export default class CheckPassphrasePage {
     await waitFor(() => {});
   }
 
-
   /**
    * Verify the passphrase validity
    * @param inProgressFn The function called while saving
@@ -120,6 +134,15 @@ export default class CheckPassphrasePage {
   async verify(inProgressFn = () => {}) {
     const leftClick = {button: 0};
     fireEvent.click(this.verifyButton, leftClick);
+    await waitFor(inProgressFn);
+  }
+
+  /**
+   * Click on the secondary action link.
+   */
+  async clickSecondaryActionLink(inProgressFn = () => {}) {
+    const leftClick = {button: 0};
+    fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }
 }

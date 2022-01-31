@@ -22,7 +22,6 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class ChooseAccountRecoveryPreferencePage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {

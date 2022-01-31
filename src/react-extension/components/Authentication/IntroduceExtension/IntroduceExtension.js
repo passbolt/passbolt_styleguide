@@ -12,13 +12,11 @@
  * @since         3.3.0
  */
 import React, {Component} from "react";
-import {detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
-import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
+import {detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
 
-class IntroduceSetupExtension extends Component {
+class IntroduceExtension extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
@@ -63,15 +61,7 @@ class IntroduceSetupExtension extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     await this.toggleProcessing();
-    this.props.authenticationContext.onCompleteIntroduceSetupExtension();
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
+    this.props.onComplete();
   }
 
   /**
@@ -83,8 +73,8 @@ class IntroduceSetupExtension extends Component {
       <div className="introduce-setup-extension">
         <h1><Trans>Congratulation! Passbolt extension has been installed.</Trans></h1>
         <form onSubmit={this.handleSubmit}>
-          <div className={`animated-setup-introduction ${this.state.browserName}`}></div>
-          <div className="arrow"></div>
+          <div className={`animated-setup-introduction ${this.state.browserName}`}/>
+          <div className="arrow"/>
           <div className="form-actions">
             <button
               type="submit"
@@ -100,8 +90,7 @@ class IntroduceSetupExtension extends Component {
   }
 }
 
-IntroduceSetupExtension.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  t: PropTypes.func, // The translation function
+IntroduceExtension.propTypes = {
+  onComplete: PropTypes.func.isRequired, // The callback to trigger when the user complete the step.
 };
-export default withAppContext(withAuthenticationContext(withTranslation('common')(IntroduceSetupExtension)));
+export default withTranslation('common')(IntroduceExtension);

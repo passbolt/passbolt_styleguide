@@ -1,103 +1,166 @@
 /**
- * Unit tests on CreateGpgKey in regard of specifications
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
  */
-import {defaultAppContext, defaultProps, propsWithCannotRememberMe} from "./CheckPassphrase.test.data";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import CheckPassphrasePage from "./CheckPassphrase.test.page";
 
+/**
+ * Unit tests on CheckPassphrase in regard of specifications
+ */
+import {defaultProps} from "./CheckPassphrase.test.data";
+import CheckPassphrasePage from "./CheckPassphrase.test.page";
+import each from "jest-each";
+import {CheckPassphraseVariations} from "./CheckPassphrase";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("Check passphrase", () => {
-  let page, // The page to test against
-    context; // The context
-  const props = defaultProps(); // The props to pass
+  let page, // The page to test against.
+    props; // The component props
 
-  describe('Check passphrase with Can Remember Me option', () => {
-    beforeEach(() => {
-      context = defaultAppContext(); // The context
-      page = new CheckPassphrasePage(context, props);
-    });
+  each([
+    {displayAs: CheckPassphraseVariations.SETUP, canRememberMe: true}, // Setup with remember me enabled
+    {displayAs: CheckPassphraseVariations.SETUP, canRememberMe: false}, // Setup with remember me disabled
+    {displayAs: CheckPassphraseVariations.RECOVER, canRememberMe: true}, // Recover with remember me enabled
+    {displayAs: CheckPassphraseVariations.RECOVER, canRememberMe: false}, // Recover with remember me disabled
+  ]).describe("Common behavior to all context", _props => {
+    it(`As AN I should be able to enter my secret key passphrase, scenario: ${JSON.stringify(_props)}`, async() => {
+      props = defaultProps(_props);
+      page = new CheckPassphrasePage(props);
 
-    it('As AN I should be able to enter my secret key passphrase', async() => {
+      expect.assertions(1);
       const expectedPassphrase = "some passphrase";
       await page.fillPassphrase(expectedPassphrase);
       expect(page.passphrase).toBe(expectedPassphrase);
     });
 
-    it('As AN I should be able to ask to remember my passphrase', async() => {
-      expect(page.rememberMe).toBe("false");
-      await page.toggleRememberMe();
-      expect(page.rememberMe).toBe("true");
-    });
-
-
-    it('As AN I cannot update the form fields while submitting the form', async() => {
+    it(`As AN I cannot update the form fields while submitting the form , scenario: ${JSON.stringify(_props)}`, async() => {
       let checkResolve = null;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => checkResolve = resolve));
-      jest.spyOn(context, 'onCheckImportedGpgKeyPassphraseRequested').mockImplementationOnce(requestMockImpl);
+      const onComplete = jest.fn(() => new Promise(resolve => checkResolve = resolve));
+      props = defaultProps({..._props, onComplete});
+      page = new CheckPassphrasePage(props);
+
+      expect.hasAssertions();
       const inProgressFn = () => {
         expect(page.canChange).toBeFalsy();
         checkResolve();
       };
       await page.fillPassphrase('some passphrase');
       await page.verify(inProgressFn);
-      expect(context.onCheckImportedGpgKeyPassphraseRequested).toHaveBeenCalledWith("some passphrase", false);
+      expect(props.onComplete).toHaveBeenCalledWith("some passphrase", false);
       expect(checkResolve).toBeDefined();
     });
 
-    it('As AN I should see a processing feedback while submitting the form', async() => {
+    it(`As AN I should see a processing feedback while submitting the form , scenario: ${JSON.stringify(_props)}`, async() => {
       let checkResolve = null;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => checkResolve = resolve));
-      jest.spyOn(context, 'onCheckImportedGpgKeyPassphraseRequested').mockImplementationOnce(requestMockImpl);
+      const onComplete = jest.fn(() => new Promise(resolve => checkResolve = resolve));
+      props = defaultProps({..._props, onComplete});
+      page = new CheckPassphrasePage(props);
+
+      expect.hasAssertions();
       const inProgressFn = () => {
         expect(page.isProcessing).toBeTruthy();
         checkResolve();
       };
       await page.fillPassphrase('some passphrase');
-      await page.toggleRememberMe();
       await page.verify(inProgressFn);
-      expect(context.onCheckImportedGpgKeyPassphraseRequested).toHaveBeenCalledWith("some passphrase", true);
+      expect(props.onComplete).toHaveBeenCalledWith("some passphrase", false);
       expect(checkResolve).toBeDefined();
     });
 
-    it('As AN I should see an error if the passphrase is empty after submitting the form (first validation)', async() => {
+    it(`As AN I should see an error if the passphrase is empty after submitting the form (first validation) , scenario: ${JSON.stringify(_props)}`, async() => {
+      props = defaultProps(_props);
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(1);
       const emptyPassphrase = ' ';
       await page.fillPassphrase(emptyPassphrase);
       await page.verify();
       expect(page.hasEmptyPassphraseError).toBeTruthy();
     });
 
-    it('As AN I should see an error if f the passphrase cannot decrypt the secret key', async() => {
+    it(`As AN I should see an error if f the passphrase cannot decrypt the secret key , scenario: ${JSON.stringify(_props)}`, async() => {
       const expectedError = {name: 'InvalidMasterPasswordError'};
-      jest.spyOn(context, 'onCheckImportedGpgKeyPassphraseRequested').mockImplementationOnce(() => Promise.reject(expectedError));
-      await page.fillPassphrase('some passphrase');
-      await page.verify();
-      expect(page.hasInvalidPassphraseError);
-    });
+      const onComplete = jest.fn(() => Promise.reject(expectedError));
+      props = defaultProps({..._props, onComplete});
+      page = new CheckPassphrasePage(props);
 
-    it('As AN I should see an error if the submission failed for an unexpected reason', async() => {
-      const expectedError = {message: 'Some error'};
-      jest.spyOn(context, 'onCheckImportedGpgKeyPassphraseRequested').mockImplementationOnce(() => Promise.reject(expectedError));
-      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
+      expect.assertions(1);
       await page.fillPassphrase('some passphrase');
       await page.verify();
-      expect(props.dialogContext.open).toBeCalledWith(NotifyError, expectedError);
+      expect(page.hasInvalidPassphraseError).toBeTruthy();
     });
   });
 
-
-  describe('Check passphrase without Remember Me option', () => {
-    beforeEach(() => {
-      context = defaultAppContext(); // The context
-      page = new CheckPassphrasePage(context, propsWithCannotRememberMe());
+  describe("Check Passphrase and remember me", () => {
+    it("As AN I should not see the remember me option if I enable it through the props", async() => {
+      expect.assertions(1);
+      props = defaultProps({canRememberMe: true});
+      page = new CheckPassphrasePage(props);
+      expect(page.canRememberMe).toBeTruthy();
     });
 
-    it('As AN I should not see the remember me option if flagged as false from site settings', () => {
+    it("As AN I should not see the remember me option if I disable it through the props", async() => {
+      expect.assertions(1);
+      props = defaultProps({canRememberMe: false});
+      page = new CheckPassphrasePage(props);
       expect(page.canRememberMe).toBeFalsy();
+    });
+
+    it("As AN I should be able to ask to remember my passphrase", async() => {
+      props = defaultProps({canRememberMe: true});
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(3);
+      expect(page.rememberMe).toBe("false");
+      await page.toggleRememberMe();
+      expect(page.rememberMe).toBe("true");
+      await page.fillPassphrase('some passphrase');
+      await page.verify();
+      expect(props.onComplete).toHaveBeenCalledWith("some passphrase", true);
+    });
+
+    it("As AN I should be able to ask to not remember my passphrase", async() => {
+      props = defaultProps({canRememberMe: true});
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(2);
+      expect(page.rememberMe).toBe("false");
+      await page.fillPassphrase('some passphrase');
+      await page.verify();
+      expect(props.onComplete).toHaveBeenCalledWith("some passphrase", false);
+    });
+  });
+
+  describe("Check passphrase and secondary action", () => {
+    it("As AN completing the setup I should be able to go to the generate key screen from the check passphrase state.", async() => {
+      props = defaultProps({displayAs: CheckPassphraseVariations.SETUP});
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(2);
+      expect(page.secondaryActionLink.textContent).toContain("I lost my passphrase, generate a new private key.");
+      await page.clickSecondaryActionLink();
+      expect(props.onSecondaryActionClick).toHaveBeenCalled();
+    });
+
+    it("As AN completing the recover I should be able to request some help if I lost my credentials.", async() => {
+      props = defaultProps({displayAs: CheckPassphraseVariations.RECOVER});
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(2);
+      expect(page.secondaryActionLink.textContent).toContain("Help, I lost my passphrase.");
+      await page.clickSecondaryActionLink();
+      expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
   });
 });
-

@@ -13,15 +13,13 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AuthenticationContextProvider from "./contexts/AuthenticationContext";
-import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "./contexts/DialogContext";
-import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
-import SiteSettings from "../shared/lib/Settings/SiteSettings";
-import Footer from "./components/Common/Footer/Footer";
 import AppContext from "./contexts/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeAuthenticationLocale from "./components/Internationalisation/ChangeLocale/ChangeExtAuthenticationLocale";
+import AuthenticationSetupContextProvider from "./contexts/Authentication/AuthenticationSetupContext";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
+import Footer from "./components/Common/Footer/Footer";
+import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
 
 /**
  * The setup application served by the browser extension.
@@ -33,32 +31,23 @@ class ExtAuthenticationSetup extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
+    this.state = this.defaultState(props);
   }
 
   /**
    * Returns the component default state
+   * @param {object} props The component props
    */
-  get defaultState() {
+  defaultState(props) {
     return {
+      port: props.port, // The background page communication port.
       siteSettings: null, // The site settings
       extensionVersion: null, // The extension version
-      locale: null, // The locale
 
       // Locale
+      locale: null, // The locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
       onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
-    };
-  }
-
-  /**
-   * Returns the component default state
-   */
-  get defaultContextValue() {
-    return {
-      port: this.props.port,
-      storage: this.props.storage,
-      trustedDomain: null, // The site domain (use trusted domain for compatibility with browser extension applications)
     };
   }
 
@@ -137,23 +126,20 @@ class ExtAuthenticationSetup extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-          <AuthenticationContextProvider value={this.defaultContextValue}>
-            <DialogContextProvider>
-              <div id="container" className="container page login">
-                <ManageDialogs/>
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <SetupAuthentication siteSettings={this.state.siteSettings}/>
-                  </div>
-                  <ChangeAuthenticationLocale/>
+          <AuthenticationSetupContextProvider>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
+                <div className="login-form">
+                  <SetupAuthentication/>
+                </div>
+                <ChangeLocale/>
               </div>
-              <Footer/>
-            </DialogContextProvider>
-          </AuthenticationContextProvider>
+            </div>
+            <Footer/>
+          </AuthenticationSetupContextProvider>
         </TranslationProvider>
         }
       </AppContext.Provider>

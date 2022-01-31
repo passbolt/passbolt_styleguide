@@ -33,6 +33,7 @@
     "grunt-shell": "^3.0.1",
     "i18next-scanner": "github:passbolt/i18next-scanner#master",
     "jest": "^27.4.0",
+    "jest-each": "^27.4.6",
     "jest-useragent-mock": "^0.1.1",
     "jest-webextension-mock": "^3.7.18",
     "jquery": "^3.5.0",

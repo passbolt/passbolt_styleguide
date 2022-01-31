@@ -13,15 +13,14 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
-import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "./contexts/DialogContext";
 import {BrowserRouter as Router} from "react-router-dom";
-import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
-import SiteSettings from "../shared/lib/Settings/SiteSettings";
-import Footer from "./components/Common/Footer/Footer";
-import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AppContext from "./contexts/AppContext";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
+import AuthenticationLoginContextProvider from "./contexts/Authentication/AuthenticationLoginContext";
+import SiteSettings from "../shared/lib/Settings/SiteSettings";
+import UserSettings from "../shared/lib/Settings/UserSettings";
+import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
+import Footer from "./components/Common/Footer/Footer";
 
 /**
  * The login application served by the browser extension.
@@ -33,11 +32,12 @@ class ExtAuthenticationLogin extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
+    this.state = this.defaultState(props);
   }
 
   async componentDidMount() {
     this.removeSkeleton();
+    await this.initializeUserSettings();
     await this.getSiteSettings();
     await this.getExtensionVersion();
     this.initLocale();
@@ -56,8 +56,10 @@ class ExtAuthenticationLogin extends Component {
   /**
    * Returns the component default state
    */
-  get defaultState() {
+  defaultState(props) {
     return {
+      port: props.port, // The background page communication port
+      storage: props.storage, // The storage
       siteSettings: null, // The site settings
       extensionVersion: null, // The extension version
       locale: null, // The locale
@@ -67,18 +69,18 @@ class ExtAuthenticationLogin extends Component {
     };
   }
 
-  /**
-   * Returns the component default state
-   */
-  get defaultContextValue() {
-    return {
-      port: this.props.port,
-      storage: this.props.storage,
-    };
-  }
-
   isReady() {
     return this.state.siteSettings !== null && this.state.locale !== null;
+  }
+
+  /**
+   * Initialize the user settings.
+   * @returns {Promise<void>}
+   */
+  async initializeUserSettings() {
+    const storageData = await this.props.storage.local.get(["_passbolt_data"]);
+    const userSettings = new UserSettings(storageData._passbolt_data.config);
+    await this.setState({userSettings});
   }
 
   /**
@@ -124,22 +126,19 @@ class ExtAuthenticationLogin extends Component {
         {this.isReady() &&
         <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
           <Router>
-            <AuthenticationContextProvider value={this.defaultContextValue}>
-              <DialogContextProvider>
-                <div id="container" className="container page login">
-                  <ManageDialogs/>
-                  <div className="content">
-                    <div className="header">
-                      <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                    </div>
-                    <div className="login-form">
-                      <OrchestrateLogin/>
-                    </div>
+            <AuthenticationLoginContextProvider>
+              <div id="container" className="container page login">
+                <div className="content">
+                  <div className="header">
+                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                  </div>
+                  <div className="login-form">
+                    <OrchestrateLogin/>
                   </div>
                 </div>
-                <Footer/>
-              </DialogContextProvider>
-            </AuthenticationContextProvider>
+              </div>
+              <Footer/>
+            </AuthenticationLoginContextProvider>
           </Router>
         </TranslationProvider>
         }
@@ -148,7 +147,6 @@ class ExtAuthenticationLogin extends Component {
   }
 }
 
-ExtAuthenticationLogin.contextType = AuthenticationContext;
 ExtAuthenticationLogin.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,

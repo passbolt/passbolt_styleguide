@@ -1,49 +1,46 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
+
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import {AuthenticationContext} from "../../../contexts/AuthenticationContext";
-import Login from "./Login";
-
+import Login, {LoginVariations} from "./Login";
+import {defaultProps} from "./Login.test.data";
 
 export default {
   title: 'Passbolt/AuthenticationLogin/Login',
   component: Login
 };
 
-const context = {
-  loginInfo: {
-    userSettings: {
-      getTrustedDomain: () => (new URL(window.location.href)).origin,
-      getSecurityTokenBackgroundColor: () => '#a85632',
-      getSecurityTokenTextColor: () => '#ffffff',
-      getSecurityTokenCode: () => "ABC"
-    }
-  }
-};
-
-
 const Template = args =>
-  <AuthenticationContext.Provider value={context}>
-    <div id="container" className="container page login">
-      <div className="content">
-        <div className="login-form">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <Login {...args} {...routerProps}/>}></Route>
-          </MemoryRouter>
-        </div>
+  <div id="container" className="container page login">
+    <div className="content">
+      <div className="login-form">
+        <MemoryRouter initialEntries={['/']}>
+          <Route component={routerProps => <Login {...args} {...routerProps}/>}/>
+        </MemoryRouter>
       </div>
     </div>
-  </AuthenticationContext.Provider>;
+  </div>;
 
+const defaultParameters = {
+  css: "ext_authentication"
+};
 
 export const Initial = Template.bind({});
-Initial.parameters = {
-  css: "ext_authentication"
-};
+Initial.args = defaultProps({displayAs: LoginVariations.SIGN_IN});
+Initial.parameters = defaultParameters;
 
 export const CompleteRecovery = Template.bind({});
-CompleteRecovery.args = {
-  displayAsAccountRecoveryForm: true
-};
-CompleteRecovery.parameters = {
-  css: "ext_authentication"
-};
+CompleteRecovery.args = defaultProps({displayAs: LoginVariations.ACCOUNT_RECOVERY});
+CompleteRecovery.parameters = defaultParameters;

@@ -16,8 +16,8 @@
  * Unit tests on  InstallExtension in regard of specifications
  */
 
-import IntroduceSetupExtensionTestPage from "./IntroduceSetupExtension.test.page";
-import {defaultProps} from "./IntroduceSetupExtension.test.data";
+import IntroduceExtensionTestPage from "./IntroduceExtension.test.page";
+import {defaultProps} from "./IntroduceExtension.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -38,7 +38,7 @@ describe("As AN I should see setup extension page", () => {
         writable: true
       });
       window.chrome = {runtime: "true"};
-      page = new IntroduceSetupExtensionTestPage(props);
+      page = new IntroduceExtensionTestPage(props);
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Congratulation! Passbolt extension has been installed.");
@@ -51,15 +51,25 @@ describe("As AN I should see setup extension page", () => {
         value: {userAgent: "Firefox"},
         writable: true
       });
-      page = new IntroduceSetupExtensionTestPage(props);
+      page = new IntroduceExtensionTestPage(props);
       // browser image
       expect(page.browser.className).toBe("animated-setup-introduction firefox");
     });
 
+    it('As AN I should see the setup extension for edge', () => {
+      Object.defineProperty(window, "navigator", {
+        value: {userAgent: "Edg"},
+        writable: true
+      });
+      page = new IntroduceExtensionTestPage(props);
+      // browser image
+      expect(page.browser.className).toBe("animated-setup-introduction edge");
+    });
+
     it('As AN I should be able to click next on the page', async() => {
-      page = new IntroduceSetupExtensionTestPage(props);
+      page = new IntroduceExtensionTestPage(props);
       await page.next();
-      expect(props.authenticationContext.onCompleteIntroduceSetupExtension).toHaveBeenCalled();
+      expect(props.onComplete).toHaveBeenCalled();
     });
   });
 });

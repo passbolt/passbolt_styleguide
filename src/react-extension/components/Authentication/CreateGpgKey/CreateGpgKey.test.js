@@ -1,123 +1,209 @@
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
+
+/**
  * Unit tests on CreateGpgKey in regard of specifications
  */
-import {defaultAppContext, defaultProps} from "./CreateGpgKey.test.data";
+import {defaultProps} from "./CreateGpgKey.test.data";
 import CreateGpgKeyPage from "./CreateGpgKey.test.page";
+import each from "jest-each";
+import {CreateGpgKeyVariation} from "./CreateGpgKey";
 import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("Create GPG key", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The context
-  const props = defaultProps(); // The props to pass
+describe("CreateGpgKey", () => {
+  each([
+    {displayAs: CreateGpgKeyVariation.SETUP}, // Create a gpg key for the setup workflow
+    {displayAs: CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY}, // Create a gpg key for the account recovery workflow
+  ]).describe("Common behavior to all context", _props => {
+    it.only(`As AN I should be able to enter a passphrase, scenario: ${JSON.stringify(_props)}`, async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
 
-  beforeEach(() => {
-    page = new CreateGpgKeyPage(context, props);
+      expect.assertions(1);
+      const expectedPassphrase = 'La belle vie';
+      await page.fill(expectedPassphrase);
+      expect(page.passphrase).toBe(expectedPassphrase);
+    });
+
+    it(`As AN I should initially see the passphrase I typed as obfuscated, scenario: ${JSON.stringify(_props)}`, async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const passphrase = 'La belle vie';
+      await page.fill(passphrase);
+      expect(page.isObfuscated).toBeTruthy();
+    });
+
+    it('As AN I should be able to see the non-obfuscate passphrase I typed, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const passphrase = 'La belle vie';
+      await page.fill(passphrase);
+      await page.toggleObfuscate();
+      expect(page.isObfuscated).toBeFalsy();
+    });
+
+    it('As AN I should see the passphrase very weak strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const veryWeakPassphrase = 'blabla';
+      await page.fill(veryWeakPassphrase);
+      await waitFor(() => expect(page.isVeryWeakPassphrase).toBeTruthy());
+    });
+
+    it('As AN I should see the passphrase weak strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const weakPassphrase = 'blablablablab';
+      await page.fill(weakPassphrase);
+      await waitFor(() => expect(page.isWeakPassphrase).toBeTruthy());
+    });
+
+    it('As AN I should see the passphrase fair strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const fairPassphrase = 'abcdefgh1234=5';
+      await page.fill(fairPassphrase);
+      await waitFor(() => expect(page.isFairPassphrase).toBeTruthy());
+    });
+
+    it('As AN I should see the passphrase strong strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const strongPassphrase = 'abcdefgh1234=5ABCD';
+      await page.fill(strongPassphrase);
+      await waitFor(() => expect(page.isStrongPassphrase).toBeTruthy());
+    });
+
+    it('As AN I should see the passphrase very strong strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
+      await page.fill(veryStrongPassphrase);
+      await waitFor(() => expect(page.isVeryStrongPassphrase).toBeTruthy());
+    });
+
+    it('As AN I should not go to the next step if the passphrase is not strong enough, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const veryWeakPassphrase = 'blabla';
+      await page.fill(veryWeakPassphrase);
+      expect(page.canGoToNextStep).toBeFalsy();
+    });
+
+    it('As AN I should not go to the next step if the passphrase is empty, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const veryWeakPassphrase = '';
+      await page.fill(veryWeakPassphrase);
+      expect(page.canGoToNextStep).toBeFalsy();
+    });
+
+    it('As AN I should go to the next step if the passphrase is strong enough, scenario: ${JSON.stringify(_props)}', async() => {
+      const props = defaultProps(_props);
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(1);
+      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
+      await page.fill(veryStrongPassphrase);
+      expect(page.canGoToNextStep).toBeTruthy();
+    });
+
+    it('As AN I cannot update the form fields while submitting the form, scenario: ${JSON.stringify(_props)}', async() => {
+      let generateResolve = null;
+      const onComplete = jest.fn(() => new Promise(resolve => generateResolve = resolve));
+      const props = defaultProps({..._props, onComplete});
+      const page = new CreateGpgKeyPage(props);
+
+      expect.hasAssertions();
+      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
+      await page.fill(veryStrongPassphrase);
+      const inProgressFn = () => {
+        expect(page.canChange).toBeFalsy();
+        generateResolve();
+      };
+      await page.generateKey(inProgressFn);
+      expect(onComplete).toHaveBeenCalled();
+      expect(generateResolve).toBeDefined();
+    });
+
+    it('As AN I should see a processing feedback while submitting the form, scenario: ${JSON.stringify(_props)}', async() => {
+      let generateResolve = null;
+      const onComplete = jest.fn(() => new Promise(resolve => generateResolve = resolve));
+      const props = defaultProps({..._props, onComplete});
+      const page = new CreateGpgKeyPage(props);
+
+      expect.hasAssertions();
+      const inProgressFn = () => {
+        expect(page.isProcessing).toBeTruthy();
+      };
+      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
+      await page.fill(veryStrongPassphrase);
+      await page.generateKey(inProgressFn);
+      expect(onComplete).toHaveBeenCalled();
+      expect(generateResolve).toBeDefined();
+    });
   });
 
-  it('As AN I should be able to enter a passphrase', async() => {
-    const expectedPassphrase = 'La belle vie';
-    await page.fill(expectedPassphrase);
-    expect(page.passphrase).toBe(expectedPassphrase);
+  describe('As AN on the Setup workflow', () => {
+    it('As AN on the setup workflow I should be able to be prompted to enter a passphrase', async() => {
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assert(1);
+      expect(page.title).toBe("Welcome to Passbolt, please select a passphrase!");
+    });
+
+    it(`As AN on the setup workflow I should be able to import an existing key instead`, async() => {
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
+
+      expect.assertions(2);
+      expect(page.secondaryActionLink.textContent).toContain("Or use an existing private key.");
+      await page.clickSecondaryActionLink();
+      expect(props.onSecondaryActionClick).toHaveBeenCalled();
+    });
   });
 
-  it('As AN I should initially see the passphrase I typed as obfuscated', async() => {
-    const passphrase = 'La belle vie';
-    await page.fill(passphrase);
-    expect(page.isObfuscated).toBeTruthy();
-  });
+  describe('As AN on the Recover workflow', () => {
+    it('As AN on the setup workflow I should be able to be prompted to enter a new passphrase', async() => {
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
 
-  it('As AN I should be able to see the non-obfuscate passphrase I typed', async() => {
-    const passphrase = 'La belle vie';
-    await page.fill(passphrase);
-    await page.toggleObfuscate();
-    expect(page.isObfuscated).toBeFalsy();
-  });
-
-  it('As AN I should see the passphrase very weak strength updated on change', async() => {
-    const veryWeakPassphrase = 'blabla';
-    await page.fill(veryWeakPassphrase);
-    await waitFor(() => expect(page.isVeryWeakPassphrase).toBeTruthy());
-  });
-
-  it('As AN I should see the passphrase weak strength updated on change', async() => {
-    const weakPassphrase = 'blablablablab';
-    await page.fill(weakPassphrase);
-    await waitFor(() => expect(page.isWeakPassphrase).toBeTruthy());
-  });
-
-  it('As AN I should see the passphrase fair strength updated on change', async() => {
-    const fairPassphrase = 'abcdefgh1234=5';
-    await page.fill(fairPassphrase);
-    await waitFor(() => expect(page.isFairPassphrase).toBeTruthy());
-  });
-
-  it('As AN I should see the passphrase strong strength updated on change', async() => {
-    const strongPassphrase = 'abcdefgh1234=5ABCD';
-    await page.fill(strongPassphrase);
-    await waitFor(() => expect(page.isStrongPassphrase).toBeTruthy());
-  });
-
-  it('As AN I should see the passphrase very strong strength updated on change', async() => {
-    const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
-    await page.fill(veryStrongPassphrase);
-    await waitFor(() => expect(page.isVeryStrongPassphrase).toBeTruthy());
-  });
-
-  it('As AN I should not go to the next step if the passphrase is not strong enough', async() => {
-    const veryWeakPassphrase = 'blabla';
-    await page.fill(veryWeakPassphrase);
-    expect(page.canGoToNextStep).toBeFalsy();
-  });
-
-  it('As AN I should not go to the next step if the passphrase is empty', async() => {
-    const veryWeakPassphrase = '';
-    await page.fill(veryWeakPassphrase);
-    expect(page.canGoToNextStep).toBeFalsy();
-  });
-
-  it('As AN I should go to the next step if the passphrase is strong enough', async() => {
-    const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
-    await page.fill(veryStrongPassphrase);
-    expect(page.canGoToNextStep).toBeTruthy();
-  });
-
-
-  it('As AN I cannot update the form fields while submitting the form', async() => {
-    const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
-    await page.fill(veryStrongPassphrase);
-
-    let generateResolve = null;
-    const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
-    jest.spyOn(context, 'onGenerateGpgKeyRequested').mockImplementationOnce(requestMockImpl);
-    const inProgressFn = () => {
-      expect(page.canChange).toBeFalsy();
-      generateResolve();
-    };
-    await page.generateKey(inProgressFn);
-    expect(context.onGenerateGpgKeyRequested).toHaveBeenCalled();
-    expect(generateResolve).toBeDefined();
-  });
-
-  it('As AN I should see a processing feedback while submitting the form', async() => {
-    const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
-    await page.fill(veryStrongPassphrase);
-
-    let generateResolve;
-    const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
-    jest.spyOn(context, 'onGenerateGpgKeyRequested').mockImplementationOnce(requestMockImpl);
-    const inProgressFn = () => {
-      expect(page.isProcessing).toBeTruthy();
-    };
-    await page.generateKey(inProgressFn);
-    expect(generateResolve).toBeDefined();
-  });
-
-
-  it('As AN I should be able to access the import secret key step with a link on this step', () => {
-    expect(page.canAccesToImport).toBeTruthy();
+      expect.assert(1);
+      expect(page.title).toBe("Choose a new passphrase.");
+    });
   });
 });

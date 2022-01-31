@@ -12,12 +12,18 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import PropTypes from "prop-types";
-import {withDialog} from "../../../contexts/DialogContext";
-import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../Common/Icons/Icon";
+
+/**
+ * The component display variations.
+ * @type {Object}
+ */
+export const CheckPassphraseVariations = {
+  SETUP: 'Setup',
+  RECOVER: 'Recover'
+};
 
 /**
  * This component checks the passphrase of an user gpg key
@@ -33,7 +39,6 @@ class CheckPassphrase extends Component {
     this.bindEventHandlers();
     this.createReferences();
   }
-
 
   /**
    * Returns the default state
@@ -97,7 +102,6 @@ class CheckPassphrase extends Component {
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
     this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
-    this.onPassphraseLost = this.onPassphraseLost.bind(this);
   }
 
   /**
@@ -148,23 +152,17 @@ class CheckPassphrase extends Component {
   }
 
   /**
-   * Whenever the user needs help because he lost his passphrase
-   */
-  async onPassphraseLost() {
-    await this.props.authenticationContext.onPassphraseLost();
-  }
-
-  /**
    * Check the private gpg key passphrase
    */
   async check() {
-    await this.props.authenticationContext.onCheckImportedGpgKeyPassphraseRequested(this.state.passphrase, this.state.rememberMe)
+    await this.props.onComplete(this.state.passphrase, this.state.rememberMe)
       .catch(this.onCheckFailure.bind(this));
   }
 
   /**
    * Whenever the gpg key import failed
-   * @param error The error
+   * @param {Error} error The error
+   * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError.
    */
   onCheckFailure(error) {
     // Whenever the passphrase is invalid.
@@ -172,8 +170,7 @@ class CheckPassphrase extends Component {
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({errors: {invalidPassphrase: true}});
     } else {
-      const ErrorDialogProps = {message: error.message};
-      this.props.dialogContext.open(NotifyError, ErrorDialogProps);
+      throw error;
     }
   }
 
@@ -211,7 +208,6 @@ class CheckPassphrase extends Component {
   async toggleProcessing() {
     await this.setState({actions: {processing: !this.state.actions.processing}});
   }
-
 
   /**
    * Toggle the obfuscate mode of the passphrase view
@@ -297,7 +293,14 @@ class CheckPassphrase extends Component {
               disabled={this.isProcessing}>
               <Trans>Verify</Trans>
             </button>
-            {this.props.secondaryAction}
+            {this.props.onSecondaryActionClick &&
+            <a onClick={this.props.onSecondaryActionClick}>
+              {{
+                [CheckPassphraseVariations.SETUP]: <Trans>I lost my passphrase, generate a new private key.</Trans>,
+                [CheckPassphraseVariations.RECOVER]: <Trans>Help, I lost my passphrase.</Trans>,
+              }[this.props.displayAs]}
+            </a>
+            }
           </div>
         </form>
       </div>
@@ -305,11 +308,18 @@ class CheckPassphrase extends Component {
   }
 }
 
+CheckPassphrase.defaultProps = {
+  displayAs: CheckPassphraseVariations.SETUP,
+};
+
 CheckPassphrase.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
+  onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to verify its passphrase
+  displayAs: PropTypes.PropTypes.oneOf([
+    CheckPassphraseVariations.SETUP,
+    CheckPassphraseVariations.RECOVER
+  ]), // Defines how the form should be displayed and behaves
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
-  dialogContext: PropTypes.any, // The dialog context
-  secondaryAction: PropTypes.any, // Secondary action to display
+  onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
 };
-export default withAuthenticationContext(withDialog(withTranslation('common')(CheckPassphrase)));
+export default withTranslation('common')(CheckPassphrase);

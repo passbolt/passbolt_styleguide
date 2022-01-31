@@ -14,14 +14,12 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import AppContext from "./contexts/AppContext";
-import AuthenticationContextProvider, {AuthenticationContext} from "./contexts/AuthenticationContext";
-import ManageDialogs from "./components/Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "./contexts/DialogContext";
+import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
+import AuthenticationRecoverContextProvider from "./contexts/Authentication/AuthenticationRecoverContext";
 import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAuthentication/RecoverAuthentication";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
-import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import ChangeExtAuthenticationLocale from "./components/Internationalisation/ChangeLocale/ChangeExtAuthenticationLocale";
+import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
 
 /**
  * The recover application served by the browser extension.
@@ -29,23 +27,25 @@ import ChangeExtAuthenticationLocale from "./components/Internationalisation/Cha
 class ExtAuthenticationRecover extends Component {
   /**
    * Default constructor
-   * @param props Component props
+   * @param {object} props Component props
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
+    this.state = this.defaultState(props);
   }
 
   /**
    * Returns the component default state
+   * @param {object} props The component props
    */
-  get defaultState() {
+  defaultState(props) {
     return {
+      port: props.port, // The background page communication port.
       siteSettings: null, // The site settings
       extensionVersion: null, // The extension version
-      locale: null, // The locale
 
       // Locale
+      locale: null, // The locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
       onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
     };
@@ -139,23 +139,20 @@ class ExtAuthenticationRecover extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
-          <AuthenticationContextProvider value={this.defaultContextValue}>
-            <DialogContextProvider>
-              <div id="container" className="container page login">
-                <ManageDialogs/>
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <RecoverAuthentication siteSettings={this.state.siteSettings}/>
-                  </div>
-                  <ChangeExtAuthenticationLocale/>
+          <AuthenticationRecoverContextProvider>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
+                <div className="login-form">
+                  <RecoverAuthentication/>
+                </div>
+                <ChangeLocale/>
               </div>
-              <Footer/>
-            </DialogContextProvider>
-          </AuthenticationContextProvider>
+            </div>
+            <Footer/>
+          </AuthenticationRecoverContextProvider>
         </TranslationProvider>
         }
       </AppContext.Provider>
@@ -163,7 +160,6 @@ class ExtAuthenticationRecover extends Component {
   }
 }
 
-ExtAuthenticationRecover.contextType = AuthenticationContext;
 ExtAuthenticationRecover.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,

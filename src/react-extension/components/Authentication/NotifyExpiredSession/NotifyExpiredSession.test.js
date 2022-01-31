@@ -16,9 +16,7 @@
  * Unit tests on SessionExpired in regard of specifications
  */
 import NotifyExpiredSessionPage from "./NotifyExpiredSession.test.page";
-import {defaultAppContext, defaultProps} from "./NotifyExpiredSession.test.data";
-import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import {defaultProps} from "./NotifyExpiredSession.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -26,10 +24,6 @@ beforeEach(() => {
 
 describe("As LU I should see the session expired dialog", () => {
   let page; // The page to test against
-  const appContext = {
-    userSettings: new UserSettings(userSettingsFixture),
-  };
-  const context = defaultAppContext(appContext); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe('As LU I can start go to login', () => {
@@ -37,7 +31,7 @@ describe("As LU I should see the session expired dialog", () => {
      * I should see the session expired dialog
      */
     beforeEach(() => {
-      page = new NotifyExpiredSessionPage(context, props);
+      page = new NotifyExpiredSessionPage(props);
     });
 
     it('matches the styleguide', async() => {

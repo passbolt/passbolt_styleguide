@@ -15,7 +15,6 @@
 /**
  * Unit tests on ChooseAccountRecoveryPreference in regard of specifications
  */
-import {waitFor} from "@testing-library/react";
 import {
   defaultProps, optInPolicyProps, optOutPolicyProps,
 } from "./ChooseAccountRecoveryPreference.test.data";
@@ -26,16 +25,17 @@ beforeEach(() => {
 });
 
 describe("See the Choose Account Recovery Preference page", () => {
-  let page; // The page to test agains
+  let page; // The page to test again
 
   describe('As user in the setup process, I can see the account recovery setup page', () => {
     /**
      * I should see the account recovery setup page
      */
     it('As user in the setup process who generated an OpenPGP key, I can see the Mandatory account recovery setup page', async() => {
+      expect.assertions(5);
       const props = defaultProps(); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
-      await waitFor(() => {});
+
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Account recovery (Mandatory)");
@@ -51,9 +51,10 @@ describe("See the Choose Account Recovery Preference page", () => {
     });
 
     it('As user in the setup process who generated an OpenPGP key, I can see the Opt-out account recovery setup page', async() => {
+      expect.assertions(4);
       const props = optOutPolicyProps(); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
-      await waitFor(() => {});
+
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Account recovery (Recommended)");
@@ -64,9 +65,10 @@ describe("See the Choose Account Recovery Preference page", () => {
     });
 
     it('As user in the setup process who generated an OpenPGP key, I can see the Opt-in account recovery setup page', async() => {
+      expect.assertions(4);
       const props = optInPolicyProps(); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
-      await waitFor(() => {});
+
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Account recovery (Optional)");
@@ -77,12 +79,14 @@ describe("See the Choose Account Recovery Preference page", () => {
     });
 
     it('As user I can go generate a new key', async() => {
-      const props = defaultProps(); // The props to pass
+      const onGenerateNewKeyInstead = jest.fn(() => Promise.resolve());
+      const props = defaultProps({onGenerateNewKeyInstead}); // The props to pass
       page = new ChooseAccountRecoveryPreferencePage(props);
-      await waitFor(() => {});
+
+      expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.goToGenerateNewKey();
-      expect(props.authenticationContext.onGoToGenerateGpgKeyRequested).toBeCalled();
+      expect(onGenerateNewKeyInstead).toHaveBeenCalled();
     });
   });
 });

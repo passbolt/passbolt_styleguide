@@ -12,15 +12,21 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import Icon from "../../Common/Icons/Icon";
-import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
-import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../Common/Icons/Icon";
+import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+
+/**
+ * The component display variations.
+ * @type {Object}
+ */
+export const CreateGpgKeyVariation = {
+  SETUP: 'Setup',
+  GENERATE_ACCOUNT_RECOVERY_GPG_KEY: 'Account recovery request key'
+};
 
 /**
  * The component allows the user to create a Gpg key by automatic generation or by manually importing one
@@ -201,25 +207,7 @@ class CreateGpgKey extends Component {
    */
   async generateGpgKey() {
     await this.toggleProcessing();
-    this.props.authenticationContext.onGenerateGpgKeyRequested(this.state.passphrase)
-      .catch(this.onGpgKeyGeneratedFailure.bind(this));
-  }
-
-  /**
-   * Whenever the gpg key generation failed
-   * @param error The error
-   */
-  async onGpgKeyGeneratedFailure(error) {
-    await this.toggleProcessing();
-    const ErrorDialogProps = {message: error.message};
-    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
-  }
-
-  /**
-   * Request to import the gpg key
-   */
-  importGpgKey() {
-    this.props.authenticationContext.onGoToImportGpgKeyRequested();
+    this.props.onComplete(this.state.passphrase);
   }
 
   /**
@@ -252,7 +240,14 @@ class CreateGpgKey extends Component {
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
       <div className="create-gpg-key">
-        <h1><Trans>Welcome to Passbolt, please select a passphrase!</Trans></h1>
+        <h1>
+          {this.props.displayAs === CreateGpgKeyVariation.SETUP &&
+          <Trans>Welcome to Passbolt, please select a passphrase!</Trans>
+          }
+          {this.props.displayAs === CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY &&
+          <Trans>Choose a new passphrase.</Trans>
+          }
+        </h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <p>
             <Trans>This passphrase is the only passphrase you will need to remember from now on, choose wisely!</Trans>
@@ -276,7 +271,7 @@ class CreateGpgKey extends Component {
             </a>
             <div className="password-complexity">
               <span className="progress">
-                <span className={`progress-bar ${this.state.passphraseStrength.id}`}></span>
+                <span className={`progress-bar ${this.state.passphraseStrength.id}`}/>
               </span>
             </div>
           </div>
@@ -309,12 +304,13 @@ class CreateGpgKey extends Component {
               disabled={this.mustBeDisabled || this.isProcessing}>
               <Trans>Next</Trans>
             </button>
-            <a
-              id="import-key-link"
-              onClick={this.handleImportGpgKey}
-              disabled={!this.areActionsAllowed}>
-              <Trans>Or use an existing private key.</Trans>
+            {this.props.onSecondaryActionClick &&
+            <a onClick={this.props.onSecondaryActionClick}>
+              {{
+                [CreateGpgKeyVariation.SETUP]: <Trans>Or use an existing private key.</Trans>,
+              }[this.props.displayAs]}
             </a>
+            }
           </div>
         </form>
       </div>
@@ -322,10 +318,18 @@ class CreateGpgKey extends Component {
   }
 }
 
-CreateGpgKey.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  dialogContext: PropTypes.any, // The dialog context
-  t: PropTypes.func, // The translation function
+CreateGpgKey.defaultProps = {
+  displayAs: CreateGpgKeyVariation.SETUP,
 };
 
-export default withAuthenticationContext(withDialog(withTranslation('common')(CreateGpgKey)));
+CreateGpgKey.propTypes = {
+  onComplete: PropTypes.func.isRequired, // The callback function to call when the form is submitted
+  displayAs: PropTypes.PropTypes.oneOf([
+    CreateGpgKeyVariation.SETUP,
+    CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
+  ]), // Defines how the form should be displayed and behaves
+  onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
+  t: PropTypes.func.isRequired, // The translation function
+};
+
+export default withTranslation('common')(CreateGpgKey);

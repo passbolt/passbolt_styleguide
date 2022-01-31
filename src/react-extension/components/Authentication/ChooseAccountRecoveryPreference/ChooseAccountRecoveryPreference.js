@@ -1,12 +1,12 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
@@ -14,45 +14,27 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 
 class ChooseAccountRecoveryPreference extends Component {
+  /**
+   * Default constructor
+   * @param {object} props The component props
+   */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
+    this.state = this.getDefaultState(props);
     this.bindCallbacks();
   }
 
   /**
    * Returns the default component state
    */
-  getDefaultState() {
+  getDefaultState(props) {
+    const status = props.policy === "opt-in" ? "rejected" : "approved";
     return {
-      status: null, // status
-      type: '', // type
-      processing: false
+      status: status,
+      processing: false,
     };
-  }
-
-  /**
-   * Get account recovery settings
-   * @returns {null|*}
-   */
-  get accountRecoveryPolicy() {
-    return this.props.authenticationContext.accountRecoveryPolicy && this.props.authenticationContext.accountRecoveryPolicy.policy;
-  }
-
-  /**
-   * Whenever the component is mounted
-   */
-  componentDidMount() {
-    if (this.accountRecoveryPolicy === "opt-out") {
-      this.setState({status: "approved", type: this.translate('Recommended')});
-    } else if (this.accountRecoveryPolicy === "opt-in") {
-      this.setState({status: "rejected", type: this.translate('Optional')});
-    } else {
-      this.setState({status: "approved", type: this.translate('Mandatory')});
-    }
   }
 
   /**
@@ -61,7 +43,6 @@ class ChooseAccountRecoveryPreference extends Component {
   bindCallbacks() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleGoToGenerateKey = this.handleGoToGenerateKey.bind(this);
   }
 
   /**
@@ -86,11 +67,14 @@ class ChooseAccountRecoveryPreference extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
     await this.toggleProcessing();
-    this.save();
+    this.complete();
   }
 
-  save() {
-    this.props.authenticationContext.onSaveAccountRecoveryPreferenceRequested(this.state.status);
+  /**
+   * Whenever the user wants to complete the step.
+   */
+  complete() {
+    this.props.onComplete(this.state.status);
   }
 
   /**
@@ -109,34 +93,11 @@ class ChooseAccountRecoveryPreference extends Component {
   }
 
   /**
-   * Go to generate key
-   */
-  handleGoToGenerateKey() {
-    this.props.authenticationContext.onGoToGenerateGpgKeyRequested();
-  }
-
-  /**
    * Can the user reject to join the account recovery program.
    * @returns {boolean}
    */
   canReject() {
-    return this.props.type !== "Mandatory";
-  }
-
-  /**
-   * can generate key instead
-   * @returns {boolean|*}
-   */
-  get canGenerateKey() {
-    return this.props.authenticationContext.isGpgKeyImported;
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
+    return this.props.policy !== "mandatory";
   }
 
   /**
@@ -146,7 +107,11 @@ class ChooseAccountRecoveryPreference extends Component {
   render() {
     return (
       <div className="recovery-account-setup-extension">
-        <h1><Trans>Account recovery</Trans> ({this.state.type})</h1>
+        <h1><Trans>Account recovery</Trans> ({{
+          ["opt-in"]: <Trans>Optional</Trans>,
+          ["opt-out"]: <Trans>Recommended</Trans>,
+          ["mandatory"]: <Trans>Mandatory</Trans>
+        }[this.props.policy]})</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
             <Trans>It is possible and recommended to share securely a copy of your private key and passphrase
@@ -194,8 +159,12 @@ class ChooseAccountRecoveryPreference extends Component {
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
             </button>
-            {this.canGenerateKey &&
-            <a className={`generate-new-key ${this.isProcessing ? "disabled" : ""}`} onClick={this.handleGoToGenerateKey} role="button"><Trans>Generate new key instead</Trans></a>
+            {this.props.canGenerateNewKeyInstead &&
+            <a className={`generate-new-key ${this.isProcessing ? "disabled" : ""}`}
+              onClick={this.props.onGenerateNewKeyInstead}
+              role="button">
+              <Trans>Generate new key instead</Trans>
+            </a>
             }
           </div>
         </form>
@@ -204,10 +173,18 @@ class ChooseAccountRecoveryPreference extends Component {
   }
 }
 
-ChooseAccountRecoveryPreference.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  type: PropTypes.string, // The type of recover account
-  canGenerateKey: PropTypes.bool, // Can generate new key
-  t: PropTypes.func, // The translation function
+ChooseAccountRecoveryPreference.defaultProps = {
+  canGenerateNewKeyInstead: false,
 };
-export default withAuthenticationContext(withTranslation("common")(ChooseAccountRecoveryPreference));
+
+ChooseAccountRecoveryPreference.propTypes = {
+  policy: PropTypes.oneOf([
+    "opt-in",
+    "opt-out",
+    "mandatory"
+  ]).isRequired, // The account recovery organization policy.
+  onComplete: PropTypes.func.isRequired, // Callback to trigger when the user chose its preference.
+  canGenerateNewKeyInstead: PropTypes.bool, // Can generate new key
+  onGenerateNewKeyInstead: PropTypes.func, // Callback to trigger when the user wants to generate a new key instead.
+};
+export default withTranslation("common")(ChooseAccountRecoveryPreference);

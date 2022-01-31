@@ -13,6 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import {Trans} from "react-i18next";
 
 /**
  * This component displays a waiting loading spinner
@@ -35,11 +36,15 @@ class LoadingSpinner extends React.Component {
 }
 
 LoadingSpinner.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string,
+  ])
 };
 
 LoadingSpinner.defaultProps = {
-  title: "Please wait..."
+  title: <Trans>Please wait...</Trans>
 };
 
 export default LoadingSpinner;

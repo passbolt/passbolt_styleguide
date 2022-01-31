@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -15,13 +14,13 @@
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import SetupExtension from "./IntroduceSetupExtension";
+import IntroduceExtension from "./IntroduceExtension";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The SetupExtension component represented as a page
  */
-export default class IntroduceSetupExtensionTestPage {
+export default class IntroduceExtensionTestPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -29,7 +28,7 @@ export default class IntroduceSetupExtensionTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <SetupExtension {...props}/>
+        <IntroduceExtension {...props}/>
       </MockTranslationProvider>
     );
   }

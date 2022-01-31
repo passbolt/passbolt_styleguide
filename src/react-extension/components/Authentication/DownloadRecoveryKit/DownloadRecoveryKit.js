@@ -12,71 +12,30 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
-/**
- * This component downloads autamatically the recovery kit including the GPG key
- */
 class DownloadRecoveryKit extends Component {
   /**
-   * Default contrustor
-   */
-  constructor(props) {
-    super(props);
-    this.bindEventHandlers();
-  }
-
-  /**
-   * Whenever the component is mounted
+   * ComponentDidMount
+   * @return {void}
    */
   componentDidMount() {
-    this.download();
+    this.props.onDownload();
   }
 
   /**
-   * Binds the component event handlers
-   */
-  bindEventHandlers() {
-    this.handleNext = this.handleNext.bind(this);
-    this.handleDownload = this.handleDownload.bind(this);
-  }
-
-  /**
-   * Whenever the user wants to continue the setup
+   * Whenever the user completed the step.
    */
   handleNext() {
-    this.continueSetup();
+    this.props.onComplete();
   }
 
   /**
-   * Whenever the user wants to download the recovery kit again
+   * Whenever the user wants to download the recovery kit again.
    */
   handleDownload() {
-    this.download();
-  }
-
-  /**
-   * Continue the setup process
-   */
-  continueSetup() {
-    this.props.authenticationContext.onRecoveryKitDownloaded();
-  }
-
-  /**
-   * Download the recovery kit
-   */
-  async download() {
-    await this.props.authenticationContext.onDownloadRecoveryKitRequested();
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
+    this.props.onDownload();
   }
 
   /**
@@ -96,13 +55,13 @@ class DownloadRecoveryKit extends Component {
           <button
             type="submit"
             className={`button primary big full-width`}
-            onClick={this.handleNext}
+            onClick={this.handleNext.bind(this)}
             role="button">
             <Trans>Next</Trans>
           </button>
           <a
             id="download-kit"
-            onClick={this.handleDownload}>
+            onClick={this.handleDownload.bind(this)}>
             <Trans>Download the kit again!</Trans>
           </a>
         </div>
@@ -112,8 +71,8 @@ class DownloadRecoveryKit extends Component {
 }
 
 DownloadRecoveryKit.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  t: PropTypes.func, // The translation function
+  onDownload: PropTypes.func.isRequired, // Callback to trigger when the user wants to download its recovery kit.
+  onComplete: PropTypes.func.isRequired, // Callback to trigger when the step is completed.
 };
 
-export default withAuthenticationContext(withTranslation('common')(DownloadRecoveryKit));
+export default withTranslation('common')(DownloadRecoveryKit);

@@ -12,7 +12,6 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {withAuthenticationContext} from "../../../contexts/AuthenticationContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -58,7 +57,7 @@ class AcceptLoginServerKeyChange extends Component {
    * @returns {Promise<void>}
    */
   async fetchServerKey() {
-    let {fingerprint} = await this.props.authenticationContext.onGetServerKeyRequested();
+    let {fingerprint} = await this.props.serverKey;
     fingerprint = fingerprint.replace(/.{4}/g, '$& ');
     fingerprint = <>{fingerprint.substr(0, 24)}<br/>{fingerprint.substr(25)}</>;
     this.setState({fingerprint});
@@ -110,7 +109,7 @@ class AcceptLoginServerKeyChange extends Component {
    * Accepts the new Gpg key
    */
   async accept() {
-    await this.props.authenticationContext.onAcceptLoginNewServerKeyRequested();
+    await this.props.onAccept();
   }
 
   /**
@@ -136,14 +135,6 @@ class AcceptLoginServerKeyChange extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
@@ -156,7 +147,7 @@ class AcceptLoginServerKeyChange extends Component {
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
-          <div className="input checkbox">
+          <div className={`input checkbox ${this.state.hasBeenValidated && this.state.errors.hasNotAccepted ? "error" : ""}`}>
             <input
               id="accept-new-key"
               type="checkbox"
@@ -166,15 +157,10 @@ class AcceptLoginServerKeyChange extends Component {
             <label htmlFor="accept-new-key">
               <Trans>Yes I checked and it is all fine.</Trans>
             </label>
-          </div>
-          {this.state.hasBeenValidated &&
-          <>
-            <br/>
-            {this.state.errors.hasNotAccepted &&
+            {this.state.hasBeenValidated && this.state.errors.hasNotAccepted &&
             <div className="has-not-accepted error-message"><Trans>You must accept the new server key</Trans></div>
             }
-          </>
-          }
+          </div>
           <div className="form-actions">
             <button
               type="submit"
@@ -191,8 +177,8 @@ class AcceptLoginServerKeyChange extends Component {
 }
 
 AcceptLoginServerKeyChange.propTypes = {
-  authenticationContext: PropTypes.any, // The authentication context
-  t: PropTypes.func, // The translation function
+  serverKey: PropTypes.object.isRequired, // The server key
+  onAccept: PropTypes.func.isRequired, // Callback to trigger when the user accepts the new key
 };
 
-export default withAuthenticationContext(withTranslation('common')(AcceptLoginServerKeyChange));
+export default withTranslation('common')(AcceptLoginServerKeyChange);

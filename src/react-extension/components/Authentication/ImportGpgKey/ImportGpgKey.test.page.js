@@ -1,6 +1,18 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.0.0
+ */
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AuthenticationContextProvider from "../../../contexts/AuthenticationContext";
 import ImportGpgKey from "./ImportGpgKey";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -10,17 +22,21 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class ImportGpgKeyPage {
   /**
    * Default constructor
-   * @param context Context value
    * @param props Props to attach
    */
-  constructor(context, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AuthenticationContextProvider value={context}>
-          <ImportGpgKey {...props}/>
-        </AuthenticationContextProvider>
+        <ImportGpgKey {...props}/>
       </MockTranslationProvider>
     );
+  }
+
+  /**
+   * Returns the title
+   */
+  get title() {
+    return this._page.container.querySelector('h1').textContent;
   }
 
   /**
@@ -44,14 +60,12 @@ export default class ImportGpgKeyPage {
     return Boolean(this._page.container.querySelector('.empty-private-key'));
   }
 
-
   /**
    * Returns true if an invalid private key error appears
    */
   get hasInvalidPrivateKeyError() {
     return Boolean(this._page.container.querySelector('.invalid-private-key'));
   }
-
 
   /**
    * Returns the verify button element
@@ -60,6 +74,12 @@ export default class ImportGpgKeyPage {
     return this._page.container.querySelector('.button.primary');
   }
 
+  /**
+   * Returns the secondary action link element
+   */
+  get secondaryActionLink() {
+    return this._page.container.querySelector('.form-actions a');
+  }
 
   /**
    * Returns true if one is processing
@@ -98,6 +118,15 @@ export default class ImportGpgKeyPage {
   async verifyKey(inProgressFn = () => {}) {
     const leftClick = {button: 0};
     fireEvent.click(this.verifyButton, leftClick);
+    await waitFor(inProgressFn);
+  }
+
+  /**
+   * Click on the secondary action link.
+   */
+  async clickSecondaryActionLink(inProgressFn = () => {}) {
+    const leftClick = {button: 0};
+    fireEvent.click(this.secondaryActionLink, leftClick);
     await waitFor(inProgressFn);
   }
 }
