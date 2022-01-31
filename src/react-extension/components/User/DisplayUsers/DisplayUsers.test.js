@@ -88,6 +88,12 @@ describe("Display Users", () => {
       page = new DisplayUsersPage(context, props);
     });
 
+    it('As AD, I should sort the users by attention required', async() => {
+      jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
+      await page.sortByAttentionRequired();
+      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('attentionRequired');
+    });
+
     it('As LU, I should sort the users by fullname', async() => {
       jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
       await page.sortByFullname();
