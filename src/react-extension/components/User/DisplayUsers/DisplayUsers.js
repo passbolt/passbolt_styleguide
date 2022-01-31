@@ -378,7 +378,21 @@ class DisplayUsers extends React.Component {
                     </th>
                     {this.isLoggedInUserAdmin() &&
                     <th className="s-cell attention-required">
-                      <Icon name="exclamation" baseline={true}/>
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Icon name="exclamation" baseline={true}/>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("attentionRequired") && this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("attentionRequired") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
+                      </a>
                     </th>
                     }
                     <th className="cell-name l-cell sortable">
