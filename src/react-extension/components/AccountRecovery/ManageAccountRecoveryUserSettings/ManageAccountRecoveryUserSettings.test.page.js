@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 
-import {render} from "@testing-library/react";
+import {render, fireEvent, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ManageAccountRecoveryUserSettings from "./ManageAccountRecoveryUserSettings";
@@ -51,5 +51,18 @@ export default class ManageAccountRecoveryUserSettingsPage {
 
   get rejectCheckbox() {
     return this.selector('#statusRecoverAccountReject');
+  }
+
+  get saveButton() {
+    return this.selector('.submit-wrapper input[type="submit"]');
+  }
+
+  isProcessing() {
+    return this.saveButton.classList.contains('disabled');
+  }
+
+  async clickOnSave() {
+    fireEvent.click(this.saveButton, {button: 0});
+    await waitFor(() => {});
   }
 }

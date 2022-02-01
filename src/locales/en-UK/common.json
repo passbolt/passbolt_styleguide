@@ -580,6 +580,7 @@
   "The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.": "The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.",
   "The Yubikey provider is disabled for all users.": "The Yubikey provider is disabled for all users.",
   "The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.": "The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.",
+  "The account recovery subscription setting has been updated.": "The account recovery subscription setting has been updated.",
   "The attribute you would like to use for the first part of the email (usually username).": "The attribute you would like to use for the first part of the email (usually username).",
   "The base DN (default naming context) for the domain.": "The base DN (default naming context) for the domain.",
   "The client identifier should be an integer.": "The client identifier should be an integer.",

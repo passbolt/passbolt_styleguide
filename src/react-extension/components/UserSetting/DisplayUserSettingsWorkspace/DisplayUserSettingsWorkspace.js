@@ -80,7 +80,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
         </div>
         <div className="panel main">
           <div className="panel left">
-            <NavigateIntoUserSettingsWorkspace/>
+            <NavigateIntoUserSettingsWorkspace hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
           </div>
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
@@ -107,6 +107,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
 DisplayUserSettingsWorkspace.propTypes = {
   context: PropTypes.any, // The application context
   match: PropTypes.any,
+  accountRecoveryContext: PropTypes.object, // The account recovery context
 };
 
 export default withAppContext(withAccountRecovery(withRouter(DisplayUserSettingsWorkspace)));
