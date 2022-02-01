@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -180,6 +181,14 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
+   * Returns true if the account recovery needs to be configured.
+   * @return {bool}
+   */
+  get attentionRequired() {
+    return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired();
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -202,7 +211,7 @@ class DisplayUserBadgeMenu extends Component {
                 <span className="email">{this.getUserUsername()}</span>
               </div>
             </div>
-            <UserAvatar user={this.props.user} className="picture left-cell" baseUrl={this.props.baseUrl}/>
+            <UserAvatar user={this.props.user} className="picture left-cell" baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired}/>
             <div className="more right-cell">
               <a role="button">
                 <Icon name="caret-down"/>
@@ -215,7 +224,7 @@ class DisplayUserBadgeMenu extends Component {
             <li key="profile">
               <div className="row">
                 <a role="button" tabIndex="1" onClick={this.handleProfileClick}>
-                  <span><Trans>Profile</Trans></span>
+                  <span><Trans>Profile</Trans></span>{this.attentionRequired && <Icon name="exclamation"/>}
                 </a>
               </div>
             </li>
@@ -246,9 +255,10 @@ class DisplayUserBadgeMenu extends Component {
 DisplayUserBadgeMenu.propTypes = {
   context: PropTypes.object, // The application context
   navigationContext: PropTypes.any, // The application navigation context
+  accountRecoveryContext: PropTypes.object, // The account recovery context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withNavigationContext(withTranslation('common')(DisplayUserBadgeMenu)));
+export default withAppContext(withNavigationContext(withAccountRecovery(withTranslation('common')(DisplayUserBadgeMenu))));

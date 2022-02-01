@@ -17,6 +17,8 @@
  */
 import ManageAccountRecoveryUserSettingsPage from "./ManageAccountRecoveryUserSettings.test.page";
 import {waitFor} from "@testing-library/react";
+import {defaultProps} from "./ManageAccountRecoveryUserSettings.test.data";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 beforeEach(() => {
   jest.resetModules();
@@ -35,27 +37,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state recommanded)', async() => {
-    const props = {
-      context: {
-        locale: "en-US",
-        userSettings: {
-          getTrustedDomain: () => new URL(window.location).origin
-        }
-      },
-      organizationPolicy: {
-        modified: "2022-01-13T15:27:26.301Z",
-        creator: {
-          profile: {
-            first_name: "Ada",
-            last_name: "Lovelace"
-          },
-          gpgkey: {
-            fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-          },
-        },
-        policy: "opt-out"
-      }
-    };
+    const props = defaultProps("opt-out");
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 
@@ -77,27 +59,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state optional)', async() => {
-    const props = {
-      context: {
-        locale: "en-US",
-        userSettings: {
-          getTrustedDomain: () => new URL(window.location).origin
-        }
-      },
-      organizationPolicy: {
-        modified: "2022-01-13T15:27:26.301Z",
-        creator: {
-          profile: {
-            first_name: "Ada",
-            last_name: "Lovelace"
-          },
-          gpgkey: {
-            fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-          },
-        },
-        policy: "opt-in"
-      }
-    };
+    const props = defaultProps("opt-in");
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 
@@ -105,5 +67,65 @@ describe("DisplayAccountRecoveryUserSettings", () => {
 
     expect(page.title.textContent).toBe("Recovery (Optional)");
     expect(page.rejectCheckbox.checked).toBeTruthy();
+  });
+
+  /**
+   * Given that I am a registered user
+   * And	the Account recovery is enabled for my organization
+   * And	the Account recovery policy is “Opt-out”
+   * And	I have a pending account recovery organization policy
+   * And	I am prompted to join the account recovery program
+   * When	I select reject
+   * And	I click on the save button
+   * Then	the dialog is closed
+   *
+   *
+   * Given that I am a registered user
+   * And  the Account recovery is enabled for my organisation
+   * And  the Account recovery policy is “Opt-out” or “Mandatory”
+   * And  I have a pending account recovery organisation policy
+   * And  I am prompted to join the account recovery program
+   * When I select the “Approve” choice
+   * And  I click on the save button
+   * Then I see a dialog to enter my passphrase
+   * When I enter my passphrase
+   * Then I see the “Enter passphrase” dialog is closed
+   * And  I see account recovery prompt dialog closed
+   * And  I see a progress dialog
+   * Then I see the progress dialog is closed
+   * And  I see a notification at the top telling my I joined the account recovery program
+   * And  I see the account recovery page in my settings workspace
+   * And  I see the Account recovery status enabled with a green dot
+   */
+  it('As a logged in user who has a pending organization account recovery policy, I can select not to join the account recovery program if the policy is “opt-out”', async() => {
+    const props = defaultProps("opt-in");
+    const page = new ManageAccountRecoveryUserSettingsPage(props);
+    await waitFor(() => { });
+
+    expect.assertions(6);
+    expect(page.exists()).toBeTruthy();
+    expect(page.rejectCheckbox.checked).toBeTruthy();
+
+    await page.clickOnSave();
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.user.save-account-recovery-settings", {status: 'rejected'}, null);
+    expect(props.accountRecoveryContext.setUserAccountRecoveryStatus).toHaveBeenCalledWith('rejected');
+    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery subscription setting has been updated.');
+    expect(props.onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('should display an error notification dialog if an error happens when communicating with the background page', async() => {
+    const props = defaultProps("opt-in");
+    const errorMessage = "The background page couldn't process the request";
+    props.context.port.request.mockImplementation(() => { throw new Error(errorMessage); });
+    const page = new ManageAccountRecoveryUserSettingsPage(props);
+    await waitFor(() => { });
+
+    expect.assertions(1);
+    await page.clickOnSave();
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
+      title: "There was an unexpected error...",
+      message: errorMessage
+    });
   });
 });

@@ -156,7 +156,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                   <a onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
                     <span>
                       <Trans>Account Recovery</Trans>
-                      {this.props.pendingAccountRecovery &&
+                      {this.props.hasPendingAccountRecoveryChoice &&
                       <Icon name="exclamation"/>
                       }
                     </span>
@@ -191,7 +191,7 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
   location: PropTypes.object,
-  pendingAccountRecovery: PropTypes.bool,
+  hasPendingAccountRecoveryChoice: PropTypes.bool,
   t: PropTypes.func, // The translation function
 };
 

@@ -125,7 +125,7 @@ class UserAvatar extends Component {
    */
   render() {
     return (
-      <div className={this.props.className}>
+      <div className={`${this.props.className} ${this.props.attentionRequired ? 'attention-required' : ''}`}>
         {!this.state.error &&
         <img src={this.getAvatarSrc()} onError={this.handleError} alt={this.getAltText()}/>
         }

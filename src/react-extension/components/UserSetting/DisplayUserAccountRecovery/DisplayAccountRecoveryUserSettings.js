@@ -25,22 +25,11 @@ import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccou
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
     this.bindCallbacks();
   }
 
   async componentDidMount() {
     await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
-    this.setState({isReady: true});
-  }
-
-  /**
-   * Returns the default component state
-   */
-  getDefaultState() {
-    return {
-      isReady: false
-    };
   }
 
   /**
@@ -93,10 +82,6 @@ class DisplayAccountRecoveryUserSettings extends Component {
     this.props.dialogContext.open(ManageAccountRecoveryUserSettings, {
       organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy()
     });
-  }
-
-  isReady() {
-    return this.state.isReady;
   }
 
   /**
@@ -156,7 +141,6 @@ class DisplayAccountRecoveryUserSettings extends Component {
   render() {
     return (
       <div className="grid grid-responsive-12">
-        {this.isReady() &&
         <div className="row">
           {this.isAccountRecoveryFeatureEnabled &&
             <div className="col8 account-recovery-profile">
@@ -220,7 +204,6 @@ class DisplayAccountRecoveryUserSettings extends Component {
             </div>
           </div>
         </div>
-        }
       </div>
     );
   }

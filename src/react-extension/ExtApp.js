@@ -58,6 +58,7 @@ import DisplayResourcesWorkspace from "./components/Resource/DisplayResourcesWor
 import DragContextProvider from "./contexts/DragContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
 import ExtAppAccountRecoveryUserService from "../shared/services/accountRecovery/ExtAppAccountRecoveryUserService";
+import HandleAccountRecoveryStatusCheck from "./components/AccountRecovery/HandleAccountRecoveryStatusCheck/HandleAccountRecoveryStatusCheck";
 
 /**
  * The passbolt application served by the browser extension.
@@ -95,6 +96,10 @@ class ExtApp extends Component {
                           <HandleProgressEvents/>
                           <HandleErrorEvents/>
                           <HandleSessionExpired/>
+
+                          { /* Account Recovery Management */}
+                          {appContext.loggedInUser && appContext.siteSettings.canIUse('accountRecovery')
+                            && <HandleAccountRecoveryStatusCheck/>}
 
                           { /* Announcement Management */}
                           {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"

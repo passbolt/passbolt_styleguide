@@ -19,6 +19,10 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -50,17 +54,17 @@ class ManageAccountRecoveryUserSettings extends Component {
    */
   componentDidMount() {
     if (this.props.organizationPolicy.policy === "opt-in") {
-      this.setState({status: "reject"});
+      this.setState({status: "rejected"});
     } else {
-      this.setState({status: "accept"});
+      this.setState({status: "approved"});
     }
   }
 
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
+  toggleProcessing() {
+    this.setState({processing: !this.state.processing});
   }
 
   /**
@@ -76,7 +80,22 @@ class ManageAccountRecoveryUserSettings extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.toggleProcessing();
+    this.toggleProcessing();
+    const accountRecoveryUserSettingDto = {status: this.state.status};
+    try {
+      const currentPolicyDto = this.state.status === "approved"
+        ? (await this.props.context.port.request('passbolt.account-recovery.get')).account_recovery_organization_public_key
+        : null;
+
+      await this.props.context.port.request("passbolt.user.save-account-recovery-settings", accountRecoveryUserSettingDto, currentPolicyDto);
+      this.props.accountRecoveryContext.setUserAccountRecoveryStatus(this.state.status);
+      this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
+      this.props.onClose();
+    } catch (error) {
+      console.error(error);
+      this.handleError(error);
+      this.toggleProcessing();
+    }
   }
 
   /**
@@ -91,6 +110,18 @@ class ManageAccountRecoveryUserSettings extends Component {
     this.setState({
       [name]: value
     });
+  }
+
+  /**
+   * Handle exception by displaying a pop-up containing the details of the error.
+   * @param {Error} error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      title: this.translate("There was an unexpected error..."),
+      message: error.message
+    };
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   canReject() {
@@ -201,12 +232,12 @@ class ManageAccountRecoveryUserSettings extends Component {
             </ul>
             <div className="radiolist-alt">
               {this.canReject() &&
-              <div className={`input radio ${this.state.status === "reject" ? "checked" : ""}`}>
+              <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
                 <input type="radio"
-                  value="reject"
+                  value="rejected"
                   onChange={this.handleInputChange}
                   name="status"
-                  checked={this.state.status === "reject"}
+                  checked={this.state.status === "rejected"}
                   id="statusRecoverAccountReject"
                   disabled={this.isProcessing}/>
                 <label htmlFor="statusRecoverAccountReject">
@@ -217,12 +248,12 @@ class ManageAccountRecoveryUserSettings extends Component {
                 </label>
               </div>
               }
-              <div className={`input radio ${this.state.status === "accept" ? "checked" : ""}`}>
+              <div className={`input radio ${this.state.status === "approved" ? "checked" : ""}`}>
                 <input type="radio"
-                  value="accept"
+                  value="approved"
                   onChange={this.handleInputChange}
                   name="status"
-                  checked={this.state.status === "accept"}
+                  checked={this.state.status === "approved"}
                   id="statusRecoverAccountAccept"
                   disabled={this.isProcessing}/>
                 <label htmlFor="statusRecoverAccountAccept">
@@ -262,8 +293,11 @@ class ManageAccountRecoveryUserSettings extends Component {
 
 ManageAccountRecoveryUserSettings.propTypes = {
   context: PropTypes.any, // The application context
+  accountRecoveryContext: PropTypes.any, // The account recovery context
+  dialogContext: PropTypes.object, // The dialog handler context
   organizationPolicy: PropTypes.object, // The organization policy details
+  actionFeedbackContext: PropTypes.object, // The action feedback context handler
   onClose: PropTypes.func, // The close callback
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(ManageAccountRecoveryUserSettings));
+export default withAppContext(withActionFeedback(withAccountRecovery(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings)))));

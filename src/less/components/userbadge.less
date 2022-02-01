@@ -41,10 +41,39 @@
   }
 
   /* user card styling */
-  .picture img {
-    width: 2.6em;
-    padding: 0.28em 0.35em 0.35em 0.35em;
-    border-radius: 50%;
+  .picture {
+    img {
+      width: 2.6em;
+      padding: 0.28em 0.35em 0.35em 0.35em;
+      border-radius: 50%;
+    }
+
+    .svg-icon {
+      &.exclamation {
+        position: absolute;
+        width: 1.2rem;
+        margin-top: 1.5rem;
+        margin-left: -0.7rem;
+        svg {
+          color: @orange-light;
+        }
+      }
+      svg {
+          width: 2.4rem;
+          height: 2.4rem;
+          margin-top:1.2rem;
+      }
+    }
+
+    &.attention-required {
+      img {
+        border: 1px solid @orange-light;
+        padding: 0;
+        position: relative;
+        top: .18em;
+        left: .25em;
+      }
+    }
   }
   .details {
     float: left;
@@ -107,6 +136,11 @@
 
     &.visible {
       display: block;
+    }
+
+    .svg-icon.exclamation {
+      color:@orange-light;
+      margin-left: 0.8rem;
     }
   }
 }
