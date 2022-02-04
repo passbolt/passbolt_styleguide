@@ -81,16 +81,22 @@ describe("See user activities", () => {
    */
   it('I should see the loading message “Retrieving activities”', async() => {
     const context = defaultAppContext();
-    context.port.addRequestListener('passbolt.actionlogs.find-all-for', () => activitiesMock);
+    let resolveFindAllForRequest = null;
+
+    context.port.addRequestListener('passbolt.actionlogs.find-all-for', () => new Promise(resolve => resolveFindAllForRequest = resolve));
     const page = new DisplayUserDetailsActivityPage(context, props);
-    await page.clickOnTitleAndWaitForLoading();
 
     expect.assertions(3);
+    page.clickOn(page.title);
+
+    await waitFor(() => {});
     expect(page.progressionText.textContent).toBe("Retrieving activities");
 
+    resolveFindAllForRequest(activitiesMock);
+
     await waitFor(() => {
-      if (page.displayActivityList.length === 0) {
-        throw new Error("Activities are not loaded yet");
+      if (page.progressionText !== null) {
+        throw new Error("Activities are still loading");
       }
     });
 

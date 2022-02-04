@@ -78,7 +78,7 @@ export default class DisplayUserDetailsActivityPage {
   }
 
   async clickOnTitle() {
-    fireEvent.click(this.title, {button: 0});
+    this.clickOn(this.title);
     await waitFor(() => {
       if (this.displayActivityList.length === 0) {
         throw new Error("Activity list is not ready yet.");
@@ -86,13 +86,8 @@ export default class DisplayUserDetailsActivityPage {
     });
   }
 
-  async clickOnTitleAndWaitForLoading() {
-    fireEvent.click(this.title, {button: 0});
-    await waitFor(() => {
-      if (this.progressionText === null) {
-        throw new Error("Activities are not being loaded at the moment.");
-      }
-    });
+  clickOn(element) {
+    fireEvent.click(element, {button: 0});
   }
 
   async moreButtonClick(targetActivityCount) {
