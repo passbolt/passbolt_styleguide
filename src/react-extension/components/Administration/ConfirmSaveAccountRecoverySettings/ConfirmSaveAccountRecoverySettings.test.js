@@ -71,11 +71,11 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       // organization recovery key
       expect(page.recoveryKeyDetailsExists()).toBeTruthy();
       expect(page.recoveryKeyDetailsFingerprint).toBe("0C1D 1761 110D 1E33 C9006D1A 5B1B 332E D064 26D3 ");
-      expect(page.recoveryKeyDetailsAlgorithm).toBe(props.newKeyDetail.algorithm);
+      expect(page.recoveryKeyDetailsAlgorithm).toBe(props.accountRecoveryPolicy.newKeyDetail.algorithm);
       expect(page.recoveryKeyDetailsKeyLength).toBe("4096");
       expect(page.recoveryKeyDetailsUserIds).toBe("ada<ada@passbolt.com>betty<betty@passbolt.com>");
-      expect(page.recoveryKeyDetailsCreated).toBe(formatDate(props.newKeyDetail.created));
-      expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.newKeyDetail.expires));
+      expect(page.recoveryKeyDetailsCreated).toBe(formatDate(props.accountRecoveryPolicy.newKeyDetail.created));
+      expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.accountRecoveryPolicy.newKeyDetail.expires));
     });
 
     it('As a logged in administrator in the administration workspace, if the previous Account recovery settings state was "Disabled" I can save the Account recovery settings to enable my policy without entering the Organization recovery key', async() => {
