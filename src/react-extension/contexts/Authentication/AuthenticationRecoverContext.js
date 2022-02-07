@@ -234,7 +234,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
     try {
       await this.props.context.port.request('passbolt.recover.set-security-token', securityTokenDto);
       this.setState({state: AuthenticationRecoverWorkflowStates.REQUESTING_ACCOUNT_RECOVERY});
-      await this.props.context.port.request('passbolt.recover.request-account-recovery');
+      await this.props.context.port.request('passbolt.recover.initiate-account-recovery-request');
       this.setState({state: AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL});
     } catch (error) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});

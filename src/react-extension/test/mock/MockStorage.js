@@ -5,7 +5,6 @@ class LocalStorage {
   }
 
   get(keys) {
-    console.debug("STORAGE GET:", keys);
     return keys.reduce((accumulator, key) => {
       if (this.storage[key]) {
         accumulator[key] = this.storage[key];
@@ -15,7 +14,6 @@ class LocalStorage {
   }
 
   set(data) {
-    console.debug("STORAGE SET:", data);
     const storageChangeEventValue = {};
     Object.keys(data).forEach(key => {
       this.storage[key] = data[key];
