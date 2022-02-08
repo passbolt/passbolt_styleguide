@@ -99,6 +99,9 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * @returns {object}
    */
   async getKeyDetail(key) {
+    if (!key) {
+      return null;
+    }
     return await this.props.context.port.request('passbolt.account-recovery.get-organization-key-details', {armored_key: key.armored_key});
   }
 

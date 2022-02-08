@@ -15,21 +15,21 @@ export function defaultProps() {
       },
       newPolicy: {
         policy: 'opt-in'
+      },
+      currentKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       }
-    },
-    currentKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
-    },
-    newKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
     },
     onCancel: jest.fn(),
     confirmSaveRequested: jest.fn(),
@@ -54,21 +54,21 @@ export function hasChangedPolicyProps() {
         account_recovery_organization_public_key: {
           armored_key: "faked_data"
         }
+      },
+      newKeyDetail: {
+        user_ids: [{
+          name: "ada",
+          email: "ada@passbolt.com"
+        }, {
+          name: "betty",
+          email: "betty@passbolt.com"
+        }],
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       }
-    },
-    newKeyDetail: {
-      user_ids: [{
-        name: "ada",
-        email: "ada@passbolt.com"
-      }, {
-        name: "betty",
-        email: "betty@passbolt.com"
-      }],
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
     },
     onCancel: jest.fn(),
     confirmSaveRequested: jest.fn(),
@@ -108,14 +108,14 @@ export function disabledPolicyProps() {
       },
       newPolicy: {
         policy: 'disabled'
+      },
+      currentKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       }
-    },
-    currentKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
     },
     onCancel: jest.fn(),
     confirmSaveRequested: jest.fn(),
@@ -137,14 +137,14 @@ export function mandatoryPolicyPropsWithOrganisationKey() {
       },
       newPolicy: {
         policy: 'mandatory'
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       }
-    },
-    newKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
     },
     onCancel: jest.fn(),
     confirmSaveRequested: jest.fn(),
@@ -166,14 +166,14 @@ export function optInPolicyPropsWithOrganisationKey() {
       },
       newPolicy: {
         policy: 'opt-in'
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       }
-    },
-    newKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
     },
     onCancel: jest.fn(),
     confirmSaveRequested: jest.fn(),
@@ -195,14 +195,14 @@ export function optOutPolicyPropsWithOrganisationKey() {
       },
       newPolicy: {
         policy: 'opt-out'
+      },
+      newKeyDetail: {
+        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+        algorithm: "RSA",
+        length: "4096",
+        created: "2020-09-01T13:11:08+00:00",
+        expires: "Never"
       }
-    },
-    newKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
     },
     onCancel: jest.fn(),
     confirmSaveRequested: jest.fn(),

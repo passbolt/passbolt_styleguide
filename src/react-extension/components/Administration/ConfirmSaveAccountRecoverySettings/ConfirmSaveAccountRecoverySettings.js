@@ -100,7 +100,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * @returns {null|*}
    */
   get currentOrganizationKeyDetail() {
-    return this.props.currentKeyDetail;
+    return this.props.accountRecoveryPolicy.currentKeyDetail;
   }
 
   /**
@@ -132,7 +132,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * @returns {null|*}
    */
   get newOrganizationKeyDetail() {
-    return this.props.newKeyDetail;
+    return this.props.accountRecoveryPolicy.newKeyDetail;
   }
 
   /**
@@ -157,7 +157,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   hasNewOrganizationRecoveryKey() {
     const hasCurrentOrganizationKey =  Boolean(this.currentOrganizationKey);
-    return hasCurrentOrganizationKey ? this.newOrganizationKey.fingerprint !== this.currentOrganizationKey.fingerprint : Boolean(this.newOrganizationKey);
+    return hasCurrentOrganizationKey ? this.newOrganizationKeyDetail.fingerprint !== this.currentOrganizationKeyDetail.fingerprint : Boolean(this.newOrganizationKey);
   }
 
   /**
