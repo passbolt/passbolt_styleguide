@@ -23,6 +23,9 @@ import DeleteUserWithConflicts from "../DeleteUser/DeleteUserWithConflicts";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
+import HandleReviewAccountRecoveryRequestWorkflow
+  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -185,7 +188,9 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle review recovery request click event
    */
   handleReviewRecoveryRequestClickEvent() {
-    // TODO the popup to approve or reject the account recovery request
+    const user = this.user;
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {user});
+    this.props.hide();
   }
 
   /**
@@ -416,11 +421,12 @@ DisplayUsersContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.any, // the dialog context
   user: PropTypes.object, // user selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu))));
+export default withAppContext(withWorkflow(withDialog(withActionFeedback(withTranslation('common')(DisplayUsersContextualMenu)))));
 

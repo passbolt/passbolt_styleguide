@@ -85,7 +85,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
 
       await page.save();
 
-      expect(props.confirmSaveRequested).toHaveBeenCalled();
+      expect(props.onSubmit).toHaveBeenCalled();
     });
 
     it('As LU I can stop saving an account recovery settings by clicking on the cancel button', async() => {

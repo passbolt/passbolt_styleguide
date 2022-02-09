@@ -26,7 +26,7 @@ const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
 /**
  * This component allows to display the provide organization key for the administration
  */
-class ProvideOrganizationKey extends React.Component {
+class ProvideAccountRecoveryOrganizationKey extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -291,18 +291,20 @@ class ProvideOrganizationKey extends React.Component {
     };
     try {
       await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', this.props.accountRecoveryPolicy.currentPolicy, privateGpgKeyDto);
-      await this.props.save(privateGpgKeyDto);
+      await this.props.onSubmit(privateGpgKeyDto);
+      await this.toggleProcessing();
+      this.props.onClose();
     } catch (error) {
-      await this.handleSaveError(error);
+      await this.handleSubmitError(error);
+      await this.toggleProcessing();
     }
-    await this.toggleProcessing();
   }
 
   /**
    * Handle save operation error.
    * @param {object} error The returned error
    */
-  async handleSaveError(error) {
+  async handleSubmitError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
       return;
@@ -310,8 +312,9 @@ class ProvideOrganizationKey extends React.Component {
       this.setState({expectedFingerprintError: error.expectedFingerprint});
     } else if (error.name === "InvalidMasterPasswordError") {
       this.setState({passwordError: this.translate("This is not a valid passphrase.")});
+    } else if (error.name === "BadSignatureMessageGpgKeyError") {
+      this.setState({keyError: error.message});
     } else {
-      console.error(error);
       this.props.onError(error);
     }
   }
@@ -364,6 +367,7 @@ class ProvideOrganizationKey extends React.Component {
    */
   handleCloseClick() {
     this.props.onCancel();
+    this.props.onClose();
   }
 
   /**
@@ -501,15 +505,15 @@ class ProvideOrganizationKey extends React.Component {
   }
 }
 
-ProvideOrganizationKey.propTypes = {
-  context: PropTypes.any, // The application context provider
-  onCancel: PropTypes.func,
-  save: PropTypes.func,
+ProvideAccountRecoveryOrganizationKey.propTypes = {
+  context: PropTypes.any.isRequired, // The application context provider
+  onClose: PropTypes.func, // Callback when the dialog must be closed
+  onCancel: PropTypes.func, // Callback when the save must be canceled
+  onSubmit: PropTypes.func, // Callback when the dialog must be submitted
+  onError: PropTypes.func, // Callback when the submit has raised an error
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  dialogContext: PropTypes.any, // The dialog context
   accountRecoveryPolicy: PropTypes.any, // The account recovery policy
   t: PropTypes.func, // The translation function
-  onError: PropTypes.func, // The unhandled error callback
 };
 
-export default withAppContext(withTranslation('common')(ProvideOrganizationKey));
+export default withAppContext(withTranslation('common')(ProvideAccountRecoveryOrganizationKey));

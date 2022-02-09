@@ -79,7 +79,10 @@ export function propsWithSelectedUser() {
           },
           "__placeholder_last_logged_in__": "",
           "last_logged_in": "",
-          is_mfa_enabled: true
+          is_mfa_enabled: true,
+          "pending_account_recovery_user_request": {
+            id: "54c6278e-f824-5fda-91ff-3e946b18d997"
+          },
         }
       ]
     }

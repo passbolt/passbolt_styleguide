@@ -139,4 +139,14 @@ export default class DisplayUsersContextualMenuPage {
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
+
+  /**
+   * Call to review an account recovery of a user
+   */
+  async reviewRecovery() {
+    const element = this._page.container.querySelectorAll('li a')[7];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
 }

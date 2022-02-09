@@ -19,7 +19,7 @@ import {
   withAdminAccountRecovery
 } from "../../../contexts/AdminAccountRecoveryContext";
 import {withDialog} from "../../../contexts/DialogContext";
-import ProvideOrganizationKey from "../ProvideOrganizationKey/ProvideOrganizationKey";
+import ProvideAccountRecoveryOrganizationKey from "../ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -34,10 +34,6 @@ class HandleSaveAccountRecovery extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = {
-      currentOpenedDialog: null
-    };
-
     this.bindCallbacks();
   }
 
@@ -81,14 +77,12 @@ class HandleSaveAccountRecovery extends React.Component {
       newKeyDetail: this.props.adminAccountRecoveryContext.newKeyDetail
     };
 
-    const currentOpenedDialog = this.props.dialogContext.open(ConfirmSaveAccountRecoverySettings, {
+    this.props.dialogContext.open(ConfirmSaveAccountRecoverySettings, {
       accountRecoveryPolicy,
       onCancel: this.handleCancelDialog,
       onError: this.handleError,
-      confirmSaveRequested: this.handleConfirmSave
+      onSubmit: this.handleConfirmSave
     });
-
-    this.setState({currentOpenedDialog});
   }
 
   displayDialogForEnterCurrentOrkStep() {
@@ -97,23 +91,19 @@ class HandleSaveAccountRecovery extends React.Component {
       newPolicy: this.props.adminAccountRecoveryContext.newPolicy
     };
 
-    const currentOpenedDialog = this.props.dialogContext.open(ProvideOrganizationKey, {
+    this.props.dialogContext.open(ProvideAccountRecoveryOrganizationKey, {
       accountRecoveryPolicy,
       onCancel: this.handleCancelDialog,
       onError: this.handleError,
-      save: this.handleSave,
+      onSubmit: this.handleSave,
     });
-
-    this.setState({currentOpenedDialog});
   }
 
   handleCancelDialog() {
-    this.props.dialogContext.close(this.state.currentOpenedDialog);
     this.props.adminAccountRecoveryContext.cancelSaveOperation();
   }
 
   handleConfirmSave() {
-    this.props.dialogContext.close(this.state.currentOpenedDialog);
     this.props.adminAccountRecoveryContext.confirmSaveRequested();
   }
 
@@ -125,7 +115,6 @@ class HandleSaveAccountRecovery extends React.Component {
     try {
       await this.props.adminAccountRecoveryContext.save(privateGpgKeyDto);
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The organization recovery policy has been updated successfully"));
-      this.props.dialogContext.close(this.state.currentOpenedDialog);
     } catch (error) {
       console.error(error);
       this.handleError(error);

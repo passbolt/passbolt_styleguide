@@ -1,19 +1,19 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import ProvideOrganizationKey from "./ProvideOrganizationKey";
+import ProvideAccountRecoveryOrganizationKey from "./ProvideAccountRecoveryOrganizationKey";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 
 
 export default {
-  title: 'Passbolt/Administration/ProvideOrganizationKey',
-  component: ProvideOrganizationKey
+  title: 'Passbolt/Administration/ProvideAccountRecoveryOrganizationKey',
+  component: ProvideAccountRecoveryOrganizationKey
 };
 
 
 const Template = args =>
   <MemoryRouter initialEntries={['/']}>
-    <Route component={routerProps => <ProvideOrganizationKey {...args} {...routerProps}/>}></Route>
+    <Route component={routerProps => <ProvideAccountRecoveryOrganizationKey {...args} {...routerProps}/>}></Route>
   </MemoryRouter>;
 
 export const Initial = Template.bind({});

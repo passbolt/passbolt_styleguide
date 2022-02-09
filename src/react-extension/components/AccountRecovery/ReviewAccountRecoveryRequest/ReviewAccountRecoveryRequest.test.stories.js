@@ -14,23 +14,23 @@
 
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import ReviewAccountRecovery from "./ReviewAccountRecovery";
+import ReviewAccountRecoveryRequest from "./ReviewAccountRecoveryRequest";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import {reviewAccountRecovery} from "./ReviewAccountRecovery.test.data";
+import {defaultProps} from "./ReviewAccountRecoveryRequest.test.data";
 
 
 export default {
-  title: 'Passbolt/AccountRecovery/ReviewAccountRecovery',
-  component: ReviewAccountRecovery
+  title: 'Passbolt/AccountRecovery/ReviewAccountRecoveryRequest',
+  component: ReviewAccountRecoveryRequest
 };
 
 
 const Template = args =>
   <MockTranslationProvider>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ReviewAccountRecovery {...args} {...routerProps}/>}></Route>
+      <Route component={routerProps => <ReviewAccountRecoveryRequest {...args} {...routerProps}/>}></Route>
     </MemoryRouter>
   </MockTranslationProvider>;
 
 export const Initial = Template.bind({});
-Initial.args = reviewAccountRecovery;
+Initial.args = defaultProps();

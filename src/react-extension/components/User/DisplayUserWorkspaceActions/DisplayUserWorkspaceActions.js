@@ -25,6 +25,9 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import {Trans, withTranslation} from "react-i18next";
+import HandleReviewAccountRecoveryRequestWorkflow
+  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -217,7 +220,9 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Handle review recovery request click event
    */
   handleReviewRecoveryRequestEvent() {
-    // TODO the popup to approve or reject the account recovery request
+    this.closeMoreMenu();
+    const user = this.selectedUser;
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {user});
   }
 
   /**
@@ -497,9 +502,10 @@ class DisplayUserWorkspaceActions extends React.Component {
 DisplayUserWorkspaceActions.propTypes = {
   context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.any, // the user workspace context
+  workflowContext: PropTypes.any, // the workflow context
   dialogContext: PropTypes.any, // the dialog context
   actionFeedbackContext: PropTypes.object, // the action feeedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceActions)))));
+export default withAppContext(withActionFeedback(withWorkflow(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserWorkspaceActions))))));

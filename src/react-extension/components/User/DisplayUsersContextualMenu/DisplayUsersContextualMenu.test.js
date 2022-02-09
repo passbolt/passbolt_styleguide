@@ -29,6 +29,7 @@ import EditUser from "../EditUser/EditUser";
 import ConfirmDisableUserMFA from "../ConfirmDisableUserMFA/ConfirmDisableUserMFA";
 import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import HandleReviewAccountRecoveryWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 
 beforeEach(() => {
   jest.resetModules();
@@ -196,5 +197,22 @@ describe("Display Users Contextual Menu", () => {
 
     expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
     expect(props.dialogContext.open).toHaveBeenCalled();
+  });
+
+  it("As LU I should review an account recovery of a user if I have the capability to do it", async() => {
+    page = new DisplayUsersContextualMenuPage(context, props);
+    await waitFor(() => {});
+
+    // The logged user is admin
+    expect(page.canEdit).toBeTruthy();
+
+    jest.spyOn(context, 'setContext').mockImplementationOnce(() => {});
+    jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(() => {});
+    jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
+
+    await page.reviewRecovery();
+
+    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryWorkflow, {user: props.user});
+    expect(props.hide).toHaveBeenCalled();
   });
 });

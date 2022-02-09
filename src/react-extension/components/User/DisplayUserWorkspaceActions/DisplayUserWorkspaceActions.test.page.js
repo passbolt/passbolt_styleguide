@@ -83,6 +83,14 @@ export default class DisplayUserWorkspaceActionsPage {
   }
 
   /**
+   * Returns true if one can review account recovery of a user
+   */
+  get canReviewAccountRecovery() {
+    const element = this._page.container.querySelectorAll('li a')[5];
+    return Boolean(element) && !element.classList.contains('disabled');
+  }
+
+  /**
    * Asks for more actions through the dropdown
    */
   async moreActions() {
