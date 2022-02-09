@@ -286,7 +286,7 @@ describe("AuthenticationRecoverContextProvider", () => {
       const props = defaultProps();
       let requestResolve;
       const onRequestAccountRecoveryMock = jest.fn(() => new Promise(resolve => requestResolve = resolve));
-      props.context.port.addRequestListener("passbolt.recover.request-account-recovery", onRequestAccountRecoveryMock);
+      props.context.port.addRequestListener("passbolt.recover.initiate-account-recovery-request", onRequestAccountRecoveryMock);
       const contextProvider = new AuthenticationRecoverContextProvider(props);
       mockComponentSetState(contextProvider);
 
