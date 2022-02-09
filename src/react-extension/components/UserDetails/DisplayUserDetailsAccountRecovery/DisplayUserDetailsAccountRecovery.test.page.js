@@ -103,4 +103,13 @@ export default class DisplayUserDetailsAccountRecoveryPage {
   async waitForLoading(inProgressFn) {
     await waitFor(inProgressFn);
   }
+
+  /**
+   * Review account recovery
+   */
+  async reviewAccountRecovery() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.currentStatusButton, leftClick);
+    await waitFor(() => {});
+  }
 }

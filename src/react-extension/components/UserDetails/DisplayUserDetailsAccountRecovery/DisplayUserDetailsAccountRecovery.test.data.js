@@ -16,6 +16,9 @@ export function defaultProps(props = {}) {
           "pending_account_recovery_user_request": null
         }
       }
+    },
+    workflowContext: {
+      start: jest.fn()
     }
   };
   return Object.assign(defaultProps, props);

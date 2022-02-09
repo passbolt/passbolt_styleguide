@@ -20,7 +20,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
 
-class ReviewAccountRecovery extends Component {
+class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
@@ -32,7 +32,7 @@ class ReviewAccountRecovery extends Component {
    */
   getDefaultState() {
     return {
-      status: "reject",
+      status: "rejected",
       processing: false
     };
   }
@@ -43,6 +43,7 @@ class ReviewAccountRecovery extends Component {
   bindCallbacks() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleCloseClick = this.handleCloseClick.bind(this);
   }
 
   /**
@@ -65,7 +66,25 @@ class ReviewAccountRecovery extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    if (!this.state.processing) {
+      await this.submit();
+    }
+  }
+
+  /**
+   * Submit the changes.
+   */
+  async submit() {
     await this.toggleProcessing();
+
+    try {
+      await this.props.onSubmit(this.state.status);
+      await this.toggleProcessing();
+      this.props.onClose();
+    } catch (error) {
+      await this.props.onError(error);
+      await this.toggleProcessing();
+    }
   }
 
   /**
@@ -87,8 +106,8 @@ class ReviewAccountRecovery extends Component {
    * @param fingerprint
    * @returns string
    */
-  formatFingerprint(fingerprint) {
-    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
+  get fingerprint() {
+    return this.requester.pending_account_recovery_user_request.fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
   }
 
   /**
@@ -107,7 +126,7 @@ class ReviewAccountRecovery extends Component {
    * @returns {*}
    */
   get requester() {
-    return this.props.accountRecoveryRequest.user;
+    return this.props.user;
   }
 
   /**
@@ -123,7 +142,15 @@ class ReviewAccountRecovery extends Component {
    * @returns {*}
    */
   get date() {
-    return this.props.accountRecoveryRequest.created;
+    return this.props.user.pending_account_recovery_user_request.created;
+  }
+
+  /**
+   * Handle close button click.
+   */
+  handleCloseClick() {
+    this.props.onCancel();
+    this.props.onClose();
   }
 
   /**
@@ -143,9 +170,9 @@ class ReviewAccountRecovery extends Component {
     return (
       <DialogWrapper
         title={this.translate("Review account recovery request")}
-        onClose={this.props.onClose}
+        onClose={this.handleCloseClick}
         disabled={this.state.processing}
-        className="recovery-account-policy-dialog">
+        className="review-account-recovery-dialog">
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             <ul>
@@ -155,7 +182,7 @@ class ReviewAccountRecovery extends Component {
                     <div>
                       <span
                         className="tooltip tooltip-bottom"
-                        data-tooltip={this.formatFingerprint(this.requester.gpgkey.fingerprint)}>
+                        data-tooltip={this.fingerprint}>
                         <span className="name-with-tooltip">{requesterFirstname}</span>
                       </span>
                       &nbsp;
@@ -174,12 +201,12 @@ class ReviewAccountRecovery extends Component {
             </ul>
             <p><strong><Trans>How do you want to proceed?</Trans></strong></p>
             <div className="radiolist-alt">
-              <div className={`input radio ${this.state.status === "reject" ? "checked" : ""}`}>
+              <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
                 <input type="radio"
-                  value="reject"
+                  value="rejected"
                   onChange={this.handleInputChange}
                   name="status"
-                  checked={this.state.status === "reject"}
+                  checked={this.state.status === "rejected"}
                   id="statusRecoverAccountReject"
                   disabled={this.isProcessing}/>
                 <label htmlFor="statusRecoverAccountReject">
@@ -189,12 +216,12 @@ class ReviewAccountRecovery extends Component {
                   </span>
                 </label>
               </div>
-              <div className={`input radio ${this.state.status === "approve" ? "checked" : ""}`}>
+              <div className={`input radio ${this.state.status === "approved" ? "checked" : ""}`}>
                 <input type="radio"
-                  value="approve"
+                  value="approved"
                   onChange={this.handleInputChange}
                   name="status"
-                  checked={this.state.status === "approve"}
+                  checked={this.state.status === "approved"}
                   id="statusRecoverAccountAccept"
                   disabled={this.isProcessing}/>
                 <label htmlFor="statusRecoverAccountAccept">
@@ -221,7 +248,7 @@ class ReviewAccountRecovery extends Component {
               className={`button cancel ${this.isProcessing ? "disabled" : ""}`}
               role="button"
               type="button"
-              onClick={this.props.onClose}
+              onClick={this.handleCloseClick}
               disabled={this.isProcessing}>
               <span><Trans>Cancel</Trans></span>
             </button>
@@ -232,10 +259,13 @@ class ReviewAccountRecovery extends Component {
   }
 }
 
-ReviewAccountRecovery.propTypes = {
-  context: PropTypes.any, // The application context
-  accountRecoveryRequest: PropTypes.object, // The organization policy details
+ReviewAccountRecoveryRequest.propTypes = {
+  context: PropTypes.any.isRequired, // The application context
+  user: PropTypes.object, // The user who has requested an account recovery
   onClose: PropTypes.func, // The close callback
+  onCancel: PropTypes.func, // The cancel callback
+  onSubmit: PropTypes.func, // The review submit requested callback
+  onError: PropTypes.func, // The review error requested callback
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(ReviewAccountRecovery));
+export default withAppContext(withTranslation("common")(ReviewAccountRecoveryRequest));

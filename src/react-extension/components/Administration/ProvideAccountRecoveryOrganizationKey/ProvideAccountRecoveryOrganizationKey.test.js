@@ -15,8 +15,8 @@
 /**
  * Unit tests on AdministrationWorkspace in regard of specifications
  */
-import {defaultProps} from "./ProvideOrganizationKey.test.data";
-import ProvideOrganizationKeyPage from "./ProvideOrganizationKey.test.page";
+import {defaultProps} from "./ProvideAccountRecoveryOrganizationKey.test.data";
+import ProvideAccountRecoveryOrganizationKeyPage from "./ProvideAccountRecoveryOrganizationKey.test.page";
 import {waitFor} from "@testing-library/dom";
 
 const formatFingerprint = fingerprint => {
@@ -36,7 +36,7 @@ describe("Provide Organization Key", () => {
 
   it('As AD, I should be able to see a dialog to provide the current ORK', async() => {
     expect.assertions(4);
-    page = new ProvideOrganizationKeyPage(defaultProps());
+    page = new ProvideAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => {});
 
     expect(page.title.textContent).toBe("Organization Recovery Key");
@@ -47,7 +47,7 @@ describe("Provide Organization Key", () => {
 
   it('As AD, I should be able to provide upload an ORK from a file', async() => {
     expect.assertions(1);
-    page = new ProvideOrganizationKeyPage(defaultProps());
+    page = new ProvideAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => {});
 
     const fileContent = {
@@ -63,7 +63,7 @@ describe("Provide Organization Key", () => {
   it('As AD, I should be able to provide a valid ORK', async() => {
     expect.assertions(2);
     const props = defaultProps();
-    page = new ProvideOrganizationKeyPage(props);
+    page = new ProvideAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
     const fileContent = {
@@ -87,7 +87,7 @@ describe("Provide Organization Key", () => {
       props.accountRecoveryPolicy.currentPolicy,
       privateGpgKeyDto);
 
-    expect(props.save).toHaveBeenCalledWith(privateGpgKeyDto);
+    expect(props.onSubmit).toHaveBeenCalledWith(privateGpgKeyDto);
   });
 
   it('As AD, I should see an error message telling me that the provided ORK is not the expected one', async() => {
@@ -101,7 +101,7 @@ describe("Provide Organization Key", () => {
 
     props.context.port.request.mockImplementation(() => { throw error; });
 
-    page = new ProvideOrganizationKeyPage(props);
+    page = new ProvideAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
     const fileContent = {
@@ -126,7 +126,7 @@ describe("Provide Organization Key", () => {
 
     props.context.port.request.mockImplementation(() => { throw error; });
 
-    page = new ProvideOrganizationKeyPage(props);
+    page = new ProvideAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
     const fileContent = {

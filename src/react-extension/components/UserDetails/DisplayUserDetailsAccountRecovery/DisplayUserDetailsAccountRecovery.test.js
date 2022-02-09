@@ -17,6 +17,7 @@ import {
   userAccountRequestsApproved, userAccountRequestsRejectedWithPending
 } from "./DisplayUserDetailsAccountRecovery.test.data";
 import DisplayUserDetailsAccountRecoveryPage from "./DisplayUserDetailsAccountRecovery.test.page";
+import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 
 /**
  * Unit tests on DisplayUserDetailsAccountRecovery in regard of specifications
@@ -65,6 +66,17 @@ describe("See account recovery", () => {
       expect(page.currentStatusButton.textContent).toBe('Review');
       expect(page.previousRecoveryRequest).toBe(`Rejected ${formatDateTimeAgo(userAccountRequestsRejectedWithPending[1].created)}`);
       expect(page.numberOfRecovery).toBe('2');
+    });
+
+    it('I should review the user account recovery request during pending status', async() => {
+      const userAccountRecoveryRequestMockImpl = jest.fn(() => Promise.resolve(oneUserAccountRequestsPending));
+      mockContextRequest(userAccountRecoveryRequestMockImpl);
+      page = new DisplayUserDetailsAccountRecoveryPage(props);
+      await page.toggleCollapse();
+
+      expect(page.currentStatusButton.textContent).toBe('Review');
+      await page.reviewAccountRecovery();
+      expect(props.workflowContext.start).toHaveBeenLastCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {user: props.userWorkspaceContext.details.user});
     });
   });
 

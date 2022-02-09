@@ -132,6 +132,20 @@ describe("Display User Workspace Actions", () => {
     await page.lockDetails();
     expect(props.userWorkspaceContext.onDetailsLocked).toHaveBeenCalled();
   });
+
+  it('As AD I should not disable a review account recovery request if a user is selected', async() => {
+    page = new DisplayUserWorkspaceActionsPage(context, propsWithSelectedUser());
+    await waitFor(() => {});
+    await page.moreActions();
+    expect(page.canReviewAccountRecovery).toBeTruthy();
+  });
+
+  it('As AD I should not disable a review account recovery request if no user is selected', async() => {
+    page = new DisplayUserWorkspaceActionsPage(context, propsWithoutSelectedUser());
+    await waitFor(() => {});
+    await page.moreActions();
+    expect(page.canReviewAccountRecovery).toBeFalsy();
+  });
 });
 
 

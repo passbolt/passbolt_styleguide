@@ -21,7 +21,7 @@ import HandleSaveAccountRecoveryPage from "./HandleSaveAccountRecovery.test.page
 import {defaultProps} from "./HandleSaveAccountRecovery.test.data";
 import {AdminAccountRecoveryContextStep} from "../../../contexts/AdminAccountRecoveryContext";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
-import ProvideOrganizationKey from "../ProvideOrganizationKey/ProvideOrganizationKey";
+import ProvideAccountRecoveryOrganizationKey from "../ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 
 beforeEach(() => {
   jest.resetModules();
@@ -45,7 +45,7 @@ describe("As AD I can see the dialog of the different save step of account recov
       },
       onCancel: expect.any(Function),
       onError: expect.any(Function),
-      confirmSaveRequested: expect.any(Function)
+      onSubmit: expect.any(Function)
     };
 
     expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmSaveAccountRecoverySettings, expect.objectContaining(expectDialogProps));
@@ -62,9 +62,9 @@ describe("As AD I can see the dialog of the different save step of account recov
       },
       onCancel: expect.any(Function),
       onError: expect.any(Function),
-      save:  expect.any(Function)
+      onSubmit:  expect.any(Function)
     };
 
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ProvideOrganizationKey, expect.objectContaining(expectDialogProps));
+    expect(props.dialogContext.open).toHaveBeenCalledWith(ProvideAccountRecoveryOrganizationKey, expect.objectContaining(expectDialogProps));
   });
 });

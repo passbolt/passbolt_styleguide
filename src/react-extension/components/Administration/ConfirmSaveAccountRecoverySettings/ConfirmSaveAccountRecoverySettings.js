@@ -49,6 +49,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    */
   handleClose() {
     this.props.onCancel();
+    this.props.onClose();
   }
 
   /**
@@ -72,11 +73,18 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     await this.toggleProcessing();
-    await this.saveAccountRecoveryOrganizationSettings();
+    try {
+      await this.saveAccountRecoveryOrganizationSettings();
+      await this.toggleProcessing();
+      this.props.onClose();
+    } catch (error) {
+      await this.props.onError(error);
+      await this.toggleProcessing();
+    }
   }
 
   async saveAccountRecoveryOrganizationSettings() {
-    await this.props.confirmSaveRequested();
+    await this.props.onSubmit();
   }
 
   /**
@@ -327,8 +335,10 @@ class ConfirmSaveAccountRecoverySettings extends Component {
 
 ConfirmSaveAccountRecoverySettings.propTypes = {
   context: PropTypes.any, // The application context
+  onClose: PropTypes.func, // Callback when the dialog must be closed
   onCancel: PropTypes.func, // The cancel callback
-  confirmSaveRequested: PropTypes.func,
+  onSubmit: PropTypes.func, // The submit callback
+  onError: PropTypes.func, // The error callback
   accountRecoveryPolicy: PropTypes.object, // The account recovery
   actionFeedbackContext: PropTypes.object, // the action feeedback context
   currentKeyDetail: PropTypes.object, // the details of the current key

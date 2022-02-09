@@ -18,7 +18,9 @@ import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withDialog} from "../../../contexts/DialogContext";
+import HandleReviewAccountRecoveryRequestWorkflow
+  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
 
 /**
  * This component displays the user details about information
@@ -93,8 +95,9 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
   /**
    * Handle the click on the review button
    */
-  async handleReviewClicked() {
-    // TODO the popup to approve or reject the account recovery request
+  handleReviewClicked() {
+    const user = this.selectedUser;
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {user});
   }
 
   async findUserRequests() {
@@ -218,8 +221,8 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
 DisplayUserDetailsAccountRecovery.propTypes = {
   context: PropTypes.any,
   userWorkspaceContext: PropTypes.object, // The user workspace context
-  dialogContext: PropTypes.object, // The dialog context
+  workflowContext: PropTypes.any, // the workflow context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserDetailsAccountRecovery))));
+export default withAppContext(withWorkflow(withUserWorkspace(withTranslation('common')(DisplayUserDetailsAccountRecovery))));
