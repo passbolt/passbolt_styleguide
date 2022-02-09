@@ -54,7 +54,7 @@ class OrchestrateLogin extends Component {
         return <DisplayUnexpectedError
           title={<Trans>Sorry, you have not been signed in.</Trans>}
           message={<Trans>Something went wrong, the sign in failed with the following error:</Trans>}
-          error={this.state.error}
+          error={this.props.authenticationLoginContext.error}
         />;
       case AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
