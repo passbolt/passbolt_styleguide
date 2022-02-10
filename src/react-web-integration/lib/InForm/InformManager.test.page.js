@@ -40,10 +40,24 @@ export default class InformManagerPage {
   }
 
   /**
+   * Returns the usernames element
+   */
+  get usernames() {
+    return document.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+  }
+
+  /**
    * Returns the password element
    */
   get password() {
     return document.querySelector(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+  }
+
+  /**
+   * Returns the passwords element
+   */
+  get passwords() {
+    return document.querySelectorAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
   }
 
   /**
@@ -125,8 +139,8 @@ export default class InformManagerPage {
     await waitFor(() => {});
   }
 
-  async clickOnInformCallToAction() {
-    InFormManager.lastCallToActionFieldClicked = InFormManager.callToActionFields[0];
+  async clickOnInformCallToAction(index = 1) {
+    InFormManager.lastCallToActionFieldClicked = InFormManager.callToActionFields[index - 1];
     await waitFor(() => {});
   }
 

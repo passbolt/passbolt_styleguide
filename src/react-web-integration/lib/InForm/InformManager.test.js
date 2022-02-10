@@ -22,25 +22,25 @@ import {
   domElementLoginWithAutocompleteAttributeUsername,
   domElementLoginWithClassEmail,
   domElementLoginWithClassUsername,
-  domElementLoginWithIdAttributeEmail,
+  domElementLoginWithIdAttributeEmail, domElementLoginWithIdAttributeLogin,
   domElementLoginWithIdAttributeUsername,
-  domElementLoginWithNameAttributeEmail,
+  domElementLoginWithNameAttributeEmail, domElementLoginWithNameAttributeLogin,
   domElementLoginWithNameAttributeUsername,
   domElementLoginWithNoTypeAndAutocompleteAttributeEmail,
   domElementLoginWithNoTypeAndAutocompleteAttributeUsername,
   domElementLoginWithNoTypeAndClassEmail,
   domElementLoginWithNoTypeAndClassUsername,
-  domElementLoginWithNoTypeAndIdAttributeEmail,
+  domElementLoginWithNoTypeAndIdAttributeEmail, domElementLoginWithNoTypeAndIdAttributeLogin,
   domElementLoginWithNoTypeAndIdAttributeUsername,
-  domElementLoginWithNoTypeAndNameAttributeEmail,
-  domElementLoginWithNoTypeAndNameAttributeUsername,
+  domElementLoginWithNoTypeAndNameAttributeEmail, domElementLoginWithNoTypeAndNameAttributeLogin,
+  domElementLoginWithNoTypeAndNameAttributeUsername, domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail,
   domElementLoginWithNoTypeAndPlaceHolderAttributeEmail,
-  domElementLoginWithNoTypeAndPlaceHolderAttributeUsername,
+  domElementLoginWithNoTypeAndPlaceHolderAttributeUsername, domElementLoginWithPlaceHolderAttributeE_mail,
   domElementLoginWithPlaceHolderAttributeEmail,
   domElementLoginWithPlaceHolderAttributeUsername,
   domElementLoginWithSubmitButton,
   domElementOnlyPassword,
-  domElementOnlyUsername,
+  domElementOnlyUsername, domElementWithMultipleLogin,
   domElementWithNoUsernamePassword,
   initializeWindow
 } from "./InformManager.test.data";
@@ -97,6 +97,25 @@ describe("InformManager", () => {
     expect(informManager.iframesLength).toBe(2);
   });
 
+  it("As LU I should see the inform call to action on form with name attribute login", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementLoginWithNameAttributeLogin; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
   it("As LU I should see the inform call to action on form with no type and name attribute username", async() => {
     // Set up document body
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeUsername; // The Dom
@@ -119,6 +138,25 @@ describe("InformManager", () => {
   it("As LU I should see the inform call to action on form with no type name attribute email", async() => {
     // Set up document body
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeEmail; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
+  it("As LU I should see the inform call to action on form with no type name attribute login", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
@@ -173,6 +211,25 @@ describe("InformManager", () => {
     expect(informManager.iframesLength).toBe(2);
   });
 
+  it("As LU I should see the inform call to action on form with id attribute login", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementLoginWithIdAttributeLogin; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
   it("As LU I should see the inform call to action on form with no type and id attribute username", async() => {
     // Set up document body
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeUsername; // The Dom
@@ -195,6 +252,25 @@ describe("InformManager", () => {
   it("As LU I should see the inform call to action on form with no type and id attribute email", async() => {
     // Set up document body
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeEmail; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
+  it("As LU I should see the inform call to action on form with no type and id attribute login", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
@@ -325,6 +401,25 @@ describe("InformManager", () => {
     expect(informManager.iframesLength).toBe(2);
   });
 
+  it("As LU I should see the inform call to action on form with placeholder attribute e-mail", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementLoginWithPlaceHolderAttributeE_mail; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
   it("As LU I should see the inform call to action on form with no type and placeholder attribute username", async() => {
     // Set up document body
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeUsername; // The Dom
@@ -347,6 +442,25 @@ describe("InformManager", () => {
   it("As LU I should see the inform call to action on form with no type and placeholder attribute email", async() => {
     // Set up document body
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeEmail; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
+  it("As LU I should see the inform call to action on form with no type and placeholder attribute e-mail", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
@@ -483,6 +597,32 @@ describe("InformManager", () => {
     await informManager.clickOnInformCallToAction();
     await informManager.autofillCredentials('test', 'password');
     expect(informManager.username.value).toBe('test');
+  });
+
+  it("As LU I should see the inform call to action when I clicked on it and autofill only fields in the same parent container", async() => {
+    // Set up document body
+    document.body.innerHTML = domElementWithMultipleLogin; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.clickOnInformCallToAction();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.clickOnInformCallToAction(2);
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.autofillCredentials('test', 'password');
+    expect(informManager.usernames[0].value).toBe('');
+    expect(informManager.passwords[0].value).toBe('');
+    expect(informManager.usernames[1].value).toBe('test');
+    expect(informManager.passwords[1].value).toBe('password');
+    expect(informManager.usernames[2].value).toBe('');
+    expect(informManager.passwords[2].value).toBe('');
   });
 
   it("As LU I should auto save a form", async() => {

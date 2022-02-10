@@ -24,6 +24,24 @@ export const domElementLoginWithNameAttributeUsername =
   '  <input type="password"/>' +
   '</div>';
 
+/**
+ * Create a login form with multiple usernames and passwords in DOM
+ * @type {string}
+ */
+export const domElementWithMultipleLogin =
+  '<div>' +
+  '  <input type="text" name="username" id="username1"/>' +
+  '  <input type="password" id="password1"/>' +
+  '</div>' +
+  '<div>' +
+  '  <input type="text" name="username" id="username2"/>' +
+  '  <input type="password" id="password2"/>' +
+  '</div>' +
+  '<div>' +
+  '  <input type="text" name="username" id="username3"/>' +
+  '  <input type="password" id="password3"/>' +
+  '</div>';
+
 
 /**
  * Create a login form with only password in DOM
@@ -54,6 +72,16 @@ export const domElementLoginWithNameAttributeEmail =
   '</div>';
 
 /**
+ * Create a login form with name attribute login in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNameAttributeLogin =
+  '<div>' +
+  '  <input type="text" name="form_login"/>' +
+  '  <input type="text" name="password"/>' +
+  '</div>';
+
+/**
  * Create a login form with no type and name attribute username in DOM
  * @type {string}
  */
@@ -70,6 +98,16 @@ export const domElementLoginWithNoTypeAndNameAttributeUsername =
 export const domElementLoginWithNoTypeAndNameAttributeEmail =
   '<div>' +
   '  <input name="email"/>' +
+  '  <input type="password"/>' +
+  '</div>';
+
+/**
+ * Create a login form with no type and name attribute login in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndNameAttributeLogin =
+  '<div>' +
+  '  <input name="Login"/>' +
   '  <input type="password"/>' +
   '</div>';
 
@@ -134,6 +172,16 @@ export const domElementLoginWithIdAttributeEmail =
   '</div>';
 
 /**
+ * Create a login form with id attribute login in DOM
+ * @type {string}
+ */
+export const domElementLoginWithIdAttributeLogin =
+  '<div>' +
+  '  <input type="text" id="Test_Ploginutg"/>' +
+  '  <input type="text" id="YahooPassword"/>' +
+  '</div>';
+
+/**
  * Create a login form with no type and id attribute username in DOM
  * @type {string}
  */
@@ -151,6 +199,16 @@ export const domElementLoginWithNoTypeAndIdAttributeEmail =
   '<div>' +
   '  <input id="Email-Y"/>' +
   '  <input type="text" id="password-Y"/>' +
+  '</div>';
+
+/**
+ * Create a login form with no type and id attribute login in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndIdAttributeLogin =
+  '<div>' +
+  '  <input id="login-Y"/>' +
+  '  <input type="text" id="password"/>' +
   '</div>';
 
 /**
@@ -209,7 +267,17 @@ export const domElementLoginWithPlaceHolderAttributeUsername =
  */
 export const domElementLoginWithPlaceHolderAttributeEmail =
   '<div>' +
-  '  <input type="TEXT" autocomplete="email"/>' +
+  '  <input type="TEXT" placeholder="email"/>' +
+  '  <input type="password"/>' +
+  '</div>';
+
+/**
+ * Create a login form with placeholder attribute e-mail in DOM
+ * @type {string}
+ */
+export const domElementLoginWithPlaceHolderAttributeE_mail =
+  '<div>' +
+  '  <input type="Text" placeholder="e-mail"/>' +
   '  <input type="password"/>' +
   '</div>';
 
@@ -229,7 +297,17 @@ export const domElementLoginWithNoTypeAndPlaceHolderAttributeUsername =
  */
 export const domElementLoginWithNoTypeAndPlaceHolderAttributeEmail =
   '<div>' +
-  '  <input autocomplete="email"/>' +
+  '  <input placeholder="email"/>' +
+  '  <input type="password"/>' +
+  '</div>';
+
+/**
+ * Create a login form with no type and placeholder attribute e-mail in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail =
+  '<div>' +
+  '  <input placeholder="The-mailO"/>' +
   '  <input type="password"/>' +
   '</div>';
 

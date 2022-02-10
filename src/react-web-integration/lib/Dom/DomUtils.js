@@ -85,10 +85,32 @@ class DomUtils {
       } else {
         return scrollParent(node.parentNode)
       }
-    }
+    };
     return scrollParent(node);
   }
 
+  /**
+   * Get the inFormCalToActionField with the lowest common ancestor of the callToActionClickedField
+   * @param {HTMLElement} callToActionClickedField
+   * @param {Array<InFormCallToActionField>} fields
+   * @returns {null|InFormCallToActionField}
+   */
+  static getFieldWithLowestCommonAncestor(callToActionClickedField, fields) {
+    if (fields.length === 0) {
+      return null;
+    } else if (fields.length === 1) {
+      return fields[0];
+    } else {
+      let parent = callToActionClickedField;
+      let field = null;
+      // We loop to find the field with the lowest common ancestors
+      while (parent && field === null) {
+        parent = parent.offsetParent || parent.parentElement;
+        field = fields.find(callToActionField => parent.contains(callToActionField.field));
+      }
+      return field;
+    }
+  }
 }
 
 export default DomUtils;
