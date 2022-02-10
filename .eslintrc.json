@@ -1,11 +1,13 @@
 {
   "parserOptions": {
     "ecmaVersion": 2020,
+    "requireConfigFile": false,
     "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
     }
   },
+  "parser": "@babel/eslint-parser",
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended"
