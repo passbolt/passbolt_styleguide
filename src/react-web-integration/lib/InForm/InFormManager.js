@@ -17,6 +17,7 @@ import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
 import {fireEvent} from "@testing-library/dom/dist/events";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
+import DomUtils from "../Dom/DomUtils";
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -105,13 +106,17 @@ class InFormManager {
     * If it was previously found, we reuse the same InformFormField, otherwise we create one
     */
     const newCredentialsFormFields = InFormCredentialsFormField.findAll();
-    this.credentialsFormFields = newCredentialsFormFields.map(newField => {
-      const matchField = fieldToMatch => credentialsFormField => credentialsFormField.field === fieldToMatch;
-      const existingField = this.credentialsFormFields.find(matchField(newField));
-      const usernameField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'username' && newField.contains(callToActionField.field));
-      const passwordField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'password' && newField.contains(callToActionField.field));
-      return existingField || new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
-    });
+    if (newCredentialsFormFields.length > 0) {
+      this.credentialsFormFields = newCredentialsFormFields.map(newField => {
+        const matchField = fieldToMatch => credentialsFormField => credentialsFormField.field === fieldToMatch;
+        const existingField = this.credentialsFormFields.find(matchField(newField));
+        const usernameField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'username' && newField.contains(callToActionField.field));
+        const passwordField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'password' && newField.contains(callToActionField.field));
+        return existingField || new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
+      });
+    } else {
+      this.credentialsFormFields = [];
+    }
   }
 
   /**
@@ -230,17 +235,22 @@ class InFormManager {
       const isUsernameType = currentFieldType === 'username';
       const isPasswordType = currentFieldType === 'password';
       if (!isUsernameType) {
-        const usernameField = this.callToActionFields.find(field => field.fieldType === 'username')?.field;
-        fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: password } });
+        fireEvent.input(this.lastCallToActionFieldClicked.field, { target: { value: password } });
+        // Get username fields and find the one with the lowest common ancestor
+        const usernameFields = this.callToActionFields
+          .filter(callToActionField => callToActionField.fieldType === 'username');
+        const usernameField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, usernameFields);
         if (usernameField) {
-          fireEvent.input(usernameField, { target: { value: username } });
+          fireEvent.input(usernameField.field, { target: { value: username } });
         }
-      }
-      if (!isPasswordType) {
-        const passwordField = this.callToActionFields.find(field => field.fieldType === 'password')?.field;
+      } else if (!isPasswordType) {
         fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: username } });
+        // Get password fields and find the one with the lowest common ancestor
+        const passwordFields = this.callToActionFields
+          .filter(callToActionField => callToActionField.fieldType === 'password');
+        const passwordField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, passwordFields);
         if (passwordField) {
-          fireEvent.input(passwordField, { target: { value: password } });
+          fireEvent.input(passwordField.field, { target: { value: password } });
         }
       }
     });
