@@ -92,7 +92,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
     const type = this.gpgkeyType[gpgkeyInfo.algorithm];
     const created = this.formatDate(gpgkeyInfo.created);
     const expires = gpgkeyInfo.expires === "Never" ? this.translate("Never") : this.formatDate(gpgkeyInfo.expires);
-    const armoredKey = gpgkeyInfo.key;
+    const armoredKey = gpgkeyInfo.armored_key;
 
     const formatedGpgkeyInfo = {fingerprint, type, created, expires, armoredKey};
     this.setState({gpgkeyInfo: formatedGpgkeyInfo});

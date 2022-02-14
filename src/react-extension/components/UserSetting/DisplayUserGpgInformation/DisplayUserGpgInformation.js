@@ -90,14 +90,13 @@ class DisplayUserGpgInformation extends React.Component {
    */
   async fetchGpgkeyInfo() {
     const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-
     // format the gpgkey info.
-    const keyId = gpgkeyInfo.keyId;
+    const keyId = gpgkeyInfo.key_id;
     const type = this.gpgkeyType[gpgkeyInfo.algorithm];
-    const uIds = gpgkeyInfo.userIds;
+    const uIds = gpgkeyInfo.user_ids;
     const created = this.formatDate(gpgkeyInfo.created);
     const expires = gpgkeyInfo.expires === "Never" ? "Never" : this.formatDate(gpgkeyInfo.expires);
-    const armoredKey = gpgkeyInfo.key;
+    const armoredKey = gpgkeyInfo.armored_key;
     const fingerprint = gpgkeyInfo.fingerprint;
     const length = gpgkeyInfo.length;
 

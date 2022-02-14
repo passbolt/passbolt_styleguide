@@ -59,7 +59,7 @@ describe("Display Users Contextual Menu", () => {
     await waitFor(() => {});
 
     const gpgKey = "some key";
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({key: gpgKey}));
+    jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({armored_key: gpgKey}));
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPublicKey();
