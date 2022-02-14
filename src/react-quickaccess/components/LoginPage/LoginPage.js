@@ -159,7 +159,7 @@ class LoginPage extends React.Component {
                 }
               </div>
               {this.props.canRememberMe &&
-                <div className="input checkbox small">
+                <div className="input checkbox">
                   <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing} />
                   <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
                 </div>

@@ -360,7 +360,7 @@ class InputPassphrase extends Component {
                 </div>
                 }
                 {hasRememberMeOptions &&
-                <div>
+                <div className="remember-me">
                   <div className="input checkbox">
                     <input id="passphrase-entry-form-remember-me" type="checkbox" name="rememberMe"
                       checked={this.state.rememberMe} onChange={this.handleInputChange}/>

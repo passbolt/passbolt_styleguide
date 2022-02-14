@@ -1,7 +1,7 @@
 /* palette */
-@white: #FFF;
-@black: #333;
-@blacker: #000;
+@white: #FFFFFF;
+@black: #262626;
+@blacker: #000000;
 
 @blue-light: #2A9CEB;
 @blue: #2894DF;
@@ -22,17 +22,18 @@
 @red-dark: #92000C;
 @red-light: #DB5454;
 
-@midgar-1: #0C0C0A;
+@midgar-1: #000000;
 @midgar-2: #222220;
 @midgar-3: #30302D;
 @midgar-4: #3B3B39;
 @midgar-5: #444442;
-@midgar-6: #606060;
+@midgar-6: #7A7A7A;
 @midgar-7: #8B8B89;
 @midgar-8: #EEEEEC;
 @midgar-9: #F3F3F3;
 @midgar-10:#FFFFFC;
 
+@grey-1: #292929;
 @grey: @midgar-7;
 @grey-lighter: @midgar-8;
 @grey-lightest: @midgar-9;
@@ -103,6 +104,7 @@
 @button-primary-hover-background: @blue-light;
 @button-primary-hover-border: @blue-light;
 @button-primary-hover-color: @white;
+@button-primary-focus: @blue-light;
 
 @button-disabled-color: @font-light;
 @button-disabled-background: @midgar-4;
@@ -114,6 +116,11 @@
 /* box shadows */
 @shadow: @blacker;
 @shadow-dark: @blacker;
+@shadow-opacity-hover-black: 0.5;
+@shadow-opacity-hover-white: 0.5;
+@shadow-opacity-active-white: 0.5;
+@shadow-opacity-active-black: 0.5;
+@shadow-focus: @blue-light;
 
 /* dropdown menus */
 @dropdown-background: @midgar-4;
@@ -122,11 +129,22 @@
 /* inputs */
 @input-background: @midgar-1;
 @input-background-disabled: @midgar-5;
+/* checkbox */
 @input-checkbox-background: @midgar-2;
 @input-checkbox-background-disabled: @blacker;
 @input-checkbox-image-disabled: @midgar-3;
 @input-checkbox-border: @midgar-6;
-@input-checkbox-hover-border: @blue-dark;
+@input-checkbox-border-disabled: @grey-1;
+@input-checkbox-focus-border: @blue;
+/* radio */
+@input-radio-background: @midgar-2;
+@input-radio-dot-background: @blue-light;
+@input-radio-dot-background-disabled: @grey-1;
+@input-radio-background-disabled: @blacker;
+@input-radio-image-disabled: @midgar-3;
+@input-radio-border: @midgar-6;
+@input-radio-border-disabled: @blacker;
+@input-radio-focus-border: @blue;
 
 /* logos */
 @logourl: url('@{images}/logo/logo_white.svg');

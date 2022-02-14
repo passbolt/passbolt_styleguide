@@ -417,7 +417,7 @@ class ImportResources extends Component {
             </div>
 
             {canUseTags &&
-            <div className="input checkbox medium">
+            <div className="input checkbox">
               <input
                 id="dialog-import-passwords-import-tags"
                 type="checkbox"
@@ -429,7 +429,7 @@ class ImportResources extends Component {
             }
 
             {canUseFolders &&
-            <div className="input checkbox medium">
+            <div className="input checkbox">
               <input
                 id="dialog-import-passwords-import-folders"
                 type="checkbox"
