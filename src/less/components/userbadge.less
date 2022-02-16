@@ -55,7 +55,7 @@
         margin-top: 1.5rem;
         margin-left: -0.7rem;
         svg {
-          color: @orange-light;
+          --icon-exclamation-background-color: @icon-exclamation-required-color;
         }
       }
       svg {
@@ -110,9 +110,6 @@
     .svg-icon {
       margin: 16px 0 0 7px;
       display: inline-block;
-      svg {
-        fill: @fill-color;
-      }
     }
 
     &:hover {
@@ -139,7 +136,7 @@
     }
 
     .svg-icon.exclamation {
-      color:@orange-light;
+      --icon-exclamation-background-color: @icon-exclamation-required-color;
       margin-left: 0.8rem;
     }
   }

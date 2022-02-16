@@ -16,14 +16,8 @@ a {
         }
     }
     &.fav {
-      .svg-icon svg {
-        fill: @favorite-fill-color;
-      }
-    }
-    &.unfav {
       .svg-icon.star svg {
-        fill: @unfavorite-fill-color;
+        --icon-favorites-color: @icon-favorite-color;
       }
-      display: inline-flex;
     }
 }

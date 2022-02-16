@@ -1,20 +1,22 @@
 /* tags */
-.tag {
-  float: left;
-  position: relative;
-  margin: 0 .8rem .8rem 0;
-  text-decoration: none;
-  border-radius: .2rem;
-  border: 1px solid @tag-border;
-  background: @tag-background;
-  color: @tag-color;
+.tag-editor, tags-list {
+    .tag {
+        float: left;
+        position: relative;
+        margin: 0 .8rem .8rem 0;
+        text-decoration: none;
+        border-radius: .2rem;
+        border: 1px solid @tag-border;
+        background: @tag-background;
+        color: @tag-color;
 
-  &:active,
-  &:hover {
-    border: 1px solid @tag-hover-border;
-    background: @tag-hover-background;
-    color: @tag-hover-color;
-  }
+        &:active,
+        &:hover {
+            border: 1px solid @tag-hover-border;
+            background: @tag-hover-background;
+            color: @tag-hover-color;
+        }
+    }
 }
 
 .tags-list {
