@@ -1,16 +1,17 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.4.0
+ * @since         3.6.0
  */
+
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
@@ -290,7 +291,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
       passphrase: this.state.password
     };
     try {
-      await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', this.props.accountRecoveryPolicy.currentPolicy, privateGpgKeyDto);
+      await this.props.context.port.request('passbolt.account-recovery.validate-organization-private-key', privateGpgKeyDto);
       await this.props.onSubmit(privateGpgKeyDto);
       await this.toggleProcessing();
       this.props.onClose();
@@ -313,6 +314,8 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     } else if (error.name === "InvalidMasterPasswordError") {
       this.setState({passwordError: this.translate("This is not a valid passphrase.")});
     } else if (error.name === "BadSignatureMessageGpgKeyError") {
+      this.setState({keyError: error.message});
+    } else if (error.name === "GpgKeyError") {
       this.setState({keyError: error.message});
     } else {
       this.props.onError(error);
@@ -421,7 +424,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
         className="provide-organization-recover-key-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content provide-organization-key">
-            <div className={`input textarea required ${this.state.keyError ? "error" : ""}`}>
+            <div className={`input textarea required ${this.state.keyError || this.state.expectedFingerprintError ? "error" : ""}`}>
               <label htmlFor="organization-recover-form-key"><Trans>Enter the private key used by your organization for account recovery</Trans></label>
               <textarea id="organization-recover-form-key" name="key" value={this.state.key}
                 onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
@@ -512,7 +515,6 @@ ProvideAccountRecoveryOrganizationKey.propTypes = {
   onSubmit: PropTypes.func, // Callback when the dialog must be submitted
   onError: PropTypes.func, // Callback when the submit has raised an error
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  accountRecoveryPolicy: PropTypes.any, // The account recovery policy
   t: PropTypes.func, // The translation function
 };
 
