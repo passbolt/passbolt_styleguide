@@ -1,15 +1,15 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.5.0
+ * @since         3.6.0
  */
 
 import {defaultProps} from "./AdminAccountRecoveryContext.test.data";
@@ -46,7 +46,7 @@ describe("AdminAccountRecovery Context", () => {
       const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
       jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get");
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(currentPolicy);
     });
 
@@ -68,7 +68,7 @@ describe("AdminAccountRecovery Context", () => {
       const privateGpgKeyDto = undefined;
       jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get");
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(currentPolicy);
       await adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);
@@ -98,7 +98,7 @@ describe("AdminAccountRecovery Context", () => {
       const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
       jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get");
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
       await adminAccountRecoveryContext.confirmSaveRequested();
       expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK);
     });
@@ -120,7 +120,7 @@ describe("AdminAccountRecovery Context", () => {
       const privateGpgKeyDto = undefined;
       jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get");
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(currentPolicy);
       await adminAccountRecoveryContext.changePolicy(newPolicy);
       expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);

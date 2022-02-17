@@ -38,7 +38,6 @@ describe("UserSettings Context", () => {
     it('As AD I should start with the review account recovery dialog', async() => {
       await handleReviewAccountRecoveryWorkflow.componentDidMount();
       expect(handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse).toBe(null);
-      expect(handleReviewAccountRecoveryWorkflow.props.accountRecoveryContext.findAccountRecoveryPolicy).toHaveBeenCalled();
       const accountRecoveryReviewProps = {
         user: handleReviewAccountRecoveryWorkflow.props.user,
         onCancel: handleReviewAccountRecoveryWorkflow.handleCancelDialog,
@@ -52,11 +51,7 @@ describe("UserSettings Context", () => {
       const status = 'approved';
       await handleReviewAccountRecoveryWorkflow.reviewAccountRecoveryRequest(status);
       expect(handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse.status).toBe(status);
-      expect(handleReviewAccountRecoveryWorkflow.props.accountRecoveryContext.getOrganizationPolicy).toHaveBeenCalled();
       const provideOrganizationKeyProps = {
-        accountRecoveryPolicy: {
-          currentPolicy: undefined
-        },
         onCancel: handleReviewAccountRecoveryWorkflow.handleCancelDialog,
         onSubmit: handleReviewAccountRecoveryWorkflow.handleSave,
         onError: handleReviewAccountRecoveryWorkflow.handleError
@@ -68,7 +63,7 @@ describe("UserSettings Context", () => {
       const status = 'rejected';
       await handleReviewAccountRecoveryWorkflow.reviewAccountRecoveryRequest(status);
       expect(handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse.status).toBe(status);
-      expect(handleReviewAccountRecoveryWorkflow.props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.organization-review', handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse, undefined);
+      expect(handleReviewAccountRecoveryWorkflow.props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.review-request', handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse, undefined);
       await waitFor(() => {});
       expect(handleReviewAccountRecoveryWorkflow.props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
       expect(handleReviewAccountRecoveryWorkflow.props.onStop).toHaveBeenCalled();
@@ -80,7 +75,7 @@ describe("UserSettings Context", () => {
         passphrase: 'passphrase'
       };
       await handleReviewAccountRecoveryWorkflow.handleSave(privateGpgKeyDto);
-      expect(handleReviewAccountRecoveryWorkflow.props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.organization-review', null, privateGpgKeyDto);
+      expect(handleReviewAccountRecoveryWorkflow.props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.review-request', null, privateGpgKeyDto);
       await waitFor(() => {});
       expect(handleReviewAccountRecoveryWorkflow.props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
       expect(handleReviewAccountRecoveryWorkflow.props.onStop).toHaveBeenCalled();

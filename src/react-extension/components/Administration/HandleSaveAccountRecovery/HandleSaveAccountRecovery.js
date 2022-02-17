@@ -1,16 +1,17 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.5.0
+ * @since         3.6.0
  */
+
 import React from "react";
 import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
@@ -86,13 +87,7 @@ class HandleSaveAccountRecovery extends React.Component {
   }
 
   displayDialogForEnterCurrentOrkStep() {
-    const accountRecoveryPolicy = {
-      currentPolicy: this.props.adminAccountRecoveryContext.currentPolicy,
-      newPolicy: this.props.adminAccountRecoveryContext.newPolicy
-    };
-
     this.props.dialogContext.open(ProvideAccountRecoveryOrganizationKey, {
-      accountRecoveryPolicy,
       onCancel: this.handleCancelDialog,
       onError: this.handleError,
       onSubmit: this.handleSave,
@@ -122,6 +117,11 @@ class HandleSaveAccountRecovery extends React.Component {
   }
 
   async handleError(error) {
+    // It can happen when the user has closed the passphrase entry dialog by instance.
+    if (error.name === "UserAbortsOperationError") {
+      return;
+    }
+
     const errorDialogProps = {
       title: this.translate("There was an unexpected error..."),
       message: error.message

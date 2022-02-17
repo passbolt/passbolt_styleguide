@@ -1,16 +1,17 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.5.0
+ * @since         3.6.0
  */
+
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
@@ -74,7 +75,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * Find the account recovery policy
    */
   async findAccountRecoveryPolicy() {
-    const currentPolicy = await this.props.context.port.request('passbolt.account-recovery.get');
+    const currentPolicy = await this.props.context.port.request("passbolt.account-recovery.get-organization-policy");
     let currentKeyDetail = null;
     if (currentPolicy.policy !== "disabled") {
       currentKeyDetail = await this.getKeyDetail(currentPolicy.account_recovery_organization_public_key);
@@ -95,14 +96,15 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
 
   /**
    * Return the details of a given key
-   * @param {object} key
+   * @param {object} organizationKey The account recovery organization key
    * @returns {object}
    */
-  async getKeyDetail(key) {
-    if (!key) {
+  async getKeyDetail(organizationKey) {
+    if (!organizationKey) {
       return null;
     }
-    return await this.props.context.port.request('passbolt.account-recovery.get-organization-key-details', {armored_key: key.armored_key});
+
+    return await this.props.context.port.request('passbolt.account-recovery.get-organization-key-details', organizationKey.armored_key);
   }
 
   /**

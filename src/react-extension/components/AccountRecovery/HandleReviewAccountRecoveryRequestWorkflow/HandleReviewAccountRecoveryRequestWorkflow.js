@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAppContext} from "../../../contexts/AppContext";
-import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ReviewAccountRecoveryRequest from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -51,7 +50,6 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * Component did mount
    */
   async componentDidMount() {
-    await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
     this.displayReviewAccountRecoveryDialog();
   }
 
@@ -81,12 +79,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * Display provide organization key
    */
   displayProvideAccountRecoveryOrganizationKeyDialog() {
-    const accountRecoveryPolicy = {
-      currentPolicy: this.props.accountRecoveryContext.getOrganizationPolicy(),
-    };
-
     this.props.dialogContext.open(ProvideAccountRecoveryOrganizationKey, {
-      accountRecoveryPolicy,
       onCancel: this.handleCancelDialog,
       onSubmit: this.handleSave,
       onError: this.handleError
@@ -124,7 +117,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * @param {Object|null} privateGpgKeyDto the private ORK given by the admin if any.
    */
   async handleSave(privateGpgKeyDto) {
-    await this.props.context.port.request('passbolt.account-recovery.organization-review', this.state.accountRecoveryResponse, privateGpgKeyDto);
+    await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryResponse, privateGpgKeyDto);
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery review has been saved successfully"));
     this.props.onStop();
   }
@@ -163,11 +156,10 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
 HandleReviewAccountRecoveryRequestWorkflow.propTypes = {
   onStop: PropTypes.func.isRequired, // The callback to stop the workflow
   dialogContext: PropTypes.any, // The dialog context
-  accountRecoveryContext: PropTypes.any, // the account recovery context
   actionFeedbackContext: PropTypes.object, // the admin action feedback context
   context: PropTypes.object, // the app context
   user: PropTypes.object, // The user
   t: PropTypes.func // the translation function
 };
 
-export default withAppContext(withAccountRecovery(withDialog(withActionFeedback(withTranslation("common")(HandleReviewAccountRecoveryRequestWorkflow)))));
+export default withAppContext(withDialog(withActionFeedback(withTranslation("common")(HandleReviewAccountRecoveryRequestWorkflow))));
