@@ -204,18 +204,15 @@ class DisplayUserBadgeMenu extends Component {
     return (
       <div className="col3 profile-wrapper">
         <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
-          <div onClick={this.handleToggleMenuClick}>
-            <div className="center-cell-wrapper">
-              <div className="details center-cell">
-                <span className="name">{this.getUserFullName()}</span>
-                <span className="email">{this.getUserUsername()}</span>
-              </div>
+          <div className="avatar-with-name" onClick={this.handleToggleMenuClick}>
+            <UserAvatar user={this.props.user} className="avatar picture left-cell" baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired}/>
+            <div className="details center-cell">
+              <span className="name">{this.getUserFullName()}</span>
+              <span className="email">{this.getUserUsername()}</span>
             </div>
-            <UserAvatar user={this.props.user} className="picture left-cell" baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired}/>
             <div className="more right-cell">
               <a role="button">
                 <Icon name="caret-down"/>
-                <span><Trans>more</Trans></span>
               </a>
             </div>
           </div>

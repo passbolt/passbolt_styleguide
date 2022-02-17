@@ -2,115 +2,26 @@
  * Profile user card
  */
 .user.profile {
-  max-width: 16em;
   float: right;
-  border: 1px solid @border-default;
-  margin-top: .5em;
+  margin-top: .6rem;
+  padding: .8rem 1.6rem;
   background: @background-lighter;
-  overflow: hidden;
   cursor: pointer;
+  box-shadow: inset 0 0 0 0.1rem @border-default;
   border-radius: 3px;
-  .button-background();
 
   .more {
+    line-height: 0;
     .button-background();
-    border-left: 1px dotted @border-default;
   }
 
-  /* fixed fluid fixed layout */
-  .left-cell,
-  .right-cell,
-  .center-cell-wrapper {
-    float: left;
-    height: 3.125em; /* 50px */
-  }
-  .center-cell-wrapper {
-    width: 100%;
-  }
   .center-cell {
-    margin: 0 0 0 3.125em;
-    overflow: hidden;
-  }
-  .left-cell {
-    width: 3.125em;
-    margin-left: -100%;
-  }
-  .right-cell {
-    width: 1.6875em;
-    margin-left: -1.75em;
-  }
-
-  /* user card styling */
-  .picture {
-    img {
-      width: 2.6em;
-      padding: 0.28em 0.35em 0.35em 0.35em;
-      border-radius: 50%;
-    }
-
-    .svg-icon {
-      &.exclamation {
-        position: absolute;
-        width: 1.2rem;
-        margin-top: 1.5rem;
-        margin-left: -0.7rem;
-        svg {
-          --icon-exclamation-background-color: @icon-exclamation-required-color;
-        }
-      }
-      svg {
-          width: 2.4rem;
-          height: 2.4rem;
-          margin-top:1.2rem;
-      }
-    }
-
-    &.attention-required {
-      img {
-        border: 1px solid @orange-light;
-        padding: 0;
-        position: relative;
-        top: .18em;
-        left: .25em;
-      }
-    }
-  }
-  .details {
-    float: left;
-    font-size: .875em;
-    padding: .357em 1em .5em 1em; /* 5/14/7/14px */
-
-    .name,
-    .email {
-      width: 11em;
-      float: left;
-      clear: both;
-      text-overflow: clip;
-      word-wrap: break-word;
-      overflow: hidden;
-      display: inline-block;
-      line-height: normal;
-      .ellipsis();
-    }
-    .name {
-      font-weight: bold;
-      padding-top: 0;
-    }
-    .email {
-      padding-bottom: 0;
-    }
+    width: 15rem;
   }
 
   .more a {
-    position: absolute;
-    display: block;
     border: 0;
     color: @font-dim;
-
-    .svg-icon {
-      margin: 16px 0 0 7px;
-      display: inline-block;
-    }
 
     &:hover {
       color: @blacker;
@@ -119,15 +30,11 @@
         fill: @fill-hover-color;
       }
     }
-
-    span:last-child {
-      visibility: hidden;
-    }
   }
 
   .dropdown-content {
-    top: 59px;
-    max-width: 16em;
+    top: 6.3rem;
+    max-width: 24.8rem;
     width: 100%;
     background: @dropdown-background;
 
@@ -147,6 +54,7 @@
   .user.profile {
     display: block;
     width: auto;
+    padding: .8rem;
 
     .center-cell {
       display: none;

@@ -9,19 +9,29 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.6.0
+ * @since         3.7.0
  */
-
 /**
  * Default props
- * @returns {{baseUrl: string, user: {last_name: string, first_name: string}}}
+ * @returns {any}
  */
-export function defaultProps() {
-  return {
-    user: {
-      "first_name": "Dame Steve",
-      "last_name": "Shirley",
-    },
+export function defaultProps(props) {
+  const defaultProps = {
     baseUrl: (new URL(window.location.href)).origin,
+    user: {
+      "username": "carol@passbolt.com",
+      "profile": {
+        "first_name": "Carol",
+        "last_name": "Shaw"
+      }
+    },
+    context: {
+      onLogoutRequested: () => {
+      },
+      siteSettings: {
+        canIUse: () => true
+      }
+    }
   };
+  return Object.assign(defaultProps, props || {});
 }

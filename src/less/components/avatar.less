@@ -1,13 +1,62 @@
-@avatar-size: 36px;
+@avatar-size: 4.2rem;
 
-.avatar img {
-    width: @avatar-size;
-    height: @avatar-size;
-    border-radius: 50%;
-}
+.avatar {
+    display: flex;
 
-.big.avatar img {
-  width: @avatar-size * 2;
-  height: @avatar-size * 2;
-  border-radius: 50%;
+    &-with-name {
+      display: flex;
+      align-items: center;
+
+      .details {
+        display: flex;
+        flex-direction: column;
+        margin-left: 1.6rem;
+
+        .name,
+        .email {
+          word-wrap: break-word;
+          display: inline-block;
+          .ellipsis();
+        }
+        .name {
+          font-weight: 700;
+          font-size: 1.5rem;
+          line-height: 2rem;
+        }
+        .email {
+          font-size: 1.2rem;
+          line-height: 1.6rem;
+        }
+      }
+    }
+
+    &.attention-required {
+      img {
+        border: 1px solid @border-attention-required;
+        box-sizing: border-box;
+      }
+      .svg-icon {
+        &.exclamation {
+          position: absolute;
+          svg {
+            width: 1.2rem;
+            height: 1.2rem;
+            margin-top: 2.6rem;
+            margin-left: 3rem;
+            --icon-exclamation-background-color: @icon-exclamation-required-color;
+          }
+        }
+      }
+    }
+
+    img {
+      width: @avatar-size;
+      height: @avatar-size;
+      border-radius: 50%;
+    }
+
+    &.big img{
+      width: @avatar-size * 2;
+      height: @avatar-size * 2;
+    }
 }
