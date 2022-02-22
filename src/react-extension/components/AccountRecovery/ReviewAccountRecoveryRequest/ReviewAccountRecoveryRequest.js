@@ -21,6 +21,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {DateTime} from "luxon";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -195,11 +196,9 @@ class ReviewAccountRecoveryRequest extends Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div>
-                      <span
-                        className="tooltip tooltip-bottom"
-                        data-tooltip={this.fingerprint}>
+                      <Tooltip message={this.fingerprint} direction="bottom">
                         <span className="name-with-tooltip">{requesterFirstname}</span>
-                      </span>
+                      </Tooltip>
                       &nbsp;
                       <span className="name"><Trans>requested an account recovery</Trans></span>
                     </div>

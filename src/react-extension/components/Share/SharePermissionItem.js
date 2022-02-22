@@ -15,12 +15,13 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
-import TooltipHtml from "../Common/Tooltip/TooltipHtml";
 import ShareVariesDetails from "./ShareVariesDetails";
 import {withAppContext} from "../../contexts/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";
+import Icon from "../Common/Icons/Icon";
+import Tooltip from "../Common/Tooltip/Tooltip";
 
 class SharePermissionItem extends Component {
   /**
@@ -160,9 +161,9 @@ class SharePermissionItem extends Component {
           </select>
 
           {(this.props.variesDetails) &&
-          <TooltipHtml offset={true}>
-            <ShareVariesDetails variesDetails={this.props.variesDetails} />
-          </TooltipHtml>
+          <Tooltip message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
+            <Icon name="info-circle"/>
+          </Tooltip>
           }
         </div>
 

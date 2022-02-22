@@ -24,8 +24,8 @@ import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../Common/Icons/Icon";
-import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
 import {Trans, withTranslation} from "react-i18next";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 class CreateUserGroup extends Component {
   /**
@@ -425,6 +425,18 @@ class CreateUserGroup extends Component {
   }
 
   /**
+   * Get the tooltip message
+   * @param groups_user The groups user
+   * @returns {JSX.Element}
+   */
+  getTooltipMessage(groups_user) {
+    return <>
+      <div className="email"><strong>{groups_user.user.username}</strong></div>
+      <div className="fingerprint">{this.getFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
+    </>;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -469,10 +481,9 @@ class CreateUserGroup extends Component {
                     <div className="aro">
                       <div className="aro-name">
                         <span className="ellipsis">{this.getUserFullname(groups_user.user)}</span>
-                        <TooltipHtml>
-                          <div className="email"><strong>{groups_user.user.username}</strong></div>
-                          <div className="fingerprint">{this.getFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
-                        </TooltipHtml>
+                        <Tooltip message={this.getTooltipMessage(groups_user)}>
+                          <Icon name="info-circle"/>
+                        </Tooltip>
                       </div>
                       <div className="permission_changes">
                         <span><Trans>Will be added</Trans></span>

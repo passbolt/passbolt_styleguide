@@ -24,6 +24,7 @@ import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext"
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -227,11 +228,9 @@ class ManageAccountRecoveryUserSettings extends Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div>
-                      <span
-                        className="tooltip tooltip-bottom"
-                        data-tooltip={this.formatFingerprint(this.requestor.gpgkey.fingerprint)}>
+                      <Tooltip message={this.formatFingerprint(this.requestor.gpgkey.fingerprint)} direction="bottom">
                         <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
-                      </span>
+                      </Tooltip>
                       &nbsp;
                       <span className="name"><Trans>requested this operation</Trans></span>
                     </div>

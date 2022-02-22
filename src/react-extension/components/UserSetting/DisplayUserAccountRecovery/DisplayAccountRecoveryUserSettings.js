@@ -24,6 +24,7 @@ import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -186,10 +187,9 @@ class DisplayAccountRecoveryUserSettings extends Component {
                       <div className="content-wrapper">
                         <div className="content">
                           <div>
-                            <span className="tooltip tooltip-bottom"
-                              data-tooltip={this.formatFingerprint(this.requestorFingerprint)}>
+                            <Tooltip message={this.formatFingerprint(this.requestorFingerprint)} direction="bottom">
                               <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
-                            </span>
+                            </Tooltip>
                             &nbsp;
                             <span className="name"><Trans>requested this operation</Trans></span>
                           </div>

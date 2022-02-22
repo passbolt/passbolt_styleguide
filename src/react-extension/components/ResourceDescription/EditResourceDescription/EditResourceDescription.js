@@ -19,6 +19,7 @@ import {withLoading} from "../../../contexts/LoadingContext";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../Common/Icons/Icon";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -391,17 +392,22 @@ class EditResourceDescription extends React.Component {
               onClick={this.handleCancel}><Trans>Cancel</Trans></a>
             <div className="description-lock">
               {!this.areResourceTypesEnabled() &&
-              <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}
-                icon="info-circle"/>
+              <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
+                <Icon name="info-circle"/>
+              </Tooltip>
               }
               {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
               <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
-                <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")} icon="lock-open" />
+                <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
+                  <Icon name="lock-open"/>
+                </Tooltip>
               </a>
               }
               {this.areResourceTypesEnabled() && this.state.encryptDescription &&
               <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
-                <Tooltip message={this.translate("The description content will be encrypted.")} icon="lock" />
+                <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
+                  <Icon name="lock"/>
+                </Tooltip>
               </a>
               }
             </div>

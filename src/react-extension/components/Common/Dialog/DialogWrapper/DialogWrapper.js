@@ -14,7 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogCloseButton from "../DialogCloseButton/DialogCloseButton";
-import TooltipHtml from "../../Tooltip/TooltipHtml";
+import Icon from "../../Icons/Icon";
+import Tooltip from "../../Tooltip/Tooltip";
 
 class DialogWrapper extends Component {
   /**
@@ -88,9 +89,9 @@ class DialogWrapper extends Component {
               <span className="dialog-header-subtitle">{this.props.subtitle}</span>
               }
               {(this.props.tooltip && this.props.tooltip !== '') &&
-              <TooltipHtml>
-                <span>{this.props.tooltip}</span>
-              </TooltipHtml>
+              <Tooltip message={this.props.tooltip}>
+                <Icon name='info-circle'/>
+              </Tooltip>
               }
             </h2>
             <DialogCloseButton onClose={this.handleClose} disabled={this.props.disabled}/>

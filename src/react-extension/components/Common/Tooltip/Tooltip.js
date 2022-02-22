@@ -1,19 +1,18 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         2.13.0
+ * @since         3.7.0
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
 
 class Tooltip extends Component {
   /**
@@ -22,20 +21,25 @@ class Tooltip extends Component {
    */
   render() {
     return (
-      <span className="tooltip tooltip-right" data-tooltip={this.props.message}>
-        <Icon name={this.props.icon}/>
-      </span>
+      <div className="tooltip">
+        {this.props.children}
+        <span className={`tooltip-text ${this.props.direction}`}>
+          {this.props.message}
+        </span>
+      </div>
     );
   }
 }
 
+
 Tooltip.defaultProps = {
-  icon: 'warning'
+  direction: 'right'
 };
 
 Tooltip.propTypes = {
-  icon: PropTypes.string,
-  message: PropTypes.string
+  children: PropTypes.any,
+  message: PropTypes.any.isRequired,
+  direction: PropTypes.string
 };
 
 export default Tooltip;

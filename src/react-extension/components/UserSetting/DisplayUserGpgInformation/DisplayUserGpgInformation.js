@@ -16,6 +16,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {DateTime} from "luxon";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 /**
  * This component displays the user GPG information
@@ -197,9 +198,9 @@ class DisplayUserGpgInformation extends React.Component {
                 <tr>
                   <td><Trans>Key Id</Trans></td>
                   <td className="keyId">
-                    <div
-                      className="input select tooltip-top"
-                      data-tooltip={this.translate("sorry you can only have one key set at the moment")}>
+                    <Tooltip
+                      message={this.translate("sorry you can only have one key set at the moment")}
+                      direction="top">
                       <select
                         id="keyId"
                         disabled={true}>
@@ -207,7 +208,7 @@ class DisplayUserGpgInformation extends React.Component {
                           {this.gpgKeyInfo.keyId}
                         </option>
                       </select>
-                    </div>
+                    </Tooltip>
                   </td>
                 </tr>
                 <tr>

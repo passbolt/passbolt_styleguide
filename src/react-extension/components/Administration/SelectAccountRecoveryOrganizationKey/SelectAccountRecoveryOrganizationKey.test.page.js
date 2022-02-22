@@ -162,11 +162,11 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   get algorithmTooltip() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-algorithm"] .tooltip');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-algorithm"] .tooltip .tooltip-text');
   }
 
   get keySizeTooltip() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-keySize"] .tooltip');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-keySize"] .tooltip .tooltip-text');
   }
 
   get nameFieldError() {

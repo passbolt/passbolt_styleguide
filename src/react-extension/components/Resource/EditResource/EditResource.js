@@ -766,17 +766,22 @@ class EditResource extends Component {
             <div className="input textarea">
               <label htmlFor="edit-password-form-description"><Trans>Description</Trans>&nbsp;
                 {!this.areResourceTypesEnabled() &&
-                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}
-                  icon="info-circle"/>
+                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
+                  <Icon name="info-circle"/>
+                </Tooltip>
                 }
                 {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")} icon="lock-open" />
+                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
+                    <Icon name="lock-open"/>
+                  </Tooltip>
                 </a>
                 }
                 {this.areResourceTypesEnabled() && this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message={this.translate("The description content will be encrypted.")} icon="lock" />
+                  <Tooltip message={this.translate("The description content will be encrypted.")}>
+                    <Icon name="lock"/>
+                  </Tooltip>
                 </a>
                 }
               </label>

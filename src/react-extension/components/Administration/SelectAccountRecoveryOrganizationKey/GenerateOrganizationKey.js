@@ -386,8 +386,9 @@ class GenerateOrganizationKey extends React.Component {
           <div className="input select">
             <label htmlFor="generate-organization-key-form-algorithm">
               <Trans>Algorithm</Trans>
-              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}
-                icon="info-circle" />
+              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
+                <Icon name="info-circle"/>
+              </Tooltip>
             </label>
             <input id="generate-organization-key-form-algorithm" name="algorithm" value={this.state.algorithm}
               className="fluid" type="text"
@@ -396,8 +397,9 @@ class GenerateOrganizationKey extends React.Component {
           <div className="input select">
             <label htmlFor="generate-organization-key-form-keySize">
               <Trans>Key Size</Trans>
-              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}
-                icon="info-circle" />
+              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
+                <Icon name="info-circle"/>
+              </Tooltip>
             </label>
             <input id="generate-organization-key-form-key-size" name="keySize" value={this.state.keySize}
               className="fluid" type="text"

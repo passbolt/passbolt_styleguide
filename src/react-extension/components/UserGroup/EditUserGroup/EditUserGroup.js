@@ -23,10 +23,10 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../Common/Icons/Icon";
-import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
 import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 /**
  * This component allows to edit an user group
@@ -663,6 +663,18 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Get the tooltip message
+   * @param groupUser The group user
+   * @returns {JSX.Element}
+   */
+  getTooltipMessage(groupUser) {
+    return <>
+      <div className="email"><strong>{groupUser.user.username}</strong></div>
+      <div className="fingerprint">{this.formatFingerprint(groupUser.user.gpgkey.fingerprint)}</div>
+    </>;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -732,10 +744,9 @@ class EditUserGroup extends Component {
                     <div className="aro">
                       <div className="aro-name">
                         <span className="ellipsis">{this.getUserFullname(groupUser.user)}</span>
-                        <TooltipHtml>
-                          <div className="email"><strong>{groupUser.user.username}</strong></div>
-                          <div className="fingerprint">{this.formatFingerprint(groupUser.user.gpgkey.fingerprint)}</div>
-                        </TooltipHtml>
+                        <Tooltip message={this.getTooltipMessage(groupUser)}>
+                          <Icon name="info-circle"/>
+                        </Tooltip>
                       </div>
                       <div className="permission_changes">
                         {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
