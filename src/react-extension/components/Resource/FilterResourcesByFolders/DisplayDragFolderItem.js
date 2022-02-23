@@ -88,11 +88,12 @@ class DisplayDragFolderItem extends React.Component {
     const canDrag = this.canDragItems(this.draggedItems);
     const dragFeedbackText = canDrag ? this.draggedItems.folders[0].name : "You are not allowed to move this content";
     return (
-      <div className="drag-and-drop">
+      <div className="drag-and-drop item-1">
         {!canDrag &&
         <Icon name="ban"/>
         }
         <span className={`message ${!canDrag ? "not-allowed" : ""}`}>{dragFeedbackText}</span>
+        <span className="count">1</span>
       </div>
     );
   }
