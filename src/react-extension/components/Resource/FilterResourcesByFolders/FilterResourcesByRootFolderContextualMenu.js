@@ -121,7 +121,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-export-folder" className={`ready closed ${this.canExport() ? "" : "disabled"}`}>
+        <li key="option-export-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">

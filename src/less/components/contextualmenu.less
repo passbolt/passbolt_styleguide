@@ -2,38 +2,74 @@
     position: absolute;
     background: @dropdown-background;
     border: 1px solid @border-default;
-    width: 12em;
-    .box-shadow();
+    filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
+    border-radius: 4px;
     z-index: 993;
-    left: 11.25em;
     display: none;
-    padding: .25em 0;
-}
+    padding: .8rem 0;
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 2rem;
 
-.contextual-menu a {
-    font-size: .875em; /* 14px */
-    display: block;
-    padding: .357em .714em; /* 5px 10px */
-    border: 0;
-}
+    // Separator of contextual menu item
+    .separator-before {
+        border-top: 1px solid @border-default;
+        margin-top: .4rem;
 
-.contextual-menu a:hover {
-    color: @font-default;
-    background: @dropdown-item-hover-background;
-}
-
-.contextual-menu li.disabled a {
-    color: @font-lightest;
-    &:hover {
-        color: @font-lightest;
-        background: @background-lighter;
+        a {
+            margin-top: .4rem;
+        }
     }
-}
 
-.contextual-menu .separator-before {
-    border-top: 1px solid @border-default;
-}
+    // Separator of contextual menu item
+    .separator-after {
+        border-bottom: 1px solid @border-default;
+        margin-bottom: .4rem;
+        a {
+            margin-bottom: .4rem;
+        }
+    }
 
-.contextual-menu .separator-after {
-    border-bottom: 1px solid @border-default;
+    // Contextual menu item
+    a {
+        display: block;
+        border: 0;
+        padding: .8rem 1.6rem;
+
+        // Disabled contextual menu item
+        &.disabled {
+
+          &:hover {
+            background: @dropdown-background;
+          }
+
+          &:active {
+            box-shadow: none;
+          }
+
+          &:focus {
+            background: @dropdown-background;
+          }
+        }
+
+        // Contextual menu item hover
+        &:hover {
+            color: @font-default;
+            background: @dropdown-item-hover-background;
+        }
+
+        // Contextual menu item pressed
+        &:active {
+          color: @font-default;
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+        }
+
+        // Contextual menu item focus visible
+        &:focus {
+          color: @font-default;
+          background: @dropdown-focus-background;
+          box-shadow: 0 0 .4rem @shadow-focus;
+          outline: none;
+        }
+    }
 }

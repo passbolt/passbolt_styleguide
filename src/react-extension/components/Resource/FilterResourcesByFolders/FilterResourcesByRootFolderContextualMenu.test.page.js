@@ -63,13 +63,6 @@ export class FoldersTreeRootFolderContextualMenuPageObject {
   }
 
   /**
-   * Returns the menu for the index one
-   */
-  menu(index) {
-    return this._container.querySelectorAll('li')[index - 1];
-  }
-
-  /**
    * Returns the menu RootFolder clickable for the index one
    */
   menuRootFolder(index) {

@@ -164,39 +164,51 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
         hide={this.props.hide}
         left={this.props.left}
         top={this.props.top}>
-        <li key="option-create-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-rename-folder" className={`separator-after ready closed ${canUpdate ? "" : "disabled"}`}>
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a onClick={this.handleRenameFolderItemClickEvent}><span><Trans>Rename</Trans></span></a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-share-folder" className={`ready closed ${canShare ? "" : "disabled"}`}>
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a onClick={this.handleShareFolderItemClickEvent}><span><Trans>Share</Trans></span></a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-export-folder" className={`ready closed ${canExport ? "" : "disabled"}`}>
+        <li key="option-create-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a
-                  className={`${this.canExport() ? "" : "disabled"}`}
+                  onClick={this.handleCreateFolderItemClickEvent}
+                  className={`${canUpdate ? "" : "disabled"}`}>
+                  <span><Trans>Create folder</Trans></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-rename-folder" className="separator-after ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  onClick={this.handleRenameFolderItemClickEvent}
+                  className={`${canUpdate ? "" : "disabled"}`}>
+                  <span><Trans>Rename</Trans></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-share-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  onClick={this.handleShareFolderItemClickEvent}
+                  className={`${canShare ? "" : "disabled"}`}>
+                  <span><Trans>Share</Trans></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-export-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  className={`${canExport ? "" : "disabled"}`}
                   onClick={this.handleExportFolderItemClickEvent}>
                   <span><Trans>Export</Trans></span>
                 </a>
@@ -204,11 +216,15 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-delete-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
+        <li key="option-delete-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleDeleteFolderItemClickEvent}><span><Trans>Delete</Trans></span></a>
+                <a
+                  onClick={this.handleDeleteFolderItemClickEvent}
+                  className={`${canUpdate ? "" : "disabled"}`}>
+                  <span><Trans>Delete</Trans></span>
+                </a>
               </div>
             </div>
           </div>
