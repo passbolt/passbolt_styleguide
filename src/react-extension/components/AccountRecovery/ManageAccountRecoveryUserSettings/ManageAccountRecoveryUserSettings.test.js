@@ -107,7 +107,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
     expect(page.rejectCheckbox.checked).toBeTruthy();
 
     await page.clickOnSave();
-    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.user.save-account-recovery-settings", {status: 'rejected'}, null);
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-user-settings", {status: 'rejected'});
     expect(props.accountRecoveryContext.setUserAccountRecoveryStatus).toHaveBeenCalledWith('rejected');
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery subscription setting has been updated.');
     expect(props.onClose).toHaveBeenCalledTimes(1);

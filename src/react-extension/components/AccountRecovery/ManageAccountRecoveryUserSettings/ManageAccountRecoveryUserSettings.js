@@ -83,11 +83,7 @@ class ManageAccountRecoveryUserSettings extends Component {
     this.toggleProcessing();
     const accountRecoveryUserSettingDto = {status: this.state.status};
     try {
-      const currentPolicyDto = this.state.status === "approved"
-        ? (await this.props.context.port.request("passbolt.account-recovery.get-organization-policy")).account_recovery_organization_public_key
-        : null;
-
-      await this.props.context.port.request("passbolt.user.save-account-recovery-settings", accountRecoveryUserSettingDto, currentPolicyDto);
+      await this.props.context.port.request("passbolt.account-recovery.save-user-settings", accountRecoveryUserSettingDto);
       this.props.accountRecoveryContext.setUserAccountRecoveryStatus(this.state.status);
       this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
       this.props.onClose();
