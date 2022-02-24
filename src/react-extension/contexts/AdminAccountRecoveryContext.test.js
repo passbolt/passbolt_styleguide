@@ -74,7 +74,7 @@ describe("AdminAccountRecovery Context", () => {
       expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);
       expect(adminAccountRecoveryContext.state.hasChanged).toBeTruthy();
       await adminAccountRecoveryContext.confirmSaveRequested();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-settings", newPolicy, currentPolicy, privateGpgKeyDto);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-policy", newPolicy, privateGpgKeyDto);
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(newPolicy);
       expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
     });
@@ -126,7 +126,7 @@ describe("AdminAccountRecovery Context", () => {
       expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);
       expect(adminAccountRecoveryContext.state.hasChanged).toBeTruthy();
       await adminAccountRecoveryContext.save();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-settings", newPolicy, currentPolicy, privateGpgKeyDto);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-policy", newPolicy, privateGpgKeyDto);
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(newPolicy);
       expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
     });
