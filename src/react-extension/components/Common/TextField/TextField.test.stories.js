@@ -12,7 +12,6 @@
  * @since         3.7.0
  */
 import React from "react";
-import {Trans} from "react-i18next";
 import Icon from "../Icons/Icon";
 
 export default {
@@ -75,6 +74,19 @@ const Template = () =>
         <div className="help-message">Help message</div>
       </div>
     </div>
+    <span style={{width: "100%", marginBottom: ".5rem"}}>In field number</span>
+    <div style={{width: "24%", marginRight: "1%"}}>
+        <input className="in-field" type="number" defaultValue={389} required="required" disabled={false}/>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <input className="in-field" type="number" defaultValue={389} required="required" disabled={true}/>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <input type="number" defaultValue={389} required="required" disabled={false}/>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <input type="number" defaultValue={389} required="required" disabled={true}/>
+    </div>
     <span style={{width: "100%", marginBottom: ".5rem"}}>Import file field</span>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input file required">
@@ -131,7 +143,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea">
         <label htmlFor="textarea1">
-          <Trans>Description</Trans>
+          Description
           <Icon name="lock"/>
         </label>
         <textarea id="textarea1" placeholder="Add a description" disabled={false}/>
@@ -140,7 +152,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea">
         <label htmlFor="textarea2">
-          <Trans>Description</Trans>
+          Description
           <Icon name="lock"/>
         </label>
         <textarea id="textarea2" placeholder="Add a description" disabled={false}/>
@@ -150,7 +162,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea">
         <label htmlFor="textarea3">
-          <Trans>Description</Trans>
+          Description
           <Icon name="lock"/>
         </label>
         <textarea id="textarea3" placeholder="Add a description" defaultValue="Value" disabled={true}/>
@@ -159,7 +171,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea">
         <label htmlFor="textarea4">
-          <Trans>Description</Trans>
+          Description
           <Icon name="lock"/>
         </label>
         <textarea id="textarea4" placeholder="Add a description" disabled={true}/>
@@ -169,7 +181,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea required">
         <label htmlFor="textarea5">
-          <Trans>Label</Trans>
+          Label
         </label>
         <textarea id="textarea5" placeholder="Placeholder" disabled={false}/>
       </div>
@@ -177,7 +189,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea required error">
         <label htmlFor="textarea6">
-          <Trans>Label</Trans>
+          Label
         </label>
         <textarea id="textarea6" placeholder="Placeholder" disabled={false}/>
         <div className="error-message">Error message</div>
@@ -186,7 +198,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea required">
         <label htmlFor="textarea7">
-          <Trans>Label</Trans>
+          Label
         </label>
         <textarea id="textarea7" placeholder="Placeholder" defaultValue="Value" disabled={true}/>
       </div>
@@ -194,7 +206,7 @@ const Template = () =>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input textarea required">
         <label htmlFor="textarea8">
-          <Trans>Label</Trans>
+          Label
         </label>
         <textarea id="textarea8" placeholder="Placeholder" disabled={true}/>
       </div>

@@ -48,7 +48,7 @@ textarea {
     // Disabled fields.
     &:disabled {
       cursor: default;
-      box-shadow: 0 0 0 .1rem @input-border;
+      box-shadow: inset 0 0 0 .1rem @input-border;
       opacity: .5;
     }
 }
@@ -63,7 +63,41 @@ textarea {
 }
 
 input[type=number] {
-  box-sizing: border-box;
+  width: 4.2rem;
+  padding: .5rem .8rem;
+  border-radius: .1rem;
+  -moz-appearance: textfield; // Remove arrows for Firefox
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none; // Remove arrows for Chrome, Safari, Edge, Opera
+    margin: 0;
+  }
+
+  &.in-field {
+    background: @input-infield-background;
+    box-shadow: inset 0 0 0 .1rem @input-infield-border;
+
+    // Fields hover
+    &:hover {
+      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-infield-border;
+    }
+
+    // Fields focus
+    &:focus {
+      box-shadow: 0 0 .4rem @shadow-focus, 0 0 0 .1rem @input-infield-border;
+    }
+
+    // Fields pressed
+    &:active {
+      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-infield-border;
+    }
+
+    // Disabled fields.
+    &:disabled {
+      box-shadow: inset 0 0 0 .1rem @input-infield-border;
+    }
+  }
 }
 
 /*
