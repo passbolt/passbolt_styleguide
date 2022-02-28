@@ -1154,6 +1154,13 @@ class Icon extends Component {
           </svg>
         }
 
+        {this.props.name === 'spinner' &&
+          <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7" cy="7" r="7" transform="translate(1 1)" fill="none" stroke="var(--spinner-background)" strokeWidth="var(--spinner-stroke-width)"/>
+            <ellipse id="loading" rx="7" ry="7" transform="translate(8 8)" fill="none" stroke="var(--spinner-color)" strokeWidth="var(--spinner-stroke-width)" strokeLinecap="round"/>
+          </svg>
+        }
+
       </span>
     );
   }

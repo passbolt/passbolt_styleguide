@@ -22,6 +22,39 @@
         --icon-favorites-color: @icon-unfavorite-color;
     }
 
+    &.failed {
+        --icon-failed-color: @icon-failed-color;
+    }
+
+    &.success {
+        --icon-success-color: @icon-success-color;
+    }
+
+    &.spinner {
+      --spinner-color: @spinner-color;
+      --spinner-background: rgba(@spinner-background, 0.25);
+      --spinner-stroke-width: .15rem;
+
+      #loading {
+        animation: spin 2s linear forwards infinite;
+        stroke-dashoffset: 43.95;
+        stroke-dasharray: 43.98;
+      }
+      @keyframes spin {
+        0% {
+          stroke-dashoffset: 43.95;
+          animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
+        }
+        50% {
+          stroke-dashoffset: 0;
+          animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
+        }
+        100% {
+          stroke-dashoffset: -43.9;
+        }
+      }
+    }
+
     &.baseline svg {
         .svg-baseline();
     }

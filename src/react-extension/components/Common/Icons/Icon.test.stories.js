@@ -107,6 +107,7 @@ const iconsNames = [
   'plug',
   'server',
   'share-2',
+  'spinner'
 ];
 
 const Template = () =>
@@ -115,8 +116,19 @@ const Template = () =>
       {iconsNames.map(iconName =>
         <div key={iconName} style={{marginTop: "1rem"}}>
           <div style={{fontSize: "1rem", marginBottom: "1rem"}}>{iconName}</div>
-          <Icon name={iconName} big={true} />
-        </div>)}
+          <Icon name={iconName} />
+        </div>)
+      }
+    </div>
+    <div style={{marginTop: "5rem"}}>
+      <div style={{display: "inline-block"}}>
+        <div style={{fontSize: "1rem", marginRight: "20rem"}}>success</div>
+        <Icon name="success" />
+      </div>
+      <div style={{display: "inline-block"}}>
+        <div style={{fontSize: "1rem"}}>failed</div>
+        <Icon name="failed" />
+      </div>
     </div>
   </React.Fragment>;
 
