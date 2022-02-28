@@ -47,6 +47,8 @@
 @grey-dark: @midgar-4;
 @spanish-gray: #989693;
 @gray: #808080;
+@arsenic: #424242;
+@eerie-black: #1E1E1E;
 
 /* background */
 @background-default: @midgar-3;
@@ -98,20 +100,11 @@
 /* buttons */
 @button-text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
 @button-primary-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-.button-background() {
-    background: @midgar-5;
-    background-image: linear-gradient(top, @midgar-5, @midgar-5);
-}
-.button-hover-background() {
-    background: @background-lightest;
-    background-image: linear-gradient(top, @midgar-6, @midgar-6);
-}
 
-@button-border: @border-input;
-@button-border-bottom: @button-border;
-@button-border-top: @button-border;
-@button-border-left: @button-border;
-@button-border-right: @button-border;
+@button-background: @arsenic;
+@button-active-background: @raisin-black;
+@button-border: @eerie-black;
+@button-focus-border: @blue;
 
 @button-primary-background: @blue;
 @button-primary-border: @blue;
