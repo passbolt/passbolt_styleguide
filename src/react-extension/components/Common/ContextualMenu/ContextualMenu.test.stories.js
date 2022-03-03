@@ -23,7 +23,7 @@ export default {
 
 const Template = () =>
   <ContextualMenuWrapper hide={() => {}}>
-    <li key="option-username-resource" className="ready">
+    <li key="option-username-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -32,7 +32,7 @@ const Template = () =>
         </div>
       </div>
     </li>
-    <li key="option-copy-password-resource" className="ready">
+    <li key="option-copy-password-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -41,7 +41,7 @@ const Template = () =>
         </div>
       </div>
     </li>
-    <li key="option-copy-uri-resource" className="ready">
+    <li key="option-copy-uri-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -50,7 +50,7 @@ const Template = () =>
         </div>
       </div>
     </li>
-    <li key="option-permalink-resource" className="ready">
+    <li key="option-permalink-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -68,7 +68,7 @@ const Template = () =>
         </div>
       </div>
     </li>
-    <li key="option-edit-resource" className="ready">
+    <li key="option-edit-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -77,7 +77,7 @@ const Template = () =>
         </div>
       </div>
     </li>
-    <li key="option-share-resource" className="ready">
+    <li key="option-share-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -86,7 +86,7 @@ const Template = () =>
         </div>
       </div>
     </li>
-    <li key="option-delete-resource" className="ready">
+    <li key="option-delete-resource">
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
@@ -95,7 +95,6 @@ const Template = () =>
         </div>
       </div>
     </li>
-  </ContextualMenuWrapper>
-  ;
+  </ContextualMenuWrapper>;
 
 export const Default = Template.bind({});

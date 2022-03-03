@@ -13,7 +13,8 @@ export function defaultAppContext(appContext) {
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: {
       canIUse: () => true
-    }
+    },
+    setContext: () => jest.fn()
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -28,6 +29,7 @@ export function defaultPropsOneResourceOwned() {
       selectedResources: [resourcesMock[0]],
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn()
     }
   };
 }
@@ -42,6 +44,7 @@ export function defaultPropsOneResourceNotOwned() {
       selectedResources: [resourcesMock[1]],
       lockDisplayDetail: false,
       onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn()
     }
   };
 }
@@ -56,6 +59,7 @@ export function defaultPropsNoResource() {
       selectedResources: [],
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn()
     }
   };
 }
@@ -70,6 +74,7 @@ export function defaultPropsMultipleResource() {
       selectedResources: resourcesMock,
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn()
     }
   };
 }
@@ -85,6 +90,7 @@ export function defaultPropsMultipleResourceUpdateRights() {
       selectedResources,
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn()
     }
   };
 }
