@@ -28,24 +28,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
-    this.createRefs();
     this.bindCallbacks();
-  }
-
-  /**
-   * Return default state
-   * @returns {Object} default state
-   */
-  getDefaultState() {
-    return {};
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.elementRef = React.createRef();
   }
 
   /**
@@ -111,7 +94,8 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
       <ContextualMenuWrapper
         hide={this.props.hide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className={this.props.className}>
         <li key="option-create-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -145,6 +129,7 @@ FilterResourcesByRootFolderContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   t: PropTypes.func, // The translation function

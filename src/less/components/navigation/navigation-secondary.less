@@ -21,7 +21,7 @@
         width: 100%;
         box-sizing: border-box;
 
-        &:hover {
+        &:hover, &.highlight {
             background: @background-lightest;
         }
         &.no-hover:hover {
@@ -37,11 +37,12 @@
               fixed right-cell
         */
         .main-cell-wrapper {
-            float: left;
-            width: 100%;
+            display: flex;
+            align-items: center;
         }
         .main-cell {
-            margin: 0 1.5em 0 0; // no left cell = no margin left
+            flex: 1;
+            width: 80%;
 
             h3 {
                 border: 0;
@@ -85,58 +86,54 @@
         */
         .right-cell {
             float: right;
-            width: 1em;
-            height: 1em;
-            margin-right: 1em;
-            margin-top: -1.5em;
+            margin-right: .5rem;
 
             a {
                 display:none;
-                width: 1em;
-                height: 1em;
-                padding: .125em;
+                padding: .8rem;
                 color:@font-light;
-                border:1px solid transparent;
+                box-shadow: none;
+                border: none;
+                background: none;
 
-                .svg-icon {
-                  position:absolute;
-                  width:16px;
-                  height:16px;
-                  line-height: 16px;
-                  text-align: center;
-                  vertical-align: center;
+                // dropdown open
+                &.open {
+                    display: flex;
+                    align-items: center;
+                    z-index: 999;
+                    background: @button-background;
+                    box-shadow: inset .1rem 0 0 0 @button-border, inset -.1rem 0 0 0 @button-border, inset 0 .1rem 0 0 @button-border;
 
-                  svg {
-                    fill: @grey-darker;
                     &:hover {
-                      fill: @font-focus;
+                      box-shadow: inset .1rem 0 0 0 @button-border, inset -.1rem 0 0 0 @button-border, inset 0 .1rem 0 0 @button-border;
                     }
-                  }
                 }
-            }
 
-            a:hover {
-                color:@font-focus;
-                background:@background-default;
-            }
-        }
+                // hover
+                &:hover {
+                    color: @font-focus;
+                    background: @button-background;
+                    box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
+                }
 
-        /* title cell is higher than normal cell
-           this centers the right cell vertically accordingly
-         */
-        &.title {
-            .right-cell {
-                margin-top: -1.825em;
+                // focus
+                &:focus {
+                    box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
+                }
+
+                // pressed
+                &:active {
+                    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+                }
             }
         }
     }
 
     .row:hover {
-        background: @background-lightest;
-
         .right-cell {
             a {
-                display:block;
+                display: flex;
+                align-items: center;
             }
         }
     }

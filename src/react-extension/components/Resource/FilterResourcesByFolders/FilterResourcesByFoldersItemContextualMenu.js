@@ -163,7 +163,8 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
       <ContextualMenuWrapper
         hide={this.props.hide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className={this.props.className}>
         <li key="option-create-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -240,6 +241,7 @@ FilterResourcesByFoldersItemContextualMenu.propTypes = {
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
   t: PropTypes.func, // The translation function

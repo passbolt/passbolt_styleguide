@@ -49,6 +49,7 @@ class FilterResourcesByFolders extends React.Component {
       draggingOverTitle: false,
       draggingOverTitleSince: null,
       open: true,
+      moreMenuOpen: false
     };
   }
 
@@ -65,18 +66,84 @@ class FilterResourcesByFolders extends React.Component {
   createElementsRef() {
     this.listElement = React.createRef();
     this.titleElementRef = React.createRef();
+    this.moreMenuRef = React.createRef();
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
+    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
+    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
+    this.handleDocumentScrollEvent = this.handleDocumentScrollEvent.bind(this);
+    this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleClickOnTitle = this.handleClickOnTitle.bind(this);
     this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
     this.handleDragLeaveTitle = this.handleDragLeaveTitle.bind(this);
     this.handleDragOverTitle = this.handleDragOverTitle.bind(this);
     this.handleDropTitle = this.handleDropTitle.bind(this);
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
+  }
+
+  /**
+   * Component did mount
+   */
+  componentDidMount() {
+    document.addEventListener('click', this.handleDocumentClickEvent);
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
+    document.addEventListener('scroll', this.handleDocumentScrollEvent, true);
+  }
+
+  /**
+   * Component will unmount
+   */
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClickEvent);
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
+    document.removeEventListener('scroll', this.handleDocumentScrollEvent, true);
+  }
+
+  /**
+   * Handle click events on document. Hide the component if the click occurred outside of the component.
+   * @param {ReactEvent} event The event
+   */
+  handleDocumentClickEvent(event) {
+    // Prevent closing when the user click on an element of the menu
+    if (this.moreMenuRef.current.contains(event.target)) {
+      return;
+    }
+    this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
+   */
+  handleDocumentContextualMenuEvent() {
+    this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Handle drag start event on document. Hide the component if any.
+   */
+  handleDocumentDragStartEvent() {
+    this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Handle scroll event on document. Hide the component if any.
+   */
+  handleDocumentScrollEvent() {
+    this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Close the create menu
+   */
+  handleCloseMoreMenu() {
+    this.setState({moreMenuOpen: false});
   }
 
   /**
@@ -106,10 +173,13 @@ class FilterResourcesByFolders extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleTitleMoreClickEvent(event) {
-    const top = event.pageY;
-    const left = event.pageX;
-    const contextualMenuProps = {left, top};
-    this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
+    const moreMenuOpen = !this.state.moreMenuOpen;
+    this.setState({moreMenuOpen});
+    if (moreMenuOpen) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const contextualMenuProps = {left, top: top + 18, className: "right"};
+      this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
+    }
   }
 
   /**
@@ -316,7 +386,7 @@ class FilterResourcesByFolders extends React.Component {
       <div className="navigation-secondary-tree navigation-secondary navigation-folders accordion">
         <div className="accordion-header">
           <div className={`${isOpen ? "open" : "close"} node root`}>
-            <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""}`}>
+            <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""} ${this.state.moreMenuOpen ? "highlight" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <h3>
@@ -342,8 +412,10 @@ class FilterResourcesByFolders extends React.Component {
                     </span>
                   </h3>
                 </div>
-                <div className="right-cell more-ctrl">
-                  <a onClick={this.handleTitleMoreClickEvent}><Icon name="plus-square"/></a>
+                <div className="dropdown right-cell more-ctrl" ref={this.moreMenuRef}>
+                  <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                    <Icon name="3-dots-h"/>
+                  </a>
                 </div>
               </div>
             </div>

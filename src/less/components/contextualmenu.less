@@ -3,13 +3,17 @@
     background: @dropdown-background;
     border: 1px solid @border-default;
     filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
-    border-radius: 4px;
+    border-radius: .4rem;
     z-index: 993;
     display: none;
     padding: .8rem 0;
     font-weight: 600;
     font-size: 1.5rem;
     line-height: 2rem;
+
+    &.right {
+      border-radius: 0 .4rem .4rem .4rem;
+    }
 
     // Separator of contextual menu item
     .separator-before {

@@ -22,80 +22,80 @@ export default {
 
 
 const Template = () =>
-    <ContextualMenuWrapper hide={() => {}}>
-      <li key="option-username-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="username"><span><Trans>Copy username</Trans></span></a>
-            </div>
+  <ContextualMenuWrapper hide={() => {}}>
+    <li key="option-username-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="username"><span><Trans>Copy username</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-copy-password-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="password"><span><Trans>Copy password</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-copy-password-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="password"><span><Trans>Copy password</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-copy-uri-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="username"><span><Trans>Copy URI</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-copy-uri-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="username"><span><Trans>Copy URI</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-permalink-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="permalink"><span><Trans>Copy permalink</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-permalink-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="permalink"><span><Trans>Copy permalink</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-open-uri-resource" className="ready separator-after">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="permalink"><span><Trans>Open URI in a new Tab</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-open-uri-resource" className="ready separator-after">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="permalink"><span><Trans>Open URI in a new Tab</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-edit-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="edit"><span><Trans>Edit</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-edit-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="edit"><span><Trans>Edit</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-share-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="share" className="disabled"><span><Trans>Share</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-share-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="share" className="disabled"><span><Trans>Share</Trans></span></a>
           </div>
         </div>
-      </li>
-      <li key="option-delete-resource" className="ready">
-        <div className="row">
-          <div className="main-cell-wrapper">
-            <div className="main-cell">
-              <a id="delete"><span><Trans>Delete</Trans></span></a>
-            </div>
+      </div>
+    </li>
+    <li key="option-delete-resource" className="ready">
+      <div className="row">
+        <div className="main-cell-wrapper">
+          <div className="main-cell">
+            <a id="delete"><span><Trans>Delete</Trans></span></a>
           </div>
         </div>
-      </li>
-    </ContextualMenuWrapper>
+      </div>
+    </li>
+  </ContextualMenuWrapper>
   ;
 
 export const Default = Template.bind({});
