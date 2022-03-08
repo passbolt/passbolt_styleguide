@@ -76,7 +76,7 @@ export default class EditUserGroupTestPage {
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

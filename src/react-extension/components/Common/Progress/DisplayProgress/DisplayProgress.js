@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import {withAppContext} from "../../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
+import Icon from "../../Icons/Icon";
 
 class DisplayProgress extends Component {
   calculateProgress() {
@@ -66,7 +67,7 @@ class DisplayProgress extends Component {
               }
             </div>
             <div className="submit-wrapper clearfix">
-              <a className="button primary processing">&nbsp;</a>
+              <a className="button primary processing">&nbsp;<Icon name="spinner"/></a>
             </div>
           </div>
         </div>

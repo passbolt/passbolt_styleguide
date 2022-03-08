@@ -24,25 +24,61 @@ export default {
 const Template = () =>
   <div style={{display: "flex", flexWrap: "wrap"}}>
     <span style={{width: "100%"}}>Primary button</span>
-    <div style={{width: "50%", marginTop: ".5rem"}}>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button primary">Save</button>
     </div>
-    <div style={{width: "50%", marginTop: ".5rem"}}>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button primary" disabled={true}>Save</button>
     </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button type="submit" className="button primary processing">
+        Save
+        <Icon name="spinner"/>
+      </button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button type="submit" className="button primary processing" disabled={true}>
+        Save
+        <Icon name="spinner"/>
+      </button>
+    </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Danger button</span>
-    <div style={{width: "50%", marginTop: ".5rem"}}>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button warning">Delete</button>
     </div>
-    <div style={{width: "50%", marginTop: ".5rem"}}>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button warning" disabled={true}>Delete</button>
     </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button warning processing">
+        Delete
+        <Icon name="spinner"/>
+      </button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button warning processing" disabled={true}>
+        Delete
+        <Icon name="spinner"/>
+      </button>
+    </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Secondary button</span>
-    <div style={{width: "50%", marginTop: ".5rem"}}>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button" type="button">Learn More</button>
     </div>
-    <div style={{width: "50%", marginTop: ".5rem"}}>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button" disabled={true} type="button">Learn More</button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button processing" type="button">
+        Learn More
+        <Icon name="spinner"/>
+      </button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button processing disabled" type="button">
+        Learn More
+        <Icon name="spinner"/>
+      </button>
     </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Action button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>

@@ -122,14 +122,14 @@ class TagDeletePageObject {
    * Returns the save button element
    */
   get saveButton() {
-    return this._container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**
    * Returns the save button processing element
    */
   get saveButtonProcessing() {
-    return this._container.querySelector('.submit-wrapper input[type=\"submit\"].processing');
+    return this._container.querySelector('.submit-wrapper button[type=\"submit\"].processing');
   }
 
   /**

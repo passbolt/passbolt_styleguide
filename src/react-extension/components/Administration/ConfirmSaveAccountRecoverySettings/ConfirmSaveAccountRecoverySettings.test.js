@@ -54,7 +54,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       expect(page.recoveryKeyDetailsExists()).toBeFalsy();
 
       // Save button exists
-      expect(page.saveButton.value).toBe("Save");
+      expect(page.saveButton.textContent).toBe("Save");
 
       // Cancel button exists
       expect(page.cancelButton.textContent).toBe("Cancel");

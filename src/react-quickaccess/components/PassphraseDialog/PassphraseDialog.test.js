@@ -39,7 +39,7 @@ describe("PassphraseDialog", () => {
     fireEvent.change(passphraseInput, event);
 
     // Click on submit.
-    const submitButton = component.container.querySelector('input[type="submit"]');
+    const submitButton = component.container.querySelector('button[type="submit"]');
     fireEvent.click(submitButton, {button: 0});
 
     await waitFor(() => {});

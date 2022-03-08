@@ -19,8 +19,9 @@ import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
 import SecretComplexity from "../../../shared/lib/Secret/SecretComplexity";
+import Icon from "../../../react-extension/components/Common/Icons/Icon";
 
-class ResourceCreatePage extends React.Component {
+class SaveResource extends React.Component {
   constructor(props) {
     super(props);
     this.initEventHandlers();
@@ -242,8 +243,13 @@ class ResourceCreatePage extends React.Component {
           </SimpleBar>
           <div className="submit-wrapper input flex-row-end">
             <a className="cancel" role="button" onClick={this.handleClose}>{this.translate("no, thanks")}</a>
-            <input type="submit" className={`button primary big ${this.state.processing ? "processing" : ""}`} role="button"
-              value={this.translate("save")} disabled={this.state.processing} />
+            <button type="submit" className={`button primary big ${this.state.processing ? "processing" : ""}`} role="button"
+              disabled={this.state.processing}>
+              <Trans>save</Trans>
+              {this.state.processing &&
+                <Icon name="spinner"/>
+              }
+            </button>
             {this.state.error &&
             <div className="error-message">{this.state.error}</div>
             }
@@ -254,10 +260,10 @@ class ResourceCreatePage extends React.Component {
   }
 }
 
-ResourceCreatePage.propTypes = {
+SaveResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(ResourceCreatePage)));
+export default withAppContext(withRouter(withTranslation('common')(SaveResource)));

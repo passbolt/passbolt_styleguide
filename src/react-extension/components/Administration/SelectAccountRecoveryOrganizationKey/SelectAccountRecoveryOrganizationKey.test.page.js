@@ -103,7 +103,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
    * Get the "Apply" button
    */
   get applyButton() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper input[type="submit"]');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper button[type="submit"]');
   }
 
   /**
@@ -154,7 +154,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   get generateButton() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper input[type="submit"]');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper button[type="submit"]');
   }
 
   get generateTab() {

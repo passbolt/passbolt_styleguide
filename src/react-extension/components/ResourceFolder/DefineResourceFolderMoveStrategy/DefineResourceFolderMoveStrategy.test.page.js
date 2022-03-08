@@ -74,7 +74,7 @@ export default class DefineResourceFolderMoveStrategyPage {
    * Returns true it one can submit the create operation
    */
   get canSubmit() {
-    return !Boolean(this._page.container.querySelector('input[type="submit"].disabled')).valueOf();
+    return !Boolean(this._page.container.querySelector('button[type="submit"].disabled')).valueOf();
   }
 
   /**
@@ -90,7 +90,7 @@ export default class DefineResourceFolderMoveStrategyPage {
    * Returns the move button element
    */
   get moveButton() {
-    return this._page.container.querySelector('input[type=\"submit\"]');
+    return this._page.container.querySelector('button[type=\"submit\"]');
   }
 
 

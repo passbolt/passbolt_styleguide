@@ -13,6 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import Icon from "../../Icons/Icon";
+import {Trans, withTranslation} from "react-i18next";
 
 class FormSubmitButton extends Component {
   /**
@@ -65,11 +67,14 @@ class FormSubmitButton extends Component {
    */
   render() {
     return (
-      <input type="submit"
+      <button type="submit"
         className={this.getClassName()}
-        disabled={this.props.disabled}
-        value={this.props.value || 'Save'}
-      />
+        disabled={this.props.disabled}>
+        {this.props.value || <Trans>Save</Trans>}
+        {this.props.processing &&
+          <Icon name="spinner"/>
+        }
+      </button>
     );
   }
 }
@@ -88,4 +93,4 @@ FormSubmitButton.propTypes = {
   fullWidth: PropTypes.bool
 };
 
-export default FormSubmitButton;
+export default withTranslation('common')(FormSubmitButton);

@@ -166,7 +166,12 @@ class LoginPage extends React.Component {
               }
             </div>
             <div className="submit-wrapper">
-              <input type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button" value={this.translate('login')} disabled={this.state.processing} />
+              <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button" disabled={this.state.processing}>
+                <Trans>login</Trans>
+                {this.state.processing &&
+                  <Icon name="spinner"/>
+                }
+              </button>
             </div>
           </form>
         </div>

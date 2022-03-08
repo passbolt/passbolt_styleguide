@@ -69,7 +69,7 @@ export default class ExportResourcesPage {
    * Returns the save button element
    */
   get exportButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

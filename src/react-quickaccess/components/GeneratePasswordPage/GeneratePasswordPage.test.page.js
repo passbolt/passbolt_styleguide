@@ -100,14 +100,14 @@ export default class GeneratePasswordTestPage {
    * Returns true it one can submit the apply operation
    */
   get canSubmit() {
-    return this._page.container.querySelector('input[type="submit"]').getAttribute('disabled') !== '';
+    return this._page.container.querySelector('button[type="submit"]').getAttribute('disabled') !== '';
   }
 
   /**
    * Returns the apply button element
    */
   get applyButton() {
-    return this._page.container.querySelector('input[type=\"submit\"]');
+    return this._page.container.querySelector('button[type=\"submit\"]');
   }
 
   /**

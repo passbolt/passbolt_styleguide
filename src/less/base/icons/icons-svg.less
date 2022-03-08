@@ -36,21 +36,22 @@
       --spinner-stroke-width: .15rem;
 
       #loading {
-        animation: spin 2s linear forwards infinite;
-        stroke-dashoffset: 43.95;
-        stroke-dasharray: 43.98;
-      }
-      @keyframes spin {
-        0% {
-          stroke-dashoffset: 43.95;
-          animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
-        }
-        50% {
-          stroke-dashoffset: 0;
-          animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
-        }
-        100% {
-          stroke-dashoffset: -43.9;
+        animation: spin 2s forwards infinite;
+        stroke-dashoffset: 50.25;
+        stroke-dasharray: 50.27;
+
+        @keyframes spin {
+          0% {
+            stroke-dashoffset: 50.25;
+            animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
+          }
+          50% {
+            stroke-dashoffset: 0;
+            animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
+          }
+          100% {
+            stroke-dashoffset: -50.25;
+          }
         }
       }
     }

@@ -8,6 +8,7 @@ import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {SecretGeneratorComplexity} from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
+import Icon from "../../../react-extension/components/Common/Icons/Icon";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {
@@ -427,8 +428,13 @@ class ResourceCreatePage extends React.Component {
             </div>
           </SimpleBar>
           <div className="submit-wrapper input">
-            <input type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
-              value={this.translate("save")} disabled={this.state.processing} />
+            <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
+              disabled={this.state.processing}>
+              <Trans>save</Trans>
+              {this.state.processing &&
+                <Icon name="spinner"/>
+              }
+            </button>
             {this.state.error &&
             <div className="error-message">{this.state.error}</div>
             }

@@ -65,7 +65,7 @@ export default class ConfirmPassphrasePage {
    * Returns the verify button element
    */
   get verifyButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

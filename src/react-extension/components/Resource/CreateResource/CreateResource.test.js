@@ -85,7 +85,7 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.description.value).toBe("");
 
       // Save button exists
-      expect(page.passwordCreate.saveButton.value).toBe("Create");
+      expect(page.passwordCreate.saveButton.textContent).toBe("Create");
 
       // Cancel button exists
       expect(page.passwordCreate.cancelButton.textContent).toBe("Cancel");

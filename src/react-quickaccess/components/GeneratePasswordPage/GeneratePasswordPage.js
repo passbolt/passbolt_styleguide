@@ -10,6 +10,7 @@ import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerat
 import {SecretGeneratorComplexity} from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
+import Icon from "../../../react-extension/components/Common/Icons/Icon";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
@@ -280,12 +281,16 @@ class GeneratePasswordPage extends React.Component {
               }
             </div>
             <div className="submit-wrapper input">
-              <input
+              <button
                 type="submit"
                 className={`button primary big full-width ${this.state.processing ? 'processing' : ''}`}
                 role="button"
-                disabled={this.state.processing || this.isPasswordEmpty()}
-                value={this.translate("Apply")} />
+                disabled={this.state.processing || this.isPasswordEmpty()}>
+                <Trans>Apply</Trans>
+                {this.state.processing &&
+                  <Icon name="spinner"/>
+                }
+              </button>
             </div>
           </form>
         </div>

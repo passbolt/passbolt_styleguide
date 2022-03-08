@@ -72,7 +72,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupWithConflictsDialog.closeButton).not.toBeNull();
       // submit button
       expect(page.displayDeleteGroupWithConflictsDialog.saveButton).not.toBeNull();
-      expect(page.displayDeleteGroupWithConflictsDialog.saveButton.value).toBe('Delete');
+      expect(page.displayDeleteGroupWithConflictsDialog.saveButton.textContent).toBe('Delete');
       // cancel button
       expect(page.displayDeleteGroupWithConflictsDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteGroupWithConflictsDialog.cancelButton.textContent).toBe('Cancel');

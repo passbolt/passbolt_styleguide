@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../../react-extension/components/Common/Icons/Icon";
 
 class PassphraseDialog extends React.Component {
 
@@ -173,8 +174,13 @@ class PassphraseDialog extends React.Component {
               </div>
             </div>
             <div className="submit-wrapper">
-              <input type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
-                value="submit" disabled={this.state.processing} />
+              <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
+                disabled={this.state.processing}>
+                <Trans>submit</Trans>
+                {this.state.processing &&
+                  <Icon name="spinner"/>
+                }
+              </button>
             </div>
           </form>
         }

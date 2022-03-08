@@ -96,7 +96,7 @@ export default class ImportResourcesPage {
    * Returns the save button element
    */
   get saveButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

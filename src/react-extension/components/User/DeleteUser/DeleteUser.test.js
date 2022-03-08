@@ -58,7 +58,7 @@ describe("See Delete User Dialog", () => {
       expect(page.displayDeleteUserDialog.closeButton).not.toBeNull();
       // submit button
       expect(page.displayDeleteUserDialog.saveButton).not.toBeNull();
-      expect(page.displayDeleteUserDialog.saveButton.value).toBe('Delete');
+      expect(page.displayDeleteUserDialog.saveButton.textContent).toBe('Delete');
       // cancel button
       expect(page.displayDeleteUserDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteUserDialog.cancelButton.textContent).toBe('Cancel');

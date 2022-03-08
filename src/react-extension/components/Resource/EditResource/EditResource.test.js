@@ -84,7 +84,7 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.description.value).toBe(mockResource.description);
 
       // Save button exists
-      expect(page.passwordEdit.saveButton.value).toBe("Save");
+      expect(page.passwordEdit.saveButton.textContent).toBe("Save");
 
       // Cancel button exists
       expect(page.passwordEdit.cancelButton.textContent).toBe("Cancel");
