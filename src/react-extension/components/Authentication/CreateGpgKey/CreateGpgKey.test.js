@@ -30,7 +30,7 @@ describe("CreateGpgKey", () => {
     {displayAs: CreateGpgKeyVariation.SETUP}, // Create a gpg key for the setup workflow
     {displayAs: CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY}, // Create a gpg key for the account recovery workflow
   ]).describe("Common behavior to all context", _props => {
-    it.only(`As AN I should be able to enter a passphrase, scenario: ${JSON.stringify(_props)}`, async() => {
+    it(`As AN I should be able to enter a passphrase, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -182,7 +182,7 @@ describe("CreateGpgKey", () => {
       const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
       const page = new CreateGpgKeyPage(props);
 
-      expect.assert(1);
+      expect.assertions(1);
       expect(page.title).toBe("Welcome to Passbolt, please select a passphrase!");
     });
 
@@ -202,8 +202,8 @@ describe("CreateGpgKey", () => {
       const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
       const page = new CreateGpgKeyPage(props);
 
-      expect.assert(1);
-      expect(page.title).toBe("Choose a new passphrase.");
+      expect.assertions(1);
+      expect(page.title).toBe("Welcome to Passbolt, please select a passphrase!");
     });
   });
 });
