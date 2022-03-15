@@ -18,23 +18,15 @@ import {withAppContext} from "./AppContext";
 
 export const AdminAccountRecoveryContext = React.createContext({
   currentPolicy: null, // The current policy
-  newPolicy: null, // The new policy
-  hasChanged: false, // If the policy has changed
-  step: null, // Step for the save process
-  findAccountRecoveryPolicy: () => {
-  }, // Whenever the account recovery policy is requested
-  changePolicy: () => {
-  }, // Whenever the policy has changed
-  resetPolicy: () => {
-  }, // Whenever the policy needs to be reset
-  initiateSaveRequested: () => {
-  }, // Whenever the initialization of the save is requested
-  confirmSaveRequested: () => {
-  }, // Whenever the confirmation of save is requested
-  save: () => {
-  }, // Whenever the save is requested
-  cancelSaveOperation: () => {
-  }
+  policyChanges: {}, // The policy changes
+  findAccountRecoveryPolicy: () => {}, // Find the current policy and store it in the state
+  getKeyInfo: () => {}, // Request an amored key info
+  changePolicy: () => {}, // Change the policy type
+  changePublicKey: () => {}, // Change the policy public key
+  hasPolicyChanges: () => {}, // Check if the policy has changes
+  resetChanges: () => {}, // Reset the changes made on the policy
+  downloadPrivateKey: () => {}, // Download the generated new policy private key
+  save: () => {}, // Save the policy changes
 });
 
 /**
@@ -56,120 +48,125 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
   get defaultState() {
     return {
       currentPolicy: null, // The current policy
-      newPolicy: null, // The new policy
-      currentKeyDetail: null, // The details of the current key
-      newKeyDetail: null, // The details of the new key
-      hasChanged: false, // If the policy has changed
-      step: AdminAccountRecoveryContextStep.INITIAL_STATE, // Step for the save process
-      findAccountRecoveryPolicy: this.findAccountRecoveryPolicy.bind(this), // Whenever the account recovery policy is requested
-      changePolicy: this.changePolicy.bind(this), // Whenever the policy has changed
-      resetPolicy: this.resetPolicy.bind(this), // Whenever the policy needs to be reset
-      initiateSaveRequested: this.initiateSaveRequested.bind(this), // Whenever the initialization of the save is requested
-      confirmSaveRequested: this.confirmSaveRequested.bind(this), // Whenever the confirmation of save is requested
-      save: this.save.bind(this), // Whenever the save is requested
-      cancelSaveOperation: this.cancelSaveOperation.bind(this), // Whenever the save process is canceled before reaching the final state
+      policyChanges: {}, // The policy changes
+      findAccountRecoveryPolicy: this.findAccountRecoveryPolicy.bind(this), // Find the current policy and store it in the state
+      getKeyInfo: this.getKeyInfo.bind(this), // Request an amored key info
+      changePolicy: this.changePolicy.bind(this), // Change the policy type
+      changePublicKey: this.changePublicKey.bind(this), // Change the policy public key
+      hasPolicyChanges: this.hasPolicyChanges.bind(this), // Check if the policy has changes
+      resetChanges: this.resetChanges.bind(this), // Reset the changes made on the policy
+      downloadPrivateKey: this.downloadPrivateKey.bind(this), // Download the generated new policy private key
+      save: this.save.bind(this), // Save the policy changes
     };
   }
 
   /**
    * Find the account recovery policy
+   * @return {Promise<void>}
    */
   async findAccountRecoveryPolicy() {
     const currentPolicy = await this.props.context.port.request("passbolt.account-recovery.get-organization-policy");
-    let currentKeyDetail = null;
-    if (currentPolicy.policy !== "disabled") {
-      currentKeyDetail = await this.getKeyDetail(currentPolicy.account_recovery_organization_public_key);
-    }
-    await this.setState({currentPolicy, currentKeyDetail, newPolicy: currentPolicy, newKeyDetail: currentKeyDetail});
+    await this.setState({currentPolicy});
   }
 
   /**
    * Change the policy
-   *
-   * @param newPolicy
+   * @param {string} policy The new policy. Any of: mandatory, opt-out, opt-in, disable.
+   * @return {Promise<void>}
    */
-  async changePolicy(newPolicy) {
-    const hasChanged = this.checkDiffBetweenPolicy(this.state.currentPolicy, newPolicy);
-    const newKeyDetail = newPolicy.policy !== "disabled" && await this.getKeyDetail(newPolicy.account_recovery_organization_public_key);
-    this.setState({newPolicy, hasChanged, newKeyDetail});
+  async changePolicy(policy) {
+    const policyChanges = this.state.policyChanges;
+
+    // If same policy than the current one, remove it from the changes if any.
+    if (policy === this.state.currentPolicy?.policy) {
+      delete policyChanges.policy;
+    } else {
+      policyChanges.policy = policy;
+    }
+
+    // If disabled policy, remove any public key change from the changes.
+    if (policy === "disabled") {
+      delete policyChanges.publicKey;
+    }
+
+    await this.setState({policyChanges});
   }
 
   /**
-   * Return the details of a given key
-   * @param {object} organizationKey The account recovery organization key
-   * @returns {object}
+   * Change the public key
+   * @param {string} publicKey The new public key in armored format.
+   * @returns {Promise<void>}
    */
-  async getKeyDetail(organizationKey) {
-    if (!organizationKey) {
+  async changePublicKey(publicKey) {
+    const policyChanges = {...this.state.policyChanges, publicKey};
+    await this.setState({policyChanges});
+  }
+
+  /**
+   * Check if there are changes to apply
+   * @returns {Boolean}
+   */
+  hasPolicyChanges() {
+    return Boolean(this.state.policyChanges?.publicKey)
+      || Boolean(this.state.policyChanges?.policy);
+  }
+
+  /**
+   * Get the key info.
+   * @param {object} armoredKey The account recovery organization key
+   * @returns {Promise<object>} The key info dto
+   */
+  async getKeyInfo(armoredKey) {
+    if (!armoredKey) {
       return null;
     }
 
-    return await this.props.context.port.request('passbolt.account-recovery.get-organization-key-details', organizationKey.armored_key);
+    return this.props.context.port.request('passbolt.account-recovery.get-organization-key-info', armoredKey);
   }
 
   /**
-   * Check difference between two policies
-   * @param currentPolicy
-   * @param newPolicy
-   * @returns {boolean}
+   * Reset the policy changes
    */
-  checkDiffBetweenPolicy(currentPolicy, newPolicy) {
-    if (currentPolicy.policy !== newPolicy.policy) {
-      return true;
-    }
-
-    if (newPolicy.policy === 'disabled') {
-      return false;
-    }
-
-    return currentPolicy.account_recovery_organization_public_key !== newPolicy.account_recovery_organization_public_key;
+  async resetChanges() {
+    const policyChanges = {};
+    await this.setState({policyChanges});
   }
 
   /**
-   * Reset the policy
-   *
+   * Whenever the user wants to download the newly generated organization private key
+   * @param {string} privateKey The organization private key
+   * @returns {Promise<void>}
    */
-  async resetPolicy() {
-    const hasChanged = false;
-    await this.setState({newPolicy: this.state.currentPolicy, hasChanged});
-  }
-
-  /**
-   * Whenever the initiate save is requested
-   */
-  async initiateSaveRequested() {
-    const step = AdminAccountRecoveryContextStep.DISPLAY_SUMMARY;
-    await this.setState({step});
-  }
-
-  /**
-   * Whenever the confirm save is requested
-   */
-  async confirmSaveRequested() {
-    if (this.state.currentPolicy.account_recovery_organization_public_key) {
-      const step = AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK;
-      await this.setState({step});
-    } else {
-      await this.save();
-    }
+  async downloadPrivateKey(privateKey) {
+    await this.props.context.port.request("passbolt.account-recovery.download-organization-generated-key", privateKey);
   }
 
   /**
    * Whenever the save has been requested
+   * @param {string} privateGpgKeyDto The current organization private key
    */
   async save(privateGpgKeyDto) {
-    await this.props.context.port.request('passbolt.account-recovery.save-organization-policy', this.state.newPolicy, privateGpgKeyDto);
-    const currentPolicy = this.state.newPolicy;
-    const currentKeyDetail = this.state.newKeyDetail;
-    if (currentPolicy.policy === "disabled") {
-      currentPolicy.account_recovery_organization_public_key = null;
-    }
-    const step = AdminAccountRecoveryContextStep.INITIAL_STATE;
-    this.setState({currentPolicy, currentKeyDetail, step, hasChanged: false});
+    const policySaveDto = this.buildPolicySaveDto();
+    const currentPolicy = await this.props.context.port.request('passbolt.account-recovery.save-organization-policy', policySaveDto, privateGpgKeyDto);
+    const policyChanges = {};
+    this.setState({currentPolicy, policyChanges});
   }
 
-  cancelSaveOperation() {
-    this.setState({step: AdminAccountRecoveryContextStep.INITIAL_STATE});
+  /**
+   * Build the policy save dto.
+   * @returns {object}
+   */
+  buildPolicySaveDto() {
+    const policySaveDto = {};
+    if (this.state.policyChanges.policy) {
+      policySaveDto.policy = this.state.policyChanges.policy;
+    }
+    if (this.state.policyChanges.publicKey) {
+      policySaveDto.account_recovery_organization_public_key = {
+        armored_key: this.state.policyChanges.publicKey
+      };
+    }
+    return policySaveDto;
   }
 
   /**
@@ -209,11 +206,3 @@ export function withAdminAccountRecovery(WrappedComponent) {
   };
 }
 
-/**
- * The admin account recovery types of state
- */
-export const AdminAccountRecoveryContextStep = {
-  INITIAL_STATE: 'Initial State',
-  DISPLAY_SUMMARY: 'Display summary',
-  ENTER_CURRENT_ORK: 'Enter current ork',
-};

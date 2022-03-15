@@ -13,22 +13,15 @@
  */
 
 /**
- * Default props
- * @returns {*}
+ * Default context
+ * @param {Object} context The override
+ * @returns {object}
  */
-import {AdminAccountRecoveryContextStep} from "../../../contexts/AdminAccountRecoveryContext";
-
-export function defaultProps(step = AdminAccountRecoveryContextStep.INITIAL_STATE) {
-  return {
-    adminAccountRecoveryContext: {
-      step,
-      currentPolicy: {policy: 'disabled'},
-      newPolicy: {policy: 'mandatory'},
-      confirmSaveRequested: jest.fn(),
-      save: jest.fn()
-    },
-    dialogContext: {
-      open: jest.fn()
-    }
+export function defaultDialogContext(context = {}) {
+  const defaultContext = {
+    dialogs: [],
+    open: jest.fn(),
+    close: jest.fn()
   };
+  return Object.assign(defaultContext, context);
 }

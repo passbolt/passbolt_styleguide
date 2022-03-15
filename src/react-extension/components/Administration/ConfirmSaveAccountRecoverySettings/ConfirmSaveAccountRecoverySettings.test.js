@@ -63,19 +63,19 @@ describe("See the Confirm Save Account Recovery Settings", () => {
     it('As a logged in administrator in the administration workspace, I can preview policy and organization recovery key', async() => {
       const props = hasChangedPolicyProps();
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
-      await waitFor(() => {});
+
       // Policy label
       expect(page.accountRecoveryPolicy).toBe('Mandatory');
-      expect(page.accountRecoveryPolicyInfo).toBe("Every user is required to provide a copy of their private key and passphrase during setup.\nWarning: You should inform your users not to store personal passwords.");
+      expect(page.accountRecoveryPolicyInfo).toBe("Every user is required to provide a copy of their private key and passphrase during setup.Warning: You should inform your users not to store personal passwords.");
 
       // organization recovery key
       expect(page.recoveryKeyDetailsExists()).toBeTruthy();
       expect(page.recoveryKeyDetailsFingerprint).toBe("0C1D 1761 110D 1E33 C9006D1A 5B1B 332E D064 26D3 ");
-      expect(page.recoveryKeyDetailsAlgorithm).toBe(props.accountRecoveryPolicy.newKeyDetail.algorithm);
+      expect(page.recoveryKeyDetailsAlgorithm).toBe(props.keyInfo.algorithm);
       expect(page.recoveryKeyDetailsKeyLength).toBe("4096");
       expect(page.recoveryKeyDetailsUserIds).toBe("ada<ada@passbolt.com>betty<betty@passbolt.com>");
-      expect(page.recoveryKeyDetailsCreated).toBe(formatDate(props.accountRecoveryPolicy.newKeyDetail.created));
-      expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.accountRecoveryPolicy.newKeyDetail.expires));
+      expect(page.recoveryKeyDetailsCreated).toBe(formatDate(props.keyInfo.created));
+      expect(page.recoveryKeyDetailsExpires).toBe(formatDateTimeAgo(props.keyInfo.expires));
     });
 
     it('As a logged in administrator in the administration workspace, if the previous Account recovery settings state was "Disabled" I can save the Account recovery settings to enable my policy without entering the Organization recovery key', async() => {
@@ -94,7 +94,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.cancel();
-      expect(props.onCancel).toBeCalled();
+      expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop saving an account recovery settings by closing the dialog', async() => {
@@ -103,7 +103,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       await page.close();
-      expect(props.onCancel).toBeCalled();
+      expect(props.onClose).toBeCalled();
     });
   });
 });

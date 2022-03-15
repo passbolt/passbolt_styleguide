@@ -63,6 +63,10 @@ describe("Provide Organization Key", () => {
   it('As AD, I should be able to provide a valid ORK', async() => {
     expect.assertions(2);
     const props = defaultProps();
+
+    // Mock the background page validate organization private key request.
+    props.context.port.request = jest.fn();
+
     page = new ProvideAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
@@ -82,16 +86,21 @@ describe("Provide Organization Key", () => {
       passphrase
     };
 
+    expect(props.onSubmit).toHaveBeenCalledWith(privateGpgKeyDto);
+
     expect(props.context.port.request).toHaveBeenCalledWith(
       'passbolt.account-recovery.validate-organization-private-key',
       privateGpgKeyDto);
-
-    expect(props.onSubmit).toHaveBeenCalledWith(privateGpgKeyDto);
   });
 
   it('As AD, I should see an error message telling me that the provided ORK is not the expected one', async() => {
     expect.assertions(1);
+
     const props = defaultProps();
+
+    // Mock the background page validate organization private key request.
+    props.context.port.request = jest.fn();
+
     const expectedFingerprint = "0c1d1761110d1e33c9006d1a5b1b332ed06426d3";
 
     const error = new Error(`Faked error`);
@@ -119,6 +128,9 @@ describe("Provide Organization Key", () => {
   it('As AD, I should see an error message telling me that the password provided is not correct', async() => {
     expect.assertions(1);
     const props = defaultProps();
+
+    // Mock the background page validate organization private key request.
+    props.context.port.request = jest.fn();
 
     const error = new Error(`Faked error`);
     error.name = 'InvalidMasterPasswordError';

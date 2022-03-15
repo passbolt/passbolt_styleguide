@@ -17,80 +17,51 @@
  * @returns {*}
  */
 import {DateTime} from "luxon";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
-export function defaultProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
-    accountRecoveryPolicy: {
-      currentPolicy: {
-        policy: 'mandatory'
-      },
-      newPolicy: {
-        policy: 'opt-in'
-      },
-      currentKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      }
-    },
+/**
+ * Default props.
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export function defaultProps(props = {}) {
+  const _props = {
+    context: defaultAppContext(props?.context),
+    policy: "opt-in",
+    keyInfo: null,
     onClose: jest.fn(),
     onCancel: jest.fn(),
     onSubmit: jest.fn(),
     onError: jest.fn(),
   };
+  delete props.context; // Treated in the default
+  return Object.assign(_props, props);
 }
 
 /**
- * Has changed policy props
- * @returns {*}
+ * Has changed policy.
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function hasChangedPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
-    accountRecoveryPolicy: {
-      currentPolicy: {
-        policy: 'disabled',
-      },
-      newPolicy: {
-        policy: 'mandatory',
-        account_recovery_organization_public_key: {
-          armored_key: "faked_data"
-        }
-      },
-      newKeyDetail: {
-        user_ids: [{
-          name: "ada",
-          email: "ada@passbolt.com"
-        }, {
-          name: "betty",
-          email: "betty@passbolt.com"
-        }],
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      }
-    },
-    onClose: jest.fn(),
-    onCancel: jest.fn(),
-    onSubmit: jest.fn(),
-    onError: jest.fn(),
+export function hasChangedPolicyProps(props = {}) {
+  const _props = {
+    policy: "mandatory",
+    keyInfo: {
+      user_ids: [{
+        name: "ada",
+        email: "ada@passbolt.com"
+      }, {
+        name: "betty",
+        email: "betty@passbolt.com"
+      }],
+      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+      algorithm: "RSA",
+      length: "4096",
+      created: "2020-09-01T13:11:08+00:00",
+      expires: "Never"
+    }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
@@ -113,124 +84,69 @@ export function formatDate(date) {
 
 /**
  * Disabled policy props
- * @returns {*}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function disabledPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
-    accountRecoveryPolicy: {
-      currentPolicy: {
-        policy: 'mandatory'
-      },
-      newPolicy: {
-        policy: 'disabled'
-      },
-      currentKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      }
-    },
-    onClose: jest.fn(),
-    onCancel: jest.fn(),
-    onSubmit: jest.fn(),
-    onError: jest.fn(),
+export function disabledPolicyProps(props = {}) {
+  const _props = {
+    policy: "disabled",
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
- * Mandatory policy props
- * @returns {*}
+ * Mandatory policy props with organization key
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function mandatoryPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
-    accountRecoveryPolicy: {
-      currentPolicy: {
-        policy: 'disabled'
-      },
-      newPolicy: {
-        policy: 'mandatory'
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      }
-    },
-    onClose: jest.fn(),
-    onCancel: jest.fn(),
-    onSubmit: jest.fn(),
-    onError: jest.fn(),
+export function mandatoryPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
+    policy: "mandatory",
+    keyInfo: {
+      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+      algorithm: "RSA",
+      length: "4096",
+      created: "2020-09-01T13:11:08+00:00",
+      expires: "Never"
+    }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
- * Opt-In policy props
- * @returns {*}
+ * Opt-in policy props with organization key
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function optInPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
-    accountRecoveryPolicy: {
-      currentPolicy: {
-        policy: 'disabled'
-      },
-      newPolicy: {
-        policy: 'opt-in'
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      }
-    },
-    onClose: jest.fn(),
-    onCancel: jest.fn(),
-    onSubmit: jest.fn(),
-    onError: jest.fn(),
+export function optInPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
+    policy: "opt-in",
+    keyInfo: {
+      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+      algorithm: "RSA",
+      length: "4096",
+      created: "2020-09-01T13:11:08+00:00",
+      expires: "Never"
+    }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
- * OptOut policy props
- * @returns {*}
+ * Opt-out policy props with organization key
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function optOutPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
-    accountRecoveryPolicy: {
-      currentPolicy: {
-        policy: 'disabled'
-      },
-      newPolicy: {
-        policy: 'opt-out'
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      }
-    },
-    onClose: jest.fn(),
-    onCancel: jest.fn(),
-    onSubmit: jest.fn(),
-    onError: jest.fn(),
+export function optOutPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
+    policy: "opt-out",
+    keyInfo: {
+      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
+      algorithm: "RSA",
+      length: "4096",
+      created: "2020-09-01T13:11:08+00:00",
+      expires: "Never"
+    }
   };
+  return defaultProps(Object.assign(_props, props));
 }

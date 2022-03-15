@@ -41,6 +41,11 @@ class ManageDialogs extends React.Component {
    * Removes the index-th dialog
    */
   async close(index) {
+    const dialog = this.props.dialogContext.dialogs.find(({key}) => key === index);
+    // If a dialog callback was given as dialog props, execute it.
+    if (dialog?.DialogProps?.onClose) {
+      dialog.DialogProps.onClose();
+    }
     this.props.dialogContext.close(index);
   }
 
@@ -55,8 +60,8 @@ class ManageDialogs extends React.Component {
           this.props.dialogContext.dialogs.map(({key, Dialog, DialogProps}) =>
             <Dialog
               key={key}
-              onClose={ () => this.close(key)}
-              {...DialogProps} />)
+              {...DialogProps}
+              onClose={ () => this.close(key)} />)
         }
         {this.props.children}
       </>

@@ -12,248 +12,175 @@
  * @since         3.6.0
  */
 
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultAdminAccountRecoveryContext} from "../../../contexts/AdminAccountRecoveryContext.test.data";
+
 /**
- * Default props
- * @returns {*}
+ * Default props.
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function defaultProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function defaultProps(props = {}) {
+  const defaultProps = {
+    context: defaultAppContext(props?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn()
     },
-    adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'disabled'
-      },
-      hasChanged: false,
-      findAccountRecoveryPolicy: jest.fn(),
-      changePolicy: jest.fn(),
-    }
+    adminAccountRecoveryContext: defaultAdminAccountRecoveryContext(props?.adminAccountRecoveryContext)
   };
+  delete props.context; // Treated in the default
+  delete props.adminAccountRecoveryContext; // Treated in the default
+  return Object.assign(defaultProps, props);
 }
 
 /**
- * Has changed policy props
- * @returns {*}
+ * Has changed props.
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function hasChangedPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function hasChangedPolicyProps(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'mandatory'
-      },
-      hasChanged: true,
-      findAccountRecoveryPolicy: jest.fn(),
-      changePolicy: jest.fn(),
-    },
-    newKeyDetail: {
-      fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-      algorithm: "RSA",
-      length: "4096",
-      created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
+      hasPolicyChanges: jest.fn(() => true),
+      policyChanges: {
+        policy: "mandatory",
+        publicKey: "new-public-key"
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
- * Disabled policy props
- * @returns {*}
+ * Disabled policy props.
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function disabledPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function disabledPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'disabled'
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      },
-      hasChanged: true,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "disabled",
+        publicKey: "new-public-key"
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
  * Mandatory policy props
- * @returns {*}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function mandatoryPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function mandatoryPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'mandatory'
-      },
-      newKeyDetail: {
-        user_ids: [{
-          name: "ada",
-          email: "ada@passbolt.com"
-        }, {
-          name: "betty",
-          email: "betty@passbolt.com"
-        }],
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      },
-      hasChanged: false,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "mandatory",
+        publicKey: "new-public-key"
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
  * Opt-In policy props
- * @returns {*}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function optInPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function optInPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'opt-in'
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      },
-      hasChanged: false,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "opt-in",
+        publicKey: "new-public-key"
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
  * OptOut policy props
- * @returns {*}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function optOutPolicyPropsWithOrganisationKey() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function optOutPolicyPropsWithOrganisationKey(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'opt-out'
-      },
-      newKeyDetail: {
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-        algorithm: "RSA",
-        length: "4096",
-        created: "2020-09-01T13:11:08+00:00",
-        expires: "Never"
-      },
-      hasChanged: false,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "opt-out",
+        publicKey: "new-public-key"
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
  * Disabled policy props
- * @returns {*}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function disabledPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function disabledPolicyProps(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'disabled',
-      },
-      hasChanged: false,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "disabled",
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
  * Mandatory policy props
- * @returns {*}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function mandatoryPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function mandatoryPolicyProps(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'mandatory',
-      },
-      hasChanged: true,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "mandatory",
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
- * Opt-In policy props
- * @returns {*}
+ * Opt-in policy props
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function optInPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function optInPolicyProps(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'opt-in',
-      },
-      hasChanged: true,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "opt-in",
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
 
 /**
- * OptOut policy props
- * @returns {*}
+ * Opt-out policy props
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function optOutPolicyProps() {
-  return {
-    context: {
-      locale: 'en-UK',
-    },
+export function optOutPolicyProps(props = {}) {
+  const _props = {
     adminAccountRecoveryContext: {
-      newPolicy: {
-        policy: 'opt-out',
-      },
-      hasChanged: true,
-      findAccountRecoveryPolicy: () => {},
-      changePolicy: () => {},
+      policyChanges: {
+        policy: "opt-out",
+      }
     }
   };
+  return defaultProps(Object.assign(_props, props));
 }
+
