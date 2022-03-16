@@ -39,7 +39,6 @@ describe("ResourceCreatePage", () => {
       };
       const props = defaultProps();
 
-      jest.useFakeTimers();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
@@ -49,10 +48,14 @@ describe("ResourceCreatePage", () => {
       );
 
       // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {});
-      jest.runAllTimers();
+      await waitFor(() => {
+        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
+          throw new Error("Component didn't finish mounting yet.");
+        }
+      });
 
       // Assert the form.
+      expect.assertions(4);
       const nameInput = component.container.querySelector('[name="name"]');
       expect(nameInput.value).toBe("Passbolt Browser Extension Test");
       const uriInput = component.container.querySelector('[name="uri"]');
@@ -79,7 +82,6 @@ describe("ResourceCreatePage", () => {
       const context = defaultAppContext();
       const props = defaultProps();
 
-      jest.useFakeTimers();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
@@ -89,10 +91,14 @@ describe("ResourceCreatePage", () => {
       );
 
       // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {});
-      jest.runAllTimers();
+      await waitFor(() => {
+        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
+          throw new Error("Component didn't finish mounting yet.");
+        }
+      });
 
       // Assert the form.
+      expect.assertions(2);
       const nameInput = component.container.querySelector('[name="name"]');
       expect(nameInput.value).toBe("");
       const uriInput = component.container.querySelector('[name="uri"]');
@@ -112,37 +118,38 @@ describe("ResourceCreatePage", () => {
         })
       };
 
-      jest.useFakeTimers();
       const context = defaultAppContext();
+      const props = defaultProps();
+
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} debug />
+            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );
 
       // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {});
-      jest.runAllTimers();
+      await waitFor(() => {
+        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
+          throw new Error("Component didn't finish mounting yet.");
+        }
+      });
 
       // Assert the form.
+      expect.assertions(2);
       const nameInput = component.container.querySelector('[name="name"]');
       expect(nameInput.value).toBe("");
       const uriInput = component.container.querySelector('[name="uri"]');
       expect(uriInput.value).toBe("");
     });
-
-  });
-
-  describe("Form validation", () => {
-
   });
 
   describe("Form submition", () => {
     it("should create a new password on submit", async () => {
       const createPasswordEventMockCallback = jest.fn();
       const context = defaultAppContext();
+      const props = defaultProps();
       // Mock the passbolt messaging layer.
       context.port = {
         request: function(event) {
@@ -163,18 +170,20 @@ describe("ResourceCreatePage", () => {
         }
       };
 
-      jest.useFakeTimers();
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} debug />
+            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
           </StaticRouter>
         </MockTranslationProvider>
       );
 
       // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {});
-      jest.runAllTimers();
+      await waitFor(() => {
+        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
+          throw new Error("Component didn't finish mounting yet.");
+        }
+      });
 
       // Fill the form empty fields
       const usernameInput = component.container.querySelector('[name="username"]');
@@ -197,6 +206,7 @@ describe("ResourceCreatePage", () => {
         uri: "https://passbolt-browser-extension/test",
         username: "test@passbolt.com"
       };
+      expect.assertions(1);
       expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, "P4ssb0lt");
     });
   });

@@ -78,10 +78,19 @@ export default class ResourceWorkspaceContextPage {
    * @ linkCssSelector The CSS link selector
    */
   async goToLink(linkCssSelector) {
+    const oldFilter = this.filter;
     const element = this._page.container.querySelector(linkCssSelector);
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    /*
+     * We ensure that the filter is applied properly before ending the promise.
+     * Without that, some unit tests may fail because they don't have the right context to run.
+     */
+    await waitFor(() => {
+      if (oldFilter === this.filter) {
+        throw new Error("Context didn't change yet.");
+      }
+    });
   }
 
   /**
