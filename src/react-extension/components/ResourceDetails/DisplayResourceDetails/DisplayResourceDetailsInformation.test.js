@@ -47,10 +47,9 @@ describe("See information", () => {
     it('I should see the information of a resource', async() => {
       page = new DisplayResourceDetailsInformationPage(context, props);
       await waitFor(() => {});
+      expect.assertions(2);
       expect(page.title.hyperlink.textContent).toBe("Information");
-
       expect(page.displayInformationList.exists()).toBeTruthy();
-      await page.title.click();
     });
 
     it('I should be able to identify each information name', async() => {
@@ -59,6 +58,7 @@ describe("See information", () => {
 
       const modificationDate = DateTime.fromISO(props.resourceWorkspaceContext.details.resource.modified).toRelative();
       const creationDate = DateTime.fromISO(props.resourceWorkspaceContext.details.resource.created).toRelative();
+      expect.assertions(16);
       expect(page.displayInformationList.usernameLabel).toBe('Username');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
       expect(page.displayInformationList.passwordLabel).toBe('Password');
@@ -75,7 +75,6 @@ describe("See information", () => {
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe(" root");
-      await page.displayInformationList.click(page.displayInformationList.location);
     });
 
     it('AS LU, I should be able to copy the username of a resource to clipboard', async() => {
@@ -85,6 +84,8 @@ describe("See information", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       await page.displayInformationList.click(page.displayInformationList.username);
+
+      expect.assertions(2);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", props.resourceWorkspaceContext.details.resource.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The username has been copied to clipboard");
     });
@@ -96,6 +97,8 @@ describe("See information", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       await page.displayInformationList.click(page.displayInformationList.password);
+
+      expect.assertions(2);
       expect(context.port.request).toHaveBeenCalledWith("passbolt.secret.decrypt", props.resourceWorkspaceContext.details.resource.id, {"showProgress": true});
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
     });
@@ -105,6 +108,8 @@ describe("See information", () => {
       await waitFor(() => {});
       mockContextRequest(() => 'secret-copy');
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+
+      expect.assertions(3);
       await page.displayInformationList.click(page.displayInformationList.viewPassword);
       expect(page.displayInformationList.password.textContent).toBe('secret-copy');
       expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.details.resource.id, {showProgress: true});
@@ -121,7 +126,9 @@ describe("See information", () => {
       };
       page = new DisplayResourceDetailsInformationPage(defaultAppContext(appContext), props);
       await waitFor(() => {});
-      await expect(page.displayInformationList.isViewPasswordExist).toBeFalsy();
+
+      expect.assertions(1);
+      expect(page.displayInformationList.isViewPasswordExist).toBeFalsy();
     });
   });
 });

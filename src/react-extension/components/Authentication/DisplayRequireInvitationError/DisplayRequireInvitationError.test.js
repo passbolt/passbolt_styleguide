@@ -16,7 +16,7 @@
  * Unit tests on DisplayError in regard of specifications
  */
 
-import DisplayRequireInvitationErrorPage from "./DisplayRequireInvitationErrorPage";
+import DisplayRequireInvitationErrorPage from "./DisplayRequireInvitationError.test.page";
 
 beforeEach(() => {
   jest.resetModules();

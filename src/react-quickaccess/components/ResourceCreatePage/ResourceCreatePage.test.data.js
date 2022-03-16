@@ -28,7 +28,7 @@ export function defaultProps() {
       getSettings: () => settingsPasswordGenerator,
       settings: settingsPasswordGenerator,
       getPreparedResource: jest.fn(),
-      getLastGeneratedPassword: () => "Password"
+      getLastGeneratedPassword: jest.fn(() => "AAAAAAAAAAAAAAAAAA")
     }
   };
 }

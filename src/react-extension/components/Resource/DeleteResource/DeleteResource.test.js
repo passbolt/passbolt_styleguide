@@ -20,12 +20,13 @@
 import {defaultAppContext, defaultPropsOneResource} from "./DeleteResource.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DeleteResourcePage from "./DeleteResource.test.page";
-import {fireEvent} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {defaultPropsMultipleResource} from "../DisplayResourcesWorkspace/DisplayResourcesWorkspaceMenu.test.data";
 
 beforeEach(() => {
   jest.resetModules();
+  jest.resetAllMocks();
 });
 
 describe("See Password Delete Dialog", () => {
@@ -47,6 +48,7 @@ describe("See Password Delete Dialog", () => {
     });
 
     it('As LU I should know what resource I am deleting', () => {
+      expect.assertions(9);
       expect(page.deleteResourcePageObject.exists()).toBeTruthy();
       // title
       expect(page.deleteResourcePageObject.dialogTitle).not.toBeNull();
@@ -66,18 +68,27 @@ describe("See Password Delete Dialog", () => {
     it('As LU I should see a toaster message after deleting a resource', async() => {
       const submitButton = page.deleteResourcePageObject.saveButton;
       // Mock the request function to make it the expected result
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
+      expect.assertions(1);
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(message => {
+        expect(message).toBe("The password has been deleted successfull");
       });
 
       await page.deleteResourcePageObject.click(submitButton);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      // ensure that the process really finishes before leaving the unit test.
+      await waitFor(() => {
+        if (ActionFeedbackContext._currentValue.displaySuccess.mock.calls.length == 0) {
+          throw new Error("Reousrce deletion didn't finish its process.");
+        }
+      });
     });
 
     it('As LU I should be able to cancel the operation by clicking on the cancel button', async() => {
       const cancelButton = page.deleteResourcePageObject.cancelButton;
 
       await page.deleteResourcePageObject.click(cancelButton);
-      expect(propsOneResource.onClose).toBeCalled();
+
+      expect.assertions(1);
+      expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
 
     it('As LU I should be able to cancel the edition with the keyboard (escape)', () => {
@@ -85,7 +96,8 @@ describe("See Password Delete Dialog", () => {
       const escapeKeyDown = {keyCode: 27};
       fireEvent.keyDown(page.deleteResourcePageObject.dialogTitle, escapeKeyDown);
 
-      expect(propsOneResource.onClose).toBeCalled();
+      expect.assertions(1);
+      expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
 
     it('Displays an error when the API call fail', async() => {
@@ -98,6 +110,7 @@ describe("See Password Delete Dialog", () => {
       await page.deleteResourcePageObject.click(submitButton);
 
       // Throw general error message
+      expect.assertions(2);
       expect(page.deleteResourcePageObject.errorDialog).not.toBeNull();
       expect(page.deleteResourcePageObject.errorDialogMessage).not.toBeNull();
     });
@@ -123,7 +136,8 @@ describe("See Password Delete Dialog", () => {
       });
 
       await page.deleteResourcePageObject.click(submitButton);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect.assertions(1);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledTimes(1);
     });
   });
 });

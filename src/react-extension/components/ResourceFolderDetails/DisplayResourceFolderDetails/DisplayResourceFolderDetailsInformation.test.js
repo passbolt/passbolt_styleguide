@@ -49,16 +49,16 @@ describe("See information", () => {
     });
 
     it('I should see the information of a resource', async() => {
+      expect.assertions(2);
       expect(page.title.hyperlink.textContent).toBe("Information");
-
       expect(page.displayInformationList.exists()).toBeTruthy();
-      await page.title.click();
     });
 
     it('I should be able to identify each information name', async() => {
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
+      expect.assertions(12);
       expect(page.displayInformationList.usernameLabel).toBe('Name');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.folder.name);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
@@ -71,7 +71,6 @@ describe("See information", () => {
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe(" /");
-      await page.displayInformationList.click(page.displayInformationList.location);
     });
   });
 });

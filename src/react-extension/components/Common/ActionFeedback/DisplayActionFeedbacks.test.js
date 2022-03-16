@@ -44,6 +44,7 @@ describe("Share Action Feedbacks", () => {
       });
 
       it('I should see “Success: The comment has been added successfully"', () => {
+        expect.assertions(1);
         expect(page.message(1)).toBe('Success: The comment has been added successfully');
       });
     });
@@ -60,6 +61,7 @@ describe("Share Action Feedbacks", () => {
       });
 
       it('I should see “Error: An error occurred during the operation”', () => {
+        expect.assertions(1);
         expect(page.message(1)).toBe('Error: An error occurred during the operation');
       });
     });
@@ -77,10 +79,11 @@ describe("Share Action Feedbacks", () => {
 
       it('I should not see the feedback message after 5 seconds', () => {
         jest.spyOn(propsForDisplayTime.actionFeedbackContext, 'remove').mockImplementation(() => {});
-        const oneSecondAfterExpectedRemoval = 6000;
+        const sixSecondAfterExpectedRemoval = 6000;
+        expect.assertions(1);
         setTimeout(() => {
           expect(propsForDisplayTime.actionFeedbackContext.remove).toHaveBeenCalled();
-        }, oneSecondAfterExpectedRemoval);
+        }, sixSecondAfterExpectedRemoval);
         jest.runAllTimers();
       });
     });
@@ -102,6 +105,7 @@ describe("Share Action Feedbacks", () => {
         await page.persist(1);
 
         const oneSecondAfterExpectedRemoval = 1000;
+        expect.assertions(2);
         setTimeout(() => {
           expect(propsForDisplayTime.actionFeedbackContext.remove).not.toHaveBeenCalled();
           expect(page.message(1)).toBe('Success: The comment has been added successfully');
@@ -125,7 +129,8 @@ describe("Share Action Feedbacks", () => {
       it('I should not see the feedback message anymore', async() => {
         jest.spyOn(propsForDisplayTime.actionFeedbackContext, 'remove').mockImplementation(() => {}).mockClear();
 
-        const twoSecondsAfterExpectedRemoval = 500;
+        const twoSecondsAfterExpectedRemoval = 2000;
+        expect.assertions(1);
         setTimeout(() => {
           const firstFeedback = propsWithOneSuccessMessage.actionFeedbackContext.feedbacks[0];
           expect(propsForDisplayTime.actionFeedbackContext.remove).toHaveBeenCalledWith(firstFeedback);

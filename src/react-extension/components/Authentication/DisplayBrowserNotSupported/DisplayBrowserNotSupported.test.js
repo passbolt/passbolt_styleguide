@@ -16,7 +16,7 @@
  * Unit tests on DisplayError in regard of specifications
  */
 
-import DisplayBrowserNotSupportedPage from "./DisplayBrowserNotSupportedPage";
+import DisplayBrowserNotSupportedPage from "./DisplayBrowserNotSupported.test.page";
 
 beforeEach(() => {
   jest.resetModules();

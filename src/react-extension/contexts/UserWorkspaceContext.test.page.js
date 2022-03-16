@@ -109,10 +109,15 @@ export default class UserWorkspaceContextPage {
    * @ linkCssSelector The CSS link selector
    */
   async goToLink(linkCssSelector) {
+    const oldFilter = this.filter;
     const element = this._page.container.querySelector(linkCssSelector);
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
-    await waitFor(() => {});
+    await waitFor(() => {
+      if (oldFilter == this.filter) {
+        throw new Error("Context didn't change yet.");
+      }
+    });
   }
 
   /**

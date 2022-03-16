@@ -55,7 +55,7 @@ module.exports = function(grunt) {
       'build-apps': {
         command: [
           'npm run build'
-        ].join('&& ')
+        ].join(' && ')
       }
 		},
 		cssmin: {
@@ -183,7 +183,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-header');
 	grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('i18next-scanner');
+  grunt.loadNpmTasks('passbolt-i18next-scanner');
 
 	// ========================================================================
 	// Register Tasks

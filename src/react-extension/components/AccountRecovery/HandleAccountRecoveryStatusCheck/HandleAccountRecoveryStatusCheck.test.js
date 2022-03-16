@@ -70,12 +70,14 @@ describe("As a logged in user, I have to approve or reject the new account recov
   it('As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “opt-out” after logging in.', async() => {
     const organizationPolicy = getOrganizationAccountRecoveryPolicy("opt-out");
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
-    new HandleAccountRecoveryStatusCheckPage(props, mockedAccountRecoveryUserService);
-    await waitFor(() => {});
 
     expect.assertions(2);
-    expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ManageAccountRecoveryUserSettings, {organizationPolicy});
+    props.dialogContext.open.mockImplementation((component, data) => {
+      expect(component).toBe(ManageAccountRecoveryUserSettings);
+      expect(data).toStrictEqual({organizationPolicy});
+    });
+
+    new HandleAccountRecoveryStatusCheckPage(props, mockedAccountRecoveryUserService);
   });
 
   /**
@@ -115,12 +117,14 @@ describe("As a logged in user, I have to approve or reject the new account recov
   it('As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “mandatory” after logging in.', async() => {
     const organizationPolicy = getOrganizationAccountRecoveryPolicy("mandatory");
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
-    new HandleAccountRecoveryStatusCheckPage(props, mockedAccountRecoveryUserService);
-    await waitFor(() => {});
 
     expect.assertions(2);
-    expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
-    expect(props.dialogContext.open).toHaveBeenCalledWith(ManageAccountRecoveryUserSettings, {organizationPolicy});
+    props.dialogContext.open.mockImplementation((component, data) => {
+      expect(component).toBe(ManageAccountRecoveryUserSettings);
+      expect(data).toStrictEqual({organizationPolicy});
+    });
+
+    new HandleAccountRecoveryStatusCheckPage(props, mockedAccountRecoveryUserService);
   });
 
   /**
@@ -152,8 +156,15 @@ describe("As a logged in user, I have to approve or reject the new account recov
     const organizationPolicy = getOrganizationAccountRecoveryPolicy("opt-in");
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
     new HandleAccountRecoveryStatusCheckPage(props, mockedAccountRecoveryUserService);
-    await waitFor(() => {});
 
+    // we ensure that the test doesn't finish before the entire app mounted, otherwise we can't prove the dialog is effectively not called.
+    await waitFor(() => {
+      if (mockedAccountRecoveryUserService.getOrganizationAccountRecoverySettings.mock.calls.length === 0) {
+        throw new Error("Component didn't finish mounting yet.");
+      }
+    });
+
+    // now we should be pretty sure that HandleAccountRecoveryStatusCheck.componentDidMount has finished his business. So, we can now prove if the dialog has been called or not.
     expect.assertions(1);
     expect(props.dialogContext.open).not.toHaveBeenCalled();
   });
