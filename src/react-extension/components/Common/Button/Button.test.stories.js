@@ -146,32 +146,24 @@ const Template = () =>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <div style={{display: "flex"}}>
-        <a className="button button-action-icon">
-          <Icon name="upload"/>
-        </a>
-      </div>
+      <a className="button button-action-icon">
+        <Icon name="upload"/>
+      </a>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <div style={{display: "flex"}}>
-        <a className="button button-action-icon disabled">
-          <Icon name="upload"/>
-        </a>
-      </div>
+      <a className="button button-action-icon disabled">
+        <Icon name="upload"/>
+      </a>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <div style={{display: "flex"}}>
-        <a className="button button-action-icon">
-          <Icon name="info-circle"/>
-        </a>
-      </div>
+      <a className="button button-action-icon">
+        <Icon name="info-circle"/>
+      </a>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <div style={{display: "flex"}}>
-        <a className="button button-action-icon disabled">
-          <Icon name="info-circle"/>
-        </a>
-      </div>
+      <a className="button button-action-icon disabled">
+        <Icon name="info-circle"/>
+      </a>
     </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Form button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
@@ -192,6 +184,31 @@ const Template = () =>
     <div style={{width: "25%, marginTop: \".5rem\""}}>
       <a className="button button-icon disabled">
         <Icon name='dice'/>
+      </a>
+    </div>
+    <span style={{width: "100%", marginTop: "3rem"}}>Eye button</span>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <a className="password-view button button-icon">
+        <Icon name='eye-open'/>
+        <span className="visually-hidden">view</span>
+      </a>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <a className="password-view button button-icon disabled">
+        <Icon name='eye-open'/>
+        <span className="visually-hidden">view</span>
+      </a>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <a className="password-view button button-icon">
+        <Icon name='eye-close'/>
+        <span className="visually-hidden">view</span>
+      </a>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <a className="password-view button button-icon disabled">
+        <Icon name='eye-close'/>
+        <span className="visually-hidden">view</span>
       </a>
     </div>
   </div>
