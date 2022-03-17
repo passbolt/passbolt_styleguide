@@ -1,9 +1,8 @@
 /* input label */
 label {
-    font-weight: bold;
-    font-size: 1.6rem; /* 16px */
-    line-height: 2.4rem; /* 24px */
-    padding: .8rem 0;
+    font-weight: 700;
+    font-size: 1.5rem; /* 15px */
+    line-height: 2rem; /* 20px */
     display: block;
 }
 
@@ -18,6 +17,18 @@ label {
     color: @font-error;
     font-weight: bold;
 }
+
 .input.error label {
     color: @font-error;
+}
+
+.input.text {
+  &.disabled {
+    label {
+      opacity: .5;
+    }
+  }
+  label {
+    margin-bottom: 1.2rem;
+  }
 }
