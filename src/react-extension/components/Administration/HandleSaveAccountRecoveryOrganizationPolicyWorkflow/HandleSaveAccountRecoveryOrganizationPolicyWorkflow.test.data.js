@@ -12,35 +12,36 @@
  * @since         3.6.0
  */
 
-import {
-  defaultAdminAccountRecoveryContext,
-  hasPolicyChangesAdminAccountRecoveryContext
-} from "../../../../contexts/AdminAccountRecoveryContext.test.data";
-import {defaultWorkflowContext} from "../../../../contexts/WorkflowContext.test.data";
+import {defaultAdminAccountRecoveryContext} from "../../../contexts/AdminAccountRecoveryContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
- * Default props.
- * @param {Object} props The props to override
+ * Default props
+ * @param {Object} props The override
  * @returns {object}
  */
 export function defaultProps(props = {}) {
   const _props = {
     adminAccountRecoveryContext: defaultAdminAccountRecoveryContext(props?.adminAccountRecoveryContext),
-    workflowContext: defaultWorkflowContext(props?.workflowContext)
+    dialogContext: defaultDialogContext(props?.dialogContext),
   };
-  delete props.adminAccountRecoveryContext; // Treated in the default
-  delete props.workflowContext; // Treated in the default
+  delete props?.adminAccountRecoveryContext; // Treated in the default
+  delete props?.dialogContext; // Treated in the default
   return Object.assign(_props, props);
 }
 
 /**
- * Has policy changes props.
- * @param {Object} props The props to override
+ * Has policy changes props
+ * @param {Object} props The override
  * @returns {object}
  */
-export function hasChangedPolicyProps(props = {}) {
+export function hasPolicyChangesProps(props = {}) {
   const _props = {
-    adminAccountRecoveryContext: hasPolicyChangesAdminAccountRecoveryContext(props?.adminAccountRecoveryContext),
+    adminAccountRecoveryContext: {
+      policyChanges: {
+        policy: "opt-in"
+      }
+    }
   };
   return defaultProps(Object.assign(_props, props));
 }

@@ -15,8 +15,6 @@
 /**
  * Unit tests on ManageAccountRecoveryAdministrationSettings in regard of specifications
  */
-
-
 import {
   defaultProps,
   hasChangedPolicyProps,
@@ -58,18 +56,15 @@ describe("As AD I should see the account recovery settings", () => {
   it('As AD in the administration workspace, I can see the account recovery section populated with the mandatory value', async() => {
     const props = mandatoryPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
-    await waitFor(() => {});
     expect(page.mandatoryRadioButton.isChecked).toBeTruthy();
     expect(page.disableRadioButton.isChecked).toBeFalsy();
     expect(page.optInRadioButton.isChecked).toBeFalsy();
     expect(page.optOutRadioButton.isChecked).toBeFalsy();
   });
 
-
   it('As AD in the administration workspace, I can see the account recovery section populated with the opt-in value', async() => {
     const props = optInPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
-    await waitFor(() => {});
     expect(page.mandatoryRadioButton.isChecked).toBeFalsy();
     expect(page.disableRadioButton.isChecked).toBeFalsy();
     expect(page.optInRadioButton.isChecked).toBeTruthy();
@@ -79,7 +74,6 @@ describe("As AD I should see the account recovery settings", () => {
   it('As AD in the administration workspace, I can see the account recovery section populated with the opt-out value', async() => {
     const props = optOutPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
-    await waitFor(() => {});
     expect(page.mandatoryRadioButton.isChecked).toBeFalsy();
     expect(page.disableRadioButton.isChecked).toBeFalsy();
     expect(page.optInRadioButton.isChecked).toBeFalsy();
@@ -89,17 +83,13 @@ describe("As AD I should see the account recovery settings", () => {
   it('As a logged in administrator in the administration workspace, I can select an account recovery policy', async() => {
     const props = hasChangedPolicyProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
-    await waitFor(() => {});
     expect(page.mandatoryRadioButton.isChecked).toBeTruthy();
     expect(page.disableRadioButton.isChecked).toBeFalsy();
     expect(page.optInRadioButton.isChecked).toBeFalsy();
     expect(page.optOutRadioButton.isChecked).toBeFalsy();
     await page.selectPolicy(page.optInRadioButton);
-    const accountRecoverySettings = {
-      ...props.adminAccountRecoveryContext.newPolicy,
-      policy: 'opt-in'
-    };
-    expect(props.adminAccountRecoveryContext.changePolicy).toHaveBeenCalledWith(accountRecoverySettings);
+    const newPolicy = "opt-in";
+    expect(props.adminAccountRecoveryContext.changePolicy).toHaveBeenCalledWith(newPolicy);
     expect(page.warningMessage).toBe("Warning, Don't forget to save your settings to apply your modification.");
   });
 });

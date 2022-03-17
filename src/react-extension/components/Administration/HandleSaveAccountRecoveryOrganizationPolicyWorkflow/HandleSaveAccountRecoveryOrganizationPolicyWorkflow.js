@@ -15,10 +15,7 @@
 import React from "react";
 import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import {
-  AdminAccountRecoveryContextStep,
-  withAdminAccountRecovery
-} from "../../../contexts/AdminAccountRecoveryContext";
+import {withAdminAccountRecovery} from "../../../contexts/AdminAccountRecoveryContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ProvideAccountRecoveryOrganizationKey from "../ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
@@ -27,9 +24,9 @@ import {withAppContext} from "../../../contexts/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /**
- * This component handle the save admin account recovery.
+ * This component handle the account recovery organization policy save.
  */
-class HandleSaveAccountRecovery extends React.Component {
+class HandleSaveAccountRecoveryOrganizationPolicyWorkflow extends React.Component {
   /**
    * Default constructor
    */
@@ -38,96 +35,121 @@ class HandleSaveAccountRecovery extends React.Component {
     this.bindCallbacks();
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   componentDidMount() {
-    this.handleSaveAccountRecoveryStep();
+    this.displayConfirmSummaryDialog();
   }
 
-  componentDidUpdate(prevProps) {
-    this.handleSaveAccountRecoveryStep(prevProps.adminAccountRecoveryContext.step);
-  }
-
+  /**
+   * Bind callbacks methods
+   */
   bindCallbacks() {
-    this.handleCancelDialog = this.handleCancelDialog.bind(this);
+    this.handleCloseDialog = this.handleCloseDialog.bind(this);
     this.handleConfirmSave = this.handleConfirmSave.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleError = this.handleError.bind(this);
   }
 
   /**
-   * Handle the step of the save account recovery
-   * @param previousStep
+   * Display the confirmation summary dialog
+   * @returns {Promise<void>}
    */
-  handleSaveAccountRecoveryStep(previousStep = AdminAccountRecoveryContextStep.INITIAL_STATE) {
-    const step = this.props.adminAccountRecoveryContext.step;
-    if (step === previousStep) {
-      return;
-    }
-
-    if (step === AdminAccountRecoveryContextStep.DISPLAY_SUMMARY) {
-      this.displayDialogForDisplaySummaryStep();
-    } else if (step === AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK) {
-      this.displayDialogForEnterCurrentOrkStep();
-    }
-  }
-
-  displayDialogForDisplaySummaryStep() {
-    const accountRecoveryPolicy = {
-      currentPolicy: this.props.adminAccountRecoveryContext.currentPolicy,
-      newPolicy: this.props.adminAccountRecoveryContext.newPolicy,
-      currentKeyDetail: this.props.adminAccountRecoveryContext.currentKeyDetail,
-      newKeyDetail: this.props.adminAccountRecoveryContext.newKeyDetail
-    };
-
+  async displayConfirmSummaryDialog() {
     this.props.dialogContext.open(ConfirmSaveAccountRecoverySettings, {
-      accountRecoveryPolicy,
-      onCancel: this.handleCancelDialog,
-      onError: this.handleError,
+      policy: this.props.adminAccountRecoveryContext.policyChanges?.policy,
+      keyInfo: await this.getNewOrganizationKeyInfo(),
+      onClose: this.handleCloseDialog,
       onSubmit: this.handleConfirmSave
     });
   }
 
-  displayDialogForEnterCurrentOrkStep() {
+  /**
+   * Get the new organization public key info.
+   * @returns {Promise<null|object>}
+   */
+  getNewOrganizationKeyInfo() {
+    const organizationKey = this.props.adminAccountRecoveryContext.policyChanges?.publicKey;
+    if (organizationKey) {
+      return this.props.adminAccountRecoveryContext.getKeyInfo(organizationKey);
+    }
+    return null;
+  }
+
+  /**
+   * Display the capture account recovery organization key dialog dialog
+   * @returns {Promise<void>}
+   */
+  displayProvideAccountRecoveryOrganizationKeyDialog() {
     this.props.dialogContext.open(ProvideAccountRecoveryOrganizationKey, {
-      onCancel: this.handleCancelDialog,
-      onError: this.handleError,
+      onClose: this.handleCloseDialog,
       onSubmit: this.handleSave,
     });
   }
 
-  handleCancelDialog() {
-    this.props.adminAccountRecoveryContext.cancelSaveOperation();
+  /**
+   * Whenever the user close a dialog, stop the workflow.
+   */
+  handleCloseDialog() {
+    this.props.onStop();
   }
 
-  handleConfirmSave() {
-    this.props.adminAccountRecoveryContext.confirmSaveRequested();
+  /**
+   * Handle the confirmation.
+   * @return {Promise<void>}
+   */
+  async handleConfirmSave() {
+    const hasKey = Boolean(this.props.adminAccountRecoveryContext.currentPolicy?.account_recovery_organization_public_key);
+    if (hasKey) {
+      this.displayProvideAccountRecoveryOrganizationKeyDialog();
+    } else {
+      await this.handleSave();
+    }
   }
 
   /**
    * Handle the actual registration of the new ORK.
    * @param {Object|null} privateGpgKeyDto the private ORK given by the admin if any.
    */
-  async handleSave(privateGpgKeyDto) {
+  async handleSave(privateGpgKeyDto = null) {
     try {
       await this.props.adminAccountRecoveryContext.save(privateGpgKeyDto);
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The organization recovery policy has been updated successfully"));
+      this.props.onStop();
     } catch (error) {
-      console.error(error);
       this.handleError(error);
     }
   }
 
-  async handleError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      return;
+  /**
+   * Handle error
+   * @param error
+   */
+  handleError(error) {
+    const dialogControlledErrors = [
+      "UserAbortsOperationError",
+      "WrongOrganizationRecoveryKeyError",
+      "InvalidMasterPasswordError",
+      "BadSignatureMessageGpgKeyError",
+      "GpgKeyError"
+    ];
+    // If the error is controlled by the dialogs, throw it to let the dialogs handle it.
+    if (dialogControlledErrors.includes(error.name)) {
+      throw error;
     }
 
+    // Handle unexpected error.
     const errorDialogProps = {
       title: this.translate("There was an unexpected error..."),
-      message: error.message
+      message: error.message,
+      error: error
     };
     this.props.context.setContext({errorDialogProps});
     this.props.dialogContext.open(NotifyError);
+    this.props.onStop();
   }
 
   /**
@@ -147,12 +169,13 @@ class HandleSaveAccountRecovery extends React.Component {
   }
 }
 
-HandleSaveAccountRecovery.propTypes = {
+HandleSaveAccountRecoveryOrganizationPolicyWorkflow.propTypes = {
   dialogContext: PropTypes.any, // The dialog context
   adminAccountRecoveryContext: PropTypes.any, // the admin account recovery context
   actionFeedbackContext: PropTypes.object, // the admin action feedback context
   context: PropTypes.object, // the app context,
+  onStop: PropTypes.func.isRequired, // The callback to stop the workflow
   t: PropTypes.func // the translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withAdminAccountRecovery(withTranslation("common")(HandleSaveAccountRecovery)))));
+export default withAppContext(withDialog(withActionFeedback(withAdminAccountRecovery(withTranslation("common")(HandleSaveAccountRecoveryOrganizationPolicyWorkflow)))));

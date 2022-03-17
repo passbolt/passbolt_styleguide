@@ -18,9 +18,12 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
-import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 class ConfirmSaveAccountRecoverySettings extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
@@ -48,7 +51,6 @@ class ConfirmSaveAccountRecoverySettings extends Component {
    * Handle close button click.
    */
   handleClose() {
-    this.props.onCancel();
     this.props.onClose();
   }
 
@@ -68,104 +70,24 @@ class ConfirmSaveAccountRecoverySettings extends Component {
 
   /**
    * Go to the next process
-   * @param event A form submit event
+   * @param {Event} event A form submit event
    */
   async handleSubmit(event) {
     event.preventDefault();
     await this.toggleProcessing();
     try {
-      await this.saveAccountRecoveryOrganizationSettings();
-      await this.toggleProcessing();
+      await this.props.onSubmit();
       this.props.onClose();
     } catch (error) {
-      await this.props.onError(error);
       await this.toggleProcessing();
+      if (error.name === "UserAbortsOperationError") {
+        // It can happen when the user has closed the passphrase entry dialog by instance. Do nothing.
+      } else {
+        // The component passing the onSubmit prop should take care of any unexpected errors, this code should not run.
+        console.error('Uncaught uncontrolled error');
+        throw error;
+      }
     }
-  }
-
-  async saveAccountRecoveryOrganizationSettings() {
-    await this.props.onSubmit();
-  }
-
-  /**
-   * Get the current account recovery settings
-   * @returns {null|*}
-   */
-  get currentAccountRecoverySettings() {
-    return this.props.accountRecoveryPolicy.currentPolicy;
-  }
-
-  /**
-   * Get the current account recovery organization key
-   * @returns {null|*}
-   */
-  get currentOrganizationKey() {
-    return this.currentAccountRecoverySettings.account_recovery_organization_public_key;
-  }
-
-  /**
-   * Get the current account recovery organization key
-   * @returns {null|*}
-   */
-  get currentOrganizationKeyDetail() {
-    return this.props.accountRecoveryPolicy.currentKeyDetail;
-  }
-
-  /**
-   * Get the current account recovery policy
-   * @returns {null|*}
-   */
-  get currentPolicy() {
-    return this.currentAccountRecoverySettings.policy;
-  }
-
-  /**
-   * Get the new account recovery settings
-   * @returns {null|*}
-   */
-  get newAccountRecoverySettings() {
-    return this.props.accountRecoveryPolicy.newPolicy;
-  }
-
-  /**
-   * Get the new account recovery organization key
-   * @returns {null|*}
-   */
-  get newOrganizationKey() {
-    return this.newAccountRecoverySettings.account_recovery_organization_public_key;
-  }
-
-  /**
-   * Get the new account recovery organization key detail
-   * @returns {null|*}
-   */
-  get newOrganizationKeyDetail() {
-    return this.props.accountRecoveryPolicy.newKeyDetail;
-  }
-
-  /**
-   * Get the new account recovery policy
-   * @returns {null|*}
-   */
-  get newPolicy() {
-    return this.newAccountRecoverySettings.policy;
-  }
-
-  /**
-   * Has new account recovery policy
-   * @returns {boolean}
-   */
-  hasNewAccountRecoveryPolicy() {
-    return this.newPolicy !== this.currentPolicy;
-  }
-
-  /**
-   * Has new account recovery organization key
-   * @returns {boolean}
-   */
-  hasNewOrganizationRecoveryKey() {
-    const hasCurrentOrganizationKey =  Boolean(this.currentOrganizationKey);
-    return hasCurrentOrganizationKey ? this.newOrganizationKeyDetail.fingerprint !== this.currentOrganizationKeyDetail.fingerprint : Boolean(this.newOrganizationKey);
   }
 
   /**
@@ -212,30 +134,6 @@ class ConfirmSaveAccountRecoverySettings extends Component {
     return DateTime.fromJSDate(new Date(date)).setLocale(this.props.context.locale).toLocaleString(DateTime.DATETIME_FULL);
   }
 
-  get policy() {
-    switch (this.newPolicy) {
-      case 'mandatory': return this.translate('Mandatory');
-      case 'opt-out': return this.translate('Optional, Opt-out');
-      case 'opt-in': return this.translate('Optional, Opt-in');
-      case 'disabled': return this.translate('Disable');
-      default: return '';
-    }
-  }
-
-  /**
-   * Get the policy info to inform the admin user
-   * @returns {string}
-   */
-  get policyInfo() {
-    switch (this.newPolicy) {
-      case 'mandatory': return `${this.translate("Every user is required to provide a copy of their private key and passphrase during setup.")}\n${this.translate("Warning: You should inform your users not to store personal passwords.")}`;
-      case 'opt-out': return this.translate("Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.");
-      case 'opt-in': return this.translate("Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.");
-      case 'disabled': return `${this.translate("Backup of the private key and passphrase will not be stored. This is the safest option.")}\n${this.translate("Warning: If users lose their private key and passphrase they will not be able to recover their account.")}`;
-      default: return '';
-    }
-  }
-
   /**
    * Get the translate function
    * @returns {function(...[*]=)}
@@ -257,22 +155,34 @@ class ConfirmSaveAccountRecoverySettings extends Component {
         className="save-recovery-account-settings-dialog">
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
-            {this.hasNewAccountRecoveryPolicy() &&
+            {this.props.policy &&
               <>
                 <label><Trans>New Account Recovery Policy</Trans></label>
                 <div className="radiolist-alt">
                   <div className="input radio">
                     <label htmlFor="accountPolicy">
-                      <span className="name">{this.policy}</span>
+                      <span className="name">
+                        {{
+                          mandatory: <Trans>Mandatory</Trans>,
+                          'opt-out': <Trans>Optional, Opt-out</Trans>,
+                          'opt-in': <Trans>Optional, Opt-in</Trans>,
+                          disabled: <Trans>Disable</Trans>
+                        }[this.props.policy]}
+                      </span>
                       <span className="info">
-                        {this.policyInfo}
+                        {{
+                          mandatory: <><Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/><Trans>Warning: You should inform your users not to store personal passwords.</Trans></>,
+                          'opt-out': <Trans>Every user will be prompted to provide a copy of their private key and passphrase by default during the setup, but they can opt out.</Trans>,
+                          'opt-in': <Trans>Every user can decide to provide a copy of their private key and passphrase by default during the setup, but they can opt in.</Trans>,
+                          disabled: <><Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans><br/><Trans>Warning: If users lose their private key and passphrase they will not be able to recover their account.</Trans></>
+                        }[this.props.policy]}
                       </span>
                     </label>
                   </div>
                 </div>
               </>
             }
-            {this.hasNewOrganizationRecoveryKey() &&
+            {this.props.keyInfo &&
               <>
                 <label><Trans>New Organization Recovery Key</Trans></label>
                 <div className="recovery-key-details">
@@ -280,27 +190,27 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                     <tbody>
                       <tr className="user-ids">
                         <td className="label"><Trans>Uid</Trans></td>
-                        <td className="value">{this.formatUserIds(this.newOrganizationKeyDetail.user_ids)}</td>
+                        <td className="value">{this.formatUserIds(this.props.keyInfo.user_ids)}</td>
                       </tr>
                       <tr className="fingerprint">
                         <td className="label"><Trans>Fingerprint</Trans></td>
-                        <td className="value">{this.formatFingerprint(this.newOrganizationKeyDetail.fingerprint)}</td>
+                        <td className="value">{this.formatFingerprint(this.props.keyInfo.fingerprint)}</td>
                       </tr>
                       <tr className="algorithm">
                         <td className="label"><Trans>Algorithm</Trans></td>
-                        <td className="value">{this.newOrganizationKeyDetail.algorithm}</td>
+                        <td className="value">{this.props.keyInfo.algorithm}</td>
                       </tr>
                       <tr className="key-length">
                         <td className="label"><Trans>Key length</Trans></td>
-                        <td className="value">{this.newOrganizationKeyDetail.length}</td>
+                        <td className="value">{this.props.keyInfo.length}</td>
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        <td className="value">{this.formatDate(this.newOrganizationKeyDetail.created)}</td>
+                        <td className="value">{this.formatDate(this.props.keyInfo.created)}</td>
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.newOrganizationKeyDetail.expires)}</td>
+                        <td className="value">{this.formatDateTimeAgo(this.props.keyInfo.expires)}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -312,16 +222,16 @@ class ConfirmSaveAccountRecoverySettings extends Component {
             <Trans>Warning, Please review carefully this configuration as it will not be trivial to change this later.</Trans>
           </div>
           <div className="submit-wrapper clearfix">
-            <button className={`button button-left ${this.isProcessing ? 'disabled' : ''}`} type="button">{this.translate("Learn More")}</button>
+            <button className={`button button-left ${this.isProcessing ? "disabled" : ''}`} type="button">{this.translate("Learn More")}</button>
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.isProcessing}
               processing={this.isProcessing}
               warning={true}/>
             <button
-              className={`button cancel ${this.isProcessing ? 'disabled' : ''}`}
+              className={`button cancel ${this.isProcessing ? "disabled" : ''}`}
               role="button"
-              type='button'
+              type="button"
               onClick={this.handleClose}
               disabled={this.isProcessing}>
               <span><Trans>Cancel</Trans></span>
@@ -336,13 +246,9 @@ class ConfirmSaveAccountRecoverySettings extends Component {
 ConfirmSaveAccountRecoverySettings.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func, // Callback when the dialog must be closed
-  onCancel: PropTypes.func, // The cancel callback
   onSubmit: PropTypes.func, // The submit callback
-  onError: PropTypes.func, // The error callback
-  accountRecoveryPolicy: PropTypes.object, // The account recovery
-  actionFeedbackContext: PropTypes.object, // the action feeedback context
-  currentKeyDetail: PropTypes.object, // the details of the current key
-  newKeyDetail: PropTypes.object, // the details of the new key
+  policy: PropTypes.string, // The account recovery policy if any change of policy
+  keyInfo: PropTypes.object, // The account recovery public key details if any change of key
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withActionFeedback(withTranslation('common')(ConfirmSaveAccountRecoverySettings)));
+export default withAppContext(withTranslation('common')(ConfirmSaveAccountRecoverySettings));

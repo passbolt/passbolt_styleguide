@@ -16,7 +16,12 @@ import {defaultAppContext} from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 import ServerKeyChangedError from "../../lib/Error/ServerKeyChangedError";
 
-function defaultAuthenticationLoginAppContext(appContext) {
+/**
+ * Default context
+ * @param {Object} appContext The props to override
+ * @returns {object}
+ */
+function defaultAuthenticationLoginAppContext(appContext = {}) {
   const port = new MockPort();
   port.addRequestListener("passbolt.auth.verify-server-key", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.auth.get-server-key", jest.fn(() => Promise.resolve()));
@@ -27,11 +32,12 @@ function defaultAuthenticationLoginAppContext(appContext) {
   const defaultAuthenticationLoginAppContext = {
     port: port,
   };
-  return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), appContext || {});
+  return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), appContext);
 }
 
 /**
  * Default props.
+ * @param {Object} props The props to override
  * @returns {object}
  */
 export function defaultProps(props) {

@@ -18,7 +18,7 @@
 
 
 import DisplayAdministrationAccountRecoveryActionsPage from "./DisplayAdministrationAccountRecoveryActions.test.page";
-import {defaultProps} from "./DisplayAdministrationAccountRecoveryActions.test.data";
+import {defaultProps, hasChangedPolicyProps} from "./DisplayAdministrationAccountRecoveryActions.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -28,24 +28,24 @@ describe("As AD I can see the administration account recovery action", () => {
   let page; // The page to test against
 
   it('As AD I should see both the save and the reset buttons disabled for administration account recovery action', async() => {
-    const props = defaultProps(false);
+    const props = defaultProps();
     page = new DisplayAdministrationAccountRecoveryActionsPage(props);
     expect(page.exists()).toBeTruthy();
     expect(page.count).toBe(2);
     expect(page.saveButton.className).toBe('button disabled');
     expect(page.resetButton.className).toBe('button disabled');
     await page.reset();
-    expect(props.adminAccountRecoveryContext.resetPolicy).toHaveBeenCalled();
+    expect(props.adminAccountRecoveryContext.resetChanges).toHaveBeenCalled();
   });
 
   it('As AD I should see the all buttons enabled', async() => {
-    const props = defaultProps(true);
+    const props = hasChangedPolicyProps();
     page = new DisplayAdministrationAccountRecoveryActionsPage(props);
     expect(page.exists()).toBeTruthy();
     expect(page.count).toBe(2);
     expect(page.saveButton.className).toBe('button ');
     expect(page.resetButton.className).toBe('button ');
     await page.save();
-    expect(props.adminAccountRecoveryContext.initiateSaveRequested).toHaveBeenCalled();
+    expect(props.workflowContext.start).toHaveBeenCalled();
   });
 });

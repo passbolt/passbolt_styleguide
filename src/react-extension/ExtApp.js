@@ -12,8 +12,6 @@
  * @since         2.12.0
  */
 
-/* eslint-disable no-unused-vars */
-/* eslint-enable no-unused-vars */
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
@@ -61,6 +59,7 @@ import ExtAppAccountRecoveryUserService from "../shared/services/accountRecovery
 import HandleAccountRecoveryStatusCheck from "./components/AccountRecovery/HandleAccountRecoveryStatusCheck/HandleAccountRecoveryStatusCheck";
 import WorkflowContextProvider from "./contexts/WorkflowContext";
 import ManageWorkflows from "./components/Common/Workflow/ManageWorkflows/ManageWorkflows";
+import AdminAccountRecoveryContextProvider from "./contexts/AdminAccountRecoveryContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -188,8 +187,11 @@ class ExtApp extends Component {
                                     "/app/administration/account-recovery"
                                   ]}>
                                     <AdministrationWorkspaceContextProvider>
-                                      <ManageDialogs/>
-                                      <AdministrationWorkspace/>
+                                      <AdminAccountRecoveryContextProvider>
+                                        <ManageDialogs/>
+                                        <ManageWorkflows/>
+                                        <AdministrationWorkspace/>
+                                      </AdminAccountRecoveryContextProvider>
                                     </AdministrationWorkspaceContextProvider>
                                   </Route>
                                   {/* Fallback */}

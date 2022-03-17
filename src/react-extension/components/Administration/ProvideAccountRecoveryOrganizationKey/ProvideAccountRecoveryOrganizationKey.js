@@ -46,9 +46,9 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
   get defaultState() {
     return {
       processing: false, // component is processing or not
-      key: "", // The organization recovery key
+      key: "", // The organization private armored key
       keyError: "", // The error organization recovery key
-      password: "",
+      password: "", // The organization private key password
       passwordError: "",
       passwordWarning: "",
       passphraseStyle: {
@@ -306,8 +306,8 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * @param {object} error The returned error
    */
   async handleSubmitError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
+      // It can happen when the user has closed the passphrase entry dialog by instance.
       return;
     } else if (error.name === "WrongOrganizationRecoveryKeyError") {
       this.setState({expectedFingerprintError: error.expectedFingerprint});
@@ -318,7 +318,9 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     } else if (error.name === "GpgKeyError") {
       this.setState({keyError: error.message});
     } else {
-      this.props.onError(error);
+      // The component passing the onSubmit prop should take care of any unexpected errors, this code should not run.
+      console.error('Uncaught uncontrolled error');
+      throw error;
     }
   }
 
@@ -369,7 +371,6 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * Handle close button click.
    */
   handleCloseClick() {
-    this.props.onCancel();
     this.props.onClose();
   }
 
@@ -511,9 +512,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
 ProvideAccountRecoveryOrganizationKey.propTypes = {
   context: PropTypes.any.isRequired, // The application context provider
   onClose: PropTypes.func, // Callback when the dialog must be closed
-  onCancel: PropTypes.func, // Callback when the save must be canceled
   onSubmit: PropTypes.func, // Callback when the dialog must be submitted
-  onError: PropTypes.func, // Callback when the submit has raised an error
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };

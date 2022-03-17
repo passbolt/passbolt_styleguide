@@ -14,13 +14,13 @@
 
 import {render} from "@testing-library/react";
 import React from "react";
-import HandleSaveAccountRecovery from "./HandleSaveAccountRecovery";
+import HandleSaveAccountRecovery from "./HandleSaveAccountRecoveryOrganizationPolicyWorkflow";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The HandleSaveAccountRecovery component represented as a page
  */
-export default class HandleSaveAccountRecoveryPage {
+export default class HandleSaveAccountRecoveryOrganizationPolicyWorkflowPage {
   /**
    * Default constructor
    * @param props Props to attach

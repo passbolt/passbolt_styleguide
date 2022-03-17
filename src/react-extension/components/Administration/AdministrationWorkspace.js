@@ -34,8 +34,6 @@ import DisplayInternationalizationAdministration
   from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
 import ManageAccountRecoveryAdministrationSettings
   from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
-import HandleSaveAccountRecovery from "./HandleSaveAccountRecovery/HandleSaveAccountRecovery";
-import AdminAccountRecoveryContextProvider from "../../contexts/AdminAccountRecoveryContext";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -99,48 +97,43 @@ class AdministrationWorkspace extends Component {
             <SearchBar disabled={true}/>
             <DisplayUserBadgeMenu baseUrl={this.props.context.trustedDomain || this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
           </div>
-          <AdminAccountRecoveryContextProvider>
-            <div className="header third">
-              <div className="col1 main-action-wrapper">
-              </div>
-              <AdministrationWorkspaceAction/>
+          <div className="header third">
+            <div className="col1 main-action-wrapper">
             </div>
-            <div className="panel main">
-              <div>
-                <div className="panel left">
-                  <DisplayAdministrationMenu/>
-                </div>
-                <div className="panel middle">
-                  <DisplayAdministrationWorkspaceBreadcrumb/>
-                  <div className="workspace-main">
-                    <div className="grid grid-responsive-12">
-                      {this.isMfaSelected() &&
-                      <DisplayMfaAdministration/>
-                      }
-                      {this.isUserDirectorySelected() &&
-                      <DisplayUserDirectoryAdministration/>
-                      }
-                      {this.isEmailNotificationsSelected() &&
-                      <DisplayEmailNotificationsAdministration/>
-                      }
-                      {this.isSubscriptionSelected() &&
-                      <DisplaySubscriptionKey/>
-                      }
-                      {this.isInternationalizationSelected() &&
-                      <DisplayInternationalizationAdministration/>
-                      }
-                      {this.isAccountRecoverySelected() &&
-                      <>
-                        <ManageAccountRecoveryAdministrationSettings/>
-                        <HandleSaveAccountRecovery/>
-                      </>
-                      }
-                    </div>
+            <AdministrationWorkspaceAction/>
+          </div>
+          <div className="panel main">
+            <div>
+              <div className="panel left">
+                <DisplayAdministrationMenu/>
+              </div>
+              <div className="panel middle">
+                <DisplayAdministrationWorkspaceBreadcrumb/>
+                <div className="workspace-main">
+                  <div className="grid grid-responsive-12">
+                    {this.isMfaSelected() &&
+                    <DisplayMfaAdministration/>
+                    }
+                    {this.isUserDirectorySelected() &&
+                    <DisplayUserDirectoryAdministration/>
+                    }
+                    {this.isEmailNotificationsSelected() &&
+                    <DisplayEmailNotificationsAdministration/>
+                    }
+                    {this.isSubscriptionSelected() &&
+                    <DisplaySubscriptionKey/>
+                    }
+                    {this.isInternationalizationSelected() &&
+                    <DisplayInternationalizationAdministration/>
+                    }
+                    {this.isAccountRecoverySelected() &&
+                    <ManageAccountRecoveryAdministrationSettings/>
+                    }
                   </div>
                 </div>
               </div>
             </div>
-          </AdminAccountRecoveryContextProvider>
+          </div>
         </div>
       </div>
     );

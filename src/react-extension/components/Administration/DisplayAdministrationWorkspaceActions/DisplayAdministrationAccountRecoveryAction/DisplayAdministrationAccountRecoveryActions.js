@@ -17,6 +17,9 @@ import PropTypes from "prop-types";
 import Icon from "../../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAdminAccountRecovery} from "../../../../contexts/AdminAccountRecoveryContext";
+import {withWorkflow} from "../../../../contexts/WorkflowContext";
+import HandleSaveAccountRecoveryOrganizationPolicyWorkflow
+  from "../../HandleSaveAccountRecoveryOrganizationPolicyWorkflow/HandleSaveAccountRecoveryOrganizationPolicyWorkflow";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -43,28 +46,28 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Handle save settings
    */
   handleSaveClick() {
-    this.props.adminAccountRecoveryContext.initiateSaveRequested();
+    this.props.workflowContext.start(HandleSaveAccountRecoveryOrganizationPolicyWorkflow, {});
   }
 
   /**
    * Handle reset account recovery policy settings
    */
   handleEditSubscriptionClick() {
-    this.props.adminAccountRecoveryContext.resetPolicy();
+    this.props.adminAccountRecoveryContext.resetChanges();
   }
 
   /**
    * Is save button enable
    */
   isSaveEnabled() {
-    return this.props.adminAccountRecoveryContext.hasChanged;
+    return this.props.adminAccountRecoveryContext.hasPolicyChanges();
   }
 
   /**
    * Is save button enable
    */
   isResetEnabled() {
-    return this.props.adminAccountRecoveryContext.hasChanged;
+    return this.props.adminAccountRecoveryContext.hasPolicyChanges();
   }
 
 
@@ -108,7 +111,8 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
 
 DisplayAdministrationWorkspaceActions.propTypes = {
   adminAccountRecoveryContext: PropTypes.object, // The admin account recovery context
+  workflowContext: PropTypes.any, // the workflow context
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminAccountRecovery(withTranslation('common')(DisplayAdministrationWorkspaceActions));
+export default withWorkflow(withAdminAccountRecovery(withTranslation('common')(DisplayAdministrationWorkspaceActions)));

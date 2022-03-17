@@ -13,122 +13,217 @@
  */
 
 import {defaultProps} from "./AdminAccountRecoveryContext.test.data";
-import {AdminAccountRecoveryContextProvider, AdminAccountRecoveryContextStep} from "./AdminAccountRecoveryContext";
-import {clear} from 'jest-useragent-mock';
+import {AdminAccountRecoveryContextProvider} from "./AdminAccountRecoveryContext";
 
-beforeEach(() => {
-  jest.resetModules();
-  jest.clearAllMocks();
-  clear();
-});
-
-describe("AdminAccountRecovery Context", () => {
+describe("AdminAccountRecoveryContext", () => {
   let adminAccountRecoveryContext; // The adminAccountRecoveryContext to text
   const props = defaultProps(); // The props to pass
 
-  describe('As AD I should complete an adminAccountRecovery setup', () => {
-    beforeEach(() => {
-      adminAccountRecoveryContext = new AdminAccountRecoveryContextProvider(props);
-      const setStateMock = state => adminAccountRecoveryContext.state = Object.assign(adminAccountRecoveryContext.state, state);
-      jest.spyOn(adminAccountRecoveryContext, 'setState').mockImplementation(setStateMock);
-      const requestMock = jest.fn(() => new Promise(resolve => resolve()));
-      jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestMock);
-    });
 
-    it('As AD I should start with the state INITIAL_STATE', () => {
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
-    });
+  beforeEach(() => {
+    adminAccountRecoveryContext = new AdminAccountRecoveryContextProvider(props);
+    const setStateMock = state => adminAccountRecoveryContext.state = Object.assign(adminAccountRecoveryContext.state, state);
+    jest.spyOn(adminAccountRecoveryContext, "setState").mockImplementation(setStateMock);
+  });
 
-    it('As AD I should get the current policy', async() => {
-      const currentPolicy = {
-        policy: "disabled"
-      };
-      const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
-      jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
+  describe("AdminAccountRecoveryContext::findAccountRecoveryPolicy", () => {
+    it("should get the current account recovery organization policy and store it in its state", async() => {
+      const currentPolicy = {policy: "disabled"};
+
+      // Mock the background page get organization policy request.
+      props.context.port.request = jest.fn(() => currentPolicy);
+
+      expect.assertions(2);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
       expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
       expect(adminAccountRecoveryContext.state.currentPolicy).toBe(currentPolicy);
     });
+  });
 
-    it('As AD I should change the policy', async() => {
-      const currentPolicy = {
-        policy: "disabled"
-      };
-      const newPolicy = {
-        policy: "mandatory",
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
-      };
-      const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
-      const privateGpgKeyDto = undefined;
-      jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
+  describe("AdminAccountRecoveryContext::changePolicy", () => {
+    it("should store the policy change", async() => {
+      const currentPolicy = {policy: "disabled"};
+      const newPolicy = "mandatory";
+
+      // Mock the background page get organization policy request.
+      props.context.port.request = jest.fn(() => currentPolicy);
+
+      expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
-      expect(adminAccountRecoveryContext.state.currentPolicy).toBe(currentPolicy);
       await adminAccountRecoveryContext.changePolicy(newPolicy);
-      expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);
-      expect(adminAccountRecoveryContext.state.hasChanged).toBeTruthy();
-      await adminAccountRecoveryContext.confirmSaveRequested();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-policy", newPolicy, privateGpgKeyDto);
-      expect(adminAccountRecoveryContext.state.currentPolicy).toBe(newPolicy);
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
+      expect(adminAccountRecoveryContext.state.policyChanges.policy).toEqual(newPolicy);
     });
 
-    it('As AD I should initiate the save with the DISPLAY_SUMMARY step', async() => {
-      await adminAccountRecoveryContext.initiateSaveRequested();
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.DISPLAY_SUMMARY);
-    });
+    it("should not impact the stored policy changes if applying the same policy", async() => {
+      const currentPolicy = {policy: "mandatory"};
+      const newPolicy = "mandatory";
 
-    it('As AD I should confirm the save with the DISPLAY_SUMMARY step', async() => {
-      const currentPolicy = {
-        policy: "mandatory",
-        account_recovery_organization_public_key: {
-          fingerprint: "0c1d1761110d1e33c9006d1a5b1b332ed06426d3",
-          algorithm: "RSA",
-          length: "4096",
-          created: "2020-09-01T13:11:08+00:00",
-          expires: "Never"
-        }
-      };
-      const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
-      jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
+      // Mock the background page get organization policy request.
+      props.context.port.request = jest.fn(() => currentPolicy);
+
+      expect.assertions(1);
       await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
-      await adminAccountRecoveryContext.confirmSaveRequested();
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.ENTER_CURRENT_ORK);
-    });
-
-    it('As AD I should save my new policy', async() => {
-      const currentPolicy = {
-        policy: "mandatory",
-        account_recovery_organization_public_key: {
-          fingerprint: "123456788"
-        }
-      };
-      const newPolicy = {
-        policy: "mandatory",
-        account_recovery_organization_public_key: {
-          fingerprint: "123456789"
-        }
-      };
-      const requestAccountRecoveryPolicyMock = jest.fn(() => currentPolicy);
-      const privateGpgKeyDto = undefined;
-      jest.spyOn(adminAccountRecoveryContext.props.context.port, 'request').mockImplementation(requestAccountRecoveryPolicyMock);
-      await adminAccountRecoveryContext.findAccountRecoveryPolicy();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-policy");
-      expect(adminAccountRecoveryContext.state.currentPolicy).toBe(currentPolicy);
       await adminAccountRecoveryContext.changePolicy(newPolicy);
-      expect(adminAccountRecoveryContext.state.newPolicy).toBe(newPolicy);
-      expect(adminAccountRecoveryContext.state.hasChanged).toBeTruthy();
+      expect(adminAccountRecoveryContext.state.policyChanges.policy).toBeUndefined();
+    });
+
+    it("should reset the public key policy change if AD wants to disable the policy", async() => {
+      const currentPolicy = {policy: "disabled"};
+      const newPolicy = "disabled";
+      const newPublicKey = "new public key";
+
+      // Mock the background page get organization policy request.
+      props.context.port.request = jest.fn(() => currentPolicy);
+
+      expect.assertions(3);
+      await adminAccountRecoveryContext.findAccountRecoveryPolicy();
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toEqual(newPublicKey);
+      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      expect(adminAccountRecoveryContext.state.policyChanges.policy).toBeUndefined();
+      expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toBeUndefined();
+    });
+  });
+
+  describe("AdminAccountRecoveryContext::changePublicKey", () => {
+    it("should store the public key change", async() => {
+      const newPublicKey = "new public key";
+
+      expect.assertions(1);
+      await adminAccountRecoveryContext.findAccountRecoveryPolicy();
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toEqual(newPublicKey);
+    });
+
+    it("should remember the policy change", async() => {
+      const newPolicy = "new policy";
+      const newPublicKey = "new public key";
+
+      expect.assertions(2);
+      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toEqual(newPublicKey);
+      expect(adminAccountRecoveryContext.state.policyChanges.policy).toEqual(newPolicy);
+    });
+  });
+
+  describe("AdminAccountRecoveryContext::hasPolicyChanges", () => {
+    it("it should return false if no policy changes", async() => {
+      expect.assertions(1);
+      expect(adminAccountRecoveryContext.hasPolicyChanges()).toBeFalsy();
+    });
+
+    it("it should return true if a new policy is set", async() => {
+      const currentPolicy = {policy: "disabled"};
+      const newPolicy = "mandatory";
+
+      // Mock the background page get organization policy request.
+      props.context.port.request = jest.fn(() => currentPolicy);
+
+      expect.assertions(1);
+      await adminAccountRecoveryContext.findAccountRecoveryPolicy();
+      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      expect(adminAccountRecoveryContext.hasPolicyChanges()).toBeTruthy();
+    });
+
+    it("it should return true if a new public key is set", async() => {
+      const newPublicKey = "new public key";
+
+      expect.assertions(1);
+      await adminAccountRecoveryContext.findAccountRecoveryPolicy();
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      expect(adminAccountRecoveryContext.hasPolicyChanges()).toBeTruthy();
+    });
+  });
+
+  describe("AdminAccountRecoveryContext::getKeyInfo", () => {
+    it("it should return the key info", async() => {
+      const armoredKey = "armored-key";
+      const mockKeyInfo = {
+        armored_key: "armored-key",
+        key_id: "key-id",
+      };
+
+      // Mock the background page get key info.
+      props.context.port.request = jest.fn(() => mockKeyInfo);
+
+      expect.assertions(2);
+      const keyInfo = await adminAccountRecoveryContext.getKeyInfo(armoredKey);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-key-info", armoredKey);
+      expect(keyInfo).toBe(mockKeyInfo);
+    });
+  });
+
+  describe("AdminAccountRecoveryContext::resetChanges", () => {
+    it("it should reset the policy changes", async() => {
+      const newPolicy = "new policy";
+      const newPublicKey = "new public key";
+      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+
+      expect.assertions(2);
+      await adminAccountRecoveryContext.resetChanges();
+      expect(adminAccountRecoveryContext.state.policyChanges.publicKey).toBeUndefined();
+      expect(adminAccountRecoveryContext.state.policyChanges.policy).toBeUndefined();
+    });
+  });
+
+  describe("AdminAccountRecoveryContext::downloadPrivateKey", () => {
+    it("it should initiate the download of the organization private key", async() => {
+      const newPrivateKey = "new private key";
+
+      // Mock the background page download private key request.
+      props.context.port.request = jest.fn();
+
+      expect.assertions(1);
+      await adminAccountRecoveryContext.downloadPrivateKey(newPrivateKey);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.download-organization-generated-key", newPrivateKey);
+    });
+  });
+
+  describe("AdminAccountRecoveryContext::save", () => {
+    it("it should save the policy changes", async() => {
+      const newPolicy = "new policy";
+      const newPublicKey = "new public key";
+      const expectedSaveDto = {
+        "account_recovery_organization_public_key": {
+          "armored_key": "new public key",
+        },
+        "policy": "new policy",
+      };
+
+      // Mock the background page save request.
+      props.context.port.request = jest.fn();
+
+      expect.assertions(1);
+      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
       await adminAccountRecoveryContext.save();
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-policy", newPolicy, privateGpgKeyDto);
-      expect(adminAccountRecoveryContext.state.currentPolicy).toBe(newPolicy);
-      expect(adminAccountRecoveryContext.state.step).toBe(AdminAccountRecoveryContextStep.INITIAL_STATE);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-policy", expectedSaveDto, undefined);
+    });
+
+    it("it should save the policy changes with a provided current private key", async() => {
+      const newPolicy = "new policy";
+      const newPublicKey = "new public key";
+      const currentPrivateKey = {
+        armored_key: "current-private-key",
+        passhrase: "current-private-key-passphrase"
+      };
+      const expectedSaveDto = {
+        "account_recovery_organization_public_key": {
+          "armored_key": "new public key",
+        },
+        "policy": "new policy",
+      };
+
+      // Mock the background page save request.
+      props.context.port.request = jest.fn();
+
+      expect.assertions(1);
+      await adminAccountRecoveryContext.changePolicy(newPolicy);
+      await adminAccountRecoveryContext.changePublicKey(newPublicKey);
+      await adminAccountRecoveryContext.save(currentPrivateKey);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-organization-policy", expectedSaveDto, currentPrivateKey);
     });
   });
 });
