@@ -82,7 +82,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
    * Get the file input in the tab "Import"
    */
   get browseInput() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.import-organization-key .input-file-chooser-wrapper input');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.import-organization-key input[type="file"]');
   }
 
   /**

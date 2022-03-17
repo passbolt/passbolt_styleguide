@@ -446,43 +446,43 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
                 disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
                 placeholder='Paste the OpenPGP Private key here' required="required" autoComplete="off" autoFocus={true}/>
             </div>
-            <div className="input-file-chooser-wrapper">
+            <div className="input file">
               <input
                 type="file"
+                id="dialog-import-private-key"
                 ref={this.fileUploaderRef}
                 disabled={this.hasAllInputDisabled()}
                 onChange={this.handleSelectOrganizationKeyFile} />
-              <div className="input text">
-                <label htmlFor="dialog-import-private-key">
-                  <Trans>Select a file to import</Trans>
-                </label>
-                <div className="input-file-inline">
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder={this.translate("No file selected")}
-                    defaultValue={this.selectedFilename} />
-                  <a
-                    className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                    onClick={this.handleSelectFile}>
-                    <Icon name="upload-a" />
-                    <span><Trans>Choose a file</Trans></span>
-                  </a>
-                </div>
-                {this.state.keyError &&
-                  <div className="key error-message">{this.state.keyError}</div>
-                }
-                {this.state.expectedFingerprintError &&
-                  <div className="key error-message">
-                    <Trans>Error, this is not the current organization recovery key.</Trans><br/>
-                    <Trans>Expected fingerprint:</Trans><br/>
-                    <br/>
-                    <span className="fingerprint">
-                      {this.formatFingerprint(this.state.expectedFingerprintError)}
-                    </span>
-                  </div>
-                }
+              <label htmlFor="dialog-import-private-key">
+                <Trans>Select a file to import</Trans>
+              </label>
+              <div className="input-file-inline">
+                <input
+                  type="text"
+                  disabled={true}
+                  placeholder={this.translate("No file selected")}
+                  defaultValue={this.selectedFilename} />
+                <button
+                  className="button primary"
+                  type='button'
+                  disabled={this.hasAllInputDisabled()}
+                  onClick={this.handleSelectFile}>
+                  <span><Trans>Choose a file</Trans></span>
+                </button>
               </div>
+              {this.state.keyError &&
+                <div className="key error-message">{this.state.keyError}</div>
+              }
+              {this.state.expectedFingerprintError &&
+                <div className="key error-message">
+                  <Trans>Error, this is not the current organization recovery key.</Trans><br/>
+                  <Trans>Expected fingerprint:</Trans><br/>
+                  <br/>
+                  <span className="fingerprint">
+                    {this.formatFingerprint(this.state.expectedFingerprintError)}
+                  </span>
+                </div>
+              }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
               <label htmlFor="generate-organization-key-form-password"><Trans>Organization key passphrase</Trans></label>

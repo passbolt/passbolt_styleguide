@@ -68,14 +68,14 @@ export default class ImportResourcesKeyUnlockPage {
    * Returns the import folder input element
    */
   get importFile() {
-    return this._page.container.querySelector('.input.text a.button.primary');
+    return this._page.container.querySelector('.input.file button.button.primary');
   }
 
   /**
    * Returns the error mesage input element
    */
   get errorMessage() {
-    return this._page.container.querySelector('.message.ready.error').textContent;
+    return this._page.container.querySelector('.error-message').textContent;
   }
 
   /**

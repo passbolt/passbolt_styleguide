@@ -69,7 +69,7 @@ export default class ExportResourcesCredentialsPage {
    * Returns the import folder input element
    */
   get importFile() {
-    return this._page.container.querySelector('.input.text a.button.primary');
+    return this._page.container.querySelector('.input.file button.button.primary');
   }
 
 

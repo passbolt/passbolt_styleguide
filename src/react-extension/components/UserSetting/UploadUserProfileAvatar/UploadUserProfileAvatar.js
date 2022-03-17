@@ -22,7 +22,6 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -311,36 +310,31 @@ class UploadUserProfileAvatar extends React.Component {
           onSubmit={this.handleUpload} noValidate>
 
           <div className="form-content">
-            <div className="input-file-chooser-wrapper">
+            <div className={`input file required ${this.areActionsAllowed ? "" : "disabled"} ${this.hasValidationError ? "error" : ""}`}>
               <input
                 id="dialog-upload-avatar-input"
                 type="file"
                 ref={this.fileUploaderRef}
                 onChange={this.handleAvatarFileSelected}
                 accept="image/*"/>
-
-              <div className={`input text required ${this.hasValidationError ? "error" : ""}`}>
-                <label htmlFor="dialog-upload-avatar-input">
-                  <Trans>Avatar</Trans>
-                </label>
-                <div className="input-file-inline">
-                  <input
-                    type="text"
-                    disabled={true}
-                    placeholder="No file selected"
-                    defaultValue={this.selectedFilename}/>
-                  <a
-                    id="dialog-upload-avatar-input"
-                    className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
-                    onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/>
-                    <span className='ellipsis'><Trans>Choose a file</Trans></span>
-                  </a>
-                </div>
-                {this.state.errors.message &&
-                <div className="error-message">{this.state.errors.message}</div>
-                }
+              <label htmlFor="dialog-upload-avatar-input">
+                <Trans>Avatar</Trans>
+              </label>
+              <div className="input-file-inline">
+                <input
+                  type="text"
+                  disabled={true}
+                  placeholder={this.translate("No file selected")}
+                  defaultValue={this.selectedFilename}/>
+                <a
+                  className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
+                  onClick={this.handleSelectFile}>
+                  <span className='ellipsis'><Trans>Choose a file</Trans></span>
+                </a>
               </div>
+              {this.state.errors.message &&
+              <div className="error-message">{this.state.errors.message}</div>
+              }
             </div>
           </div>
 

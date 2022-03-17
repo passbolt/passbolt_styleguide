@@ -285,34 +285,33 @@ class ImportResourcesKeyUnlock extends Component {
               </div>
             </div>
 
-            <div className="input-file-chooser-wrapper">
+            <div className={`input file ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
               <input
                 type="file"
+                id="dialog-import-passwords"
                 ref={this.fileUploaderRef}
                 onChange={this.handleFileSelected}/>
-              <div className="input text">
-                <label><Trans>Keepass key file (optional)</Trans></label>
-                <div className="input-file-inline">
-                  <input
-                    type="text"
-                    placeholder={this.translate('No key file selected')}
-                    disabled
-                    value={this.selectedFilename}/>
-                  <a
-                    className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                    onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/>
-                    <span><Trans>Choose a file</Trans></span>
-                  </a>
-                </div>
+              <label htmlFor="dialog-import-passwords"><Trans>Keepass key file (optional)</Trans></label>
+              <div className="input-file-inline">
+                <input
+                  type="text"
+                  placeholder={this.translate('No key file selected')}
+                  disabled
+                  value={this.selectedFilename}/>
+                <button
+                  className="button primary"
+                  type="button"
+                  disabled={this.hasAllInputDisabled()}
+                  onClick={this.handleSelectFile}>
+                  <span><Trans>Choose a file</Trans></span>
+                </button>
               </div>
+              {isInvalidPasswordOrKeyFile &&
+                <div className="error-message">
+                  <Trans>Cannot decrypt the file, invalid credentials.</Trans>
+                </div>
+              }
             </div>
-
-            {isInvalidPasswordOrKeyFile &&
-            <div className="message ready error">
-              <Trans>Cannot decrypt the file, invalid credentials.</Trans>
-            </div>
-            }
           </div>
 
           <div className="submit-wrapper clearfix">

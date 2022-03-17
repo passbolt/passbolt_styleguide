@@ -86,7 +86,7 @@ describe("As LU I should see the export resources credentials dialog", () => {
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.importFile.className).toBe("button primary disabled");
+        expect(page.importFile.getAttribute("disabled")).not.toBeNull();
         expect(page.password.getAttribute("disabled")).not.toBeNull();
         expect(page.exportButton.getAttribute("disabled")).not.toBeNull();
         expect(page.exportButton.className).toBe("button primary disabled processing");

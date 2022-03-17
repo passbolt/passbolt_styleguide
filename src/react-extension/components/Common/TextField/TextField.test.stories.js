@@ -73,6 +73,58 @@ const Template = () =>
         <div className="help-message">Help message</div>
       </div>
     </div>
+    <span style={{width: "100%", marginBottom: ".5rem"}}>Import file field</span>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <div className="input file required">
+        <input type="file"/>
+        <label>Select a File</label>
+        <div className="input-file-inline">
+          <input type="text" disabled={true} placeholder="Placeholder"/>
+          <button className="button primary">
+            <span>Select a file</span>
+          </button>
+        </div>
+        <div className="help-message">Help message</div>
+      </div>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <div className="input file required error">
+        <input type="file"/>
+        <label>Select a File</label>
+        <div className="input-file-inline">
+          <input type="text" disabled={true} placeholder="Placeholder"/>
+          <button className="button primary">
+            <span>Select a file</span>
+          </button>
+        </div>
+        <div className="error-message">Error message</div>
+      </div>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <div className="input file required disabled">
+        <input type="file"/>
+        <label>Select a File</label>
+        <div className="input-file-inline">
+          <input type="text" disabled={true} value="Value" placeholder="Placeholder"/>
+          <button className="button primary" disabled={true}>
+            <span>Select a file</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <div className="input file required disabled">
+        <input type="file"/>
+        <label>Select a File</label>
+        <div className="input-file-inline">
+          <input type="text" disabled={true} placeholder="Placeholder"/>
+          <button className="button primary" disabled={true}>
+            <span>Select a file</span>
+          </button>
+        </div>
+        <div className="help-message">Help message</div>
+      </div>
+    </div>
   </div>;
 
 export const Default = Template.bind({});

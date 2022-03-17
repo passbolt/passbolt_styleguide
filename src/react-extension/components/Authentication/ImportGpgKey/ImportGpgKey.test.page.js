@@ -78,7 +78,7 @@ export default class ImportGpgKeyPage {
    * Returns the verify button element
    */
   get verifyButton() {
-    return this._page.container.querySelector('.button.primary');
+    return this._page.container.querySelector('.form-actions .button.primary');
   }
 
   /**

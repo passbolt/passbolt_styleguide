@@ -59,11 +59,11 @@ export default class ProvideAccountRecoveryOrganizationKeyPage {
   }
 
   get fileUploadField() {
-    return this.selector('.input-file-chooser-wrapper .input-file-inline input');
+    return this.selector('.input-file-inline input');
   }
 
   get browseInput() {
-    return this.selector('.provide-organization-recover-key-dialog .input-file-chooser-wrapper input');
+    return this.selector('.provide-organization-recover-key-dialog .input.file input');
   }
 
   get submitButton() {

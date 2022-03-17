@@ -234,34 +234,33 @@ class ImportOrganizationKey extends React.Component {
               disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
               placeholder='Add Open PGP Public key' required="required" autoComplete="off" autoFocus={true} />
           </div>
-          <div className="input-file-chooser-wrapper">
+          <div className="input file">
             <input
               type="file"
+              id="dialog-import-private-key"
               ref={this.fileUploaderRef}
               disabled={this.hasAllInputDisabled()}
               onChange={this.handleSelectOrganizationKeyFile} />
-
-            <div className="input text">
-              <label htmlFor="dialog-import-private-key">
-                <Trans>Select a file to import</Trans>
-              </label>
-              <div className="input-file-inline">
-                <input
-                  type="text"
-                  disabled={true}
-                  placeholder={this.translate("No file selected")}
-                  defaultValue={this.selectedFilename} />
-                <a
-                  className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                  onClick={this.handleSelectFile}>
-                  <Icon name="upload-a" />
-                  <span><Trans>Choose a file</Trans></span>
-                </a>
-              </div>
-              {this.state.keyError &&
-                <div className="key error-message">{this.state.keyError}</div>
-              }
+            <label htmlFor="dialog-import-private-key">
+              <Trans>Select a file to import</Trans>
+            </label>
+            <div className="input-file-inline">
+              <input
+                type="text"
+                disabled={true}
+                placeholder={this.translate("No file selected")}
+                defaultValue={this.selectedFilename} />
+              <button
+                className="button primary"
+                type='button'
+                disabled={this.hasAllInputDisabled()}
+                onClick={this.handleSelectFile}>
+                <span><Trans>Choose a file</Trans></span>
+              </button>
             </div>
+            {this.state.keyError &&
+              <div className="key error-message">{this.state.keyError}</div>
+            }
           </div>
         </div>
         {!this.state.hasAlreadyBeenValidated &&
