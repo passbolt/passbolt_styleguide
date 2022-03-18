@@ -664,21 +664,21 @@ class CreateResource extends Component {
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="create-password-form-description"><Trans>Description</Trans>&nbsp;
+              <label htmlFor="create-password-form-description"><Trans>Description</Trans>
                 {!this.areResourceTypesEnabled() &&
                 <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
                   <Icon name="info-circle"/>
                 </Tooltip>
                 }
                 {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
-                <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
+                <a onClick={this.handleDescriptionToggle} className="lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
                   </Tooltip>
                 </a>
                 }
                 {this.areResourceTypesEnabled() && this.state.encryptDescription &&
-                <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
+                <a onClick={this.handleDescriptionToggle} className="lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")}>
                     <Icon name="lock"/>
                   </Tooltip>
@@ -690,7 +690,7 @@ class CreateResource extends Component {
                 disabled={this.state.processing}  onKeyUp={this.handleDescriptionInputKeyUp} onChange={this.handleInputChange}>
               </textarea>
               {this.state.descriptionError &&
-              <div className="error message">{this.state.descriptionError}</div>
+              <div className="error-message">{this.state.descriptionError}</div>
               }
               {this.state.descriptionWarning &&
               <div className="warning message">{this.state.descriptionWarning}</div>

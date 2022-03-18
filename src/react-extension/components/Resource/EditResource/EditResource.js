@@ -764,7 +764,7 @@ class EditResource extends Component {
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="edit-password-form-description"><Trans>Description</Trans>&nbsp;
+              <label htmlFor="edit-password-form-description"><Trans>Description</Trans>
                 {!this.areResourceTypesEnabled() &&
                 <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
                   <Icon name="info-circle"/>

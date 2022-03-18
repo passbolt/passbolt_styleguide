@@ -4,6 +4,15 @@ label {
     font-size: 1.5rem; /* 15px */
     line-height: 2rem; /* 20px */
     display: block;
+
+    & > :first-child {
+        margin-left: .4rem;
+    }
+
+    svg {
+        height: 1.2rem;
+        width: 1.2rem;
+    }
 }
 
 /*
@@ -13,16 +22,18 @@ label {
 	.required		- additional red star
 */
 .required label:after {
-    content: " \002A"; /* unicode character * */
+    content: "\002A"; /* unicode character * */
     color: @font-error;
     font-weight: bold;
+    margin-left: .4rem;
 }
 
 .input.error label {
     color: @font-error;
 }
 
-.input.text, .input.file {
+.input.text, .input.file
+, .input.textarea {
   &.disabled {
     label {
       opacity: .5;
