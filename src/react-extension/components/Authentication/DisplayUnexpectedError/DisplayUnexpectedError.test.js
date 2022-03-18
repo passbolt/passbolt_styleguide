@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {defaultProps} from "./DisplayUnexpectedError.test.data";
+import {defaultProps, passboltApiFetchErrorProps} from "./DisplayUnexpectedError.test.data";
 import DisplayUnexpectedErrorTestPage from "./DisplayUnexpectedError.test.page";
 
 beforeEach(() => {
@@ -19,20 +19,28 @@ beforeEach(() => {
 });
 
 describe("DisplayUnexpectedError", () => {
-  let page, props;
-
-  beforeEach(() => {
-    props = defaultProps(); // The props to pass
-    page = new DisplayUnexpectedErrorTestPage(props);
-  });
-
   it('As AN I should be able to try again', async() => {
-    expect.assertions(1);
+    const props = defaultProps();
+    const page = new DisplayUnexpectedErrorTestPage(props);
+
+    expect.assertions(2);
     Object.defineProperty(window, "location", {
       value: {reload: jest.fn()},
     });
+    expect(page.moreDetailsCta).toBeNull();
     await page.tryAgain();
     expect(window.location.reload).toHaveBeenCalled();
+  });
+
+  it('As a user I should see error details if the error carry some', async() => {
+    const props = passboltApiFetchErrorProps();
+    const page = new DisplayUnexpectedErrorTestPage(props);
+
+    expect.assertions(3);
+    expect(page.moreDetailsCta).toBeTruthy();
+    await page.showErrorDetails();
+    expect(page.moreDetailsCta).toBeTruthy();
+    expect(page.errorDetails.value).toEqual(JSON.stringify(props.error.data, null, 4));
   });
 });
 

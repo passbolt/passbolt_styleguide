@@ -45,6 +45,7 @@ export function defaultProps(props = {}) {
  */
 export function hasChangedPolicyProps(props = {}) {
   const _props = {
+    context: defaultAppContext(),
     policy: "mandatory",
     keyInfo: {
       user_ids: [{
