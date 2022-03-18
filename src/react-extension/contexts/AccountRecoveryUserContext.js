@@ -26,6 +26,7 @@ export const AccountRecoveryUserContext = React.createContext({
   getPolicy: () => {},
   getUserAccountRecoverySubscriptionStatus: () => {},
   isAccountRecoveryChoiceRequired: () => {},
+  isPolicyEnabled: () => {},
 });
 
 const ACCOUNT_RECOVERY_STATUS_PENDING = 'pending';
@@ -60,6 +61,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
       getUserAccountRecoverySubscriptionStatus: this.getUserAccountRecoverySubscriptionStatus.bind(this), // The user account recovery program subscription status
       setUserAccountRecoveryStatus: this.setUserAccountRecoveryStatus.bind(this), // Sets the status of the current user account recovery setting
       isAccountRecoveryChoiceRequired: this.isAccountRecoveryChoiceRequired.bind(this), // Returns true if the user has to decide to participate or not for the account recovery program
+      isPolicyEnabled: this.isPolicyEnabled.bind(this), // Return true is the policy is enabled
     };
   }
 
@@ -67,6 +69,10 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * Find the account recovery policy
    */
   async findAccountRecoveryPolicy() {
+    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+      return;
+    }
+
     if (this.state.accountRecoveryOrganizationPolicy !== null) {
       return;
     }
@@ -97,9 +103,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * @returns {object}
    */
   getRequestedDate() {
-    //TODO: replace by: this.getOrganizationPolicy()?.modified;
-    const organizationPolicy = this.getOrganizationPolicy();
-    return organizationPolicy && organizationPolicy.modified;
+    return this.getOrganizationPolicy()?.modified;
   }
 
   /**
@@ -107,9 +111,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * @returns {object}
    */
   getRequestor() {
-    //TODO: replace by: this.getOrganizationPolicy()?.creator;
-    const organizationPolicy = this.getOrganizationPolicy();
-    return organizationPolicy && organizationPolicy.creator;
+    return this.getOrganizationPolicy()?.creator;
   }
 
   /**
@@ -117,9 +119,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * @returns {string}
    */
   getPolicy() {
-    //TODO: replace by: this.getOrganizationPolicy()?.policy;
-    const organizationPolicy = this.getOrganizationPolicy();
-    return organizationPolicy && organizationPolicy.policy;
+    return this.getOrganizationPolicy()?.policy;
   }
 
   /**
@@ -152,6 +152,15 @@ export class AccountRecoveryUserContextProvider extends React.Component {
     const policy = this.getPolicy();
     return this.state.status === AccountRecoveryUserContextProvider.STATUS_PENDING
       && (policy === AccountRecoveryUserContextProvider.POLICY_MANDATORY || policy === AccountRecoveryUserContextProvider.POLICY_OPT_OUT);
+  }
+
+  /**
+   * Return true if the policy is not set to POLICY_DISABLED
+   * @returns {boolean}
+   */
+  isPolicyEnabled() {
+    const policy = this.getPolicy();
+    return policy && policy !== AccountRecoveryUserContextProvider.POLICY_DISABLED;
   }
 
   static get STATUS_PENDING() {

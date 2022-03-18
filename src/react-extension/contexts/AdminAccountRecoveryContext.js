@@ -65,8 +65,11 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findAccountRecoveryPolicy() {
+    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+      return;
+    }
     const currentPolicy = await this.props.context.port.request("passbolt.account-recovery.get-organization-policy");
-    await this.setState({currentPolicy});
+    this.setState({currentPolicy});
   }
 
   /**

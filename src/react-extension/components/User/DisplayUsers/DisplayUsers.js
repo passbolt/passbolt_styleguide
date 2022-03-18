@@ -248,6 +248,14 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
+   * @returns {boolean}
+   */
+  hasAttentionRequiredColumn() {
+    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
+  }
+
+  /**
    * Format date in time ago
    * @param {string} date The date to format
    * @return {string} The formatted date
@@ -286,7 +294,7 @@ class DisplayUsers extends React.Component {
             </div>
           </div>
         </td>
-        {this.isLoggedInUserAdmin() &&
+        {this.hasAttentionRequiredColumn() &&
           <td className="s-cell attention-required">
             {hasUserAttentionRequired &&
             <Icon name="exclamation" baseline={true}/>
@@ -376,7 +384,7 @@ class DisplayUsers extends React.Component {
                         </label>
                       </div>
                     </th>
-                    {this.isLoggedInUserAdmin() &&
+                    {this.hasAttentionRequiredColumn() &&
                     <th className="s-cell attention-required">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
                         <div className="cell-header">

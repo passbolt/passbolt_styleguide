@@ -12,25 +12,22 @@
  * @since         3.6.0
  */
 
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any}
  */
-export function defaultProps(props) {
+export function defaultProps(data = {}) {
   const defaultProps = {
-    context: {
-      loggedInUser: {},
-      locale: "en-US",
-      userSettings: {
-        getTrustedDomain: () => new URL(window.location).origin
-      }
-    },
+    context: defaultAppContext(data?.context),
     dialogContext: {
       open: jest.fn()
     }
   };
-  return Object.assign(defaultProps, props || {});
+  delete data.context;
+  return Object.assign(defaultProps, data);
 }
 
 export const mockedData = {

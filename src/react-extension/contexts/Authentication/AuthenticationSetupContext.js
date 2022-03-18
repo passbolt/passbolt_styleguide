@@ -113,6 +113,9 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {boolean}
    */
   get accountRecoveryOrganizationPolicyEnabled() {
+    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+      return false;
+    }
     const accountRecoveryOrganizationPolicy = this.state.setupInfo?.account_recovery_organization_policy?.policy;
     return accountRecoveryOrganizationPolicy && accountRecoveryOrganizationPolicy !== 'disabled';
   }

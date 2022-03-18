@@ -17,7 +17,7 @@
  */
 import React from 'react';
 import {
-  defaultAppContext,
+  defaultContext,
   propsWithGroupDetails,
   propsWithoutLock,
   propsWithUserDetails
@@ -42,7 +42,7 @@ beforeEach(() => {
 
 describe("Display User Workspace", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
+  const context = defaultContext(); // The applicative context
 
   it('As LU, I should see the user details area if the area is locked and the details is on an user', async() => {
     page = new DisplayUserWorkspacePage(context, propsWithUserDetails());
