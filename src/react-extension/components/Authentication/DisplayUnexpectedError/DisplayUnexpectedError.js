@@ -14,13 +14,65 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../Common/Icons/Icon";
 
 class DisplayUnexpectedError extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.state = this.defaultState;
+    this.bindCallbacks();
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      showErrorDetails: false // Display flag of the error details area
+    };
+  }
+
+  /**
+   * Bind the component handlers
+   */
+  bindCallbacks() {
+    this.handleErrorDetailsToggle = this.handleErrorDetailsToggle.bind(this);
+  }
+
   /**
    * Whenever the user click on the action
    */
   onClick() {
     window.location.reload();
+  }
+
+  /**
+   * Handle the toggle display of error details
+   */
+  handleErrorDetailsToggle() {
+    this.setState({showErrorDetails: !this.state.showErrorDetails});
+  }
+
+  /**
+   * Does the provided error carry details.
+   * @returns {boolean}
+   */
+  get hasErrorDetails() {
+    const error = this.props?.error;
+    return Boolean(error?.details) || Boolean(error?.data);
+  }
+
+  /**
+   * Format the error details as a string.
+   * @returns {string}
+   */
+  formatErrors() {
+    const errorMessage = this.props.error?.details || this.props.error?.data;
+    return JSON.stringify(errorMessage, null, 4);
   }
 
   /**
@@ -33,6 +85,31 @@ class DisplayUnexpectedError extends Component {
         <h1>{this.props.title}</h1>
         <p>{this.props.message}</p>
         <p>{this.props.error && this.props.error.message}</p>
+        {this.hasErrorDetails &&
+          <div className="accordion error-details">
+            <div className="accordion-header">
+              <a onClick={this.handleErrorDetailsToggle}>
+                <Trans>Error details</Trans>
+                <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
+              </a>
+            </div>
+            {this.state.showErrorDetails &&
+              <div className="accordion-content">
+                <div className="input text">
+                  <label
+                    htmlFor="js_field_debug"
+                    className="visuallyhidden">
+                    <Trans>Error details</Trans>
+                  </label>
+                  <textarea
+                    id="js_field_debug"
+                    defaultValue={`${this.formatErrors()}`}
+                    readOnly />
+                </div>
+              </div>
+            }
+          </div>
+        }
         <div className="form-actions">
           <button onClick={this.onClick.bind(this)} className="button primary big full-width" role="button"><Trans>Try again</Trans></button>
         </div>

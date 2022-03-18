@@ -12,13 +12,45 @@
  * @since         3.6.0
  */
 
+import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import EntityValidationError from "../../../../shared/lib/Error/EntityValidationError";
+
 /**
  * Default props
- * @returns {{}}
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function defaultProps(props) {
+export function defaultProps(props = {}) {
   const defaultProps = {
     error: new Error("Mocked unexpected error.")
   };
-  return Object.assign(defaultProps, props || {});
+  return Object.assign(defaultProps, props);
+}
+
+/**
+ * Passbolt API fetch error props
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export function passboltApiFetchErrorProps(props = {}) {
+  const error = new PassboltApiFetchError("Could not finalize API request", {
+    body: {
+      message: "The provided Gpg doesn't fit the minimal requirements.",
+    },
+    code: 403
+  });
+  const defaultProps = {error};
+  return Object.assign(defaultProps, props);
+}
+
+/**
+ * Passbolt Entity validation error props
+ * @param {Object} props The props to override
+ * @returns {object}
+ */
+export function passboltEntityValidationErrorProps(props = {}) {
+  const error = new EntityValidationError("Could not validate Entity");
+  error.addError("algorithm", "enum", "The algorithm value is not included in the supported list.");
+  const defaultProps = {error};
+  return Object.assign(defaultProps, props);
 }

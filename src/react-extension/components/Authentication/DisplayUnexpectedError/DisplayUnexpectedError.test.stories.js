@@ -15,7 +15,11 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import DisplayUnexpectedError from "./DisplayUnexpectedError";
-import {defaultProps} from "./DisplayUnexpectedError.test.data";
+import {
+  defaultProps,
+  passboltApiFetchErrorProps,
+  passboltEntityValidationErrorProps
+} from "./DisplayUnexpectedError.test.data";
 
 export default {
   title: 'Passbolt/Authentication/DisplayUnexpectedError',
@@ -46,5 +50,17 @@ SignInError.args = defaultProps({
   message: "Something went wrong, the sign in failed with the following error",
 });
 SignInError.parameters = {
+  css: "ext_authentication"
+};
+
+export const ErrorWithData = Template.bind({});
+ErrorWithData.args = passboltApiFetchErrorProps();
+ErrorWithData.parameters = {
+  css: "ext_authentication"
+};
+
+export const ErrorWithDetails = Template.bind({});
+ErrorWithDetails.args = passboltEntityValidationErrorProps();
+ErrorWithDetails.parameters = {
   css: "ext_authentication"
 };

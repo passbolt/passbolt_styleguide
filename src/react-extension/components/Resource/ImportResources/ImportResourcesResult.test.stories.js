@@ -36,3 +36,20 @@ Initial.args = {
   },
   onClose: () => {}
 };
+
+export const ImportWithErrors = Template.bind({});
+ImportWithErrors.args = {
+  resourceWorkspaceContext: {
+    resourceFileImportResult: {
+      created: {
+        foldersCount: 10,
+        resourcesCount: 15
+      },
+      errors: {
+        resources: ["Example of resource import error", "Example of resource import error"],
+        folders: ["Example of folder import error", "Example of folder import error"]
+      }
+    }
+  },
+  onClose: () => {}
+};

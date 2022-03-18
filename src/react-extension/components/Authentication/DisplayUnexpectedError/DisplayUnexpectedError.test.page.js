@@ -23,11 +23,12 @@ import DisplayUnexpectedError from "./DisplayUnexpectedError";
 export default class DisplayUnexpectedErrorTestPage {
   /**
    * Default constructor
+   * @param {object} props Props to attach
    */
-  constructor() {
+  constructor(props = {}) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayUnexpectedError/>
+        <DisplayUnexpectedError {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -47,10 +48,32 @@ export default class DisplayUnexpectedErrorTestPage {
   }
 
   /**
+   * Returns the more details cta element
+   */
+  get moreDetailsCta() {
+    return this._page.container.querySelector('.error-details a');
+  }
+
+  /**
+   * Returns the more details element
+   */
+  get errorDetails() {
+    return this._page.container.querySelector('.error-details textarea');
+  }
+
+  /**
    * Request new account
    */
   async tryAgain() {
     const leftClick = {button: 0};
     fireEvent.click(this.tryAgainButton, leftClick);
+  }
+
+  /**
+   * Show error details
+   */
+  async showErrorDetails() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.moreDetailsCta, leftClick);
   }
 }

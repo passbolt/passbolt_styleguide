@@ -32,6 +32,7 @@ export function defaultAppContext(appContext) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
   const defaultAppContext = {
+    locale: 'en-UK',
     userSettings,
     siteSettings,
     resourceTypesSettings,
