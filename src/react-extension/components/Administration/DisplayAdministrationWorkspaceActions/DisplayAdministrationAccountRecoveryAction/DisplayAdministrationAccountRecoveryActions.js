@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAdminAccountRecovery} from "../../../../contexts/AdminAccountRecoveryContext";
+import {AccountRecoveryUserContextProvider} from "../../../../contexts/AccountRecoveryUserContext";
 import {withWorkflow} from "../../../../contexts/WorkflowContext";
 import HandleSaveAccountRecoveryOrganizationPolicyWorkflow
   from "../../HandleSaveAccountRecoveryOrganizationPolicyWorkflow/HandleSaveAccountRecoveryOrganizationPolicyWorkflow";
@@ -58,9 +59,28 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
 
   /**
    * Is save button enable
+   * @returns {boolean}
    */
   isSaveEnabled() {
-    return this.props.adminAccountRecoveryContext.hasPolicyChanges();
+    if (!this.props.adminAccountRecoveryContext.hasPolicyChanges()) { //there is currently no change
+      return false;
+    }
+    const changes = this.props.adminAccountRecoveryContext.policyChanges;
+    const currentPolicy = this.props.adminAccountRecoveryContext.currentPolicy;
+
+    if (changes?.policy ===  AccountRecoveryUserContextProvider.POLICY_DISABLED) {
+      // the new policy type to save is now disabled, there is no need to check for the key, we can save
+      return true;
+    }
+
+    const effectiveOrk = changes.publicKey || currentPolicy.account_recovery_organization_public_key?.armored_key;
+    if (Boolean(changes.policy) && Boolean(effectiveOrk)) {
+      //the policy has changed to an enabled type and there is an applicable ORK, we can save
+      return true;
+    }
+
+    //the policy didn't changed, so we check if the applicable one is enabled and if we have a new key defined
+    return currentPolicy.policy !== AccountRecoveryUserContextProvider.POLICY_DISABLED && Boolean(changes.publicKey);
   }
 
   /**
