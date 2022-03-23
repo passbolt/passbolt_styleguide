@@ -11,46 +11,45 @@
 .dialog {
   position: relative;
   max-width: 48rem;
-  border: 1px solid @border-default;
-  background: @background-lightest;
   margin: auto;
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 4.8rem;
-  .box-shadow();
+  background: @dialog-background;
+  border: 1px solid @dialog-border;
+  border-radius: .3rem;
+  box-sizing: border-box;
+  filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.1));
 
   /* header */
   .dialog-header {
-    padding: .8rem 1.6rem 0 1.6rem;
-    height: 4.8rem;
+    display: flex;
+    align-items: center;
+    padding: 1.6rem;
 
-    h2 {
-      margin: .8rem 0 1rem .4rem;
-      font-size: 1.8rem;
-      .ellipsis();
-    }
-
-    .dialog-header-subtitle {
-      padding-top: .4rem;
-      padding-left: .8rem;
-      font-size: 1.4rem;
-      color: @font-default;
-    }
-
-    .tooltip-alt {
-      margin-left: .8rem;
-      font-size: 1.2rem;
-      font-weight: normal;
-      color: @font-default;
-      line-height: 1em;
-
-      .tooltip-text {
-        white-space: normal;
+    .dialog-title-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      width: 90%;
+      h2 {
+        margin: 0;
+        font-size: 1.9rem;
+        line-height: 2.6rem;
+        .ellipsis();
       }
-    }
 
-    .dialog-close {
-      margin-top: -3.6rem;
+      .dialog-header-subtitle {
+        padding-top: .4rem;
+        padding-left: .8rem;
+        font-size: 1.4rem;
+        line-height: 2rem;
+      }
+
+      .tooltip {
+        margin-left: 1rem;
+        line-height: 0;
+      }
     }
   }
 
@@ -173,10 +172,9 @@
 
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close {
-
+  margin-left: 1rem;
   &, &:hover {
     display: block;
-    float: right;
     border: none;
   }
 

@@ -83,17 +83,19 @@ class DialogWrapper extends Component {
       <div className={`${this.props.className} dialog-wrapper`}>
         <div className="dialog">
           <div className="dialog-header">
-            <h2>
-              <span className="dialog-header-title">{this.props.title}</span>
-              {this.props.subtitle &&
-              <span className="dialog-header-subtitle">{this.props.subtitle}</span>
-              }
+            <div className="dialog-title-wrapper">
+              <h2>
+                <span className="dialog-header-title">{this.props.title}</span>
+                {this.props.subtitle &&
+                  <span className="dialog-header-subtitle">{this.props.subtitle}</span>
+                }
+              </h2>
               {(this.props.tooltip && this.props.tooltip !== '') &&
-              <Tooltip message={this.props.tooltip}>
-                <Icon name='info-circle'/>
-              </Tooltip>
+                <Tooltip message={this.props.tooltip}>
+                  <Icon name='info-circle'/>
+                </Tooltip>
               }
-            </h2>
+            </div>
             <DialogCloseButton onClose={this.handleClose} disabled={this.props.disabled}/>
           </div>
           <div className="dialog-content">
@@ -111,7 +113,6 @@ DialogWrapper.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   tooltip: PropTypes.string,
-  loading: PropTypes.bool,
   disabled: PropTypes.bool,
   onClose: PropTypes.func
 };
