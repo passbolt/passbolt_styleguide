@@ -38,6 +38,12 @@ export function defaultAppContext(appContext) {
     resourceTypesSettings,
     port: new MockPort(),
     storage: new MockStorage(),
+    loggedInUser: {
+      id: userSettings.id,
+      role: {
+        name: 'admin'
+      }
+    }
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

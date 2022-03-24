@@ -260,6 +260,20 @@ describe("AuthenticationSetupContextProvider", () => {
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE);
     });
 
+    it("When a passphrase check succeed and accountRecovery feature flag is disabled but the server sends an enabled account recovery organization policy, the machine state should be set to: CHOOSE_SECURITY_TOKEN", async() => {
+      const props = withAccountRecoveryEnabled(defaultProps());
+      props.context.siteSettings.canIUse = jest.fn(() => false);
+      const contextProvider = new AuthenticationSetupContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.importGpgKey();
+      await contextProvider.checkPassphrase("passphrase");
+      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", false, undefined);
+      expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN);
+    });
+
     it("When a wrong passphrase is requested to be checked, the error should be rethrown and the machine state should remain on: SIGN_IN", async() => {
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.setup.verify-passphrase", jest.fn(() => Promise.reject(new InvalidMasterPasswordError())));

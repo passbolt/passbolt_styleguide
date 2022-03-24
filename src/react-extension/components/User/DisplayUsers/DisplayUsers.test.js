@@ -17,7 +17,7 @@
  */
 
 import {
-  defaultAppContext,
+  defaultContext,
   defaultProps, propsWithFirstUserAttentionRequired,
   propsWithNoUsersWithTextSearch,
   propsWithNullUsers
@@ -31,7 +31,7 @@ beforeEach(() => {
 
 describe("Display Users", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
+  const context = defaultContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe("As LU, I should see the appropriate list of users", () => {

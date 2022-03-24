@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/DisplayUserDetailsInformation";
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
@@ -32,6 +33,10 @@ class DisplayUserDetails extends React.Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
+  }
+
+  componentDidMount() {
+    this.props.accountRecoveryContext.findAccountRecoveryPolicy();
   }
 
   /**
@@ -90,11 +95,19 @@ class DisplayUserDetails extends React.Component {
   }
 
   /**
+   * Is the account recovery enabled
+   * @returns {boolean}
+   */
+  isAccountRecoveryEnabled() {
+    return this.props.accountRecoveryContext.isPolicyEnabled();
+  }
+
+  /**
    * Get attention required
    * @returns {boolean}
    */
   get hasAttentionRequired() {
-    return Boolean(this.user.pending_account_recovery_user_request);
+    return this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_user_request);
   }
 
   /**
@@ -130,7 +143,7 @@ class DisplayUserDetails extends React.Component {
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}
           {this.user.active && <DisplayUserDetailsPublicKey/>}
-          {this.user.active && this.isLoggedInUserAdmin() && <DisplayUserDetailsAccountRecovery/>}
+          {this.isAccountRecoveryEnabled() && this.user.active && this.isLoggedInUserAdmin() && <DisplayUserDetailsAccountRecovery/>}
         </div>
       </div>
     );
@@ -141,7 +154,8 @@ DisplayUserDetails.propTypes = {
   context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  accountRecoveryContext: PropTypes.object, // The account recovery context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withActionFeedback(withTranslation('common')(DisplayUserDetails))));
+export default withAppContext(withAccountRecovery(withUserWorkspace(withActionFeedback(withTranslation('common')(DisplayUserDetails)))));

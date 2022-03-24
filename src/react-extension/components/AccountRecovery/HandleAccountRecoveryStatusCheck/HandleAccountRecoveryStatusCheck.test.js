@@ -68,7 +68,7 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * And	I see a “Save” button
    */
   it('As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “opt-out” after logging in.', async() => {
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy("opt-out");
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "opt-out"});
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
 
     expect.assertions(2);
@@ -115,7 +115,7 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * And	I see a “Save” button
    */
   it('As a logged in user who has a pending organization account recovery policy, I can see a dialog prompting me to join the account recovery program if the policy is “mandatory” after logging in.', async() => {
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy("mandatory");
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "mandatory"});
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
 
     expect.assertions(2);
@@ -153,7 +153,7 @@ describe("As a logged in user, I have to approve or reject the new account recov
    * Then I am not prompted to join the account recovery program
    */
   it('As a logged in user who has a pending organisation account recovery policy, I can join the account recovery program when I am prompted to join it.', async() => {
-    const organizationPolicy = getOrganizationAccountRecoveryPolicy("opt-in");
+    const organizationPolicy = getOrganizationAccountRecoveryPolicy({policy: "opt-in"});
     const mockedAccountRecoveryUserService = defaultAccountRecoveryUserService(organizationPolicy);
     new HandleAccountRecoveryStatusCheckPage(props, mockedAccountRecoveryUserService);
 
