@@ -83,7 +83,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
     }
 
     const accountRecoveryOrganizationPolicy = await this.props.accountRecoveryUserService.getOrganizationAccountRecoverySettings();
-    const status = loggedInUser.account_recovery_user_setting ? loggedInUser.account_recovery_user_setting : AccountRecoveryUserContextProvider.STATUS_PENDING;
+    const status = loggedInUser.account_recovery_user_setting?.status || AccountRecoveryUserContextProvider.STATUS_PENDING;
     this.setState({
       accountRecoveryOrganizationPolicy,
       status
