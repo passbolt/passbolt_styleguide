@@ -55,6 +55,11 @@ class DisplayUserDetailsGroups extends React.Component {
    */
   get groups() {
     const {groups} = this.props.context;
+    // If the group haven't yet been loaded
+    if (!groups) {
+      return [];
+    }
+
     const selectedUser = this.props.userWorkspaceContext.details.user;
     if (selectedUser) {
       const belongsToGroup = group => group.groups_users.some(group_user => group_user.user_id === selectedUser.id);
