@@ -60,6 +60,7 @@ import HandleAccountRecoveryStatusCheck from "./components/AccountRecovery/Handl
 import WorkflowContextProvider from "./contexts/WorkflowContext";
 import ManageWorkflows from "./components/Common/Workflow/ManageWorkflows/ManageWorkflows";
 import AdminAccountRecoveryContextProvider from "./contexts/AdminAccountRecoveryContext";
+import HandleApplicationFirstLoadRoute from "./components/Common/Route/HandleApplicationFirstLoadRoute";
 
 /**
  * The passbolt application served by the browser extension.
@@ -112,6 +113,8 @@ class ExtApp extends Component {
                               <NavigationContextProvider>
                                 <HandleExtAppRouteChanged/>
                                 <Switch>
+                                  { /* The application first load route points to an html document */ }
+                                  <Route path="/data/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
                                   { /* The following routes are not handled by the browser extension application. */}
                                   <Route exact path={[
                                     "/app/administration",
@@ -146,6 +149,7 @@ class ExtApp extends Component {
                                   </Route>
                                   {/* Users workspace */}
                                   <Route path={[
+                                    "/app/account-recovery-requests/review/:accountRecoveryRequestId",
                                     "/app/groups/view/:selectedGroupId",
                                     "/app/groups/edit/:selectedGroupId",
                                     "/app/users/view/:selectedUserId",

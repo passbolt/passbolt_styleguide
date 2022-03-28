@@ -25,6 +25,19 @@ export function defaultProps() {
   return {};
 }
 
+/**
+ * Default user workspace context
+ * @param {Object} data Context properties to override
+ * @return {Object}
+ */
+export function defaultUserWorkspaceContext(data = {}) {
+  const _default = {
+    onUserSelected: {
+      single: jest.fn()
+    }
+  };
+  return Object.assign(_default, data);
+}
 
 /**
  * Default users

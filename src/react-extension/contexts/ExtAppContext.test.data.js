@@ -43,7 +43,8 @@ export function defaultAppContext(appContext) {
       role: {
         name: 'admin'
       }
-    }
+    },
+    users: [],
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

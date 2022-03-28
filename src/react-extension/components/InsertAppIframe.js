@@ -34,20 +34,27 @@ class InsertAppIframe extends Component {
    * @returns {void}
    */
   loadAppIframe() {
-    const contentScriptPathname = this.getPagePathname();
-    const iframeUrl = `${this.props.browserExtensionUrl}data/passbolt-iframe-app.html?passbolt=passbolt-iframe-app&pathname=${contentScriptPathname}`;
-    this.iframeRef.current.contentWindow.location = iframeUrl;
+    const url = new URL(`${this.props.browserExtensionUrl}data/passbolt-iframe-app.html`);
+    url.searchParams.append("passbolt", "passbolt-iframe-app");
+
+    // If the user aims to a location, extract it and add it as parameter of the iframe url.
+    const pathname = this.getPagePathname();
+    if (pathname && pathname !== "/") {
+      url.searchParams.append("pathname", pathname);
+    }
+
+    this.iframeRef.current.contentWindow.location = url.toString();
   }
 
   /**
    * Get the pathname from url.
    * By instance ?pathname=/app/users
    *
-   * @returns {string}
+   * @returns {string|null} Return null if the pathname doesn't validate
    */
   getPagePathname() {
     if (!this.validatePagePathname()) {
-      return "";
+      return null;
     }
 
     return this.props.location.pathname;
@@ -56,7 +63,6 @@ class InsertAppIframe extends Component {
   /**
    * Validate a pathname.
    * A valid pathname contains only alphabetical, numerical, / and - characters
-   * @param {string} pathname
    * @returns {boolean}
    */
   validatePagePathname() {

@@ -109,6 +109,7 @@ class UserWorkspaceContextProvider extends React.Component {
   initializeProperties() {
     this.users = null; // A cache of the last known list of users from the App context
     this.groups = []; // A cache of the last known list of groups from the App context
+    this.routeLocationKey = null; // The current route location key being resolved, it will be used to avoid double execution of the route change handler.
   }
 
   /**
@@ -176,9 +177,17 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param previousLocation Previous router location
    */
   async handleRouteChange(previousLocation) {
-    const hasLocationChanged = this.props.location.key !== previousLocation.key;
+    const hasLocationChanged = this.props.location.key !== previousLocation.key; // Did the route change as per react-dom-router
+    /*
+     * Multiple componentDidUpdate can be triggered with the same route change.
+     * Avoid this by storing and checking the last route key change resolved by the component.
+     * @deprecated to removed with react-router-dom v6.1.0 @see https://github.com/supasate/connected-react-router/issues/129#issuecomment-446212160
+     */
+    const hasLocationChangedRouter5 = this.props.location.key !== this.routeLocationKey;
+    this.routeLocationKey = this.props.location.key;
     const isAppFirstLoad = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
-    if (hasLocationChanged || isAppFirstLoad) {
+
+    if ((hasLocationChanged && hasLocationChangedRouter5)|| isAppFirstLoad) {
       await this.handleGroupRouteChange();
       await this.handleUserRouteChange();
     }
@@ -215,10 +224,12 @@ class UserWorkspaceContextProvider extends React.Component {
    * Handle the user view route change
    */
   async handleUserRouteChange() {
-    const isUserLocation = this.props.location.pathname.includes('users');
-    const userId = this.props.match.params.selectedUserId;
+    const isUserLocation = this.props.location.pathname.includes('users')
+      || this.props.location.pathname.includes('account-recovery-requests/review');
+
     if (isUserLocation) {
-      if (userId) { // Case of password view
+      const userId = this.props.match.params.selectedUserId;
+      if (userId) { // Case of user view
         await this.handleSingleUserRouteChange(userId);
       } else { // Case of all and applied filters
         await this.handleAllUserRouteChange();
@@ -235,7 +246,7 @@ class UserWorkspaceContextProvider extends React.Component {
     if (hasUsers) {
       const user = this.users.find(user => user.id === userId);
       const hasNoneFilter = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
-      if (hasNoneFilter) { // Case of password view by url bar inputting
+      if (hasNoneFilter) { // Case of user view by url bar inputting
         await this.search({type: UserWorkspaceFilterTypes.ALL});
       }
       // If the user does not exist, it should display an error
@@ -256,7 +267,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async handleAllUserRouteChange() {
     const hasUsers = this.users !== null;
     if (hasUsers) {
-      const filter = (this.props.location.state && this.props.location.state.filter) || {type: UserWorkspaceFilterTypes.ALL};
+      const filter = this.props.location.state?.filter || {type: UserWorkspaceFilterTypes.ALL};
       await this.search(filter);
       await this.detailNothing();
     }
@@ -274,7 +285,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   handleUnknownUser() {
     this.props.actionFeedbackContext.displayError("The user does not exist");
-    this.props.history.push({pathname: `/app/users`});
+    this.props.history.push({pathname: "/app/users"});
   }
 
   /**
@@ -282,7 +293,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   handleUnknownGroup() {
     this.props.actionFeedbackContext.displayError("The group does not exist");
-    this.props.history.push({pathname: `/app/users`});
+    this.props.history.push({pathname: "/app/users"});
   }
 
   /**
