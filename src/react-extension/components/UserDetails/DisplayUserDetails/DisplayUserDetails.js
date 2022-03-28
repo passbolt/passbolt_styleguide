@@ -107,7 +107,7 @@ class DisplayUserDetails extends React.Component {
    * @returns {boolean}
    */
   get hasAttentionRequired() {
-    return this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_user_request);
+    return this.isAccountRecoveryEnabled() && Boolean(this.user.pending_account_recovery_request);
   }
 
   /**

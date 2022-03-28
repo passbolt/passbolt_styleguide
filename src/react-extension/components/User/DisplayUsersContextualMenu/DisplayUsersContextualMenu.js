@@ -242,7 +242,7 @@ class DisplayUsersContextualMenu extends React.Component {
    * @returns {boolean}
    */
   hasPendingAccountRecoveryRequest() {
-    return this.user && Boolean(this.user.pending_account_recovery_user_request);
+    return this.user && Boolean(this.user.pending_account_recovery_request);
   }
 
   /**

@@ -85,8 +85,8 @@ const contextWithPreviousApprovedAndPending = {
   userWorkspaceContext: {
     details: {
       user: {
-        "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-        "pending_account_recovery_user_request": {"status": "pending"}
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        pending_account_recovery_request: {"status": "pending"}
       }
     }
   }
@@ -103,8 +103,8 @@ const contextWithPreviousRejectedAndPending = {
   userWorkspaceContext: {
     details: {
       user: {
-        "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-        "pending_account_recovery_user_request": {"status": "pending"}
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        pending_account_recovery_request: {"status": "pending"}
       }
     }
   }
@@ -121,8 +121,8 @@ const contextWithOnePending = {
   userWorkspaceContext: {
     details: {
       user: {
-        "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-        "pending_account_recovery_user_request": {"status": "pending"}
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        pending_account_recovery_request: {"status": "pending"}
       }
     }
   }
