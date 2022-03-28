@@ -18,6 +18,9 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {withTranslation} from "react-i18next";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import HandleReviewAccountRecoveryRequestWorkflow
+  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
 
 /**
  * Handle the review account recovery request route.
@@ -56,6 +59,7 @@ class HandleReviewAccountRecoveryRequestRoute extends React.Component {
     }
 
     await this.props.userWorkspaceContext.onUserSelected.single(user);
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequest});
   }
 
   /**
@@ -88,6 +92,7 @@ HandleReviewAccountRecoveryRequestRoute.propTypes = {
   match: PropTypes.object, // The router match helper
   t: PropTypes.func, // The translation function
   userWorkspaceContext: PropTypes.any, // The user workspace context
+  workflowContext: PropTypes.any, // The workflow context
 };
 
-export default withAppContext(withUserWorkspace(withActionFeedback(withRouter(withTranslation("common")(HandleReviewAccountRecoveryRequestRoute)))));
+export default withAppContext(withUserWorkspace(withActionFeedback(withWorkflow(withRouter(withTranslation("common")(HandleReviewAccountRecoveryRequestRoute))))));

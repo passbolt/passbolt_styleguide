@@ -212,7 +212,8 @@ describe("Display Users Contextual Menu", () => {
 
     await page.reviewRecovery();
 
-    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryWorkflow, {user: props.user});
+    const accountRecoveryRequestId = props.user.pending_account_recovery_request.id;
+    expect(props.workflowContext.start).toHaveBeenCalledWith(HandleReviewAccountRecoveryWorkflow, {accountRecoveryRequestId});
     expect(props.hide).toHaveBeenCalled();
   });
 });

@@ -76,7 +76,8 @@ describe("See account recovery", () => {
 
       expect(page.currentStatusButton.textContent).toBe('Review');
       await page.reviewAccountRecovery();
-      expect(props.workflowContext.start).toHaveBeenLastCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {user: props.userWorkspaceContext.details.user});
+      const accountRecoveryRequestId = props.userWorkspaceContext.details.user.pending_account_recovery_request.id;
+      expect(props.workflowContext.start).toHaveBeenLastCalledWith(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
     });
   });
 
