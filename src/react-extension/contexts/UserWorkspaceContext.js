@@ -187,7 +187,7 @@ class UserWorkspaceContextProvider extends React.Component {
     this.routeLocationKey = this.props.location.key;
     const isAppFirstLoad = this.state.filter.type === UserWorkspaceFilterTypes.NONE;
 
-    if ((hasLocationChanged && hasLocationChangedRouter5)|| isAppFirstLoad) {
+    if ((hasLocationChanged && hasLocationChangedRouter5) || isAppFirstLoad) {
       await this.handleGroupRouteChange();
       await this.handleUserRouteChange();
     }

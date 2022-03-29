@@ -22,15 +22,25 @@ export function defaultProps() {
         id: '54c6278e-f824-5fdb-91ff-3e946b18c996'
       }
     },
-    user: {
-      id: "54c6278e-f824-5fda-91ff-3e946b18d994",
-      profile: {
-        first_name: "Betty"
-      },
-      pending_account_recovery_user_request: {
-        id: "54c6278e-f824-5fda-91ff-3e946b18d997",
-        created: "2021-05-25T09:08:34.123",
-        fingerprint: "0c1d1761110d1e33c9006d1a5b1b332e"
+    accountRecoveryRequest: {
+      id: "54c6278e-f824-5fda-91ff-3e946b18d996",
+      status: "pending",
+      fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
+      creator: {
+        id: "54c6278e-f824-5fda-91ff-3e946b18d994",
+        role_id: "c4870358-e32f-41ce-999b-8f80c9b0d17f",
+        active: true,
+        deleted: false,
+        last_logged_in: "",
+        profile: {
+          avatar: {url: {medium: "img/avatar/user_medium.png", small: "img/avatar/user.png"}},
+          created: "2020-09-01T13:11:08+00:00",
+          first_name: "Betty",
+          id: "f6b23982-d3dd-4f8b-9bcc-f3a473edffc2",
+          last_name: "Holberton",
+          modified: "2020-09-01T13:11:08+00:00",
+          user_id: "5247399c-6c8a-47f0-8880-aa854e01e554",
+        },
       },
     },
     onClose: jest.fn(),

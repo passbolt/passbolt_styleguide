@@ -221,8 +221,8 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleReviewRecoveryRequestEvent() {
     this.closeMoreMenu();
-    const user = this.selectedUser;
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {user});
+    const accountRecoveryRequestId = this.selectedUser.pending_account_recovery_request.id;
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
   }
 
   /**

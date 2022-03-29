@@ -97,10 +97,14 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    * Handle the click on the review button
    */
   handleReviewClicked() {
-    const user = this.selectedUser;
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {user});
+    const accountRecoveryRequestId = this.selectedUser.pending_account_recovery_request.id;
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
   }
 
+  /**
+   * Find the user account recovery request and populate the state.
+   * @returns {Promise<void>}
+   */
   async findUserRequests() {
     const userRequests = await this.props.context.port.request('passbolt.account-recovery.get-user-requests', this.selectedUser.id);
     userRequests.sort((a, b) => new Date(b.created) - new Date(a.created));

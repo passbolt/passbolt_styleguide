@@ -11,36 +11,34 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import MockPort from "../../../test/mock/MockPort";
+
+import {v4 as uuidv4} from "uuid";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props
- * @returns {*}
+ * @param {Object} props The override
+ * @returns {object}
  */
-export function defaultProps() {
-  return {
-    context: {
-      port: new MockPort(),
-      loggedInUser: {
-        id: "c4870358-e32f-41ce-999b-8f80c9b0d17f"
-      }
-    },
+export function defaultProps(props = {}) {
+  const _props = {
+    accountRecoveryRequestId: uuidv4(),
     accountRecoveryContext: {
       findAccountRecoveryPolicy: jest.fn(),
       getOrganizationPolicy: jest.fn()
     },
-    dialogContext: {
-      open: jest.fn()
-    },
-    user: {
-      pending_account_recovery_user_request: {
-        id: "c4870358-e32f-41ce-999c-8f80c9b0d17r"
-      }
-    },
-    actionFeedbackContext: {
-      displaySuccess: jest.fn()
-    },
+    actionFeedbackContext: defaultActionFeedbackContextContext(props?.actionFeedbackContext),
+    context: defaultAppContext(props?.context),
+    dialogContext: defaultDialogContext(props?.dialogContext),
     onStop: jest.fn(),
     t: text => text
   };
+  delete props?.adminAccountRecoveryContext; // Treated in the default
+  delete props?.adminAccountRecoveryContext; // Treated in the default
+  delete props?.context; // Treated in the default
+  delete props?.dialogContext; // Treated in the default
+  return Object.assign(_props, props);
 }
+

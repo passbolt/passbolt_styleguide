@@ -107,7 +107,7 @@ class ReviewAccountRecoveryRequest extends Component {
    * @returns string
    */
   get fingerprint() {
-    return this.requester.pending_account_recovery_user_request.fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
+    return this.props.accountRecoveryRequest.fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
   }
 
   /**
@@ -122,19 +122,19 @@ class ReviewAccountRecoveryRequest extends Component {
   }
 
   /**
-   * Get the user who initiated the account recovery.
-   * @returns {*}
+   * Get the user who initiated the account recovery request.
+   * @returns {object}
    */
-  get requester() {
-    return this.props.user;
+  get creator() {
+    return this.props.accountRecoveryRequest.creator;
   }
 
   /**
-   * Get the user firstname requester.
+   * Get the creator first name.
    * @returns {string}
    */
-  get requesterFirstname() {
-    return this.requester.profile.first_name;
+  get creatorFirstName() {
+    return this.creator.profile.first_name;
   }
 
   /**
@@ -142,7 +142,7 @@ class ReviewAccountRecoveryRequest extends Component {
    * @returns {*}
    */
   get date() {
-    return this.props.user.pending_account_recovery_user_request.created;
+    return this.props.accountRecoveryRequest.created;
   }
 
   /**
@@ -166,7 +166,7 @@ class ReviewAccountRecoveryRequest extends Component {
    * @returns {JSX}
    */
   render() {
-    const requesterFirstname = this.requesterFirstname;
+    const requesterFirstname = this.creatorFirstName;
     return (
       <DialogWrapper
         title={this.translate("Review account recovery request")}
@@ -193,7 +193,7 @@ class ReviewAccountRecoveryRequest extends Component {
                 </div>
                 <div className="teaser-image attention-required">
                   <UserAvatar
-                    user={this.requester}
+                    user={this.creator}
                     baseUrl={this.props.context.userSettings.getTrustedDomain()}
                     attentionRequired={true}/>
                 </div>
@@ -261,7 +261,7 @@ class ReviewAccountRecoveryRequest extends Component {
 
 ReviewAccountRecoveryRequest.propTypes = {
   context: PropTypes.any.isRequired, // The application context
-  user: PropTypes.object, // The user who has requested an account recovery
+  accountRecoveryRequest: PropTypes.object.isRequired, // The account recovery request to review.
   onClose: PropTypes.func, // The close callback
   onCancel: PropTypes.func, // The cancel callback
   onSubmit: PropTypes.func, // The review submit requested callback

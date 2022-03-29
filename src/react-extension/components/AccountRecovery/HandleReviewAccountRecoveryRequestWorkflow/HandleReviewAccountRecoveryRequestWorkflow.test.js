@@ -12,78 +12,90 @@
  * @since         3.6.0
  */
 
+import {waitFor} from "@testing-library/react";
+import {v4 as uuidv4} from "uuid";
 import {defaultProps} from "./HandleReviewAccountRecoveryRequestWorkflow.test.data";
-import {HandleReviewAccountRecoveryRequestWorkflow} from "./HandleReviewAccountRecoveryRequestWorkflow";
+import HandleReviewAccountRecoveryRequestWorkflowTestPage from "./HandleReviewAccountRecoveryRequestWorkflow.test.page";
 import ReviewAccountRecovery from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";
 import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
-import {waitFor} from "@testing-library/react";
 
-beforeEach(() => {
-  jest.resetModules();
-  jest.clearAllMocks();
-});
+describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
+  let page, props, accountRecoveryRequest;
 
-describe("UserSettings Context", () => {
-  let handleReviewAccountRecoveryWorkflow; // The handleReviewAccountRecoveryWorkflow to text
+  beforeEach(async() => {
+    props = defaultProps();
+    accountRecoveryRequest = {id: uuidv4()};
+    props.context.port.request = jest.fn(() => accountRecoveryRequest);
+    page = new HandleReviewAccountRecoveryRequestWorkflowTestPage(props);
+    await waitFor(() => {});
+  });
 
   describe('As AD I should complete an authentication setup', () => {
-    beforeEach(() => {
-      handleReviewAccountRecoveryWorkflow = new HandleReviewAccountRecoveryRequestWorkflow(defaultProps());
-      const setStateMock = state => handleReviewAccountRecoveryWorkflow.state = Object.assign(handleReviewAccountRecoveryWorkflow.state, state);
-      jest.spyOn(handleReviewAccountRecoveryWorkflow, 'setState').mockImplementation(setStateMock);
-      const requestMock = jest.fn(() => new Promise(resolve => resolve()));
-      jest.spyOn(handleReviewAccountRecoveryWorkflow.props.context.port, 'request').mockImplementation(requestMock);
+    it('As AD I should start with the review account recovery process with an account recovery request id', async() => {
+      expect.assertions(1);
+      const accountRecoveryReviewProps = {
+        accountRecoveryRequest: accountRecoveryRequest,
+        onCancel: page._instance.handleCancelDialog,
+        onSubmit: page._instance.reviewAccountRecoveryRequest,
+        onError: page._instance.handleError
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ReviewAccountRecovery, accountRecoveryReviewProps);
     });
 
-    it('As AD I should start with the review account recovery dialog', async() => {
-      await handleReviewAccountRecoveryWorkflow.componentDidMount();
-      expect(handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse).toBe(null);
+    it('As AD I should start with the review account recovery process with an account recovery request (when an admin follow an email link, the route handler load the request and pass it to the workflow)', async() => {
+      accountRecoveryRequest = {id: uuidv4()};
+      props = defaultProps({accountRecoveryRequest});
+      page = new HandleReviewAccountRecoveryRequestWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      expect.assertions(1);
       const accountRecoveryReviewProps = {
-        user: handleReviewAccountRecoveryWorkflow.props.user,
-        onCancel: handleReviewAccountRecoveryWorkflow.handleCancelDialog,
-        onSubmit: handleReviewAccountRecoveryWorkflow.reviewAccountRecoveryRequest,
-        onError: handleReviewAccountRecoveryWorkflow.handleError
+        accountRecoveryRequest: accountRecoveryRequest,
+        onCancel: page._instance.handleCancelDialog,
+        onSubmit: page._instance.reviewAccountRecoveryRequest,
+        onError: page._instance.handleError
       };
-      expect(handleReviewAccountRecoveryWorkflow.props.dialogContext.open).toHaveBeenCalledWith(ReviewAccountRecovery, accountRecoveryReviewProps);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ReviewAccountRecovery, accountRecoveryReviewProps);
     });
 
     it('As AD I can approved the review account recovery', async() => {
-      const status = 'approved';
-      await handleReviewAccountRecoveryWorkflow.reviewAccountRecoveryRequest(status);
-      expect(handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse.status).toBe(status);
+      expect.assertions(1);
+      const status = "approved";
+      page._instance.reviewAccountRecoveryRequest(status);
       const provideOrganizationKeyProps = {
-        onCancel: handleReviewAccountRecoveryWorkflow.handleCancelDialog,
-        onSubmit: handleReviewAccountRecoveryWorkflow.handleSave,
-        onError: handleReviewAccountRecoveryWorkflow.handleError
+        onCancel: page._instance.handleCancelDialog,
+        onSubmit: page._instance.handleSave,
+        onError: page._instance.handleError
       };
-      expect(handleReviewAccountRecoveryWorkflow.props.dialogContext.open).toHaveBeenCalledWith(ProvideAccountRecoveryOrganizationKey, provideOrganizationKeyProps);
+      expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ProvideAccountRecoveryOrganizationKey, provideOrganizationKeyProps);
     });
 
     it('As AD I can reject the review account recovery', async() => {
-      const status = 'rejected';
-      await handleReviewAccountRecoveryWorkflow.reviewAccountRecoveryRequest(status);
-      expect(handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse.status).toBe(status);
-      expect(handleReviewAccountRecoveryWorkflow.props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.review-request', handleReviewAccountRecoveryWorkflow.state.accountRecoveryResponse, undefined);
+      expect.assertions(2);
+      const status = "rejected";
+      page._instance.reviewAccountRecoveryRequest(status);
       await waitFor(() => {});
-      expect(handleReviewAccountRecoveryWorkflow.props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
-      expect(handleReviewAccountRecoveryWorkflow.props.onStop).toHaveBeenCalled();
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
+      expect(props.onStop).toHaveBeenCalled();
     });
 
     it('As AD I can provide the ORK', async() => {
+      expect.assertions(3);
       const privateGpgKeyDto = {
         armored_key: 'private gpg key',
         passphrase: 'passphrase'
       };
-      await handleReviewAccountRecoveryWorkflow.handleSave(privateGpgKeyDto);
-      expect(handleReviewAccountRecoveryWorkflow.props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.review-request', null, privateGpgKeyDto);
+      await page._instance.handleSave(privateGpgKeyDto);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.review-request', null, privateGpgKeyDto);
       await waitFor(() => {});
-      expect(handleReviewAccountRecoveryWorkflow.props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
-      expect(handleReviewAccountRecoveryWorkflow.props.onStop).toHaveBeenCalled();
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
+      expect(props.onStop).toHaveBeenCalled();
     });
 
     it('As AD I can cancel the review account recovery workflow', async() => {
-      await handleReviewAccountRecoveryWorkflow.handleCancelDialog();
-      expect(handleReviewAccountRecoveryWorkflow.props.onStop).toHaveBeenCalled();
+      expect.assertions(1);
+      await page._instance.handleCancelDialog();
+      expect(props.onStop).toHaveBeenCalled();
     });
   });
 });

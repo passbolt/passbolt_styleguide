@@ -188,8 +188,8 @@ class DisplayUsersContextualMenu extends React.Component {
    * Handle review recovery request click event
    */
   handleReviewRecoveryRequestClickEvent() {
-    const user = this.user;
-    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {user});
+    const accountRecoveryRequestId = this.user.pending_account_recovery_request.id;
+    this.props.workflowContext.start(HandleReviewAccountRecoveryRequestWorkflow, {accountRecoveryRequestId});
     this.props.hide();
   }
 

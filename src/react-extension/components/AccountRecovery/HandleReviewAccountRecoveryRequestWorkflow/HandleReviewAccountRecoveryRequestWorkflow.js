@@ -42,7 +42,8 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   get defaultState() {
     return {
-      accountRecoveryResponse: null,
+      accountRecoveryRequest: null, // The account recovery request to assess.
+      accountRecoveryResponse: null, // The account recovery response to submit.
     };
   }
 
@@ -50,7 +51,20 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * Component did mount
    */
   async componentDidMount() {
-    this.displayReviewAccountRecoveryDialog();
+    await this.getAccountRecoveryRequest();
+    await this.displayReviewAccountRecoveryDialog();
+  }
+
+  /**
+   * Get the account recovery request
+   * @returns {Promise<Object>}
+   */
+  async getAccountRecoveryRequest() {
+    let accountRecoveryRequest = this.props.accountRecoveryRequest;
+    if (!accountRecoveryRequest) {
+      accountRecoveryRequest = await this.props.context.port.request("passbolt.account-recovery.get-request", this.props.accountRecoveryRequestId);
+    }
+    this.setState({accountRecoveryRequest});
   }
 
   /**
@@ -65,10 +79,11 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
 
   /**
    * Display review account recovery dialog
+   * @return {Promise<void>}
    */
-  displayReviewAccountRecoveryDialog() {
+  async displayReviewAccountRecoveryDialog() {
     this.props.dialogContext.open(ReviewAccountRecoveryRequest, {
-      user: this.props.user,
+      accountRecoveryRequest: this.state.accountRecoveryRequest,
       onCancel: this.handleCancelDialog,
       onSubmit: this.reviewAccountRecoveryRequest,
       onError: this.handleError
@@ -100,7 +115,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
   reviewAccountRecoveryRequest(status) {
     const accountRecoveryResponse = {
       status: status,
-      account_recovery_request_id: this.props.user.pending_account_recovery_user_request.id,
+      account_recovery_request_id: this.state.accountRecoveryRequest.id,
       responder_foreign_key: this.props.context.loggedInUser.id,
       responder_foreign_model: FOREIGN_MODEL_ORGANIZATION_KEY
     };
@@ -153,12 +168,40 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
   }
 }
 
+/**
+ * Assert that at least one of the account recovery request props is defined
+ * @param {object} props The props
+ * @param {string} propName The asserted prop
+ * @param {string} componentName The component name
+ * @returns {Error}
+ */
+const requiredAccountRecoveryProp = (props, propName, componentName) => {
+  if (!props.accountRecoveryRequestId && !props.accountRecoveryRequest) {
+    return new Error(`One of 'accountRecoveryRequestId' or 'accountRecoveryRequest' is required by '${componentName}' component.`);
+  }
+  if (props.accountRecoveryRequestId) {
+    PropTypes.checkPropTypes({
+      accountRecoveryRequestId: PropTypes.string,
+    }, props,
+    propName,
+    componentName);
+  }
+  if (props.accountRecoveryRequest) {
+    PropTypes.checkPropTypes({
+      accountRecoveryRequestId: PropTypes.object,
+    }, props,
+    propName,
+    componentName);
+  }
+};
+
 HandleReviewAccountRecoveryRequestWorkflow.propTypes = {
   onStop: PropTypes.func.isRequired, // The callback to stop the workflow
   dialogContext: PropTypes.any, // The dialog context
   actionFeedbackContext: PropTypes.object, // the admin action feedback context
   context: PropTypes.object, // the app context
-  user: PropTypes.object, // The user
+  accountRecoveryRequestId: requiredAccountRecoveryProp, // The account recovery request id
+  accountRecoveryRequest: requiredAccountRecoveryProp, // The account recovery request
   t: PropTypes.func // the translation function
 };
 
