@@ -353,7 +353,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @returns {Boolean}
    */
   isAttentionRequired(user) {
-    return Boolean(user.pending_account_recovery_user_request);
+    return Boolean(user.pending_account_recovery_request);
   }
 
   /**

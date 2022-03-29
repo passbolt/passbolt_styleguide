@@ -232,6 +232,6 @@ export function propsWithNoUsersWithTextSearch() {
  */
 export function propsWithFirstUserAttentionRequired() {
   const props = defaultProps();
-  props.userWorkspaceContext.filteredUsers[0].pending_account_recovery_user_request = true;
+  props.userWorkspaceContext.filteredUsers[0].pending_account_recovery_request = true;
   return props;
 }

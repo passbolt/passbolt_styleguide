@@ -287,7 +287,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   hasPendingAccountRecoveryRequest() {
-    return this.selectedUser && Boolean(this.selectedUser.pending_account_recovery_user_request);
+    return this.selectedUser && Boolean(this.selectedUser.pending_account_recovery_request);
   }
 
   /**

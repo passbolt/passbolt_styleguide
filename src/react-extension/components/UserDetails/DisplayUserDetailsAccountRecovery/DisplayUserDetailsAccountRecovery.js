@@ -139,7 +139,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    * @returns {boolean}
    */
   get isAccountRecoveryPending() {
-    return Boolean(this.selectedUser.pending_account_recovery_user_request);
+    return Boolean(this.selectedUser.pending_account_recovery_request);
   }
 
   /**

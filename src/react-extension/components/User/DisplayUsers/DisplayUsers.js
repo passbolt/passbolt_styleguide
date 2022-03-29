@@ -274,7 +274,7 @@ class DisplayUsers extends React.Component {
     const roleName = this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id);
     const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"}`;
-    const hasUserAttentionRequired = Boolean(user.pending_account_recovery_user_request);
+    const hasUserAttentionRequired = Boolean(user.pending_account_recovery_request);
 
     return (
       <tr
