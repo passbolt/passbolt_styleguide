@@ -23,6 +23,11 @@ export function defaultProps(props) {
     displayAs: ImportGpgKeyVariations.SETUP,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
+    context: {
+      port: {
+        request: jest.fn(async() => ({}))
+      }
+    }
   };
   return Object.assign(defaultProps, props || {});
 }

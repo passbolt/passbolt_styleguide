@@ -68,6 +68,13 @@ export default class ImportGpgKeyPage {
   }
 
   /**
+   * Returns true if an invalid private key error appears
+   */
+  get invalidPrivateKeyErrorMessage() {
+    return this._page.container.querySelector('.invalid-private-key').textContent;
+  }
+
+  /**
    * Returns the verify button element
    */
   get verifyButton() {

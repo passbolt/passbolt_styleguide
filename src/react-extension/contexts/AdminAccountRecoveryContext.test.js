@@ -149,7 +149,7 @@ describe("AdminAccountRecoveryContext", () => {
 
       expect.assertions(2);
       const keyInfo = await adminAccountRecoveryContext.getKeyInfo(armoredKey);
-      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.get-organization-key-info", armoredKey);
+      expect(adminAccountRecoveryContext.props.context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-key-info", armoredKey);
       expect(keyInfo).toBe(mockKeyInfo);
     });
   });

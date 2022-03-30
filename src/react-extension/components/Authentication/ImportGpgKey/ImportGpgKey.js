@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * The component display variations.
@@ -192,16 +193,41 @@ class ImportGpgKey extends Component {
   }
 
   /**
-   * Validate the security token data
+   * Validate the imported private key
    */
   async validate() {
     const {privateKey} = this.state;
-    const emptyPrivateKey =  privateKey.trim() === '';
+    const emptyPrivateKey = privateKey.trim() === '';
     if (emptyPrivateKey) {
-      await this.setState({hasBeenValidated: true, errors: {emptyPrivateKey}});
+      this.setState({hasBeenValidated: true, errors: {emptyPrivateKey}});
       return;
     }
-    await this.setState({hasBeenValidated: true, errors: {}});
+
+    const keyInfo = await this.props.context.port.request("passbolt.keyring.get-key-info", privateKey);
+    let invalidPrivateKey = false;
+    let errorMessage = "";
+    if (keyInfo.revoked) {
+      invalidPrivateKey = true;
+      errorMessage = this.translate("The private key should not be revoked.");
+    } else if (this.isKeyExpired(keyInfo)) {
+      invalidPrivateKey = true;
+      errorMessage = this.translate("The private key should not be expired.");
+    }
+    this.setState({hasBeenValidated: true, errors: {invalidPrivateKey}, errorMessage});
+  }
+
+  /**
+   * Returns true if the given key info is expired
+   * @returns {boolean}
+   */
+  isKeyExpired(keyInfo) {
+    const expires = keyInfo.expires;
+    if (expires === "Never") {
+      return false;
+    }
+    const now = Date.now();
+    const expirationDate = new Date(expires);
+    return expirationDate < now;
   }
 
   /**
@@ -293,6 +319,7 @@ ImportGpgKey.defaultProps = {
 };
 
 ImportGpgKey.propTypes = {
+  context: PropTypes.object, // The application context
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to import its gpg key
   displayAs: PropTypes.PropTypes.oneOf([
     ImportGpgKeyVariations.SETUP,
@@ -301,4 +328,4 @@ ImportGpgKey.propTypes = {
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(ImportGpgKey);
+export default withAppContext(withTranslation('common')(ImportGpgKey));

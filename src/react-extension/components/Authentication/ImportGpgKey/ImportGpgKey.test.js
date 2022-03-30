@@ -46,9 +46,11 @@ describe("ImportGpgKey", () => {
       const props = defaultProps({..._props, onComplete});
       const page = new ImportGpgKeyPage(props);
 
-      expect.hasAssertions();
-      const inProgressFn = () => {
-        expect(page.canChange).toBeFalsy();
+      expect.assertions(2);
+      const inProgressFn = async() => {
+        if (page.canChange) {
+          throw new Error("The page state didn't change yet.");
+        }
         verifyResolve();
       };
       await page.fill("some private key");
@@ -63,9 +65,11 @@ describe("ImportGpgKey", () => {
       const props = defaultProps({..._props, onComplete});
       const page = new ImportGpgKeyPage(props);
 
-      expect.hasAssertions();
+      expect.assertions(2);
       const inProgressFn = () => {
-        expect(page.isProcessing).toBeTruthy();
+        if (!page.isProcessing) {
+          throw new Error("The page is not yet processing");
+        }
         verifyResolve();
       };
       await page.fill("some private key");
@@ -95,6 +99,36 @@ describe("ImportGpgKey", () => {
       await page.fill('Some private key');
       await page.verifyKey();
       expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+    });
+
+    it(`As AN I should see an error if the private key is expired, scenario: ${JSON.stringify(_props)}`, async() => {
+      const props = defaultProps({..._props});
+      props.context.port.request.mockImplementation(() => ({
+        expires: "2021-05-25T09:00:00.000",
+        revoked: false
+      }));
+      const page = new ImportGpgKeyPage(props);
+
+      expect.assertions(2);
+      await page.fill('Some private key');
+      await page.verifyKey();
+      expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+      expect(page.invalidPrivateKeyErrorMessage).toBe("The private key should not be expired.");
+    });
+
+    it(`As AN I should see an error if the private key is revoked, scenario: ${JSON.stringify(_props)}`, async() => {
+      const props = defaultProps({..._props});
+      props.context.port.request.mockImplementation(() => ({
+        expires: "Never",
+        revoked: true
+      }));
+      const page = new ImportGpgKeyPage(props);
+
+      expect.assertions(2);
+      await page.fill('Some private key');
+      await page.verifyKey();
+      expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+      expect(page.invalidPrivateKeyErrorMessage).toBe("The private key should not be revoked.");
     });
   });
 
