@@ -16,13 +16,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 
 /**
  * The ApiAccountRecovery context.
  * @type {React.Context<object>}
  */
 export const ApiAccountRecoveryContext = React.createContext({
-  accountRecoveryRequestId: null, // The account recovery request id
   userId: null, // The account recovery user id
   authenticationToken: null, // The account recovery authentication token
   state: null, // The current account recovery workflow state
@@ -48,11 +48,10 @@ class ApiAccountRecoveryContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      accountRecoveryRequestId: null, // The account recovery request id
       userId: null, // The account recovery user id
       authenticationToken: null, // The account recovery authentication token
       state: ApiAccountRecoveryContextState.INITIAL_STATE, // The current account recovery workflow state
-      onInitializeAccountRecoveryRequested:  this.onInitializeAccountRecoveryRequested.bind(this) // Whenever the initialization of the account recovery is requested.
+      onInitializeAccountRecoveryRequested: this.onInitializeAccountRecoveryRequested.bind(this) // Whenever the initialization of the account recovery is requested.
     };
   }
 
@@ -61,41 +60,42 @@ class ApiAccountRecoveryContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async onInitializeAccountRecoveryRequested() {
-    if (!this.state.accountRecoveryRequestId || !this.state.userId || !this.state.authenticationToken) {
+    if (!this.state.userId || !this.state.authenticationToken) {
       return this.setState({state: ApiAccountRecoveryContextState.ERROR_STATE});
     }
 
-    await this.verifyAccountRecoveryInfo()
-      .then(this.handleAccountRecoveryVerifySuccess.bind(this))
-      .catch(this.handleAccountRecoveryVerifyError.bind(this));
+    try {
+      await this.verifyCanContinueAccountRecovery();
+      this.setState({state: ApiAccountRecoveryContextState.RESTART_FROM_SCRATCH});
+    } catch (error) {
+      await this.handleVerifyCanContinueAccountRecoveryError(error);
+    }
   }
 
   /**
-   * Verify the account recovery information.
-   * @returns {Promise<object>}
+   * Verify the user can continue its account recovery.
+   * @returns {Promise<void>}
    */
-  async verifyAccountRecoveryInfo() {
+  async verifyCanContinueAccountRecovery() {
     const apiClientOptions = this.props.context.getApiClientOptions();
     apiClientOptions.setResourceName("account-recovery");
     const apiClient = new ApiClient(apiClientOptions);
-    const {body} = await apiClient.get(`requests/${this.state.accountRecoveryRequestId}/${this.state.userId}/${this.state.authenticationToken}`);
-    return body;
+    await apiClient.get(`continue/${this.state.userId}/${this.state.authenticationToken}`);
   }
 
   /**
-   * When the account recovery info are valid.
-   * @return {void}
+   * Handle error on the can continue account recovery verification.
+   * @return {Promise<void>}
    */
-  handleAccountRecoveryVerifySuccess() {
-    this.setState({state: ApiAccountRecoveryContextState.RESTART_FROM_SCRATCH});
-  }
-
-  /**
-   * When the account recovery info didn't validate
-   * @return {void}
-   */
-  handleAccountRecoveryVerifyError(error) {
-    return this.setState({state: ApiAccountRecoveryContextState.ERROR_STATE, error: error});
+  async handleVerifyCanContinueAccountRecoveryError(error) {
+    if (error instanceof PassboltApiFetchError) {
+      const isTokenExpired = Boolean(error?.data?.body?.token?.expired);
+      if (isTokenExpired) {
+        await this.setState({state: ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE});
+        return;
+      }
+    }
+    await this.setState({state: ApiAccountRecoveryContextState.ERROR_STATE, error: error});
   }
 
   /**
@@ -142,5 +142,6 @@ export function withApiAccountRecoveryContext(WrappedComponent) {
 export const ApiAccountRecoveryContextState = {
   INITIAL_STATE: 'Initial state',
   RESTART_FROM_SCRATCH: 'Restart from scratch state',
+  TOKEN_EXPIRED_STATE: 'Token expired state',
   ERROR_STATE: 'Error state',
 };

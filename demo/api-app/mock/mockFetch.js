@@ -24,7 +24,7 @@ import mockGetSiteSettings from "./request/mockGetSiteSettings";
 import mockGetUserSettings from "./request/mockGetUserSettings";
 import mockGetRecoverSettings from "./request/mockGetRecoverSettings";
 import mockGetSetupSettings from "./request/mockGetSetupSettings";
-import mockGetAccountRecoverySettings from "./request/mockGetAccountRecoverySettings";
+import mockGetAccountRecoveryContinue from "./request/mockGetAccountRecoveryContinue";
 
 export default () => {
   const mockFetch = new MockFetch();
@@ -44,8 +44,7 @@ export default () => {
   mockFetch.addGetFetchRequest("http://localhost:3000/account/settings.json?api-version=v2", mockGetUserSettings);
   mockFetch.addGetFetchRequest("http://localhost:3000/setup/recover/d7dcd030-391b-4870-bd13-c9e498c67582/064c08e6-0cfb-4b73-91e3-f634c4b48088.json?api-version=v2", mockGetRecoverSettings);
   mockFetch.addGetFetchRequest("http://localhost:3000/setup/install/d7dcd030-391b-4870-bd13-c9e498c67582/064c08e6-0cfb-4b73-91e3-f634c4b48088.json?api-version=v2", mockGetSetupSettings);
-  mockFetch.addGetFetchRequest("http://localhost:3000/account-recovery/requests/347828ed-68e4-403a-ba05-26466fdb5981/d7dcd030-391b-4870-bd13-c9e498c67582/064c08e6-0cfb-4b73-91e3-f634c4b48088.json?api-version=v2", mockGetAccountRecoverySettings);
+  mockFetch.addGetFetchRequest("http://localhost:3000/account-recovery/continue/d7dcd030-391b-4870-bd13-c9e498c67582/064c08e6-0cfb-4b73-91e3-f634c4b48088.json?api-version=v2", mockGetAccountRecoveryContinue);
 
   return mockFetch;
 };
-
