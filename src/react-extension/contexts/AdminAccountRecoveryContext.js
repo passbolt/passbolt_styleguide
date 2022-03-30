@@ -124,7 +124,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
       return null;
     }
 
-    return this.props.context.port.request('passbolt.account-recovery.get-organization-key-info', armoredKey);
+    return this.props.context.port.request('passbolt.keyring.get-key-info', armoredKey);
   }
 
   /**

@@ -15,6 +15,7 @@ import React from "react";
 import {render} from "@testing-library/react";
 import {BrowserRouter as Router} from "react-router-dom";
 import HandleReviewAccountRecoveryRequestRoute from "./HandleReviewAccountRecoveryRequestRoute";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The ChangeLocale component represented as a page
@@ -26,9 +27,11 @@ export default class HandleReviewAccountRecoveryRequestRouteTestPage {
    */
   constructor(props) {
     this._page = render(
-      <Router>
-        <HandleReviewAccountRecoveryRequestRoute {...props}/>
-      </Router>
+      <MockTranslationProvider>
+        <Router>
+          <HandleReviewAccountRecoveryRequestRoute {...props}/>
+        </Router>
+      </MockTranslationProvider>
     );
   }
 }
