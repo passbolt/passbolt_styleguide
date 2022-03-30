@@ -14,25 +14,28 @@
 
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import DisplayAccountRecoveryNotSupported from "./DisplayAccountRecoveryNotSupported";
+import DisplayExpiredTokenError from "./DisplayExpiredTokenError";
+import {defaultProps} from "./DisplayExpiredTokenError.test.data";
 
 export default {
-  title: 'Passbolt/Authentication/DisplayAccountRecoveryNotSupported',
-  component: DisplayAccountRecoveryNotSupported
+  title: 'Passbolt/AuthenticationAccountRecovery/DisplayExpiredTokenError',
+  component: DisplayExpiredTokenError
 };
 
 const Template = args =>
-  <MockTranslationProvider>
-    <div id="container" className="container page login">
-      <div className="content">
-        <div className="login-form">
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <DisplayAccountRecoveryNotSupported {...args} {...routerProps}/>}/>
-          </MemoryRouter>
-        </div>
+  <div id="container" className="container page login">
+    <div className="content">
+      <div className="login-form">
+        <MemoryRouter initialEntries={['/']}>
+          <Route component={routerProps => <DisplayExpiredTokenError {...args} {...routerProps}/>}/>
+        </MemoryRouter>
       </div>
     </div>
-  </MockTranslationProvider>;
+  </div>;
+
 
 export const Initial = Template.bind({});
+Initial.args = defaultProps();
+Initial.parameters = {
+  css: "ext_authentication"
+};

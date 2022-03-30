@@ -35,7 +35,6 @@ class ApiAccountRecovery extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.accountRecoveryRequestId = null; // The account recovery request token
     this.userId = null; // The recover user id
     this.authenticationToken = null; // The authentication token
     this.initializeProperties();
@@ -72,16 +71,15 @@ class ApiAccountRecovery extends Component {
    */
   initializeProperties() {
     const uuidRegex = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}";
-    const recoverBootstrapRegex = `account-recovery\/requests\/(${uuidRegex})\/(${uuidRegex})\/(${uuidRegex})$`;
+    const recoverBootstrapRegex = `account-recovery\/requests\/(${uuidRegex})\/(${uuidRegex})$`;
     const regex = new RegExp(recoverBootstrapRegex);
     const match = window.location.pathname.match(regex);
     if (!match) {
       console.error("Unable to parse the url.");
       return;
     }
-    this.accountRecoveryRequestId = match[1];
-    this.userId = match[2];
-    this.authenticationToken = match[3];
+    this.userId = match[1];
+    this.authenticationToken = match[2];
   }
 
   /**
@@ -211,7 +209,7 @@ class ApiAccountRecovery extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath={`${this.state.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
-          <ApiAccountRecoveryContextProvider value={{accountRecoveryRequestId: this.accountRecoveryRequestId, userId: this.userId, authenticationToken: this.authenticationToken}}>
+          <ApiAccountRecoveryContextProvider value={{userId: this.userId, authenticationToken: this.authenticationToken}}>
             <div id="container" className="container page login">
               <div className="content">
                 <div className="header">
