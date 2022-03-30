@@ -99,29 +99,49 @@ class Login extends Component {
    * Returns the user full name
    */
   get fullname() {
-    return this.props.userSettings.fullName;
+    return this.props.userSettings?.fullName
+      || `${this.props.account?.user?.profile?.first_name} ${this.props.account?.user?.profile?.last_name}`;
   }
 
   /**
    * Returns the username
    */
   get username() {
-    return this.props.userSettings.username;
+    return this.props.userSettings?.username || this.props.account?.user?.username;
   }
 
   /**
    * Returns the security token code of the suer
    */
   get securityTokenCode() {
-    return this.props.userSettings.getSecurityTokenCode();
+    return this.props.userSettings?.getSecurityTokenCode()
+      ||  this.props.account?.security_token?.code;
+  }
+
+  /**
+   * Get security token color
+   * @return {string}
+   */
+  get securityTokenColor() {
+    return this.props.userSettings?.getSecurityTokenBackgroundColor()
+      || this.props.account?.security_token?.color;
+  }
+
+  /**
+   * Get security token text color
+   * @return {string}
+   */
+  get securityTokenTextColor() {
+    return this.props.userSettings?.getSecurityTokenTextColor()
+      || this.props.account?.security_token?.textcolor;
   }
 
   /**
    * Returns the style of the security token (color and text color)
    */
   get securityTokenStyle() {
-    const inverseStyle =  {background: this.props.userSettings.getSecurityTokenTextColor(), color: this.props.userSettings.getSecurityTokenBackgroundColor()};
-    const fullStyle =  {background: this.props.userSettings.getSecurityTokenBackgroundColor(), color: this.props.userSettings.getSecurityTokenTextColor()};
+    const inverseStyle =  {background: this.securityTokenTextColor, color: this.securityTokenColor};
+    const fullStyle =  {background: this.securityTokenColor, color: this.securityTokenTextColor};
     return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
   }
 
@@ -131,7 +151,7 @@ class Login extends Component {
    */
   get passphraseInputStyle() {
     const emptyStyle =  {background: "", color: ""};
-    const fullStyle =  {background: this.props.userSettings.getSecurityTokenBackgroundColor(), color: this.props.userSettings.getSecurityTokenTextColor()};
+    const fullStyle =  {background: this.securityTokenColor, color: this.securityTokenTextColor};
     return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
   }
 
@@ -139,7 +159,8 @@ class Login extends Component {
    * Returns the trusted domain
    */
   get trustedDomain() {
-    return this.props.userSettings.getTrustedDomain();
+    return this.props.userSettings?.getTrustedDomain()
+      || this.props.account?.domain;
   }
 
   /**
@@ -314,7 +335,7 @@ class Login extends Component {
     return (
       <div className="login">
         <div className="login-user">
-          <UserAvatar baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
+          <UserAvatar user={this.props.account?.user} baseUrl={this.trustedDomain} className="big avatar user-avatar"/>
           <p className="login-user-name">{this.fullname}</p>
           <p className="login-user-email">{this.username}</p>
         </div>
@@ -422,7 +443,8 @@ Login.propTypes = {
     LoginVariations.ACCOUNT_RECOVERY,
   ]), // Defines how the form should be displayed and behaves
   context: PropTypes.any, // The application context
-  userSettings: PropTypes.object.isRequired, // The user settings
+  account: PropTypes.object, // The user account
+  userSettings: PropTypes.object, // The user settings
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSignIn: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to sign-in
   onCheckPassphrase: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to check the passphrase

@@ -62,6 +62,7 @@ import mockRequestPasswordGeneratorSettings from "./request/mockRequestPasswordG
 import mockRequestMobileTransferCreate from "./request/mockRequestMobileTransferCreate";
 import mockRequestMobileTransferGet from "./request/mockRequestMobileTransferGet";
 import mockRequestMobileTransferUpdate from "./request/mockRequestMobileTransferUpdate";
+import mockRequestAccountRecoveryGetAccount from "./request/mockRequestAccountRecoveryGetAccount";
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
@@ -116,6 +117,7 @@ export default (storage) => {
   mockPort.addRequestListener("passbolt.mobile.transfer.create", mockRequestMobileTransferCreate);
   mockPort.addRequestListener("passbolt.mobile.transfer.update", mockRequestMobileTransferUpdate);
   mockPort.addRequestListener("passbolt.mobile.transfer.get", mockRequestMobileTransferGet);
+  mockPort.addRequestListener("passbolt.account-recovery.get-account", mockRequestAccountRecoveryGetAccount);
 
   // Deprecated events
   const deprecatedEvent = (name) => {throw new Error(`This event is deprecated.`)};

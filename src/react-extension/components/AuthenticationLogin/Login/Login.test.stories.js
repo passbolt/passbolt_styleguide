@@ -15,7 +15,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import Login, {LoginVariations} from "./Login";
-import {defaultProps} from "./Login.test.data";
+import {defaultProps, defaultPropsWithAccount} from "./Login.test.data";
 
 export default {
   title: 'Passbolt/AuthenticationLogin/Login',
@@ -42,5 +42,5 @@ Initial.args = defaultProps({displayAs: LoginVariations.SIGN_IN});
 Initial.parameters = defaultParameters;
 
 export const CompleteRecovery = Template.bind({});
-CompleteRecovery.args = defaultProps({displayAs: LoginVariations.ACCOUNT_RECOVERY});
+CompleteRecovery.args = defaultPropsWithAccount({displayAs: LoginVariations.ACCOUNT_RECOVERY});
 CompleteRecovery.parameters = defaultParameters;
