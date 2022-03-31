@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAppContext} from "../../../contexts/AppContext";
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ReviewAccountRecoveryRequest from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -51,6 +52,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * Component did mount
    */
   async componentDidMount() {
+    await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
     await this.getAccountRecoveryRequest();
     await this.displayReviewAccountRecoveryDialog();
   }
@@ -113,10 +115,11 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * @param {string} status
    */
   reviewAccountRecoveryRequest(status) {
+    const orkId = this.props.accountRecoveryContext.accountRecoveryOrganizationPolicy.account_recovery_organization_public_key.id;
     const accountRecoveryResponse = {
       status: status,
       account_recovery_request_id: this.state.accountRecoveryRequest.id,
-      responder_foreign_key: this.props.context.loggedInUser.id,
+      responder_foreign_key: orkId,
       responder_foreign_model: FOREIGN_MODEL_ORGANIZATION_KEY
     };
     this.setState({accountRecoveryResponse});
@@ -199,10 +202,11 @@ HandleReviewAccountRecoveryRequestWorkflow.propTypes = {
   onStop: PropTypes.func.isRequired, // The callback to stop the workflow
   dialogContext: PropTypes.any, // The dialog context
   actionFeedbackContext: PropTypes.object, // the admin action feedback context
+  accountRecoveryContext: PropTypes.object, // The account recovery context
   context: PropTypes.object, // the app context
   accountRecoveryRequestId: requiredAccountRecoveryProp, // The account recovery request id
   accountRecoveryRequest: requiredAccountRecoveryProp, // The account recovery request
   t: PropTypes.func // the translation function
 };
 
-export default withAppContext(withDialog(withActionFeedback(withTranslation("common")(HandleReviewAccountRecoveryRequestWorkflow))));
+export default withAppContext(withAccountRecovery(withDialog(withActionFeedback(withTranslation("common")(HandleReviewAccountRecoveryRequestWorkflow)))));

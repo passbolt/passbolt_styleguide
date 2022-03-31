@@ -106,8 +106,8 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    * @returns {Promise<void>}
    */
   async findUserRequests() {
-    const userRequests = await this.props.context.port.request('passbolt.account-recovery.get-user-requests', this.selectedUser.id);
-    userRequests.sort((a, b) => new Date(b.created) - new Date(a.created));
+    const unsortedUserRequests = await this.props.context.port.request('passbolt.account-recovery.get-user-requests', this.selectedUser.id);
+    const userRequests = unsortedUserRequests.sort((a, b) => new Date(b.created) - new Date(a.created));
     this.setState({userRequests});
   }
 
