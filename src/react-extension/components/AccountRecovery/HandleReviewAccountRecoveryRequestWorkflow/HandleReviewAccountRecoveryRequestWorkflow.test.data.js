@@ -27,7 +27,12 @@ export function defaultProps(props = {}) {
     accountRecoveryRequestId: uuidv4(),
     accountRecoveryContext: {
       findAccountRecoveryPolicy: jest.fn(),
-      getOrganizationPolicy: jest.fn()
+      getOrganizationPolicy: jest.fn(),
+      accountRecoveryOrganizationPolicy: {
+        account_recovery_organization_public_key: {
+          id: uuidv4()
+        }
+      }
     },
     actionFeedbackContext: defaultActionFeedbackContextContext(props?.actionFeedbackContext),
     context: defaultAppContext(props?.context),

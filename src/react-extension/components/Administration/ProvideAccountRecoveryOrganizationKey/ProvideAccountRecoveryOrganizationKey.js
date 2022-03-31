@@ -320,7 +320,10 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     } else {
       // The component passing the onSubmit prop should take care of any unexpected errors, this code should not run.
       console.error('Uncaught uncontrolled error');
-      throw error;
+      if (typeof this.props.onError === 'undefined') {
+        throw error;
+      }
+      this.props.onError(error);
     }
   }
 
@@ -513,6 +516,7 @@ ProvideAccountRecoveryOrganizationKey.propTypes = {
   context: PropTypes.any.isRequired, // The application context provider
   onClose: PropTypes.func, // Callback when the dialog must be closed
   onSubmit: PropTypes.func, // Callback when the dialog must be submitted
+  onError: PropTypes.func, // Callback when an error occurs
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
