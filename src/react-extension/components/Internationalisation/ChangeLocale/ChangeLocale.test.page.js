@@ -35,7 +35,7 @@ export default class ChangeLocalePage {
    * Returns the change locale element
    */
   get changeLocale() {
-    const element = this._page.container.querySelector('.input.select.locale');
+    const element = this._page.container.querySelector('.select-field-wrapper.input');
     return {
       exists() {
         return element !== null;
@@ -54,20 +54,27 @@ export default class ChangeLocalePage {
    * Returns the locale selected input element
    */
   get localeSelected() {
-    return this._page.container.querySelector('#user-locale-input').value;
+    return this._page.container.querySelector('#user-locale-input .value').textContent;
   }
 
-  /** change the value on the element */
-  async change(element, value) {
-    const data = {target: {value: value}};
-    fireEvent.change(element, data);
+  /**
+   * Returns the locale input element
+   */
+  getLocaleList(index) {
+    return this._page.container.querySelectorAll('#user-locale-input .option')[index - 1];
+  }
+
+  /** click on the element */
+  async click(element) {
+    fireEvent.click(element);
     await waitFor(() => {
     });
   }
 
   /** select the french language */
   async selectLanguageFr() {
-    await this.change(this.locale, 'fr-FR');
+    await this.click(this.locale);
+    await this.click(this.getLocaleList(2));
   }
 }
 

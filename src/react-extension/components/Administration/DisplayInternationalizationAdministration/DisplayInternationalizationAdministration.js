@@ -18,6 +18,7 @@ import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorks
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
+import SelectField from "../../Common/SelectField/SelectField";
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -172,7 +173,10 @@ class DisplayInternationalizationAdministration extends React.Component {
    * @returns {array}
    */
   get supportedLocales() {
-    return this.props.context.siteSettings.supportedLocales || [];
+    if (this.props.context.siteSettings.supportedLocales) {
+      return this.props.context.siteSettings.supportedLocales.map(supportedLocale => ({value: supportedLocale.locale, label: supportedLocale.label}));
+    }
+    return [];
   }
 
   /**
@@ -193,15 +197,9 @@ class DisplayInternationalizationAdministration extends React.Component {
         <div className="internationalisation-settings col7">
           <h3><Trans>Internationalisation</Trans></h3>
           <form className="form">
-            <div className="input select locale">
+            <div className="select-field-wrapper input">
               <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
-              <select className="medium" id="locale-input" name="locale" value={this.state.locale} onChange={this.handleInputChange}>
-                {this.supportedLocales.map(supportedLocale =>
-                  <option key={supportedLocale.locale} value={supportedLocale.locale}>
-                    {supportedLocale.label}
-                  </option>
-                )}
-              </select>
+              <SelectField className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={this.state.locale} onChange={this.handleInputChange}/>
               <p><Trans>The default language of the organisation.</Trans></p>
             </div>
           </form>

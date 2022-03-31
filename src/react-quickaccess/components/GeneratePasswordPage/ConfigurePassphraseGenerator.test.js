@@ -58,9 +58,9 @@ describe("Configure Passphrase Generator", () => {
     });
 
     it('As LU I should change the separator', async() => {
-      expect(page.wordCase.value).toBe('lowercase');
-      await page.changeWordCase('camelcase');
-      expect(page.wordCase.value).toBe('camelcase');
+      expect(page.wordCase.textContent).toBe('Lower case');
+      await page.changeWordCase();
+      expect(page.wordCase.textContent).toBe('Upper case');
       expect(props.onChanged).toHaveBeenCalled();
     });
   });

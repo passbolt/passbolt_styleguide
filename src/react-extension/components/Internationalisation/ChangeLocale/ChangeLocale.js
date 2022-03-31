@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
+import SelectField from "../../Common/SelectField/SelectField";
 
 /**
  * This component allows the user to change the locale
@@ -126,21 +127,26 @@ class ChangeLocale extends Component {
   }
 
   /**
+   * Get the supported locales
+   * @returns {array}
+   */
+  get supportedLocales() {
+    if (this.props.context.siteSettings.supportedLocales) {
+      return this.props.context.siteSettings.supportedLocales.map(supportedLocale => ({value: supportedLocale.locale, label: supportedLocale.label}));
+    }
+    return [];
+  }
+
+  /**
    * Render the component
    */
   render() {
     return (
       <>
         {!this.isLoading() &&
-        <div className="input select locale">
-          <select id="user-locale-input" name="locale" value={this.state.locale}
-            disabled={!this.areActionsAllowed} onChange={this.handleLocaleInputChange}>
-            {this.props.context.siteSettings.supportedLocales.map(supportedLocale =>
-              <option key={supportedLocale.locale} value={supportedLocale.locale}>
-                {supportedLocale.label}
-              </option>
-            )}
-          </select>
+        <div className="select-field-wrapper input">
+          <SelectField id="user-locale-input" name="locale" value={this.state.locale}
+            disabled={!this.areActionsAllowed} items={this.supportedLocales} onChange={this.handleLocaleInputChange}/>
         </div>
         }
       </>

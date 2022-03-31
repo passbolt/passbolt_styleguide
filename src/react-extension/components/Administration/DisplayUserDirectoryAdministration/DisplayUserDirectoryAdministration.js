@@ -22,6 +22,7 @@ import DisplayTestUserDirectoryAdministration
   from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
+import SelectField from "../../Common/SelectField/SelectField";
 
 /**
  * This component allows to display the MFA for the administration
@@ -126,8 +127,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleDirectoryConfigurationTitleClicked = this.handleDirectoryConfigurationTitleClicked.bind(this);
     this.handleSynchronizationOptionsTitleClicked = this.handleSynchronizationOptionsTitleClicked.bind(this);
     this.handleConnectionTypeClicked = this.handleConnectionTypeClicked.bind(this);
-    this.handleDefaultAdminClicked = this.handleDefaultAdminClicked.bind(this);
-    this.handleDefaultGroupAdminClicked = this.handleDefaultGroupAdminClicked.bind(this);
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleHostInputKeyUp = this.handleHostInputKeyUp.bind(this);
@@ -135,8 +134,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleDomainInputKeyUp = this.handleDomainInputKeyUp.bind(this);
     this.stopPropagation = this.stopPropagation.bind(this);
     this.handleConnectionTypeChange = this.handleConnectionTypeChange.bind(this);
-    this.handleUserToBeDefaultAdminClick = this.handleUserToBeDefaultAdminClick.bind(this);
-    this.handleUserToBeDefaultGroupAdminClick = this.handleUserToBeDefaultGroupAdminClick.bind(this);
   }
 
   /**
@@ -144,8 +141,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   createRefs() {
     this.connectionTypeRef = React.createRef();
-    this.defaultAdminRef = React.createRef();
-    this.defaultGroupAdminRef = React.createRef();
   }
 
   /**
@@ -165,12 +160,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   handleUserDirectoryClickEvent(event) {
     // Prevent stop editing when the user click on an element of the editor
-    if (this.defaultAdminRef.current !== null && !this.defaultAdminRef.current.contains(event.target)) {
-      this.setState({openDefaultAdmin: false});
-    }
-    if (this.defaultGroupAdminRef.current !== null && !this.defaultGroupAdminRef.current.contains(event.target)) {
-      this.setState({openDefaultGroupAdmin: false});
-    }
     if (this.connectionTypeRef.current !== null && !this.connectionTypeRef.current.contains(event.target)) {
       this.setState({openConnectionType: false});
     }
@@ -321,24 +310,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * Handle the click on the default admin
-   */
-  handleDefaultAdminClicked() {
-    if (!this.hasAllInputDisabled()) {
-      this.setState({openDefaultAdmin: !this.state.openDefaultAdmin, defaultAdminSearch: ""});
-    }
-  }
-
-  /**
-   * Handle the click on the default group admin
-   */
-  handleDefaultGroupAdminClicked() {
-    if (!this.hasAllInputDisabled()) {
-      this.setState({openDefaultGroupAdmin: !this.state.openDefaultGroupAdmin, defaultGroupAdminSearch: ""});
-    }
-  }
-
-  /**
    * Handle host input keyUp event.
    */
   handleHostInputKeyUp() {
@@ -378,28 +349,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({[name]: value});
-    this.handleEnabledSaveButton();
-  }
-
-  /**
-   * Handle user to be default admin click event
-   * @param event
-   */
-  handleUserToBeDefaultAdminClick(event) {
-    const target = event.target;
-    const userId = target.dataset.id;
-    this.setState({defaultAdmin: userId});
-    this.handleEnabledSaveButton();
-  }
-
-  /**
-   * Handle user to be default Group admin click event
-   * @param event
-   */
-  handleUserToBeDefaultGroupAdminClick(event) {
-    const target = event.target;
-    const userId = target.dataset.id;
-    this.setState({defaultGroupAdmin: userId});
     this.handleEnabledSaveButton();
   }
 
@@ -694,10 +643,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   getUsersAllowedToBeDefaultAdmin() {
     if (this.state.users !== null) {
       const users = this.state.users.filter(user => user.active === true && user.role.name === "admin");
-      if (this.state.defaultAdminSearch !== "") {
-        return this.getUsersMatch(users, this.state.defaultAdminSearch.toLowerCase());
-      }
-      return users;
+      return users && users.map(user => ({value: user.id, label: this.displayUser(user)}));
     }
     return [];
   }
@@ -708,34 +654,9 @@ class DisplayUserDirectoryAdministration extends React.Component {
   getUsersAllowedToBeDefaultGroupAdmin() {
     if (this.state.users !== null) {
       const users = this.state.users.filter(user => user.active === true);
-      if (this.state.defaultGroupAdminSearch !== "") {
-        return this.getUsersMatch(users, this.state.defaultGroupAdminSearch.toLowerCase());
-      }
-      return users;
+      return users && users.map(user => ({value: user.id, label: this.displayUser(user)}));
     }
     return [];
-  }
-
-  /**
-   *  get users who match the keyword
-   * @param users
-   * @param keyword
-   * @returns {*}
-   */
-  getUsersMatch(users, keyword) {
-    const words = (keyword && keyword.split(/\s+/)) || [''];
-
-    // Test match of some escaped test words against the name / username
-    const escapeWord = word => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const wordToRegex = word => new RegExp(escapeWord(word), 'i');
-    const matchWord = (word, value) => wordToRegex(word).test(value);
-
-    const matchUsernameProperty = (word, user) => matchWord(word, user.username);
-    const matchNameProperty = (word, user) => matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
-    const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
-    const matchText = user => words.every(word => matchUser(word, user));
-
-    return users.filter(matchText);
   }
 
   /**
@@ -770,17 +691,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
-   * Display default group admin
-   */
-  displayDefaultGroupAdmin() {
-    if (this.state.users !== null && this.state.defaultGroupAdmin !== "") {
-      const user = this.state.users.find(user => user.id === this.state.defaultGroupAdmin);
-      return this.displayUser(user);
-    }
-    return "";
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -793,9 +703,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const userAllowedToBeDefaultAdmin = this.getUsersAllowedToBeDefaultAdmin();
-    const userAllowedToBeDefaultGroupAdmin = this.getUsersAllowedToBeDefaultGroupAdmin();
-
     return (
       <div className="row">
         <div className="ldap-settings col7">
@@ -1017,88 +924,28 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     </a>
                   </h3>
                   <div className="accordion-content">
-                    <div className="input select required ad openldap">
+                    <div className="select-field-wrapper input required ad openldap">
                       <label><Trans>Default admin</Trans></label>
-                      <div onClick={this.handleDefaultAdminClicked} ref={this.defaultAdminRef}>
-                        <div
-                          className={`chosen-container chosen-container-single ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openDefaultAdmin ? "chosen-with-drop" : ""}`}>
-                          <a className="chosen-single">
-                            <span id="default-user-select">{this.displayDefaultAdmin()}</span>
-                            <div>
-                              {!this.state.openDefaultAdmin &&
-                              <Icon name="caret-down" baseline={true}/>
-                              }
-                              {this.state.openDefaultAdmin &&
-                              <Icon name="caret-up" baseline={true}/>
-                              }
-                            </div>
-                          </a>
-                          <div className="chosen-drop">
-                            <div className="chosen-search" onClick={this.stopPropagation}>
-                              <input className="chosen-search-input" name="defaultAdminSearch"
-                                value={this.state.defaultAdminSearch} onChange={this.handleInputChange} type="text"/>
-                              <Icon name="search"/>
-                            </div>
-                            <ul className="chosen-results">
-                              {userAllowedToBeDefaultAdmin.length > 0 &&
-                              userAllowedToBeDefaultAdmin.map(user =>
-                                <li key={user.id} className="active-result" onClick={this.handleUserToBeDefaultAdminClick} data-id={user.id}>
-                                  {this.displayUser(user)}
-                                </li>
-                              )
-                              }
-                              {userAllowedToBeDefaultAdmin.length === 0 &&
-                              <li className="no-results" onClick={this.stopPropagation}>
-                                <Trans>No results match</Trans> <span>{this.state.defaultAdminSearch}</span>
-                              </li>
-                              }
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                      <SelectField items={this.getUsersAllowedToBeDefaultAdmin()}
+                        id="default-user-select"
+                        name="defaultAdmin"
+                        value={this.state.defaultAdmin}
+                        onChange={this.handleInputChange}
+                        disabled={this.hasAllInputDisabled()}
+                        search={true}/>
                       <div className="help-message">
                         <Trans>The default admin user is the user that will perform the operations for the the directory.</Trans>
                       </div>
                     </div>
-                    <div className="input select required ad openldap">
+                    <div className="select-field-wrapper input required ad openldap">
                       <label><Trans>Default group admin</Trans></label>
-                      <div onClick={this.handleDefaultGroupAdminClicked} ref={this.defaultGroupAdminRef}>
-                        <div
-                          className={`chosen-container chosen-container-single ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openDefaultGroupAdmin ? "chosen-with-drop" : ""}`}>
-                          <a className="chosen-single">
-                            <span id="default-group-admin-user-select">{this.displayDefaultGroupAdmin()}</span>
-                            <div>
-                              {!this.state.openDefaultGroupAdmin &&
-                              <Icon name="caret-down" baseline={true}/>
-                              }
-                              {this.state.openDefaultGroupAdmin &&
-                              <Icon name="caret-up" baseline={true}/>
-                              }
-                            </div>
-                          </a>
-                          <div className="chosen-drop">
-                            <div className="chosen-search" onClick={this.stopPropagation}>
-                              <input className="chosen-search-input" name="defaultGroupAdminSearch"
-                                value={this.state.defaultGroupAdminSearch} onChange={this.handleInputChange} type="text"/>
-                              <Icon name="search"/>
-                            </div>
-                            <ul className="chosen-results">
-                              {userAllowedToBeDefaultGroupAdmin.length > 0 &&
-                              userAllowedToBeDefaultGroupAdmin.map(user =>
-                                <li key={user.id} className="active-result" onClick={this.handleUserToBeDefaultGroupAdminClick} data-id={user.id}>
-                                  {this.displayUser(user)}
-                                </li>
-                              )
-                              }
-                              {userAllowedToBeDefaultGroupAdmin.length === 0 &&
-                              <li className="no-results" onClick={this.stopPropagation}>
-                                <Trans>No results match</Trans> <span>{this.state.defaultGroupAdminSearch}</span>
-                              </li>
-                              }
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                      <SelectField items={this.getUsersAllowedToBeDefaultGroupAdmin()}
+                        id="default-group-admin-user-select"
+                        name="defaultGroupAdmin"
+                        value={this.state.defaultGroupAdmin}
+                        onChange={this.handleInputChange}
+                        disabled={this.hasAllInputDisabled()}
+                        search={true}/>
                       <div className="help-message">
                         <Trans>The default group manager is the user that will be the group manager of newly created groups.</Trans>
                       </div>

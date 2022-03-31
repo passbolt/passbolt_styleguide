@@ -40,7 +40,7 @@ describe("As AN I should see the current locale", () => {
 
     it('As a AD I should be able to see my default language in the administration internationalisation page', async() => {
       expect(page.changeLocale.exists()).toBeTruthy();
-      expect(page.localeSelected).toBe(props.context.locale);
+      expect(page.localeSelected).toBe("English");
     });
 
     it('As AN I should be able to change the locale', async() => {

@@ -125,7 +125,7 @@ class ImportGpgKey extends Component {
    */
   async handleChangePrivateKey(event) {
     const privateKey = event.target.value;
-    this.setState({privateKey})
+    this.setState({privateKey});
     if (this.state.hasBeenValidated) {
       await this.validate();
     }

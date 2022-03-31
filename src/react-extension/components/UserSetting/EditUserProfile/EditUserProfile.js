@@ -22,6 +22,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import SelectField from "../../Common/SelectField/SelectField";
 
 class EditUserProfile extends Component {
   /**
@@ -269,7 +270,10 @@ class EditUserProfile extends Component {
    * @returns {array}
    */
   get supportedLocales() {
-    return this.props.context.siteSettings.supportedLocales || [];
+    if (this.props.context.siteSettings.supportedLocales) {
+      return this.props.context.siteSettings.supportedLocales.map(supportedLocale => ({value: supportedLocale.locale, label: supportedLocale.label}));
+    }
+    return [];
   }
 
   /**
@@ -351,16 +355,10 @@ class EditUserProfile extends Component {
             </div>
 
             {this.canIUseLocale &&
-            <div className="input select locale required">
+            <div className="select-field-wrapper input required">
               <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
-              <select id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
-                disabled={!this.areActionsAllowed} onChange={this.handleInputChange}>
-                {this.supportedLocales.map(supportedLocale =>
-                  <option key={supportedLocale.locale} value={supportedLocale.locale}>
-                    {supportedLocale.label}
-                  </option>
-                )}
-              </select>
+              <SelectField id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
+                items={this.supportedLocales} disabled={!this.areActionsAllowed} onChange={this.handleInputChange}/>
             </div>
             }
 

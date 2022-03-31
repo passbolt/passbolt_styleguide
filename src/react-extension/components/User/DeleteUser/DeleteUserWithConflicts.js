@@ -22,6 +22,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
+import SelectField from "../../Common/SelectField/SelectField";
 
 /**
  * This component allows user to delete a user with conflict to reassign ownership of folders, resources and groups
@@ -443,6 +444,16 @@ class DeleteUserWithConflicts extends Component {
   }
 
   /**
+   * Get aco permission
+   * @param id
+   * @returns {*}
+   */
+  getAcoPermissionsList(id) {
+    const getLabel = (permission) => (permission.aro === "User" && this.getUserOptionLabel(permission.user)) || (permission.aro === "Group" && permission.group.name);
+    return this.acosPermissionsOptions[id]?.map(permission => ({value: permission.id, label: getLabel(permission)})) || [];
+  }
+
+  /**
    * Get the user label displayed as option
    * @param {object} user
    */
@@ -493,16 +504,9 @@ class DeleteUserWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.foldersErrors.map(folderError =>
                   <li key={folderError.id}>
-                    <div className="input select required">
+                    <div className="select-field-wrapper input required">
                       <label htmlFor="transfer_folder_owner">{folderError.name} (<Trans>Folder</Trans>) <Trans>new owner</Trans>:</label>
-                      <select className="fluid form-element ready" value={this.state.owners[folderError.id]} onChange={event => this.handleOnChangeOwner(event, folderError.id)}>
-                        {this.acosPermissionsOptions[folderError.id].map(permission => (
-                          <option key={permission.id} value={permission.id}>
-                            {permission.aro === "User" && this.getUserOptionLabel(permission.user)}
-                            {permission.aro === "Group" && permission.group.name}
-                          </option>
-                        ))}
-                      </select>
+                      <SelectField className="form-element" value={this.state.owners[folderError.id]} items={this.getAcoPermissionsList(folderError.id)} onChange={event => this.handleOnChangeOwner(event, folderError.id)}/>
                     </div>
                   </li>
                 )}
@@ -515,16 +519,9 @@ class DeleteUserWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
-                    <div className="input select required">
+                    <div className="select-field-wrapper input required">
                       <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
-                      <select className="fluid form-element ready" value={this.state.owners[resourceError.id]} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}>
-                        {this.acosPermissionsOptions[resourceError.id].map(permission => (
-                          <option key={permission.id} value={permission.id}>
-                            {permission.aro === "User" && this.getUserOptionLabel(permission.user)}
-                            {permission.aro === "Group" && permission.group.name}
-                          </option>
-                        ))}
-                      </select>
+                      <SelectField className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
                     </div>
                   </li>
                 )}
@@ -537,13 +534,9 @@ class DeleteUserWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.groupsErrors.map(groupError =>
                   <li key={groupError.id}>
-                    <div className="input select required">
+                    <div className="select-field-wrapper input required">
                       <label htmlFor="transfer_group_manager">{groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:</label>
-                      <select className="fluid form-element ready" value={this.state.managers[groupError.id]} onChange={event => this.handleOnChangeManager(event, groupError.id)}>
-                        {this.groupsGroupsUsersOptions[groupError.id].map(groupUser => (
-                          <option key={groupUser.id} value={groupUser.id}>{this.getUserOptionLabel(groupUser.user)}</option>
-                        ))}
-                      </select>
+                      <SelectField className="form-element" value={this.state.managers[groupError.id]} items={this.getAcoPermissionsList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
                     </div>
                   </li>
                 )}
