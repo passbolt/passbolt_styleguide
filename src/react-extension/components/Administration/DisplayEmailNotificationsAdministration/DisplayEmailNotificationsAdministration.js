@@ -79,13 +79,15 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       // Comments
       showComment: true, // show comment in email,
       // Account Recovery
-      accountRecoveryImpossibleAdmin: true, // send email to admins when an account recovery is impossible to process
-      accountRecoveryInitiated: true, // send email when an account recovery is requested
-      accountRecoveryProcessed: true, // send email when an account recovery has been rejected or approved by an admin
-      accountRecoveryPolicyChanged: true, // send email when the account recovery policy of the organization changed
-      accountRecoveryImpossibleUser: true, // send email to the user when an account recovery is impossible to process
-      accountRecoveryApproved: true, // send email when the account recovery request has been approved
-      accountRecoveryRejected: true, // send email when the account recovery request has been rejected
+
+      accountRecoveryRequestAdmin: true, //send email to the admins when a user did an account recovery request
+      accountRecoveryRequestGuessing: true, //send email to the admin when a suspicious attempt to recovery a key is made
+      accountRecoveryRequestCreatedAmin: true, //send email to the admin when when an account recovery response has been created
+      accountRecoveryRequestCreatedAllAdmins: true, //send email to all admins when an account recovery response has been created
+      accountRecoveryRequestPolicyUpdate: true, //send email to the admins when the account recovery organization policy has been updated
+      accountRecoveryRequestUser: true, //send email to the user when an account recovery request has been made
+      accountRecoveryRequestUserApproved: true, //send email to the user when the account recovery request has been approved
+      accountRecoveryRequestUserRejected: true, //send email to the user when the account recovery request has been rejected
     };
   }
 
@@ -164,13 +166,14 @@ class DisplayEmailNotificationsAdministration extends React.Component {
     const  showComment = body.show_comment;
 
     // Account recovery
-    const accountRecoveryImpossibleAdmin = body.send_account_recovery_impossible_admin;
-    const accountRecoveryInitiated = body.send_account_recovery_initiated;
-    const accountRecoveryProcessed = body.send_account_recovery_processed;
-    const accountRecoveryPolicyChanged = body.send_account_recovery_policy_changed;
-    const accountRecoveryImpossibleUser = body.send_account_recovery_impossible_user;
-    const accountRecoveryApproved = body.send_account_recovery_approved;
-    const accountRecoveryRejected = body.send_account_recovery_rejected;
+    const accountRecoveryRequestUser = body.send_accountRecovery_request_user;
+    const accountRecoveryRequestAdmin = body.send_accountRecovery_request_admin;
+    const accountRecoveryRequestGuessing = body.send_accountRecovery_request_guessing;
+    const accountRecoveryRequestUserApproved = body.send_accountRecovery_response_user_approved;
+    const accountRecoveryRequestUserRejected = body.send_accountRecovery_response_user_rejected;
+    const accountRecoveryRequestCreatedAmin = body.send_accountRecovery_response_created_admin;
+    const accountRecoveryRequestCreatedAllAdmins = body.send_accountRecovery_response_created_allAdmins;
+    const accountRecoveryRequestPolicyUpdate = body.send_accountRecovery_policy_update;
 
     this.setState({
       loading: false,
@@ -197,13 +200,14 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       showUri,
       showUsername,
       showComment,
-      accountRecoveryImpossibleAdmin,
-      accountRecoveryInitiated,
-      accountRecoveryProcessed,
-      accountRecoveryPolicyChanged,
-      accountRecoveryImpossibleUser,
-      accountRecoveryApproved,
-      accountRecoveryRejected,
+      accountRecoveryRequestUser,
+      accountRecoveryRequestAdmin,
+      accountRecoveryRequestGuessing,
+      accountRecoveryRequestUserApproved,
+      accountRecoveryRequestUserRejected,
+      accountRecoveryRequestCreatedAmin,
+      accountRecoveryRequestCreatedAllAdmins,
+      accountRecoveryRequestPolicyUpdate,
     });
   }
 
@@ -279,18 +283,19 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       send_group_manager_update: this.state.groupManagerUpdate,
       send_user_create: this.state.userCreate,
       send_user_recover: this.state.userRecover,
+      send_accountRecovery_request_user: this.state.accountRecoveryRequestUser,
+      send_accountRecovery_request_admin: this.state.accountRecoveryRequestAdmin,
+      send_accountRecovery_request_guessing: this.state.accountRecoveryRequestGuessing,
+      send_accountRecovery_response_user_approved: this.state.accountRecoveryRequestUserApproved,
+      send_accountRecovery_response_user_rejected: this.state.accountRecoveryRequestUserRejected,
+      send_accountRecovery_response_created_admin: this.state.accountRecoveryRequestCreatedAmin,
+      send_accountRecovery_response_created_allAdmins: this.state.accountRecoveryRequestCreatedAllAdmins,
+      send_accountRecovery_policy_update: this.state.accountRecoveryRequestPolicyUpdate,
       show_description: this.state.showDescription,
       show_secret: this.state.showSecret,
       show_uri: this.state.showUri,
       show_username: this.state.showUsername,
       show_comment: this.state.showComment,
-      send_account_recovery_impossible_admin: this.state.accountRecoveryImpossibleAdmin,
-      send_account_recovery_initiated: this.state.accountRecoveryInitiated,
-      send_account_recovery_processed: this.state.accountRecoveryProcessed,
-      send_account_recovery_policy_changed: this.state.accountRecoveryPolicyChanged,
-      send_account_recovery_impossible_user: this.state.accountRecoveryImpossibleUser,
-      send_account_recovery_approved: this.state.accountRecoveryApproved,
-      send_account_recovery_rejected: this.state.accountRecoveryRejected,
     };
 
     await this.props.administrationWorkspaceContext.onSaveEmailNotificationsRequested(emailNotifications);
@@ -530,49 +535,55 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                 <div className="col6">
                   <label><Trans>Admin</Trans></label>
                   <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-impossible-admin-toggle-button"><Trans>When an account recovery is impossible, notify the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryImpossibleAdmin" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryImpossibleAdmin} id="account-recovery-impossible-admin-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-impossible-admin-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-initiated-toggle-button"><Trans>When an account recovery is initiated, notify the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryInitiated" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryInitiated} id="account-recovery-initiated-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-initiated-toggle-button"/>
+                    <label htmlFor="account-recovery-request-admin-toggle-button"><Trans>When an account recovery is requested, notify the administrators</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestAdmin" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestAdmin} id="account-recovery-request-admin-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-request-admin-toggle-button"/>
                   </span>
                   <span className="input toggle-switch form-element ready">
-                    <label htmlFor="account-recovery-processed-toggle-button"><Trans>When an account recovery is rejected or approved, notify the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryProcessed" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryProcessed} id="account-recovery-processed-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-processed-toggle-button"/>
+                    <label htmlFor="account-recovery-request-guessing-toggle-button"><Trans>When a suspicious attempt to guess for an existing account recovery request is made, notify the administrators?</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestGuessing" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestGuessing} id="account-recovery-request-guessing-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-request-guessing-toggle-button"/>
                   </span>
                   <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-policy-changed-toggle-button"><Trans>When an account recovery policy is changed, notify the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryPolicyChanged" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryPolicyChanged} id="account-recovery-policy-changed-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-policy-changed-toggle-button"/>
+                    <label htmlFor="account-recovery-policy-update-toggle-button"><Trans>When an account recovery policy is updated, notify the administrators</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestPolicyUpdate" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestPolicyUpdate} id="account-recovery-policy-update-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-policy-update-toggle-button"/>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <label htmlFor="account-recovery-response-created-admin-toggle-button"><Trans>When an administrator answered to an account recovery request, notify the administrator</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAmin" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAmin} id="account-recovery-response-created-admin-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-response-created-admin-toggle-button"/>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <label htmlFor="account-recovery-response-created-all-admin-toggle-button"><Trans>When an administrator answered to an account recovery request, notify all the administrators</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAllAdmins" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAllAdmins} id="account-recovery-response-created-all-admin-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-response-created-all-admin-toggle-button"/>
                   </span>
                 </div>
                 <div className="col6 last">
                   <label><Trans>User</Trans></label>
                   <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-impossible-user-toggle-button"><Trans>When an account recovery is impossible, notify the user</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryImpossibleUser" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryImpossibleUser} id="account-recovery-impossible-user-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-impossible-user-toggle-button"/>
+                    <label htmlFor="account-recovery-request-user-toggle-button"><Trans>When an account recovery is requested, notify the user</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUser" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUser} id="account-recovery-request-user-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-request-user-toggle-button"/>
                   </span>
                   <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-approved-toggle-button"><Trans>When an account recovery is approved, notify the user</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryApproved" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryApproved} id="account-recovery-approved-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-approved-toggle-button"/>
+                    <label htmlFor="account-recovery-response-user-approved-toggle-button"><Trans>When an account recovery is approved, notify the user</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserApproved" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserApproved} id="account-recovery-response-user-approved-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-response-user-approved-toggle-button"/>
                   </span>
                   <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-rejected-toggle-button"><Trans>When an account recovery is rejected, notify the user</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRejected" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRejected} id="account-recovery-rejected-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-rejected-toggle-button"/>
+                    <label htmlFor="account-recovery-response-user-rejected-toggle-button"><Trans>When an account recovery is rejected, notify the user</Trans></label>
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserRejected" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserRejected} id="account-recovery-response-user-rejected-toggle-button"/>
+                    <label className="toggle-switch-button" htmlFor="account-recovery-response-user-rejected-toggle-button"/>
                   </span>
                 </div>
               </div>
