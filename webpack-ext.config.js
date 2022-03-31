@@ -18,6 +18,8 @@ const demoEntry = {
   "ext-recover": path.resolve(__dirname, "./demo/ext-app/entry/ExtRecover.entry.js"), // The recover application served by the browser extension.
   "ext-bootstrap-login": path.resolve(__dirname, "./demo/ext-app/entry/ExtBootstrapLogin.entry.js"), // The login bootstrap application served by the browser extension.
   "ext-login": path.resolve(__dirname, "./demo/ext-app/entry/ExtLogin.entry.js"), // The login application served by the browser extension.
+  "ext-bootstrap-account-recovery": path.resolve(__dirname, "./demo/ext-app/entry/ExtBootstrapAccountRecovery.entry.js"), // The account recovery bootstrap application served by the browser extension.
+  "ext-account-recovery": path.resolve(__dirname, "./demo/ext-app/entry/ExtAccountRecovery.entry.js"), // The account recovery application served by the browser extension.
 };
 
 const config = {
