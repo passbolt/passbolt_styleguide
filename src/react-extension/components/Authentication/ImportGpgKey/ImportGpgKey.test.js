@@ -130,6 +130,18 @@ describe("ImportGpgKey", () => {
       expect(page.hasInvalidPrivateKeyError).toBeTruthy();
       expect(page.invalidPrivateKeyErrorMessage).toBe("The private key should not be revoked.");
     });
+
+    it(`As AN I should see an error if the private key format is invalid, scenario: ${JSON.stringify(_props)}`, async() => {
+      const props = defaultProps({..._props});
+      props.context.port.request.mockImplementation(() => { throw new Error("Invalid Gpg key format."); });
+      const page = new ImportGpgKeyPage(props);
+
+      expect.assertions(2);
+      await page.fill('Some private key');
+      await page.verifyKey();
+      expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+      expect(page.invalidPrivateKeyErrorMessage).toBe("The private key should be a valid armored GPG key.");
+    });
   });
 
   describe('As AN on the Setup workflow', () => {
