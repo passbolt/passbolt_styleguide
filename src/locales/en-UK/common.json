@@ -654,6 +654,7 @@
   "The permissions do not match the destination folder permissions.": "The permissions do not match the destination folder permissions.",
   "The permissions have been changed successfully.": "The permissions have been changed successfully.",
   "The private key is invalid.": "The private key is invalid.",
+  "The private key should be a valid armored GPG key.": "The private key should be a valid armored GPG key.",
   "The private key should not be empty.": "The private key should not be empty.",
   "The private key should not be expired.": "The private key should not be expired.",
   "The private key should not be revoked.": "The private key should not be revoked.",

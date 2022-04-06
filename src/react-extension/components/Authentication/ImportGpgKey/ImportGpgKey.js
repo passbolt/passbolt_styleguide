@@ -203,10 +203,20 @@ class ImportGpgKey extends Component {
       return;
     }
 
-    const keyInfo = await this.props.context.port.request("passbolt.keyring.get-key-info", privateKey);
+    let isMalformedArmored = false;
+    let keyInfo;
+    try {
+      keyInfo = await this.props.context.port.request("passbolt.keyring.get-key-info", privateKey);
+    } catch (e) {
+      isMalformedArmored = true;
+    }
+
     let invalidPrivateKey = false;
     let errorMessage = "";
-    if (keyInfo.revoked) {
+    if (isMalformedArmored) {
+      invalidPrivateKey = true;
+      errorMessage = this.translate("The private key should be a valid armored GPG key.");
+    } else if (keyInfo.revoked) {
       invalidPrivateKey = true;
       errorMessage = this.translate("The private key should not be revoked.");
     } else if (this.isKeyExpired(keyInfo)) {
