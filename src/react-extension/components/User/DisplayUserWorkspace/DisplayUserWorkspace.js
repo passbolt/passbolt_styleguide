@@ -59,7 +59,7 @@ class DisplayUserWorkspace extends React.Component {
     return (
       <div>
         {this.props.context.users &&
-        <Route path="/app/account-recovery-requests/review/:accountRecoveryRequestId" component={HandleReviewAccountRecoveryRequestRoute}/>
+        <Route path="/app/account-recovery/requests/review/:accountRecoveryRequestId" component={HandleReviewAccountRecoveryRequestRoute}/>
         }
         <div className="header second">
           <Logo/>

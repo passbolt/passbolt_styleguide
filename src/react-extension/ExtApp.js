@@ -149,7 +149,7 @@ class ExtApp extends Component {
                                   </Route>
                                   {/* Users workspace */}
                                   <Route path={[
-                                    "/app/account-recovery-requests/review/:accountRecoveryRequestId",
+                                    "/app/account-recovery/requests/review/:accountRecoveryRequestId",
                                     "/app/groups/view/:selectedGroupId",
                                     "/app/groups/edit/:selectedGroupId",
                                     "/app/users/view/:selectedUserId",

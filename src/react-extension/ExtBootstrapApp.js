@@ -120,7 +120,7 @@ class ExtBootstrapApp extends Component {
               </>
             </Route>
             <Route exact path={[
-              "/app/account-recovery-requests/review/:accountRecoveryRequestId",
+              "/app/account-recovery/requests/review/:accountRecoveryRequestId",
               "/app/administration/subscription",
               "/app/administration/account-recovery",
               "/app/folders/view/:filterByFolderId",
