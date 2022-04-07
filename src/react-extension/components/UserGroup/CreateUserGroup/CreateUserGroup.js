@@ -26,6 +26,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import Select from "../../Common/Select/Select";
 
 class CreateUserGroup extends Component {
   /**
@@ -150,7 +151,7 @@ class CreateUserGroup extends Component {
    */
   handleSelectUpdate(event, userId) {
     const target = event.target;
-    const is_admin = target.value === "true";
+    const is_admin = target.value === true;
     const groups_users = Object.assign(this.state.groups_users);
     const index = groups_users.findIndex(groups_user => groups_user.user.id === userId);
     groups_users[index] = Object.assign(groups_users[index], {is_admin});
@@ -437,6 +438,17 @@ class CreateUserGroup extends Component {
   }
 
   /**
+   * Get permissions
+   * @returns {[{label: *, value: boolean}]}
+   */
+  get permissions() {
+    return [
+      {value: false, label: this.translate("Member")},
+      {value: true, label: this.translate("Group manager")}
+    ];
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -489,12 +501,9 @@ class CreateUserGroup extends Component {
                         <span><Trans>Will be added</Trans></span>
                       </div>
                     </div>
-                    <div className="select rights">
-                      <select value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
-                        onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}>
-                        <option value="false">{this.translate("Member")}</option>
-                        <option value="true">{this.translate("Group manager")}</option>
-                      </select>
+                    <div className="rights">
+                      <Select className="inline" items={this.permissions} value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
+                        onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}/>
                     </div>
                     <div className="actions">
                       <a className={`remove-item ${this.hasAllInputDisabled() ? "disabled" : ""}`}

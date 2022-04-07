@@ -187,7 +187,15 @@ class CreateGroupPageObject {
    * @param index the display of the permission
    */
   selectRights(index) {
-    return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.select.rights select');
+    return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.rights .select .selected-value');
+  }
+
+  /**
+   * Returns the select rights item for the 'index' one
+   * @param index the display of the item permission
+   */
+  selectItem(index) {
+    return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.rights .select .option');
   }
 
   /**
@@ -269,9 +277,15 @@ class CreateGroupPageObject {
   }
 
   /** fill the input element with data */
-  fillInput(element, data)  {
+  fillInput(element, data) {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+  }
+
+  /** select item */
+  async selectFirstItem(index)  {
+    await this.click(this.selectRights(index));
+    await this.click(this.selectItem(index));
   }
 }
 

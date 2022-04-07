@@ -19,9 +19,9 @@ import {Trans} from "react-i18next";
 import CustomPropTypes from "../../../../shared/lib/PropTypes/CustomPropTypes";
 
 /**
- * Display of the SelectField component
+ * Display of the Select component
  */
-class SelectField extends Component {
+class Select extends Component {
   /**
    * Default constructor
    * @param props Component props
@@ -349,8 +349,8 @@ class SelectField extends Component {
 
   render() {
     return (
-      <div className={`select-field-container ${this.props.className}`} style={{width: this.state.style?.width, height: this.state.style?.height}}>
-        <div onKeyDown={this.handleSelectKeyDown} id={this.props.id} className={`select-field ${this.state.open ? 'open' : ''}`} style={this.state.style}>
+      <div className={`select-container ${this.props.className}`} style={{width: this.state.style?.width, height: this.state.style?.height}}>
+        <div onKeyDown={this.handleSelectKeyDown} id={this.props.id} className={`select ${this.props.direction} ${this.state.open ? 'open' : ''}`} style={this.state.style}>
           <div ref={this.selectedItemRef}
             className={`selected-value ${this.props.disabled ? 'disabled' : ''}`}
             tabIndex={this.props.disabled ? -1 : 0}
@@ -387,10 +387,11 @@ class SelectField extends Component {
   }
 }
 
-SelectField.defaultProps = {
+Select.defaultProps = {
   id: "",
-  name: "value",
-  className: ""
+  name: "select",
+  className: "",
+  direction: 'bottom'
 };
 
 /**
@@ -411,10 +412,11 @@ const isValueInItems = (props, propName, componentName) => {
   }
 };
 
-SelectField.propTypes = {
+Select.propTypes = {
   id: PropTypes.string, // The select field id
   name: PropTypes.string, // The select field name
   className: PropTypes.string, // The class name
+  direction: PropTypes.string,
   search: PropTypes.bool, // The search field property
   items: PropTypes.array.isRequired, // The item list of the select field
   value: CustomPropTypes.allPropTypes(
@@ -425,4 +427,4 @@ SelectField.propTypes = {
   onChange: PropTypes.func, // The on change event callback
 };
 
-export default SelectField;
+export default Select;

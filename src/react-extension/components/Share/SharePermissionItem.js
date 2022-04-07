@@ -22,6 +22,7 @@ import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";
 import Icon from "../Common/Icons/Icon";
 import Tooltip from "../Common/Tooltip/Tooltip";
+import Select from "../Common/Select/Select";
 
 class SharePermissionItem extends Component {
   /**
@@ -71,9 +72,9 @@ class SharePermissionItem extends Component {
 
   getSelectClassName() {
     if (this.isInputDisabled()) {
-      return 'permission disabled';
+      return 'permission inline disabled';
     }
-    return 'permission';
+    return 'permission inline';
   }
 
   getAroName() {
@@ -119,6 +120,22 @@ class SharePermissionItem extends Component {
   }
 
   /**
+   * Get the permissions
+   * @returns {[{label: string, value: string}]}
+   */
+  get permissions() {
+    const permissions = [
+      {value: "1", label: this.translate("can read")},
+      {value: "7", label: this.translate("can update")},
+      {value: "15", label: this.translate("is owner")},
+    ];
+    if (this.props.variesDetails) {
+      permissions.push({value: "-1", label: this.translate("varies")});
+    }
+    return permissions;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -145,20 +162,14 @@ class SharePermissionItem extends Component {
           </div>
         </div>
 
-        <div className="select rights">
-          <select name="permissionSelect"
+        <div className="rights">
+          <Select name="permissionSelect"
             className={this.getSelectClassName()}
-            value={this.state.permissionType}
+            items={this.permissions}
+            value={this.state.permissionType.toString()}
             disabled={this.isInputDisabled()}
             onChange={this.handleUpdate}
-          >
-            <option value="1">{this.translate("can read")}</option>
-            <option value="7">{this.translate("can update")}</option>
-            <option value="15">{this.translate("is owner")}</option>
-            { (this.props.variesDetails) &&
-            <option value="-1">{this.translate("varies")}</option>
-            }
-          </select>
+          />
 
           {(this.props.variesDetails) &&
           <Tooltip message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>

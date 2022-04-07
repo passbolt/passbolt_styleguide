@@ -83,7 +83,6 @@ class DisplayProgress extends Component {
    */
   isInfiniteProgressMode() {
     return !this.props.context.progressDialogProps.goals;
-
   }
 
   /**

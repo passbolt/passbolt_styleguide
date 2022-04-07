@@ -97,11 +97,11 @@ describe("InputPassphrase", () => {
     expect(rememberMeInput.checked).toBe(false);
 
     // Remember me duration options exists.
-    const rememberMeDurationSelect = container.querySelector("[name=\"rememberMeDuration\"]");
+    const rememberMeDurationSelect = container.querySelector(".select-container .select");
     expect(rememberMeDurationSelect).not.toBeNull();
     const rememberMeOptions = context.siteSettings.getRememberMeOptions();
-    Object.keys(rememberMeOptions).forEach(optionKey => {
-      const rememberMeDurationOption = container.querySelector(`option[value="${optionKey}"]`);
+    Object.keys(rememberMeOptions).forEach((optionKey, index) => {
+      const rememberMeDurationOption = index === 0 ? container.querySelector(".select-container .select .selected-value .value") : container.querySelectorAll(".select-container .select .option")[index - 1];
       expect(rememberMeDurationOption).not.toBeNull();
       expect(rememberMeDurationOption.textContent).toBe(rememberMeOptions[optionKey]);
     });
@@ -325,10 +325,13 @@ describe("InputPassphrase", () => {
     fireEvent.click(rememberMeInput, leftClick);
 
     // Select a remember me duration.
-    const rememberMeDurationSelect = container.querySelector("[name=\"rememberMeDuration\"]");
-    // Simulate change event, the click on the option does not trigger the onChange event.
-    fireEvent.change(rememberMeDurationSelect, {target: {value: "1800"}});
-
+    const rememberMeDurationSelect = container.querySelector(".select-container .select .selected-value");
+    // The click on the select.
+    fireEvent.click(rememberMeDurationSelect, leftClick);
+    // Get the second select item in the list.
+    const secondSelectItem = container.querySelectorAll(".select-container .select .option")[1];
+    // The click on the second select item.
+    fireEvent.click(secondSelectItem, leftClick);
     // Submit.
     const submitButton = container.querySelector(".submit-wrapper [type=\"submit\"]");
     fireEvent.click(submitButton, leftClick);

@@ -22,7 +22,7 @@ import DisplayTestUserDirectoryAdministration
   from "../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
-import SelectField from "../../Common/SelectField/SelectField";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows to display the MFA for the administration
@@ -683,11 +683,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * get the connection type
    */
   get connectionType() {
-    return {
-      plain: "ldap://",
-      ssl: "ldaps:// (ssl)",
-      tls: "ldaps:// (tls)"
-    };
+    return [
+      {value: "plain", label: "ldap://"},
+      {value: "ssl", label: "ldaps:// (ssl)"},
+      {value: "tls", label: "ldaps:// (tls)"},
+    ];
   }
 
   /**
@@ -755,27 +755,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <div className="clearfix required ad openldap">
                       <label><Trans>Server url</Trans></label>
                       <div className="input text singleline connection_info ad openldap">
-                        <div onClick={this.handleConnectionTypeClicked} ref={this.connectionTypeRef}
-                          className={`protocol chosen-container chosen-container-single connection-type ${this.hasAllInputDisabled() ? "chosen-disabled" : "chosen-container-active"} ${this.state.openConnectionType ? "chosen-with-drop" : ""}`}>
-                          <a className="chosen-single">
-                            <span id="connection-type-input">{this.connectionType[this.state.connectionType]}</span>
-                            <div>
-                              {!this.state.openDefaultGroupAdmin &&
-                              <Icon name="caret-down" baseline={true}/>
-                              }
-                              {this.state.openDefaultGroupAdmin &&
-                              <Icon name="caret-up" baseline={true}/>
-                              }
-                            </div>
-                          </a>
-                          <div className="chosen-drop">
-                            <ul className="chosen-results">
-                              <li className="active-result" onClick={this.handleConnectionTypeChange} data-id={"plain"}>ldap://</li>
-                              <li className="active-result" onClick={this.handleConnectionTypeChange} data-id={"ssl"}>ldaps:// (ssl)</li>
-                              <li className="active-result" onClick={this.handleConnectionTypeChange} data-id={"tls"}>ldaps:// (tls)</li>
-                            </ul>
-                          </div>
-                        </div>
+                        <Select className="inline" items={this.connectionType} value={this.state.connectionType} disabled={this.hasAllInputDisabled()}/>
                         <div className="input text host ad openldap">
                           <input id="server-input" type="text" className="required fluid form-element" name="host"
                             value={this.state.host} onChange={this.handleInputChange} onKeyUp={this.handleHostInputKeyUp}
@@ -924,9 +904,9 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     </a>
                   </h3>
                   <div className="accordion-content">
-                    <div className="select-field-wrapper input required ad openldap">
+                    <div className="select-wrapper input required ad openldap">
                       <label><Trans>Default admin</Trans></label>
-                      <SelectField items={this.getUsersAllowedToBeDefaultAdmin()}
+                      <Select items={this.getUsersAllowedToBeDefaultAdmin()}
                         id="default-user-select"
                         name="defaultAdmin"
                         value={this.state.defaultAdmin}
@@ -937,9 +917,9 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         <Trans>The default admin user is the user that will perform the operations for the the directory.</Trans>
                       </div>
                     </div>
-                    <div className="select-field-wrapper input required ad openldap">
+                    <div className="select-wrapper input required ad openldap">
                       <label><Trans>Default group admin</Trans></label>
-                      <SelectField items={this.getUsersAllowedToBeDefaultGroupAdmin()}
+                      <Select items={this.getUsersAllowedToBeDefaultGroupAdmin()}
                         id="default-group-admin-user-select"
                         name="defaultGroupAdmin"
                         value={this.state.defaultGroupAdmin}

@@ -18,6 +18,7 @@ import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationErro
 import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
+import Select from "../../Common/Select/Select";
 
 class InputPassphrase extends Component {
   constructor(props) {
@@ -62,7 +63,6 @@ class InputPassphrase extends Component {
    */
   createInputRef() {
     this.passphraseInputRef = React.createRef();
-    this.rememberMeDurationSelectRef = React.createRef();
   }
 
   /**
@@ -201,21 +201,21 @@ class InputPassphrase extends Component {
   handleRememberMeDurationSelectChange(event) {
     this.setState({
       rememberMe: true,
-      rememberMeDuration: parseInt(event.target.value)
+      rememberMeDuration: event.target.value
     });
   }
 
 
   /**
    * Render the remember me options
-   * @return {array<JSX>}
+   * @returns {*[]}
    */
   renderRememberMeOptions() {
     const selectOptions = [];
     const rememberMeOptions = this.props.context.siteSettings.getRememberMeOptions();
 
     for (const time in rememberMeOptions) {
-      selectOptions.push(<option value={time} key={time}>{rememberMeOptions[time]}</option>);
+      selectOptions.push({value: parseInt(time), label: rememberMeOptions[time]});
     }
 
     return selectOptions;
@@ -280,11 +280,8 @@ class InputPassphrase extends Component {
                     <label htmlFor="passphrase-entry-form-remember-me"><Trans>Remember it for</Trans> </label>
                   </div>
                   <div className="input select">
-                    <select name="rememberMeDuration" value={this.state.rememberMeDuration}
-                      onChange={this.handleRememberMeDurationSelectChange}
-                      ref={this.rememberMeDurationSelectRef}>
-                      {this.renderRememberMeOptions()}
-                    </select>
+                    <Select name="rememberMeDuration" items={this.renderRememberMeOptions()} value={this.state.rememberMeDuration}
+                      onChange={this.handleRememberMeDurationSelectChange}/>
                   </div>
                 </div>
                 }

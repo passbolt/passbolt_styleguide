@@ -99,14 +99,14 @@ export default class DisplayUserDirectoryAdministrationPage {
    * Returns the connection type element
    */
   get connectionType() {
-    return this._page.container.querySelector('#connection-type-input');
+    return this._page.container.querySelector('.select-container.inline .select .selected-value').textContent;
   }
 
   /**
    * Returns the connection type select element
    */
   get connectionTypeSelect() {
-    return this._page.container.querySelector('.chosen-container.chosen-container-single.connection-type');
+    return this._page.container.querySelector('.select-container.inline .select .selected-value');
   }
 
   /**

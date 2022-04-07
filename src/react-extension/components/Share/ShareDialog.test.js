@@ -71,7 +71,7 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.aroDetails(3)).toBe('Group');
       expect(page.aroName(12)).toBe('Administrator');
       expect(page.aroDetails(12)).toBe('Group');
-      expect(page.selectRights(12).value).toBe('1');
+      expect(page.selectRights(12).textContent).toBe('can read');
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
@@ -115,7 +115,7 @@ describe("As Lu I should see the share dialog", () => {
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
         expect(page.shareNameInput.getAttribute("disabled")).not.toBeNull();
-        expect(page.selectRights(1).getAttribute("disabled")).not.toBeNull();
+        expect(page.selectRights(1).className).toBe("selected-value disabled");
         expect(page.removeAro(1).className).toBe('remove-item disabled');
         expect(page.cancelButton.className).toBe('cancel disabled');
         expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
@@ -126,7 +126,7 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I shouldn’t be able to submit the form if there is no owner', async() => {
       expect.assertions(2);
-      await page.selectCanReadRights(1);
+      await page.selectFirstItemRights(1);
       expect(page.errorMessage).toBe('Please make sure there is at least one owner.');
       expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
     });
@@ -204,7 +204,7 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.count).toBe(12);
       expect(page.aroName(12)).toBe('Administrator');
       expect(page.aroDetails(12)).toBe('Group');
-      expect(page.selectRights(12).value).toBe('1');
+      expect(page.selectRights(12).textContent).toBe('can read');
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);
@@ -254,7 +254,7 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.count).toBe(3);
       expect(page.aroName(3)).toBe('Admin User');
       expect(page.aroDetails(3)).toBe('admin@passbolt.com');
-      expect(page.selectRights(3).value).toBe('1');
+      expect(page.selectRights(3).textContent).toBe('can read');
 
       const requestMockImpl = jest.fn();
       mockContextRequest(requestMockImpl);

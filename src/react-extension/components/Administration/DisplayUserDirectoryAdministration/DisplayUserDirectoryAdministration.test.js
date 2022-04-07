@@ -49,7 +49,7 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.userDirectory.checked).toBeTruthy();
 
       expect(page.activeDirectory.checked).toBeTruthy();
-      expect(page.connectionType.textContent).toBe("ldap://");
+      expect(page.connectionType).toBe("ldap://");
       expect(page.serverHost.value).toBe("127.0.0.1");
       expect(page.port.value).toBe("389");
       expect(page.username.value).toBe("username");
@@ -243,7 +243,7 @@ describe("As AD I should see the user directory settings", () => {
       await waitFor(() => {
         expect(page.userDirectory.getAttribute("disabled")).not.toBeNull();
         expect(page.activeDirectory.getAttribute("disabled")).not.toBeNull();
-        expect(page.connectionTypeSelect.className).toBe("protocol chosen-container chosen-container-single connection-type chosen-disabled ");
+        expect(page.connectionTypeSelect.className).toBe("selected-value disabled");
         expect(page.serverHost.getAttribute("disabled")).not.toBeNull();
         expect(page.port.getAttribute("disabled")).not.toBeNull();
         expect(page.username.getAttribute("disabled")).not.toBeNull();

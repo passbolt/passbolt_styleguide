@@ -115,13 +115,14 @@ export default class EditUserGroupTestPage {
     const element = this._page.container.querySelectorAll('.permissions.groups_users .row')[index - 1];
     return {
       get role() {
-        const value =  element.querySelector('.select.rights select').value;
+        const value =  element.querySelector('.select .value').textContent;
         return value ? "Group Manager" : "Member";
       },
-      set role(value) {
-        const roleElement = element.querySelector('.select.rights select');
-        const inputEvent = {target: {value: value === "Group Manager" ? "true" : "false"}};
-        fireEvent.change(roleElement, inputEvent);
+      set role(index) {
+        const roleElement = element.querySelector('.select .value');
+        fireEvent.click(roleElement);
+        const roleItem = element.querySelectorAll('.select .option')[index - 1];
+        fireEvent.click(roleItem);
       },
       get name() {
         return element.querySelector('.aro-name span').innerHTML;

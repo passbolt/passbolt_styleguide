@@ -17,7 +17,7 @@ import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {DateTime} from "luxon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
-import SelectField from "../../Common/SelectField/SelectField";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component displays the user GPG information
@@ -202,7 +202,7 @@ class DisplayUserGpgInformation extends React.Component {
                     <Tooltip
                       message={this.translate("sorry you can only have one key set at the moment")}
                       direction="top">
-                      <SelectField
+                      <Select
                         id="keyId"
                         value={this.gpgKeyInfo.keyId}
                         items={[{value: this.gpgKeyInfo.keyId, label: this.gpgKeyInfo.keyId}]}

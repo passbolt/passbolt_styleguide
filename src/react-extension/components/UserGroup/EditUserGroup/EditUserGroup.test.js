@@ -60,8 +60,7 @@ describe("See the Edit User Group", () => {
       expect.assertions(3);
       expect(page.groupMember(2).role).toBe("Group Manager");
 
-      const newRole = "Member";
-      page.groupMember(2).role = newRole;
+      page.groupMember(2).role = 1;
 
       await page.save();
 
@@ -168,9 +167,8 @@ describe("See the Edit User Group", () => {
 
     it('As AD I should see an error message when the editing group has no group manager anymore', async() => {
       expect.assertions(1);
-      const newRole = "Member";
-      page.groupMember(1).role = newRole;
-      page.groupMember(2).role = newRole;
+      page.groupMember(1).role = 1;
+      page.groupMember(2).role = 1;
       await waitFor(() => {});
       expect(page.hasNoManager).toBeTruthy();
     });

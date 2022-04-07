@@ -121,7 +121,15 @@ export default class ShareDialogPage {
    * @param index the display of the permission
    */
   selectRights(index) {
-    return this._page.container.querySelectorAll('.permissions .row')[index - 1].querySelector('.select.rights select');
+    return this._page.container.querySelectorAll('.permissions .row')[index - 1].querySelector('.select .selected-value');
+  }
+
+  /**
+   * Returns the select item rights for the 'index' one
+   * @param index the display of the permission
+   */
+  selectFirstItem(index) {
+    return this._page.container.querySelectorAll('.permissions .row')[index - 1].querySelector('.select .option');
   }
 
   /**
@@ -191,8 +199,9 @@ export default class ShareDialogPage {
   }
 
   /** Select is owner rights */
-  async selectCanReadRights(index) {
-    await this.fillInput(this.selectRights(index), "1");
+  async selectFirstItemRights(index) {
+    await this.click(this.selectRights(index));
+    await this.click(this.selectFirstItem(index));
   }
 
   /** Save permissions */

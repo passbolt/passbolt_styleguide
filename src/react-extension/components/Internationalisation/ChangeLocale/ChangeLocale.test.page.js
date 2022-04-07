@@ -35,7 +35,7 @@ export default class ChangeLocalePage {
    * Returns the change locale element
    */
   get changeLocale() {
-    const element = this._page.container.querySelector('.select-field-wrapper.input');
+    const element = this._page.container.querySelector('.select-wrapper.input');
     return {
       exists() {
         return element !== null;

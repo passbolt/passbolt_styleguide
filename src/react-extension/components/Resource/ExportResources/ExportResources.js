@@ -24,7 +24,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
 import {Trans, withTranslation} from "react-i18next";
-import SelectField from "../../Common/SelectField/SelectField";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows to export resources to a specified format
@@ -296,9 +296,9 @@ class ExportResources extends React.Component {
 
           <div className="form-content">
 
-            <div className="select-field-wrapper input required">
+            <div className="select-wrapper input required">
               <label htmlFor="export-format"><Trans>Choose the export format (csv and kdbx are supported)</Trans></label>
-              <SelectField
+              <Select
                 id="export-format"
                 value={this.state.selectedExportFormat}
                 items={this.exportFormats}

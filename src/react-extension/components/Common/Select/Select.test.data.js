@@ -32,3 +32,39 @@ export function defaultProps(props = {}) {
   };
   return Object.assign(defaultProps, props || {});
 }
+
+/**
+ * Default inline props
+ * @returns {{}}
+ */
+export function defaultInlineProps(props = {}) {
+  const defaultProps = {
+    items: [
+      {value: "0", label: "can read"},
+      {value: "1", label: "can update"},
+      {value: "2", label: "is owner"},
+      {value: "-1", label: "varies"},
+    ],
+    value: "0",
+    onChange: () => jest.fn()
+  };
+  return Object.assign(defaultProps, props || {});
+}
+
+/**
+ * Default inline props
+ * @returns {{}}
+ */
+export function defaultInlineLdapProps(props = {}) {
+  const defaultProps = {
+    items: [
+      {value: "0", label: "ldap://"},
+      {value: "1", label: "http://"},
+      {value: "2", label: "https://"},
+      {value: "3", label: "ftp://"},
+    ],
+    value: "0",
+    onChange: () => jest.fn()
+  };
+  return Object.assign(defaultProps, props || {});
+}

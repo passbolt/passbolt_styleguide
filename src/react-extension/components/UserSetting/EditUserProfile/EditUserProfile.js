@@ -22,7 +22,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import SelectField from "../../Common/SelectField/SelectField";
+import Select from "../../Common/Select/Select";
 
 class EditUserProfile extends Component {
   /**
@@ -355,9 +355,9 @@ class EditUserProfile extends Component {
             </div>
 
             {this.canIUseLocale &&
-            <div className="select-field-wrapper input required">
+            <div className="select-wrapper input required">
               <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
-              <SelectField id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
+              <Select id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
                 items={this.supportedLocales} disabled={!this.areActionsAllowed} onChange={this.handleInputChange}/>
             </div>
             }

@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import SelectField from "../../../react-extension/components/Common/SelectField/SelectField";
+import Select from "../../../react-extension/components/Common/Select/Select";
 
 class ConfigurePassphraseGenerator extends Component {
   constructor(props) {
@@ -141,9 +141,9 @@ class ConfigurePassphraseGenerator extends Component {
           <input type="text" id="configure-passphrase-generator-form-words-separator" name="separator" value={this.separator} onChange={this.handleInputChange}
             placeholder={this.translate("Type one or more characters")}/>
         </div>
-        <div className="select-field-wrapper input">
+        <div className="select-wrapper input">
           <label htmlFor="configure-passphrase-generator-form-words-case"><Trans>Words case</Trans></label>
-          <SelectField id="configure-passphrase-generator-form-words-case" name="word_case" items={this.wordCaseList} value={this.wordCase} onChange={this.handleInputChange}/>
+          <Select id="configure-passphrase-generator-form-words-case" name="word_case" items={this.wordCaseList} value={this.wordCase} onChange={this.handleInputChange}/>
         </div>
       </>
     );

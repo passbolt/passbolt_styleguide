@@ -27,6 +27,7 @@ import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows to edit an user group
@@ -273,7 +274,7 @@ class EditUserGroup extends Component {
    * @return {Promise<void>}
    */
   async handleMemberRoleChange(event, groupUser) {
-    const isManager = event.target.value === 'true';
+    const isManager = event.target.value === true;
     await this.updateMemberRole(groupUser, isManager);
   }
 
@@ -675,6 +676,17 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Get permissions
+   * @returns {[{label: *, value: boolean}]}
+   */
+  get permissions() {
+    return [
+      {value: false, label: this.translate("Member")},
+      {value: true, label: this.translate("Group manager")}
+    ];
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -757,15 +769,13 @@ class EditUserGroup extends Component {
                       </div>
                     </div>
 
-                    <div className="select rights">
-                      <select
-                        className="permission"
+                    <div className="rights">
+                      <Select
+                        className="permission inline"
                         value={groupUser.is_admin}
+                        items={this.permissions}
                         onChange={event => this.handleMemberRoleChange(event, groupUser)}
-                        disabled={!this.areActionsAllowed}>
-                        <option value={false}>{this.translate("Member")}</option>
-                        <option value={true}>{this.translate("Group manager")}</option>
-                      </select>
+                        disabled={!this.areActionsAllowed}/>
                     </div>
 
                     <div className="actions">

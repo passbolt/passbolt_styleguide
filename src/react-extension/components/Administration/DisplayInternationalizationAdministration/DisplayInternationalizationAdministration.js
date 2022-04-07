@@ -18,7 +18,7 @@ import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorks
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../Common/Icons/Icon";
-import SelectField from "../../Common/SelectField/SelectField";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -197,9 +197,9 @@ class DisplayInternationalizationAdministration extends React.Component {
         <div className="internationalisation-settings col7">
           <h3><Trans>Internationalisation</Trans></h3>
           <form className="form">
-            <div className="select-field-wrapper input">
+            <div className="select-wrapper input">
               <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
-              <SelectField className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={this.state.locale} onChange={this.handleInputChange}/>
+              <Select className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={this.state.locale} onChange={this.handleInputChange}/>
               <p><Trans>The default language of the organisation.</Trans></p>
             </div>
           </form>
