@@ -94,7 +94,7 @@ class Password extends Component {
    */
   get passphraseInputStyle() {
     const emptyStyle =  undefined;
-    const fullStyle =  {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor};
+    const fullStyle =  {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor, "--passphrase-placeholder-color": this.props.securityToken.textColor};
     return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
   }
 

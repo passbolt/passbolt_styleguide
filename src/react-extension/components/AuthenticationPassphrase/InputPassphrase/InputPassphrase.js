@@ -46,7 +46,7 @@ class InputPassphrase extends Component {
       passphrase: "",
       rememberMe: false,
       passphraseError: "",
-      rememberMeDuration: 0,
+      rememberMeDuration: 300,
     };
   }
 
