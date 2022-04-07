@@ -49,16 +49,16 @@ export default class UserSettings {
     return this.settings["user.settings.trustedDomain"];
   }
 
-  getSecurityTokenBackgroundColor() {
-    return this.settings["user.settings.securityToken.color"];
-  }
-
-  getSecurityTokenTextColor() {
-    return this.settings["user.settings.securityToken.textColor"];
-  }
-
-  getSecurityTokenCode() {
-    return this.settings["user.settings.securityToken.code"];
+  /**
+   * retunr the security token
+   * @returns {{backgroundColor, code, textColor}}
+   */
+  getSecurityToken() {
+    return {
+      code: this.settings["user.settings.securityToken.code"],
+      backgroundColor: this.settings["user.settings.securityToken.color"],
+      textColor: this.settings["user.settings.securityToken.textColor"]
+    };
   }
 
   /**

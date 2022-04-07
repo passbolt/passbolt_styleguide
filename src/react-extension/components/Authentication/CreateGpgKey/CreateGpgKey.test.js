@@ -91,7 +91,7 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
 
       expect.assertions(1);
-      const fairPassphrase = 'abcdefgh1234=5';
+      const fairPassphrase = 'abcdefgh1234=5ABCD';
       await page.fill(fairPassphrase);
       await waitFor(() => expect(page.isFairPassphrase).toBeTruthy());
     });
@@ -101,7 +101,7 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
 
       expect.assertions(1);
-      const strongPassphrase = 'abcdefgh1234=5ABCD';
+      const strongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.fill(strongPassphrase);
       await waitFor(() => expect(page.isStrongPassphrase).toBeTruthy());
     });
@@ -111,7 +111,7 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
 
       expect.assertions(1);
-      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
+      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===!';
       await page.fill(veryStrongPassphrase);
       await waitFor(() => expect(page.isVeryStrongPassphrase).toBeTruthy());
     });

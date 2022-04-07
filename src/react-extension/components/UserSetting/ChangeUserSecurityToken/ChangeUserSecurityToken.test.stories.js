@@ -12,8 +12,12 @@ export default {
 
 const context = {
   userSettings: {
-    getSecurityTokenBackgroundColor: () => '#8bc34a',
-    getSecurityTokenCode: () => "ABC"
+    getSecurityToken: () => (
+      {
+        code: "ABC",
+        backgroundColor: '#8bc34a'
+      }
+    )
   }
 };
 

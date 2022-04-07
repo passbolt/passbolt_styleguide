@@ -29,7 +29,8 @@ import {Trans, withTranslation} from "react-i18next";
 import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
-import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import Password from "../../../../shared/components/Password/Password";
+import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 
 /** Resource password max length */
@@ -60,8 +61,6 @@ class CreateResource extends Component {
       description: "",
       descriptionError: "",
       descriptionWarning: "",
-      viewPassword: false,
-      passwordInputHasFocus: false,
       encryptDescription: false,
       hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
@@ -71,11 +70,8 @@ class CreateResource extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handlePasswordInputFocus = this.handlePasswordInputFocus.bind(this);
-    this.handlePasswordInputBlur = this.handlePasswordInputBlur.bind(this);
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
-    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
     this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
@@ -430,22 +426,6 @@ class CreateResource extends Component {
   }
 
   /**
-   * Handle password input focus.
-   */
-  handlePasswordInputFocus() {
-    const passwordInputHasFocus = true;
-    this.setState({passwordInputHasFocus: passwordInputHasFocus});
-  }
-
-  /**
-   * Handle password input blur.
-   */
-  handlePasswordInputBlur() {
-    const passwordInputHasFocus = false;
-    this.setState({passwordInputHasFocus: passwordInputHasFocus});
-  }
-
-  /**
    * Handle name input keyUp event.
    */
   handleNameInputKeyUp() {
@@ -468,16 +448,6 @@ class CreateResource extends Component {
       const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
       this.setState({passwordWarning});
     }
-  }
-
-  /**
-   * Handle view password button click.
-   */
-  handleViewPasswordButtonClick() {
-    if (this.state.processing) {
-      return;
-    }
-    this.setState({viewPassword: !this.state.viewPassword});
   }
 
   /**
@@ -559,17 +529,6 @@ class CreateResource extends Component {
    */
   render() {
     const passwordEntropy = SecretGenerator.entropy(this.state.password);
-    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
-    /*
-     * The parser can't find the translation for passwordStrength.label
-     * To fix that we can use it in comment
-     * this.translate("n/a")
-     * this.translate("very weak")
-     * this.translate("weak")
-     * this.translate("fair")
-     * this.translate("strong")
-     * this.translate("very strong")
-     */
 
     return (
       <DialogWrapper title={this.translate("Create a password")} className="create-password-dialog"
@@ -606,61 +565,36 @@ class CreateResource extends Component {
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
               <label htmlFor="create-password-form-password"><Trans>Password</Trans></label>
-              <div className="input text password">
-                <input id="create-password-form-password" name="password" className="required" maxLength="4096"
-                  placeholder={this.translate("Password")} required="required" type={this.state.viewPassword ? "text" : "password"}
-                  onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
-                  onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
-                  onChange={this.handleInputChange} disabled={this.state.processing}
+              <div className="password-button-inline">
+                <Password id="create-password-form-password"
+                  name="password"
                   autoComplete="new-password"
-                  ref={this.passwordInputRef}/>
-                <a onClick={this.handleViewPasswordButtonClick}
-                  className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                  <Icon name='eye-open' big={true}/>
-                  <span className="visually-hidden">view</span>
+                  placeholder={this.translate("Password")}
+                  preview={true}
+                  onKeyUp={this.handlePasswordInputKeyUp}
+                  value={this.state.password}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}
+                  inputRef={this.passwordInputRef}/>
+                <a onClick={this.handleGeneratePasswordButtonClick}
+                  className="password-generate button-icon button">
+                  <Icon name='dice' big={true}/>
+                  <span className="visually-hidden">generate</span>
                 </a>
-
-              </div>
-              <ul className="actions inline">
-                <li>
-                  <a onClick={this.handleGeneratePasswordButtonClick}
-                    className="password-generate button-icon button">
-                    <Icon name='magic-wand' big={true}/>
-                    <span className="visually-hidden">generate</span>
-                  </a>
-                </li>
                 {this.canUsePasswordGenerator &&
-                <li>
                   <a onClick={this.handleOpenGenerator}
                     className="password-generator button-icon button">
-                    <Icon name='cog' big={true}/>
+                    <Icon name='settings' big={true}/>
                     <span className="visually-hidden">open generator</span>
                   </a>
-                </li>
                 }
-              </ul>
-              <div className={`password-complexity ${passwordStrength.id}`}>
-                <span className="progress">
-                  <span className={`progress-bar ${passwordStrength.id}`} />
-                </span>
-                <span className="complexity-text">
-                  <div>
-                    <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
-                  </div>
-                  <div>
-                    <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
-                  </div>
-                </span>
               </div>
+              <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
               {this.state.passwordError &&
-              <div className="input text">
                 <div className="password error-message">{this.state.passwordError}</div>
-              </div>
               }
               {this.state.passwordWarning &&
-              <div className="input text">
                 <div className="password warning message">{this.state.passwordWarning}</div>
-              </div>
               }
             </div>
             <div className="input textarea">

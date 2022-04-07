@@ -449,7 +449,7 @@ class DeleteUserWithConflicts extends Component {
    * @returns {*}
    */
   getAcoPermissionsList(id) {
-    const getLabel = (permission) => (permission.aro === "User" && this.getUserOptionLabel(permission.user)) || (permission.aro === "Group" && permission.group.name);
+    const getLabel = permission => (permission.aro === "User" && this.getUserOptionLabel(permission.user)) || (permission.aro === "Group" && permission.group.name);
     return this.acosPermissionsOptions[id]?.map(permission => ({value: permission.id, label: getLabel(permission)})) || [];
   }
 

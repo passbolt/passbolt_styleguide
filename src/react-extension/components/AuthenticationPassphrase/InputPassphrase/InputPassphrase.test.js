@@ -71,12 +71,14 @@ describe("InputPassphrase", () => {
     expect(dialogLabel.textContent).toBe("You need your passphrase to continue.");
 
     // Passphrase input field exists.
+    const passphraseWrapper = container.querySelector(".input.password");
     const passphraseInput = container.querySelector("[type=\"password\"][name=\"passphrase\"]");
     expect(passphraseInput).not.toBeNull();
     // Is focus.
     expect(passphraseInput).toBe(document.activeElement);
     // Has the expected style.
-    const passphraseInputStyle = window.getComputedStyle(passphraseInput);
+    const passphraseInputStyle = window.getComputedStyle(passphraseWrapper);
+
     expect(passphraseInputStyle.background).toBe("rgb(0, 0, 0)");
     expect(passphraseInputStyle.color).toBe("rgb(255, 255, 255)");
 
@@ -164,6 +166,7 @@ describe("InputPassphrase", () => {
   it("changes the style of its security token when the passphrase input get or lose focus.", () => {
     const {container} = renderInputPassphrase();
 
+    const passphraseWrapper = container.querySelector(".input.password");
     const passphraseInput = container.querySelector("[name=\"passphrase\"]");
     const securityTokenElement = container.querySelector(".security-token");
 
@@ -173,7 +176,7 @@ describe("InputPassphrase", () => {
      */
     fireEvent.focus(passphraseInput);
     let securityTokenStyle = window.getComputedStyle(securityTokenElement);
-    let passphraseInputStyle = window.getComputedStyle(passphraseInput);
+    let passphraseInputStyle = window.getComputedStyle(passphraseWrapper);
     expect(passphraseInputStyle.background).toBe("rgb(0, 0, 0)");
     expect(passphraseInputStyle.color).toBe("rgb(255, 255, 255)");
     expect(securityTokenStyle.background).toBe("rgb(255, 255, 255)");

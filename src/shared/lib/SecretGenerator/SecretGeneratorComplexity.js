@@ -25,27 +25,27 @@ const STRENGTH = [
   },
   {
     id: 'very-weak',
-    label: 'very weak',
+    label: 'Very weak',
     strength: 1
   },
   {
     id: 'weak',
-    label: 'weak',
+    label: 'Weak',
     strength: 60
   },
   {
     id: 'fair',
-    label: 'fair',
+    label: 'Fair',
     strength: 80
   },
   {
     id: 'strong',
-    label: 'strong',
+    label: 'Strong',
     strength: 112
   },
   {
     id: 'very-strong',
-    label: 'very strong',
+    label: 'Very strong',
     strength: 128
   }
 ];

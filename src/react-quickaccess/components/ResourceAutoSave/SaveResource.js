@@ -18,8 +18,10 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
-import SecretComplexity from "../../../shared/lib/Secret/SecretComplexity";
 import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Password from "../../../shared/components/Password/Password";
+import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 class SaveResource extends React.Component {
   constructor(props) {
@@ -37,7 +39,6 @@ class SaveResource extends React.Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
   }
 
   getDefaultState() {
@@ -52,9 +53,7 @@ class SaveResource extends React.Component {
       uriError: "",
       password: "",
       passwordError: "",
-      viewPassword: false,
-      strengthClass: "not_available",
-      strengthLabel: "n/a",
+      passwordEntropy: 0,
     };
   }
 
@@ -169,19 +168,9 @@ class SaveResource extends React.Component {
     });
   }
 
-  handleViewPasswordButtonClick() {
-    if (this.state.processing) {
-      return;
-    }
-
-    this.setState({ viewPassword: !this.state.viewPassword });
-  }
-
   loadPassword(password) {
-    const passwordStrength = SecretComplexity.getStrength(password);
-    const strengthClass = passwordStrength.id;
-    const strengthLabel = passwordStrength.label;
-    this.setState({password, strengthClass, strengthLabel});
+    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    this.setState({password, passwordEntropy});
   }
 
   render() {
@@ -215,29 +204,16 @@ class SaveResource extends React.Component {
                 <div className="error-message">{this.state.usernameError}</div>
                 }
               </div>
-              <div className="input text password required">
+              <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
                 <label htmlFor="password"><Trans>Password</Trans></label>
-                <div className="password-management">
-                  <div className="flex-row">
-                    <input name="password" maxLength="4096" value={this.state.password} onChange={this.handlePasswordChange} disabled={this.state.processing}
-                      type={this.state.viewPassword ? "text" : "password"} className="required" placeholder={this.translate('Password')} id="password"
-                      autoComplete="new-password"/>
-                    <a onClick={this.handleViewPasswordButtonClick} className={`password-view button button-icon button-toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                      <span className="fa icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M569.354 231.631C512.969 135.949 407.81 72 288 72 168.14 72 63.004 135.994 6.646 231.631a47.999 47.999 0 0 0 0 48.739C63.031 376.051 168.19 440 288 440c119.86 0 224.996-63.994 281.354-159.631a47.997 47.997 0 0 0 0-48.738zM288 392c-75.162 0-136-60.827-136-136 0-75.162 60.826-136 136-136 75.162 0 136 60.826 136 136 0 75.162-60.826 136-136 136zm104-136c0 57.438-46.562 104-104 104s-104-46.562-104-104c0-17.708 4.431-34.379 12.236-48.973l-.001.032c0 23.651 19.173 42.823 42.824 42.823s42.824-19.173 42.824-42.823c0-23.651-19.173-42.824-42.824-42.824l-.032.001C253.621 156.431 270.292 152 288 152c57.438 0 104 46.562 104 104z" /></svg>
-                      </span>
-                      <span className="visually-hidden"><Trans>view</Trans></span>
-                    </a>
-                  </div>
-                    {this.state.passwordError &&
-                      <div className="error-message">{this.state.passwordError}</div>
-                    }
-                  <div className="password-strength flex-row">
-                    <span className="password-strength-bar"><span className={`password-strength-bar-value ${this.state.strengthClass}`}/></span>
-                    <span className="password-strength-label"><Trans>Strength:</Trans></span>
-                    <span className="password-strength-value">${this.state.strengthLabel}</span>
-                  </div>
+                <div className="password-button-inline">
+                  <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
+                    placeholder={this.translate('Password')} id="password" autoComplete="new-password"/>
                 </div>
+                <PasswordComplexity entropy={this.state.passwordEntropy} error={Boolean(this.state.passwordError)}/>
+                {this.state.passwordError &&
+                  <div className="error-message">{this.state.passwordError}</div>
+                }
               </div>
             </div>
           </SimpleBar>

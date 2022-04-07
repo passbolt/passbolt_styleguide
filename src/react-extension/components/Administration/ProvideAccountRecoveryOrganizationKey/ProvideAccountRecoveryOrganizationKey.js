@@ -16,12 +16,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../Common/Icons/Icon";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import Password from "../../../../shared/components/Password/Password";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -53,15 +53,6 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
       password: "", // The organization private key password
       passwordError: "",
       passwordWarning: "",
-      passphraseStyle: {
-        background: "",
-        color: ""
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      },
-      viewPassword: false,
       hasAlreadyBeenValidated: false, // True if the form has already been submitted onc
       selectedFile: null
     };
@@ -75,10 +66,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     this.handleCloseClick = this.handleCloseClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyInputKeyUp = this.handleKeyInputKeyUp.bind(this);
-    this.handlePasswordInputFocus = this.handlePasswordInputFocus.bind(this);
-    this.handlePasswordInputBlur = this.handlePasswordInputBlur.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
-    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleSelectOrganizationKeyFile = this.handleSelectOrganizationKeyFile.bind(this);
   }
@@ -185,16 +173,6 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
   }
 
   /**
-   * Handle view password button click.
-   */
-  handleViewPasswordButtonClick() {
-    if (this.state.processing) {
-      return;
-    }
-    this.setState({viewPassword: !this.state.viewPassword});
-  }
-
-  /**
    * Validate the password input.
    * @return {Promise}
    */
@@ -220,38 +198,6 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     const name = target.name;
     this.setState({
       [name]: value
-    });
-  }
-
-  /**
-   * Handle password input focus.
-   */
-  handlePasswordInputFocus() {
-    this.setState({
-      passphraseStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenTextColor(),
-        color: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-      }
-    });
-  }
-
-  /**
-   * Handle password input blur.
-   */
-  handlePasswordInputBlur() {
-    this.setState({
-      passphraseStyle: {
-        background: "",
-        color: ""
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      }
     });
   }
 
@@ -486,30 +432,22 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
               <label htmlFor="generate-organization-key-form-password"><Trans>Organization key passphrase</Trans></label>
-              <div className="input text password">
-                <input id="generate-organization-key-form-password" name="password" className="required" maxLength="4096"
-                  placeholder={this.translate("Passphrase")} required="required" type={this.state.viewPassword ? "text" : "password"}
-                  onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
-                  onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
-                  onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
-                  autoComplete="new-password"
-                  ref={this.passwordInputRef}/>
-                <a onClick={this.handleViewPasswordButtonClick}
-                  className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                  <Icon name='eye-open' big={true}/>
-                  <span className="visually-hidden">view</span>
-                </a>
-                <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
-              </div>
+              <Password id="generate-organization-key-form-password"
+                name="password"
+                placeholder={this.translate("Passphrase")}
+                autoComplete="new-password"
+                onKeyUp={this.handlePasswordInputKeyUp}
+                value={this.state.password}
+                securityToken={this.props.context.userSettings.getSecurityToken()}
+                preview={true}
+                onChange={this.handleInputChange}
+                disabled={this.hasAllInputDisabled()}
+                inputRef={this.passwordInputRef}/>
               {this.state.passwordError &&
-              <div className="input text">
                 <div className="password error-message">{this.state.passwordError}</div>
-              </div>
               }
               {this.state.passwordWarning &&
-              <div className="input text">
                 <div className="password warning message">{this.state.passwordWarning}</div>
-              </div>
               }
             </div>
           </div>

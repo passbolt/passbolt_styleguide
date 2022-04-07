@@ -19,12 +19,14 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
-import Icon from "../../Common/Icons/Icon";
 import debounce from "debounce-promise";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
+import Password from "../../../../shared/components/Password/Password";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 /**
  * This component displays the user choose passphrase information
@@ -48,12 +50,7 @@ class EnterNewPassphrase extends React.Component {
   get defaultState() {
     return {
       passphrase: '', // The current passphrase
-      passphraseStrength: {  // The current passphrase strength
-        id: '',
-        label: ''
-      },
-      isObfuscated: true, // True if the passphrase should not be visible
-      errors: {}, // The list of errors
+      passphraseEntropy: 0,  // The current passphrase entropy
       actions: {
         processing: false // True if one's processing passphrase
       },
@@ -104,9 +101,6 @@ class EnterNewPassphrase extends React.Component {
    */
   bindEventHandlers() {
     this.handlePassphraseChange = this.handlePassphraseChange.bind(this);
-    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
-    this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
-    this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -119,15 +113,29 @@ class EnterNewPassphrase extends React.Component {
   }
 
   /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInput.current.focus();
+  }
+
+  /**
    * Whenever the passphrase change
    * @param event The input event
    */
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
     this.setState({passphrase});
-    const passphraseStrength = this.evaluatePassphraseStrength(passphrase);
+    const passphraseEntropy = SecretGenerator.entropy(passphrase);
     const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
-    this.setState({passphraseStrength, hintClassNames});
+    this.setState({passphraseEntropy, hintClassNames});
     await this.checkPassphraseIsInDictionary(passphrase, hintClassNames);
   }
 
@@ -149,27 +157,12 @@ class EnterNewPassphrase extends React.Component {
   }
 
   /**
-   * Whenever one wants to toggle the obfusctated mode
-   */
-  handleToggleObfuscate() {
-    this.toggleObfuscate();
-  }
-
-  /**
    * Whenever the user submits the passphrase
    * @param event A form submit event
    */
   handleSubmit(event) {
     event.preventDefault();
     this.generateGpgKey();
-  }
-
-  /**
-   * Returns the strength evaluation of the passphrase
-   * @param passphrase The passphrase to evaluate
-   */
-  evaluatePassphraseStrength(passphrase) {
-    return SecurityComplexity.getStrength(passphrase);
   }
 
   /**
@@ -186,48 +179,6 @@ class EnterNewPassphrase extends React.Component {
       specialCharacters: hintClassName(masks.special),
       notInDictionary:  'error'
     };
-  }
-
-  /**
-   * Returns the security token code of the suer
-   */
-  get securityTokenCode() {
-    return this.props.context.userSettings.getSecurityTokenCode();
-  }
-
-  /**
-   * Returns the style of the security token (color and text color)
-   */
-  get securityTokenStyle() {
-    const {userSettings} = this.props.context;
-    const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
-    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
-    return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
-  }
-
-  /**
-   * Get the passphrase input style.
-   * @return {Object}
-   */
-  get passphraseInputStyle() {
-    const {userSettings} = this.props.context;
-    const emptyStyle =  {background: "", color: ""};
-    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
-    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
-  }
-
-  /**
-   * Whenever the user focus on the passphrase input
-   */
-  handleFocusPassphrase() {
-    this.setState({hasPassphraseFocus: true});
-  }
-
-  /**
-   * Whenever the user blurs on the passphrase input
-   */
-  handleBlurPassphrase() {
-    this.setState({hasPassphraseFocus: false});
   }
 
   /**
@@ -298,34 +249,17 @@ class EnterNewPassphrase extends React.Component {
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter a new passphrase</Trans></h3>
               <div className="form-content">
-                <div className="input text password required">
-                  <input
+                <div className="input-password-wrapper input required">
+                  <Password
                     id="passphrase-input"
-                    type={this.state.isObfuscated ? "password" : "text"}
-                    ref={this.passphraseInput}
+                    autoComplete="off"
+                    inputRef={this.passphraseInput}
                     value={this.state.passphrase}
-                    style={this.passphraseInputStyle}
+                    preview={true}
+                    securityToken={this.props.context.userSettings.getSecurityToken()}
                     onChange={this.handlePassphraseChange}
-                    onFocus={this.handleFocusPassphrase}
-                    onBlur={this.handleBlurPassphrase}
-                    disabled={!this.areActionsAllowed}
-                    autoFocus={true}
-                    autoComplete="off"/>
-                  <a
-                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-                    role="button"
-                    onClick={this.handleToggleObfuscate}>
-                    <Icon name="eye-open"/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                  <span className="security-token" style={this.securityTokenStyle}>
-                    {this.securityTokenCode}
-                  </span>
-                  <div className="password-complexity">
-                    <span className="progress">
-                      <span className={`progress-bar ${this.state.passphraseStrength.id}`}/>
-                    </span>
-                  </div>
+                    disabled={!this.areActionsAllowed}/>
+                  <PasswordComplexity entropy={this.state.passphraseEntropy}/>
                 </div>
                 <div className="password-hints">
                   <ul>

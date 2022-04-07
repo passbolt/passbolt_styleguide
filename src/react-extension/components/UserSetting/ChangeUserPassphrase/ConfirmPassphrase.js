@@ -19,9 +19,9 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
-import Icon from "../../Common/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * This component displays the user confirm passphrase information
@@ -46,8 +46,6 @@ class ConfirmPassphrase extends React.Component {
       processing: false, // component is processing or not
       passphrase: "", // The passphrase input
       passphraseError: null, // The passphrase error input
-      isObfuscated: true, // True if the passphrase should not be visible
-      hasPassphraseFocus: false, // The password input has focus
     };
   }
 
@@ -56,9 +54,6 @@ class ConfirmPassphrase extends React.Component {
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
-    this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
-    this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
   }
@@ -68,6 +63,20 @@ class ConfirmPassphrase extends React.Component {
    */
   createInputRef() {
     this.passphraseInputRef = React.createRef();
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInputRef.current.focus();
   }
 
   /**
@@ -87,62 +96,6 @@ class ConfirmPassphrase extends React.Component {
     const value = target.value;
     const name = target.name;
     this.setState({[name]: value});
-  }
-
-  /**
-   * Whenever one wants to toggle the obfusctated mode
-   */
-  handleToggleObfuscate() {
-    this.toggleObfuscate();
-  }
-
-  /**
-   * Toggle the obfuscate mode of the passphrase view
-   */
-  toggleObfuscate() {
-    this.setState({isObfuscated: !this.state.isObfuscated});
-  }
-
-  /**
-   * Returns the security token code of the suer
-   */
-  get securityTokenCode() {
-    return this.props.context.userSettings.getSecurityTokenCode();
-  }
-
-  /**
-   * Returns the style of the security token (color and text color)
-   */
-  get securityTokenStyle() {
-    const {userSettings} = this.props.context;
-    const inverseStyle =  {background: userSettings.getSecurityTokenTextColor(), color: userSettings.getSecurityTokenBackgroundColor()};
-    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
-    return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
-  }
-
-  /**
-   * Get the passphrase input style.
-   * @return {Object}
-   */
-  get passphraseInputStyle() {
-    const {userSettings} = this.props.context;
-    const emptyStyle =  {background: "", color: ""};
-    const fullStyle =  {background: userSettings.getSecurityTokenBackgroundColor(), color: userSettings.getSecurityTokenTextColor()};
-    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
-  }
-
-  /**
-   * Whenever the user focus on the passphrase input
-   */
-  handleFocusPassphrase() {
-    this.setState({hasPassphraseFocus: true});
-  }
-
-  /**
-   * Whenever the user blurs on the passphrase input
-   */
-  handleBlurPassphrase() {
-    this.setState({hasPassphraseFocus: false});
   }
 
   /**
@@ -229,34 +182,19 @@ class ConfirmPassphrase extends React.Component {
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter your passphrase to continue</Trans></h3>
               <div className="form-content">
-                <div className={`input text password required ${this.state.passphraseError ? "error" : ""}`}>
+                <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""}`}>
                   <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
-                  <input
+                  <Password
                     id="passphrase-input"
-                    type={`${this.state.isObfuscated ? "password" : "text"}`}
-                    name="passphrase" placeholder={this.translate('Passphrase')}
-                    required="required"
-                    ref={this.passphraseInputRef}
-                    className={`required ${this.state.passphraseError ? "error" : ""}`}
-                    autoFocus={true}
-                    value={this.state.passphrase}
-                    style={this.passphraseInputStyle}
-                    onChange={this.handleInputChange}
-                    onFocus={this.handleFocusPassphrase}
-                    onBlur={this.handleBlurPassphrase}
-                    disabled={this.hasAllInputDisabled()}
                     autoComplete="off"
+                    name="passphrase" placeholder={this.translate('Passphrase')}
+                    inputRef={this.passphraseInputRef}
+                    value={this.state.passphrase}
+                    onChange={this.handleInputChange}
+                    disabled={this.hasAllInputDisabled()}
+                    preview={true}
+                    securityToken={this.props.context.userSettings.getSecurityToken()}
                   />
-                  <a
-                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-                    role="button"
-                    onClick={this.handleToggleObfuscate}>
-                    <Icon name="eye-open"/>
-                    <span className="visually-hidden"><Trans>View</Trans></span>
-                  </a>
-                  <span className="security-token" style={this.securityTokenStyle}>
-                    {this.securityTokenCode}
-                  </span>
                   {this.state.passphraseError &&
                     <div className="error-message">{this.state.passphraseError}</div>
                   }

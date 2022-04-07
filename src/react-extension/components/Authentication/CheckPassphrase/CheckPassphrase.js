@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * The component display variations.
@@ -101,7 +101,6 @@ class CheckPassphrase extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
-    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
   }
 
   /**
@@ -142,13 +141,6 @@ class CheckPassphrase extends Component {
    */
   async handleToggleRememberMe() {
     await this.toggleRemmemberMe();
-  }
-
-  /**
-   * Whenever one wants to toggle the obfusctated mode
-   */
-  handleToggleObfuscate() {
-    this.toggleObfuscate();
   }
 
   /**
@@ -210,13 +202,6 @@ class CheckPassphrase extends Component {
   }
 
   /**
-   * Toggle the obfuscate mode of the passphrase view
-   */
-  toggleObfuscate() {
-    this.setState({isObfuscated: !this.state.isObfuscated});
-  }
-
-  /**
    * Put the focus on the passphrase input
    */
   focusOnPassphrase() {
@@ -241,24 +226,17 @@ class CheckPassphrase extends Component {
         <h1><Trans>Please enter your passphrase to continue.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
-            <div className={`input text password required ${this.hasErrors ? "error" : ""}`}>
+            <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""}`}>
               <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
-              <input
+              <Password
                 id="passphrase"
-                ref={this.passphraseInputRef}
-                type={this.state.isObfuscated ? "password" : "text" }
+                autoComplete="off"
+                inputRef={this.passphraseInputRef}
                 name="passphrase"
                 value={this.state.passphrase}
+                preview={true}
                 onChange={this.handleChangePassphrase}
-                disabled={!this.areActionsAllowed}
-                autoComplete="off"/>
-              <a
-                className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-                role="button"
-                onClick={this.handleToggleObfuscate}>
-                <Icon name="eye-open"/>
-                <span className="visually-hidden">view</span>
-              </a>
+                disabled={!this.areActionsAllowed}/>
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPassphrase &&

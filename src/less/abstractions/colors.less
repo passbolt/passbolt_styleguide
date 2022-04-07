@@ -12,16 +12,20 @@
 @green-lightest: #EDF7EB;
 @green-light: #66CC00;
 @green: #009900;
+@islamic-green: #0EAA00;
 
 @yellow-lightest: #FFFAE7;
 @yellow-light: #FEF0BF;
 @yellow: #FFBD2E;
+@bright-yellow: #FFA724;
+
 @orange-light: #DD6A00;
 @orange: #9F6000;
 
 @red: #D40101;
 @red-light: #DB5454;
 @red-dark: #92000C;
+@dark-candy-apple-red: #A40000;
 
 @grey-darkest: #666;
 @grey-darker: #888888;
@@ -43,6 +47,7 @@
 @bright-gray: #EEEEEE;
 @gray-x11: #BDBDBD;
 @light-silver: #D7D7D7;
+@gray-2: #7C7C7C;
 
 /* borders */
 @border-lightest: @grey-lightest;
@@ -187,10 +192,14 @@
 @select-border: @grey;
 @select-focus-border: @blue;
 
-
 /* progress bar */
 @background-progress-bar-default: @gray-x11;
 @background-progress-bar: @red;
+
+/* complexity */
+@complexity-color: @gray-2;
+@complexity-bar-background-default: @gray-x11;
+@complexity-bar-background-gradient: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
 
 /* logos */
 @logourl: url('@{images}/logo/logo.svg');

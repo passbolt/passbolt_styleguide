@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Password from "../../../shared/components/Password/Password";
 
 class PassphraseDialog extends React.Component {
 
@@ -16,8 +17,6 @@ class PassphraseDialog extends React.Component {
   initEventHandlers() {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleInputFocus = this.handleInputFocus.bind(this);
-    this.handleInputBlur = this.handleInputBlur.bind(this);
     this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
@@ -29,9 +28,21 @@ class PassphraseDialog extends React.Component {
       passphrase: '',
       rememberMe: false,
       passphraseError: '',
-      passphraseStyle: {},
-      securityTokenStyle: {}
     };
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInputRef.current.focus();
   }
 
   /**
@@ -86,7 +97,7 @@ class PassphraseDialog extends React.Component {
     });
     if (attempt < 3) {
       // Force the passphrase input focus. The autoFocus attribute only works during the first rendering.
-      this.passphraseInputRef.current.focus();
+      this.focusOnPassphrase();
     }
   }
 
@@ -97,32 +108,6 @@ class PassphraseDialog extends React.Component {
 
     this.setState({
       [name]: value
-    });
-  }
-
-  handleInputFocus() {
-    this.setState({
-      passphraseStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenTextColor(),
-        color: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-      }
-    });
-  }
-
-  handleInputBlur() {
-    this.setState({
-      passphraseStyle: {
-        background: "",
-        color: ""
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      }
     });
   }
 
@@ -158,14 +143,13 @@ class PassphraseDialog extends React.Component {
         {this.state.attempt < 3 &&
           <form onSubmit={this.handleFormSubmit}>
             <div className="form-container">
-              <div className={`input text passphrase required ${this.state.passphraseError ? 'error' : ''}`} >
+              <div className={`input-password-wrapper input required ${this.state.passphraseError ? 'error' : ''}`} >
                 <label htmlFor="passphrase"><Trans>Please enter your passphrase</Trans></label>
-                <input type="password" name="passphrase" placeholder={this.translate('passphrase')} id="passphrase" autoFocus ref={this.passphraseInputRef}
-                  value={this.state.passphrase} onChange={this.handleInputChange} onFocus={this.handleInputFocus} onBlur={this.handleInputBlur}
-                  disabled={this.state.processing} style={this.state.passphraseStyle} autoComplete="off"/>
-                <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
+                <Password name="passphrase" placeholder={this.translate('passphrase')} id="passphrase" inputRef={this.passphraseInputRef}
+                  value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.state.processing}
+                  securityToken={this.props.context.userSettings.getSecurityToken()} autoComplete="off"/>
                 {this.state.passphraseError &&
-                <div className="error-message">{this.state.passphraseError}</div>
+                  <div className="error-message">{this.state.passphraseError}</div>
                 }
               </div>
               <div className="input checkbox">

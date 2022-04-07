@@ -67,8 +67,8 @@ class ChangeUserSecurityToken extends Component {
    * Get the security token from the logged in user
    */
   getSecurityTokenFromLoggedInUser() {
-    const background = this.props.context.userSettings.getSecurityTokenBackgroundColor();
-    const code = this.props.context.userSettings.getSecurityTokenCode();
+    const background = this.props.context.userSettings.getSecurityToken().backgroundColor;
+    const code = this.props.context.userSettings.getSecurityToken().code;
     this.setState({background, code});
   }
 

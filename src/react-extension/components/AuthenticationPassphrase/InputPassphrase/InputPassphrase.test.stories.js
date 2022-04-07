@@ -2,6 +2,8 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import InputPassphrase from "./InputPassphrase";
 import AppContext from "../../../contexts/AppContext";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 
 export default {
@@ -16,9 +18,7 @@ const context = {
     getSecurityTokenTextColor: () => '#ffffff',
     getSecurityTokenCode: () => "ABC",
   },
-  siteSettings: {
-    getRememberMeOptions: () => true
-  }
+  siteSettings: new SiteSettings(siteSettingsFixture)
 };
 
 

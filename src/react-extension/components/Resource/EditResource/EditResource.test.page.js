@@ -200,7 +200,7 @@ class PasswordEditPageObject {
    * Returns the password view button element
    */
   get passwordViewButton() {
-    return this._container.querySelector('.password-view.button');
+    return this._container.querySelector('.password-view.button .svg-icon');
   }
 
   /**

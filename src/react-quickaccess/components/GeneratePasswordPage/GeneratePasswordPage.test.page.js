@@ -49,7 +49,7 @@ export default class GeneratePasswordTestPage {
    * Returns the password value
    */
   get password() {
-    return this._page.container.querySelector('.input.text.password input').value;
+    return this._page.container.querySelector('.input.password input').value;
   }
 
   /**

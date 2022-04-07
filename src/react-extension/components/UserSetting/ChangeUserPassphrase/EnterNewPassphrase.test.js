@@ -77,19 +77,19 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see the passphrase fair strength updated on change', async() => {
-      const fairPassphrase = 'abcdefgh1234=5';
+      const fairPassphrase = 'abcdefgh1234=5ABCD';
       await page.insertPassphrase(fairPassphrase);
       await waitFor(() => expect(page.isFairPassphrase).toBeTruthy());
     });
 
     it('As LU I should see the passphrase strong strength updated on change', async() => {
-      const strongPassphrase = 'abcdefgh1234=5ABCD';
+      const strongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(strongPassphrase);
       await waitFor(() => expect(page.isStrongPassphrase).toBeTruthy());
     });
 
     it('As LU I should see the passphrase very strong strength updated on change', async() => {
-      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
+      const veryStrongPassphrase = 'abcdefgh1234=5ABCD===!';
       await page.insertPassphrase(veryStrongPassphrase);
       await waitFor(() => expect(page.isVeryStrongPassphrase).toBeTruthy());
     });
