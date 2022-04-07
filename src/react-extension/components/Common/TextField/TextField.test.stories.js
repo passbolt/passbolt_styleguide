@@ -76,7 +76,7 @@ const Template = () =>
     </div>
     <span style={{width: "100%", marginBottom: ".5rem"}}>In field number</span>
     <div style={{width: "24%", marginRight: "1%"}}>
-        <input className="in-field" type="number" defaultValue={389} required="required" disabled={false}/>
+      <input className="in-field" type="number" defaultValue={389} required="required" disabled={false}/>
     </div>
     <div style={{width: "24%", marginRight: "1%"}}>
       <input className="in-field" type="number" defaultValue={389} required="required" disabled={true}/>

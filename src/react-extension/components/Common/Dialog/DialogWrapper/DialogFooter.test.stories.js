@@ -42,10 +42,10 @@ export const Default = Template.bind({});
 Default.args = {
   disabled: false,
   processing: false
-}
+};
 
 export const Disabled = Template.bind({});
 Disabled.args = {
   disabled: true,
   processing: true
-}
+};

@@ -20,6 +20,7 @@ import MockTranslationProvider from "../../../../test/mock/components/Internatio
 
 beforeEach(() => {
   jest.resetModules();
+  jest.useFakeTimers();
 });
 
 describe("DisplayProgress", () => {
@@ -29,10 +30,12 @@ describe("DisplayProgress", () => {
     const {container} = render(
       <AppContext.Provider value={appContext}>
         <MockTranslationProvider>
-          <DisplayProgress debug t={text => text}/>
+          <DisplayProgress t={text => text}/>
         </MockTranslationProvider>
       </AppContext.Provider>
     );
+
+    jest.advanceTimersByTime(500);
 
     // Dialog title exists and correct
     const dialogTitle = container.querySelector(".dialog-header h2");
@@ -44,16 +47,16 @@ describe("DisplayProgress", () => {
     expect(dialogContentLabel.textContent).toBe("Take a deep breath and enjoy being in the present moment...");
 
     // Progress bar.
-    const progressBarElement = container.querySelector(".progress-bar");
+    const progressBarElement = container.querySelector(".progress");
     const progressBarStyle = window.getComputedStyle(progressBarElement);
-    expect(progressBarStyle.width).toBe("100%");
+    expect(progressBarStyle.width).toBe("17.355371900826455%");
 
     // Progress details elements to not be displayed.
     const progressDetailsElement = container.querySelector(".progress-details");
     expect(progressDetailsElement).toBeNull();
 
     // Primary button exists
-    const primaryButton = container.querySelector(".button.primary.processing");
+    const primaryButton = container.querySelector(".button.processing");
     expect(primaryButton).not.toBeNull();
   });
 
@@ -63,13 +66,13 @@ describe("DisplayProgress", () => {
     const {container} = render(
       <AppContext.Provider value={appContext}>
         <MockTranslationProvider>
-          <DisplayProgress debug />
+          <DisplayProgress/>
         </MockTranslationProvider>
       </AppContext.Provider>
     );
 
     // Progress bar.
-    const progressBarElement = container.querySelector(".progress-bar");
+    const progressBarElement = container.querySelector(".progress");
     const progressBarStyle = window.getComputedStyle(progressBarElement);
     expect(progressBarStyle.width).toBe("0%");
 

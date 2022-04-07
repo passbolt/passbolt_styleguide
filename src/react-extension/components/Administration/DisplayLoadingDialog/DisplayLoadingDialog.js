@@ -15,23 +15,70 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../Common/Icons/Icon";
 
 class DisplayLoadingDialog extends Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Default constructor
+   * @param props Component props
    */
   constructor(props) {
     super(props);
-    this.bindEventHandlers();
+    this.infiniteTimerUpdateIntervalId = null; // The infinite timer update interval ID
+    this.state = this.defaultState;
   }
 
   /**
-   * Bind event handlers
-   * @returns {void}
+   * Returns the component default state
+   * @return {object}
    */
-  bindEventHandlers() {
-    this.handleClose = this.handleClose.bind(this);
+  get defaultState() {
+    return {
+      infiniteTimer: 0, // The timer for the infinite calculation, used only if infinite progress mode.
+    };
+  }
+
+  /**
+   * Component did mount
+   */
+  componentDidMount() {
+    this.startInfiniteTimerUpdateProgress();
+  }
+
+  /**
+   * Component will unmount
+   */
+  componentWillUnmount() {
+    this.resetInterval();
+  }
+
+  /**
+   * Reset interval
+   */
+  resetInterval() {
+    if (this.infiniteTimerUpdateIntervalId) {
+      clearInterval(this.infiniteTimerUpdateIntervalId);
+      this.infiniteTimerUpdateIntervalId = null;
+    }
+  }
+
+  /**
+   * Start the infinite timer update.
+   * @return {void}
+   */
+  startInfiniteTimerUpdateProgress() {
+    this.infiniteTimerUpdateIntervalId = setInterval(() => {
+      const infiniteTimer = this.state.infiniteTimer + 2;
+      this.setState({infiniteTimer});
+    }, 500);
+  }
+
+  /**
+   * Calculate the infinite progress
+   * @return {number}
+   */
+  calculateInfiniteProgress() {
+    return 100 - (100 / Math.pow(1.1, this.state.infiniteTimer));
   }
 
   /**
@@ -55,16 +102,22 @@ class DisplayLoadingDialog extends Component {
    * @returns {JSX}
    */
   render() {
+    const progress = this.calculateInfiniteProgress();
+    const progressBarStyle = {width: `${progress}%`};
+
     return (
       <DialogWrapper className='loading-dialog' title={this.props.title}
-        onClose={this.handleClose} disabled={false}>
+        onClose={this.handleClose} disabled={true}>
         <div className="form-content">
           <label><Trans>Take a deep breath and enjoy being in the present moment...</Trans></label>
           <div className="progress-bar-wrapper">
-            <span style={{"width": `100%`}} className="progress-bar big infinite">
-              <span className="progress"></span>
+            <span className="progress-bar">
+              <span className={`progress ${progress === 100 ? 'completed' : ''}`} style={progressBarStyle}/>
             </span>
           </div>
+        </div>
+        <div className="submit-wrapper clearfix">
+          <a className="button processing">Submit<Icon name="spinner"/></a>
         </div>
       </DialogWrapper>
     );

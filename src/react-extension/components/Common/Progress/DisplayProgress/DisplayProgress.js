@@ -18,11 +18,109 @@ import PropTypes from "prop-types";
 import Icon from "../../Icons/Icon";
 
 class DisplayProgress extends Component {
-  calculateProgress() {
-    if (!this.props.context.progressDialogProps.goals) {
-      return 100; // displays a spinning 100% progress bar by default.
+  /**
+   * Default constructor
+   * @param props Component props
+   */
+  constructor(props) {
+    super(props);
+    this.infiniteTimerUpdateIntervalId = null; // The infinite timer update interval ID
+    this.state = this.defaultState;
+  }
+
+  /**
+   * Returns the component default state
+   * @return {object}
+   */
+  get defaultState() {
+    return {
+      infiniteTimer: 0, // The timer for the infinite calculation, used only if infinite progress mode.
+    };
+  }
+
+  /**
+   * Component did mount
+   */
+  componentDidMount() {
+    this.startInfiniteTimerUpdateProgress();
+  }
+
+  /**
+   * Start the infinite timer update.
+   * @return {void}
+   */
+  startInfiniteTimerUpdateProgress() {
+    if (!this.isInfiniteProgressMode()) {
+      return;
     }
 
+    this.infiniteTimerUpdateIntervalId = setInterval(() => {
+      const infiniteTimer = this.state.infiniteTimer + 2;
+      this.setState({infiniteTimer});
+    }, 500);
+  }
+
+  /**
+   * Component did update
+   * @return {void}
+   */
+  componentDidUpdate() {
+    if (!this.isInfiniteProgressMode() && this.infiniteTimerUpdateIntervalId) {
+      this.resetInterval();
+    }
+  }
+
+  /**
+   * Component will unmount
+   */
+  componentWillUnmount() {
+    this.resetInterval();
+  }
+
+  /**
+   * Check if the component should display an infinite progress bar.
+   * @returns {boolean}
+   */
+  isInfiniteProgressMode() {
+    return !this.props.context.progressDialogProps.goals;
+
+  }
+
+  /**
+   * Reset interval
+   */
+  resetInterval() {
+    if (this.infiniteTimerUpdateIntervalId) {
+      clearInterval(this.infiniteTimerUpdateIntervalId);
+      this.infiniteTimerUpdateIntervalId = null;
+    }
+  }
+
+  /**
+   * Calculate the progress
+   * @return {number}
+   */
+  calculateProgress() {
+    if (this.props.context.progressDialogProps?.goals > 0) {
+      return this.calculateGoalsProgress();
+    } else {
+      return this.calculateInfiniteProgress();
+    }
+  }
+
+  /**
+   * Calculate the infinite progress
+   * @return {number}
+   */
+  calculateInfiniteProgress() {
+    return 100 - (100 / Math.pow(1.1, this.state.infiniteTimer));
+  }
+
+  /**
+   * Calculate the progress based on the goals
+   * @return {number}
+   */
+  calculateGoalsProgress() {
     const completed = this.props.context.progressDialogProps.completed || 0;
     let progress = Math.round((100 * completed) / this.props.context.progressDialogProps.goals);
     if (progress > 100) {
@@ -39,35 +137,39 @@ class DisplayProgress extends Component {
     return this.props.t;
   }
 
+  /**
+   * Render
+   * @returns {JSX.Element}
+   */
   render() {
-    const displayDetailsSection = this.props.context.progressDialogProps.goals || false;
     const progress = this.calculateProgress();
     const progressBarStyle = {width: `${progress}%`};
-    const progressLabelStyle = {float: "right"};
 
     return (
       <div className="dialog-wrapper progress-dialog">
         <div className="dialog">
           <div className="dialog-header">
-            <h2>{this.props.context.progressDialogProps.title || this.translate("Please wait...") }</h2>
+            <span className="dialog-title-wrapper">
+              <h2>{this.props.context.progressDialogProps.title || <Trans>Please wait...</Trans>}</h2>
+            </span>
           </div>
           <div className="dialog-content">
             <div className="form-content">
               <label><Trans>Take a deep breath and enjoy being in the present moment...</Trans></label>
               <div className="progress-bar-wrapper">
-                <span className="progress-bar big infinite" style={progressBarStyle}>
-                  <span className="progress"></span>
+                <span className="progress-bar">
+                  <span className={`progress ${progress === 100 ? 'completed' : ''}`} style={progressBarStyle}/>
                 </span>
+                {!this.isInfiniteProgressMode() &&
+                  <div className="progress-details">
+                    <span className="progress-step-label">{this.props.context.progressDialogProps.message || <Trans>Please wait...</Trans>}</span>
+                    <span className="progress-percent">{progress}%</span>
+                  </div>
+                }
               </div>
-              {displayDetailsSection &&
-              <div className="progress-details">
-                <span className="progress-step-label">{this.props.context.progressDialogProps.message ||  this.translate("Please wait...") }</span>
-                <span style={progressLabelStyle} className="progress-percent">{progress}%</span>
-              </div>
-              }
             </div>
             <div className="submit-wrapper clearfix">
-              <a className="button primary processing">&nbsp;<Icon name="spinner"/></a>
+              <a className="button processing">Submit<Icon name="spinner"/></a>
             </div>
           </div>
         </div>
