@@ -115,8 +115,8 @@ class Password extends Component {
    */
   render() {
     return (
-      <div className="input password" style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
-        <input id={this.props.id} name={this.props.name} className={`${this.props.securityToken ? "security" : ""}`}
+      <div className={`input password ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
+        <input id={this.props.id} name={this.props.name}
           maxLength="4096"
           placeholder={this.props.placeholder}
           type={this.state.viewPassword ? "text" : "password"}

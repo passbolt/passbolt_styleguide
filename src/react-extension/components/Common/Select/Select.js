@@ -280,20 +280,24 @@ class Select extends Component {
     switch (event.keyCode) {
       // ENTER KEYBOARD
       case 13:
+        event.stopPropagation(); // avoid side effect
         this.handleSelectClick();
         return;
       // DOWN ARROW KEYBOARD
       case 40:
         event.preventDefault(); // avoid scrolling with keyboard
+        event.stopPropagation(); // avoid side effect
         this.state.open ? this.focusItem(0) : this.handleSelectClick();
         return;
       // UP ARROW KEYBOARD
       case 38:
         event.preventDefault(); // avoid scrolling with keyboard
+        event.stopPropagation(); // avoid side effect
         this.state.open ? this.focusItem(this.listItemsFiltered.length - 1) : this.handleSelectClick();
         return;
       // ESCAPE KEYBOARD
       case 27:
+        event.stopPropagation(); // avoid side effect
         this.closeSelect();
         return;
       default:
@@ -319,18 +323,18 @@ class Select extends Component {
       // ENTER KEYBOARD
       case 13:
         // Prevent handle key down on parent element
-        event.stopPropagation();
+        event.stopPropagation(); // avoid side effect
         this.handleItemClick(item);
         return;
       // DOWN ARROW KEYBOARD
       case 40:
-        event.stopPropagation();
+        event.stopPropagation(); // avoid side effect
         event.preventDefault(); // avoid scrolling with keyboard
         event.target.nextSibling ? event.target.nextSibling.focus() : this.focusItem(0);
         return;
       // UP ARROW KEYBOARD
       case 38:
-        event.stopPropagation();
+        event.stopPropagation(); // avoid side effect
         event.preventDefault(); // avoid scrolling with keyboard
         event.target.previousSibling ? event.target.previousSibling.focus() : this.focusItem(this.listItemsFiltered.length - 1);
         return;
@@ -405,9 +409,9 @@ const isValueInItems = (props, propName, componentName) => {
   const value = props[propName];
   // value must be in the items
   const items = props.items;
-  if (items.every(item => item.value !== value)) {
+  if (items.length > 0 && items.every(item => item.value !== value)) {
     return new Error(
-      `Invalid prop ${propName} passed to ${componentName}. Expected a value in items.`
+      `Invalid prop ${propName} passed to ${componentName}. Expected the value ${value} in items.`
     );
   }
 };

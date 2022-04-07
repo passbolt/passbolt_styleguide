@@ -7,16 +7,14 @@ import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 
 export default {
-  title: 'Passbolt/AuthenticationLogin/InputPassphrase',
+  title: 'Passbolt/AuthenticationPassphrase/InputPassphrase',
   component: InputPassphrase
 };
 
 const context = {
   userSettings: {
     getTrustedDomain: () => (new URL(window.location.href)).origin,
-    getSecurityTokenBackgroundColor: () => '#a85632',
-    getSecurityTokenTextColor: () => '#ffffff',
-    getSecurityTokenCode: () => "ABC",
+    getSecurityToken: () => ({backgroundColor: '#a85632', code: "ABC", textColor: '#ffffff'}),
   },
   siteSettings: new SiteSettings(siteSettingsFixture)
 };
