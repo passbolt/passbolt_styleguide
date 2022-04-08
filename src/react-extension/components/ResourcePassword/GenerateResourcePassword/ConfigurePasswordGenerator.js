@@ -121,7 +121,7 @@ class ConfigurePasswordGenerator extends React.Component {
   render() {
     return (
       <>
-        <div>
+        <div className="input text">
           <label htmlFor="configure-password-generator-form-length">
             <Trans>Length</Trans>
           </label>
@@ -144,7 +144,7 @@ class ConfigurePasswordGenerator extends React.Component {
           </div>
         </div>
 
-        <div>
+        <div className="input text">
           <label htmlFor="configure-password-generator-form-masks">
             <Trans>Character Types</Trans>
           </label>
@@ -162,19 +162,16 @@ class ConfigurePasswordGenerator extends React.Component {
           </div>
         </div>
 
-        <div>
-          <label/>
-          <div className="input checkbox">
-            <input
-              id="configure-password-generator-form-exclude-look-alike"
-              type="checkbox"
-              name="exclude-look-alike"
-              checked={this.isExcludeLookAlikeCharacters}
-              onChange={this.handleExcludeLookAlikeCharactersToggled}/>
-            <label htmlFor="configure-password-generator-form-exclude-look-alike">
-              <Trans>Exclude look-alike characters</Trans>
-            </label>
-          </div>
+        <div className="input checkbox">
+          <input
+            id="configure-password-generator-form-exclude-look-alike"
+            type="checkbox"
+            name="exclude-look-alike"
+            checked={this.isExcludeLookAlikeCharacters}
+            onChange={this.handleExcludeLookAlikeCharactersToggled}/>
+          <label htmlFor="configure-password-generator-form-exclude-look-alike">
+            <Trans>Exclude look-alike characters</Trans>
+          </label>
         </div>
 
       </>

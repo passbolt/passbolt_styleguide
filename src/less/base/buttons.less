@@ -35,7 +35,7 @@ button,
     }
 
     /* focus */
-    &:focus {
+    &:focus, &:focus-visible {
         box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
         color: @font-default;
         text-decoration: none;
@@ -61,12 +61,14 @@ button,
 
     /* button-action-icon */
     &-action-icon {
+      min-width: inherit;
       width: 4.8rem;
       height: 3.6rem;
     }
 
     /* button-icon */
     &-icon {
+        min-width: inherit;
         width: 4.8rem;
         height: 3.6rem;
         padding: 0;
@@ -88,8 +90,8 @@ button,
         }
 
       svg {
-        width: 2.2rem;
-        height: 2.2rem;
+        width: 2rem;
+        height: 2rem;
       }
     }
 
@@ -255,9 +257,11 @@ input[type=submit].button.processing {
 
 /* toggle selected */
 .button-toggle.selected {
-    background: @button-selected-background;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
-    border: 1px solid @button-selected-border;
+    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+    background: @button-active-background;
+    color: @font-default;
+    text-decoration: none;
+    border: none;
 }
 
 /* group */
@@ -265,6 +269,7 @@ input[type=submit].button.processing {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
+    gap: .6rem;
 
     &--nowrap {
       & > .button {
@@ -274,6 +279,5 @@ input[type=submit].button.processing {
 
     & > * {
       flex-grow: 1;
-      margin-bottom: .5em;;
     }
 }

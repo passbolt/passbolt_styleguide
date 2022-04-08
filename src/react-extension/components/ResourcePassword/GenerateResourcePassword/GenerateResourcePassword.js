@@ -230,8 +230,8 @@ class GenerateResourcePassword extends Component {
               </Tabs>
             </div>
             <div className="submit-wrapper clearfix">
-              <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing || this.isPasswordEmpty()} processing={this.state.processing}/>
               <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
+              <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing || this.isPasswordEmpty()} processing={this.state.processing}/>
             </div>
           </form>
         </DialogWrapper>
