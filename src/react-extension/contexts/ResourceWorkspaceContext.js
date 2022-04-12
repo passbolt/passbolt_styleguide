@@ -89,8 +89,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     this.state = this.defaultState;
     this.initializeProperties();
 
-    // Execute first request to refresh users, groups, etc. then wait 10sec to trigger next one
-    // E.g. Only perform two populate max per 10 sec
+    /*
+     * Execute first request to refresh users, groups, etc. then wait 10sec to trigger next one
+     * E.g. Only perform two populate max per 10 sec
+     */
     this.populateDebounced = debounce(this.populate, 10000, {leading: true, accumulate: false});
   }
 
@@ -157,7 +159,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    this.populate();
+    this.populateDebounced();
     this.handleResourcesWaitedFor();
   }
 
