@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "3.5.2",
+  "version": "3.5.3",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2022 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -36,7 +36,7 @@
     "jest-useragent-mock": "^0.1.1",
     "jest-webextension-mock": "^3.7.18",
     "jquery": "^3.5.0",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "^2.6.7",
     "webpack": "5.46.0",
     "webpack-cli": "4.9.1",
     "webpack-dev-server": "^4.7.2"
@@ -47,7 +47,7 @@
     "debounce-promise": "^3.1.2",
     "grapheme-splitter": "^1.0.4",
     "i18next": "^19.8.5",
-    "i18next-http-backend": "^1.2.4",
+    "i18next-http-backend": "^1.4.0",
     "ip-regex": "^4.3.0",
     "jssha": "^3.2.0",
     "luxon": "^1.27.0",
@@ -84,7 +84,6 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "preversion": "npm test && npm run eslint",
-    "version": "npx grunt && git add -A",
-    "postversion": "git push && git push --tags"
+    "version": "npx grunt && git add -A"
   }
 }
