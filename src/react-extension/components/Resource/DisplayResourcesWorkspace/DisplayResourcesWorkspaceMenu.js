@@ -386,7 +386,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
               <a
                 className={`button ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
                 onClick={this.handleExportClickEvent}>
-                <Icon name="upload"/>
+                <Icon name="download"/>
                 <span><Trans>Export</Trans></span>
               </a>
             </li>

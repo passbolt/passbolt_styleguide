@@ -147,7 +147,7 @@ class ShareActionFeedback extends React.Component {
           onMouseOver={this.persist}
           onMouseLeave={this.displayWithTimer}
           onClick={this.close}>
-          <div className={`message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} warning`}>
+          <div className={`message animated ${this.state.shouldRender ? 'fadeInUp' : 'fadeOutUp'} ${this.props.feedback.type}`}>
             <span className="content">
               <strong>
                 {this.props.feedback.type === "success" && <><Trans>Success</Trans>: </>}

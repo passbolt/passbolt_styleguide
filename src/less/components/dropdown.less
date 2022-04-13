@@ -94,12 +94,12 @@
                         background: @dropdown-background;
                     }
 
-                    &:active {
-                        box-shadow: none;
+                    &:focus {
+                      background: @dropdown-background;
                     }
 
-                    &:focus {
-                        background: @dropdown-background;
+                    &:active {
+                        box-shadow: none;
                     }
                 }
 
@@ -109,18 +109,19 @@
                     background: @dropdown-item-hover-background;
                 }
 
-                // Dropdown menu item pressed
-                &:active {
-                    color: @font-default;
-                    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
-                }
-
                 // Dropdown menu item focus
                 &:focus {
-                    color: @font-default;
+                    color: @font-dropdown-focus;
                     background: @dropdown-focus-background;
                     box-shadow: 0 0 .4rem @shadow-focus;
                     outline: none;
+                }
+
+                // Dropdown menu item pressed
+                &:active {
+                    color: @font-default;
+                    background: @dropdown-item-hover-background;
+                    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
                 }
             }
         }

@@ -23,7 +23,7 @@ class SearchBar extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
+    this.state = this.defaultState;
     this.bindCallbacks();
     this.createReferences();
   }
@@ -33,6 +33,8 @@ class SearchBar extends Component {
    */
   bindCallbacks() {
     this.handleChangeEvent = this.handleChangeEvent.bind(this);
+    this.handleSubmitButtonFocus = this.handleSubmitButtonFocus.bind(this);
+    this.handleSubmitButtonBlur = this.handleSubmitButtonBlur.bind(this);
     this.handleOnSubmitEvent = this.handleOnSubmitEvent.bind(this);
   }
 
@@ -40,8 +42,10 @@ class SearchBar extends Component {
    * Get default state
    * @returns {*}
    */
-  getDefaultState() {
-    return {};
+  get defaultState() {
+    return {
+      hasSubmitButtonFocus: false, // true if the form button has focus
+    };
   }
 
   /**
@@ -64,6 +68,20 @@ class SearchBar extends Component {
   }
 
   /**
+   * Handle submit button focus
+   */
+  handleSubmitButtonFocus() {
+    this.setState({hasSubmitButtonFocus: true});
+  }
+
+  /**
+   * Handle submit button blur
+   */
+  handleSubmitButtonBlur() {
+    this.setState({hasSubmitButtonFocus: false});
+  }
+
+  /**
    * Handle on submit
    * @params {ReactEvent} The react event.
    */
@@ -83,18 +101,20 @@ class SearchBar extends Component {
     return (
       <div className="col2 search-wrapper">
         <form className="search" onSubmit={this.handleOnSubmitEvent}>
-          <div className="input search required">
+          <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""}`}>
             <label>Search</label>
             <input ref={this.searchInputRef} className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}
               onChange={this.handleChangeEvent}
               placeholder={this.props.placeholder || this.props.t('Search')}
               value={this.props.value}/>
+            <div className="search-button-wrapper">
+              <button className="button button-icon" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
+                <Icon name="search"/>
+                <span className="visuallyhidden">Search</span>
+              </button>
+            </div>
           </div>
-          <button className="button" value="search" type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
-            <Icon name="search"/>
-            <span className="visuallyhidden">Search</span>
-          </button>
         </form>
       </div>
     );

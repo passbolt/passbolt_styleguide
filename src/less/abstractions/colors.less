@@ -2,6 +2,7 @@
 @white: #FFFFFF;
 @black: #262626;
 @blacker: #000000;
+@dark-charcoal: #333333;
 
 @blue-light: #2A9CEB;
 @blue: #2894DF;
@@ -14,7 +15,7 @@
 @green: #009900;
 @islamic-green: #0EAA00;
 
-@yellow-lightest: #FFFAE7;
+@yellow-lightest: #FFDBA6;
 @yellow-light: #FEF0BF;
 @yellow: #FFBD2E;
 @bright-yellow: #FFA724;
@@ -26,6 +27,7 @@
 @red-light: #DB5454;
 @red-dark: #92000C;
 @dark-candy-apple-red: #A40000;
+@light-salmon-pink: #FFA6A6;
 
 @grey-darkest: #666;
 @grey-darker: #888888;
@@ -45,6 +47,7 @@
 @spanish-gray: #989693;
 @sonic-silver: #7A7A7A;
 @bright-gray: #EEEEEE;
+@bright-gray-2: #EBEBE9;
 @gray-x11: #BDBDBD;
 @light-silver: #D7D7D7;
 @gray-2: #7C7C7C;
@@ -65,6 +68,7 @@
 
 /* font */
 @font-default: @black;
+@font-header-first: @bright-gray-2;
 @font-dim: @grey-darkest;
 @font-light: @grey-darker;
 @font-lighter: @grey-dark;
@@ -77,6 +81,7 @@
 @font-inverse-background: @grey-darkest;
 @font-success: @black;
 @font-notice: @black;
+@font-dropdown-focus: @white;
 @font-tooltip: @white;
 @font-drag: @white;
 
@@ -86,6 +91,8 @@
 @background-light: @grey;
 @background-lighter: @grey-lighter;
 @background-lightest: @grey-lightest;
+@background-header-first: @dark-charcoal;
+@background-header-second: @bright-gray;
 
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
@@ -140,6 +147,9 @@
 @button-close-background: rgba(@white, .1);
 @button-close-border: rgba(@blacker, .05);
 
+@button-search-background: rgba(@white, .1);
+@button-search-border: rgba(@blacker, .05);
+
 @button-disabled-color: @font-light;
 @button-disabled-background: @white;
 @button-disabled-border: @border-default;
@@ -161,6 +171,7 @@
 
 /* dropdown menus */
 @dropdown-background: @grey-lighter;
+@dropdown-profile-background: @white;
 @dropdown-focus-background: @blue;
 @dropdown-item-hover-background: @gainsboro-3;
 
@@ -232,14 +243,14 @@
 @breadcrumb-background: @background-default;
 
 /* messages */
-@message-error-color: @font-default;
-@message-error-background: @background-error;
-@message-success-color: @font-default;
-@message-success-background: @background-success;
-@message-notice-color: @font-default;
+@message-error-color: @blacker;
+@message-error-background: @light-salmon-pink;
+@message-success-color: @blacker;
+@message-success-background: @green-lightest;
+@message-notice-color: @blacker;
 @message-notice-background: @background-notice;
-@message-warning-color: @font-default;
-@message-warning-background: @background-warning;
+@message-warning-color: @blacker;
+@message-warning-background: @yellow-lightest;
 
 /* sidebar */
 @panel-background: lighten(@background-default, 10);

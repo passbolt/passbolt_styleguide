@@ -3,16 +3,19 @@
  */
 .user.profile {
   float: right;
-  margin-top: .6rem;
-  padding: .8rem 1.6rem;
-  background: @background-lighter;
-  cursor: pointer;
-  box-shadow: inset 0 0 0 0.1rem @border-default;
-  border-radius: 3px;
+  margin: 1.6rem 1.6rem 0 0;
 
-  .more {
-    line-height: 0;
-    background: @button-background;
+  .button {
+    text-align: left;
+
+    /* active */
+    &:active {
+      background: @button-background;
+    }
+
+    &.open {
+      background: @dropdown-profile-background;
+    }
   }
 
   .center-cell {
@@ -21,26 +24,13 @@
 
   .more a {
     border: 0;
-    color: @font-dim;
-
-    &:hover {
-      color: @blacker;
-
-      svg {
-        fill: @fill-hover-color;
-      }
-    }
   }
 
   .dropdown-content {
-    top: 6.3rem;
-    max-width: 24.8rem;
+    top: calc(100% - .3rem);
     width: 100%;
-    background: @dropdown-background;
-
-    &.visible {
-      display: block;
-    }
+    background: @dropdown-profile-background;
+    border-radius: 0 0 0.4rem 0.4rem;
 
     .svg-icon.exclamation {
       --icon-exclamation-background-color: @icon-exclamation-required-color;

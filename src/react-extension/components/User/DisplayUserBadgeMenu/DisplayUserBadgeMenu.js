@@ -204,7 +204,7 @@ class DisplayUserBadgeMenu extends Component {
     return (
       <div className="col3 profile-wrapper">
         <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
-          <div className="avatar-with-name" onClick={this.handleToggleMenuClick}>
+          <div className={`avatar-with-name button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
             <UserAvatar user={this.props.user} className="avatar picture left-cell" baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired}/>
             <div className="details center-cell">
               <span className="name">{this.getUserFullName()}</span>

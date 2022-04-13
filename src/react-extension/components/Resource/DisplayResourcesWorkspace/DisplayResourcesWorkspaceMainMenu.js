@@ -259,9 +259,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
         </div>
         {this.canImport &&
           <a
-            className="button"
+            className="button button-action-icon"
             onClick={this.handleImportClickEvent}>
-            <Icon name="upload-a" />
+            <Icon name="upload" />
             <span className="visuallyhidden"><Trans>upload</Trans></span>
           </a>
         }

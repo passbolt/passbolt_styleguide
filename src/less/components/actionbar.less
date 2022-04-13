@@ -1,21 +1,21 @@
 /* actions */
 .header.third .main-action-wrapper {
-    margin-top: .8rem;
-    padding-left: .8rem;
-
+    margin: .4rem 0 0 1.6rem;
+    .dropdown {
+      margin-right: 0;
+    }
     .button {
         float: left;
+        margin-right: .8rem;
     }
 
 }
 
 .header.third .actions-wrapper {
-    margin-top: .8rem;
-
+    margin: .4rem 1.6rem 0 0;
     .button {
-        font-size: 1.4rem;
         float: left;
-        margin-right: .8rem;
+        margin-right: 1rem;
     }
     li {
         display: inline;
@@ -24,8 +24,10 @@
         float: right;
 
         .button {
-          min-width: 1.6rem;
-          padding: .6rem 1.4rem;
+          min-width: inherit;
+          &:last-child {
+            margin-right: 0;
+          }
         }
     }
 }

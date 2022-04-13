@@ -9,7 +9,7 @@
 @blue-twitter: #4099FF;
 @blue-facebook: #3B5998;
 
-@green-lightest: #f4f4d9;
+@green-lightest: #EDF7EB;
 @green-light: #66CC00;
 @green: #009900;
 @islamic-green: #0EAA00;
@@ -17,6 +17,7 @@
 @yellow-light: #FEF0BF;
 @yellow: #FFBD2E;
 @bright-yellow: #FFA724;
+@deep-champagne: #FFDBA6;
 
 @orange-light: #DD6A00;
 @orange: #9F6000;
@@ -25,6 +26,7 @@
 @red-dark: #92000C;
 @red-light: #DB5454;
 @dark-candy-apple-red: #A40000;
+@light-salmon-pink: #FFA6A6;
 
 @midgar-1: #000000;
 @midgar-2: #222220;
@@ -42,6 +44,7 @@
 @grey-1: #292929;
 @dim-gray: #696969;
 @black-olive: #3B3B3B;
+@bright-gray: #EBEBE9;
 @gray: #808080;
 @dark-liver: #515151;
 @grey: @midgar-7;
@@ -55,6 +58,8 @@
 @arsenic: #424242;
 @eerie-black: #1E1E1E;
 @eerie-black-2: #181818;
+@eerie-black-3: #1C1C1C;
+@charleston-green: #2C2C2C;
 
 /* background */
 @background-default: @raisin-black;
@@ -62,6 +67,8 @@
 @background-light: @midgar-4;
 @background-lighter: @midgar-4;
 @background-lightest: @midgar-5;
+@background-header-first: @eerie-black-3;
+@background-header-second: @charleston-green;
 
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
@@ -90,6 +97,7 @@
 
 /* font */
 @font-default: @white;
+@font-header-first: @bright-gray;
 @font-dim: lighten(@midgar-7, 25);
 @font-light: @midgar-7;
 @font-lighter: @midgar-7;
@@ -100,6 +108,7 @@
 @font-inverse-dark: @midgar-9;
 @font-inverse: @midgar-8;
 @font-inverse-background: @midgar-1;
+@font-dropdown-focus: @white;
 @font-tooltip: @white;
 @font-drag: @white;
 
@@ -145,6 +154,9 @@
 @button-close-background: rgba(@blacker, .1);
 @button-close-border: rgba(@white, .1);
 
+@button-search-background: rgba(@blacker, .1);
+@button-search-border: rgba(@white, .1);
+
 @button-disabled-color: @font-light;
 @button-disabled-background: @midgar-4;
 @button-disabled-border: @border-default;
@@ -166,6 +178,7 @@
 
 /* dropdown menus */
 @dropdown-background: @midgar-4;
+@dropdown-profile-background: @eerie-black-3;
 @dropdown-focus-background: @blue;
 @dropdown-item-hover-background: @granite-gray;
 
@@ -238,14 +251,14 @@
 @breadcrumb-background: @midgar-3;
 
 /* messages */
-@message-error-color: @black;
-@message-error-background: @background-error;
-@message-success-color: @black;
-@message-success-background: @background-success;
-@message-notice-color: @black;
+@message-error-color: @blacker;
+@message-error-background: @light-salmon-pink;
+@message-success-color: @blacker;
+@message-success-background: @green-lightest;
+@message-notice-color: @blacker;
 @message-notice-background: @background-notice;
-@message-warning-color: @black;
-@message-warning-background: @background-warning;
+@message-warning-color: @blacker;
+@message-warning-background: @deep-champagne;
 
 /* controls */
 @controls-dot:url('@{images}/controls/dot_white.svg');
