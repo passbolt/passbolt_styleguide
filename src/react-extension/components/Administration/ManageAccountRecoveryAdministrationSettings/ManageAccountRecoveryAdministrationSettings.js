@@ -75,6 +75,8 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
     if (Boolean(publicArmoredKey) && !this.state.keyInfoDto) {
       const keyInfoDto = await this.props.adminAccountRecoveryContext.getKeyInfo(publicArmoredKey);
       this.setState({keyInfoDto});
+    } else if (!publicArmoredKey && this.state.keyInfoDto) {
+      this.setState({keyInfoDto: null});
     }
   }
 
