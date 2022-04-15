@@ -317,13 +317,13 @@ class ImportResourcesKeyUnlock extends Component {
           </div>
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              disabled={this.hasAllInputDisabled()}
+              onClick={this.handleCancel}/>
             <FormSubmitButton
               value={this.translate("Continue import")}
               disabled={this.hasAllInputDisabled()}
               processing={this.state.processing}/>
-            <FormCancelButton
-              disabled={this.hasAllInputDisabled()}
-              onClick={this.handleCancel}/>
           </div>
         </form>
       </DialogWrapper>

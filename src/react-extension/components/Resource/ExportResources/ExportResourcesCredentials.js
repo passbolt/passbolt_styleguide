@@ -273,13 +273,13 @@ class ExportResourcesCredentials extends Component {
           </div>
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              disabled={!this.areActionsAllowed}
+              onClick={this.handleCancel}/>
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
               value={this.translate("Export")}/>
-            <FormCancelButton
-              disabled={!this.areActionsAllowed}
-              onClick={this.handleCancel}/>
           </div>
         </form>
       </DialogWrapper>

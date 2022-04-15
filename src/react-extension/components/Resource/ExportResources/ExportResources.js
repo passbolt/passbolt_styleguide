@@ -319,14 +319,14 @@ class ExportResources extends React.Component {
           </div>
 
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton
-              disabled={!this.areActionsAllowed}
-              processing={this.isProcessing}
-              value={this.translate("Export")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
               onClick={this.handleCancel}/>
+            <FormSubmitButton
+              disabled={!this.areActionsAllowed}
+              processing={this.isProcessing}
+              value={this.translate("Export")}/>
           </div>
 
         </form>
