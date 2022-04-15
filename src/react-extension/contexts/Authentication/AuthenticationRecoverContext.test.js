@@ -51,7 +51,7 @@ describe("AuthenticationRecoverContextProvider", () => {
       expect.assertions(3);
       await contextProvider.initialize();
       expect(props.context.port.requestListeners["passbolt.recover.first-install"]).toHaveBeenCalled();
-      expect(props.context.port.requestListeners["passbolt.recover.info"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.start"]).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION);
     });
 
@@ -65,7 +65,7 @@ describe("AuthenticationRecoverContextProvider", () => {
       expect.assertions(3);
       await contextProvider.initialize();
       expect(props.context.port.requestListeners["passbolt.recover.first-install"]).toHaveBeenCalled();
-      expect(props.context.port.requestListeners["passbolt.recover.info"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.start"]).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY);
     });
 
@@ -78,7 +78,7 @@ describe("AuthenticationRecoverContextProvider", () => {
       expect.assertions(3);
       await contextProvider.initialize();
       expect(props.context.port.requestListeners["passbolt.recover.first-install"]).toHaveBeenCalled();
-      expect(props.context.port.requestListeners["passbolt.recover.info"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.start"]).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY);
     });
   });

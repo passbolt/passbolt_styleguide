@@ -47,7 +47,6 @@ class ExtAuthenticationSetup extends Component {
       // Locale
       locale: null, // The locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
-      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
     };
   }
 
@@ -97,7 +96,7 @@ class ExtAuthenticationSetup extends Component {
    * Init the locale
    */
   async initLocale() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
+    const {locale} = await this.props.port.request("passbolt.setup.get-and-init-locale");
     this.setState({locale});
   }
 
@@ -107,14 +106,7 @@ class ExtAuthenticationSetup extends Component {
    */
   async onUpdateLocaleRequested(locale) {
     const localeDto = {locale};
-    await this.props.port.request("passbolt.locale.update-user-locale", localeDto);
-    this.onRefreshLocaleRequested(locale);
-  }
-
-  /**
-   * Whenever the refresh of the locale is requested
-   */
-  onRefreshLocaleRequested(locale) {
+    await this.props.port.request("passbolt.setup.update-locale", localeDto);
     this.setState({locale});
   }
 

@@ -41,7 +41,6 @@ export const AuthenticationRecoverWorkflowStates = {
 export const AuthenticationRecoverContext = React.createContext({
   // Workflow data.
   state: null, // The recover workflow current state
-  recoverInfo: null, // The recover info
   error: null, // The current error
 
   // Workflow mutators.
@@ -84,8 +83,9 @@ export class AuthenticationRecoverContextProvider extends React.Component {
     return {
       // Workflow data.
       state: AuthenticationRecoverWorkflowStates.LOADING, // The recover workflow current state
-      recoverInfo: null, // The recover info
       error: null, // The current error
+      passphrase: null, // The user passphrase
+      rememberMe: null, // The user remember me choice
 
       // Public workflow mutators.
       goToImportGpgKey: this.goToImportGpgKey.bind(this), // Whenever the user wants to go to the import key step.
@@ -113,14 +113,15 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async initialize() {
     const isFirstInstall = await this.props.context.port.request('passbolt.recover.first-install');
     const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
-    const recoverInfo = await this.props.context.port.request('passbolt.recover.info');
-    // The user might have already set a locale, the recover info update the background page locale, refresh the locale.
-    this.props.context.onRefreshLocaleRequested(recoverInfo.locale);
+    await this.props.context.port.request('passbolt.recover.start');
+    // The user locale is retrieved by the recover start, update the application locale
+    await this.props.context.initLocale();
     // In case of error the background page should just disconnect the extension setup application.
-    await this.setState({
-      state: isFirstInstall && isChromeBrowser ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY,
-      recoverInfo
-    });
+    let state = AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+    if (isFirstInstall && isChromeBrowser) {
+      state = AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION;
+    }
+    await this.setState({state});
   }
 
   /**
@@ -164,7 +165,11 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
       await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase, rememberMe);
-      await this.setState({state: AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN});
+      await this.setState({
+        state: AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN,
+        passphrase: passphrase,
+        rememberMe: rememberMe
+      });
     } catch (error) {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
@@ -184,6 +189,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.set-security-token", securityTokenDto);
       this.setState({state: AuthenticationRecoverWorkflowStates.SIGNING_IN});
       await this.props.context.port.request('passbolt.recover.complete');
+      await this.props.context.port.request("passbolt.recover.sign-in", this.state.passphrase, this.state.rememberMe);
     } catch (error) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
@@ -194,8 +200,8 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async requestHelpCredentialsLost() {
-    const canRequestAccountRecoveryPolicy = this.state.recoverInfo?.user?.account_recovery_user_setting?.status === 'approved';
-    if (canRequestAccountRecoveryPolicy) {
+    const hasUserAccountRecoveryEnabled = await this.props.context.port.request("passbolt.recover.has-user-enabled-account-recovery");
+    if (hasUserAccountRecoveryEnabled) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY});
     } else {
       await this.setState({state: AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST});

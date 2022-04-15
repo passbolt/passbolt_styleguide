@@ -47,7 +47,7 @@ class ExtAuthenticationRecover extends Component {
       // Locale
       locale: null, // The locale
       onUpdateLocaleRequested: this.onUpdateLocaleRequested.bind(this),
-      onRefreshLocaleRequested: this.onRefreshLocaleRequested.bind(this),
+      initLocale: this.initLocale.bind(this), // Recover require to re-init the locale after the recover start retrieved the user locale.
     };
   }
 
@@ -69,7 +69,7 @@ class ExtAuthenticationRecover extends Component {
     this.removeSkeleton();
     await this.getSiteSettings();
     await this.getExtensionVersion();
-    this.initLocale();
+    await this.initLocale();
   }
 
   /**
@@ -120,14 +120,6 @@ class ExtAuthenticationRecover extends Component {
   async onUpdateLocaleRequested(locale) {
     const localeDto = {locale};
     await this.props.port.request("passbolt.locale.update-user-locale", localeDto);
-    this.onRefreshLocaleRequested(locale);
-  }
-
-  /**
-   * Whenever the refresh of the locale is requested
-   */
-  async onRefreshLocaleRequested() {
-    const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
   }
 

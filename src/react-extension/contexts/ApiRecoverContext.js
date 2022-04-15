@@ -69,24 +69,24 @@ class ApiRecoverContextProvider extends React.Component {
       return this.setState({state: ApiRecoverContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE});
     }
 
-    await this.verifyRecoverInfo()
-      .then(this.handleRecoverVerifySuccess.bind(this))
-      .catch(this.handleRecoverVerifyError.bind(this));
+    await this.startRecover()
+      .then(this.handleStartRecoverSuccess.bind(this))
+      .catch(this.handleStartRecoverError.bind(this));
   }
 
   /**
-   * When the recover info are valid.
+   * When the recover started with success.
    * @return {void}
    */
-  handleRecoverVerifySuccess() {
+  handleStartRecoverSuccess() {
     this.setState({state: ApiRecoverContextState.INSTALL_EXTENSION_STATE});
   }
 
   /**
-   * When the recover info didn't validate
+   * When the recover didn't start with success.
    * @return {void}
    */
-  handleRecoverVerifyError(error) {
+  handleStartRecoverError(error) {
     if (error instanceof PassboltApiFetchError) {
       const isTokenExpired = getPropValue(error, "data.body.token.expired");
       if (isTokenExpired) {
@@ -107,15 +107,14 @@ class ApiRecoverContextProvider extends React.Component {
   }
 
   /**
-   * Verify the recover information.
-   * @returns {Promise<object>}
+   * Start the recover.
+   * @returns {Promise<void>}
    */
-  async verifyRecoverInfo() {
+  async startRecover() {
     const apiClientOptions = this.props.context.getApiClientOptions();
     apiClientOptions.setResourceName("setup");
     const apiClient = new ApiClient(apiClientOptions);
-    const {body} = await apiClient.get(`recover/${this.state.userId}/${this.state.token}`);
-    return body;
+    await apiClient.get(`recover/${this.state.userId}/${this.state.token}`);
   }
 
   /**
