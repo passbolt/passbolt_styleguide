@@ -489,8 +489,8 @@ class ShareDialog extends Component {
             />
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose} />
+            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
         </form>
       </DialogWrapper>

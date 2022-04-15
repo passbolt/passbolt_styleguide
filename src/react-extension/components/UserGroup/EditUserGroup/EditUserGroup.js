@@ -711,37 +711,36 @@ class EditUserGroup extends Component {
           onSubmit={this.handleSubmit}
           noValidate>
 
-          <div className="group_members">
-
-            <div className="form-content">
-              <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
-                <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
-                <input
-                  id="group-name-input"
-                  ref={this.references.name}
-                  value={this.state.groupToEdit.name}
-                  maxLength="50"
-                  type="text"
-                  placeholder={this.translate("group name")}
-                  onChange={this.handleNameChange}
-                  disabled={!this.areActionsAllowed || !this.isLoggedInUserAdmin()}/>
-                {this.hasErrors("name", "empty") &&
-                <div className="name error-message">
-                  <Trans>A name is required.</Trans>
-                </div>
-                }
-                {this.hasErrors("name", "alreadyExists") &&
-                <div className="name error-message">
-                  <Trans>The group name already exists.</Trans>
-                </div>
-                }
+          <div className="form-content">
+            <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
+              <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
+              <input
+                id="group-name-input"
+                ref={this.references.name}
+                value={this.state.groupToEdit.name}
+                maxLength="50"
+                type="text"
+                placeholder={this.translate("group name")}
+                onChange={this.handleNameChange}
+                disabled={!this.areActionsAllowed || !this.isLoggedInUserAdmin()}/>
+              {this.hasErrors("name", "empty") &&
+              <div className="name error-message">
+                <Trans>A name is required.</Trans>
               </div>
-
-              <div className="input required">
-                <label><Trans>Group members</Trans></label>
+              }
+              {this.hasErrors("name", "alreadyExists") &&
+              <div className="name error-message">
+                <Trans>The group name already exists.</Trans>
               </div>
+              }
             </div>
 
+            <div className="input required">
+              <label><Trans>Group members</Trans></label>
+            </div>
+          </div>
+
+          <div className="group_members">
             <div className="form-content permission-edit">
               <ul className="permissions scroll groups_users">
                 {this.groupsUsers.map(groupUser => (
@@ -783,7 +782,7 @@ class EditUserGroup extends Component {
                         title="remove"
                         className={`remove-item ${!this.areActionsAllowed ? "disabled" : ""}`}
                         onClick={event => this.handleMemberRemoved(event, groupUser)}>
-                        <Icon name="close-circle"/>
+                        <Icon name="close"/>
                         <span className="visuallyhidden">remove</span>
                       </a>
                     </div>
@@ -791,27 +790,27 @@ class EditUserGroup extends Component {
                 ))
                 }
               </ul>
-              {!this.hasMembers &&
-              <div className="message warning">
-                <span><Trans>The group is empty, please add a group manager.</Trans></span>
-              </div>
-              }
-              {this.hasMembers && !this.hasManager &&
-              <div className="message error at-least-one-manager">
-                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
-              </div>
-              }
-              {!this.isManager &&
-              <div className="message warning feedback cannot-add-user">
-                <span><Trans>Only the group manager can add new people to a group.</Trans></span>
-              </div>
-              }
-              {this.hasMembersChanges && this.hasManager &&
-              <div className="message warning feedback">
-                <span><Trans>You need to click save for the changes to take place.</Trans></span>
-              </div>
-              }
             </div>
+            {!this.hasMembers &&
+            <div className="message warning">
+              <span><Trans>The group is empty, please add a group manager.</Trans></span>
+            </div>
+            }
+            {this.hasMembers && !this.hasManager &&
+            <div className="message error at-least-one-manager">
+              <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+            </div>
+            }
+            {!this.isManager &&
+            <div className="message warning feedback cannot-add-user">
+              <span><Trans>Only the group manager can add new people to a group.</Trans></span>
+            </div>
+            }
+            {this.hasMembersChanges && this.hasManager &&
+            <div className="message warning feedback">
+              <span><Trans>You need to click save for the changes to take place.</Trans></span>
+            </div>
+            }
           </div>
 
           {this.isManager &&
@@ -831,13 +830,13 @@ class EditUserGroup extends Component {
           }
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              onClick={this.handleClose}
+              disabled={!this.areActionsAllowed}/>
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.hasSubmitDisabled}
               processing={this.isProcessing}/>
-            <FormCancelButton
-              onClick={this.handleClose}
-              disabled={!this.areActionsAllowed}/>
           </div>
 
         </form>

@@ -508,7 +508,7 @@ class CreateUserGroup extends Component {
                     <div className="actions">
                       <a className={`remove-item ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                         onClick={event => this.handleDeleteClickEvent(event, groups_user.user.id)} role="button">
-                        <Icon name='close-circle'/>
+                        <Icon name='close'/>
                         <span className="visually-hidden">Remove</span>
                       </a>
                     </div>
@@ -549,8 +549,8 @@ class CreateUserGroup extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
+            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
         </form>
       </DialogWrapper>

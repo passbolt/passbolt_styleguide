@@ -162,6 +162,12 @@ class SharePermissionItem extends Component {
           </div>
         </div>
 
+        {(this.props.variesDetails) &&
+          <Tooltip message={<ShareVariesDetails variesDetails={this.props.variesDetails} />} direction="left">
+            <Icon name="info-circle"/>
+          </Tooltip>
+        }
+
         <div className="rights">
           <Select name="permissionSelect"
             className={this.getSelectClassName()}
@@ -170,12 +176,6 @@ class SharePermissionItem extends Component {
             disabled={this.isInputDisabled()}
             onChange={this.handleUpdate}
           />
-
-          {(this.props.variesDetails) &&
-          <Tooltip message={<ShareVariesDetails variesDetails={this.props.variesDetails} />}>
-            <Icon name="info-circle"/>
-          </Tooltip>
-          }
         </div>
 
         <div className="actions">
