@@ -408,9 +408,9 @@ class CreateUser extends Component {
               <div className="username error-message">{this.state.usernameError}</div>
               }
             </div>
-            <div className="input checkbox">
-              <label htmlFor="is_admin"><Trans>Role</Trans></label>
-              <div id="is_admin">
+            <div className="input checkbox-wrapper">
+              <label htmlFor="is_admin_checkbox"><Trans>Role</Trans></label>
+              <div className="input checkbox">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}
                   checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
                 <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
@@ -421,8 +421,8 @@ class CreateUser extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
         </form>
       </DialogWrapper>

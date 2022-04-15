@@ -454,6 +454,15 @@ class DeleteUserWithConflicts extends Component {
   }
 
   /**
+   * Get the users
+   * @param id
+   * @returns {*}
+   */
+  getGroupUsersList(id) {
+    return this.groupsGroupsUsersOptions[id]?.map(groupUser => ({value: groupUser.id, label: this.getUserOptionLabel(groupUser.user)})) || [];
+  }
+
+  /**
    * Get the user label displayed as option
    * @param {object} user
    */
@@ -536,7 +545,7 @@ class DeleteUserWithConflicts extends Component {
                   <li key={groupError.id}>
                     <div className="select-wrapper input required">
                       <label htmlFor="transfer_group_manager">{groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:</label>
-                      <Select className="form-element" value={this.state.managers[groupError.id]} items={this.getAcoPermissionsList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
+                      <Select className="form-element" value={this.state.managers[groupError.id]} items={this.getGroupUsersList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
                     </div>
                   </li>
                 )}
@@ -545,8 +554,8 @@ class DeleteUserWithConflicts extends Component {
             }
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
           </div>
         </form>
       </DialogWrapper>

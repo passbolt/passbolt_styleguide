@@ -374,9 +374,9 @@ class EditUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
             </div>
-            <div className="input checkbox">
-              <label htmlFor="is_admin"><Trans>Role</Trans></label>
-              <div id="is_admin">
+            <div className="input checkbox-wrapper">
+              <label htmlFor="is_admin_checkbox"><Trans>Role</Trans></label>
+              <div className="input checkbox">
                 <input
                   id="is_admin_checkbox"
                   name="is_admin"
@@ -392,8 +392,8 @@ class EditUser extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
         </form>
       </DialogWrapper>

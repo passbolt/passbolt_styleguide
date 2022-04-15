@@ -1,5 +1,5 @@
 .checkbox {
-    margin-bottom: .8rem;
+    margin-bottom: 1.2rem;
     display: flex;
     align-items: center;
 
@@ -21,7 +21,7 @@
         & + label {
             flex: 1;
             font-weight: 600;
-            margin-left: 1.2rem;
+            margin: 0 0 0 1.2rem;
             display: inline-block;
             cursor: pointer;
             padding: 0;
@@ -50,7 +50,7 @@
 
         // Disabled state label.
         &:disabled + label {
-            color: rgba(@font-default, 0.5);
+            opacity: .5;
             cursor: auto;
         }
 
