@@ -13,11 +13,12 @@
  */
 
 import React from 'react';
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import PropTypes from "prop-types";
 import {AccountRecoveryUserContextProvider} from "../../../contexts/AccountRecoveryUserContext";
-import ManageAccountRecoveryUserSettings from '../ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings';
+import AccountRecoveryInviteUserSettingPreferenceDialog from '../AccountRecoveryInviteUserSettingPreferenceDialog/AccountRecoveryInviteUserSettingPreferenceDialog';
 
 /**
  * This component listens any event related to passphrase entry dialog actions to perform
@@ -32,13 +33,19 @@ class HandleAccountRecoveryStatusCheck extends React.Component {
       return;
     }
 
+    const isResponsePostpone = await this.props.context.port.request("passbolt.account-recovery.has-user-postponed-user-setting-invitation");
+
+    if (isResponsePostpone) {
+      return;
+    }
+
     const isUserAccountRecoverySubscriptionStatusPending = this.props.accountRecoveryContext.getUserAccountRecoverySubscriptionStatus() === AccountRecoveryUserContextProvider.STATUS_PENDING;
     if (!isUserAccountRecoverySubscriptionStatusPending) {
       return;
     }
 
-    this.props.dialogContext.open(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy()
+    this.props.dialogContext.open(AccountRecoveryInviteUserSettingPreferenceDialog, {
+      policy: this.props.accountRecoveryContext.getPolicy()
     });
   }
 
@@ -60,6 +67,7 @@ class HandleAccountRecoveryStatusCheck extends React.Component {
 HandleAccountRecoveryStatusCheck.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   accountRecoveryContext: PropTypes.object, // The account recovery context
+  context: PropTypes.object, // the application context
 };
 
-export default withAccountRecovery(withDialog(HandleAccountRecoveryStatusCheck));
+export default withAppContext(withAccountRecovery(withDialog(HandleAccountRecoveryStatusCheck)));
