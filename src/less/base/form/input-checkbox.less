@@ -35,10 +35,11 @@
             border: none;
         }
 
-        // Box focus
-        &:focus {
+        // Box focus and focus-visible
+        &:focus, &:focus-visible {
             box-shadow: 0 0 .4rem @shadow-focus;
             border: 1px solid @input-checkbox-focus-border;
+            outline: 0;
         }
 
         // Box pressed

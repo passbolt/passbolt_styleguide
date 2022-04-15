@@ -168,7 +168,7 @@ class DisplayProgress extends Component {
               </div>
             </div>
             <div className="submit-wrapper clearfix">
-              <a className="button processing">Submit<Icon name="spinner"/></a>
+              <a className="button disabled processing">Submit<Icon name="spinner"/></a>
             </div>
           </div>
         </div>

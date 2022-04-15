@@ -143,8 +143,8 @@ class DeleteUser extends Component {
             <p><Trans>Warning: This action can’t be undone. All the data associated with this user will be permanently deleted.</Trans></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
           </div>
         </form>
       </DialogWrapper>

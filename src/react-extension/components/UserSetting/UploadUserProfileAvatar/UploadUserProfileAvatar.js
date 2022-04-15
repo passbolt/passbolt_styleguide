@@ -339,14 +339,14 @@ class UploadUserProfileAvatar extends React.Component {
           </div>
 
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton
-              disabled={!this.areActionsAllowed}
-              processing={this.isProcessing}
-              value={this.translate("Save")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
               onClick={this.handleCancel}/>
+            <FormSubmitButton
+              disabled={!this.areActionsAllowed}
+              processing={this.isProcessing}
+              value={this.translate("Save")}/>
           </div>
 
         </form>

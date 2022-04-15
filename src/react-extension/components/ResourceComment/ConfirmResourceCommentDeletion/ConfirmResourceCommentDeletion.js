@@ -132,14 +132,14 @@ class ConfirmDeleteDialog extends Component {
               <p><Trans>Warning: Once the comment is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
             </div>
             <div className="submit-wrapper clearfix">
+              <FormCancelButton
+                disabled={this.state.actions.processing}
+                onClick={this.handleClose} />
               <FormSubmitButton
                 disabled={this.state.actions.processing}
                 processing={this.state.processing}
                 value={this.translate("Delete")}
                 warning={true}/>
-              <FormCancelButton
-                disabled={this.state.actions.processing}
-                onClick={this.handleClose} />
             </div>
           </form>
         </DialogWrapper>

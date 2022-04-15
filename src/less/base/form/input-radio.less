@@ -41,10 +41,11 @@
           border: none;
         }
 
-        // Radio focus
-        &:focus {
+        // Radio focus and focus-visible
+        &:focus, &:focus-visible {
           box-shadow: 0 0 .4rem @shadow-focus;
           border: 1px solid @input-radio-focus-border;
+          outline: 0;
         }
 
         // Radio pressed
@@ -120,9 +121,10 @@
       margin-left: 1.6rem;
 
       .name {
-        font-weight: bold;
+        margin: 0;
+        font-weight: 600;
         display:block;
-        font-size: 1em;
+        font-size: 1.6rem;
       }
 
       .info {

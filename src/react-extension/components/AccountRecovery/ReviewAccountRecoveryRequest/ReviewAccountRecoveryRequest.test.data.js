@@ -26,6 +26,7 @@ export function defaultProps() {
       id: "54c6278e-f824-5fda-91ff-3e946b18d996",
       status: "pending",
       fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
+      created: "2022-01-13T15:27:26.301Z",
       creator: {
         id: "54c6278e-f824-5fda-91ff-3e946b18d994",
         role_id: "c4870358-e32f-41ce-999b-8f80c9b0d17f",

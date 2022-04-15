@@ -25,6 +25,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -143,10 +144,12 @@ class ManageAccountRecoveryUserSettings extends Component {
   /**
    * get fingerprint
    * @param fingerprint
-   * @returns string
+   * @returns {JSX.Element}
    */
   formatFingerprint(fingerprint) {
-    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
+    fingerprint = fingerprint || "";
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
   }
 
   /**
@@ -227,13 +230,11 @@ class ManageAccountRecoveryUserSettings extends Component {
               <li className="usercard-detailed-col-2">
                 <div className="content-wrapper">
                   <div className="content">
-                    <div>
-                      <Tooltip message={this.formatFingerprint(this.requestor.gpgkey.fingerprint)} direction="bottom">
-                        <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
-                      </Tooltip>
-                      &nbsp;
-                      <span className="name"><Trans>requested this operation</Trans></span>
-                    </div>
+                    <Tooltip message={this.formatFingerprint(this.requestor.gpgkey.fingerprint)} direction="bottom">
+                      <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
+                    </Tooltip>
+                    &nbsp;
+                    <span className="name"><Trans>requested this operation</Trans></span>
                     <div className="subinfo light">{this.formatDateTimeAgo(this.date)}</div>
                   </div>
                 </div>
@@ -282,18 +283,13 @@ class ManageAccountRecoveryUserSettings extends Component {
               disabled={this.isProcessing}>
               {this.translate("Learn More")}
             </button>
+            <FormCancelButton
+              disabled={this.isProcessing}
+              onClick={this.close}/>
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.isProcessing}
               processing={this.isProcessing}/>
-            <button
-              className={`button cancel ${this.isProcessing ? "disabled" : ""}`}
-              role="button"
-              type="button"
-              onClick={this.close}
-              disabled={this.isProcessing}>
-              <span><Trans>Cancel</Trans></span>
-            </button>
           </div>
         </form>
       </DialogWrapper>

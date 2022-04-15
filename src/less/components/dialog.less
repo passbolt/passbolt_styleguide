@@ -19,7 +19,7 @@
   border: 1px solid @dialog-border;
   border-radius: .3rem;
   box-sizing: border-box;
-  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1rem 1rem @dialog-box-shadow;
 
   /* header */
   .dialog-header {
@@ -58,30 +58,24 @@
   .dialog-body {
     background: @background-default;
     padding: 1.6rem;
-  }
 
-  .error-message {
-    margin-bottom: 1rem;
-  }
-
-  p {
-    margin-top: .8rem;
-    font-size: 1.5rem;
-    /* 15px */
-  }
-
-  p+.checkbox {
-    padding-bottom: .8rem;
-
-    & label {
-      font-size: 1.6rem;
+    // all direct child element
+    & > * {
+      margin-bottom: 1.6rem;
     }
-  }
 
-  /* form input resizing */
-  label {
-    letter-spacing: -0.045em;
-    /* 15px */
+    // all direct label element
+    & > label {
+      white-space: inherit;
+      overflow: inherit;
+      text-overflow: inherit;
+      -o-text-overflow: inherit;
+      -ms-text-overflow: inherit;
+    }
+
+    label {
+      letter-spacing: -0.045em;
+    }
   }
 
   input[type=text],

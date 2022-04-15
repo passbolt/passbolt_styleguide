@@ -160,14 +160,14 @@ class ConfirmDisableUserMFA extends Component {
           </div>
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              disabled={this.areActionsDisabled}
+              onClick={this.handleClose}/>
             <FormSubmitButton
               value={this.translate("Disable MFA")}
               warning={true}
               processing={this.isProcessing}
               disabled={this.areActionsDisabled}/>
-            <FormCancelButton
-              disabled={this.areActionsDisabled}
-              onClick={this.handleClose}/>
           </div>
 
         </form>
