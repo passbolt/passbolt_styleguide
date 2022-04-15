@@ -48,6 +48,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a success toaster message after sharing resources to users and groups with success', async() => {
+      expect.assertions(19);
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 3 resources');
@@ -89,6 +90,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I can remove a permission', async() => {
+      expect.assertions(2);
       expect(page.count).toBe(11);
       await page.selectRemovePermission(1);
       expect(page.count).toBe(10);
@@ -123,30 +125,35 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I shouldn’t be able to submit the form if there is no owner', async() => {
+      expect.assertions(2);
       await page.selectCanReadRights(1);
       expect(page.errorMessage).toBe('Please make sure there is at least one owner.');
       expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
     });
 
     it('As LU I can stop sharing resources by clicking on the cancel button', async() => {
+      expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.click(page.cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop sharing resources by closing the dialog', async() => {
+      expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.click(page.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop sharing resources with the keyboard (escape)', async() => {
+      expect.assertions(2);
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(2);
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
       mockContextRequest(requestAutocompleteResultMockImpl);
       await page.searchName("adm");
@@ -154,14 +161,15 @@ describe("As Lu I should see the share dialog", () => {
       await page.selectUserOrGroup(1);
 
       // Mock the request function to make it return an error.
+      const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Jest simulate API error.");
+        throw error;
       });
 
       await page.savePermissions();
 
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 
@@ -180,6 +188,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a success toaster message after sharing one resource to users and groups with success', async() => {
+      expect.assertions(13);
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share resource');
@@ -229,6 +238,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a success toaster message after sharing one folder to users and groups with success', async() => {
+      expect.assertions(13);
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-folders', shareDialogProps.foldersIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share folder');
@@ -276,6 +286,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a error dialog message after try to sharing folders and resources at the same time', async() => {
+      expect.assertions(4);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 2 items');
 
@@ -287,7 +298,7 @@ describe("As Lu I should see the share dialog", () => {
 
       await page.savePermissions();
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: new Error("Multi resource and folder share is not implemented.")});
     });
   });
 });

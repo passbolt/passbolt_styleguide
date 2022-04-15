@@ -20,6 +20,8 @@ import Icon from "../../Common/Icons/Icon";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withAppContext} from "../../../contexts/AppContext";
+import {withDialog} from "../../../contexts/DialogContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -318,13 +320,22 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
     } else if (error.name === "GpgKeyError") {
       this.setState({keyError: error.message});
     } else {
-      // The component passing the onSubmit prop should take care of any unexpected errors, this code should not run.
       console.error('Uncaught uncontrolled error');
-      if (typeof this.props.onError === 'undefined') {
-        throw error;
-      }
-      this.props.onError(error);
+      //@todo unify unexpected error management: the error should be handle by the workflow proposing the callback prop
+      this.onUnexpectedError(error);
     }
+  }
+
+  /**
+   * Whenever an unexpected error occured
+   * @param {object} error The error
+   * @returns {Promise<void>}
+   */
+  onUnexpectedError(error) {
+    const errorDialogProps = {
+      error: error
+    };
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**
@@ -516,9 +527,9 @@ ProvideAccountRecoveryOrganizationKey.propTypes = {
   context: PropTypes.any.isRequired, // The application context provider
   onClose: PropTypes.func, // Callback when the dialog must be closed
   onSubmit: PropTypes.func, // Callback when the dialog must be submitted
-  onError: PropTypes.func, // Callback when an error occurs
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  dialogContext: PropTypes.object, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(ProvideAccountRecoveryOrganizationKey));
+export default withAppContext(withDialog(withTranslation('common')(ProvideAccountRecoveryOrganizationKey)));

@@ -42,6 +42,7 @@ describe("As LU I should see the export resources credentials dialog", () => {
     });
 
     it('As LU I see a success dialog after unlocking keypass file with success', async() => {
+      expect.assertions(7);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Enter the password and/or key file");
       const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
@@ -95,34 +96,39 @@ describe("As LU I should see the export resources credentials dialog", () => {
     });
 
     it('As LU I can stop importing passwords by clicking on the cancel button', async() => {
+      expect.assertions(1);
       await page.cancelExport();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop importing passwords by closing the dialog', async() => {
+      expect.assertions(1);
       await page.closeDialog();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop importing passwords with the keyboard (escape)', async() => {
+      expect.assertions(1);
       await page.escapeKey();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(1);
       const file = new File(['test'], 'keyfile.txt', {type: 'txt'});
       await page.fillPassword("test");
       await page.selectKeypassFile(file);
       // Mock the request function to make it return an error.
+      const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Jest simulate API error.");
+        throw error;
       });
 
       await page.selectExport();
       await waitFor(() => {});
 
       // Throw dialog general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 });

@@ -43,6 +43,7 @@ describe("See the Edit User Group", () => {
 
 
     it('As AD I should change the name of the group', async() => {
+      expect.assertions(3);
       expect(page.groupName).toBe("Leadership team");
 
       const newGroupName = "A different group name";
@@ -56,6 +57,7 @@ describe("See the Edit User Group", () => {
     });
 
     it('As AD I should change the role of a group member', async() => {
+      expect.assertions(3);
       expect(page.groupMember(2).role).toBe("Group Manager");
 
       const newRole = "Member";
@@ -69,6 +71,7 @@ describe("See the Edit User Group", () => {
     });
 
     it('As AD I should remove a user from a group', async() => {
+      expect.assertions(3);
       expect(page.groupMembersCount).toBe(2);
 
       await page.removeGroupMember(1);
@@ -80,11 +83,13 @@ describe("See the Edit User Group", () => {
     });
 
     it('As non-GM I should not add a new user to the group', async() => {
+      expect.assertions(1);
       // The current logged in user is not GM
       expect(page.canAdd).toBeFalsy();
     });
 
     it('AS GM I should add a new user to the group', async() => {
+      expect.assertions(5);
       // Set the context in order the logged in user to be a group manager
       const propsWithGroupManager = defaultProps();
       propsWithGroupManager.userWorkspaceContext.groupToEdit.groups_users[0].user_id = context.loggedInUser.id;
@@ -122,21 +127,25 @@ describe("See the Edit User Group", () => {
     });
 
     it('As AD I can stop editing a group by clicking on the cancel button', async() => {
+      expect.assertions(1);
       await page.cancel();
       expect(props.onClose).toBeCalled();
     });
 
     it('As AD I can stop editing a group by closing the dialog', async() => {
+      expect.assertions(1);
       await page.close();
       expect(props.onClose).toBeCalled();
     });
 
 
     it('As AD I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
-      mockContextRequest(context, () => Promise.reject("Some error"));
+      expect.assertions(1);
+      const error = new Error("Some error");
+      mockContextRequest(context, () => Promise.reject(error));
       jest.spyOn(props.dialogContext, 'open').mockImplementation(() => {});
       await page.save();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
 
     it('As AD I should see an error message if the group name already exists', async() => {
@@ -158,6 +167,7 @@ describe("See the Edit User Group", () => {
     });
 
     it('As AD I should see an error message when the editing group has no group manager anymore', async() => {
+      expect.assertions(1);
       const newRole = "Member";
       page.groupMember(1).role = newRole;
       page.groupMember(2).role = newRole;

@@ -37,6 +37,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state recommanded)', async() => {
+    expect.assertions(3);
     const props = defaultProps("opt-out");
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
@@ -59,6 +60,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state optional)', async() => {
+    expect.assertions(3);
     const props = defaultProps("opt-in");
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
@@ -124,8 +126,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
     await page.clickOnSave();
 
     expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {
-      title: "There was an unexpected error...",
-      message: errorMessage
+      error: new Error(errorMessage)
     });
   });
 });

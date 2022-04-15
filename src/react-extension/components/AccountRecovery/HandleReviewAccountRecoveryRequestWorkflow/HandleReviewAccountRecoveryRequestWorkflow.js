@@ -45,6 +45,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
     return {
       accountRecoveryRequest: null, // The account recovery request to assess.
       accountRecoveryResponse: null, // The account recovery response to submit.
+      currentOpenedDialog: null,
     };
   }
 
@@ -84,11 +85,13 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * @return {Promise<void>}
    */
   async displayReviewAccountRecoveryDialog() {
-    this.props.dialogContext.open(ReviewAccountRecoveryRequest, {
+    const dialogId = this.props.dialogContext.open(ReviewAccountRecoveryRequest, {
       accountRecoveryRequest: this.state.accountRecoveryRequest,
       onCancel: this.handleCancelDialog,
       onSubmit: this.reviewAccountRecoveryRequest,
-      onError: this.handleError
+    });
+    this.setState({
+      currentOpenedDialog: dialogId
     });
   }
 
@@ -96,10 +99,12 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * Display provide organization key
    */
   displayProvideAccountRecoveryOrganizationKeyDialog() {
-    this.props.dialogContext.open(ProvideAccountRecoveryOrganizationKey, {
+    const dialogId = this.props.dialogContext.open(ProvideAccountRecoveryOrganizationKey, {
       onCancel: this.handleCancelDialog,
       onSubmit: this.handleSave,
-      onError: this.handleError
+    });
+    this.setState({
+      currentOpenedDialog: dialogId
     });
   }
 
@@ -108,6 +113,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   handleCancelDialog() {
     this.props.onStop();
+    this.props.dialogContext.close(this.state.currentOpenedDialog);
   }
 
   /**
@@ -135,9 +141,14 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * @param {Object|null} privateGpgKeyDto the private ORK given by the admin if any.
    */
   async handleSave(privateGpgKeyDto) {
-    await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryResponse, privateGpgKeyDto);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery review has been saved successfully"));
-    this.props.onStop();
+    try {
+      await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryResponse, privateGpgKeyDto);
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery review has been saved successfully"));
+      this.props.onStop();
+    } catch (e) {
+      console.log(e);
+      this.handleError(e);
+    }
   }
 
   /**
@@ -147,11 +158,11 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   async handleError(error) {
     const errorDialogProps = {
-      title: this.translate("There was an unexpected error..."),
-      message: error.message
+      error: error
     };
-    this.props.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(NotifyError);
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
+    this.props.onStop();
+    this.props.dialogContext.close(this.state.currentOpenedDialog);
   }
 
   /**

@@ -313,11 +313,9 @@ class ImportResources extends Component {
     } else {
       // If an unexpected error occurred.
       const errorDialogProps = {
-        title: this.translate("There was an unexpected error..."),
-        message: error.message
+        error: error
       };
-      this.props.context.setContext({errorDialogProps});
-      this.props.dialogContext.open(NotifyError);
+      this.props.dialogContext.open(NotifyError, errorDialogProps);
     }
   }
 

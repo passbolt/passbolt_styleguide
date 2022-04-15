@@ -198,7 +198,7 @@ class ImportResourcesKeyUnlock extends Component {
    * Handle the failure of the KDBX import
    * @param error The import error
    */
-  async handleImportError(error) {
+  handleImportError(error) {
     const userAbortsOperation = error.name === "UserAbortsOperationError";
     const isInvalidPasswordOrKeyFile = error.code === "InvalidKey" || error.code === "InvalidArg";
 
@@ -208,15 +208,13 @@ class ImportResourcesKeyUnlock extends Component {
       // If the user aborts the operation, then do nothing. It happens when the users close the passphrase dialog
     } else if (isInvalidPasswordOrKeyFile) {
       // If the credentials are invalid.
-      await this.setState({errors: {invalidPasswordOrKeyfile: true}});
+      this.setState({errors: {invalidPasswordOrKeyfile: true}});
     } else {
       // If an unexpected error occurred.
       const errorDialogProps = {
-        title: this.translate("There was an unexpected error..."),
-        message: error.message
+        error: error
       };
-      this.props.context.setContext({errorDialogProps});
-      this.props.dialogContext.open(NotifyError);
+      this.props.dialogContext.open(NotifyError, errorDialogProps);
     }
   }
 

@@ -38,6 +38,7 @@ describe("See the Create Dialog User", () => {
     });
 
     it('As AD I should see a success toaster message after disabling a user MFA with success', async() => {
+      expect.assertions(2);
       mockContextRequest(context, () => Promise.resolve());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       await page.confirm();
@@ -62,15 +63,18 @@ describe("See the Create Dialog User", () => {
     });
 
     it('As AD I should cancel the operation', async() => {
+      expect.assertions(1);
       await page.cancel();
       expect(props.onClose).toBeCalled();
     });
 
     it('As AD I should see an error message if the user MFA disabling goes wrong', async() => {
-      mockContextRequest(context, () => Promise.reject("Some error"));
+      expect.assertions(1);
+      const error = new Error("Some error");
+      mockContextRequest(context, () => Promise.reject(error));
       jest.spyOn(props.dialogContext, 'open').mockImplementation(() => {});
       await page.confirm();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 });

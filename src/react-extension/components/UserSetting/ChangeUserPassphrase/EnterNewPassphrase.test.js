@@ -43,18 +43,21 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should be able to enter my new passphrase', async() => {
+      expect.assertions(1);
       const expectedPassphrase = 'La belle vie';
       await page.insertPassphrase(expectedPassphrase);
       expect(page.passphrase).toBe(expectedPassphrase);
     });
 
     it('As LU I should initially see the passphrase I typed as obfuscated', async() => {
+      expect.assertions(1);
       const passphrase = 'La belle vie';
       await page.insertPassphrase(passphrase);
       expect(page.isObfuscated).toBeTruthy();
     });
 
     it('As LU I should be able to see the non-obfuscate passphrase I typed', async() => {
+      expect.assertions(1);
       const passphrase = 'La belle vie';
       await page.insertPassphrase(passphrase);
       await page.toggleObfuscate();
@@ -92,18 +95,21 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should not go to the next step if the passphrase is not strong enough', async() => {
+      expect.assertions(1);
       const veryWeakPassphrase = 'blabla';
       await page.insertPassphrase(veryWeakPassphrase);
       expect(page.canUpdate).toBeFalsy();
     });
 
     it('As LU I should not go to the next step if the passphrase is empty', async() => {
+      expect.assertions(1);
       const veryWeakPassphrase = '';
       await page.insertPassphrase(veryWeakPassphrase);
       expect(page.canUpdate).toBeFalsy();
     });
 
     it('As LU I should go to the next step if the passphrase is strong enough', async() => {
+      expect.assertions(1);
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
       expect(page.canUpdate).toBeTruthy();
@@ -111,6 +117,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
 
 
     it('As LU I cannot update the form fields while submitting the form', async() => {
+      expect.assertions(3);
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
 
@@ -126,6 +133,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see a processing feedback while submitting the form', async() => {
+      expect.assertions(2);
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
 
@@ -140,11 +148,13 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should be able to cancel the confirmation of my passphrase', async() => {
+      expect.assertions(1);
       await page.cancel();
       expect(props.userSettingsContext.onGoToIntroductionPassphraseRequested).toHaveBeenCalled();
     });
 
     it('As LU I should see an error dialog if there is an api error', async() => {
+      expect.assertions(3);
       expect(page.updateButton.getAttribute("disabled")).not.toBeNull();
       expect(page.updateButton.className).toBe('button primary disabled medium');
 
@@ -154,7 +164,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       jest.spyOn(props.userSettingsContext, 'onUpdatePassphraseRequested').mockImplementationOnce(mockReject(new PassboltApiFetchError("Jest simulate API error.")));
 
       await page.update();
-      const ErrorDialogProps = {message: "Jest simulate API error."};
+      const ErrorDialogProps = {error: new Error("Jest simulate API error.")};
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
     });
   });

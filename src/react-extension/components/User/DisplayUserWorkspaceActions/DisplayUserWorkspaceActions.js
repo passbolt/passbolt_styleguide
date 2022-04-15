@@ -183,7 +183,6 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      title: this.translate("There was an unexpected error..."),
       message: error.message
     };
     this.props.context.setContext({errorDialogProps});
@@ -372,12 +371,10 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   onResendInviteFailure(error) {
     const errorDialogProps = {
-      title: "There was an unexpected error...",
-      message: error.message
+      error: error
     };
     this.toggleMoreMenu();
-    this.props.context.setContext({errorDialogProps});
-    this.props.dialogContext.open(NotifyError);
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**

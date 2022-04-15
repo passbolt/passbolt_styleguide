@@ -176,7 +176,7 @@ class ConfirmPassphrase extends React.Component {
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({passphraseError: this.translate("The passphrase is invalid.")});
     } else {
-      const ErrorDialogProps = {message: error.message};
+      const ErrorDialogProps = {error: error};
       this.props.dialogContext.open(NotifyError, ErrorDialogProps);
     }
   }

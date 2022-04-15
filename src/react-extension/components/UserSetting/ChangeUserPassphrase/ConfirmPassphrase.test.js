@@ -42,6 +42,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should be able to confirm my passphrase', async() => {
+      expect.assertions(3);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Please enter your passphrase to continue');
 
@@ -55,6 +56,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should be able to cancel the confirmation of my passphrase', async() => {
+      expect.assertions(1);
       await page.cancel();
       expect(props.userSettingsContext.onGoToIntroductionPassphraseRequested).toHaveBeenCalled();
     });
@@ -76,7 +78,8 @@ describe("As LU I should see the user confirm passphrase page", () => {
       });
     });
 
-    it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
+      expect.assertions(4);
       expect(page.verifyButton.getAttribute("disabled")).not.toBeNull();
       expect(page.verifyButton.className).toBe('button primary disabled medium');
 
@@ -94,7 +97,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       jest.spyOn(props.userSettingsContext, 'onCheckProvidePassphraseRequested').mockImplementationOnce(mockReject(new PassboltApiFetchError("Jest simulate API error.")));
 
       await page.verify();
-      const ErrorDialogProps = {message: "Jest simulate API error."};
+      const ErrorDialogProps = {error: new Error("Jest simulate API error.")};
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
     });
   });

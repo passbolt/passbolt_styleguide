@@ -43,6 +43,7 @@ describe("As LU I should see the password import dialog", () => {
     });
 
     it('As LU I see a success dialog after importing a file with success', async() => {
+      expect.assertions(9);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Import passwords");
       const file = new File(['test'], 'import.csv', {type: 'csv'});
@@ -96,6 +97,7 @@ describe("As LU I should see the password import dialog", () => {
     });
 
     it('As LU I shouldn’t be able to submit the form if there is an error', async() => {
+      expect.assertions(1);
       const file = new File(['test'], 'import.csv', {type: 'csv'});
       // check fields in the form
       await page.selectImportFile(file);
@@ -114,6 +116,7 @@ describe("As LU I should see the password import dialog", () => {
     });
 
     it('As LU I shouldn’t be able to submit the form if there is an error in kdbx file', async() => {
+      expect.assertions(2);
       const file = new File(['test'], 'import.kdbx', {type: 'kdbx'});
       // check fields in the form
       await page.selectImportFile(file);
@@ -141,34 +144,39 @@ describe("As LU I should see the password import dialog", () => {
     });
 
     it('As LU I can stop importing passwords by clicking on the cancel button', async() => {
+      expect.assertions(1);
       await page.cancelImport();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop importing passwords by closing the dialog', async() => {
+      expect.assertions(1);
       await page.closeDialog();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop importing passwords with the keyboard (escape)', async() => {
+      expect.assertions(1);
       await page.escapeKey();
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(1);
       const file = new File(['test'], 'import.csv', {type: 'csv'});
       // check fields in the form
       await page.selectImportFile(file);
       // Mock the request function to make it return an error.
+      const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Jest simulate API error.");
+        throw error;
       });
 
       await page.submitImport();
       await waitFor(() => {});
 
       // Throw dialog general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 });
