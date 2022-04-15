@@ -632,8 +632,8 @@ class CreateResource extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
+            <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
           </div>
         </form>
       </DialogWrapper>
