@@ -69,24 +69,24 @@ class ApiSetupContextProvider extends React.Component {
       return this.setState({state: ApiSetupContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE});
     }
 
-    await this.verifySetupInfo()
-      .then(this.handleSetupVerifySuccess.bind(this))
-      .catch(this.handleSetupVerifyError.bind(this));
+    await this.startSetup()
+      .then(this.handleStartSetupSuccess.bind(this))
+      .catch(this.handleStartSetupError.bind(this));
   }
 
   /**
-   * When the setup info are valid.
+   * When the setup start succeed.
    * @return {void}
    */
-  handleSetupVerifySuccess() {
+  handleStartSetupSuccess() {
     this.setState({state: ApiSetupContextState.INSTALL_EXTENSION_STATE});
   }
 
   /**
-   * When the setup info didn't validate
+   * When the setup start failed.
    * @return {void}
    */
-  handleSetupVerifyError(error) {
+  handleStartSetupError(error) {
     if (error instanceof PassboltApiFetchError) {
       const isTokenExpired = getPropValue(error, "data.body.token.expired");
       if (isTokenExpired) {
@@ -110,7 +110,7 @@ class ApiSetupContextProvider extends React.Component {
    * Verify the setup information.
    * @returns {Promise<object>}
    */
-  async verifySetupInfo() {
+  async startSetup() {
     const apiClientOptions = this.props.context.getApiClientOptions();
     apiClientOptions.setResourceName("setup");
     const apiClient = new ApiClient(apiClientOptions);

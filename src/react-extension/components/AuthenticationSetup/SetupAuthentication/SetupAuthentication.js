@@ -69,7 +69,7 @@ class SetupAuthentication extends Component {
         />;
       case AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE:
         return <ChooseAccountRecoveryPreference
-          policy={this.props.authenticationSetupContext.setupInfo?.account_recovery_organization_policy?.policy}
+          policy={this.props.authenticationSetupContext.accountRecoveryOrganizationPolicy?.policy}
           onComplete={this.props.authenticationSetupContext.chooseAccountRecoveryPreference}
           canGenerateNewKeyInstead={!this.props.authenticationSetupContext.gpgKeyGenerated}
           onGenerateNewKeyInstead={this.props.authenticationSetupContext.goToGenerateGpgKey}

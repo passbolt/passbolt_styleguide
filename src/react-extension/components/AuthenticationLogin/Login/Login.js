@@ -100,14 +100,14 @@ class Login extends Component {
    */
   get fullname() {
     return this.props.userSettings?.fullName
-      || `${this.props.account?.user?.profile?.first_name} ${this.props.account?.user?.profile?.last_name}`;
+      || `${this.props.account?.first_name} ${this.props.account?.last_name}`;
   }
 
   /**
    * Returns the username
    */
   get username() {
-    return this.props.userSettings?.username || this.props.account?.user?.username;
+    return this.props.userSettings?.username || this.props.account?.username;
   }
 
   /**

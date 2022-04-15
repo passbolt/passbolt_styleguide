@@ -22,7 +22,7 @@ import MockPort from "../../test/mock/MockPort";
  */
 export function defaultAuthenticationSetupAppContext(appContext) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.setup.info", jest.fn(() => ({locale: "fr-FR"})));
+  port.addRequestListener("passbolt.setup.start", jest.fn(() => ({locale: "fr-FR"})));
   port.addRequestListener("passbolt.setup.is-first-install", jest.fn(() => Promise.resolve(false)));
   port.addRequestListener("passbolt.setup.generate-key", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.setup.download-recovery-kit", jest.fn(() => Promise.resolve()));
@@ -55,12 +55,9 @@ export function defaultProps(props) {
  * @returns {object}
  */
 export function withAccountRecoveryEnabled(props) {
-  const setupInfo = {
-    locale: "fr-FR",
-    account_recovery_organization_policy: {
-      policy: "opt-in"
-    }
+  const accountRecoveryOrganizationPolicy = {
+    policy: "opt-in"
   };
-  props.context.port.addRequestListener("passbolt.setup.info", () => Promise.resolve(setupInfo));
+  props.context.port.addRequestListener("passbolt.setup.get-account-recovery-organization-policy", () => Promise.resolve(accountRecoveryOrganizationPolicy));
   return props;
 }

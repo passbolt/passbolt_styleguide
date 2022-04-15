@@ -38,7 +38,6 @@ export const AuthenticationSetupWorkflowStates = {
 export const AuthenticationSetupContext = React.createContext({
   // Workflow data.
   state: null, // The setup workflow current state
-  setupInfo: null, // The setup info
   gpgKeyGenerated: null, // Did the user generate a key?
   error: null, // The current error
 
@@ -84,9 +83,10 @@ export class AuthenticationSetupContextProvider extends React.Component {
     return {
       // Workflow data.
       state: AuthenticationSetupWorkflowStates.LOADING, // The setup workflow current state
-      setupInfo: null, // The setup info
       gpgKeyGenerated: null, // Did the user generate a key?
       error: null, // The current error
+      passphrase: null, // The user passphrase
+      rememberMe: false, // The user remember me choice
 
       // Public workflow mutators.
       goToGenerateGpgKey: this.goToGenerateGpgKey.bind(this), // Whenever the user wants to go to the generate key step.
@@ -109,32 +109,19 @@ export class AuthenticationSetupContextProvider extends React.Component {
   }
 
   /**
-   * Is account recovery organization policy enabled.
-   * @returns {boolean}
-   */
-  get accountRecoveryOrganizationPolicyEnabled() {
-    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
-      return false;
-    }
-    const accountRecoveryOrganizationPolicy = this.state.setupInfo?.account_recovery_organization_policy?.policy;
-    return accountRecoveryOrganizationPolicy && accountRecoveryOrganizationPolicy !== 'disabled';
-  }
-
-  /**
    * Initialize the authentication setup workflow
    * @returns {Promise<void>}
    */
   async initialize() {
     const isFirstInstall = await this.props.context.port.request('passbolt.setup.is-first-install');
     const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
-    const setupInfo = await this.props.context.port.request('passbolt.setup.info');
-    // update the locale to use the user locale
-    this.props.context.onRefreshLocaleRequested(setupInfo.locale);
+    await this.props.context.port.request('passbolt.setup.start');
     // In case of error the background page should just disconnect the extension setup application.
-    await this.setState({
-      state: isFirstInstall && isChromeBrowser ? AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION : AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY,
-      setupInfo,
-    });
+    let state = AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY;
+    if (isFirstInstall && isChromeBrowser) {
+      state = AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION;
+    }
+    await this.setState({state});
   }
 
   /**
@@ -159,6 +146,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       await this.setState({
         state: AuthenticationSetupWorkflowStates.DOWNLOAD_RECOVERY_KIT,
         armored_key: armoredKey,
+        passphrase: passphrase,
         gpgKeyGenerated: true,
       });
     } catch (error) {
@@ -183,11 +171,29 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async handleRecoveryKitDownloaded() {
-    if (this.accountRecoveryOrganizationPolicyEnabled) {
-      await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE});
+    if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
+      const accountRecoveryOrganizationPolicy = await this.props.context.port.request('passbolt.setup.get-account-recovery-organization-policy');
+      await this.setState({
+        state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE,
+        accountRecoveryOrganizationPolicy: accountRecoveryOrganizationPolicy
+      });
     } else {
       await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
     }
+  }
+
+  /**
+   * Is account recovery organization policy enabled.
+   * @returns {Promise<boolean>}
+   */
+  async isAccountRecoveryOrganizationPolicyEnabled() {
+    if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
+      return false;
+    }
+    const accountRecoveryOrganizationPolicy = await this.props.context.port.request('passbolt.setup.get-account-recovery-organization-policy');
+
+    return accountRecoveryOrganizationPolicy
+      && accountRecoveryOrganizationPolicy?.policy !== 'disabled';
   }
 
   /**
@@ -234,11 +240,13 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
       await this.props.context.port.request("passbolt.setup.verify-passphrase", passphrase, rememberMe);
-      if (this.accountRecoveryOrganizationPolicyEnabled) {
-        await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE});
-      } else {
-        await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
-      }
+      this.setState({
+        passphrase: passphrase,
+        rememberMe: rememberMe,
+        state: await this.isAccountRecoveryOrganizationPolicyEnabled()
+          ? AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE
+          : AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN
+      });
     } catch (error) {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
@@ -255,7 +263,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async chooseAccountRecoveryPreference(status) {
     try {
-      await this.props.context.port.request('passbolt.setup.set-account-recovery-user-setting', {status});
+      await this.props.context.port.request('passbolt.setup.set-account-recovery-user-setting', status, this.state.passphrase);
       await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
     } catch (error) {
       await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
@@ -272,6 +280,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.setup.set-security-token", securityTokenDto);
       this.setState({state: AuthenticationSetupWorkflowStates.SIGNING_IN});
       await this.props.context.port.request('passbolt.setup.complete');
+      await this.props.context.port.request("passbolt.setup.sign-in", this.state.passphrase, this.state.rememberMe);
     } catch (error) {
       await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
     }

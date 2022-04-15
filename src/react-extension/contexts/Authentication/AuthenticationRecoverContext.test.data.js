@@ -22,7 +22,7 @@ import MockPort from "../../test/mock/MockPort";
  */
 export function defaultAuthenticationRecoverAppContext(appContext) {
   const port = new MockPort();
-  port.addRequestListener("passbolt.recover.info", jest.fn(() => ({locale: "fr-FR"})));
+  port.addRequestListener("passbolt.recover.start", jest.fn(() => ({locale: "fr-FR"})));
   port.addRequestListener("passbolt.recover.first-install", jest.fn(() => Promise.resolve(false)));
   port.addRequestListener("passbolt.recover.import-key", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.recover.verify-passphrase", jest.fn(() => Promise.resolve()));
@@ -33,6 +33,7 @@ export function defaultAuthenticationRecoverAppContext(appContext) {
   const defaultAuthenticationRecover = {
     port: port,
     onRefreshLocaleRequested: jest.fn(),
+    initLocale: jest.fn(),
   };
   return Object.assign(defaultAppContext(defaultAuthenticationRecover), appContext || {});
 }
@@ -54,14 +55,6 @@ export function defaultProps(props) {
  * @returns {object}
  */
 export function withAccountRecoveryEnabled(props) {
-  const recoverInfo = {
-    locale: "fr-FR",
-    user: {
-      account_recovery_user_setting: {
-        status: "approved"
-      }
-    }
-  };
-  props.context.port.addRequestListener("passbolt.recover.info", () => Promise.resolve(recoverInfo));
+  props.context.port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", () => Promise.resolve(true));
   return props;
 }
