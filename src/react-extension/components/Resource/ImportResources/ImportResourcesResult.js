@@ -262,6 +262,8 @@ class ImportResourcesResult extends Component {
    * Render the component
    */
   render() {
+    const createAndErrorResourcesCount = this.resultCreatedResourcesCount + this.resultErrorsResources.length;
+    const createAndErrorFoldersCount = this.resultCreatedFoldersCount + this.resultErrorsFolders.length;
     return (
       <DialogWrapper
         title={this.resultHasErrors ? this.translate("Something went wrong!") : this.translate("Import success!")}
@@ -277,7 +279,7 @@ class ImportResourcesResult extends Component {
             <>
               <p className="error inline-error"><Trans>There was an issue while importing passwords:</Trans></p>
               <p>
-                <Trans count={this.resultCreatedResourcesCount + this.resultErrorsResources.length}>
+                <Trans count={createAndErrorResourcesCount}>
                   <strong>{{numberResourceSuccess: this.resultCreatedResourcesCount}} out of {{count: this.resultCreatedResourcesCount + this.resultErrorsResources.length}}</strong> password has been imported.
                 </Trans>
               </p>
@@ -292,7 +294,7 @@ class ImportResourcesResult extends Component {
             <>
               <p className="error inline-error"><Trans>There was an issue while importing folders:</Trans></p>
               <p>
-                <Trans count={this.resultCreatedFoldersCount + this.resultErrorsFolders.length}>
+                <Trans count={createAndErrorFoldersCount}>
                   <strong>{{numberFolderSuccess: this.resultCreatedFoldersCount}} out of {{count: this.resultCreatedFoldersCount + this.resultErrorsFolders.length}}</strong> folder has been imported.
                 </Trans>
               </p>
