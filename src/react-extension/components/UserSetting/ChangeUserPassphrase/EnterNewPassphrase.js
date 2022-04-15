@@ -252,7 +252,7 @@ class EnterNewPassphrase extends React.Component {
    */
   async onGpgKeyGeneratedFailure(error) {
     await this.toggleProcessing();
-    const ErrorDialogProps = {message: error.message};
+    const ErrorDialogProps = {error: error};
     this.props.dialogContext.open(NotifyError, ErrorDialogProps);
   }
 

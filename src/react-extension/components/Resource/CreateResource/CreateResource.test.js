@@ -49,6 +49,7 @@ describe("See the Create Resource", () => {
     });
 
     it('matches the styleguide', () => {
+      expect.assertions(18);
       // Dialog title exists and correct
       expect(page.passwordCreate.exists()).toBeTruthy();
       expect(page.title.header.textContent).toBe("Create a password");
@@ -91,6 +92,7 @@ describe("See the Create Resource", () => {
     });
 
     it('generates password when clicking on the generate button.', async() => {
+      expect.assertions(2);
       page.passwordCreate.focusInput(page.passwordCreate.password);
       await page.passwordCreate.click(page.passwordCreate.passwordGenerateButton);
       expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
@@ -98,6 +100,7 @@ describe("See the Create Resource", () => {
     });
 
     it('views password when clicking on the view button.', async() => {
+      expect.assertions(6);
       const passwordValue = "secret-decrypted";
       page.passwordCreate.fillInput(page.passwordCreate.password, passwordValue);
       // View password
@@ -116,6 +119,7 @@ describe("See the Create Resource", () => {
     });
 
     it('requests the addon to create a resource with encrypted description when clicking on the submit button.', async() => {
+      expect.assertions(7);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
@@ -158,6 +162,7 @@ describe("See the Create Resource", () => {
     });
 
     it('requests the addon to create a resource with non encrypted description when clicking on the submit button.', async() => {
+      expect.assertions(7);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
@@ -203,6 +208,7 @@ describe("See the Create Resource", () => {
     });
 
     it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+      expect.assertions(3);
       expect(page.passwordCreate.exists()).toBeTruthy();
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
@@ -212,6 +218,7 @@ describe("See the Create Resource", () => {
     });
 
     it('As LU I can stop createing a password by clicking on the cancel button', async() => {
+      expect.assertions(2);
       expect(page.passwordCreate.exists()).toBeTruthy();
       await page.passwordCreate.click(page.passwordCreate.cancelButton);
       expect(props.onClose).toBeCalled();
@@ -244,40 +251,46 @@ describe("See the Create Resource", () => {
     });
 
     it('As LU I can stop createing a password by closing the dialog', async() => {
+      expect.assertions(2);
       expect(page.passwordCreate.exists()).toBeTruthy();
       await page.passwordCreate.click(page.passwordCreate.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop adding a password with the keyboard (escape)', async() => {
+      expect.assertions(2);
       expect(page.passwordCreate.exists()).toBeTruthy();
       await page.passwordCreate.escapeKey(page.passwordCreate.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(1);
       // Mock the request function to make it return an error.
       page.passwordCreate.fillInput(page.passwordCreate.name, "name");
       page.passwordCreate.fillInput(page.passwordCreate.password, "password");
 
+      const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Jest simulate API error.");
+        throw error;
       });
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
       // Throw general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
 
     it('As LU I should access to the password generator dialog', async() => {
+      expect.assertions(1);
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
       await page.passwordCreate.openPasswordGenerator();
       expect(props.dialogContext.open).toBeCalled();
     });
 
     it('As LU I should access to the password generator dialog', async() => {
+      expect.assertions(1);
       await page.passwordCreate.openPasswordGenerator();
       expect(page.passwordCreate.passwordGeneratorDialog).not.toBeNull();
     });

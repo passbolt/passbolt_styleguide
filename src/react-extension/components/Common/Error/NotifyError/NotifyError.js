@@ -14,7 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogCloseButton from "../../Dialog/DialogCloseButton/DialogCloseButton";
-import {withAppContext} from "../../../../contexts/AppContext";
+import {withTranslation, Trans} from "react-i18next";
+import Icon from "../../../Common/Icons/Icon";
 
 class NotifyError extends Component {
   /**
@@ -23,7 +24,14 @@ class NotifyError extends Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindCallbacks();
+  }
+
+  get defaultState() {
+    return {
+      showErrorDetails: false
+    };
   }
 
   /**
@@ -32,6 +40,7 @@ class NotifyError extends Component {
    */
   bindCallbacks() {
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleErrorDetailsToggle = this.handleErrorDetailsToggle.bind(this);
   }
 
   /**
@@ -57,8 +66,9 @@ class NotifyError extends Component {
    * @returns {String|string} return default if string is empty
    */
   getTitle() {
-    const contextTitle = this.props.context.errorDialogProps && this.props.context.errorDialogProps.title;
-    return contextTitle || this.props.title ||  NotifyError.defaultProps.title;
+    return this.props.title
+      ? this.props.title
+      : this.translate("There was an unexpected error...");
   }
 
   /**
@@ -66,8 +76,7 @@ class NotifyError extends Component {
    * @returns {String|string} return default if string is empty
    */
   getMessage() {
-    const contextMessage = this.props.context.errorDialogProps && this.props.context.errorDialogProps.message;
-    return contextMessage || this.props.message ||  NotifyError.defaultProps.message;
+    return this.props.error.message;
   }
 
   /**
@@ -81,6 +90,40 @@ class NotifyError extends Component {
       event.stopPropagation();
       this.props.onClose();
     }
+  }
+
+  /**
+   * Handle toggling display of error details.
+   */
+  handleErrorDetailsToggle() {
+    this.setState({
+      showErrorDetails: !this.state.showErrorDetails
+    });
+  }
+
+  /**
+   * Returns true if the error embed some details to be displayed.
+   * It is the case when the field `details` is set or if there is a field `data` with an non-empty `body` property.
+   */
+  get hasErrorDetails() {
+    return Boolean(this.props.error.data?.body) || Boolean(this.props.error.details);
+  }
+
+  /**
+   * Get the translate function
+   * @returns {function(...[*]=)}
+   */
+  get translate() {
+    return this.props.t;
+  }
+
+  /**
+   * Format the error details as a string.
+   * @returns {string}
+   */
+  formatErrors() {
+    const errorMessage = this.props.error?.details || this.props.error?.data;
+    return JSON.stringify(errorMessage, null, 4);
   }
 
   /**
@@ -98,6 +141,31 @@ class NotifyError extends Component {
           <div className="dialog-content">
             <div className="form-content">
               <p>{this.getMessage()}</p>
+              {this.hasErrorDetails &&
+                <div className="accordion error-details">
+                  <div className="accordion-header">
+                    <a onClick={this.handleErrorDetailsToggle}>
+                      <Trans>Error details</Trans>
+                      <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
+                    </a>
+                  </div>
+                  {this.state.showErrorDetails &&
+                    <div className="accordion-content">
+                      <div className="input text">
+                        <label
+                          htmlFor="js_field_debug"
+                          className="visuallyhidden">
+                          <Trans>Error details</Trans>
+                        </label>
+                        <textarea
+                          id="js_field_debug"
+                          defaultValue={this.formatErrors()}
+                          readOnly />
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
             </div>
             <div className="submit-wrapper clearfix">
               <a className="button primary warning" onClick={this.props.onClose}>Ok</a>
@@ -109,16 +177,11 @@ class NotifyError extends Component {
   }
 }
 
-NotifyError.defaultProps = {
-  title: "Oops something went wrong.",
-  message: "An internal error occurred, please try again later."
-};
-
 NotifyError.propTypes = {
-  context: PropTypes.any, // The application context
-  title: PropTypes.string,
-  message: PropTypes.string,
-  onClose: PropTypes.func
+  title: PropTypes.string, // The title to display in the header
+  error: PropTypes.object.isRequired, // The error object to handle in the dialog
+  onClose: PropTypes.func, // The close callback
+  t: PropTypes.func // the translation function
 };
 
-export default withAppContext(NotifyError);
+export default withTranslation("common")(NotifyError);

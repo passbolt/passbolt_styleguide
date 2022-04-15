@@ -36,6 +36,7 @@ describe("Move Folder", () => {
 
   describe('As LU I should move a folder', () => {
     it('As System I should send a move request with the change permission option by default', async() => {
+      expect.assertions(1);
       const expectedParameters =  ["some request id", "SUCCESS", {moveOption: "change"}];
       jest.spyOn(context.port, 'emit').mockImplementationOnce(() => {});
       await page.move('change');
@@ -43,6 +44,7 @@ describe("Move Folder", () => {
     });
 
     it('As System I should send a move request with the keep permissions option', async() => {
+      expect.assertions(1);
       const expectedParameters =  ["some request id", "SUCCESS", {moveOption: "keep"}];
       jest.spyOn(context.port, 'emit').mockImplementationOnce(() => {});
       await page.move('keep');
@@ -50,6 +52,7 @@ describe("Move Folder", () => {
     });
 
     it('As LU I should see the close of the dialog', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'emit').mockImplementationOnce(() => {});
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.move('change');
@@ -59,25 +62,25 @@ describe("Move Folder", () => {
 
   describe('As LU I should be informed when the folder move failed', () => {
     it('AS LU I should see the error message when the folder move failed', async() => {
-      const error = {message: "Some error message"};
-      const dialogErrorProps = {errorDialogProps: {title: "There was an unexpected error...", message: error.message}};
+      expect.assertions(1);
+      const error = new Error("Some error message");
       jest.spyOn(context.port, 'emit').mockImplementationOnce(() => Promise.reject(error));
-      jest.spyOn(context, 'setContext').mockImplementationOnce(jest.fn());
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
       await page.move('change');
-      expect(context.setContext).toHaveBeenCalledWith(dialogErrorProps);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 
   describe('AS LU I should cancel the operation', () => {
     it('AS LU I should cancel the operation by closing the dialog', async() => {
+      expect.assertions(1);
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.close();
       expect(props.onClose).toHaveBeenCalled();
     });
 
     it('AS LU I should cancel the operation by explicitely cancelling', async() => {
+      expect.assertions(1);
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.cancel();
       expect(props.onClose).toHaveBeenCalled();
@@ -86,6 +89,7 @@ describe("Move Folder", () => {
 
   describe('AS LU I should not perform actions during the folder creation', () => {
     it('AS LU I should not cancel during the folder move', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canCancel).toBeFalsy();
@@ -94,6 +98,7 @@ describe("Move Folder", () => {
     });
 
     it('AS LU I should not close during the folder move', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canClose).toBeFalsy();
@@ -102,6 +107,7 @@ describe("Move Folder", () => {
     });
 
     it('AS LU I should not change data during the folder move', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canChangeData).toBeFalsy();
@@ -110,6 +116,7 @@ describe("Move Folder", () => {
     });
 
     it('AS LU I should not re-submit during the folder move', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canSubmit).toBeFalsy();

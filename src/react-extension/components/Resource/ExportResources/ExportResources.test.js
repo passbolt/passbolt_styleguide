@@ -43,6 +43,7 @@ describe("As LU I should see the password export dialog", () => {
     });
 
     it('As LU I see a success toaster after exporting resources in csv with success', async() => {
+      expect.assertions(6);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Export passwords");
 
@@ -69,6 +70,7 @@ describe("As LU I should see the password export dialog", () => {
     });
 
     it('As LU I see a export resources credential dialog after exporting resources in kdbx with success', async() => {
+      expect.assertions(4);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe("Export passwords");
 
@@ -104,36 +106,41 @@ describe("As LU I should see the password export dialog", () => {
     });
 
     it('As LU I can stop exporting passwords by clicking on the cancel button', async() => {
+      expect.assertions(2);
       await page.cancelExport();
       expect(props.resourceWorkspaceContext.onResourcesToExport).toHaveBeenCalledWith({resourcesIds: null, foldersIds: null});
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop exporting passwords by closing the dialog', async() => {
+      expect.assertions(2);
       await page.closeDialog();
       expect(props.resourceWorkspaceContext.onResourcesToExport).toHaveBeenCalledWith({resourcesIds: null, foldersIds: null});
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I can stop exporting passwords with the keyboard (escape)', async() => {
+      expect.assertions(2);
       await page.escapeKey();
       expect(props.resourceWorkspaceContext.onResourcesToExport).toHaveBeenCalledWith({resourcesIds: null, foldersIds: null});
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(1);
       // Fill the form
       await page.selectFormat('csv-lastpass');
       // Mock the request function to make it return an error.
+      const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Jest simulate API error.");
+        throw error;
       });
 
       await page.submitExport();
       await waitFor(() => {});
 
       // Throw dialog general error message
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 });

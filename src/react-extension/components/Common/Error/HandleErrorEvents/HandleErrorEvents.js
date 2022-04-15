@@ -42,9 +42,8 @@ class HandleErrorEvents extends React.Component {
    * @param message The error message
    */
   handleErrorDialogOpenEvent(title, message) {
-    const errorDialogProps = {title: title, message: message};
-    this.props.dialogContext.setContext({errorDialogProps});
-    this.props.dialogContext.open(NotifyError);
+    const errorDialogProps = {title: title, error: new Error(message)};
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**

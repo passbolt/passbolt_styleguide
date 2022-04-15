@@ -18,7 +18,9 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../contexts/AppContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {DateTime} from "luxon";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -82,9 +84,22 @@ class ReviewAccountRecoveryRequest extends Component {
       await this.toggleProcessing();
       this.props.onClose();
     } catch (error) {
-      await this.props.onError(error);
       await this.toggleProcessing();
+      //@todo unify unexpected error management: the error should be handle by the workflow proposing the callback prop
+      this.onUnexpectedError(error);
     }
+  }
+
+  /**
+   * Whenever an unexpected error occured
+   * @param {object} error The error
+   * @returns {Promise<void>}
+   */
+  onUnexpectedError(error) {
+    const errorDialogProps = {
+      error: error
+    };
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
 
   /**
@@ -262,10 +277,10 @@ class ReviewAccountRecoveryRequest extends Component {
 ReviewAccountRecoveryRequest.propTypes = {
   context: PropTypes.any.isRequired, // The application context
   accountRecoveryRequest: PropTypes.object.isRequired, // The account recovery request to review.
+  dialogContext: PropTypes.object, // The dialog handler
   onClose: PropTypes.func, // The close callback
   onCancel: PropTypes.func, // The cancel callback
   onSubmit: PropTypes.func, // The review submit requested callback
-  onError: PropTypes.func, // The review error requested callback
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation("common")(ReviewAccountRecoveryRequest));
+export default withAppContext(withDialog(withTranslation("common")(ReviewAccountRecoveryRequest)));

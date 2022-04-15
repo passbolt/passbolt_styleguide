@@ -21,6 +21,7 @@ describe("As AD I should edit the subscription key", () => {
   it('As AD I should be able to paste my subscription key', async() => {
     const expectedPrivateKey = 'Some subscription key';
     await page.fill(expectedPrivateKey);
+    expect.assertions(1);
     expect(page.subscriptionKey).toBe(expectedPrivateKey);
   });
 
@@ -35,6 +36,7 @@ describe("As AD I should edit the subscription key", () => {
     };
     await page.fill("some subscription key");
     await page.updateKey(inProgressFn);
+    expect.assertions(5);
     expect(props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested).toHaveBeenCalled();
     expect(verifyResolve).toBeDefined();
   });
@@ -47,6 +49,7 @@ describe("As AD I should edit the subscription key", () => {
       expect(page.saveButtonIsProcessing).toBeTruthy();
       verifyResolve();
     };
+    expect.assertions(5);
     await page.fill("some subscription key");
     await page.updateKey(inProgressFn);
     expect(props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested).toHaveBeenCalled();
@@ -58,6 +61,7 @@ describe("As AD I should edit the subscription key", () => {
     const emptyPrivateKey = ' ';
     await page.fill(emptyPrivateKey);
     await page.updateKey();
+    expect.assertions(2);
     expect(page.hasSubscriptionKeyError).toBeTruthy();
     expect(page.subscriptionKeyErrorMessage).toBe("A subscription key is required.");
   });
@@ -67,6 +71,7 @@ describe("As AD I should edit the subscription key", () => {
     jest.spyOn(props.administrationWorkspaceContext, 'onUpdateSubscriptionKeyRequested').mockImplementationOnce(() => Promise.reject(expectedError));
     await page.fill('Some subscription key');
     await page.updateKey();
+    expect.assertions(2);
     expect(page.hasSubscriptionKeyError).toBeTruthy();
     expect(page.subscriptionKeyErrorMessage).toBe("The key is invalid.");
   });
@@ -76,16 +81,18 @@ describe("As AD I should edit the subscription key", () => {
     jest.spyOn(props.administrationWorkspaceContext, 'onUpdateSubscriptionKeyRequested').mockImplementationOnce(() => Promise.reject(expectedError));
     await page.fill('Some subscription key');
     await page.updateKey();
+    expect.assertions(2);
     expect(page.hasSubscriptionKeyError).toBeTruthy();
     expect(page.subscriptionKeyErrorMessage).toBe("The subscription key is invalid.");
   });
 
   it('As AD I should see an error if the submission failed for an unexpected reason', async() => {
-    const expectedError = {message: 'Some error'};
-    jest.spyOn(props.administrationWorkspaceContext, 'onUpdateSubscriptionKeyRequested').mockImplementationOnce(() => Promise.reject(expectedError));
+    const error = new Error('Some error');
+    jest.spyOn(props.administrationWorkspaceContext, 'onUpdateSubscriptionKeyRequested').mockImplementationOnce(() => Promise.reject(error));
     jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
     await page.fill('Some subscription key');
     await page.updateKey();
-    expect(props.dialogContext.open).toBeCalledWith(NotifyError);
+    expect.assertions(1);
+    expect(props.dialogContext.open).toBeCalledWith(NotifyError, {error: error});
   });
 });

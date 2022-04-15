@@ -36,6 +36,7 @@ describe("Rename Folder", () => {
 
   describe('As LU I should rename a folder', () => {
     it('As System I should send a rename request', async() => {
+      expect.assertions(1);
       const expectedParameters =  ["passbolt.folders.update", {id: "some folder id", name: "My super folder"}];
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       await page.rename({name: 'My super folder'});
@@ -43,6 +44,7 @@ describe("Rename Folder", () => {
     });
 
     it('As LU I should see a success message when I successfully renamed a folder', async() => {
+      expect.assertions(1);
       const expectedMessage = "The folder was renamed successfully";
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(jest.fn());
@@ -51,6 +53,7 @@ describe("Rename Folder", () => {
     });
 
     it('As LU I should see the renamed folder as selected and scrolled', async() => {
+      expect.assertions(1);
       const folderId = 'some folder id';
       const expectedParameters = ["passbolt.folders.select-and-scroll-to", folderId];
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: folderId}));
@@ -60,6 +63,7 @@ describe("Rename Folder", () => {
     });
 
     it('As LU I should see the close of the dialog', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.rename({name: 'My super folder'});
@@ -69,11 +73,13 @@ describe("Rename Folder", () => {
 
   describe('As LU I should input appropriate data to rename a folder', () => {
     it('AS LU I should not fill an empty folder name', async() => {
+      expect.assertions(1);
       await page.rename({name: ''});
       expect(page.hasInvalidName).toBeTruthy();
     });
 
     it('AS LU I should not fill a folder name longer than 64 characters', async() => {
+      expect.assertions(1);
       await page.rename({name: '1111111111 1111111111 1111111111 1111111111 1111111111 1111111111 1111'});
       expect(page.hasInvalidName).toBeTruthy();
     });
@@ -81,6 +87,7 @@ describe("Rename Folder", () => {
 
   describe('As LU I should be informed when the folder rename failed', () => {
     it('AS LU I should stays on the dialog if the user have not input the passphrase', async() => {
+      expect.assertions(1);
       const error = {name: "UserAbortsOperationError"};
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
       jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(jest.fn());
@@ -89,25 +96,25 @@ describe("Rename Folder", () => {
     });
 
     it('AS LU I should see the error message when the folder rename failed', async() => {
+      expect.assertions(1);
       const error = {message: "Some error message"};
-      const dialogErrorProps = {errorDialogProps: {title: "There was an unexpected error...", message: error.message}};
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
-      jest.spyOn(context, 'setContext').mockImplementationOnce(jest.fn());
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
       await page.rename({name: 'My super folder'});
-      expect(context.setContext).toHaveBeenCalledWith(dialogErrorProps);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 
   describe('AS LU I should cancel the operation', () => {
     it('AS LU I should cancel the operation by closing the dialog', async() => {
+      expect.assertions(1);
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.close();
       expect(props.onClose).toHaveBeenCalled();
     });
 
     it('AS LU I should cancel the operation by explicitely cancelling', async() => {
+      expect.assertions(1);
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.cancel();
       expect(props.onClose).toHaveBeenCalled();
@@ -116,6 +123,7 @@ describe("Rename Folder", () => {
 
   describe('AS LU I should not perform actions during the folder rename', () => {
     it('AS LU I should not cancel during the folder rename', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canCancel).toBeFalsy();
@@ -124,6 +132,7 @@ describe("Rename Folder", () => {
     });
 
     it('AS LU I should not close during the folder rename', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canClose).toBeFalsy();
@@ -132,6 +141,7 @@ describe("Rename Folder", () => {
     });
 
     it('AS LU I should not change data during the folder rename', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canChangeData).toBeFalsy();
@@ -140,6 +150,7 @@ describe("Rename Folder", () => {
     });
 
     it('AS LU I should not re-submit during the folder rename', async() => {
+      expect.assertions(1);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canSubmit).toBeFalsy();

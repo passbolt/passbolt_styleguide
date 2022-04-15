@@ -37,7 +37,6 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         accountRecoveryRequest: accountRecoveryRequest,
         onCancel: page._instance.handleCancelDialog,
         onSubmit: page._instance.reviewAccountRecoveryRequest,
-        onError: page._instance.handleError
       };
       expect(props.dialogContext.open).toHaveBeenCalledWith(ReviewAccountRecovery, accountRecoveryReviewProps);
     });
@@ -53,7 +52,6 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         accountRecoveryRequest: accountRecoveryRequest,
         onCancel: page._instance.handleCancelDialog,
         onSubmit: page._instance.reviewAccountRecoveryRequest,
-        onError: page._instance.handleError
       };
       expect(props.dialogContext.open).toHaveBeenCalledWith(ReviewAccountRecovery, accountRecoveryReviewProps);
     });
@@ -65,7 +63,6 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       const provideOrganizationKeyProps = {
         onCancel: page._instance.handleCancelDialog,
         onSubmit: page._instance.handleSave,
-        onError: page._instance.handleError
       };
       expect(props.dialogContext.open).toHaveBeenNthCalledWith(2, ProvideAccountRecoveryOrganizationKey, provideOrganizationKeyProps);
     });

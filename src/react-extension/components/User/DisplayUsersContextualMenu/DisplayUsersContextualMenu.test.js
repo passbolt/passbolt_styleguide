@@ -42,6 +42,7 @@ describe("Display Users Contextual Menu", () => {
   props.hide = jest.fn();
 
   it("As LU I should copy an user permalink", async() => {
+    expect.assertions(3);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -55,6 +56,7 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should copy an user public key", async() => {
+    expect.assertions(3);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -69,6 +71,7 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should copy an user email address", async() => {
+    expect.assertions(3);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -82,12 +85,14 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should not edit an user if I don't have the capability to do it", async() => {
+    expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutEdit(), props);
     await waitFor(() => {});
     expect(page.canEdit).toBeFalsy();
   });
 
   it("As LU I should edit an user if I have the capability to do it", async() => {
+    expect.assertions(4);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -106,12 +111,14 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should not resend an invite to an user if I don't have the capability to do it", async() => {
+    expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutEdit(), props);
     await waitFor(() => {});
     expect(page.canResendInvite).toBeFalsy();
   });
 
   it("As LU I should resend an invite to an user if I have the capability to do it", async() => {
+    expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -125,6 +132,7 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should not disable an user MFA if I don't have the capability to do it", async() => {
+    expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutDisableMFA(), props);
     await waitFor(() => {});
 
@@ -132,6 +140,7 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should disable an user MFA if I have the capability to do it", async() => {
+    expect.assertions(3);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -147,12 +156,14 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should not  delete an user if I don't have the capability to do it", async() => {
+    expect.assertions(1);
     page = new DisplayUsersContextualMenuPage(contextWithoutDelete(), props);
     await waitFor(() => {});
     expect(page.canDelete).toBeFalsy();
   });
 
   it("As LU I should delete an user if I have the capability to do it", async() => {
+    expect.assertions(5);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -172,21 +183,22 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it('As LU I should see an error message if the delete went wrong', async() => {
+    expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
     const error = {message: 'some error'};
-    const errorDialogProps = {title: "There was an unexpected error...", message: error.message};
+    const errorDialogProps = {error: error};
     jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject({message: error.message}));
 
     await page.delete();
 
     expect(context.port.request).toHaveBeenLastCalledWith("passbolt.users.delete-dry-run", "640ebc06-5ec1-5322-a1ae-6120ed2f3a74");
-    expect(context.setContext).toHaveBeenLastCalledWith({errorDialogProps});
-    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+    expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, errorDialogProps);
   });
 
   it('As LU I should see an delete dry error message if the delete request has a delete dry error', async() => {
+    expect.assertions(2);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
@@ -200,6 +212,7 @@ describe("Display Users Contextual Menu", () => {
   });
 
   it("As LU I should review an account recovery of a user if I have the capability to do it", async() => {
+    expect.assertions(3);
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 

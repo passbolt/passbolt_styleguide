@@ -75,14 +75,11 @@ describe("Delete Folder", () => {
     });
 
     it('AS LU I should see the error message when the folder deletion failed', async() => {
-      const error = {message: "Some error message"};
-      const dialogErrorProps = {errorDialogProps: {title: "There was an unexpected error...", message: error.message}};
+      const error = new Error("Some error message");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
-      jest.spyOn(context, 'setContext').mockImplementationOnce(jest.fn());
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
       await page.delete(false);
-      expect(context.setContext).toHaveBeenCalledWith(dialogErrorProps);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
   });
 
