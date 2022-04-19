@@ -20,6 +20,7 @@ import {withActionFeedback} from "./ActionFeedbackContext";
 import {withLoading} from "./LoadingContext";
 import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
 import {DateTime} from "luxon";
+import debounce from "debounce-promise";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -87,6 +88,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.initializeProperties();
+
+    /*
+     * Execute first request to refresh users, groups, etc. then wait 10sec to trigger next one
+     * E.g. Only perform two populate max per 10 sec
+     */
+    this.populateDebounced = debounce(this.populate, 10000, {leading: true, accumulate: false});
   }
 
   /**
@@ -152,7 +159,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    this.populate();
+    this.populateDebounced();
     this.handleResourcesWaitedFor();
   }
 
@@ -178,8 +185,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
       if (isNotNonePreviousFilter) {
-        await this.populate();
         await this.unselectAll();
+        await this.populateDebounced();
       }
     }
   }
