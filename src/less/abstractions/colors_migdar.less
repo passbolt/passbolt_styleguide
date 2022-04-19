@@ -62,6 +62,9 @@
 @eerie-black-3: #1C1C1C;
 @eerie-black-4: #1F1F1F;
 @charleston-green: #2C2C2C;
+@davys-grey: #575757;
+@granite-gray-2: #616161;
+@onyx: #383838;
 @chinese-black-2: #111111;
 @philippine-silver: #B1B1B1;
 @azureish-white: #DDEBF8;
@@ -74,6 +77,7 @@
 @background-lightest: @midgar-5;
 @background-header-first: @eerie-black-3;
 @background-header-second: @charleston-green;
+@background-footer: @charleston-green;
 
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
@@ -116,6 +120,7 @@
 @font-dropdown-focus: @white;
 @font-tooltip: @white;
 @font-drag: @white;
+@font-hover-secret: @red;
 
 /* dialog */
 @dialog-background: @midgar-4;
@@ -253,11 +258,13 @@
 @passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
 
 /* grid */
-@tableview-background: @midgar-2;
-@tableview-background-selected: darken(@blue, 30);
-@tableview-background-hover: @midgar-4;
-@tableview-header-background: @midgar-4;
-@breadcrumb-background: @midgar-3;
+@tableview-background: @raisin-black;
+@tableview-background-even: @eerie-black-3;
+@tableview-background-hover: @onyx;
+@tableview-background-selected: @davys-grey;
+@tableview-header-background: @black-olive;
+@tableview-shadow: @granite-gray-2;
+@breadcrumb-background: @midgar-4;
 
 /* messages */
 @message-error-color: @blacker;
@@ -279,6 +286,7 @@
 
 /* sidebar */
 @panel-background: #353532;
+@panel-middle-background: @midgar-4;
 @sidebar-background: @midgar-4;
 @sidebar-border: @border-lightest;
 @sidebar-section-background: @midgar-4;

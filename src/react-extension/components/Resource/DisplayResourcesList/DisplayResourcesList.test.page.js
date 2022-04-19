@@ -106,12 +106,12 @@ export default class DisplayResourcesListPage {
         await waitFor(() => {});
       },
       async selectWithCheckbox() {
-        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell');
+        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell input');
         fireEvent.click(checkbox, leftClick);
         await waitFor(() => {});
       },
       async selectRangeCheckbox() {
-        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell');
+        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell input');
         fireEvent.click(checkbox, {button: 0, shiftKey: true});
         await waitFor(() => {});
       },

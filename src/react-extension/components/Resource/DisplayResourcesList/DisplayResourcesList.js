@@ -163,8 +163,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   async handleCheckboxWrapperClick(event, resource) {
-    // Prevent event fired twice due to the input + label
-    event.preventDefault();
     /*
      * We want the td to extend the clickable area of the checkbox.
      * If we propagate the event, the tr will listen to the click and select only the clicked row.
@@ -543,21 +541,18 @@ class DisplayResourcesList extends React.Component {
         onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
         onDragStart={event => this.handleDragStartEvent(event, resource)}
         onDragEnd={event => this.handleDragEndEvent(event, resource)}>
-        <td className="cell-multiple-select selections s-cell"
-          onClick={ev => this.handleCheckboxWrapperClick(ev, resource)}>
+        <td className="cell-multiple-select selections s-cell">
           <div className="ready">
             <div className="input checkbox">
-              <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true}/>
-              <label htmlFor={`checkbox_multiple_select_checkbox_${resource.id}`}>
-                <span className="visually-hidden"><Trans>Select resource</Trans></span>
-              </label>
+              <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true} onClick={ev => this.handleCheckboxWrapperClick(ev, resource)}/>
+              <span className="visually-hidden"><Trans>Select resource</Trans></span>
             </div>
           </div>
         </td>
         <td className="cell-favorite selections s-cell">
           <div className="ready">
             <a className={`no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
-              <Icon baseline={true} name="star"/>
+              <Icon name="star"/>
               <span className="visuallyhidden">fav</span>
             </a>
           </div>
@@ -583,11 +578,10 @@ class DisplayResourcesList extends React.Component {
             </a>
           </div>
           {this.canUsePreviewPassword &&
-          <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)}
-            className={`password-view button button-icon button-toggle ${this.isPasswordPreviewed(resource.id) ? "selected" : ""}`}>
-            <Icon name='eye-open' baseline={true}/>
-            <span className="visually-hidden">view</span>
-          </a>
+            <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button button-icon">
+              <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
+              <span className="visually-hidden">view</span>
+            </a>
           }
         </td>
         <td className="cell-uri l-cell">
@@ -688,21 +682,21 @@ class DisplayResourcesList extends React.Component {
                           name="select all"
                           checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
-                        <label htmlFor="passwords-select-all">
-                          <span className="visually-hidden">select all</span>
-                        </label>
+                        <span className="visually-hidden">select all</span>
                       </div>
                     </th>
                     <th className="cell-favorite selections s-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav">
-                        <Icon baseline={true} name="star"/>
+                        <Icon name="star"/>
                         <span className="visuallyhidden">fav</span>
-                        {this.isSortedColumn("favorite") && this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-up"/>
-                        }
-                        {this.isSortedColumn("favorite") && !this.isSortedAsc() &&
-                        <Icon baseline={true} name="caret-down"/>
-                        }
+                        <span className="cell-header-icon-sort">
+                          {this.isSortedColumn("favorite") && this.isSortedAsc() &&
+                          <Icon name="ascending"/>
+                          }
+                          {this.isSortedColumn("favorite") && !this.isSortedAsc() &&
+                          <Icon name="descending"/>
+                          }
+                        </span>
                       </a>
                     </th>
                     <th className="cell-name m-cell sortable">
@@ -713,10 +707,10 @@ class DisplayResourcesList extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("name") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -730,10 +724,10 @@ class DisplayResourcesList extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("username") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -754,10 +748,10 @@ class DisplayResourcesList extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("uri") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("uri") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -771,10 +765,10 @@ class DisplayResourcesList extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
