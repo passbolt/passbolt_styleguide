@@ -203,41 +203,15 @@ class ImportGpgKey extends Component {
       return;
     }
 
-    let isMalformedArmored = false;
-    let keyInfo;
-    try {
-      keyInfo = await this.props.context.port.request("passbolt.keyring.get-key-info", privateKey);
-    } catch (e) {
-      isMalformedArmored = true;
-    }
-
     let invalidPrivateKey = false;
     let errorMessage = "";
-    if (isMalformedArmored) {
+    try {
+      await this.props.validatePrivateGpgKey(privateKey);
+    } catch (e) {
       invalidPrivateKey = true;
-      errorMessage = this.translate("The private key should be a valid armored GPG key.");
-    } else if (keyInfo.revoked) {
-      invalidPrivateKey = true;
-      errorMessage = this.translate("The private key should not be revoked.");
-    } else if (this.isKeyExpired(keyInfo)) {
-      invalidPrivateKey = true;
-      errorMessage = this.translate("The private key should not be expired.");
+      errorMessage = e.message;
     }
     this.setState({hasBeenValidated: true, errors: {invalidPrivateKey}, errorMessage});
-  }
-
-  /**
-   * Returns true if the given key info is expired
-   * @returns {boolean}
-   */
-  isKeyExpired(keyInfo) {
-    const expires = keyInfo.expires;
-    if (expires === "Never") {
-      return false;
-    }
-    const now = Date.now();
-    const expirationDate = new Date(expires);
-    return expirationDate < now;
   }
 
   /**
@@ -325,17 +299,18 @@ class ImportGpgKey extends Component {
 }
 
 ImportGpgKey.defaultProps = {
-  displayAs: ImportGpgKeyVariations.SETUP
+  displayAs: ImportGpgKeyVariations.SETUP,
 };
 
 ImportGpgKey.propTypes = {
   context: PropTypes.object, // The application context
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to import its gpg key
-  displayAs: PropTypes.PropTypes.oneOf([
+  displayAs: PropTypes.oneOf([
     ImportGpgKeyVariations.SETUP,
     ImportGpgKeyVariations.RECOVER
   ]), // Defines how the form should be displayed and behaves
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
+  validatePrivateGpgKey: PropTypes.func, // The callback to check the validity of the gpg key
 };
 export default withAppContext(withTranslation('common')(ImportGpgKey));

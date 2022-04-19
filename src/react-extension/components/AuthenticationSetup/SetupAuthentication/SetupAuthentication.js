@@ -59,6 +59,7 @@ class SetupAuthentication extends Component {
           displayAs={ImportGpgKeyVariations.SETUP}
           onComplete={this.props.authenticationSetupContext.importGpgKey}
           onSecondaryActionClick={this.props.authenticationSetupContext.goToGenerateGpgKey}
+          validatePrivateGpgKey={this.props.authenticationSetupContext.validatePrivateKey}
         />;
       case AuthenticationSetupWorkflowStates.VALIDATE_PASSPHRASE:
         return <CheckPassphrase

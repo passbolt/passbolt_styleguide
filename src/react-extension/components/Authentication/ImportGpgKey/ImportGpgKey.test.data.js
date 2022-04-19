@@ -27,7 +27,8 @@ export function defaultProps(props) {
       port: {
         request: jest.fn(async() => ({}))
       }
-    }
+    },
+    validatePrivateGpgKey: jest.fn()
   };
   return Object.assign(defaultProps, props || {});
 }
