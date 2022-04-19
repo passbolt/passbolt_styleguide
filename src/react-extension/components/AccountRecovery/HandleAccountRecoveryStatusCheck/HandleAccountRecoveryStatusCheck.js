@@ -13,6 +13,7 @@
  */
 
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
@@ -44,6 +45,11 @@ class HandleAccountRecoveryStatusCheck extends React.Component {
       return;
     }
 
+    const pathname = this.props.location.pathname;
+    if (pathname.startsWith("/app/settings/account-recovery")) {
+      return;
+    }
+
     this.props.dialogContext.open(AccountRecoveryInviteUserSettingPreferenceDialog, {
       policy: this.props.accountRecoveryContext.getPolicy()
     });
@@ -68,6 +74,7 @@ HandleAccountRecoveryStatusCheck.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   accountRecoveryContext: PropTypes.object, // The account recovery context
   context: PropTypes.object, // the application context
+  location: PropTypes.object, // the current page location
 };
 
-export default withAppContext(withAccountRecovery(withDialog(HandleAccountRecoveryStatusCheck)));
+export default withRouter(withAppContext(withAccountRecovery(withDialog(HandleAccountRecoveryStatusCheck))));

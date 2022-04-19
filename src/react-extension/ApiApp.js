@@ -35,7 +35,6 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import AppContext from "./contexts/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
 import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
-//import HandleAccountRecoveryStatusCheck from "./components/AccountRecovery/HandleAccountRecoveryStatusCheck/HandleAccountRecoveryStatusCheck";
 
 /**
  * The passbolt application served by the API.
@@ -61,10 +60,6 @@ class ApiApp extends Component {
                         <DisplayActionFeedbacks/>
                         { /* Session expired handler */}
                         <HandleSessionExpired/>
-
-                        { /* Account Recovery Management */}
-                        {/*appContext.loggedInUser && appContext.siteSettings.canIUse('accountRecovery')
-                          && <HandleAccountRecoveryStatusCheck/>*/}
 
                         { /* Announcement Management */}
                         {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
