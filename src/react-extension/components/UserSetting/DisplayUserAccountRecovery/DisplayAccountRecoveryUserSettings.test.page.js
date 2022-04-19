@@ -14,6 +14,7 @@
 
 import {render, fireEvent} from "@testing-library/react";
 import React from "react";
+import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAccountRecoveryUserSettings from "./DisplayAccountRecoveryUserSettings";
 import AccountRecoveryUserContextProvider from "../../../contexts/AccountRecoveryUserContext";
@@ -30,7 +31,9 @@ export default class DisplayAccountRecoveryUserSettingsPage {
     this._page = render(
       <AccountRecoveryUserContextProvider accountRecoveryUserService={mockedAccountRecoveryUserService} context={props.context}>
         <MockTranslationProvider>
-          <DisplayAccountRecoveryUserSettings {...props}/>
+          <Router>
+            <DisplayAccountRecoveryUserSettings {...props}/>
+          </Router>
         </MockTranslationProvider>
       </AccountRecoveryUserContextProvider>
     );

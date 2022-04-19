@@ -13,6 +13,7 @@
  */
 
 import React, {Component} from "react";
+import {Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
@@ -22,6 +23,7 @@ import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext"
 import Icon from "../../Common/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
+import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -29,6 +31,11 @@ class DisplayAccountRecoveryUserSettings extends Component {
     this.bindCallbacks();
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   async componentDidMount() {
     await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
   }
@@ -79,6 +86,9 @@ class DisplayAccountRecoveryUserSettings extends Component {
     return this.props.accountRecoveryContext.status === "approved";
   }
 
+  /**
+   * Handle user clicking on review click.
+   */
   handleReviewClick() {
     this.props.dialogContext.open(ManageAccountRecoveryUserSettings, {
       organizationPolicy: this.props.accountRecoveryContext.getOrganizationPolicy()
@@ -87,7 +97,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user requesting the current user to subscribe to the account recovery program.
-   * @returns {*}
+   * @returns {object|void}
    */
   get requestor() {
     return this.props.accountRecoveryContext.getRequestor();
@@ -95,7 +105,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
 
   /**
    * Get the user requesting the current user to subscribe to the account recovery program.
-   * @returns {*}
+   * @returns {string|void}
    */
   get requestorFingerprint() {
     const requestor = this.requestor;
@@ -123,6 +133,10 @@ class DisplayAccountRecoveryUserSettings extends Component {
     return this.policy !== "disabled";
   }
 
+  /**
+   * Return the organization policy type.
+   * @returns {string|void}
+   */
   get policy() {
     return this.props.accountRecoveryContext.getPolicy();
   }
@@ -141,71 +155,76 @@ class DisplayAccountRecoveryUserSettings extends Component {
    */
   render() {
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row">
-          {this.isAccountRecoveryFeatureEnabled &&
-            <div className="col8 account-recovery-profile">
-              <h3><Trans>Account Recovery</Trans></h3>
-              <p>
-                <Trans>It is possible to share securely your recovery kit with the administrator.</Trans>&nbsp;
-                <Trans>They will be able to help you in case you lose it.</Trans>&nbsp;
-                <Trans>Otherwise, you may lose access to your data.</Trans>
-              </p>
-              <div className="account-recovery-status">
-                <div className="account-recovery-review">
-                  <p className="status-wrapper">
-                    <Trans>Status</Trans>:
-                    <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`}/>
-                    <span className="status">{this.props.accountRecoveryContext.status}</span>
-                  </p>
-                  {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
-                  <button type='button' className="button primary" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
+      <>
+        {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() &&
+          <Route exact path="/app/settings/account-recovery/edit" component={HandleAccountRecoveryUserSettingsRoute}/>
+        }
+        <div className="grid grid-responsive-12">
+          <div className="row">
+            {this.isAccountRecoveryFeatureEnabled &&
+              <div className="col8 account-recovery-profile">
+                <h3><Trans>Account Recovery</Trans></h3>
+                <p>
+                  <Trans>It is possible to share securely your recovery kit with the administrator.</Trans>&nbsp;
+                  <Trans>They will be able to help you in case you lose it.</Trans>&nbsp;
+                  <Trans>Otherwise, you may lose access to your data.</Trans>
+                </p>
+                <div className="account-recovery-status">
+                  <div className="account-recovery-review">
+                    <p className="status-wrapper">
+                      <Trans>Status</Trans>:
+                      <span className={`account-recovery-hints ${this.props.accountRecoveryContext.status}`}/>
+                      <span className="status">{this.props.accountRecoveryContext.status}</span>
+                    </p>
+                    {this.hasNotApprovedStatus() && !this.isStatusApproved() &&
+                    <button type='button' className="button primary" onClick={this.handleReviewClick}><Trans>Review</Trans></button>
+                    }
+                  </div>
+                  {this.hasNotApprovedStatus() &&
+                  <ul>
+                    <li className="usercard-detailed-col-2">
+                      <div className="content-wrapper">
+                        <div className="content">
+                          <div>
+                            <span className="tooltip tooltip-bottom"
+                              data-tooltip={this.formatFingerprint(this.requestorFingerprint)}>
+                              <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
+                            </span>
+                            &nbsp;
+                            <span className="name"><Trans>requested this operation</Trans></span>
+                          </div>
+                          <div className="subinfo light">{this.formatDateTimeAgo(this.requestedDate)}</div>
+                        </div>
+                      </div>
+                      <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+                    </li>
+                  </ul>
                   }
                 </div>
-                {this.hasNotApprovedStatus() &&
-                <ul>
-                  <li className="usercard-detailed-col-2">
-                    <div className="content-wrapper">
-                      <div className="content">
-                        <div>
-                          <span className="tooltip tooltip-bottom"
-                            data-tooltip={this.formatFingerprint(this.requestorFingerprint)}>
-                            <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
-                          </span>
-                          &nbsp;
-                          <span className="name"><Trans>requested this operation</Trans></span>
-                        </div>
-                        <div className="subinfo light">{this.formatDateTimeAgo(this.requestedDate)}</div>
-                      </div>
-                    </div>
-                    <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                  </li>
-                </ul>
-                }
               </div>
-            </div>
-          }
-          {!this.isAccountRecoveryFeatureEnabled &&
-            <div className="col8 account-recovery-profile">
-              <h3><Trans>Account Recovery</Trans></h3>
-              <h4><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
-              <p>
-                <Trans>Please contact your administrator to enable the account recovery feature.</Trans>
-              </p>
-            </div>
-          }
-          <div className="col4 last">
-            <div>
-              <h3><Trans>Need some help?</Trans></h3>
-              <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-              <a className="button" href="https://help.passbolt.com" target="_blank" rel="noopener noreferrer">
-                <Icon name="life-ring"/>
-                <span><Trans>Read documentation</Trans></span>
-              </a>
+            }
+            {!this.isAccountRecoveryFeatureEnabled &&
+              <div className="col8 account-recovery-profile">
+                <h3><Trans>Account Recovery</Trans></h3>
+                <h4><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
+                <p>
+                  <Trans>Please contact your administrator to enable the account recovery feature.</Trans>
+                </p>
+              </div>
+            }
+            <div className="col4 last">
+              <div>
+                <h3><Trans>Need some help?</Trans></h3>
+                <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
+                <a className="button" href="https://help.passbolt.com" target="_blank" rel="noopener noreferrer">
+                  <Icon name="life-ring"/>
+                  <span><Trans>Read documentation</Trans></span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 }

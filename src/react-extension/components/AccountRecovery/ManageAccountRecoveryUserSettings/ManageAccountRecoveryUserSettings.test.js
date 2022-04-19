@@ -36,7 +36,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * When	 I click on the “Review” button
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
-  it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state recommanded)', async() => {
+  it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state recommended)', async() => {
     expect.assertions(3);
     const props = defaultProps("opt-out");
     const page = new ManageAccountRecoveryUserSettingsPage(props);
@@ -44,7 +44,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
 
     expect(page.exists()).toBeTruthy();
 
-    expect(page.title.textContent).toBe("Recovery (Recommanded)");
+    expect(page.title.textContent).toBe("Recovery (Recommended)");
     expect(page.acceptCheckbox.checked).toBeTruthy();
   });
 

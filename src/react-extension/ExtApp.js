@@ -100,16 +100,16 @@ class ExtApp extends Component {
                             <HandleErrorEvents/>
                             <HandleSessionExpired/>
 
-                            { /* Account Recovery Management */}
-                            {appContext.loggedInUser && appContext.siteSettings.canIUse('accountRecovery')
-                              && <HandleAccountRecoveryStatusCheck/>}
-
                             { /* Announcement Management */}
                             {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
                               && appContext.siteSettings.canIUse('ee')
                               && <HandleSubscriptionAnnouncement/>}
 
                             <Router>
+                              { /* Account Recovery Management */}
+                              {appContext.loggedInUser && appContext.siteSettings.canIUse('accountRecovery')
+                                && <HandleAccountRecoveryStatusCheck/>}
+
                               <NavigationContextProvider>
                                 <HandleExtAppRouteChanged/>
                                 <Switch>

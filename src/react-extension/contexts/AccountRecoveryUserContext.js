@@ -33,6 +33,7 @@ const ACCOUNT_RECOVERY_STATUS_PENDING = 'pending';
 const ACCOUNT_RECOVERY_POLICY_MANDATORY = "mandatory";
 const ACCOUNT_RECOVERY_POLICY_OPT_OUT = "opt-out";
 const ACCOUNT_RECOVERY_POLICY_DISABLED = 'disabled';
+const ACCOUNT_RECOVERY_STATUS_APPROVED = 'approved';
 /**
  * The related context provider
  */
@@ -177,6 +178,10 @@ export class AccountRecoveryUserContextProvider extends React.Component {
 
   static get POLICY_OPT_OUT() {
     return ACCOUNT_RECOVERY_POLICY_OPT_OUT;
+  }
+
+  static get STATUS_APPROVED() {
+    return ACCOUNT_RECOVERY_STATUS_APPROVED;
   }
 
   /**

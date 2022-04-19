@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -47,6 +48,7 @@ class ManageAccountRecoveryUserSettings extends Component {
   bindCallbacks() {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.close = this.close.bind(this);
   }
 
   /**
@@ -86,11 +88,22 @@ class ManageAccountRecoveryUserSettings extends Component {
       await this.props.context.port.request("passbolt.account-recovery.save-user-settings", accountRecoveryUserSettingDto);
       this.props.accountRecoveryContext.setUserAccountRecoveryStatus(this.state.status);
       this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
-      this.props.onClose();
+      this.close();
     } catch (error) {
       console.error(error);
       this.handleError(error);
       this.toggleProcessing();
+    }
+  }
+
+  /**
+   * Close the dialog.
+   */
+  close() {
+    this.props.onClose();
+    const pathname = this.props.location.pathname;
+    if (pathname !== "/app/settings/account-recovery") {
+      this.props.history.push("/app/settings/account-recovery");
     }
   }
 
@@ -175,7 +188,7 @@ class ManageAccountRecoveryUserSettings extends Component {
     if (this.props.organizationPolicy.policy === "mandatory") {
       return "Mandatory";
     } else if (this.props.organizationPolicy.policy === "opt-out") {
-      return "Recommanded";
+      return "Recommended";
     } else {
       return "Optional";
     }
@@ -197,7 +210,7 @@ class ManageAccountRecoveryUserSettings extends Component {
     return (
       <DialogWrapper
         title={`${this.translate("Recovery")} (${this.type})`}
-        onClose={this.props.onClose}
+        onClose={this.close}
         disabled={this.state.processing}
         className="recovery-account-policy-dialog">
         <form onSubmit={this.handleSubmit}>
@@ -275,7 +288,7 @@ class ManageAccountRecoveryUserSettings extends Component {
               className={`button cancel ${this.isProcessing ? "disabled" : ""}`}
               role="button"
               type="button"
-              onClick={this.props.onClose}
+              onClick={this.close}
               disabled={this.isProcessing}>
               <span><Trans>Cancel</Trans></span>
             </button>
@@ -293,6 +306,8 @@ ManageAccountRecoveryUserSettings.propTypes = {
   organizationPolicy: PropTypes.object, // The organization policy details
   actionFeedbackContext: PropTypes.object, // The action feedback context handler
   onClose: PropTypes.func, // The close callback
+  history: PropTypes.object, // The navigation history
+  location: PropTypes.object, // The current page location
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withActionFeedback(withAccountRecovery(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings)))));
+export default withRouter(withAppContext(withActionFeedback(withAccountRecovery(withDialog(withTranslation("common")(ManageAccountRecoveryUserSettings))))));

@@ -48,6 +48,7 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    this.props.onClose();
     await this.props.history.push({pathname: "/app/settings/account-recovery/edit"});
   }
 

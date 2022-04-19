@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-
+import {BrowserRouter as Router} from "react-router-dom";
 import {render, fireEvent, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,7 +28,9 @@ export default class ManageAccountRecoveryUserSettingsPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <ManageAccountRecoveryUserSettings {...props}/>
+        <Router>
+          <ManageAccountRecoveryUserSettings {...props}/>
+        </Router>
       </MockTranslationProvider>
     );
   }
