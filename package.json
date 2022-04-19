@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "3.5.3",
+  "version": "3.6.0-alpha1",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2022 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -90,7 +90,6 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "preversion": "npm test && npm run eslint",
-    "version": "npx grunt && git add -A",
-    "postversion": "git push && git push --tags"
+    "version": "npx grunt && git add -A"
   }
 }
