@@ -102,7 +102,10 @@ describe("ImportGpgKey", () => {
     });
 
     it(`As AN I should see an error if the private key is expired, scenario: ${JSON.stringify(_props)}`, async() => {
-      const props = defaultProps({..._props});
+      const props = defaultProps({
+        ..._props,
+        validatePrivateGpgKey: jest.fn(() => { throw new Error("The private key should not be expired."); })
+      });
       props.context.port.request.mockImplementation(() => ({
         expires: "2021-05-25T09:00:00.000",
         revoked: false
@@ -117,7 +120,10 @@ describe("ImportGpgKey", () => {
     });
 
     it(`As AN I should see an error if the private key is revoked, scenario: ${JSON.stringify(_props)}`, async() => {
-      const props = defaultProps({..._props});
+      const props = defaultProps({
+        ..._props,
+        validatePrivateGpgKey: jest.fn(() => { throw new Error("The private key should not be revoked."); })
+      });
       props.context.port.request.mockImplementation(() => ({
         expires: "Never",
         revoked: true
@@ -132,7 +138,10 @@ describe("ImportGpgKey", () => {
     });
 
     it(`As AN I should see an error if the private key format is invalid, scenario: ${JSON.stringify(_props)}`, async() => {
-      const props = defaultProps({..._props});
+      const props = defaultProps({
+        ..._props,
+        validatePrivateGpgKey: jest.fn(() => { throw new Error("The private key should be a valid armored GPG key."); })
+      });
       props.context.port.request.mockImplementation(() => { throw new Error("Invalid Gpg key format."); });
       const page = new ImportGpgKeyPage(props);
 
@@ -162,6 +171,24 @@ describe("ImportGpgKey", () => {
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
+
+    it("As AN on the setup workflow I can't provide a key having an expiration date", async() => {
+      const props = defaultProps({
+        displayAs: ImportGpgKeyVariations.SETUP,
+        validatePrivateGpgKey: jest.fn(() => { throw new Error("The private key shouldn't have an expiry date."); })
+      });
+      props.context.port.request.mockImplementation(() => ({
+        expires: "2100-01-01 00:00:00.000",
+        revoked: false
+      }));
+      const page = new ImportGpgKeyPage(props);
+
+      expect.assertions(2);
+      await page.fill('Some private key');
+      await page.verifyKey();
+      expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+      expect(page.invalidPrivateKeyErrorMessage).toBe("The private key shouldn't have an expiry date.");
+    });
   });
 
   describe('As AN on the Recover workflow', () => {
@@ -173,7 +200,7 @@ describe("ImportGpgKey", () => {
       expect(page.title).toBe("Welcome back, please enter your private key to begin the recovery process.");
     });
 
-    it(`As AN on the setup workflow I should be able to request help if I lost my private key`, async() => {
+    it(`As AN on the recover workflow I should be able to request help if I lost my private key`, async() => {
       const props = defaultProps({displayAs: ImportGpgKeyVariations.RECOVER});
       const page = new ImportGpgKeyPage(props);
 
@@ -181,6 +208,20 @@ describe("ImportGpgKey", () => {
       expect(page.secondaryActionLink.textContent).toContain("Help, I lost my private key.");
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
+    });
+
+    it("As AN on the recover workflow I can still provide a key having an expiration date", async() => {
+      const props = defaultProps({displayAs: ImportGpgKeyVariations.RECOVER});
+      props.context.port.request.mockImplementation(() => ({
+        expires: "2100-01-01 00:00:00.000",
+        revoked: false
+      }));
+      const page = new ImportGpgKeyPage(props);
+
+      expect.assertions(1);
+      await page.fill('Some private key');
+      await page.verifyKey();
+      expect(page.hasInvalidPrivateKeyError).toBeFalsy();
     });
   });
 });

@@ -60,6 +60,8 @@ export const AuthenticationSetupContext = React.createContext({
   }, // Whenever the user wants to set its account recovery preferences.
   chooseSecurityToken: () => {
   }, // Whenever the user wants to choose its security token preference.
+  validatePrivateKey: () => {
+  }, // Whenever we need to verify the imported private key
 });
 
 /**
@@ -98,6 +100,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       checkPassphrase: this.checkPassphrase.bind(this), // Whenever the user want to check the passphrase of its imported gpg key.
       chooseAccountRecoveryPreference: this.chooseAccountRecoveryPreference.bind(this), // Whenever the user wants to set its account recovery preferences.
       chooseSecurityToken: this.chooseSecurityToken.bind(this), // Whenever the user wants to choose its security token preference.
+      validatePrivateKey: this.validatePrivateKey.bind(this), // Whenever we need to verify the imported private key
     };
   }
 
@@ -284,6 +287,14 @@ export class AuthenticationSetupContextProvider extends React.Component {
     } catch (error) {
       await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
+  }
+
+  /**
+   * Whenever we need to verify the imported private key
+   * @param {string} key the private to check in its armored form
+   */
+  async validatePrivateKey(key) {
+    await this.props.context.port.request('passbolt.setup.validate-private-key', key);
   }
 
   /**

@@ -48,6 +48,7 @@ class RecoverAuthentication extends Component {
           displayAs={ImportGpgKeyVariations.RECOVER}
           onComplete={this.props.authenticationRecoverContext.importGpgKey.bind(this)}
           onSecondaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
+          validatePrivateGpgKey={this.props.authenticationRecoverContext.validatePrivateKey.bind(this)}
         />;
       case AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE:
         return <CheckPassphrase

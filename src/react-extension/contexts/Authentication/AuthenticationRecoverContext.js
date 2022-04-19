@@ -60,6 +60,8 @@ export const AuthenticationRecoverContext = React.createContext({
   }, // Whenever the user wants to create an account recovery gpg key.
   chooseAccountRecoverySecurityToken: () => {
   }, // Whenever the user chose its account recovery security token preferences.
+  validatePrivateKey: () => {
+  }, // Whenever we need to verify the imported private key
 });
 
 /**
@@ -96,6 +98,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       initiateAccountRecovery: this.initiateAccountRecovery.bind(this), // Whenever the user wants to initiate an account recovery.
       generateAccountRecoveryGpgKey: this.generateAccountRecoveryGpgKey.bind(this), // Whenever the user wants to create an account recovery gpg key.
       chooseAccountRecoverySecurityToken: this.chooseAccountRecoverySecurityToken.bind(this), // Whenever the user chose its account recovery security token preferences.
+      validatePrivateKey: this.validatePrivateKey.bind(this), // Whenever we need to verify the imported private key
     };
   }
 
@@ -245,6 +248,14 @@ export class AuthenticationRecoverContextProvider extends React.Component {
     } catch (error) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
+  }
+
+  /**
+   * Whenever we need to verify the imported private key
+   * @param {string} key the private to check in its armored form
+   */
+  async validatePrivateKey(key) {
+    await this.props.context.port.request('passbolt.recover.validate-private-key', key);
   }
 
   /**
