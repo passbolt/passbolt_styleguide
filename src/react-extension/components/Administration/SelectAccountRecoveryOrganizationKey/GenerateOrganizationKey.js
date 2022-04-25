@@ -319,7 +319,7 @@ class GenerateOrganizationKey extends React.Component {
               <div className="email error-message">{this.state.emailError}</div>
             }
           </div>
-          <div className="input select">
+          <div className="input select-wrapper">
             <label htmlFor="generate-organization-key-form-algorithm">
               <Trans>Algorithm</Trans>
               <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
@@ -330,7 +330,7 @@ class GenerateOrganizationKey extends React.Component {
               className="fluid" type="text"
               autoComplete="off" disabled={true} />
           </div>
-          <div className="input select">
+          <div className="input select-wrapper">
             <label htmlFor="generate-organization-key-form-keySize">
               <Trans>Key Size</Trans>
               <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
@@ -366,8 +366,8 @@ class GenerateOrganizationKey extends React.Component {
           </div>
         }
         <div className="submit-wrapper clearfix">
-          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Generate & Apply")} />
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
+          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Generate & Apply")} />
         </div>
       </form>
     );

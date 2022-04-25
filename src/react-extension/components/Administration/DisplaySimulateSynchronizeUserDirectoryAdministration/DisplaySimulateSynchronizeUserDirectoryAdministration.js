@@ -217,9 +217,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   getUsersFullReport() {
     let userFullReport = '';
     if (this.usersSuccess.length > 0 || this.usersError.length > 0 || this.usersIgnored.length > 0) {
-      const usersHeader = `---------------------------------------------------------------------\n
-      ${this.translate("Users")}\n
-      ---------------------------------------------------------------------\n`;
+      const usersHeader = `-----------------------------------------------\n${this.translate("Users")}\n-----------------------------------------------\n`;
       userFullReport = userFullReport.concat(usersHeader);
       const addMessage = user => userFullReport = userFullReport.concat(`- ${user.message}\n`);
       if (this.usersSuccess.length > 0) {
@@ -245,9 +243,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   getGroupsFullReport() {
     let groupFullReport = '';
     if (this.groupsSuccess.length > 0 || this.groupsError.length > 0 || this.groupsIgnored.length > 0) {
-      const groupsHeader = `---------------------------------------------------------------------\n
-       ${this.translate("Groups")}\n
-       ---------------------------------------------------------------------\n`;
+      const groupsHeader = `-----------------------------------------------\n${this.translate("Groups")}\n-----------------------------------------------\n`;
       groupFullReport = groupFullReport.concat(groupsHeader);
       const addMessage = group => groupFullReport = groupFullReport.concat(`- ${group.message}\n`);
       if (this.groupsSuccess.length > 0) {
@@ -305,9 +301,11 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
             }
             <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleFullReportClicked}>
-                {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
-                {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link"><Trans>Full report</Trans></a>
+                <a role="link">
+                  <Trans>Full report</Trans>
+                  {this.state.openFullReport && <Icon name="caret-down"/>}
+                  {!this.state.openFullReport && <Icon name="caret-right"/>}
+                </a>
               </div>
               <div className="accordion-content">
                 <div className="input text">
@@ -318,8 +316,8 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
             <p></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></a>
             <FormCancelButton disabled={this.isLoading()} onClick={this.handleClose}/>
+            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleSynchronize}><Trans>Synchronize</Trans></a>
           </div>
         </DialogWrapper>
         }

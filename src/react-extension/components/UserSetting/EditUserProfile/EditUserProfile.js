@@ -52,7 +52,7 @@ class EditUserProfile extends Component {
         first_name: "",
         last_name: "",
         username: "",
-        locale: "",
+        locale: "en-UK",
       },
       actions: {
         processing: false // True if one is processing the edit
@@ -365,13 +365,13 @@ class EditUserProfile extends Component {
           </div>
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              disabled={!this.areActionsAllowed}
+              onClick={this.handleClose}/>
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
               value={this.translate("Save")}/>
-            <FormCancelButton
-              disabled={!this.areActionsAllowed}
-              onClick={this.handleClose}/>
           </div>
 
         </form>

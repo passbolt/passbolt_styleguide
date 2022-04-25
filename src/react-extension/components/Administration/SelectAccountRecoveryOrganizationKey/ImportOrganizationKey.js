@@ -270,8 +270,8 @@ class ImportOrganizationKey extends React.Component {
           </div>
         }
         <div className="submit-wrapper clearfix">
-          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Apply")} />
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
+          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Apply")} />
         </div>
       </form>
     );
