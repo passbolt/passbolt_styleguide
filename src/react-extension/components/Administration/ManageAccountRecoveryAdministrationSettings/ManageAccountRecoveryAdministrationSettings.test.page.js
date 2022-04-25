@@ -139,12 +139,13 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
   }
 
   /**
-   * Go to renew key
+   * Click on "opt-in" radio button and wait for the component to be updated.
    */
-  async selectPolicy(policy) {
+  async clickOnOptInPolicyButton() {
     const leftClick = {button: 0};
-    fireEvent.click(policy.element, leftClick);
-    await waitFor(() => {});
+    const element = this._page.container.querySelector('#accountRecoveryPolicyOptIn');
+    fireEvent.click(element, leftClick);
+    element.checked = true;
   }
 
   /**

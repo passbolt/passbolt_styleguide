@@ -35,6 +35,7 @@ describe("As AD I should see the account recovery settings", () => {
   let page; // The page to test against
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the default value', async() => {
+    expect.assertions(12);
     const props = defaultProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     await waitFor(() => {});
@@ -54,6 +55,7 @@ describe("As AD I should see the account recovery settings", () => {
   });
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the mandatory value', async() => {
+    expect.assertions(4);
     const props = mandatoryPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     expect(page.mandatoryRadioButton.isChecked).toBeTruthy();
@@ -63,6 +65,7 @@ describe("As AD I should see the account recovery settings", () => {
   });
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the opt-in value', async() => {
+    expect.assertions(4);
     const props = optInPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     expect(page.mandatoryRadioButton.isChecked).toBeFalsy();
@@ -72,6 +75,7 @@ describe("As AD I should see the account recovery settings", () => {
   });
 
   it('As AD in the administration workspace, I can see the account recovery section populated with the opt-out value', async() => {
+    expect.assertions(4);
     const props = optOutPolicyPropsWithOrganisationKey(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     expect(page.mandatoryRadioButton.isChecked).toBeFalsy();
@@ -81,13 +85,14 @@ describe("As AD I should see the account recovery settings", () => {
   });
 
   it('As a logged in administrator in the administration workspace, I can select an account recovery policy', async() => {
+    expect.assertions(6);
     const props = hasChangedPolicyProps(); // The props to pass
     page = new ManageAccountRecoveryAdministrationSettingsPage(props);
     expect(page.mandatoryRadioButton.isChecked).toBeTruthy();
     expect(page.disableRadioButton.isChecked).toBeFalsy();
     expect(page.optInRadioButton.isChecked).toBeFalsy();
     expect(page.optOutRadioButton.isChecked).toBeFalsy();
-    await page.selectPolicy(page.optInRadioButton);
+    await page.clickOnOptInPolicyButton();
     const newPolicy = "opt-in";
     expect(props.adminAccountRecoveryContext.changePolicy).toHaveBeenCalledWith(newPolicy);
     expect(page.warningMessage).toBe("Warning, Don't forget to save your settings to apply your modification.");
