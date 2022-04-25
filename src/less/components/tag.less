@@ -1,9 +1,9 @@
 /* tags */
-.tag-editor, tags-list {
+.tag-editor, .tags-list {
     .tag {
         float: left;
         position: relative;
-        margin: 0 .8rem .8rem 0;
+        margin: 0 .5rem .5rem 0;
         text-decoration: none;
         border-radius: .2rem;
         border: 1px solid @tag-border;
@@ -23,65 +23,54 @@
     .clearfix();
 
     .tag-list-item{
+        display: flex;
         float: left;
         max-width: 95%;
     }
     .tag {
       padding: .4rem .6rem;
+      width: 100%;
     }
 }
 .tag-editor {
-    margin-bottom:1em;
-
-    .message {
-        font-size:1em;
-        margin-top:.5em;
-
-        span.svg-icon {
-          display: initial;
-          margin-left: -0.15em;
-          padding-right: 0.15em;
-        }
-    }
     .tag {
-      padding: 0 .6rem;
+      display: flex;
+      align-items: center;
+      padding: .5rem;
+      margin-left: .5rem;
+      max-width: 95%;
     }
     .tag-content {
-        padding-right: .5em;
-        padding-top: .25em;
-        display: inline-block; // TODO
-        max-width: 90%; // TODO review size
+        margin-right: .5rem;
     }
     .tag-delete {
-        border-left: 1px dotted @blue;
-        margin-left: -.25em;
-        padding-left: .5em;
-        font-size: .75em;
-        vertical-align: 30%;
+        border-left: 1px solid rgba(@tag-border, .5);
         cursor: pointer;
-    }
-    .tag:hover:after {
-        border-color: @border-input-light;
+
+      .svg-icon {
+          margin-left: .5rem;
+        }
     }
     .tag-editor-input-wrapper {
         .clearfix();
-        min-height:5em;
-        padding: .5em;
-        border: 1px solid @border-input;
-        border-top: 1px solid @border-input-light;
+        min-height: 7rem;
+        padding: .7rem .8rem .2rem .3rem;
+        background: @input-background;
+        border: .1rem solid @input-border;
+        border-radius: .4rem;
         position: relative;
 
-        &.input-focus {
+        &:focus-within {
            border-color: @border-focus;
         }
     }
 
     .tag-editor-input {
-        min-height:1.5em;
-        padding: .2em .4em 0 .4em;
+        min-height: 2.1rem;
+        padding: .6rem .6rem 0 .8rem;
         box-shadow: none;
-        min-width: 6em;
-        max-width: 24em;
+        min-width: 6rem;
+        max-width: 31rem;
         float: left;
         word-break: break-word;
     }
@@ -91,12 +80,13 @@
         cursor: default;
         border: 1px solid @border-default;
         border-top: 0;
-        background: @background-default;
-        .box-shadow();
+        background: @dropdown-background;
+        filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
+        border-radius: 0 0 .4rem .4rem;
         position: absolute;
         display: inline-flex;
         z-index: 9999;
-        max-height: 120px;
+        max-height: 10.5rem;
         overflow: hidden;
         overflow-y: auto;
         box-sizing: border-box;
@@ -116,11 +106,18 @@
             text-overflow: ellipsis;
             color: @font-default;
             display: block;
-            padding: .35em .43em; /* align autocomplete suggestion with tag input */
+            padding: .5rem .6rem; /* align autocomplete suggestion with tag input */
             border: 0;
 
+            a {
+              line-height: 1.9rem;
+              font-size: 1.4rem;
+              font-weight: 400;
+              letter-spacing: normal;
+            }
+
             &.selected {
-                background: @background-lighter;
+                background: @dropdown-item-hover-background;
             }
         }
     }

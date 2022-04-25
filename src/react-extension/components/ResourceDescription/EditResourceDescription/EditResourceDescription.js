@@ -384,33 +384,34 @@ class EditResourceDescription extends React.Component {
           <div className="feedbacks error-message">{this.state.error}</div>
           }
           <div className="actions">
-            <a className={`button description-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
+            <div className="description-lock">
+              {!this.areResourceTypesEnabled() &&
+                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
+                  <Icon name="info-circle"/>
+                </Tooltip>
+              }
+              {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
+                <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
+                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
+                    <Icon name="lock-open"/>
+                  </Tooltip>
+                </a>
+              }
+              {this.areResourceTypesEnabled() && this.state.encryptDescription &&
+                <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
+                  <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
+                    <Icon name="lock"/>
+                  </Tooltip>
+                </a>
+              }
+            </div>
+            <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
+              onClick={this.handleCancel}><Trans>Cancel</Trans>
+            </a>
+            <a className={`button primary description-editor-submit ${this.hasAllInputDisabled() ? "processing disabled" : ""}`}
               onClick={this.handleFormSubmit} role="button">
               <span><Trans>Save</Trans></span>
             </a>
-            <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-              onClick={this.handleCancel}><Trans>Cancel</Trans></a>
-            <div className="description-lock">
-              {!this.areResourceTypesEnabled() &&
-              <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
-                <Icon name="info-circle"/>
-              </Tooltip>
-              }
-              {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
-              <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
-                <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
-                  <Icon name="lock-open"/>
-                </Tooltip>
-              </a>
-              }
-              {this.areResourceTypesEnabled() && this.state.encryptDescription &&
-              <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
-                <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
-                  <Icon name="lock"/>
-                </Tooltip>
-              </a>
-              }
-            </div>
           </div>
         </div>
       </form>

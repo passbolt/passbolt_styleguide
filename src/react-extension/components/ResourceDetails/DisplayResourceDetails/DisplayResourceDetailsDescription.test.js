@@ -166,7 +166,7 @@ describe("See description", () => {
       await page.passwordSidebarDescriptionSection.waitForLoading(() => {
         expect(page.descriptionEditor.component).not.toBeNull();
         expect(page.descriptionEditor.descriptionInput.getAttribute("disabled")).not.toBeNull();
-        expect(page.descriptionEditor.saveButton.className).toBe("button description-editor-submit primary processing disabled");
+        expect(page.descriptionEditor.saveButton.className).toBe("button primary description-editor-submit processing disabled");
         expect(page.descriptionEditor.cancelButton.className).toBe("cancel button disabled");
         updateResolve();
       });

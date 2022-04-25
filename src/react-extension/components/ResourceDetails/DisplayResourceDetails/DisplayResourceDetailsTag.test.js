@@ -280,7 +280,7 @@ describe("See tags", () => {
       await page.passwordSidebarTagSection.waitForLoading(() => {
         expect(page.tagEditor.component).not.toBeNull();
         expect(page.tagEditor.component.getAttribute("contenteditable")).toBe("false");
-        expect(page.tagEditor.saveButton.className).toBe("button tag-editor-submit primary processing disabled");
+        expect(page.tagEditor.saveButton.className).toBe("button primary tag-editor-submit processing disabled");
         expect(page.tagEditor.cancelButton.className).toBe("button cancel tag-editor-cancel disabled");
         updateResolve();
       });

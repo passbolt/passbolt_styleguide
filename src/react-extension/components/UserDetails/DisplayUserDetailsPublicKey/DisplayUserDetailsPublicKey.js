@@ -236,9 +236,9 @@ class DisplayUserDetailsPublicKey extends React.Component {
               <span className="label"><Trans>Public key</Trans></span>
               <span className="value">
                 <a
-                  className="button copy-public-key"
+                  className="button button-icon copy-public-key"
                   onClick={this.handlePublicKeyCopy}>
-                  <span><Trans>Copy</Trans></span>
+                  <Icon name="copy-to-clipboard"/>
                 </a>
               </span>
             </li>

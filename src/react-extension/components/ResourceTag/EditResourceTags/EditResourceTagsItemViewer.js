@@ -79,8 +79,8 @@ class EditResourceTagsItemViewer extends React.Component {
         </div>
         }
         {!isLoading && this.props.tags.length === 0 &&
-        <em className="empty-content"
-          onClick={this.props.toggleInputTagEditor}><Trans>There is no tag, click here to add one</Trans></em>
+        <span className="empty-content"
+          onClick={this.props.toggleInputTagEditor}><Trans>There is no tag, click here to add one</Trans></span>
         }
         {!isLoading && this.props.tags.length > 0 &&
         <ul className="tags tags-list" onClick={this.props.toggleInputTagEditor}>
