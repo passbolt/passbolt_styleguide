@@ -83,7 +83,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         passphrase: 'passphrase'
       };
       await page._instance.handleSave(privateGpgKeyDto);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.account-recovery.review-request', null, privateGpgKeyDto);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.review-request", accountRecoveryRequest.id, null, {"armored_key": "private gpg key", "passphrase": "passphrase"});
       await waitFor(() => {});
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery review has been saved successfully');
       expect(props.onStop).toHaveBeenCalled();

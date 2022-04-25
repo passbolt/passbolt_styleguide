@@ -60,6 +60,7 @@ class ApiAccountRecoveryContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async onInitializeAccountRecoveryRequested() {
+    // @todo account-recovery userId and authentication token are always null here. TO continue.
     if (!this.state.userId || !this.state.authenticationToken) {
       return this.setState({state: ApiAccountRecoveryContextState.ERROR_STATE});
     }

@@ -22,8 +22,6 @@ import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideA
 import ReviewAccountRecoveryRequest from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
-const FOREIGN_MODEL_ORGANIZATION_KEY = 'AccountRecoveryOrganizationKey';
-
 /**
  * This component handle the review account recovery workflow.
  */
@@ -39,12 +37,12 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
 
   /**
    * Get default state
-   * @returns {{accountRecoveryResponse: null}}
+   * @returns {Object}
    */
   get defaultState() {
     return {
+      responseStatus: null, // The response status.
       accountRecoveryRequest: null, // The account recovery request to assess.
-      accountRecoveryResponse: null, // The account recovery response to submit.
       currentOpenedDialog: null,
     };
   }
@@ -118,18 +116,11 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
 
   /**
    * Review account recovery request
-   * @param {string} status
+   * @param {string} responseStatus The response status. Any of "approved" or "rejected".
    */
-  reviewAccountRecoveryRequest(status) {
-    const orkId = this.props.accountRecoveryContext.accountRecoveryOrganizationPolicy.account_recovery_organization_public_key.id;
-    const accountRecoveryResponse = {
-      status: status,
-      account_recovery_request_id: this.state.accountRecoveryRequest.id,
-      responder_foreign_key: orkId,
-      responder_foreign_model: FOREIGN_MODEL_ORGANIZATION_KEY
-    };
-    this.setState({accountRecoveryResponse});
-    if (status !== 'approved') {
+  reviewAccountRecoveryRequest(responseStatus) {
+    this.setState({responseStatus});
+    if (responseStatus !== 'approved') {
       this.handleSave();
     } else {
       this.displayProvideAccountRecoveryOrganizationKeyDialog();
@@ -142,7 +133,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    */
   async handleSave(privateGpgKeyDto) {
     try {
-      await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryResponse, privateGpgKeyDto);
+      await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryRequest.id, this.state.responseStatus, privateGpgKeyDto);
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery review has been saved successfully"));
       this.props.onStop();
     } catch (e) {
