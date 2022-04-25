@@ -88,9 +88,12 @@ class ManageAccountRecoveryUserSettings extends Component {
       this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
       this.props.onClose();
     } catch (error) {
+      this.toggleProcessing();
+      if (error.name === "UserAbortsOperationError") {
+        return;
+      }
       console.error(error);
       this.handleError(error);
-      this.toggleProcessing();
     }
   }
 
