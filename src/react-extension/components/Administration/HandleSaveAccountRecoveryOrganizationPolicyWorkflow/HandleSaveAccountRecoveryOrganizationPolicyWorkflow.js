@@ -141,11 +141,13 @@ class HandleSaveAccountRecoveryOrganizationPolicyWorkflow extends React.Componen
       throw error;
     }
 
-    // Handle unexpected error.
-    const errorDialogProps = {
-      error: error
-    };
-    this.props.dialogContext.open(NotifyError, errorDialogProps);
+    if (error.name === "PassboltApiFetchError" && error?.data?.body?.account_recovery_organization_public_key?.fingerprint?.isNotAccountRecoveryOrganizationPublicKeyFingerprintRule) {
+      this.props.dialogContext.open(NotifyError, {error: new Error(this.translate("The new organization recovery key should not be a formerly used organization recovery key."))});
+    } else {
+      // Handle unexpected error.
+      this.props.dialogContext.open(NotifyError, {error});
+    }
+
     this.props.onStop();
   }
 

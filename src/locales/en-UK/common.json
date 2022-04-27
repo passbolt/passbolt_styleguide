@@ -635,6 +635,7 @@
   "The invite has been resent successfully": "The invite has been resent successfully",
   "The key can't be empty.": "The key can't be empty.",
   "The multi factor authentication settings for the organization were updated.": "The multi factor authentication settings for the organization were updated.",
+  "The new organization recovery key should not be a formerly used organization recovery key.": "The new organization recovery key should not be a formerly used organization recovery key.",
   "The operation failed with the following error:": "The operation failed with the following error:",
   "The operation has been aborted.": "The operation has been aborted.",
   "The operation was cancelled.": "The operation was cancelled.",
