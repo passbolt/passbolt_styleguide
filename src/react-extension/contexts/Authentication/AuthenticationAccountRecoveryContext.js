@@ -21,6 +21,7 @@ export const AuthenticationAccountRecoveryWorkflowStates = {
   VERIFY_PASSPHRASE: "Validate Passphrase",
   RECOVERING_ACCOUNT: "Recovering Account",
   SIGNING_IN: 'Signing in',
+  DOWNLOAD_RECOVERY_KIT: 'Downloading Recovery Kit',
   LOADING: "Loading",
   UNEXPECTED_ERROR: "Unexpected Error",
   HELP_CREDENTIALS_LOST: "Help Credentials lost",
@@ -48,6 +49,10 @@ export const AuthenticationAccountRecoveryContext = React.createContext({
   }, // Whenever the user wants to go to the validate passphrase.
   requestHelpCredentialsLost: () => {
   }, // Whenever the user wants to request help because it lost its credentials.
+  downloadRecoveryKit: () => {
+  }, // Go to the download recovery kit step
+  handleRecoveryKitDownloaded: () => {
+  }, // Go to the step after the download recovery kit
 });
 
 /**
@@ -62,6 +67,10 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+
+    //This is not on state as it's not related to rendering
+    this.passphrase = null;
+    this.rememberMe = null;
   }
 
   /**
@@ -80,6 +89,8 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
       needHelpCredentialsLost: this.needHelpCredentialsLost.bind(this), // Whenever the user lost its passphrase.
       goToValidatePassphrase: this.goToValidatePassphrase.bind(this), // Whenever the user wants to go to the validate passphrase.
       requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user wants to request help because it lost its credentials.
+      downloadRecoveryKit: this.downloadRecoveryKit.bind(this), // Go to the download recovery kit step
+      handleRecoveryKitDownloaded: this.handleRecoveryKitDownloaded.bind(this), // Go to the step after the download recovery kit
     };
   }
 
@@ -154,28 +165,37 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async complete(passphrase, rememberMe = false) {
-    const accountRecovered = await this.recoverAccount(passphrase);
-    if (!accountRecovered) {
-      return;
-    }
-    await this.signIn(passphrase, rememberMe);
-  }
-
-  /**
-   * Recover the account
-   * @param {string} passphrase The passphrase.
-   * @returns {Promise<boolean>}
-   */
-  async recoverAccount(passphrase) {
     await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.RECOVERING_ACCOUNT});
     try {
       await this.props.context.port.request("passbolt.account-recovery.recover-account", passphrase);
-      return true;
+      this.passphrase = passphrase;
+      this.rememberMe = rememberMe;
+      this.setState({state: AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT});
     } catch (error) {
-      // @todo Should we handle differently request already completed error?
       await this.handleUnexpectedError(error);
-      return false;
     }
+  }
+
+  /**
+   * Whenever the user wants to download the recovery kit.
+   * @returns {Promise<void>}
+   */
+  async downloadRecoveryKit() {
+    try {
+      await this.props.context.port.request('passbolt.account-recovery.download-recovery-kit');
+    } catch (error) {
+      this.setState({state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error});
+    }
+  }
+
+  /**
+   * Whenever the user finished to download the recovery kit.
+   * @returns {Promise<void>}
+   */
+  async handleRecoveryKitDownloaded() {
+    await this.signIn(this.passphrase, this.rememberMe);
+    this.passphrase = null;
+    this.rememberMe = null;
   }
 
   /**
@@ -185,7 +205,7 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
    * @returns {Promise<void>}
    */
   async signIn(passphrase, rememberMe = false) {
-    await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN});
+    this.setState({state: AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN});
     try {
       await this.props.context.port.request("passbolt.account-recovery.sign-in", passphrase, rememberMe);
     } catch (error) {

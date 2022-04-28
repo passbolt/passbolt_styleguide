@@ -16,6 +16,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import InsertAccountRecoveryIframe
   from "./components/AuthenticationAccountRecovery/OrchestrateAccountRecovery/InsertAccountRecoveryIframe";
+import InsertFileIframe from "./components/InsertFileIframe";
 
 /**
  * The bootstrap of the account recovery application served by the browser extension.
@@ -61,6 +62,7 @@ class ExtBootstrapAccountRecovery extends Component {
     return (
       <>
         <InsertAccountRecoveryIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
       </>
     );
   }

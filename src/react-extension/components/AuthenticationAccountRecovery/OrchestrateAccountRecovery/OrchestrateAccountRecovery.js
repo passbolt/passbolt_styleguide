@@ -25,6 +25,7 @@ import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/
 import Login, {LoginVariations} from "../../AuthenticationLogin/Login/Login";
 import RequestAccountRecovery, {RequestAccountRecoveryVariations} from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
+import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/DownloadRecoveryKit";
 
 /**
  * The component orchestrates the recover authentication process
@@ -54,12 +55,17 @@ class OrchestrateAccountRecovery extends Component {
           onPrimaryActionClick={this.props.authenticationAccountRecoveryContext.requestHelpCredentialsLost}
           onSecondaryActionClick={this.props.authenticationAccountRecoveryContext.goToValidatePassphrase}
         />;
+      case AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT:
+        return <DownloadRecoveryKit
+          onDownload={this.props.authenticationAccountRecoveryContext.downloadRecoveryKit}
+          onComplete={this.props.authenticationAccountRecoveryContext.handleRecoveryKitDownloaded}
+        />;
       case AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN:
         return <LoadingSpinner
           title={<Trans>Signing in, please wait.</Trans>}
         />;
       case AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX:
-        return <CheckMailBox/>
+        return <CheckMailBox/>;
       case AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
           error={this.props.authenticationAccountRecoveryContext.error}

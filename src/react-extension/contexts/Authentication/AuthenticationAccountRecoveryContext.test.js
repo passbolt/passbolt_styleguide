@@ -117,45 +117,87 @@ describe("AuthenticationAccountRecoveryContextProvider", () => {
   });
 
   describe("AuthenticationAccountRecoveryContextProvider::complete", () => {
-    it("When an unexpected error occurred during the recovering of the account the machine state should be set to: UNEXPECTED_ERROR", async() => {
+    it("When an unexpected error occurred while recovering the account, the machine state should be set to: UNEXPECTED_ERROR", async() => {
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.account-recovery.recover-account", jest.fn(() => Promise.reject(new Error("Unexpected error"))));
       const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      expect.assertions(3);
+      expect.assertions(2);
       await contextProvider.initialize();
       await contextProvider.complete("passphrase", true);
       expect(props.context.port.requestListeners["passbolt.account-recovery.recover-account"]).toHaveBeenCalledWith("passphrase", undefined);
-      expect(props.context.port.requestListeners["passbolt.account-recovery.sign-in"]).not.toHaveBeenCalledWith();
       expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR);
     });
 
-    it("When an unexpected error occurred during the signing-in the machine state should be set to: UNEXPECTED_ERROR", async() => {
+    it("When the account recovery is recovered the machine state should be set to: DOWNLOAD_RECOVERY_KIT", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.complete("passphrase", true);
+      expect(props.context.port.requestListeners["passbolt.account-recovery.recover-account"]).toHaveBeenCalledWith("passphrase", undefined);
+      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT);
+    });
+  });
+
+  describe("AuthenticationAccountRecoveryContextProvider::downloadRecoveryKit", () => {
+    it("When the user requests the download of the recovery kit, the machine state should be remain to: DOWNLOAD_RECOVERY_KIT", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.complete("passphrase", true);
+      await contextProvider.downloadRecoveryKit();
+      expect(props.context.port.requestListeners["passbolt.account-recovery.download-recovery-kit"]).toHaveBeenCalledTimes(1);
+      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.DOWNLOAD_RECOVERY_KIT);
+    });
+
+    it("When an unexpected error occurred while downloading the recovery kit, the machine state should be set to: UNEXPECTED_ERROR", async() => {
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.account-recovery.download-recovery-kit", jest.fn(() => Promise.reject(new Error("Unexpected error"))));
+      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.complete("passphrase", true);
+      await contextProvider.downloadRecoveryKit();
+      expect(props.context.port.requestListeners["passbolt.account-recovery.download-recovery-kit"]).toHaveBeenCalledTimes(1);
+      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR);
+    });
+  });
+
+  describe("AuthenticationAccountRecoveryContextProvider::handleRecoveryKitDownloaded", () => {
+    it("When the user has downloaded its recovery kit and signs in, the machine state should be set to: SIGNING_IN", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.complete("passphrase", true);
+      await contextProvider.handleRecoveryKitDownloaded();
+      expect(props.context.port.requestListeners["passbolt.account-recovery.sign-in"]).toHaveBeenCalledWith("passphrase", true, undefined);
+      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN);
+    });
+
+    it("When the user has downloaded its recovery kit and but fails to sign-in, the machine state should be set to: UNEXPECTED_ERROR", async() => {
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.account-recovery.sign-in", jest.fn(() => Promise.reject(new Error("Unexpected error"))));
       const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      expect.assertions(3);
+      expect.assertions(2);
       await contextProvider.initialize();
       await contextProvider.complete("passphrase", true);
-      expect(props.context.port.requestListeners["passbolt.account-recovery.recover-account"]).toHaveBeenCalledWith("passphrase", undefined);
+      await contextProvider.handleRecoveryKitDownloaded();
       expect(props.context.port.requestListeners["passbolt.account-recovery.sign-in"]).toHaveBeenCalledWith("passphrase", true, undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR);
-    });
-
-    it("When the account recovery is completed the machine state should be set to: SIGNING_IN", async() => {
-      const props = defaultProps();
-      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
-      mockComponentSetState(contextProvider);
-
-      expect.assertions(3);
-      await contextProvider.initialize();
-      await contextProvider.complete("passphrase", true);
-      expect(props.context.port.requestListeners["passbolt.account-recovery.recover-account"]).toHaveBeenCalledWith("passphrase", undefined);
-      expect(props.context.port.requestListeners["passbolt.account-recovery.sign-in"]).toHaveBeenCalledWith("passphrase", true, undefined);
-      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN);
     });
   });
 
