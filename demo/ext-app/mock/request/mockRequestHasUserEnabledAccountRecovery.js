@@ -11,9 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-
-import siteSettingsFixture from "../../../../src/react-extension/test/fixture/Settings/siteSettings";
-
 export default () => {
-  return siteSettingsFixture;
+  return true;
 };

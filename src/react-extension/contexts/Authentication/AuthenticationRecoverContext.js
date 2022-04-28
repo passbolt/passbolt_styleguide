@@ -31,6 +31,7 @@ export const AuthenticationRecoverWorkflowStates = {
   SIGNING_IN: 'Signing in',
   UNEXPECTED_ERROR: 'Unexpected Error',
   VALIDATE_PASSPHRASE: 'Validate passphrase',
+  CHECK_MAILBOX: 'Check mailbox',
 };
 
 /**
@@ -52,8 +53,8 @@ export const AuthenticationRecoverContext = React.createContext({
   }, // Whenever the user want to check the passphrase of its imported gpg key.
   chooseSecurityToken: () => {
   }, // Whenever the user wants to choose its security token preference.
-  requestHelpCredentialsLost: () => {
-  }, // Whenever the user who lost its credentials request help.
+  needHelpCredentialsLost: () => {
+  }, // Whenever the user who lost its credentials needs help.
   initiateAccountRecovery: () => {
   }, // Whenever the user wants to initiate an account recovery.
   generateAccountRecoveryGpgKey: () => {
@@ -62,6 +63,8 @@ export const AuthenticationRecoverContext = React.createContext({
   }, // Whenever the user chose its account recovery security token preferences.
   validatePrivateKey: () => {
   }, // Whenever we need to verify the imported private key
+  requestHelpCredentialsLost: () => {
+  } // Whenever the user wants to request help because it lost its credentials.
 });
 
 /**
@@ -94,7 +97,8 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       importGpgKey: this.importGpgKey.bind(this), // Whenever the user imports its gpg key.
       checkPassphrase: this.checkPassphrase.bind(this), // Whenever the user want to check the passphrase of its imported gpg key.
       chooseSecurityToken: this.chooseSecurityToken.bind(this), // Whenever the user wants to choose its security token preference.
-      requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user who lost its credentials request help.
+      needHelpCredentialsLost: this.needHelpCredentialsLost.bind(this), // Whenever the user who lost its credentials needs help.
+      requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user wants to request help because it lost its credentials.
       initiateAccountRecovery: this.initiateAccountRecovery.bind(this), // Whenever the user wants to initiate an account recovery.
       generateAccountRecoveryGpgKey: this.generateAccountRecoveryGpgKey.bind(this), // Whenever the user wants to create an account recovery gpg key.
       chooseAccountRecoverySecurityToken: this.chooseAccountRecoverySecurityToken.bind(this), // Whenever the user chose its account recovery security token preferences.
@@ -116,6 +120,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async initialize() {
     const isFirstInstall = await this.props.context.port.request('passbolt.recover.first-install');
     const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
+
     await this.props.context.port.request('passbolt.recover.start');
     // The user locale is retrieved by the recover start, update the application locale
     await this.props.context.initLocale();
@@ -199,10 +204,10 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   }
 
   /**
-   * Whenever the user lost its credentials.
+   * Whenever the user who lost its credentials needs help.
    * @returns {Promise<void>}
    */
-  async requestHelpCredentialsLost() {
+  async needHelpCredentialsLost() {
     const hasUserAccountRecoveryEnabled = await this.props.context.port.request("passbolt.recover.has-user-enabled-account-recovery");
     if (hasUserAccountRecoveryEnabled) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY});
@@ -217,6 +222,19 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async initiateAccountRecovery() {
     await this.setState({state: AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY});
+  }
+
+  /**
+   * Whenever the user wants to request help because it lost its credentials.
+   * @returns {Promise<void>}
+   */
+  async requestHelpCredentialsLost() {
+    try {
+      await this.props.context.port.request('passbolt.recover.request-help-credentials-lost');
+      await this.setState({state: AuthenticationRecoverWorkflowStates.CHECK_MAILBOX});
+    } catch (error) {
+      await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+    }
   }
 
   /**

@@ -23,11 +23,14 @@ import {
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import AcceptLoginServerKeyChange from "../AcceptLoginServerKeyChange/AcceptLoginServerKeyChange";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
+import RequestAccountRecovery, {RequestAccountRecoveryVariations} from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
+import AskForAuthenticationHelp, {AskForAuthenticationHelpCredentialLostVariations} from "../../Authentication/AskForAuthenticationHelpCredentialLost/AskForAuthenticationHelpCredentialLost";
+import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
 
 /**
- * The component orchestrates the login authentication process
+ * The component orchestrates the login authentication box main content.
  */
-class OrchestrateLogin extends Component {
+class OrchestrateLoginBoxMain extends Component {
   /**
    * Render the component
    */
@@ -39,7 +42,7 @@ class OrchestrateLogin extends Component {
           userSettings={this.props.context.userSettings}
           onSignIn={this.props.authenticationLoginContext.signIn}
           onCheckPassphrase={this.props.authenticationLoginContext.checkPassphrase}
-          onSecondaryActionClick={this.props.authenticationLoginContext.handleSwitchAccount}
+          onSecondaryActionClick={this.props.authenticationLoginContext.needHelpCredentialsLost}
         />;
       case AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY:
         return <AcceptLoginServerKeyChange
@@ -56,6 +59,20 @@ class OrchestrateLogin extends Component {
           message={<Trans>Something went wrong, the sign in failed with the following error:</Trans>}
           error={this.props.authenticationLoginContext.error}
         />;
+      case AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY:
+        return <RequestAccountRecovery
+          displayAs={RequestAccountRecoveryVariations.SIGN_IN}
+          onPrimaryActionClick={this.props.authenticationLoginContext.requestHelpCredentialsLost.bind(this)}
+          onSecondaryActionClick={this.props.authenticationLoginContext.goToValidatePassphrase.bind(this)}
+        />;
+      case AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST:
+        return <AskForAuthenticationHelp
+          displayAs={AskForAuthenticationHelpCredentialLostVariations.SIGN_IN}
+          onPrimaryActionClick={this.props.authenticationLoginContext.requestHelpCredentialsLost.bind(this)}
+          onSecondaryActionClick={this.props.authenticationLoginContext.goToValidatePassphrase.bind(this)}
+        />;
+      case AuthenticationLoginWorkflowStates.CHECK_MAILBOX:
+        return <CheckMailBox/>;
       case AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
           error={this.props.authenticationLoginContext.error}
@@ -66,8 +83,8 @@ class OrchestrateLogin extends Component {
   }
 }
 
-OrchestrateLogin.propTypes = {
+OrchestrateLoginBoxMain.propTypes = {
   context: PropTypes.any.isRequired, // The application context
   authenticationLoginContext: PropTypes.any.isRequired, // The authentication login context
 };
-export default withAppContext(withAuthenticationLoginContext(withTranslation('common')(OrchestrateLogin)));
+export default withAppContext(withAuthenticationLoginContext(withTranslation('common')(OrchestrateLoginBoxMain)));

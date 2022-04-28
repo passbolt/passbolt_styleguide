@@ -158,4 +158,32 @@ describe("AuthenticationAccountRecoveryContextProvider", () => {
       expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN);
     });
   });
+
+  describe("AuthenticationAccountRecoveryContextProvider::requestHelpCredentialsLost", () => {
+    it("When the user lost its passphrase and requests administrator help, the machine state should be set to: CHECK_MAILBOX", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.requestHelpCredentialsLost();
+      expect(props.context.port.requestListeners["passbolt.account-recovery.request-help-credentials-lost"]).toHaveBeenCalled();
+      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX);
+    });
+
+    it("When the user lost its passphrase and fails to request administrator help the machine state should be set to: UNEXPECTED_ERROR", async() => {
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.account-recovery.request-help-credentials-lost", jest.fn(() => Promise.reject(new Error("Unexpected error"))));
+      const contextProvider = new AuthenticationAccountRecoveryContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(3);
+      await contextProvider.initialize();
+      await contextProvider.requestHelpCredentialsLost();
+      expect(props.context.port.requestListeners["passbolt.account-recovery.request-help-credentials-lost"]).toHaveBeenCalled();
+      expect(contextProvider.state.state).toEqual(AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR);
+      expect(contextProvider.state.error.message).toEqual("Unexpected error");
+    });
+  });
 });

@@ -14,37 +14,21 @@
 
 export default () => {
   return {
-    "domain": "http://localhost:3000",
+    "type": "account",
+    "domain": "https://passbolt.local",
+    "user_id": "",
+    "username": "ada@passbolt.dev",
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "user_key_fingerprint": "",
+    "user_public_armored_key": "",
+    "user_private_armored_key": "",
+    "server_public_armored_key": "",
+    "locale": "de-DE",
     "security_token": {
       "code": "HGA",
       "color": "#8bc34a",
       "textcolor": "#000000",
-    },
-    "user": {
-      "id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
-      "username": "ada@passbolt.com",
-      "active": true,
-      "deleted": false,
-      "created": "2020-08-13T10:10:02+00:00",
-      "modified": "2020-09-13T10:10:02+00:00",
-      "role": {
-        "name": "admin",
-      },
-      "profile": {
-        "id": "99522cc9-0acc-5ae2-b996-d03bded3c0a6",
-        "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
-        "first_name": "Ada",
-        "last_name": "Lovelace",
-        "created": "2020-10-13T10:10:02+00:00",
-        "modified": "2020-10-13T10:10:02+00:00",
-        "avatar": {
-          "url": {
-            "medium": "img/avatar/user_medium.png",
-            "small": "img/avatar/user.png"
-          }
-        }
-      },
     }
   };
 };

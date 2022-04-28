@@ -12,6 +12,8 @@
  * @since         3.6.0
  */
 
+import {AskForAuthenticationHelpCredentialLostVariations} from "./AskForAuthenticationHelpCredentialLost";
+
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
@@ -31,7 +33,9 @@ export function defaultAppContext(appContext) {
 export function defaultProps(props) {
   const defaultProps = {
     context: defaultAppContext(),
-    onTryAgain: jest.fn(() => Promise.resolve()),
+    displayAs: AskForAuthenticationHelpCredentialLostVariations.SIGN_IN,
+    onPrimaryActionClick: jest.fn(() => Promise.resolve()),
+    onSecondaryActionClick: jest.fn(() => Promise.resolve()),
   };
   return Object.assign(defaultProps, props || {});
 }

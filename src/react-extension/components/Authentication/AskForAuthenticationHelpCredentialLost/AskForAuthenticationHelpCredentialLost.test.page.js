@@ -13,13 +13,13 @@
  */
 import {fireEvent, render} from "@testing-library/react";
 import React from "react";
-import AskForAuthenticationHelp from "./AskForAuthenticationHelp";
+import AskForAuthenticationHelpCredentialLost from "./AskForAuthenticationHelpCredentialLost";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The AskForAuthenticationHelp component represented as a page
  */
-export default class AskForAuthenticationHelpTestPage {
+export default class AskForAuthenticationHelpCredentialLostTestPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -27,24 +27,24 @@ export default class AskForAuthenticationHelpTestPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AskForAuthenticationHelp {...props}/>
+        <AskForAuthenticationHelpCredentialLost {...props}/>
       </MockTranslationProvider>
     );
   }
 
   /**
-   * Returns the request new account element
+   * Returns the request help
    */
-  get requestNewAccountButton() {
+  get requestHelpButton() {
     return this._page.container.querySelector('.button.primary');
   }
 
   /**
-   * Request new account
+   * Request help
    */
-  async requestNewAccount() {
+  async requestHelp() {
     const leftClick = {button: 0};
-    fireEvent.click(this.requestNewAccountButton, leftClick);
+    fireEvent.click(this.requestHelpButton, leftClick);
   }
 
   /**
@@ -56,9 +56,6 @@ export default class AskForAuthenticationHelpTestPage {
 
   /**
    * Try again
-   */
-  /**
-   * Request new account
    */
   async tryAgain() {
     const leftClick = {button: 0};

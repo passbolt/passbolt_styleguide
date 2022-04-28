@@ -15,67 +15,17 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 
+/**
+ * The component display variations.
+ * @type {Object}
+ */
+export const RequestAccountRecoveryVariations = {
+  SIGN_IN: 'Sign-in',
+  RECOVER: 'Recover',
+  ACCOUNT_RECOVERY: 'Account recovery'
+};
+
 class RequestAccountRecovery extends Component {
-  constructor(props) {
-    super(props);
-    this.state = this.getDefaultState();
-    this.bindCallbacks();
-  }
-
-  /**
-   * Returns the default component state
-   */
-  getDefaultState() {
-    return {
-      processing: false
-    };
-  }
-
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  /**
-   * Toggle the processing mode
-   */
-  async toggleProcessing() {
-    await this.setState({processing: !this.state.processing});
-  }
-
-  /**
-   * Returns true if the component must be in a processing mode
-   */
-  get isProcessing() {
-    return this.state.processing;
-  }
-
-  /**
-   * Go to the next process
-   * @param event A form submit event
-   */
-  async handleSubmit(event) {
-    // Avoid the form to be submitted.
-    event.preventDefault();
-
-    if (this.isProcessing) {
-      return;
-    }
-
-    await this.toggleProcessing();
-    await this.requestAccountRecovery();
-  }
-
-  /**
-   * Request account recovery.
-   * @returns {Promise<void>}
-   */
-  async requestAccountRecovery() {
-    await this.props.onComplete();
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -84,31 +34,37 @@ class RequestAccountRecovery extends Component {
     return (
       <div className="initiate-recover-account">
         <h1><Trans>Request account recovery</Trans></h1>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <Trans>Both the private key and passphrase are required to recover your account, if you do not have access,
-              you can request an account recovery to an administrator.
-            </Trans>
-          </p>
-          <div className="form-actions">
-            <button
-              type="submit"
-              className={`button primary big full-width ${this.isProcessing ? "processing" : ""}`}
-              role="button"
-              disabled={this.isProcessing}>
-              <Trans>Request account recovery</Trans>
-            </button>
-            <a href="#">
-              <Trans>Learn more about account recovery</Trans>
-            </a>
-          </div>
-        </form>
+        <p>
+          {{
+            [RequestAccountRecoveryVariations.SIGN_IN]: <><Trans>Your passphrase is required to sign-in.</Trans> <Trans>If you do not have access, you can request an account recovery to an administrator.</Trans></>,
+            [RequestAccountRecoveryVariations.RECOVER]: <><Trans>Both the private key and passphrase are required to recover your account.</Trans> <Trans>If you do not have access, you can request an account recovery to an administrator.</Trans></>,
+            [RequestAccountRecoveryVariations.ACCOUNT_RECOVERY]: <><Trans>The passphrase you defined when initiating the account recovery is required to complete the operation.</Trans> <Trans>If you do not have access, you can request a new account recovery to an administrator.</Trans></>,
+          }[this.props.displayAs]}
+        </p>
+        <div className="form-actions">
+          <button
+            type="button"
+            className={`button primary big full-width ${this.isProcessing ? "processing" : ""}`}
+            role="button"
+            onClick={this.props.onPrimaryActionClick}>
+            <Trans>Request account recovery</Trans>
+          </button>
+          <a onClick={this.props.onSecondaryActionClick}>
+            <Trans>I want to try again.</Trans>
+          </a>
+        </div>
       </div>
     );
   }
 }
 
 RequestAccountRecovery.propTypes = {
-  onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to initiate its account recovery.
+  displayAs: PropTypes.oneOf([
+    RequestAccountRecoveryVariations.SIGN_IN,
+    RequestAccountRecoveryVariations.RECOVER,
+    RequestAccountRecoveryVariations.ACCOUNT_RECOVERY,
+  ]).isRequired, // Defines how the form should be displayed and behaves
+  onPrimaryActionClick: PropTypes.func.isRequired, // The callback to trigger clicks on the primary action
+  onSecondaryActionClick: PropTypes.func.isRequired, // The callback to trigger clicks on the secondary action
 };
 export default withTranslation('common')(RequestAccountRecovery);

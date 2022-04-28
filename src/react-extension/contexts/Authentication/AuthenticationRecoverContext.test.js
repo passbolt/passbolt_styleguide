@@ -217,26 +217,26 @@ describe("AuthenticationRecoverContextProvider", () => {
     });
   });
 
-  describe("AuthenticationRecoverContextProvider::requestHelpCredentialsLost", () => {
-    it("When help is requested due to credentials lost, the machine state should be set to: HELP_CREDENTIALS_LOST", async() => {
+  describe("AuthenticationRecoverContextProvider::needHelpCredentialsLost", () => {
+    it("When the user needs help due to credentials lost but the user didn't enroll to the program, the machine state should be set to: HELP_CREDENTIALS_LOST", async() => {
       const props = defaultProps();
       const contextProvider = new AuthenticationRecoverContextProvider(props);
       mockComponentSetState(contextProvider);
 
       expect.assertions(1);
       await contextProvider.initialize();
-      await contextProvider.requestHelpCredentialsLost();
+      await contextProvider.needHelpCredentialsLost();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST);
     });
 
-    it("Given the user joined the account recovery program, when help is requested due to credentials lost, the machine state should be set to: INITIATE_ACCOUNT_RECOVERY", async() => {
+    it("When the user needs help due to credentials lost but the user enroll to the program, the machine state should be set to, the machine state should be set to: INITIATE_ACCOUNT_RECOVERY", async() => {
       const props = withAccountRecoveryEnabled(defaultProps());
       const contextProvider = new AuthenticationRecoverContextProvider(props);
       mockComponentSetState(contextProvider);
 
       expect.assertions(1);
       await contextProvider.initialize();
-      await contextProvider.requestHelpCredentialsLost();
+      await contextProvider.needHelpCredentialsLost();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY);
     });
   });
@@ -313,6 +313,34 @@ describe("AuthenticationRecoverContextProvider", () => {
       await contextProvider.initialize();
       await contextProvider.chooseAccountRecoverySecurityToken({color: "black", textColor: "red"});
       expect(props.context.port.requestListeners["passbolt.recover.set-security-token"]).toHaveBeenCalledWith({color: "black", textColor: "red"}, undefined);
+      expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR);
+      expect(contextProvider.state.error.message).toEqual("Unexpected error");
+    });
+  });
+
+  describe("AuthenticationRecoverContextProvider::requestHelpCredentialsLost", () => {
+    it("When the user requests help to an administrator, the machine state should be set to: CHECK_MAILBOX", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationRecoverContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.initialize();
+      await contextProvider.requestHelpCredentialsLost();
+      expect(props.context.port.requestListeners["passbolt.recover.request-help-credentials-lost"]).toHaveBeenCalled();
+      expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.CHECK_MAILBOX);
+    });
+
+    it("When the user fails to request help to an administrator, the machine state should be set to: UNEXPECTED_ERROR", async() => {
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.recover.request-help-credentials-lost", jest.fn(() => Promise.reject(new Error("Unexpected error"))));
+      const contextProvider = new AuthenticationRecoverContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(3);
+      await contextProvider.initialize();
+      await contextProvider.requestHelpCredentialsLost();
+      expect(props.context.port.requestListeners["passbolt.recover.request-help-credentials-lost"]).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR);
       expect(contextProvider.state.error.message).toEqual("Unexpected error");
     });

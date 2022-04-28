@@ -11,39 +11,38 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-
-import RequestAccountRecoveryPage from "./RequestAccountRecovery.test.page";
-import {defaultProps} from "./RequestAccountRecovery.test.data";
 import each from "jest-each";
-import {RequestAccountRecoveryVariations} from "./RequestAccountRecovery";
+import {defaultProps} from "./AskForAuthenticationHelpCredentialLost.test.data";
+import AskForAuthenticationHelpCredentialLostTestPage from "./AskForAuthenticationHelpCredentialLost.test.page";
+import {AskForAuthenticationHelpCredentialLostVariations} from "./AskForAuthenticationHelpCredentialLost";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("RequestAccountRecoveryPage", () => {
+describe("AskForAuthenticationHelpCredentialLost", () => {
   each([
-    {displayAs: RequestAccountRecoveryVariations.SETUP}, // Login
-    {displayAs: RequestAccountRecoveryVariations.RECOVER}, // recover account
-    {displayAs: RequestAccountRecoveryVariations.ACCOUNT_RECOVERY}, // account recovery
+    {displayAs: AskForAuthenticationHelpCredentialLostVariations.SETUP}, // Login
+    {displayAs: AskForAuthenticationHelpCredentialLostVariations.RECOVER}, // recover account
   ]).describe("Common behavior to all context", _props => {
     let page, props;
 
     beforeEach(() => {
       props = defaultProps(_props); // The props to pass
-      page = new RequestAccountRecoveryPage(props);
+      page = new AskForAuthenticationHelpCredentialLostTestPage(props);
     });
 
-    it('As AN I should be able to request an account recovery', async() => {
+    it('As AN I should be able to request a new account', async() => {
       expect.assertions(1);
-      await page.requestAccountRecovery();
+      await page.requestHelp();
       expect(props.onPrimaryActionClick).toHaveBeenCalled();
     });
 
     it('As AN I should be able to try again', async() => {
       expect.assertions(1);
-      await page.clickSecondaryActionLink();
+      await page.tryAgain();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
   });
 });
+

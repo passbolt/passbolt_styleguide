@@ -22,7 +22,10 @@ export const AuthenticationLoginWorkflowStates = {
   SIGN_IN: "Sign in",
   SIGN_IN_ERROR: "Sign in error",
   SIGNING_IN: "Signing in",
+  INITIATE_ACCOUNT_RECOVERY: "Initiate account recovery",
+  HELP_CREDENTIALS_LOST: "Help credentials lost",
   UNEXPECTED_ERROR: "Unexpected error",
+  CHECK_MAILBOX: "Check mailbox",
 };
 
 /**
@@ -45,6 +48,12 @@ export const AuthenticationLoginContext = React.createContext({
   }, // Whenever a switch account is required.
   acceptNewServerKey: () => {
   }, // Whenever a new server gpg key is accepted.
+  needHelpCredentialsLost: () => {
+  }, // Whenever a user lost its passphrase.
+  requestHelpCredentialsLost: () => {
+  }, // Whenever the user wants to request help because it lost its credentials.
+  goToValidatePassphrase: () => {
+  }, // Whenever the users wants to go to the validate passphrase.
 });
 
 /**
@@ -76,6 +85,9 @@ export class AuthenticationLoginContextProvider extends React.Component {
       signIn: this.signIn.bind(this), // Whenever a user sign-in is required.
       handleSwitchAccount: this.handleSwitchAccount.bind(this), // Whenever a switch account is required.
       acceptNewServerKey: this.acceptNewServerKey.bind(this), // Whenever a new server gpg key is accepted.
+      needHelpCredentialsLost: this.needHelpCredentialsLost.bind(this), // Whenever a user lost its passphrase.
+      requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user wants to request help because it lost its credentials.
+      goToValidatePassphrase: this.goToValidatePassphrase.bind(this), // Whenever the users wants to go to the validate passphrase.
     };
   }
 
@@ -177,6 +189,40 @@ export class AuthenticationLoginContextProvider extends React.Component {
     } catch (error) {
       await this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
+  }
+
+  /**
+   * Whenever the user lost its passphrase.
+   * @returns {Promise<void>}
+   */
+  async needHelpCredentialsLost() {
+    const canIUserAccountRecovery = this.props.context.siteSettings.canIUse('accountRecovery');
+    if (canIUserAccountRecovery) {
+      await this.setState({state: AuthenticationLoginWorkflowStates.INITIATE_ACCOUNT_RECOVERY});
+    } else {
+      await this.setState({state: AuthenticationLoginWorkflowStates.HELP_CREDENTIALS_LOST});
+    }
+  }
+
+  /**
+   * Whenever the user wants to request help because it lost its credentials.
+   * @returns {Promise<void>}
+   */
+  async requestHelpCredentialsLost() {
+    try {
+      await this.props.context.port.request('passbolt.auth.request-help-credentials-lost');
+      await this.setState({state: AuthenticationLoginWorkflowStates.CHECK_MAILBOX});
+    } catch (error) {
+      await this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: error});
+    }
+  }
+
+  /**
+   * Whenever the users wants to go to the validate passphrase.
+   * @returns {Promise<void>}
+   */
+  async goToValidatePassphrase() {
+    await this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
   }
 
   /**
