@@ -243,18 +243,21 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
       await this.props.context.port.request("passbolt.setup.verify-passphrase", passphrase, rememberMe);
-      this.setState({
-        passphrase: passphrase,
-        rememberMe: rememberMe,
-        state: await this.isAccountRecoveryOrganizationPolicyEnabled()
-          ? AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE
-          : AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN
-      });
+      this.setState({passphrase, rememberMe});
+
+      if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
+        this.setState({
+          accountRecoveryOrganizationPolicy: await this.props.context.port.request('passbolt.setup.get-account-recovery-organization-policy'),
+          state: AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE
+        });
+      } else {
+        this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
+      }
     } catch (error) {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
       } else {
-        await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
       }
     }
   }
