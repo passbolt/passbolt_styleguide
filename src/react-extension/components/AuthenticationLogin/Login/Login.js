@@ -402,30 +402,19 @@ class Login extends Component {
           }
 
           <div className="form-actions">
-            {this.props.displayAs === LoginVariations.SIGN_IN && <>
-              <button
-                type="submit"
-                className={`button primary big full-width ${processingClassName}`}
-                role="button"
-                disabled={this.isProcessing}>
-                <Trans>Sign in</Trans>
-              </button>
-              <a onClick={this.props.onSecondaryActionClick}>
-                <Trans>Or switch to another account.</Trans>
-              </a>
-            </>}
-            {this.props.displayAs === LoginVariations.ACCOUNT_RECOVERY && <>
-              <button
-                type="submit"
-                className={`button primary big full-width ${processingClassName}`}
-                role="button"
-                disabled={this.isProcessing}>
-                <Trans>Complete recovery</Trans>
-              </button>
-              <a onClick={this.props.onSecondaryActionClick}>
-                <Trans>Help, I lost my passphrase.</Trans>
-              </a>
-            </>}
+            <button
+              type="submit"
+              className={`button primary big full-width ${processingClassName}`}
+              role="button"
+              disabled={this.isProcessing}>
+              {{
+                [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
+                [LoginVariations.ACCOUNT_RECOVERY]: <Trans>Complete recovery</Trans>,
+              }[this.props.displayAs]}
+            </button>
+            <a onClick={this.props.onSecondaryActionClick}>
+              <Trans>Help, I lost my passphrase.</Trans>
+            </a>
           </div>
         </form>
       </div>
@@ -438,7 +427,7 @@ Login.defaultProps = {
 };
 
 Login.propTypes = {
-  displayAs: PropTypes.PropTypes.oneOf([
+  displayAs: PropTypes.oneOf([
     LoginVariations.SIGN_IN,
     LoginVariations.ACCOUNT_RECOVERY,
   ]), // Defines how the form should be displayed and behaves

@@ -14,12 +14,12 @@
 
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import AskForAuthenticationHelp from "./AskForAuthenticationHelp";
-import {defaultProps} from "./AskForAuthenticationHelp.test.data";
+import AskForAuthenticationHelpCredentialLost from "./AskForAuthenticationHelpCredentialLost";
+import {defaultProps} from "./AskForAuthenticationHelpCredentialLost.test.data";
 
 export default {
-  title: 'Passbolt/Authentication/AskForAuthenticationHelp',
-  component: AskForAuthenticationHelp
+  title: 'Passbolt/Authentication/AskForAuthenticationHelpCredentialLost',
+  component: AskForAuthenticationHelpCredentialLost
 };
 
 const Template = args =>
@@ -27,7 +27,7 @@ const Template = args =>
     <div className="content">
       <div className="login-form">
         <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <AskForAuthenticationHelp {...args} {...routerProps}/>}/>
+          <Route component={routerProps => <AskForAuthenticationHelpCredentialLost {...args} {...routerProps}/>}/>
         </MemoryRouter>
       </div>
     </div>

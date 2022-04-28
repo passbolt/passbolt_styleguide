@@ -27,6 +27,7 @@ export function defaultAuthenticationAccountRecoveryAppContext(appContext = {}) 
   port.addRequestListener("passbolt.account-recovery.verify-passphrase", jest.fn());
   port.addRequestListener("passbolt.account-recovery.recover-account", jest.fn());
   port.addRequestListener("passbolt.account-recovery.sign-in", jest.fn());
+  port.addRequestListener("passbolt.account-recovery.request-help-credentials-lost", jest.fn());
 
   const defaultAuthenticationRecover = {
     port: port,

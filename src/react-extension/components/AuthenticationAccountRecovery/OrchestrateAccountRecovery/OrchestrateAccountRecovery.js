@@ -23,6 +23,8 @@ import {
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import Login, {LoginVariations} from "../../AuthenticationLogin/Login/Login";
+import RequestAccountRecovery, {RequestAccountRecoveryVariations} from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
+import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
 
 /**
  * The component orchestrates the recover authentication process
@@ -40,16 +42,24 @@ class OrchestrateAccountRecovery extends Component {
           account={this.props.authenticationAccountRecoveryContext.account}
           onSignIn={this.props.authenticationAccountRecoveryContext.complete}
           onCheckPassphrase={this.props.authenticationAccountRecoveryContext.verifyPassphrase}
-          // onSecondaryActionClick={this.props.authenticationLoginContext.handleSwitchAccount}
+          onSecondaryActionClick={this.props.authenticationAccountRecoveryContext.needHelpCredentialsLost}
         />;
       case AuthenticationAccountRecoveryWorkflowStates.RECOVERING_ACCOUNT:
         return <LoadingSpinner
           title={<Trans>Recovering your account, please wait.</Trans>}
         />;
+      case AuthenticationAccountRecoveryWorkflowStates.HELP_CREDENTIALS_LOST:
+        return <RequestAccountRecovery
+          displayAs={RequestAccountRecoveryVariations.ACCOUNT_RECOVERY}
+          onPrimaryActionClick={this.props.authenticationAccountRecoveryContext.requestHelpCredentialsLost}
+          onSecondaryActionClick={this.props.authenticationAccountRecoveryContext.goToValidatePassphrase}
+        />;
       case AuthenticationAccountRecoveryWorkflowStates.SIGNING_IN:
         return <LoadingSpinner
           title={<Trans>Signing in, please wait.</Trans>}
         />;
+      case AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX:
+        return <CheckMailBox/>
       case AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
           error={this.props.authenticationAccountRecoveryContext.error}

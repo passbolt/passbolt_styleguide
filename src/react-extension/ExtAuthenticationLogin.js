@@ -19,8 +19,9 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import AuthenticationLoginContextProvider from "./contexts/Authentication/AuthenticationLoginContext";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
-import OrchestrateLogin from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLogin";
+import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxMain";
 import Footer from "./components/Common/Footer/Footer";
+import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 
 /**
  * The login application served by the browser extension.
@@ -133,7 +134,10 @@ class ExtAuthenticationLogin extends Component {
                     <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                   </div>
                   <div className="login-form">
-                    <OrchestrateLogin/>
+                    <OrchestrateLoginBoxMain/>
+                  </div>
+                  <div className="login-box-footer">
+                    <OrchestrateLoginBoxFooter/>
                   </div>
                 </div>
               </div>

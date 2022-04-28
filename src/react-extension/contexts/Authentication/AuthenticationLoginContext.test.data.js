@@ -15,24 +15,42 @@
 import {defaultAppContext} from "../ExtAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 import ServerKeyChangedError from "../../lib/Error/ServerKeyChangedError";
+import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../test/fixture/Settings/siteSettings";
 
 /**
  * Default context
  * @param {Object} appContext The props to override
  * @returns {object}
  */
-function defaultAuthenticationLoginAppContext(appContext = {}) {
+export function defaultAuthenticationLoginAppContext(appContext = {}) {
   const port = new MockPort();
   port.addRequestListener("passbolt.auth.verify-server-key", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.auth.get-server-key", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.auth.verify-passphrase", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.auth.login", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.auth.replace-server-key", jest.fn(() => Promise.resolve()));
+  port.addRequestListener("passbolt.auth.request-help-credentials-lost", jest.fn(() => Promise.resolve()));
 
   const defaultAuthenticationLoginAppContext = {
     port: port,
+    siteSettings: new SiteSettings(siteSettingsFixture)
   };
   return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), appContext);
+}
+
+/**
+ * Default context with account recovery disabled
+ * @param {Object} appContext The props to override
+ * @returns {object}
+ */
+export function defaultAuthenticationLoginAppContextWithAccountRecoveryDisabled(appContext = {}) {
+  const siteSettingsWithAccountRecoveryDisabled = JSON.parse(JSON.stringify(siteSettingsFixture));
+  siteSettingsWithAccountRecoveryDisabled.passbolt.plugins.accountRecovery.enabled = false;
+  return defaultAuthenticationLoginAppContext({
+    siteSettings: new SiteSettings(siteSettingsWithAccountRecoveryDisabled),
+    ...appContext,
+  });
 }
 
 /**

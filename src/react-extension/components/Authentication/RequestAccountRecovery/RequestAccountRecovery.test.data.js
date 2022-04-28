@@ -18,7 +18,8 @@
  */
 export function defaultProps(props) {
   const defaultProps = {
-    onComplete: jest.fn(() => Promise.resolve()),
+    onPrimaryActionClick: jest.fn(() => Promise.resolve()),
+    onSecondaryActionClick: jest.fn(() => Promise.resolve()),
   };
   return Object.assign(defaultProps, props || {});
 }

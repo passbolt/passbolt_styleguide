@@ -25,7 +25,8 @@ export default {
     "edition": "pro",
     "plugins": {
       "accountRecovery": {
-        "enabled": true
+        "version": "1.0.0",
+        "enabled": true,
       },
       "import": {
         "version": "2.0.1",

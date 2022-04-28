@@ -140,7 +140,7 @@ describe("Login", () => {
 
       expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Sign in");
-      expect(page.secondaryActionLink.textContent).toBe("Or switch to another account.");
+      expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
     });
   });
 

@@ -23,6 +23,8 @@ export const AuthenticationAccountRecoveryWorkflowStates = {
   SIGNING_IN: 'Signing in',
   LOADING: "Loading",
   UNEXPECTED_ERROR: "Unexpected Error",
+  HELP_CREDENTIALS_LOST: "Help Credentials lost",
+  CHECK_MAILBOX: "Check mailbox",
 };
 
 /**
@@ -40,8 +42,12 @@ export const AuthenticationAccountRecoveryContext = React.createContext({
   }, // Verify the user wants to check the account recovery temporary gpgkey passphrase
   complete: () => {
   }, // Complete the account recovery
-  goToRestartFromScratch: () => {
-  }, // Go to restart from scratch
+  needHelpCredentialsLost: () => {
+  }, // Whenever the user lost its passphrase.
+  goToValidatePassphrase: () => {
+  }, // Whenever the user wants to go to the validate passphrase.
+  requestHelpCredentialsLost: () => {
+  }, // Whenever the user wants to request help because it lost its credentials.
 });
 
 /**
@@ -71,7 +77,9 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
       // Public workflow mutators.
       verifyPassphrase: this.verifyPassphrase.bind(this), // Verify the user wants to check the account recovery temporary gpgkey passphrase
       complete: this.complete.bind(this), // Complete the account recovery request
-      goToRestartFromScratch: this.goToRestartFromScratch.bind(this), // Go to restart from scratch
+      needHelpCredentialsLost: this.needHelpCredentialsLost.bind(this), // Whenever the user lost its passphrase.
+      goToValidatePassphrase: this.goToValidatePassphrase.bind(this), // Whenever the user wants to go to the validate passphrase.
+      requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user wants to request help because it lost its credentials.
     };
   }
 
@@ -186,20 +194,33 @@ export class AuthenticationAccountRecoveryContextProvider extends React.Componen
   }
 
   /**
-   * Go to the restart from scratch screen.
-   * @returns {Promise<void>}
-   */
-  async goToRestartFromScratch() {
-    await this.props.context.port.request("passbolt.account-recovery.destroy-iframe");
-  }
-
-  /**
    * Handle unexpected error.
    * @param {Object} error The error.
    * @returns {Promise<void>}
    */
   async handleUnexpectedError(error) {
     await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error});
+  }
+
+  /**
+   * Whenever the user lost its passphrase.
+   * @returns {Promise<void>}
+   */
+  async needHelpCredentialsLost() {
+    await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.HELP_CREDENTIALS_LOST});
+  }
+
+  /**
+   * Whenever the user wants to request help because it lost its credentials.
+   * @returns {Promise<void>}
+   */
+  async requestHelpCredentialsLost() {
+    try {
+      await this.props.context.port.request('passbolt.account-recovery.request-help-credentials-lost');
+      await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.CHECK_MAILBOX});
+    } catch (error) {
+      await this.setState({state: AuthenticationAccountRecoveryWorkflowStates.UNEXPECTED_ERROR, error: error});
+    }
   }
 
   /**

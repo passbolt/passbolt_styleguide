@@ -22,13 +22,14 @@ import {
 import ImportGpgKey, {ImportGpgKeyVariations} from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import CheckPassphrase, {CheckPassphraseVariations} from "../../Authentication/CheckPassphrase/CheckPassphrase";
 import ChooseSecurityToken from "../../Authentication/ChooseSecurityToken/ChooseSecurityToken";
-import AskForAuthenticationHelp from "../../Authentication/AskForAuthenticationHelp/AskForAuthenticationHelp";
+import AskForAuthenticationHelpCredentialLost, {AskForAuthenticationHelpCredentialLostVariations} from "../../Authentication/AskForAuthenticationHelpCredentialLost/AskForAuthenticationHelpCredentialLost";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import IntroduceExtension from "../../Authentication/IntroduceExtension/IntroduceExtension";
-import InitiateAccountRecovery from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
+import RequestAccountRecovery, {RequestAccountRecoveryVariations} from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
 import CreateGpgKey, {CreateGpgKeyVariation} from "../../Authentication/CreateGpgKey/CreateGpgKey";
 import CheckAccountRecoveryEmail from "../../Authentication/CheckAccountRecoveryEmail/CheckAccountRecoveryEmail";
+import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
 
 /**
  * The component orchestrates the recover authentication process
@@ -47,7 +48,7 @@ class RecoverAuthentication extends Component {
         return <ImportGpgKey
           displayAs={ImportGpgKeyVariations.RECOVER}
           onComplete={this.props.authenticationRecoverContext.importGpgKey.bind(this)}
-          onSecondaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
+          onSecondaryActionClick={this.props.authenticationRecoverContext.needHelpCredentialsLost.bind(this)}
           validatePrivateGpgKey={this.props.authenticationRecoverContext.validatePrivateKey.bind(this)}
         />;
       case AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE:
@@ -55,7 +56,7 @@ class RecoverAuthentication extends Component {
           displayAs={CheckPassphraseVariations.RECOVER}
           canRememberMe={this.props.context.siteSettings.hasRememberMeUntilILogoutOption}
           onComplete={this.props.authenticationRecoverContext.checkPassphrase.bind(this)}
-          onSecondaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
+          onSecondaryActionClick={this.props.authenticationRecoverContext.needHelpCredentialsLost.bind(this)}
         />;
       case AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN:
         return <ChooseSecurityToken
@@ -66,12 +67,16 @@ class RecoverAuthentication extends Component {
           title={<Trans>Signing in, please wait...</Trans>}
         />;
       case AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST:
-        return <AskForAuthenticationHelp
-          onTryAgain={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
+        return <AskForAuthenticationHelpCredentialLost
+          displayAs={AskForAuthenticationHelpCredentialLostVariations.RECOVER}
+          onPrimaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
+          onSecondaryActionClick={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
         />;
       case AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY:
-        return <InitiateAccountRecovery
-          onComplete={this.props.authenticationRecoverContext.initiateAccountRecovery.bind(this)}
+        return <RequestAccountRecovery
+          displayAs={RequestAccountRecoveryVariations.RECOVER}
+          onPrimaryActionClick={this.props.authenticationRecoverContext.initiateAccountRecovery.bind(this)}
+          onSecondaryActionClick={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
         />;
       case AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY:
         return <CreateGpgKey
@@ -88,6 +93,8 @@ class RecoverAuthentication extends Component {
         />;
       case AuthenticationRecoverWorkflowStates.CHECK_ACCOUNT_RECOVERY_EMAIL:
         return <CheckAccountRecoveryEmail/>;
+      case AuthenticationRecoverWorkflowStates.CHECK_MAILBOX:
+        return <CheckMailBox/>;
       case AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
           error={this.props.authenticationRecoverContext.error}
