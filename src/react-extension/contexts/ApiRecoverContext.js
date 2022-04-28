@@ -17,7 +17,6 @@ import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
-import getPropValue from "../lib/Object/getPropValue";
 
 /**
  * The Api recover context.
@@ -88,8 +87,9 @@ class ApiRecoverContextProvider extends React.Component {
    */
   handleStartRecoverError(error) {
     if (error instanceof PassboltApiFetchError) {
-      const isTokenExpired = getPropValue(error, "data.body.token.expired");
-      if (isTokenExpired) {
+      const isTokenExpired = Boolean(error.data.body?.token?.expired);
+      const isTokenConsumed = Boolean(error.data.body?.token?.isActive);
+      if (isTokenExpired || isTokenConsumed) {
         return this.setState({state: ApiRecoverContextState.TOKEN_EXPIRED_STATE});
       }
     }
