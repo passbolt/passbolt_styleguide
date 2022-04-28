@@ -48,6 +48,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
       loading: true, // component is loading or not
       processing: false, // component is processing or not
 
+      hasFieldFocus: false, // true if the form field has focus
+
       openCredentials: true, // section credential open
       openDirectoryConfiguration: false, // section directory configuration open
       openSynchronizationOptions: false, // section synchronization options open
@@ -132,6 +134,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleHostInputKeyUp = this.handleHostInputKeyUp.bind(this);
     this.handlePortInputKeyUp = this.handlePortInputKeyUp.bind(this);
     this.handleDomainInputKeyUp = this.handleDomainInputKeyUp.bind(this);
+    this.handleFieldFocus = this.handleFieldFocus.bind(this);
+    this.handleFieldBlur = this.handleFieldBlur.bind(this);
     this.stopPropagation = this.stopPropagation.bind(this);
     this.handleConnectionTypeChange = this.handleConnectionTypeChange.bind(this);
   }
@@ -358,8 +362,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   handleConnectionTypeChange(event) {
     const target = event.target;
-    const connectionType = target.dataset.id;
-    this.setState({connectionType});
+    const connectionType = target.value;
+    this.setState({connectionType, hasFieldFocus: false}); // Due to React < v17 onBlur is not propagated by the child
     this.handleEnabledSaveButton();
   }
 
@@ -691,6 +695,20 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * Handle field focus
+   */
+  handleFieldFocus() {
+    this.setState({hasFieldFocus: true});
+  }
+
+  /**
+   * Handle field blur
+   */
+  handleFieldBlur() {
+    this.setState({hasFieldFocus: false});
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -752,27 +770,27 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="clearfix required ad openldap">
+                    <div className="input text required ad openldap">
                       <label><Trans>Server url</Trans></label>
-                      <div className="input text singleline connection_info ad openldap">
-                        <Select className="inline" items={this.connectionType} value={this.state.connectionType} disabled={this.hasAllInputDisabled()}/>
-                        <div className="input text host ad openldap">
-                          <input id="server-input" type="text" className="required fluid form-element" name="host"
-                            value={this.state.host} onChange={this.handleInputChange} onKeyUp={this.handleHostInputKeyUp}
-                            placeholder={this.translate("host")} disabled={this.hasAllInputDisabled()}/>
-                          {this.state.hostError &&
-                          <div id="server-input-feedback" className="error-message">{this.state.hostError}</div>
-                          }
+                      <div className={`input text singleline connection_info ad openldap ${this.state.hasFieldFocus ? "no-focus" : ""}`}>
+                        <input id="server-input" type="text" className="required host ad openldap form-element" name="host"
+                          value={this.state.host} onChange={this.handleInputChange} onKeyUp={this.handleHostInputKeyUp}
+                          placeholder={this.translate("host")} disabled={this.hasAllInputDisabled()}/>
+                        <div className="protocol" onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}>
+                          <Select className="inline" name="connectionType" items={this.connectionType} value={this.state.connectionType} onChange={this.handleConnectionTypeChange} disabled={this.hasAllInputDisabled()}/>
                         </div>
-                        <div className="input text port ad openldap">
-                          <input id="port-input" type="number" className="required fluid form-element" name="port"
-                            value={this.state.port} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
+                        <div className="port ad openldap">
+                          <input id="port-input" type="number" className="required in-field form-element" name="port"
+                            value={this.state.port} onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus} onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.translate("port")}
                             disabled={this.hasAllInputDisabled()}/>
-                          {this.state.portError &&
-                          <div id="port-input-feedback" className="error-message">{this.state.portError}</div>
-                          }
                         </div>
                       </div>
+                      {this.state.hostError &&
+                        <div id="server-input-feedback" className="error-message">{this.state.hostError}</div>
+                      }
+                      {this.state.portError &&
+                        <div id="port-input-feedback" className="error-message">{this.state.portError}</div>
+                      }
                     </div>
                     <div className="singleline clearfix">
                       <div className="input text first-field ad openldap">
