@@ -118,18 +118,28 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initialize() {
-    const isFirstInstall = await this.props.context.port.request('passbolt.recover.first-install');
-    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
-
     await this.props.context.port.request('passbolt.recover.start');
     // The user locale is retrieved by the recover start, update the application locale
     await this.props.context.initLocale();
-    // In case of error the background page should just disconnect the extension setup application.
-    let state = AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
-    if (isFirstInstall && isChromeBrowser) {
-      state = AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION;
+
+    const isLostPassphraseCase = await this.props.context.port.request('passbolt.recover.lost-passphrase-case');
+    if (isLostPassphraseCase) {
+      const hasUserEnrolledToAccountRecovery = await this.props.context.port.request('passbolt.recover.has-user-enabled-account-recovery');
+      const state = hasUserEnrolledToAccountRecovery
+        ? AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
+        : AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST;
+      this.setState({state});
+      return;
     }
-    await this.setState({state});
+
+    const isFirstInstall = await this.props.context.port.request('passbolt.recover.first-install');
+    const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
+
+    const state = isFirstInstall && isChromeBrowser
+      ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION
+      : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
+
+    this.setState({state});
   }
 
   /**
