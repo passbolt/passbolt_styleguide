@@ -81,6 +81,36 @@ describe("AuthenticationRecoverContextProvider", () => {
       expect(props.context.port.requestListeners["passbolt.recover.start"]).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY);
     });
+
+    it("When the extension was already installed and the URL is for a lost-passphrase case and the user enrolled for the account-recovery program, the machine state should be set to: GENERATE_ACCOUNT_RECOVERY_GPG_KEY", async() => {
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", jest.fn(() => Promise.resolve(true)));
+      props.context.port.addRequestListener("passbolt.recover.lost-passphrase-case", jest.fn(() => Promise.resolve(true)));
+      const contextProvider = new AuthenticationRecoverContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(4);
+      await contextProvider.initialize();
+      expect(props.context.port.requestListeners["passbolt.recover.lost-passphrase-case"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.has-user-enabled-account-recovery"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.start"]).toHaveBeenCalled();
+      expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY);
+    });
+
+    it("When the extension was already installed and the URL is for a lost-passphrase case and the user didn't enrolled for the account-recovery program, the machine state should be set to: HELP_CREDENTIALS_LOST", async() => {
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", jest.fn(() => Promise.resolve(false)));
+      props.context.port.addRequestListener("passbolt.recover.lost-passphrase-case", jest.fn(() => Promise.resolve(true)));
+      const contextProvider = new AuthenticationRecoverContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(4);
+      await contextProvider.initialize();
+      expect(props.context.port.requestListeners["passbolt.recover.lost-passphrase-case"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.has-user-enabled-account-recovery"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.recover.start"]).toHaveBeenCalled();
+      expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST);
+    });
   });
 
   describe("AuthenticationRecoverContextProvider::goToImportGpgKey", () => {
@@ -220,6 +250,7 @@ describe("AuthenticationRecoverContextProvider", () => {
   describe("AuthenticationRecoverContextProvider::needHelpCredentialsLost", () => {
     it("When the user needs help due to credentials lost but the user didn't enroll to the program, the machine state should be set to: HELP_CREDENTIALS_LOST", async() => {
       const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", jest.fn(() => Promise.resolve(false)));
       const contextProvider = new AuthenticationRecoverContextProvider(props);
       mockComponentSetState(contextProvider);
 
