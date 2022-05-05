@@ -78,7 +78,8 @@ class DomUtils {
         style(node, "overflow-x"));
 
     const scrollParent = node => {
-      if (!node || node===document.body) {
+      // if node or node = document.body or node type is element node (ex: for iframe node type = document)
+      if (!node || node === document.body || node.nodeType !== Node.ELEMENT_NODE) {
         return window;
       } else if (isScrollable(node)) {
         return node;
