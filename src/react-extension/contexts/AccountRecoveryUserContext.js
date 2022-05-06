@@ -152,7 +152,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
 
     const policy = this.getPolicy();
     return this.state.status === AccountRecoveryUserContextProvider.STATUS_PENDING
-      && (policy === AccountRecoveryUserContextProvider.POLICY_MANDATORY || policy === AccountRecoveryUserContextProvider.POLICY_OPT_OUT);
+      && policy !== AccountRecoveryUserContextProvider.POLICY_DISABLED;
   }
 
   /**
