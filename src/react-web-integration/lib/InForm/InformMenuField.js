@@ -96,8 +96,10 @@ class InFormMenuField {
     let y = 0;
     let currentElement = this.field;
     let hasScroll = false;
+    const isInIframe = this.field.ownerDocument !== document;
     const {top, left, height, width} = this.field.getBoundingClientRect();
-    const {top: topBody, left: leftBody} = document.documentElement.getBoundingClientRect();
+    // If the field is in iframe get the top and left of the iframe else get the top and the left of the body
+    const {top: topBody, left: leftBody} = isInIframe ? this.field.ownerDocument.defaultView.frameElement.getBoundingClientRect() : document.documentElement.getBoundingClientRect();
     /*
      * We loop to calculate the cumulated position of the field
      * from its ancestors and itself differential offset / scroll position
@@ -112,7 +114,7 @@ class InFormMenuField {
      * If there is no scroll on the page, we use the getBoundingClientRect to have the position of the field
      * this avoid a position issue if there is a transform style in css
      */
-    if (!hasScroll) {
+    if (!hasScroll && !isInIframe) {
       x = left + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
       y = top + height; // Calculate the bottom position of the input
     } else {
