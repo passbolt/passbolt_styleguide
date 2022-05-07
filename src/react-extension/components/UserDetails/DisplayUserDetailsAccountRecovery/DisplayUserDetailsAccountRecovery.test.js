@@ -93,7 +93,7 @@ describe("See account recovery", () => {
       await page.toggleCollapse();
 
       expect(page.currentStatusButton).toBeNull();
-      expect(page.previousRecoveryRequest).toBe('Approved 1 year ago');
+      expect(page.previousRecoveryRequest).toBe(`Approved ${formatDateTimeAgo(oneUserAccountRequestsApproved[0].created)}`);
       expect(page.numberOfRecovery).toBe('1');
     });
 

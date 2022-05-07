@@ -137,6 +137,10 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery review has been saved successfully"));
       this.props.onStop();
     } catch (e) {
+      if (e.name === "UserAbortsOperationError") {
+        // It can happen when the user has closed the passphrase entry dialog by instance.
+        return;
+      }
       console.log(e);
       this.handleError(e);
     }
