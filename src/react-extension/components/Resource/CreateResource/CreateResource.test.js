@@ -49,7 +49,7 @@ describe("See the Create Resource", () => {
     });
 
     it('matches the styleguide', () => {
-      expect.assertions(18);
+      expect.assertions(19);
       // Dialog title exists and correct
       expect(page.passwordCreate.exists()).toBeTruthy();
       expect(page.title.header.textContent).toBe("Create a password");
@@ -101,7 +101,7 @@ describe("See the Create Resource", () => {
     });
 
     it('views password when clicking on the view button.', async() => {
-      expect.assertions(6);
+      expect.assertions(8);
       const passwordValue = "secret-decrypted";
       page.passwordCreate.fillInput(page.passwordCreate.password, passwordValue);
       // View password

@@ -54,7 +54,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
   }
 
   get continueButton() {
-    return this.selector('.recovery-account-policy-dialog .submit-wrapper input[type="submit"]');
+    return this.selector('.recovery-account-policy-dialog .submit-wrapper button[type="submit"]');
   }
 
   async clickOnContinue() {
