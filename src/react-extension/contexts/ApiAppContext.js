@@ -6,6 +6,7 @@ import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
+import {CsrfToken} from "../../shared/lib/apiClient/csrfToken";
 
 /**
  * The ApiApp context provider
@@ -91,32 +92,7 @@ class ApiAppContextProvider extends React.Component {
   getApiClientOptions() {
     return new ApiClientOptions()
       .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(this.getCsrfToken());
-  }
-
-  /**
-   * Get csrf token
-   * @returns {string}
-   */
-  getCsrfToken() {
-    const cookieString = document.cookie;
-    if (!cookieString) {
-      return undefined;
-    }
-    const cookieArray = cookieString.split('; ');
-    if (!cookieArray) {
-      return undefined;
-    }
-    const csrfCookie = cookieArray.find(row => row.startsWith('csrfToken'));
-    if (!csrfCookie) {
-      return undefined;
-    }
-    const csrfToken = csrfCookie.split('=');
-    if (csrfToken && csrfToken.length === 2) {
-      return csrfToken[1];
-    }
-
-    return undefined;
+      .setCsrfToken(CsrfToken.getToken());
   }
 
   /**

@@ -23,6 +23,7 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
 import OrchestrateApiAccountRecovery
   from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
+import {CsrfToken} from "../shared/lib/apiClient/csrfToken";
 
 /**
  * The recover application served by the API.
@@ -71,7 +72,7 @@ class ApiAccountRecovery extends Component {
    */
   initializeProperties() {
     const uuidRegex = "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}";
-    const recoverBootstrapRegex = `account-recovery\/requests\/(${uuidRegex})\/(${uuidRegex})$`;
+    const recoverBootstrapRegex = `account-recovery\/continue\/(${uuidRegex})\/(${uuidRegex})$`;
     const regex = new RegExp(recoverBootstrapRegex);
     const match = window.location.pathname.match(regex);
     if (!match) {
@@ -101,7 +102,8 @@ class ApiAccountRecovery extends Component {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain);
+      .setBaseUrl(this.state.trustedDomain)
+      .setCsrfToken(CsrfToken.getToken());
   }
 
   /**

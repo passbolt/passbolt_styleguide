@@ -17,6 +17,7 @@ import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
+import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 
 /**
  * The Api recover context.
@@ -26,8 +27,12 @@ export const ApiRecoverContext = React.createContext({
   userId: null, // The recover user id
   token: null, // The recover token
   state: null, // The current recover workflow state
+  unexpectedError: null, // The unexpected error obejct if any
   // Whenever the initialization of the recover is requested.
   onInitializeRecoverRequested: () => {
+  },
+  // Callback to be used when a user is unexpectedly logged in.
+  logoutUserAndRefresh: () => {
   }
 });
 
@@ -49,10 +54,12 @@ class ApiRecoverContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      userId: null,
-      token: null,
-      state: ApiRecoverContextState.INITIAL_STATE,
-      onInitializeRecoverRequested: this.onInitializeRecoverRequested.bind(this)
+      userId: null, // The recover user id
+      token: null, // The recover token
+      state: ApiRecoverContextState.INITIAL_STATE, // The current recover workflow state
+      unexpectedError: null, // The unexpected error obejct if any
+      onInitializeRecoverRequested: this.onInitializeRecoverRequested.bind(this), // Whenever the initialization of the recover is requested.
+      logoutUserAndRefresh: this.logoutUserAndRefresh.bind(this), // Callback to be used when a user is unexpectedly logged in.
     };
   }
 
@@ -62,7 +69,7 @@ class ApiRecoverContextProvider extends React.Component {
    */
   async onInitializeRecoverRequested() {
     if (!this.state.userId || !this.state.token) {
-      return this.setState({state: ApiRecoverContextState.ERROR_STATE});
+      return this.setState({state: ApiRecoverContextState.REQUEST_INVITATION_ERROR});
     }
     if (!this.isBrowserSupported()) {
       return this.setState({state: ApiRecoverContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE});
@@ -87,13 +94,42 @@ class ApiRecoverContextProvider extends React.Component {
    */
   handleStartRecoverError(error) {
     if (error instanceof PassboltApiFetchError) {
+      const isUserLoggedIn = error.data.code === 403;
+      if (isUserLoggedIn) {
+        return this.setState({state: ApiRecoverContextState.ERROR_ALREADY_SIGNED_IN_STATE});
+      }
+
       const isTokenExpired = Boolean(error.data.body?.token?.expired);
       const isTokenConsumed = Boolean(error.data.body?.token?.isActive);
       if (isTokenExpired || isTokenConsumed) {
         return this.setState({state: ApiRecoverContextState.TOKEN_EXPIRED_STATE});
       }
+
+      if (error?.data?.code === 400) {
+        return this.setState({state: ApiRecoverContextState.REQUEST_INVITATION_ERROR});
+      }
     }
-    return this.setState({state: ApiRecoverContextState.ERROR_STATE});
+    return this.setState({state: ApiRecoverContextState.UNEXPECTED_ERROR_STATE});
+  }
+
+  /**
+   * When the user asks for logging out before going on with the desired process.
+   * @returns {Promise<void>}
+   */
+  async logoutUserAndRefresh() {
+    try {
+      const apiClientOptions = this.props.context.getApiClientOptions();
+      apiClientOptions.setResourceName("auth");
+      const apiClient = new ApiClient(apiClientOptions);
+      const fetchOptions = {...apiClient.buildFetchOptions(), method: 'POST', redirect: "manual"};
+      const url = apiClient.buildUrl(`${apiClient.baseUrl}/logout`);
+      await fetch(url.toString(), fetchOptions);
+    } catch (e) {
+      const error = new PassboltServiceUnavailableError(e.message);
+      return this.setState({unexpectedError: error, state: ApiRecoverContextState.UNEXPECTED_ERROR_STATE});
+    }
+
+    window.location.reload();
   }
 
   /**
@@ -163,5 +199,7 @@ export const ApiRecoverContextState = {
   DOWNLOAD_SUPPORTED_BROWSER_STATE: 'Download supported browser state',
   INSTALL_EXTENSION_STATE: 'Install extension state',
   TOKEN_EXPIRED_STATE: 'Token expired state',
-  ERROR_STATE: 'Error state',
+  ERROR_ALREADY_SIGNED_IN_STATE: 'Error, already signed in state',
+  REQUEST_INVITATION_ERROR: 'Request inviration error state',
+  UNEXPECTED_ERROR_STATE: 'Unexpected error state',
 };
