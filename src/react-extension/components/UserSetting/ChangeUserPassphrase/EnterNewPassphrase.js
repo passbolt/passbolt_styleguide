@@ -61,7 +61,8 @@ class EnterNewPassphrase extends React.Component {
         enoughLength: '',
         uppercase: '',
         alphanumeric: '',
-        specialCharacters: ''
+        specialCharacters: '',
+        notInDictionary: ''
       }
     };
   }
@@ -78,7 +79,8 @@ class EnterNewPassphrase extends React.Component {
    */
   get isValid() {
     const validation = {
-      enoughLength:  this.state.passphrase.length >= 8
+      enoughLength:  this.state.passphrase.length >= 8,
+      enoughStrength: this.state.passphraseStrength.id !== 'n/a'
     };
     return Object.values(validation).every(value => value);
   }
@@ -140,7 +142,10 @@ class EnterNewPassphrase extends React.Component {
     // debounce only to check the passphrase is in dictionary
     const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(passphrase).catch(() => null);
     hintClassNames.notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
-    this.setState({hintClassNames});
+    // if the passphrase is in dictionary, force the complexity to n/a
+    const passphraseStrength = {...this.state.passphraseStrength};
+    passphraseStrength.id = isPwned ? 'n/a' : this.state.passphraseStrength.id;
+    this.setState({hintClassNames, passphraseStrength});
   }
 
   /**
