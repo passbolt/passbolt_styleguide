@@ -71,7 +71,8 @@ describe("Resource Workspace Context", () => {
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.TEXT);
     });
 
-    xit("AS LU I should have an GROUP filter when I went to /app/passwords with such a filter", async() => {
+    it("AS LU I should have an GROUP filter when I went to /app/passwords with such a filter", async() => {
+      mockContextRequest(context, () => []);
       await page.goToGroup({group: {id: 'some group id'}});
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.GROUP);
     });
@@ -93,9 +94,9 @@ describe("Resource Workspace Context", () => {
   });
 
   describe("As LU I should have the appropriate search filtered results at any time", () => {
-    xit("AS LU I should have all resources when the filter is ALL-ITEMS", async() => {
+    it("AS LU I should have all resources when the filter is ALL-ITEMS", async() => {
       await page.goToAllItems();
-      expect(page.filteredResources).toBe(context.resources);
+      expect(page.filteredResources).toStrictEqual(context.resources);
     });
 
     it("AS LU I should have all resources all resources when the filter is RECENTLY-MODIFIED", async() => {
