@@ -15,14 +15,19 @@
 /**
  * Unit tests on CreateGpgKey in regard of specifications
  */
-import {defaultProps} from "./CreateGpgKey.test.data";
-import CreateGpgKeyPage from "./CreateGpgKey.test.page";
+import {waitFor} from "@testing-library/react";
 import each from "jest-each";
 import {CreateGpgKeyVariation} from "./CreateGpgKey";
-import {waitFor} from "@testing-library/react";
+import {defaultProps} from "./CreateGpgKey.test.data";
+import CreateGpgKeyPage from "./CreateGpgKey.test.page";
+import PwnedPasswords from "../../../../shared/lib/Secret/PwnedPasswords";
+
+jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
 
 beforeEach(() => {
   jest.resetModules();
+  jest.clearAllMocks();
+  PwnedPasswords.pwnedPasswords.mockResolvedValue(false);
 });
 
 describe("CreateGpgKey", () => {
@@ -50,7 +55,7 @@ describe("CreateGpgKey", () => {
       expect(page.isObfuscated).toBeTruthy();
     });
 
-    it('As AN I should be able to see the non-obfuscate passphrase I typed, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should be able to see the non-obfuscate passphrase I typed, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -61,7 +66,7 @@ describe("CreateGpgKey", () => {
       expect(page.isObfuscated).toBeFalsy();
     });
 
-    it('As AN I should see the passphrase very weak strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should see the passphrase very weak strength updated on change, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -71,7 +76,7 @@ describe("CreateGpgKey", () => {
       await waitFor(() => expect(page.isVeryWeakPassphrase).toBeTruthy());
     });
 
-    it('As AN I should see the passphrase weak strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should see the passphrase weak strength updated on change, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -81,7 +86,7 @@ describe("CreateGpgKey", () => {
       await waitFor(() => expect(page.isWeakPassphrase).toBeTruthy());
     });
 
-    it('As AN I should see the passphrase fair strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should see the passphrase fair strength updated on change, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -91,7 +96,7 @@ describe("CreateGpgKey", () => {
       await waitFor(() => expect(page.isFairPassphrase).toBeTruthy());
     });
 
-    it('As AN I should see the passphrase strong strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should see the passphrase strong strength updated on change, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -101,7 +106,7 @@ describe("CreateGpgKey", () => {
       await waitFor(() => expect(page.isStrongPassphrase).toBeTruthy());
     });
 
-    it('As AN I should see the passphrase very strong strength updated on change, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should see the passphrase very strong strength updated on change, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -111,7 +116,7 @@ describe("CreateGpgKey", () => {
       await waitFor(() => expect(page.isVeryStrongPassphrase).toBeTruthy());
     });
 
-    it('As AN I should not go to the next step if the passphrase is not strong enough, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should not go to the next step if the passphrase is not strong enough, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -121,7 +126,7 @@ describe("CreateGpgKey", () => {
       expect(page.canGoToNextStep).toBeFalsy();
     });
 
-    it('As AN I should not go to the next step if the passphrase is empty, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should not go to the next step if the passphrase is empty, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
@@ -131,17 +136,17 @@ describe("CreateGpgKey", () => {
       expect(page.canGoToNextStep).toBeFalsy();
     });
 
-    it('As AN I should go to the next step if the passphrase is strong enough, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should go to the next step if the passphrase is strong enough, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps(_props);
       const page = new CreateGpgKeyPage(props);
 
-      expect.assertions(1);
+      expect.hasAssertions();
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.fill(veryStrongPassphrase);
-      expect(page.canGoToNextStep).toBeTruthy();
+      await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
     });
 
-    it('As AN I cannot update the form fields while submitting the form, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I cannot update the form fields while submitting the form, scenario: ${JSON.stringify(_props)}`, async() => {
       let generateResolve = null;
       const onComplete = jest.fn(() => new Promise(resolve => generateResolve = resolve));
       const props = defaultProps({..._props, onComplete});
@@ -154,12 +159,13 @@ describe("CreateGpgKey", () => {
         expect(page.canChange).toBeFalsy();
         generateResolve();
       };
+      await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
       await page.generateKey(inProgressFn);
       expect(onComplete).toHaveBeenCalled();
       expect(generateResolve).toBeDefined();
     });
 
-    it('As AN I should see a processing feedback while submitting the form, scenario: ${JSON.stringify(_props)}', async() => {
+    it(`As AN I should see a processing feedback while submitting the form, scenario: ${JSON.stringify(_props)}`, async() => {
       let generateResolve = null;
       const onComplete = jest.fn(() => new Promise(resolve => generateResolve = resolve));
       const props = defaultProps({..._props, onComplete});
@@ -171,6 +177,7 @@ describe("CreateGpgKey", () => {
       };
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.fill(veryStrongPassphrase);
+      await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
       await page.generateKey(inProgressFn);
       expect(onComplete).toHaveBeenCalled();
       expect(generateResolve).toBeDefined();

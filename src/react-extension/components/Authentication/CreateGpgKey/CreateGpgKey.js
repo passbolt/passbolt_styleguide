@@ -63,7 +63,8 @@ class CreateGpgKey extends Component {
         enoughLength: '',
         uppercase: '',
         alphanumeric: '',
-        specialCharacters: ''
+        specialCharacters: '',
+        notInDictionary: ''
       }
     };
   }
@@ -80,7 +81,9 @@ class CreateGpgKey extends Component {
    */
   get isValid() {
     const validation = {
-      enoughLength:  this.state.passphrase.length >= 8
+      enoughLength: this.state.hintClassNames.enoughLength === "success",
+      enoughStrength: this.state.passphraseStrength.id !== "n/a",
+      notInDictionary: this.state.hintClassNames.notInDictionary === "success"
     };
     return Object.values(validation).every(value => value);
   }
@@ -122,25 +125,35 @@ class CreateGpgKey extends Component {
    */
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    this.setState({passphrase});
+    await this.setState({passphrase});
     const passphraseStrength = this.evaluatePassphraseStrength(passphrase);
-    const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
+    const hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
     this.setState({passphraseStrength, hintClassNames});
     await this.checkPassphraseIsInDictionary(passphrase, hintClassNames);
   }
 
   /**
    * check if the passphrase is in dictionary
-   * @param passphrase
-   * @param hintClassNames
    * @returns {Promise<void>}
    */
-  async checkPassphraseIsInDictionary(passphrase, hintClassNames) {
+  async checkPassphraseIsInDictionary() {
     const hintClassName = condition => condition ? 'success' : 'error';
+
     // debounce only to check the passphrase is in dictionary
-    const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(passphrase).catch(() => null);
-    hintClassNames.notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
-    this.setState({hintClassNames});
+    const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(this.state.passphrase).catch(() => null);
+    const notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
+
+    // if the passphrase is in dictionary, force the complexity to n/a
+    const passphraseStrength = {...this.state.passphraseStrength};
+    passphraseStrength.id = isPwned ? 'n/a' : this.state.passphraseStrength.id;
+
+    this.setState({
+      hintClassNames: {
+        ...this.state.hintClassNames,
+        notInDictionary
+      },
+      passphraseStrength
+    });
   }
 
   /**
@@ -186,7 +199,7 @@ class CreateGpgKey extends Component {
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
       specialCharacters: hintClassName(masks.special),
-      notInDictionary:  'error'
+      notInDictionary: this.state.hintClassNames.notInDictionary || 'error'
     };
   }
 
@@ -291,7 +304,7 @@ class CreateGpgKey extends Component {
                 <Trans>It contains special characters (like / or * or %)</Trans>
               </li>
               <li className={this.state.hintClassNames.notInDictionary}>
-                <Trans>It is not part of a dictionary</Trans>
+                <Trans>It is not part of an exposed data breaches</Trans>
               </li>
             </ul>
           </div>
