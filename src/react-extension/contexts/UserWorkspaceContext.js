@@ -126,7 +126,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async componentDidUpdate(prevProps, prevState) {
     await this.handleFilterChange(prevState.filter);
-    await this.handleUsersLoaded();
+    this.handleUsersLoaded();
     await this.handleUsersChange();
     await this.handleGroupsChange();
     await this.handleRouteChange(prevProps.location);
