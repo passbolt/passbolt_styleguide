@@ -168,19 +168,46 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param prevProps
    */
   async componentDidUpdate(prevProps, prevState) {
-    await this.handleFilterChange(prevState.filter);
     await this.handleResourcesLoaded();
     await this.handleFoldersChange();
     await this.handleResourcesChange();
     await this.handleRouteChange(prevProps.location);
+    await this.handleFilterChange(prevState.filter);
     await this.redirectAfterSelection();
   }
 
   /**
+   * Is filter equal
+   * @param {Object} filter1 The first filter to compare.
+   * @param {Object} filter2 The second filter to compare.
+   * @returns {boolean}
+   */
+  isFilterEqual(filter1, filter2) {
+    if (filter1.type !== filter2.type) {
+      return false;
+    }
+
+    const type = filter1.type;
+    switch (type) {
+      case ResourceWorkspaceFilterTypes.GROUP:
+        return filter1?.payload?.group?.id === filter2?.payload?.group?.id;
+      case ResourceWorkspaceFilterTypes.FOLDER:
+        return filter1?.payload?.folder?.id === filter2?.payload?.folder?.id;
+      case ResourceWorkspaceFilterTypes.TAG:
+        return filter1?.payload?.tag?.id === filter2?.payload?.tag?.id;
+      case ResourceWorkspaceFilterTypes.TEXT:
+        return filter1?.payload === filter2?.payload;
+      default:
+        return true;
+    }
+  }
+
+  /**
    * Handles the resource search filter change
+   * @return {Promise<void>}
    */
   async handleFilterChange(previousFilter) {
-    const hasFilterChanged = previousFilter !== this.state.filter;
+    const hasFilterChanged = !this.isFilterEqual(previousFilter, this.state.filter);
     if (hasFilterChanged) {
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
       const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
@@ -1027,15 +1054,15 @@ export function withResourceWorkspace(WrappedComponent) {
 export const ResourceWorkspaceFilterTypes = {
   NONE: 'NONE', // Initial filter at page load
   ALL: 'ALL', // All resources
-  FOLDER: 'FILTER-BY-FOLDER', // Resources for a given folder
-  ROOT_FOLDER: 'FILTER-BY-ROOT-FOLDER', // Resources of the root folder
-  TAG: 'FILTER-BY-TAG', // Resources for a given tag
-  GROUP: 'FILTER-BY-GROUP', // Resources for a given group
+  FOLDER: 'FILTER-BY-FOLDER', // Resources in a given folder
+  ROOT_FOLDER: 'FILTER-BY-ROOT-FOLDER', // Resources at the root folder
+  TAG: 'FILTER-BY-TAG', // Resources marked with a given tag
+  GROUP: 'FILTER-BY-GROUP', // Resources shared with a given group
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Resources matching some text words
-  ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Current user personal resources
-  FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources filter
-  SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Shared with current user resources
-  RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIERD', // Keep recently modified resources
+  ITEMS_I_OWN: 'FILTER-BY-ITEMS-I-OWN', // Resources the users is owner of
+  FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources
+  SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Resources shared with the current user (who is not the owner)
+  RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Resources recently modified
 };
 
 /**
