@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
+import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 
 /**
  * The ApiAccountRecovery context.
@@ -26,8 +27,13 @@ export const ApiAccountRecoveryContext = React.createContext({
   userId: null, // The account recovery user id
   authenticationToken: null, // The account recovery authentication token
   state: null, // The current account recovery workflow state
+  unexpectedError: null, // The unexpected error obejct if any
+  // Whenever the initialization of the account recovery is requested.,
   onInitializeAccountRecoveryRequested: () => {
-  } // Whenever the initialization of the account recovery is requested.
+  },
+  // Callback to be used when a user is unexpectedly logged in.
+  logoutUserAndRefresh: () => {
+  },
 });
 
 /**
@@ -51,7 +57,9 @@ class ApiAccountRecoveryContextProvider extends React.Component {
       userId: null, // The account recovery user id
       authenticationToken: null, // The account recovery authentication token
       state: ApiAccountRecoveryContextState.INITIAL_STATE, // The current account recovery workflow state
-      onInitializeAccountRecoveryRequested: this.onInitializeAccountRecoveryRequested.bind(this) // Whenever the initialization of the account recovery is requested.
+      unexpectedError: null, // The unexpected error obejct if any
+      onInitializeAccountRecoveryRequested: this.onInitializeAccountRecoveryRequested.bind(this), // Whenever the initialization of the account recovery is requested.
+      logoutUserAndRefresh: this.logoutUserAndRefresh.bind(this), // Callback to be used when a user is unexpectedly logged in.
     };
   }
 
@@ -62,7 +70,7 @@ class ApiAccountRecoveryContextProvider extends React.Component {
   async onInitializeAccountRecoveryRequested() {
     // @todo account-recovery userId and authentication token are always null here. TO continue.
     if (!this.state.userId || !this.state.authenticationToken) {
-      return this.setState({state: ApiAccountRecoveryContextState.ERROR_STATE});
+      return this.setState({state: ApiAccountRecoveryContextState.REQUEST_INVITATION_ERROR});
     }
 
     try {
@@ -90,13 +98,37 @@ class ApiAccountRecoveryContextProvider extends React.Component {
    */
   async handleVerifyCanContinueAccountRecoveryError(error) {
     if (error instanceof PassboltApiFetchError) {
+      const isUserLoggedIn = error.data.code === 403;
+      if (isUserLoggedIn) {
+        return this.setState({state: ApiAccountRecoveryContextState.ERROR_ALREADY_SIGNED_IN_STATE});
+      }
+
       const isTokenExpired = Boolean(error?.data?.body?.token?.expired);
       if (isTokenExpired) {
-        await this.setState({state: ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE});
-        return;
+        return this.setState({state: ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE});
       }
     }
-    await this.setState({state: ApiAccountRecoveryContextState.ERROR_STATE, error: error});
+    this.setState({state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE, unexpectedError: error});
+  }
+
+  /**
+   * When the user asks for logging out before going on with the desired process.
+   * @returns {Promise<void>}
+   */
+  async logoutUserAndRefresh() {
+    try {
+      const apiClientOptions = this.props.context.getApiClientOptions();
+      apiClientOptions.setResourceName("auth");
+      const apiClient = new ApiClient(apiClientOptions);
+      const fetchOptions = {...apiClient.buildFetchOptions(), method: 'POST', redirect: "manual"};
+      const url = apiClient.buildUrl(`${apiClient.baseUrl}/logout`);
+      await fetch(url.toString(), fetchOptions);
+    } catch (e) {
+      const error = new PassboltServiceUnavailableError(e.message);
+      return this.setState({unexpectedError: error, state: ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE});
+    }
+
+    window.location.reload();
   }
 
   /**
@@ -144,5 +176,7 @@ export const ApiAccountRecoveryContextState = {
   INITIAL_STATE: 'Initial state',
   RESTART_FROM_SCRATCH: 'Restart from scratch state',
   TOKEN_EXPIRED_STATE: 'Token expired state',
-  ERROR_STATE: 'Error state',
+  ERROR_ALREADY_SIGNED_IN_STATE: 'Error, already signed in state',
+  REQUEST_INVITATION_ERROR: 'Request inviration error state',
+  UNEXPECTED_ERROR_STATE: 'Unexpected error state',
 };

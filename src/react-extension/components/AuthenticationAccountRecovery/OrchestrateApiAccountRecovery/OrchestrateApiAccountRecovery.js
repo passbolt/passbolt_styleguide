@@ -22,6 +22,7 @@ import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import DisplayRestartFromScratchError from "../DisplayRestartFromScratchError/DisplayRestartFromScratchError";
 import DisplayExpiredTokenError from "../DisplayExpiredTokenError/DisplayExpiredTokenError";
+import DisplayAlreadyLoggedInError, {DisplayAlreadyLoggedInErrorVariations} from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
 
 /**
  * The component orchestrates the api account recovery authentication workflow.
@@ -51,8 +52,15 @@ class OrchestrateApiAccountRecovery extends Component {
         return <DisplayRestartFromScratchError/>;
       case ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE:
         return <DisplayExpiredTokenError/>;
-      case ApiAccountRecoveryContextState.ERROR_STATE:
-        return <DisplayUnexpectedError error={this.props.apiAccountRecoveryContext.error}/>;
+      case ApiAccountRecoveryContextState.ERROR_ALREADY_SIGNED_IN_STATE:
+        return <DisplayAlreadyLoggedInError
+          onLogoutButtonClick={this.props.apiAccountRecoveryContext.logoutUserAndRefresh}
+          displayAs={DisplayAlreadyLoggedInErrorVariations.ACCOUNT_RECOVERY}
+        />;
+      case ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE:
+        return <DisplayUnexpectedError
+          error={this.props.apiAccountRecoveryContext.unexpectedError}
+        />;
       default:
         return <LoadingSpinner/>;
     }

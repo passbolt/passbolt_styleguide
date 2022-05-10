@@ -17,7 +17,7 @@ import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
-import getPropValue from "../lib/Object/getPropValue";
+import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
 
 /**
  * The Api setup context.
@@ -27,8 +27,12 @@ export const ApiSetupContext = React.createContext({
   userId: null, // The setup user id
   token: null, // The setup token
   state: null, // The current setup workflow state
+  unexpectedError: null, // The unexpected error obejct if any
   // Whenever the initialization of the setup is requested.
   onInitializeSetupRequested: () => {
+  },
+  // Callback to be used when a user is unexpectedly logged in.
+  logoutUserAndRefresh: () => {
   }
 });
 
@@ -50,10 +54,12 @@ class ApiSetupContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      userId: null,
-      token: null,
-      state: ApiSetupContextState.INITIAL_STATE,
-      onInitializeSetupRequested: this.onInitializeSetupRequested.bind(this)
+      userId: null, // The account recovery user id
+      token: null, // The recover token
+      state: ApiSetupContextState.INITIAL_STATE, // The current recover workflow state
+      unexpectedError: null, // The unexpected error obejct if any
+      onInitializeSetupRequested: this.onInitializeSetupRequested.bind(this), // Whenever the initialization of the recover is requested.
+      logoutUserAndRefresh: this.logoutUserAndRefresh.bind(this), // Callback to be used when a user is unexpectedly logged in.
     };
   }
 
@@ -63,7 +69,7 @@ class ApiSetupContextProvider extends React.Component {
    */
   async onInitializeSetupRequested() {
     if (!this.state.userId || !this.state.token) {
-      return this.setState({state: ApiSetupContextState.ERROR_STATE});
+      return this.setState({state: ApiSetupContextState.REQUEST_INVITATION_ERROR});
     }
     if (!this.isBrowserSupported()) {
       return this.setState({state: ApiSetupContextState.DOWNLOAD_SUPPORTED_BROWSER_STATE});
@@ -83,17 +89,47 @@ class ApiSetupContextProvider extends React.Component {
   }
 
   /**
+   * When the user asks for logging out before going on with the desired process.
+   * @returns {Promise<void>}
+   */
+  async logoutUserAndRefresh() {
+    try {
+      const apiClientOptions = this.props.context.getApiClientOptions();
+      apiClientOptions.setResourceName("auth");
+      const apiClient = new ApiClient(apiClientOptions);
+      const fetchOptions = {...apiClient.buildFetchOptions(), method: 'POST', redirect: "manual"};
+      const url = apiClient.buildUrl(`${apiClient.baseUrl}/logout`);
+      await fetch(url.toString(), fetchOptions);
+    } catch (e) {
+      const error = new PassboltServiceUnavailableError(e.message);
+      return this.setState({unexpectedError: error, state: ApiSetupContextState.UNEXPECTED_ERROR_STATE});
+    }
+
+    window.location.reload();
+  }
+
+  /**
    * When the setup start failed.
    * @return {void}
    */
   handleStartSetupError(error) {
     if (error instanceof PassboltApiFetchError) {
-      const isTokenExpired = getPropValue(error, "data.body.token.expired");
-      if (isTokenExpired) {
+      const isUserLoggedIn = error.data.code === 403;
+      if (isUserLoggedIn) {
+        return this.setState({state: ApiSetupContextState.ERROR_ALREADY_SIGNED_IN_STATE});
+      }
+
+      const isTokenExpired = Boolean(error.data.body?.token?.expired);
+      const isTokenConsumed = Boolean(error.data.body?.token?.isActive);
+      if (isTokenExpired || isTokenConsumed) {
         return this.setState({state: ApiSetupContextState.TOKEN_EXPIRED_STATE});
       }
+
+      if (error?.data?.code === 400) {
+        return this.setState({state: ApiSetupContextState.REQUEST_INVITATION_ERROR});
+      }
     }
-    return this.setState({state: ApiSetupContextState.ERROR_STATE});
+    return this.setState({state: ApiSetupContextState.UNEXPECTED_ERROR_STATE});
   }
 
   /**
@@ -164,5 +200,7 @@ export const ApiSetupContextState = {
   DOWNLOAD_SUPPORTED_BROWSER_STATE: 'Download supported browser state',
   INSTALL_EXTENSION_STATE: 'Install extension state',
   TOKEN_EXPIRED_STATE: 'Token expired state',
-  ERROR_STATE: 'Error state',
+  ERROR_ALREADY_SIGNED_IN_STATE: 'Error, already signed in state',
+  REQUEST_INVITATION_ERROR: 'Request inviration error state',
+  UNEXPECTED_ERROR_STATE: 'Unexpected error state',
 };

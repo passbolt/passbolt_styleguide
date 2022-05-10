@@ -19,6 +19,8 @@ import InstallExtension from "../../Authentication/InstallExtension/InstallExten
 import DisplayBrowserNotSupported from "../../Authentication/DisplayBrowserNotSupported/DisplayBrowserNotSupported";
 import DisplayRequireInvitationError from "../../Authentication/DisplayRequireInvitationError/DisplayRequireInvitationError";
 import DisplayExpiredTokenError from "../../Authentication/DisplayExpiredTokenError/DisplayExpiredTokenError";
+import DisplayAlreadyLoggedInError, {DisplayAlreadyLoggedInErrorVariations} from "../../Authentication/DisplayAlreadyLoggedInError/DisplayAlreadyLoggedInError";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 
 /**
  * The component orchestrates the api recover authentication workflow.
@@ -50,8 +52,17 @@ class OrchestrateApiRecover extends Component {
         return <DisplayBrowserNotSupported/>;
       case ApiRecoverContextState.TOKEN_EXPIRED_STATE:
         return <DisplayExpiredTokenError/>;
-      case ApiRecoverContextState.ERROR_STATE:
+      case ApiRecoverContextState.ERROR_ALREADY_SIGNED_IN_STATE:
+        return <DisplayAlreadyLoggedInError
+          onLogoutButtonClick={this.props.apiRecoverContext.logoutUserAndRefresh}
+          displayAs={DisplayAlreadyLoggedInErrorVariations.RECOVER}
+        />;
+      case ApiRecoverContextState.REQUEST_INVITATION_ERROR:
         return <DisplayRequireInvitationError/>;
+      case ApiRecoverContextState.UNEXPECTED_ERROR_STATE:
+        return <DisplayUnexpectedError
+          error={this.props.apiRecoverContext.unexpectedError}
+        />;
       default:
         return <LoadingSpinner/>;
     }
