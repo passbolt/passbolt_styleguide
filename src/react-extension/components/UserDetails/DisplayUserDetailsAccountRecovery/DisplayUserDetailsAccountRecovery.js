@@ -54,6 +54,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
    */
   async componentDidUpdate(prevProps) {
     await this.handleUserChange(prevProps.userWorkspaceContext.details.user);
+    await this.handleUserPendingAccountRecoveryRequestChange(prevProps.userWorkspaceContext.details.user);
   }
 
   /**
@@ -67,6 +68,22 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
       await this.setState(state);
       await this.findUserRequests();
       this.setState({loading: false});
+    }
+  }
+
+  /**
+   * Handle the update of the user pending account recovery request.
+   * When an admin reviews a pending request by instance, refresh the section content.
+   * @param {object} user The previous user
+   */
+  async handleUserPendingAccountRecoveryRequestChange(user) {
+    if (!this.state.open) {
+      return;
+    }
+    if (user?.pending_account_recovery_request?.status !== this.props.userWorkspaceContext.details.user?.pending_account_recovery_request?.status) {
+      await this.setState({loading: true});
+      await this.findUserRequests();
+      await this.setState({loading: false});
     }
   }
 
