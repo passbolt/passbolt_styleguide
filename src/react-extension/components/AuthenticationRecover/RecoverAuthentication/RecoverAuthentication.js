@@ -66,6 +66,10 @@ class RecoverAuthentication extends Component {
         return <LoadingSpinner
           title={<Trans>Signing in, please wait...</Trans>}
         />;
+      case AuthenticationRecoverWorkflowStates.COMPLETING_RECOVER:
+        return <LoadingSpinner
+          title={<Trans>Completing recover. Please wait...</Trans>}
+        />;
       case AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST:
         return <AskForAuthenticationHelpCredentialLost
           displayAs={AskForAuthenticationHelpCredentialLostVariations.RECOVER}

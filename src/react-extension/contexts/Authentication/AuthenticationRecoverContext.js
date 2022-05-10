@@ -29,6 +29,7 @@ export const AuthenticationRecoverWorkflowStates = {
   LOADING: 'Loading',
   REQUESTING_ACCOUNT_RECOVERY: 'Requesting account recovery',
   SIGNING_IN: 'Signing in',
+  COMPLETING_RECOVER: 'Completing recover',
   UNEXPECTED_ERROR: 'Unexpected Error',
   VALIDATE_PASSPHRASE: 'Validate passphrase',
   CHECK_MAILBOX: 'Check mailbox',
@@ -89,7 +90,6 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       // Workflow data.
       state: AuthenticationRecoverWorkflowStates.LOADING, // The recover workflow current state
       error: null, // The current error
-      passphrase: null, // The user passphrase
       rememberMe: null, // The user remember me choice
 
       // Public workflow mutators.
@@ -185,7 +185,6 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase, rememberMe);
       await this.setState({
         state: AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN,
-        passphrase: passphrase,
         rememberMe: rememberMe
       });
     } catch (error) {
@@ -205,9 +204,10 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   async chooseSecurityToken(securityTokenDto) {
     try {
       await this.props.context.port.request("passbolt.recover.set-security-token", securityTokenDto);
-      this.setState({state: AuthenticationRecoverWorkflowStates.SIGNING_IN});
+      this.setState({state: AuthenticationRecoverWorkflowStates.COMPLETING_RECOVER});
       await this.props.context.port.request('passbolt.recover.complete');
-      await this.props.context.port.request("passbolt.recover.sign-in", this.state.passphrase, this.state.rememberMe);
+      this.setState({state: AuthenticationRecoverWorkflowStates.SIGNING_IN});
+      await this.props.context.port.request("passbolt.recover.sign-in", this.state.rememberMe);
     } catch (error) {
       await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
