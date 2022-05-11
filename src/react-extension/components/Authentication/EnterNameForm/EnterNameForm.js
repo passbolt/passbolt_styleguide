@@ -248,7 +248,10 @@ class EnterNameForm extends Component {
               disabled={this.hasAllInputDisabled()} big={true} fullWidth={true} processing={this.state.processing}
               value={this.translate("Sign up")}
             />
-            <a href={`${this.props.context.trustedDomain}/auth/login?locale=${this.props.context.locale}`}><Trans>I already have an account</Trans></a>
+            <a href={`${this.props.context.trustedDomain}/auth/login?locale=${this.props.context.locale}`}
+              rel="noopener noreferrer">
+              <Trans>I already have an account</Trans>
+            </a>
           </div>
         </form>
       </div>

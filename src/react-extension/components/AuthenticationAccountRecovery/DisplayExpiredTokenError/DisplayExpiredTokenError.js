@@ -26,9 +26,14 @@ class DisplayExpiredTokenError extends Component {
     return (
       <div className="setup-error">
         <h1><Trans>The request is expired.</Trans></h1>
-        <p><Trans>You can initiate a new account recovery by clicking on the button bellow.</Trans></p>
+        <p><Trans>If you still need to recover your account, you will need to start the process from scratch.</Trans></p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button"><Trans>Restart from scratch</Trans></a>
+          <a href={`${this.props.context.trustedDomain}`}
+            className="button primary big full-width"
+            role="button"
+            rel="noopener noreferrer">
+            <Trans>Continue</Trans>
+          </a>
         </div>
       </div>
     );

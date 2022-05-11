@@ -39,7 +39,7 @@ export const ApiAccountRecoveryContext = React.createContext({
 /**
  * The related context provider
  */
-class ApiAccountRecoveryContextProvider extends React.Component {
+export class ApiAccountRecoveryContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -68,7 +68,6 @@ class ApiAccountRecoveryContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async onInitializeAccountRecoveryRequested() {
-    // @todo account-recovery userId and authentication token are always null here. TO continue.
     if (!this.state.userId || !this.state.authenticationToken) {
       return this.setState({state: ApiAccountRecoveryContextState.REQUEST_INVITATION_ERROR});
     }
@@ -104,7 +103,8 @@ class ApiAccountRecoveryContextProvider extends React.Component {
       }
 
       const isTokenExpired = Boolean(error?.data?.body?.token?.expired);
-      if (isTokenExpired) {
+      const isNotActive = Boolean(error?.data?.body?.token?.isActive);
+      if (isTokenExpired || isNotActive) {
         return this.setState({state: ApiAccountRecoveryContextState.TOKEN_EXPIRED_STATE});
       }
     }

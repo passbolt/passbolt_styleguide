@@ -27,7 +27,12 @@ class DisplayRequireInvitationError extends Component {
         <h1><Trans>Access to this service requires an invitation.</Trans></h1>
         <p><Trans>This email is not associated with any approved users on this domain.</Trans> <Trans>Please contact your administrator to request an invitation link.</Trans></p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button"><Trans>Try with another email</Trans></a>
+          <a href={`${this.props.context.trustedDomain}/users/recover`}
+            className="button primary big full-width"
+            role="button"
+            rel="noopener noreferrer">
+            <Trans>Try with another email</Trans>
+          </a>
         </div>
       </div>
     );

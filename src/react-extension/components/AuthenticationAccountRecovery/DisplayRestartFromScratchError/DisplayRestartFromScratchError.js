@@ -29,7 +29,12 @@ class DisplayRestartFromScratchError extends Component {
         <p><Trans>You need to finalize the account recovery process with the same computer you used for the account recovery request.</Trans><br/><br/>
           <Trans>If you changed systems, or reinstalled passbolt web extension in the meantime, you will need to start the account recovery process from scratch.</Trans></p>
         <div className="form-actions">
-          <a href={`${this.props.context.trustedDomain}/users/recover`} className="button primary big full-width" role="button"><Trans>Restart from scratch</Trans></a>
+          <a href={`${this.props.context.trustedDomain}/users/recover`}
+            className="button primary big full-width"
+            role="button"
+            rel="noopener noreferrer">
+            <Trans>Restart from scratch</Trans>
+          </a>
         </div>
       </div>
     );
