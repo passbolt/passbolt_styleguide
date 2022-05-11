@@ -92,7 +92,7 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the header
    */
   get hyperlink() {
-    return this._container.querySelectorAll(".folders-label span")[1];
+    return this._container.querySelectorAll(".folders-label a")[0];
   }
 
   /** Click on the component */
@@ -123,7 +123,7 @@ class FilterResourcesByFoldersPageObject {
    * Returns the root folder
    */
   get rootFolder() {
-    return this._container.querySelectorAll('.folders-label span')[1];
+    return this._container.querySelectorAll('.folders-label a')[0];
   }
 
   /**
@@ -144,7 +144,7 @@ class FilterResourcesByFoldersPageObject {
    * Returns the more button root folder
    */
   get moreButton() {
-    return this._container.querySelector('.accordion-header .node.root .row.title .main-cell-wrapper .right-cell.more-ctrl a');
+    return this._container.querySelector('.accordion-header .node.root .row.title .right-cell.more-ctrl a');
   }
 
   /**

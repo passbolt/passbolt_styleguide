@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
+import React from "react";
 import Icon from "../../Common/Icons/Icon";
 import PropTypes from "prop-types";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
@@ -31,7 +31,6 @@ class FilterResourcesByFoldersItem extends React.Component {
     super(props);
     this.state = this.getDefaultState();
     this.bindCallbacks();
-    this.createRefs();
   }
 
   /**
@@ -47,18 +46,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     };
   }
 
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.moreMenuRef = React.createRef();
-  }
-
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
-    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
-    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
-    this.handleDocumentScrollEvent = this.handleDocumentScrollEvent.bind(this);
     this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleToggleOpenFolder = this.handleToggleOpenFolder.bind(this);
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
@@ -69,63 +57,6 @@ class FilterResourcesByFoldersItem extends React.Component {
     this.handleDropEvent = this.handleDropEvent.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
-  }
-
-  /**
-   * Component did mount
-   */
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
-    document.addEventListener('scroll', this.handleDocumentScrollEvent, true);
-    if (this.props.match.params.filterByFolderId) {
-      // Expand folder tree until the selected folder
-      this.openFolderParentTree(this.props.match.params.filterByFolderId);
-    }
-  }
-
-  /**
-   * Component will unmount
-   */
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
-    document.removeEventListener('scroll', this.handleDocumentScrollEvent, true);
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on the button
-    if (this.moreMenuRef.current && this.moreMenuRef.current.contains(event.target)) {
-      return;
-    }
-    this.handleCloseMoreMenu();
-  }
-
-  /**
-   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
-   */
-  handleDocumentContextualMenuEvent() {
-    this.handleCloseMoreMenu();
-  }
-
-  /**
-   * Handle drag start event on document. Hide the component if any.
-   */
-  handleDocumentDragStartEvent() {
-    this.handleCloseMoreMenu();
-  }
-
-  /**
-   * Handle scroll event on document. Hide the component if any.
-   */
-  handleDocumentScrollEvent() {
-    this.handleCloseMoreMenu();
   }
 
   /**
@@ -212,7 +143,8 @@ class FilterResourcesByFoldersItem extends React.Component {
     if (moreMenuOpen) {
       const {left, top} = event.currentTarget.getBoundingClientRect();
       const folder = this.props.folder;
-      const contextualMenuProps = {folder, left, top: top + 18, className: "right"};
+      const onBeforeHide = this.handleCloseMoreMenu;
+      const contextualMenuProps = {folder, left, top: top + 18, className: "right", onBeforeHide};
       this.props.contextualMenuContext.show(FilterResourcesByFoldersItemContextualMenu, contextualMenuProps);
     }
   }
@@ -536,7 +468,7 @@ class FilterResourcesByFoldersItem extends React.Component {
     return (
       <li
         className={`${isOpen ? "opened" : "closed"} folder-item`}>
-        <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""} ${this.state.moreMenuOpen ? "highlight" : ""}`}
+        <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""} ${hasChildren ? "" : "no-child"} ${this.state.moreMenuOpen ? "highlight" : ""}`}
           draggable="true"
           onDrop={this.handleDropEvent}
           onDragOver={this.handleDragOverEvent}
@@ -549,14 +481,14 @@ class FilterResourcesByFoldersItem extends React.Component {
               onContextMenu={this.handleContextualMenuEvent}>
               <a role="button">
                 {hasChildren &&
-                <Fragment>
+                <div className="toggle-folder" onClick={this.handleToggleOpenFolder}>
                   {isOpen &&
-                  <Icon name="caret-down" onClick={this.handleToggleOpenFolder}/>
+                  <Icon name="caret-down"/>
                   }
                   {!isOpen &&
-                  <Icon name="caret-right" onClick={this.handleToggleOpenFolder}/>
+                  <Icon name="caret-right"/>
                   }
-                </Fragment>
+                </div>
                 }
                 {!this.props.folder.personal &&
                 <Icon name="folder-shared"/>
@@ -567,12 +499,12 @@ class FilterResourcesByFoldersItem extends React.Component {
                 <span title={this.props.folder.name} className="folder-name">{this.props.folder.name}</span>
               </a>
             </div>
-            {!isDragged &&
-              <div className="dropdown right-cell more-ctrl" ref={this.moreMenuRef}>
-                <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleMoreClickEvent}><Icon name="3-dots-h"/></a>
-              </div>
-            }
           </div>
+          {!isDragged &&
+            <div className="dropdown right-cell more-ctrl">
+              <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleMoreClickEvent}><Icon name="3-dots-h"/></a>
+            </div>
+          }
         </div>
         {hasChildren && isOpen &&
         <ul className="folders-tree">

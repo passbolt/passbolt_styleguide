@@ -187,7 +187,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
         {this.canIUseCreate() &&
         <div className="dropdown" ref={this.createMenuRef}>
           <a className="button create primary ready" onClick={this.handleCreateClickEvent}>
-            <Icon name="plus-circle"/>
+            <Icon name="add"/>
             <span><Trans>Create</Trans></span>
           </a>
           <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>

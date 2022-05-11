@@ -43,8 +43,9 @@ class FilterResourcesByTags extends React.Component {
   getDefaultState() {
     return {
       open: true,
-      title: this.translate("Filter by tags"),
-      filterType: null // type of the filter selected
+      title: this.translate("Tags"),
+      filterType: null, // type of the filter selected
+      moreMenuOpen: false // more menu open
     };
   }
 
@@ -55,6 +56,7 @@ class FilterResourcesByTags extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
+    this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleFilterTagsType = this.handleFilterTagsType.bind(this);
   }
 
@@ -77,21 +79,35 @@ class FilterResourcesByTags extends React.Component {
   }
 
   /**
+   * Close the more menu
+   */
+  handleCloseMoreMenu() {
+    this.setState({moreMenuOpen: false});
+  }
+
+  /**
    * Handle when the user requests to display the contextual menu on the tag title section.
    * @param {ReactEvent} event The event
    */
   handleTitleMoreClickEvent(event) {
-    this.showContextualMenu(event.pageY, event.pageX);
+    const moreMenuOpen = !this.state.moreMenuOpen;
+    this.setState({moreMenuOpen});
+    if (moreMenuOpen) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      this.showContextualMenu(top + 18, left, "right");
+    }
   }
 
   /**
    * Show the contextual menu
    * @param {int} left The left position to display the menu
    * @param {int} top The top position to display the menu
+   * @param {string} className The className to display the menu
    */
-  showContextualMenu(top, left) {
+  showContextualMenu(top, left, className = "") {
     const onFilterSelected = this.handleFilterTagsType;
-    const contextualMenuProps = {left, onFilterSelected, top};
+    const onBeforeHide = this.handleCloseMoreMenu;
+    const contextualMenuProps = {left, onFilterSelected, onBeforeHide, top, className};
     this.props.contextualMenuContext.show(FilterResourcesByTagsContextualMenu, contextualMenuProps);
   }
 
@@ -130,7 +146,7 @@ class FilterResourcesByTags extends React.Component {
     return {
       personal: this.translate("My tags"),
       shared: this.translate("Shared tags"),
-      default: this.translate("Filter by tags")
+      default: this.translate("Tags")
     };
   }
 
@@ -182,23 +198,24 @@ class FilterResourcesByTags extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <h3>
-                    <span className="folders-label" onClick={this.handleTitleClickEvent}>
-                      <Fragment>
-                        {this.state.open &&
-                        <Icon name="caret-down"/>
-                        }
-                        {!this.state.open &&
-                        <Icon name="caret-right"/>
-                        }
-                      </Fragment>
-                      <span
-                        onContextMenu={this.handleTitleContextualMenuEvent}>{this.state.title}</span>
+                    <span className="folders-label" onClick={this.handleTitleClickEvent} onContextMenu={this.handleTitleContextualMenuEvent}>
+                      <a role="button">
+                        <>
+                          {this.state.open &&
+                            <Icon name="caret-down"/>
+                          }
+                          {!this.state.open &&
+                            <Icon name="caret-right"/>
+                          }
+                        </>
+                        {this.state.title}
+                      </a>
                     </span>
                   </h3>
                 </div>
               </div>
-              <div className="right-cell more-ctrl">
-                <a className="filter" onClick={this.handleTitleMoreClickEvent}><Icon name="filter"/></a>
+              <div className="dropdown right-cell more-ctrl">
+                <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></a>
               </div>
             </div>
           </li>

@@ -37,6 +37,17 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
   bindCallbacks() {
     this.handleCreateFolderItemClickEvent = this.handleCreateFolderItemClickEvent.bind(this);
     this.handleExportFolderItemClickEvent = this.handleExportFolderItemClickEvent.bind(this);
+    this.handleHide = this.handleHide.bind(this);
+  }
+
+  /**
+   * Handle hide contextual menu
+   */
+  handleHide() {
+    if (typeof this.props.onBeforeHide === 'function') {
+      this.props.onBeforeHide();
+    }
+    this.props.hide();
   }
 
   /**
@@ -49,7 +60,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
       }
     });
     this.props.dialogContext.open(CreateResourceFolder);
-    this.props.hide();
+    this.handleHide();
   }
 
   /**
@@ -57,7 +68,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    */
   async handleExportFolderItemClickEvent() {
     await this.export();
-    this.props.hide();
+    this.handleHide();
   }
 
   /**
@@ -92,7 +103,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
   render() {
     return (
       <ContextualMenuWrapper
-        hide={this.props.hide}
+        hide={this.handleHide}
         left={this.props.left}
         top={this.props.top}
         className={this.props.className}>
@@ -127,6 +138,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
 FilterResourcesByRootFolderContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
+  onBeforeHide: PropTypes.func, // On before hide callBack
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   className: PropTypes.string, // Class name to add

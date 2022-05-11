@@ -130,10 +130,10 @@ class FilterResourcesByShortcuts extends React.Component {
       <div className="navigation-secondary navigation-shortcuts">
         <ul >
           <li>
-            <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleAllItemsClick}>
+                  <a>
                     <span><Trans>All items</Trans></span>
                   </a>
                 </div>
@@ -141,10 +141,10 @@ class FilterResourcesByShortcuts extends React.Component {
             </div>
           </li>
           <li>
-            <div className={`row ${this.isFavoriteSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isFavoriteSelected ? "selected" : ""}`} onClick={this.handleFavoriteClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleFavoriteClick}>
+                  <a>
                     <span><Trans>Favorites</Trans></span>
                   </a>
                 </div>
@@ -152,10 +152,10 @@ class FilterResourcesByShortcuts extends React.Component {
             </div>
           </li>
           <li>
-            <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`} onClick={this.handleRecentlyModifiedClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleRecentlyModifiedClick}>
+                  <a>
                     <span><Trans>Recently Modified</Trans></span>
                   </a>
                 </div>
@@ -163,10 +163,10 @@ class FilterResourcesByShortcuts extends React.Component {
             </div>
           </li>
           <li>
-            <div className={`row ${this.isSharedWithMeSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isSharedWithMeSelected ? "selected" : ""}`} onClick={this.handleSharedWithMeClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleSharedWithMeClick}>
+                  <a>
                     <span><Trans>Shared with me</Trans></span>
                   </a>
                 </div>
@@ -174,10 +174,10 @@ class FilterResourcesByShortcuts extends React.Component {
             </div>
           </li>
           <li>
-            <div className={`row ${this.isItemsIOwnSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isItemsIOwnSelected ? "selected" : ""}`} onClick={this.handleItemsIOwnClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleItemsIOwnClick}>
+                  <a>
                     <span><Trans>Owned by me</Trans></span>
                   </a>
                 </div>

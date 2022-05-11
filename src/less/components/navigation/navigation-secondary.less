@@ -1,8 +1,15 @@
 /* left panel navigation */
 .navigation-secondary {
-    font-size: .9375em;
-    border-bottom: 1px dotted @border-default;
-    padding: .625em 0;
+    box-shadow: inset 0 -.1rem 0 @border-default; // border bottom
+    padding: 1.2rem 0;
+
+    &:last-child {
+      box-shadow: none;
+    }
+
+    &.navigation-shortcuts {
+      padding: .6rem 0 2rem 0;
+    }
 
     ul {
       list-style: none;
@@ -17,18 +24,34 @@
         Navigation row
     */
     .row {
-        float: left;
-        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: .4rem 0;
         box-sizing: border-box;
 
+        // Hover
         &:hover, &.highlight {
-            background: @background-lightest;
+            background: @navigation-menu-hover-background;
         }
         &.no-hover:hover {
             background: transparent;
         }
+
+        // Focus
+        &:focus {
+          background: @background-focus;
+          box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @border-focus;
+          .main-cell a {
+            color: @font-focus-navigation;
+          }
+        }
+
+        // Selected
         &.selected {
-            font-weight: bold;
+          background: @navigation-menu-hover-background;
+          .main-cell a {
+            font-weight: 700;
+          }
         }
 
         /*
@@ -37,13 +60,15 @@
               fixed right-cell
         */
         .main-cell-wrapper {
-            display: flex;
-            align-items: center;
+            flex: 1;
+
+            &:active {
+                .main-cell a {
+                    font-weight: 700;
+                }
+            }
         }
         .main-cell {
-            flex: 1;
-            width: 80%;
-
             h3 {
                 border: 0;
                 font-size: 1em;
@@ -65,8 +90,8 @@
 
             a {
                 border: 0;
-                padding: .2em .313em; /* 2px 5px */
-                padding-left: 1em;
+                padding-left: 1.6rem;
+                font-weight: 400;
                 color: @font-default;
                 display: block;
 
@@ -74,7 +99,7 @@
                   display: inline;
                   margin-left: 0.8rem;
                   svg {
-                    color: @orange-light;
+                    --icon-exclamation-color: @icon-exclamation-required-color;
                     vertical-align: middle;
                   }
                 }
@@ -95,6 +120,7 @@
                 box-shadow: none;
                 border: none;
                 background: none;
+                min-width: inherit;
 
                 // dropdown open
                 &.open {
