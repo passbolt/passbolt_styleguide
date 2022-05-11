@@ -243,7 +243,7 @@ describe("AuthenticationSetupContextProvider", () => {
       await contextProvider.initialize();
       await contextProvider.importGpgKey();
       await contextProvider.checkPassphrase("passphrase");
-      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", false, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN);
     });
 
@@ -256,7 +256,7 @@ describe("AuthenticationSetupContextProvider", () => {
       await contextProvider.initialize();
       await contextProvider.importGpgKey();
       await contextProvider.checkPassphrase("passphrase");
-      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", false, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE);
     });
 
@@ -270,7 +270,7 @@ describe("AuthenticationSetupContextProvider", () => {
       await contextProvider.initialize();
       await contextProvider.importGpgKey();
       await contextProvider.checkPassphrase("passphrase");
-      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", false, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.verify-passphrase"]).toHaveBeenCalledWith("passphrase", undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN);
     });
 
@@ -315,7 +315,7 @@ describe("AuthenticationSetupContextProvider", () => {
       expect.assertions(2);
       await contextProvider.initialize();
       await contextProvider.chooseAccountRecoveryPreference("approved");
-      expect(props.context.port.requestListeners["passbolt.setup.set-account-recovery-user-setting"]).toHaveBeenCalledWith("approved", null, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.set-account-recovery-user-setting"]).toHaveBeenCalledWith("approved", undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN);
     });
 
@@ -328,7 +328,7 @@ describe("AuthenticationSetupContextProvider", () => {
       expect.assertions(3);
       await contextProvider.initialize();
       await contextProvider.chooseAccountRecoveryPreference("approved");
-      expect(props.context.port.requestListeners["passbolt.setup.set-account-recovery-user-setting"]).toHaveBeenCalledWith("approved", null, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.set-account-recovery-user-setting"]).toHaveBeenCalledWith("approved", undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR);
       expect(contextProvider.state.error.message).toEqual("Unexpected error");
     });
@@ -340,10 +340,12 @@ describe("AuthenticationSetupContextProvider", () => {
       const contextProvider = new AuthenticationSetupContextProvider(props);
       mockComponentSetState(contextProvider);
 
-      expect.assertions(2);
+      expect.assertions(4);
       await contextProvider.initialize();
       await contextProvider.chooseSecurityToken({color: "black", textColor: "red"});
       expect(props.context.port.requestListeners["passbolt.setup.set-security-token"]).toHaveBeenCalledWith({color: "black", textColor: "red"}, undefined);
+      expect(props.context.port.requestListeners["passbolt.setup.complete"]).toHaveBeenCalled();
+      expect(props.context.port.requestListeners["passbolt.setup.sign-in"]).toHaveBeenCalledWith(false, undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.SIGNING_IN);
     });
 

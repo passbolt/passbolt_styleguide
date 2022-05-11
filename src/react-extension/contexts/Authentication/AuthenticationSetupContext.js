@@ -26,6 +26,7 @@ export const AuthenticationSetupWorkflowStates = {
   INTRODUCE_EXTENSION: 'Introduce extension',
   LOADING: 'Loading',
   SIGNING_IN: 'Signing in',
+  COMPLETING_SETUP: 'Completing setup',
   UNEXPECTED_ERROR: 'Unexpected Error',
   VALIDATE_PASSPHRASE: 'Validate passphrase',
 };
@@ -87,7 +88,6 @@ export class AuthenticationSetupContextProvider extends React.Component {
       state: AuthenticationSetupWorkflowStates.LOADING, // The setup workflow current state
       gpgKeyGenerated: null, // Did the user generate a key?
       error: null, // The current error
-      passphrase: null, // The user passphrase
       rememberMe: false, // The user remember me choice
 
       // Public workflow mutators.
@@ -149,7 +149,6 @@ export class AuthenticationSetupContextProvider extends React.Component {
       await this.setState({
         state: AuthenticationSetupWorkflowStates.DOWNLOAD_RECOVERY_KIT,
         armored_key: armoredKey,
-        passphrase: passphrase,
         gpgKeyGenerated: true,
       });
     } catch (error) {
@@ -242,8 +241,8 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
-      await this.props.context.port.request("passbolt.setup.verify-passphrase", passphrase, rememberMe);
-      this.setState({passphrase, rememberMe});
+      await this.props.context.port.request("passbolt.setup.verify-passphrase", passphrase);
+      this.setState({rememberMe});
 
       if (await this.isAccountRecoveryOrganizationPolicyEnabled()) {
         this.setState({
@@ -269,7 +268,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
    */
   async chooseAccountRecoveryPreference(status) {
     try {
-      await this.props.context.port.request('passbolt.setup.set-account-recovery-user-setting', status, this.state.passphrase);
+      await this.props.context.port.request('passbolt.setup.set-account-recovery-user-setting', status);
       await this.setState({state: AuthenticationSetupWorkflowStates.CHOOSE_SECURITY_TOKEN});
     } catch (error) {
       await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
@@ -284,9 +283,10 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async chooseSecurityToken(securityTokenDto) {
     try {
       await this.props.context.port.request("passbolt.setup.set-security-token", securityTokenDto);
-      this.setState({state: AuthenticationSetupWorkflowStates.SIGNING_IN});
+      this.setState({state: AuthenticationSetupWorkflowStates.COMPLETING_SETUP});
       await this.props.context.port.request('passbolt.setup.complete');
-      await this.props.context.port.request("passbolt.setup.sign-in", this.state.passphrase, this.state.rememberMe);
+      this.setState({state: AuthenticationSetupWorkflowStates.SIGNING_IN});
+      await this.props.context.port.request('passbolt.setup.sign-in', this.state.rememberMe);
     } catch (error) {
       await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
