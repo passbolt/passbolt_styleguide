@@ -27,9 +27,9 @@ describe("DisplayExpiredTokenError", () => {
     page = new DisplayExpiredTokenErrorTestPage(props);
   });
 
-  it('As AN I should be able to restart from scratch', async() => {
+  it('As AN I should be able to continue', async() => {
     expect.assertions(1);
-    expect(page.restartFromScratchButton.getAttribute("href")).toEqual(`${props.context.trustedDomain}/users/recover`);
+    expect(page.restartFromScratchButton.getAttribute("href")).toEqual(`${props.context.trustedDomain}`);
   });
 });
 
