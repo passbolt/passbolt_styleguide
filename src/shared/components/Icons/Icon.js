@@ -221,7 +221,7 @@ class Icon extends Component {
           * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
-        {this.props.name === 'Check' &&
+        {this.props.name === 'check' &&
           <svg width="15" height="11" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.6647 0.940002L4.86478 9.74L0.864777 5.74" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -649,6 +649,15 @@ class Icon extends Component {
         {this.props.name === 'star' &&
           <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.30478 0.110001L9.32474 4.21L13.8548 4.87L10.5747 8.06L11.3548 12.57L7.30478 10.44L3.25479 12.57L4.03476 8.06L0.754791 4.87L5.28476 4.21L7.30478 0.110001Z" fill="var(--icon-favorites-color)"/>
+          </svg>
+        }
+        {/*
+          * @copyright     Copyright (c) 2013-2017 Cole Bemis (https://github.com/feathericons/feather)
+          * @license       https://opensource.org/licenses/MIT MIT License
+        */}
+        {this.props.name === 'star-stroke' &&
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1.77L10.02 5.87L14.55 6.53L11.2699 9.72L12.05 14.23L8 12.1L3.95001 14.23L4.72998 9.72L1.45001 6.53L5.97998 5.87L8 1.77Z" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinejoin="round"/>
           </svg>
         }
         {/*

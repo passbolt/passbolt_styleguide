@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";

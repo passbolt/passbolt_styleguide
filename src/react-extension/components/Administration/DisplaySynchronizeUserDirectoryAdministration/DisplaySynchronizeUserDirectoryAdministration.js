@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";

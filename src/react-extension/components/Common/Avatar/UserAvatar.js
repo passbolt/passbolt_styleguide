@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 class UserAvatar extends Component {
   /**

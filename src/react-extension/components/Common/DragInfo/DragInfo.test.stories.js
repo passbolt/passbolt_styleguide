@@ -12,7 +12,7 @@
  * @since         3.7.0
  */
 import React from "react";
-import Icon from "../Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 export default {
   title: 'Passbolt/Common/DragInfo',

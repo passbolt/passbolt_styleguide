@@ -100,27 +100,9 @@
             display: flex;
             justify-content: center;
             border: 0;
-            background: transparent;
             padding: 0;
             width: 2.2rem;
             height: 2rem;
-            box-shadow: none;
-            border-radius: .1rem;
-
-            &:hover {
-                background: @button-panel-info-background;
-                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-panel-info-border;
-            }
-
-            &:active {
-                background: @button-panel-info-background;
-                box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-panel-info-border;
-            }
-
-            &:disabled, &.disabled {
-                background: @button-panel-info-background;
-                box-shadow: none;
-            }
         }
 
     }

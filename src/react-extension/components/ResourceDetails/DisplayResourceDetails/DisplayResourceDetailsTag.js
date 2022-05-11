@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import EditResourceTagsItemViewer from "../../ResourceTag/EditResourceTags/EditResourceTagsItemViewer";
 import EditResourceTags from "../../ResourceTag/EditResourceTags/EditResourceTags";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -105,8 +105,8 @@ class DisplayResourceDetailsTag extends React.Component {
           </h4>
         </div>
         <div className="accordion-content">
-          <a className="edit_tags_button section-action" onClick={this.toggleInputTagEditor}>
-            <Icon name="edit"></Icon>
+          <a className="section-action button button-transparent" onClick={this.toggleInputTagEditor}>
+            <Icon name="edit"/>
             <span className="visuallyhidden">edit</span>
           </a>
 

@@ -19,7 +19,7 @@ import {withLoading} from "../../../contexts/LoadingContext";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
  * This component allows the current user to edit the description of a resource

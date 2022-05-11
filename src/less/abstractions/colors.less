@@ -57,6 +57,8 @@
 @anti-flash-white: #F0F0F0;
 @azureish-white: #DDEBF8;
 @platinum: #E8E8E8;
+@cultured: #F5F5F5;
+@davys-grey: #5D5D5D;
 
 /* borders */
 @border-lightest: @grey-lightest;
@@ -73,7 +75,7 @@
 @border-link-focus: @blue;
 
 /* font */
-@font-default: @black;
+@font-default: @blacker;
 @font-header-first: @bright-gray-2;
 @font-dim: @grey-darkest;
 @font-light: @grey-darker;
@@ -103,6 +105,16 @@
 @background-header-second: @bright-gray;
 @background-focus: @blue;
 @background-footer: @bright-gray;
+
+/* quickaccess */
+@quickaccess-header-background: @bright-gray;
+@quickaccess-footer-background: @bright-gray;
+@quickaccess-back-link-background: @cultured;
+@quickaccess-list-title-background: @cultured;
+@quickaccess-list-title-hover-background: @bright-gray-3;
+@quickaccess-list-title-active-background: @azureish-white;
+@quickaccess-border: @grey;
+@quickaccess-font-property-name: @davys-grey;
 
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
@@ -151,17 +163,8 @@
 @button-warning-border: @red;
 @button-warning-color: @font-inverse;
 
-@button-eye-background: rgba(@white, .1);
-@button-eye-border: rgba(@blacker, .05);
-
-@button-close-background: rgba(@white, .1);
-@button-close-border: rgba(@blacker, .05);
-
-@button-search-background: rgba(@white, .1);
-@button-search-border: rgba(@blacker, .05);
-
-@button-panel-info-background: rgba(@white, .1);
-@button-panel-info-border: rgba(@blacker, .05);
+@button-transparent-background: rgba(@white, .1);
+@button-transparent-border: rgba(@blacker, .05);
 
 @button-disabled-color: @font-light;
 @button-disabled-background: @white;

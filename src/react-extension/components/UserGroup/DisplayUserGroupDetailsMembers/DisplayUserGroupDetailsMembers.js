@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
@@ -114,8 +114,8 @@ class DisplayUserGroupDetailsMembers extends React.Component {
           </h4>
         </div>
         <div className="accordion-content">
-          <a className="section-action" onClick={this.handleEditGroup}>
-            <Icon name="edit"></Icon>
+          <a className="section-action button button-transparent" onClick={this.handleEditGroup}>
+            <Icon name="edit"/>
             <span className="visuallyhidden">Edit</span>
           </a>
           {this.isLoading() &&

@@ -14,7 +14,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans} from "react-i18next";
 import CustomPropTypes from "../../../../shared/lib/PropTypes/CustomPropTypes";
 

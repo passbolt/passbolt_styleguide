@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext, {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../components/Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDrag} from "../../../contexts/DragContext";
 
 class DisplayDragFolderItem extends React.Component {

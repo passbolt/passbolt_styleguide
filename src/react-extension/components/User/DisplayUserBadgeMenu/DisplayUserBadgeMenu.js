@@ -17,7 +17,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUserBadgeMenu extends Component {

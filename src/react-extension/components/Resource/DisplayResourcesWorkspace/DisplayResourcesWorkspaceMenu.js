@@ -17,7 +17,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import EditResource from "../EditResource/EditResource";

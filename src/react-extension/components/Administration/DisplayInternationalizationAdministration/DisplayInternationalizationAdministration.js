@@ -17,7 +17,7 @@ import {withActionFeedback} from "../../../../react-extension/contexts/ActionFee
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import Select from "../../Common/Select/Select";
 
 /**

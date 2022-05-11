@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
@@ -208,7 +208,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canShare() &&
-          <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
+          <a onClick={this.handlePermissionsEditClickEvent} className="section-action button button-transparent">
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>modify</Trans></span>
           </a>

@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformation";
 import DisplayResourceDetailsTag from "./DisplayResourceDetailsTag";
@@ -117,7 +117,7 @@ class DisplayResourceDetails extends React.Component {
               </div>
               <span className="subtitle">{this.subtitle}</span>
             </h3>
-            <a className="dialog-close" onClick={this.handleCloseClick}>
+            <a className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visuallyhidden">Close</span>
             </a>

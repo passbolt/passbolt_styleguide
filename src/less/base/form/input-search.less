@@ -89,32 +89,9 @@
         padding: .3rem .3rem .3rem 0;
 
         .button {
-            background: transparent;
             padding: .8rem;
             width: 4.2rem;
             height: 3rem;
-            box-shadow: none;
-            border-radius: .1rem;
-
-            &:hover {
-                background: @button-search-background;
-                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-search-border;
-            }
-
-            &:active {
-                background: @button-search-background;
-                box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-search-border;
-            }
-
-            &:disabled, &.disabled {
-                background: @button-search-background;
-                box-shadow: none;
-            }
-
-            .svg-icon svg {
-                width: initial;
-                height: initial;
-            }
         }
     }
 
@@ -132,4 +109,10 @@
     &:active {
         box-shadow: none;
     }
+}
+
+/* remove webkit search input decoration and cancel button */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
 }

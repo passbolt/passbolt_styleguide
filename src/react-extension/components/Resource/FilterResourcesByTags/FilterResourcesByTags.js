@@ -13,7 +13,7 @@
  */
 import React, {Fragment} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import FilterResourcesByTagsContextualMenu from "./FilterResourcesByTagsContextualMenu";
 import FilterResourcesByTagsList from "./FilterResourcesByTagsList";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import Autocomplete from "../../Common/Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";

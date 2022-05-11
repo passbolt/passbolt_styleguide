@@ -22,7 +22,7 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
@@ -780,7 +780,7 @@ class EditUserGroup extends Component {
                     <div className="actions">
                       <a
                         title="remove"
-                        className={`remove-item ${!this.areActionsAllowed ? "disabled" : ""}`}
+                        className={`remove-item button button-transparent ${!this.areActionsAllowed ? "disabled" : ""}`}
                         onClick={event => this.handleMemberRemoved(event, groupUser)}>
                         <Icon name="close"/>
                         <span className="visuallyhidden">remove</span>

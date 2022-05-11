@@ -20,7 +20,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 /**

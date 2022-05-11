@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Icons/Icon";
+import Icon from "../../../../../shared/components/Icons/Icon";
 import {withTranslation} from "react-i18next";
 
 class SearchBar extends Component {
@@ -109,7 +109,7 @@ class SearchBar extends Component {
               placeholder={this.props.placeholder || this.props.t('Search')}
               value={this.props.value}/>
             <div className="search-button-wrapper">
-              <button className="button button-icon" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
+              <button className="button button-transparent" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
                 <Icon name="search"/>
                 <span className="visuallyhidden">Search</span>
               </button>

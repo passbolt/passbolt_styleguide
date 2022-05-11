@@ -20,7 +20,7 @@ import {withAppContext} from "../../contexts/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";
-import Icon from "../Common/Icons/Icon";
+import Icon from "../../../shared/components/Icons/Icon";
 import Tooltip from "../Common/Tooltip/Tooltip";
 import Select from "../Common/Select/Select";
 

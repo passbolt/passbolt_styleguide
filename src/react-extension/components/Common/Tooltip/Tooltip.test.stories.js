@@ -16,7 +16,7 @@
  * Storybook tests on Tootlip in regard of specifications
  */
 import React from "react";
-import Icon from "../Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "./Tooltip";
 
 export default {

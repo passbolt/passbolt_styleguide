@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";

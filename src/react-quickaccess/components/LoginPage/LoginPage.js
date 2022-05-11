@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 
 class LoginPage extends React.Component {

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import EditResourceDescription from "../../ResourceDescription/EditResourceDescription/EditResourceDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -302,7 +302,7 @@ class DisplayResourceDetailsDescription extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canEdit() &&
-          <a className="section-action" onClick={this.handleEditClickEvent}>
+          <a className="section-action button button-transparent" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>edit</Trans></span>
           </a>

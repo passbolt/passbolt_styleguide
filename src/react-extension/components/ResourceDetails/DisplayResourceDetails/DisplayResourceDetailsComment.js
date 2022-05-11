@@ -18,7 +18,7 @@ import AddResourceComment from "../../ResourceComment/AddResourceComment/AddReso
 import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class DisplayResourceDetailsComment extends React.Component {
@@ -161,7 +161,7 @@ class DisplayResourceDetailsComment extends React.Component {
           <div className="accordion-content">
             {this.state.canAddByIcon &&
               <a
-                className="section-action"
+                className="section-action button button-transparent"
                 href="#"
                 onClick={this.handleRequestedAddEvent}>
                 <Icon name="plus-circle"/>

@@ -95,6 +95,42 @@ button,
       }
     }
 
+    &-transparent {
+        min-width: inherit;
+        background: transparent;
+        box-shadow: none;
+        border-radius: .1rem;
+
+        /* focus */
+        &:focus {
+          box-shadow: none;
+        }
+
+        /* hover */
+        &:hover {
+            background: @button-transparent-background;
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-transparent-border;
+        }
+
+        /* focus visible */
+        &:focus-visible {
+            background: @button-transparent-background;
+            box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
+        }
+
+        /* active */
+        &:active {
+            background: @button-transparent-background;
+            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-transparent-border;
+        }
+
+        /* disabled */
+        &:disabled, &.disabled {
+            background: @button-transparent-background;
+            box-shadow: none;
+        }
+    }
+
     /* processing state */
     &.processing {
         background: @button-background;

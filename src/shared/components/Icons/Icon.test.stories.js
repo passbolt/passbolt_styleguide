@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "./Icon";
-import "../../../../css/themes/default/api_main.css";
+import "../../../css/themes/default/api_main.css";
 
 
 export default {
-  title: 'Passbolt/Common/Icon'
+  title: 'Passbolt/Shared/Icon'
 };
 
 const iconsNames = [
@@ -24,7 +24,7 @@ const iconsNames = [
   'caret-right',
   'caret-left',
   'caret-up',
-  'Check',
+  'check',
   'clock',
   'close-circle',
   'close',
@@ -62,6 +62,7 @@ const iconsNames = [
   'search',
   'share',
   'star',
+  'star-stroke',
   'switch',
   'theme-dark',
   'theme-light',

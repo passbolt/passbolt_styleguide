@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Icon from "../Icons/Icon";
 
 /**
  * This component represent a password input field with some additional properties
@@ -128,7 +128,7 @@ class Password extends Component {
         {this.props.preview &&
           <div className="password-view-wrapper">
             <a onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
-              className={`password-view button button-icon ${this.props.disabled ? "disabled" : ""}`}>
+              className={`password-view button button-transparent ${this.props.disabled ? "disabled" : ""}`}>
               {!this.state.viewPassword &&
                 <Icon name='eye-open'/>
               }

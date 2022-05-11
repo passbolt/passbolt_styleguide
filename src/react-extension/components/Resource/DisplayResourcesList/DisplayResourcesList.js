@@ -21,7 +21,7 @@ import {
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
@@ -578,7 +578,7 @@ class DisplayResourcesList extends React.Component {
             </a>
           </div>
           {this.canUsePreviewPassword &&
-            <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button button-icon">
+            <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button button-transparent">
               <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
               <span className="visually-hidden">view</span>
             </a>

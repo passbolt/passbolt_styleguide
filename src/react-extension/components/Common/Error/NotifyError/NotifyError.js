@@ -14,8 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withTranslation, Trans} from "react-i18next";
-import Icon from "../../../Common/Icons/Icon";
 import DialogWrapper from "../../Dialog/DialogWrapper/DialogWrapper";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 class NotifyError extends Component {
   /**

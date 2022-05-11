@@ -15,96 +15,44 @@ body {
         padding: .4rem 1.6rem;
         line-height: 2rem;
     }
-    label {
-        font-size:1.5rem;
-        padding-top: .8rem;
-        padding-bottom: .2rem;
-        line-height: 2rem;
+    .secondary-action, .option-link, .property-action {
+        padding: 0;
+        width: 2.4rem;
+        height: 2.4rem;
     }
-    input[type="text"], input[type="email"], input[type="password"], input[type="search"], textarea {
-        font-size: 1.5rem;
-        padding: .8rem .8rem;
-        margin: .9rem 0 .4rem 0;
-        height: 3.6rem;
+    .transition {
+      display: flex;
+      align-items: center;
     }
-    .error-message {
-        font-size:1.3rem;
-        margin-bottom: .4rem;
-        color: @font-error;
-    }
-    .passphrase {
-        input[type=password] {
-            box-sizing: border-box;
-            width: calc(100% - 4.5rem); // password field - token
-        }
-    }
-    .security-token {
-        width:4.5rem;
-        font-size:1.5rem;
-        margin-top:-.2rem;
-        padding: .4rem .8rem;
-    }
-    .button.button-icon {
-        position:relative;
-        box-sizing: content-box;
-        display:block;
-        margin:0;
-        padding:.8rem;
-        width:1.6rem;
-        height:1.6rem;
-        line-height:2rem;
-        float:right;
-        background:transparent;
-        border:0;
-    }
-    .button.button-icon.button-toggle.selected {
-        background: @button-selected-background;
-    }
-    a {
-        &:hover, &:active, &:focus {
-            svg path {
-                fill:@font-focus;
-            }
-        }
-    }
-
     .back-link {
         .clearfix();
-        background:@background-lighter;
+        display: flex;
+        align-items: center;
+        background: @quickaccess-back-link-background;
         line-height: 2rem;
 
         .primary-action  {
             display:block;
             border:0;
-            float:left;
-            width: 28rem; // width - sidebar offset - secondary action width - padding
+            flex: 1;
             padding: 1.6rem;
             .ellipsis();
 
+            .svg-icon {
+              margin-right: 1.6rem;
+            }
             .primary-action-title {
                 font-size: 1.5rem;
             }
-            .icon {
-                float:left;
-                margin-right: 1rem;
-            }
-            svg {
-                vertical-align: middle;
-                path {
-                    fill: @font-lighter;
-                }
-            }
         }
         .secondary-action {
-            padding: 1.6rem;
-            .icon {
-                float:right;
-            }
+            margin-right: 1.6rem;
         }
     }
 
     .submit-wrapper {
         .clearfix();
+        background: @quickaccess-footer-background;
         padding: 1.6rem;
         .button.primary.big {
           line-height: 2.3rem;
@@ -126,22 +74,15 @@ body {
     }
     .processing-wrapper {
         background-color: @background-default;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin:.8rem 3rem .8rem 1.6rem;
+        padding-left: 1rem;
 
         .processing-text {
             position: relative;
-            padding-left: 1rem;
-        }
-        .processing-text:before {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            content: " ";
-            top: 0px;
-            left: 0px;
-            background: transparent @loading left center no-repeat;
-            background-size: auto 75% ;
+            margin-left: .8rem;
         }
     }
 }

@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import {withAppContext} from "../../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import Icon from "../../Icons/Icon";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 class DisplayProgress extends Component {
   /**

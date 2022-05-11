@@ -17,7 +17,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {Trans, withTranslation} from "react-i18next";
-import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
+import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 
 /**
  * This component displays the user profile information

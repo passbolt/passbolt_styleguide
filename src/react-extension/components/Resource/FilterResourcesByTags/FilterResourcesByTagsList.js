@@ -17,7 +17,7 @@ import FilterResourcesByTagsListContextualMenu from "./FilterResourcesByTagsList
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 import {withDialog} from "../../../contexts/DialogContext";

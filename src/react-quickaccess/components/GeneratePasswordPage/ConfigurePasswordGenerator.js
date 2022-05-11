@@ -143,7 +143,7 @@ class ConfigurePasswordGenerator extends React.Component {
           </div>
         </div>
 
-        <div>
+        <div className="select-button">
           <label htmlFor="configure-password-generator-form-masks">
             <Trans>Character Types</Trans>
           </label>

@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
 import {Trans, withTranslation} from "react-i18next";
 

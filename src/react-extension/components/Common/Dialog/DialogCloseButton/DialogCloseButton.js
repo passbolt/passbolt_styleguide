@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Icons/Icon";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 class DialogCloseButton extends Component {
   /**
@@ -46,7 +46,7 @@ class DialogCloseButton extends Component {
    * @returns {string}
    */
   getClassName() {
-    let className = 'dialog-close';
+    let className = 'dialog-close button button-transparent';
     if (this.props.disabled) {
       className += ' disabled';
     }

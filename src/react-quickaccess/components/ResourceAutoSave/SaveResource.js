@@ -13,12 +13,11 @@
  *
  */
 import React from "react";
-import SimpleBar from "../SimpleBar/SimpleBar";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
-import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
@@ -178,7 +177,7 @@ class SaveResource extends React.Component {
       <div className="resource-auto-save">
         <h1 className="title"><Trans>Would you like to save this credential ?</Trans></h1>
         <form onSubmit={this.handleFormSubmit}>
-          <SimpleBar className="resource-auto-save-form">
+          <div className="resource-auto-save-form">
             <div className="form-container">
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
                 <label htmlFor="name"><Trans>Name</Trans></label>
@@ -216,7 +215,7 @@ class SaveResource extends React.Component {
                 }
               </div>
             </div>
-          </SimpleBar>
+          </div>
           <div className="submit-wrapper input flex-row-end">
             <a className="cancel" role="button" onClick={this.handleClose}>{this.translate("no, thanks")}</a>
             <button type="submit" className={`button primary big ${this.state.processing ? "processing" : ""}`} role="button"

@@ -20,9 +20,9 @@ import QRCode from 'qrcode';
 import {sha512} from "../../../lib/Crypto/sha512";
 import {Trans, withTranslation} from "react-i18next";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import ShowErrorDetails from "../../Common/Error/ShowErrorDetails/ShowErrorDetails";
-import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
+import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 import MobileTransferIcon from "../../Common/Icons/MobileTransferIcon";
 
 // Ref. http://blog.qr4.nl/page/QR-Code-Data-Capacity.aspx

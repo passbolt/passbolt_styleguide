@@ -12,7 +12,7 @@
  * @since         3.7.0
  */
 import React from "react";
-import Icon from "../Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {defaultProps} from "../../../../shared/components/Password/Password.test.data";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";

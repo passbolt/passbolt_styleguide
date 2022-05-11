@@ -117,7 +117,7 @@ class ConfigurePassphraseGenerator extends Component {
   render() {
     return (
       <>
-        <div className="input text">
+        <div>
           <label htmlFor="configure-passphrase-generator-form-word-count"><Trans>Number of words</Trans></label>
           <div className="slider">
             <input
@@ -141,9 +141,9 @@ class ConfigurePassphraseGenerator extends Component {
           <input type="text" id="configure-passphrase-generator-form-words-separator" name="separator" value={this.separator} onChange={this.handleInputChange}
             placeholder={this.translate("Type one or more characters")}/>
         </div>
-        <div className="select-wrapper input">
+        <div className="select-inline input">
           <label htmlFor="configure-passphrase-generator-form-words-case"><Trans>Words case</Trans></label>
-          <Select id="configure-passphrase-generator-form-words-case" name="word_case" items={this.wordCaseList} value={this.wordCase} onChange={this.handleInputChange}/>
+          <Select id="configure-passphrase-generator-form-words-case" className="inline" name="word_case" items={this.wordCaseList} value={this.wordCase} onChange={this.handleInputChange}/>
         </div>
       </>
     );

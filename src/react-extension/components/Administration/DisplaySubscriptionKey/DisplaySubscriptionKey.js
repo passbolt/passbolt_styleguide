@@ -20,8 +20,8 @@ import {Trans, withTranslation} from "react-i18next";
 import {withDialog} from "../../../../react-extension/contexts/DialogContext";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import Icon from "../../Common/Icons/Icon";
-import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
+import Icon from "../../../../shared/components/Icons/Icon";
+import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 
 /**
  * This component allows to display the subscription key for the administration

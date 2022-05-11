@@ -23,7 +23,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
@@ -506,7 +506,7 @@ class CreateUserGroup extends Component {
                         onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}/>
                     </div>
                     <div className="actions">
-                      <a className={`remove-item ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      <a className={`remove-item button button-transparent ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                         onClick={event => this.handleDeleteClickEvent(event, groups_user.user.id)} role="button">
                         <Icon name='close'/>
                         <span className="visually-hidden">Remove</span>

@@ -1,13 +1,12 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import SimpleBar from "../SimpleBar/SimpleBar";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
-import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 
@@ -325,20 +324,16 @@ class ResourceCreatePage extends React.Component {
       <div className="resource-create">
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Cancel the operation")}>
-            <span className="icon fa">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z" /></svg>
-            </span>
+            <Icon name="chevron-left"/>
             <span className="primary-action-title"><Trans>Create password</Trans></span>
           </a>
-          <Link to="/data/quickaccess.html" className="secondary-action button-icon button" title={this.translate("Cancel")}>
-            <span className="fa icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" /></svg>
-            </span>
+          <Link to="/data/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+            <Icon name="close"/>
             <span className="visually-hidden"><Trans>cancel</Trans></span>
           </Link>
         </div>
         <form onSubmit={this.handleFormSubmit}>
-          <SimpleBar className="resource-create-form">
+          <div className="resource-create-form">
             <div className="form-container">
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
                 <label htmlFor="name"><Trans>Name</Trans></label>
@@ -371,13 +366,13 @@ class ResourceCreatePage extends React.Component {
                     autoComplete="new-password" placeholder={this.translate('Password')} id="password" inputRef={this.passwordInputRef}/>
                   <a onClick={this.handleGeneratePasswordButtonClick}
                     className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
-                    <Icon name='dice' big={true}/>
+                    <Icon name='dice'/>
                     <span className="visually-hidden">generate</span>
                   </a>
                   {this.canUsePasswordGenerator &&
                     <a onClick={this.handleOpenGenerator}
                       className="password-generator button-icon button">
-                      <Icon name='cog' big={true}/>
+                      <Icon name='settings'/>
                       <span className="visually-hidden">open generator</span>
                     </a>
                   }
@@ -388,7 +383,7 @@ class ResourceCreatePage extends React.Component {
                 }
               </div>
             </div>
-          </SimpleBar>
+          </div>
           <div className="submit-wrapper input">
             <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
               disabled={this.state.processing}>

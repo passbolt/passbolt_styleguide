@@ -3,30 +3,42 @@
         .properties {
             .property {
                 .clearfix();
-                a {
-                    display:block;
-                    border:0;
-                }
-                .password-view {
-                  display: block;
-                  position: relative;
-                  box-sizing: content-box;
-                  margin: 0 0 0 .5rem;
-                  padding: .1rem .3rem .1rem .3rem;
-                  background: 0 0;
-                  border: 0;
-                  float: left;
+                display: flex;
+                align-items: center;
+                padding: 1.6rem;
+                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
 
-                  &.selected {
-                    background: @button-selected-background;
-                  }
+                &:last-child {
+                  box-shadow: none;
+                }
+                a {
+                  border: 0;
                 }
             }
+            .information {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+
+              .password-wrapper {
+                display: flex;
+                align-items: center;
+
+                .password-view {
+                  width: 2.2rem;
+                  height: 2.1rem;
+                  margin: 0 0 0 .8rem;
+                  padding: 0;
+
+                  .svg-icon svg {
+                    width: 1.4rem;
+                    height: 100%;
+                  }
+                }
+              }
+            }
             .property-value {
-                width:28rem;
-                float:left;
-                padding:0 1rem 1.6rem 1.6rem;
-                font-size: 1.5rem;
+                max-width: 30rem;
                 .ellipsis();
                 &.empty {
                   font-style: italic;
@@ -34,40 +46,32 @@
                 }
             }
             .property-name {
+                font-weight: 600;
                 font-size: 1.3rem;
+                line-height: 1.8rem;
                 color: @font-light;
-                width: 28rem;
-                float: left;
-                padding: 1.6rem 1rem .4rem 1.6rem;
-            }
-            .property-action {
-                margin-top: 1.6rem;
-                padding: 1.6rem;
-                &.disabled {
-                  path {
-                    fill: @font-lightest;
-                  }
-                }
+                margin-bottom: .4rem;
             }
             .secret {
                 display: inline-block;
-                height: .8rem;
-                float: left;
-                border: 0;
-                margin-left: 1.6rem;
-                margin-bottom: .9rem;
+                max-width: 28rem;
                 &.secret-copy {
-                  width: 10.5rem;
-                  background: transparent @controls-dot repeat-x left 3px;
                   &:hover {
-                    background: transparent @controls-dot-hover repeat-x left 3px;
+                    color: @font-hover-secret;
                   }
-                }
-                &.decrypted {
-                  max-width: 28rem;
-                  width: inherit;
-                  margin-left: 0;
-                  padding-right: 0;
+                  > span {
+                    display: none;
+                  }
+
+                  &:before {
+                    content: 'BBBBBBBBB';
+                    font-family: 'Passbolt', sans-serif;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 1.8rem;
+                    letter-spacing: normal;
+                    line-height: 100%;
+                  }
                 }
             }
         }

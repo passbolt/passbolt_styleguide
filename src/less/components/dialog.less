@@ -133,42 +133,21 @@
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close {
   margin-left: 1rem;
+  padding: 0;
   &, &:hover {
     display: block;
     border: none;
   }
 
   .svg-icon {
-    background: transparent;
     padding: .65rem;
     width: 2.4rem;
     height: 2.4rem;
     text-align: center;
     display: block;
     line-height: 1.2rem;
-    box-shadow: none;
     border: none;
-    border-radius: .1rem;
     box-sizing: border-box;
-
-    /* hover */
-    &:hover {
-      background: @button-close-background;
-      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-close-border;
-      border: none;
-    }
-
-    /* focus */
-    &:focus {
-      background: @button-close-background;
-      box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
-    }
-
-    /* active */
-    &:active {
-      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-close-border;
-      background: @button-active-background;
-    }
   }
 }
 

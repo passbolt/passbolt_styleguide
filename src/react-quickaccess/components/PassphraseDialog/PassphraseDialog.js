@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 
 class PassphraseDialog extends React.Component {
@@ -133,10 +133,8 @@ class PassphraseDialog extends React.Component {
           <a className="primary-action">
             <span className="primary-action-title"><Trans>Passphrase required</Trans></span>
           </a>
-          <a onClick={this.handleCloseButtonClick} className="secondary-action button-icon button" title={this.translate("cancel the operation")}>
-            <span className="fa icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512"><path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" /></svg>
-            </span>
+          <a onClick={this.handleCloseButtonClick} className="secondary-action button-transparent button" title={this.translate("cancel the operation")}>
+            <Icon name="close"/>
             <span className="visually-hidden"><Trans>cancel</Trans></span>
           </a>
         </div>

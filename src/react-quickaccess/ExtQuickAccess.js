@@ -29,6 +29,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import SaveResource from "./components/ResourceAutoSave/SaveResource";
 import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
 import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
+import Icon from "../shared/components/Icons/Icon";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/data/quickaccess.html',
@@ -240,6 +241,7 @@ class ExtQuickAccess extends React.Component {
               <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
               {!isReady &&
               <div className="processing-wrapper">
+                <Icon name="spinner"/>
                 <p className="processing-text">Connecting your account</p>
               </div>
               }
@@ -256,9 +258,9 @@ class ExtQuickAccess extends React.Component {
                   <PrepareResourceContextProvider>
                     <AnimatedSwitch>
                       <Route path="/data/quickaccess/login" render={() => (
-                        <LoginPage 
+                        <LoginPage
                           loginSuccessCallback={this.loginSuccessCallback}
-                          mfaRequiredCallback={this.mfaRequiredCallback} 
+                          mfaRequiredCallback={this.mfaRequiredCallback}
                           canRememberMe={this.canRememberMe}/>
                       )}/>
                       <PrivateRoute exact path="/data/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
