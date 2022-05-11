@@ -409,7 +409,7 @@ class DisplayMfaAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="mfa-settings col7">
+        <div className="mfa-settings col7 main-column">
           <form className="form ready">
             <div className="provider-section totp">
               <h3>

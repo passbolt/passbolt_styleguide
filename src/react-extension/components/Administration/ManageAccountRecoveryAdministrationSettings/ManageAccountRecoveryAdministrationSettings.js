@@ -266,7 +266,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="recover-account-settings col8">
+        <div className="recover-account-settings col8 main-column">
           <h3><Trans>Account Recovery</Trans></h3>
           {this.props.adminAccountRecoveryContext.hasPolicyChanges() &&
             <div className="warning message" id="email-notification-setting-overridden-banner">

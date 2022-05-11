@@ -192,7 +192,7 @@ class DisplayUserGpgInformation extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-key-inspector-information">
         <div className="row">
-          <div className="col6 key-info">
+          <div className="col6 main-column key-info">
             <h3><Trans>Information for public and secret key</Trans></h3>
             <table className="table-info" id="privkeyinfo">
               <tbody>
@@ -203,6 +203,7 @@ class DisplayUserGpgInformation extends React.Component {
                       message={this.translate("sorry you can only have one key set at the moment")}
                       direction="top">
                       <Select
+                        className="inline"
                         id="keyId"
                         value={this.gpgKeyInfo.keyId}
                         items={[{value: this.gpgKeyInfo.keyId, label: this.gpgKeyInfo.keyId}]}
@@ -237,12 +238,15 @@ class DisplayUserGpgInformation extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="col6 last key-export">
-            <h3><Trans>Public key block</Trans></h3>
-            <div className="input textarea gpgkey" rel="publicKey">
-              <textarea
-                defaultValue={this.gpgKeyInfo.armoredKey}
-                className="fluid code"/>
+          <div className="col6 secondary-column last key-export">
+            <div className="sidebar">
+              <h3><Trans>Public key block</Trans></h3>
+              <div className="input textarea gpgkey" rel="publicKey">
+                <textarea
+                  defaultValue={this.gpgKeyInfo.armoredKey}
+                  className="fluid code"
+                  readOnly={true}/>
+              </div>
             </div>
           </div>
         </div>

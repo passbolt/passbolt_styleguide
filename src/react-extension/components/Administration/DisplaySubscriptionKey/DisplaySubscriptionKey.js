@@ -315,7 +315,7 @@ class DisplaySubscriptionKey extends React.Component {
     return (
       <div className="row">
         {!this.isLoading() &&
-        <div className="subscription-key col8">
+        <div className="subscription-key col8 main-column">
           <h3><Trans>Subscription key details</Trans></h3>
           <div className="feedback-card">
             {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&

@@ -723,7 +723,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="ldap-settings col7">
+        <div className="ldap-settings col7 main-column">
           <form className="form">
             <h3>
               <span className="input toggle-switch form-element">

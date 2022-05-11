@@ -389,7 +389,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="email-notification-settings col8">
+        <div className="email-notification-settings col8 main-column">
           {this.hasDatabaseSetting() && this.hasFileConfigSetting() &&
           <div className="warning message" id="email-notification-setting-overridden-banner">
             <p>

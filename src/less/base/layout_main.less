@@ -22,10 +22,6 @@
       height: auto;
       padding: 0;
 
-      .grid {
-        padding-bottom: 1.6rem;
-      }
-
       .panel.left {
         background: @panel-background;
       }
@@ -105,10 +101,10 @@
   /* if the other grid is used
    don't center the grid inside main panel */
   .panel.main .grid-responsive-12 {
-    float: left;
     width: 100%;
+    height: calc(100% - 3.9rem); // 100% - the height of the breadcrumb
+    margin-right: 1.6rem;
     max-width: none;
-    padding-left: .25em;
     box-sizing: border-box;
   }
 }
@@ -155,10 +151,6 @@
       .panel.middle {
         width: 100%;
         left: 0;
-      }
-
-      .row {
-        padding-left: .5em;
       }
 
       .panel.aside {

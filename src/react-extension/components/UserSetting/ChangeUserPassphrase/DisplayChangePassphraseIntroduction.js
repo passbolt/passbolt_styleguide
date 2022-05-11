@@ -125,7 +125,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col7">
+          <div className="col7 main-column">
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Before getting started...</Trans></h3>
               <div className="password-management-bg">
@@ -140,7 +140,7 @@ class DisplayChangePassphraseIntroduction extends React.Component {
                 <label htmlFor="passphrase-update-understand"> <Trans>Ok, I understand what I need to do.</Trans></label>
               </div>
               <div className="submit-wrapper">
-                <button className="button primary medium submit" type="submit" disabled={this.hasAllInputDisabled()}>
+                <button className="button primary submit" type="submit" disabled={this.hasAllInputDisabled()}>
                   <Trans>Start</Trans>
                 </button>
               </div>

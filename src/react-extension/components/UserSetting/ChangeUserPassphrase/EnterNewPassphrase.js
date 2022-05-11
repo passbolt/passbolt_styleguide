@@ -245,7 +245,7 @@ class EnterNewPassphrase extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col7">
+          <div className="col7 main-column">
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter a new passphrase</Trans></h3>
               <div className="form-content">
@@ -282,10 +282,10 @@ class EnterNewPassphrase extends React.Component {
                 </div>
               </div>
               <div className="submit-wrapper">
-                <button className="button cancel medium" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
+                <button className="button cancel" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
                   <Trans>Cancel</Trans>
                 </button>
-                <FormSubmitButton primary={true} medium={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.translate('Update')}/>
+                <FormSubmitButton primary={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.translate('Update')}/>
               </div>
             </form>
           </div>

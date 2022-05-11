@@ -194,7 +194,7 @@ class DisplayInternationalizationAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="internationalisation-settings col7">
+        <div className="internationalisation-settings col7 main-column">
           <h3><Trans>Internationalisation</Trans></h3>
           <form className="form">
             <div className="select-wrapper input">

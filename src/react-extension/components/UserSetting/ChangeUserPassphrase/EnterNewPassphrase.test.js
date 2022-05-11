@@ -156,7 +156,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     it('As LU I should see an error dialog if there is an api error', async() => {
       expect.assertions(3);
       expect(page.updateButton.getAttribute("disabled")).not.toBeNull();
-      expect(page.updateButton.className).toBe('button primary disabled medium');
+      expect(page.updateButton.className).toBe('button primary disabled');
 
       // Fill the form
       page.insertPassphrase("passphrase");

@@ -8,113 +8,41 @@
 
     .avatar {
       flex-direction: column;
+      align-items: center;
+
       img {
-        border: 1px solid @border-default;
         padding: 0;
-        width: 12.5em;
-        height: 12.5em;
-        margin: .5em 1em 0 0;
-      }
-
-      .edit {
-        width: 12.5em;
-        height: 3.125em;
-        background-color: rgba(0,0,0,0.7);
-        border: 1px solid transparent;
-        color: @font-inverse;
-        margin: -3.25em 0 2em 0;
-        position: relative;
-
-        a {
-          color: @font-inverse;
-          display: block;
-          height: 3.125em;
-          .clearfix();
-
-          .svg-icon {
-            float:left;
-          }
-          .svg-icon svg {
-            float: left;
-            fill: white;
-            width: 1.6rem;
-            height: 1.6rem;
-            margin:.8em
-          }
-          .help-text {
-            float: left;
-            display: block;
-            font-size: 0.813em;
-            margin-left: 0;
-            padding: 0.5em;
-            width: 9em;
-          }
-        }
+        width: 15rem;
+        height: 15rem;
+        margin-bottom: 1.6rem;
       }
     }
   }
 
   .profile-key-inspector-information {
-    .input.select.tooltip-top {
-      display: inline-block;
-    }
     .key-info .table-info {
-      .select select {
-        margin: 0;
-        padding: .1rem 1.8rem .1rem .2rem;
-        background-size: .8rem auto, 100%;
+      .fingerprint {
+        line-height: 1.6rem;
       }
     }
   }
 
   .key-export {
-    .actions {
-      margin: 1em 0;
-    }
     .input.textarea.gpgkey textarea.fluid.code {
       height: 27em;
+      margin-bottom: 0;
     }
   }
 
   .profile-passphrase {
     .password-management-bg {
-      background: transparent url('@{images}/illustrations/passphrase_intro.png') center center no-repeat;
-      background-size: contain;
+      background: transparent url('@{images}/illustrations/passphrase_intro.svg') center center no-repeat;
       height: 16rem;
-    }
-    .input.checkbox {
-      margin-bottom: 1em;
-    }
-
-    .password {
-      .clearfix();
-
-      input {
-        width: calc(100% - 30rem); // password field - show button
-      }
-
-      .security-token {
-        margin-top: 0;
-        margin-left: .8rem;
-      }
-
-      .input {
-        .message.error {
-          clear: both;
-        }
-      }
-    }
-
-    .password-complexity {
-      .progress {
-        width: calc(100% - 25.9rem); // align with password field and show button
-      }
     }
 
     .enter-passphrase {
-      .submit-wrapper {
-        display: flex;
-        flex-direction: row;
+      .input-password-wrapper {
+        max-width: 45rem;
       }
     }
 
@@ -125,15 +53,24 @@
         font-size: 1.6rem;
       }
     }
+
+    .submit-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+
+      .button.cancel {
+        margin-right: 1.6rem;
+      }
+    }
   }
 
   .profile-choose-security-token {
     .input-security-token {
       .clearfix();
-      margin: 1em 0 1.5em 0;
 
       label {
-        margin-bottom:.5em;
+        margin-bottom: 1.2rem;
       }
       .input.text {
         .rounded();
@@ -153,23 +90,53 @@
         cursor: pointer;
       }
     }
+    .submit-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+    }
   }
 
   .profile-mobile-transfer {
-    .mobile-transfer-bg {
-      background: transparent url('@{images}/diagrams/mobile-transfer.svg') left center no-repeat;
-      background-size: contain;
-      height: 16em;
-      margin: 2em 0;
+    .app-store {
+      display: block;
+      background: transparent url('@{images}/third_party/appstore.svg') left center no-repeat;
+      height: 4.4rem;
+      border: 0;
+    }
+    .play-store {
+      display: block;
+      background: transparent url('@{images}/third_party/playstore.svg') left center no-repeat;
+      height: 4.4rem;
+      border: 0;
+    }
+    .transfer-account {
+      display: flex;
+      .submit-wrapper {
+        margin: 0 0 0 1.6rem;
+        .button {
+          margin: 1.6rem 0 0 0;
+        }
+      }
+    }
+    #qr-canvas {
+      margin: 1.6rem auto;
+    }
+    .submit-wrapper {
+      .button.cancel {
+        margin-left: auto;
+      }
     }
   }
 }
 
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
-  .page.settings .profile-detailed-information {
-    .avatar {
-      float: none;
+  .page.settings {
+    .profile-detailed-information {
+      .avatar {
+        float: none;
+      }
     }
   }
 }

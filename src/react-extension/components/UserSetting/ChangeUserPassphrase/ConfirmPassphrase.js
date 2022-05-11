@@ -178,7 +178,7 @@ class ConfirmPassphrase extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col7">
+          <div className="col7 main-column">
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter your passphrase to continue</Trans></h3>
               <div className="form-content">
@@ -205,14 +205,14 @@ class ConfirmPassphrase extends React.Component {
               </div>
               <div className="submit-wrapper">
                 <button
-                  className="button cancel medium"
+                  className="button cancel"
                   type="button"
                   disabled={this.hasAllInputDisabled()}
                   onClick={this.handleCancel}>
                   <Trans>Cancel</Trans>
                 </button>
                 <FormSubmitButton
-                  primary={true} medium={true}
+                  primary={true}
                   disabled={this.mustBeDisabled()}
                   processing={this.state.processing}
                   value={this.translate('Verify')}/>
