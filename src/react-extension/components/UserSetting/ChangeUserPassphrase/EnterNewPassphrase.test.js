@@ -20,9 +20,15 @@ import {defaultProps} from "./EnterNewPassphrase.test.data";
 import {waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import PwnedPasswords from "../../../../shared/lib/Secret/PwnedPasswords";
+
+jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
 
 beforeEach(() => {
+  jest.useFakeTimers();
   jest.resetModules();
+  jest.clearAllMocks();
+  PwnedPasswords.pwnedPasswords.mockResolvedValue(false);
 });
 
 describe("As LU I should see the user confirm passphrase page", () => {
@@ -109,17 +115,17 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should go to the next step if the passphrase is strong enough', async() => {
-      expect.assertions(1);
+      expect.hasAssertions();
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
-      expect(page.canUpdate).toBeTruthy();
+      await waitFor(() => expect(page.canUpdate).toBeTruthy());
     });
 
-
     it('As LU I cannot update the form fields while submitting the form', async() => {
-      expect.assertions(3);
+      expect.hasAssertions();
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
+      await waitFor(() => expect(page.canUpdate).toBeTruthy());
 
       let generateResolve = null;
       const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
@@ -133,9 +139,10 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see a processing feedback while submitting the form', async() => {
-      expect.assertions(2);
+      expect.hasAssertions();
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
+      await waitFor(() => expect(page.canUpdate).toBeTruthy());
 
       let generateResolve;
       const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
@@ -154,12 +161,13 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see an error dialog if there is an api error', async() => {
-      expect.assertions(3);
+      expect.hasAssertions();
       expect(page.updateButton.getAttribute("disabled")).not.toBeNull();
       expect(page.updateButton.className).toBe('button primary disabled');
 
       // Fill the form
       page.insertPassphrase("passphrase");
+      await waitFor(() => expect(page.canUpdate).toBeTruthy());
       const mockReject = error => jest.fn(() => new Promise((resolve, reject) => reject(error)));
       jest.spyOn(props.userSettingsContext, 'onUpdatePassphraseRequested').mockImplementationOnce(mockReject(new PassboltApiFetchError("Jest simulate API error.")));
 

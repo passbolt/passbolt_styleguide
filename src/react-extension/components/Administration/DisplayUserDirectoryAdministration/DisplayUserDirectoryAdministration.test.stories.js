@@ -12,7 +12,7 @@ export default {
 const Template = args =>
   <div className="grid grid-responsive-12">
     <DisplayUserDirectoryAdministration {...args}/>
-  </div>
+  </div>;
 
 Template.propTypes = {
   context: PropTypes.object,

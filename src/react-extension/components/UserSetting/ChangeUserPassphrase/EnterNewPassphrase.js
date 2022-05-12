@@ -77,7 +77,8 @@ class EnterNewPassphrase extends React.Component {
   get isValid() {
     const validation = {
       enoughLength:  this.state.passphrase.length >= 8,
-      enoughStrength: this.state.passphraseStrength.id !== 'n/a'
+      enoughEntropy: this.state.passphraseEntropy !== 0,
+      notInDictionary: this.state.hintClassNames.notInDictionary === "success"
     };
     return Object.values(validation).every(value => value);
   }
@@ -136,24 +137,30 @@ class EnterNewPassphrase extends React.Component {
     const passphraseEntropy = SecretGenerator.entropy(passphrase);
     const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
     this.setState({passphraseEntropy, hintClassNames});
-    await this.checkPassphraseIsInDictionary(passphrase, hintClassNames);
+    await this.checkPassphraseIsInDictionary();
   }
 
   /**
    * check if the passphrase is in dictionary
-   * @param passphrase
-   * @param hintClassNames
    * @returns {Promise<void>}
    */
-  async checkPassphraseIsInDictionary(passphrase, hintClassNames) {
+  async checkPassphraseIsInDictionary() {
     const hintClassName = condition => condition ? 'success' : 'error';
+
     // debounce only to check the passphrase is in dictionary
-    const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(passphrase).catch(() => null);
-    hintClassNames.notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
+    const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(this.state.passphrase).catch(() => null);
+    const notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
+
     // if the passphrase is in dictionary, force the complexity to n/a
-    const passphraseStrength = {...this.state.passphraseStrength};
-    passphraseStrength.id = isPwned ? 'n/a' : this.state.passphraseStrength.id;
-    this.setState({hintClassNames, passphraseStrength});
+    const passphraseEntropy = isPwned ? 0 : this.state.passphraseEntropy;
+
+    this.setState({
+      hintClassNames: {
+        ...this.state.hintClassNames,
+        notInDictionary
+      },
+      passphraseEntropy
+    });
   }
 
   /**
