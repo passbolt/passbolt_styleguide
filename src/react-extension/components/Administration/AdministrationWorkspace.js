@@ -109,27 +109,25 @@ class AdministrationWorkspace extends Component {
               </div>
               <div className="panel middle">
                 <DisplayAdministrationWorkspaceBreadcrumb/>
-                <div className="workspace-main">
-                  <div className="grid grid-responsive-12">
-                    {this.isMfaSelected() &&
-                    <DisplayMfaAdministration/>
-                    }
-                    {this.isUserDirectorySelected() &&
-                    <DisplayUserDirectoryAdministration/>
-                    }
-                    {this.isEmailNotificationsSelected() &&
-                    <DisplayEmailNotificationsAdministration/>
-                    }
-                    {this.isSubscriptionSelected() &&
-                    <DisplaySubscriptionKey/>
-                    }
-                    {this.isInternationalizationSelected() &&
-                    <DisplayInternationalizationAdministration/>
-                    }
-                    {this.isAccountRecoverySelected() &&
-                    <ManageAccountRecoveryAdministrationSettings/>
-                    }
-                  </div>
+                <div className="grid grid-responsive-12">
+                  {this.isMfaSelected() &&
+                  <DisplayMfaAdministration/>
+                  }
+                  {this.isUserDirectorySelected() &&
+                  <DisplayUserDirectoryAdministration/>
+                  }
+                  {this.isEmailNotificationsSelected() &&
+                  <DisplayEmailNotificationsAdministration/>
+                  }
+                  {this.isSubscriptionSelected() &&
+                  <DisplaySubscriptionKey/>
+                  }
+                  {this.isInternationalizationSelected() &&
+                  <DisplayInternationalizationAdministration/>
+                  }
+                  {this.isAccountRecoverySelected() &&
+                  <ManageAccountRecoveryAdministrationSettings/>
+                  }
                 </div>
               </div>
             </div>

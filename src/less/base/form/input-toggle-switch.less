@@ -1,9 +1,10 @@
 .input.toggle-switch {
-  margin-bottom: .8rem;
+  margin-bottom: 1.2rem;
   display: flex;
   align-items: center;
 
   .toggle-switch-checkbox {
+    flex: 0 0 3.2rem;
     -webkit-appearance: none;
     appearance: none;
     display: grid;
@@ -17,14 +18,17 @@
     margin: 0;
 
     & + label {
-      flex: 1;
       font-weight: 600;
-      margin-left: 1.2rem;
+      margin: 0 0 0 1.2rem;
       display: inline-block;
       cursor: pointer;
       padding: 0;
       line-height: 2rem;
       .ellipsis();
+
+      &.text {
+        font-weight: 400;
+      }
     }
 
     // Toggle hover
@@ -40,6 +44,7 @@
     // Toggle focus
     &:focus-visible {
       box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @input-toggle-focus-border;
+      outline: 0;
     }
 
     // Toggle pressed

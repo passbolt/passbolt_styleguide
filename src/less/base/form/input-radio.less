@@ -1,9 +1,14 @@
 .radiolist, .radiolist-alt {
-    margin-bottom:.8rem;
+    margin-bottom: 1.2rem;
+
+    & > label {
+      margin-bottom: 1.2rem;
+    }
 
     .input.radio {
       display: flex;
       align-items: center;
+      margin-right: 1.6rem;
 
       input[type=radio] {
         -webkit-appearance: none;
@@ -26,7 +31,7 @@
           cursor: pointer;
           font-size: 1.5rem;
           line-height: 2rem;
-          margin-left: 1.2rem;
+          margin: 0 0 0 1.2rem;
           .ellipsis();
         }
 

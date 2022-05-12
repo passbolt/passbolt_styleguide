@@ -23,7 +23,7 @@ label {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required label:after {
+.required > label:after {
     content: "\002A"; /* unicode character * */
     color: @font-error;
     font-weight: bold;

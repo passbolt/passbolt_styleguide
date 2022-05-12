@@ -330,20 +330,20 @@ class DisplaySubscriptionKey extends React.Component {
             <div className="subscription-information">
               {!this.hasSubscriptionKey() &&
               <>
-                <h4><Trans>Your subscription key is either missing or not valid.</Trans></h4>
+                <h4 className="no-border"><Trans>Your subscription key is either missing or not valid.</Trans></h4>
                 <p><Trans>Sorry your subscription is either missing or not readable.</Trans><br/>
                   <Trans>Update the subscription key and try again.</Trans> <Trans>If this does not work get in touch with support.</Trans>
                 </p>
               </>
               }
               {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-              <h4><Trans>Your subscription key is going to expire.</Trans></h4>
+              <h4 className="no-border"><Trans>Your subscription key is going to expire.</Trans></h4>
               }
               {this.hasSubscriptionKey() && this.hasInvalidSubscription() &&
-              <h4><Trans>Your subscription key is not valid.</Trans></h4>
+              <h4 className="no-border"><Trans>Your subscription key is not valid.</Trans></h4>
               }
               {this.hasValidSubscription() && !this.hasSubscriptionKeyGoingToExpire() &&
-              <h4><Trans>Your subscription key is valid and up to date!</Trans></h4>
+              <h4 className="no-border"><Trans>Your subscription key is valid and up to date!</Trans></h4>
               }
               {this.hasSubscriptionKey() &&
               <ul>
@@ -378,19 +378,19 @@ class DisplaySubscriptionKey extends React.Component {
               </ul>
               }
               {this.hasSubscriptionToRenew() &&
-              <>
+              <div className="actions-wrapper">
                 {this.hasSubscriptionKey() &&
-                <a className="button primary big" role="button" onClick={this.handleRenewKey}>
+                <button className="button primary" type="button" onClick={this.handleRenewKey}>
                   <Trans>Renew key</Trans>
-                </a>
+                </button>
                 }
                 {!this.hasSubscriptionKey() &&
-                <a className="button primary big" role="button" onClick={this.handleUpdateKey}>
+                <button className="button primary" type="button" onClick={this.handleUpdateKey}>
                   <Trans>Update key</Trans>
-                </a>
+                </button>
                 }
                 <a target="_blank" rel="noopener noreferrer" href="https://www.passbolt.com/contact"><Trans>or, contact us</Trans></a>
-              </>
+              </div>
               }
             </div>
           </div>

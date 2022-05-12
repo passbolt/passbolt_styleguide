@@ -23,10 +23,8 @@ export default {
 
 const Template = ({...args}) =>
   <div className="panel middle">
-    <div className="workspace-main">
-      <div className="grid grid-responsive-12">
-        <DisplayInternationalizationAdministration {...args}/>
-      </div>
+    <div className="grid grid-responsive-12">
+      <DisplayInternationalizationAdministration {...args}/>
     </div>
   </div>;
 

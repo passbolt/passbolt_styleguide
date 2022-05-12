@@ -617,7 +617,7 @@ class TransferToMobile extends React.Component {
                 <p><Trans>4. Scan the QR codes with your phone.</Trans></p>
                 <p><Trans>5. And you are done!</Trans></p>
                 <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                  <Icon name="life-ring"/>
+                  <Icon name="document"/>
                   <span><Trans>Read the documentation</Trans></span>
                 </a>
               </div>
@@ -644,7 +644,7 @@ class TransferToMobile extends React.Component {
                   <p><Trans><strong>4. Scan the QR codes with your phone.</strong></Trans></p>
                   <p><Trans>5. And you are done!</Trans></p>
                   <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                    <Icon name="life-ring"/>
+                    <Icon name="document"/>
                     <span><Trans>Read the documentation</Trans></span>
                   </a>
                 </div>
@@ -679,7 +679,7 @@ class TransferToMobile extends React.Component {
                   <p><Trans>4. Scan the QR codes with your phone.</Trans></p>
                   <p><Trans><strong>5. And you are done!</strong></Trans></p>
                   <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                    <Icon name="life-ring"/>
+                    <Icon name="document"/>
                     <span><Trans>Read the documentation</Trans></span>
                   </a>
                 </div>
@@ -712,7 +712,7 @@ class TransferToMobile extends React.Component {
                 <p><Trans>Contact your administrator with details about what went wrong.</Trans></p>
                 <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
                 <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                  <Icon name="life-ring"/>
+                  <Icon name="document"/>
                   <span><Trans>Help site</Trans></span>
                 </a>
               </div>
@@ -744,7 +744,7 @@ class TransferToMobile extends React.Component {
                 <p><Trans>Contact your administrator with the error details.</Trans></p>
                 <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
                 <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                  <Icon name="life-ring"/>
+                  <Icon name="document"/>
                   <span><Trans>Help site</Trans></span>
                 </a>
               </div>

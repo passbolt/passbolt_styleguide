@@ -5,8 +5,8 @@
 import MockPort from "../../../test/mock/MockPort";
 import {DateTime} from "luxon";
 
-export function defaultProps() {
-  return {
+export function defaultProps(props) {
+  const defaultProps = {
     context: {
       port: new MockPort(),
       onGetSubscriptionKeyRequested: () => mockSubscription,
@@ -25,6 +25,7 @@ export function defaultProps() {
       onGoToNewTab: jest.fn()
     }
   };
+  return Object.assign(defaultProps, props || {});
 }
 
 /**

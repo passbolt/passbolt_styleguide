@@ -4,6 +4,10 @@
     margin-bottom: 1.2rem;
     height: 3.6rem;
 
+    &.medium {
+        width: 50%;
+    }
+
     .select {
         position: relative;
         display: flex;
@@ -11,10 +15,6 @@
         font-size: 1.5rem;
         font-weight: 400;
         line-height: 2rem;
-
-        &.medium {
-          width: 50%;
-        }
 
         // selected value
         .selected-value {
@@ -59,6 +59,7 @@
             flex: 1;
             display: block;
             margin-right: 1rem;
+            .ellipsis();
           }
         }
         // Select items
@@ -68,8 +69,7 @@
             background: @select-background;
             box-sizing: border-box;
             box-shadow: inset .1rem 0 0 0 @select-border, inset -.1rem 0 0 0 @select-border, inset 0 -.1rem 0 0 @select-border;
-            min-width: 100%;
-            width: max-content;
+            width: 100%;
             transition: all 0.5s;
             opacity: 0;
             visibility: hidden;
@@ -102,6 +102,7 @@
                     display: block;
                     border: none;
                     padding: .8rem 3.6rem .8rem .8rem; // padding right very important to keep space for the caret down
+                    .ellipsis();
 
                     // Select item hover
                     &:hover {
@@ -193,9 +194,13 @@
             }
         }
 
-        .select-items .items {
-            .option {
-                padding: .8rem 3.4rem .8rem 1.6rem;
+        .select-items {
+            min-width: 100%;
+            width: max-content;
+            .items {
+                .option {
+                    padding: .8rem 3.4rem .8rem 1.6rem;
+                }
             }
         }
 

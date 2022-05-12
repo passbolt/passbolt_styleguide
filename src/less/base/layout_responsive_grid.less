@@ -14,7 +14,7 @@
     .row {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        min-height: 100%;
         margin: 0 1.6rem;
         .clearfix();
 
@@ -52,6 +52,28 @@
                 }
             }
 
+            .message {
+              margin: 0;
+            }
+
+            .accordion {
+              margin: 0;
+              .accordion-header {
+                a {
+                  display: flex;
+                  align-items: center;
+                  border: none;
+
+                  .svg-icon {
+                    margin-right: .4rem;
+                  }
+                }
+              }
+              .accordion-content {
+                margin: 1.6rem;
+              }
+            }
+
             h3 {
                 padding: .8rem 1.6rem 1.1rem 1.6rem;
                 margin: 0;
@@ -59,6 +81,16 @@
                 font-size: 2rem;
                 line-height: 2.7rem;
                 letter-spacing: -0.045em;
+
+                & > * {
+                  margin: 0;
+                }
+
+                label {
+                  font-size: 2rem;
+                  line-height: 2.7rem;
+                  letter-spacing: -0.045em;
+                }
             }
 
             h4 {
@@ -72,6 +104,12 @@
                 &.no-border {
                   border: none;
                   margin-top: 0;
+                }
+
+                label, a {
+                  font-size: 1.8rem;
+                  line-height: 2.5rem;
+                  letter-spacing: -0.045em;
                 }
             }
         }
