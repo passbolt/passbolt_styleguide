@@ -120,6 +120,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
           </a>
           {this.isLoading() &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving group members</Trans></span>
           </div>
           }

@@ -3,7 +3,6 @@
         .clearfix();
 
         a {
-            color:@font-default;
             display:block;
         }
         a:hover {
@@ -25,22 +24,13 @@
         .clearfix();
 
         .processing-wrapper {
-            background-color: @background-default;
-            padding: 0.5em 1.5em;
+            display: flex;
+            align-items: center;
+            margin: 0 0 0 3.2rem;
 
             .processing-text {
                 position: relative;
-                padding-left: 1.5em;
-            }
-            .processing-text:before {
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                content: " ";
-                top: 0;
-                left: 0;
-                background: transparent @loading left center no-repeat;
-                background-size: auto 75% ;
+                margin-left: .5rem;
             }
         }
     }
@@ -50,7 +40,7 @@
         }
     }
 }
-.dialog .accordion {
+.dialog .accordion, .login .accordion {
     .accordion-header {
         margin-bottom: 1.2rem;
         a {

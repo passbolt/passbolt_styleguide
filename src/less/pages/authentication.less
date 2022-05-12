@@ -11,26 +11,13 @@ html, body {
   p {
     font-size: 1.6rem;
     line-height: 2.4rem;
+    margin-bottom: 1.6rem;
   }
 
-  .processing-wrapper {
-    display:block;
-    width: 16rem;
-    height: 16rem;
-    margin:auto;
-
-    .processing {
-      display:block;
-      text-align: center;
-    }
-    .processing:after {
-      display:block;
-      width: 16rem;
-      height: 16rem;
-      content: " ";
-      background: transparent @loading center center no-repeat;
-      background-size: auto 50%;
-    }
+  .processing-wrapper svg{
+    width: 12rem;
+    height: 12rem;
+    --spinner-stroke-width: .07rem;
   }
 
   .login-form {
@@ -97,7 +84,6 @@ html, body {
       }
       .randomize-button-wrapper {
         float:left;
-        width: 10rem;
         text-align: center;
         clear:both;
         cursor: pointer;
@@ -188,6 +174,10 @@ html, body {
     justify-content: center;
     text-align: center;
   }
+
+  .select-wrapper {
+    margin: 1.2rem 0 0 0;
+  }
 }
 
 @media only screen and (min-width: 42rem) {
@@ -215,7 +205,7 @@ html, body {
       }
 
       .login-form {
-        .box-shadow();
+        box-shadow: 0 0 1rem @dialog-box-shadow;
         border-radius: .3rem;
         max-width:37.2rem;
         margin:auto;
@@ -223,9 +213,9 @@ html, body {
         background:@background-default;
       }
 
-      .input.select.locale {
+      .select-wrapper {
         max-width: 45.2rem;
-        margin: auto;
+        margin: 1.2rem auto auto auto;
       }
 
       .login-box-footer {

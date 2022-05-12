@@ -20,6 +20,21 @@ const DOWNLOAD_FIREFOX_URL = "https://www.mozilla.org/firefox/download/thanks/";
 const DOWNLOAD_CHROME_URL = "https://www.google.com/chrome/";
 
 class DisplayBrowserNotSupported extends Component {
+  constructor(props) {
+    super(props);
+    this.state = this.getDefaultState();
+  }
+
+  /**
+   * Returns the default component state
+   */
+  getDefaultState() {
+    const currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "black" : "white";
+
+    return {
+      theme: currentTheme
+    };
+  }
   /**
    * Render the component
    * @returns {JSX}
@@ -30,7 +45,7 @@ class DisplayBrowserNotSupported extends Component {
         <h1><Trans>Sorry, your browser is not supported.</Trans></h1>
         <p><Trans>Please download chrome or firefox to get started with passbolt.</Trans></p>
         <a href={`${DOWNLOAD_FIREFOX_URL}`} className="browser" target="_blank" rel="noopener noreferrer">
-          <img src={`${this.props.context.trustedDomain}/img/third_party/firefox_logo.png`} />
+          <img src={`${this.props.context.trustedDomain}/img/third_party/firefox_logo-${this.state.theme}.png`} />
         </a>
         <div className="form-actions">
           <a href={DOWNLOAD_FIREFOX_URL} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer"><Trans>Download Firefox</Trans></a>

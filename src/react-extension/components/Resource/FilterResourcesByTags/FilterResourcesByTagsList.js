@@ -314,6 +314,7 @@ class FilterResourcesByTagsList extends React.Component {
       <div className="accordion-content">
         {this.isLoading() &&
         <div className="processing-wrapper">
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }

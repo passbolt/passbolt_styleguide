@@ -1,6 +1,5 @@
 /** Select **/
 .select-container {
-    overflow-y: hidden;
     margin-bottom: 1.2rem;
     height: 3.6rem;
 
@@ -70,7 +69,7 @@
             box-sizing: border-box;
             box-shadow: inset .1rem 0 0 0 @select-border, inset -.1rem 0 0 0 @select-border, inset 0 -.1rem 0 0 @select-border;
             width: 100%;
-            transition: all 0.5s;
+            transition: opacity 0.5s;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -156,7 +155,6 @@
 /** Select inline **/
 .select-container.inline {
     display: flex;
-    overflow-y: hidden;
     margin-bottom: 0;
     height: 3rem;
 
@@ -226,4 +224,49 @@
             }
         }
     }
+}
+
+/** Select inline **/
+.select-container.setup-extension {
+  display: flex;
+  margin-bottom: 0;
+
+  .select {
+    // selected value
+    .selected-value {
+      background: transparent;
+      box-shadow: none;
+
+      // Select inline hover
+      &:hover {
+        box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+      }
+
+      // Select inline focus
+      &:focus-visible {
+        box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @select-focus-border;
+      }
+
+      // Select inline pressed
+      &:active {
+        box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+      }
+
+      // Select inline disabled
+      &.disabled {
+        box-shadow: none;
+      }
+    }
+
+    .select-items {
+      background: @select-setup-extension-background;
+    }
+
+    &.open {
+      .selected-value {
+        background: @select-setup-extension-background;
+        box-shadow: inset .1rem 0 0 0 @select-border, inset -.1rem 0 0 0 @select-border, inset 0 .1rem 0 0 @select-border;
+      }
+    }
+  }
 }
