@@ -557,6 +557,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : DateTime.fromISO(d1) < DateTime.fromISO(d2) ? -1 : 1);
     const stringSorter = (s1, s2) => s1.localeCompare(s2);
     const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
+    const accountRecoveryUserSettingStatusSorter = (u1, u2) => (u2?.account_recovery_user_setting?.status === u1?.account_recovery_user_setting?.status) ? 0 : u2?.account_recovery_user_setting?.status ? -1 : 1;
     const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
     const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
     const roleNameSorter = (roleIdU1, roleIdU2) => this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
@@ -567,6 +568,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
     const isRoleNameProperty = this.state.sorter.propertyName === 'role.name';
     const isAttentionRequiredProperty = this.state.sorter.propertyName === 'attentionRequired';
+    const isAccountRecoveryUserSettingStatusProperty = this.state.sorter.propertyName === 'account_recovery_user_setting.status';
 
     let propertySorter;
     if (isNameProperty) {
@@ -577,6 +579,8 @@ class UserWorkspaceContextProvider extends React.Component {
       propertySorter = plainObjectSorter(attentionRequireSorter);
     } else if (isRoleNameProperty) {
       propertySorter = keySorter("role_id", roleNameSorter);
+    } else if (isAccountRecoveryUserSettingStatusProperty) {
+      propertySorter = plainObjectSorter(accountRecoveryUserSettingStatusSorter);
     } else {
       propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringSorter);
     }

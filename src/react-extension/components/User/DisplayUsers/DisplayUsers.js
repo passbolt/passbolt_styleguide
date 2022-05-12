@@ -130,7 +130,6 @@ class DisplayUsers extends React.Component {
     this.props.userWorkspaceContext.onSorterChanged(sortProperty);
   }
 
-
   /**
    * Returns the current list of filtered users to display
    */
@@ -254,6 +253,22 @@ class DisplayUsers extends React.Component {
   }
 
   /**
+   * Returns true if the mfa feature is enabled and if the logged in user is an admin.
+   * @returns {boolean}
+   */
+  hasMfaColumn() {
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
+   * @returns {boolean}
+   */
+  hasAccountRecoveryColumn() {
+    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
+  }
+
+  /**
    * Format date in time ago
    * @param {string} date The date to format
    * @return {string} The formatted date
@@ -318,12 +333,23 @@ class DisplayUsers extends React.Component {
             {lastLoggedInFormatted}
           </div>
         </td>
-        {this.isLoggedInUserAdmin() &&
-          <td className="cell-is_mfa_enabled m-cell">
-            <div>
-              {mfa}
-            </div>
-          </td>
+        {this.hasMfaColumn() &&
+        <td className="cell-is_mfa_enabled m-cell">
+          <div>
+            {mfa}
+          </div>
+        </td>
+        }
+        {this.hasAccountRecoveryColumn() &&
+        <td className="cell-is_account_recovery_enabled m-cell">
+          <div>
+            {{
+              "approved": <Trans>Approved</Trans>,
+              "rejected": <Trans>Rejected</Trans>,
+              [undefined]: <Trans>Pending</Trans>,
+            }[user?.account_recovery_user_setting?.status]}
+          </div>
+        </td>
         }
       </tr>
     );
@@ -477,7 +503,7 @@ class DisplayUsers extends React.Component {
                       </a>
 
                     </th>
-                    {this.isLoggedInUserAdmin() &&
+                    {this.hasMfaColumn() &&
                       <th className="cell-is_mfa_enabled m-cell sortable">
                         <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
                           <div className="cell-header">
@@ -495,6 +521,25 @@ class DisplayUsers extends React.Component {
                           </div>
                         </a>
                       </th>
+                    }
+                    {this.hasAccountRecoveryColumn() &&
+                    <th className="cell-account_recovery_user_setting_status m-cell sortable">
+                      <a onClick={ev => this.handleSortByColumnClick(ev, "account_recovery_user_setting.status")}>
+                        <div className="cell-header">
+                          <span className="cell-header-text">
+                            <Trans>Account recovery</Trans>
+                          </span>
+                          <span className="cell-header-icon-sort">
+                            {this.isSortedColumn("account_recovery_user_setting.status") && this.isSortedAsc() &&
+                              <Icon baseline={true} name="caret-up"/>
+                            }
+                            {this.isSortedColumn("account_recovery_user_setting.status") && !this.isSortedAsc() &&
+                            <Icon baseline={true} name="caret-down"/>
+                            }
+                          </span>
+                        </div>
+                      </a>
+                    </th>
                     }
                   </tr>
                 </thead>
