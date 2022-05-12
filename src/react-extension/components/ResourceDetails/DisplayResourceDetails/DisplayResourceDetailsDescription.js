@@ -310,6 +310,7 @@ class DisplayResourceDetailsDescription extends React.Component {
           {this.state.isSecretDecrypting &&
           <p className="description-content">
             <span className="processing-wrapper">
+              <Icon name="spinner"/>
               <span className="processing-text"><Trans>Decrypting</Trans></span>
             </span>
           </p>

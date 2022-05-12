@@ -19,6 +19,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -186,6 +187,7 @@ class DisplayResourceCommentList extends React.Component {
         }
         {this.state.actions.loading &&
         <div className="processing-wrapper">
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving comments</Trans></span>
         </div>
         }

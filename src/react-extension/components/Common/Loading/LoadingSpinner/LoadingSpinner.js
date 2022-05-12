@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans} from "react-i18next";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 /**
  * This component displays a waiting loading spinner
@@ -27,8 +28,7 @@ class LoadingSpinner extends React.Component {
       <div className="login-processing">
         <h1>{this.props.title}</h1>
         <div className="processing-wrapper">
-          <div className="processing">
-          </div>
+          <Icon name="spinner"/>
         </div>
       </div>
     );

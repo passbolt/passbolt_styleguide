@@ -413,6 +413,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
         <div className="accordion-content">
           {loadingActivities &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }

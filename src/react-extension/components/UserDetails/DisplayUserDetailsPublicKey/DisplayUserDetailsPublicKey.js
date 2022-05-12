@@ -210,6 +210,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
           {isLoading &&
           <ul>
             <li className="processing-wrapper">
+              <Icon name="spinner"/>
               <span className="processing-text"><Trans>Retrieving public key</Trans></span>
             </li>
           </ul>

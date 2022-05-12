@@ -624,10 +624,11 @@ class EditUserGroup extends Component {
   /**
    * Format fingerprint
    * @param {string} fingerprint An user finger print
-   * @returns {string}
+   * @returns {JSX.Element}
    */
   formatFingerprint(fingerprint) {
-    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
   }
 
   /**

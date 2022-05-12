@@ -15,6 +15,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
+import {defaultProps} from "./DownloadRecoveryKit.test.data";
 
 export default {
   title: 'Passbolt/Authentication/DownloadRecoveryKit',
@@ -34,6 +35,7 @@ const Template = args =>
 
 
 export const Initial = Template.bind({});
+Initial.args = defaultProps();
 Initial.parameters = {
   css: "ext_authentication"
 };

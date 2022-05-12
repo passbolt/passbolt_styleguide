@@ -221,6 +221,7 @@ class DisplayResourceDetailsPermission extends React.Component {
           }
           {this.isLoading() &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
           </div>
           }

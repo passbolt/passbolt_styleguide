@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 class EditResourceTagsItemViewer extends React.Component {
   /**
@@ -75,6 +76,7 @@ class EditResourceTagsItemViewer extends React.Component {
       <div>
         {isLoading &&
         <div className="processing-wrapper">
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }

@@ -62,7 +62,7 @@ describe("See the Create Dialog Group", () => {
       expect(page.createGroup.count()).toBe(2);
       expect(page.createGroup.userFirstNameLastName(2)).toBe('Ada Lovelace');
       expect(page.createGroup.userEmail(2)).toBe('ada@passbolt.com');
-      expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23AC DF76 1353 B5B1 5D9B 054F');
+      expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23ACDF76 1353 B5B1 5D9B 054F ');
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);

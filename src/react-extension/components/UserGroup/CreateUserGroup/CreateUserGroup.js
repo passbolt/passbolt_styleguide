@@ -417,12 +417,13 @@ class CreateUserGroup extends Component {
   }
 
   /**
-   * get fingerprint
+   * Format fingerprint
    * @param fingerprint
-   * @returns {string}
+   * @returns {JSX.Element}
    */
-  getFingerprint(fingerprint) {
-    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+  formatFingerprint(fingerprint) {
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
   }
 
   /**
@@ -433,7 +434,7 @@ class CreateUserGroup extends Component {
   getTooltipMessage(groups_user) {
     return <>
       <div className="email"><strong>{groups_user.user.username}</strong></div>
-      <div className="fingerprint">{this.getFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
+      <div className="fingerprint">{this.formatFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
     </>;
   }
 

@@ -145,7 +145,7 @@ class ChangeLocale extends Component {
       <>
         {!this.isLoading() &&
         <div className="select-wrapper input">
-          <Select id="user-locale-input" name="locale" value={this.state.locale}
+          <Select id="user-locale-input" className="setup-extension" name="locale" value={this.state.locale}
             disabled={!this.areActionsAllowed} items={this.supportedLocales} onChange={this.handleLocaleInputChange}/>
         </div>
         }
