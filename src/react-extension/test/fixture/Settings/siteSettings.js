@@ -132,6 +132,9 @@ export default {
       },
       "mobile": {
         "version": "1.0.0"
+      },
+      "accountRecoveryRequestHelp": {
+        "version": "1.0.0"
       }
     }
   }

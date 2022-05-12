@@ -75,6 +75,7 @@ class RecoverAuthentication extends Component {
           displayAs={AskForAuthenticationHelpCredentialLostVariations.RECOVER}
           onPrimaryActionClick={this.props.authenticationRecoverContext.requestHelpCredentialsLost.bind(this)}
           onSecondaryActionClick={this.props.authenticationRecoverContext.goToImportGpgKey.bind(this)}
+          canRequestHelp={this.props.context.siteSettings.canIUse('accountRecoveryRequestHelp')}
         />;
       case AuthenticationRecoverWorkflowStates.INITIATE_ACCOUNT_RECOVERY:
         return <RequestAccountRecovery

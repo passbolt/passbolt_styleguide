@@ -44,21 +44,38 @@ class AskForAuthenticationHelpCredentialLost extends Component {
           }[this.props.displayAs]}
         </p>
         <div className="form-actions">
+          {this.props.canRequestHelp &&
+          <>
+            <button
+              onClick={this.props.onPrimaryActionClick.bind(this)}
+              className="button primary big full-width"
+              role="button"
+              rel="noopener noreferrer">
+              <Trans>Request help</Trans>
+            </button>
+            <a onClick={this.props.onSecondaryActionClick.bind(this)}>
+              <Trans>I want to try again.</Trans>
+            </a>
+          </>
+          }
+          {!this.props.canRequestHelp &&
           <button
-            onClick={this.props.onPrimaryActionClick.bind(this)}
+            onClick={this.props.onSecondaryActionClick.bind(this)}
             className="button primary big full-width"
             role="button"
             rel="noopener noreferrer">
-            <Trans>Request help</Trans>
-          </button>
-          <a onClick={this.props.onSecondaryActionClick.bind(this)}>
             <Trans>I want to try again.</Trans>
-          </a>
+          </button>
+          }
         </div>
       </div>
     );
   }
 }
+
+AskForAuthenticationHelpCredentialLost.defaultProps = {
+  canRequestHelp: true,
+};
 
 AskForAuthenticationHelpCredentialLost.propTypes = {
   displayAs: PropTypes.oneOf([
@@ -68,6 +85,7 @@ AskForAuthenticationHelpCredentialLost.propTypes = {
   context: PropTypes.object.isRequired, // The application context.
   onPrimaryActionClick: PropTypes.func.isRequired, // The callback to trigger when the user wants to request help.
   onSecondaryActionClick: PropTypes.func.isRequired, // The callback to trigger when the user wants to try again.
+  canRequestHelp: PropTypes.bool, // Can the user request administrator help. @deprecated since v3.6 the request help feature was added with v3.6
 };
 
 export default withAppContext(withTranslation('common')(AskForAuthenticationHelpCredentialLost));

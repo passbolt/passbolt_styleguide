@@ -70,6 +70,7 @@ class OrchestrateLoginBoxMain extends Component {
           displayAs={AskForAuthenticationHelpCredentialLostVariations.SIGN_IN}
           onPrimaryActionClick={this.props.authenticationLoginContext.requestHelpCredentialsLost.bind(this)}
           onSecondaryActionClick={this.props.authenticationLoginContext.goToValidatePassphrase.bind(this)}
+          canRequestHelp={this.props.context.siteSettings.canIUse('accountRecoveryRequestHelp')}
         />;
       case AuthenticationLoginWorkflowStates.CHECK_MAILBOX:
         return <CheckMailBox/>;
