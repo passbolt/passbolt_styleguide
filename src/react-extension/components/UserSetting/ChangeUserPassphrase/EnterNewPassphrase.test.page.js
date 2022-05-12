@@ -86,42 +86,42 @@ export default class EnterNewPassphrasePage {
    * Returns true if the current passphrase is very weak
    */
   get isVeryWeakPassphrase() {
-    return Boolean(this._page.container.querySelector('.very-weak'));
+    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Very weak'));
   }
 
   /**
    * Returns true if the current passphrase is weak
    */
   get isWeakPassphrase() {
-    return Boolean(this._page.container.querySelector('.weak'));
+    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Weak'));
   }
 
   /**
    * Returns true if the current passphrase is fair
    */
   get isFairPassphrase() {
-    return Boolean(this._page.container.querySelector('.fair'));
+    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Fair'));
   }
 
   /**
    * Returns true if the current passphrase is strong
    */
   get isStrongPassphrase() {
-    return Boolean(this._page.container.querySelector('.strong'));
+    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Strong'));
   }
 
   /**
    * Returns true if the current passphrase is very strong
    */
   get isVeryStrongPassphrase() {
-    return Boolean(this._page.container.querySelector('.very-strong'));
+    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Very strong'));
   }
 
   /**
    * Returns the update button element
    */
   get updateButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

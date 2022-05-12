@@ -132,8 +132,8 @@ class DeleteResourceTag extends Component {
             <p><Trans>Warning: Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
           </div>
         </form>
       </DialogWrapper>

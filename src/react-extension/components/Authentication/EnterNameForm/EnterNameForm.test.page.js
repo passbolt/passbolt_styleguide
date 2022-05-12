@@ -81,7 +81,7 @@ export default class EnterNameFormPage {
    * Returns the next button element
    */
   get registerButton() {
-    return this._page.container.querySelector('.form-actions input[type=\"submit\"]');
+    return this._page.container.querySelector('.form-actions button[type=\"submit\"]');
   }
 
   /**

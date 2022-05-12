@@ -14,7 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -389,7 +389,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="email-notification-settings col8">
+        <div className="email-notification-settings col8 main-column">
           {this.hasDatabaseSetting() && this.hasFileConfigSetting() &&
           <div className="warning message" id="email-notification-setting-overridden-banner">
             <p>
@@ -398,7 +398,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           </div>
           }
           {!this.hasDatabaseSetting() && this.hasFileConfigSetting() &&
-          <div className="warning message hidden" id="email-notification-fileconfig-exists-banner">
+          <div className="warning message" id="email-notification-fileconfig-exists-banner">
             <p>
               <Trans>You seem to have Email Notification Settings defined in your passbolt.php (or via environment variables).</Trans> <Trans>Submitting the form will overwrite those settings with the ones you choose in the form below.</Trans>
             </p>
@@ -408,234 +408,256 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           <p>
             <Trans>In this section you can choose which email notifications will be sent.</Trans>
           </p>
-          <form className="form">
-            <div className="row">
-              <div className="col6">
-                <label><Trans>Passwords</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-create-toggle-button"><Trans>When a password is created, notify its creator.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordCreate" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.passwordCreate} id="send-password-create-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-password-create-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-update-toggle-button"><Trans>When a password is updated, notify the users who have access to it.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordUpdate" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.passwordUpdate} id="send-password-update-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-password-update-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-delete-toggle-button"><Trans>When a password is deleted, notify the users who had access to it.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordDelete" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.passwordDelete} id="send-password-delete-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-password-delete-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-password-share-toggle-button"><Trans>When a password is shared, notify the users who gain access to it.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordShare" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.passwordShare} id="send-password-share-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-password-share-toggle-button"/>
-                </span>
-              </div>
-              {this.canUseFolders() &&
-              <div className="col6 last">
+          <div className="section">
+            <div className="password-section">
+              <label><Trans>Passwords</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordCreate" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.passwordCreate} id="send-password-create-toggle-button"/>
+                <label className="text" htmlFor="send-password-create-toggle-button">
+                  <Trans>When a password is created, notify its creator.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordUpdate" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.passwordUpdate} id="send-password-update-toggle-button"/>
+                <label className="text" htmlFor="send-password-update-toggle-button">
+                  <Trans>When a password is updated, notify the users who have access to it.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordDelete" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.passwordDelete} id="send-password-delete-toggle-button"/>
+                <label className="text" htmlFor="send-password-delete-toggle-button">
+                  <Trans>When a password is deleted, notify the users who had access to it.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordShare" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.passwordShare} id="send-password-share-toggle-button"/>
+                <label className="text" htmlFor="send-password-share-toggle-button">
+                  <Trans>When a password is shared, notify the users who gain access to it.</Trans>
+                </label>
+              </span>
+            </div>
+            {this.canUseFolders() &&
+              <div className="folder-section">
                 <label><Trans>Folders</Trans></label>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-create-toggle-button"><Trans>When a folder is created, notify its creator.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderCreate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderCreate} id="send-folder-create-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-folder-create-toggle-button"/>
+                  <label className="text" htmlFor="send-folder-create-toggle-button">
+                    <Trans>When a folder is created, notify its creator.</Trans>
+                  </label>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-update-toggle-button"><Trans>When a folder is updated, notify the users who have access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderUpdate" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderUpdate} id="send-folder-update-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-folder-update-toggle-button"/>
+                  <label className="text" htmlFor="send-folder-update-toggle-button">
+                    <Trans>When a folder is updated, notify the users who have access to it.</Trans>
+                  </label>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-delete-toggle-button"><Trans>When a folder is deleted, notify the users who had access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderDelete" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderDelete} id="send-folder-delete-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-folder-delete-toggle-button"/>
+                  <label className="text" htmlFor="send-folder-delete-toggle-button">
+                    <Trans>When a folder is deleted, notify the users who had access to it.</Trans>
+                  </label>
                 </span>
                 <span className="input toggle-switch form-element">
-                  <label htmlFor="send-folder-share-toggle-button"><Trans>When a folder is shared, notify the users who gain access to it.</Trans></label>
                   <input type="checkbox" className="toggle-switch-checkbox checkbox" name="folderShare" disabled={this.hasAllInputDisabled()}
                     onChange={this.handleInputChange} checked={this.state.folderShare} id="send-folder-share-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-folder-share-toggle-button"/>
+                  <label className="text" htmlFor="send-folder-share-toggle-button">
+                    <Trans>When a folder is shared, notify the users who gain access to it.</Trans>
+                  </label>
                 </span>
-              </div>
-              }
-              <div className="row">
-              </div>
-              <div className="col6 last">
-                <label><Trans>Comments</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-comment-add-toggle-button"><Trans>When a comment is posted on a password, notify the users who have access to this password.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="commentAdd" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.commentAdd} id="send-comment-add-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-comment-add-toggle-button"/>
-                </span>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col6">
-                <label><Trans>Group membership</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-delete-toggle-button"><Trans>When a group is deleted, notify the users who were members of it.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupDelete" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.groupDelete} id="send-group-delete-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-group-delete-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="group-user-add-toggle-button"><Trans>When users are added to a group, notify them.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserAdd" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.groupUserAdd} id="send-group-user-add-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-group-user-add-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-user-delete-toggle-button"><Trans>When users are removed from a group, notify them.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserDelete" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.groupUserDelete} id="send-group-user-delete-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-group-user-delete-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-user-update-toggle-button"><Trans>When user roles change in a group, notify the corresponding users.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserUpdate" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.groupUserUpdate} id="send-group-user-update-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-group-user-update-toggle-button"/>
-                </span>
-              </div>
-              <div className="col6 last">
-                <label><Trans>Group manager</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-group-manager-update-toggle-button"><Trans>When members of a group change, notify the group manager(s).</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupManagerUpdate" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.groupManagerUpdate} id="send-group-manager-update-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-group-manager-update-toggle-button"/>
-                </span>
-                <label><Trans>Registration & Recovery</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-user-create-toggle-button"><Trans>When new users are invited to passbolt, notify them.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userCreate" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.userCreate} id="send-user-create-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-user-create-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="send-user-recover-toggle-button"><Trans>When users try to recover their account, notify them.</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userRecover" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.userRecover} id="send-user-recover-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="send-user-recover-toggle-button"/>
-                </span>
-              </div>
-            </div>
-            {this.canUseAccountRecovery() &&
-              <div className="row">
-                <h3><Trans>Account recovery</Trans></h3>
-                <div className="col6">
-                  <label><Trans>Admin</Trans></label>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-request-admin-toggle-button"><Trans>When an account recovery is requested, notify the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestAdmin" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestAdmin} id="account-recovery-request-admin-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-request-admin-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element ready">
-                    <label htmlFor="account-recovery-request-guessing-toggle-button"><Trans>When a suspicious attempt to guess for an existing account recovery request is made, notify the administrators?</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestGuessing" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestGuessing} id="account-recovery-request-guessing-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-request-guessing-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-policy-update-toggle-button"><Trans>When an account recovery policy is updated, notify the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestPolicyUpdate" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestPolicyUpdate} id="account-recovery-policy-update-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-policy-update-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-response-created-admin-toggle-button"><Trans>When an administrator answered to an account recovery request, notify the administrator</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAmin" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAmin} id="account-recovery-response-created-admin-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-response-created-admin-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-response-created-all-admin-toggle-button"><Trans>When an administrator answered to an account recovery request, notify all the administrators</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAllAdmins" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAllAdmins} id="account-recovery-response-created-all-admin-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-response-created-all-admin-toggle-button"/>
-                  </span>
-                </div>
-                <div className="col6 last">
-                  <label><Trans>User</Trans></label>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-request-user-toggle-button"><Trans>When an account recovery is requested, notify the user</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUser" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUser} id="account-recovery-request-user-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-request-user-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-response-user-approved-toggle-button"><Trans>When an account recovery is approved, notify the user</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserApproved" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserApproved} id="account-recovery-response-user-approved-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-response-user-approved-toggle-button"/>
-                  </span>
-                  <span className="input toggle-switch form-element">
-                    <label htmlFor="account-recovery-response-user-rejected-toggle-button"><Trans>When an account recovery is rejected, notify the user</Trans></label>
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserRejected" disabled={this.hasAllInputDisabled()}
-                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserRejected} id="account-recovery-response-user-rejected-toggle-button"/>
-                    <label className="toggle-switch-button" htmlFor="account-recovery-response-user-rejected-toggle-button"/>
-                  </span>
-                </div>
               </div>
             }
-            <div className="row">
-              <h3><Trans>Email content visibility</Trans></h3>
-              <p><Trans>In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.</Trans></p>
-              <div className="col6">
-                <label><Trans>Passwords</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="show-username-toggle-button"><Trans>Username</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showUsername" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.showUsername} id="show-username-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="show-username-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="show-uri-toggle-button"><Trans>URI</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showUri" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.showUri} id="show-uri-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="show-uri-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element ready">
-                  <label htmlFor="show-secret-toggle-button"><Trans>Encrypted secret</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showSecret" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.showSecret} id="show-secret-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="show-secret-toggle-button"/>
-                </span>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="show-description-toggle-button"><Trans>Description</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showDescription" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.showDescription} id="show-description-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="show-description-toggle-button"/>
-                </span>
-              </div>
-              <div className="col6 last">
-                <label><Trans>Comments</Trans></label>
-                <span className="input toggle-switch form-element">
-                  <label htmlFor="show-comment-toggle-button"><Trans>Comment content</Trans></label>
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showComment" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={this.state.showComment} id="show-comment-toggle-button"/>
-                  <label className="toggle-switch-button" htmlFor="show-comment-toggle-button"/>
-                </span>
-              </div>
+          </div>
+          <div className="section">
+            <div className="comment-section">
+              <label><Trans>Comments</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="commentAdd" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.commentAdd} id="send-comment-add-toggle-button"/>
+                <label className="text" htmlFor="send-comment-add-toggle-button">
+                  <Trans>When a comment is posted on a password, notify the users who have access to this password.</Trans>
+                </label>
+              </span>
             </div>
-          </form>
+          </div>
+          <div className="section">
+            <div className="group-section">
+              <label><Trans>Group membership</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupDelete" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.groupDelete} id="send-group-delete-toggle-button"/>
+                <label className="text" htmlFor="send-group-delete-toggle-button">
+                  <Trans>When a group is deleted, notify the users who were members of it.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserAdd" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.groupUserAdd} id="send-group-user-add-toggle-button"/>
+                <label className="text" htmlFor="send-group-user-add-toggle-button">
+                  <Trans>When users are added to a group, notify them.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserDelete" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.groupUserDelete} id="send-group-user-delete-toggle-button"/>
+                <label className="text" htmlFor="send-group-user-delete-toggle-button">
+                  <Trans>When users are removed from a group, notify them.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupUserUpdate" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.groupUserUpdate} id="send-group-user-update-toggle-button"/>
+                <label className="text" htmlFor="send-group-user-update-toggle-button">
+                  <Trans>When user roles change in a group, notify the corresponding users.</Trans>
+                </label>
+              </span>
+            </div>
+            <div className="group-admin-section">
+              <label><Trans>Group manager</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupManagerUpdate" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.groupManagerUpdate} id="send-group-manager-update-toggle-button"/>
+                <label className="text" htmlFor="send-group-manager-update-toggle-button">
+                  <Trans>When members of a group change, notify the group manager(s).</Trans>
+                </label>
+              </span>
+              <label><Trans>Registration & Recovery</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userCreate" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.userCreate} id="send-user-create-toggle-button"/>
+                <label className="text" htmlFor="send-user-create-toggle-button">
+                  <Trans>When new users are invited to passbolt, notify them.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userRecover" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.userRecover} id="send-user-recover-toggle-button"/>
+                <label className="text" htmlFor="send-user-recover-toggle-button">
+                  <Trans>When users try to recover their account, notify them.</Trans>
+                </label>
+              </span>
+            </div>
+          </div>
+          {this.canUseAccountRecovery() &&
+            <>
+              <h3><Trans>Account recovery</Trans></h3>
+              <div className="section">
+                <div className="admin-section">
+                  <label><Trans>Admin</Trans></label>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryImpossibleAdmin" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestAdmin} id="account-recovery-request-admin-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-request-admin-toggle-button">
+                      <Trans>When an account recovery is requested, notify the administrators</Trans>
+                    </label>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestPolicyUpdate" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestPolicyUpdate} id="account-recovery-policy-update-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-policy-update-toggle-button">
+                      <Trans>When an account recovery policy is updated, notify the administrators</Trans>
+                    </label>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAmin" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAmin} id="account-recovery-response-created-admin-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-response-created-admin-toggle-button">
+                      <Trans>When an administrator answered to an account recovery request, notify the administrator</Trans>
+                    </label>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAllAdmins" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAllAdmins} id="account-recovery-response-created-all-admin-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-response-created-all-admin-toggle-button">
+                      <Trans>When an administrator answered to an account recovery request, notify all the administrators</Trans>
+                    </label>
+                  </span>
+                </div>
+                <div className="user-section">
+                  <label><Trans>User</Trans></label>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUser" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUser} id="account-recovery-request-user-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-request-user-toggle-button">
+                      <Trans>When an account recovery is requested, notify the user</Trans>
+                    </label>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserApproved" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserApproved} id="account-recovery-response-user-approved-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-response-user-approved-toggle-button">
+                      <Trans>When an account recovery is approved, notify the user</Trans>
+                    </label>
+                  </span>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserRejected" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserRejected} id="account-recovery-response-user-rejected-toggle-button"/>
+                    <label className="text" htmlFor="account-recovery-response-user-rejected-toggle-button">
+                      <Trans>When an account recovery is rejected, notify the user</Trans>
+                    </label>
+                  </span>
+                </div>
+              </div>
+            </>
+          }
+          <h3><Trans>Email content visibility</Trans></h3>
+          <p><Trans>In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.</Trans></p>
+          <div className="section">
+            <div className="password-section">
+              <label><Trans>Passwords</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showUsername" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.showUsername} id="show-username-toggle-button"/>
+                <label className="text" htmlFor="show-username-toggle-button">
+                  <Trans>Username</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showUri" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.showUri} id="show-uri-toggle-button"/>
+                <label className="text" htmlFor="show-uri-toggle-button">
+                  <Trans>URI</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element ready">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showSecret" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.showSecret} id="show-secret-toggle-button"/>
+                <label className="text" htmlFor="show-secret-toggle-button">
+                  <Trans>Encrypted secret</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showDescription" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.showDescription} id="show-description-toggle-button"/>
+                <label className="text" htmlFor="show-description-toggle-button">
+                  <Trans>Description</Trans>
+                </label>
+              </span>
+            </div>
+            <div className="comment-section">
+              <label><Trans>Comments</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="showComment" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.showComment} id="show-comment-toggle-button"/>
+                <label className="text" htmlFor="show-comment-toggle-button">
+                  <Trans>Comment content</Trans>
+                </label>
+              </span>
+            </div>
+          </div>
         </div>
         <div className="col4 last">
           <div className="sidebar-help">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about email notification, checkout the dedicated page on the help website.</Trans></p>
             <a className="button" href="https://help.passbolt.com/configure/notification/email" target="_blank" rel="noopener noreferrer">
-              <Icon name="life-ring"/>
+              <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>

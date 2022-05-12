@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
@@ -117,25 +117,27 @@ class FilterResourcesByGroups extends React.Component {
    */
   render() {
     return (
-      <div>
+      <>
         {this.hasGroup() &&
         <div className="navigation-secondary-tree navigation-secondary navigation-groups accordion">
           <ul className="accordion-header">
             <li className={`node root ${this.state.open ? "open" : "close"}`}>
-              <div className="row title">
+              <div className="row title" onClick={this.handleTitleClickEvent}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <h3>
-                      <span className="folders-label" onClick={this.handleTitleClickEvent}>
-                        <Fragment>
-                          {this.state.open &&
-                        <Icon name="caret-down"/>
-                          }
-                          {!this.state.open &&
-                        <Icon name="caret-right"/>
-                          }
-                        </Fragment>
-                        <span><Trans>Filter by groups</Trans></span>
+                      <span className="folders-label">
+                        <a role="button">
+                          <>
+                            {this.state.open &&
+                              <Icon name="caret-down"/>
+                            }
+                            {!this.state.open &&
+                              <Icon name="caret-right"/>
+                            }
+                          </>
+                          <Trans>Groups</Trans>
+                        </a>
                       </span>
                     </h3>
                   </div>
@@ -148,11 +150,13 @@ class FilterResourcesByGroups extends React.Component {
             <ul className="tree ready">
               {this.groupsSorted.map(group =>
                 <li className="node root group-item" key={group.id}>
-                  <div className={`row ${this.isSelected(group.id) ? "selected" : ""}`}>
-                    <div className="main-cell-wrapper"
-                      onClick={() => this.handleClickGroupEvent(group)}>
+                  <div className={`row ${this.isSelected(group.id) ? "selected" : ""}`} onClick={() => this.handleClickGroupEvent(group)}>
+                    <div className="main-cell-wrapper">
                       <div className="main-cell">
-                        <a title={group.name}><span className="ellipsis">{group.name}</span></a>
+                        <a title={group.name}>
+                          <Icon name="users"/>
+                          <span className="ellipsis">{group.name}</span>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -164,7 +168,7 @@ class FilterResourcesByGroups extends React.Component {
           }
         </div>
         }
-      </div>
+      </>
     );
   }
 }

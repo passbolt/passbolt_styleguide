@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -172,9 +172,11 @@ class DisplayTestUserDirectoryAdministration extends Component {
             </p>
             <div className={`accordion directory-list ${this.state.openListGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleListGroupsUsersClicked}>
-                {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
-                {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link"><Trans>See list</Trans></a>
+                <a role="link">
+                  <Trans>See list</Trans>
+                  {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
+                  {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
+                </a>
               </div>
               <div className="accordion-content">
                 <table>
@@ -208,9 +210,11 @@ class DisplayTestUserDirectoryAdministration extends Component {
             </div>
             <div className={`accordion accordion-directory-structure ${this.state.openStructureGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleStructureGroupsUsersClicked}>
-                {this.state.openStructureGroupsUsers && <Icon name="caret-down" baseline={true}/>}
-                {!this.state.openStructureGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                <a role="link"><Trans>See structure</Trans></a>
+                <a role="link">
+                  <Trans>See structure</Trans>
+                  {this.state.openStructureGroupsUsers && <Icon name="caret-down" baseline={true}/>}
+                  {!this.state.openStructureGroupsUsers && <Icon name="caret-right" baseline={true}/>}
+                </a>
               </div>
               <div className="accordion-content">
                 <div className="directory-structure">
@@ -231,9 +235,11 @@ class DisplayTestUserDirectoryAdministration extends Component {
               <p className="directory-errors error">{this.translate("{{count}} entry had errors and will be ignored during synchronization.", {count: this.errors.length})}</p>
               <div className={`accordion accordion-directory-errors ${this.state.openErrors ? "" : "closed"}`}>
                 <div className="accordion-header" onClick={this.handleErrorsClicked}>
-                  {this.state.openErrors && <Icon name="caret-down" baseline={true}/>}
-                  {!this.state.openErrors && <Icon name="caret-right" baseline={true}/>}
-                  <a role="link"><Trans>See error details</Trans></a>
+                  <a role="link">
+                    <Trans>See error details</Trans>
+                    {this.state.openErrors && <Icon name="caret-down" baseline={true}/>}
+                    {!this.state.openErrors && <Icon name="caret-right" baseline={true}/>}
+                  </a>
                 </div>
                 <div className="accordion-content">
                   <div className="directory-errors">

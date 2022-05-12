@@ -50,9 +50,11 @@ const context = {
 
 const Template = args =>
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayUserProfile {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
+    <div id="container" className="page settings">
+      <MemoryRouter initialEntries={['/']}>
+        <Route component={routerProps => <DisplayUserProfile {...args} {...routerProps}/>}></Route>
+      </MemoryRouter>
+    </div>
   </AppContext.Provider>;
 
 Template.propTypes = {

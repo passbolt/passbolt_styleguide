@@ -83,7 +83,7 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.importFile.className).toBe("button primary disabled");
+        expect(page.importFile.getAttribute("disabled")).not.toBeNull();
         expect(page.password.getAttribute("disabled")).not.toBeNull();
         expect(page.continueImportButton.getAttribute("disabled")).not.toBeNull();
         expect(page.continueImportButton.className).toBe("button primary disabled processing");

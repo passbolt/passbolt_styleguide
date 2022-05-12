@@ -82,10 +82,10 @@ class FilterUsersByShortcut extends React.Component {
       <div className="navigation-secondary navigation-shortcuts">
         <ul >
           <li>
-            <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a id="all-users" onClick={this.handleAllItemsClick}>
+                  <a id="all-users">
                     <span><Trans>All users</Trans></span>
                   </a>
                 </div>
@@ -93,10 +93,10 @@ class FilterUsersByShortcut extends React.Component {
             </div>
           </li>
           <li>
-            <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`}>
+            <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`} onClick={this.handleRecentlyModifiedClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a id="recently-modified"  onClick={this.handleRecentlyModifiedClick}>
+                  <a id="recently-modified">
                     <span><Trans>Recently Modified</Trans></span>
                   </a>
                 </div>

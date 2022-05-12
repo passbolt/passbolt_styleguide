@@ -18,7 +18,7 @@ import AddResourceComment from "../../ResourceComment/AddResourceComment/AddReso
 import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 
 class DisplayResourceDetailsComment extends React.Component {
@@ -160,18 +160,13 @@ class DisplayResourceDetailsComment extends React.Component {
         { this.state.open &&
           <div className="accordion-content">
             {this.state.canAddByIcon &&
-          <a
-            className="section-action"
-            href="#"
-            onClick={this.handleRequestedAddEvent}>
-            <span className="svg-icon">
-              <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M1344 960v-128q0-26-19-45t-45-19h-256v-256q0-26-19-45t-45-19h-128q-26 0-45 19t-19 45v256h-256q-26 0-45 19t-19 45v128q0 26 19 45t45 19h256v256q0 26 19 45t45 19h128q26 0 45-19t19-45v-256h256q26 0 45-19t19-45zm320-64q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/>
-              </svg>
-            </span>
-            <span className="visuallyhidden"><Trans>Create</Trans></span>
-          </a>
+              <a
+                className="section-action button button-transparent"
+                href="#"
+                onClick={this.handleRequestedAddEvent}>
+                <Icon name="plus-circle"/>
+                <span className="visuallyhidden"><Trans>Create</Trans></span>
+              </a>
             }
 
             { this.state.canAdd &&

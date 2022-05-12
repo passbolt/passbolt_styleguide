@@ -58,7 +58,7 @@ describe("See the Edit Tag Dialog", () => {
       expect(page.tagEdit.tagName.value).toBe(context.tagToEdit.slug);
 
       // Save button exists
-      expect(page.tagEdit.saveButton.value).toBe("Save");
+      expect(page.tagEdit.saveButton.textContent).toBe("Save");
 
       // Cancel button exists
       expect(page.tagEdit.cancelButton.textContent).toBe("Cancel");

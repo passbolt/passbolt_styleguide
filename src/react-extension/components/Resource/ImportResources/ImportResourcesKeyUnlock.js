@@ -20,11 +20,11 @@ import {withDialog} from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import Icon from "../../Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResult from "./ImportResourcesResult";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * This component is the second step of the import dialog when the file to import is KDB(X) file
@@ -49,7 +49,7 @@ class ImportResourcesKeyUnlock extends Component {
       // Dialog states
       processing: false,
 
-      showPassword: false, // True if the password should be textually displayed
+      password: '', // The current password
       keyFile: null, // The optional key file
       errors: {} // The import errors
     };
@@ -61,7 +61,7 @@ class ImportResourcesKeyUnlock extends Component {
   bindHandlers() {
     this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.handlePasswordViewToggled = this.handlePasswordViewToggled.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -89,13 +89,6 @@ class ImportResourcesKeyUnlock extends Component {
   }
 
   /**
-   * Handle the password view mode toggle
-   */
-  async handlePasswordViewToggled() {
-    await this.setState({showPassword: !this.state.showPassword});
-  }
-
-  /**
    * Handle the selection of a file by file explorer
    */
   handleSelectFile() {
@@ -109,6 +102,20 @@ class ImportResourcesKeyUnlock extends Component {
   async handleFileSelected(event) {
     const [keyFile] = event.target.files;
     await this.setState({keyFile});
+  }
+
+  /**
+   * Handle input change
+   * @param event
+   */
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   /**
@@ -162,7 +169,7 @@ class ImportResourcesKeyUnlock extends Component {
     const resourceFileToImport = this.fileToImport;
     const b64FileContent = resourceFileToImport.b64FileContent;
     const fileType = resourceFileToImport.fileType;
-    const password = this.passwordInputRef.current.value;
+    const password = this.state.password;
     const keyfile = await this.readFile();
     const options = Object.assign({}, resourceFileToImport.options, {credentials: {password, keyfile}});
 
@@ -266,63 +273,57 @@ class ImportResourcesKeyUnlock extends Component {
 
           <div className="form-content">
 
-            <div className="input-password-wrapper">
+            <div className="input-password-wrapper input">
               <label htmlFor="import-password-dialog-password"><Trans>Keepass password</Trans></label>
-              <div className="input password">
-                <input
-                  id="import-password-dialog-password"
-                  type={this.state.showPassword ? "text" : "password"}
-                  disabled={this.hasAllInputDisabled()}
-                  placeholder={this.translate('Passphrase')}
-                  ref={this.passwordInputRef}
-                  autoComplete="off"/>
-                <a
-                  onClick={this.handlePasswordViewToggled}
-                  className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                  <Icon name='eye-open' big={true}/>
-                  <span className="visually-hidden">view</span>
-                </a>
-              </div>
+              <Password
+                id="import-password-dialog-password"
+                name="password"
+                autoComplete="off"
+                value={this.state.password}
+                onChange={this.handleInputChange}
+                disabled={this.hasAllInputDisabled()}
+                placeholder={this.translate('Passphrase')}
+                preview={true}
+                inputRef={this.passwordInputRef}/>
             </div>
 
-            <div className="input-file-chooser-wrapper">
+            <div className={`input file ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
               <input
                 type="file"
+                id="dialog-import-passwords"
                 ref={this.fileUploaderRef}
                 onChange={this.handleFileSelected}/>
-              <div className="input text">
-                <label><Trans>Keepass key file (optional)</Trans></label>
-                <div className="input-file-inline">
-                  <input
-                    type="text"
-                    placeholder={this.translate('No key file selected')}
-                    disabled
-                    value={this.selectedFilename}/>
-                  <a
-                    className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                    onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/>
-                    <span><Trans>Choose a file</Trans></span>
-                  </a>
-                </div>
+              <label htmlFor="dialog-import-passwords"><Trans>Keepass key file (optional)</Trans></label>
+              <div className="input-file-inline">
+                <input
+                  type="text"
+                  placeholder={this.translate('No key file selected')}
+                  disabled
+                  value={this.selectedFilename}/>
+                <button
+                  className="button primary"
+                  type="button"
+                  disabled={this.hasAllInputDisabled()}
+                  onClick={this.handleSelectFile}>
+                  <span><Trans>Choose a file</Trans></span>
+                </button>
               </div>
+              {isInvalidPasswordOrKeyFile &&
+                <div className="error-message">
+                  <Trans>Cannot decrypt the file, invalid credentials.</Trans>
+                </div>
+              }
             </div>
-
-            {isInvalidPasswordOrKeyFile &&
-            <div className="message ready error">
-              <Trans>Cannot decrypt the file, invalid credentials.</Trans>
-            </div>
-            }
           </div>
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              disabled={this.hasAllInputDisabled()}
+              onClick={this.handleCancel}/>
             <FormSubmitButton
               value={this.translate("Continue import")}
               disabled={this.hasAllInputDisabled()}
               processing={this.state.processing}/>
-            <FormCancelButton
-              disabled={this.hasAllInputDisabled()}
-              onClick={this.handleCancel}/>
           </div>
         </form>
       </DialogWrapper>

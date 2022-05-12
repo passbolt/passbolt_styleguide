@@ -1,21 +1,31 @@
-.feedback-card,
-/* @deprecated .message.animated */ .message.animated
-{
+.feedback-card {
   background: @background-default;
   color: @font-default;
   display:flex;
+  align-items: center;
   border:1px solid @border-light;
   border-radius:3px;
 
   .illustration {
-    flex: 0 0 180px;;
+    flex: 0 0 11rem;
+    margin: 1.6rem 0 1.6rem 1.6rem;
   }
   .additional-information {
     flex: 1;
-    line-height: 180px;;
-    margin-top: 1.5em;
-    padding-left:1em;
-    padding-right:1em;
+    margin: 1.6rem;
+
+    & > * {
+      margin-bottom: 1.6rem;
+    }
+
+    button.button {
+      margin: 3.2rem 0 0 auto;
+    }
+
+    a.button {
+      margin: 1.6rem 0 0 auto;
+      float: right;
+    }
   }
 }
 
@@ -23,5 +33,6 @@
   .feedback-card,
   .message.animated {
     flex-direction: column;
+    align-items: center;
   }
 }

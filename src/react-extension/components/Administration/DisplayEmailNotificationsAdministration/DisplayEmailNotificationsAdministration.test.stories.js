@@ -27,10 +27,8 @@ const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
     <MemoryRouter initialEntries={['/']}>
       <div className="panel middle">
-        <div className="workspace-main">
-          <div className="grid grid-responsive-12">
-            <Route component={routerProps => <DisplayEmailNotificationsAdministration {...args} {...routerProps}/>}></Route>
-          </div>
+        <div className="grid grid-responsive-12">
+          <Route component={routerProps => <DisplayEmailNotificationsAdministration {...args} {...routerProps}/>}></Route>
         </div>
       </div>
     </MemoryRouter>

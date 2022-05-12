@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../react-extension/components/Common/Icons/Icon";
+import Icon from "../../../shared/components/Icons/Icon";
+import Password from "../../../shared/components/Password/Password";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -16,9 +17,6 @@ class LoginPage extends React.Component {
   initEventHandlers() {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleInputFocus = this.handleInputFocus.bind(this);
-    this.handleInputBlur = this.handleInputBlur.bind(this);
-    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
   }
 
   initState() {
@@ -27,10 +25,21 @@ class LoginPage extends React.Component {
       processing: false,
       passphrase: "",
       rememberMe: false,
-      passphraseStyle: {},
-      securityTokenStyle: {},
-      isObfuscated: true, // True if the passphrase should not be visible
     };
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInputRef.current.focus();
   }
 
   /**
@@ -53,7 +62,7 @@ class LoginPage extends React.Component {
         processing: false
       });
       // Force the focus onto the passphrase input. The autoFocus attribute only works with the first rendering.
-      this.passphraseInputRef.current.focus();
+      this.focusOnPassphrase();
     }
   }
 
@@ -79,46 +88,6 @@ class LoginPage extends React.Component {
     });
   }
 
-  handleInputFocus() {
-    this.setState({
-      passphraseStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenTextColor(),
-        color: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-      }
-    });
-  }
-
-  handleInputBlur() {
-    this.setState({
-      passphraseStyle: {
-        background: "",
-        color: ""
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      }
-    });
-  }
-
-  /**
-   * Whenever one wants to toggle the obfuscated mode
-   */
-  handleToggleObfuscate() {
-    this.toggleObfuscate();
-  }
-
-  /**
-   * Toggle the obfuscate mode of the passphrase view
-   */
-  toggleObfuscate() {
-    this.setState({isObfuscated: !this.state.isObfuscated});
-  }
-
   render() {
     return (
       <div className="quickaccess-login">
@@ -132,41 +101,35 @@ class LoginPage extends React.Component {
               <div className="input text passphrase required">
                 <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
                 <div className="password with-token">
-                  <input
-                    type={this.state.isObfuscated ? "password" : "text"}
+                  <Password
                     name="passphrase" placeholder={this.translate('passphrase')}
                     id="passphrase"
-                    autoFocus
-                    ref={this.passphraseInputRef}
+                    autoComplete="off"
+                    inputRef={this.passphraseInputRef}
                     value={this.state.passphrase}
                     onChange={this.handleInputChange}
-                    onFocus={this.handleInputFocus}
-                    onBlur={this.handleInputBlur}
-                    disabled={this.state.processing}
-                    style={this.state.passphraseStyle}
-                    autoComplete="off"/>
-                  <a
-                    className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-                    role="button"
-                    onClick={this.handleToggleObfuscate}>
-                    <Icon name="eye-open"/>
-                    <span className="visually-hidden">view</span>
-                  </a>
-                  <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
+                    preview={true}
+                    securityToken={this.props.context.userSettings.getSecurityToken()}
+                    disabled={this.state.processing}/>
                 </div>
                 {this.state.error &&
                 <div className="error-message">{this.state.error}</div>
                 }
               </div>
               {this.props.canRememberMe &&
-                <div className="input checkbox small">
+                <div className="input checkbox">
                   <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing} />
                   <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
                 </div>
               }
             </div>
             <div className="submit-wrapper">
-              <input type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button" value={this.translate('login')} disabled={this.state.processing} />
+              <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button" disabled={this.state.processing}>
+                <Trans>login</Trans>
+                {this.state.processing &&
+                  <Icon name="spinner"/>
+                }
+              </button>
             </div>
           </form>
         </div>

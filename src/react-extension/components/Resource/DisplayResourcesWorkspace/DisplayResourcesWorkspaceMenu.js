@@ -17,7 +17,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import EditResource from "../EditResource/EditResource";
@@ -360,23 +360,23 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
-          <ul className="ready">
+          <ul>
             <li id="password_action">
-              <a className={`button ready ${this.hasOneResourceSelected() ? "" : "disabled"}`}
+              <a className={`button ${this.hasOneResourceSelected() ? "" : "disabled"}`}
                 onClick={this.handleCopySecretClickEvent}>
                 <Icon name="copy-to-clipboard"/>
                 <span><Trans>Copy</Trans></span>
               </a>
             </li>
             <li id="edit_action">
-              <a className={`button ready ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
+              <a className={`button ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
                 onClick={this.handleEditClickEvent}>
-                <Icon name="edit"></Icon>
+                <Icon name="edit"/>
                 <span><Trans>Edit</Trans></span>
               </a>
             </li>
             <li id="share_action">
-              <a className={`button ready ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
+              <a className={`button ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
                 onClick={this.handleShareClickEvent}>
                 <Icon name="share"/>
                 <span><Trans>Share</Trans></span>
@@ -384,21 +384,21 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
             </li>
             <li id="export_action">
               <a
-                className={`button ready ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
+                className={`button ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
                 onClick={this.handleExportClickEvent}>
-                <Icon name="upload"/>
+                <Icon name="download"/>
                 <span><Trans>Export</Trans></span>
               </a>
             </li>
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
-                <a className={`button more ready ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
+                <a className={`button more ${this.state.moreMenuOpen ? "open" : ""} ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
                   onClick={this.handleMoreClickEvent}>
                   <span><Trans>More</Trans></span>
                   <Icon name="caret-down"/>
                 </a>
-                <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
-                  <li id="username_action" className="">
+                <ul className={`dropdown-content menu right ${this.state.moreMenuOpen ? "visible" : ""}`}>
+                  <li id="username_action">
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
@@ -453,7 +453,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
           </ul>
         </div>
         <div className="actions secondary">
-          <ul className="ready">
+          <ul>
             <li>
               <a className={`button button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>

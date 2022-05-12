@@ -230,13 +230,6 @@ class AddResourceComment extends React.Component {
                 <span className="modified"><Trans>right now</Trans></span>
               </div>
               <div className="actions">
-                <button
-                  className="button comment-submit"
-                  type="submit"
-                  onClick={this.handleSubmitEvent}
-                  disabled={this.state.actions.processing}>
-                  <Trans>Save</Trans>
-                </button>
                 {
                   this.props.cancellable &&
                   <button
@@ -248,6 +241,13 @@ class AddResourceComment extends React.Component {
                     <span><Trans>Cancel</Trans></span>
                   </button>
                 }
+                <button
+                  className="button primary comment-submit"
+                  type="submit"
+                  onClick={this.handleSubmitEvent}
+                  disabled={this.state.actions.processing}>
+                  <Trans>Save</Trans>
+                </button>
               </div>
             </div>
           </div>

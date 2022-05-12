@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
-import Icon from "../../Common/Icons/Icon";
+import React from "react";
+import Icon from "../../../../shared/components/Icons/Icon";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
@@ -36,7 +36,6 @@ class FilterResourcesByFolders extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getDefaultState();
-    this.createElementsRef();
     this.bindCallbacks();
   }
 
@@ -49,6 +48,7 @@ class FilterResourcesByFolders extends React.Component {
       draggingOverTitle: false,
       draggingOverTitleSince: null,
       open: true,
+      moreMenuOpen: false
     };
   }
 
@@ -56,21 +56,16 @@ class FilterResourcesByFolders extends React.Component {
    * Returns true if the component should be re-rendered
    */
   shouldComponentUpdate(prevProps, prevState) {
-    return prevState !== this.state || prevProps.context.folders !== this.props.context.folders;
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createElementsRef() {
-    this.listElement = React.createRef();
-    this.titleElementRef = React.createRef();
+    return prevState !== this.state
+      || prevProps.context.folders !== this.props.context.folders
+      || prevProps.resourceWorkspaceContext.filter.type !== this.props.resourceWorkspaceContext.filter.type;
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleClickOnTitle = this.handleClickOnTitle.bind(this);
     this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
     this.handleDragLeaveTitle = this.handleDragLeaveTitle.bind(this);
@@ -80,11 +75,25 @@ class FilterResourcesByFolders extends React.Component {
   }
 
   /**
+   * Close the create menu
+   */
+  handleCloseMoreMenu() {
+    this.setState({moreMenuOpen: false});
+  }
+
+  /**
    * Handle when the user clicks on the section title.
    */
   handleClickOnTitle() {
     const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
     this.props.history.push(`/app/passwords`, {filter});
+  }
+
+  /**
+   * Returns true if the All Items shortcut is currently selected
+   */
+  get isSelected() {
+    return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.ROOT_FOLDER;
   }
 
   /**
@@ -106,10 +115,14 @@ class FilterResourcesByFolders extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleTitleMoreClickEvent(event) {
-    const top = event.pageY;
-    const left = event.pageX;
-    const contextualMenuProps = {left, top};
-    this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
+    const moreMenuOpen = !this.state.moreMenuOpen;
+    this.setState({moreMenuOpen});
+    if (moreMenuOpen) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const onBeforeHide = this.handleCloseMoreMenu;
+      const contextualMenuProps = {left, top: top + 18, className: "right", onBeforeHide};
+      this.props.contextualMenuContext.show(FilterResourcesByRootFolderContextualMenu, contextualMenuProps);
+    }
   }
 
   /**
@@ -316,35 +329,37 @@ class FilterResourcesByFolders extends React.Component {
       <div className="navigation-secondary-tree navigation-secondary navigation-folders accordion">
         <div className="accordion-header">
           <div className={`${isOpen ? "open" : "close"} node root`}>
-            <div className={`row title ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""}`}>
+            <div className={`row title ${this.isSelected ? "selected" : ""} ${showDropFocus ? "drop-focus" : ""} ${disabled ? "disabled" : ""} ${this.state.moreMenuOpen ? "highlight" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <h3>
                     <span className="folders-label">
-                      {!isLoading &&
-                      <Fragment>
-                        {isOpen &&
-                        <Icon name="caret-down" onClick={() => this.handleSectionTitleClickCaretEvent()}/>
-                        }
-                        {!isOpen &&
-                        <Icon name="caret-right" onClick={() => this.handleSectionTitleClickCaretEvent()}/>
-                        }
-                      </Fragment>
-                      }
-                      <span
-                        ref={this.titleElementRef}
+                      <a role="button"
                         onDragOver={this.handleDragOverTitle}
                         onDragLeave={this.handleDragLeaveTitle}
                         onDrop={this.handleDropTitle}
                         onClick={this.handleClickOnTitle}
-                        onContextMenu={this.handleTitleContextualMenuEvent}
-                      ><Trans>Folders</Trans></span>
+                        onContextMenu={this.handleTitleContextualMenuEvent}>
+                        {!isLoading &&
+                          <div className="toggle-folder" onClick={() => this.handleSectionTitleClickCaretEvent()}>
+                            {isOpen &&
+                              <Icon name="caret-down"/>
+                            }
+                            {!isOpen &&
+                              <Icon name="caret-right"/>
+                            }
+                          </div>
+                        }
+                        <Trans>Folders</Trans>
+                      </a>
                     </span>
                   </h3>
                 </div>
-                <div className="right-cell more-ctrl">
-                  <a onClick={this.handleTitleMoreClickEvent}><Icon name="plus-square"/></a>
-                </div>
+              </div>
+              <div className="dropdown right-cell more-ctrl">
+                <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                  <Icon name="3-dots-h"/>
+                </a>
               </div>
             </div>
           </div>
@@ -363,8 +378,7 @@ class FilterResourcesByFolders extends React.Component {
             length={rootFolders.length}
             pageSize={20}
             minSize={20}
-            type="simple"
-            ref={this.listElement}>
+            type="simple">
           </ReactList>
           }
         </div>

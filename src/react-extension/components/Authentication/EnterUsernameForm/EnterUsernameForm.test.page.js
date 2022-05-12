@@ -80,7 +80,7 @@ export default class EnterUsernameFormPage {
    * Returns the next button element
    */
   get nextButton() {
-    return this._page.container.querySelector('.form-actions input[type=\"submit\"]');
+    return this._page.container.querySelector('.form-actions button[type=\"submit\"]');
   }
 
   /**

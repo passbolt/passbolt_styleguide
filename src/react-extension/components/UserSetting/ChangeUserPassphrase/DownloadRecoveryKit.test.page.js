@@ -51,7 +51,7 @@ export default class DownloadRecoveryKitPage {
    * Returns the download backup button element
    */
   get downloadBackupButton() {
-    return this._page.container.querySelector('.additional-information a.button');
+    return this._page.container.querySelector('.additional-information button.button');
   }
 
   /**

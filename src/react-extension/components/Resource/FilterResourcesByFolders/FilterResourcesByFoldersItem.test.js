@@ -50,6 +50,7 @@ describe("As LU I should see each folders", () => {
 
     it('As LU I should see all folders name', async() => {
       expect(page.filterResourcesByFoldersItem.exists()).toBeTruthy();
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
       expect(page.filterResourcesByFoldersItem.count).toBe(4);
       expect(page.filterResourcesByFoldersItem.name(1)).toBe("Certificates");
@@ -66,7 +67,7 @@ describe("As LU I should see each folders", () => {
 
     it('As LU I should be able to open a contextual menu for a folder with the more button', async() => {
       await page.filterResourcesByFoldersItem.openContextualMenuWithButton(1);
-      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0]});
+      expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0], className: 'right', left: 0, top: 18, onBeforeHide: expect.any(Function)});
     });
 
     it('As LU I should be able to open a contextual menu for a folder with right click on parent folder', async() => {
@@ -75,11 +76,13 @@ describe("As LU I should see each folders", () => {
     });
 
     it('As LU I should be able to open a contextual menu for a folder with right click on a child folder', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
       await page.filterResourcesByFoldersItem.openContextualMenuWithRightClick(3);
       expect(props.contextualMenuContext.show).toHaveBeenCalledWith(FilterResourcesByFoldersItemContextualMenu, {folder: foldersMock[0]});
     });
 
     it('As LU I should be able to drag and drop a folder on another folder', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
       await page.filterResourcesByFoldersItem.dragStartOnFolder(3);
       await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
       await page.filterResourcesByFoldersItem.dragOverOnFolder(1);
@@ -91,6 +94,8 @@ describe("As LU I should see each folders", () => {
     });
 
     it('As LU I should be able to close folder to hide the child folders', async() => {
+      await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
+      expect(page.filterResourcesByFoldersItem.count).toBe(3);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(1);
       expect(page.filterResourcesByFoldersItem.count).toBe(1);
     });

@@ -97,11 +97,11 @@ describe("As LU I should see each menu", () => {
     });
 
     it('As LU I should see all menu disabled', async() => {
-      expect(page.filterResourcesByFoldersItemContextualMenu.menu(1).className).toBe("ready closed disabled");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menu(2).className).toBe("separator-after ready closed disabled");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menu(3).className).toBe("ready closed disabled");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menu(4).className).toBe("ready closed ");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menu(5).className).toBe("ready closed disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(1).className).toBe("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(2).className).toBe("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(3).className).toBe("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(4).className).toBe("");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(5).className).toBe("disabled");
     });
   });
 });

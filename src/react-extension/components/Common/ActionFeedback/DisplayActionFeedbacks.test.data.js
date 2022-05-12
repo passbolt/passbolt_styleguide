@@ -17,7 +17,8 @@
  */
 export const propsWithOneSuccessMessage = {
   actionFeedbackContext: {
-    feedbacks: [{type: 'success', message: "The comment has been added successfully"}]
+    feedbacks: [{type: 'success', message: "The comment has been added successfully"}],
+    remove: () => {}
   }
 };
 
@@ -26,7 +27,8 @@ export const propsWithOneSuccessMessage = {
  */
 export const propsWithOneErrorMessage = {
   actionFeedbackContext: {
-    feedbacks: [{type: 'error', message: "An error occurred during the operation"}]
+    feedbacks: [{type: 'error', message: "An error occurred during the operation"}],
+    remove: () => {}
   }
 };
 

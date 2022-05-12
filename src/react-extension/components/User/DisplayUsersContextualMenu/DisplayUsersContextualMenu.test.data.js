@@ -19,7 +19,7 @@ export function defaultAppContext(appContext) {
         name: 'admin'
       }
     },
-    setContext: () => {}
+    setContext: jest.fn()
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -67,15 +67,15 @@ export function contextWithoutDelete() {
 export function defaultProps() {
   return {
     actionFeedbackContext: {
-      displaySuccess: () => {}
+      displaySuccess: jest.fn()
     },
     dialogContext: {
-      open: () => {}
+      open: jest.fn()
     },
+    hide: jest.fn(),
     workflowContext: {
       start: jest.fn()
     },
-    hide: () => {},
     user: {
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
       "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",

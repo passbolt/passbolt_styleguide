@@ -67,8 +67,8 @@ class ChangeUserSecurityToken extends Component {
    * Get the security token from the logged in user
    */
   getSecurityTokenFromLoggedInUser() {
-    const background = this.props.context.userSettings.getSecurityTokenBackgroundColor();
-    const code = this.props.context.userSettings.getSecurityTokenCode();
+    const background = this.props.context.userSettings.getSecurityToken().backgroundColor;
+    const code = this.props.context.userSettings.getSecurityToken().code;
     this.setState({background, code});
   }
 
@@ -319,7 +319,7 @@ class ChangeUserSecurityToken extends Component {
     return (
       <div className="grid grid-responsive-12 profile-choose-security-token">
         <div className="row">
-          <div className="col7">
+          <div className="col7 main-column">
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Update the Security Token</Trans></h3>
               <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
@@ -373,7 +373,7 @@ class ChangeUserSecurityToken extends Component {
               </div>
             </form>
           </div>
-          <div className="col4 last ">
+          <div className="col4 last">
             <div className="sidebar-help">
               <h3><Trans>Why is this token needed?</Trans></h3>
               <p>

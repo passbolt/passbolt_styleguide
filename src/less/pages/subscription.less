@@ -1,48 +1,60 @@
 .subscription-key {
   .subscription-information {
-    width: 100%;
-    li {
-      .clearfix();
-      padding-bottom:.25em;
+    flex: 1;
+    margin-left: 1.6rem;
+    ul {
+      margin: 1.6rem;
 
-      span {
-        .ellipsis();
-      }
-      .label {
-        width: 40%;
-        display: inline-block;
-        margin-right: 5%;
-        float: left;
-        height: 1.8em;
-        color: @font-lighter;
+      li {
+        .clearfix();
+        padding-bottom:.25em;
 
-        &.error {
-          color: @font-error;
+        span {
+          .ellipsis();
         }
-        &.warning {
-          color: @font-warning;
-        }
-      }
-      .value {
-        width: 55%;
-        display: inline-block;
-        float: left;
-        height: 1.8em;
+        .label {
+          width: 40%;
+          display: inline-block;
+          margin-right: 5%;
+          float: left;
+          height: 1.8em;
+          color: @font-lighter;
 
-        &.error {
-          color: @font-error;
+          &.error {
+            color: @font-error;
+          }
+          &.warning {
+            color: @font-warning;
+          }
         }
-        &.warning {
-          color: @font-warning;
+        .value {
+          width: 55%;
+          display: inline-block;
+          float: left;
+          height: 1.8em;
+
+          &.error {
+            color: @font-error;
+          }
+          &.warning {
+            color: @font-warning;
+          }
         }
       }
     }
 
-    a {
-      margin-top: 1em;
+    p {
+      margin: 1.6rem;
+    }
 
-      &.button {
-        margin-right: 1.5em;
+    .actions-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 1.6rem;
+
+      a {
+        margin-left: 1.6rem;
       }
     }
   }

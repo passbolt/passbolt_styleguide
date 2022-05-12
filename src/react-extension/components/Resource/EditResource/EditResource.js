@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -27,7 +27,8 @@ import {Trans, withTranslation} from "react-i18next";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePassword/GenerateResourcePassword";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
-import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import Password from "../../../../shared/components/Password/Password";
+import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -60,8 +61,6 @@ class EditResource extends Component {
       description: resource.description || "",
       descriptionError: "",
       descriptionWarning: "",
-      viewPassword: false,
-      passwordInputHasFocus: false,
       isSecretDecrypting: true,
       encryptDescription: null,
       resourceTypeId: resource.resource_type_id || ""
@@ -72,11 +71,8 @@ class EditResource extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handlePasswordInputFocus = this.handlePasswordInputFocus.bind(this);
-    this.handlePasswordInputBlur = this.handlePasswordInputBlur.bind(this);
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
-    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleDescriptionInputFocus = this.handleDescriptionInputFocus.bind(this);
@@ -425,28 +421,12 @@ class EditResource extends Component {
   }
 
   /**
-   * Handle password input focus.
-   */
-  async handlePasswordInputFocus() {
-    const passwordInputHasFocus = true;
-    this.setState({passwordInputHasFocus: passwordInputHasFocus});
-    this.passwordInputRef.current.focus();
-  }
-
-  /**
    * Handle description input focus.
    */
   async handleDescriptionInputFocus() {
     const descriptionHasFocus = true;
     this.setState({passwordInputHasFocus: descriptionHasFocus});
     this.descriptionInputRef.current.focus();
-  }
-
-  /**
-   * Handle password input blur.
-   */
-  handlePasswordInputBlur() {
-    this.setState({passwordInputHasFocus: false});
   }
 
   /**
@@ -473,16 +453,6 @@ class EditResource extends Component {
     const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
     const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
     this.setState({passwordWarning});
-  }
-
-  /**
-   * Handle view password button click.
-   */
-  async handleViewPasswordButtonClick() {
-    if (this.hasAllInputDisabled()) {
-      return;
-    }
-    this.setState({viewPassword: !this.state.viewPassword});
   }
 
   /**
@@ -658,18 +628,7 @@ class EditResource extends Component {
    */
   render() {
     const passwordEntropy = SecretGenerator.entropy(this.state.password);
-    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
-    /*
-     * The parser can't find the translation for passwordStrength.label
-     * To fix that we can use it in comment
-     * this.translate("n/a")
-     * this.translate("very weak")
-     * this.translate("weak")
-     * this.translate("fair")
-     * this.translate("strong")
-     * this.translate("very strong")
-     */
 
     return (
       <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.nameOriginal} className="edit-password-dialog"
@@ -706,77 +665,52 @@ class EditResource extends Component {
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
               <label htmlFor="edit-password-form-password"><Trans>Password</Trans></label>
-              <div className="input text password">
-                <input id="edit-password-form-password" name="password" className={`required ${this.state.isSecretDecrypting ? "" : "decrypted"}`}
-                  required="required" maxLength="4096" type={this.state.viewPassword ? "text" : "password"}
+              <div className="password-button-inline">
+                <Password id="edit-password-form-password" name="password"
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
-                  placeholder={passwordPlaceholder} onFocus={this.handlePasswordInputFocus}
-                  onBlur={this.handlePasswordInputBlur} onChange={this.handleInputChange}
-                  disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}
-                  autoComplete="new-password"
-                  ref={this.passwordInputRef}/>
-                <a onClick={this.handleViewPasswordButtonClick}
-                  className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                  <Icon name='eye-open' big={true}/>
-                  <span className="visually-hidden">view</span>
+                  placeholder={passwordPlaceholder} onChange={this.handleInputChange}
+                  autoComplete="new-password" disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}
+                  preview={true} inputRef={this.passwordInputRef}/>
+                <a onClick={this.handleGeneratePasswordButtonClick}
+                  className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                  <Icon name='dice' big={true}/>
+                  <span className="visually-hidden">generate</span>
                 </a>
-              </div>
-              <ul className="actions inline">
-                <li>
-                  <a onClick={this.handleGeneratePasswordButtonClick}
-                    className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
-                    <Icon name='magic-wand' big={true}/>
-                    <span className="visually-hidden">generate</span>
-                  </a>
-                </li>
                 {this.canUsePasswordGenerator &&
-                <li>
                   <a onClick={this.handleOpenGenerator}
                     className="password-generator button-icon button">
-                    <Icon name='cog' big={true}/>
+                    <Icon name='settings' big={true}/>
                     <span className="visually-hidden">open generator</span>
                   </a>
-                </li>
                 }
-              </ul>
-              <div className={`password-complexity ${passwordStrength.id}`}>
-                <span className="progress">
-                  <span className={`progress-bar ${passwordStrength.id}`}/>
-                </span>
-                <span className="complexity-text">
-                  <div>
-                    <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
-                  </div>
-                  <div>
-                    <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
-                  </div>
-                </span>
               </div>
+              <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
               {this.state.passwordError &&
-              <div className="input text">
                 <div className="password error-message">{this.state.passwordError}</div>
-              </div>
               }
               {this.state.passwordWarning &&
-              <div className="input text">
                 <div className="password warning message">{this.state.passwordWarning}</div>
-              </div>
               }
             </div>
             <div className="input textarea">
-              <label htmlFor="edit-password-form-description"><Trans>Description</Trans>&nbsp;
+              <label htmlFor="edit-password-form-description"><Trans>Description</Trans>
                 {!this.areResourceTypesEnabled() &&
-                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}
-                  icon="info-circle"/>
+                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
+                  <Icon name="info-circle"/>
+                </Tooltip>
                 }
                 {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")} icon="lock-open" />
+                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
+                    <Icon name="lock-open"/>
+                  </Tooltip>
                 </a>
                 }
                 {this.areResourceTypesEnabled() && this.state.encryptDescription &&
                 <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
-                  <Tooltip message={this.translate("The description content will be encrypted.")} icon="lock" />
+                  <Tooltip message={this.translate("The description content will be encrypted.")}>
+                    <Icon name="lock"/>
+                  </Tooltip>
                 </a>
                 }
               </label>
@@ -795,8 +729,8 @@ class EditResource extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton value={this.translate("Save")} disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} processing={this.hasAllInputDisabled()}/>
             <FormCancelButton disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} onClick={this.handleClose}/>
+            <FormSubmitButton value={this.translate("Save")} disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} processing={this.hasAllInputDisabled()}/>
           </div>
         </form>
       </DialogWrapper>

@@ -17,7 +17,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {Trans, withTranslation} from "react-i18next";
-import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
+import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 
 /**
  * This component displays the user profile information
@@ -57,16 +57,14 @@ class DownloadRecoveryKit extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
-          <div className="col7 last">
+          <div className="col7 main-column last">
             <h3><Trans>The passphrase was updated!</Trans></h3>
             <div className="feedback-card">
               <AnimatedFeedback name='success' />
               <div className="additional-information">
                 <p><Trans>Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.</Trans></p>
                 <p><Trans>Keep this backup in a safe place, you will need it in case of emergency.</Trans></p>
-                <p>
-                  <a className="button primary medium" role="button" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></a>
-                </p>
+                <button type="button" className="button primary" onClick={this.handleDownloadBackup}><Trans>Download backup</Trans></button>
               </div>
             </div>
           </div>

@@ -219,7 +219,7 @@ class DisplayInFormMenu extends React.Component {
       title={this.props.t("Generate a new password securely")}
       subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}"</span>}
       description={this.props.t("You will be able to save it after submitting")}
-      icon="magic-wand"/>;
+      icon="dice"/>;
   }
 
   /**

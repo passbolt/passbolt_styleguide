@@ -15,9 +15,11 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import Password from "../../../../shared/components/Password/Password";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 /**
  * The component display variations.
@@ -50,12 +52,7 @@ class CreateGpgKey extends Component {
   get defaultState() {
     return {
       passphrase: '', // The current passphrase
-      passphraseStrength: {  // The current passphrase strength
-        id: '',
-        label: ''
-      },
-      isObfuscated: true, // True if the paasphrase should not be visible
-      errors: {}, // The list of errors
+      passphraseEntropy: 0,  // The current passphrase entropy
       actions: {
         processing: false // True if one's processing passphrase
       },
@@ -82,7 +79,7 @@ class CreateGpgKey extends Component {
   get isValid() {
     const validation = {
       enoughLength: this.state.hintClassNames.enoughLength === "success",
-      enoughStrength: this.state.passphraseStrength.id !== "n/a",
+      enoughEntropy: this.state.passphraseEntropy !== 0,
       notInDictionary: this.state.hintClassNames.notInDictionary === "success"
     };
     return Object.values(validation).every(value => value);
@@ -107,7 +104,6 @@ class CreateGpgKey extends Component {
    */
   bindEventHandlers() {
     this.handlePassphraseChange = this.handlePassphraseChange.bind(this);
-    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
     this.handleImportGpgKey = this.handleImportGpgKey.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -120,15 +116,29 @@ class CreateGpgKey extends Component {
   }
 
   /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInput.current.focus();
+  }
+
+  /**
    * Whenever the passphrase change
    * @param event The input event
    */
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    await this.setState({passphrase});
-    const passphraseStrength = this.evaluatePassphraseStrength(passphrase);
-    const hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
-    this.setState({passphraseStrength, hintClassNames});
+    this.setState({passphrase});
+    const passphraseEntropy = SecretGenerator.entropy(passphrase);
+    const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
+    this.setState({passphraseEntropy, hintClassNames});
     await this.checkPassphraseIsInDictionary(passphrase, hintClassNames);
   }
 
@@ -144,23 +154,15 @@ class CreateGpgKey extends Component {
     const notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
 
     // if the passphrase is in dictionary, force the complexity to n/a
-    const passphraseStrength = {...this.state.passphraseStrength};
-    passphraseStrength.id = isPwned ? 'n/a' : this.state.passphraseStrength.id;
+    const passphraseEntropy = isPwned ? 0 : this.state.passphraseEntropy;
 
     this.setState({
       hintClassNames: {
         ...this.state.hintClassNames,
         notInDictionary
       },
-      passphraseStrength
+      passphraseEntropy
     });
-  }
-
-  /**
-   * Whenever one wants to toggle the obfusctated mode
-   */
-  handleToggleObfuscate() {
-    this.toggleObfuscate();
   }
 
   /**
@@ -177,14 +179,6 @@ class CreateGpgKey extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.generateGpgKey();
-  }
-
-  /**
-   * Returns the strength evaluation of the passphrase
-   * @param passphrase The passphrase to evaluate
-   */
-  evaluatePassphraseStrength(passphrase) {
-    return SecurityComplexity.getStrength(passphrase);
   }
 
   /**
@@ -231,13 +225,6 @@ class CreateGpgKey extends Component {
   }
 
   /**
-   * Toggle the obfuscate mode of the passphrase view
-   */
-  toggleObfuscate() {
-    this.setState({isObfuscated: !this.state.isObfuscated});
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -265,28 +252,16 @@ class CreateGpgKey extends Component {
           <p>
             <Trans>This passphrase is the only passphrase you will need to remember from now on, choose wisely!</Trans>
           </p>
-          <div className="input text password required">
-            <input
+          <div className="input-password-wrapper input required">
+            <Password
               id="passphrase-input"
-              type={this.state.isObfuscated ? "password" : "text"}
-              ref={this.passphraseInput}
+              autoComplete="off"
+              inputRef={this.passphraseInput}
               value={this.state.passphrase}
+              preview={true}
               onChange={this.handlePassphraseChange}
-              disabled={!this.areActionsAllowed}
-              autoFocus={true}
-              autoComplete="off"/>
-            <a
-              className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-              role="button"
-              onClick={this.handleToggleObfuscate}>
-              <Icon name="eye-open"/>
-              <span className="visually-hidden">view</span>
-            </a>
-            <div className="password-complexity">
-              <span className="progress">
-                <span className={`progress-bar ${this.state.passphraseStrength.id}`}/>
-              </span>
-            </div>
+              disabled={!this.areActionsAllowed}/>
+            <PasswordComplexity entropy={this.state.passphraseEntropy}/>
           </div>
 
           <div className="password-hints">

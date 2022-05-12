@@ -56,13 +56,13 @@ describe("See the Create Dialog Group", () => {
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
-      page.createGroup.fillInput(page.createGroup.selectRights(2), "true");
+      await page.createGroup.selectFirstItem(2);
       expect(page.createGroup.warningMessage).toBe('You need to click save for the changes to take place.');
 
       expect(page.createGroup.count()).toBe(2);
       expect(page.createGroup.userFirstNameLastName(2)).toBe('Ada Lovelace');
       expect(page.createGroup.userEmail(2)).toBe('ada@passbolt.com');
-      expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23AC DF76 1353 B5B1 5D9B 054F');
+      expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23ACDF76 1353 B5B1 5D9B 054F ');
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
@@ -103,7 +103,7 @@ describe("See the Create Dialog Group", () => {
       await waitFor(() => {
         expect(page.createGroup.name.getAttribute("disabled")).not.toBeNull();
         expect(page.createGroup.usernameInput.getAttribute("disabled")).not.toBeNull();
-        expect(page.createGroup.selectRights(1).getAttribute("disabled")).not.toBeNull();
+        expect(page.createGroup.selectRights(1).className).toBe('selected-value disabled');
         expect(page.createGroup.removeUserDisabled(1)).not.toBeNull();
         expect(page.createGroup.cancelButtonDisabled).not.toBeNull();
         expect(page.createGroup.saveButton.getAttribute("disabled")).not.toBeNull();

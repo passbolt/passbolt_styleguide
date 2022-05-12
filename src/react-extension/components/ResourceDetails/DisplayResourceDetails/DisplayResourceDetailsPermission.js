@@ -14,7 +14,7 @@
 import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -214,13 +214,14 @@ class DisplayResourceDetailsPermission extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canShare() &&
-          <a onClick={this.handlePermissionsEditClickEvent} className="section-action">
+          <a onClick={this.handlePermissionsEditClickEvent} className="section-action button button-transparent">
             <Icon name="edit"/>
             <span className="visuallyhidden">modify</span>
           </a>
           }
           {this.isLoading() &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
           </div>
           }

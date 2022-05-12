@@ -22,6 +22,6 @@ export function defaultProps() {
       "first_name": "Dame Steve",
       "last_name": "Shirley",
     },
-    baseUrl: "https://passbolt.local",
+    baseUrl: (new URL(window.location.href)).origin,
   };
 }

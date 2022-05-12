@@ -1,10 +1,20 @@
 /* input label */
 label {
-    font-weight: bold;
-    font-size: 1.6rem; /* 16px */
-    line-height: 2.4rem; /* 24px */
-    padding: .8rem 0;
+    font-weight: 700;
+    font-size: 1.5rem; /* 15px */
+    line-height: 2rem; /* 20px */
     display: block;
+    width: max-content;
+    max-width: 100%;
+
+    & > :first-child {
+        margin-left: .4rem;
+    }
+
+    svg {
+        height: 1.2rem;
+        width: 1.2rem;
+    }
 }
 
 /*
@@ -13,11 +23,26 @@ label {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required label:after {
-    content: " \002A"; /* unicode character * */
+.required > label:after {
+    content: "\002A"; /* unicode character * */
     color: @font-error;
     font-weight: bold;
+    margin-left: .4rem;
 }
+
 .input.error label {
     color: @font-error;
+}
+
+.input.text, .input-password-wrapper,
+.input.file, .input.textarea,
+.input.select-wrapper, .input.checkbox-wrapper {
+  &.disabled {
+    label {
+      opacity: .5;
+    }
+  }
+  label {
+    margin-bottom: 1.2rem;
+  }
 }

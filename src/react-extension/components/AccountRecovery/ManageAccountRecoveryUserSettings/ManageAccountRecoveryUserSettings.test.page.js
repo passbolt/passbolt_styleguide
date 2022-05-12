@@ -56,7 +56,7 @@ export default class ManageAccountRecoveryUserSettingsPage {
   }
 
   get saveButton() {
-    return this.selector('.submit-wrapper input[type="submit"]');
+    return this.selector('.submit-wrapper button[type="submit"]');
   }
 
   isProcessing() {

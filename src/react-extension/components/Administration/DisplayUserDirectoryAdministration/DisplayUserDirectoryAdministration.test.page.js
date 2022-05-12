@@ -99,14 +99,14 @@ export default class DisplayUserDirectoryAdministrationPage {
    * Returns the connection type element
    */
   get connectionType() {
-    return this._page.container.querySelector('#connection-type-input');
+    return this._page.container.querySelector('.select-container.inline .select .selected-value').textContent;
   }
 
   /**
    * Returns the connection type select element
    */
   get connectionTypeSelect() {
-    return this._page.container.querySelector('.chosen-container.chosen-container-single.connection-type');
+    return this._page.container.querySelector('.select-container.inline .select .selected-value');
   }
 
   /**
@@ -204,14 +204,14 @@ export default class DisplayUserDirectoryAdministrationPage {
    * Returns the default user input element
    */
   get defaultUser() {
-    return this._page.container.querySelector('#default-user-select');
+    return this._page.container.querySelector('#default-user-select .selected-value .value');
   }
 
   /**
    * Returns the default group admin user input element
    */
   get defaultGroupAdminUser() {
-    return this._page.container.querySelector('#default-group-admin-user-select');
+    return this._page.container.querySelector('#default-group-admin-user-select .selected-value .value');
   }
 
   /**

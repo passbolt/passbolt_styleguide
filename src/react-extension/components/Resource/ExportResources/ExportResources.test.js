@@ -48,7 +48,7 @@ describe("As LU I should see the password export dialog", () => {
       expect(page.title).toBe("Export passwords");
 
       // Fill the form
-      await page.selectFormat('csv-lastpass');
+      await page.selectFormat(2);
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(requestMockImpl);
@@ -75,7 +75,6 @@ describe("As LU I should see the password export dialog", () => {
       expect(page.title).toBe("Export passwords");
 
       // Fill the form
-      await page.selectFormat('kdbx');
 
       await page.submitExport();
       await waitFor(() => {});
@@ -86,7 +85,7 @@ describe("As LU I should see the password export dialog", () => {
 
     it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
       // Fill the form
-      await page.selectFormat('csv-lastpass');
+      await page.selectFormat(1);
       // Mock the request function to make it the expected result
       let updateResolve;
       const requestMockImpl = jest.fn(() => new Promise(resolve => {
@@ -97,7 +96,7 @@ describe("As LU I should see the password export dialog", () => {
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.select.getAttribute("disabled")).not.toBeNull();
+        expect(page.select.className).toBe("selected-value disabled");
         expect(page.exportButton.getAttribute("disabled")).not.toBeNull();
         expect(page.exportButton.className).toBe("button primary disabled processing");
         expect(page.cancelButton.className).toBe("cancel disabled");
@@ -129,7 +128,7 @@ describe("As LU I should see the password export dialog", () => {
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
       expect.assertions(1);
       // Fill the form
-      await page.selectFormat('csv-lastpass');
+      await page.selectFormat(3);
       // Mock the request function to make it return an error.
       const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {

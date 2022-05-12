@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -213,6 +213,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving account recovery</Trans></span>
           </div>
           }

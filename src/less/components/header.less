@@ -3,30 +3,35 @@
     overflow: visible !important;
 
     &.first {
-        background: @background-dark;
+        background: @background-header-first;
     }
-    &.second {
-        background: @background-lighter;
+    &.second, &.third {
+        background: @background-header-second;
     }
 
     /* top navigation */
     .navigation.primary {
+        padding: 1rem 1.6rem;
         .clearfix();
 
         li {
-            padding: .5em;
+            margin-right: 1.6rem;
             float: left;
 
-            &:first-child {
-                padding-left: 1em;
+            &:last-child {
+              margin-right: 0;
             }
             &.right {
                 float: right;
-                margin-right: 1em;
+                margin-right: 0;
             }
 
             a {
-                color: @font-inverse-dark;
+                color: @font-header-first;
+                font-weight: 600;
+                font-size: 1.7rem;
+                line-height: 2.3rem;
+                letter-spacing: -0.05em;
                 text-decoration: none;
                 border: 0;
                 display: inline-block;
@@ -80,9 +85,20 @@
 
     /* logo positioning */
     .logo {
-        margin: 1.25em 0 0 1em;
+        margin: 3.2rem 0 0 1.6rem;
         max-width: 80%;
     }
 }
 
+@media all and (max-width: 1024px) {
+  .header {
+    .navigation.primary {
+      li {
+        a {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+}
 

@@ -64,7 +64,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
   }
 
   get fingerprint() {
-    return this.selector('.account-recovery-profile .account-recovery-status ul li .tooltip').dataset.tooltip;
+    return this.selector('.account-recovery-profile .account-recovery-status ul li .tooltip .tooltip-text').innerHTML;
   }
 
   get description() {

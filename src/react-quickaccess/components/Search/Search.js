@@ -1,14 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
+import Icon from "../../../shared/components/Icons/Icon";
 
 class Search extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.searchInputRef = React.createRef();
+    this.state = this.defaultState;
+    this.bindCallbacks();
+    this.createReferences();
+  }
+
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  get defaultState() {
+    return {
+      hasSubmitButtonFocus: false, // true if the form button has focus
+    };
   }
 
   /**
@@ -18,6 +30,22 @@ class Search extends React.Component {
    */
   componentDidMount() {
     this.focus();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmitButtonFocus = this.handleSubmitButtonFocus.bind(this);
+    this.handleSubmitButtonBlur = this.handleSubmitButtonBlur.bind(this);
+  }
+
+  /**
+   * Create elements references
+   */
+  createReferences() {
+    this.searchInputRef = React.createRef();
   }
 
   /**
@@ -35,23 +63,37 @@ class Search extends React.Component {
     }
   }
 
+  /**
+   * Handle submit button focus
+   */
+  handleSubmitButtonFocus() {
+    this.setState({hasSubmitButtonFocus: true});
+  }
+
+  /**
+   * Handle submit button blur
+   */
+  handleSubmitButtonBlur() {
+    this.setState({hasSubmitButtonFocus: false});
+  }
+
   handleInputChange(event) {
     this.props.context.updateSearch(event.target.value);
   }
 
   render() {
     return (
-      <div className="search">
-        <div className="input text required">
+      <div className="search-wrapper">
+        <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""}`}>
           <label className="visually-hidden">search</label>
-          <input name="search" maxLength="50" type="text" placeholder={this.translate("search")} autoComplete="off"
+          <input name="search" maxLength="50" type="search" placeholder={this.translate("search")} autoComplete="off"
             ref={this.searchInputRef} onChange={this.handleInputChange} value={this.props.context.search} />
-          <a id="search-submit" className="search-submit button button-icon" role="button">
-            <span className="visually-hidden"><Trans>search</Trans></span>
-            <span className="fa icon">
-              <svg xmlns="http://www.w3.org/2000/svg" aria-label="magnifying glass icon"><path id="search-icon" d="M15.781 13.844a.723.723 0 0 1 .219.531.723.723 0 0 1-.219.531l-.875.875a.723.723 0 0 1-.531.219.723.723 0 0 1-.531-.219l-3.125-3.125a.723.723 0 0 1-.219-.531v-.5C9.333 12.542 8 13 6.5 13a6.313 6.313 0 0 1-3.266-.875 6.567 6.567 0 0 1-2.359-2.36A6.313 6.313 0 0 1 0 6.5c0-1.187.292-2.276.875-3.266A6.567 6.567 0 0 1 3.235.875 6.313 6.313 0 0 1 6.5 0c1.187 0 2.276.292 3.266.875a6.567 6.567 0 0 1 2.359 2.36c.583.989.875 2.078.875 3.265 0 1.5-.458 2.833-1.375 4h.5c.208 0 .385.073.531.219l3.125 3.125zM6.5 10.5c.73 0 1.401-.177 2.016-.531a3.891 3.891 0 0 0 1.453-1.453A3.966 3.966 0 0 0 10.5 6.5c0-.73-.177-1.401-.531-2.016a3.891 3.891 0 0 0-1.453-1.453A3.966 3.966 0 0 0 6.5 2.5c-.73 0-1.401.177-2.016.531a3.891 3.891 0 0 0-1.453 1.453A3.966 3.966 0 0 0 2.5 6.5c0 .73.177 1.401.531 2.016a3.891 3.891 0 0 0 1.453 1.453A3.966 3.966 0 0 0 6.5 10.5z" fillRule="evenodd" /></svg>
-            </span>
-          </a>
+          <div className="search-button-wrapper">
+            <button className="button button-transparent" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
+              <Icon name="search"/>
+              <span className="visuallyhidden">Search</span>
+            </button>
+          </div>
         </div>
       </div>
     );

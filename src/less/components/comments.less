@@ -10,34 +10,35 @@
         width: 100%;
     }
     .right-column {
-        margin-left: 4rem;
+        margin-left: 4.2rem;
     }
     .left-column {
         float: left;
-        width: 3.2rem;
+        width: 4.2rem;
         margin-left: -100%;
     }
 
     .comment {
-        padding-bottom: .8rem;
+        padding-bottom: 1.6rem;
         .clearfix();
 
         p {
-            background: @background-lighter;
+            background: @comment-background;
             padding: 1.6rem;
             margin-left: 1.6rem;
             margin-top: 0;
+            border-radius: .3rem;
         }
 
         /* picture */
         .author.picture {
-            width: 3.2rem;
-            height: 3.2rem;
+            width: 4.2rem;
+            height: 4.2rem;
             margin-top: .4rem;
 
             img {
-                width: 3.2rem;
-                height: 3.2rem;
+                width: 4.2rem;
+                height: 4.2rem;
             }
             a {
                 border: 0;
@@ -47,7 +48,7 @@
         /* username and date */
         .metadata {
             font-style: italic;
-            margin: .8rem 0 1.6rem 1.6rem;
+            margin: .8rem 0 0 1.6rem;
 
             .author.username {
                 max-width: 48%;
@@ -68,11 +69,19 @@
 
         /* actions */
         .form-content {
-            margin-left:.8rem;
+            margin-left: 1.6rem;
+
+            .metadata {
+              margin: -1.2rem 0 0 0;
+            }
+
+            .actions {
+              margin-top: .4rem;
+            }
         }
         .actions {
             float: right;
-            margin-top: -3.6rem;
+            margin-top: -2rem;
             margin-right: 0;
         }
 
@@ -84,12 +93,16 @@
             height: 1px;
             border-top: 1rem solid transparent;
             border-bottom: 1rem solid transparent;
-            border-right: 1rem solid @background-lighter;
-            margin-left: -2.4rem;
-            margin-top: -.8rem;
+            border-right: 1rem solid @comment-background;
+            margin-left: -2.6rem;
         }
         a.delete-comment {
+            display: flex;
+            justify-content: center;
             border: 0;
+            padding: 0;
+            width: 2.2rem;
+            height: 2rem;
         }
 
     }

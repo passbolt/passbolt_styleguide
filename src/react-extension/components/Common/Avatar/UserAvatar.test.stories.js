@@ -15,7 +15,6 @@
 /**
  * Storybook tests on UserAvatar in regard of specifications
  */
-import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import UserAvatar from "./UserAvatar";
 import {defaultProps} from "./UserAvatar.test.data";
@@ -28,20 +27,28 @@ export default {
 
 
 const Template = args =>
-  <div className="panel aside ready">
-    <div className="sidebar user">
-      <div className="sidebar-header">
-        <div className={`teaser-image  ${args.attentionRequired ? "attention-required" : ""}`}>
-          <MemoryRouter initialEntries={['/']}>
-            <Route component={routerProps => <UserAvatar {...args} {...routerProps}/>}></Route>
-          </MemoryRouter>
-        </div>
+  <div style={{display: "flex", flexWrap: "wrap"}}>
+    <div style={{width: "50%"}}>
+      <UserAvatar {...args}/>
+    </div>
+    <div style={{width: "50%"}}>
+      <UserAvatar {...args} attentionRequired={true}/>
+    </div>
+    <div className="avatar-with-name" style={{width: "50%", marginTop: "2.3rem"}}>
+      <UserAvatar {...args}/>
+      <div className="details center-cell">
+        <span className="name">Name</span>
+        <span className="email">name@passbolt.com</span>
+      </div>
+    </div>
+    <div className="avatar-with-name" style={{width: "50%", marginTop: "2.3rem"}}>
+      <UserAvatar {...args} attentionRequired={true}/>
+      <div className="details center-cell">
+        <span className="name">Name</span>
+        <span className="email">name@passbolt.com</span>
       </div>
     </div>
   </div>;
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
-
-export const AttentionRequired = Template.bind({});
-AttentionRequired.args = Object.assign(defaultProps(), {attentionRequired: true});

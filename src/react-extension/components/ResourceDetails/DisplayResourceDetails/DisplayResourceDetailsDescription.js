@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import EditResourceDescription from "../../ResourceDescription/EditResourceDescription/EditResourceDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -302,7 +302,7 @@ class DisplayResourceDetailsDescription extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canEdit() &&
-          <a className="section-action" onClick={this.handleEditClickEvent}>
+          <a className="section-action button button-transparent" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>edit</Trans></span>
           </a>
@@ -310,26 +310,27 @@ class DisplayResourceDetailsDescription extends React.Component {
           {this.state.isSecretDecrypting &&
           <p className="description-content">
             <span className="processing-wrapper">
+              <Icon name="spinner"/>
               <span className="processing-text"><Trans>Decrypting</Trans></span>
             </span>
           </p>
           }
           {this.state.error &&
           <p className="description-content error-message">
-            <a onClick={this.handleRetryDecryptClickEvent}>
-              <em className="empty-content">{this.state.errorMsg}</em>
+            <a className="empty-content" onClick={this.handleRetryDecryptClickEvent}>
+              {this.state.errorMsg}
             </a>
           </p>
           }
           {this.mustShowEmptyDescription() &&
           <p className="description-content">
             {!this.canEdit() &&
-              <em className="empty-content"><Trans>There is no description.</Trans></em>
+              <span className="empty-content"><Trans>There is no description.</Trans></span>
             }
             {this.canEdit() &&
-            <em className="empty-content" onClick={this.toggleInputDescriptionEditor}>
+            <span className="empty-content" onClick={this.toggleInputDescriptionEditor}>
               <Trans>There is no description yet, click here to add one.</Trans>
-            </em>
+            </span>
             }
           </p>
           }

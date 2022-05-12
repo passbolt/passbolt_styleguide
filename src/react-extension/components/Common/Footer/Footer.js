@@ -12,10 +12,11 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import Icon from "../Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
+import Tooltip from "../Tooltip/Tooltip";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
 const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
@@ -131,14 +132,14 @@ class Footer extends Component {
               </a>
             </li>
             <li>
-              <a
-                href={this.creditsUrl}
-                className="tooltip-left"
-                {...(this.versions && {"data-tooltip": this.versions})}
-                target="_blank"
-                rel="noopener noreferrer">
-                <Icon name="heart-o"/>
-              </a>
+              <Tooltip message={this.versions} direction="left">
+                <a
+                  href={this.creditsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <Icon name="heart-o"/>
+                </a>
+              </Tooltip>
             </li>
           </ul>
         </div>

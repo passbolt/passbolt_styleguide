@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 class DisplayUnexpectedError extends Component {
   /**
@@ -90,7 +90,7 @@ class DisplayUnexpectedError extends Component {
             <div className="accordion-header">
               <a onClick={this.handleErrorDetailsToggle}>
                 <Trans>Error details</Trans>
-                <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
+                <Icon name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
               </a>
             </div>
             {this.state.showErrorDetails &&

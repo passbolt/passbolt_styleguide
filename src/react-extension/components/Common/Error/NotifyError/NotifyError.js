@@ -13,9 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import DialogCloseButton from "../../Dialog/DialogCloseButton/DialogCloseButton";
 import {withTranslation, Trans} from "react-i18next";
-import Icon from "../../../Common/Icons/Icon";
+import DialogWrapper from "../../Dialog/DialogWrapper/DialogWrapper";
+import Icon from "../../../../../shared/components/Icons/Icon";
 
 class NotifyError extends Component {
   /**
@@ -132,16 +132,13 @@ class NotifyError extends Component {
    */
   render() {
     return (
-      <div className="dialog-wrapper error-dialog">
-        <div className="dialog">
-          <div className="dialog-header">
-            <h2>{this.getTitle()}</h2>
-            <DialogCloseButton onClose={this.props.onClose}/>
-          </div>
-          <div className="dialog-content">
-            <div className="form-content">
-              <p>{this.getMessage()}</p>
-              {this.hasErrorDetails &&
+      <DialogWrapper
+        className="dialog-wrapper error-dialog"
+        onClose={this.props.onClose}
+        title={this.getTitle()}>
+        <div className="form-content">
+          <p>{this.getMessage()}</p>
+          {this.hasErrorDetails &&
                 <div className="accordion error-details">
                   <div className="accordion-header">
                     <a onClick={this.handleErrorDetailsToggle}>
@@ -165,14 +162,11 @@ class NotifyError extends Component {
                     </div>
                   }
                 </div>
-              }
-            </div>
-            <div className="submit-wrapper clearfix">
-              <a className="button primary warning" onClick={this.props.onClose}>Ok</a>
-            </div>
-          </div>
+          }</div>
+        <div className="submit-wrapper clearfix">
+          <button type="button" className="button primary warning" onClick={this.props.onClose}>Ok</button>
         </div>
-      </div>
+      </DialogWrapper>
     );
   }
 }

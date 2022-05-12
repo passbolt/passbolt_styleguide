@@ -1,3 +1,24 @@
+// Css variable declaration as root to enable the possibility of override it
+:root {
+  // default icon color, background color and stroke width
+  --icon-color: @icon-color;
+  --icon-background-color: @icon-background-color;
+  --icon-stroke-width: .15rem;
+  // default icon exclamation color and background color
+  --icon-exclamation-color: @icon-exclamation-color;
+  --icon-exclamation-background-color: @icon-exclamation-default-color;
+  // default icon star color
+  --icon-favorites-color: @icon-unfavorite-color;
+  // default icon failed color
+  --icon-failed-color: @icon-failed-color;
+  // default icon success color
+  --icon-success-color: @icon-success-color;
+  // default icon spinner color, background color and stroke width
+  --spinner-color: @spinner-color;
+  --spinner-background: rgba(@spinner-background, 0.25);
+  --spinner-stroke-width: .15rem;
+}
+
 .svg-baseline() {
     top:.125em;
     position: relative;
@@ -7,25 +28,36 @@
     display: inline-flex;
     align-self: center;
 
-    svg {
-        fill: @fill-color;
-        height:1em;
-        width:1em;
+    &.spinner {
+      #loading {
+        animation: spin 2s forwards infinite;
+        stroke-dashoffset: 50.25;
+        stroke-dasharray: 50.27;
+
+        @keyframes spin {
+          0% {
+            stroke-dashoffset: 50.25;
+            animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
+          }
+          50% {
+            stroke-dashoffset: 0;
+            animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
+          }
+          100% {
+            stroke-dashoffset: -50.25;
+          }
+        }
+      }
     }
+
     &.baseline svg {
         .svg-baseline();
     }
-    &.dim svg,
-    &.light svg {
-        fill: @fill-light-color;
-    }
 
     &.icon-only {
-      svg {
-        padding: .1rem;
-        height:1.6rem;
-        width:1.6rem;
-      }
+        svg {
+            padding: .1rem;
+        }
     }
 }
 

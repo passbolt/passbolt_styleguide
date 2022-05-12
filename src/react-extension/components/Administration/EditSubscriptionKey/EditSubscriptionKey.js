@@ -36,6 +36,7 @@ class EditSubscriptionKey extends Component {
 
   getDefaultState() {
     return {
+      selectedFile: null, // the file to import
       key: "", // The subscription key
       keyError: "", // The error subscription key
       processing: false,
@@ -49,6 +50,7 @@ class EditSubscriptionKey extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyInputKeyUp = this.handleKeyInputKeyUp.bind(this);
     this.handleSelectSubscriptionKeyFile = this.handleSelectSubscriptionKeyFile.bind(this);
+    this.handleSelectFile = this.handleSelectFile.bind(this);
   }
 
   /**
@@ -111,13 +113,27 @@ class EditSubscriptionKey extends Component {
   }
 
   /**
+   * Handle the selection of a file by file explorer
+   */
+  handleSelectFile() {
+    this.fileUploaderRef.current.click();
+  }
+
+  /**
+   * Returns the selected file's name
+   */
+  get selectedFilename() {
+    return this.state.selectedFile ? this.state.selectedFile.name : "";
+  }
+
+  /**
    * Whenever the user select a subscription key file
    * @param event The file dom event
    */
   async handleSelectSubscriptionKeyFile(event) {
     const [subscriptionFile] = event.target.files;
     const subscriptionKey = await this.readSubscriptionKeyFile(subscriptionFile);
-    await this.fillSubscriptionKey(subscriptionKey);
+    this.setState({key: subscriptionKey, selectedFile: subscriptionFile});
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -139,14 +155,6 @@ class EditSubscriptionKey extends Component {
       };
       reader.readAsText(subscriptionFile);
     });
-  }
-
-  /**
-   * Fill the subscription key
-   * @param subscriptionKey A subscription key
-   */
-  async fillSubscriptionKey(subscriptionKey) {
-    await this.setState({key: subscriptionKey});
   }
 
   /**
@@ -298,22 +306,24 @@ class EditSubscriptionKey extends Component {
                 disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required full_report"
                 required="required" autoComplete="off" autoFocus={true}/>
             </div>
-            <div className="input-file-chooser-wrapper">
-              <div className="input text">
-                <input
-                  type="file"
-                  ref={this.fileUploaderRef}
-                  disabled={this.hasAllInputDisabled()}
-                  onChange={this.handleSelectSubscriptionKeyFile}/>
-                {this.state.keyError &&
-                <div className="key error-message">{this.state.keyError}</div>
-                }
+            <div className={`input file ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+              <input type="file" ref={this.fileUploaderRef}
+                disabled={this.hasAllInputDisabled()}
+                onChange={this.handleSelectSubscriptionKeyFile}/>
+              <div className="input-file-inline">
+                <input type="text" disabled={true} placeholder={this.translate("No key file selected")} value={this.selectedFilename}/>
+                <button type='button' className="button primary" onClick={this.handleSelectFile} disabled={this.hasAllInputDisabled()}>
+                  <span><Trans>Choose a file</Trans></span>
+                </button>
               </div>
+              {this.state.keyError &&
+                <div className="key error-message">{this.state.keyError}</div>
+              }
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick} />
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
         </form>
       </DialogWrapper>

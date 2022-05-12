@@ -54,14 +54,14 @@ export default class TransferToMobileTestPage {
    * Start button
    */
   get startButton() {
-    return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-start a.button');
+    return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-start button.button');
   }
 
   /**
    * Cancel button
    */
   get cancelButton() {
-    return this._page.container.querySelector('.profile-mobile-transfer a.cancel.button');
+    return this._page.container.querySelector('.profile-mobile-transfer button.cancel.button');
   }
 
   /**

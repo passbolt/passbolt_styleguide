@@ -2,23 +2,24 @@
  * Breadcrumbs
  */
 .breadcrumbs {
-    height: 3.2rem;
+    height: 3.9rem;
     padding: 0;
     margin-bottom: 0;
     background: @breadcrumb-background;
 
     ul {
-        padding-top: 0.45em;
-        margin-left: .1875em;
+        padding-top: 1rem;
+        margin-left: 1rem;
         li {
             display: inline-block;
-            font-size: .8em; /* 12px/base16>15 */
-            margin-left: .25em;
+            margin-left: .5rem;
             max-width: 25%;
             float: left;
             &:before {
                 content: "\203A"; /* unicode character › */
-                margin-right: .5em;
+                margin-right: 0.5rem;
+                font-size: 1.4rem;
+                font-weight: 600;
             }
             &:first-child {
                 margin-left: 0;
@@ -30,13 +31,12 @@
         }
         a {
             border: 0;
+            font-size: 1.4rem;
+            line-height: 1.9rem;
+            letter-spacing: -0.045em;
         }
     }
     div.main-cell {
         display: inline;
     }
-}
-
-.panel.middle .breadcrumbs {
-    border-bottom: 1px solid @border-default;
 }

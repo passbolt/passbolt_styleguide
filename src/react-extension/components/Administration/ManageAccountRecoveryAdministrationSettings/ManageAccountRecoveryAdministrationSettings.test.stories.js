@@ -30,10 +30,8 @@ const Template = args =>
   <MemoryRouter initialEntries={['/']}>
     <div className="panel main">
       <div className="panel middle">
-        <div className="workspace-main">
-          <div className="grid grid-responsive-12">
-            <Route component={routerProps => <ManageAccountRecoveryAdministrationSettings {...args} {...routerProps}/>}></Route>
-          </div>
+        <div className="grid grid-responsive-12">
+          <Route component={routerProps => <ManageAccountRecoveryAdministrationSettings {...args} {...routerProps}/>}></Route>
         </div>
       </div>
     </div>

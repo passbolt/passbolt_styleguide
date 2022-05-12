@@ -72,7 +72,7 @@ export default class RenameResourceFolderPage {
    * Returns true it one can submit the create operation
    */
   get canSubmit() {
-    return !Boolean(this._page.container.querySelector('input[type="submit"].disabled')).valueOf();
+    return !Boolean(this._page.container.querySelector('button[type="submit"].disabled')).valueOf();
   }
 
   /**
@@ -86,7 +86,7 @@ export default class RenameResourceFolderPage {
    * Returns the save button element
    */
   get saveButton() {
-    return this._page.container.querySelector('input[type=\"submit\"]');
+    return this._page.container.querySelector('button[type=\"submit\"]');
   }
 
   /**

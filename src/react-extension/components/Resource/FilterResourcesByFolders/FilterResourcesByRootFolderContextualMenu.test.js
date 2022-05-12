@@ -74,8 +74,6 @@ describe("As LU I should see each menu", () => {
     });
 
     it('As LU I should see all menu disabled', async() => {
-      expect(page.foldersTreeRootFolderContextualMenu.menu(1).className).toBe("ready closed");
-      expect(page.foldersTreeRootFolderContextualMenu.menu(2).className).toBe("ready closed disabled");
       expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(1).className).toBe("");
       expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2).className).toBe("disabled");
     });

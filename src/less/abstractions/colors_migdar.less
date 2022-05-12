@@ -1,7 +1,7 @@
 /* palette */
-@white: #FFF;
-@black: #333;
-@blacker: #000;
+@white: #FFFFFF;
+@black: #262626;
+@blacker: #000000;
 
 @blue-light: #2A9CEB;
 @blue: #2894DF;
@@ -9,93 +9,160 @@
 @blue-twitter: #4099FF;
 @blue-facebook: #3B5998;
 
-@green-lightest: #f4f4d9;
+@green-lightest: #EDF7EB;
 @green-light: #66CC00;
 @green: #009900;
+@islamic-green: #0EAA00;
 
 @yellow-light: #FEF0BF;
 @yellow: #FFBD2E;
+@bright-yellow: #FFA724;
+@deep-champagne: #FFDBA6;
+
 @orange-light: #DD6A00;
 @orange: #9F6000;
 
 @red: #D40101;
 @red-dark: #92000C;
 @red-light: #DB5454;
+@dark-candy-apple-red: #A40000;
+@light-salmon-pink: #FFA6A6;
 
-@midgar-1: #0C0C0A;
+@midgar-1: #000000;
 @midgar-2: #222220;
-@midgar-3: #30302D;
-@midgar-4: #3B3B39;
+@midgar-3: #303030;
+@midgar-4: #353535;
 @midgar-5: #444442;
-@midgar-6: #606060;
+@midgar-6: #7A7A7A;
 @midgar-7: #8B8B89;
 @midgar-8: #EEEEEC;
 @midgar-9: #F3F3F3;
 @midgar-10:#FFFFFC;
 
+@raisin-black: #202020;
+@chinese-black: #101010;
+@grey-1: #292929;
+@dim-gray: #696969;
+@black-olive: #3B3B3B;
+@bright-gray: #EBEBE9;
+@gray: #808080;
+@gray-2: #7C7C7C;
+@dark-liver: #515151;
 @grey: @midgar-7;
 @grey-lighter: @midgar-8;
 @grey-lightest: @midgar-9;
 @grey-darker: @midgar-6;
 @grey-darkest: @midgar-5;
 @grey-dark: @midgar-4;
+@spanish-gray: #989693;
+@granite-gray: #606060;
+@arsenic: #424242;
+@eerie-black: #1E1E1E;
+@eerie-black-2: #181818;
+@eerie-black-3: #1C1C1C;
+@eerie-black-4: #1F1F1F;
+@charleston-green: #2C2C2C;
+@davys-grey: #575757;
+@granite-gray-2: #616161;
+@onyx: #383838;
+@chinese-black-2: #111111;
+@philippine-silver: #B1B1B1;
+@azureish-white: #DDEBF8;
+@silver-chalice: #ABABAB;
 
 /* background */
-@background-default: @midgar-3;
+@background-default: @raisin-black;
 @background-dark: @midgar-2;
 @background-light: @midgar-4;
 @background-lighter: @midgar-4;
 @background-lightest: @midgar-5;
+@background-header-first: @eerie-black-3;
+@background-header-second: @charleston-green;
+@background-focus: @blue;
+@background-footer: @charleston-green;
+
+/* quickaccess */
+@quickaccess-header-background: @midgar-4;
+@quickaccess-footer-background: @midgar-4;
+@quickaccess-back-link-background: @charleston-green;
+@quickaccess-list-title-background: @charleston-green;
+@quickaccess-list-title-hover-background: @onyx;
+@quickaccess-list-title-active-background: @davys-grey;
+@quickaccess-border: @chinese-black;
+@quickaccess-font-property-name: @silver-chalice;
 
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
 @background-warning: @yellow-light;
 @background-updated: #5C564C;
-@background-notice: @blue;
+@background-notice: @raisin-black;
 @background-overlay: rgba(0, 0, 0, 0.8);
-@background-splash: @background-dark;
+@background-splash: @midgar-4;
+@background-tooltip: @spanish-gray;
+@background-drag: @gray;
+@background-drag-number: @red;
 
 /* borders */
 @border-lightest: @midgar-1;
 @border-lighter: @midgar-1;
 @border-light: @midgar-1;
-@border-default: @midgar-1;
+@border-default: @raisin-black;
 @border-dark: @midgar-1;
 @border-input: @midgar-2;
 @border-input-light: @midgar-3;
 @border-focus: @blue;
 @border-focus-dark: @blue-dark;
+@border-attention-required: @orange-light;
+@border-link-default: @dark-liver;
+@border-link-focus: @blue;
+
+/* Inform menu */
+@inform-menu-hover-background: @onyx;
+@inform-menu-active-background: @davys-grey;
+@inform-menu-border: @chinese-black;
 
 /* font */
-@font-default: @midgar-10;
+@font-default: @white;
+@font-header-first: @bright-gray;
 @font-dim: lighten(@midgar-7, 25);
 @font-light: @midgar-7;
 @font-lighter: @midgar-7;
 @font-lightest: @midgar-5; // not WCAG on background default, for decoration only
 @font-focus: @blue;
 @font-warning: @orange;
-@font-error: #FF6B70;
+@font-error: @red;
 @font-inverse-dark: @midgar-9;
 @font-inverse: @midgar-8;
 @font-inverse-background: @midgar-1;
+@font-dropdown-focus: @white;
+@font-tooltip: @white;
+@font-drag: @white;
+@font-hover-secret: @red;
+@font-focus-navigation: @white;
+
+/* dialog */
+@dialog-background: @midgar-4;
+@dialog-border: @eerie-black-2;
+@dialog-box-shadow: rgba(0, 0, 0, 0.5);
+@dialog-divider-border: @chinese-black;
+
+/* autocomplete */
+@autocomplete-background: @blacker;
+@autocomplete-hover-background: @raisin-black;
+@autocomplete-border: @blacker;
 
 /* buttons */
 @button-text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
 @button-primary-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-.button-background() {
-    background: @midgar-5;
-    background-image: linear-gradient(top, @midgar-5, @midgar-5);
-}
-.button-hover-background() {
-    background: @background-lightest;
-    background-image: linear-gradient(top, @midgar-6, @midgar-6);
-}
 
-@button-border: @border-input;
-@button-border-bottom: @button-border;
-@button-border-top: @button-border;
-@button-border-left: @button-border;
-@button-border-right: @button-border;
+@button-background: @midgar-4;
+@button-active-background: @raisin-black;
+@button-border: @raisin-black;
+@button-focus-border: @blue;
+
+@button-icon-background: @arsenic;
+@button-icon-active-background: @raisin-black;
+@button-icon-border: @eerie-black;
 
 @button-primary-background: @blue;
 @button-primary-border: @blue;
@@ -103,6 +170,14 @@
 @button-primary-hover-background: @blue-light;
 @button-primary-hover-border: @blue-light;
 @button-primary-hover-color: @white;
+@button-primary-focus: @blue-light;
+
+@button-warning-background: @red;
+@button-warning-border: @red;
+@button-warning-color: @white;
+
+@button-transparent-background: rgba(@blacker, .1);
+@button-transparent-border: rgba(@white, .1);
 
 @button-disabled-color: @font-light;
 @button-disabled-background: @midgar-4;
@@ -114,19 +189,75 @@
 /* box shadows */
 @shadow: @blacker;
 @shadow-dark: @blacker;
+@shadow-opacity-hover-black: 0.5;
+@shadow-opacity-hover-white: 0.5;
+@shadow-opacity-active-white: 0.5;
+@shadow-opacity-active-black: 0.5;
+@shadow-opacity-dropdown: 0.5;
+@shadow-opacity-select: 0.5;
+@shadow-opacity-panel-info: 0.75;
+@shadow-focus: @blue-light;
+@shadow-drag: @gray;
+
+/* Navigation menu */
+@navigation-menu-hover-background: @granite-gray;
 
 /* dropdown menus */
 @dropdown-background: @midgar-4;
-@dropdown-item-hover-background: @midgar-5;
+@dropdown-profile-background: @eerie-black-3;
+@dropdown-focus-background: @blue;
+@dropdown-item-hover-background: @granite-gray;
 
 /* inputs */
 @input-background: @midgar-1;
 @input-background-disabled: @midgar-5;
+@input-infield-background: @midgar-4;
+@input-border: @midgar-1;
+@input-infield-border: @raisin-black;
+@input-focus-border: @blue;
+/* checkbox */
 @input-checkbox-background: @midgar-2;
 @input-checkbox-background-disabled: @blacker;
 @input-checkbox-image-disabled: @midgar-3;
 @input-checkbox-border: @midgar-6;
-@input-checkbox-hover-border: @blue-dark;
+@input-checkbox-border-disabled: @grey-1;
+@input-checkbox-focus-border: @blue;
+/* radio */
+@input-radio-background: @midgar-2;
+@input-radio-dot-background: @blue-light;
+@input-radio-dot-background-disabled: @grey-1;
+@input-radio-background-disabled: @blacker;
+@input-radio-image-disabled: @midgar-3;
+@input-radio-border: @midgar-6;
+@input-radio-border-disabled: @blacker;
+@input-radio-focus-border: @blue;
+/* toggle */
+@input-toggle-background: @gray;
+@input-toggle-focus-background: @blue;
+@input-toggle-dot-background: @white;
+@input-toggle-checked-background: @green;
+@input-toggle-focus-border: @blue;
+/* select */
+@select-background: @midgar-4;
+@select-setup-extension-background: @raisin-black;
+@select-hover-background: @granite-gray;
+@select-focus-background: @blue;
+@select-focus-font: @white;
+@select-border: @raisin-black;
+@select-focus-border: @blue;
+/* range */
+@input-range-background: @arsenic;
+@input-range-dot-background: @midgar-6;
+@input-range-dot-border: @arsenic;
+
+/* progress bar */
+@background-progress-bar-default: @arsenic;
+@background-progress-bar: @red;
+
+/* complexity */
+@complexity-color: @white;
+@complexity-bar-background-default: @arsenic;
+@complexity-bar-background-gradient: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
 
 /* logos */
 @logourl: url('@{images}/logo/logo_white.svg');
@@ -140,21 +271,24 @@
 @passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
 
 /* grid */
-@tableview-background: @midgar-2;
-@tableview-background-selected: darken(@blue, 30);
-@tableview-background-hover: @midgar-4;
-@tableview-header-background: @midgar-4;
-@breadcrumb-background: @midgar-3;
+@tableview-background: @raisin-black;
+@tableview-background-even: @eerie-black-3;
+@tableview-background-hover: @onyx;
+@tableview-background-selected: @davys-grey;
+@tableview-header-background: @black-olive;
+@tableview-shadow: @granite-gray-2;
+@breadcrumb-background: @midgar-4;
+@grid-border: @chinese-black;
 
 /* messages */
-@message-error-color: @black;
-@message-error-background: @background-error;
-@message-success-color: @black;
-@message-success-background: @background-success;
-@message-notice-color: @black;
+@message-error-color: @blacker;
+@message-error-background: @light-salmon-pink;
+@message-success-color: @blacker;
+@message-success-background: @green-lightest;
+@message-notice-color: @blacker;
 @message-notice-background: @background-notice;
-@message-warning-color: @black;
-@message-warning-background: @background-warning;
+@message-warning-color: @blacker;
+@message-warning-background: @deep-champagne;
 
 /* controls */
 @controls-dot:url('@{images}/controls/dot_white.svg');
@@ -165,11 +299,24 @@
 @controls-chevron-down-focus:url('@{images}/controls/chevron-down_blue.svg');
 
 /* sidebar */
-@panel-background: #353532;
+@panel-background: @midgar-4;
+@panel-middle-background: @midgar-4;
 @sidebar-background: @midgar-4;
 @sidebar-border: @border-lightest;
 @sidebar-section-background: @midgar-4;
 @sidebar-section-header-background: @midgar-3;
+
+/* panel info */
+@panel-info-header-icon-background: @chinese-black-2;
+@panel-info-header-icon-color: @gray-2;
+@panel-info-header-subtitle-font-color: @philippine-silver;
+@panel-info-background: @midgar-4;
+@panel-info-content-background: @midgar-3;
+@panel-info-notice-background: @azureish-white;
+@panel-info-border: @raisin-black;
+
+/* comment */
+@comment-background: @eerie-black-4;
 
 /* tables */
 @table-background: @midgar-2;
@@ -177,8 +324,9 @@
 @table-row-even-background: lighten(@midgar-2, 2);
 
 /* tabs */
-@tab-selected-background: @background-default;
-@tab-unselected-background: @background-lighter;
+@tab-selected-background: @raisin-black;
+@tab-unselected-background: @chinese-black;
+@tab-border: @chinese-black;
 
 /* tags */
 @tag-color: #d4e4ff;
@@ -201,10 +349,33 @@
 @scrollbar-track: @midgar-6;
 
 /* svg fill */
-@fill-color: @white;
-@fill-light-color: @grey-lighter;
+@icon-color: @white;
+@icon-background-color: @black-olive;
+@icon-color-button-primary: @white;
+@icon-background-color-button-primary: @black-olive;
+@icon-color-button-warning: @white;
+@icon-background-color-button-warning: @black-olive;
 @fill-hover-color: @grey;
 
 /* favorite icon fill */
-@favorite-fill-color: @red;
-@unfavorite-fill-color: @grey;
+@icon-favorite-color: @red;
+@icon-unfavorite-color: @dim-gray;
+
+/* exclamation icon fill */
+@icon-exclamation-required-color: @orange-light;
+@icon-exclamation-default-color: @dim-gray;
+@icon-exclamation-color: @white;
+
+/* spinner icon fill */
+@spinner-color: @white;
+@spinner-background: @white;
+@spinner-color-button-primary: @white;
+@spinner-background-button-primary: @white;
+@spinner-color-button-warning: @white;
+@spinner-background-button-warning: @white;
+
+/* failed icon fill */
+@icon-failed-color: @red;
+
+/* success icon fill */
+@icon-success-color: @green;

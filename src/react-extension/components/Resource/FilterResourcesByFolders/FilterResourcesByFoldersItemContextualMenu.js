@@ -52,6 +52,17 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     this.handleShareFolderItemClickEvent = this.handleShareFolderItemClickEvent.bind(this);
     this.handleExportFolderItemClickEvent = this.handleExportFolderItemClickEvent.bind(this);
     this.handleDeleteFolderItemClickEvent = this.handleDeleteFolderItemClickEvent.bind(this);
+    this.handleHide = this.handleHide.bind(this);
+  }
+
+  /**
+   * Handle hide contextual menu
+   */
+  handleHide() {
+    if (typeof this.props.onBeforeHide === 'function') {
+      this.props.onBeforeHide();
+    }
+    this.props.hide();
   }
 
   /**
@@ -61,7 +72,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     if (this.canUpdate()) {
       this.props.context.setContext({folderCreateDialogProps: {folderParentId: this.props.folder.id}});
       this.props.dialogContext.open(CreateResourceFolder);
-      this.props.hide();
+      this.handleHide();
     }
   }
 
@@ -72,7 +83,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     if (this.canUpdate()) {
       this.props.context.setContext({folder: this.props.folder});
       this.props.dialogContext.open(RenameResourceFolder);
-      this.props.hide();
+      this.handleHide();
     }
   }
 
@@ -84,7 +95,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
       const foldersIds = [this.props.folder.id];
       this.props.context.setContext({shareDialogProps: {foldersIds}});
       this.props.dialogContext.open(ShareDialog);
-      this.props.hide();
+      this.handleHide();
     }
   }
 
@@ -94,7 +105,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   async handleExportFolderItemClickEvent() {
     if (this.canExport()) {
       await this.export();
-      this.props.hide();
+      this.handleHide();
     }
   }
 
@@ -105,7 +116,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     if (this.canUpdate()) {
       this.props.context.setContext({folder: this.props.folder});
       this.props.dialogContext.open(DeleteResourceFolder);
-      this.props.hide();
+      this.handleHide();
     }
   }
 
@@ -161,42 +172,55 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
 
     return (
       <ContextualMenuWrapper
-        hide={this.props.hide}
+        hide={this.handleHide}
         left={this.props.left}
-        top={this.props.top}>
-        <li key="option-create-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-rename-folder" className={`separator-after ready closed ${canUpdate ? "" : "disabled"}`}>
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a onClick={this.handleRenameFolderItemClickEvent}><span><Trans>Rename</Trans></span></a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-share-folder" className={`ready closed ${canShare ? "" : "disabled"}`}>
-          <div className="row">
-            <div className="main-cell-wrapper">
-              <div className="main-cell">
-                <a onClick={this.handleShareFolderItemClickEvent}><span><Trans>Share</Trans></span></a>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li key="option-export-folder" className={`ready closed ${canExport ? "" : "disabled"}`}>
+        top={this.props.top}
+        className={this.props.className}>
+        <li key="option-create-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
                 <a
-                  className={`${this.canExport() ? "" : "disabled"}`}
+                  onClick={this.handleCreateFolderItemClickEvent}
+                  className={`${canUpdate ? "" : "disabled"}`}>
+                  <span><Trans>Create folder</Trans></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-rename-folder" className="separator-after ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  onClick={this.handleRenameFolderItemClickEvent}
+                  className={`${canUpdate ? "" : "disabled"}`}>
+                  <span><Trans>Rename</Trans></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-share-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  onClick={this.handleShareFolderItemClickEvent}
+                  className={`${canShare ? "" : "disabled"}`}>
+                  <span><Trans>Share</Trans></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li key="option-export-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <a
+                  className={`${canExport ? "" : "disabled"}`}
                   onClick={this.handleExportFolderItemClickEvent}>
                   <span><Trans>Export</Trans></span>
                 </a>
@@ -204,11 +228,15 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-delete-folder" className={`ready closed ${canUpdate ? "" : "disabled"}`}>
+        <li key="option-delete-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleDeleteFolderItemClickEvent}><span><Trans>Delete</Trans></span></a>
+                <a
+                  onClick={this.handleDeleteFolderItemClickEvent}
+                  className={`${canUpdate ? "" : "disabled"}`}>
+                  <span><Trans>Delete</Trans></span>
+                </a>
               </div>
             </div>
           </div>
@@ -222,8 +250,10 @@ FilterResourcesByFoldersItemContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
   folder: PropTypes.object,
   hide: PropTypes.func, // Hide the contextual menu
+  onBeforeHide: PropTypes.func, // On before hide callBack
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
+  className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
   t: PropTypes.func, // The translation function

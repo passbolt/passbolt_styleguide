@@ -14,7 +14,7 @@
 
 import React from "react";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import ConfirmResourceCommentDeletion from "../ConfirmResourceCommentDeletion/ConfirmResourceCommentDeletion";
@@ -49,7 +49,7 @@ class DeleteComment extends React.Component {
 
   render() {
     return (
-      <a className="delete-comment" onClick={this.delete}>
+      <a className="delete-comment button button-transparent" onClick={this.delete}>
         <span className="svg-icon">
           <Icon name="trash"/>
         </span>

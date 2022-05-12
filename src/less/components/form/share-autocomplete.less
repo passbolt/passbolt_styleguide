@@ -4,11 +4,9 @@
 */
 .form-content.permission-add {
     label {
-        padding-bottom: .5em;
-        padding-top: 1em;
-        height: 1.5em;
+        margin-top: .4rem;
     }
-    .autocomplete input {
+    .autocomplete.input {
         margin-bottom: 0;
     }
     .message {
@@ -22,6 +20,7 @@
 */
 .autocomplete-wrapper {
     position: relative;
+    margin-top: -.7rem;
 
     .autocomplete-content {
         position: absolute;
@@ -31,26 +30,48 @@
         z-index: 899;
         padding: 0;
         margin: 0;
-        border: 1px solid @border-default;
-        max-height: 10em;
+        background: @autocomplete-background;
+        border: 1px solid @autocomplete-border;
+        border-radius: .3rem;
+        max-height: 14.2rem;
         overflow: auto;
         box-sizing: border-box;
+        filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
 
         .row {
             .clearfix();
-            font-size: .813em;
-            padding: .825em .5em .5em 1em;
-            border-bottom: 1px dotted @border-default;
+            font-size: 1.5rem;
+            padding: .8rem 1.6rem;
+            margin: .8rem 0;
 
             &:last-child {
                 border: 0;
             }
-            &.selected,
+
+            &.selected {
+              background: @autocomplete-hover-background;
+            }
+
             &:hover {
-                background: @background-lightest;
+                background: @autocomplete-hover-background;
+                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+
+                a {
+                    color: @font-default;
+                }
+            }
+
+            /* active */
+            &:active {
+              box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+              background: @autocomplete-hover-background;
+
+              a {
+                  color: @font-default;
+              }
             }
             /* user summary */
-            .avatar img {
+            .avatar {
                 float: left;
             }
             .user,

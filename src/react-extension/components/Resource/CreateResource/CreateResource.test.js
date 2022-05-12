@@ -49,7 +49,7 @@ describe("See the Create Resource", () => {
     });
 
     it('matches the styleguide', () => {
-      expect.assertions(18);
+      expect.assertions(19);
       // Dialog title exists and correct
       expect(page.passwordCreate.exists()).toBeTruthy();
       expect(page.title.header.textContent).toBe("Create a password");
@@ -72,11 +72,12 @@ describe("See the Create Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordCreate.complexityText.textContent).toBe("Complexity: n/aEntropy: 0.0 bits");
+      expect(page.passwordCreate.complexityText.textContent).toBe("Quality");
 
       // Password view button exists.
       expect(page.passwordCreate.passwordViewButton).not.toBeNull();
-      expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(false);
+      expect(page.passwordCreate.passwordViewButton.classList.contains("eye-open")).toBe(true);
+      expect(page.passwordCreate.passwordViewButton.classList.contains("eye-close")).toBe(false);
 
       // Password generate button exists.
       expect(page.passwordCreate.passwordGenerateButton).not.toBeNull();
@@ -85,7 +86,7 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.description.value).toBe("");
 
       // Save button exists
-      expect(page.passwordCreate.saveButton.value).toBe("Create");
+      expect(page.passwordCreate.saveButton.textContent).toBe("Create");
 
       // Cancel button exists
       expect(page.passwordCreate.cancelButton.textContent).toBe("Cancel");
@@ -95,12 +96,12 @@ describe("See the Create Resource", () => {
       expect.assertions(2);
       page.passwordCreate.focusInput(page.passwordCreate.password);
       await page.passwordCreate.click(page.passwordCreate.passwordGenerateButton);
-      expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
-      expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("Quality");
+      expect(page.passwordCreate.progressBar.classList.contains("error")).toBe(false);
     });
 
     it('views password when clicking on the view button.', async() => {
-      expect.assertions(6);
+      expect.assertions(8);
       const passwordValue = "secret-decrypted";
       page.passwordCreate.fillInput(page.passwordCreate.password, passwordValue);
       // View password
@@ -108,14 +109,16 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.password.value).toBe(passwordValue);
       let passwordInputType = page.passwordCreate.password.getAttribute("type");
       expect(passwordInputType).toBe("text");
-      expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(true);
+      expect(page.passwordCreate.passwordViewButton.classList.contains("eye-open")).toBe(false);
+      expect(page.passwordCreate.passwordViewButton.classList.contains("eye-close")).toBe(true);
 
       // Hide password
       await page.passwordCreate.click(page.passwordCreate.passwordViewButton);
       expect(page.passwordCreate.password.value).toBe(passwordValue);
       passwordInputType = page.passwordCreate.password.getAttribute("type");
       expect(passwordInputType).toBe("password");
-      expect(page.passwordCreate.passwordViewButton.classList.contains("selected")).toBe(false);
+      expect(page.passwordCreate.passwordViewButton.classList.contains("eye-open")).toBe(true);
+      expect(page.passwordCreate.passwordViewButton.classList.contains("eye-close")).toBe(false);
     });
 
     it('requests the addon to create a resource with encrypted description when clicking on the submit button.', async() => {

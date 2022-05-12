@@ -86,7 +86,7 @@ describe("As LU I should see the password import dialog", () => {
 
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.importFile.className).toBe("button primary disabled");
+        expect(page.importFile.getAttribute("disabled")).not.toBeNull();
         expect(page.importTag.getAttribute("disabled")).not.toBeNull();
         expect(page.importFolder.getAttribute("disabled")).not.toBeNull();
         expect(page.saveButton.getAttribute("disabled")).not.toBeNull();

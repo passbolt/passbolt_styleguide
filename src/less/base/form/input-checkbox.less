@@ -1,71 +1,70 @@
 .checkbox {
-    input[type=checkbox] {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
 
-        &.error {
-          color: @red;
-        }
+    input[type=checkbox] {
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        display: grid;
+        place-content: center;
+        cursor: pointer;
+        content: '';
+        width: 1.4rem;
+        height: 1.4rem;
+        background: @input-checkbox-background;
+        border: 1px solid @input-checkbox-border;
+        border-radius: .2rem;
+        box-sizing: border-box;
 
         & + label {
-            font-weight: normal;
-            position: relative;
+            flex: 1;
+            font-weight: 600;
+            margin: 0 0 0 1.2rem;
+            display: inline-block;
             cursor: pointer;
             padding: 0;
-            margin-bottom: .8rem;
-        }
-
-        // Box.
-        & + label:before {
-            content: '';
-            margin-top:.4rem;
-            margin-right: 1rem;
-            display: inline-block;
-            vertical-align: text-top;
-            width: 1.4rem;
-            height: 1.4rem;
-            background: @input-checkbox-background;
-            border: 1px solid @input-checkbox-border;
-            border-radius: .3rem;
-            box-sizing: border-box;
+            line-height: 2rem;
+            .ellipsis();
         }
 
         // Box hover
-        &:hover + label:before {
-            box-shadow: 0 .1rem 0 @shadow, inset 0 .1rem 0 rgba(255, 255, 255, .25);
+        &:hover {
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-checkbox-border;
+            border: none;
         }
 
-        // Box focus
-        &:focus + label:before {
-            box-shadow: 0 0 .4rem @input-checkbox-hover-border;
-            border: 1px solid @input-checkbox-hover-border;
+        // Box focus-visible
+        &:focus-visible {
+            box-shadow: 0 0 .4rem @shadow-focus;
+            border: 1px solid @input-checkbox-focus-border;
+            outline: 0;
         }
 
         // Box pressed
-        &:active + label:before {
-          box-shadow: inset 0 -.1rem 0 rgba(255, 255, 255, .25), inset 0 .1rem 0 @shadow;
+        &:active {
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-checkbox-border;
+          border: none;
         }
 
         // Disabled state label.
         &:disabled + label {
-            color: @button-disabled-border;
+            opacity: .5;
             cursor: auto;
         }
 
         // Disabled box.
-        &:disabled + label:before {
+        &:disabled {
+            cursor: default;
             box-shadow: none;
             background: @input-checkbox-background-disabled;
-            border: none;
+            border: 1px solid @input-checkbox-border-disabled;
         }
 
         // Checkmark. Could be replaced with an image
-        &:checked + label:after {
+        &:checked:before {
             content: '';
-            position: absolute;
-            left: .2rem;
-            top: .75rem;
             width: 1rem;
             height: 1rem;
             background-size: 1rem 1rem;
@@ -73,53 +72,8 @@
             -webkit-mask-image: @controls-check;
             mask-image: @controls-check;
         }
-        &:disabled + label:after {
+        &:disabled:before {
             background: @input-checkbox-image-disabled;
-        }
-    }
-}
-.checkbox.medium {
-  input[type=checkbox] {
-    cursor: pointer;
-    & + label {
-      font-size:1.5rem;
-    }
-    & + label:before {
-      margin-top:.3rem;
-      margin-right: 1rem;
-      width: 1.4rem;
-      height: 1.4rem;
-    }
-
-    &:checked + label:after {
-      left: .2rem;
-      top: .7rem;
-      width: 1rem;
-      height: 1rem;
-      background-size: 1rem 1rem;
-    }
-  }
-}
-
-.checkbox.small {
-    input[type=checkbox] {
-        cursor: pointer;
-        & + label {
-            font-size:1.4rem;
-        }
-        & + label:before {
-            margin-top:.3rem;
-            margin-right: 1rem;
-            width: 1.4rem;
-            height: 1.4rem;
-        }
-
-        &:checked + label:after {
-            left: .2rem;
-            top: .7rem;
-            width: 1rem;
-            height: 1rem;
-            background-size: 1rem 1rem;
         }
     }
 }

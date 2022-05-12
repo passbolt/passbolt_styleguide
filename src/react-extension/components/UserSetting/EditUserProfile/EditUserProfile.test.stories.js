@@ -14,6 +14,7 @@ const context = {
   userSettings: {
     getTrustedDomain: () => (new URL(window.location.href)).origin
   },
+  locale: "en-UK",
   siteSettings: {
     canIUse: () => true,
     supportedLocales: [

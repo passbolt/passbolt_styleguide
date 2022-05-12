@@ -22,6 +22,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withLoading} from "../../../contexts/LoadingContext";
 import {Trans, withTranslation} from "react-i18next";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows user to delete a user with conflict to reassign ownership of folders, resources and groups
@@ -443,6 +444,25 @@ class DeleteUserWithConflicts extends Component {
   }
 
   /**
+   * Get aco permission
+   * @param id
+   * @returns {*}
+   */
+  getAcoPermissionsList(id) {
+    const getLabel = permission => (permission.aro === "User" && this.getUserOptionLabel(permission.user)) || (permission.aro === "Group" && permission.group.name);
+    return this.acosPermissionsOptions[id]?.map(permission => ({value: permission.id, label: getLabel(permission)})) || [];
+  }
+
+  /**
+   * Get the users
+   * @param id
+   * @returns {*}
+   */
+  getGroupUsersList(id) {
+    return this.groupsGroupsUsersOptions[id]?.map(groupUser => ({value: groupUser.id, label: this.getUserOptionLabel(groupUser.user)})) || [];
+  }
+
+  /**
    * Get the user label displayed as option
    * @param {object} user
    */
@@ -493,16 +513,9 @@ class DeleteUserWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.foldersErrors.map(folderError =>
                   <li key={folderError.id}>
-                    <div className="input select required">
+                    <div className="select-wrapper input required">
                       <label htmlFor="transfer_folder_owner">{folderError.name} (<Trans>Folder</Trans>) <Trans>new owner</Trans>:</label>
-                      <select className="fluid form-element ready" value={this.state.owners[folderError.id]} onChange={event => this.handleOnChangeOwner(event, folderError.id)}>
-                        {this.acosPermissionsOptions[folderError.id].map(permission => (
-                          <option key={permission.id} value={permission.id}>
-                            {permission.aro === "User" && this.getUserOptionLabel(permission.user)}
-                            {permission.aro === "Group" && permission.group.name}
-                          </option>
-                        ))}
-                      </select>
+                      <Select className="form-element" value={this.state.owners[folderError.id]} items={this.getAcoPermissionsList(folderError.id)} onChange={event => this.handleOnChangeOwner(event, folderError.id)}/>
                     </div>
                   </li>
                 )}
@@ -515,16 +528,9 @@ class DeleteUserWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
-                    <div className="input select required">
+                    <div className="select-wrapper input required">
                       <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
-                      <select className="fluid form-element ready" value={this.state.owners[resourceError.id]} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}>
-                        {this.acosPermissionsOptions[resourceError.id].map(permission => (
-                          <option key={permission.id} value={permission.id}>
-                            {permission.aro === "User" && this.getUserOptionLabel(permission.user)}
-                            {permission.aro === "Group" && permission.group.name}
-                          </option>
-                        ))}
-                      </select>
+                      <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
                     </div>
                   </li>
                 )}
@@ -537,13 +543,9 @@ class DeleteUserWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.groupsErrors.map(groupError =>
                   <li key={groupError.id}>
-                    <div className="input select required">
+                    <div className="select-wrapper input required">
                       <label htmlFor="transfer_group_manager">{groupError.name} (<Trans>Group</Trans>) <Trans>new manager</Trans>:</label>
-                      <select className="fluid form-element ready" value={this.state.managers[groupError.id]} onChange={event => this.handleOnChangeManager(event, groupError.id)}>
-                        {this.groupsGroupsUsersOptions[groupError.id].map(groupUser => (
-                          <option key={groupUser.id} value={groupUser.id}>{this.getUserOptionLabel(groupUser.user)}</option>
-                        ))}
-                      </select>
+                      <Select className="form-element" value={this.state.managers[groupError.id]} items={this.getGroupUsersList(groupError.id)} onChange={event => this.handleOnChangeManager(event, groupError.id)}/>
                     </div>
                   </li>
                 )}
@@ -552,8 +554,8 @@ class DeleteUserWithConflicts extends Component {
             }
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
+            <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Delete")} warning={true}/>
           </div>
         </form>
       </DialogWrapper>

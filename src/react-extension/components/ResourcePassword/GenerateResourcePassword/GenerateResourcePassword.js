@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -26,7 +26,8 @@ import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
-import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import Password from "../../../../shared/components/Password/Password";
+import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 /**
  * This component generate password or passphrase following configuration
@@ -171,22 +172,6 @@ class GenerateResourcePassword extends Component {
    */
   render() {
     const passwordEntropy = SecretGenerator.entropy(this.state.password);
-    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
-    /*
-     * The parser can't find the translation for passwordStrength.label
-     * To fix that we can use it in comment
-     * this.translate("n/a")
-     * this.translate("very weak")
-     * this.translate("weak")
-     * this.translate("fair")
-     * this.translate("strong")
-     * this.translate("very strong")
-     *
-     * The parser can't find the translation for generator.name
-     * To fix that we can use it in comment
-     * this.translate("Password")
-     * this.translate("Passphrase")
-     */
     return (
       <>
         {!this.state.loading &&
@@ -199,58 +184,29 @@ class GenerateResourcePassword extends Component {
             <div className="form-content">
               <div className="input-password-wrapper input">
                 <label htmlFor="generate-resource-password-form-password"><Trans>Password</Trans></label>
-                <div className="input text password">
-                  <input
+                <div className="password-button-inline">
+                  <Password
                     id="generate-resource-password-form-password"
                     name="password"
-                    readOnly="readOnly"
-                    className="required"
+                    autoComplete="off"
+                    readOnly={true}
                     placeholder={this.translate("Password")}
-                    type={this.state.isObfuscated ? "password" : "text"}
+                    preview={true}
                     value={this.state.password}
                     onChange={this.handleInputChange}
-                    disabled={this.state.processing}
-                    autoComplete="off"/>
-                  <a
-                    onClick={this.handleViewPasswordToggle}
-                    className={`password-view button button-icon toggle ${this.state.isObfuscated ? "" : "selected"}`}>
-                    <Icon name='eye-open' big={true}/>
+                    disabled={this.state.processing}/>
+                  <a onClick={this.handleGeneratePassword} className="password-generate button-icon button">
+                    <Icon name='dice' big={true}/>
+                    <span className="visually-hidden">generate</span>
+                  </a>
+                  <a onClick={this.handleCopyPassword}
+                    className={`copy-to-clipboard button button-icon`}>
+                    <Icon name='copy-to-clipboard' big={true}/>
                     <span className="visually-hidden">view</span>
                   </a>
                 </div>
-                <ul className="actions inline">
-                  <li>
-                    <a onClick={this.handleGeneratePassword} className="password-generate button-icon button">
-                      <Icon name='magic-wand' big={true}/>
-                      <span className="visually-hidden">generate</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      onClick={this.handleCopyPassword}
-                      className={`copy-to-clipboard button button-icon`}>
-                      <Icon name='copy-to-clipboard' big={true}/>
-                      <span className="visually-hidden">view</span>
-                    </a>
-                  </li>
-                </ul>
-                <div className={`password-complexity ${passwordStrength.id}`}>
-                  <span className="progress">
-                    <span className={`progress-bar ${passwordStrength.id}`} />
-                  </span>
-                  <span className="complexity-text">
-                    <div>
-                      <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
-                    </div>
-                    <div>
-                      <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
-                    </div>
-
-                  </span>
-                </div>
+                <PasswordComplexity entropy={passwordEntropy}/>
               </div>
-
-              <br/>
 
               <Tabs activeTabName={this.state.generator.name}>
                 {this.generators.map(generator =>
@@ -274,8 +230,8 @@ class GenerateResourcePassword extends Component {
               </Tabs>
             </div>
             <div className="submit-wrapper clearfix">
-              <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing || this.isPasswordEmpty()} processing={this.state.processing}/>
               <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
+              <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing || this.isPasswordEmpty()} processing={this.state.processing}/>
             </div>
           </form>
         </DialogWrapper>

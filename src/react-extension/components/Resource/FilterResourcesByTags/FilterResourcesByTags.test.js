@@ -102,7 +102,7 @@ describe("See tags", () => {
       expect(page.sidebarTagFilterSection.errorDialogExist).toBeTruthy();
     });
 
-    it('As LU I filter the tags in the resources workspace primary sidebar by personal tag', async() => {
+    it.only('As LU I filter the tags in the resources workspace primary sidebar by personal tag', async() => {
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu.textContent).toBe("My tags");
       await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.personalTagMenu);
@@ -114,7 +114,7 @@ describe("See tags", () => {
       await page.title.click(page.title.filterButton);
       expect(page.sidebarTagFilterSectionsContextualMenu.allTagMenu.textContent).toBe("All tags");
       await page.sidebarTagFilterSectionsContextualMenu.click(page.sidebarTagFilterSectionsContextualMenu.allTagMenu);
-      expect(page.title.hyperlink.textContent).toBe("Filter by tags");
+      expect(page.title.hyperlink.textContent).toBe("Tags");
       expect(page.sidebarTagFilterSection.count()).toBe(5);
     });
 

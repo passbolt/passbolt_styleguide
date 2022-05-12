@@ -82,7 +82,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
    * Get the file input in the tab "Import"
    */
   get browseInput() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.import-organization-key .input-file-chooser-wrapper input');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.import-organization-key input[type="file"]');
   }
 
   /**
@@ -103,7 +103,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
    * Get the "Apply" button
    */
   get applyButton() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper input[type="submit"]');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper button[type="submit"]');
   }
 
   /**
@@ -154,7 +154,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   get generateButton() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper input[type="submit"]');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .submit-wrapper button[type="submit"]');
   }
 
   get generateTab() {
@@ -162,11 +162,11 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   get algorithmTooltip() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-algorithm"] .tooltip');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-algorithm"] .tooltip .tooltip-text');
   }
 
   get keySizeTooltip() {
-    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-keySize"] .tooltip');
+    return this._page.container.querySelector('.organization-recover-key-dialog.dialog-wrapper .form-content.generate-organization-key [for="generate-organization-key-form-keySize"] .tooltip .tooltip-text');
   }
 
   get nameFieldError() {

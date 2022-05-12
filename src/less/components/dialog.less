@@ -11,46 +11,45 @@
 .dialog {
   position: relative;
   max-width: 48rem;
-  border: 1px solid @border-default;
-  background: @background-lightest;
   margin: auto;
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 4.8rem;
-  .box-shadow();
+  background: @dialog-background;
+  border: 1px solid @dialog-border;
+  border-radius: .3rem;
+  box-sizing: border-box;
+  box-shadow: 0 1rem 1rem @dialog-box-shadow;
 
   /* header */
   .dialog-header {
-    padding: .8rem 1.6rem 0 1.6rem;
-    height: 4.8rem;
+    display: flex;
+    align-items: center;
+    padding: 1.6rem;
 
-    h2 {
-      margin: .8rem 0 1rem .4rem;
-      font-size: 1.8rem;
-      .ellipsis();
-    }
-
-    .dialog-header-subtitle {
-      padding-top: .4rem;
-      padding-left: .8rem;
-      font-size: 1.4rem;
-      color: @font-default;
-    }
-
-    .tooltip-alt {
-      margin-left: .8rem;
-      font-size: 1.2rem;
-      font-weight: normal;
-      color: @font-default;
-      line-height: 1em;
-
-      .tooltip-text {
-        white-space: normal;
+    .dialog-title-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      width: 90%;
+      h2 {
+        margin: 0;
+        font-size: 1.9rem;
+        line-height: 2.6rem;
+        .ellipsis();
       }
-    }
 
-    .dialog-close {
-      margin-top: -3.6rem;
+      .dialog-header-subtitle {
+        padding-top: .4rem;
+        padding-left: .8rem;
+        font-size: 1.4rem;
+        line-height: 2rem;
+      }
+
+      .tooltip {
+        margin-left: 1rem;
+        line-height: 0;
+      }
     }
   }
 
@@ -58,32 +57,16 @@
   .form-content,
   .dialog-body {
     background: @background-default;
-    padding: 1rem 2rem 2.4rem 2rem;
-  }
+    padding: 1.6rem;
 
-  .error-message {
-    margin-bottom: 1rem;
-  }
-
-  p {
-    margin-top: .8rem;
-    font-size: 1.5rem;
-    /* 15px */
-  }
-
-  p+.checkbox {
-    padding-bottom: .8rem;
-
-    & label {
-      font-size: 1.6rem;
+    // all direct child element
+    & > * {
+      margin-bottom: 1.6rem;
     }
-  }
 
-  /* form input resizing */
-  label {
-    clear: both;
-    font-size: 1.5rem;
-    /* 15px */
+    label {
+      letter-spacing: -0.045em;
+    }
   }
 
   input[type=text],
@@ -119,42 +102,18 @@
   /* submit / cancel */
   .submit-wrapper,
   .dialog-footer {
-    margin: 0;
-    clear: both;
-    width: 100%;
-    padding: 1.2rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 1.6rem;
 
-    .cancel,
-    .button {
-      float: right;
-      margin-right: 1.6rem;
-    }
-
-    .button {
-      box-sizing: border-box;
-      min-width: 8rem;
-    }
-
-    .primary {
-      font-size: 1.8rem;
-      padding: 1.2rem 2.4rem;
-    }
-
-    .cancel {
-      margin-top: .7em;
-      font-size: 1.6rem;
-    }
-  }
-
-  .dialog-footer {
     .button-left {
-      float: left;
-      margin-left: 1.6rem;
       margin-right: auto;
     }
 
     .cancel {
-      margin-top: 0;
+      margin-left: auto;
+      margin-right: 1.6rem;
     }
   }
 
@@ -164,54 +123,31 @@
       margin-left: -0.15em;
       padding-right: 0.15em;
     }
-  
+
     a, a:hover, a:visited {
       color: @message-notice-color;
     }
-  } 
+  }
 }
 
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close {
-
-  &,
-  &:hover {
+  margin-left: 1rem;
+  padding: 0;
+  &, &:hover {
     display: block;
-    float: right;
-    border: 0;
-  }
-
-  &:active {
-    .rounded();
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
-  }
-
-  .fa-close {
-    padding-top: 15px;
-    width: 30px;
-    height: 15px;
-    text-align: center;
-    display: block;
-    line-height: 0;
-    border: 1px solid @background-lighter;
-    .rounded();
+    border: none;
   }
 
   .svg-icon {
-    padding: 7px 0 7px 0;
-    width: 30px;
-    height: 15px;
+    padding: .65rem;
+    width: 2.4rem;
+    height: 2.4rem;
     text-align: center;
     display: block;
-    line-height: 15px;
-    border: 1px solid @background-lighter;
-    .rounded();
-  }
-
-  &:hover .fa-close,
-  &:hover .svg-icon {
-    border: 1px solid @background-light;
-    .rounded();
+    line-height: 1.2rem;
+    border: none;
+    box-sizing: border-box;
   }
 }
 

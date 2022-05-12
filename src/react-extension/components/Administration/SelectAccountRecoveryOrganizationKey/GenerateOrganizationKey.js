@@ -15,15 +15,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import XRegExp from "xregexp";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {SecretGeneratorComplexity} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
+import Password from "../../../../shared/components/Password/Password";
+import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -58,15 +59,6 @@ class GenerateOrganizationKey extends React.Component {
       password: "",
       passwordError: "",
       passwordWarning: "",
-      passphraseStyle: {
-        background: "",
-        color: ""
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      },
-      viewPassword: false,
       hasAlreadyBeenValidated: false // True if the form has already been submitted once
     };
   }
@@ -79,10 +71,7 @@ class GenerateOrganizationKey extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handleEmailInputKeyUp = this.handleEmailInputKeyUp.bind(this);
-    this.handlePasswordInputFocus = this.handlePasswordInputFocus.bind(this);
-    this.handlePasswordInputBlur = this.handlePasswordInputBlur.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
-    this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
   }
 
   /**
@@ -168,16 +157,6 @@ class GenerateOrganizationKey extends React.Component {
   }
 
   /**
-   * Handle view password button click.
-   */
-  handleViewPasswordButtonClick() {
-    if (this.state.processing) {
-      return;
-    }
-    this.setState({viewPassword: !this.state.viewPassword});
-  }
-
-  /**
    * Validate the password input.
    * @return {Promise}
    */
@@ -204,38 +183,6 @@ class GenerateOrganizationKey extends React.Component {
     const target = event.target;
     this.setState({
       [target.name]: target.value
-    });
-  }
-
-  /**
-   * Handle password input focus.
-   */
-  handlePasswordInputFocus() {
-    this.setState({
-      passphraseStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenTextColor(),
-        color: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-      }
-    });
-  }
-
-  /**
-   * Handle password input blur.
-   */
-  handlePasswordInputBlur() {
-    this.setState({
-      passphraseStyle: {
-        background: "",
-        color: ""
-      },
-      securityTokenStyle: {
-        background: this.props.context.userSettings.getSecurityTokenBackgroundColor(),
-        color: this.props.context.userSettings.getSecurityTokenTextColor(),
-      }
     });
   }
 
@@ -350,17 +297,6 @@ class GenerateOrganizationKey extends React.Component {
    */
   render() {
     const passwordEntropy = SecretGenerator.entropy(this.state.password);
-    const passwordStrength = SecretGeneratorComplexity.strength(passwordEntropy);
-    /*
-     * The parser can't find the translation for passwordStrength.label
-     * To fix that we can use it in comment
-     * this.translate("n/a")
-     * this.translate("very weak")
-     * this.translate("weak")
-     * this.translate("fair")
-     * this.translate("strong")
-     * this.translate("very strong")
-     */
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
         <div className="form-content generate-organization-key">
@@ -383,21 +319,23 @@ class GenerateOrganizationKey extends React.Component {
               <div className="email error-message">{this.state.emailError}</div>
             }
           </div>
-          <div className="input select">
+          <div className="input select-wrapper">
             <label htmlFor="generate-organization-key-form-algorithm">
               <Trans>Algorithm</Trans>
-              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}
-                icon="info-circle" />
+              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
+                <Icon name="info-circle"/>
+              </Tooltip>
             </label>
             <input id="generate-organization-key-form-algorithm" name="algorithm" value={this.state.algorithm}
               className="fluid" type="text"
               autoComplete="off" disabled={true} />
           </div>
-          <div className="input select">
+          <div className="input select-wrapper">
             <label htmlFor="generate-organization-key-form-keySize">
               <Trans>Key Size</Trans>
-              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}
-                icon="info-circle" />
+              <Tooltip message={this.translate("Algorithm and key size cannot be changed at the moment. These are secure default")}>
+                <Icon name="info-circle"/>
+              </Tooltip>
             </label>
             <input id="generate-organization-key-form-key-size" name="keySize" value={this.state.keySize}
               className="fluid" type="text"
@@ -405,43 +343,18 @@ class GenerateOrganizationKey extends React.Component {
           </div>
           <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
             <label htmlFor="generate-organization-key-form-password"><Trans>Organization key passphrase</Trans></label>
-            <div className="input text password">
-              <input id="generate-organization-key-form-password" name="password" className="required" maxLength="4096"
-                placeholder={this.translate("Passphrase")} required="required" type={this.state.viewPassword ? "text" : "password"}
-                onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
-                onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
-                onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
-                autoComplete="new-password"
-                ref={this.passwordInputRef} />
-              <a onClick={this.handleViewPasswordButtonClick}
-                className={`password-view button button-icon toggle ${this.state.viewPassword ? "selected" : ""}`}>
-                <Icon name='eye-open' big={true} />
-                <span className="visually-hidden">view</span>
-              </a>
-              <span className="security-token" style={this.state.securityTokenStyle}>{this.props.context.userSettings.getSecurityTokenCode()}</span>
-            </div>
-            <div className={`password-complexity ${passwordStrength.id}`}>
-              <span className="progress">
-                <span className={`progress-bar ${passwordStrength.id}`} />
-              </span>
-              <span className="complexity-text">
-                <div>
-                  <Trans>Complexity:</Trans> <strong>{this.translate(passwordStrength.label)}</strong>
-                </div>
-                <div>
-                  <Trans>Entropy:</Trans> <strong>{passwordEntropy.toFixed(1)} bits</strong>
-                </div>
-              </span>
-            </div>
+            <Password id="generate-organization-key-form-password" name="password"
+              placeholder={this.translate("Passphrase")} autoComplete="new-password" preview={true}
+              securityToken={this.props.context.userSettings.getSecurityToken()}
+              onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
+              onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
+              inputRef={this.passwordInputRef}/>
+            <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
             {this.state.passwordError &&
-              <div className="input text">
                 <div className="password error-message">{this.state.passwordError}</div>
-              </div>
             }
             {this.state.passwordWarning &&
-              <div className="input text">
                 <div className="password warning message">{this.state.passwordWarning}</div>
-              </div>
             }
           </div>
         </div>
@@ -453,8 +366,8 @@ class GenerateOrganizationKey extends React.Component {
           </div>
         }
         <div className="submit-wrapper clearfix">
-          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Generate & Apply")} />
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
+          <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Generate & Apply")} />
         </div>
       </form>
     );

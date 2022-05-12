@@ -19,5 +19,5 @@ Initial.args = {
 };
 
 Initial.parameters = {
-  css: "api_main"
+  css: "ext_quickaccess"
 };

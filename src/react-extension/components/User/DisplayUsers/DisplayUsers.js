@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import ReactList from "react-list";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
@@ -113,8 +113,6 @@ class DisplayUsers extends React.Component {
    * @param user An user
    */
   handleCheckboxWrapperClick(event, user) {
-    // Prevent event fired twice due to the input + label
-    event.preventDefault();
     /*
      * We want the td to extend the clickable area of the checkbox.
      * If we propagate the event, the tr will listen to the click and select only the clicked row.
@@ -282,16 +280,10 @@ class DisplayUsers extends React.Component {
         className={rowClassName}
         onClick={event => this.handleUserSelected(event, user)}
         onContextMenu={event => this.handleUserRightClick(event, user)}>
-        <td
-          className="cell-multiple-select selections s-cell"
-          onClick={ev => this.handleCheckboxWrapperClick(ev, user)}>
-          <div className="ready">
-            <div className="input checkbox">
-              <input type="checkbox" id={`checkbox_multiple_select_checkbox_${user.id}`} checked={isSelected} readOnly={true}/>
-              <label htmlFor={`checkbox_multiple_select_checkbox_${user.id}`}>
-                <span className="visually-hidden"><Trans>Select user</Trans></span>
-              </label>
-            </div>
+        <td className="cell-multiple-select selections s-cell">
+          <div className="input checkbox">
+            <input type="checkbox" id={`checkbox_multiple_select_checkbox_${user.id}`} checked={isSelected} readOnly={true} onClick={ev => this.handleCheckboxWrapperClick(ev, user)}/>
+            <span className="visually-hidden"><Trans>Select user</Trans></span>
           </div>
         </td>
         {this.hasAttentionRequiredColumn() &&
@@ -376,12 +368,8 @@ class DisplayUsers extends React.Component {
                   <tr>
                     <th className="cell-multiple-select selections s-cell">
                       <div className="input checkbox">
-                        <input
-                          type="checkbox"
-                          name="select all"/>
-                        <label htmlFor="js-passwords-select-all">
-                          <span className="visually-hidden">select all</span>
-                        </label>
+                        <input type="checkbox" name="select all" checked={false} readOnly={true}/>
+                        <span className="visually-hidden">select all</span>
                       </div>
                     </th>
                     {this.hasAttentionRequiredColumn() &&

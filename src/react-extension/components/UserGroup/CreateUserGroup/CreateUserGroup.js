@@ -23,9 +23,10 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../Common/Icons/Icon";
-import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import Select from "../../Common/Select/Select";
 
 class CreateUserGroup extends Component {
   /**
@@ -150,7 +151,7 @@ class CreateUserGroup extends Component {
    */
   handleSelectUpdate(event, userId) {
     const target = event.target;
-    const is_admin = target.value === "true";
+    const is_admin = target.value === true;
     const groups_users = Object.assign(this.state.groups_users);
     const index = groups_users.findIndex(groups_user => groups_user.user.id === userId);
     groups_users[index] = Object.assign(groups_users[index], {is_admin});
@@ -416,12 +417,36 @@ class CreateUserGroup extends Component {
   }
 
   /**
-   * get fingerprint
+   * Format fingerprint
    * @param fingerprint
-   * @returns {string}
+   * @returns {JSX.Element}
    */
-  getFingerprint(fingerprint) {
-    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+  formatFingerprint(fingerprint) {
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+  }
+
+  /**
+   * Get the tooltip message
+   * @param groups_user The groups user
+   * @returns {JSX.Element}
+   */
+  getTooltipMessage(groups_user) {
+    return <>
+      <div className="email"><strong>{groups_user.user.username}</strong></div>
+      <div className="fingerprint">{this.formatFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
+    </>;
+  }
+
+  /**
+   * Get permissions
+   * @returns {[{label: *, value: boolean}]}
+   */
+  get permissions() {
+    return [
+      {value: false, label: this.translate("Member")},
+      {value: true, label: this.translate("Group manager")}
+    ];
   }
 
   /**
@@ -469,26 +494,22 @@ class CreateUserGroup extends Component {
                     <div className="aro">
                       <div className="aro-name">
                         <span className="ellipsis">{this.getUserFullname(groups_user.user)}</span>
-                        <TooltipHtml>
-                          <div className="email"><strong>{groups_user.user.username}</strong></div>
-                          <div className="fingerprint">{this.getFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
-                        </TooltipHtml>
+                        <Tooltip message={this.getTooltipMessage(groups_user)}>
+                          <Icon name="info-circle"/>
+                        </Tooltip>
                       </div>
                       <div className="permission_changes">
                         <span><Trans>Will be added</Trans></span>
                       </div>
                     </div>
-                    <div className="select rights">
-                      <select value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
-                        onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}>
-                        <option value="false">{this.translate("Member")}</option>
-                        <option value="true">{this.translate("Group manager")}</option>
-                      </select>
+                    <div className="rights">
+                      <Select className="inline" items={this.permissions} value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
+                        onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}/>
                     </div>
                     <div className="actions">
-                      <a className={`remove-item ${this.hasAllInputDisabled() ? "disabled" : ""}`}
+                      <a className={`remove-item button button-transparent ${this.hasAllInputDisabled() ? "disabled" : ""}`}
                         onClick={event => this.handleDeleteClickEvent(event, groups_user.user.id)} role="button">
-                        <Icon name='close-circle'/>
+                        <Icon name='close'/>
                         <span className="visually-hidden">Remove</span>
                       </a>
                     </div>
@@ -529,8 +550,8 @@ class CreateUserGroup extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
+            <FormSubmitButton disabled={this.hasSubmitDisabled()} processing={this.state.processing} value={this.translate("Save")}/>
           </div>
         </form>
       </DialogWrapper>

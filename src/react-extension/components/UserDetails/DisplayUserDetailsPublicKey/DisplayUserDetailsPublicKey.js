@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -210,6 +210,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
           {isLoading &&
           <ul>
             <li className="processing-wrapper">
+              <Icon name="spinner"/>
               <span className="processing-text"><Trans>Retrieving public key</Trans></span>
             </li>
           </ul>
@@ -236,9 +237,9 @@ class DisplayUserDetailsPublicKey extends React.Component {
               <span className="label"><Trans>Public key</Trans></span>
               <span className="value">
                 <a
-                  className="button copy-public-key"
+                  className="button button-icon copy-public-key"
                   onClick={this.handlePublicKeyCopy}>
-                  <span><Trans>Copy</Trans></span>
+                  <Icon name="copy-to-clipboard"/>
                 </a>
               </span>
             </li>

@@ -68,7 +68,7 @@ export default class dragContextProvider extends React.Component {
    */
   async handleDragStart(event, draggedItemComponent, draggedItems) {
     await this.setState({displayDraggedItemsComponent: [{draggedItemComponent}], dragging: true, draggedItems});
-    event.dataTransfer.setDragImage(this.elementRef.current, 5, 5);
+    event.dataTransfer.setDragImage(this.elementRef.current, 10, 10);
   }
 
   /**
@@ -85,7 +85,7 @@ export default class dragContextProvider extends React.Component {
   render() {
     return (
       <DragContext.Provider value={this.state}>
-        <div ref={this.elementRef}>
+        <div className="drag-and-drop-wrapper" ref={this.elementRef}>
           {this.state.displayDraggedItemsComponent.map((displayDraggedItemComponent, index) =>
             <displayDraggedItemComponent.draggedItemComponent
               key={index}/>

@@ -27,6 +27,7 @@ export function defaultAppContextProEdition(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
     siteSettings: new SiteSettings(siteSettingsFixture),
+    setContext: () => jest.fn()
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

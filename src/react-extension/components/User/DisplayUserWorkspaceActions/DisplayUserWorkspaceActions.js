@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import EditUser from "../EditUser/EditUser";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -394,27 +394,27 @@ class DisplayUserWorkspaceActions extends React.Component {
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           {this.isLoggedInUserAdmin() &&
-          <ul className="ready">
+          <ul>
             <li>
-              <a className={`button ready ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
+              <a className={`button ${this.isButtonDisabled() ? "disabled" : ""}`} onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
                 <span><Trans>Edit</Trans></span>
               </a>
             </li>
             <li>
-              <a className={`button ready ${!this.canDelete ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
+              <a className={`button ${!this.canDelete ? "disabled" : ""}`} onClick={this.handleDeleteClickEvent}>
                 <Icon name="trash"/>
                 <span><Trans>Delete</Trans></span>
               </a>
             </li>
             <div className="dropdown" ref={this.moreMenuRef}>
               <a
-                className={`button ready ${this.hasMoreActionAllowed ? "" : "disabled"}`}
+                className={`button more ${this.state.moreMenuOpen ? "open" : ""} ${this.hasMoreActionAllowed ? "" : "disabled"}`}
                 onClick={this.handleMoreClickEvent}>
                 <span><Trans>More</Trans></span>
                 <Icon name="caret-down"/>
               </a>
-              <ul className={`dropdown-content menu ready ${this.state.moreMenuOpen ? "visible" : ""}`}>
+              <ul className={`dropdown-content menu right ${this.state.moreMenuOpen ? "visible" : ""}`}>
                 <li id="copy-user-permalink" className="separator-after">
                   <div className="row">
                     <div className="main-cell-wrapper">
@@ -459,7 +459,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                 </li>
                 }
                 {this.canIReviewAccountRecoveryRequest() &&
-                <li key="review-recovery-user" className="ready">
+                <li key="review-recovery-user">
                   <div className="row">
                     <div className="main-cell-wrapper">
                       <div className="main-cell">
@@ -480,7 +480,7 @@ class DisplayUserWorkspaceActions extends React.Component {
           }
         </div>
         <div className="actions secondary">
-          <ul className="ready">
+          <ul>
             <li>
               <a
                 className={`button button-toggle info ${this.hasDetailsLocked() ? "selected" : ""}`}

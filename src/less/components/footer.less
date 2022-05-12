@@ -6,23 +6,41 @@
   position: fixed;
   bottom: 0;
   text-align: right;
-  font-size: 1.2rem; /* 12px */
   width: 100%;
-  height: 3.8rem;
-  background: @background-default;
+  background: @background-footer;
   border-top: 1px solid @border-default;
+  box-sizing: border-box;
   z-index: 890;
 
   .footer-links {
-    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 2.4rem;
+    padding: .8rem 0;
     width: 100%;
     li {
-      display: inline;
-      margin-right: 1.5em;
+      display: flex;
+      line-height: 1.6rem;
+
+      &:last-child {
+        margin-right: 3.2rem;
+      }
 
       &.error-message a {
-        background-color:@background-default;
+        background-color:@background-footer;
         color: @font-error;
+      }
+
+      a {
+        font-size: 1.2rem; /* 12px */
+        line-height: 1.6rem; /* 16px */
+        letter-spacing: -0.045em;
+
+        .svg-icon svg {
+          width: 1.4rem;
+          height: 1.2rem;
+        }
       }
     }
   }

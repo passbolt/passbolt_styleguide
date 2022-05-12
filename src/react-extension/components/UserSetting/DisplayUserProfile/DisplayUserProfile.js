@@ -17,7 +17,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
 import {Trans, withTranslation} from "react-i18next";
@@ -99,7 +99,7 @@ class DisplayUserProfile extends React.Component {
       <div className="grid grid-responsive-12 profile-detailed-information">
         {this.user &&
         <div className="row">
-          <div className="profile col6">
+          <div className="profile col6 main-column">
             <h3><Trans>Profile</Trans></h3>
             <table className="table-info profile">
               <tbody>
@@ -127,7 +127,7 @@ class DisplayUserProfile extends React.Component {
             </table>
             {this.canIUseLocale &&
             <>
-              <h3><Trans>Internationalisation</Trans></h3>
+              <h4><Trans>Internationalisation</Trans></h4>
               <table className="table-info profile">
                 <tbody>
                   <tr className="locale">
@@ -139,23 +139,24 @@ class DisplayUserProfile extends React.Component {
             </>
             }
           </div>
-          <div className="avatar col6 last">
-            <h3><Trans>Avatar</Trans></h3>
-            <div className="avatar">
-              <div className="value">
-                <UserAvatar
-                  user={this.props.context.loggedInUser}
-                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                  className=""/>
-              </div>
-              <div className="edit">
-                <a
-                  className="edit-avatar-action"
+          <div className="col5 secondary-column last">
+            <div className="sidebar">
+              <h3><Trans>Avatar</Trans></h3>
+              <div className="avatar">
+                <div className="value">
+                  <UserAvatar
+                    user={this.props.context.loggedInUser}
+                    baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                    className=""/>
+                </div>
+                <button
+                  className="button edit-avatar-action"
                   title="Change Avatar"
+                  type="button"
                   onClick={this.handleUploadPicture}>
-                  <Icon name="camera"/>
+                  <Icon name="upload"/>
                   <span className="help-text"><Trans>Upload a new avatar picture</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>

@@ -66,7 +66,7 @@ export default class DisplayInternationalizationAdministrationPage {
    * Returns the locale selected input element
    */
   get localeSelected() {
-    return this._page.container.querySelector('#locale-input').value;
+    return this._page.container.querySelector('#locale-input .value').textContent;
   }
 
   /**
@@ -76,16 +76,23 @@ export default class DisplayInternationalizationAdministrationPage {
     return this.internationalisationSettings !== null;
   }
 
-  /** change the value on the element */
-  async change(element, value) {
-    const data = {target: {value: value}};
-    fireEvent.change(element, data);
+  /**
+   * Returns the locale input element
+   */
+  getLocaleList(index) {
+    return this._page.container.querySelectorAll('#locale-input .option')[index - 1];
+  }
+
+  /** click on the element */
+  async click(element) {
+    fireEvent.click(element);
     await waitFor(() => {
     });
   }
 
-  /** select the french locale */
+  /** select the french language */
   async selectLanguageFr() {
-    await this.change(this.locale, 'fr-FR');
+    await this.click(this.locale);
+    await this.click(this.getLocaleList(2));
   }
 }

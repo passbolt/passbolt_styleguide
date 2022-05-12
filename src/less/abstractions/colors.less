@@ -1,7 +1,8 @@
 /* palette */
-@white: #FFF;
-@black: #333;
-@blacker: #000;
+@white: #FFFFFF;
+@black: #262626;
+@blacker: #000000;
+@dark-charcoal: #333333;
 
 @blue-light: #2A9CEB;
 @blue: #2894DF;
@@ -12,25 +13,52 @@
 @green-lightest: #EDF7EB;
 @green-light: #66CC00;
 @green: #009900;
+@islamic-green: #0EAA00;
 
-@yellow-lightest: #FFFAE7;
+@yellow-lightest: #FFDBA6;
 @yellow-light: #FEF0BF;
 @yellow: #FFBD2E;
+@bright-yellow: #FFA724;
+
 @orange-light: #DD6A00;
 @orange: #9F6000;
 
 @red: #D40101;
 @red-light: #DB5454;
 @red-dark: #92000C;
+@dark-candy-apple-red: #A40000;
+@light-salmon-pink: #FFA6A6;
 
 @grey-darkest: #666;
 @grey-darker: #888888;
+@gray: #808080;
 @grey-dark: #969696;
+@grey-1: #A1A1A1;
 @grey-2: #BBB;
-@grey-3: #CCC;
-@grey: #DDD;
-@grey-lighter: #EEE;
+@grey-3: #C4C4C4;
+@gainsboro: #DDDDDD;
+@gainsboro-2: #DEDEDE;
+@gainsboro-3: #DCDCDC;
+@chinese-silver: #CCCCCC;
+@grey: #E0E0E0;
+@quick-silver: #A0A0A0;
+@grey-lighter: #F8F8F8;
 @grey-lightest: #F3F3F3;
+@spanish-gray: #989693;
+@sonic-silver: #7A7A7A;
+@bright-gray: #EEEEEE;
+@bright-gray-2: #EBEBE9;
+@bright-gray-3: #E9E9E9;
+@gray-x11: #BDBDBD;
+@light-silver: #D7D7D7;
+@gray-2: #7C7C7C;
+@lotion: #FAFAFA;
+@gray-3: #80807E;
+@anti-flash-white: #F0F0F0;
+@azureish-white: #DDEBF8;
+@platinum: #E8E8E8;
+@cultured: #F5F5F5;
+@davys-grey: #5D5D5D;
 
 /* borders */
 @border-lightest: @grey-lightest;
@@ -42,9 +70,18 @@
 @border-input-light: @grey-2;
 @border-focus: @blue;
 @border-focus-dark: @blue-dark;
+@border-attention-required: @orange-light;
+@border-link-default: @chinese-silver;
+@border-link-focus: @blue;
+
+/* Inform menu */
+@inform-menu-hover-background: @bright-gray-3;
+@inform-menu-active-background: @azureish-white;
+@inform-menu-border: @grey;
 
 /* font */
-@font-default: @black;
+@font-default: @blacker;
+@font-header-first: @bright-gray-2;
 @font-dim: @grey-darkest;
 @font-light: @grey-darker;
 @font-lighter: @grey-dark;
@@ -57,6 +94,11 @@
 @font-inverse-background: @grey-darkest;
 @font-success: @black;
 @font-notice: @black;
+@font-dropdown-focus: @white;
+@font-tooltip: @white;
+@font-drag: @white;
+@font-hover-secret: @red;
+@font-focus-navigation: @white;
 
 /* background */
 @background-default: @white;
@@ -64,30 +106,55 @@
 @background-light: @grey;
 @background-lighter: @grey-lighter;
 @background-lightest: @grey-lightest;
+@background-header-first: @dark-charcoal;
+@background-header-second: @bright-gray;
+@background-focus: @blue;
+@background-footer: @bright-gray;
+
+/* quickaccess */
+@quickaccess-header-background: @bright-gray;
+@quickaccess-footer-background: @bright-gray;
+@quickaccess-back-link-background: @cultured;
+@quickaccess-list-title-background: @cultured;
+@quickaccess-list-title-hover-background: @bright-gray-3;
+@quickaccess-list-title-active-background: @azureish-white;
+@quickaccess-border: @grey;
+@quickaccess-font-property-name: @davys-grey;
 
 @background-error: lighten(@red, 53%);
 @background-success: @green-lightest;
 @background-warning: @yellow-light;
 @background-updated: @yellow-lightest;
-@background-notice: lighten(@blue, 40%);
+@background-notice: @platinum;
 @background-overlay: rgba(255, 255, 255, 0.9);
-@background-splash: @background-lightest;
+@background-splash: @grey-lightest;
+@background-tooltip: @spanish-gray;
+@background-drag: @gray;
+@background-drag-number: @red;
+
+/* dialog */
+@dialog-background: @bright-gray;
+@dialog-border: @light-silver;
+@dialog-box-shadow: rgba(0, 0, 0, 0.1);
+@dialog-divider-border: @grey;
+
+/* autocomplete */
+@autocomplete-background: @white;
+@autocomplete-hover-background: @gainsboro-2;
+@autocomplete-border: @gray-x11;
 
 /* buttons */
 @button-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
 @button-primary-text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-.button-background() {
-  background: @background-lightest;
-}
-.button-hover-background() {
-    background: @background-lighter;
-}
 
-@button-border: @border-input;
-@button-border-bottom: @button-border;
-@button-border-top: @button-border;
-@button-border-left: @button-border;
-@button-border-right: @button-border;
+@button-background: @grey-lighter;
+@button-active-background: @gainsboro-2;
+@button-border: @grey;
+@button-focus-border: @blue;
+
+@button-icon-background: @bright-gray;
+@button-icon-active-background: @grey;
+@button-icon-border: @gray-x11;
 
 @button-primary-background: @blue;
 @button-primary-border: @blue;
@@ -95,6 +162,14 @@
 @button-primary-hover-background: @blue-light;
 @button-primary-hover-border: @blue-light;
 @button-primary-hover-color: @font-inverse;
+@button-primary-focus: @blue-light;
+
+@button-warning-background: @red;
+@button-warning-border: @red;
+@button-warning-color: @font-inverse;
+
+@button-transparent-background: rgba(@white, .1);
+@button-transparent-border: rgba(@blacker, .05);
 
 @button-disabled-color: @font-light;
 @button-disabled-background: @white;
@@ -106,19 +181,74 @@
 /* box shadows */
 @shadow: @background-light;
 @shadow-dark: @background-dark;
+@shadow-opacity-hover-black: 0.2;
+@shadow-opacity-hover-white: 0.25;
+@shadow-opacity-active-white: 0.35;
+@shadow-opacity-active-black: 0.35;
+@shadow-opacity-dropdown: 0.1;
+@shadow-opacity-select: 0.1;
+@shadow-opacity-panel-info: 0.3;
+@shadow-focus: @blue-light;
+@shadow-drag: @gray;
+
+/* Navigation menu */
+@navigation-menu-hover-background: @gainsboro-3;
 
 /* dropdown menus */
-@dropdown-background: @background-default;
-@dropdown-item-hover-background: @background-lighter;
+@dropdown-background: @grey-lighter;
+@dropdown-profile-background: @white;
+@dropdown-focus-background: @blue;
+@dropdown-item-hover-background: @gainsboro-3;
 
 /* inputs */
 @input-background: @white;
 @input-background-disabled: @grey-lightest;
+@input-infield-background: @grey-lighter;
+@input-border: @gray-x11;
+@input-infield-border: @grey;
+@input-focus-border: @blue;
+/* checkbox */
 @input-checkbox-background: @white;
 @input-checkbox-background-disabled: @grey-3;
-@input-checkbox-image-disabled: @grey-dark;
-@input-checkbox-border: @grey;
-@input-checkbox-hover-border: @blue-light;
+@input-checkbox-image-disabled: @grey-1;
+@input-checkbox-border: @quick-silver;
+@input-checkbox-border-disabled: @grey-3;
+@input-checkbox-focus-border: @blue;
+/* radio */
+@input-radio-background: @white;
+@input-radio-dot-background: @blue-light;
+@input-radio-background-disabled: @grey-3;
+@input-radio-dot-background-disabled: @grey-1;
+@input-radio-border: @quick-silver;
+@input-radio-border-disabled: @grey-3;
+@input-radio-focus-border: @blue;
+/* toggle */
+@input-toggle-background: @gray;
+@input-toggle-focus-background: @blue;
+@input-toggle-dot-background: @white;
+@input-toggle-checked-background: @green;
+@input-toggle-focus-border: @blue;
+/* select */
+@select-background: @grey-lighter;
+@select-setup-extension-background: @white;
+@select-hover-background: @gainsboro;
+@select-focus-background: @blue;
+@select-focus-font: @white;
+@select-border: @grey;
+@select-focus-border: @blue;
+/* range */
+@input-range-background: @chinese-silver;
+@input-range-dot-background: @grey-lightest;
+@input-range-dot-border: @chinese-silver;
+
+/* progress bar */
+@background-progress-bar-default: @gray-x11;
+@background-progress-bar: @red;
+
+/* complexity */
+@complexity-color: @gray-2;
+@complexity-bar-background-default: @gray-x11;
+@complexity-bar-background-gradient: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
 
 /* logos */
 @logourl: url('@{images}/logo/logo.svg');
@@ -132,28 +262,44 @@
 @passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
 
 /* grid */
-@tableview-background: @background-default;
-@tableview-background-hover: lighten(@background-lightest,2);
-@tableview-background-selected: @yellow-lightest;
-@tableview-header-background: @background-default;
-@breadcrumb-background: @background-default;
+@tableview-background: @white;
+@tableview-background-even: @lotion;
+@tableview-background-hover: @bright-gray-3;
+@tableview-background-selected: @azureish-white;
+@tableview-header-background: @bright-gray;
+@tableview-shadow: @white;
+@breadcrumb-background: @lotion;
+@grid-border: @grey;
 
 /* messages */
-@message-error-color: @font-default;
-@message-error-background: @background-error;
-@message-success-color: @font-default;
-@message-success-background: @background-success;
-@message-notice-color: @font-default;
+@message-error-color: @blacker;
+@message-error-background: @light-salmon-pink;
+@message-success-color: @blacker;
+@message-success-background: @green-lightest;
+@message-notice-color: @blacker;
 @message-notice-background: @background-notice;
-@message-warning-color: @font-default;
-@message-warning-background: @background-warning;
+@message-warning-color: @blacker;
+@message-warning-background: @yellow-lightest;
 
 /* sidebar */
-@panel-background: lighten(@background-default, 10);
+@panel-background: @lotion;
+@panel-middle-background: @lotion;
 @sidebar-background: @background-default;
 @sidebar-border: @border-lightest;
 @sidebar-section-background: @background-default;
 @sidebar-section-header-background: @background-default;
+
+/* panel info */
+@panel-info-header-icon-background: @anti-flash-white;
+@panel-info-header-icon-color: @gray-2;
+@panel-info-header-subtitle-font-color: @gray-3;
+@panel-info-background: @white;
+@panel-info-content-background: @white;
+@panel-info-notice-background: @azureish-white;
+@panel-info-border: @grey;
+
+/* comment */
+@comment-background: @bright-gray;
 
 /* secret placeholder */
 @controls-dot:url('@{images}/controls/dot_black.svg');
@@ -169,8 +315,9 @@
 @table-row-even-background: @background-default;
 
 /* tabs */
-@tab-selected-background: @background-default;
-@tab-unselected-background: @background-lighter;
+@tab-selected-background: @white;
+@tab-unselected-background: @light-silver;
+@tab-border: @light-silver;
 
 /* tags */
 @tag-color: @blue;
@@ -192,10 +339,33 @@
 @scrollbar-track: #C1C1C1;
 
 /* svg fill */
-@fill-color: @black;
-@fill-light-color: @grey-darker;
-@fill-hover-color: @black;
+@icon-color: @blacker;
+@icon-background-color: @white;
+@icon-color-button-primary: @white;
+@icon-background-color-button-primary: @blacker;
+@icon-color-button-warning: @white;
+@icon-background-color-button-warning: @blacker;
+@fill-hover-color: @blacker;
 
 /* favorite icon fill */
-@favorite-fill-color: @red;
-@unfavorite-fill-color: @grey;
+@icon-favorite-color: @red;
+@icon-unfavorite-color: @gainsboro;
+
+/* exclamation icon fill */
+@icon-exclamation-required-color: @orange-light;
+@icon-exclamation-default-color: @gainsboro;
+@icon-exclamation-color: @white;
+
+/* spinner icon fill */
+@spinner-color: @sonic-silver;
+@spinner-background: @blacker;
+@spinner-color-button-primary: @white;
+@spinner-background-button-primary: @white;
+@spinner-color-button-warning: @white;
+@spinner-background-button-warning: @white;
+
+/* failed icon fill */
+@icon-failed-color: @red;
+
+/* success icon fill */
+@icon-success-color: @green;

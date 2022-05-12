@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import XRegExp from "xregexp";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 
@@ -409,134 +409,121 @@ class DisplayMfaAdministration extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="mfa-settings col7">
-          <form className="form ready">
-            <div className="provider-section totp">
-              <h3>
-                <span className="input toggle-switch form-element ready">
-                  <input id="totp-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="totpProviderToggle"
-                    onChange={this.handleInputChange} checked={this.state.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
-                  <label className="toggle-switch-button" htmlFor="totp-provider-toggle-button"/>
-                </span>
-                <label><Trans>Time-based One Time Password</Trans></label>
-              </h3>
-              {!this.isOtpProviderChecked() &&
-              <p className="description">
-                <Trans>The Time-based One Time Password provider is disabled for all users.</Trans>
-              </p>
-              }
-              {this.isOtpProviderChecked() &&
-              <p className="description">
-                <Trans>The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
-              </p>
-              }
-            </div>
-            <div className="provider-section yubikey">
-              <h3>
-                <span className="input toggle-switch form-element">
-                  <input id="yubikey-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="yubikeyToggle"
-                    onChange={this.handleInputChange} checked={this.state.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
-                  <label className="toggle-switch-button" htmlFor="yubikey-provider-toggle-button"/>
-                </span>
-                <label>Yubikey</label>
-              </h3>
-              {!this.isYubikeyChecked() &&
-              <p className="description">
-                <Trans>The Yubikey provider is disabled for all users.</Trans>
-              </p>
-              }
-              {this.isYubikeyChecked() &&
-              <div>
-                <p className="description">
-                  <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
-                </p>
-                <div className="form-content">
-                  <div className={`input text required ${this.state.yubikeyClientIdentifierError ? "error" : ""}`}>
-                    <label><Trans>Client identifier</Trans></label>
-                    <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
-                      onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
-                    {this.state.yubikeyClientIdentifierError &&
-                    <div className="yubikey_client_identifier error-message">{this.state.yubikeyClientIdentifierError}</div>
-                    }
-                  </div>
-                  <div className={`input text required ${this.state.yubikeySecretKeyError ? "error" : ""}`}>
-                    <label><Trans>Secret key</Trans></label>
-                    <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
-                      onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
-                    {this.state.yubikeySecretKeyError &&
-                    <div className="yubikey_secret_key error-message">{this.state.yubikeySecretKeyError}</div>
-                    }
-                  </div>
-                </div>
-              </div>
+        <div className="mfa-settings col7 main-column">
+          <h3>Multi Factor Authentication</h3>
+          <p><Trans>In this section you can choose which multi factor authentication will be available.</Trans></p>
+          <h4 className="no-border">
+            <span className="input toggle-switch form-element ready">
+              <input id="totp-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="totpProviderToggle"
+                onChange={this.handleInputChange} checked={this.state.totpProviderToggle} disabled={this.hasAllInputDisabled()}/>
+              <label htmlFor="totp-provider-toggle-button"><Trans>Time-based One Time Password</Trans></label>
+            </span>
+          </h4>
+          {!this.isOtpProviderChecked() &&
+          <p className="description">
+            <Trans>The Time-based One Time Password provider is disabled for all users.</Trans>
+          </p>
+          }
+          {this.isOtpProviderChecked() &&
+          <p className="description">
+            <Trans>The Time-based One Time Password provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
+          </p>
+          }
+          <h4>
+            <span className="input toggle-switch form-element">
+              <input id="yubikey-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="yubikeyToggle"
+                onChange={this.handleInputChange} checked={this.state.yubikeyToggle} disabled={this.hasAllInputDisabled()}/>
+              <label htmlFor="yubikey-provider-toggle-button">Yubikey</label>
+            </span>
+          </h4>
+          {!this.isYubikeyChecked() &&
+          <p className="description">
+            <Trans>The Yubikey provider is disabled for all users.</Trans>
+          </p>
+          }
+          {this.isYubikeyChecked() &&
+          <>
+            <p className="description">
+              <Trans>The Yubikey provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
+            </p>
+            <div className={`input text required ${this.state.yubikeyClientIdentifierError ? "error" : ""}`}>
+              <label><Trans>Client identifier</Trans></label>
+              <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
+                onChange={this.handleInputChange} value={this.state.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
+              {this.state.yubikeyClientIdentifierError &&
+              <div className="yubikey_client_identifier error-message">{this.state.yubikeyClientIdentifierError}</div>
               }
             </div>
-            <div className="provider-section duo">
-              <h3>
-                <span className="input toggle-switch form-element ready">
-                  <input id="duo-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="duoToggle"
-                    onChange={this.handleInputChange} checked={this.state.duoToggle} disabled={this.hasAllInputDisabled()}/>
-                  <label className="toggle-switch-button" htmlFor="duo-provider-toggle-button"/>
-                </span>
-                <label>Duo</label>
-              </h3>
-              {!this.isDuoChecked() &&
-              <p className="description">
-                <Trans>The Duo provider is disabled for all users.</Trans>
-              </p>
-              }
-              {this.isDuoChecked() &&
-              <div>
-                <p className="description enabled">
-                  <Trans>The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
-                </p>
-                <div className="form-content">
-                  <div className={`input text required ${this.state.duoHostnameError ? "error" : ""}`}>
-                    <label><Trans>Hostname</Trans></label>
-                    <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
-                      placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
-                      onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                    {this.state.duoHostnameError &&
-                    <div className="duo_hostname error-message">{this.state.duoHostnameError}</div>
-                    }
-                  </div>
-                  <div className={`input text required ${this.state.duoIntegrationKeyError ? "error" : ""}`}>
-                    <label><Trans>Integration key</Trans></label>
-                    <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
-                      placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
-                      onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                    {this.state.duoIntegrationKeyError &&
-                    <div className="duo_integration_key error-message">{this.state.duoIntegrationKeyError}</div>
-                    }
-                  </div>
-                  <div className={`input text required ${this.state.duoSaltError ? "error" : ""}`}>
-                    <label><Trans>Salt</Trans></label>
-                    <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
-                      value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                    {this.state.duoSaltError &&
-                    <div className="duo_salt error-message">{this.state.duoSaltError}</div>
-                    }
-                  </div>
-                  <div className={`input text required ${this.state.duoSecretKeyError ? "error" : ""}`}>
-                    <label><Trans>Secret key</Trans></label>
-                    <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
-                      value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                    {this.state.duoSecretKeyError &&
-                    <div className="duo_secret_key error-message">{this.state.duoSecretKeyError}</div>
-                    }
-                  </div>
-                </div>
-              </div>
+            <div className={`input text required ${this.state.yubikeySecretKeyError ? "error" : ""}`}>
+              <label><Trans>Secret key</Trans></label>
+              <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
+                onChange={this.handleInputChange} value={this.state.yubikeySecretKey} disabled={this.hasAllInputDisabled()}/>
+              {this.state.yubikeySecretKeyError &&
+              <div className="yubikey_secret_key error-message">{this.state.yubikeySecretKeyError}</div>
               }
             </div>
-          </form>
+          </>
+          }
+          <h4>
+            <span className="input toggle-switch form-element ready">
+              <input id="duo-provider-toggle-button" type="checkbox" className="toggle-switch-checkbox checkbox" name="duoToggle"
+                onChange={this.handleInputChange} checked={this.state.duoToggle} disabled={this.hasAllInputDisabled()}/>
+              <label htmlFor="duo-provider-toggle-button">Duo</label>
+            </span>
+          </h4>
+          {!this.isDuoChecked() &&
+          <p className="description">
+            <Trans>The Duo provider is disabled for all users.</Trans>
+          </p>
+          }
+          {this.isDuoChecked() &&
+          <>
+            <p className="description enabled">
+              <Trans>The Duo provider is enabled for all users. They can setup this provider in their profile and use it as second factor authentication.</Trans>
+            </p>
+            <div className={`input text required ${this.state.duoHostnameError ? "error" : ""}`}>
+              <label><Trans>Hostname</Trans></label>
+              <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
+                placeholder="api-24zlkn4.duosecurity.com" value={this.state.duoHostname}
+                onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
+              {this.state.duoHostnameError &&
+              <div className="duo_hostname error-message">{this.state.duoHostnameError}</div>
+              }
+            </div>
+            <div className={`input text required ${this.state.duoIntegrationKeyError ? "error" : ""}`}>
+              <label><Trans>Integration key</Trans></label>
+              <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
+                placeholder="HASJKDSQJO213123KQSLDF" value={this.state.duoIntegrationKey}
+                onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
+              {this.state.duoIntegrationKeyError &&
+              <div className="duo_integration_key error-message">{this.state.duoIntegrationKeyError}</div>
+              }
+            </div>
+            <div className={`input text required ${this.state.duoSaltError ? "error" : ""}`}>
+              <label><Trans>Salt</Trans></label>
+              <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
+                value={this.state.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
+              {this.state.duoSaltError &&
+              <div className="duo_salt error-message">{this.state.duoSaltError}</div>
+              }
+            </div>
+            <div className={`input text required ${this.state.duoSecretKeyError ? "error" : ""}`}>
+              <label><Trans>Secret key</Trans></label>
+              <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
+                value={this.state.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
+              {this.state.duoSecretKeyError &&
+              <div className="duo_secret_key error-message">{this.state.duoSecretKeyError}</div>
+              }
+            </div>
+          </>
+          }
         </div>
         <div className="col4 last">
           <div className="sidebar-help">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out our Multi Factor Authentication configuration guide.</Trans></p>
             <a className="button" href="https://help.passbolt.com/configure" target="_blank" rel="noopener noreferrer">
-              <Icon name="life-ring"/>
+              <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>

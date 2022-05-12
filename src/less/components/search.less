@@ -1,40 +1,12 @@
 /* search */
 form.search {
-    margin-top: 1.6rem;
+    margin-top: 2.8rem;
+    max-width: 64rem;
 
     legend, label {
         display: none;
         width: 16rem;
     }
-    input[type=search] {
-        float: left;
-        width: 65%;
-        margin-bottom: 0;
-        border-right:1px solid @background-default;
-        padding: .5rem 1rem;
-    }
-
-    input[type=search]:focus,
-    input[type=search]:active {
-        border-right:1px solid @blue;
-    }
-    button {
-        height: 3.6rem; /* 36px */
-        width: 6.5rem;
-        float: left;
-        margin-left: 0;
-        border-radius: 0 2px 2px 0;
-
-        .svg-icon svg {
-            top: .1rem;
-        }
-    }
-}
-
-/* remove webkit search input decoration and cancel button */
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button {
-    display: none;
 }
 
 /* rescale on small screen */

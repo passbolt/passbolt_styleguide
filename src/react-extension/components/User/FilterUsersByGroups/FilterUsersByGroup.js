@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Fragment} from "react";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -44,7 +44,9 @@ class FilterUsersByGroup extends React.Component {
     return {
       open: true, // open the group section
       title: this.translate("All groups"), // title of the section
-      filterType: null // type of the filter selected
+      filterType: null, // type of the filter selected
+      moreTitleMenuOpen: false, // more title menu open
+      moreMenuOpenGroupId: null // more menu open for a group with the id
     };
   }
 
@@ -54,10 +56,12 @@ class FilterUsersByGroup extends React.Component {
   bindCallbacks() {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.handleTitleMoreClickEvent = this.handleTitleMoreClickEvent.bind(this);
+    this.handleCloseTitleMoreMenu = this.handleCloseTitleMoreMenu.bind(this);
     this.handleTitleContextualMenuEvent = this.handleTitleContextualMenuEvent.bind(this);
     this.handleFilterGroupType = this.handleFilterGroupType.bind(this);
     this.handleGroupSelected = this.handleGroupSelected.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
+    this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
   }
 
@@ -84,7 +88,19 @@ class FilterUsersByGroup extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleTitleMoreClickEvent(event) {
-    this.showContextualMenu(event.pageY, event.pageX);
+    const moreTitleMenuOpen = !this.state.moreTitleMenuOpen;
+    this.setState({moreTitleMenuOpen});
+    if (moreTitleMenuOpen) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      this.showContextualMenu(top + 18, left, "right");
+    }
+  }
+
+  /**
+   * Close the title more menu
+   */
+  handleCloseTitleMoreMenu() {
+    this.setState({moreTitleMenuOpen: false});
   }
 
   /**
@@ -134,10 +150,24 @@ class FilterUsersByGroup extends React.Component {
    * @param group An user group
    */
   handleMoreClickEvent(event, group) {
-    const top = event.pageY;
-    const left = event.pageX;
-    const contextualMenuProps = {group, left, top};
-    this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
+    const moreMenuOpenGroupId = this.state.moreMenuOpenGroupId === group.id ? null : group.id;
+    this.setState({moreMenuOpenGroupId});
+    if (moreMenuOpenGroupId) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const onBeforeHide = this.handleCloseMoreMenu;
+      const contextualMenuProps = {group, left, top: top + 18, className: "right", onBeforeHide};
+      this.props.contextualMenuContext.show(DisplayGroupContextualMenu, contextualMenuProps);
+    }
+  }
+
+  /**
+   * Close the more menu with the group id
+   * @param {string} id The group id
+   */
+  handleCloseMoreMenu(id) {
+    if (this.state.moreMenuOpenGroupId === id) {
+      this.setState({moreMenuOpenGroupId: null});
+    }
   }
 
   // Zero conditional statements
@@ -202,10 +232,12 @@ class FilterUsersByGroup extends React.Component {
    * Show the contextual menu
    * @param {int} left The left position to display the menu
    * @param {int} top The top position to display the menu
+   * @param {string} className The class name to display the menu
    */
-  showContextualMenu(top, left) {
+  showContextualMenu(top, left, className = "") {
     const onFilterSelected = this.handleFilterGroupType;
-    const contextualMenuProps = {left, onFilterSelected, top};
+    const onBeforeHide = this.handleCloseTitleMoreMenu;
+    const contextualMenuProps = {left, onFilterSelected, onBeforeHide, top, className};
     this.props.contextualMenuContext.show(FilterUsersByGroupContextualMenu, contextualMenuProps);
   }
 
@@ -278,21 +310,23 @@ class FilterUsersByGroup extends React.Component {
                 <div className="main-cell">
                   <h3>
                     <span className="folders-label" onClick={this.handleTitleClickEvent}>
-                      <Fragment>
-                        {this.state.open &&
-                        <Icon name="caret-down"/>
-                        }
-                        {!this.state.open &&
-                        <Icon name="caret-right"/>
-                        }
-                      </Fragment>
-                      <span onContextMenu={this.handleTitleContextualMenuEvent}>{this.state.title}</span>
+                      <a role="button" onContextMenu={this.handleTitleContextualMenuEvent}>
+                        <>
+                          {this.state.open &&
+                            <Icon name="caret-down"/>
+                          }
+                          {!this.state.open &&
+                            <Icon name="caret-right"/>
+                          }
+                        </>
+                        {this.state.title}
+                      </a>
                     </span>
                   </h3>
                 </div>
               </div>
-              <div className="right-cell more-ctrl">
-                <a className="filter" onClick={this.handleTitleMoreClickEvent}><Icon name="filter"/></a>
+              <div className="dropdown right-cell more-ctrl">
+                <a className={`button ${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></a>
               </div>
             </div>
           </li>
@@ -301,6 +335,7 @@ class FilterUsersByGroup extends React.Component {
         <div className="accordion-content">
           {this.isLoading() &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving groups</Trans></span>
           </div>
           }
@@ -312,25 +347,26 @@ class FilterUsersByGroup extends React.Component {
             {this.filteredGroups.map(group =>
               <li className="node root group-item" key={group.id}>
                 <div className={`row  ${this.isSelected(group) ? "selected" : ""}`}>
-                  <div className="main-cell-wrapper">
+                  <div className="main-cell-wrapper"
+                    onClick={event => this.handleGroupSelected(event, group)}
+                    onContextMenu={event => this.handleContextualMenuEvent(event, group)}>
                     <div className="main-cell">
                       <a
-                        title={group.name}
-                        onClick={event => this.handleGroupSelected(event, group)}
-                        onContextMenu={event => this.handleContextualMenuEvent(event, group)}>
+                        title={group.name}>
+                        <Icon name="users"/>
                         <span className="ellipsis">{group.name}</span>
                       </a>
                     </div>
-                    {this.canShowMore(group) &&
-                    <div className="right-cell more-ctrl">
+                  </div>
+                  {this.canShowMore(group) &&
+                    <div className="dropdown right-cell more-ctrl">
                       <a
                         onClick={event => this.handleMoreClickEvent(event, group)}
-                        className="more">
-                        <Icon name="plus-square"/>
+                        className={`button ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
+                        <Icon name="3-dots-h"/>
                       </a>
                     </div>
-                    }
-                  </div>
+                  }
                 </div>
               </li>
             )

@@ -39,6 +39,7 @@ class DisplayGroupContextualMenu extends React.Component {
   bindCallbacks() {
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleEditGroup = this.handleEditGroup.bind(this);
+    this.handleHide = this.handleHide.bind(this);
   }
 
   /**
@@ -70,7 +71,7 @@ class DisplayGroupContextualMenu extends React.Component {
         this.handleError(error);
       }
     }
-    this.props.hide();
+    this.handleHide();
   }
 
   /**
@@ -115,6 +116,16 @@ class DisplayGroupContextualMenu extends React.Component {
   async handleEditGroup() {
     await this.props.userWorkspaceContext.onGroupToEdit(this.props.group);
     this.props.dialogContext.open(EditUserGroup);
+    this.handleHide();
+  }
+
+  /**
+   * Handle hide contextual menu
+   */
+  handleHide() {
+    if (typeof this.props.onBeforeHide === 'function') {
+      this.props.onBeforeHide(this.props.group.id);
+    }
     this.props.hide();
   }
 
@@ -133,9 +144,10 @@ class DisplayGroupContextualMenu extends React.Component {
   render() {
     return (
       <ContextualMenuWrapper
-        hide={this.props.hide}
+        hide={this.handleHide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className={this.props.className}>
         <li key="option-filter-all-groups" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -172,9 +184,11 @@ class DisplayGroupContextualMenu extends React.Component {
 DisplayGroupContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
+  onBeforeHide: PropTypes.func, // On before hide callback
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
-  group: PropTypes.object,
+  group: PropTypes.object, // The group
+  className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any, // The dialog context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   t: PropTypes.func, // The translation function

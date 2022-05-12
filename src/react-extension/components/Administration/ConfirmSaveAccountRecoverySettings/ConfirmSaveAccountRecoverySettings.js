@@ -18,6 +18,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {withAppContext} from "../../../contexts/AppContext";
 import {DateTime} from "luxon";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 class ConfirmSaveAccountRecoverySettings extends Component {
   /**
@@ -223,19 +224,14 @@ class ConfirmSaveAccountRecoverySettings extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <button className={`button button-left ${this.isProcessing ? "disabled" : ''}`} type="button">{this.translate("Learn More")}</button>
+            <FormCancelButton
+              onClick={this.handleClose}
+              disabled={this.isProcessing}/>
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.isProcessing}
               processing={this.isProcessing}
               warning={true}/>
-            <button
-              className={`button cancel ${this.isProcessing ? "disabled" : ''}`}
-              role="button"
-              type="button"
-              onClick={this.handleClose}
-              disabled={this.isProcessing}>
-              <span><Trans>Cancel</Trans></span>
-            </button>
           </div>
         </form>
       </DialogWrapper>

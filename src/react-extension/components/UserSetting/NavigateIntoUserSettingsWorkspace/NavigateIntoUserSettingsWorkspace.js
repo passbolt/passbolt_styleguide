@@ -18,7 +18,7 @@ import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace

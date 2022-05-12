@@ -15,8 +15,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../Common/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * The component display variations.
@@ -52,8 +52,6 @@ class Login extends Component {
       actions: {
         processing: false // True if one's processing passphrase
       },
-      isObfuscated: true, // True if the passphrase should not be visible
-      hasPassphraseFocus: false, // The password input has focus
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
@@ -111,51 +109,6 @@ class Login extends Component {
   }
 
   /**
-   * Returns the security token code of the suer
-   */
-  get securityTokenCode() {
-    return this.props.userSettings?.getSecurityTokenCode()
-      ||  this.props.account?.security_token?.code;
-  }
-
-  /**
-   * Get security token color
-   * @return {string}
-   */
-  get securityTokenColor() {
-    return this.props.userSettings?.getSecurityTokenBackgroundColor()
-      || this.props.account?.security_token?.color;
-  }
-
-  /**
-   * Get security token text color
-   * @return {string}
-   */
-  get securityTokenTextColor() {
-    return this.props.userSettings?.getSecurityTokenTextColor()
-      || this.props.account?.security_token?.textcolor;
-  }
-
-  /**
-   * Returns the style of the security token (color and text color)
-   */
-  get securityTokenStyle() {
-    const inverseStyle =  {background: this.securityTokenTextColor, color: this.securityTokenColor};
-    const fullStyle =  {background: this.securityTokenColor, color: this.securityTokenTextColor};
-    return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
-  }
-
-  /**
-   * Get the passphrase input style.
-   * @return {Object}
-   */
-  get passphraseInputStyle() {
-    const emptyStyle =  {background: "", color: ""};
-    const fullStyle =  {background: this.securityTokenColor, color: this.securityTokenTextColor};
-    return this.state.hasPassphraseFocus ? fullStyle : emptyStyle;
-  }
-
-  /**
    * Returns the trusted domain
    */
   get trustedDomain() {
@@ -170,9 +123,6 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
-    this.handleFocusPassphrase = this.handleFocusPassphrase.bind(this);
-    this.handleBlurPassphrase = this.handleBlurPassphrase.bind(this);
-    this.handleToggleObfuscate = this.handleToggleObfuscate.bind(this);
   }
 
   /**
@@ -180,6 +130,20 @@ class Login extends Component {
    */
   createReferences() {
     this.passphraseInputRef = React.createRef();
+  }
+
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
+   * Put the focus on the passphrase input
+   */
+  focusOnPassphrase() {
+    this.passphraseInputRef.current.focus();
   }
 
   /**
@@ -211,31 +175,10 @@ class Login extends Component {
   }
 
   /**
-   * Whenever the user focus on the passphrase input
-   */
-  handleFocusPassphrase() {
-    this.setState({hasPassphraseFocus: true});
-  }
-
-  /**
-   * Whenever the user blurs on the passphrase input
-   */
-  handleBlurPassphrase() {
-    this.setState({hasPassphraseFocus: false});
-  }
-
-  /**
    * Whenever the user tosggles the remember me flag
    */
   async handleToggleRememberMe() {
     await this.toggleRememberMe();
-  }
-
-  /**
-   * Whenever one wants to toggle the obfusctated mode
-   */
-  handleToggleObfuscate() {
-    this.toggleObfuscate();
   }
 
   /**
@@ -313,13 +256,6 @@ class Login extends Component {
   }
 
   /**
-   * Toggle the obfuscate mode of the passphrase view
-   */
-  toggleObfuscate() {
-    this.setState({isObfuscated: !this.state.isObfuscated});
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -341,37 +277,21 @@ class Login extends Component {
         </div>
 
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
-          <div className={`input text required ${this.hasErrors ? "error" : ""}`}>
+          <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""}`}>
             <label htmlFor="passphrase">
               <Trans>Passphrase</Trans>
             </label>
-            <div className="password with-token">
-              <input
-                id="passphrase"
-                ref={this.passphraseInputRef}
-                type={this.state.isObfuscated ? "password" : "text"}
-                name="passphrase"
-                placeholder={this.translate('Passphrase')}
-                className="login-passphrase-input"
-                style={this.passphraseInputStyle}
-                value={this.state.passphrase}
-                onChange={this.handleChangePassphrase}
-                onFocus={this.handleFocusPassphrase}
-                onBlur={this.handleBlurPassphrase}
-                disabled={!this.areActionsAllowed}
-                autoFocus={true}
-                autoComplete="off"/>
-              <a
-                className={`password-view button-icon button button-toggle ${this.state.isObfuscated ? "" : "selected"}`}
-                role="button"
-                onClick={this.handleToggleObfuscate}>
-                <Icon name="eye-open"/>
-                <span className="visually-hidden">view</span>
-              </a>
-              <span className="security-token" style={this.securityTokenStyle}>
-                {this.securityTokenCode}
-              </span>
-            </div>
+            <Password
+              id="passphrase"
+              autoComplete="off"
+              inputRef={this.passphraseInputRef}
+              name="passphrase"
+              placeholder={this.translate('Passphrase')}
+              value={this.state.passphrase}
+              onChange={this.handleChangePassphrase}
+              disabled={!this.areActionsAllowed}
+              preview={true}
+              securityToken={this.props.userSettings.getSecurityToken()}/>
             {this.state.hasBeenValidated &&
             <>
               {this.state.errors.emptyPassphrase &&

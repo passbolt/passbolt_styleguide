@@ -3,7 +3,11 @@ a {
     outline: 0;
     text-decoration: none;
     cursor: pointer;
-    border-bottom: 1px solid @border-default;
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    letter-spacing: -0.045em;
+    border-bottom: 1px solid @border-link-default;
 
     &:link, &:visited {
         color: @font-default;
@@ -12,21 +16,19 @@ a {
         text-decoration: none;
         cursor: pointer;
         color: @font-focus;
-        border-bottom: 1px solid @border-focus;
+        border-bottom: 1px solid @border-link-focus;
     }
     &:active, &:focus {
         outline: 0;
         color: @font-focus;
-        border: 0;
-    }
-    &.no-border, &:hover.no-border {
-        border-bottom:0;
+        border: none;
     }
     &.disabled {
         outline: 0;
         text-decoration: none;
         cursor: default;
-        color: @grey-darker;
+        color: @font-default;
+        opacity: .5;
         pointer-events: none;
     }
 }

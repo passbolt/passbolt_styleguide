@@ -20,10 +20,10 @@ import {withDialog} from "../../../contexts/DialogContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import Icon from "../../Common/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * This component is the second step of the export dialog when the file to import is KDB(X) file
@@ -45,7 +45,7 @@ class ExportResourcesCredentials extends Component {
    */
   get defaultState() {
     return {
-      showPassword: false, // True if the password should be textually displayed
+      password: '', // The current password
       keyFile: null, // The optional key file
       actions: {
         processing: false // Actions flag about processing
@@ -57,9 +57,9 @@ class ExportResourcesCredentials extends Component {
    * Bind component handlers
    */
   bindHandlers() {
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectFile = this.handleSelectFile.bind(this);
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.handlePasswordViewToggled = this.handlePasswordViewToggled.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -94,13 +94,6 @@ class ExportResourcesCredentials extends Component {
   }
 
   /**
-   * Handle the password view mode toggle
-   */
-  async handlePasswordViewToggled() {
-    await this.setState({showPassword: !this.state.showPassword});
-  }
-
-  /**
    * Handle the selection of a file by file explorer
    */
   handleSelectFile() {
@@ -114,6 +107,20 @@ class ExportResourcesCredentials extends Component {
   async handleFileSelected(event) {
     const [keyFile] = event.target.files;
     await this.setState({keyFile});
+  }
+
+  /**
+   * Handle input change
+   * @param event
+   */
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
   }
 
   /**
@@ -139,7 +146,7 @@ class ExportResourcesCredentials extends Component {
    * Export the resource file
    */
   async export() {
-    const password = this.passwordInputRef.current.value;
+    const password = this.state.password;
     const keyfile = await this.readFile();
     const options = {credentials: {password, keyfile}};
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
@@ -232,53 +239,47 @@ class ExportResourcesCredentials extends Component {
 
           <div className="form-content">
 
-            <div className="input-password-wrapper">
+            <div className="input-password-wrapper input">
               <label htmlFor="password"><Trans>Keepass password</Trans></label>
-              <div className="input text password">
-                <input id="password"
-                  type={this.state.showPassword ? "text" : "password"}
-                  placeholder={this.translate("Passphrase")}
-                  ref={this.passwordInputRef}
-                  disabled={!this.areActionsAllowed}
-                  autoComplete="off"/>
-                <a
-                  onClick={this.handlePasswordViewToggled}
-                  className={`password-view button button-icon toggle ${this.state.showPassword ? "selected" : ""} ${!this.areActionsAllowed ? "disabled" : ""}`}>
-                  <Icon name="eye-open" big={true}/>
-                  <span className="visually-hidden">view</span>
-                </a>
-              </div>
+              <Password id="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleInputChange}
+                placeholder={this.translate("Passphrase")}
+                autoComplete="off"
+                inputRef={this.passwordInputRef}
+                preview={true}
+                disabled={!this.areActionsAllowed}/>
             </div>
 
-            <div className="input-file-chooser-wrapper">
-              <div className="input text">
-                <input type="file"
-                  ref={this.fileUploaderRef}
-                  onChange={this.handleFileSelected}/>
-                <label><Trans>Keepass key file (optional)</Trans></label>
-                <div className="input-file-inline">
-                  <input type="text"
-                    placeholder={this.translate("No key file selected")}
-                    disabled
-                    value={this.selectedFilename}/>
-                  <a className={`button primary ${!this.areActionsAllowed ? "disabled" : ""}`}
-                    onClick={this.handleSelectFile}>
-                    <Icon name="upload-a"/>
-                    <span><Trans>Choose a file</Trans></span>
-                  </a>
-                </div>
+            <div className={`input file ${!this.areActionsAllowed ? "disabled" : ""}`}>
+              <input type="file"
+                ref={this.fileUploaderRef}
+                id="dialog-exports-passwords"
+                onChange={this.handleFileSelected}/>
+              <label htmlFor="dialog-exports-passwords"><Trans>Keepass key file (optional)</Trans></label>
+              <div className="input-file-inline">
+                <input type="text"
+                  placeholder={this.translate("No key file selected")}
+                  disabled
+                  value={this.selectedFilename}/>
+                <button type='button' className="button primary"
+                  disabled={!this.areActionsAllowed}
+                  onClick={this.handleSelectFile}>
+                  <span><Trans>Choose a file</Trans></span>
+                </button>
               </div>
             </div>
           </div>
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              disabled={!this.areActionsAllowed}
+              onClick={this.handleCancel}/>
             <FormSubmitButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
               value={this.translate("Export")}/>
-            <FormCancelButton
-              disabled={!this.areActionsAllowed}
-              onClick={this.handleCancel}/>
           </div>
         </form>
       </DialogWrapper>

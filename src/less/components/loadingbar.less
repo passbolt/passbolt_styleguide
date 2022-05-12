@@ -1,66 +1,37 @@
 /* Small Progress bar */
 .progress-bar {
-    background: transparent;
+    background: @background-progress-bar-default;
     width: 100%;
-    height: 2px;
+    height: .3rem;
     display: block;
-}
+    border-radius: .2rem;
 
-.progress-bar span {
-    background: @red;
-    height: 2px;
-    display: block;
-}
-
-/* larger progress bar */
-.progress-bar-wrapper {
-    border: 1px solid @border-default;
-    height: 10px;
-    display: block;
-    margin: 2em 0 1em 0;
-    padding: 2px;
-
-    .progress-bar.big {
-        width: 100%;
-        height: 10px;
+    .progress {
+        background: @background-progress-bar;
+        width: 0;
+        height: .3rem;
         display: block;
-        clear: both;
+        border-radius: .2rem;
+        transition: width 500ms linear;
 
-        .progress {
-            background: @red;
-            width: 5%;
-            display: block;
-            height: 10px;
+        &.completed {
+            transition: none; // Remove the transition to display the progress bar completed before the dialog being closed
         }
-
-        /* indefinite loading */
-        &.infinite {
-            background: @red;
-
-            .progress {
-                width: 100%;
-                overflow: hidden;
-                background: url('@{images}/controls/infinite-bar.gif') repeat-x;
-                -moz-opacity: 0.5;
-                -khtml-opacity: 0.5;
-                opacity: 0.5;
-                -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=5);
-                filter: progid:DXImageTransform.Microsoft.Alpha(opacity=5);
-                filter: alpha(opacity=5);
-
-            }
-        }
-
     }
-
 }
 
 .progress-details {
-    color: @font-light;
-    margin: 0.5em 0 .5em 0;
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    letter-spacing: -0.045em;
+    margin: 0.5rem 0 .5rem 0;
     .progress-percent {
         float: right;
     }
+}
+
+.progress-bar-wrapper {
+  margin: 3rem 0 2rem 0;
 }
 
 /*
@@ -71,7 +42,7 @@
     position: fixed;
     display: block;
     width: 100%;
-    bottom: 2.35em;
+    bottom: 3.4rem;
     z-index: 991;
 
     .progress-bar span {

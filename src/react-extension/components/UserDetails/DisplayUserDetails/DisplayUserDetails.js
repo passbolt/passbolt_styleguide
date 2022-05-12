@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";

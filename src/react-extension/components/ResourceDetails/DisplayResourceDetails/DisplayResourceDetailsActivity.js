@@ -17,7 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 
@@ -488,6 +488,7 @@ class DisplayResourceDetailsActivity extends React.Component {
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
+            <Icon name="spinner"/>
             <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }

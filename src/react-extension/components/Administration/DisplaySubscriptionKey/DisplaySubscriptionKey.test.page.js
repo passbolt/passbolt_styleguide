@@ -66,14 +66,14 @@ export default class DisplaySubscriptionKeyPage {
    * Returns the enew Key button element
    */
   get renewKeyButton() {
-    return this._page.container.querySelector('.subscription-information a.button');
+    return this._page.container.querySelector('.subscription-information button');
   }
 
   /**
    * Returns the contact us element
    */
   get contactUs() {
-    return this._page.container.querySelectorAll('.subscription-information a')[1];
+    return this._page.container.querySelector('.subscription-information a');
   }
 
   /**

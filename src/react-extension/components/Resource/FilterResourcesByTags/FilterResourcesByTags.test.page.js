@@ -123,7 +123,7 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the filter
    */
   get filterButton() {
-    return this._container.querySelector('.filter');
+    return this._container.querySelector('.row.title .dropdown.right-cell.more-ctrl a');
   }
 
   /** Click on the component */
@@ -168,7 +168,7 @@ class SidebarTagFilterSectionPageObject {
    * Returns the clickable area of the more tag
    */
   get moreButton() {
-    return this._container.querySelector('.more');
+    return this._container.querySelector('.tag-item .dropdown.right-cell.more-ctrl a');
   }
 
   /**

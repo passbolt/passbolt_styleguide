@@ -20,9 +20,10 @@ import QRCode from 'qrcode';
 import {sha512} from "../../../lib/Crypto/sha512";
 import {Trans, withTranslation} from "react-i18next";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import ShowErrorDetails from "../../Common/Error/ShowErrorDetails/ShowErrorDetails";
-import AnimatedFeedback from "../../Common/Icons/AnimatedFeedback";
+import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
+import MobileTransferIcon from "../../Common/Icons/MobileTransferIcon";
 
 // Ref. http://blog.qr4.nl/page/QR-Code-Data-Capacity.aspx
 const QRCODE_VERSION = 27;
@@ -587,61 +588,72 @@ class TransferToMobile extends React.Component {
       <div className="grid grid-responsive-12 profile-mobile-transfer">
         <div className="row">
           {this.state.step === 'start' &&
-          <div className="mobile-transfer-step-start">
-            <div className="profile col6">
-              <h3><Trans>Welcome to the mobile account transfer!</Trans></h3>
-              <div className="mobile-transfer-bg">
-                <div className="visually-hidden">An illustration showing the different steps.</div>
-              </div>
-              <p className="font-dim">
-                <Trans>Click start once the mobile application is installed and opened on your phone and you are ready to scan QR codes.</Trans>
+          <>
+            <div className="profile col6 main-column mobile-transfer-step-start">
+              <h3><Trans>Welcome to the mobile app setup</Trans></h3>
+              <h4 className="no-border"><Trans>Download the mobile app</Trans></h4>
+              <p>
+                <Trans>Passbolt is available on AppStore & PlayStore</Trans>
               </p>
-              <div className="submit-wrapper">
-                <a className={`button primary big ${processingClassName}`} role="button" onClick={this.handleClickStart}>
-                  <Trans>Start</Trans>
-                </a>
+              <a className="app-store" href="https://apps.apple.com/lv/app/passbolt-password-manager/id1569629432" target="_blank" rel="noopener noreferrer"></a>
+              <a className="play-store" href="https://play.google.com/store/apps/details?id=com.passbolt.mobile.android" target="_blank" rel="noopener noreferrer"></a>
+              <h4><Trans>Transfer your account key</Trans></h4>
+              <div className="transfer-account">
+                <MobileTransferIcon/>
+                <div className="submit-wrapper">
+                  <p><Trans>Click here to start once the mobile application is installed and opened on your phone and you are ready to scan QR codes.</Trans></p>
+                  <button type="button" className={`button primary ${processingClassName}`} role="button" onClick={this.handleClickStart}>
+                    <Trans>Start</Trans>
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="avatar col4 push1 last">
-              <h3><Trans>Get started in 5 easy steps</Trans></h3>
-              <p><Trans>1. Install the application from the store.</Trans></p>
-              <p><Trans>2. Open the application on your phone.</Trans></p>
-              <p><strong><Trans>3. Click start, here, in your browser.</Trans></strong></p>
-              <p><Trans>4. Scan the QR codes with your phone.</Trans></p>
-              <p><Trans>5. And you are done!</Trans></p>
-              <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                <Icon name="life-ring"/>
-                <span><Trans>Read the documentation</Trans></span>
-              </a>
-            </div>
-          </div>
-          }
-          {this.state.step === 'in progress' &&
-            <div className="mobile-transfer-step-in-progress">
-              <div className="profile col6">
-                <h3><Trans>Transfer in progress...</Trans></h3>
-                <img id="qr-canvas" style={{width: `${QRCODE_WIDTH}px`, height: `${QRCODE_WIDTH}px`, marginBottom: '1em'}} src={this.getCurrentQrCodeSrc()}/>
-                <a className={`button cancel ${processingClassName}`} role="button" onClick={this.handleClickCancel}>
-                  <Trans>Cancel</Trans>
-                </a>
-              </div>
-              <div className="avatar col4 push1 last">
+            <div className="col4 last">
+              <div className="sidebar-help">
                 <h3><Trans>Get started in 5 easy steps</Trans></h3>
                 <p><Trans>1. Install the application from the store.</Trans></p>
                 <p><Trans>2. Open the application on your phone.</Trans></p>
-                <p><Trans>3. Click start, here, in your browser.</Trans></p>
-                <p><Trans><strong>4. Scan the QR codes with your phone.</strong></Trans></p>
+                <p><strong><Trans>3. Click start, here, in your browser.</Trans></strong></p>
+                <p><Trans>4. Scan the QR codes with your phone.</Trans></p>
                 <p><Trans>5. And you are done!</Trans></p>
                 <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                  <Icon name="life-ring"/>
+                  <Icon name="document"/>
                   <span><Trans>Read the documentation</Trans></span>
                 </a>
               </div>
             </div>
+          </>
+          }
+          {this.state.step === 'in progress' &&
+            <>
+              <div className="profile col6 main-column mobile-transfer-step-in-progress">
+                <h3><Trans>Transfer in progress...</Trans></h3>
+                <img id="qr-canvas" style={{width: `${QRCODE_WIDTH}px`, height: `${QRCODE_WIDTH}px`}} src={this.getCurrentQrCodeSrc()}/>
+                <div className="submit-wrapper">
+                  <button className={`button cancel ${processingClassName}`} type="button" onClick={this.handleClickCancel}>
+                    <Trans>Cancel</Trans>
+                  </button>
+                </div>
+              </div>
+              <div className="col4 last">
+                <div className="sidebar-help">
+                  <h3><Trans>Get started in 5 easy steps</Trans></h3>
+                  <p><Trans>1. Install the application from the store.</Trans></p>
+                  <p><Trans>2. Open the application on your phone.</Trans></p>
+                  <p><Trans>3. Click start, here, in your browser.</Trans></p>
+                  <p><Trans><strong>4. Scan the QR codes with your phone.</strong></Trans></p>
+                  <p><Trans>5. And you are done!</Trans></p>
+                  <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
+                    <Icon name="document"/>
+                    <span><Trans>Read the documentation</Trans></span>
+                  </a>
+                </div>
+              </div>
+            </>
           }
           {this.state.step === 'complete' &&
-            <div className="mobile-transfer-step-complete">
-              <div className="profile col6">
+            <>
+              <div className="profile main-column col6 mobile-transfer-step-complete">
                 <h3><Trans>Transfer complete!</Trans></h3>
                 <div className="feedback-card">
                   <AnimatedFeedback name='success' />
@@ -650,31 +662,33 @@ class TransferToMobile extends React.Component {
                       <Trans>You are now ready to continue the setup on your phone.</Trans>&nbsp;
                       <Trans>You can restart this process if you want to configure another phone.</Trans>
                     </p>
-                    <p>
-                      <a className={`button primary ${processingClassName}`} role="button" onClick={this.handleClickDone}>
+                    <div className="submit-wrapper">
+                      <button className={`button primary ${processingClassName}`} type="button" onClick={this.handleClickDone}>
                         <Trans>Configure another phone</Trans>
-                      </a>
-                    </p>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="avatar col4 push1 last">
-                <h3><Trans>Get started in 5 easy steps</Trans></h3>
-                <p><Trans>1. Install the application from the store.</Trans></p>
-                <p><Trans>2. Open the application on your phone.</Trans></p>
-                <p><Trans>3. Click start, here, in your browser.</Trans></p>
-                <p><Trans>4. Scan the QR codes with your phone.</Trans></p>
-                <p><Trans><strong>5. And you are done!</strong></Trans></p>
-                <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                  <Icon name="life-ring"/>
-                  <span><Trans>Read the documentation</Trans></span>
-                </a>
+              <div className="col4 last">
+                <div className="sidebar-help">
+                  <h3><Trans>Get started in 5 easy steps</Trans></h3>
+                  <p><Trans>1. Install the application from the store.</Trans></p>
+                  <p><Trans>2. Open the application on your phone.</Trans></p>
+                  <p><Trans>3. Click start, here, in your browser.</Trans></p>
+                  <p><Trans>4. Scan the QR codes with your phone.</Trans></p>
+                  <p><Trans><strong>5. And you are done!</strong></Trans></p>
+                  <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
+                    <Icon name="document"/>
+                    <span><Trans>Read the documentation</Trans></span>
+                  </a>
+                </div>
               </div>
-            </div>
+            </>
           }
           {this.state.step === 'cancel' &&
-          <div className="mobile-transfer-step-error">
-            <div className="profile col6">
+          <>
+            <div className="profile main-column col6 mobile-transfer-step-error">
               <h3><Trans>The operation was cancelled.</Trans></h3>
               <div className="feedback-card">
                 <AnimatedFeedback name='error' />
@@ -684,28 +698,30 @@ class TransferToMobile extends React.Component {
                       or the authentication token expired.</Trans>&nbsp;
                     <Trans>Please try again later or contact your administrator.</Trans>
                   </p>
-                  <p>
-                    <a className={`button primary ${processingClassName}`} role="button" onClick={this.handleClickStart}>
+                  <div className="submit-wrapper">
+                    <button className={`button primary ${processingClassName}`} type="button" onClick={this.handleClickStart}>
                       <Trans>Restart</Trans>
-                    </a>
-                  </p>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="avatar col4 push1 last">
-              <h3><Trans>Need some help?</Trans></h3>
-              <p><Trans>Contact your administrator with details about what went wrong.</Trans></p>
-              <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
-              <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                <Icon name="life-ring"/>
-                <span><Trans>Help site</Trans></span>
-              </a>
+            <div className="col4 last">
+              <div className="sidebar-help">
+                <h3><Trans>Need some help?</Trans></h3>
+                <p><Trans>Contact your administrator with details about what went wrong.</Trans></p>
+                <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
+                <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
+                  <Icon name="document"/>
+                  <span><Trans>Help site</Trans></span>
+                </a>
+              </div>
             </div>
-          </div>
+          </>
           }
           {this.state.step === 'error' &&
-          <div className="mobile-transfer-step-error">
-            <div className="profile col6">
+          <>
+            <div className="profile col6 main-column mobile-transfer-step-error">
               <h3><Trans>Oops, something went wrong</Trans></h3>
               <div className="feedback-card">
                 <AnimatedFeedback name='error' />
@@ -713,25 +729,27 @@ class TransferToMobile extends React.Component {
                   <p>
                     <Trans>There was an issue during the transfer. Please try again later or contact your administrator.</Trans>
                   </p>
-                  <p>
-                    <a className={`button primary ${processingClassName}`} role="button" onClick={this.handleClickStart}>
+                  <div className="submit-wrapper">
+                    <button className={`button primary ${processingClassName}`} type="button" onClick={this.handleClickStart}>
                       <Trans>Restart</Trans>
-                    </a>
-                  </p>
+                    </button>
+                  </div>
                 </div>
               </div>
               <ShowErrorDetails error={this.state.error} />
             </div>
-            <div className="avatar col4 push1 last">
-              <h3><Trans>Need some help?</Trans></h3>
-              <p><Trans>Contact your administrator with the error details.</Trans></p>
-              <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
-              <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
-                <Icon name="life-ring"/>
-                <span><Trans>Help site</Trans></span>
-              </a>
+            <div className="col4 last">
+              <div className="sidebar-help">
+                <h3><Trans>Need some help?</Trans></h3>
+                <p><Trans>Contact your administrator with the error details.</Trans></p>
+                <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
+                <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
+                  <Icon name="document"/>
+                  <span><Trans>Help site</Trans></span>
+                </a>
+              </div>
             </div>
-          </div>
+          </>
           }
         </div>
       </div>

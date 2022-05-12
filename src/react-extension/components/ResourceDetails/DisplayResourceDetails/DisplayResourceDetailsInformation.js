@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React from "react";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {
@@ -371,8 +371,8 @@ class DisplayResourceDetailsInformation extends React.Component {
               </div>
               {this.canUsePreviewPassword &&
               <a onClick={this.handleViewPasswordButtonClick}
-                className={`password-view button button-icon button-toggle ${isPasswordPreviewed ? "selected" : ""}`}>
-                <Icon name='eye-open'/>
+                className="password-view button button-transparent">
+                <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
                 <span className="visually-hidden">view</span>
               </a>
               }

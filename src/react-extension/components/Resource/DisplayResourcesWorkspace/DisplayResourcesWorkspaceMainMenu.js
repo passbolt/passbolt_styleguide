@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
@@ -228,11 +228,11 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     return (
       <>
         <div className="dropdown" ref={this.createMenuRef}>
-          <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"}`} onClick={this.handleCreateClickEvent}>
-            <Icon name="plus-circle"/>
+          <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"} ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
+            <Icon name="add"/>
             <span><Trans>Create</Trans></span>
           </a>
-          <ul className={`dropdown-content menu ready ${this.state.createMenuOpen ? "visible" : ""}`}>
+          <ul className={`dropdown-content menu ready right ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="password_action">
               <div className="row">
                 <div className="main-cell-wrapper">
@@ -259,9 +259,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
         </div>
         {this.canImport &&
           <a
-            className="button"
+            className="button button-action-icon"
             onClick={this.handleImportClickEvent}>
-            <Icon name="upload-a" />
+            <Icon name="upload" />
             <span className="visuallyhidden"><Trans>upload</Trans></span>
           </a>
         }

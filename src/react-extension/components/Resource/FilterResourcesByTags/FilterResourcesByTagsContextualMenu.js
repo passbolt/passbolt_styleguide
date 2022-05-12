@@ -32,6 +32,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
    */
   bindCallbacks() {
     this.handleFilterClickEvent = this.handleFilterClickEvent.bind(this);
+    this.handleHide = this.handleHide.bind(this);
   }
 
   /**
@@ -40,6 +41,16 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
    */
   handleFilterClickEvent(filterType) {
     this.props.onFilterSelected(filterType);
+    this.handleHide();
+  }
+
+  /**
+   * Handle hide contextual menu
+   */
+  handleHide() {
+    if (typeof this.props.onBeforeHide === 'function') {
+      this.props.onBeforeHide();
+    }
     this.props.hide();
   }
 
@@ -58,9 +69,10 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
   render() {
     return (
       <ContextualMenuWrapper
-        hide={this.props.hide}
+        hide={this.handleHide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className={this.props.className}>
         <li key="option-filter-all-tag" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -97,7 +109,9 @@ FilterResourcesByTagsContextualMenu.propTypes = {
   onFilterSelected: PropTypes.func,
   left: PropTypes.number, // left position in px of the menu
   hide: PropTypes.func, // Hide the contextual menu
+  onBeforeHide: PropTypes.func, // On before hide callBack
   top: PropTypes.number, // top position in px of the menu
+  className: PropTypes.string, // Class name to add
   t: PropTypes.func, // The translation function
 };
 

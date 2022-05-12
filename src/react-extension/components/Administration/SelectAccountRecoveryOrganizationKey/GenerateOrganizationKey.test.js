@@ -100,10 +100,10 @@ describe('As AD I can generate an ORK', () => {
 
     const tooltipText = "Algorithm and key size cannot be changed at the moment. These are secure default";
     expect(page.algorithmTooltip).not.toBeNull();
-    expect(page.algorithmTooltip.dataset.tooltip).toBe(tooltipText);
+    expect(page.algorithmTooltip.innerHTML).toBe(tooltipText);
 
     expect(page.keySizeTooltip).not.toBeNull();
-    expect(page.keySizeTooltip.dataset.tooltip).toBe(tooltipText);
+    expect(page.keySizeTooltip.innerHTML).toBe(tooltipText);
   });
 
   /**

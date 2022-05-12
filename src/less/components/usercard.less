@@ -1,6 +1,6 @@
 .usercard-col-2(@avatar-size) {
     .clearfix();
-    margin: 0 0 1em 0;
+    margin: 0 0 1.2rem 0;
 
     &:last-of-type {
         margin-bottom: 0;
@@ -11,11 +11,15 @@
         width: 100%;
 
         .content {
-            margin-left: @avatar-size;
-            padding: 0 1em 0 1em;
+            margin: 0 0 0 calc(@avatar-size + 1.6rem);
 
             .name {
                 .ellipsis();
+
+                &-with-tooltip {
+                    font-weight: bold;
+                    .ellipsis();
+                }
             }
 
             .subinfo {
@@ -89,14 +93,11 @@
 }
 
 .usercard-col-2 {
-    .usercard-col-2(36px);
+    .usercard-col-2(42px);
 }
 
 .usercard-detailed-col-2 {
-    .usercard-col-2(36px);
-
-    padding: 0.5em 0;
-    margin: 0;
+    .usercard-col-2(42px);
 
     // Animation used to show that an activity is new.
     @keyframes highlight {

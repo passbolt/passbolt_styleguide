@@ -16,6 +16,8 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {DateTime} from "luxon";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component displays the user GPG information
@@ -190,24 +192,23 @@ class DisplayUserGpgInformation extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-key-inspector-information">
         <div className="row">
-          <div className="col6 key-info">
+          <div className="col6 main-column key-info">
             <h3><Trans>Information for public and secret key</Trans></h3>
             <table className="table-info" id="privkeyinfo">
               <tbody>
                 <tr>
                   <td><Trans>Key Id</Trans></td>
                   <td className="keyId">
-                    <div
-                      className="input select tooltip-top"
-                      data-tooltip={this.translate("sorry you can only have one key set at the moment")}>
-                      <select
+                    <Tooltip
+                      message={this.translate("sorry you can only have one key set at the moment")}
+                      direction="top">
+                      <Select
+                        className="inline"
                         id="keyId"
-                        disabled={true}>
-                        <option value={this.gpgKeyInfo.keyId}>
-                          {this.gpgKeyInfo.keyId}
-                        </option>
-                      </select>
-                    </div>
+                        value={this.gpgKeyInfo.keyId}
+                        items={[{value: this.gpgKeyInfo.keyId, label: this.gpgKeyInfo.keyId}]}
+                        disabled={true}/>
+                    </Tooltip>
                   </td>
                 </tr>
                 <tr>
@@ -237,12 +238,15 @@ class DisplayUserGpgInformation extends React.Component {
               </tbody>
             </table>
           </div>
-          <div className="col6 last key-export">
-            <h3><Trans>Public key block</Trans></h3>
-            <div className="input textarea gpgkey" rel="publicKey">
-              <textarea
-                defaultValue={this.gpgKeyInfo.armoredKey}
-                className="fluid code"/>
+          <div className="col6 secondary-column last key-export">
+            <div className="sidebar">
+              <h3><Trans>Public key block</Trans></h3>
+              <div className="input textarea gpgkey" rel="publicKey">
+                <textarea
+                  defaultValue={this.gpgKeyInfo.armoredKey}
+                  className="fluid code"
+                  readOnly={true}/>
+              </div>
             </div>
           </div>
         </div>

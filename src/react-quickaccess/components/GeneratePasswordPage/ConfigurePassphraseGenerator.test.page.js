@@ -60,7 +60,14 @@ export default class ConfigurePassphraseGeneratorPage {
    * Get the word case
    */
   get wordCase() {
-    return this._page.container.querySelector('#configure-passphrase-generator-form-words-case');
+    return this._page.container.querySelector('#configure-passphrase-generator-form-words-case .selected-value .value');
+  }
+
+  /**
+   * Get the first item word case select
+   */
+  get firstWordCaseItem() {
+    return this._page.container.querySelector('#configure-passphrase-generator-form-words-case .option');
   }
 
   /**
@@ -96,14 +103,19 @@ export default class ConfigurePassphraseGeneratorPage {
     await waitFor(() => {});
   }
 
+  /** Click on the element */
+  async click(element)  {
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
   /**
    * Change word case
-   * @param data
    * @returns {Promise<void>}
    */
-  async changeWordCase(data) {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(this.wordCase, dataInputEvent);
-    await waitFor(() => {});
+  async changeWordCase() {
+    await this.click(this.wordCase);
+    await this.click(this.firstWordCaseItem);
   }
 }

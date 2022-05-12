@@ -36,6 +36,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
   bindCallbacks() {
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+    this.handleHide = this.handleHide.bind(this);
   }
 
   /**
@@ -44,7 +45,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
   handleEditClickEvent() {
     this.props.context.setContext({tagToEdit: this.props.selectedTag});
     this.props.dialogContext.open(EditResourceTag);
-    this.props.hide();
+    this.handleHide();
   }
 
   /**
@@ -53,6 +54,16 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
   handleDeleteClickEvent() {
     this.props.context.setContext({tagToDelete: this.props.selectedTag});
     this.props.dialogContext.open(DeleteResourceTag);
+    this.handleHide();
+  }
+
+  /**
+   * Handle hide contextual menu
+   */
+  handleHide() {
+    if (typeof this.props.onBeforeHide === 'function') {
+      this.props.onBeforeHide(this.props.selectedTag.id);
+    }
     this.props.hide();
   }
 
@@ -71,9 +82,10 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
   render() {
     return (
       <ContextualMenuWrapper
-        hide={this.props.hide}
+        hide={this.handleHide}
         left={this.props.left}
-        top={this.props.top}>
+        top={this.props.top}
+        className={this.props.className}>
         <li key="option-edit-tag" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -100,9 +112,11 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
 FilterResourcesByTagsListContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
   hide: PropTypes.func, // Hide the contextual menu
+  onBeforeHide: PropTypes.func, // On before hide callback
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   selectedTag: PropTypes.object,
+  className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };

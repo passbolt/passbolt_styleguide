@@ -24,6 +24,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import ExportResourcesCredentials from "./ExportResourcesCredentials";
 import {Trans, withTranslation} from "react-i18next";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows to export resources to a specified format
@@ -295,23 +296,14 @@ class ExportResources extends React.Component {
 
           <div className="form-content">
 
-            <div className="input select required">
+            <div className="select-wrapper input required">
               <label htmlFor="export-format"><Trans>Choose the export format (csv and kdbx are supported)</Trans></label>
-              <select
+              <Select
                 id="export-format"
                 value={this.state.selectedExportFormat}
+                items={this.exportFormats}
                 onChange={this.handleExportFormatSelected}
-                disabled={!this.areActionsAllowed}>
-                {
-                  this.exportFormats.map(format =>
-                    <option
-                      key={format.value}
-                      value={format.value}>
-                      {format.label}
-                    </option>
-                  )
-                }
-              </select>
+                disabled={!this.areActionsAllowed}/>
             </div>
             <p>
               {this.hasFoldersToExport && !this.hasResourcesToExport &&
@@ -327,14 +319,14 @@ class ExportResources extends React.Component {
           </div>
 
           <div className="submit-wrapper clearfix">
-            <FormSubmitButton
-              disabled={!this.areActionsAllowed}
-              processing={this.isProcessing}
-              value={this.translate("Export")}/>
             <FormCancelButton
               disabled={!this.areActionsAllowed}
               processing={this.isProcessing}
               onClick={this.handleCancel}/>
+            <FormSubmitButton
+              disabled={!this.areActionsAllowed}
+              processing={this.isProcessing}
+              value={this.translate("Export")}/>
           </div>
 
         </form>

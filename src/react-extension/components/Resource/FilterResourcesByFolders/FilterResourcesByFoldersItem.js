@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
-import Icon from "../../Common/Icons/Icon";
+import React from "react";
+import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
@@ -41,13 +41,13 @@ class FilterResourcesByFoldersItem extends React.Component {
     return {
       draggingOver: false,
       draggingOverSince: null,
-      open: false
+      open: false,
+      moreMenuOpen: false
     };
   }
 
-
-
   bindCallbacks() {
+    this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleToggleOpenFolder = this.handleToggleOpenFolder.bind(this);
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
     this.handleDragEndEvent = this.handleDragEndEvent.bind(this);
@@ -59,11 +59,11 @@ class FilterResourcesByFoldersItem extends React.Component {
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
   }
 
-  componentDidMount() {
-    if (this.props.match.params.filterByFolderId) {
-      // Expand folder tree until the selected folder
-      this.openFolderParentTree(this.props.match.params.filterByFolderId);
-    }
+  /**
+   * Close the create menu
+   */
+  handleCloseMoreMenu() {
+    this.setState({moreMenuOpen: false});
   }
 
   /**
@@ -138,11 +138,15 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleMoreClickEvent(event) {
-    const top = event.pageY;
-    const left = event.pageX;
-    const folder = this.props.folder;
-    const contextualMenuProps = {folder, left, top};
-    this.props.contextualMenuContext.show(FilterResourcesByFoldersItemContextualMenu, contextualMenuProps);
+    const moreMenuOpen = !this.state.moreMenuOpen;
+    this.setState({moreMenuOpen});
+    if (moreMenuOpen) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      const folder = this.props.folder;
+      const onBeforeHide = this.handleCloseMoreMenu;
+      const contextualMenuProps = {folder, left, top: top + 18, className: "right", onBeforeHide};
+      this.props.contextualMenuContext.show(FilterResourcesByFoldersItemContextualMenu, contextualMenuProps);
+    }
   }
 
   /**
@@ -464,27 +468,27 @@ class FilterResourcesByFoldersItem extends React.Component {
     return (
       <li
         className={`${isOpen ? "opened" : "closed"} folder-item`}>
-        <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""}`}
+        <div className={`row ${isSelected ? "selected" : ""} ${isDisabled ? "disabled" : ""} ${isDragged ? "is-dragged" : ""} ${showDropFocus ? "drop-focus" : ""} ${hasChildren ? "" : "no-child"} ${this.state.moreMenuOpen ? "highlight" : ""}`}
           draggable="true"
           onDrop={this.handleDropEvent}
           onDragOver={this.handleDragOverEvent}
           onDragEnd={this.handleDragEndEvent}
           onDragLeave={this.handleDragLeaveEvent}
           onDragStart={this.handleDragStartEvent}>
-          <div className="main-cell-wrapper"
-            onClick={this.handleSelectEvent}
-            onContextMenu={this.handleContextualMenuEvent}>
-            <div className="main-cell">
+          <div className="main-cell-wrapper">
+            <div className="main-cell"
+              onClick={this.handleSelectEvent}
+              onContextMenu={this.handleContextualMenuEvent}>
               <a role="button">
                 {hasChildren &&
-                <Fragment>
+                <div className="toggle-folder" onClick={this.handleToggleOpenFolder}>
                   {isOpen &&
-                  <Icon name="caret-down" onClick={this.handleToggleOpenFolder}/>
+                  <Icon name="caret-down"/>
                   }
                   {!isOpen &&
-                  <Icon name="caret-right" onClick={this.handleToggleOpenFolder}/>
+                  <Icon name="caret-right"/>
                   }
-                </Fragment>
+                </div>
                 }
                 {!this.props.folder.personal &&
                 <Icon name="folder-shared"/>
@@ -497,9 +501,9 @@ class FilterResourcesByFoldersItem extends React.Component {
             </div>
           </div>
           {!isDragged &&
-          <div className="right-cell more-ctrl">
-            <a onClick={this.handleMoreClickEvent}><Icon name="plus-square"/></a>
-          </div>
+            <div className="dropdown right-cell more-ctrl">
+              <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleMoreClickEvent}><Icon name="3-dots-h"/></a>
+            </div>
           }
         </div>
         {hasChildren && isOpen &&

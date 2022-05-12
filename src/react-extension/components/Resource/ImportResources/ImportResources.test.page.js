@@ -68,14 +68,14 @@ export default class ImportResourcesPage {
    * Returns the import folder input element
    */
   get importFile() {
-    return this._page.container.querySelector('#dialog-import-passwords-choose-file');
+    return this._page.container.querySelector('.input-file-inline button.button');
   }
 
   /**
    * Returns the error mesage input element
    */
   get errorMessage() {
-    return this._page.container.querySelector('.message.ready.error').textContent;
+    return this._page.container.querySelector('.error-message').textContent;
   }
 
   /**
@@ -96,7 +96,7 @@ export default class ImportResourcesPage {
    * Returns the save button element
    */
   get saveButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**

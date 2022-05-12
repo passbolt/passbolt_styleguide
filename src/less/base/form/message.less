@@ -7,26 +7,22 @@
 .input {
     .error-message {
         padding: 0;
-        font-size: 1.4rem;
-        margin-top: .2rem;
+        font-size: 1.5rem;
         margin-bottom: 1.6rem;
-        background-color: transparent;
         border: 0;
         font-weight: normal;
         color: @font-error;
-        background:@background-default;
         clear:both;
     }
     .help-message {
         padding: 0;
-        font-size: 1.4rem;
-        margin-top: .2rem;
+        font-size: 1.5rem;
         margin-bottom: 1.6rem;
-        background-color: transparent;
         border: 0;
-        color: @font-light;
         font-weight: normal;
-        background:@background-default;
         clear:both;
+    }
+    &.disabled .help-message{
+      opacity: .5;
     }
 }

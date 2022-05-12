@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppContext, {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import Icon from "../../../components/Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withDrag} from "../../../contexts/DragContext";
 
 class DisplayDragFolderItem extends React.Component {
@@ -88,11 +88,12 @@ class DisplayDragFolderItem extends React.Component {
     const canDrag = this.canDragItems(this.draggedItems);
     const dragFeedbackText = canDrag ? this.draggedItems.folders[0].name : "You are not allowed to move this content";
     return (
-      <div className="drag-and-drop">
+      <div className="drag-and-drop item-1">
         {!canDrag &&
         <Icon name="ban"/>
         }
         <span className={`message ${!canDrag ? "not-allowed" : ""}`}>{dragFeedbackText}</span>
+        <span className="count">1</span>
       </div>
     );
   }

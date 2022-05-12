@@ -57,7 +57,7 @@ describe("See Password Delete Dialog", () => {
       expect(page.deleteResourcePageObject.closeButton).not.toBeNull();
       // submit button
       expect(page.deleteResourcePageObject.saveButton).not.toBeNull();
-      expect(page.deleteResourcePageObject.saveButton.value).toBe('Delete');
+      expect(page.deleteResourcePageObject.saveButton.textContent).toBe('Delete');
       // cancel button
       expect(page.deleteResourcePageObject.cancelButton).not.toBeNull();
       expect(page.deleteResourcePageObject.cancelButton.textContent).toBe('Cancel');

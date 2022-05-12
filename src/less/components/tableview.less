@@ -4,35 +4,33 @@
 .tableview {
   background: @tableview-background;
   position: relative;
+  margin-right: 1.6rem;
   font-size: 1.5rem; /* 15px */
   height: 100%;
+  border-radius: 0.3rem 0.3rem 0 0;
+  border: 1px solid @border-default;
+  border-bottom: none;
+  box-shadow: 0 -.1rem 0 @tableview-shadow;
 
   /* header */
   .tableview-header {
     background: @tableview-header-background;
     height: 3.2rem;
-    overflow-y: scroll;
+    width: 100%;
 
     table {
       width: 100%;
-
-      th.m-cell.sortable, th.l-cell.sortable {
-        .svg-icon svg {
-          margin-left: 0.55em;
-        }
-      }
     }
   }
 
   /* main content */
   .tableview-content {
-    top: 2.125em;
-    bottom: 3.2rem;
+    top: 3.1rem;
+    bottom: 3.8rem;
     padding: 0;
     width: 100%;
     border-top: 1px solid @border-default;
     overflow-y: scroll;
-    background: @tableview-background;
     position: absolute;
 
     table {
@@ -48,15 +46,17 @@
 
     th, td {
       text-align: left;
-      padding: .3rem .3rem;
+      padding: .5rem .3rem .6rem .3rem;
       vertical-align: middle;
     }
 
     th {
-      font-weight: bold;
+      font-weight: 800;
     }
 
     td div {
+      font-weight: 600;
+      letter-spacing: -0.045em;
       .ellipsis();
     }
 
@@ -94,19 +94,27 @@
 
     .cell-header-text {
       flex: 0 1 auto;
+      font-weight: 800;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
     .cell-header-icon-sort {
+      display: flex;
+      align-items: center;
+
       .svg-icon {
-        display: inherit;
+        margin-left: 0.5rem;
       }
     }
 
     tbody tr {
       height: 3.2rem;
+
+      &:nth-child(even) {
+        background: @tableview-background-even;
+      }
 
       &.selected {
         background: @tableview-background-selected;
@@ -128,14 +136,17 @@
     /* multi select and fav fix */
     th.cell-multiple-select,
     td.cell-multiple-select {
-
       .input.checkbox {
-        padding-left: .6rem; // some space for focus state
+        margin: 0 0 0 .5rem; // some space for focus state
+      }
+    }
 
-        label {
-          padding:0;
-          margin:0;
-        }
+    /* multi select and fav fix */
+    th.cell-favorite,
+    td.cell-favorite {
+      a {
+        display: flex;
+        align-items: center;
       }
     }
 
@@ -165,27 +176,24 @@
       .secret {
         float: left;
         max-width: calc(100% - 3rem); // password field - password preview button
-        margin-top:.1rem;
       }
       .password-view {
         display: none;
-        position: relative;
-        box-sizing: content-box;
-        margin: 0 0 0 .3rem;
-        padding: 0 .3rem 0 .3rem;
-        background: 0 0;
-        border: 0;
+        align-items: center;
+        width: 2.2rem;
+        height: 2rem;
+        margin: 0 0 0 .8rem;
+        padding: 0;
         float: left;
 
-        &.selected {
-          margin-top: .1rem;
-          display: block;
-          background: @button-selected-background;
+        .svg-icon svg {
+          width: 1.4rem;
+          height: 100%;
         }
       }
       &:hover {
         .password-view {
-          display: block;
+          display: flex;
         }
       }
     }

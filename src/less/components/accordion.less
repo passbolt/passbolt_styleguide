@@ -3,7 +3,6 @@
         .clearfix();
 
         a {
-            color:@font-default;
             display:block;
         }
         a:hover {
@@ -14,7 +13,7 @@
     h3.accordion-header {
       a {
         line-height: 3.2rem;
-        border-bottom: 1px dotted @border-default;
+        border-bottom: 1px solid @border-default;
         .svg-icon {
           margin-right:.4rem;
         }
@@ -25,22 +24,13 @@
         .clearfix();
 
         .processing-wrapper {
-            background-color: @background-default;
-            padding: 0.5em 1.5em;
+            display: flex;
+            align-items: center;
+            margin: 0 0 0 3.2rem;
 
             .processing-text {
                 position: relative;
-                padding-left: 1.5em;
-            }
-            .processing-text:before {
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                content: " ";
-                top: 0;
-                left: 0;
-                background: transparent @loading left center no-repeat;
-                background-size: auto 75% ;
+                margin-left: .5rem;
             }
         }
     }
@@ -50,12 +40,17 @@
         }
     }
 }
-.dialog .accordion {
+.dialog .accordion, .login .accordion {
     .accordion-header {
-        margin-bottom:.5em;
+        margin-bottom: 1.2rem;
         a {
-            display: inline;
+            display: flex;
+            align-items: center;
             border-bottom: 0;
+
+            .svg-icon {
+                margin-left:.5rem;
+            }
         }
     }
 }
@@ -66,8 +61,8 @@
 
             .svg-icon {
               position:absolute;
-              right:1.5em;
-              margin-top: .25em;
+              right:1.6rem;
+              margin-top: .8rem;
               &.exclamation {
                 position: relative;
                 right: inherit;
@@ -80,23 +75,8 @@
 }
 
 .accordion.navigation-secondary {
-    .accordion-header .main-cell {
-        a:before {
-            margin-left: -1.25em;
-            margin-top: .25em;
-            content: "\f0d7"; /* caret down */
-            font: normal normal normal 1em FontAwesome;
-            text-rendering: auto;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            width:1em;
-            height:1em;
-            position: absolute;
-            text-align: center;
-        }
-    }
     .accordion-content > .empty-content {
-      padding: 0 0 0 2.5em;
+      padding: 0 0 0 3.2rem;
     }
 }
 

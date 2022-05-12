@@ -71,11 +71,12 @@ describe("See the Edit Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordEdit.complexityText.textContent).toBe("Complexity: n/aEntropy: 0.0 bits");
+      expect(page.passwordEdit.complexityText.textContent).toBe("Quality");
 
       // Password view button exists.
       expect(page.passwordEdit.passwordViewButton).not.toBeNull();
-      expect(page.passwordEdit.passwordViewButton.classList.contains("selected")).toBe(false);
+      expect(page.passwordEdit.passwordViewButton.classList.contains("eye-open")).toBe(true);
+      expect(page.passwordEdit.passwordViewButton.classList.contains("eye-close")).toBe(false);
 
       // Password generate button exists.
       expect(page.passwordEdit.passwordGenerateButton).not.toBeNull();
@@ -84,7 +85,7 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.description.value).toBe(mockResource.description);
 
       // Save button exists
-      expect(page.passwordEdit.saveButton.value).toBe("Save");
+      expect(page.passwordEdit.saveButton.textContent).toBe("Save");
 
       // Cancel button exists
       expect(page.passwordEdit.cancelButton.textContent).toBe("Cancel");
@@ -94,31 +95,33 @@ describe("See the Edit Resource", () => {
     it('generates password when clicking on the generate button.', async() => {
       page.passwordEdit.focusInput(page.passwordEdit.password);
       await waitFor(() => {
-        expect(page.passwordEdit.password.classList).toContain("decrypted");
+        expect(page.passwordEdit.password.disabled).toBeFalsy();
       });
       await page.passwordEdit.click(page.passwordEdit.passwordGenerateButton);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("n/a (entropy: 0.0 bits)");
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
     });
 
     it('views password when clicking on the view button.', async() => {
       const passwordValue = "secret-decrypted";
       // View password
-      await page.passwordEdit.click(page.passwordEdit.passwordViewButton);
       await waitFor(() => {
-        expect(page.passwordEdit.password.classList).toContain("decrypted");
+        expect(page.passwordEdit.password.disabled).toBeFalsy();
       });
+      await page.passwordEdit.click(page.passwordEdit.passwordViewButton);
       expect(page.passwordEdit.password.value).toBe(passwordValue);
       let passwordInputType = page.passwordEdit.password.getAttribute("type");
       expect(passwordInputType).toBe("text");
-      expect(page.passwordEdit.passwordViewButton.classList.contains("selected")).toBe(true);
+      expect(page.passwordEdit.passwordViewButton.classList.contains("eye-open")).toBe(false);
+      expect(page.passwordEdit.passwordViewButton.classList.contains("eye-close")).toBe(true);
 
       // Hide password
       await page.passwordEdit.click(page.passwordEdit.passwordViewButton);
       expect(page.passwordEdit.password.value).toBe(passwordValue);
       passwordInputType = page.passwordEdit.password.getAttribute("type");
       expect(passwordInputType).toBe("password");
-      expect(page.passwordEdit.passwordViewButton.classList.contains("selected")).toBe(false);
+      expect(page.passwordEdit.passwordViewButton.classList.contains("eye-open")).toBe(true);
+      expect(page.passwordEdit.passwordViewButton.classList.contains("eye-close")).toBe(false);
     });
 
     it('requests the addon to edit a resource with encrypted description when clicking on the submit button.', async() => {
@@ -137,12 +140,12 @@ describe("See the Edit Resource", () => {
       page.passwordEdit.fillInput(page.passwordEdit.username, resourceMeta.username);
       page.passwordEdit.focusInput(page.passwordEdit.password);
       await waitFor(() => {
-        expect(page.passwordEdit.password.classList).toContain("decrypted");
+        expect(page.passwordEdit.password.disabled).toBeTruthy();
       });
       page.passwordEdit.fillInput(page.passwordEdit.password, resourceMeta.password);
       page.passwordEdit.blurInput(page.passwordEdit.password);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
-      expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Quality");
+      expect(page.passwordEdit.progressBar.classList.contains("error")).toBe(false);
       page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
 
       const requestMockImpl = jest.fn();

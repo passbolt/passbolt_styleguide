@@ -26,6 +26,10 @@ const defaultContext = {
   ]
 };
 
+const emptyTag = {
+  resources: null
+};
+
 
 const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
@@ -46,10 +50,7 @@ Initial.args = {
   context: defaultContext
 };
 
-Initial.argTypes = {
-  context: {
-    control: {
-      type: 'object'
-    }
-  }
+export const Loading = Template.bind({});
+Loading.args = {
+  context: emptyTag
 };

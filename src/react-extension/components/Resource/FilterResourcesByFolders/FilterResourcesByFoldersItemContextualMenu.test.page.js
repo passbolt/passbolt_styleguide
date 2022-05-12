@@ -62,13 +62,6 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
   }
 
   /**
-   * Returns the menu for the index one
-   */
-  menu(index) {
-    return this._container.querySelectorAll('li')[index - 1];
-  }
-
-  /**
    * Returns the menu item clickable for the index one
    */
   menuItem(index) {

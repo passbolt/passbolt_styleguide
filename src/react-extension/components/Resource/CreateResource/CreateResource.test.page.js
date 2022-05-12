@@ -197,7 +197,7 @@ class PasswordCreatePageObject {
    * Returns the password view button element
    */
   get passwordViewButton() {
-    return this._container.querySelector('.password-view.button');
+    return this._container.querySelector('.password-view.button .svg-icon');
   }
 
   /**
@@ -220,7 +220,7 @@ class PasswordCreatePageObject {
    * Returns the save button element
    */
   get saveButton() {
-    return this._container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
 

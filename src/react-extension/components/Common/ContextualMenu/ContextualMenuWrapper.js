@@ -45,6 +45,7 @@ class ContextualMenuWrapper extends Component {
     this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
     this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
+    this.handleDocumentScrollEvent = this.handleDocumentScrollEvent.bind(this);
   }
 
   /**
@@ -63,6 +64,7 @@ class ContextualMenuWrapper extends Component {
     document.addEventListener('click', this.handleDocumentClickEvent);
     document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
     document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
+    document.addEventListener('scroll', this.handleDocumentScrollEvent, true);
   }
 
   /**
@@ -74,6 +76,14 @@ class ContextualMenuWrapper extends Component {
     document.removeEventListener('click', this.handleDocumentClickEvent);
     document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
     document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
+    document.removeEventListener('scroll', this.handleDocumentScrollEvent, true);
+  }
+
+  /**
+   * Handle scroll event on document. Hide the component if any.
+   */
+  handleDocumentScrollEvent() {
+    this.props.hide();
   }
 
   /**
@@ -127,18 +137,23 @@ class ContextualMenuWrapper extends Component {
    */
   render() {
     return (
-      <ul ref={this.elementRef} className="contextual-menu" style={this.getStyle()}>
+      <ul ref={this.elementRef} className={`contextual-menu ${this.props.className}`} style={this.getStyle()}>
         {this.props.children}
       </ul>
     );
   }
 }
 
+ContextualMenuWrapper.defaultProps = {
+  className: ""
+};
+
 ContextualMenuWrapper.propTypes = {
   children: PropTypes.any, // The wrapped content
   left: PropTypes.number, // left position in px of the menu
   hide: PropTypes.func, // Hide the contextual menu
-  top: PropTypes.number // top position in px of the menu
+  top: PropTypes.number, // top position in px of the menu
+  className: PropTypes.string // Class name to add
 };
 
 export default ContextualMenuWrapper;

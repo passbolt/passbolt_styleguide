@@ -17,7 +17,7 @@ import FilterResourcesByTagsListContextualMenu from "./FilterResourcesByTagsList
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -43,7 +43,8 @@ class FilterResourcesByTagsList extends React.Component {
     return {
       open: true,
       selectedTag: null, // Tag selected for the contextual menu
-      draggingOverTagId: null // The dragging over tag id
+      draggingOverTagId: null, // The dragging over tag id
+      moreMenuOpenTagId: null // more menu open for a tag with the id
     };
   }
 
@@ -53,6 +54,7 @@ class FilterResourcesByTagsList extends React.Component {
   bindCallbacks() {
     this.handleContextualMenuEvent = this.handleContextualMenuEvent.bind(this);
     this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
+    this.handleCloseMoreMenu = this.handleCloseMoreMenu.bind(this);
     this.handleDropEvent = this.handleDropEvent.bind(this);
     this.handleDragOverEvent = this.handleDragOverEvent.bind(this);
     this.handleDragLeaveEvent = this.handleDragLeaveEvent.bind(this);
@@ -81,7 +83,22 @@ class FilterResourcesByTagsList extends React.Component {
    * @param {Object} selectedTag The target tag
    */
   handleMoreClickEvent(event, selectedTag) {
-    this.showContextualMenu(event.pageY, event.pageX, selectedTag);
+    const moreMenuOpenTagId = this.state.moreMenuOpenTagId === selectedTag.id ? null : selectedTag.id;
+    this.setState({moreMenuOpenTagId});
+    if (moreMenuOpenTagId) {
+      const {left, top} = event.currentTarget.getBoundingClientRect();
+      this.showContextualMenu(top + 18, left, selectedTag, "right", this.handleCloseMoreMenu);
+    }
+  }
+
+  /**
+   * Close the more menu with the tag id
+   * @param {string} id The tag id
+   */
+  handleCloseMoreMenu(id) {
+    if (this.state.moreMenuOpenTagId === id) {
+      this.setState({moreMenuOpenTagId: null});
+    }
   }
 
   /**
@@ -89,9 +106,12 @@ class FilterResourcesByTagsList extends React.Component {
    * @param {int} left The left position to display the menu
    * @param {int} top The top position to display the menu
    * @param {Object} selectedTag The target tag
+   * @param {string} className The class name to display the menu
+   * @param {function} callbackBeforeHide The callback before to hide the menu
    */
-  showContextualMenu(top, left, selectedTag) {
-    const contextualMenuProps = {left, selectedTag, top};
+  showContextualMenu(top, left, selectedTag, className = "", callbackBeforeHide = null) {
+    const onBeforeHide = callbackBeforeHide;
+    const contextualMenuProps = {left, selectedTag, onBeforeHide, top, className};
     this.props.contextualMenuContext.show(FilterResourcesByTagsListContextualMenu, contextualMenuProps);
   }
 
@@ -294,6 +314,7 @@ class FilterResourcesByTagsList extends React.Component {
       <div className="accordion-content">
         {this.isLoading() &&
         <div className="processing-wrapper">
+          <Icon name="spinner"/>
           <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }
@@ -308,16 +329,17 @@ class FilterResourcesByTagsList extends React.Component {
                 onDrop={ event => this.handleDropEvent(event, tag)}
                 onDragOver={ event => this.handleDragOverEvent(event, tag.id)}
                 onDragLeave={this.handleDragLeaveEvent}>
-                <div className="main-cell-wrapper" onClick={() => this.handleOnClickTag(tag)}
+                <div className="main-cell-wrapper"
+                  onClick={() => this.handleOnClickTag(tag)}
                   onContextMenu={event => this.handleContextualMenuEvent(event, tag)}>
                   <div className="main-cell">
                     <a title={tag.slug}><span className="ellipsis tag-name">{tag.slug}</span></a>
                   </div>
                 </div>
                 {!tag.is_shared &&
-                <div className="right-cell more-ctrl">
-                  <a className="more" onClick={event => this.handleMoreClickEvent(event, tag)}>
-                    <Icon name="plus-square"/>
+                <div className="dropdown right-cell more-ctrl">
+                  <a className={`button ${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`} onClick={event => this.handleMoreClickEvent(event, tag)}>
+                    <Icon name="3-dots-h"/>
                   </a>
                 </div>
                 }

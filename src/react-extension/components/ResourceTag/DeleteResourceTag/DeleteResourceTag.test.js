@@ -58,7 +58,7 @@ describe("See the Delete Tag Dialog", () => {
       expect(page.tagDelete.tagName.textContent).toBe(context.tagToDelete.slug);
 
       // Save button exists
-      expect(page.tagDelete.saveButton.value).toBe("Delete");
+      expect(page.tagDelete.saveButton.textContent).toBe("Delete");
 
       // Cancel button exists
       expect(page.tagDelete.cancelButton.textContent).toBe("Cancel");

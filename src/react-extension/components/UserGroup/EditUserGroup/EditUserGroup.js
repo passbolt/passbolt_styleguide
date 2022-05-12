@@ -22,11 +22,12 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../Common/Icons/Icon";
-import TooltipHtml from "../../Common/Tooltip/TooltipHtml";
+import Icon from "../../../../shared/components/Icons/Icon";
 import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import Select from "../../Common/Select/Select";
 
 /**
  * This component allows to edit an user group
@@ -273,7 +274,7 @@ class EditUserGroup extends Component {
    * @return {Promise<void>}
    */
   async handleMemberRoleChange(event, groupUser) {
-    const isManager = event.target.value === 'true';
+    const isManager = event.target.value === true;
     await this.updateMemberRole(groupUser, isManager);
   }
 
@@ -623,10 +624,11 @@ class EditUserGroup extends Component {
   /**
    * Format fingerprint
    * @param {string} fingerprint An user finger print
-   * @returns {string}
+   * @returns {JSX.Element}
    */
   formatFingerprint(fingerprint) {
-    return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, '$& ');
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
   }
 
   /**
@@ -663,6 +665,29 @@ class EditUserGroup extends Component {
   }
 
   /**
+   * Get the tooltip message
+   * @param groupUser The group user
+   * @returns {JSX.Element}
+   */
+  getTooltipMessage(groupUser) {
+    return <>
+      <div className="email"><strong>{groupUser.user.username}</strong></div>
+      <div className="fingerprint">{this.formatFingerprint(groupUser.user.gpgkey.fingerprint)}</div>
+    </>;
+  }
+
+  /**
+   * Get permissions
+   * @returns {[{label: *, value: boolean}]}
+   */
+  get permissions() {
+    return [
+      {value: false, label: this.translate("Member")},
+      {value: true, label: this.translate("Group manager")}
+    ];
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -687,37 +712,36 @@ class EditUserGroup extends Component {
           onSubmit={this.handleSubmit}
           noValidate>
 
-          <div className="group_members">
-
-            <div className="form-content">
-              <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
-                <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
-                <input
-                  id="group-name-input"
-                  ref={this.references.name}
-                  value={this.state.groupToEdit.name}
-                  maxLength="50"
-                  type="text"
-                  placeholder={this.translate("group name")}
-                  onChange={this.handleNameChange}
-                  disabled={!this.areActionsAllowed || !this.isLoggedInUserAdmin()}/>
-                {this.hasErrors("name", "empty") &&
-                <div className="name error-message">
-                  <Trans>A name is required.</Trans>
-                </div>
-                }
-                {this.hasErrors("name", "alreadyExists") &&
-                <div className="name error-message">
-                  <Trans>The group name already exists.</Trans>
-                </div>
-                }
+          <div className="form-content">
+            <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
+              <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
+              <input
+                id="group-name-input"
+                ref={this.references.name}
+                value={this.state.groupToEdit.name}
+                maxLength="50"
+                type="text"
+                placeholder={this.translate("group name")}
+                onChange={this.handleNameChange}
+                disabled={!this.areActionsAllowed || !this.isLoggedInUserAdmin()}/>
+              {this.hasErrors("name", "empty") &&
+              <div className="name error-message">
+                <Trans>A name is required.</Trans>
               </div>
-
-              <div className="input required">
-                <label><Trans>Group members</Trans></label>
+              }
+              {this.hasErrors("name", "alreadyExists") &&
+              <div className="name error-message">
+                <Trans>The group name already exists.</Trans>
               </div>
+              }
             </div>
 
+            <div className="input required">
+              <label><Trans>Group members</Trans></label>
+            </div>
+          </div>
+
+          <div className="group_members">
             <div className="form-content permission-edit">
               <ul className="permissions scroll groups_users">
                 {this.groupsUsers.map(groupUser => (
@@ -732,10 +756,9 @@ class EditUserGroup extends Component {
                     <div className="aro">
                       <div className="aro-name">
                         <span className="ellipsis">{this.getUserFullname(groupUser.user)}</span>
-                        <TooltipHtml>
-                          <div className="email"><strong>{groupUser.user.username}</strong></div>
-                          <div className="fingerprint">{this.formatFingerprint(groupUser.user.gpgkey.fingerprint)}</div>
-                        </TooltipHtml>
+                        <Tooltip message={this.getTooltipMessage(groupUser)}>
+                          <Icon name="info-circle"/>
+                        </Tooltip>
                       </div>
                       <div className="permission_changes">
                         {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
@@ -746,23 +769,21 @@ class EditUserGroup extends Component {
                       </div>
                     </div>
 
-                    <div className="select rights">
-                      <select
-                        className="permission"
+                    <div className="rights">
+                      <Select
+                        className="permission inline"
                         value={groupUser.is_admin}
+                        items={this.permissions}
                         onChange={event => this.handleMemberRoleChange(event, groupUser)}
-                        disabled={!this.areActionsAllowed}>
-                        <option value={false}>{this.translate("Member")}</option>
-                        <option value={true}>{this.translate("Group manager")}</option>
-                      </select>
+                        disabled={!this.areActionsAllowed}/>
                     </div>
 
                     <div className="actions">
                       <a
                         title="remove"
-                        className={`remove-item ${!this.areActionsAllowed ? "disabled" : ""}`}
+                        className={`remove-item button button-transparent ${!this.areActionsAllowed ? "disabled" : ""}`}
                         onClick={event => this.handleMemberRemoved(event, groupUser)}>
-                        <Icon name="close-circle"/>
+                        <Icon name="close"/>
                         <span className="visuallyhidden">remove</span>
                       </a>
                     </div>
@@ -770,27 +791,27 @@ class EditUserGroup extends Component {
                 ))
                 }
               </ul>
-              {!this.hasMembers &&
-              <div className="message warning">
-                <span><Trans>The group is empty, please add a group manager.</Trans></span>
-              </div>
-              }
-              {this.hasMembers && !this.hasManager &&
-              <div className="message error at-least-one-manager">
-                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
-              </div>
-              }
-              {!this.isManager &&
-              <div className="message warning feedback cannot-add-user">
-                <span><Trans>Only the group manager can add new people to a group.</Trans></span>
-              </div>
-              }
-              {this.hasMembersChanges && this.hasManager &&
-              <div className="message warning feedback">
-                <span><Trans>You need to click save for the changes to take place.</Trans></span>
-              </div>
-              }
             </div>
+            {!this.hasMembers &&
+            <div className="message warning">
+              <span><Trans>The group is empty, please add a group manager.</Trans></span>
+            </div>
+            }
+            {this.hasMembers && !this.hasManager &&
+            <div className="message error at-least-one-manager">
+              <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+            </div>
+            }
+            {!this.isManager &&
+            <div className="message warning feedback cannot-add-user">
+              <span><Trans>Only the group manager can add new people to a group.</Trans></span>
+            </div>
+            }
+            {this.hasMembersChanges && this.hasManager &&
+            <div className="message warning feedback">
+              <span><Trans>You need to click save for the changes to take place.</Trans></span>
+            </div>
+            }
           </div>
 
           {this.isManager &&
@@ -810,13 +831,13 @@ class EditUserGroup extends Component {
           }
 
           <div className="submit-wrapper clearfix">
+            <FormCancelButton
+              onClick={this.handleClose}
+              disabled={!this.areActionsAllowed}/>
             <FormSubmitButton
               value={this.translate("Save")}
               disabled={this.hasSubmitDisabled}
               processing={this.isProcessing}/>
-            <FormCancelButton
-              onClick={this.handleClose}
-              disabled={!this.areActionsAllowed}/>
           </div>
 
         </form>

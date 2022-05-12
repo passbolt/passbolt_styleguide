@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../Common/Icons/Icon";
+import Icon from "../../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../contexts/AppContext";
 import Autocomplete from "../../Common/Autocomplete/Autocomplete";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -528,24 +528,23 @@ class EditResourceTags extends React.Component {
             />
             }
           </div>
-          {!this.state.errorMessage && this.props.isOwner &&
-          <div className="message notice">
-            <Icon baseline={true} name="info-circle"/>
-            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Tags starting with # are shared with all users who have access. Separate tags using commas.</Trans>
-          </div>
-          }
           {this.state.errorMessage &&
           <div className="error-message">{this.state.errorMessage}</div>
           }
         </div>
         <div className="actions">
-          <a className={`button tag-editor-submit ${this.hasAllInputDisabled() ? "primary processing disabled" : ""}`}
+          <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
+            onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></a>
+          <a className={`button primary tag-editor-submit ${this.hasAllInputDisabled() ? "processing disabled" : ""}`}
             onClick={this.handleOnSubmit}>
             <span><Trans>Save</Trans></span>
           </a>
-          <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-            onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></a>
         </div>
+        {!this.state.errorMessage && this.props.isOwner &&
+          <div className="message notice">
+            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Tags starting with # are shared with all users who have access. Separate tags using commas.</Trans>
+          </div>
+        }
       </div>
     );
   }

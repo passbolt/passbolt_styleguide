@@ -21,6 +21,8 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {DateTime} from "luxon";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -118,11 +120,11 @@ class ReviewAccountRecoveryRequest extends Component {
 
   /**
    * get fingerprint
-   * @param fingerprint
-   * @returns string
+   * @returns {JSX.Element}
    */
   get fingerprint() {
-    return this.props.accountRecoveryRequest.fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
+    const result = this.props.accountRecoveryRequest.fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
   }
 
   /**
@@ -195,26 +197,22 @@ class ReviewAccountRecoveryRequest extends Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div>
-                      <span
-                        className="tooltip tooltip-bottom"
-                        data-tooltip={this.fingerprint}>
+                      <Tooltip message={this.fingerprint} direction="bottom">
                         <span className="name-with-tooltip">{requesterFirstname}</span>
-                      </span>
+                      </Tooltip>
                       &nbsp;
                       <span className="name"><Trans>requested an account recovery</Trans></span>
                     </div>
                     <div className="subinfo light">{this.formatDateTimeAgo(this.date)}</div>
                   </div>
                 </div>
-                <div className="teaser-image attention-required">
-                  <UserAvatar
-                    user={this.creator}
-                    baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                    attentionRequired={true}/>
-                </div>
+                <UserAvatar
+                  user={this.creator}
+                  baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                  attentionRequired={true}/>
               </li>
             </ul>
-            <p><strong><Trans>How do you want to proceed?</Trans></strong></p>
+            <label><Trans>How do you want to proceed?</Trans></label>
             <div className="radiolist-alt">
               <div className={`input radio ${this.state.status === "rejected" ? "checked" : ""}`}>
                 <input type="radio"
@@ -255,18 +253,13 @@ class ReviewAccountRecoveryRequest extends Component {
               disabled={this.isProcessing}>
               {this.translate("Learn More")}
             </button>
+            <FormCancelButton
+              disabled={this.isProcessing}
+              onClick={this.handleCloseClick}/>
             <FormSubmitButton
               value={this.translate("Submit")}
               disabled={this.isProcessing}
               processing={this.isProcessing}/>
-            <button
-              className={`button cancel ${this.isProcessing ? "disabled" : ""}`}
-              role="button"
-              type="button"
-              onClick={this.handleCloseClick}
-              disabled={this.isProcessing}>
-              <span><Trans>Cancel</Trans></span>
-            </button>
           </div>
         </form>
       </DialogWrapper>

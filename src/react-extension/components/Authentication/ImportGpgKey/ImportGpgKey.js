@@ -45,6 +45,7 @@ class ImportGpgKey extends Component {
    */
   get defaultState() {
     return {
+      selectedFile: null, // the file to import
       privateKey: '', // The gpg private key
       actions: {
         processing: false // True if one's processing passphrase
@@ -93,6 +94,7 @@ class ImportGpgKey extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this);
     this.handleSelectPrivateKeyFile = this.handleSelectPrivateKeyFile.bind(this);
+    this.handleSelectFile = this.handleSelectFile.bind(this);
   }
 
   /**
@@ -123,10 +125,24 @@ class ImportGpgKey extends Component {
    */
   async handleChangePrivateKey(event) {
     const privateKey = event.target.value;
-    await this.fillPrivateKey(privateKey);
+    this.setState({privateKey});
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
+  }
+
+  /**
+   * Handle the selection of a file by file explorer
+   */
+  handleSelectFile() {
+    this.fileUploaderRef.current.click();
+  }
+
+  /**
+   * Returns the selected file's name
+   */
+  get selectedFilename() {
+    return this.state.selectedFile ? this.state.selectedFile.name : "";
   }
 
   /**
@@ -136,7 +152,7 @@ class ImportGpgKey extends Component {
   async handleSelectPrivateKeyFile(event) {
     const [privateKeyFile] = event.target.files;
     const privateKey = await this.readPrivateKeyFile(privateKeyFile);
-    await this.fillPrivateKey(privateKey);
+    this.setState({privateKey, selectedFile: privateKeyFile});
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -164,15 +180,6 @@ class ImportGpgKey extends Component {
       throw error;
     }
   }
-
-  /**
-   * Fill the gpg private key
-   * @param privateKey A private gpg key
-   */
-  async fillPrivateKey(privateKey) {
-    await this.setState({privateKey});
-  }
-
 
   /**
    * Read the selected private key file and returns its content in a base 64
@@ -255,15 +262,20 @@ class ImportGpgKey extends Component {
               onChange={this.handleChangePrivateKey}
               disabled={!this.areActionsAllowed}/>
           </div>
-          <div className="input-file-chooser-wrapper">
-            <div className="input text">
-              <input
-                type="file"
-                ref={this.fileUploaderRef}
-                disabled={!this.areActionsAllowed}
-                onChange={this.handleSelectPrivateKeyFile}
-                accept="text/plain,.key,.asc"/>
-              {this.state.hasBeenValidated &&
+          <div className={`input file ${!this.areActionsAllowed ? "disabled" : ""}`}>
+            <input
+              type="file"
+              ref={this.fileUploaderRef}
+              disabled={!this.areActionsAllowed}
+              onChange={this.handleSelectPrivateKeyFile}
+              accept="text/plain,.key,.asc"/>
+            <div className="input-file-inline">
+              <input type="text" disabled={true} placeholder={this.translate("No key file selected")} value={this.selectedFilename}/>
+              <button className="button primary" type="button" onClick={this.handleSelectFile} disabled={!this.areActionsAllowed}>
+                <span><Trans>Choose a file</Trans></span>
+              </button>
+            </div>
+            {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPrivateKey &&
                   <div className="empty-private-key error-message"><Trans>The private key should not be empty.</Trans></div>
@@ -272,8 +284,7 @@ class ImportGpgKey extends Component {
                   <div className="invalid-private-key error-message">{this.state.errorMessage}</div>
                 }
               </>
-              }
-            </div>
+            }
           </div>
           <div className="form-actions">
             <button

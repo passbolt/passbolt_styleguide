@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import Select from "../../../react-extension/components/Common/Select/Select";
 
 class ConfigurePassphraseGenerator extends Component {
   constructor(props) {
@@ -90,6 +91,18 @@ class ConfigurePassphraseGenerator extends Component {
   }
 
   /**
+   * Get word case list
+   * @returns {[{label: *, value: string},{label: *, value: string},{label: *, value: string}]}
+   */
+  get wordCaseList() {
+    return [
+      {value: "lowercase", label: this.translate("Lower case")},
+      {value: "uppercase", label: this.translate("Upper case")},
+      {value: "camelcase", label: this.translate("Camel case")}
+    ];
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -104,7 +117,7 @@ class ConfigurePassphraseGenerator extends Component {
   render() {
     return (
       <>
-        <div className="input text">
+        <div>
           <label htmlFor="configure-passphrase-generator-form-word-count"><Trans>Number of words</Trans></label>
           <div className="slider">
             <input
@@ -128,13 +141,9 @@ class ConfigurePassphraseGenerator extends Component {
           <input type="text" id="configure-passphrase-generator-form-words-separator" name="separator" value={this.separator} onChange={this.handleInputChange}
             placeholder={this.translate("Type one or more characters")}/>
         </div>
-        <div className="input select">
+        <div className="select-inline input">
           <label htmlFor="configure-passphrase-generator-form-words-case"><Trans>Words case</Trans></label>
-          <select id="configure-passphrase-generator-form-words-case" name="word_case" value={this.word_case} onChange={this.handleInputChange}>
-            <option key="lowercase" value="lowercase">{this.translate("Lower case")}</option>
-            <option key="uppercase" value="uppercase">{this.translate("Upper case")}</option>
-            <option key="camelcase" value="camelcase">{this.translate("Camel case")}</option>
-          </select>
+          <Select id="configure-passphrase-generator-form-words-case" className="inline" name="word_case" items={this.wordCaseList} value={this.wordCase} onChange={this.handleInputChange}/>
         </div>
       </>
     );

@@ -62,14 +62,14 @@ export default class ExportResourcesPage {
    * Returns the input file element
    */
   get select() {
-    return this._page.container.querySelector('#export-format');
+    return this._page.container.querySelector('#export-format .selected-value');
   }
 
   /**
    * Returns the save button element
    */
   get exportButton() {
-    return this._page.container.querySelector('.submit-wrapper input[type=\"submit\"]');
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
 
   /**
@@ -84,6 +84,13 @@ export default class ExportResourcesPage {
    */
   exists() {
     return this.dialog !== null;
+  }
+
+  /**
+   * Returns the export format element
+   */
+  getLocaleList(index) {
+    return this._page.container.querySelectorAll('#export-format .option')[index - 1];
   }
 
   /** Click on the element */
@@ -121,10 +128,9 @@ export default class ExportResourcesPage {
     await this.click(this.dialogClose);
   }
 
-  /** Click on select */
-  async selectFormat(format) {
-    const dataInputEvent = {target: {value: format}};
-    fireEvent.change(this.select, dataInputEvent);
-    await waitFor(() => {});
+  /** Click on select item for the index one */
+  async selectFormat(index) {
+    await this.click(this.select);
+    await this.click(this.getLocaleList(index));
   }
 }
