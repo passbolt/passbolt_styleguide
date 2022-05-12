@@ -126,8 +126,15 @@ describe("Display Users", () => {
 
     it('As LU, I should sort the users by mfa enabled', async() => {
       jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
-      await page.sortByFullname();
-      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('name');
+      await page.sortByMFAEnabled();
+      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('is_mfa_enabled');
+    });
+
+
+    it('As LU, I should sort the users by account recovery status', async() => {
+      jest.spyOn(props.userWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
+      await page.sortByAccountRecoveryStatus();
+      expect(props.userWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('account_recovery_user_setting.status');
     });
   });
 });

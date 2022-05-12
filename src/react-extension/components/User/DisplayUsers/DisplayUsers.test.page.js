@@ -156,4 +156,14 @@ export default class DisplayUsersPage {
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
+
+  /**
+   * Sort the users by their account recovery status
+   */
+  async sortByAccountRecoveryStatus() {
+    const element = this._page.container.querySelectorAll('thead th a')[7];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
 }
