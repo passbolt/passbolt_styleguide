@@ -62,16 +62,9 @@ class DisplayInFormMenuItem extends React.Component {
   render() {
     return (
       <a className={this.getClassName()} onClick={this.handleClick}>
-        {this.props.processing &&
-          <div className="processing-wrapper">
-            <div className="processing"></div>
-          </div>
-        }
-        {!this.props.processing &&
         <div className="in-form-menu-item-icon">
-          <Icon name={this.props.icon} big={true} dim={true}/>
+          <Icon name={this.props.processing ? "spinner" : this.props.icon} big={true} dim={true}/>
         </div>
-        }
         <div className="in-form-menu-item-content">
           <div className="in-form-menu-item-content-header">
             <strong>
