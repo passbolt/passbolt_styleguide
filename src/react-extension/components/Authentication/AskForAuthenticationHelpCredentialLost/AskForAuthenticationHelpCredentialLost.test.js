@@ -43,6 +43,15 @@ describe("AskForAuthenticationHelpCredentialLost", () => {
       await page.tryAgain();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
+
+    // @deprecated with v3.6 the request help feature was added with v3.6
+    it('As AN I cannot request help only try again if the canRequestHelp prop is set to false', async() => {
+      props = defaultProps({..._props, canRequestHelp: false});
+      page = new AskForAuthenticationHelpCredentialLostTestPage(props);
+      expect.assertions(1);
+      await page.requestHelp();
+      expect(props.onSecondaryActionClick).toHaveBeenCalled();
+    });
   });
 });
 
