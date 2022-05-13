@@ -131,13 +131,13 @@ class DisplayUserTheme extends React.Component {
         <div className="row">
           <div className="main-column">
             <h3>Theme</h3>
-            <div className="row themes">
+            <div className="themes">
               <div className="col12">
                 <ul>
                   {
                     this.state.themes.map(theme => (
                       <li key={theme.id}>
-                        <div className={`main-cell row theme ${selectedClass(theme)}`}>
+                        <div className={`main-cell theme ${selectedClass(theme)}`}>
                           <a onClick={event => this.handleThemeSelected(event, theme)}>
                             <img src={theme.preview}/>
                             <div className="theme-desc">
