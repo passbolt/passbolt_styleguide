@@ -268,6 +268,8 @@ class Login extends Component {
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
+    const securityToken = this.props.userSettings?.getSecurityToken() || this.props.account.security_token;
+
     return (
       <div className="login">
         <div className="login-user">
@@ -291,7 +293,7 @@ class Login extends Component {
               onChange={this.handleChangePassphrase}
               disabled={!this.areActionsAllowed}
               preview={true}
-              securityToken={this.props.userSettings.getSecurityToken()}/>
+              securityToken={securityToken}/>
             {this.state.hasBeenValidated &&
             <>
               {this.state.errors.emptyPassphrase &&
