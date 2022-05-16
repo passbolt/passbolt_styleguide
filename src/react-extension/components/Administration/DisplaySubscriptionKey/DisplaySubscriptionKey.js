@@ -322,10 +322,10 @@ class DisplaySubscriptionKey extends React.Component {
             <AnimatedFeedback name="success" />
             }
             {this.hasInvalidSubscription() &&
-            <AnimatedFeedback name="warning" />
+            <AnimatedFeedback name="error" />
             }
             {this.hasValidSubscription() && this.hasSubscriptionKeyGoingToExpire() &&
-            <AnimatedFeedback name="error" />
+            <AnimatedFeedback name="warning" />
             }
             <div className="subscription-information">
               {!this.hasSubscriptionKey() &&
