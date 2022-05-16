@@ -14,7 +14,7 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import DisplayUsers from "./DisplayUsers";
-import {defaultAppContext, defaultProps, propsWithFirstUserAttentionRequired} from "./DisplayUsers.test.data";
+import {defaultContext, defaultProps, propsWithFirstUserAttentionRequired} from "./DisplayUsers.test.data";
 
 
 export default {
@@ -32,7 +32,7 @@ const Template = args =>
   </MemoryRouter>;
 
 export const Initial = Template.bind({});
-Initial.args = Object.assign(defaultProps(), {context: defaultAppContext()});
+Initial.args = Object.assign(defaultProps(), {context: defaultContext()});
 
 export const AccountRecoveryPending = Template.bind({});
-AccountRecoveryPending.args = Object.assign(propsWithFirstUserAttentionRequired(), {context: defaultAppContext()});
+AccountRecoveryPending.args = Object.assign(propsWithFirstUserAttentionRequired(), {context: defaultContext()});
