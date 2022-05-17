@@ -2,7 +2,7 @@ import React from "react";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey";
 import {
   defaultProps,
-  mockSubscriptionExpired,
+  mockSubscriptionExpired, mockSubscriptionGoingToExpire,
   mockSubscriptionUsersExceeded,
   mockUsers
 } from "./DisplaySubscriptionKey.test.data";
@@ -20,6 +20,18 @@ const Template = args =>
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
+
+const propsSubscriptionGoingToExpire = {
+  context: {
+    port: {
+      request: () => mockUsers
+    },
+    onGetSubscriptionKeyRequested: () => mockSubscriptionGoingToExpire,
+    setContext: jest.fn()
+  }
+};
+export const SubscriptionGoingToExpire = Template.bind({});
+SubscriptionGoingToExpire.args = defaultProps(propsSubscriptionGoingToExpire);
 
 const propsSubscriptionExpired = {
   context: {
