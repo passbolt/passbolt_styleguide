@@ -13,11 +13,8 @@
  * @since         2.11.0
  */
 
-
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
-import {BrowserRouter as Router} from "react-router-dom";
 import {UserWorkspaceContext} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserDetailsInformation from "./DisplayUserDetailsInformation";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -28,19 +25,14 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class DisplayUserDetailsInformationPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <Router>
-            <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
-              <DisplayUserDetailsInformation {...props}/>
-            </UserWorkspaceContext.Provider>
-          </Router>
-        </AppContext.Provider>
+        <UserWorkspaceContext.Provider value={props.userWorkspaceContext}>
+          <DisplayUserDetailsInformation {...props}/>
+        </UserWorkspaceContext.Provider>
       </MockTranslationProvider>
     );
   }
@@ -52,12 +44,25 @@ export default class DisplayUserDetailsInformationPage {
     return this._page.container.querySelector('.role .value').innerHTML;
   }
 
-
   /**
    * Returns the detailed user status
    */
   get status() {
     return this._page.container.querySelector('.status .value').textContent;
+  }
+
+  /**
+   * Returns the detailed account recovery status
+   */
+  get accountRecoveryStatus() {
+    return this._page.container.querySelector('.account-recovery-status .value').textContent;
+  }
+
+  /**
+   * Returns the detailed mfa status
+   */
+  get mfaStatus() {
+    return this._page.container.querySelector('.mfa .value').textContent;
   }
 
   /**

@@ -16,7 +16,7 @@
  * Unit tests on DisplayUserDetailsInformation in regard of specifications
  */
 
-import {defaultAppContext, defaultProps} from "./DisplayUserDetailsInformation.test.data";
+import {defaultProps} from "./DisplayUserDetailsInformation.test.data";
 import DisplayUserDetailsInformationPage from "./DisplayUserDetailsInformation.test.page";
 
 beforeEach(() => {
@@ -25,11 +25,10 @@ beforeEach(() => {
 
 describe("Display User Details Information", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
   beforeEach(() => {
-    page = new DisplayUserDetailsInformationPage(context, props);
+    page = new DisplayUserDetailsInformationPage(props);
   });
 
   it('As LU I should initially see the information area as expanded', () => {
@@ -50,5 +49,13 @@ describe("Display User Details Information", () => {
 
   it('As LU I should see the detailed user status', () => {
     expect(page.status).toBe('Activated');
+  });
+
+  it('As LU I should see the detailed account recovery status', () => {
+    expect(page.accountRecoveryStatus).toBe('Pending');
+  });
+
+  it('As LU I should see the detailed mfa status', () => {
+    expect(page.mfaStatus).toBe('Disabled');
   });
 });

@@ -19,6 +19,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 
 /**
  * This component displays the user details about information
@@ -48,6 +49,15 @@ class DisplayUserDetailsInformation extends React.Component {
    */
   bindHandlers() {
     this.handleTitleClicked = this.handleTitleClicked.bind(this);
+  }
+
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  componentDidMount() {
+    this.props.accountRecoveryContext.findAccountRecoveryPolicy();
   }
 
   /**
@@ -84,6 +94,32 @@ class DisplayUserDetailsInformation extends React.Component {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
     return duration < 1000 && duration > 0 < 1000 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+  }
+
+  /**
+   * Check if the logged in user is admin
+   * @return {boolean}
+   */
+  isLoggedInUserAdmin() {
+    return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
+   * Returns true if the mfa feature is enabled and if the logged in user is an admin.
+   * @returns {boolean}
+   */
+  hasMfaSection() {
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
+  }
+
+  /**
+   * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
+   * @returns {boolean}
+   */
+  hasAccountRecoverySection() {
+    return this.props.context.siteSettings.canIUse("accountRecovery")
+      && this.isLoggedInUserAdmin()
+      && this.props.accountRecoveryContext.isPolicyEnabled();
   }
 
   /**
@@ -127,6 +163,30 @@ class DisplayUserDetailsInformation extends React.Component {
               <span className="label"><Trans>Status</Trans></span>
               <span className="value">{status}</span>
             </li>
+            {this.hasAccountRecoverySection() &&
+            <li className="account-recovery-status">
+              <span className="label"><Trans>Account recovery</Trans></span>
+              <span className="value">
+                {{
+                  "approved": <Trans>Approved</Trans>,
+                  "rejected": <Trans>Rejected</Trans>,
+                  [undefined]: <Trans>Pending</Trans>,
+                }[this.user?.account_recovery_user_setting?.status]}
+              </span>
+            </li>
+            }
+            {this.hasMfaSection() &&
+            <li className="mfa">
+              <span className="label"><Trans>MFA</Trans></span>
+              <span className="value">
+                {{
+                  [true]: <Trans>Enabled</Trans>,
+                  [false]: <Trans>Disabled</Trans>,
+                  [undefined]: <Trans>Disabled</Trans>,
+                }[this.user?.is_mfa_enabled]}
+              </span>
+            </li>
+            }
           </ul>
         </div>
       </div>
@@ -137,7 +197,8 @@ class DisplayUserDetailsInformation extends React.Component {
 DisplayUserDetailsInformation.propTypes = {
   context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
+  accountRecoveryContext: PropTypes.object, // The account recovery context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withUserWorkspace(withTranslation('common')(DisplayUserDetailsInformation)));
+export default withAppContext(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUserDetailsInformation))));

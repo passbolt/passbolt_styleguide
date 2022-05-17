@@ -45,6 +45,10 @@ export function defaultAppContext(appContext) {
       }
     },
     users: [],
+    roles: [{
+      id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
+      name: 'Admin'
+    }]
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
