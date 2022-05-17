@@ -279,7 +279,7 @@ class CreateGpgKey extends Component {
                 <Trans>It contains special characters (like / or * or %)</Trans>
               </li>
               <li className={this.state.hintClassNames.notInDictionary}>
-                <Trans>It is not part of an exposed data breaches</Trans>
+                <Trans>It is not part of an exposed data breach</Trans>
               </li>
             </ul>
           </div>

@@ -1,5 +1,5 @@
 /*!**********************************************************************!*\
-  !*** ./src/react-extension/ApiAccountRecovery.entry.js + 24 modules ***!
+  !*** ./src/react-extension/ApiAccountRecovery.entry.js + 28 modules ***!
   \**********************************************************************/
 
 /**
