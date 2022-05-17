@@ -228,11 +228,11 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     return (
       <>
         <div className="dropdown" ref={this.createMenuRef}>
-          <a className={`button create primary ready ${this.canCreate() ? "" : "disabled"} ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
+          <a className={`button create primary ${this.canCreate() ? "" : "disabled"} ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
             <Icon name="add"/>
             <span><Trans>Create</Trans></span>
           </a>
-          <ul className={`dropdown-content menu ready right ${this.state.createMenuOpen ? "visible" : ""}`}>
+          <ul className={`dropdown-content menu right ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="password_action">
               <div className="row">
                 <div className="main-cell-wrapper">
