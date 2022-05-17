@@ -150,7 +150,7 @@ class GenerateOrganizationKey extends React.Component {
       this.validatePasswordInput();
     } else {
       const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
-      const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+      const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
       const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
       this.setState({passwordWarning});
     }
@@ -342,7 +342,12 @@ class GenerateOrganizationKey extends React.Component {
               autoComplete="off" disabled={true} />
           </div>
           <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-            <label htmlFor="generate-organization-key-form-password"><Trans>Organization key passphrase</Trans></label>
+            <label htmlFor="generate-organization-key-form-password">
+              <Trans>Organization key passphrase</Trans>
+              {this.state.passwordWarning &&
+                <Icon name="exclamation"/>
+              }
+            </label>
             <Password id="generate-organization-key-form-password" name="password"
               placeholder={this.translate("Passphrase")} autoComplete="new-password" preview={true}
               securityToken={this.props.context.userSettings.getSecurityToken()}
@@ -354,7 +359,7 @@ class GenerateOrganizationKey extends React.Component {
                 <div className="password error-message">{this.state.passwordError}</div>
             }
             {this.state.passwordWarning &&
-                <div className="password warning message">{this.state.passwordWarning}</div>
+                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
             }
           </div>
         </div>
