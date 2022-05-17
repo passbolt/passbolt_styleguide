@@ -284,6 +284,8 @@ object-assign
 
 /*! ../internals/create-property-descriptor */
 
+/*! ../internals/define-built-in */
+
 /*! ../internals/define-iterator */
 
 /*! ../internals/define-well-known-symbol */
@@ -415,8 +417,6 @@ object-assign
 /*! ../internals/ordinary-to-primitive */
 
 /*! ../internals/path */
-
-/*! ../internals/redefine */
 
 /*! ../internals/regexp-flags */
 
@@ -868,10 +868,6 @@ object-assign
 
 /*!*********************************************************!*\
   !*** ./node_modules/core-js-pure/internals/is-array.js ***!
-  \*********************************************************/
-
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js-pure/internals/redefine.js ***!
   \*********************************************************/
 
 /*!*********************************************************!*\
@@ -1356,6 +1352,10 @@ object-assign
 
 /*!****************************************************************!*\
   !*** ./node_modules/core-js-pure/internals/create-property.js ***!
+  \****************************************************************/
+
+/*!****************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/define-built-in.js ***!
   \****************************************************************/
 
 /*!****************************************************************!*\
