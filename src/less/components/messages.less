@@ -39,6 +39,16 @@
   &.notice {
     color:@message-notice-color;
     background: @message-notice-background;
+    --icon-color: @message-notice-color;
+
+    a {
+      color:@message-notice-color;
+
+      &:hover {
+        color: @font-focus;
+        border-bottom: 1px solid @border-link-focus;
+      }
+    }
   }
   &.warning {
     color:@message-warning-color;
