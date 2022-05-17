@@ -23,6 +23,7 @@ import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/Use
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 
 
 /**
@@ -63,6 +64,15 @@ class DisplayUsers extends React.Component {
   createRefs() {
     this.listRef = React.createRef();
     this.dragFeedbackElement = React.createRef();
+  }
+
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  componentDidMount() {
+    this.props.accountRecoveryContext.findAccountRecoveryPolicy();
   }
 
   /**
@@ -265,7 +275,9 @@ class DisplayUsers extends React.Component {
    * @returns {boolean}
    */
   hasAccountRecoveryColumn() {
-    return this.props.context.siteSettings.canIUse("accountRecovery") && this.isLoggedInUserAdmin();
+    return this.props.context.siteSettings.canIUse("accountRecovery")
+      && this.isLoggedInUserAdmin()
+      && this.props.accountRecoveryContext.isPolicyEnabled();
   }
 
   /**
@@ -570,7 +582,8 @@ DisplayUsers.propTypes = {
   userWorkspaceContext: PropTypes.any, // The user workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  accountRecoveryContext: PropTypes.object, // The account recovery context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withTranslation('common')(DisplayUsers))))));
+export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withUserWorkspace(withAccountRecovery(withTranslation('common')(DisplayUsers)))))));

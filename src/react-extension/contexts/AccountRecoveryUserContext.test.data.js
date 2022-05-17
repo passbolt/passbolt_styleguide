@@ -40,7 +40,7 @@ export const defaultOrganizationAccountRecoveryPolicy = (data = {}) => {
 
 /**
  * Default context
- * @param {Object} appContext The props to override
+ * @param {Object} data The props to override
  * @returns {object}
  */
 export const defaultProps = (data = {}) => {
@@ -53,3 +53,16 @@ export const defaultProps = (data = {}) => {
   delete data.context;
   return Object.assign(defaultData, data);
 };
+
+/**
+ * Default context
+ * @param {Object} context The props to override
+ * @returns {object}
+ */
+export function defaultAccountRecoveryUserContext(context = {}) {
+  const defaultContext = {
+    findAccountRecoveryPolicy: jest.fn(),
+    isPolicyEnabled: jest.fn(() => true)
+  };
+  return Object.assign(defaultContext, context);
+}

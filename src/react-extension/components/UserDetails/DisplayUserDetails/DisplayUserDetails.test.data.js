@@ -1,4 +1,22 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.13.0
+ */
+
 import MockPort from "../../../test/mock/MockPort";
+import UserSettings from "../../../../shared/lib/Settings/UserSettings";
+import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -8,12 +26,8 @@ import MockPort from "../../../test/mock/MockPort";
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
-    userSettings: {
-      getTrustedDomain: () => (new URL(window.location.href)).origin
-    },
-    siteSettings: {
-      getServerTimezone: () => ""
-    },
+    userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: new SiteSettings(siteSettingsFixture),
     groups:  [
       {
         "id": "516c2db6-0aed-52d8-854f-b3f3499995e7",

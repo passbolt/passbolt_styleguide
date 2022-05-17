@@ -14,6 +14,9 @@
 
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {
+  defaultAccountRecoveryUserContext,
+} from "../../../contexts/AccountRecoveryUserContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -38,6 +41,7 @@ export function defaultContext(data = {}) {
  */
 export function defaultProps() {
   return {
+    accountRecoveryContext: defaultAccountRecoveryUserContext(),
     userWorkspaceContext: {
       onUserScrolled: () => {},
       scrollTo: {

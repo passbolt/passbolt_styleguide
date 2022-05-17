@@ -1,29 +1,19 @@
-import MockPort from "../../../test/mock/MockPort";
-
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.11.0
  */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    userSettings: {
-      getTrustedDomain: () => (new URL(window.location.href)).origin
-    },
-    siteSettings: {
-      getServerTimezone: () => ""
-    },
-    roles: [
-      {
-        id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
-        name: 'Admin'
-      }
-    ]
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
 
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 
 /**
  * Default props
@@ -31,6 +21,8 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    context: defaultAppContext(),
+    accountRecoveryContext: defaultAccountRecoveryUserContext(),
     userWorkspaceContext: {
       details: {
         user: {
