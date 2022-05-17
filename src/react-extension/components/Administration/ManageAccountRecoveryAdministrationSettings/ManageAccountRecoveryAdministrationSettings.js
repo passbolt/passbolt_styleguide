@@ -354,12 +354,11 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
             <h3>
               <span className="input toggle-switch form-element ">
                 <input type="checkbox" className="toggle-switch-checkbox checkbox" name="organisationRecoveryKeyToggle" disabled={this.hasAllInputDisabled()} checked={this.isPolicyEnabled()} id="recovery-key-toggle-button" />
-                <label className="toggle-switch-button" htmlFor="recovery-key-toggle-button" />
+                <label htmlFor="recovery-key-toggle-button"><Trans>Organization Recovery Key</Trans></label>
               </span>
-              <label htmlFor="recovery-key-toggle-button"><Trans>Organization Recovery Key</Trans></label>
             </h3>
             {this.isPolicyEnabled() &&
-              <div>
+              <>
                 <p>
                   <Trans>Your organization recovery key will be used to decrypt and recover the private key and passphrase of the users that are participating in the account recovery program.</Trans> <Trans>The organization private recovery key should not be stored in passbolt.</Trans> <Trans>You should keep it offline in a safe place.</Trans>
                 </p>
@@ -405,7 +404,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                     </tbody>
                   </table>
                 </div>
-              </div>
+              </>
             }
           </form>
         </div>
