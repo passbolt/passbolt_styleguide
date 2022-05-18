@@ -52,7 +52,7 @@ class SaveResource extends React.Component {
       uriError: "",
       password: "",
       passwordError: "",
-      passwordEntropy: 0,
+      passwordEntropy: null,
     };
   }
 
@@ -168,7 +168,7 @@ class SaveResource extends React.Component {
   }
 
   loadPassword(password) {
-    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
     this.setState({password, passwordEntropy});
   }
 

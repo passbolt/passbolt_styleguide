@@ -627,7 +627,7 @@ class EditResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
 
     return (

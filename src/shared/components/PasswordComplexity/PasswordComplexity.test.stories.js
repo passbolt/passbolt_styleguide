@@ -23,6 +23,9 @@ export default {
 const Template = () =>
   <div style={{display: "flex", flexWrap: "wrap"}}>
     <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
       <PasswordComplexity entropy={0}/>
     </div>
     <div style={{width: "49%", marginRight: "1%"}}>

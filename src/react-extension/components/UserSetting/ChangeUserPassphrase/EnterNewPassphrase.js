@@ -50,7 +50,7 @@ class EnterNewPassphrase extends React.Component {
   get defaultState() {
     return {
       passphrase: '', // The current passphrase
-      passphraseEntropy: 0,  // The current passphrase entropy
+      passphraseEntropy: null,  // The current passphrase entropy
       actions: {
         processing: false // True if one's processing passphrase
       },
@@ -77,7 +77,7 @@ class EnterNewPassphrase extends React.Component {
   get isValid() {
     const validation = {
       enoughLength:  this.state.passphrase.length >= 8,
-      enoughEntropy: this.state.passphraseEntropy !== 0,
+      enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy !== 0,
       notInDictionary: this.state.hintClassNames.notInDictionary === "success"
     };
     return Object.values(validation).every(value => value);
@@ -134,7 +134,7 @@ class EnterNewPassphrase extends React.Component {
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
     this.setState({passphrase});
-    const passphraseEntropy = SecretGenerator.entropy(passphrase);
+    const passphraseEntropy = passphrase ? SecretGenerator.entropy(passphrase) : null;
     const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
     this.setState({passphraseEntropy, hintClassNames});
     await this.checkPassphraseIsInDictionary();
@@ -152,7 +152,7 @@ class EnterNewPassphrase extends React.Component {
     const notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
 
     // if the passphrase is in dictionary, force the complexity to n/a
-    const passphraseEntropy = isPwned ? 0 : this.state.passphraseEntropy;
+    const passphraseEntropy = Boolean(this.state.passphrase) && isPwned ? 0 : this.state.passphraseEntropy;
 
     this.setState({
       hintClassNames: {
