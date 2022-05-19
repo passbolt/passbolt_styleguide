@@ -230,7 +230,7 @@ class ResourceViewPage extends React.Component {
         console.error('An error occured', error);
         this.setState({
           usingOnThisTab: false,
-          useOnThisTabError: "Unable to use the password on this page. Copy and paste the information instead."
+          useOnThisTabError: this.props.t("Unable to use the password on this page. Copy and paste the information instead.")
         });
       }
     }
@@ -428,8 +428,13 @@ class ResourceViewPage extends React.Component {
           </li>
         </ul>
         <div className="submit-wrapper input">
-          <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "processing" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
-            <Trans>use on this page</Trans>
+          <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
+            {this.state.usingOnThisTab &&
+              <Icon name="spinner"/>
+            }
+            {!this.state.usingOnThisTab &&
+              <Trans>use on this page</Trans>
+            }
           </a>
           {this.state.useOnThisTabError &&
           <div className="error-message">{this.state.useOnThisTabError}</div>
