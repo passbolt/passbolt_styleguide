@@ -98,7 +98,7 @@ export const mockGpgKey = {
   "uid": "Ada Lovelace \u003Cada@passbolt.com\u003E",
   "keyId": "5D9B054F",
   "fingerprint": "03F60E958F4CB29723ACDF761353B5B15D9B054F",
-  "algorithm": "rsa_encrypt",
+  "algorithm": "rsa",
   "expires": null,
   "key_created": "2015-08-09T12:48:31+00:00",
   "deleted": false,
