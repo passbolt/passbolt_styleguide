@@ -63,7 +63,7 @@ class DisplayUnexpectedError extends Component {
    */
   get hasErrorDetails() {
     const error = this.props?.error;
-    return Boolean(error?.details) || Boolean(error?.data);
+    return Boolean(error?.details) || Boolean(error?.data?.body);
   }
 
   /**
