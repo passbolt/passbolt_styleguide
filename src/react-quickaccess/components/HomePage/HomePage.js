@@ -190,7 +190,7 @@ class HomePage extends React.Component {
         console.error('An error occured', error);
         this.setState({
           usingOnThisTab: false,
-          useOnThisTabError: "Unable to use the password on this page. Copy and paste the information instead."
+          useOnThisTabError: this.props.t("Unable to use the password on this page. Copy and paste the information instead.")
         });
       }
     }
@@ -319,7 +319,7 @@ class HomePage extends React.Component {
             </div>
           }
         </div>
-        <div className="submit-wrapper button-after-list">
+        <div className="submit-wrapper button-after-list input">
           <Link to={`/data/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
