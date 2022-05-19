@@ -111,12 +111,8 @@ class DisplayUserGpgInformation extends React.Component {
    */
   get gpgkeyType() {
     return {
-      // RSA (Encrypt or Sign) [HAC]
-      rsa_encrypt_sign: "RSA",
-      // RSA (Encrypt only) [HAC]
-      rsa_encrypt: "RSA",
-      // RSA (Sign only) [HAC]
-      rsa_sign: "RSA",
+      // RSA (any type) [HAC]
+      rsa: "RSA",
       // Elgamal (Encrypt only) [ELGAMAL] [HAC]
       elgamal: "Elgamal",
       // DSA (Sign only) [FIPS186] [HAC]
