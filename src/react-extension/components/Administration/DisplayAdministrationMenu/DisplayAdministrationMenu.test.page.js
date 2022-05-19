@@ -51,7 +51,7 @@ export default class DisplayAdministrationMenuPage {
    * Returns the menu
    */
   get menuSelected() {
-    return this._page.container.querySelector('.row.selected .main-cell-wrapper .main-cell a').textContent;
+    return this._page.container.querySelector('.row.selected .main-cell-wrapper .main-cell a span').textContent;
   }
 
   /**
