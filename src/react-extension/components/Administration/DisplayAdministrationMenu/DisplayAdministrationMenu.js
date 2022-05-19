@@ -256,7 +256,10 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleAccountRecoveryClick}><span><Trans>Account Recovery</Trans></span></a>
+                  <a onClick={this.handleAccountRecoveryClick}>
+                    <span><Trans>Account Recovery</Trans></span>
+                    <span className="chips beta">BETA</span>
+                  </a>
                 </div>
               </div>
             </div>

@@ -163,7 +163,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
         <div className="grid grid-responsive-12">
           <div className="row">
             {this.isAccountRecoveryFeatureEnabled &&
-              <div className="col8 account-recovery-profile">
+              <div className="col8 account-recovery-profile main-column">
                 <h3><Trans>Account Recovery</Trans></h3>
                 <p>
                   <Trans>It is possible to share securely your recovery kit with the administrator.</Trans>&nbsp;
@@ -213,7 +213,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
               </div>
             }
             <div className="col4 last">
-              <div>
+              <div className="sidebar-help">
                 <h3><Trans>Need some help?</Trans></h3>
                 <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
                 <a className="button" href="https://help.passbolt.com" target="_blank" rel="noopener noreferrer">

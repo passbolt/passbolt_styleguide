@@ -156,10 +156,10 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                   <a onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
                     <span>
                       <Trans>Account Recovery</Trans>
-                      {this.props.hasPendingAccountRecoveryChoice &&
-                      <Icon name="exclamation"/>
-                      }
                     </span>
+                    {this.props.hasPendingAccountRecoveryChoice &&
+                      <Icon name="exclamation"/>
+                    }
                   </a>
                 </div>
               </div>
