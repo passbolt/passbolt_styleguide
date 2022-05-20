@@ -236,6 +236,21 @@ const Template = () =>
     <span style={{width: "100%", marginBottom: ".5rem"}}>Password Field</span>
     <div style={{width: "24%", marginRight: "1%"}}>
       <div className="input-password-wrapper input required">
+        <label htmlFor="password-0">Password</label>
+        <div className="password-button-inline">
+          <Password {...defaultProps({id: "password-0", placeholder: "Password", securityToken: false})}/>
+          <a className="button button-icon">
+            <Icon name='dice'/>
+          </a>
+          <a className="button button-icon">
+            <Icon name='settings'/>
+          </a>
+        </div>
+        <PasswordComplexity/>
+      </div>
+    </div>
+    <div style={{width: "24%", marginRight: "1%"}}>
+      <div className="input-password-wrapper input required">
         <label htmlFor="password-1">Password</label>
         <div className="password-button-inline">
           <Password {...defaultProps({id: "password-1", placeholder: "Password", securityToken: false})}/>

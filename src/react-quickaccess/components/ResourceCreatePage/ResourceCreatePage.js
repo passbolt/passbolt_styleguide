@@ -44,7 +44,7 @@ class ResourceCreatePage extends React.Component {
       uriError: "",
       password: "",
       passwordError: "",
-      passwordEntropy: 0,
+      passwordEntropy: null,
     };
   }
 
@@ -307,7 +307,7 @@ class ResourceCreatePage extends React.Component {
   }
 
   loadPassword(password) {
-    const passwordEntropy = SecretGenerator.entropy(password);
+    const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
     this.setState({password, passwordEntropy});
   }
 

@@ -528,7 +528,7 @@ class CreateResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
 
     return (
       <DialogWrapper title={this.translate("Create a password")} className="create-password-dialog"

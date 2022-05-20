@@ -296,7 +296,7 @@ class GenerateOrganizationKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const passwordEntropy = SecretGenerator.entropy(this.state.password);
+    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
         <div className="form-content generate-organization-key">

@@ -77,11 +77,21 @@ class PasswordComplexity extends Component {
   }
 
   /**
+   * Get the entropy value to display.
+   * @returns {Number}
+   */
+  get entropy() {
+    const entropy = this.props.entropy || 0.0
+    return entropy.toFixed(1);
+  }
+
+  /**
    * Has entropy
    * @returns {boolean}
    */
   hasEntropy() {
-    return this.props.entropy > 0;
+    return this.props.entropy !== null
+      && typeof this.props.entropy !== "undefined";
   }
 
   /**
@@ -112,7 +122,7 @@ class PasswordComplexity extends Component {
       <div className="password-complexity">
         <span className="complexity-text">
           {(this.hasEntropy() || this.hasError()) &&
-            <>{strength.label} (<Trans>entropy:</Trans> {this.props.entropy.toFixed(1)} bits)</>
+            <>{strength.label} (<Trans>entropy:</Trans> {this.entropy} bits)</>
           }
           {!this.hasEntropy() && !this.hasError() &&
             <Trans>Quality</Trans>
@@ -127,7 +137,7 @@ class PasswordComplexity extends Component {
 }
 
 PasswordComplexity.defaultProps = {
-  entropy: 0
+  entropy: null
 };
 
 PasswordComplexity.propTypes = {
