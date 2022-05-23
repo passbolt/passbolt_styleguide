@@ -128,7 +128,7 @@ class Password extends Component {
         {this.props.preview &&
           <div className="password-view-wrapper">
             <a onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
-              className={`password-view button button-transparent ${this.props.disabled ? "disabled" : ""}`}>
+              className={`password-view infield button button-transparent ${this.props.disabled ? "disabled" : ""}`}>
               {!this.state.viewPassword &&
                 <Icon name='eye-open'/>
               }
