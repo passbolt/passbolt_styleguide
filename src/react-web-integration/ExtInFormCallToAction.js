@@ -32,7 +32,7 @@ class ExtInFormCallToAction extends React.Component {
   get defaultState() {
     return {
       port: this.props.port
-    }
+    };
   }
 
   /**

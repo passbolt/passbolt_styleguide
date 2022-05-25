@@ -151,7 +151,6 @@ class AskInFormMenuDisplay extends React.Component {
       </>
     );
   }
-
 }
 
 AskInFormMenuDisplay.propTypes = {

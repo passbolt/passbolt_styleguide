@@ -116,10 +116,10 @@ mockPortPasswordEmpty.addRequestListener('passbolt.in-form-menu.init', () => get
 const mockPortPasswordFilled = new MockPort();
 mockPortPasswordFilled.addRequestListener('passbolt.in-form-menu.init', () => getResponse("password", "test",));
 
-const Template = (args) =>
+const Template = args =>
   <div className="web-integration">
     <DisplayInFormMenu {...args}/>
-  </div>
+  </div>;
 
 export const OnUsernameFieldWithEmptyValue = Template.bind({});
 export const OnUsernameFieldWithValue = Template.bind({});

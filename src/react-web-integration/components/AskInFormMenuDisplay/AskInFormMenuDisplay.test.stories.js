@@ -17,6 +17,7 @@ import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import ReactDOM from "react-dom";
 import AppContext from "../../contexts/AppContext";
 import MockPort from "../../../react-extension/test/mock/MockPort";
+import PropTypes from "prop-types";
 
 export default {
   title: 'Passbolt/WebIntegration/AskInFormMenuDisplay',
@@ -27,14 +28,14 @@ export default {
 // Simulate Iframe anchor of In-form components
 const InFormAnchor = ({context}) => {
   useEffect(() => {
-    const loginInput = document.querySelector('input')
+    const loginInput = document.querySelector('input');
     const anchor = document.createElement("div");
     loginInput.parentNode.insertBefore(anchor, loginInput);
 
     // Find the position to insert the in-form component in regard of the input
     const {top, left, width, height} = loginInput.getBoundingClientRect();
-    const leftAnchorPosition = left + width - 25 // 25px inside the input
-    const topAnchorPosition = top + (height-16) / 2; // Look for the difference between the input height and the icon size 16
+    const leftAnchorPosition = left + width - 25; // 25px inside the input
+    const topAnchorPosition = top + (height - 16) / 2; // Look for the difference between the input height and the icon size 16
     const containerStyle = {zIndex: 200, position: 'absolute', top: topAnchorPosition, left: leftAnchorPosition};
     const InForm = () =>
       <AppContext.Provider value={context}>
@@ -43,11 +44,15 @@ const InFormAnchor = ({context}) => {
             <AskInFormMenuDisplay/>
           </div>
         </div>
-      </AppContext.Provider>
+      </AppContext.Provider>;
     ReactDOM.render(<InForm/>, anchor);
   }, []);
   return (<></>);
-}
+};
+
+InFormAnchor.propTypes = {
+  context: PropTypes.object,
+};
 
 const Template = ({context}) =>
   <div>
@@ -56,6 +61,10 @@ const Template = ({context}) =>
       placeholder="username"/>
     <InFormAnchor context={context}/>
   </div>;
+
+Template.propTypes = {
+  context: PropTypes.object,
+};
 
 const parameters = {
   css: "ext_in_form_cta"

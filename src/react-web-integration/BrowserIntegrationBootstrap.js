@@ -56,7 +56,7 @@ async function getSiteSettings() {
   try {
     const siteSettingsDto = await port.request('passbolt.organization-settings.get', false);
     return new SiteSettings(siteSettingsDto);
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   }
 }

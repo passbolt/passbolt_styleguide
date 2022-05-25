@@ -49,4 +49,4 @@ export default {
   input[type='text' i][name*='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='password' i]:not([hidden]):not([disabled])`
-}
+};

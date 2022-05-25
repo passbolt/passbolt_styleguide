@@ -16,9 +16,8 @@
  * Some DOM utils
  */
 class DomUtils {
-
   static getAccessibleAndSameDomainIframes() {
-    return Array.prototype.filter.call( document.querySelectorAll("iframe"), iframe => {
+    return Array.prototype.filter.call(document.querySelectorAll("iframe"), iframe => {
       const contentDocument = DomUtils.getAccessedIframeContentDocument(iframe);
       return contentDocument && DomUtils.isRequestInitiatedFromSameOrigin(window.location.href, contentDocument.location.href);
     });
@@ -37,7 +36,7 @@ class DomUtils {
       console.error(error);
     }
     return iframeContentDocument;
-  };
+  }
 
 
   /**
@@ -59,7 +58,7 @@ class DomUtils {
 
     // Requested document and top/iframe document origin is same
     return requestedOrigin === documentOrigin;
-  };
+  }
 
   /**
    * Returns the first scrollable parent of the given node
@@ -71,7 +70,7 @@ class DomUtils {
     const style = (node, prop) =>
       getComputedStyle(node, null).getPropertyValue(prop);
 
-    const isScrollable = (node) =>
+    const isScrollable = node =>
       regex.test(
         style(node, "overflow") +
         style(node, "overflow-y") +
@@ -84,7 +83,7 @@ class DomUtils {
       } else if (isScrollable(node)) {
         return node;
       } else {
-        return scrollParent(node.parentNode)
+        return scrollParent(node.parentNode);
       }
     };
     return scrollParent(node);
