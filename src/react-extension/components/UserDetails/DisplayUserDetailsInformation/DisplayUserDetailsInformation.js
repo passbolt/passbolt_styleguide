@@ -109,7 +109,7 @@ class DisplayUserDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   hasMfaSection() {
-    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin();
+    return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin() && this.user.active;
   }
 
   /**
@@ -119,7 +119,8 @@ class DisplayUserDetailsInformation extends React.Component {
   hasAccountRecoverySection() {
     return this.props.context.siteSettings.canIUse("accountRecovery")
       && this.isLoggedInUserAdmin()
-      && this.props.accountRecoveryContext.isPolicyEnabled();
+      && this.props.accountRecoveryContext.isPolicyEnabled()
+      && this.user.active;
   }
 
   /**
