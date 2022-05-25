@@ -60,7 +60,7 @@ export class CsrfToken {
    * Get the current csrf token from cookie
    * @returns {string}
    */
-   static getToken() {
+  static getToken() {
     const cookieString = document.cookie;
     if (!cookieString) {
       return undefined;

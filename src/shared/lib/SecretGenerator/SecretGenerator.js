@@ -34,7 +34,7 @@ export const SecretGenerator = {
    * @param secret A secret
    * @return {Number} The secret entropy
    */
-  entropy: (secret) => {
+  entropy: secret => {
     const {numberWords, separator, isPassphrase} = PassphraseGenerator.detectPassphrase(secret);
     if (isPassphrase) {
       return SecretGeneratorComplexity.entropyPassphrase(numberWords, separator);

@@ -27,7 +27,6 @@ const DEFAULT_LOCALE_URL = '/locales/{{lng}}/{{ns}}.json';
  * This component set up the translation process
  */
 class TranslationProvider extends Component {
-
   constructor(props) {
     super(props);
     this.state = this.defaultState;
@@ -79,7 +78,7 @@ class TranslationProvider extends Component {
       // I18next plugin used to load the translations json over http.
       .use(HttpApi)
       // init i18next, once done store the i18next instance in the state.
-      .init(this.i18nextOptions, () => this.setState({i18next, locale:this.props.locale}));
+      .init(this.i18nextOptions, () => this.setState({i18next, locale: this.props.locale}));
   }
 
   /**

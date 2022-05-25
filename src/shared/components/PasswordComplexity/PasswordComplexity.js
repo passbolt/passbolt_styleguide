@@ -81,7 +81,7 @@ class PasswordComplexity extends Component {
    * @returns {Number}
    */
   get entropy() {
-    const entropy = this.props.entropy || 0.0
+    const entropy = this.props.entropy || 0.0;
     return entropy.toFixed(1);
   }
 

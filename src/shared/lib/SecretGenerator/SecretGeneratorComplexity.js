@@ -165,17 +165,15 @@ export const SecretGeneratorComplexity = {
    * @param {number} entropy The entropy
    * @returns {{strength: number, id: string, label: string}|{strength: number, id: string, label: string}|{strength: number, id: string, label: string}|{strength: number, id: string, label: string}|{strength: number, id: string, label: string}}
    */
-  strength: (entropy = 0) => {
-    return STRENGTH.reduce((accumulator, item) => {
-      if (!accumulator) {
-        return item;
-      }
-      if (item.strength > accumulator.strength && entropy >= item.strength) {
-        return item;
-      }
-      return accumulator;
-    });
-  },
+  strength: (entropy = 0) => STRENGTH.reduce((accumulator, item) => {
+    if (!accumulator) {
+      return item;
+    }
+    if (item.strength > accumulator.strength && entropy >= item.strength) {
+      return item;
+    }
+    return accumulator;
+  }),
   calculEntropy
 };
 
