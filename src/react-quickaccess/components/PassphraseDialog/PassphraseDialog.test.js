@@ -16,7 +16,6 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("PassphraseDialog", () => {
-
   it("should execute the onComplete prop function when the passphrase is correct", async() => {
     const onComplete = jest.fn();
     const appContext = {
@@ -45,5 +44,4 @@ describe("PassphraseDialog", () => {
     await waitFor(() => {});
     expect(onComplete).toHaveBeenCalled();
   });
-
 });

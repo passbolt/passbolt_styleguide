@@ -13,7 +13,6 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("Search", () => {
-
   it("should render the prop search as default input value", () => {
     const appContext = {
       search: "search keywords"

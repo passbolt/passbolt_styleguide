@@ -5,7 +5,6 @@ import {withAppContext} from "../../contexts/AppContext";
 import Icon from "../../../shared/components/Icons/Icon";
 
 class Search extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = this.defaultState;
@@ -89,7 +88,7 @@ class Search extends React.Component {
           <input name="search" maxLength="50" type="search" placeholder={this.translate("search")} autoComplete="off"
             ref={this.searchInputRef} onChange={this.handleInputChange} value={this.props.context.search} />
           <div className="search-button-wrapper">
-            <button className="button button-transparent" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
+            <button className="button button-transparent" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit">
               <Icon name="search"/>
               <span className="visuallyhidden">Search</span>
             </button>
@@ -105,4 +104,4 @@ Search.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common', { withRef: true })(Search));
+export default withAppContext(withTranslation('common', {withRef: true})(Search));

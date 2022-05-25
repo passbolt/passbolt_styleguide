@@ -18,13 +18,6 @@ import {withAppContext} from "../../contexts/AppContext";
 
 class ManageQuickAccessMode extends Component {
   /**
-   * Default constructor
-   */
-  constructor(props) {
-    super(props);
-  }
-
-  /**
    * Whenever the component is mounted
    */
   componentDidMount() {

@@ -79,7 +79,7 @@ class ResourceCreatePage extends React.Component {
   handleLastGeneratedPassword() {
     const currentLastGeneratedPassword = this.props.prepareResourceContext.getLastGeneratedPassword();
     if (currentLastGeneratedPassword?.length > 0) {
-      this.loadPassword(currentLastGeneratedPassword)
+      this.loadPassword(currentLastGeneratedPassword);
     }
   }
 
@@ -104,7 +104,7 @@ class ResourceCreatePage extends React.Component {
   async loadPasswordMetaFromTabInfo() {
     const {name, uri, username, password} = await this.getPasswordMetaFromTabInfo();
     this.setState({name, uri, username});
-    if(password?.length > 0) {
+    if (password?.length > 0) {
       this.loadPassword(password);
     }
     await this.focusFirstEmptyField(name, uri, username, password);
@@ -160,7 +160,7 @@ class ResourceCreatePage extends React.Component {
           this.uriInputRef.current.focus();
         } else if (username === "") {
           this.usernameInputRef.current.focus();
-        } else if(password === "") {
+        } else if (password === "") {
           this.passwordInputRef.current.focus();
         }
         resolve();
@@ -238,7 +238,7 @@ class ResourceCreatePage extends React.Component {
   }
 
   handleSubmitError(error) {
-    if(error.name === "UserAbortsOperationError") {
+    if (error.name === "UserAbortsOperationError") {
       this.setState({processing: false});
     } else if (error.name === "PassboltApiFetchError"
       && error.data.code === 400 && error.data.body
