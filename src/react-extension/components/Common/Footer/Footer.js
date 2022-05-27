@@ -132,14 +132,24 @@ class Footer extends Component {
               </a>
             </li>
             <li>
-              <Tooltip message={this.versions} direction="left">
+              {this.versions &&
+                <Tooltip message={this.versions} direction="left">
+                  <a
+                    href={this.creditsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Icon name="heart-o"/>
+                  </a>
+                </Tooltip>
+              }
+              {!this.versions &&
                 <a
                   href={this.creditsUrl}
                   target="_blank"
                   rel="noopener noreferrer">
                   <Icon name="heart-o"/>
                 </a>
-              </Tooltip>
+              }
             </li>
           </ul>
         </div>
