@@ -111,7 +111,7 @@ class AnimatedSwitch extends React.Component {
       transition = "slideRight";
     } else {
       /*
-       * The page has changed but not transition has been defined for it.
+       * The page has changed but no transition has been defined for it.
        * Use the default noTransition transition
        */
       if (currentLocationPath !== this._previousLocationPathname) {
