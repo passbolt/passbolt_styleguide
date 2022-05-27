@@ -204,9 +204,9 @@ class DisplayAccountRecoveryUserSettings extends Component {
               </div>
             }
             {!this.isAccountRecoveryFeatureEnabled &&
-              <div className="col8 account-recovery-profile">
+              <div className="col8 account-recovery-profile main-column">
                 <h3><Trans>Account Recovery</Trans></h3>
-                <h4><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
+                <h4 className="no-border"><Trans>Sorry the account recovery feature is not enabled for this organization.</Trans></h4>
                 <p>
                   <Trans>Please contact your administrator to enable the account recovery feature.</Trans>
                 </p>
