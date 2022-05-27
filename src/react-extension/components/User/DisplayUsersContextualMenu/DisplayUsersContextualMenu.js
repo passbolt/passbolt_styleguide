@@ -236,6 +236,15 @@ class DisplayUsersContextualMenu extends React.Component {
   }
 
   /**
+   * Check if the public key of the user could be copied.
+   * It's not the case if users are inactive as they don't have public key at this stage.
+   * @return {boolean}
+   */
+  canCopyPublicKey() {
+    return this.user.active;
+  }
+
+  /**
    * Has a pending account recovery for the user.
    * @returns {boolean}
    */
@@ -325,7 +334,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handlePublicKeyCopy}>
+                <a
+                  onClick={this.handlePublicKeyCopy}
+                  className={this.canCopyPublicKey() ? '' : 'disabled'}>
                   <span><Trans>Copy public key</Trans></span>
                 </a>
               </div>
