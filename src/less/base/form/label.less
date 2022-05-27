@@ -7,13 +7,18 @@ label {
     width: max-content;
     max-width: 100%;
 
-    & > :first-child {
+    & > * {
         margin-left: .4rem;
     }
 
-    svg {
-        height: 1.2rem;
-        width: 1.2rem;
+    .svg-icon {
+        &.exclamation {
+            --icon-exclamation-background-color: @icon-exclamation-required-color;
+        }
+        svg {
+            height: 1.2rem;
+            width: 1.2rem;
+        }
     }
 }
 

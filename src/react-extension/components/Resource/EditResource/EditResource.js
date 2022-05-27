@@ -450,7 +450,7 @@ class EditResource extends Component {
   async handlePasswordInputKeyUp() {
     const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
     await this.validatePasswordInput();
-    const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+    const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
     const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
     this.setState({passwordWarning});
   }
@@ -503,7 +503,7 @@ class EditResource extends Component {
   handleDescriptionInputKeyUp() {
     const hasResourceDescriptionMaxLength = this.state.description.length >= RESOURCE_DESCRIPTION_MAX_LENGTH;
 
-    const warningMessage = this.translate("Warning: this is the maximum size for this field, make sure your data was not truncated");
+    const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
     const descriptionWarning = hasResourceDescriptionMaxLength ? warningMessage : '';
     this.setState({descriptionWarning});
   }
@@ -664,7 +664,12 @@ class EditResource extends Component {
               }
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-              <label htmlFor="edit-password-form-password"><Trans>Password</Trans></label>
+              <label htmlFor="edit-password-form-password">
+                <Trans>Password</Trans>
+                {this.state.passwordWarning &&
+                  <Icon name="exclamation"/>
+                }
+              </label>
               <div className="password-button-inline">
                 <Password id="edit-password-form-password" name="password"
                   onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
@@ -689,11 +694,14 @@ class EditResource extends Component {
                 <div className="password error-message">{this.state.passwordError}</div>
               }
               {this.state.passwordWarning &&
-                <div className="password warning message">{this.state.passwordWarning}</div>
+                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
               }
             </div>
             <div className="input textarea">
               <label htmlFor="edit-password-form-description"><Trans>Description</Trans>
+                {this.state.descriptionWarning &&
+                  <Icon name="exclamation"/>
+                }
                 {!this.areResourceTypesEnabled() &&
                 <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
                   <Icon name="info-circle"/>
@@ -724,7 +732,7 @@ class EditResource extends Component {
               <div className="error-message">{this.state.descriptionError}</div>
               }
               {this.state.descriptionWarning &&
-              <div className="warning message">{this.state.descriptionWarning}</div>
+                <div className="warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
               }
             </div>
           </div>
