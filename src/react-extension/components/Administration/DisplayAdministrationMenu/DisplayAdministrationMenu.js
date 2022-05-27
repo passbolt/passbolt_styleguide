@@ -21,6 +21,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 /**
  * This component allows to display the menu of the administration
@@ -258,7 +259,9 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <a onClick={this.handleAccountRecoveryClick}>
                     <span><Trans>Account Recovery</Trans></span>
-                    <span className="chips beta">BETA</span>
+                    <Tooltip message={<Trans>Account recovery is still in beta version. Use it with caution.</Trans>} direction="left">
+                      <span className="chips beta">BETA</span>
+                    </Tooltip>
                   </a>
                 </div>
               </div>
