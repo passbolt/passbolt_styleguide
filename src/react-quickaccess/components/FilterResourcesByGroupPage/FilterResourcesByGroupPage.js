@@ -45,7 +45,7 @@ class FilterResourcesByGroupPage extends React.Component {
 
     // The selected group to use to filter the resources shared on is passed via the history.push state option.
     if (this.props.location.state && this.props.location.state.selectedGroup) {
-      selectedGroup = this.props.location.state.selectedGroup
+      selectedGroup = this.props.location.state.selectedGroup;
     }
 
     return {
@@ -77,7 +77,7 @@ class FilterResourcesByGroupPage extends React.Component {
     this.props.context.updateSearch("");
     // Push the group as state of the component.
     const selectedGroup = this.state.groups.find(group => group.id === groupId);
-    this.props.history.push(`/data/quickaccess/resources/group/${groupId}`, { selectedGroup });
+    this.props.history.push(`/data/quickaccess/resources/group/${groupId}`, {selectedGroup});
   }
 
   handleSelectResourceClick(ev, resourceId) {
@@ -96,7 +96,7 @@ class FilterResourcesByGroupPage extends React.Component {
     const filters = {'has-users': [this.props.context.userSettings.id]};
     const groups = await this.props.context.port.request("passbolt.groups.find-all", {filters});
     this.sortGroupsAlphabetically(groups);
-    this.setState({ groups });
+    this.setState({groups});
   }
 
   async findAndLoadResources() {

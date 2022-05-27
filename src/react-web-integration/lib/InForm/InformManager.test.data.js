@@ -322,7 +322,7 @@ export const domElementLoginWithSubmitButton =
   '    <input type="password"/>' +
   '    <input type="submit"/>' +
   '  </form>';
-  '</div>';
+'</div>';
 
 /**
  * Create a login form only password with submit button in DOM

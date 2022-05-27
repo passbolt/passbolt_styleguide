@@ -78,7 +78,8 @@ class InFormManager {
    * Find authentication callToActionFields in the document and set them as object properties
    */
   findAndSetUsernameAndPasswordFields() {
-    /* We find the username / passwords DOM callToActionFields.
+    /*
+     * We find the username / passwords DOM callToActionFields.
      * If it was previously found, we reuse the same InformUsernameField, otherwise we create one
      * Else we clean and reset callToActionFields
      */
@@ -102,9 +103,10 @@ class InFormManager {
    * Find authentication formFields in the document and set them as object properties
    */
   findAndSetCredentialsFormFields() {
-   /* We find the form DOM formFields.
-    * If it was previously found, we reuse the same InformFormField, otherwise we create one
-    */
+    /*
+     * We find the form DOM formFields.
+     * If it was previously found, we reuse the same InformFormField, otherwise we create one
+     */
     const newCredentialsFormFields = InFormCredentialsFormField.findAll();
     if (newCredentialsFormFields.length > 0) {
       this.credentialsFormFields = newCredentialsFormFields.map(newField => {
@@ -131,7 +133,7 @@ class InFormManager {
    * Whenever the DOM changes
    */
   handleDomChange() {
-    const updateAuthenticationFields = (mutationsList) => {
+    const updateAuthenticationFields = mutationsList => {
       // Check if a child node has been added or removed with type
       const mutationChildNodes = mutation => mutation.type === 'childList';
       // Check if the mutation is an iframe added or removed by us
@@ -142,10 +144,10 @@ class InFormManager {
         this.findAndSetAuthenticationFields();
         this.handleInformCallToActionClickEvent();
       }
-    }
+    };
     // Search again for authentication callToActionFields to attach when the DOM changes
     this.mutationObserver = new MutationObserver(updateAuthenticationFields);
-    this.mutationObserver.observe(document.body, { attributes: true, childList: true, subtree: true });
+    this.mutationObserver.observe(document.body, {attributes: true, childList: true, subtree: true});
   }
 
   /**
@@ -158,7 +160,7 @@ class InFormManager {
     let isInformIframe = false;
     if (this.callToActionFields.length > 0) {
       const isIdPresent = iframe => Array.prototype.some.call(nodeList, node => iframe.iframeId === node.id);
-      isInformIframe = this.callToActionFields.some(isIdPresent)
+      isInformIframe = this.callToActionFields.some(isIdPresent);
     }
     if (!isInformIframe && this.menuField) {
       isInformIframe = Array.prototype.some.call(nodeList, node => this.menuField.iframeId === node.id);
@@ -195,20 +197,20 @@ class InFormManager {
    * Handle the click on the in-form call-to-action (iframe)
    */
   handleInformCallToActionClickEvent() {
-    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => {this.lastCallToActionFieldClicked = callToActionField});
+    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => { this.lastCallToActionFieldClicked = callToActionField; });
     this.callToActionFields.forEach(setLastCallToActionFieldClicked);
   }
 
   /** Whenever one requires to get the type and value of the input attached to the last call-to-action performed */
   handleGetLastCallToActionClickedInput() {
-    port.on('passbolt.web-integration.last-performed-call-to-action-input', (requestId) => {
-      port.emit(requestId, 'SUCCESS', {type: this.lastCallToActionFieldClicked.fieldType, value: this.lastCallToActionFieldClicked.field.value})
+    port.on('passbolt.web-integration.last-performed-call-to-action-input', requestId => {
+      port.emit(requestId, 'SUCCESS', {type: this.lastCallToActionFieldClicked.fieldType, value: this.lastCallToActionFieldClicked.field.value});
     });
   }
 
   /** Whenever one requires to get the current credentials */
   handleGetCurrentCredentials() {
-    port.on('passbolt.web-integration.get-credentials', (requestId) => {
+    port.on('passbolt.web-integration.get-credentials', requestId => {
       const currentFieldType = this.lastCallToActionFieldClicked?.fieldType;
       const isUsernameType = currentFieldType === 'username';
       const isPasswordType = currentFieldType === 'password';
@@ -235,22 +237,22 @@ class InFormManager {
       const isUsernameType = currentFieldType === 'username';
       const isPasswordType = currentFieldType === 'password';
       if (!isUsernameType) {
-        fireEvent.input(this.lastCallToActionFieldClicked.field, { target: { value: password } });
+        fireEvent.input(this.lastCallToActionFieldClicked.field, {target: {value: password}});
         // Get username fields and find the one with the lowest common ancestor
         const usernameFields = this.callToActionFields
           .filter(callToActionField => callToActionField.fieldType === 'username');
         const usernameField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, usernameFields);
         if (usernameField) {
-          fireEvent.input(usernameField.field, { target: { value: username } });
+          fireEvent.input(usernameField.field, {target: {value: username}});
         }
       } else if (!isPasswordType) {
-        fireEvent.input( this.lastCallToActionFieldClicked.field, { target: { value: username } });
+        fireEvent.input(this.lastCallToActionFieldClicked.field, {target: {value: username}});
         // Get password fields and find the one with the lowest common ancestor
         const passwordFields = this.callToActionFields
           .filter(callToActionField => callToActionField.fieldType === 'password');
         const passwordField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, passwordFields);
         if (passwordField) {
-          fireEvent.input(passwordField.field, { target: { value: password } });
+          fireEvent.input(passwordField.field, {target: {value: password}});
         }
       }
     });
@@ -263,7 +265,7 @@ class InFormManager {
     port.on('passbolt.web-integration.fill-password', password => {
       this.callToActionFields
         .filter(callToActionField => callToActionField.fieldType === 'password')
-        .forEach(callToActionField => fireEvent.input(callToActionField.field, { target: { value: password }}));
+        .forEach(callToActionField => fireEvent.input(callToActionField.field, {target: {value: password}}));
       this.menuField.removeMenuIframe();
       // Listen the auto-save on the appropriate form field
       const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));
@@ -286,7 +288,7 @@ class InFormManager {
    * Whenever the port is disconnected due to an update of the extension
    */
   handlePortDisconnectEvent() {
-    port._port.onDisconnect.addListener(this.destroy)
+    port._port.onDisconnect.addListener(this.destroy);
   }
 }
 

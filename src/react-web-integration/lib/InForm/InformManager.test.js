@@ -61,6 +61,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with name attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -80,6 +81,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with name attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -99,6 +101,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with name attribute login", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -118,6 +121,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and name attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -137,6 +141,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type name attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -156,6 +161,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type name attribute login", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndNameAttributeLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -175,6 +181,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with id attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -194,6 +201,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with id attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -213,6 +221,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with id attribute login", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithIdAttributeLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -232,6 +241,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and id attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -251,6 +261,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and id attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -270,6 +281,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and id attribute login", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndIdAttributeLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -289,6 +301,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with autocomplete attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithAutocompleteAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -308,6 +321,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with autocomplete attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithAutocompleteAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -327,6 +341,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and autocomplete attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndAutocompleteAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -346,6 +361,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and autocomplete attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndAutocompleteAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -365,6 +381,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with placeholder attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithPlaceHolderAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -384,6 +401,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with placeholder attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithPlaceHolderAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -403,6 +421,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with placeholder attribute e-mail", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithPlaceHolderAttributeE_mail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -422,6 +441,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and placeholder attribute username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -441,6 +461,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and placeholder attribute email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -460,6 +481,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and placeholder attribute e-mail", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndPlaceHolderAttributeE_mail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -479,6 +501,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with class username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithClassUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -498,6 +521,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with class email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithClassEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -517,6 +541,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type and class username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndClassUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -536,6 +561,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action on form with no type class email", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndClassEmail; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -555,6 +581,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action when I clicked on it and autofill fields", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -577,6 +604,7 @@ describe("InformManager", () => {
 
   it("As LU I should autofill a form with only password", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementOnlyPassword; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -589,6 +617,7 @@ describe("InformManager", () => {
 
   it("As LU I should autofill a form with only username", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementOnlyUsername; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -601,6 +630,7 @@ describe("InformManager", () => {
 
   it("As LU I should see the inform call to action when I clicked on it and autofill only fields in the same parent container", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementWithMultipleLogin; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
@@ -627,6 +657,7 @@ describe("InformManager", () => {
 
   it("As LU I should auto save a form", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithSubmitButton; // The Dom
     const informManager = new InformManagerPage();
     await informManager.clickOnInformCallToAction();
@@ -639,12 +670,13 @@ describe("InformManager", () => {
       password: "password",
       url: "http://localhost/",
       username: "",
-    }
+    };
     expect(window.port.emit).toHaveBeenCalledWith('passbolt.web-integration.autosave', save);
   });
 
   it("As LU I should auto save a form with only password field", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginOnlyPasswordWithSubmitButton; // The Dom
     const informManager = new InformManagerPage();
     await informManager.clickOnInformCallToAction();
@@ -657,12 +689,13 @@ describe("InformManager", () => {
       password: "password",
       url: "http://localhost/",
       username: "",
-    }
+    };
     expect(window.port.emit).toHaveBeenCalledWith('passbolt.web-integration.autosave', save);
   });
 
   it("As LU I shouldn't see the inform call to action on a page with no login form", async() => {
     // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementWithNoUsernamePassword; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);

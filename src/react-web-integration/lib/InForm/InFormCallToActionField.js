@@ -127,8 +127,8 @@ class InFormCallToActionField {
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
-    iframe.style.top = top + 'px'
-    iframe.style.left =  left + 'px';
+    iframe.style.top = `${top}px`;
+    iframe.style.left =  `${left}px`;
     iframe.style.border = 0;
     iframe.style.width = '18px';
     iframe.style.height = '18px';

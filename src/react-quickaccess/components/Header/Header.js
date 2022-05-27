@@ -5,7 +5,6 @@ import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 
 class Header extends React.Component {
-
   constructor(props) {
     super(props);
     this.initEventHandlers();

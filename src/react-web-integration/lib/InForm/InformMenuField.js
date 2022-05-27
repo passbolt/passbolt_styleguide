@@ -77,8 +77,8 @@ class InFormMenuField {
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
-    iframe.style.top = top + 'px';
-    iframe.style.left =  left + 'px';
+    iframe.style.top = `${top}px`;
+    iframe.style.left =  `${left}px`;
     iframe.style.border = 0;
     iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
     iframe.style.height = '220px'; // For 3 items in a row to be display

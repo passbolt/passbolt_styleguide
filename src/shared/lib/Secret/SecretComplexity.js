@@ -100,7 +100,7 @@ export default class SecretComplexity {
    * @param pwd {srtring} The password to test the entropy
    * @return {int}
    */
-  static entropy(pwd= '') {
+  static entropy(pwd = '') {
     let maskSize = 0;
 
     for (const i in MASKS) {

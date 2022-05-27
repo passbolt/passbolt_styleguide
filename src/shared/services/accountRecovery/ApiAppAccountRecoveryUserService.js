@@ -16,7 +16,6 @@ import {ApiClient} from "../../lib/apiClient/apiClient";
 import {ApiClientOptions} from "../../lib/apiClient/apiClientOptions";
 
 export default class ApiAppAccountRecoveryUserService {
-
   constructor() {
     this.baseUrl = this.getBaseUrl();
   }

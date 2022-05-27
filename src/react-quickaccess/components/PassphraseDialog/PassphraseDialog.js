@@ -6,7 +6,6 @@ import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 
 class PassphraseDialog extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = this.initState();
@@ -83,7 +82,7 @@ class PassphraseDialog extends React.Component {
     const isPassphraseEmpty = this.state.passphrase === "";
     const errorMessage = isPassphraseEmpty
       ? this.translate("The passphrase should not be empty.")
-      : this.translate("This is not a valid passphrase.")
+      : this.translate("This is not a valid passphrase.");
 
     let attempt = this.state.attempt;
     if (!isPassphraseEmpty) {
@@ -112,7 +111,7 @@ class PassphraseDialog extends React.Component {
   }
 
   handleCloseButtonClick() {
-    this.props.context.port.emit(this.props.requestId, "ERROR", { name: "UserAbortsOperationError", message: "The dialog has been closed." });
+    this.props.context.port.emit(this.props.requestId, "ERROR", {name: "UserAbortsOperationError", message: "The dialog has been closed."});
     this.props.onComplete();
   }
 
@@ -121,7 +120,7 @@ class PassphraseDialog extends React.Component {
     if (event.keyCode === 27) {
       // If not stop it will bubble to the QuickAccess component and it will close the quickaccess dialog.
       event.stopPropagation();
-      this.props.context.port.emit(this.props.requestId, "ERROR", { name: "UserAbortsOperationError", message: "The dialog has been closed." });
+      this.props.context.port.emit(this.props.requestId, "ERROR", {name: "UserAbortsOperationError", message: "The dialog has been closed."});
       this.props.onComplete();
     }
   }

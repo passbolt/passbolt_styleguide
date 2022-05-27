@@ -11,7 +11,7 @@ export function defaultProps() {
           {
             "name": "Password",
             "type": "password",
-            "default_options":{
+            "default_options": {
               "length": 18,
               "look_alike": true,
               "min_length": 8,
@@ -82,7 +82,7 @@ export function defaultProps() {
           {
             "name": "Passphrase",
             "type": "passphrase",
-            "default_options":{
+            "default_options": {
               "word_count": 8,
               "word_case": "lowercase",
               "min_word": 4,

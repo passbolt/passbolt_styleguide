@@ -14,7 +14,6 @@
 
 import InFormCallToActionField from "./InFormCallToActionField";
 import DomUtils from "../Dom/DomUtils";
-import {v4 as uuidv4} from "uuid";
 
 /** Button submit selector */
 const SUBMIT_BUTTON_SELECTOR = "button[type='submit'], input[type='submit']";
@@ -111,7 +110,6 @@ class InFormCredentialsFormField {
     this.field.removeEventListener('submit', this.autosave);
     this.submitButton?.removeEventListener("click", this.autosave);
   }
-
 }
 
 export default InFormCredentialsFormField;

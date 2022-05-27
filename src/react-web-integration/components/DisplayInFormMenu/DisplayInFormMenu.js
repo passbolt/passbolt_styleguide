@@ -140,9 +140,9 @@ class DisplayInFormMenu extends React.Component {
   get items() {
     if (this.hasConfiguration) {
       if (this.isUsernameConfiguration) {
-        return this.isUsernameFilled ? this.filledUsernameMenuItems: this.emptyUsernameMenuItems;
-      } else if(this.isPasswordConfiguration) {
-        return this.isPasswordFilled ? this.filledPasswordMenuItems: this.emptyPasswordMenuItems;
+        return this.isUsernameFilled ? this.filledUsernameMenuItems : this.emptyUsernameMenuItems;
+      } else if (this.isPasswordConfiguration) {
+        return this.isPasswordFilled ? this.filledPasswordMenuItems : this.emptyPasswordMenuItems;
       }
     }
     return [];
@@ -153,8 +153,8 @@ class DisplayInFormMenu extends React.Component {
    */
   get truncatedGeneratedPassword() {
     if (this.state.generatedPassword) {
-      const uplimitIndex = Math.min(TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length/2));
-      return this.state.generatedPassword.substring(0,uplimitIndex);
+      const uplimitIndex = Math.min(TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH, Math.floor(this.state.generatedPassword.length / 2));
+      return this.state.generatedPassword.substring(0, uplimitIndex);
     }
     return this.state.generatedPassword;
   }
@@ -217,7 +217,7 @@ class DisplayInFormMenu extends React.Component {
       key="generate-password"
       onClick={this.handleGeneratePasswordRequestedEvent}
       title={this.props.t("Generate a new password securely")}
-      subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}"</span>}
+      subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}</span>}
       description={this.props.t("You will be able to save it after submitting")}
       icon="dice"/>;
   }
@@ -266,18 +266,16 @@ class DisplayInFormMenu extends React.Component {
    */
   get suggestedResourcesItems() {
     const suggestedResources = (this.state.configuration && this.state.configuration.suggestedResources) || [];
-    return suggestedResources.reduce((menuItems, resource) => {
-      return menuItems.concat([
-        <DisplayInFormMenuItem
-          key={resource.id}
-          onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
-          processing={this.state.resourceIdProcessing === resource.id}
-          disabled={this.state.resourceIdProcessing === resource.id}
-          title={resource.name}
-          description={resource.username}
-          icon="key"/>
-      ]);
-    }, []);
+    return suggestedResources.reduce((menuItems, resource) => menuItems.concat([
+      <DisplayInFormMenuItem
+        key={resource.id}
+        onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
+        processing={this.state.resourceIdProcessing === resource.id}
+        disabled={this.state.resourceIdProcessing === resource.id}
+        title={resource.name}
+        description={resource.username}
+        icon="key"/>
+    ]), []);
   }
 
   /**
@@ -322,7 +320,7 @@ class DisplayInFormMenu extends React.Component {
     try {
       await this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
     await this.setState({resourceIdProcessing: null});
   }

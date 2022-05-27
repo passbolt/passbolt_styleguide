@@ -94,7 +94,7 @@ class FilterResourcesByTagPage extends React.Component {
   async findAndLoadTags() {
     const tags = await this.props.context.port.request("passbolt.tags.find-all");
     this.sortTagsAlphabetically(tags);
-    this.setState({ tags });
+    this.setState({tags});
   }
 
   async findAndLoadResources() {

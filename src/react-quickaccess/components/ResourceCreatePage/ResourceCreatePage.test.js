@@ -21,9 +21,7 @@ afterEach(() => {
 });
 
 describe("ResourceCreatePage", () => {
-
   describe("Form initialization", () => {
-
     it("should intialize the name and uri input fields with the active tab metadata", async() => {
       const context = defaultAppContext();
       // mock the passbolt messaging layer.
@@ -66,7 +64,7 @@ describe("ResourceCreatePage", () => {
       expect(passwordInput.value).toBe("AAAAAAAAAAAAAAAAAA");
     });
 
-    it("should not initialize with chrome new tab metadata", async () => {
+    it("should not initialize with chrome new tab metadata", async() => {
       // mock the passbolt messaging layer.
       window.passbolt = {
         request: event => new Promise(resolve => {
@@ -105,7 +103,7 @@ describe("ResourceCreatePage", () => {
       expect(uriInput.value).toBe("");
     });
 
-    it("should not initialize with firefox new tab metadata", async () => {
+    it("should not initialize with firefox new tab metadata", async() => {
       // mock the passbolt messaging layer.
       window.passbolt = {
         request: event => new Promise(resolve => {
@@ -146,7 +144,7 @@ describe("ResourceCreatePage", () => {
   });
 
   describe("Form submition", () => {
-    it("should create a new password on submit", async () => {
+    it("should create a new password on submit", async() => {
       const createPasswordEventMockCallback = jest.fn();
       const context = defaultAppContext();
       const props = defaultProps();
@@ -159,8 +157,7 @@ describe("ResourceCreatePage", () => {
                 name: "Passbolt Browser Extension Test",
                 uri: "https://passbolt-browser-extension/test"
               });
-            }
-            else if (event === "passbolt.resources.create") {
+            } else if (event === "passbolt.resources.create") {
               createPasswordEventMockCallback(arguments[1], arguments[2]);
               resolve({
                 id: "newly-created-resource-id"
@@ -210,5 +207,4 @@ describe("ResourceCreatePage", () => {
       expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, "P4ssb0lt");
     });
   });
-
 });

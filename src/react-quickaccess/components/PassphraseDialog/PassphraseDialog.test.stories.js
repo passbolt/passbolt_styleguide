@@ -36,7 +36,7 @@ Initial.args = {
 Initial.parameters = parameters;
 
 const mockedPort = new MockPort();
-mockedPort.addRequestListener("passbolt.keyring.private.checkpassphrase", () => {throw new Error();} );
+mockedPort.addRequestListener("passbolt.keyring.private.checkpassphrase", () => { throw new Error(); });
 
 const contextRequestError = {
   port: mockedPort

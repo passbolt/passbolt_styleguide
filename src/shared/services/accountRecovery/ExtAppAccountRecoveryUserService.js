@@ -13,7 +13,6 @@
  */
 
 export default class ExtAppAccountRecoveryUserService {
-
   constructor(port) {
     this.port = port;
   }
