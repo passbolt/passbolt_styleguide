@@ -158,7 +158,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                       <Trans>Account Recovery</Trans>
                     </span>
                     {this.props.hasPendingAccountRecoveryChoice &&
-                      <Icon name="exclamation"/>
+                      <Icon name="exclamation" baseline={true}/>
                     }
                   </a>
                 </div>
