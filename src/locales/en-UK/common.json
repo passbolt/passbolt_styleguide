@@ -416,7 +416,7 @@
   "None of your passwords are yet marked as favorite.": "None of your passwords are yet marked as favorite.",
   "None of your passwords are yet marked as favorite. Add stars to passwords you want to easily find later.": "None of your passwords are yet marked as favorite. Add stars to passwords you want to easily find later.",
   "None of your passwords matched this search.": "None of your passwords matched this search.",
-  "Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.": "Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.",
+  "Note: Administrators can add and delete users; They can also create groups and assign group managers; By default they can not see all passwords.": "Note: Administrators can add and delete users; They can also create groups and assign group managers; By default they can not see all passwords.",
   "Number of recovery": "Number of recovery",
   "Number of words": "Number of words",
   "OK": "OK",

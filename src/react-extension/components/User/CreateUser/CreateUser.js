@@ -416,7 +416,7 @@ class CreateUser extends Component {
                 <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
               </div>
               <div className="help-message">
-                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; Admin can not see all passwords.</Trans>
+                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; By default they can not see all passwords.</Trans>
               </div>
             </div>
           </div>
