@@ -14,10 +14,14 @@ html, body {
     margin-bottom: 1.6rem;
   }
 
-  .processing-wrapper svg{
-    width: 12rem;
-    height: 12rem;
-    --spinner-stroke-width: .07rem;
+  .processing-wrapper {
+    display: flex;
+    margin-top: 1.6rem;
+    svg {
+      width: 12rem;
+      height: 12rem;
+      --spinner-stroke-width: .07rem;
+    }
   }
 
   .login-form {
@@ -209,7 +213,7 @@ html, body {
         border-radius: .3rem;
         max-width:37.2rem;
         margin:auto;
-        padding:4.8rem 4rem 5.6rem 4rem;
+        padding:4.8rem 4rem;
         background:@background-default;
       }
 
