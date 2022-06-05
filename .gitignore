@@ -7,3 +7,7 @@ src/css
 
 #jest test coverage
 /coverage
+
+# CI                 #
+######################
+junit.xml
