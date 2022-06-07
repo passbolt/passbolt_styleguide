@@ -23,4 +23,9 @@ webpack-ext.config.js
 webpack-in-form-menu.config.js
 
 #jest test coverage
+######################
 /coverage
+
+# CI                 #
+######################
+junit.xml

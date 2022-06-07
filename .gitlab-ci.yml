@@ -1,24 +1,23 @@
 image: debian:stable-slim
 
-variables:
-  DOCKER_HOST: tcp://localhost:2375
-  DOCKER_DRIVER: overlay2
-# Function variables
-# Modify the following values to match the ones desired for your function
-# Remember to modify each environment service accounts if required
-  NAME: "generateSubscriptionKey"
-  RUNTIME: "nodejs10"
-  MEMORY: "256MB"
-
 stages:
   - test
 
 tester:
   stage: test
   image: node:16
+  coverage: /Lines\s* [:] ([\d\.]+)%/
   script:
-    - npm install
-    - npm run test
+    - npm ci
+    - npm run test:coverage
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - junit.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
 
 linter:
   stage: test
