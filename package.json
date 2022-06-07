@@ -59,7 +59,6 @@
     "ip-regex": "^4.3.0",
     "jssha": "^3.2.0",
     "luxon": "^2.3.1",
-    "npm-force-resolutions": "0.0.10",
     "prop-types": "^15.7.2",
     "qrcode": "^1.5.0",
     "react": "16.14.0",
@@ -74,11 +73,12 @@
     "webextension-polyfill": "^0.9.0",
     "xregexp": "^4.3.0"
   },
-  "resolutions": {
-    "glob-parent": "5.1.2"
+  "overrides": {
+    "glob-stream": {
+      "glob-parent": "5.1.2"
+    }
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions || echo 1",
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
     "start-app-dev-server": "npm run start-api-app-dev-server & npm run start-ext-app-dev-server & npm run start-in-form-menu-app-dev-server",
