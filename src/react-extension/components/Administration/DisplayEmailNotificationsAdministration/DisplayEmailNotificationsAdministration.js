@@ -68,6 +68,19 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       // Registration & Recovery
       userCreate: true, // send email when a user is created
       userRecover: true, // send email when a user is recovered
+      userRecoverComplete: true, //send email when a user complete a recovery of the account
+      userRecoverAbortAdmin: true, //send email to the admins when a user aborted a recover
+      userRecoverCompleteAdmin: true, //send email to the admins when a user completed a recover
+
+      // Account Recovery
+      accountRecoveryRequestAdmin: true, //send email to the admins when a user did an account recovery request
+      accountRecoveryRequestGuessing: true, //send email to the admin when a suspicious attempt to recovery a key is made
+      accountRecoveryRequestCreatedAmin: true, //send email to the admin when when an account recovery response has been created
+      accountRecoveryRequestCreatedAllAdmins: true, //send email to all admins when an account recovery response has been created
+      accountRecoveryRequestPolicyUpdate: true, //send email to the admins when the account recovery organization policy has been updated
+      accountRecoveryRequestUser: true, //send email to the user when an account recovery request has been made
+      accountRecoveryRequestUserApproved: true, //send email to the user when the account recovery request has been approved
+      accountRecoveryRequestUserRejected: true, //send email to the user when the account recovery request has been rejected
 
       // Email content visibility
 
@@ -78,16 +91,6 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       showUsername: true, // show username in email
       // Comments
       showComment: true, // show comment in email,
-      // Account Recovery
-
-      accountRecoveryRequestAdmin: true, //send email to the admins when a user did an account recovery request
-      accountRecoveryRequestGuessing: true, //send email to the admin when a suspicious attempt to recovery a key is made
-      accountRecoveryRequestCreatedAmin: true, //send email to the admin when when an account recovery response has been created
-      accountRecoveryRequestCreatedAllAdmins: true, //send email to all admins when an account recovery response has been created
-      accountRecoveryRequestPolicyUpdate: true, //send email to the admins when the account recovery organization policy has been updated
-      accountRecoveryRequestUser: true, //send email to the user when an account recovery request has been made
-      accountRecoveryRequestUserApproved: true, //send email to the user when the account recovery request has been approved
-      accountRecoveryRequestUserRejected: true, //send email to the user when the account recovery request has been rejected
     };
   }
 
@@ -155,6 +158,11 @@ class DisplayEmailNotificationsAdministration extends React.Component {
     // Registration & Recovery
     const userCreate = body.send_user_create;
     const userRecover = body.send_user_recover;
+    const userRecoverComplete = body.send_user_recoverComplete;
+    const userRecoverAbortAdmin = body.send_admin_user_recover_abort;
+    const userRecoverCompleteAdmin = body.send_admin_user_recover_complete;
+    const userSetupCompleteAdmin = body.send_admin_user_setup_completed;
+
     // Email content visibility
 
     // Passwords
@@ -195,6 +203,9 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       groupManagerUpdate,
       userCreate,
       userRecover,
+      userRecoverComplete,
+      userRecoverCompleteAdmin,
+      userSetupCompleteAdmin,
       showDescription,
       showSecret,
       showUri,
@@ -208,6 +219,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       accountRecoveryRequestCreatedAmin,
       accountRecoveryRequestCreatedAllAdmins,
       accountRecoveryRequestPolicyUpdate,
+      userRecoverAbortAdmin,
     });
   }
 
@@ -283,6 +295,10 @@ class DisplayEmailNotificationsAdministration extends React.Component {
       send_group_manager_update: this.state.groupManagerUpdate,
       send_user_create: this.state.userCreate,
       send_user_recover: this.state.userRecover,
+      send_user_recoverComplete: this.state.userRecoverComplete,
+      send_admin_user_setup_completed: this.state.userSetupCompleteAdmin,
+      send_admin_user_recover_abort: this.state.userRecoverAbortAdmin,
+      send_admin_user_recover_complete: this.state.userRecoverCompleteAdmin,
       send_accountRecovery_request_user: this.state.accountRecoveryRequestUser,
       send_accountRecovery_request_admin: this.state.accountRecoveryRequestAdmin,
       send_accountRecovery_request_guessing: this.state.accountRecoveryRequestGuessing,
@@ -527,7 +543,36 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   <Trans>When members of a group change, notify the group manager(s).</Trans>
                 </label>
               </span>
-              <label><Trans>Registration & Recovery</Trans></label>
+            </div>
+          </div>
+          <h3><Trans>Registration & Recovery</Trans></h3>
+          <div className="section">
+            <div className="admin-section">
+              <label><Trans>Admin</Trans></label>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userSetupCompleteAdmin" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.userSetupCompleteAdmin} id="user-setup-complete-admin-toggle-button"/>
+                <label className="text" htmlFor="user-setup-complete-admin-toggle-button">
+                  <Trans>When a user completed a setup, notify all the administrators.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userRecoverCompleteAdmin" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.userRecoverCompleteAdmin} id="user-recover-complete-admin-toggle-button"/>
+                <label className="text" htmlFor="user-recover-complete-admin-toggle-button">
+                  <Trans>When a user completed a recover, notify all the administrators.</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userRecoverAbortAdmin" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.userRecoverAbortAdmin} id="user-recover-abort-admin-toggle-button"/>
+                <label className="text" htmlFor="user-recover-abort-admin-toggle-button">
+                  <Trans>When a user aborted a recover, notify all the administrators.</Trans>
+                </label>
+              </span>
+            </div>
+            <div className="user-section">
+              <label><Trans>User</Trans></label>
               <span className="input toggle-switch form-element">
                 <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userCreate" disabled={this.hasAllInputDisabled()}
                   onChange={this.handleInputChange} checked={this.state.userCreate} id="send-user-create-toggle-button"/>
@@ -542,6 +587,13 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   <Trans>When users try to recover their account, notify them.</Trans>
                 </label>
               </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="userRecoverComplete" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={this.state.userRecoverComplete} id="user-recover-complete-toggle-button"/>
+                <label className="text" htmlFor="user-recover-complete-toggle-button">
+                  <Trans>When users completed the recover of their account, notify them.</Trans>
+                </label>
+              </span>
             </div>
           </div>
           {this.canUseAccountRecovery() &&
@@ -551,31 +603,31 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                 <div className="admin-section">
                   <label><Trans>Admin</Trans></label>
                   <span className="input toggle-switch form-element">
-                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryImpossibleAdmin" disabled={this.hasAllInputDisabled()}
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestAdmin" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestAdmin} id="account-recovery-request-admin-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-request-admin-toggle-button">
-                      <Trans>When an account recovery is requested, notify the administrators</Trans>
+                      <Trans>When an account recovery is requested, notify the administrators.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestPolicyUpdate" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestPolicyUpdate} id="account-recovery-policy-update-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-policy-update-toggle-button">
-                      <Trans>When an account recovery policy is updated, notify the administrators</Trans>
+                      <Trans>When an account recovery policy is updated, notify the administrators.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAmin" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAmin} id="account-recovery-response-created-admin-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-response-created-admin-toggle-button">
-                      <Trans>When an administrator answered to an account recovery request, notify the administrator</Trans>
+                      <Trans>When an administrator answered to an account recovery request, notify the administrator.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAllAdmins" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestCreatedAllAdmins} id="account-recovery-response-created-all-admin-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-response-created-all-admin-toggle-button">
-                      <Trans>When an administrator answered to an account recovery request, notify all the administrators</Trans>
+                      <Trans>When an administrator answered to an account recovery request, notify all the administrators.</Trans>
                     </label>
                   </span>
                 </div>
@@ -585,21 +637,21 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUser" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUser} id="account-recovery-request-user-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-request-user-toggle-button">
-                      <Trans>When an account recovery is requested, notify the user</Trans>
+                      <Trans>When an account recovery is requested, notify the user.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserApproved" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserApproved} id="account-recovery-response-user-approved-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-response-user-approved-toggle-button">
-                      <Trans>When an account recovery is approved, notify the user</Trans>
+                      <Trans>When an account recovery is approved, notify the user.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestUserRejected" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={this.state.accountRecoveryRequestUserRejected} id="account-recovery-response-user-rejected-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-response-user-rejected-toggle-button">
-                      <Trans>When an account recovery is rejected, notify the user</Trans>
+                      <Trans>When an account recovery is rejected, notify the user.</Trans>
                     </label>
                   </span>
                 </div>

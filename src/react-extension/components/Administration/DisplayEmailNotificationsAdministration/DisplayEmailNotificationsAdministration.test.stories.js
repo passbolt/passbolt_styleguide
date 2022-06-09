@@ -59,6 +59,8 @@ const administrationWorkspaceContext = {
       send_group_manager_update: true,
       send_user_create: true,
       send_user_recover: true,
+      send_admin_user_recover_complete: true,
+      send_admin_user_setup_completed: true,
       show_description: true,
       show_secret: true,
       show_uri: true,
