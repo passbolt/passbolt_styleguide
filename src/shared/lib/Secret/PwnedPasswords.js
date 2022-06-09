@@ -3,6 +3,8 @@
  *
  */
 import jsSHA from "jssha";
+import ExternalServiceUnavailableError from "../Error/ExternalServiceUnavailableError";
+import ExternalServiceError from "../Error/ExternalServiceError";
 
 // Number of characters from the hash that API expects
 const PREFIX_LENGTH = 5;
@@ -22,9 +24,15 @@ export default class PwnedPasswords {
     const hashedPasswordSuffix = hashedPassword.substr(PREFIX_LENGTH);
     const url = API_URL + hashedPasswordPrefix;
 
-    const response = await fetch(url);
+    let response;
+    try {
+      response = await fetch(url);
+    } catch (e) {
+      throw new ExternalServiceUnavailableError("pwnedpasswords API service is not available");
+    }
+
     if (response.status !== 200) {
-      return Promise.reject(new Error(`Failed to load pwnedpasswords API: ${response.status}`));
+      throw new ExternalServiceError(`Failed to request pwnedpasswords API: ${response.status}`);
     }
     const data = await response.text();
     return data
