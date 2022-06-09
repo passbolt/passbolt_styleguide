@@ -54,7 +54,7 @@ class DisplayUserBadgeMenu extends Component {
     this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
     this.handleProfileClick = this.handleProfileClick.bind(this);
     this.handleThemeClick = this.handleThemeClick.bind(this);
-    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.handleMobileAppsClick = this.handleMobileAppsClick.bind(this);
   }
 
   componentDidMount() {
@@ -172,11 +172,11 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
-   * Handle logout click
+   * Handle mobile apps click
    * @return {void}
    */
-  handleLogoutClick() {
-    this.props.context.onLogoutRequested();
+  handleMobileAppsClick() {
+    this.props.navigationContext.onGoToUserSettingsMobileRequested();
     this.closeUserBadgeMenu();
   }
 
@@ -221,7 +221,7 @@ class DisplayUserBadgeMenu extends Component {
             <li key="profile">
               <div className="row">
                 <a role="button" tabIndex="1" onClick={this.handleProfileClick}>
-                  <span><Trans>Profile</Trans></span>{this.attentionRequired && <Icon name="exclamation"/>}
+                  <span><Trans>Profile</Trans></span>{this.attentionRequired && <Icon name="exclamation" baseline={true}/>}
                 </a>
               </div>
             </li>
@@ -236,8 +236,9 @@ class DisplayUserBadgeMenu extends Component {
             }
             <li key="logout">
               <div className="row">
-                <a role="button" tabIndex="3" onClick={this.handleLogoutClick}>
-                  <span><Trans>Sign out</Trans></span>
+                <a role="button" tabIndex="3" onClick={this.handleMobileAppsClick}>
+                  <span><Trans>Mobile Apps</Trans></span>
+                  <span className="chips new">new</span>
                 </a>
               </div>
             </li>

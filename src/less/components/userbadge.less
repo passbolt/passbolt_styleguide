@@ -30,12 +30,23 @@
   .dropdown-content {
     top: calc(100% - .3rem);
     min-width: 100%;
+    width: 100%;
     background: @dropdown-profile-background;
     border-radius: 0 0 0.4rem 0.4rem;
+
+    a > span {
+      display: block;
+      .ellipsis();
+    }
 
     .svg-icon.exclamation {
       --icon-exclamation-background-color: @icon-exclamation-required-color;
       margin-left: 0.8rem;
+    }
+
+    .chips {
+      margin-left: 0.8rem;
+      padding-bottom: .1rem;
     }
   }
 }
