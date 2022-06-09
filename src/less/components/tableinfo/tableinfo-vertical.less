@@ -5,7 +5,11 @@ table.table-info.vertical {
 
     td {
         line-height: 2.9rem;
-        padding-right: 1.6rem;
+        padding-right: clamp(1.6rem, calc(.4rem + 4vw), 20rem);
+
+        &:first-child {
+          color: @font-lighter;
+        }
 
         &.warning {
             background: @background-warning;
@@ -26,7 +30,6 @@ table.table-info.vertical {
     }
 
     td + td {
-        font-weight: 700;
         padding-right: 0;
     }
 
