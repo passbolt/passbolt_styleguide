@@ -56,7 +56,7 @@ export default class ManageAccountRecoveryAdministrationSettingsPage {
    * Returns the account recovery policy title element
    */
   get accountRecoveryPolicyTitle() {
-    return this._page.container.querySelector('.recover-account-settings .form h3').textContent;
+    return this._page.container.querySelector('.recover-account-settings .form h4').textContent;
   }
 
   /**

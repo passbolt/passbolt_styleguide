@@ -283,7 +283,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
           </div>
           }
           <form className="form">
-            <h3><Trans>Account Recovery Policy</Trans></h3>
+            <h4 className="no-border"><Trans>Account Recovery Policy</Trans></h4>
             <p>
               <Trans>In this section you can choose the default behavior of account recovery for all users.</Trans>
             </p>
@@ -351,12 +351,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                 </label>
               </div>
             </div>
-            <h3>
+            <h4>
               <span className="input toggle-switch form-element ">
                 <input type="checkbox" className="toggle-switch-checkbox checkbox" name="organisationRecoveryKeyToggle" disabled={this.hasAllInputDisabled()} checked={this.isPolicyEnabled()} id="recovery-key-toggle-button" />
                 <label htmlFor="recovery-key-toggle-button"><Trans>Organization Recovery Key</Trans></label>
               </span>
-            </h3>
+            </h4>
             {this.isPolicyEnabled() &&
               <>
                 <p>
