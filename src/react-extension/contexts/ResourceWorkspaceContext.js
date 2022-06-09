@@ -856,7 +856,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
     const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
     const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
-    const stringSorter = (s1, s2) => (s1||"").localeCompare(s2||"");
+    const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
     const booleanSorter = (s1, s2) => s1 === s2 ? 0 : s1 ? -1 : 1;
     const sorter = this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
     const propertySorter = keySorter(this.state.sorter.propertyName, sorter);

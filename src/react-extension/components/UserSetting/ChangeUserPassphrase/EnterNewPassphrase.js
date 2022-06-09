@@ -1,13 +1,12 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.1.0
@@ -27,6 +26,9 @@ import {withAppContext} from "../../../contexts/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
+import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 
 /**
  * This component displays the user choose passphrase information
@@ -60,7 +62,8 @@ class EnterNewPassphrase extends React.Component {
         alphanumeric: '',
         specialCharacters: '',
         notInDictionary: ''
-      }
+      },
+      isPwnedServiceAvailable: true // True if the isPwned service can be reached
     };
   }
 
@@ -78,7 +81,7 @@ class EnterNewPassphrase extends React.Component {
     const validation = {
       enoughLength:  this.state.passphrase.length >= 8,
       enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy !== 0,
-      notInDictionary: this.state.hintClassNames.notInDictionary === "success"
+      notInDictionary: this.state.hintClassNames.notInDictionary !== "error"
     };
     return Object.values(validation).every(value => value);
   }
@@ -133,34 +136,16 @@ class EnterNewPassphrase extends React.Component {
    */
   async handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    this.setState({passphrase});
-    const passphraseEntropy = passphrase ? SecretGenerator.entropy(passphrase) : null;
-    const hintClassNames = await this.evaluatePassphraseHintClassNames(passphrase);
-    this.setState({passphraseEntropy, hintClassNames});
-    await this.checkPassphraseIsInDictionary();
-  }
+    let hintClassNames = {};
+    let passphraseEntropy = null;
 
-  /**
-   * check if the passphrase is in dictionary
-   * @returns {Promise<void>}
-   */
-  async checkPassphraseIsInDictionary() {
-    const hintClassName = condition => condition ? 'success' : 'error';
+    if (passphrase.length) {
+      passphraseEntropy = SecretGenerator.entropy(passphrase);
+      hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
+      this.evaluatePassphraseIsInDictionaryDebounce();
+    }
 
-    // debounce only to check the passphrase is in dictionary
-    const isPwned = await this.evaluatePassphraseIsInDictionaryDebounce(this.state.passphrase).catch(() => null);
-    const notInDictionary = isPwned !== null ? hintClassName(!isPwned) : null;
-
-    // if the passphrase is in dictionary, force the complexity to n/a
-    const passphraseEntropy = Boolean(this.state.passphrase) && isPwned ? 0 : this.state.passphraseEntropy;
-
-    this.setState({
-      hintClassNames: {
-        ...this.state.hintClassNames,
-        notInDictionary
-      },
-      passphraseEntropy
-    });
+    this.setState({passphrase, passphraseEntropy, hintClassNames});
   }
 
   /**
@@ -178,26 +163,53 @@ class EnterNewPassphrase extends React.Component {
    */
   evaluatePassphraseHintClassNames(passphrase) {
     const masks = SecurityComplexity.matchMasks(passphrase);
-    const hintClassName = condition => condition ? 'success' : 'error';
+    const hintClassName = condition => condition ? 'success' : 'warning';
     return {
-      enoughLength:  hintClassName(passphrase.length >= 8),
+      enoughLength: passphrase.length >= 8 ? 'success' : 'error',
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
       specialCharacters: hintClassName(masks.special),
-      notInDictionary:  'error'
+      notInDictionary: this.state.hintClassNames.notInDictionary
     };
   }
 
   /**
    * Evaluate if the passphrase is in dictionary
-   * @param passphrase The passphrase to evaluate
-   * @return {Promise<boolean>} Return true if the password is part of a dictionary, false otherwise
+   * @return {Promise<void>}
    */
-  async evaluatePassphraseIsInDictionary(passphrase) {
-    if (passphrase.length >= 8) {
-      return SecretComplexity.ispwned(passphrase);
+  async evaluatePassphraseIsInDictionary() {
+    let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
+    if (!isPwnedServiceAvailable) {
+      return;
     }
-    return true;
+
+    const passphrase = this.state.passphrase;
+    let notInDictionaryHint = "success";
+
+    if (passphrase.length < 8) {
+      notInDictionaryHint = "error";
+    } else {
+      try {
+        const isPwned = await SecretComplexity.ispwned(passphrase);
+        notInDictionaryHint = isPwned ? "error" : "success";
+      } catch (error) {
+        // If the service is unavailable don't block the user journey.
+        if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
+          isPwnedServiceAvailable = false;
+          notInDictionaryHint = "unavailable";
+        } else {
+          throw error;
+        }
+      }
+    }
+
+    this.setState({
+      isPwnedServiceAvailable,
+      hintClassNames: {
+        ...this.state.hintClassNames,
+        notInDictionary: notInDictionaryHint
+      }
+    });
   }
 
   /**
@@ -283,7 +295,15 @@ class EnterNewPassphrase extends React.Component {
                       <Trans>It contains special characters (like / or * or %)</Trans>
                     </li>
                     <li className={this.state.hintClassNames.notInDictionary}>
-                      <Trans>It is not part of a dictionary</Trans>
+                      {this.state.isPwnedServiceAvailable &&
+                      <Trans>It is not part of an exposed data breach</Trans>
+                      }
+                      {!this.state.isPwnedServiceAvailable &&
+                      <Tooltip message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
+                        direction="bottom">
+                        <Trans>It is not part of an exposed data breach</Trans>
+                      </Tooltip>
+                      }
                     </li>
                   </ul>
                 </div>
