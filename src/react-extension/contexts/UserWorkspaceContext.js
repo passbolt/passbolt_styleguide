@@ -555,7 +555,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const plainObjectSorter = sorter => baseSorter(sorter);
 
     const dateSorter = (d1, d2) => !d1 ? -1 : (!d2 ? 1 : DateTime.fromISO(d1) < DateTime.fromISO(d2) ? -1 : 1);
-    const stringSorter = (s1, s2) => (s1||"").localeCompare(s2||"");
+    const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
     const mfaSorter = (u1, u2) => (u2.is_mfa_enabled === u1.is_mfa_enabled) ? 0 : u2.is_mfa_enabled ? -1 : 1;
     const accountRecoveryUserSettingStatusSorter = (u1, u2) => (u2?.account_recovery_user_setting?.status === u1?.account_recovery_user_setting?.status) ? 0 : u2?.account_recovery_user_setting?.status ? -1 : 1;
     const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
