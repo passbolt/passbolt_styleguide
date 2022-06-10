@@ -121,7 +121,7 @@ class ConfigurePasswordGenerator extends React.Component {
   render() {
     return (
       <>
-        <div className="input text">
+        <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
           <label htmlFor="configure-password-generator-form-length">
             <Trans>Length</Trans>
           </label>
@@ -133,18 +133,20 @@ class ConfigurePasswordGenerator extends React.Component {
               value={this.length.default}
               step="1"
               type="range"
-              onChange={this.handleLengthChanged}/>
+              onChange={this.handleLengthChanged}
+              disabled={this.props.disabled}/>
             <input
               id="configure-password-generator-form-length"
               type="number"
               min={this.length.min}
               max={this.length.max}
               value={this.length.default}
-              onChange={this.handleLengthChanged}/>
+              onChange={this.handleLengthChanged}
+              disabled={this.props.disabled}/>
           </div>
         </div>
 
-        <div className="input text">
+        <div className={`input text ${this.props.disabled ? 'disabled' : ''}`}>
           <label htmlFor="configure-password-generator-form-masks">
             <Trans>Character Types</Trans>
           </label>
@@ -154,7 +156,7 @@ class ConfigurePasswordGenerator extends React.Component {
                 <button
                   key={mask.name}
                   className={`button button-toggle ${(mask.active || mask.required ? 'selected' : '')}`}
-                  onClick={event => this.handleMaskToggled(mask.name, event)}>
+                  onClick={event => this.handleMaskToggled(mask.name, event)} disabled={this.props.disabled}>
                   {mask.label}
                 </button>
               ))
@@ -168,7 +170,8 @@ class ConfigurePasswordGenerator extends React.Component {
             type="checkbox"
             name="exclude-look-alike"
             checked={this.isExcludeLookAlikeCharacters}
-            onChange={this.handleExcludeLookAlikeCharactersToggled}/>
+            onChange={this.handleExcludeLookAlikeCharactersToggled}
+            disabled={this.props.disabled}/>
           <label htmlFor="configure-password-generator-form-exclude-look-alike">
             <Trans>Exclude look-alike characters</Trans>
           </label>
@@ -182,6 +185,7 @@ class ConfigurePasswordGenerator extends React.Component {
 ConfigurePasswordGenerator.propTypes = {
   configuration: PropTypes.object, // The current generator options configuration
   onChanged: PropTypes.func, // Called whenever the generator configuration changed
+  disabled: PropTypes.bool, // The disabled attribute
   t: PropTypes.func, // The translation function
 };
 

@@ -535,7 +535,7 @@ class CreateResource extends Component {
         disabled={this.state.processing} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-name"><Trans>Name</Trans></label>
               <input id="create-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
@@ -545,7 +545,7 @@ class CreateResource extends Component {
               <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
-            <div className={`input text ${this.state.uriError ? "error" : ""}`}>
+            <div className={`input text ${this.state.uriError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-uri"><Trans>URI</Trans></label>
               <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
@@ -554,7 +554,7 @@ class CreateResource extends Component {
               <div className="error-message">{this.state.uriError}</div>
               }
             </div>
-            <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
+            <div className={`input text ${this.state.usernameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-username"><Trans>Username</Trans></label>
               <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
@@ -563,7 +563,7 @@ class CreateResource extends Component {
               <div className="error-message">{this.state.usernameError}</div>
               }
             </div>
-            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
+            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-password">
                 <Trans>Password</Trans>
                 {this.state.passwordWarning &&
@@ -582,13 +582,13 @@ class CreateResource extends Component {
                   disabled={this.state.processing}
                   inputRef={this.passwordInputRef}/>
                 <a onClick={this.handleGeneratePasswordButtonClick}
-                  className="password-generate button-icon button">
+                  className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
                   <Icon name='dice' big={true}/>
                   <span className="visually-hidden">generate</span>
                 </a>
                 {this.canUsePasswordGenerator &&
                   <a onClick={this.handleOpenGenerator}
-                    className="password-generator button-icon button">
+                    className={`password-generator button-icon button ${this.state.processing ? "disabled" : ""}`}>
                     <Icon name='settings' big={true}/>
                     <span className="visually-hidden">open generator</span>
                   </a>
@@ -602,7 +602,7 @@ class CreateResource extends Component {
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
               }
             </div>
-            <div className="input textarea">
+            <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-description"><Trans>Description</Trans>
                 {this.state.descriptionWarning &&
                   <Icon name="exclamation"/>

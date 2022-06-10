@@ -264,7 +264,7 @@ class EditResourceTag extends Component {
         className="edit-tag-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-tag-form-name"><Trans>Tag name</Trans></label>
               <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}

@@ -225,7 +225,7 @@ class EnterNameForm extends Component {
       <div className="enter-name">
         <h1><Trans>New here? Enter your name to get started.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
-          <div className={`input text required ${this.state.firstnameError ? "error" : ""}`}>
+          <div className={`input text required ${this.state.firstnameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
             <label htmlFor="firstname"><Trans>First Name</Trans></label>
             <input id="firstname-input" type="text" name="firstname" ref={this.firstnameRef} value={this.state.firstname}
               onKeyUp={this.handleFirstnameInputOnKeyUp} onChange={this.handleInputChange}
@@ -234,7 +234,7 @@ class EnterNameForm extends Component {
             <div className="error-message">{this.state.firstnameError}</div>
             }
           </div>
-          <div className={`input text required ${this.state.lastnameError ? "error" : ""}`}>
+          <div className={`input text required ${this.state.lastnameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
             <label htmlFor="lastname"><Trans>Last Name</Trans></label>
             <input id="lastname-input" type="text" name="lastname" ref={this.lastnameRef} value={this.state.lastname}
               onKeyUp={this.handleLastnameInputOnKeyUp} onChange={this.handleInputChange}

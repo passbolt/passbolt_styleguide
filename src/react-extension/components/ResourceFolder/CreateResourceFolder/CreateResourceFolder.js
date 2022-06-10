@@ -288,7 +288,7 @@ class CreateResourceFolder extends Component {
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="folder-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="folder-name-input"><Trans>Name</Trans></label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}

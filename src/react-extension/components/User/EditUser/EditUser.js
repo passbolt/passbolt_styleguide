@@ -342,7 +342,7 @@ class EditUser extends Component {
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="user-edit-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-first-name-input"><Trans>First Name</Trans></label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder={this.translate("first name")}
@@ -354,7 +354,7 @@ class EditUser extends Component {
               <div className="first_name error-message">{this.state.first_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-last-name-input"><Trans>Last Name</Trans></label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef} type="text" value={this.state.last_name} placeholder={this.translate("last name")}
@@ -366,7 +366,7 @@ class EditUser extends Component {
               <div className="last_name error-message">{this.state.last_nameError}</div>
               }
             </div>
-            <div className="input text required">
+            <div className="input text required disabled">
               <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
               <input id="user-username-input" name="username"
                 type="text" value={this.state.username} placeholder="username"
@@ -374,7 +374,7 @@ class EditUser extends Component {
                 autoComplete='off' autoFocus={true}
               />
             </div>
-            <div className="input checkbox-wrapper">
+            <div className={`input checkbox-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="is_admin_checkbox"><Trans>Role</Trans></label>
               <div className="input checkbox">
                 <input

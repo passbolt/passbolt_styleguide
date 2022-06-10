@@ -226,7 +226,7 @@ class CheckPassphrase extends Component {
         <h1><Trans>Please enter your passphrase to continue.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
-            <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""}`}>
+            <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
               <Password
                 id="passphrase"

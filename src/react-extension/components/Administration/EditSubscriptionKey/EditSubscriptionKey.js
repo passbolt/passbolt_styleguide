@@ -299,7 +299,7 @@ class EditSubscriptionKey extends Component {
         className="edit-subscription-dialog">
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input textarea required ${this.state.keyError ? "error" : ""}`}>
+            <div className={`input textarea required ${this.state.keyError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-tag-form-name"><Trans>Subscription key</Trans></label>
               <textarea id="edit-subscription-form-key" name="key" value={this.state.key}
                 onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}

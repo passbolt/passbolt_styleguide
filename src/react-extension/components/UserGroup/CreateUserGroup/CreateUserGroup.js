@@ -470,11 +470,11 @@ class CreateUserGroup extends Component {
         disabled={this.hasAllInputDisabled()}>
         <form className="group-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="group_name"><Trans>Group name</Trans></label>
               <input id="group-name-input" name="name" className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.state.processing} ref={this.nameInputRef}/>
+                disabled={this.hasAllInputDisabled()} ref={this.nameInputRef}/>
               {this.state.nameError &&
               <div className="name error-message">{this.state.nameError}</div>
               }

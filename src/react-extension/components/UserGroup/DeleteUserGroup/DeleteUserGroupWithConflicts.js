@@ -381,7 +381,7 @@ class DeleteUserGroupWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.foldersErrors.map(folderError =>
                   <li key={folderError.id}>
-                    <div className="select-wrapper input required">
+                    <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
                       <label htmlFor="transfer_folder_owner">{folderError.name} <Trans>(Folder) new owner:</Trans></label>
                       <Select className="form-element" value={this.state.owners[folderError.id]} items={this.getAcoPermissionsList(folderError.id)} onChange={event => this.handleOnChangeOwner(event, folderError.id)}/>
                     </div>
@@ -396,7 +396,7 @@ class DeleteUserGroupWithConflicts extends Component {
               <ul className="ownership-transfer-items">
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
-                    <div className="select-wrapper input required">
+                    <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
                       <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
                       <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
                     </div>
