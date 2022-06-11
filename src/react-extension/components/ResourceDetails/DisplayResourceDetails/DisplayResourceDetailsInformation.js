@@ -387,7 +387,7 @@ class DisplayResourceDetailsInformation extends React.Component {
           </li>
           <li className="modified">
             <span className="label"><Trans>Modified</Trans></span>
-            <span className="value">{modifiedDateTimeAgo}</span>
+            <span className="value" title={this.resource.modified}>{modifiedDateTimeAgo}</span>
           </li>
           <li className="modified-by">
             <span className="label"><Trans>Modified by</Trans></span>
@@ -395,7 +395,7 @@ class DisplayResourceDetailsInformation extends React.Component {
           </li>
           <li className="modified">
             <span className="label"><Trans>Created</Trans></span>
-            <span className="value">{createdDateTimeAgo}</span>
+            <span className="value" title={this.resource.created}>{createdDateTimeAgo}</span>
           </li>
           <li className="modified-by">
             <span className="label"><Trans>Created by</Trans></span>
