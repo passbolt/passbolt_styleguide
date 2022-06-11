@@ -57,16 +57,17 @@ describe("See information", () => {
     it('I should be able to identify each information name', async() => {
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-
-      expect.assertions(12);
+      expect.assertions(14);
       expect(page.displayInformationList.usernameLabel).toBe('Name');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.folder.name);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
       expect(page.displayInformationList.modified(1).textContent).toContain('ago');
+      expect(page.displayInformationList.modified(1).getAttribute("title")).toBe('2020-02-01T00:00:00+00:00');
       expect(page.displayInformationList.modifiedByLabel(1)).toBe('Modified by');
       expect(page.displayInformationList.modifiedBy(1).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.modifiedLabel(2)).toBe('Created');
       expect(page.displayInformationList.modified(2).textContent).toContain('ago');
+      expect(page.displayInformationList.modified(2).getAttribute("title")).toBe('2020-02-01T00:00:00+00:00');
       expect(page.displayInformationList.modifiedByLabel(2)).toBe('Created by');
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');
