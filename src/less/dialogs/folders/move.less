@@ -39,22 +39,17 @@
         .folders-list-item {
             user-select: none;
             padding: 0.75em 1.25em 0.75em 1.5em;
-            border-bottom: 1px solid @border-lighter;
+            border-bottom: 1px solid @dialog-folder-move-border;
             cursor: pointer;
 
             &.disabled {
-                color: @font-dim;
-                background: @background-lightest;
+                opacity: .5;
                 cursor: default;
-
-                .svg-icon svg {
-                    fill: @font-dim;
-                }
             }
             &.selected {
-                background: @background-lighter;
+                background: @dialog-folder-move-selected-background;
                 .folder-view {
-                    border:1px solid @background-lighter;
+                    border:1px solid @dialog-folder-move-selected-border;
                 }
             }
             .folder-name {
@@ -76,7 +71,7 @@
                 .rounded();
 
                 &:hover {
-                    border:1px solid @border-light;
+                    border:1px solid @border-default;
                 }
             }
         }

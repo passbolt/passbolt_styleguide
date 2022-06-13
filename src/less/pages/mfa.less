@@ -31,12 +31,12 @@
     .totp-setup {
         .input-verify {
             float:left;
-            background:@background-lightest;
+            background:@mfa-background;
             padding:2.5em;
             width: calc(100% - 294px); // 100% - (262px + 32px)
             height:262px;
             box-sizing: border-box;
-            border:3px solid @background-lightest;
+            border:3px solid @mfa-border;
             border-left:0;
             margin: 1.6rem 0;
 
@@ -49,7 +49,7 @@
             max-width:262px;
             box-sizing: border-box;
             max-height:262px;
-            border:3px solid @background-lightest;
+            border:3px solid @mfa-border;
             margin: 1.6rem 0 1.6rem 1.6rem;
         }
         .input.password {
@@ -124,15 +124,15 @@
             width:12.5em;
             margin-bottom:2em;
             margin-right:2em;
-            border:1px solid @border-light;
+            border:1px solid @mfa-provider-border;
             &:hover {
                 border:1px solid @border-default;
-                .box-shadow();
+                box-shadow: 0 0 1rem 0 rgba(0, 0, 0, @shadow-opacity-dropdown);
             }
         }
 
         a {
-            border-bottom:1px solid @border-light;
+            border-bottom:1px solid @mfa-provider-border;
             display:block;
             text-align: center;
 
@@ -149,12 +149,8 @@
         }
         .mfa-provider-status {
             padding:1em;
-            background:@background-lightest;
+            background:@mfa-background;
             text-align: center;
-
-            &.disabled {
-              color: @button-disabled-color;
-            }
         }
     }
 
@@ -163,7 +159,7 @@
         display:flex;
 
         &:nth-child(even) {
-            background: @background-lightest;
+            background: @mfa-background;
         }
         .device {
             flex:1;
@@ -173,7 +169,7 @@
 
             &.current:before {
                 content:'\2022'; /* unicode character • */
-                color:@green;
+                color:@mfa-device-color;
                 font-size:.75em;
                 position:absolute;
                 margin-left:-.5em;

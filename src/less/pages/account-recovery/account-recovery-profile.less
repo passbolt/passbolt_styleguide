@@ -1,7 +1,7 @@
 .account-recovery-profile {
 
   .account-recovery-status {
-    background: @background-lighter;
+    background: @account-recovery-card-background;
     padding: 1.6rem;
     border-radius: .3rem;
     max-width: 100rem;
@@ -26,13 +26,13 @@
         padding: 0 .5rem;
       }
       &.approved {
-        color: @green;
+        color: @hint-success-color;
       }
       &.rejected {
-        color: @red;
+        color: @hint-error-color;
       }
       &.pending {
-        color: @orange-light;
+        color: @hint-warning-color;
       }
     }
 
