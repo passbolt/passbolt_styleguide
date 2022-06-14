@@ -33,7 +33,7 @@ describe("AccountRecoveryUser Context", () => {
 
     //Using renderIntoDocument allows us to call the component methods and the component to have a working (react) state
     const component = renderIntoDocument(<AccountRecoveryUserContextProvider {...props}/>);
-    await component.findAccountRecoveryPolicy();
+    await component.loadAccountRecoveryPolicy();
 
     expect.assertions(6);
     expect(props.accountRecoveryUserService.getOrganizationAccountRecoverySettings).toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe("AccountRecoveryUser Context", () => {
 
     //Using renderIntoDocument allows us to call the component methods and the component to have a working (react) state
     const component = renderIntoDocument(<AccountRecoveryUserContextProvider {...props}/>);
-    await component.findAccountRecoveryPolicy();
+    await component.loadAccountRecoveryPolicy();
 
     expect.assertions(2);
     expect(component.getUserAccountRecoverySubscriptionStatus()).toBe("pending");

@@ -60,7 +60,10 @@ export function hasPolicyChangesAdminAccountRecoveryContext(context = {}) {
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
-    context: defaultAppContext(props?.appContext)
+    context: defaultAppContext(props?.appContext),
+    accountRecoveryContext: {
+      reloadAccountRecoveryPolicy: jest.fn()
+    }
   };
   return Object.assign(defaultProps, props);
 }

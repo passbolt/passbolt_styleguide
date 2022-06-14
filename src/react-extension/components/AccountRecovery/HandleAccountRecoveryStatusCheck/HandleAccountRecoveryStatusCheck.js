@@ -29,7 +29,7 @@ class HandleAccountRecoveryStatusCheck extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
+    await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
     if (!this.isOrganizationPolicyRequiresAUserChoice()) {
       return;
     }

@@ -51,7 +51,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
    * Component did mount
    */
   async componentDidMount() {
-    await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
+    await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
     await this.getAccountRecoveryRequest();
     await this.displayReviewAccountRecoveryDialog();
   }

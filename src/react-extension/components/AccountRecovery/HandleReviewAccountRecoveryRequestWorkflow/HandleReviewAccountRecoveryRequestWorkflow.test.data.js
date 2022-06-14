@@ -16,6 +16,7 @@ import {v4 as uuidv4} from "uuid";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 
 /**
  * Default props
@@ -25,15 +26,13 @@ import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedb
 export function defaultProps(props = {}) {
   const _props = {
     accountRecoveryRequestId: uuidv4(),
-    accountRecoveryContext: {
-      findAccountRecoveryPolicy: jest.fn(),
-      getOrganizationPolicy: jest.fn(),
+    accountRecoveryContext: defaultAccountRecoveryUserContext({
       accountRecoveryOrganizationPolicy: {
         account_recovery_organization_public_key: {
           id: uuidv4()
         }
       }
-    },
+    }),
     actionFeedbackContext: defaultActionFeedbackContextContext(props?.actionFeedbackContext),
     context: defaultAppContext(props?.context),
     dialogContext: defaultDialogContext(props?.dialogContext),

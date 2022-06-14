@@ -72,7 +72,7 @@ class DisplayUsers extends React.Component {
    * @return {void}
    */
   componentDidMount() {
-    this.props.accountRecoveryContext.findAccountRecoveryPolicy();
+    this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
   }
 
   /**

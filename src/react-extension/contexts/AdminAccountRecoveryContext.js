@@ -15,6 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
+import {withAccountRecovery} from "./AccountRecoveryUserContext";
 
 export const AdminAccountRecoveryContext = React.createContext({
   currentPolicy: null, // The current policy
@@ -153,6 +154,7 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
     const currentPolicy = await this.props.context.port.request('passbolt.account-recovery.save-organization-policy', policySaveDto, privateGpgKeyDto);
     const policyChanges = {};
     this.setState({currentPolicy, policyChanges});
+    this.props.accountRecoveryContext.reloadAccountRecoveryPolicy();
   }
 
   /**
@@ -187,9 +189,10 @@ export class AdminAccountRecoveryContextProvider extends React.Component {
 
 AdminAccountRecoveryContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
+  accountRecoveryContext: PropTypes.object, // The account recovery context
 };
-export default withAppContext(AdminAccountRecoveryContextProvider);
+export default withAppContext(withAccountRecovery(AdminAccountRecoveryContextProvider));
 
 /**
  * Resource Workspace Context Consumer HOC
