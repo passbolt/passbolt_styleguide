@@ -36,7 +36,7 @@ class DisplayUserDetails extends React.Component {
   }
 
   componentDidMount() {
-    this.props.accountRecoveryContext.findAccountRecoveryPolicy();
+    this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
   }
 
   /**

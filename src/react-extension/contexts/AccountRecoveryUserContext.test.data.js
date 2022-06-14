@@ -62,6 +62,8 @@ export const defaultProps = (data = {}) => {
 export function defaultAccountRecoveryUserContext(context = {}) {
   const defaultContext = {
     findAccountRecoveryPolicy: jest.fn(),
+    loadAccountRecoveryPolicy: jest.fn(),
+    reloadAccountRecoveryPolicy: jest.fn(),
     isPolicyEnabled: jest.fn(() => true)
   };
   return Object.assign(defaultContext, context);

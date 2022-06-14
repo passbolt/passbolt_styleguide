@@ -38,7 +38,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * @return {void}
    */
   async componentDidMount() {
-    await this.props.accountRecoveryContext.findAccountRecoveryPolicy();
+    await this.props.accountRecoveryContext.loadAccountRecoveryPolicy();
   }
 
   /**

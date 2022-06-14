@@ -27,6 +27,8 @@ export const AccountRecoveryUserContext = React.createContext({
   getUserAccountRecoverySubscriptionStatus: () => {},
   isAccountRecoveryChoiceRequired: () => {},
   isPolicyEnabled: () => {},
+  loadAccountRecoveryPolicy: () => {},
+  reloadAccountRecoveryPolicy: () => {},
 });
 
 const ACCOUNT_RECOVERY_STATUS_PENDING = 'pending';
@@ -63,7 +65,27 @@ export class AccountRecoveryUserContextProvider extends React.Component {
       setUserAccountRecoveryStatus: this.setUserAccountRecoveryStatus.bind(this), // Sets the status of the current user account recovery setting
       isAccountRecoveryChoiceRequired: this.isAccountRecoveryChoiceRequired.bind(this), // Returns true if the user has to decide to participate or not for the account recovery program
       isPolicyEnabled: this.isPolicyEnabled.bind(this), // Return true is the policy is enabled
+      loadAccountRecoveryPolicy: this.loadAccountRecoveryPolicy.bind(this), // Run the initial load of the account recovery policy
+      reloadAccountRecoveryPolicy: this.reloadAccountRecoveryPolicy.bind(this), // Reload the account recovery policy regardless of having it cached or not
     };
+  }
+
+  /**
+   * Run the initial load of the account recovery policy.
+   */
+  async loadAccountRecoveryPolicy() {
+    if (this.state.accountRecoveryOrganizationPolicy !== null) {
+      return;
+    }
+
+    await this.findAccountRecoveryPolicy();
+  }
+
+  /**
+   * Reload the account recovery policy regardless of having it cached or not.
+   */
+  async reloadAccountRecoveryPolicy() {
+    await this.findAccountRecoveryPolicy();
   }
 
   /**
@@ -71,10 +93,6 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    */
   async findAccountRecoveryPolicy() {
     if (!this.props.context.siteSettings.canIUse('accountRecovery')) {
-      return;
-    }
-
-    if (this.state.accountRecoveryOrganizationPolicy !== null) {
       return;
     }
 
