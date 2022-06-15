@@ -19,7 +19,7 @@
 import {
   domElementLoginOnlyPasswordWithSubmitButton,
   domElementLoginWithAutocompleteAttributeEmail,
-  domElementLoginWithAutocompleteAttributeUsername,
+  domElementLoginWithAutocompleteAttributeUsername, domElementLoginWithClassCreateAccount,
   domElementLoginWithClassEmail,
   domElementLoginWithClassUsername,
   domElementLoginWithIdAttributeEmail, domElementLoginWithIdAttributeLogin,
@@ -27,7 +27,7 @@ import {
   domElementLoginWithNameAttributeEmail, domElementLoginWithNameAttributeLogin,
   domElementLoginWithNameAttributeUsername,
   domElementLoginWithNoTypeAndAutocompleteAttributeEmail,
-  domElementLoginWithNoTypeAndAutocompleteAttributeUsername,
+  domElementLoginWithNoTypeAndAutocompleteAttributeUsername, domElementLoginWithNoTypeAndClassCreateAccount,
   domElementLoginWithNoTypeAndClassEmail,
   domElementLoginWithNoTypeAndClassUsername,
   domElementLoginWithNoTypeAndIdAttributeEmail, domElementLoginWithNoTypeAndIdAttributeLogin,
@@ -539,6 +539,26 @@ describe("InformManager", () => {
     expect(informManager.iframesLength).toBe(2);
   });
 
+  it("As LU I should see the inform call to action on form with class create-account-input", async() => {
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithClassCreateAccount; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
   it("As LU I should see the inform call to action on form with no type and class username", async() => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
@@ -563,6 +583,26 @@ describe("InformManager", () => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property
     document.body.innerHTML = domElementLoginWithNoTypeAndClassEmail; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
+  it("As LU I should see the inform call to action on form with no type class create-account-input", async() => {
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNoTypeAndClassCreateAccount; // The Dom
     const informManager = new InformManagerPage();
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnUsername();
