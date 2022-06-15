@@ -286,13 +286,19 @@ object-assign
 
 /*! ../internals/define-built-in */
 
+/*! ../internals/define-global-property */
+
 /*! ../internals/define-iterator */
 
 /*! ../internals/define-well-known-symbol */
 
+/*! ../internals/delete-property-or-throw */
+
 /*! ../internals/descriptors */
 
 /*! ../internals/document-create-element */
+
+/*! ../internals/does-not-exceed-safe-integer */
 
 /*! ../internals/dom-iterables */
 
@@ -376,6 +382,8 @@ object-assign
 
 /*! ../internals/length-of-array-like */
 
+/*! ../internals/math-trunc */
+
 /*! ../internals/native-symbol */
 
 /*! ../internals/native-symbol-registry */
@@ -421,8 +429,6 @@ object-assign
 /*! ../internals/regexp-flags */
 
 /*! ../internals/require-object-coercible */
-
-/*! ../internals/set-global */
 
 /*! ../internals/set-to-string-tag */
 
@@ -987,7 +993,7 @@ object-assign
   \***********************************************************/
 
 /*!***********************************************************!*\
-  !*** ./node_modules/core-js-pure/internals/set-global.js ***!
+  !*** ./node_modules/core-js-pure/internals/math-trunc.js ***!
   \***********************************************************/
 
 /*!***********************************************************!*\
@@ -1691,6 +1697,10 @@ object-assign
   \***********************************************************************/
 
 /*!***********************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/define-global-property.js ***!
+  \***********************************************************************/
+
+/*!***********************************************************************!*\
   !*** ./node_modules/core-js-pure/internals/native-symbol-registry.js ***!
   \***********************************************************************/
 
@@ -1771,6 +1781,10 @@ object-assign
   \*************************************************************************/
 
 /*!*************************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/delete-property-or-throw.js ***!
+  \*************************************************************************/
+
+/*!*************************************************************************!*\
   !*** ./node_modules/core-js-pure/internals/is-array-iterator-method.js ***!
   \*************************************************************************/
 
@@ -1844,6 +1858,10 @@ object-assign
 
 /*!*****************************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs3/helpers/iterableToArrayLimit.js ***!
+  \*****************************************************************************/
+
+/*!*****************************************************************************!*\
+  !*** ./node_modules/core-js-pure/internals/does-not-exceed-safe-integer.js ***!
   \*****************************************************************************/
 
 /*!*****************************************************************************!*\
