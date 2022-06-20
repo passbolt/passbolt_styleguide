@@ -102,12 +102,12 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   async componentDidMount() {
-    document.addEventListener('click', this.handleUserDirectoryClickEvent);
+    document.addEventListener('click', this.handleUserDirectoryClickEvent, {capture: true});
     this.findAllUserDirectorySettings();
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleUserDirectoryClickEvent);
+    document.removeEventListener('click', this.handleUserDirectoryClickEvent, {capture: true});
   }
 
   /**

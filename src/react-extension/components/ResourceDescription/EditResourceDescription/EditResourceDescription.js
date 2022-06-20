@@ -237,14 +237,14 @@ class EditResourceDescription extends React.Component {
    * Remove listener for outside description editor clicks that aims to closes the editor
    */
   removeOutsideEditorClickEvent() {
-    document.removeEventListener('click', this.handleEditorClickEvent);
+    document.removeEventListener('click', this.handleEditorClickEvent, {capture: true});
   }
 
   /**
    * handle a click outside of the editor
    */
   handleOutsideEditorClickEvent() {
-    document.addEventListener('click', this.handleEditorClickEvent);
+    document.addEventListener('click', this.handleEditorClickEvent, {capture: true});
   }
 
   /*

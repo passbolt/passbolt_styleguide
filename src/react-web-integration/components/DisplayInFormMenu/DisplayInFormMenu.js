@@ -51,11 +51,11 @@ class DisplayInFormMenu extends React.Component {
    */
   componentDidMount() {
     this.handleDisplayConfigurationReceivedEvent();
-    document.addEventListener('click', this.handleInFormMenuClickEvent);
+    document.addEventListener('click', this.handleInFormMenuClickEvent, {capture: true});
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleInFormMenuClickEvent);
+    document.removeEventListener('click', this.handleInFormMenuClickEvent, {capture: true});
   }
 
   /**

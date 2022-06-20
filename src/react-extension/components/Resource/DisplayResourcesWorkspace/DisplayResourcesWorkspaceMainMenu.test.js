@@ -104,12 +104,12 @@ describe("See Workspace Main Menu", () => {
       page = new DisplayResourcesWorkspaceMainMenuPage(contextPro, propsFolderOwned);
     });
 
-    it('As LU I cannot start adding a resource or a folder via the workspace main menu', () => {
+    it('As LU I cannot start adding a resource or a folder via the workspace main menu', async() => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
       expect(page.displayMenu.createMenuDisabled).toBeNull();
 
-      page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
 
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
       expect(page.displayMenu.newFolderMenu).not.toBeNull();

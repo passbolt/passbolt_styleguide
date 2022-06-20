@@ -45,11 +45,11 @@ class Autocomplete extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
   }
 
   createInputRefs() {
