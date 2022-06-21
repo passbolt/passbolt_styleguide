@@ -46,6 +46,7 @@ import {
 } from "./InformManager.test.data";
 import InformManagerPage from "./InformManager.test.page";
 import InFormManager from "./InFormManager";
+import DomUtils from "../Dom/DomUtils";
 
 beforeEach(() => {
   jest.resetModules();
@@ -701,6 +702,30 @@ describe("InformManager", () => {
     expect(informManager.iframesLength).toBe(0);
     await informManager.focusOnSearch();
     expect(informManager.iframesLength).toBe(0);
+  });
+
+  it("As LU I should see the inform call to action in iframe", async() => {
+    jest.spyOn(DomUtils, "isRequestInitiatedFromSameOrigin").mockImplementation(() => true);
+    // Set up document body
+    const iframe = document.createElement('iframe');
+    iframe.srcdoc = domElementLoginWithIdAttributeLogin;
+    document.body.appendChild(iframe);
+    // eslint-disable-next-line no-unsanitized/property
+    iframe.contentDocument.body.innerHTML = domElementLoginWithIdAttributeLogin;
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.focusOnUsernameIframe();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.clickOnInformCallToAction();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsernameIframe();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.focusOnPasswordIframe();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.clickOnInformCallToAction(2);
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnPasswordIframe();
+    expect(informManager.iframesLength).toBe(1);
   });
 });
 
