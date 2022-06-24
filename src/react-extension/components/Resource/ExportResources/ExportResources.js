@@ -296,7 +296,7 @@ class ExportResources extends React.Component {
 
           <div className="form-content">
 
-            <div className="select-wrapper input required">
+            <div className={`select-wrapper input required ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="export-format"><Trans>Choose the export format (csv and kdbx are supported)</Trans></label>
               <Select
                 id="export-format"

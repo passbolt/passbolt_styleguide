@@ -303,7 +303,7 @@ class EditUserProfile extends Component {
 
           <div className="form-content">
 
-            <div className={`input text required ${firstnameErrorSelector}`}>
+            <div className={`input text required ${firstnameErrorSelector} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="user-profile-firstname-input"><Trans>First Name</Trans></label>
               <input
                 id="user-profile-firstname-input"
@@ -324,7 +324,7 @@ class EditUserProfile extends Component {
               }
             </div>
 
-            <div className={`input text required ${lastnameErrorSelector}`}>
+            <div className={`input text required ${lastnameErrorSelector} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="user-profile-lastname-input"><Trans>Last Name</Trans></label>
               <input
                 id="user-profile-lastname-input"
@@ -344,7 +344,7 @@ class EditUserProfile extends Component {
               }
             </div>
 
-            <div className="input text required">
+            <div className="input text required disabled">
               <label htmlFor="user-profile-username-input"><Trans>Username / Email</Trans></label>
               <input
                 id="user-profile-username-input"
@@ -355,7 +355,7 @@ class EditUserProfile extends Component {
             </div>
 
             {this.canIUseLocale &&
-            <div className="select-wrapper input required">
+            <div className={`select-wrapper input required ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="user-profile-locale-input"><Trans>Language</Trans></label>
               <Select id="user-profile-locale-input" name="locale" value={this.state.profile.locale}
                 items={this.supportedLocales} disabled={!this.areActionsAllowed} onChange={this.handleInputChange}/>

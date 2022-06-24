@@ -273,7 +273,7 @@ class ImportResourcesKeyUnlock extends Component {
 
           <div className="form-content">
 
-            <div className="input-password-wrapper input">
+            <div className={`input-password-wrapper input ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="import-password-dialog-password"><Trans>Keepass password</Trans></label>
               <Password
                 id="import-password-dialog-password"

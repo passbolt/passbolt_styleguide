@@ -239,7 +239,7 @@ class ExportResourcesCredentials extends Component {
 
           <div className="form-content">
 
-            <div className="input-password-wrapper input">
+            <div className={`input-password-wrapper input ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="password"><Trans>Keepass password</Trans></label>
               <Password id="password"
                 name="password"

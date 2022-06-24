@@ -370,7 +370,7 @@ class CreateUser extends Component {
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.first_nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-first-name-input"><Trans>First Name</Trans></label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
@@ -383,7 +383,7 @@ class CreateUser extends Component {
               <div className="first_name error-message">{this.state.first_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.last_nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-last-name-input"><Trans>Last Name</Trans></label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
@@ -396,7 +396,7 @@ class CreateUser extends Component {
               <div className="last_name error-message">{this.state.last_nameError}</div>
               }
             </div>
-            <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
               <input id="user-username-input" name="username"
                 ref={this.usernameRef} type="text" value={this.state.username} placeholder={this.translate("email")}
@@ -408,7 +408,7 @@ class CreateUser extends Component {
               <div className="username error-message">{this.state.usernameError}</div>
               }
             </div>
-            <div className="input checkbox-wrapper">
+            <div className={`input checkbox-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="is_admin_checkbox"><Trans>Role</Trans></label>
               <div className="input checkbox">
                 <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}

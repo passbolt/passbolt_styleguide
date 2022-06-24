@@ -635,7 +635,7 @@ class EditResource extends Component {
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-name"><Trans>Name</Trans></label>
               <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
@@ -645,7 +645,7 @@ class EditResource extends Component {
               <div className="name error-message">{this.state.nameError}</div>
               }
             </div>
-            <div className={`input text ${this.state.uriError ? "error" : ""}`}>
+            <div className={`input text ${this.state.uriError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-uri"><Trans>URI</Trans></label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
@@ -654,7 +654,7 @@ class EditResource extends Component {
               <div className="error-message">{this.state.uriError}</div>
               }
             </div>
-            <div className={`input text ${this.state.usernameError ? "error" : ""}`}>
+            <div className={`input text ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-username"><Trans>Username</Trans></label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="255"
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
@@ -663,7 +663,7 @@ class EditResource extends Component {
               <div className="error-message">{this.state.usernameError}</div>
               }
             </div>
-            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
+            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">
                 <Trans>Password</Trans>
                 {this.state.passwordWarning &&
@@ -683,7 +683,7 @@ class EditResource extends Component {
                 </a>
                 {this.canUsePasswordGenerator &&
                   <a onClick={this.handleOpenGenerator}
-                    className="password-generator button-icon button">
+                     className={`password-generator button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='settings' big={true}/>
                     <span className="visually-hidden">open generator</span>
                   </a>
@@ -697,7 +697,7 @@ class EditResource extends Component {
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
               }
             </div>
-            <div className="input textarea">
+            <div className={`input textarea ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-description"><Trans>Description</Trans>
                 {this.state.descriptionWarning &&
                   <Icon name="exclamation"/>

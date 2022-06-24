@@ -252,7 +252,7 @@ class ImportGpgKey extends Component {
         <form
           acceptCharset="utf-8"
           onSubmit={this.handleSubmit}>
-          <div className={`input textarea required openpgp-key ${this.hasErrors ? "error" : ""}`}>
+          <div className={`input textarea required openpgp-key ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
             <label htmlFor="private-key"><Trans>Private key</Trans></label>
             <textarea
               name="private-key"

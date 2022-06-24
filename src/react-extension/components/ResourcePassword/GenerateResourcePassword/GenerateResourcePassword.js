@@ -182,7 +182,7 @@ class GenerateResourcePassword extends Component {
           onClose={this.handleClose}>
           <form onSubmit={this.handleSubmit} noValidate>
             <div className="form-content">
-              <div className="input-password-wrapper input">
+              <div className={`input-password-wrapper input ${this.state.processing ? 'disabled' : ''}`}>
                 <label htmlFor="generate-resource-password-form-password"><Trans>Password</Trans></label>
                 <div className="password-button-inline">
                   <Password
@@ -195,12 +195,13 @@ class GenerateResourcePassword extends Component {
                     value={this.state.password}
                     onChange={this.handleInputChange}
                     disabled={this.state.processing}/>
-                  <a onClick={this.handleGeneratePassword} className="password-generate button-icon button">
+                  <a onClick={this.handleGeneratePassword}
+                    className={`password-generate button-icon button ${this.state.processing ? 'disabled' : ''}`}>
                     <Icon name='dice' big={true}/>
                     <span className="visually-hidden">generate</span>
                   </a>
                   <a onClick={this.handleCopyPassword}
-                    className={`copy-to-clipboard button button-icon`}>
+                    className={`copy-to-clipboard button button-icon ${this.state.processing ? 'disabled' : ''}`}>
                     <Icon name='copy-to-clipboard' big={true}/>
                     <span className="visually-hidden">view</span>
                   </a>
@@ -218,12 +219,14 @@ class GenerateResourcePassword extends Component {
                     {generator.type === "password" &&
                     <ConfigurePasswordGenerator
                       configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}/>
+                      onChanged={this.handleGeneratorChanged}
+                      disabled={this.state.processing}/>
                     }
                     {generator.type === "passphrase" &&
                     <ConfigurePassphraseGenerator
                       configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}/>
+                      onChanged={this.handleGeneratorChanged}
+                      disabled={this.state.processing}/>
                     }
                   </Tab>
                 )}

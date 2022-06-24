@@ -713,7 +713,7 @@ class EditUserGroup extends Component {
           noValidate>
 
           <div className="form-content">
-            <div className={`input text required ${this.hasErrors("name") ? "error" : ""}`}>
+            <div className={`input text required ${this.hasErrors("name") ? "error" : ""} ${!this.areActionsAllowed || !this.isLoggedInUserAdmin() ? 'disabled' : ''}`}>
               <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
               <input
                 id="group-name-input"

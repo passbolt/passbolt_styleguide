@@ -338,7 +338,7 @@ class Autocomplete extends Component {
     return (
       <div>
         <div>
-          <div className="input text autocomplete">
+          <div className={`input text autocomplete ${this.isInputDisabled() ? 'disabled' : ''}`}>
             <label htmlFor={this.props.id}>{this.props.label}</label>
             <input id={this.props.id}
               name={this.props.name}

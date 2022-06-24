@@ -101,7 +101,7 @@ class SearchBar extends Component {
     return (
       <div className="col2 search-wrapper">
         <form className="search" onSubmit={this.handleOnSubmitEvent}>
-          <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""}`}>
+          <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""} ${this.props.disabled ? 'disabled' : ''}`}>
             <label>Search</label>
             <input ref={this.searchInputRef} className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}

@@ -280,7 +280,7 @@ class EnterUsernameForm extends Component {
       <div className="enter-username">
         <h1><Trans>Please enter your email to continue.</Trans></h1>
         <form acceptCharset="utf-8" onSubmit={this.handleFormSubmit} noValidate>
-          <div className={`input text required ${this.state.usernameError ? "error" : ""}`}>
+          <div className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
             <label htmlFor="username"><Trans>Email</Trans></label>
             <input id="username-input" type="text" ref={this.usernameRef} name="username" value={this.state.username}
               onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange} placeholder={this.translate("you@organization.com")}

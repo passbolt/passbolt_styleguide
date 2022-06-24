@@ -322,7 +322,7 @@ class ChangeUserSecurityToken extends Component {
           <div className="col7 main-column">
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Update the Security Token</Trans></h3>
-              <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
+              <div className={`input-security-token input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
                 <label htmlFor="security-token-text"><Trans>Security token</Trans></label>
                 <input
                   id="security-token-text"

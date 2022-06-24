@@ -182,7 +182,7 @@ class ConfirmPassphrase extends React.Component {
             <form className="enter-passphrase" onSubmit={this.handleSubmit}>
               <h3><Trans>Please enter your passphrase to continue</Trans></h3>
               <div className="form-content">
-                <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""}`}>
+                <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label htmlFor="passphrase-input"><Trans>Passphrase</Trans></label>
                   <Password
                     id="passphrase-input"

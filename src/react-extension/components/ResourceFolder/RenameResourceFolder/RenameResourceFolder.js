@@ -318,7 +318,7 @@ class RenameResourceFolder extends Component {
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <form className="folder-rename-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="folder-name-input"><Trans>Folder name</Trans></label>
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}
