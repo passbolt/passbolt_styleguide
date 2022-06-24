@@ -101,7 +101,7 @@ class DeleteResourcePageObject {
   }
 
   get resourceName() {
-    return this._container.querySelector('.form-content div p strong');
+    return this._container.querySelector('.form-content p strong');
   }
 
   get errorDialog() {

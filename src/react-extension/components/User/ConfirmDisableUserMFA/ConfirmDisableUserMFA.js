@@ -156,7 +156,7 @@ class ConfirmDisableUserMFA extends Component {
                 You are about to disable second-factor authentication (MFA) for the user <strong>{{name}} ({{username}})</strong>.
               </Trans>
             </p>
-            <p><Trans>Warning: Existing settings will be lost. This action cannot be undone.</Trans></p>
+            <p><Trans>Existing settings will be lost. This action cannot be undone.</Trans></p>
           </div>
 
           <div className="submit-wrapper clearfix">

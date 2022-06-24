@@ -155,14 +155,14 @@ class DeleteResource extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             {!this.hasMultipleResources() &&
-            <div>
+            <>
               <p>
                 <Trans>
                   Are you sure you want to delete the password <strong>{{resourceName: this.resources[0].name}}</strong>?
                 </Trans>
               </p>
-              <p><Trans>Warning: Once the password is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
-            </div>
+              <p><Trans>Once the password is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
+            </>
             }
             {this.hasMultipleResources() &&
             <p>
