@@ -1,18 +1,8 @@
 a {
-    &:hover {
-        .svg-icon svg {
-            fill: @font-focus;
-        }
-    }
     &.disabled {
         .svg-icon svg {
-            fill: @font-light;
             pointer-events: none;
             cursor: default;
-        }
-
-        &:hover .svg-icon svg {
-            fill: @font-light;
         }
     }
     &.fav {

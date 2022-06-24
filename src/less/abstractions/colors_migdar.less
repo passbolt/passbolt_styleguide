@@ -1,267 +1,98 @@
 /* palette */
 @white: #FFFFFF;
-@black: #262626;
-@blacker: #000000;
+@black: #000000;
 
-@blue-light: #2A9CEB;
-@blue: #2894DF;
-@blue-dark: #4271b7;
-@blue-twitter: #4099FF;
-@blue-facebook: #3B5998;
+@pale-cornflower-blue: #B8D0FD;
+@button-blue: #2A9CEB;
+@bleu-de-france: #2894DF;
+@steel-blue: #4271b7;
 
-@green-lightest: #EDF7EB;
-@green-light: #66CC00;
-@green: #009900;
+@honeydew: #EDF7EB;
 @islamic-green: #0EAA00;
+@islamic-green-2: #009900;
 
-@yellow-light: #FEF0BF;
-@yellow: #FFBD2E;
 @bright-yellow: #FFA724;
 @deep-champagne: #FFDBA6;
+@deep-champagne-2: #FEF0BF;
 
-@orange-light: #DD6A00;
-@orange: #9F6000;
+@spanish-orange: #DD6A00;
 
-@red: #D40101;
-@red-dark: #92000C;
-@red-light: #DB5454;
+@rosso-corsa: #D40101;
 @dark-candy-apple-red: #A40000;
 @light-salmon-pink: #FFA6A6;
 
-@midgar-1: #000000;
-@midgar-2: #222220;
-@midgar-3: #303030;
-@midgar-4: #353535;
-@midgar-5: #444442;
-@midgar-6: #7A7A7A;
-@midgar-7: #8B8B89;
-@midgar-8: #EEEEEC;
-@midgar-9: #F3F3F3;
-@midgar-10:#FFFFFC;
-
-@raisin-black: #202020;
 @chinese-black: #101010;
-@grey-1: #292929;
-@dim-gray: #696969;
-@black-olive: #3B3B3B;
-@bright-gray: #EBEBE9;
-@gray: #808080;
-@gray-2: #7C7C7C;
-@dark-liver: #515151;
-@grey: @midgar-7;
-@grey-lighter: @midgar-8;
-@grey-lightest: @midgar-9;
-@grey-darker: @midgar-6;
-@grey-darkest: @midgar-5;
-@grey-dark: @midgar-4;
-@spanish-gray: #989693;
-@black-olive-2: #404040;
-@arsenic: #424242;
+@chinese-black-2: #111111;
+@chinese-black-3: #151515;
 @eerie-black: #1E1E1E;
 @eerie-black-2: #181818;
 @eerie-black-3: #1C1C1C;
 @eerie-black-4: #1F1F1F;
+@raisin-black: #202020;
 @charleston-green: #2C2C2C;
-@granite-gray-2: #616161;
-@chinese-black-2: #111111;
+@charleston-green-2: #292929;
+@dark-charcoal: #303030;
+@jet: #353535;
+@black-olive: #3B3B3B;
+@black-olive-2: #404040;
+@arsenic: #424242;
+@outer-space: #444442;
+@dark-liver: #515151;
+@umber: #5C564C;
+@granite-gray: #616161;
+@dim-gray: #696969;
+@sonic-silver: #7A7A7A;
+@gray: #808080;
+@gray-2: #7C7C7C;
+@philippine-gray: #8B8B89;
+@spanish-gray: #989693;
+@silver-chalice: #ABABAB;
 @philippine-silver: #B1B1B1;
 @azureish-white: #DDEBF8;
-@silver-chalice: #ABABAB;
-@chinese-black-3: #151515;
+@bright-gray: #EBEBE9;
 
 /* background */
 @background-default: @raisin-black;
-@background-dark: @midgar-2;
-@background-light: @midgar-4;
-@background-lighter: @midgar-4;
-@background-lightest: @midgar-5;
+/* header */
 @background-header-first: @eerie-black-3;
 @background-header-second: @charleston-green;
-@background-focus: @blue;
+/* footer */
 @background-footer: @charleston-green;
+/* background behind card setup/recover/login */
+@background-splash: @chinese-black;
+
+/* borders */
+/* default */
+@border-default: @raisin-black;
+/* attention required */
+@border-attention-required: @spanish-orange;
+
+/* font */
+@font-default: @white;
+@font-header-first: @bright-gray;
+@font-dim: lighten(@philippine-gray, 25);
+@font-light: @philippine-gray;
+@font-lighter: @philippine-gray;
+@font-lightest: @outer-space; // not WCAG on background default, for decoration only
+@font-focus: @bleu-de-france;
+@font-warning: @spanish-orange;
+@font-error: @rosso-corsa;
+@font-inverse: @white;
+@font-dropdown-focus: @white;
+@font-hover-secret: @rosso-corsa;
+@font-focus-navigation: @white;
+@font-error-api: @raisin-black;
+@font-notification: @black;
 
 /* quickaccess */
-@quickaccess-header-background: @midgar-4;
-@quickaccess-footer-background: @midgar-4;
+@quickaccess-header-background: @jet;
+@quickaccess-footer-background: @jet;
 @quickaccess-back-link-background: @charleston-green;
 @quickaccess-list-title-background: @charleston-green;
 @quickaccess-list-title-hover-background: @chinese-black;
 @quickaccess-list-title-active-background: @black-olive-2;
 @quickaccess-border: @chinese-black;
 @quickaccess-font-property-name: @silver-chalice;
-
-@background-error: lighten(@red, 53%);
-@background-success: @green-lightest;
-@background-warning: @yellow-light;
-@background-updated: #5C564C;
-@background-notice: @raisin-black;
-@background-overlay: rgba(0, 0, 0, 0.8);
-@background-splash: @chinese-black;
-@background-tooltip: @chinese-black-3;
-@background-drag: @gray;
-@background-drag-number: @red;
-
-/* borders */
-@border-lightest: @midgar-1;
-@border-lighter: @midgar-1;
-@border-light: @midgar-1;
-@border-default: @raisin-black;
-@border-dark: @midgar-1;
-@border-input: @midgar-2;
-@border-input-light: @midgar-3;
-@border-focus: @blue;
-@border-focus-dark: @blue-dark;
-@border-attention-required: @orange-light;
-@border-link-default: @dark-liver;
-@border-link-focus: @blue;
-
-/* Inform menu */
-@inform-menu-hover-background: @chinese-black;
-@inform-menu-active-background: @black-olive-2;
-@inform-menu-border: @chinese-black;
-
-/* font */
-@font-default: @white;
-@font-header-first: @bright-gray;
-@font-dim: lighten(@midgar-7, 25);
-@font-light: @midgar-7;
-@font-lighter: @midgar-7;
-@font-lightest: @midgar-5; // not WCAG on background default, for decoration only
-@font-focus: @blue;
-@font-warning: @orange-light;
-@font-error: @red;
-@font-inverse-dark: @midgar-9;
-@font-inverse: @midgar-8;
-@font-inverse-background: @midgar-1;
-@font-dropdown-focus: @white;
-@font-tooltip: @white;
-@font-drag: @white;
-@font-hover-secret: @red;
-@font-focus-navigation: @white;
-
-/* chips */
-@chips-font: @white;
-@chips-beta-background: @orange-light;
-@chips-new-background: @blue;
-
-/* dialog */
-@dialog-background: @midgar-4;
-@dialog-border: @eerie-black-2;
-@dialog-box-shadow: rgba(0, 0, 0, 0.5);
-@dialog-divider-border: @chinese-black;
-
-/* autocomplete */
-@autocomplete-background: @blacker;
-@autocomplete-hover-background: @raisin-black;
-@autocomplete-border: @blacker;
-
-/* buttons */
-@button-text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
-@button-primary-text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-
-@button-background: @midgar-4;
-@button-active-background: @chinese-black;
-@button-border: @raisin-black;
-@button-focus-border: @blue;
-
-@button-icon-background: @arsenic;
-@button-icon-active-background: @chinese-black;
-@button-icon-border: @eerie-black;
-
-@button-primary-background: @blue;
-@button-primary-border: @blue;
-@button-primary-color: @white;
-@button-primary-hover-background: @blue-light;
-@button-primary-hover-border: @blue-light;
-@button-primary-hover-color: @white;
-@button-primary-focus: @blue-light;
-
-@button-warning-background: @red;
-@button-warning-border: @red;
-@button-warning-color: @white;
-
-@button-transparent-background: rgba(@blacker, .1);
-@button-transparent-border: rgba(@white, .1);
-
-@button-disabled-color: @font-light;
-@button-disabled-background: @midgar-4;
-@button-disabled-border: @border-default;
-
-@button-selected-background: @midgar-2;
-@button-selected-border: @midgar-1;
-
-/* box shadows */
-@shadow: @blacker;
-@shadow-dark: @blacker;
-@shadow-opacity-hover-black: 0.5;
-@shadow-opacity-hover-white: 0.25;
-@shadow-opacity-active-white: 0.25;
-@shadow-opacity-active-black: 0.5;
-@shadow-opacity-dropdown: 0.5;
-@shadow-opacity-select: 0.5;
-@shadow-opacity-panel-info: 0.75;
-@shadow-focus: @blue-light;
-@shadow-drag: @gray;
-
-/* Navigation menu */
-@navigation-menu-hover-background: @black-olive-2;
-
-/* dropdown menus */
-@dropdown-background: @midgar-4;
-@dropdown-profile-background: @eerie-black-3;
-@dropdown-focus-background: @blue;
-@dropdown-item-hover-background: @black-olive-2;
-
-/* inputs */
-@input-background: @midgar-1;
-@input-background-disabled: @midgar-5;
-@input-infield-background: @midgar-4;
-@input-border: @midgar-1;
-@input-infield-border: @raisin-black;
-@input-focus-border: @blue;
-/* checkbox */
-@input-checkbox-background: @midgar-2;
-@input-checkbox-background-disabled: @blacker;
-@input-checkbox-image-disabled: @midgar-3;
-@input-checkbox-border: @midgar-6;
-@input-checkbox-border-disabled: @grey-1;
-@input-checkbox-focus-border: @blue;
-/* radio */
-@input-radio-background: @midgar-2;
-@input-radio-dot-background: @blue-light;
-@input-radio-dot-background-disabled: @grey-1;
-@input-radio-background-disabled: @blacker;
-@input-radio-image-disabled: @midgar-3;
-@input-radio-border: @midgar-6;
-@input-radio-border-disabled: @blacker;
-@input-radio-focus-border: @blue;
-/* toggle */
-@input-toggle-background: @gray;
-@input-toggle-focus-background: @blue;
-@input-toggle-dot-background: @white;
-@input-toggle-checked-background: @green;
-@input-toggle-focus-border: @blue;
-/* select */
-@select-background: @midgar-4;
-@select-setup-extension-background: @raisin-black;
-@select-hover-background: @black-olive-2;
-@select-focus-background: @blue;
-@select-focus-font: @white;
-@select-border: @raisin-black;
-@select-focus-border: @blue;
-/* range */
-@input-range-background: @arsenic;
-@input-range-dot-background: @midgar-6;
-@input-range-dot-border: @arsenic;
-
-/* progress bar */
-@background-progress-bar-default: @arsenic;
-@background-progress-bar: @red;
-
-/* complexity */
-@complexity-color: @white;
-@complexity-bar-background-default: @arsenic;
-@complexity-bar-background-gradient: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
 
 /* logos */
 @logourl: url('@{images}/logo/logo_white.svg');
@@ -274,99 +105,250 @@
 @passbolt-icon-badge-5-plus: url('@{images}/logo/icon-badge-5+.svg');
 @passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
 
+/* Inform menu */
+@inform-menu-hover-background: @chinese-black;
+@inform-menu-active-background: @black-olive-2;
+@inform-menu-border: @chinese-black;
+
+/* dialog */
+@dialog-background: @jet;
+@dialog-background-overlay: rgba(0, 0, 0, 0.8);
+@dialog-border: @eerie-black-2;
+@dialog-box-shadow: rgba(0, 0, 0, 0.5);
+@dialog-divider-border: @chinese-black;
+/* share dialog */
+@dialog-permission-background-updated: @umber;
+@dialog-permission-border: @black;
+/* folder move dialog */
+@dialog-folder-move-selected-background: @jet;
+@dialog-folder-move-border: @black;
+@dialog-folder-move-selected-border: @jet;
+/* delete user/group conflict dialog */
+@dialog-delete-conflict-title-background: @jet;
+
+/* buttons */
+@button-background: @jet;
+@button-active-background: @chinese-black;
+@button-border: @raisin-black;
+@button-focus-border: @bleu-de-france;
+
+@button-icon-background: @arsenic;
+@button-icon-active-background: @chinese-black;
+@button-icon-border: @eerie-black;
+
+@button-primary-background: @bleu-de-france;
+@button-primary-border: @bleu-de-france;
+@button-primary-color: @white;
+
+@button-warning-background: @rosso-corsa;
+@button-warning-border: @rosso-corsa;
+@button-warning-color: @white;
+
+@button-transparent-background: rgba(@black, .1);
+@button-transparent-border: rgba(@white, .1);
+
+/* link */
+@background-link-focus: @bleu-de-france;
+@border-link-message: @black;
+@border-link-default: @dark-liver;
+@border-link-focus: @bleu-de-france;
+
+/* tooltip */
+@background-tooltip: @chinese-black-3;
+@font-tooltip: @white;
+
+/* inputs */
+@input-background: @black;
+@input-background-disabled: @outer-space;
+@input-infield-background: @jet;
+@input-border: @black;
+@input-infield-border: @raisin-black;
+@input-focus-border: @bleu-de-france;
+
+/* checkbox */
+@input-checkbox-background: @raisin-black;
+@input-checkbox-background-disabled: @black;
+@input-checkbox-image-disabled: @dark-charcoal;
+@input-checkbox-border: @sonic-silver;
+@input-checkbox-border-disabled: @charleston-green-2;
+@input-checkbox-focus-border: @bleu-de-france;
+
+/* controls */
+@controls-check:url('@{images}/controls/check_white.svg');
+
+/* radio */
+@input-radio-background: @raisin-black;
+@input-radio-dot-background: @button-blue;
+@input-radio-dot-background-disabled: @charleston-green-2;
+@input-radio-background-disabled: @black;
+@input-radio-image-disabled: @dark-charcoal;
+@input-radio-border: @sonic-silver;
+@input-radio-border-disabled: @black;
+@input-radio-focus-border: @bleu-de-france;
+
+/* radio list */
+@input-radio-list-background: @jet;
+@input-radio-list-border: @raisin-black;
+@input-radio-list-hover-border: @raisin-black;
+@input-radio-list-focus: @bleu-de-france;
+
+/* toggle */
+@input-toggle-background: @gray;
+@input-toggle-focus-background: @bleu-de-france;
+@input-toggle-dot-background: @white;
+@input-toggle-checked-background: @islamic-green-2;
+@input-toggle-focus-border: @bleu-de-france;
+
+/* select */
+@select-background: @jet;
+@select-setup-extension-background: @raisin-black;
+@select-hover-background: @black-olive-2;
+@select-focus-background: @bleu-de-france;
+@select-focus-font: @white;
+@select-border: @raisin-black;
+@select-focus-border: @bleu-de-france;
+
+/* range */
+@input-range-background: @arsenic;
+@input-range-dot-background: @sonic-silver;
+@input-range-dot-border: @arsenic;
+
+/* complexity */
+@complexity-color: @white;
+@complexity-bar-background-default: @arsenic;
+@complexity-bar-background-gradient: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
+
+/* hints */
+@hint-success-color: @islamic-green-2;
+@hint-warning-color: @spanish-orange;
+@hint-error-color: @rosso-corsa;
+
+/* drag items */
+@background-drag: @gray;
+@background-drag-number: @rosso-corsa;
+@font-drag: @white;
+
+/* announcement */
+@announcement-background: @deep-champagne-2;
+@announcement-font: @black;
+
+/* chips */
+@chips-font: @white;
+@chips-beta-background: @spanish-orange;
+@chips-new-background: @bleu-de-france;
+
+/* autocomplete */
+@autocomplete-background: @black;
+@autocomplete-hover-background: @raisin-black;
+@autocomplete-selected-background: @jet;
+@autocomplete-border: @black;
+
+/* progress bar */
+@background-progress-bar-default: @arsenic;
+@background-progress-bar: @rosso-corsa;
+
+/* sidebar */
+@panel-background: @jet;
+@panel-middle-background: @jet;
+@sidebar-background: @jet;
+@sidebar-border: @black;
+@sidebar-section-background: @jet;
+@sidebar-section-header-background: @dark-charcoal;
+
+/* Navigation menu */
+@navigation-menu-hover-background: @black-olive-2;
+@navigation-menu-border-focus: @bleu-de-france;
+@navigation-menu-background-focus: @bleu-de-france;
+
+/* dropdown menus */
+@dropdown-background: @jet;
+@dropdown-profile-background: @eerie-black-3;
+@dropdown-focus-background: @bleu-de-france;
+@dropdown-item-hover-background: @black-olive-2;
+
 /* grid */
 @tableview-background: @raisin-black;
 @tableview-background-even: @eerie-black-3;
 @tableview-background-hover: @chinese-black;
 @tableview-background-selected: @black-olive-2;
 @tableview-header-background: @black-olive;
-@tableview-shadow: @granite-gray-2;
-@breadcrumb-background: @midgar-4;
+@tableview-shadow: @granite-gray;
+@breadcrumb-background: @jet;
 @grid-border: @chinese-black;
-
-/* messages */
-@message-error-color: @blacker;
-@message-error-background: @light-salmon-pink;
-@message-success-color: @blacker;
-@message-success-background: @green-lightest;
-@message-notice-color: @blacker;
-@message-notice-background: @azureish-white;
-@message-warning-color: @blacker;
-@message-warning-background: @deep-champagne;
-
-/* controls */
-@controls-dot:url('@{images}/controls/dot_white.svg');
-@controls-dot-hover:url('@{images}/controls/dot_red.svg');
-@controls-check:url('@{images}/controls/check_white.svg');
-@controls-chevron-right:url('@{images}/controls/chevron-right_white.svg');
-@controls-chevron-down:url('@{images}/controls/chevron-down_white.svg');
-@controls-chevron-down-focus:url('@{images}/controls/chevron-down_blue.svg');
-
-/* sidebar */
-@panel-background: @midgar-4;
-@panel-middle-background: @midgar-4;
-@sidebar-background: @midgar-4;
-@sidebar-border: @border-lightest;
-@sidebar-section-background: @midgar-4;
-@sidebar-section-header-background: @midgar-3;
 
 /* panel info */
 @panel-info-header-icon-background: @chinese-black-2;
 @panel-info-header-icon-color: @gray-2;
 @panel-info-header-subtitle-font-color: @philippine-silver;
-@panel-info-background: @midgar-4;
-@panel-info-content-background: @midgar-3;
+@panel-info-background: @jet;
+@panel-info-content-background: @dark-charcoal;
 @panel-info-notice-background: @azureish-white;
 @panel-info-border: @raisin-black;
 
 /* comment */
 @comment-background: @eerie-black-4;
 
+/* tags */
+@tag-color: @azureish-white;
+@tag-border: @pale-cornflower-blue;
+@tag-background: rgba(42,156,235,0.1);
+@tag-hover-color: @button-blue;
+@tag-hover-border: @button-blue;
+@tag-hover-background: @dark-charcoal;
+@tag-editor-border-focus: @bleu-de-france;
+
+/* notice */
+@notice-background: @raisin-black;
+
 /* tables */
-@table-background: @midgar-2;
-@table-border: @border-default;
-@table-row-even-background: lighten(@midgar-2, 2);
+@table-background: @raisin-black;
+@table-background-warning: @deep-champagne-2;
+@table-background-error: lighten(@rosso-corsa, 53%);
+@table-border: @raisin-black;
+@table-row-even-background: lighten(@raisin-black, 2);
 
 /* tabs */
 @tab-selected-background: @raisin-black;
 @tab-unselected-background: @chinese-black;
 @tab-border: @chinese-black;
 
-/* tags */
-@tag-color: #d4e4ff;
-@tag-border: #b8d0fd;
-@tag-background: rgba(42,156,235,0.1);
-@tag-hover-color: @blue-light;
-@tag-hover-border: @blue-light;
-@tag-hover-background: @midgar-3;
+/* mfa */
+@mfa-background: @outer-space;
+@mfa-border: @outer-space;
+@mfa-provider-border: @black;
+@mfa-device-color: @islamic-green-2;
 
-/* tooltip */
-@tooltip-background: @background-lightest;
-@tooltip-color: @font-inverse;
+/* feedback card */
+@feedback-card-border: @black;
 
-/* loading animation */
-@loading: url('@{images}/controls/loading_dark.svg');
+/* account recovery */
+@account-recovery-card-background: @jet;
 
-/* scrollbar */
-@scrollbar-background: @background-default;
-@scrollbar-border: @midgar-1;
-@scrollbar-track: @midgar-6;
+/* messages */
+@message-error-color: @black;
+@message-error-background: @light-salmon-pink;
+@message-success-color: @black;
+@message-success-background: @honeydew;
+@message-notice-color: @black;
+@message-notice-background: @azureish-white;
+@message-warning-color: @black;
+@message-warning-background: @deep-champagne;
 
-/* svg fill */
+/* default icon svg fill */
 @icon-color: @white;
 @icon-background-color: @black-olive;
 @icon-color-button-primary: @white;
 @icon-background-color-button-primary: @black-olive;
 @icon-color-button-warning: @white;
 @icon-background-color-button-warning: @black-olive;
-@fill-hover-color: @grey;
+@fill-hover-color: @philippine-gray;
 
 /* favorite icon fill */
-@icon-favorite-color: @red;
+@icon-favorite-color: @rosso-corsa;
 @icon-unfavorite-color: @dim-gray;
 
 /* exclamation icon fill */
-@icon-exclamation-required-color: @orange-light;
+@icon-exclamation-required-color: @spanish-orange;
 @icon-exclamation-default-color: @dim-gray;
 @icon-exclamation-color: @white;
 
@@ -379,7 +361,21 @@
 @spinner-background-button-warning: @white;
 
 /* failed icon fill */
-@icon-failed-color: @red;
+@icon-failed-color: @rosso-corsa;
 
 /* success icon fill */
-@icon-success-color: @green;
+@icon-success-color: @islamic-green-2;
+
+/* box shadows */
+@shadow-opacity-hover-black: 0.5;
+@shadow-opacity-hover-white: 0.25;
+@shadow-opacity-active-white: 0.25;
+@shadow-opacity-active-black: 0.5;
+@shadow-opacity-dropdown: 0.5;
+@shadow-opacity-select: 0.5;
+@shadow-opacity-panel-info: 0.75;
+@shadow-focus: @button-blue;
+@shadow-drag: @gray;
+
+/* loading animation (DEPRECATED) */
+@loading: url('@{images}/controls/loading_dark.svg');

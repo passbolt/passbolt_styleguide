@@ -14,10 +14,10 @@
 .message {
   padding: 1.6rem;
   a {
-    border-bottom: 1px solid @border-dark;
+    border-bottom: 1px solid @border-link-message;
   }
   a:hover {
-    border-bottom: 1px solid @blue;
+    border-bottom: 1px solid @border-link-focus;
   }
   &.error {
     color: @message-error-color;
@@ -25,11 +25,11 @@
 
     a:link, a:visited {
       color: @message-error-color;
-      border-bottom: 1px dotted @border-dark;
+      border-bottom: 1px dotted @border-link-message;
     }
     a:hover {
       color: @message-error-color;
-      border-bottom: 1px solid @border-dark;
+      border-bottom: 1px solid @border-link-message;
     }
   }
   &.success {

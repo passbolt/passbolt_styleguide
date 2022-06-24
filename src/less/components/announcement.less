@@ -5,8 +5,8 @@
   height: 3.8rem;
   font-size: 1.4rem;
   text-align: center;
-  background: @background-warning;
-  color: @blacker;
+  background: @announcement-background;
+  color: @announcement-font;
   width: 100%;
 
   p {
@@ -15,25 +15,25 @@
   }
 
   a {
-    color: @black;
-    border-bottom: 1px solid @grey-darkest;
+    color: @announcement-font;
+    border-bottom: 1px solid @border-link-default;
     display: inline-block;
     padding-bottom: 0;
     line-height: 1.6rem;
     margin-left: .8rem;
 
     &:link, &:visited {
-      color: @black;
+      color: @announcement-font;
     }
     &:hover {
       text-decoration: none;
       cursor: pointer;
-      color: @blue;
-      border-bottom: 1px solid @blue;
+      color: @font-focus;
+      border-bottom: 1px solid @border-link-focus;
     }
     &:active, &:focus {
       outline: 0;
-      color: @blue;
+      color: @font-focus;
       border: 0;
     }
   }

@@ -4,7 +4,7 @@
     border: 1px solid @border-default;
     border-top: 0;
     background: @background-default;
-    .box-shadow();
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, @shadow-opacity-dropdown);
     position: absolute;
     display: none;
     z-index: 9999;
@@ -29,7 +29,7 @@
             color: @font-default;
         }
         &.selected {
-            background: @background-lighter;
+            background: @autocomplete-selected-background;
         }
     }
 }
