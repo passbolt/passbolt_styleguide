@@ -40,6 +40,14 @@ export default class InformManagerPage {
   }
 
   /**
+   * Returns the username in iframe element
+   */
+  get usernameIframe() {
+    return document.querySelector('iframe').contentDocument.querySelector(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+  }
+
+
+  /**
    * Returns the usernames element
    */
   get usernames() {
@@ -51,6 +59,13 @@ export default class InformManagerPage {
    */
   get password() {
     return document.querySelector(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+  }
+
+  /**
+   * Returns the password in iframe element
+   */
+  get passwordIframe() {
+    return document.querySelector('iframe').contentDocument.querySelector(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
   }
 
   /**
@@ -94,9 +109,21 @@ export default class InformManagerPage {
     await waitFor(() => {});
   }
 
+  /** Blur on the username iframe element */
+  async blurOnUsernameIframe()  {
+    fireEvent.blur(this.usernameIframe);
+    await waitFor(() => {});
+  }
+
   /** Blur on the password element */
   async blurOnPassword()  {
     fireEvent.blur(this.password);
+    await waitFor(() => {});
+  }
+
+  /** Blur on the password iframe element */
+  async blurOnPasswordIframe()  {
+    fireEvent.blur(this.passwordIframe);
     await waitFor(() => {});
   }
 
@@ -106,9 +133,21 @@ export default class InformManagerPage {
     await waitFor(() => {});
   }
 
+  /** Focus on the username iframe element */
+  async focusOnUsernameIframe()  {
+    fireEvent.focus(this.usernameIframe);
+    await waitFor(() => {});
+  }
+
   /** Focus on the password element */
   async focusOnPassword()  {
     fireEvent.focus(this.password);
+    await waitFor(() => {});
+  }
+
+  /** Focus on the password iframe element */
+  async focusOnPasswordIframe()  {
+    fireEvent.focus(this.passwordIframe);
     await waitFor(() => {});
   }
 
