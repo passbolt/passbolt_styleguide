@@ -92,18 +92,13 @@
             }
 
             &.loading {
+                .main-cell {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                }
                 .info {
-                    margin-left: 3.8em;
-
-                    &:after {
-                        width: 60%;
-                        height: 100%;
-                        position: absolute;
-                        content: " ";
-                        top: 0px;
-                        left: 1.45em;
-                        background: transparent @loading left center no-repeat;
-                    }
+                    margin-left: 1.6rem;
                 }
             }
         }

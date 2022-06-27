@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import AutocompleteItem from "./AutocompleteItem";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 class Autocomplete extends Component {
   /**
@@ -207,6 +208,11 @@ class Autocomplete extends Component {
               <AutocompleteItem key={key} id={key} slug={tag.slug} selected={this.isItemSelected(key)}
                 onClick={this.handleSelect}/>
             )}
+            {this.state.processing &&
+              <li className="autocomplete-suggestion row">
+                <Icon name="spinner"/>
+              </li>
+            }
           </ul>
         </div>
       </div>
