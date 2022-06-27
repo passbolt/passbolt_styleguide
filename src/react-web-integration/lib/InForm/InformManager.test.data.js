@@ -132,6 +132,16 @@ export const domElementLoginWithClassEmail =
   '</div>';
 
 /**
+ * Create a login form with class create-account-input in DOM
+ * @type {string}
+ */
+export const domElementLoginWithClassCreateAccount =
+  '<div>' +
+  '  <input type="text" class="create-account-input"/>' +
+  '  <input type="text" class="password"/>' +
+  '</div>';
+
+/**
  * Create a login form with no type and class username in DOM
  * @type {string}
  */
@@ -148,6 +158,16 @@ export const domElementLoginWithNoTypeAndClassUsername =
 export const domElementLoginWithNoTypeAndClassEmail =
   '<div>' +
   '  <input class="email"/>' +
+  '  <input type="password"/>' +
+  '</div>';
+
+/**
+ * Create a login form with no type and class create-account-input in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndClassCreateAccount =
+  '<div>' +
+  '  <input class="create-account-input"/>' +
   '  <input type="password"/>' +
   '</div>';
 
