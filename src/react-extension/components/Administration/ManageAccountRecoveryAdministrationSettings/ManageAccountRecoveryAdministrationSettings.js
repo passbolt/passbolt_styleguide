@@ -218,8 +218,11 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    * @return {string}
    */
   formatDateTimeAgo(date) {
-    if (date === 'Never') {
-      return date;
+    if (date === null) {
+      return "n/a";
+    }
+    if (date === 'Infinity') {
+      return this.translate("Never");
     }
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();

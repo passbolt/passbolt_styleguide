@@ -97,7 +97,14 @@ class DisplayUserGpgInformation extends React.Component {
     const type = this.gpgkeyType[gpgkeyInfo.algorithm];
     const uIds = gpgkeyInfo.user_ids;
     const created = this.formatDate(gpgkeyInfo.created);
-    const expires = gpgkeyInfo.expires === "Never" ? "Never" : this.formatDate(gpgkeyInfo.expires);
+    let expires;
+    if (gpgkeyInfo.expires === null) {
+      expires = "n/a";
+    } else if (gpgkeyInfo.expires === "Infinity") {
+      expires = this.translate("Never");
+    } else {
+      expires = this.formatDate(gpgkeyInfo.expires);
+    }
     const armoredKey = gpgkeyInfo.armored_key;
     const fingerprint = gpgkeyInfo.fingerprint;
     const length = gpgkeyInfo.length;

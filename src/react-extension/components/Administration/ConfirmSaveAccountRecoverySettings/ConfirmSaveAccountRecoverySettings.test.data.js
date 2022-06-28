@@ -59,7 +59,7 @@ export function hasChangedPolicyProps(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
+      expires: "Infinity"
     }
   };
   return defaultProps(Object.assign(_props, props));
@@ -71,12 +71,15 @@ export function hasChangedPolicyProps(props = {}) {
  * @return {string}
  */
 export function formatDateTimeAgo(date) {
-  if (date === 'Never') {
-    return date;
+  if (date === null) {
+    return "n/a";
+  }
+  if (date === 'Infinity') {
+    return "Never";
   }
   const dateTime = DateTime.fromISO(date);
   const duration = dateTime.diffNow().toMillis();
-  return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative();
+  return duration > -1000 && duration < 0 ? 'Just now' : dateTime.toRelative();
 }
 
 export function formatDate(date) {
@@ -108,7 +111,7 @@ export function mandatoryPolicyPropsWithOrganisationKey(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
+      expires: "Infinity"
     }
   };
   return defaultProps(Object.assign(_props, props));
@@ -127,7 +130,7 @@ export function optInPolicyPropsWithOrganisationKey(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
+      expires: "Infinity"
     }
   };
   return defaultProps(Object.assign(_props, props));
@@ -146,7 +149,7 @@ export function optOutPolicyPropsWithOrganisationKey(props = {}) {
       algorithm: "RSA",
       length: "4096",
       created: "2020-09-01T13:11:08+00:00",
-      expires: "Never"
+      expires: "Infinity"
     }
   };
   return defaultProps(Object.assign(_props, props));
