@@ -20,7 +20,7 @@ const context = {
   },
   users: mockUsers,
   loggedInUser: {
-    id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    id: "54c6278e-f824-5fda-91ff-3e946b18d994",
     profile: {
       id: "48bcd9ac-a520-53e0-b3a4-9da7e57b91aa",
       user_id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
@@ -51,3 +51,6 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
+
+export const Loading = Template.bind({});
+Loading.args = Object.assign(defaultProps(), {context: {...context, port: {}}});
