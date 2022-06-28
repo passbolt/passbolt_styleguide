@@ -55,6 +55,19 @@ class ExtBootstrapApp extends Component {
   }
 
   /**
+   * It returns true if the page is detected as a passbolt app.
+   * For that purpose, it simply checks if <html> has a class 'passbolt' set.
+   * @returns {boolean}
+   */
+  isPassboltApp() {
+    const rootNode = document.getRootNode();
+    const htmlTag = rootNode.lastChild;
+
+    return htmlTag?.tagName === "HTML"
+      && htmlTag.classList.contains('passbolt');
+  }
+
+  /**
    * Get the list of user settings from local storage and set it in the state
    * Using UserSettings
    */
@@ -100,6 +113,10 @@ class ExtBootstrapApp extends Component {
   }
 
   render() {
+    if (!this.isPassboltApp()) {
+      return null;
+    }
+
     return (
       <>
         {this.isReady &&
