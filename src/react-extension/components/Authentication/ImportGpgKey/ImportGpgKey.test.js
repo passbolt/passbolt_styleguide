@@ -125,7 +125,7 @@ describe("ImportGpgKey", () => {
         validatePrivateGpgKey: jest.fn(() => { throw new Error("The private key should not be revoked."); })
       });
       props.context.port.request.mockImplementation(() => ({
-        expires: "Never",
+        expires: "Infinity",
         revoked: true
       }));
       const page = new ImportGpgKeyPage(props);

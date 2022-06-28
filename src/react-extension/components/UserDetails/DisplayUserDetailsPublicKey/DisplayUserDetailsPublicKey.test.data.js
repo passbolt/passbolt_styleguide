@@ -24,7 +24,6 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-
 /**
  * Default props
  * @returns {any}
@@ -99,8 +98,27 @@ export const mockGpgKey = {
   "keyId": "5D9B054F",
   "fingerprint": "03F60E958F4CB29723ACDF761353B5B15D9B054F",
   "algorithm": "rsa",
-  "expires": null,
+  "expires": "Infinity",
   "key_created": "2015-08-09T12:48:31+00:00",
+  "deleted": false,
+  "created": "2020-08-19T14:56:54+00:00",
+  "modified": "2020-08-19T14:56:54+00:00"
+};
+
+/**
+ * Mocked a gpg key
+ */
+export const mockInvalidGpgKey = {
+  "id": "04481719-5d9d-5e22-880a-a6b9270601d2",
+  "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+  "armored_key": "-----BEGIN PGP PRIVATE KEY BLOCK-----\nVersion: OpenPGP.js v0.3.0\nComment: https://openpgpjs.org\n\nxbYEUubX7gEBANDWhzoP+Tr/IyRSv++vl5jBesQIPTYGQBdzF4YDnGEBABEB\nAAH+CQMIfzdw4/PKNl5gVXdtfDFdSIN8yJT2rbeg3+SsWexXZNNdRaONWaiB\nZ5cG9Q6+BoXKsEshIdcYOgwsAgRxlPpRA34Vvmg2QBk7PhdrkbK7aqENsJ1w\ndIlLD6p9GmLE20yVff58/fMiUtPRgsD83SpKTAX6EM1ulpkuQQNjmrVc5qc8\n7AMdF80JdW5kZWZpbmVkwj8EEAEIABMFAlLm1+4JEBD8MASZrpALAhsDAAAs\nQgD8CUrwv7Hrp/INR0/UvAvzS52VztREQwQWTJMrgTNHBGjHtgRS5tfuAQEA\nnys9SaSgR+l6iZc/M8hGIUmbuahE2/+mtw+/l0RO+WcAEQEAAf4JAwjr39Yi\nFzjxImDN1IoYVsonA9M+BtIIJHafuQUHjyEr1paJJK5xS6KlyGgpMTXTD6y/\nqxS3ZSPPzHGRrs2CmkVEiPmurn9Ed05tb0y9OnJkWtuh3z9VVq9d8zHzuENa\nbUfli+P/v+dRaZ+1rSOxUFbFYbFB5XK/A9b/OPFrv+mb4KrtLxugwj8EGAEI\nABMFAlLm1+4JEBD8MASZrpALAhsMAAC3IgD8DnLGbMnpLtrX72RCkPW1ffLq\n71vlXMJNXvoCeuejiRw=\n-----END PGP PRIVATE KEY BLOCK-----",
+  "bits": 256,
+  "uid": "undefined \u003C\u003E",
+  "keyId": "99ae900b",
+  "fingerprint": "C694577FF69DE85C07935DF310FC300499AE900B",
+  "algorithm": "rsa",
+  "expires": null,
+  "key_created": "2014-01-27T22:04:30.000Z",
   "deleted": false,
   "created": "2020-08-19T14:56:54+00:00",
   "modified": "2020-08-19T14:56:54+00:00"
