@@ -12,10 +12,10 @@
   p {
     padding:0;
     margin:.8rem;
+    max-width: inherit;
   }
 
   a {
-    color: @announcement-font;
     border-bottom: 1px solid @border-link-default;
     display: inline-block;
     padding-bottom: 0;
@@ -38,11 +38,12 @@
     }
   }
 
-  .announcement-close {
+  a.announcement-close {
+    --icon-color: @announcement-font;
     float: right;
     border: 0;
+    margin-top: -.2rem;
     margin-right: 1.6rem;
-    margin-top: .4rem;
   }
 }
 
