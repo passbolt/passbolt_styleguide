@@ -32,6 +32,19 @@ class ExtBootstrapAccountRecovery extends Component {
   }
 
   /**
+   * It returns true if the page is detected as a passbolt app.
+   * For that purpose, it simply checks if <html> has a class 'passbolt' set.
+   * @returns {boolean}
+   */
+  isPassboltApp() {
+    const rootNode = document.getRootNode();
+    const htmlTag = rootNode.lastChild;
+
+    return htmlTag?.tagName === "HTML"
+      && htmlTag.classList.contains('passbolt');
+  }
+
+  /**
    * Remove skeleton preloaded in html if any
    */
   removeSkeleton() {
@@ -59,6 +72,10 @@ class ExtBootstrapAccountRecovery extends Component {
   }
 
   render() {
+    if (!this.isPassboltApp()) {
+      return null;
+    }
+
     return (
       <>
         <InsertAccountRecoveryIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
