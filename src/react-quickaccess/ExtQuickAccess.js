@@ -72,13 +72,20 @@ class ExtQuickAccess extends React.Component {
   }
 
   async componentDidMount() {
-    this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
-    this.handlePassphraseRequest();
-    await this.checkPluginIsConfigured();
-    await this.getUser();
-    this.checkAuthStatus();
-    await this.getSiteSettings();
-    this.getLocale();
+    try {
+      this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
+      this.handlePassphraseRequest();
+      await this.checkPluginIsConfigured();
+      await this.getUser();
+      await this.checkAuthStatus();
+      await this.getSiteSettings();
+      this.getLocale();
+    } catch (e) {
+      this.setState({
+        hasError: true,
+        errorMessage: e.message
+      });
+    }
   }
 
   initState(props) {
@@ -88,6 +95,8 @@ class ExtQuickAccess extends React.Component {
       isAuthenticated: null,
       userSettings: null,
       siteSettings: null,
+      hasError: false,
+      errorMessage: "",
       locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
       // Search
       search: "",
@@ -98,7 +107,7 @@ class ExtQuickAccess extends React.Component {
       passphraseRequired: false,
       passphraseRequestId: '',
       // Tab id to refer to the good one if detached mode
-      tabId: this.getTabIdFromUrl()
+      tabId: this.getTabIdFromUrl(),
     };
   }
 
@@ -239,10 +248,15 @@ class ExtQuickAccess extends React.Component {
           <Router>
             <div className="container quickaccess" onKeyDown={this.handleKeyDown}>
               <Header logoutSuccessCallback={this.logoutSuccessCallback}/>
-              {!isReady &&
+              {!isReady && !this.state.hasError &&
               <div className="processing-wrapper">
                 <Icon name="spinner"/>
                 <p className="processing-text">Connecting your account</p>
+              </div>
+              }
+              {this.state.hasError &&
+              <div className="processing-wrapper">
+                <p className="processing-text">{this.state.errorMessage}</p>
               </div>
               }
               {isReady &&
