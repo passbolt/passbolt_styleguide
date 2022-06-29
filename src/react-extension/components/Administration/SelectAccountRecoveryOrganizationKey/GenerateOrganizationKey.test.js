@@ -55,12 +55,17 @@ describe('As AD I can generate an ORK', () => {
    * And    I see an “Generate & Apply” button
    */
   it("As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to generate an Organization Recovery Key", async() => {
+    expect.assertions(12);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => { });
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
-    await page.clickOnGenerateTab(() => expect(page.isGenerateTabSeletect()).toBe(true));
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
     expect(page.isFieldRequired(page.nameField)).toBe(true);
     expect(page.isFieldRequired(page.emailField)).toBe(true);
@@ -91,12 +96,17 @@ describe('As AD I can generate an ORK', () => {
    * And    I see a tooltip telling me that this setting is disable and safe
    */
   it("As a logged in administrator in the administration workspace, I can not select the algorithm type of the Organization Recovery Key generator", async() => {
+    expect.assertions(5);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => { });
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
-    await page.clickOnGenerateTab(() => expect(page.isGenerateTabSeletect()).toBe(true));
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
     const tooltipText = "Algorithm and key size cannot be changed at the moment. These are secure default";
     expect(page.algorithmTooltip).not.toBeNull();
@@ -118,18 +128,34 @@ describe('As AD I can generate an ORK', () => {
    * Then   the characters are replaced with symbols
    */
   it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase” text field in the Organization Recovery Key dialog", async() => {
+    expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => { });
+    await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
-    await page.clickOnGenerateTab(() => expect(page.isGenerateTabSeletect()).toBe(true));
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
     page.passphraseField.value = "dummy-passphrase";
     expect(page.passphraseField.getAttribute("type")).toBe("password");
 
-    await page.toggleShowPassword(() => expect(page.passphraseField.getAttribute("type")).toBe("text"));
-    await page.toggleShowPassword(() => expect(page.passphraseField.getAttribute("type")).toBe("password"));
+    await page.toggleShowPassword(() => {
+      if (page.passphraseField.getAttribute("type") !== "text") {
+        throw new Error("Changes are not available yet");
+      }
+    });
+    expect(page.passphraseField.getAttribute("type")).toBe("text");
+
+    await page.toggleShowPassword(() => {
+      if (page.passphraseField.getAttribute("type") !== "password") {
+        throw new Error("Changes are not available yet");
+      }
+    });
+    expect(page.passphraseField.getAttribute("type")).toBe("password");
   });
 
   /**
@@ -141,13 +167,22 @@ describe('As AD I can generate an ORK', () => {
    * And    I see the empty mandatory field label in @red
    */
   it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a valid email and name", async() => {
+    expect.assertions(4);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => { });
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
-    await page.clickOnGenerateTab(() => expect(page.isGenerateTabSeletect()).toBe(true));
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
-    await page.clickOnGenerateButton(() => expect(page.nameError).not.toBeNull());
+    await page.clickOnGenerateButton(() => {
+      if (page.nameError === null) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
     expect(page.nameFieldError).not.toBeNull();
     expect(page.emailFieldError).not.toBeNull();
@@ -163,17 +198,26 @@ describe('As AD I can generate an ORK', () => {
    * Then   I see an error message below the passphrase telling me to use a strong passphrase instead
    */
   it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a strong passphrase", async() => {
+    expect.assertions(3);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
-    await waitFor(() => { });
+    await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
-    await page.clickOnGenerateTab(() => expect(page.isGenerateTabSeletect()).toBe(true));
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
-    page.nameField.value = "test";
-    page.emailField.value = "test@passbolt.com";
-    page.passphraseField.value = "almost fair passw";
+    await page.type("test", page.nameField);
+    await page.type("test@passbolt.com", page.emailField);
+    await page.type("almost fair passw", page.passphraseField);
 
-    await page.clickOnGenerateButton(() => expect(page.nameError).not.toBeNull());
+    await page.clickOnGenerateButton(() => {
+      if (page.passphraseFieldError === null) {
+        throw new Error("Changes are not available yet");
+      }
+    });
 
     expect(page.passphraseFieldError).not.toBeNull();
     expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'`);

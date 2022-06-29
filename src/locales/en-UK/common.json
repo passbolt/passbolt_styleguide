@@ -659,6 +659,7 @@
   "The passphrase is stored on your device and never sent server side.": "The passphrase is stored on your device and never sent server side.",
   "The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.": "The passphrase is used to encrypt your secret key, which is required to decrypt your secrets, such as the passwords.",
   "The passphrase should not be empty.": "The passphrase should not be empty.",
+  "The passphrase should not be part of an exposed data breach.": "The passphrase should not be part of an exposed data breach.",
   "The passphrase was updated!": "The passphrase was updated!",
   "The passphrase you defined when initiating the account recovery is required to complete the operation.": "The passphrase you defined when initiating the account recovery is required to complete the operation.",
   "The password field is not defined.": "The password field is not defined.",
