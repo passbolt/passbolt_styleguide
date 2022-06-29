@@ -15,6 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import XRegExp from "xregexp";
+import debounce from "debounce-promise";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -25,6 +26,9 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
+import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
+import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -40,6 +44,7 @@ class GenerateOrganizationKey extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
     this.bindCallbacks();
     this.createInputRef();
   }
@@ -56,10 +61,13 @@ class GenerateOrganizationKey extends React.Component {
       emailError: "",
       algorithm: "RSA",
       keySize: 4096,
-      password: "",
-      passwordError: "",
-      passwordWarning: "",
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once
+      passphrase: "",
+      passphraseError: "",
+      passphraseWarning: "",
+      passphraseEntropy: null,
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
+      isPwned: false,
+      isPwnedServiceAvailable: true // True if the isPwned service can be reached
     };
   }
 
@@ -71,7 +79,7 @@ class GenerateOrganizationKey extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handleEmailInputKeyUp = this.handleEmailInputKeyUp.bind(this);
-    this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
+    this.handlePassphraseChange = this.handlePassphraseChange.bind(this);
   }
 
   /**
@@ -80,7 +88,7 @@ class GenerateOrganizationKey extends React.Component {
   createInputRef() {
     this.nameInputRef = React.createRef();
     this.emailInputRef = React.createRef();
-    this.passwordInputRef = React.createRef();
+    this.passphraseInputRef = React.createRef();
   }
 
   /**
@@ -143,36 +151,77 @@ class GenerateOrganizationKey extends React.Component {
   }
 
   /**
-   * Handle password input keyUp event.
+   * Handle passphrase input keyUp event.
+   * @param {ReactEvent} event The react event.
    */
-  handlePasswordInputKeyUp() {
+  async handlePassphraseChange(event) {
+    const passphrase = event.target.value;
+    const passphraseEntropy = passphrase?.length
+      ? SecretGenerator.entropy(passphrase)
+      : null;
+    this.setState({passphrase, passphraseEntropy});
+
     if (this.state.hasAlreadyBeenValidated) {
-      this.validatePasswordInput();
+      await this.validatePassphraseInput(passphrase, passphraseEntropy);
     } else {
-      const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
+      const hasResourcePassphraseMaxLength = passphrase.length >= RESOURCE_PASSWORD_MAX_LENGTH;
       const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-      const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
-      this.setState({passwordWarning});
+      const passphraseWarning = hasResourcePassphraseMaxLength ? warningMessage : '';
+      this.setState({passphraseWarning});
     }
   }
 
   /**
-   * Validate the password input.
-   * @return {Promise}
+   * Validate the passphrase.
+   * @param {string} passphrase the passphrase to validate
+   * @param {integer|null} passphraseEntropy the entropy of the given passphrase
+   * @return {Promise<void>}
    */
-  validatePasswordInput() {
-    const password = this.state.password;
-    let passwordError = null;
-    if (!password.length) {
-      passwordError = this.translate("A passphrase is required.");
+  async validatePassphraseInput(passphrase, passphraseEntropy) {
+    let passphraseError = null;
+    if (!passphrase?.length) {
+      passphraseError = this.translate("A passphrase is required.");
+    } else if (passphraseEntropy < FAIR_STRENGTH_ENTROPY) {
+      passphraseError = this.translate(`A strong passphrase is required. The minimum complexity must be 'fair'`);
+    } else {
+      this.evaluatePassphraseIsInDictionaryDebounce();
     }
 
-    if (SecretGenerator.entropy(this.state.password) < FAIR_STRENGTH_ENTROPY) {
-      passwordError = this.translate(`A strong passphrase is required. The minimum complexity must be 'fair'`);
+    this.setState({passphraseError});
+  }
+
+  /**
+   * Evaluate if the passphrase is in dictionary
+   * @return {Promise<void>} Return true if the passphrase is part of a dictionary, false otherwise
+   */
+  async evaluatePassphraseIsInDictionary() {
+    if (!this.state.isPwnedServiceAvailable) {
+      return false;
     }
 
-    this.setState({passwordError});
-    return passwordError === null;
+    let isPwned;
+    try {
+      isPwned = await SecretComplexity.ispwned(this.state.passphrase);
+    } catch (error) {
+      // If the service is unavailable don't block the user journey.
+      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
+        this.setState({
+          isPwnedServiceAvailable: false
+        });
+        return;
+      } else {
+        throw error;
+      }
+    }
+
+    let passphraseError = this.state.passphraseError;
+    let passphraseEntropy = this.state.passphraseEntropy;
+    if (isPwned) {
+      passphraseError = this.translate("The passphrase should not be part of an exposed data breach.");
+      passphraseEntropy = 0;
+    }
+
+    this.setState({isPwned, passphraseEntropy, passphraseError});
   }
 
   /**
@@ -201,8 +250,8 @@ class GenerateOrganizationKey extends React.Component {
       this.nameInputRef.current.focus();
     } else if (this.state.emailError) {
       this.emailInputRef.current.focus();
-    } else if (this.state.passwordError) {
-      this.passwordInputRef.current.focus();
+    } else if (this.state.passphraseError) {
+      this.passphraseInputRef.current.focus();
     }
   }
 
@@ -241,19 +290,12 @@ class GenerateOrganizationKey extends React.Component {
    * @return {Promise<boolean>}
    */
   async validate() {
-    // Reset the form errors.
-    this.setState({
-      nameError: "",
-      emailError: "",
-      passwordError: "",
-    });
-
     // Validate the form inputs.
     const isNameValid = this.validateNameInput();
     const isEmailValid = this.validateEmailInput();
-    const isPasswordValid = this.validatePasswordInput();
+    const isPassphraseValid = this.validatePassphraseInput(this.state.passphrase, this.state.passphraseEntropy);
 
-    return isNameValid && isEmailValid && isPasswordValid;
+    return isNameValid && isEmailValid && isPassphraseValid;
   }
 
   async generateKey() {
@@ -262,7 +304,7 @@ class GenerateOrganizationKey extends React.Component {
       email: this.state.email,
       algorithm: this.state.algorithm,
       keySize: this.state.keySize,
-      passphrase: this.state.password,
+      passphrase: this.state.passphrase,
     };
 
     return await this.props.context.port.request("passbolt.account-recovery.generate-organization-key", generateGpgKeyDto);
@@ -296,7 +338,6 @@ class GenerateOrganizationKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
         <div className="form-content generate-organization-key">
@@ -341,25 +382,28 @@ class GenerateOrganizationKey extends React.Component {
               className="fluid" type="text"
               autoComplete="off" disabled={true} />
           </div>
-          <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
+          <div className={`input-password-wrapper input required ${this.state.passphraseError ? "error" : ""}`}>
             <label htmlFor="generate-organization-key-form-password">
               <Trans>Organization key passphrase</Trans>
-              {this.state.passwordWarning &&
+              {this.state.passphraseWarning &&
                 <Icon name="exclamation"/>
               }
             </label>
             <Password id="generate-organization-key-form-password" name="password"
               placeholder={this.translate("Passphrase")} autoComplete="new-password" preview={true}
               securityToken={this.props.context.userSettings.getSecurityToken()}
-              onKeyUp={this.handlePasswordInputKeyUp} value={this.state.password}
-              onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
-              inputRef={this.passwordInputRef}/>
-            <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
-            {this.state.passwordError &&
-                <div className="password error-message">{this.state.passwordError}</div>
+              value={this.state.passphrase}
+              onChange={this.handlePassphraseChange} disabled={this.hasAllInputDisabled()}
+              inputRef={this.passphraseInputRef}/>
+            <PasswordComplexity entropy={this.state.passphraseEntropy}/>
+            {this.state.passphraseError &&
+              <div className="password error-message">{this.state.passphraseError}</div>
             }
-            {this.state.passwordWarning &&
-                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
+            {this.state.passphraseWarning &&
+              <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passphraseWarning}</div>
+            }
+            {!this.state.isPwnedServiceAvailable &&
+              <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
             }
           </div>
         </div>

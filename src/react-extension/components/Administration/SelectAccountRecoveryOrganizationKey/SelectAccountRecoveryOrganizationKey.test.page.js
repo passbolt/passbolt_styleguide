@@ -259,4 +259,18 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
 
     await waitFor(waitForCallback);
   }
+
+  async type(text, element) {
+    fireEvent.input(element, {
+      target: {
+        value: text
+      }
+    });
+
+    await waitFor(() => {
+      if (element.value !== text) {
+        throw new Error("The field has not changed yet.");
+      }
+    });
+  }
 }
