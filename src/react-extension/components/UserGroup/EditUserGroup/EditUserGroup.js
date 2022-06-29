@@ -28,6 +28,7 @@ import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
+import SharePermissionItemSkeleton from "../../Share/SharePermissionItemSkeleton";
 
 /**
  * This component allows to edit an user group
@@ -197,7 +198,7 @@ class EditUserGroup extends Component {
    * @type {boolean}
    */
   get areActionsAllowed() {
-    return !this.isProcessing;
+    return !this.isProcessing && !this.isLoading;
   }
 
   /**
@@ -706,7 +707,7 @@ class EditUserGroup extends Component {
         onClose={this.handleClose}
         disabled={!this.areActionsAllowed}>
 
-        {!this.isLoading &&  this.props.context.loggedInUser &&
+        {this.props.context.loggedInUser &&
         <form
           className="group-form"
           onSubmit={this.handleSubmit}
@@ -743,56 +744,65 @@ class EditUserGroup extends Component {
 
           <div className="group_members">
             <div className="form-content permission-edit">
-              <ul className="permissions scroll groups_users">
-                {this.groupsUsers.map(groupUser => (
-                  <li
-                    key={groupUser.user_id}
-                    className={`row ${this.isMemberChanged(groupUser) ? 'permission-updated' : ''}`}>
+              {this.isLoading &&
+                <ul className="permissions scroll groups_users">
+                  <SharePermissionItemSkeleton/>
+                  <SharePermissionItemSkeleton/>
+                  <SharePermissionItemSkeleton/>
+                </ul>
+              }
+              {!this.isLoading &&
+                <ul className="permissions scroll groups_users">
+                  {this.groupsUsers.map(groupUser => (
+                    <li
+                      key={groupUser.user_id}
+                      className={`row ${this.isMemberChanged(groupUser) ? 'permission-updated' : ''}`}>
 
-                    <UserAvatar
-                      baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                      user={groupUser.user}/>
+                      <UserAvatar
+                        baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                        user={groupUser.user}/>
 
-                    <div className="aro">
-                      <div className="aro-name">
-                        <span className="ellipsis">{this.getUserFullname(groupUser.user)}</span>
-                        <Tooltip message={this.getTooltipMessage(groupUser)}>
-                          <Icon name="info-circle"/>
-                        </Tooltip>
+                      <div className="aro">
+                        <div className="aro-name">
+                          <span className="ellipsis">{this.getUserFullname(groupUser.user)}</span>
+                          <Tooltip message={this.getTooltipMessage(groupUser)}>
+                            <Icon name="info-circle"/>
+                          </Tooltip>
+                        </div>
+                        <div className="permission_changes">
+                          {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
+                          {this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) &&
+                            <span><Trans>Will be updated</Trans></span>}
+                          {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span><Trans>Unchanged</Trans></span>}
+
+                        </div>
                       </div>
-                      <div className="permission_changes">
-                        {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
-                        {this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) &&
-                        <span><Trans>Will be updated</Trans></span>}
-                        {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span><Trans>Unchanged</Trans></span>}
 
+                      <div className="rights">
+                        <Select
+                          className="permission inline"
+                          value={groupUser.is_admin}
+                          items={this.permissions}
+                          onChange={event => this.handleMemberRoleChange(event, groupUser)}
+                          disabled={!this.areActionsAllowed}/>
                       </div>
-                    </div>
 
-                    <div className="rights">
-                      <Select
-                        className="permission inline"
-                        value={groupUser.is_admin}
-                        items={this.permissions}
-                        onChange={event => this.handleMemberRoleChange(event, groupUser)}
-                        disabled={!this.areActionsAllowed}/>
-                    </div>
-
-                    <div className="actions">
-                      <a
-                        title="remove"
-                        className={`remove-item button button-transparent ${!this.areActionsAllowed ? "disabled" : ""}`}
-                        onClick={event => this.handleMemberRemoved(event, groupUser)}>
-                        <Icon name="close"/>
-                        <span className="visuallyhidden">remove</span>
-                      </a>
-                    </div>
-                  </li>
-                ))
-                }
-              </ul>
+                      <div className="actions">
+                        <a
+                          title="remove"
+                          className={`remove-item button button-transparent ${!this.areActionsAllowed ? "disabled" : ""}`}
+                          onClick={event => this.handleMemberRemoved(event, groupUser)}>
+                          <Icon name="close"/>
+                          <span className="visuallyhidden">remove</span>
+                        </a>
+                      </div>
+                    </li>
+                  ))
+                  }
+                </ul>
+              }
             </div>
-            {!this.hasMembers &&
+            {!this.isLoading && !this.hasMembers &&
             <div className="message warning">
               <span><Trans>The group is empty, please add a group manager.</Trans></span>
             </div>
@@ -802,7 +812,7 @@ class EditUserGroup extends Component {
               <span><Trans>Please make sure there is at least one group manager.</Trans></span>
             </div>
             }
-            {!this.isManager &&
+            {!this.isLoading && !this.isManager &&
             <div className="message warning feedback cannot-add-user">
               <span><Trans>Only the group manager can add new people to a group.</Trans></span>
             </div>
