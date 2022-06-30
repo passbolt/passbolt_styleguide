@@ -40,6 +40,17 @@ class SharePermissionItem extends Component {
   }
 
   /**
+   * Component did mount
+   * @returns {Promise<void>}
+   */
+  async componentDidMount() {
+    if (this.isUser()) {
+      const gpgKey = await this.findUserGpgKey(this.props.aro.profile.user_id);
+      this.setState({gpgKey});
+    }
+  }
+
+  /**
    *  Invoked immediately after updating occurs. This method is not called for the initial render.
    * @param prevProps
    */
@@ -52,6 +63,15 @@ class SharePermissionItem extends Component {
   bindEventHandlers() {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  /**
+   * Find a user gpg key
+   * @param {string} userId
+   * @returns {Promise<object>}
+   */
+  async findUserGpgKey(userId) {
+    return await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
   }
 
   /**
@@ -87,6 +107,27 @@ class SharePermissionItem extends Component {
   }
 
   /**
+   * Get the tooltip message
+   * @returns {JSX.Element}
+   */
+  get tooltipMessage() {
+    return <>
+      <div className="email"><strong>{this.props.aro.username}</strong></div>
+      <div className="fingerprint">{this.formatFingerprint(this.state.gpgKey.fingerprint)}</div>
+    </>;
+  }
+
+  /**
+   * Format fingerprint
+   * @param {string} fingerprint An user finger print
+   * @returns {JSX.Element}
+   */
+  formatFingerprint(fingerprint) {
+    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
+    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+  }
+
+  /**
    * Return true if aro in props is a user
    * @returns {boolean}
    */
@@ -100,6 +141,14 @@ class SharePermissionItem extends Component {
    */
   isGroup() {
     return !(this.props.aro && this.props.aro.profile);
+  }
+
+  /**
+   * Has a gpg key fingerprint
+   * @returns {*}
+   */
+  hasGpgKey() {
+    return this.state.gpgKey && this.state.gpgKey.fingerprint;
   }
 
   getClassName() {
@@ -156,6 +205,11 @@ class SharePermissionItem extends Component {
         <div className="aro">
           <div className="aro-name">
             <span className="ellipsis">{this.getAroName()}</span>
+            {this.hasGpgKey() &&
+              <Tooltip message={this.tooltipMessage}>
+                <Icon name="info-circle"/>
+              </Tooltip>
+            }
           </div>
           <div className="aro-details">
             <span className="ellipsis">{this.getAroDetails()}</span>
