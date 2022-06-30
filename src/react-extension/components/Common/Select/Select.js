@@ -101,6 +101,7 @@ class Select extends Component {
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleSelectKeyDown = this.handleSelectKeyDown.bind(this);
     this.handleItemKeyDown = this.handleItemKeyDown.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   /**
@@ -208,6 +209,16 @@ class Select extends Component {
       top
     };
     this.setState({style});
+  }
+
+  /**
+   * Handle blur
+   * @param event
+   */
+  handleBlur(event) {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      this.closeSelect();
+    }
   }
 
   /**
@@ -354,7 +365,7 @@ class Select extends Component {
   render() {
     return (
       <div className={`select-container ${this.props.className}`} style={{width: this.state.style?.width, height: this.state.style?.height}}>
-        <div onKeyDown={this.handleSelectKeyDown} id={this.props.id} className={`select ${this.props.direction} ${this.state.open ? 'open' : ''}`} style={this.state.style}>
+        <div onKeyDown={this.handleSelectKeyDown} onBlur={this.handleBlur} id={this.props.id} className={`select ${this.props.direction} ${this.state.open ? 'open' : ''}`} style={this.state.style}>
           <div ref={this.selectedItemRef}
             className={`selected-value ${this.props.disabled ? 'disabled' : ''}`}
             tabIndex={this.props.disabled ? -1 : 0}
