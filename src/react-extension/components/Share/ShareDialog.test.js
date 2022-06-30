@@ -16,7 +16,13 @@
  * Unit tests on ShareDialog in regard of specifications
  */
 import ShareDialogPage from "./ShareDialog.test.page";
-import {autocompleteResult, defaultAppContext, defaultProps, folders, resources} from "./ShareDialog.test.data";
+import {
+  autocompleteResult,
+  defaultAppContext,
+  defaultProps, folders,
+  mockResultsFolders,
+  mockResultsResources, mockResultsResourcesAndFolders, resources
+} from "./ShareDialog.test.data";
 import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
@@ -41,7 +47,7 @@ describe("As Lu I should see the share dialog", () => {
      * I should see the share dialog
      */
     beforeEach(async() => {
-      const requestResourcesMockImpl = jest.fn(() => resources);
+      const requestResourcesMockImpl = path => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({shareDialogProps});
       page = new ShareDialogPage(context, props);
@@ -181,7 +187,7 @@ describe("As Lu I should see the share dialog", () => {
      * I should see the share dialog
      */
     beforeEach(async() => {
-      const requestResourcesMockImpl = jest.fn(() => resources);
+      const requestResourcesMockImpl = path => mockResultsResources[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({shareDialogProps});
       page = new ShareDialogPage(context, props);
@@ -231,7 +237,7 @@ describe("As Lu I should see the share dialog", () => {
      * I should see the share dialog
      */
     beforeEach(async() => {
-      const requestResourcesMockImpl = jest.fn(() => folders);
+      const requestResourcesMockImpl = path => mockResultsFolders[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({shareDialogProps});
       page = new ShareDialogPage(context, props);
@@ -279,7 +285,7 @@ describe("As Lu I should see the share dialog", () => {
      * I should see the share dialog
      */
     beforeEach(async() => {
-      const requestResourcesMockImpl = jest.fn(() => folders);
+      const requestResourcesMockImpl = path => mockResultsResourcesAndFolders[path];
       mockContextRequest(requestResourcesMockImpl);
       context.setContext({shareDialogProps});
       page = new ShareDialogPage(context, props);

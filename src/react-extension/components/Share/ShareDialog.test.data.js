@@ -35,6 +35,10 @@ export function defaultProps() {
   };
 }
 
+const gpgKey = {
+  "fingerprint": "0C1D1761110D1E33C9006D1A5B1B332ED06426D3"
+};
+
 /**
  * Default resources
  */
@@ -1702,3 +1706,21 @@ export const autocompleteResult = [
     "last_logged_in": ""
   }
 ];
+
+export const mockResultsResources = {
+  'passbolt.share.get-resources': resources,
+  'passbolt.keyring.get-public-key-info-by-user': gpgKey,
+  "passbolt.share.resources.save": true,
+};
+
+export const mockResultsFolders = {
+  'passbolt.share.get-folders': folders,
+  'passbolt.keyring.get-public-key-info-by-user': gpgKey,
+  "passbolt.share.folders.save": true,
+};
+
+export const mockResultsResourcesAndFolders = {
+  'passbolt.share.get-resources': resources,
+  'passbolt.share.get-folders': folders,
+  'passbolt.keyring.get-public-key-info-by-user': gpgKey,
+};
