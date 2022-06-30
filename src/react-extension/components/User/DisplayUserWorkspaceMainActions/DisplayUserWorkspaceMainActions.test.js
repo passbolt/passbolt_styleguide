@@ -49,17 +49,17 @@ describe("See Workspace Main Menu", () => {
       page = new DisplayUserWorkspaceMainActionsTestPage(context, props);
     });
 
-    it('As AD I can adding a user via the create menu', () => {
+    it('As AD I can adding a user via the create menu', async() => {
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
-      page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
+      await page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
       expect(page.displayUserWorkspaceMainActions.newUserMenu).not.toBeNull();
     });
 
-    it('As AD I can adding a group via the create menu', () => {
+    it('As AD I can adding a group via the create menu', async() => {
       expect(page.displayUserWorkspaceMainActions.exists()).toBeTruthy();
       expect(page.displayUserWorkspaceMainActions.createMenu).not.toBeNull();
-      page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
+      await page.displayUserWorkspaceMainActions.clickOnMenu(page.displayUserWorkspaceMainActions.createMenu);
       expect(page.displayUserWorkspaceMainActions.newGroupMenu).not.toBeNull();
     });
   });

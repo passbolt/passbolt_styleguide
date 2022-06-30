@@ -69,15 +69,15 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
+    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
+    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
   }
 
   /**

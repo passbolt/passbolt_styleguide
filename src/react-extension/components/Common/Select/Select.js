@@ -117,10 +117,10 @@ class Select extends Component {
    * Component did mount
    */
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
-    document.addEventListener('scroll', this.handleDocumentScrollEvent, true);
+    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.addEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
   }
 
   /**
@@ -129,10 +129,10 @@ class Select extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
-    document.removeEventListener('scroll', this.handleDocumentScrollEvent, true);
+    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.removeEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
   }
 
   /**

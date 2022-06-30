@@ -89,7 +89,7 @@ class EditResourceTags extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleEditorClickEvent);
+    document.addEventListener('click', this.handleEditorClickEvent, {capture: true});
     this.fetchAllTags();
     this.setState({loading: false}, () => {
       this.focusOnInputTag();
@@ -97,7 +97,7 @@ class EditResourceTags extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleEditorClickEvent);
+    document.removeEventListener('click', this.handleEditorClickEvent, {capture: true});
   }
 
   focusOnInputTag() {

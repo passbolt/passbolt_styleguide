@@ -49,7 +49,7 @@ class NotifyError extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
   }
 
   /**
@@ -58,7 +58,7 @@ class NotifyError extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
   }
 
   /**

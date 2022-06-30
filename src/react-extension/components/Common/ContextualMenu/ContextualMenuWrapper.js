@@ -61,10 +61,10 @@ class ContextualMenuWrapper extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent);
-    document.addEventListener('scroll', this.handleDocumentScrollEvent, true);
+    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
+    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.addEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
   }
 
   /**
@@ -73,10 +73,10 @@ class ContextualMenuWrapper extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent);
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent);
-    document.removeEventListener('scroll', this.handleDocumentScrollEvent, true);
+    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
+    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    document.removeEventListener('scroll', this.handleDocumentScrollEvent, {capture: true});
   }
 
   /**
@@ -95,6 +95,8 @@ class ContextualMenuWrapper extends Component {
     if (this.elementRef.current.contains(event.target)) {
       return;
     }
+    // Avoid side effect if the click is on the button to open the contextual menu
+    event.stopPropagation();
     this.props.hide();
   }
 

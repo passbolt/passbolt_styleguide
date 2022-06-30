@@ -79,14 +79,14 @@ class DisplayUserWorkspaceActions extends React.Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
+    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
   }
 
   /**
    * Whenever the component will unmount
    */
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
+    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
   }
 
   /**

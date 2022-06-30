@@ -62,7 +62,7 @@ class Autocomplete extends Component {
     this.setState({loading: false, name: ''}, () => {
       this.inputRef.current.focus();
     });
-    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
   }
 
   /**
@@ -82,7 +82,7 @@ class Autocomplete extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
   }
 
   /**
