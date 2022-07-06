@@ -171,7 +171,11 @@ describe("As LU I should see the user confirm passphrase page", () => {
       const mockReject = error => jest.fn(() => new Promise((resolve, reject) => reject(error)));
       jest.spyOn(props.userSettingsContext, 'onUpdatePassphraseRequested').mockImplementationOnce(mockReject(new PassboltApiFetchError("Jest simulate API error.")));
 
-      await page.update();
+      await page.update(() => {
+        if (!page.notInDictionaryHint.classList.contains("success")) {
+          throw new Error("The page state didn't change yet.");
+        }
+      });
       const ErrorDialogProps = {error: new Error("Jest simulate API error.")};
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
     });

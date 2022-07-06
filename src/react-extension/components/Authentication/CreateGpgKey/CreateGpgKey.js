@@ -44,6 +44,7 @@ class CreateGpgKey extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.isPwndProcessingPromise = null;
     this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
     this.bindEventHandlers();
     this.createReferences();
@@ -57,7 +58,7 @@ class CreateGpgKey extends Component {
       passphrase: '', // The current passphrase
       passphraseEntropy: null,  // The current passphrase entropy
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
       hintClassNames: { // The class names for passphrase hints
         enoughLength: '',
@@ -108,7 +109,6 @@ class CreateGpgKey extends Component {
    */
   bindEventHandlers() {
     this.handlePassphraseChange = this.handlePassphraseChange.bind(this);
-    this.handleImportGpgKey = this.handleImportGpgKey.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -145,17 +145,10 @@ class CreateGpgKey extends Component {
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
-      this.evaluatePassphraseIsInDictionaryDebounce();
+      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
     }
 
     this.setState({passphrase, passphraseEntropy, hintClassNames});
-  }
-
-  /**
-   * Whenever the user wants to import his gpg key manually
-   */
-  handleImportGpgKey() {
-    this.importGpgKey();
   }
 
   /**
@@ -224,10 +217,24 @@ class CreateGpgKey extends Component {
   }
 
   /**
+   * Await for isPwned service to finish its process and returns true if the current displayed passphrase is pwned.
+   * @return {Promise<boolean>}
+   */
+  async isCurrentPassphrasePwned() {
+    await this.isPwndProcessingPromise;
+    return this.state.hintClassNames.notInDictionary === "error";
+  }
+
+  /**
    * Generate the Gpg key
    */
   async generateGpgKey() {
     await this.toggleProcessing();
+    const isPwned = await this.isCurrentPassphrasePwned();
+    if (isPwned) {
+      await this.toggleProcessing();
+      return;
+    }
     this.props.onComplete(this.state.passphrase);
   }
 
@@ -235,7 +242,11 @@ class CreateGpgKey extends Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({actions: {processing: !this.state.actions.processing}});
+    const actions = {
+      ...this.state.actions,
+      processing: !this.state.actions.processing
+    };
+    await this.setState({actions});
   }
 
   /**
