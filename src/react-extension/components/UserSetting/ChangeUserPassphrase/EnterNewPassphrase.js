@@ -41,6 +41,7 @@ class EnterNewPassphrase extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.isPwndProcessingPromise = null;
     this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
     this.bindEventHandlers();
     this.createReferences();
@@ -54,7 +55,7 @@ class EnterNewPassphrase extends React.Component {
       passphrase: '', // The current passphrase
       passphraseEntropy: null,  // The current passphrase entropy
       actions: {
-        processing: false // True if one's processing passphrase
+        processing: false, // True if one's processing passphrase
       },
       hintClassNames: { // The class names for passphrase hints
         enoughLength: '',
@@ -142,7 +143,7 @@ class EnterNewPassphrase extends React.Component {
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
-      this.evaluatePassphraseIsInDictionaryDebounce();
+      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
     }
 
     this.setState({passphrase, passphraseEntropy, hintClassNames});
@@ -213,10 +214,26 @@ class EnterNewPassphrase extends React.Component {
   }
 
   /**
+   * Await for isPwned service to finish its process and returns true if the current displayed passphrase is pwned.
+   * @return {Promise<boolean>}
+   */
+  async isCurrentPassphrasePwned() {
+    await this.isPwndProcessingPromise;
+    return this.state.hintClassNames.notInDictionary === "error";
+  }
+
+  /**
    * Generate the Gpg key
+   * @return {Promise<void>}
    */
   async generateGpgKey() {
     await this.toggleProcessing();
+    const isPwned = await this.isCurrentPassphrasePwned();
+    if (isPwned) {
+      await this.toggleProcessing();
+      return;
+    }
+
     this.props.userSettingsContext.onUpdatePassphraseRequested(this.state.passphrase)
       .catch(this.onGpgKeyGeneratedFailure.bind(this));
   }
@@ -242,7 +259,11 @@ class EnterNewPassphrase extends React.Component {
    * Toggle the processing mode
    */
   async toggleProcessing() {
-    await this.setState({actions: {processing: !this.state.actions.processing}});
+    const actions = {
+      ...this.state.actions,
+      processing: !this.state.actions.processing
+    };
+    await this.setState({actions});
   }
 
   /**

@@ -161,7 +161,7 @@ describe("CreateGpgKey", () => {
       };
       await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
       await page.generateKey(inProgressFn);
-      expect(onComplete).toHaveBeenCalled();
+      await waitFor(() =>  expect(onComplete).toHaveBeenCalled());
       expect(generateResolve).toBeDefined();
     });
 
@@ -179,7 +179,7 @@ describe("CreateGpgKey", () => {
       await page.fill(veryStrongPassphrase);
       await waitFor(() => expect(page.canGoToNextStep).toBeTruthy());
       await page.generateKey(inProgressFn);
-      expect(onComplete).toHaveBeenCalled();
+      await waitFor(() =>  expect(onComplete).toHaveBeenCalled());
       expect(generateResolve).toBeDefined();
     });
   });

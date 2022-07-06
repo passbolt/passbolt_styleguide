@@ -153,6 +153,13 @@ export default class EnterNewPassphrasePage {
   }
 
   /**
+   * Returns the list item concerning the 'not in dictionnary" hints
+   */
+  get notInDictionaryHint() {
+    return this._page.container.querySelectorAll(".password-hints li")[4];
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
