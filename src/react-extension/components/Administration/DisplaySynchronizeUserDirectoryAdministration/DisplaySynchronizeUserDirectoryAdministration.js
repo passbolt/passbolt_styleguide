@@ -190,6 +190,22 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
   }
 
   /**
+   * Has success user resource
+   * @returns {boolean}
+   */
+  hasSuccessUserResource() {
+    return this.usersSuccess.length > 0;
+  }
+
+  /**
+   * Has success resource
+   * @returns {boolean}
+   */
+  hasSuccessGroupResource() {
+    return this.groupsSuccess.length > 0;
+  }
+
+  /**
    * Has error or ignore resource
    * @returns {boolean}
    */
@@ -287,7 +303,15 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             </p>
             <p></p>
             {this.hasSuccessResource() &&
-            <p id="resources-synchronize"> {this.translate("{{users}} and {{groups}} have been synchronized.", {users: this.translate("{{count}} user", {count: this.usersSuccess.length}), groups: this.translate("{{count}} group", {count: this.groupsSuccess.length})})} </p>
+              <p id="resources-synchronize">
+                {this.hasSuccessUserResource() &&
+                  <>{this.translate("{{count}} user has been synchronized.", {count: this.usersSuccess.length})}</>
+                }
+                {this.hasSuccessResource() && this.hasSuccessGroupResource() && <br/>}
+                {this.hasSuccessGroupResource() &&
+                  <>{this.translate("{{count}} group has been synchronized.", {count: this.groupsSuccess.length})}</>
+                }
+              </p>
             }
             {!this.hasSuccessResource() &&
             <p id="no-resources"> <Trans>No resources have been synchronized.</Trans> </p>

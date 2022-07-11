@@ -305,17 +305,16 @@ class ExportResources extends React.Component {
                 onChange={this.handleExportFormatSelected}
                 disabled={!this.areActionsAllowed}/>
             </div>
-            <p>
-              {this.hasFoldersToExport && !this.hasResourcesToExport &&
+            {this.hasFoldersToExport &&
+              <p>
                 <em>{this.translate("{{count}} folder is going to be exported.", {count: foldersIdsToExport.length})}</em>
-              }
-              {this.hasFoldersToExport && this.hasResourcesToExport &&
-                <em>{this.translate("{{resources}} and {{folders}} are going to be exported.", {resources: this.translate("{{count}} password", {count: resourcesIdsToExport.length}), folders: this.translate("{{count}} folder", {count: foldersIdsToExport.length})})}</em>
-              }
-              {!this.hasFoldersToExport && this.hasResourcesToExport &&
+              </p>
+            }
+            {this.hasResourcesToExport &&
+              <p>
                 <em>{this.translate("{{count}} password is going to be exported.", {count: resourcesIdsToExport.length})}</em>
-              }
-            </p>
+              </p>
+            }
           </div>
 
           <div className="submit-wrapper clearfix">
