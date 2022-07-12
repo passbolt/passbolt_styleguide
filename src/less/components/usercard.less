@@ -23,7 +23,7 @@
             }
 
             .subinfo {
-                color: @font-default;
+                color: @default-text-color;
                 font-size: 0.929em; /* 13px */
             }
         }
@@ -70,7 +70,7 @@
                 float: right;
                 text-align: right;
                 line-height: (@avatar-size / 2);
-                color: @font-dim;
+                color: @text-info-color;
                 span {
                     background-color: white;
                     font-size: 0.8em;
@@ -101,13 +101,13 @@
 
     // Animation used to show that an activity is new.
     @keyframes highlight {
-        from { background-color: @tableview-background-selected; }
+        from { background-color: @tableview-selected-background; }
         to { background-color: transparent; }
     }
 
     // Style to apply when an activity is new.
     &.highlight {
-        background-color: @tableview-background-selected;
+        background-color: @tableview-selected-background;
         animation-delay: 2s;
         animation-duration: 5s;
         animation-name: highlight;
@@ -116,14 +116,14 @@
 
     .content-wrapper .content {
         .name, .subinfo {
-            color: @font-dim;
+            color: @text-info-color;
         }
     }
 
     .content-wrapper .content .name {
         white-space: normal;
         .creator {
-            color: @font-default;
+            color: @default-text-color;
         }
     }
 }

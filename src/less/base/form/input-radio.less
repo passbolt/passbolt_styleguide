@@ -49,7 +49,7 @@
 
         // Radio focus-visible
         &:focus-visible {
-          box-shadow: 0 0 .4rem @shadow-focus;
+          box-shadow: 0 0 .4rem @shadow-focus-color;
           border: 1px solid @input-radio-focus-border;
           outline: 0;
         }
@@ -75,13 +75,13 @@
         // Disabled radio.
         &:disabled {
           cursor: auto;
-          background: @input-radio-background-disabled;
-          border: 1px solid @input-radio-border-disabled;
+          background: @input-radio-disabled-background;
+          border: 1px solid @input-radio-disabled-border;
           box-shadow: none;
 
           &:before{
             box-shadow: none;
-            background: @input-radio-dot-background-disabled;
+            background: @input-radio-dot-disabled-background;
           }
         }
 
@@ -114,9 +114,9 @@
     margin-top: 1.6rem;
 
     &.checked {
-      border: 1px solid @input-radio-list-focus;
+      border: 1px solid @input-radio-list-focus-border;
       &:hover {
-        border:1px solid @input-radio-list-focus;
+        border:1px solid @input-radio-list-focus-border;
       }
     }
     &:hover {

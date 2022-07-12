@@ -42,13 +42,13 @@
                 .ellipsis();
                 &.empty {
                   font-style: italic;
-                  color: @font-lightest
+                  color: @text-lightest-color
                 }
             }
             .property-name {
                 font-size: 1.3rem;
                 line-height: 1.8rem;
-                color: @font-light;
+                color: @text-light-color;
                 margin-bottom: .4rem;
             }
             .secret {
@@ -56,7 +56,7 @@
                 max-width: 28rem;
                 &.secret-copy {
                   &:hover {
-                    color: @font-hover-secret;
+                    color: @text-secret-hover-color;
                   }
                   > span {
                     display: none;

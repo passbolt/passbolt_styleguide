@@ -20,7 +20,7 @@
           display: flex;
           flex: 1;
           align-items: center;
-          color: @font-default;
+          color: @default-text-color;
           background: @input-background;
           box-shadow: inset 0 0 0 .1rem @input-border;
           border-radius: .2rem;
@@ -35,7 +35,7 @@
 
           // Select focus-visible
           &:focus-visible {
-            box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @input-focus-border;
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
             outline: 0;
           }
 
@@ -110,8 +110,8 @@
                     // Select item focus-visible
                     &:focus-visible {
                       background: @select-focus-background;
-                      color: @select-focus-font;
-                      box-shadow: 0 0 .4rem @shadow-focus;
+                      color: @select-focus-text-color;
+                      box-shadow: 0 0 .4rem @shadow-focus-color;
                       outline: 0;
                     }
 
@@ -170,7 +170,7 @@
 
             // Select inline focus
             &:focus-visible {
-                box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @select-focus-border;
+                box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @select-focus-border;
             }
 
             // Select inline pressed
@@ -241,7 +241,7 @@
 
       // Select inline focus
       &:focus-visible {
-        box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @select-focus-border;
+        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @select-focus-border;
       }
 
       // Select inline pressed

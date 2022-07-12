@@ -1,9 +1,9 @@
 .autocomplete-suggestions {
     text-align: left;
     cursor: default;
-    border: 1px solid @border-default;
+    border: 1px solid @default-border;
     border-top: 0;
-    background: @background-default;
+    background: @default-background;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, @shadow-opacity-dropdown);
     position: absolute;
     display: none;
@@ -19,14 +19,14 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: @font-default;
+        color: @default-text-color;
         font-size: .875em; /* 14px */
         display: block;
         padding: .357em .714em; /* 5px 10px */
         border: 0;
         b {
             font-weight: normal;
-            color: @font-default;
+            color: @default-text-color;
         }
         &.selected {
             background: @autocomplete-selected-background;

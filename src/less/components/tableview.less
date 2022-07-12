@@ -8,9 +8,9 @@
   font-size: 1.5rem; /* 15px */
   height: 100%;
   border-radius: 0.3rem 0.3rem 0 0;
-  border: 1px solid @border-default;
+  border: 1px solid @default-border;
   border-bottom: none;
-  box-shadow: 0 -.1rem 0 @tableview-shadow;
+  box-shadow: 0 -.1rem 0 @tableview-shadow-color;
 
   /* header */
   .tableview-header {
@@ -29,7 +29,7 @@
     bottom: 3.8rem;
     padding: 0;
     width: 100%;
-    border-top: 1px solid @border-default;
+    border-top: 1px solid @default-border;
     overflow-y: scroll;
     position: absolute;
 
@@ -116,24 +116,24 @@
       height: 3.2rem;
 
       &:nth-child(even) {
-        background: @tableview-background-even;
+        background: @tableview-even-background;
       }
 
       &.selected {
-        background: @tableview-background-selected;
+        background: @tableview-selected-background;
       }
 
       &:hover {
-        background: @tableview-background-hover;
+        background: @tableview-hover-background;
       }
 
       &.selected:hover {
-        background: @tableview-background-selected;
+        background: @tableview-selected-background;
       }
     }
 
     tbody tr.inactive {
-      color: @font-lighter;
+      color: @text-lighter-color;
     }
 
     /* multi select and fav fix */
@@ -206,7 +206,7 @@
 @media all and (max-width: 600px) {
   .tableview {
     table tbody {
-      background: @tableview-background-selected;
+      background: @tableview-selected-background;
 
       td {
         display: block;

@@ -3,12 +3,12 @@ table.table-info.horizontal {
     width: 100%;
     border-collapse: collapse;
     padding: 0;
-    border: 1px solid @border-default;
+    border: 1px solid @default-border;
     margin-bottom: 1em;
 
     &.with-borders {
         td, th {
-            border-right: 1px solid @border-default;
+            border-right: 1px solid @default-border;
         }
 
     }
@@ -18,7 +18,7 @@ table.table-info.horizontal {
         margin: 0;
     }
     th {
-        border-bottom: 1px solid @border-default;
+        border-bottom: 1px solid @default-border;
         a {
             display:block;
             border:0;
@@ -39,7 +39,7 @@ table.table-info.horizontal {
             background: @table-row-even-background;
         }
         tr:hover {
-            background: @tableview-background-hover;
+            background: @tableview-hover-background;
         }
     }
 }

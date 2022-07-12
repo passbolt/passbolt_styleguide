@@ -16,7 +16,7 @@ textarea {
     font-size: 1.5rem;
     font-weight: 400;
     line-height: 2rem;
-    color: @font-default;
+    color: @default-text-color;
     background: @input-background;
     width: 100%;
     max-width: 64rem;
@@ -36,7 +36,7 @@ textarea {
 
     // Fields focus
     &:focus {
-      box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @input-focus-border;
+      box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
       outline: 0;
     }
 
@@ -91,7 +91,7 @@ input[type=number] {
 
     // Fields focus
     &:focus {
-      box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @input-focus-border;
+      box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
     }
 
     // Fields pressed

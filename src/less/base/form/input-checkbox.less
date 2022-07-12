@@ -37,7 +37,7 @@
 
         // Box focus-visible
         &:focus-visible {
-            box-shadow: 0 0 .4rem @shadow-focus;
+            box-shadow: 0 0 .4rem @shadow-focus-color;
             border: 1px solid @input-checkbox-focus-border;
             outline: 0;
         }
@@ -58,8 +58,8 @@
         &:disabled {
             cursor: default;
             box-shadow: none;
-            background: @input-checkbox-background-disabled;
-            border: 1px solid @input-checkbox-border-disabled;
+            background: @input-checkbox-disabled-background;
+            border: 1px solid @input-checkbox-disabled-border;
         }
 
         // Checkmark. Could be replaced with an image
@@ -73,7 +73,7 @@
             mask-image: @controls-check;
         }
         &:disabled:before {
-            background: @input-checkbox-image-disabled;
+            background: @input-checkbox-disabled-image-background;
         }
     }
 }

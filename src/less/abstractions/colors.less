@@ -4,7 +4,7 @@
 @dark-charcoal: #333333;
 
 @button-blue: #2A9CEB;
-@bleu-de-france: #2894df;
+@bleu-de-france: #2894DF;
 @steel-blue: #4271b7;
 
 @honeydew: #EDF7EB;
@@ -21,7 +21,6 @@
 @dark-candy-apple-red: #A40000;
 @light-salmon-pink: #FFA6A6;
 
-@davys-grey: #5D5D5D;
 @granite-gray: #666666;
 @sonic-silver: #7A7A7A;
 @gray: #808080;
@@ -52,38 +51,43 @@
 @cultured-2: #F8F8F8;
 @lotion: #FAFAFA;
 
-/* background */
-@background-default: @white;
-/* header */
-@background-header-first: @dark-charcoal;
-@background-header-second: @bright-gray;
-/* footer */
-@background-footer: @bright-gray;
-/* background behind card setup/recover/login */
-@background-splash: @anti-flash-white;
-
-/* borders */
 /* default */
-@border-default: @chinese-white;
-/* attention required */
-@border-attention-required: @spanish-orange;
+/* background */
+@default-background: @white;
+/* borders */
+@default-border: @chinese-white;
+/* text */
+@default-text-color: @black;
 
-/* font */
-@font-default: @black;
-@font-header-first: @bright-gray-2;
-@font-dim: @granite-gray;
-@font-light: @taupe-gray;
-@font-lighter: @spanish-gray;
-@font-lightest: @chinese-white; // not WCAG on background default, for decoration only
-@font-focus: @bleu-de-france;
-@font-warning: @spanish-orange;
-@font-error: @rosso-corsa;
-@font-inverse: @white;
-@font-dropdown-focus: @white;
-@font-hover-secret: @rosso-corsa;
-@font-focus-navigation: @white;
-@font-error-api: @black;
-@font-notification: @black;
+/* text */
+@text-info-color: @granite-gray;
+@text-light-color: @taupe-gray;
+@text-lighter-color: @spanish-gray;
+@text-lightest-color: @chinese-white; // not WCAG on background default, for decoration only
+@text-focus-color: @bleu-de-france;
+@text-warning-color: @spanish-orange;
+@text-error-color: @rosso-corsa;
+@text-secret-hover-color: @rosso-corsa;
+@text-error-api-color: @black;
+@text-notification-color: @black;
+
+/* header */
+@header-main-menu-background: @dark-charcoal;
+@header-main-menu-text-color: @bright-gray-2;
+@header-main-menu-hover-text-color: @white;
+@header-workspace-background: @bright-gray;
+
+/* footer */
+@footer-background: @bright-gray;
+
+/* authentication */
+/* background behind card setup/recover/login */
+@authentication-background: @anti-flash-white;
+/* text */
+@authentication-title-text-color: @granite-gray;
+
+/* attention required */
+@attention-required-border: @spanish-orange;
 
 /* quickaccess */
 @quickaccess-header-background: @bright-gray;
@@ -93,7 +97,6 @@
 @quickaccess-list-title-hover-background: @bright-gray-3;
 @quickaccess-list-title-active-background: @azureish-white;
 @quickaccess-border: @chinese-white;
-@quickaccess-font-property-name: @davys-grey;
 
 /* logos */
 @logourl: url('@{images}/logo/logo.svg');
@@ -113,12 +116,12 @@
 
 /* dialog */
 @dialog-background: @bright-gray;
-@dialog-background-overlay: rgba(255, 255, 255, 0.9);
+@dialog-overlay-background: rgba(255, 255, 255, 0.9);
 @dialog-border: @light-silver;
-@dialog-box-shadow: rgba(0, 0, 0, 0.1);
+@dialog-box-shadow-color: rgba(0, 0, 0, 0.1);
 @dialog-divider-border: @chinese-white;
 /* share dialog */
-@dialog-permission-background-updated: @deep-champagne;
+@dialog-permission-updated-background: @deep-champagne;
 @dialog-permission-border: @cultured-2;
 /* folder move dialog */
 @dialog-folder-move-selected-background: @cultured-2;
@@ -128,9 +131,6 @@
 @dialog-delete-conflict-title-background: @anti-flash-white;
 
 /* buttons */
-@button-text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-@button-primary-text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-
 @button-background: @cultured-2;
 @button-active-background: @gainsboro-2;
 @button-border: @chinese-white;
@@ -152,18 +152,17 @@
 @button-transparent-border: rgba(@black, .05);
 
 /* link */
-@background-link-focus: @bleu-de-france;
-@border-link-message: @taupe-gray;
-@border-link-default: @chinese-silver;
-@border-link-focus: @bleu-de-france;
+@link-highlight-background: @bleu-de-france;
+@link-border: @chinese-silver;
+@link-hover-border: @bleu-de-france;
 
 /* tooltip */
-@background-tooltip: @philippine-silver;
-@font-tooltip: @black;
+@tooltip-background: @philippine-silver;
+@tooltip-text-color: @black;
 
 /* inputs */
 @input-background: @white;
-@input-background-disabled: @anti-flash-white;
+@input-disabled-background: @anti-flash-white;
 @input-infield-background: @cultured-2;
 @input-border: @gray-x11;
 @input-infield-border: @chinese-white;
@@ -171,10 +170,10 @@
 
 /* checkbox */
 @input-checkbox-background: @white;
-@input-checkbox-background-disabled: @silver-sand;
-@input-checkbox-image-disabled: @quick-silver-2;
+@input-checkbox-disabled-background: @silver-sand;
+@input-checkbox-disabled-image-background: @quick-silver-2;
 @input-checkbox-border: @quick-silver;
-@input-checkbox-border-disabled: @silver-sand;
+@input-checkbox-disabled-border: @silver-sand;
 @input-checkbox-focus-border: @bleu-de-france;
 
 /* controls */
@@ -183,17 +182,17 @@
 /* radio */
 @input-radio-background: @white;
 @input-radio-dot-background: @button-blue;
-@input-radio-background-disabled: @silver-sand;
-@input-radio-dot-background-disabled: @quick-silver-2;
+@input-radio-disabled-background: @silver-sand;
+@input-radio-dot-disabled-background: @quick-silver-2;
 @input-radio-border: @quick-silver;
-@input-radio-border-disabled: @silver-sand;
+@input-radio-disabled-border: @silver-sand;
 @input-radio-focus-border: @bleu-de-france;
 
 /* radio list */
 @input-radio-list-background: @cultured-2;
 @input-radio-list-border: @chinese-white;
 @input-radio-list-hover-border: @silver-sand;
-@input-radio-list-focus: @bleu-de-france;
+@input-radio-list-focus-border: @bleu-de-france;
 
 /* toggle */
 @input-toggle-background: @gray;
@@ -202,24 +201,24 @@
 @input-toggle-checked-background: @islamic-green-2;
 @input-toggle-focus-border: @bleu-de-france;
 
-/* select */
-@select-background: @cultured-2;
-@select-setup-extension-background: @white;
-@select-hover-background: @gainsboro;
-@select-focus-background: @bleu-de-france;
-@select-focus-font: @white;
-@select-border: @chinese-white;
-@select-focus-border: @bleu-de-france;
-
 /* range */
 @input-range-background: @chinese-silver;
 @input-range-dot-background: @anti-flash-white;
 @input-range-dot-border: @chinese-silver;
 
+/* select */
+@select-background: @cultured-2;
+@select-setup-extension-background: @white;
+@select-hover-background: @gainsboro;
+@select-focus-background: @bleu-de-france;
+@select-focus-text-color: @white;
+@select-border: @chinese-white;
+@select-focus-border: @bleu-de-france;
+
 /* complexity */
-@complexity-color: @gray-2;
-@complexity-bar-background-default: @gray-x11;
-@complexity-bar-background-gradient: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
+@complexity-text-color: @gray-2;
+@complexity-bar-default-background: @gray-x11;
+@complexity-bar-gradient-background: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
 
 /* hints */
 @hint-success-color: @islamic-green-2;
@@ -227,16 +226,16 @@
 @hint-error-color: @rosso-corsa;
 
 /* drag items */
-@background-drag: @gray;
-@background-drag-number: @rosso-corsa;
-@font-drag: @white;
+@drag-background: @gray;
+@drag-number-background: @rosso-corsa;
+@drag-text-color: @white;
 
 /* announcement */
 @announcement-background: @blond;
-@announcement-font: @black;
+@announcement-text-color: @black;
 
 /* chips */
-@chips-font: @white;
+@chips-text-color: @white;
 @chips-beta-background: @spanish-orange;
 @chips-new-background: @bleu-de-france;
 
@@ -247,66 +246,66 @@
 @autocomplete-border: @gray-x11;
 
 /* progress bar */
-@background-progress-bar-default: @gray-x11;
-@background-progress-bar: @rosso-corsa;
+@progress-bar-default-background: @gray-x11;
+@progress-bar-background: @rosso-corsa;
 
-/* sidebar */
-@panel-background: @lotion;
-@panel-middle-background: @lotion;
-@sidebar-background: @background-default;
-@sidebar-border: @anti-flash-white;
-@sidebar-section-background: @background-default;
-@sidebar-section-header-background: @background-default;
+/* workspace */
+@workspace-left-background: @lotion;
+@workspace-middle-background: @lotion;
+@workspace-title-border: @chinese-white;
 
-/* Navigation menu */
-@navigation-menu-hover-background: @gainsboro-3;
-@navigation-menu-border-focus: @bleu-de-france;
-@navigation-menu-background-focus: @bleu-de-france;
+/* left workspace menu */
+@workspace-left-menu-hover-background: @gainsboro-3;
+@workspace-left-menu-focus-border: @bleu-de-france;
+@workspace-left-menu-focus-background: @bleu-de-france;
+@workspace-left-menu-focus-text-color: @white;
 
 /* dropdown menus */
 @dropdown-background: @cultured-2;
 @dropdown-profile-background: @white;
 @dropdown-focus-background: @bleu-de-france;
+@dropdown-focus-text-color: @white;
 @dropdown-item-hover-background: @gainsboro-3;
 
 /* grid */
 @tableview-background: @white;
-@tableview-background-even: @lotion;
-@tableview-background-hover: @bright-gray-3;
-@tableview-background-selected: @azureish-white;
+@tableview-even-background: @lotion;
+@tableview-hover-background: @bright-gray-3;
+@tableview-selected-background: @azureish-white;
 @tableview-header-background: @bright-gray;
-@tableview-shadow: @white;
+@tableview-shadow-color: @white;
 @breadcrumb-background: @lotion;
-@grid-border: @chinese-white;
 
-/* panel info */
-@panel-info-header-icon-background: @anti-flash-white;
-@panel-info-header-icon-color: @gray-2;
-@panel-info-header-subtitle-font-color: @gray-3;
-@panel-info-background: @white;
-@panel-info-content-background: @white;
-@panel-info-notice-background: @azureish-white;
-@panel-info-border: @chinese-white;
+/* info panel */
+@info-panel-background: @white;
+@info-panel-border: @anti-flash-white;
+@info-panel-header-icon-background: @anti-flash-white;
+@info-panel-header-icon-color: @gray-2;
+@info-panel-header-subtitle-text-color: @gray-3;
+@info-panel-section-header-background: @white;
+@info-panel-section-content-background: @white;
+@info-panel-section-notice-background: @azureish-white;
+@info-panel-section-border: @chinese-white;
 
 /* comment */
 @comment-background: @bright-gray;
 
 /* tags */
-@tag-color: @bleu-de-france;
+@tag-text-color: @bleu-de-france;
 @tag-border: @bleu-de-france;
 @tag-background: rgba(42,156,235,0.05);
-@tag-hover-color: @white;
+@tag-hover-text-color: @white;
 @tag-hover-border: @bleu-de-france;
 @tag-hover-background: @bleu-de-france;
-@tag-editor-border-focus: @bleu-de-france;
+@tag-editor-focus-border: @bleu-de-france;
 
 /* notice */
 @notice-background: @platinum;
 
 /* tables */
 @table-background: @white;
-@table-background-warning: @blond;
-@table-background-error: lighten(@rosso-corsa, 53%);
+@table-warning-background: @blond;
+@table-error-background: @light-salmon-pink;
 @table-border: @chinese-white;
 @table-row-even-background: @white;
 
@@ -319,7 +318,7 @@
 @mfa-background: @anti-flash-white;
 @mfa-border: @anti-flash-white;
 @mfa-provider-border: @chinese-white;
-@mfa-device-color: @islamic-green-2;
+@mfa-hint-trusted-device-color: @islamic-green-2;
 
 /* feedback card */
 @feedback-card-border: @chinese-white;
@@ -328,22 +327,23 @@
 @account-recovery-card-background: @cultured-2;
 
 /* messages */
-@message-error-color: @black;
+@message-error-text-color: @black;
 @message-error-background: @light-salmon-pink;
-@message-success-color: @black;
+@message-success-text-color: @black;
 @message-success-background: @honeydew;
-@message-notice-color: @black;
+@message-notice-text-color: @black;
 @message-notice-background: @azureish-white;
-@message-warning-color: @black;
+@message-warning-text-color: @black;
 @message-warning-background: @deep-champagne;
+@message-link-border: @taupe-gray;
 
 /* default icon svg fill */
 @icon-color: @black;
 @icon-background-color: @white;
-@icon-color-button-primary: @white;
-@icon-background-color-button-primary: @black;
-@icon-color-button-warning: @white;
-@icon-background-color-button-warning: @black;
+@icon-primary-color: @white;
+@icon-primary-background-color: @black;
+@icon-warning-color: @white;
+@icon-warning-background-color: @black;
 
 /* favorite icon fill */
 @icon-favorite-color: @rosso-corsa;
@@ -355,12 +355,12 @@
 @icon-exclamation-color: @white;
 
 /* spinner icon fill */
-@spinner-color: @sonic-silver;
-@spinner-background: @black;
-@spinner-color-button-primary: @white;
-@spinner-background-button-primary: @white;
-@spinner-color-button-warning: @white;
-@spinner-background-button-warning: @white;
+@icon-spinner-color: @sonic-silver;
+@icon-spinner-background: @black;
+@icon-spinner-primary-color: @white;
+@icon-spinner-primary-background: @white;
+@icon-spinner-warning-color: @white;
+@icon-spinner-warning-background: @white;
 
 /* failed icon fill */
 @icon-failed-color: @rosso-corsa;
@@ -375,6 +375,6 @@
 @shadow-opacity-active-black: 0.35;
 @shadow-opacity-dropdown: 0.1;
 @shadow-opacity-select: 0.1;
-@shadow-opacity-panel-info: 0.3;
-@shadow-focus: @button-blue;
-@shadow-drag: @gray;
+@shadow-opacity-info-panel: 0.3;
+@shadow-focus-color: @button-blue;
+@shadow-drag-color: @gray;

@@ -8,13 +8,13 @@
         border-radius: .2rem;
         border: 1px solid @tag-border;
         background: @tag-background;
-        color: @tag-color;
+        color: @tag-text-color;
 
         &:active,
         &:hover {
             border: 1px solid @tag-hover-border;
             background: @tag-hover-background;
-            color: @tag-hover-color;
+            color: @tag-hover-text-color;
         }
     }
 }
@@ -61,7 +61,7 @@
         position: relative;
 
         &:focus-within {
-           border-color: @tag-editor-border-focus;
+           border-color: @tag-editor-focus-border;
         }
     }
 
@@ -78,7 +78,7 @@
     .autocomplete-suggestions {
         text-align: left;
         cursor: default;
-        border: 1px solid @border-default;
+        border: 1px solid @default-border;
         border-top: 0;
         background: @dropdown-background;
         filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
@@ -108,7 +108,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: @font-default;
+            color: @default-text-color;
             display: block;
             padding: .5rem .6rem; /* align autocomplete suggestion with tag input */
             border: 0;

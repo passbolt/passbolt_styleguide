@@ -14,44 +14,44 @@
 .message {
   padding: 1.6rem;
   a {
-    border-bottom: 1px solid @border-link-message;
+    border-bottom: 1px solid @message-link-border;
   }
   a:hover {
-    border-bottom: 1px solid @border-link-focus;
+    border-bottom: 1px solid @link-hover-border;
   }
   &.error {
-    color: @message-error-color;
+    color: @message-error-text-color;
     background: @message-error-background;
 
     a:link, a:visited {
-      color: @message-error-color;
-      border-bottom: 1px dotted @border-link-message;
+      color: @message-error-text-color;
+      border-bottom: 1px dotted @message-link-border;
     }
     a:hover {
-      color: @message-error-color;
-      border-bottom: 1px solid @border-link-message;
+      color: @message-error-text-color;
+      border-bottom: 1px solid @message-link-border;
     }
   }
   &.success {
-    color:@message-success-color;
+    color:@message-success-text-color;
     background: @message-success-background;
   }
   &.notice {
-    color:@message-notice-color;
+    color:@message-notice-text-color;
     background: @message-notice-background;
-    --icon-color: @message-notice-color;
+    --icon-color: @message-notice-text-color;
 
     a {
-      color:@message-notice-color;
+      color:@message-notice-text-color;
 
       &:hover {
-        color: @font-focus;
-        border-bottom: 1px solid @border-link-focus;
+        color: @text-focus-color;
+        border-bottom: 1px solid @link-hover-border;
       }
     }
   }
   &.warning {
-    color:@message-warning-color;
+    color:@message-warning-text-color;
     background: @message-warning-background;
   }
 

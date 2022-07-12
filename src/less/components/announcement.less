@@ -6,7 +6,7 @@
   font-size: 1.4rem;
   text-align: center;
   background: @announcement-background;
-  color: @announcement-font;
+  color: @announcement-text-color;
   width: 100%;
 
   p {
@@ -16,30 +16,30 @@
   }
 
   a {
-    border-bottom: 1px solid @border-link-default;
+    border-bottom: 1px solid @link-border;
     display: inline-block;
     padding-bottom: 0;
     line-height: 1.6rem;
     margin-left: .8rem;
 
     &:link, &:visited {
-      color: @announcement-font;
+      color: @announcement-text-color;
     }
     &:hover {
       text-decoration: none;
       cursor: pointer;
-      color: @font-focus;
-      border-bottom: 1px solid @border-link-focus;
+      color: @text-focus-color;
+      border-bottom: 1px solid @link-hover-border;
     }
     &:active, &:focus {
       outline: 0;
-      color: @font-focus;
+      color: @text-focus-color;
       border: 0;
     }
   }
 
   a.announcement-close {
-    --icon-color: @announcement-font;
+    --icon-color: @announcement-text-color;
     float: right;
     border: 0;
     margin-top: -.2rem;

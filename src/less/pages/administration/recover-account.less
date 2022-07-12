@@ -2,7 +2,7 @@
   .input.radio {
     display: flex;
     align-items: center;
-    border: 1px solid @border-default;
+    border: 1px solid @default-border;
     background-color: @account-recovery-card-background;
     padding: 1.6rem;
     margin-right: 0;
@@ -17,7 +17,7 @@
   }
 
   .recovery-key-details {
-    border: 1px solid @border-default;
+    border: 1px solid @default-border;
     border-radius: .3rem;
     padding: 1.6rem;
     display: flex;
@@ -30,10 +30,10 @@
 
       .label, .value, .empty-value {
         vertical-align: top;
-        color: @font-default;
+        color: @default-text-color;
       }
       .value {
-        color: @font-default;
+        color: @default-text-color;
       }
       .table-button {
         float: right;
@@ -44,7 +44,7 @@
       }
 
       .empty-value {
-        color: @font-light;
+        color: @text-light-color;
       }
     }
   }
@@ -56,7 +56,7 @@
   }
   .radiolist-alt {
     .input.radio:hover {
-        border: 1px solid @border-default;
+        border: 1px solid @default-border;
     }
 
     label {
@@ -68,7 +68,7 @@
   }
   .submit-wrapper .button {
     &.button-left {
-      background: @background-default;
+      background: @default-background;
     }
   }
 }
