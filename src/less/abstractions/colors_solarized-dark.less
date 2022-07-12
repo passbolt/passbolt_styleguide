@@ -1,0 +1,389 @@
+/* palette */
+@text-icon-main-color: hsl(46,42%,88%);
+@main-color: hsl(194,14%,5%);
+
+@primary-color-1: hsl(45,100%,55%);
+@primary-color-2: hsl(45,100%,50%);
+@primary-color-3: hsl(45,100%,45%);
+@primary-color-4: hsl(45,100%,40%);
+
+@success-1: hsl(68,100%,30%);
+@success-2: hsl(68,100%,35%);
+
+@warning-1: hsl(18,80%,54%);
+@warning-2: hsl(18,80%,64%);
+@warning-3: hsl(18,80%,74%);
+@warning-4: hsl(18,80%,44%);
+
+@alert-1: hsl(1,71%,52%);
+@alert-2: hsl(1,71%,62%);
+@alert-3: hsl(1,71%,72%);
+
+/* palette: main color gradient */
+@hue: 194;
+@saturation: 14%; // must be a %
+
+@main-color-gradient-1: hsl(@hue,@saturation,10%);
+@main-color-gradient-2: hsl(@hue,@saturation,12%);
+@main-color-gradient-3: hsl(@hue,@saturation,14%);
+@main-color-gradient-4: hsl(@hue,@saturation,15%);
+@main-color-gradient-5: hsl(@hue,@saturation,17%);
+@main-color-gradient-6: hsl(@hue,@saturation,19%);
+@main-color-gradient-7: hsl(@hue,@saturation,21%);
+@main-color-gradient-8: hsl(@hue,@saturation,23%);
+@main-color-gradient-9: hsl(@hue,@saturation,24%);
+@main-color-gradient-10: hsl(@hue,@saturation,26%);
+@main-color-gradient-11: hsl(@hue,@saturation,28%);
+@main-color-gradient-12: hsl(@hue,@saturation,30%);
+@main-color-gradient-13: hsl(@hue,@saturation,31%);
+@main-color-gradient-14: hsl(@hue,@saturation,33%);
+@main-color-gradient-15: hsl(@hue,@saturation,35%);
+@main-color-gradient-16: hsl(@hue,@saturation,37%);
+@main-color-gradient-17: hsl(@hue,@saturation,39%);
+@main-color-gradient-18: hsl(@hue,@saturation,40%);
+@main-color-gradient-19: hsl(@hue,@saturation,42%);
+@main-color-gradient-20: hsl(@hue,@saturation,44%);
+@main-color-gradient-21: hsl(@hue,@saturation,46%);
+@main-color-gradient-22: hsl(@hue,@saturation,48%);
+@main-color-gradient-23: hsl(@hue,@saturation,49%);
+@main-color-gradient-24: hsl(@hue,@saturation,51%);
+@main-color-gradient-25: hsl(@hue,@saturation,53%);
+@main-color-gradient-26: hsl(@hue,@saturation,55%);
+@main-color-gradient-27: hsl(@hue,@saturation,56%);
+@main-color-gradient-28: hsl(@hue,@saturation,58%);
+@main-color-gradient-29: hsl(@hue,@saturation,60%);
+
+
+/* components */
+
+/* background */
+@default-background: @main-color-gradient-8;
+/* borders */
+@default-border: @main-color-gradient-8;
+/* text */
+@default-text-color: @text-icon-main-color;
+
+/* text */
+@text-info-color: @main-color-gradient-27;
+@text-light-color: @main-color-gradient-24;
+@text-lighter-color: @main-color-gradient-24;
+@text-lightest-color: @main-color-gradient-16;
+@text-focus-color: @primary-color-3;
+@text-warning-color: @warning-4;
+@text-error-color: @alert-1;
+@text-secret-hover-color: @alert-1;
+@text-error-api-color: @main-color-gradient-8;
+@text-notification-color: @main-color;
+
+/* header */
+@header-main-menu-background: @main-color-gradient-6;
+@header-main-menu-text-color: @main-color-gradient-29;
+@header-main-menu-hover-text-color: @text-icon-main-color;
+@header-workspace-background: @main-color-gradient-9;
+
+/* footer */
+@footer-background: @main-color-gradient-9;
+
+/* authentication */
+/* background behind card setup/recover/login */
+@authentication-background: @main-color-gradient-1;
+/* text */
+@authentication-title-text-color: @main-color-gradient-27;
+
+/* attention required */
+@attention-required-border: @warning-4;
+
+/* quickaccess */
+@quickaccess-header-background: @main-color-gradient-12;
+@quickaccess-footer-background: @main-color-gradient-12;
+@quickaccess-back-link-background: @main-color-gradient-9;
+@quickaccess-list-title-background: @main-color-gradient-9;
+@quickaccess-list-title-hover-background: @main-color-gradient-1;
+@quickaccess-list-title-active-background: @main-color-gradient-14;
+@quickaccess-border: @main-color-gradient-1;
+
+/* logos */
+@logourl: url('@{images}/logo/logo_white.svg');
+@passbolt-icon-without-badge: url('@{images}/logo/icon-without-badge.svg');
+@passbolt-icon-badge-1: url('@{images}/logo/icon-badge-1.svg');
+@passbolt-icon-badge-2: url('@{images}/logo/icon-badge-2.svg');
+@passbolt-icon-badge-3: url('@{images}/logo/icon-badge-3.svg');
+@passbolt-icon-badge-4: url('@{images}/logo/icon-badge-4.svg');
+@passbolt-icon-badge-5: url('@{images}/logo/icon-badge-5.svg');
+@passbolt-icon-badge-5-plus: url('@{images}/logo/icon-badge-5+.svg');
+@passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
+
+/* Inform menu */
+@inform-menu-hover-background: @main-color-gradient-1;
+@inform-menu-active-background: @main-color-gradient-14;
+@inform-menu-border: @main-color-gradient-1;
+
+/* dialog */
+@dialog-background: @main-color-gradient-12;
+@dialog-overlay-background: hsla(@hue,@saturation,5%,.8);
+@dialog-border: @main-color-gradient-5;
+@dialog-box-shadow-color: hsla(@hue,@saturation,1%,.5);
+@dialog-divider-border: @main-color-gradient-1;
+/* share dialog */
+@dialog-permission-updated-background: @main-color-gradient-18;
+@dialog-permission-border: @main-color;
+/* folder move dialog */
+@dialog-folder-move-selected-background: @main-color-gradient-12;
+@dialog-folder-move-border: @main-color;
+@dialog-folder-move-selected-border: @main-color-gradient-12;
+/* delete user/group conflict dialog */
+@dialog-delete-conflict-title-background: @main-color-gradient-12;
+
+/* buttons */
+@button-background: @main-color-gradient-12;
+@button-active-background: @main-color-gradient-1;
+@button-border: @main-color-gradient-8;
+@button-focus-border: @primary-color-3;
+
+@button-icon-background: @main-color-gradient-15;
+@button-icon-active-background: @main-color-gradient-1;
+@button-icon-border: @main-color-gradient-4;
+
+@button-primary-background: @primary-color-3;
+@button-primary-border: @primary-color-3;
+@button-primary-color: @main-color;
+
+@button-warning-background: @alert-1;
+@button-warning-border: @alert-1;
+@button-warning-color: @text-icon-main-color;
+
+@button-transparent-background: hsla(@hue,@saturation,5%,.1);
+@button-transparent-border: hsla(@hue,@saturation,90%,.1);
+
+/* link */
+@link-highlight-background: @primary-color-3;
+@link-border: @main-color-gradient-17;
+@link-hover-border: @primary-color-3;
+
+/* tooltip */
+@tooltip-background: @main-color-gradient-3;
+@tooltip-text-color: @text-icon-main-color;
+
+/* inputs */
+@input-background: @main-color;
+@input-disabled-background: @main-color-gradient-16;
+@input-infield-background: @main-color-gradient-12;
+@input-border: @main-color;
+@input-infield-border: @main-color-gradient-8;
+@input-focus-border: @primary-color-3;
+
+/* checkbox */
+@input-checkbox-background: @main-color-gradient-8;
+@input-checkbox-disabled-background: @main-color;
+@input-checkbox-disabled-image-background: @main-color-gradient-11;
+@input-checkbox-border: @main-color-gradient-21;
+@input-checkbox-disabled-border: @main-color-gradient-10;
+@input-checkbox-focus-border: @primary-color-3;
+
+/* controls */
+@controls-check: url('@{images}/controls/check_white.svg');
+
+/* radio */
+@input-radio-background: @main-color-gradient-8;
+@input-radio-dot-background: @primary-color-2;
+@input-radio-disabled-background: @main-color;
+@input-radio-dot-disabled-background: @main-color-gradient-10;
+@input-radio-border: @main-color-gradient-21;
+@input-radio-disabled-border: @main-color;
+@input-radio-focus-border: @primary-color-3;
+
+/* radio list */
+@input-radio-list-background: @main-color-gradient-12;
+@input-radio-list-border: @main-color-gradient-8;
+@input-radio-list-hover-border: @main-color-gradient-8;
+@input-radio-list-focus-border: @primary-color-3;
+
+/* toggle */
+@input-toggle-background: @main-color-gradient-22;
+@input-toggle-focus-background: @primary-color-3;
+@input-toggle-dot-background: @text-icon-main-color;
+@input-toggle-checked-background: @success-2;
+@input-toggle-focus-border: @primary-color-3;
+
+/* range */
+@input-range-background: @main-color-gradient-15;
+@input-range-dot-background: @main-color-gradient-21;
+@input-range-dot-border: @main-color-gradient-15;
+
+/* select */
+@select-background: @main-color-gradient-12;
+@select-setup-extension-background: @main-color-gradient-8;
+@select-hover-background: @main-color-gradient-14;
+@select-focus-background: @primary-color-3;
+@select-focus-text-color: @text-icon-main-color;
+@select-border: @main-color-gradient-8;
+@select-focus-border: @primary-color-3;
+
+/* complexity */
+@complexity-text-color: @text-icon-main-color;
+@complexity-bar-default-background: @main-color-gradient-15;
+@complexity-bar-gradient-background: linear-gradient(to right,#A40000, #FFA724, #0EAA00);
+
+/* hints */
+@hint-success-color: @success-2;
+@hint-warning-color: @warning-4;
+@hint-error-color: @alert-1;
+
+/* drag items */
+@drag-background: @main-color-gradient-22;
+@drag-number-background: @alert-1;
+@drag-text-color: @text-icon-main-color;
+
+/* announcement */
+@announcement-background: @warning-3;
+@announcement-text-color: @main-color;
+
+/* chips */
+@chips-text-color: @text-icon-main-color;
+@chips-beta-background: @warning-4;
+@chips-new-background: @primary-color-3;
+
+/* autocomplete */
+@autocomplete-background: @main-color;
+@autocomplete-hover-background: @main-color-gradient-8;
+@autocomplete-selected-background: @main-color-gradient-12;
+@autocomplete-border: @main-color;
+
+/* progress bar */
+@progress-bar-default-background: @main-color-gradient-15;
+@progress-bar-background: @alert-1;
+
+/* workspace */
+@workspace-left-background: @main-color-gradient-12;
+@workspace-middle-background: @main-color-gradient-12;
+@workspace-title-border: @main-color-gradient-1;
+
+/* left workspace menu */
+@workspace-left-menu-hover-background: @main-color-gradient-14;
+@workspace-left-menu-focus-border: @primary-color-3;
+@workspace-left-menu-focus-background: @primary-color-3;
+@workspace-left-menu-focus-text-color: @text-icon-main-color;
+
+/* dropdown menus */
+@dropdown-background: @main-color-gradient-12;
+@dropdown-profile-background: @main-color-gradient-6;
+@dropdown-focus-background: @primary-color-3;
+@dropdown-focus-text-color: @text-icon-main-color;
+@dropdown-item-hover-background: @main-color-gradient-14;
+
+/* grid */
+@tableview-background: @main-color-gradient-8;
+@tableview-even-background: @main-color-gradient-6;
+@tableview-hover-background: @main-color-gradient-1;
+@tableview-selected-background: @main-color-gradient-14;
+@tableview-header-background: @main-color-gradient-13;
+@tableview-shadow-color: @main-color-gradient-19;
+@breadcrumb-background: @main-color-gradient-12;
+
+/* info panel */
+@info-panel-background: @main-color-gradient-12;
+@info-panel-border: @main-color;
+@info-panel-header-icon-background: @main-color-gradient-2;
+@info-panel-header-icon-color: @main-color-gradient-23;
+@info-panel-header-subtitle-text-color: @main-color-gradient-26;
+@info-panel-section-header-background: @main-color-gradient-12;
+@info-panel-section-content-background: @main-color-gradient-11;
+@info-panel-section-notice-background: @main-color-gradient-28;
+@info-panel-section-border: @main-color-gradient-8;
+
+/* comment */
+@comment-background: @main-color-gradient-7;
+
+/* tags */
+@tag-text-color: @main-color;
+@tag-border: @primary-color-1;
+@tag-background: hsl(45,100%,40%,.1);
+@tag-hover-text-color: @primary-color-2;
+@tag-hover-border: @primary-color-2;
+@tag-hover-background: @main-color-gradient-11;
+@tag-editor-focus-border: @primary-color-3;
+
+/* notice */
+@notice-background: @main-color-gradient-8;
+
+/* tables */
+@table-background: @main-color-gradient-8;
+@table-warning-background: @warning-3;
+@table-error-background: @alert-3;
+@table-border: @main-color-gradient-8;
+@table-row-even-background: @main-color-gradient-15;
+
+/* tabs */
+@tab-selected-background: @main-color-gradient-8;
+@tab-unselected-background: @main-color-gradient-1;
+@tab-border: @main-color-gradient-1;
+
+/* mfa */
+@mfa-background: @main-color-gradient-16;
+@mfa-border: @main-color-gradient-16;
+@mfa-provider-border: @main-color;
+@mfa-hint-trusted-device-color: @success-2;
+
+/* feedback card */
+@feedback-card-border: @main-color;
+
+/* account recovery */
+@account-recovery-card-background: @main-color-gradient-12;
+
+/* user card */
+@usercard-created-background: @success-1;
+@usercard-updated-background: @warning-1;
+@usercard-removed-background: @alert-1;
+
+/* messages */
+@message-error-text-color: @main-color;
+@message-error-background: @alert-3;
+@message-success-text-color: @main-color;
+@message-success-background: @success-2;
+@message-notice-text-color: @main-color;
+@message-notice-background: @main-color-gradient-28;
+@message-warning-text-color: @main-color;
+@message-warning-background: @warning-2;
+@message-link-border: @main-color;
+
+/* default icon svg fill */
+@icon-color: @text-icon-main-color;
+@icon-background-color: @main-color-gradient-13;
+@icon-primary-color: @main-color;
+@icon-primary-background-color: @main-color-gradient-13;
+@icon-warning-color: @text-icon-main-color;
+@icon-warning-background-color: @main-color-gradient-13;
+
+/* favorite icon fill */
+@icon-favorite-color: @alert-1;
+@icon-unfavorite-color: @main-color-gradient-20;
+
+/* exclamation icon fill */
+@icon-exclamation-required-color: @warning-4;
+@icon-exclamation-default-color: @main-color-gradient-20;
+@icon-exclamation-color: @text-icon-main-color;
+
+/* spinner icon fill */
+@icon-spinner-color: @text-icon-main-color;
+@icon-spinner-background: @text-icon-main-color;
+@icon-spinner-primary-color: @main-color;
+@icon-spinner-primary-background: @text-icon-main-color;
+@icon-spinner-warning-color: @text-icon-main-color;
+@icon-spinner-warning-background: @text-icon-main-color;
+
+/* failed icon fill */
+@icon-failed-color: @alert-1;
+
+/* success icon fill */
+@icon-success-color: @success-2;
+
+/* box shadows */
+@shadow-opacity-hover-black: 0.5;
+@shadow-opacity-hover-white: 0.25;
+@shadow-opacity-active-white: 0.25;
+@shadow-opacity-active-black: 0.5;
+@shadow-opacity-dropdown: 0.5;
+@shadow-opacity-select: 0.5;
+@shadow-opacity-info-panel: 0.75;
+@shadow-focus-color: @primary-color-2;
+@shadow-drag-color: @main-color-gradient-22;

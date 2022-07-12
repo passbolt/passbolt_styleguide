@@ -13,7 +13,7 @@
  */
 import React from "react";
 import {
-  defaultColorVariables, getArgTypes, midgarColorVariables,
+  defaultColorVariables, getArgTypes, midgarColorVariables, solarizedDarkColorVariables, solarizedLightColorVariables,
 } from "./Theme.test.data";
 import Theme from "./Theme";
 
@@ -35,3 +35,10 @@ export const Midgar = Template.bind({});
 Midgar.args = midgarColorVariables;
 Midgar.argTypes = getArgTypes(midgarColorVariables);
 
+export const SolarizedLight = Template.bind({});
+SolarizedLight.args = solarizedLightColorVariables;
+SolarizedLight.argTypes = getArgTypes(solarizedLightColorVariables);
+
+export const SolarizedDark = Template.bind({});
+SolarizedDark.args = solarizedDarkColorVariables;
+SolarizedDark.argTypes = getArgTypes(solarizedDarkColorVariables);
