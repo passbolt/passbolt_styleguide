@@ -309,7 +309,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
                 {this.hasSuccessUserResource() &&
                   <>{this.translate("{{count}} user will be synchronized.", {count: this.usersSuccess.length})}</>
                 }
-                {this.hasSuccessResource() && this.hasSuccessGroupResource() && <br/>}
+                {this.hasSuccessUserResource() && this.hasSuccessGroupResource() && <br/>}
                 {this.hasSuccessGroupResource() &&
                   <>{this.translate("{{count}} group will be synchronized.", {count: this.groupsSuccess.length})}</>
                 }

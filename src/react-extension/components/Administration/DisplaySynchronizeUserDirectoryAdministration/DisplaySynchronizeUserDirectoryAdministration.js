@@ -307,7 +307,7 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
                 {this.hasSuccessUserResource() &&
                   <>{this.translate("{{count}} user has been synchronized.", {count: this.usersSuccess.length})}</>
                 }
-                {this.hasSuccessResource() && this.hasSuccessGroupResource() && <br/>}
+                {this.hasSuccessUserResource() && this.hasSuccessGroupResource() && <br/>}
                 {this.hasSuccessGroupResource() &&
                   <>{this.translate("{{count}} group has been synchronized.", {count: this.groupsSuccess.length})}</>
                 }

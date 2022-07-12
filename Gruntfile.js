@@ -56,6 +56,11 @@ module.exports = function(grunt) {
         command: [
           'npm run build'
         ].join(' && ')
+      },
+      'externalize': {
+        command: [
+          'npm run externalize'
+        ].join(' && ')
       }
 		},
 		cssmin: {
@@ -130,36 +135,6 @@ module.exports = function(grunt) {
         ]
       },
     },
-    i18next: {
-      externalize: {
-        src: 'src/**/*.{js,html}',
-        dest: 'src',
-        options: {
-          lngs: ['en-UK'],
-          func: {
-            list: ['this.props.t', 'this.translate'], // function use to parse and find new translation
-            extensions: ['.js', '.jsx']
-          },
-          trans: {
-            component: 'Trans',
-            i18nKey: 'i18nKey',
-            defaultsKey: 'defaults',
-            extensions: ['.js', '.jsx'],
-            fallbackKey: true
-          },
-          nsSeparator: false,
-          keySeparator: false,
-          defaultNs: 'common',
-          resource: {
-            loadPath: 'src/locales/{{lng}}/{{ns}}.json',
-            savePath: 'locales/{{lng}}/{{ns}}.json'
-          },
-          removeUnusedKeys: true,
-          sort: true,
-          debug: false,
-        }
-      }
-    },
 		watch: {
 			less: {
 				files: [
@@ -183,7 +158,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-header');
 	grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('passbolt-i18next-scanner');
 
 	// ========================================================================
 	// Register Tasks
@@ -194,5 +168,5 @@ module.exports = function(grunt) {
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
 	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
   grunt.registerTask('css', [ 'clean:css', 'less', 'cssmin']);
-  grunt.registerTask('externalize-locale-string', ['i18next']);
+  grunt.registerTask('externalize-locale-string', ['shell:externalize']);
 };
