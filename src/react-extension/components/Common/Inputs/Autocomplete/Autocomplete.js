@@ -19,6 +19,8 @@ import AutocompleteItem from "./AutocompleteItem";
 import AutocompleteItemEmpty from "./AutocompleteItemEmpty";
 import AutocompleteItemLoading from "./AutocompleteItemLoading";
 
+const AUTOCOMPLETE_DISPLAY_LIMIT = 10;
+
 class Autocomplete extends Component {
   /**
    * Constructor
@@ -328,6 +330,14 @@ class Autocomplete extends Component {
         return;
       }
     }
+  }
+
+  /**
+   * Returns the maximum count of element the autocomplete list should display.
+   * @returns {integer}
+   */
+  static get DISPLAY_LIMIT() {
+    return AUTOCOMPLETE_DISPLAY_LIMIT;
   }
 
   /**

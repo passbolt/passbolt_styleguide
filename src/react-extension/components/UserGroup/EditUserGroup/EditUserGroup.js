@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
+import ReactList from "react-list";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -21,14 +22,11 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../../../shared/components/Icons/Icon";
 import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Tooltip from "../../Common/Tooltip/Tooltip";
-import Select from "../../Common/Select/Select";
 import SharePermissionItemSkeleton from "../../Share/SharePermissionItemSkeleton";
+import EditUserGroupItem from "./EditUserGroupItem";
 
 /**
  * This component allows to edit an user group
@@ -89,6 +87,7 @@ class EditUserGroup extends Component {
     this.references = {
       name: React.createRef()
     };
+    this.listRef = React.createRef();
   }
 
   /**
@@ -105,18 +104,20 @@ class EditUserGroup extends Component {
     this.handleAutocompleteClose = this.handleAutocompleteClose.bind(this);
     this.handleAutocompleteOpen = this.handleAutocompleteOpen.bind(this);
     this.fetchAutocompleteItems = this.fetchAutocompleteItems.bind(this);
+
+    this.renderItem = this.renderItem.bind(this);
   }
 
   /**
    * Populate the component with initial data
    * @return {Promise<void>}
    */
-  async populate() {
+  populate() {
     const name = this.groupToEdit.name;
     const groupsUsers = JSON.parse(JSON.stringify(this.groupToEdit.groups_users)); // Clone the groups users to not alter the original
-    await Promise.all(groupsUsers.map(this.decorateGroupUserWithUser.bind(this)));
+    groupsUsers.map(this.decorateGroupUserWithUser.bind(this));
     this.sortGroupsUsersAlphabeticallyByUserFullName(groupsUsers);
-    await this.setState({groupToEdit: {name, groupsUsers}});
+    this.setState({groupToEdit: {name, groupsUsers}});
   }
 
   /**
@@ -134,8 +135,8 @@ class EditUserGroup extends Component {
    * @param {Object} groupUser The group user to decorate
    * @returns {Promise<object>}
    */
-  async decorateGroupUserWithUser(groupUser) {
-    groupUser.user = await this.findUser(groupUser.user_id);
+  decorateGroupUserWithUser(groupUser) {
+    groupUser.user = this.findUser(groupUser.user_id);
     return groupUser;
   }
 
@@ -144,10 +145,8 @@ class EditUserGroup extends Component {
    * @param {string} userId
    * @returns {Promise<object>}
    */
-  async findUser(userId) {
-    const user = this.props.context.users.find(user => user.id === userId);
-    user.gpgkey = await this.findUserGpgkey(user.id);
-    return user;
+  findUser(userId) {
+    return this.props.context.users.find(user => user.id === userId);
   }
 
   /**
@@ -468,7 +467,8 @@ class EditUserGroup extends Component {
    */
   async removeMember(groupUserToRemove) {
     const indexToRemove = this.groupsUsers.findIndex(groupUser => groupUser.user_id === groupUserToRemove.user_id);
-    const groupsUsers = this.groupsUsers.splice(indexToRemove, 1);
+    const groupsUsers = this.groupsUsers;
+    groupsUsers.splice(indexToRemove, 1);
     return this.updateGroupsUsers(groupsUsers);
   }
 
@@ -660,32 +660,58 @@ class EditUserGroup extends Component {
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
     const matchText = user => words.every(word => matchUser(word, user));
 
-    const usersMatched = this.props.context.users.filter(user => user.active === true && !this.isMember(user))
-      .filter(matchText);
-    return this.decorateUsersWithGpgkey(usersMatched);
+    let currentCount = 0;
+    const firstUsersMatched = this.props.context.users.filter(user => {
+      const isUserMatching = currentCount < Autocomplete.DISPLAY_LIMIT
+        && user.active === true
+        && !this.isMember(user)
+        && matchText(user);
+
+      if (isUserMatching) {
+        currentCount++;
+      }
+      return isUserMatching;
+    });
+    return this.decorateUsersWithGpgkey(firstUsersMatched);
   }
 
   /**
-   * Get the tooltip message
-   * @param groupUser The group user
+   * Use to render a single item of the user group list
+   * @param {integer} index of the item in the source list
+   * @param {integer} key index of the HTML element in the ReactList
    * @returns {JSX.Element}
    */
-  getTooltipMessage(groupUser) {
-    return <>
-      <div className="email"><strong>{groupUser.user.username}</strong></div>
-      <div className="fingerprint">{this.formatFingerprint(groupUser.user.gpgkey.fingerprint)}</div>
-    </>;
+  renderItem(index, key) {
+    const groupUser = this.groupsUsers[index];
+    const isMemberChanged = this.isMemberChanged(groupUser);
+    const isMemberAdded = this.isMemberAdded(groupUser);
+    const editUserGroupItemKey = `${groupUser.user_id}`;
+    return (
+      <EditUserGroupItem
+        key={editUserGroupItemKey}
+        isMemberChanged={isMemberChanged}
+        isMemberAdded={isMemberAdded}
+        groupUser={groupUser}
+        onMemberRoleChange={this.handleMemberRoleChange}
+        onMemberRemoved={this.handleMemberRemoved}
+        areActionsAllowed={this.areActionsAllowed}
+        isLastItemDisplayed={key >= 2}
+      />
+    );
   }
 
   /**
-   * Get permissions
-   * @returns {[{label: *, value: boolean}]}
+   * Use to render the container of the list of the ReactList component
+   * @param {Array<JSX.Element>} items the list of the items to be rendered as children element of the conainer
+   * @param {*} ref the ref ReactList needs to manage the scrll
+   * @returns {JSX.Element}
    */
-  get permissions() {
-    return [
-      {value: false, label: this.translate("Member")},
-      {value: true, label: this.translate("Group manager")}
-    ];
+  renderContainer(items, ref) {
+    return (
+      <ul className="permissions groups_users" ref={ref}>
+        {items}
+      </ul>
+    );
   }
 
   /**
@@ -743,63 +769,23 @@ class EditUserGroup extends Component {
           </div>
 
           <div className="group_members">
-            <div className="form-content permission-edit">
+            <div className="form-content scroll permission-edit">
               {this.isLoading &&
-                <ul className="permissions scroll groups_users">
+                <ul className="permissions groups_users">
                   <SharePermissionItemSkeleton/>
                   <SharePermissionItemSkeleton/>
                   <SharePermissionItemSkeleton/>
                 </ul>
               }
               {!this.isLoading &&
-                <ul className="permissions scroll groups_users">
-                  {this.groupsUsers.map(groupUser => (
-                    <li
-                      key={groupUser.user_id}
-                      className={`row ${this.isMemberChanged(groupUser) ? 'permission-updated' : ''}`}>
-
-                      <UserAvatar
-                        baseUrl={this.props.context.userSettings.getTrustedDomain()}
-                        user={groupUser.user}/>
-
-                      <div className="aro">
-                        <div className="aro-name">
-                          <span className="ellipsis">{this.getUserFullname(groupUser.user)}</span>
-                          <Tooltip message={this.getTooltipMessage(groupUser)}>
-                            <Icon name="info-circle"/>
-                          </Tooltip>
-                        </div>
-                        <div className="permission_changes">
-                          {this.isMemberAdded(groupUser) && <span><Trans>Will be added</Trans></span>}
-                          {this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) &&
-                            <span><Trans>Will be updated</Trans></span>}
-                          {!this.isMemberChanged(groupUser) && !this.isMemberAdded(groupUser) && <span><Trans>Unchanged</Trans></span>}
-
-                        </div>
-                      </div>
-
-                      <div className="rights">
-                        <Select
-                          className="permission inline"
-                          value={groupUser.is_admin}
-                          items={this.permissions}
-                          onChange={event => this.handleMemberRoleChange(event, groupUser)}
-                          disabled={!this.areActionsAllowed}/>
-                      </div>
-
-                      <div className="actions">
-                        <a
-                          title="remove"
-                          className={`remove-item button button-transparent ${!this.areActionsAllowed ? "disabled" : ""}`}
-                          onClick={event => this.handleMemberRemoved(event, groupUser)}>
-                          <Icon name="close"/>
-                          <span className="visuallyhidden">remove</span>
-                        </a>
-                      </div>
-                    </li>
-                  ))
-                  }
-                </ul>
+                <ReactList
+                  itemRenderer={this.renderItem}
+                  itemsRenderer={this.renderContainer}
+                  length={this.groupsUsers.length}
+                  minSize={4}
+                  type="uniform"
+                  threshold={30}>
+                </ReactList>
               }
             </div>
             {!this.isLoading && !this.hasMembers &&
