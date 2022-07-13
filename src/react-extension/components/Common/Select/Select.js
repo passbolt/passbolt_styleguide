@@ -199,14 +199,12 @@ class Select extends Component {
    * Force the visibility of the select with fixed position
    */
   forceVisibilitySelect() {
-    const {left, top, width, height} = this.selectedItemRef.current.getBoundingClientRect();
+    const {width, height} = this.selectedItemRef.current.getBoundingClientRect();
     const style = {
       position: 'fixed',
       zIndex: 1,
       width,
       height,
-      left,
-      top
     };
     this.setState({style});
   }
