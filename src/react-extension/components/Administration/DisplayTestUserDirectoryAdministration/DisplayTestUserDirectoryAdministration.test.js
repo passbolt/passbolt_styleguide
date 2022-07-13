@@ -46,7 +46,7 @@ describe("See the test user directory administration Dialog", () => {
     it('As AD I should see the number of user(s) and group(s) founds on the LDAP server in the dialog for my Test settings report', async() => {
       expect(page.title.hyperlink.textContent).toBe("Test settings report");
       expect(page.displayTestUserDirectoryAdministrationDialog.exists()).toBeTruthy();
-      expect(page.displayTestUserDirectoryAdministrationDialog.usersAndGroupsFound).toBe('12 users and 58 groups have been found.');
+      expect(page.displayTestUserDirectoryAdministrationDialog.usersAndGroupsFound).toBe('12 users have been found.58 groups have been found.');
       await page.displayTestUserDirectoryAdministrationDialog.click(page.displayTestUserDirectoryAdministrationDialog.buttonOk);
       expect(props.onClose).toBeCalled();
     });

@@ -168,7 +168,17 @@ class DisplayTestUserDirectoryAdministration extends Component {
           <p></p>
           <div className="ldap-test-settings-report">
             <p>
-              {this.translate("{{users}} and {{groups}} have been found.", {users: this.translate("{{count}} user", {count: this.users.length}), groups: this.translate("{{count}} group", {count: this.groups.length})})}
+              {this.users.length > 0 &&
+                <>
+                  {this.translate("{{count}} user has been found.", {count: this.users.length})}
+                </>
+              }
+              {this.users.length > 0 && this.groups.length > 0 && <br/>}
+              {this.groups.length > 0 &&
+                <>
+                  {this.translate("{{count}} group has been found.", {count: this.groups.length})}
+                </>
+              }
             </p>
             <div className={`accordion directory-list ${this.state.openListGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleListGroupsUsersClicked}>

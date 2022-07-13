@@ -72,7 +72,6 @@ class MockTranslationProvider extends Component {
         keySeparator: false, // don't use the dot for separator of nested json object
         nsSeparator: false, // allowed ':' in key to avoid namespace separator
         debug: false,
-        compatibilityJSON: "v3"
       });
   }
 
