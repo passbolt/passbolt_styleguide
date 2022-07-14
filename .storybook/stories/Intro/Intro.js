@@ -21,8 +21,8 @@ class Intro extends Component {
   render() {
     return (
       <div className="storybook-intro-hero">
-        <link rel="stylesheet" href={`/stories/assets/intro/intro.css`}/>
-        <link rel="stylesheet" href={`/css/themes/default/ext_app.css`}/>
+        <link rel="stylesheet" href={`stories/assets/intro/intro.css`}/>
+        <link rel="stylesheet" href={`css/themes/default/ext_app.css`}/>
         <div className="storybook-intro-hero-left">
           <h1><img src="img/logo/logo.svg" alt="Passbolt logo"/></h1>
           <p className="storybook-intro-hero-subtitle">
