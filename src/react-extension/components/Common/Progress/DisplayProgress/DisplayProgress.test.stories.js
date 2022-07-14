@@ -4,7 +4,7 @@ import DisplayProgress from "./DisplayProgress";
 
 
 export default {
-  title: 'Passbolt/Common/DisplayProgress',
+  title: 'Passbolt Component/Common/DisplayProgress',
   component: DisplayProgress
 };
 

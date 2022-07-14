@@ -20,7 +20,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt/ResourcePassword/GenerateResourcePassword',
+  title: 'Passbolt Component/ResourcePassword/GenerateResourcePassword',
   component: GenerateResourcePassword
 };
 

@@ -6,7 +6,7 @@ import {autocompleteResult, resources} from "./ShareDialog.test.data";
 
 
 export default {
-  title: 'Passbolt/Share/ShareDialog',
+  title: 'Passbolt Component/Share/ShareDialog',
   component: ShareDialog
 };
 

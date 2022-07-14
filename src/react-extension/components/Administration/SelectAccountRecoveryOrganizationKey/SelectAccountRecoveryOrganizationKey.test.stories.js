@@ -22,7 +22,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 
 
 export default {
-  title: 'Passbolt/Administration/SelectAccountRecoveryOrganizationKey',
+  title: 'Passbolt Component/Administration/SelectAccountRecoveryOrganizationKey',
   component: SelectAccountRecoveryOrganizationKey
 };
 

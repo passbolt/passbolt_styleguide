@@ -15,21 +15,21 @@ import React from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 export default {
-  title: 'Passbolt/Common/DragInfo',
+  title: 'Foundations/DragInfo',
   component: "DragInfo"
 };
 
 
 const Template = () =>
   <div style={{display: "flex", flexWrap: "wrap"}}>
-    <div style={{width: "25%"}}>
+    <div style={{width: "50%"}}>
       <div className="drag-and-drop-wrapper" draggable={true} style={{top: "1%"}}>
         <div className="drag-and-drop item-1">
           <span className="message">First name of the resource/folder/user</span>
         </div>
       </div>
     </div>
-    <div style={{width: "25%"}}>
+    <div style={{width: "50%"}}>
       <div className="drag-and-drop-wrapper" draggable={true} style={{top: "1%"}}>
         <div className="drag-and-drop item-2">
           <span className="message">First name of the resource/folder/user</span>
@@ -37,16 +37,18 @@ const Template = () =>
         </div>
       </div>
     </div>
-    <div style={{width: "25%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "1%"}}>
+    <br/>
+    <br/>
+    <div style={{width: "50%"}}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "8%"}}>
         <div className="drag-and-drop item-n">
           <span className="message">First name of the resource/folder/user</span>
           <span className="count">3</span>
         </div>
       </div>
     </div>
-    <div style={{width: "25%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "1%"}}>
+    <div style={{width: "50%"}}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "8%"}}>
         <div className="drag-and-drop item-n">
           <span className="message">First name of the resource/folder/user</span>
           <span className="count">99+</span>
@@ -56,7 +58,7 @@ const Template = () =>
     <br/>
     <br/>
     <div style={{width: "25%"}}>
-      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "8%"}}>
+      <div className="drag-and-drop-wrapper" draggable={true} style={{top: "15%"}}>
         <div className="drag-and-drop item-1">
           <Icon name="ban"/>
           <span className="message not-allowed">You are not allowed to move this content</span>

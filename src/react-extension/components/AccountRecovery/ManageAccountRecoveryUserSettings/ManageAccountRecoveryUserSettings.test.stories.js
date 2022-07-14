@@ -19,7 +19,7 @@ import MockTranslationProvider from "../../../test/mock/components/International
 
 
 export default {
-  title: 'Passbolt/AccountRecovery/ManageAccountRecoveryUserSettings',
+  title: 'Passbolt Component/AccountRecovery/ManageAccountRecoveryUserSettings',
   component: ManageAccountRecoveryUserSettings
 };
 

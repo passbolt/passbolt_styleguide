@@ -18,7 +18,7 @@ import DisplayUserDetailsInformation from "./DisplayUserDetailsInformation";
 import {defaultProps} from "./DisplayUserDetailsInformation.test.data";
 
 export default {
-  title: 'Passbolt/UserDetails/DisplayUserDetailsInformation',
+  title: 'Passbolt Component/UserDetails/DisplayUserDetailsInformation',
   component: DisplayUserDetailsInformation
 };
 

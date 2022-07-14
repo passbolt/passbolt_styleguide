@@ -16,7 +16,7 @@ import React from "react";
 import NotifyError from "./NotifyError";
 
 export default {
-  title: 'Passbolt/Common/Error/NotifyError',
+  title: 'Passbolt Component/Common/Error/NotifyError',
   component: NotifyError
 };
 
@@ -24,3 +24,8 @@ const Template = args =>
   <NotifyError {...args}/>;
 
 export const Default = Template.bind({});
+Default.args = {
+  error: {
+    message: "The error message"
+  }
+};

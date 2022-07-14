@@ -7,7 +7,7 @@ import {defaultAppContext, mockResults} from "./SaveResource.test.data";
 import Header from "../Header/Header";
 
 export default {
-  title: 'Passbolt/QuickAccess/SaveResource',
+  title: 'Passbolt Component/QuickAccess/SaveResource',
   component: SaveResource
 };
 

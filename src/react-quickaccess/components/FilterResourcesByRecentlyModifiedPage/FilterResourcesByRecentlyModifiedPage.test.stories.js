@@ -7,7 +7,7 @@ import {defaultAppContext, mockNoResource, mockResources} from "./FilterResource
 
 
 export default {
-  title: 'Passbolt/QuickAccess/FilterResourcesByRecentlyModified',
+  title: 'Passbolt Component/QuickAccess/FilterResourcesByRecentlyModified',
   component: FilterResourcesByRecentlyModifiedPage
 };
 

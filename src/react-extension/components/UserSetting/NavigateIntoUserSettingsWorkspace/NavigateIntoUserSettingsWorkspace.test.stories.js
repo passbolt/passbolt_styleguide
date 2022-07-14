@@ -6,7 +6,7 @@ import NavigateIntoUserSettingsWorkspace from "./NavigateIntoUserSettingsWorkspa
 
 
 export default {
-  title: 'Passbolt/UserSetting/NavigateIntoUserSettingsWorkspace',
+  title: 'Passbolt Component/UserSetting/NavigateIntoUserSettingsWorkspace',
   component: NavigateIntoUserSettingsWorkspace
 };
 

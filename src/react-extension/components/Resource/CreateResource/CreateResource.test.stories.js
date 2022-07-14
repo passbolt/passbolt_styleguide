@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 import {defaultProps} from "./CreateResource.test.data";
 
 export default {
-  title: 'Passbolt/Resource/CreateResource',
+  title: 'Passbolt Component/Resource/CreateResource',
   component: CreateResource,
   argTypes: {
     language: {

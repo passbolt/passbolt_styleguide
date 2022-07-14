@@ -5,7 +5,7 @@ import ConfirmResourceCommentDeletion from "./ConfirmResourceCommentDeletion";
 
 
 export default {
-  title: 'Passbolt/ResourceComment/ConfirmResourceCommentDeletion',
+  title: 'Passbolt Component/ResourceComment/ConfirmResourceCommentDeletion',
   component: ConfirmResourceCommentDeletion
 };
 

@@ -7,7 +7,7 @@ import {defaultAppContext, mockResources} from "./FilterResourcesByItemsIOwnPage
 
 
 export default {
-  title: 'Passbolt/QuickAccess/FilterResourcesByItemsIOwn',
+  title: 'Passbolt Component/QuickAccess/FilterResourcesByItemsIOwn',
   component: FilterResourcesByItemsIOwnPage
 };
 

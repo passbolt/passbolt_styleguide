@@ -6,7 +6,7 @@ import DisplaySynchronizeUserDirectoryAdministration from "./DisplaySynchronizeU
 
 
 export default {
-  title: 'Passbolt/Administration/DisplaySynchronizeUserDirectoryAdministration',
+  title: 'Passbolt Component/Administration/DisplaySynchronizeUserDirectoryAdministration',
   component: DisplaySynchronizeUserDirectoryAdministration
 };
 

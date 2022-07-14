@@ -19,7 +19,7 @@ import MockTranslationProvider from "../../../test/mock/components/International
 import MockPort from "../../../test/mock/MockPort";
 
 export default {
-  title: 'Passbolt/AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog',
+  title: 'Passbolt Component/AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog',
   component: AccountRecoveryInviteUserSettingPreferenceDialog
 };
 

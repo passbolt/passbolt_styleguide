@@ -5,7 +5,7 @@ import "../../../css/themes/default/api_main.css";
 
 
 export default {
-  title: 'Passbolt/Shared/Icon'
+  title: 'Foundations/Icon'
 };
 
 const iconsNames = [

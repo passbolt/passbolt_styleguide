@@ -18,7 +18,7 @@ import GeneratePasswordPage from "./GeneratePasswordPage";
 
 
 export default {
-  title: 'Passbolt/QuickAccess/GeneratePasswordPage',
+  title: 'Passbolt Component/QuickAccess/GeneratePasswordPage',
   component: GeneratePasswordPage
 };
 

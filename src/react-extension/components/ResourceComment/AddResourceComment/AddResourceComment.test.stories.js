@@ -6,7 +6,7 @@ import AddResourceComment from "./AddResourceComment";
 
 
 export default {
-  title: 'Passbolt/ResourceComment/AddComment',
+  title: 'Passbolt Component/ResourceComment/AddComment',
   component: AddResourceComment
 };
 

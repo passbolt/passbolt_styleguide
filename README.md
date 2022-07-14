@@ -148,12 +148,15 @@ to webpack 4, the dependencies will need to be installed manually.
 
 ```
 npm install \
-    @storybook/addon-actions@next \
-    @storybook/addon-essentials@next \
-    @storybook/addon-links@next \
-    @storybook/builder-webpack5@next \
-    @storybook/manager-webpack5@next \
-    @storybook/react@next \
+    @storybook/addon-actions \
+    @storybook/addon-essentials \
+    @storybook/addon-links \
+    @storybook/builder-webpack5 \
+    @storybook/manager-webpack5 \
+    @storybook/react \
+    @storybook/addon-docs \
+    @storybook/theming \
+    @storybook/storybook-deployer \
     --no-save
 ```
 

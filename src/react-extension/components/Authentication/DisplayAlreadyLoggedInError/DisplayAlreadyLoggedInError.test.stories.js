@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import DisplayAlreadyLoggedInError, {DisplayAlreadyLoggedInErrorVariations} from "./DisplayAlreadyLoggedInError";
 
 export default {
-  title: 'Passbolt/Authentication/DisplayAlreadyLoggedInError',
+  title: 'Passbolt Component/Authentication/DisplayAlreadyLoggedInError',
   component: DisplayAlreadyLoggedInError
 };
 

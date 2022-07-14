@@ -18,7 +18,7 @@ import DisplayRequireInvitationError from "./DisplayRestartFromScratchError";
 import DisplayRestartFromScratchError from "./DisplayRestartFromScratchError";
 
 export default {
-  title: 'Passbolt/AuthenticationAccountRecovery/DisplayRestartFromScratchError',
+  title: 'Passbolt Component/AuthenticationAccountRecovery/DisplayRestartFromScratchError',
   component: DisplayRequireInvitationError
 };
 

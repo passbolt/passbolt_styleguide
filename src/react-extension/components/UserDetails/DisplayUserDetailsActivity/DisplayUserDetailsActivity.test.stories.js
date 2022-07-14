@@ -20,7 +20,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import DisplayUserDetailsActivity from "./DisplayUserDetailsActivity";
 
 export default {
-  title: 'Passbolt/UserDetails/DisplayUserDetailsActivity',
+  title: 'Passbolt Component/UserDetails/DisplayUserDetailsActivity',
   component: DisplayUserDetailsActivity
 };
 

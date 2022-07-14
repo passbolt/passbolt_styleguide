@@ -18,7 +18,7 @@ import Login, {LoginVariations} from "./Login";
 import {defaultProps, defaultPropsWithAccount} from "./Login.test.data";
 
 export default {
-  title: 'Passbolt/AuthenticationLogin/Login',
+  title: 'Passbolt Component/AuthenticationLogin/Login',
   component: Login
 };
 

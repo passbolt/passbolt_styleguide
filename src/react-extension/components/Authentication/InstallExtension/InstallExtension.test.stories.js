@@ -16,7 +16,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import InstallExtension from "./InstallExtension";
 
 export default {
-  title: 'Passbolt/Authentication/InstallExtension',
+  title: 'Passbolt Component/Authentication/InstallExtension',
   component: InstallExtension
 };
 

@@ -3,7 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import MoreFiltersPage from "./MoreFiltersPage";
 
 export default {
-  title: 'Passbolt/QuickAccess/MoreFilters',
+  title: 'Passbolt Component/QuickAccess/MoreFilters',
   component: MoreFiltersPage
 };
 

@@ -5,7 +5,7 @@ import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDeta
 
 
 export default {
-  title: 'Passbolt/ResourceFolderDetails/DisplayResourceFolderDetailsInformation',
+  title: 'Passbolt Component/ResourceFolderDetails/DisplayResourceFolderDetailsInformation',
   component: DisplayResourceFolderDetailsInformation
 };
 

@@ -15,7 +15,7 @@ import React from "react";
 import DialogWrapper from "./DialogWrapper";
 
 export default {
-  title: 'Passbolt/Common/DialogWrapper',
+  title: 'Passbolt Component/Common/DialogWrapper',
   component: "DialogWrapper"
 };
 

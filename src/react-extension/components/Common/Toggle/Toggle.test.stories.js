@@ -14,7 +14,7 @@
 import React from "react";
 
 export default {
-  title: 'Passbolt/Common/Toggle',
+  title: 'Foundations/Toggle',
   component: "Toggle"
 };
 

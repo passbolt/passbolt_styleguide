@@ -7,7 +7,7 @@ import {defaultAppContext, mockNoResource, mockResources} from "./HomePage.test.
 
 
 export default {
-  title: 'Passbolt/QuickAccess/Home',
+  title: 'Passbolt Component/QuickAccess/Home',
   component: HomePage
 };
 

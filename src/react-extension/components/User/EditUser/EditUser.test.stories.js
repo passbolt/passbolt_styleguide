@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt/User/EditUser',
+  title: 'Passbolt Component/User/EditUser',
   component: EditUser
 };
 
