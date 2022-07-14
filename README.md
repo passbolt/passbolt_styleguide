@@ -156,6 +156,7 @@ npm install \
     @storybook/react \
     @storybook/addon-docs \
     @storybook/theming \
+    @storybook/storybook-deployer \
     --no-save
 ```
 
