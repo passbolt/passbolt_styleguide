@@ -14,7 +14,7 @@
 import React from "react";
 
 export default {
-  title: 'Passbolt/Common/Text',
+  title: 'Foundations/Text',
   component: "Text"
 };
 

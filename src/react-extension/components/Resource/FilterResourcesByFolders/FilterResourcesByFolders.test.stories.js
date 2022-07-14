@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt/Resource/FilterResourcesByFolders',
+  title: 'Passbolt Component/Resource/FilterResourcesByFolders',
   component: FilterResourcesByFolders
 };
 

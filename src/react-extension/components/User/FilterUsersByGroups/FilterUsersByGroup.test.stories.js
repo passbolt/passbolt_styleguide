@@ -6,7 +6,7 @@ import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 
 
 export default {
-  title: 'Passbolt/User/FilterUsersByGroup',
+  title: 'Passbolt Component/User/FilterUsersByGroup',
   component: FilterUsersByGroup
 };
 

@@ -16,7 +16,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import ChooseSecurityToken from "./ChooseSecurityToken";
 
 export default {
-  title: 'Passbolt/Authentication/ChooseSecurityToken',
+  title: 'Passbolt Component/Authentication/ChooseSecurityToken',
   component: ChooseSecurityToken
 };
 

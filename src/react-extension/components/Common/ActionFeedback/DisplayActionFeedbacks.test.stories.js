@@ -16,7 +16,7 @@ import {propsWithOneErrorMessage, propsWithOneSuccessMessage} from "./DisplayAct
 import DisplayActionFeedbacks from "./DisplayActionFeedbacks";
 
 export default {
-  title: 'Passbolt/Common/ActionFeedback',
+  title: 'Passbolt Component/Common/ActionFeedback',
   component: "DisplayActionFeedbacks"
 };
 

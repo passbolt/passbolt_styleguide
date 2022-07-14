@@ -19,7 +19,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 
 export default {
-  title: 'Passbolt/Administration/ProvideAccountRecoveryOrganizationKey',
+  title: 'Passbolt Component/Administration/ProvideAccountRecoveryOrganizationKey',
   component: ProvideAccountRecoveryOrganizationKey
 };
 

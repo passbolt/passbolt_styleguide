@@ -77,6 +77,17 @@ export const globalTypes = {
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
+  options: {
+    storySort: {
+      order: [
+        'Getting started',
+        'Foundations',
+        'Passbolt Components',
+      ],
+      method: (a, b) =>
+        a[1].kind === b[1].kind ? 0 : a[1].id.localeCompare(b[1].id, undefined, { numeric: true })
+    },
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,

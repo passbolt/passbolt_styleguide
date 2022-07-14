@@ -25,7 +25,7 @@ import {
  * DisplayResourcesWorkspaceMenu stories
  */
 export default {
-  title: 'Passbolt/Resource/DisplayResourcesWorkspaceMenu',
+  title: 'Passbolt Component/Resource/DisplayResourcesWorkspaceMenu',
   component: DisplayResourcesWorkspaceMenu
 };
 

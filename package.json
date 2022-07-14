@@ -93,6 +93,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "preversion": "npm test && npm run eslint",
-    "version": "npx grunt && git add -A"
+    "version": "npx grunt && git add -A",
+    "deploy-storybook": "storybook-to-ghpages --remote github"
   }
 }

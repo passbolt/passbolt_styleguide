@@ -18,7 +18,7 @@ import DownloadRecoveryKit from "./DownloadRecoveryKit";
 import {defaultProps} from "./DownloadRecoveryKit.test.data";
 
 export default {
-  title: 'Passbolt/Authentication/DownloadRecoveryKit',
+  title: 'Passbolt Component/Authentication/DownloadRecoveryKit',
   component: DownloadRecoveryKit
 };
 

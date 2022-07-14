@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt/ResourceFolder/RenameResourceFolder',
+  title: 'Passbolt Component/ResourceFolder/RenameResourceFolder',
   component: RenameResourceFolder
 };
 

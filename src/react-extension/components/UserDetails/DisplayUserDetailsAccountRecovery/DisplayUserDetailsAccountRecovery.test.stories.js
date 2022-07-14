@@ -23,7 +23,7 @@ import {
 } from "./DisplayUserDetailsAccountRecovery.test.data";
 
 export default {
-  title: 'Passbolt/UserDetails/DisplayUserDetailsAccountRecovery',
+  title: 'Passbolt Component/UserDetails/DisplayUserDetailsAccountRecovery',
   component: DisplayUserDetailsAccountRecovery
 };
 

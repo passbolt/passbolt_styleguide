@@ -18,7 +18,7 @@ import AskForAuthenticationHelpCredentialLost from "./AskForAuthenticationHelpCr
 import {defaultProps} from "./AskForAuthenticationHelpCredentialLost.test.data";
 
 export default {
-  title: 'Passbolt/Authentication/AskForAuthenticationHelpCredentialLost',
+  title: 'Passbolt Component/Authentication/AskForAuthenticationHelpCredentialLost',
   component: AskForAuthenticationHelpCredentialLost
 };
 

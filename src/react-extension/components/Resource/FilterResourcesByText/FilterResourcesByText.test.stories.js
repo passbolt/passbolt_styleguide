@@ -4,7 +4,7 @@ import FilterResourcesByText from "./FilterResourcesByText";
 
 
 export default {
-  title: 'Passbolt/Resource/FilterResourcesByText',
+  title: 'Passbolt Component/Resource/FilterResourcesByText',
   component: FilterResourcesByText
 };
 

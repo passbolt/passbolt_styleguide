@@ -16,7 +16,7 @@ import Password from "./Password";
 import {defaultProps} from "./Password.test.data";
 
 export default {
-  title: 'Passbolt/Shared/Password',
+  title: 'Foundations/Password',
   component: "Password"
 };
 

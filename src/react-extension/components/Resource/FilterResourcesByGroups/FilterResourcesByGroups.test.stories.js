@@ -6,7 +6,7 @@ import FilterResourcesByGroups from "./FilterResourcesByGroups";
 
 
 export default {
-  title: 'Passbolt/Resource/FilterResourcesByGroups',
+  title: 'Passbolt Component/Resource/FilterResourcesByGroups',
   component: FilterResourcesByGroups
 };
 

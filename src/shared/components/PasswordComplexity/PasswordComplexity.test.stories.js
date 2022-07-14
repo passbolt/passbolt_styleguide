@@ -15,7 +15,7 @@ import React from "react";
 import PasswordComplexity from "./PasswordComplexity";
 
 export default {
-  title: 'Passbolt/Shared/PasswordComplexity',
+  title: 'Foundations/PasswordComplexity',
   component: "PasswordComplexity"
 };
 

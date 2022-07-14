@@ -6,7 +6,7 @@ import DisplaySimulateSynchronizeUserDirectoryAdministration
   from "./DisplaySimulateSynchronizeUserDirectoryAdministration";
 
 export default {
-  title: 'Passbolt/Administration/DisplaySimulateSynchronizeUserDirectoryAdministration',
+  title: 'Passbolt Component/Administration/DisplaySimulateSynchronizeUserDirectoryAdministration',
   component: DisplaySimulateSynchronizeUserDirectoryAdministration
 };
 

@@ -18,7 +18,7 @@ import DisplayAccountRecoveryUserSettings from "./DisplayAccountRecoveryUserSett
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 export default {
-  title: "Passbolt/UserSetting/DisplayAccountRecoveryUserSettings",
+  title: "Passbolt Component/UserSetting/DisplayAccountRecoveryUserSettings",
   component: DisplayAccountRecoveryUserSettings
 };
 

@@ -16,7 +16,7 @@ import {Trans} from "react-i18next";
 import ContextualMenuWrapper from "./ContextualMenuWrapper";
 
 export default {
-  title: 'Passbolt/Common/ContextualMenu',
+  title: 'Passbolt Component/Common/ContextualMenu',
   component: "ContextualMenu"
 };
 

@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import CheckMailBox from "./CheckMailBox";
 
 export default {
-  title: 'Passbolt/Authentication/CheckMailBox',
+  title: 'Passbolt Component/Authentication/CheckMailBox',
   component: CheckMailBox
 };
 

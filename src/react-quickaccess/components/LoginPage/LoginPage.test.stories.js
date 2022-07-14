@@ -6,7 +6,7 @@ import LoginPage from "./LoginPage";
 import {defaultAppContext} from "./LoginPage.test.data";
 
 export default {
-  title: 'Passbolt/QuickAccess/Login',
+  title: 'Passbolt Component/QuickAccess/Login',
   component: LoginPage
 };
 

@@ -6,7 +6,7 @@ import AppContext from "../../../contexts/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 
 export default {
-  title: 'Passbolt/Resource/DisplayResourcesList',
+  title: 'Passbolt Component/Resource/DisplayResourcesList',
   component: DisplayResourcesList
 };
 
