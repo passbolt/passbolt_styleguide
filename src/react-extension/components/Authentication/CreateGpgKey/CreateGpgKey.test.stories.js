@@ -17,7 +17,7 @@ import CreateGpgKey, {CreateGpgKeyVariation} from "./CreateGpgKey";
 import {defaultProps} from "./CreateGpgKey.test.data";
 
 export default {
-  title: 'Passbolt/Authentication/CreateGpgKey',
+  title: 'Passbolt Component/Authentication/CreateGpgKey',
   component: CreateGpgKey
 };
 

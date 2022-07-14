@@ -16,7 +16,7 @@ import LoadingBar from "./LoadingBar";
 
 
 export default {
-  title: 'Passbolt/Common/Loading',
+  title: 'Foundations/Loading',
   component: LoadingBar
 };
 

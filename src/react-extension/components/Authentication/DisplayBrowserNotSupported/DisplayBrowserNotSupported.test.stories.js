@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import DisplayBrowserNotSupported from "./DisplayBrowserNotSupported";
 
 export default {
-  title: 'Passbolt/Authentication/DisplayBrowserNotSupported',
+  title: 'Passbolt Component/Authentication/DisplayBrowserNotSupported',
   component: DisplayBrowserNotSupported
 };
 

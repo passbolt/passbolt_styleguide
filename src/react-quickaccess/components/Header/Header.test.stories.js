@@ -7,7 +7,7 @@ import {defaultAppContext} from "./Header.test.data";
 
 
 export default {
-  title: 'Passbolt/QuickAccess/Header',
+  title: 'Passbolt Component/QuickAccess/Header',
   component: Header
 };
 

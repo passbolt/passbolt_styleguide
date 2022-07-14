@@ -6,7 +6,7 @@ import DisplayUserSettingsWorkspaceBreadcrumb from "./DisplayUserSettingsWorkspa
 
 
 export default {
-  title: 'Passbolt/UserSetting/DisplayUserSettingsWorkspaceBreadcrumb',
+  title: 'Passbolt Component/UserSetting/DisplayUserSettingsWorkspaceBreadcrumb',
   component: DisplayUserSettingsWorkspaceBreadcrumb
 };
 

@@ -7,7 +7,7 @@ import {defaultAppContext, mockResources} from "./FilterResourcesBySharedWithMeP
 
 
 export default {
-  title: 'Passbolt/QuickAccess/FilterResourcesBySharedWithMe',
+  title: 'Passbolt Component/QuickAccess/FilterResourcesBySharedWithMe',
   component: FilterResourcesBySharedWithMePage
 };
 

@@ -17,7 +17,7 @@ import EditSubscriptionKey from "./EditSubscriptionKey";
 import {defaultProps} from "./EditSubscriptionKey.test.data";
 
 export default {
-  title: 'Passbolt/Administration/EditSubscriptionKey',
+  title: 'Passbolt Component/Administration/EditSubscriptionKey',
   component: EditSubscriptionKey
 };
 

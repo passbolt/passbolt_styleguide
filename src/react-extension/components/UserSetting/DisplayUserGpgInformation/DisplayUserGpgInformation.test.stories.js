@@ -6,7 +6,7 @@ import DisplayUserGpgInformation from "./DisplayUserGpgInformation";
 
 
 export default {
-  title: 'Passbolt/UserSetting/DisplayUserGpgInformation',
+  title: 'Passbolt Component/UserSetting/DisplayUserGpgInformation',
   component: DisplayUserGpgInformation
 };
 

@@ -7,7 +7,7 @@ import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 
 export default {
-  title: 'Passbolt/AuthenticationPassphrase/InputPassphrase',
+  title: 'Passbolt Component/AuthenticationPassphrase/InputPassphrase',
   component: InputPassphrase
 };
 

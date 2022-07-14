@@ -6,7 +6,7 @@ import EditUserProfile from "./EditUserProfile";
 
 
 export default {
-  title: 'Passbolt/UserSetting/EditUserProfile',
+  title: 'Passbolt Component/UserSetting/EditUserProfile',
   component: EditUserProfile
 };
 

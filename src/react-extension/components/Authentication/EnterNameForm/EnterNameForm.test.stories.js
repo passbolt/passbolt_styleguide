@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import EnterNameForm from "./EnterNameForm";
 
 export default {
-  title: 'Passbolt/Authentication/EnterNameForm',
+  title: 'Passbolt Component/Authentication/EnterNameForm',
   component: EnterNameForm
 };
 

@@ -7,7 +7,7 @@ import {defaultAppContext} from "./DisplayUserGroupDetailsInformation.test.data"
 
 
 export default {
-  title: 'Passbolt/UserGroup/DisplayUserGroupDetailsInformation',
+  title: 'Passbolt Component/UserGroup/DisplayUserGroupDetailsInformation',
   component: DisplayUserGroupDetailsInformation
 };
 

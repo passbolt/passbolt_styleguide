@@ -16,7 +16,7 @@ import SearchBar from "./SearchBar";
 import {defaultProps} from "./SearchBar.test.data";
 
 export default {
-  title: 'Passbolt/Common/Search',
+  title: 'Foundations/Search',
   component: "SearchBar"
 };
 

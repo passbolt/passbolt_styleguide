@@ -7,7 +7,7 @@ import {defaultAppContext, mockResources} from "./FilterResourcesByFavoritePage.
 
 
 export default {
-  title: 'Passbolt/QuickAccess/FilterResourcesByFavorite',
+  title: 'Passbolt Component/QuickAccess/FilterResourcesByFavorite',
   component: FilterResourcesByFavoritePage
 };
 

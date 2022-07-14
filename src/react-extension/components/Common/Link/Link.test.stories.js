@@ -14,7 +14,7 @@
 import React from "react";
 
 export default {
-  title: 'Passbolt/Common/Link',
+  title: 'Foundations/Link',
   component: "Link"
 };
 

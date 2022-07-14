@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import DisplayEmailNotificationsAdministration from "./DisplayEmailNotificationsAdministration";
 
 export default {
-  title: 'Passbolt/Administration/DisplayEmailNotificationsAdministration',
+  title: 'Passbolt Component/Administration/DisplayEmailNotificationsAdministration',
   component: DisplayEmailNotificationsAdministration
 };
 

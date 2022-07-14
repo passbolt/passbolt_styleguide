@@ -6,7 +6,7 @@ import DisplayUserDetailsPublicKey from "./DisplayUserDetailsPublicKey";
 
 
 export default {
-  title: 'Passbolt/UserDetails/DisplayUserDetailsPublicKey',
+  title: 'Passbolt Component/UserDetails/DisplayUserDetailsPublicKey',
   component: DisplayUserDetailsPublicKey
 };
 

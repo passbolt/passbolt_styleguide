@@ -7,7 +7,7 @@ import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";
 
 
 export default {
-  title: 'Passbolt/User/FilterUsersByBreadcrumb',
+  title: 'Passbolt Component/User/FilterUsersByBreadcrumb',
   component: FilterUsersByBreadcrumb
 };
 

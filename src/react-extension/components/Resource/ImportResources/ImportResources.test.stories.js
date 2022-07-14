@@ -17,7 +17,7 @@ import ImportResources from "./ImportResources";
 import {defaultProps} from "./ImportResources.test.data";
 
 export default {
-  title: 'Passbolt/Resource/ImportResources/ImportResources',
+  title: 'Passbolt Component/Resource/ImportResources/ImportResources',
   component: ImportResources
 };
 

@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt/User/DeleteUserWithConflicts',
+  title: 'Passbolt Component/User/DeleteUserWithConflicts',
   component: DeleteUserWithConflicts
 };
 

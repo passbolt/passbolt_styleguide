@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import CheckAccountRecoveryEmail from "./CheckAccountRecoveryEmail";
 
 export default {
-  title: 'Passbolt/Authentication/CheckAccountRecoveryEmail',
+  title: 'Passbolt Component/Authentication/CheckAccountRecoveryEmail',
   component: CheckAccountRecoveryEmail
 };
 

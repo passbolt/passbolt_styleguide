@@ -10,7 +10,7 @@ import {
  * DisplayResourcesWorkspaceMainMenu stories
  */
 export default {
-  title: 'Passbolt/Resource/DisplayResourcesWorkspaceMainMenu',
+  title: 'Passbolt Component/Resource/DisplayResourcesWorkspaceMainMenu',
   component: DisplayResourcesWorkspaceMainMenu
 };
 

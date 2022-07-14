@@ -14,7 +14,7 @@
 import React from "react";
 
 export default {
-  title: 'Passbolt/Common/Checkbox',
+  title: 'Foundations/Checkbox',
   component: "Checkbox"
 };
 

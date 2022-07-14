@@ -18,7 +18,7 @@ import {defaultContext, defaultProps, propsWithFirstUserAttentionRequired} from 
 
 
 export default {
-  title: 'Passbolt/User/DisplayUsers',
+  title: 'Passbolt Component/User/DisplayUsers',
   component: DisplayUsers
 };
 

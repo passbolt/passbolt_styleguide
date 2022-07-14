@@ -7,7 +7,7 @@ import {defaultAppContext} from "./PassphraseDialog.test.data";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 
 export default {
-  title: 'Passbolt/QuickAccess/PassphraseDialog',
+  title: 'Passbolt Component/QuickAccess/PassphraseDialog',
   component: PassphraseDialog
 };
 

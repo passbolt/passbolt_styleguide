@@ -4,7 +4,7 @@ import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
 
 
 export default {
-  title: 'Passbolt/ResourcePassword/ConfigurePassphraseGenerator',
+  title: 'Passbolt Component/ResourcePassword/ConfigurePassphraseGenerator',
   component: ConfigurePassphraseGenerator
 };
 

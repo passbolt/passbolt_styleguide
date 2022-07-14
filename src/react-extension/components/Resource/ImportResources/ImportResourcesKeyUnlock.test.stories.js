@@ -5,7 +5,7 @@ import ImportResourcesKeyUnlock from "./ImportResourcesKeyUnlock";
 
 
 export default {
-  title: 'Passbolt/Resource/ImportResources/ImportResourcesKeyUnlock',
+  title: 'Passbolt Component/Resource/ImportResources/ImportResourcesKeyUnlock',
   component: ImportResourcesKeyUnlock
 };
 

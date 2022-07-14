@@ -9,7 +9,7 @@ import {
 
 
 export default {
-  title: 'Passbolt/Administration/DisplaySubscriptionKey',
+  title: 'Passbolt Component/Administration/DisplaySubscriptionKey',
   component: DisplaySubscriptionKey
 };
 

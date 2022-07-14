@@ -5,7 +5,7 @@ import FilterUsersByShortcut from "./FilterUsersByShortcut";
 
 
 export default {
-  title: 'Passbolt/User/FilterUsersByShortcut',
+  title: 'Passbolt Component/User/FilterUsersByShortcut',
   component: FilterUsersByShortcut
 };
 

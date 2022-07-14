@@ -16,7 +16,7 @@ import Select from "./Select";
 import {defaultInlineLdapProps, defaultInlineProps, defaultProps} from "./Select.test.data";
 
 export default {
-  title: 'Passbolt/Common/Select',
+  title: 'Foundations/Select',
   component: "Select"
 };
 

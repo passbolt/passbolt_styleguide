@@ -20,7 +20,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "./Tooltip";
 
 export default {
-  title: 'Passbolt/Common/Tooltip',
+  title: 'Foundations/Tooltip',
   component: Tooltip
 };
 
@@ -28,7 +28,7 @@ export default {
 
 const Template = () =>
   <div style={{marginLeft: "auto", marginTop: "20rem", textAlign: "center"}}>
-    <p>Put the mouse below</p>
+    <div>Put the mouse below</div>
     <Tooltip message="Tool tip placeholder" direction="top">
       <Tooltip message="Tool tip placeholder" direction="right">
         <Tooltip message="Tool tip placeholder" direction="bottom">

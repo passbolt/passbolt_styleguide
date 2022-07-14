@@ -16,7 +16,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans} from "react-i18next";
 
 export default {
-  title: 'Passbolt/Common/Button',
+  title: 'Foundations/Button',
   component: "Button"
 };
 

@@ -6,7 +6,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt/Resource/DeleteResource',
+  title: 'Passbolt Component/Resource/DeleteResource',
   component: DeleteResource
 };
 

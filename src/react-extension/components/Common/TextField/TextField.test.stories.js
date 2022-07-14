@@ -18,7 +18,7 @@ import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 
 export default {
-  title: 'Passbolt/Common/TextField',
+  title: 'Foundations/TextField',
   component: "TextField"
 };
 

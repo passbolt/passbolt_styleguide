@@ -5,7 +5,7 @@ import AppContext from "../../../contexts/AppContext";
 
 
 export default {
-  title: 'Passbolt/Resource/ImportResources/ImportResourcesResult',
+  title: 'Passbolt Component/Resource/ImportResources/ImportResourcesResult',
   component: ImportResourcesResult
 };
 
