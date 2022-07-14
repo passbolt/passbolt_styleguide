@@ -1,4 +1,5 @@
 files:
   - source: /src/locales/en-UK/*.json
+    type: i18next_json
     translation: /src/locales/%locale%/%original_file_name%
 commit_message: '[skip-ci]'
