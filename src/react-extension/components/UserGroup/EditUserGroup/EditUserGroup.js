@@ -685,7 +685,7 @@ class EditUserGroup extends Component {
     const groupUser = this.groupsUsers[index];
     const isMemberChanged = this.isMemberChanged(groupUser);
     const isMemberAdded = this.isMemberAdded(groupUser);
-    const editUserGroupItemKey = `${groupUser.user_id}`;
+    const editUserGroupItemKey = groupUser.user_id;
     return (
       <EditUserGroupItem
         key={editUserGroupItemKey}
