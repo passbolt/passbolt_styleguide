@@ -4,6 +4,6 @@ export default create({
   base: 'light',
   brandTitle: 'Passbolt',
   brandUrl: 'https://passbolt.com',
-  brandImage: '/img/logo/logo.svg',
+  brandImage: 'img/logo/logo.svg',
   brandTarget: '_blank',
 });
