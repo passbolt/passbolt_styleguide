@@ -1,0 +1,46 @@
+.sbdocs-content {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+.storybook-intro-hero {
+    height: 90vh;
+    width: 98vw;
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding: 0 12% 0 14%;
+    box-sizing: border-box;
+}
+.storybook-intro-hero .storybook-intro-hero-left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.storybook-intro-hero .storybook-intro-hero-left .storybook-intro-hero-subtitle {
+    font-size: 3rem;
+    line-height: 3.6rem;
+    max-width: 80%;
+    padding: 1.6rem 0 5.2rem 0;
+}
+
+.storybook-intro-hero .storybook-intro-hero-left img {
+    width: 35rem;
+}
+.storybook-intro-hero .storybook-intro-hero-left .storybook-intro-hero-actions {
+    display: flex;
+}
+.storybook-intro-hero .storybook-intro-hero-left .storybook-intro-hero-actions a {
+    margin-right: 1.6rem;
+}
+.storybook-intro-hero .storybook-intro-hero-right  {
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+}
+.storybook-intro-hero .storybook-intro-hero-right img {
+    width: 95%;
+}
