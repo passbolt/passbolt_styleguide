@@ -36,6 +36,11 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page = new CreateUserGroupPage(context, props);
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.clearAllTimers();
     });
 
     it('As AD I see a success toaster message after adding a group with success', async() => {
@@ -52,8 +57,10 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
-      await waitFor(() => {});
+      jest.runOnlyPendingTimers();
+
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
+      await waitFor(() => {});
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       await page.createGroup.selectFirstItem(2);
@@ -86,8 +93,10 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
-      await waitFor(() => {});
+      jest.runOnlyPendingTimers();
+
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
+      await waitFor(() => {});
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       // Mock the request function to make it the expected result
@@ -118,10 +127,12 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
-      await waitFor(() => {});
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
-      await page.createGroup.click(page.createGroup.userAutocomplete);
+      jest.runOnlyPendingTimers();
 
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
+      await waitFor(() => {});
+
+      await page.createGroup.click(page.createGroup.userAutocomplete);
       await page.createGroup.click(page.createGroup.saveButton);
 
       // Throw error message
@@ -153,8 +164,10 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
-      await waitFor(() => {});
+      jest.runOnlyPendingTimers();
+
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
+      await waitFor(() => {});
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       // Mock the request function to make it return an error.
@@ -176,8 +189,10 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
-      await waitFor(() => {});
+      jest.runOnlyPendingTimers();
+
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
+      await waitFor(() => {});
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       const data = {

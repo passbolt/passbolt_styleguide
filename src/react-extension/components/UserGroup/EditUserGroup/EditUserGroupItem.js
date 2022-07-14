@@ -55,20 +55,9 @@ class EditUserGroupItem extends Component {
    * @return {Promise<void>}
    */
   async populate() {
-    const userId = this.props.groupUser.user_id;
-    const user = this.findUser(userId);
-    const fingerprint = await this.getFingerprintForUser(userId);
+    const user = this.props.groupUser.user;
+    const fingerprint = await this.getFingerprintForUser(user.id);
     this.setState({user, fingerprint});
-  }
-
-  /**
-   * Find a user
-   * @param {string} userId
-   * @returns {object}
-   */
-  findUser(userId) {
-    return this.props.groupUser.user
-      || this.props.context.users.find(user => user.id === userId);
   }
 
   /**

@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
+import ReactList from "react-list";
 import PropTypes from "prop-types";
 
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -22,11 +23,8 @@ import Autocomplete from "../../Common/Inputs/Autocomplete/Autocomplete";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import Tooltip from "../../Common/Tooltip/Tooltip";
-import Select from "../../Common/Select/Select";
+import EditUserGroupItem from "../EditUserGroup/EditUserGroupItem";
 
 class CreateUserGroup extends Component {
   /**
@@ -77,6 +75,9 @@ class CreateUserGroup extends Component {
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handleSelectUpdate = this.handleSelectUpdate.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
+
+    this.renderItem = this.renderItem.bind(this);
+    this.renderContainer = this.renderContainer.bind(this);
   }
 
   /**
@@ -320,7 +321,7 @@ class CreateUserGroup extends Component {
     groups_users.push({user: aro, is_admin});
     this.setState({groups_users}, () => {
       // scroll at the bottom of the group users list
-      this.groupUsersListRef.current.scrollTop = this.groupUsersListRef.current.scrollHeight;
+      this.groupUsersListRef.current.scrollTo(groups_users.length - 1);
     });
   }
 
@@ -357,16 +358,26 @@ class CreateUserGroup extends Component {
     const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
     const matchText = user => words.every(word => matchUser(word, user));
 
-    const usersMatched = this.props.context.users.filter(user => user.active === true && !userAlreadyAdded(user))
-      .filter(matchText);
+    let currentCount = 0;
+    const firstUsersMatched = this.props.context.users.filter(user => {
+      const isUserMatching = currentCount < Autocomplete.DISPLAY_LIMIT
+        && user.active === true
+        && !userAlreadyAdded(user)
+        && matchText(user);
 
-    return this.decorateUsersWithGpgKey(usersMatched);
+      if (isUserMatching) {
+        currentCount++;
+      }
+      return isUserMatching;
+    });
+
+    return this.decorateUsersWithGpgKey(firstUsersMatched);
   }
 
   /**
    * Decorate a list of users with their gpg key.
    * @param {array} users
-   * @returns {array}
+   * @returns {Promise<array}
    */
   async decorateUsersWithGpgKey(users) {
     const decorateGroupsUsersWithGpgKey = async user => Object.assign(user, {gpgkey: await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', user.id)});
@@ -450,6 +461,43 @@ class CreateUserGroup extends Component {
   }
 
   /**
+   * Use to render a single item of the user group list
+   * @param {integer} index of the item in the source list
+   * @param {integer} key index of the HTML element in the ReactList
+   * @returns {JSX.Element}
+   */
+  renderItem(index, key) {
+    const groupUser = this.state.groups_users[index];
+    const createUserGroupItemKey = groupUser.user.id;
+    return (
+      <EditUserGroupItem
+        key={createUserGroupItemKey}
+        groupUser={groupUser}
+        onMemberRoleChange={event => this.handleSelectUpdate(event, groupUser.user.id)}
+        onMemberRemoved={event => this.handleDeleteClickEvent(event, groupUser.user.id)}
+        isLastItemDisplayed={key >= 2}
+        isMemberChanged={true}
+        isMemberAdded={true}
+        areActionsAllowed={!this.hasAllInputDisabled()}
+      />
+    );
+  }
+
+  /**
+   * Use to render the container of the list of the ReactList component
+   * @param {Array<JSX.Element>} items the list of the items to be rendered as children element of the conainer
+   * @param {*} ref the ref ReactList needs to manage the scroll
+   * @returns {JSX.Element}
+   */
+  renderContainer(items, ref) {
+    return (
+      <ul className="permissions groups_users" ref={ref}>
+        {items}
+      </ul>
+    );
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -485,55 +533,34 @@ class CreateUserGroup extends Component {
             </div>
           </div>
           <div className="group_members">
-            <div className="form-content permission-edit">
+            <div className="form-content scroll permission-edit">
               {this.hasMembers() &&
-              <ul className="permissions scroll groups_users" ref={this.groupUsersListRef}>
-                {this.state.groups_users.map(groups_user =>
-                  <li key={groups_user.user.id} className="row">
-                    <UserAvatar user={groups_user.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
-                    <div className="aro">
-                      <div className="aro-name">
-                        <span className="ellipsis">{this.getUserFullname(groups_user.user)}</span>
-                        <Tooltip message={this.getTooltipMessage(groups_user)}>
-                          <Icon name="info-circle"/>
-                        </Tooltip>
-                      </div>
-                      <div className="permission_changes">
-                        <span><Trans>Will be added</Trans></span>
-                      </div>
-                    </div>
-                    <div className="rights">
-                      <Select className="inline" items={this.permissions} value={groups_user.is_admin} disabled={this.hasAllInputDisabled()}
-                        onChange={event => this.handleSelectUpdate(event, groups_user.user.id)}/>
-                    </div>
-                    <div className="actions">
-                      <a className={`remove-item button button-transparent ${this.hasAllInputDisabled() ? "disabled" : ""}`}
-                        onClick={event => this.handleDeleteClickEvent(event, groups_user.user.id)} role="button">
-                        <Icon name='close'/>
-                        <span className="visually-hidden">Remove</span>
-                      </a>
-                    </div>
-                  </li>
-                )
-                }
-              </ul>
-              }
-              {!this.hasMembers() &&
-              <div className="message warning">
-                <span><Trans>The group is empty, please add a group manager.</Trans></span>
-              </div>
-              }
-              {this.hasMembers() && !this.hasManager() &&
-              <div className="message error">
-                <span><Trans>Please make sure there is at least one group manager.</Trans></span>
-              </div>
-              }
-              {this.hasManager() &&
-              <div className="message warning">
-                <span><Trans>You need to click save for the changes to take place.</Trans></span>
-              </div>
+                <ReactList
+                  ref={this.groupUsersListRef}
+                  itemRenderer={this.renderItem}
+                  itemsRenderer={this.renderContainer}
+                  length={this.state.groups_users.length}
+                  minSize={4}
+                  type="uniform"
+                  threshold={30}>
+                </ReactList>
               }
             </div>
+            {!this.hasMembers() &&
+            <div className="message warning">
+              <span><Trans>The group is empty, please add a group manager.</Trans></span>
+            </div>
+            }
+            {this.hasMembers() && !this.hasManager() &&
+            <div className="message error">
+              <span><Trans>Please make sure there is at least one group manager.</Trans></span>
+            </div>
+            }
+            {this.hasManager() &&
+            <div className="message warning">
+              <span><Trans>You need to click save for the changes to take place.</Trans></span>
+            </div>
+            }
             <div className="form-content permission-add">
               <Autocomplete
                 id="user-name-input"
