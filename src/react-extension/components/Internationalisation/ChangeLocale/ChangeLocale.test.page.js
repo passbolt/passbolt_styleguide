@@ -74,7 +74,7 @@ export default class ChangeLocalePage {
   /** select the french language */
   async selectLanguageFr() {
     await this.click(this.locale);
-    await this.click(this.getLocaleList(2));
+    await this.click(this.getLocaleList(3));
   }
 }
 

@@ -17,8 +17,10 @@ import {Component} from "react";
 import PropTypes from "prop-types";
 import deTranslations from "../../../../../locales/de-DE/common.json";
 import enTranslations from "../../../../../locales/en-UK/common.json";
+import esTranslations from "../../../../../locales/es-ES/common.json";
 import frTranslations from "../../../../../locales/fr-FR/common.json";
 import jaTranslations from "../../../../../locales/ja-JP/common.json";
+import ltTranslations from "../../../../../locales/lt-LT/common.json";
 import nlTranslations from "../../../../../locales/nl-NL/common.json";
 import plTranslations from "../../../../../locales/pl-PL/common.json";
 import svTranslations from "../../../../../locales/sv-SE/common.json";
@@ -47,11 +49,17 @@ class MockTranslationProvider extends Component {
           "en-UK": {
             common: enTranslations
           },
+          "es-ES": {
+            common: esTranslations
+          },
           "fr-FR": {
             common: frTranslations
           },
           "ja-JP": {
             common: jaTranslations
+          },
+          "lt-LT": {
+            common:  ltTranslations
           },
           "nl-NL": {
             common: nlTranslations
