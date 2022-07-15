@@ -107,26 +107,32 @@ export default {
       "locale": {
         "options": [
           {
-            "locale": "de-DE",
-            "label": "Deutsch"
+            locale: "de-DE",
+            label: "Deutsch"
           }, {
-            "locale": "en-UK",
-            "label": "English"
+            locale: "en-UK",
+            label: "English"
           }, {
-            "locale": "fr-FR",
-            "label": "Français"
+            locale: "es-ES",
+            label: "Español"
           }, {
-            "locale": "ja-JP",
-            "label": "日本語"
+            locale: "fr-FR",
+            label: "Français"
           }, {
-            "locale": "nl-NL",
-            "label": "Nederlands"
+            locale: "ja-JP",
+            label: "日本語"
           }, {
-            "locale": "pl-PL",
-            "label": "Polski"
+            locale: "lt-LT",
+            label: "Lietuvių"
           }, {
-            "locale": "sv-SE",
-            "label": "Svenska"
+            locale: "nl-NL",
+            label: "Nederlands"
+          }, {
+            locale: "pl-PL",
+            label: "Polski"
+          }, {
+            locale: "sv-SE",
+            label: "Svenska"
           }
         ]
       },
