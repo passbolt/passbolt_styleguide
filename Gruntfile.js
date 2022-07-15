@@ -59,7 +59,7 @@ module.exports = function(grunt) {
       },
       'externalize': {
         command: [
-          'npm run externalize'
+          'npm run i18n:externalize'
         ].join(' && ')
       }
 		},
