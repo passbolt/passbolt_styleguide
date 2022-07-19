@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
+import ReactList from "react-list";
 import PropTypes from "prop-types";
 
 import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -60,7 +61,7 @@ class ShareDialog extends Component {
     const permissions = this.shareChanges.aggregatePermissionsByAro();
     this.setState({loading: false, name: '', permissions: permissions}, () => {
       // scroll at the top of the permission list
-      this.permissionListRef.current.scrollTop = 0;
+      this.permissionListRef.current.scrollTo(0);
     });
   }
 
@@ -97,6 +98,9 @@ class ShareDialog extends Component {
 
     this.handlePermissionUpdate = this.handlePermissionUpdate.bind(this);
     this.handlePermissionDelete = this.handlePermissionDelete.bind(this);
+
+    this.renderItem = this.renderItem.bind(this);
+    this.renderContainer = this.renderContainer.bind(this);
   }
 
   /**
@@ -210,7 +214,7 @@ class ShareDialog extends Component {
     permissions.push(permission);
     this.setState({permissions: permissions}, () => {
       // scroll at the bottom of the permission list
-      this.permissionListRef.current.scrollTop = this.permissionListRef.current.scrollHeight;
+      this.permissionListRef.current.scrollTo(this.state.permissions.length - 1);
     });
   }
 
@@ -420,6 +424,45 @@ class ShareDialog extends Component {
   }
 
   /**
+   * Use to render a single item of the share permission list
+   * @param {integer} index of the item in the source list
+   * @param {integer} key index of the HTML element in the ReactList
+   * @returns {JSX.Element}
+   */
+  renderItem(index, key) {
+    const permission = this.state.permissions[index];
+    const sharePermissionItemKey = permission.aro.id;
+    return (
+      <SharePermissionItem
+        id={permission.aro.id}
+        key={sharePermissionItemKey}
+        aro={permission.aro}
+        permissionType={permission.type}
+        variesDetails={permission.variesDetails}
+        updated={permission.updated}
+        disabled={this.hasAllInputDisabled()}
+        onUpdate={this.handlePermissionUpdate}
+        onDelete={this.handlePermissionDelete}
+        isLastItemDisplayed={key >= 2}
+      />
+    );
+  }
+
+  /**
+   * Use to render the container of the list of the ReactList component
+   * @param {Array<JSX.Element>} items the list of the items to be rendered as children element of the conainer
+   * @param {*} ref the ref ReactList needs to manage the scroll
+   * @returns {JSX.Element}
+   */
+  renderContainer(items, ref) {
+    return (
+      <ul className="permissions" ref={ref}>
+        {items}
+      </ul>
+    );
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -440,28 +483,24 @@ class ShareDialog extends Component {
         onClose={this.handleClose}
         disabled={this.hasAllInputDisabled()}>
         <form className="share-form" onSubmit={this.handleFormSubmit} noValidate>
-          <div className="form-content permission-edit">
+          <div className="form-content scroll permission-edit">
             {(this.state.loading) &&
-              <ul className="permissions scroll">
+              <ul className="permissions">
                 <SharePermissionItemSkeleton/>
                 <SharePermissionItemSkeleton/>
                 <SharePermissionItemSkeleton/>
               </ul>
             }
             {!(this.state.loading) &&
-              <ul className="permissions scroll" ref={this.permissionListRef}>
-                {(this.state.permissions && (this.state.permissions).map((permission, key) => <SharePermissionItem
-                  id={permission.aro.id}
-                  key={key}
-                  aro={permission.aro}
-                  permissionType={permission.type}
-                  variesDetails={permission.variesDetails}
-                  updated={permission.updated}
-                  disabled={this.hasAllInputDisabled()}
-                  onUpdate={this.handlePermissionUpdate}
-                  onDelete={this.handlePermissionDelete}
-                />))}
-              </ul>
+              <ReactList
+                itemRenderer={this.renderItem}
+                itemsRenderer={this.renderContainer}
+                length={this.state.permissions.length}
+                minSize={this.props.listMinSize}
+                type="uniform"
+                ref={this.permissionListRef}
+                threshold={30}>
+              </ReactList>
             }
           </div>
           {(this.hasNoOwner()) &&
@@ -498,12 +537,17 @@ class ShareDialog extends Component {
   }
 }
 
+ShareDialog.defaultProps = {
+  listMinSize: 4
+};
+
 ShareDialog.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
+  listMinSize: PropTypes.number, // The minimum size to be renderered in the permission list
   t: PropTypes.func, // The translation function
 };
 

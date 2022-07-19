@@ -31,7 +31,7 @@ export default class ShareDialogPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <ShareDialog {...props}/>
+          <ShareDialog {...props} listMinSize={20}/>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
