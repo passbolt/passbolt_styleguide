@@ -92,7 +92,6 @@ class EditUserGroup extends Component {
 
   /**
    * Binds the component handlers
-   * @return {void}
    */
   bindHandlers() {
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -110,7 +109,6 @@ class EditUserGroup extends Component {
 
   /**
    * Populate the component with initial data
-   * @return {Promise<void>}
    */
   populate() {
     const name = this.groupToEdit.name;
@@ -123,7 +121,6 @@ class EditUserGroup extends Component {
   /**
    * Sort a list of groups users by their
    * @param {array} groupsUsers
-   * @returns {void}
    */
   sortGroupsUsersAlphabeticallyByUserFullName(groupsUsers) {
     const sortGroupsUsersAlphabeticallyByUserFullName = (groupUserA, groupUserB) => this.getUserFullname(groupUserA.user).localeCompare(this.getUserFullname(groupUserB.user));
@@ -133,7 +130,6 @@ class EditUserGroup extends Component {
   /**
    * Decorate a group user with its associated user
    * @param {Object} groupUser The group user to decorate
-   * @returns {Promise<object>}
    */
   decorateGroupUserWithUser(groupUser) {
     groupUser.user = this.findUser(groupUser.user_id);
@@ -143,7 +139,7 @@ class EditUserGroup extends Component {
   /**
    * Find a user
    * @param {string} userId
-   * @returns {Promise<object>}
+   * @returns {object}
    */
   findUser(userId) {
     return this.props.context.users.find(user => user.id === userId);
@@ -261,46 +257,43 @@ class EditUserGroup extends Component {
 
   /**
    * Whenever the group name change
-   * @return {Promise<void>}
    */
-  async handleNameChange(event) {
-    await this.updateName(event.target.value);
+  handleNameChange(event) {
+    this.updateName(event.target.value);
   }
 
   /**
    * Whenever a member's permission has changed
    * @param {Event} event A select DOM event
    * @param {object} groupUser A group user
-   * @return {Promise<void>}
    */
-  async handleMemberRoleChange(event, groupUser) {
+  handleMemberRoleChange(event, groupUser) {
     const isManager = event.target.value === true;
-    await this.updateMemberRole(groupUser, isManager);
+    this.updateMemberRole(groupUser, isManager);
   }
 
   /**
    * Whenever a member's is removed from the group
    * @param {Event} event A click DOM event
    * @param {object} groupUser A group user
-   * @return {Promise<void>}
    */
-  async handleMemberRemoved(event, groupUser) {
-    await this.removeMember(groupUser);
+  handleMemberRemoved(event, groupUser) {
+    this.removeMember(groupUser);
   }
 
   /**
    * Whenever the user wants to submit the changes
    * @param {Event} event A submit DOM event
-   * @return {Promise<void>}
+   * @returns {Promise<void>}
    */
   async handleSubmit(event) {
     event.preventDefault();
 
-    await this.resetErrors();
+    this.resetErrors();
     const actions = Object.assign(this.state.actions, {processing: true});
     this.setState({actions});
 
-    await this.validate();
+    this.validate();
     if (this.hasErrors()) {
       return this.handleValidateError();
     }
@@ -325,7 +318,6 @@ class EditUserGroup extends Component {
 
   /**
    * Focus the field of the form which is in error state.
-   * @return {void}
    */
   focusFieldError() {
     if (this.hasErrors("name")) {
@@ -335,7 +327,6 @@ class EditUserGroup extends Component {
 
   /**
    * Whenever the user will to close the dialog
-   * @return {void}
    */
   handleClose() {
     this.close();
@@ -343,7 +334,6 @@ class EditUserGroup extends Component {
 
   /**
    * handleAutocompleteOpen
-   * @return {void}
    */
   handleAutocompleteOpen() {
     this.setState({autocompleteOpen: true});
@@ -351,7 +341,6 @@ class EditUserGroup extends Component {
 
   /**
    * handleAutocompleteClose
-   * @return {void}
    */
   handleAutocompleteClose() {
     this.setState({autocompleteOpen: false});
@@ -362,16 +351,15 @@ class EditUserGroup extends Component {
    * What happens when an item in the autocomplete list is selected
    * e.g. if it's not already in the list, add it and scroll
    * @param {object} user The selected user
-   * @return {void}
    */
-  async handleAutocompleteSelect(user) {
+  handleAutocompleteSelect(user) {
     const groupUser = this.groupToEdit.groups_users.find(groupUser => groupUser.user_id === user.id);
     // Case of previously deleted member and re-added
     if (groupUser) {
-      await this.restoreMember(groupUser);
+      this.restoreMember(groupUser);
     } else {
       // Case of fresh member
-      await this.addMember(user);
+      this.addMember(user);
     }
   }
 
@@ -387,7 +375,7 @@ class EditUserGroup extends Component {
   /**
    * Returns true if the group user membership has changed.
    * @param {object} groupUser the group user
-   * @return {boolean}
+   * @returns {boolean}
    */
   isMemberChanged(groupUser) {
     const originalGroupUser = this.groupToEdit.groups_users.find(originalGroupUser => originalGroupUser.id === groupUser.id);
@@ -396,7 +384,7 @@ class EditUserGroup extends Component {
 
   /**
    * Returns true of the member has been added
-   * @return {boolean}
+   * @returns {boolean}
    */
   isMemberAdded(groupUser) {
     return groupUser.id === undefined;
@@ -405,91 +393,90 @@ class EditUserGroup extends Component {
   /**
    * Changes the group name
    * @param name The new name
-   * @return {Promise<*>}
    */
-  async updateName(name) {
-    await this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {name})});
+  updateName(name) {
+    this.setState({groupToEdit: Object.assign({}, this.state.groupToEdit, {name})});
     if (this.state.validation.hasAlreadyBeenValidated) {
-      await this.validateName();
+      this.validateName();
     }
   }
 
   /**
    * Changes the group groups users
    * @param {array} The new groups users
-   * @return {Promise<*>}
+   * @param {boolean} shouldScrollToEnd if true triggers a scroll to the end of the list
    */
-  async updateGroupsUsers(groupsUsers) {
+  updateGroupsUsers(groupsUsers, shouldScrollToEnd) {
     const groupToEdit = Object.assign({}, this.state.groupToEdit, {groups_users: groupsUsers});
-    this.setState({groupToEdit});
+    this.setState({groupToEdit}, () => {
+      if (shouldScrollToEnd) {
+        // scroll at the bottom of the group users list
+        this.listRef.current.scrollTo(this.groupsUsers.length - 1);
+      }
+    });
   }
 
   /**
    * Update a member's group membership role
    * @param {object} groupUserToUpdate The group user whose permission will be updated
    * @param {boolean} isManager True if the members will be a group manager
-   * @retrurn {Promise<*>}
    */
-  async updateMemberRole(groupUserToUpdate, isManager) {
+  updateMemberRole(groupUserToUpdate, isManager) {
     const indexToUpdate = this.groupsUsers.findIndex(groupUser => groupUser.user_id === groupUserToUpdate.user_id);
     groupUserToUpdate.is_admin = isManager;
     this.groupsUsers[indexToUpdate] = groupUserToUpdate;
-    return this.updateGroupsUsers(this.groupsUsers);
+    this.updateGroupsUsers(this.groupsUsers);
   }
 
   /**
    * Add a user to the member list
    * @param {object} user The user to create a new group membership for
-   * @retrurn {Promise<*>}
    */
-  async addMember(user) {
+  addMember(user) {
     const mustBeAdmin = !this.hasManager;
     const groupUser = {user_id: user.id, is_admin: mustBeAdmin};
-    await this.decorateGroupUserWithUser(groupUser);
+    this.decorateGroupUserWithUser(groupUser);
     this.groupsUsers.push(groupUser);
-    return this.updateGroupsUsers(this.groupsUsers);
+    this.updateGroupsUsers(this.groupsUsers, true);
   }
 
   /**
    * Restore a previously removed group user to the list
    * @param {object} groupUserToRestore The group user to restore
-   * @retrurn {Promise<*>}
    */
-  async restoreMember(groupUserToRestore) {
-    await this.decorateGroupUserWithUser(groupUserToRestore);
+  restoreMember(groupUserToRestore) {
+    this.decorateGroupUserWithUser(groupUserToRestore);
     this.groupsUsers.push(groupUserToRestore);
-    return this.updateGroupsUsers(this.groupsUsers);
+    this.updateGroupsUsers(this.groupsUsers, true);
   }
 
   /**
    * Removes a member from the list
    * @param {object} groupUserToRemove The group user to remove
    */
-  async removeMember(groupUserToRemove) {
+  removeMember(groupUserToRemove) {
     const indexToRemove = this.groupsUsers.findIndex(groupUser => groupUser.user_id === groupUserToRemove.user_id);
     const groupsUsers = this.groupsUsers;
     groupsUsers.splice(indexToRemove, 1);
-    return this.updateGroupsUsers(groupsUsers);
+    this.updateGroupsUsers(groupsUsers);
   }
 
   /**
    * Validate the form
-   * @return {Promise<void>}
    */
-  async validate() {
-    await this.validateName();
-    await this.setState({validation: Object.assign({}, this.state.validation, {hasAlreadyBeenValidated: true})});
+  validate() {
+    this.validateName();
+    this.setState({validation: Object.assign({}, this.state.validation, {hasAlreadyBeenValidated: true})});
   }
 
   /**
    * Validates the group name
-   * @return {Promise<void>}
    */
-  async validateName() {
-    await this.resetErrors("name");
+  validateName() {
+    this.resetErrors("name");
     const name = this.state.groupToEdit.name;
     if (name.trim() === "") {
-      await this.setError("name", "empty");
+      this.setError("name", "empty");
     }
   }
 
@@ -498,9 +485,8 @@ class EditUserGroup extends Component {
    * @param {string} domain The error namespace
    * @param {string} type The error type
    * @param {string|boolean?} value the error value
-   * @returns {Promise<void>}
    */
-  async setError(domain, type, value) {
+  setError(domain, type, value) {
     value = value || true;
     const errors = this.state.errors || {};
     errors[domain] = errors[domain] || {};
@@ -511,15 +497,14 @@ class EditUserGroup extends Component {
   /**
    * Reset the errors
    * @param {string?} domain (Optional) The domain to reset.
-   * @returns {Promise<void>}
    */
-  async resetErrors(domain) {
+  resetErrors(domain) {
     let errors = {};
     if (domain) {
       errors = this.state.errors;
       delete errors[domain];
     }
-    await this.setState({errors});
+    this.setState({errors});
   }
 
   /**
@@ -549,12 +534,12 @@ class EditUserGroup extends Component {
    * @returns {*}
    */
   hasGroupNameAlreadyExists(errorData) {
-    return errorData && errorData.body && errorData.body.name && errorData.body.name.group_unique;
+    return errorData?.body?.name?.group_unique;
   }
 
   /**
    * Edits the current group
-   * @return {Promise<*>}
+   * @returns {Promise<void>}
    */
   async updateGroup() {
     const groupDto = {
@@ -581,14 +566,13 @@ class EditUserGroup extends Component {
 
   /**
    * Whenever the group has been updated successfully
-   * @return {void}
    */
-  async onEditFailure(error) {
+  onEditFailure(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
     if (error.name === "UserAbortsOperationError") {
       this.setState({processing: false});
     } else if (this.hasGroupNameAlreadyExists(error.data)) {
-      await this.setError("name", "alreadyExists");
+      this.setError("name", "alreadyExists");
       this.setState({processing: false});
     } else {
       // Unexpected error occurred.
@@ -601,7 +585,6 @@ class EditUserGroup extends Component {
   /**
    * Handle error to display the error dialog
    * @param {object} error The error
-   * @return {void}
    */
   onError(error) {
     const errorDialogProps = {
@@ -779,6 +762,7 @@ class EditUserGroup extends Component {
               }
               {!this.isLoading &&
                 <ReactList
+                  ref={this.listRef}
                   itemRenderer={this.renderItem}
                   itemsRenderer={this.renderContainer}
                   length={this.groupsUsers.length}

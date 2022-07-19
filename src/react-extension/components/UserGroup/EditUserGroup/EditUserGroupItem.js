@@ -52,7 +52,7 @@ class EditUserGroupItem extends Component {
 
   /**
    * Populate the component with initial data
-   * @return {Promise<void>}
+   * @returns {Promise<void>}
    */
   async populate() {
     const user = this.props.groupUser.user;
@@ -72,7 +72,7 @@ class EditUserGroupItem extends Component {
 
   /**
    * Returns true if the comopinent is ready to be displayed with all information
-   * @return {boolean}
+   * @returns {boolean}
    */
   get isReady() {
     return this.state.user !== null && this.state.fingerprint !== null;
@@ -126,7 +126,6 @@ class EditUserGroupItem extends Component {
     const isReady = this.isReady;
     return (
       <li
-        key={this.props.key}
         className={`row ${this.props.isMemberChanged ? 'permission-updated' : ''} ${!isReady ? "skeleton" : ""}`}
       >
         {isReady &&
@@ -200,7 +199,6 @@ EditUserGroupItem.propTypes = {
   groupUser: PropTypes.object.isRequired,
   onMemberRoleChange: PropTypes.func.isRequired,
   onMemberRemoved: PropTypes.func.isRequired,
-  key: PropTypes.any.isRequired,
   isMemberChanged: PropTypes.bool,
   isMemberAdded: PropTypes.bool,
   areActionsAllowed: PropTypes.bool,
