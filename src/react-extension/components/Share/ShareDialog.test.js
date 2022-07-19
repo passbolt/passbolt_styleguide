@@ -28,6 +28,10 @@ import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchErr
 import {waitFor} from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
 
+beforeAll(() => {
+  global.scrollTo = jest.fn();
+});
+
 beforeEach(() => {
   jest.resetModules();
 });
