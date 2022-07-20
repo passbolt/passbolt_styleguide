@@ -30,8 +30,10 @@ const Template = args =>
   <AppContext.Provider value={args.context}>
     <MemoryRouter initialEntries={['/']}>
       <div className="panel aside">
-        <div className="comments">
-          <Route component={routerProps => <AddResourceComment {...args} {...routerProps}/>}></Route>
+        <div className="comments accordion sidebar-section">
+          <div className="accordion-content">
+            <Route component={routerProps => <AddResourceComment {...args} {...routerProps}/>}></Route>
+          </div>
         </div>
       </div>
     </MemoryRouter>

@@ -17,5 +17,9 @@ module.exports = {
   "core": {
     "builder": "webpack5"
   },
-  "staticDirs": ['../src']
+  "staticDirs": ['../src'],
+  "env": (config) => ({
+    ...config,
+    ORIGIN_URL: 'https://passbolt.github.io/passbolt_styleguide',
+  }),
 }

@@ -251,7 +251,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
     if (!user_ids) {
       return null;
     }
-    return user_ids.map((user, id) => <Fragment key={id}>{user.name}&lt;{user.email}&gt;<br/></Fragment>);
+    return user_ids.map((user, id) => <Fragment key={id}>{user.name} &lt;{user.email}&gt;<br/></Fragment>);
   }
 
   /**

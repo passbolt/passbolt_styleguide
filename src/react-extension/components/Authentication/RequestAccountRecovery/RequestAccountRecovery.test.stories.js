@@ -36,5 +36,10 @@ const Template = args =>
     </div>
   </MockTranslationProvider>;
 
+const defaultParameters = {
+  css: "ext_authentication"
+};
+
 export const Initial = Template.bind({});
 Initial.args = defaultProps();
+Initial.parameters = defaultParameters;

@@ -51,4 +51,5 @@ const Template = args =>
   </div>;
 
 export const Initial = Template.bind({});
-Initial.args = defaultProps();
+// eslint-disable-next-line no-undef
+Initial.args = defaultProps({baseUrl: process.env.ORIGIN_URL});

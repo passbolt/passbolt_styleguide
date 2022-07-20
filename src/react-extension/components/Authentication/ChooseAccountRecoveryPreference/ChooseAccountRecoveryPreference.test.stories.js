@@ -41,20 +41,30 @@ const Template = args =>
     </div>
   </MockTranslationProvider>;
 
+const defaultParameters = {
+  css: "ext_authentication"
+};
+
 export const MandatoryWithLink = Template.bind({});
 MandatoryWithLink.args = mandatoryPolicyPropsWithImportedKey();
+MandatoryWithLink.parameters = defaultParameters;
 
 export const OptOutWithLink = Template.bind({});
 OptOutWithLink.args = optOutPolicyPropsWithImportedKey();
+OptOutWithLink.parameters = defaultParameters;
 
 export const OptInWithLink = Template.bind({});
 OptInWithLink.args = optInPolicyPropsWithImportedKey();
+OptInWithLink.parameters = defaultParameters;
 
 export const Mandatory = Template.bind({});
 Mandatory.args = mandatoryPolicyProps();
+Mandatory.parameters = defaultParameters;
 
 export const OptOut = Template.bind({});
 OptOut.args = optOutPolicyProps();
+OptOut.parameters = defaultParameters;
 
 export const OptIn = Template.bind({});
 OptIn.args = optInPolicyProps();
+OptIn.parameters = defaultParameters;

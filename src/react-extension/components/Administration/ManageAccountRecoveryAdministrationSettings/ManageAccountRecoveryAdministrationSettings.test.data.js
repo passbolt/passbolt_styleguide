@@ -46,11 +46,22 @@ export function hasChangedPolicyProps(props = {}) {
       policyChanges: {
         policy: "mandatory",
         publicKey: "new-public-key"
-      }
+      },
+      getKeyInfo: () => defaultKeyInfo
     }
   };
   return defaultProps(Object.assign(_props, props));
 }
+
+const defaultKeyInfo = {
+  user_ids: [{name:"Test Test", email:"test@passbolt.com"}],
+  armored_key: "new-public-key",
+  fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
+  algorithm: "RSA",
+  length: "4096",
+  created: "2022-05-01T13:11:08+00:00",
+  expires: "2024-05-01T13:11:08+00:00",
+};
 
 /**
  * Disabled policy props.
@@ -63,7 +74,8 @@ export function disabledPolicyPropsWithOrganisationKey(props = {}) {
       policyChanges: {
         policy: "disabled",
         publicKey: "new-public-key"
-      }
+      },
+      getKeyInfo: () => defaultKeyInfo
     }
   };
   return defaultProps(Object.assign(_props, props));
@@ -80,7 +92,8 @@ export function mandatoryPolicyPropsWithOrganisationKey(props = {}) {
       policyChanges: {
         policy: "mandatory",
         publicKey: "new-public-key"
-      }
+      },
+      getKeyInfo: () => defaultKeyInfo
     }
   };
   return defaultProps(Object.assign(_props, props));
@@ -97,7 +110,8 @@ export function optInPolicyPropsWithOrganisationKey(props = {}) {
       policyChanges: {
         policy: "opt-in",
         publicKey: "new-public-key"
-      }
+      },
+      getKeyInfo: () => defaultKeyInfo
     }
   };
   return defaultProps(Object.assign(_props, props));
@@ -114,7 +128,8 @@ export function optOutPolicyPropsWithOrganisationKey(props = {}) {
       policyChanges: {
         policy: "opt-out",
         publicKey: "new-public-key"
-      }
+      },
+      getKeyInfo: () => defaultKeyInfo
     }
   };
   return defaultProps(Object.assign(_props, props));
