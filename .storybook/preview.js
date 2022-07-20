@@ -18,11 +18,11 @@ const defaultContext = {
     canIUse: () => true,
     settings: {
       app: {
-        url: (new URL(window.location.href)).origin,
+        url: process.env.ORIGIN_URL,
       }
     }
   },
-  trustedDomain: "http://localhost:6006",
+  trustedDomain: process.env.ORIGIN_URL,
 };
 
 const withAppContextProvider = (Story) =>
@@ -36,7 +36,7 @@ function withStylesheet(Story, context) {
 
   return (
     <>
-      <link rel="stylesheet" href={`/css/themes/${themeName}/${css}.css`}/>
+      <link rel="stylesheet" href={`css/themes/${themeName}/${css}.css`}/>
       <Story/>
     </>
   );

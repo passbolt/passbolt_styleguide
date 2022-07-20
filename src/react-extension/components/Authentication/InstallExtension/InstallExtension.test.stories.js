@@ -55,6 +55,7 @@ Chrome.loaders = [
     });
   },
 ];
+Chrome.parameters = defaultParameters;
 
 export const Edge = Template.bind({});
 Edge.loaders = [
@@ -65,6 +66,7 @@ Edge.loaders = [
     });
   },
 ];
+Edge.parameters = defaultParameters;
 
 export const UnsupportedBrowser = Template.bind({});
 UnsupportedBrowser.loaders = [
@@ -75,3 +77,4 @@ UnsupportedBrowser.loaders = [
     });
   },
 ];
+UnsupportedBrowser.parameters = defaultParameters;

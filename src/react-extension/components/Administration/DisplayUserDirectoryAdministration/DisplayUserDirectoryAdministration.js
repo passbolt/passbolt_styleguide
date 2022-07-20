@@ -804,7 +804,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       disabled={this.hasAllInputDisabled()}/>
                   </div>
                 </div>
-                <div className={`"input text required ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Domain</Trans></label>
                   <input id="domain-name-input" type="text" name="domain" value={this.state.domain}
                     onChange={this.handleInputChange} className="required fluid form-element" onKeyUp={this.handleDomainInputKeyUp}
@@ -813,7 +813,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                   <div id="domain-name-input-feedback" className="error-message">{this.state.domainError}</div>
                   }
                 </div>
-                <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Base DN</Trans></label>
                   <input id="base-dn-input" type="text" name="baseDn" value={this.state.baseDn}
                     onChange={this.handleInputChange} className="fluid form-element" placeholder="OU=OrgUsers,DC=mydomain,DC=local"
@@ -834,7 +834,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 </a>
               </h4>
               <div className="accordion-content">
-                <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Group path</Trans></label>
                   <input id="group-path-input" type="text" name="groupPath" value={this.state.groupPath}
                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("Group Path")}
@@ -843,7 +843,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <Trans>Group path is used in addition to the base DN while searching groups.</Trans> <Trans>Leave empty if users and groups are in the same DN.</Trans>
                   </div>
                 </div>
-                <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>User path</Trans></label>
                   <input id="user-path-input" type="text" name="userPath" value={this.state.userPath}
                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("User Path")}
@@ -852,7 +852,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 </div>
                 {this.isOpenLdapChecked() &&
                 <div>
-                  <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Group object class</Trans></label>
                     <input id="group-object-class-input" type="text" name="groupObjectClass"
                       value={this.state.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
@@ -861,7 +861,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       <Trans>For Openldap only. Defines which group object to use.</Trans> (<Trans>Default</Trans>: posixGroup)
                     </div>
                   </div>
-                  <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>User object class</Trans></label>
                     <input id="user-object-class-input" type="text" name="userObjectClass"
                       value={this.state.userObjectClass} onChange={this.handleInputChange} className="required fluid form-element"
@@ -869,7 +869,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <div className="help-message"><Trans>For Openldap only. Defines which user object to use.</Trans> (<Trans>Default</Trans>: inetOrgPerson)
                     </div>
                   </div>
-                  <div className={`"input text openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                  <div className={`input text openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Use email prefix / suffix?</Trans></label>
                     <div className="input toggle-switch openldap form-element">
                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="useEmailPrefix"
@@ -885,7 +885,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                   </div>
                   {this.isUseEmailPrefixChecked() &&
                   <div className="singleline clearfix" id="use-email-prefix-suffix-options">
-                    <div className={`"input text first-field openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <div className={`input text first-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                       <label><Trans>Email prefix</Trans></label>
                       <input id="email-prefix-input" type="text" name="emailPrefix" checked={this.state.emailPrefix}
                         onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("username")}
@@ -894,7 +894,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                         <Trans>The attribute you would like to use for the first part of the email (usually username).</Trans>
                       </div>
                     </div>
-                    <div className={`"input text last-field openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <div className={`input text last-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                       <label><Trans>Email suffix</Trans></label>
                       <input id="email-suffix-input" type="text" name="emailSuffix" value={this.state.emailSuffix}
                         onChange={this.handleInputChange} className="required form-element"
@@ -919,7 +919,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 </a>
               </h4>
               <div className="accordion-content">
-                <div className={`"select-wrapper input required ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Default admin</Trans></label>
                   <Select items={this.getUsersAllowedToBeDefaultAdmin()}
                     id="default-user-select"
@@ -932,7 +932,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <Trans>The default admin user is the user that will perform the operations for the the directory.</Trans>
                   </div>
                 </div>
-                <div className={`"select-wrapper input required ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Default group admin</Trans></label>
                   <Select items={this.getUsersAllowedToBeDefaultGroupAdmin()}
                     id="default-group-admin-user-select"
@@ -945,7 +945,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <Trans>The default group manager is the user that will be the group manager of newly created groups.</Trans>
                   </div>
                 </div>
-                <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Groups parent group</Trans></label>
                   <input id="groups-parent-group-input" type="text" name="groupsParentGroup"
                     value={this.state.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.translate("Group name")}
@@ -954,7 +954,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <Trans>Synchronize only the groups which are members of this group.</Trans>
                   </div>
                 </div>
-                <div className={`"input text ad openldap" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Users parent group</Trans></label>
                   <input id="users-parent-group-input" type="text" name="usersParentGroup"
                     value={this.state.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.translate("Group name")}
@@ -964,7 +964,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                   </div>
                 </div>
                 {this.isActiveDirectoryChecked() &&
-                <div className={`"input text clearfix ad" ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                <div className={`input text clearfix ad ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Enabled users only</Trans></label>
                   <div className="input toggle-switch ad form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="enabledUsersOnly"

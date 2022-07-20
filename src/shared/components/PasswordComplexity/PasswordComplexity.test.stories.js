@@ -26,16 +26,16 @@ const Template = () =>
       <PasswordComplexity/>
     </div>
     <div style={{width: "49%", marginRight: "1%"}}>
-      <PasswordComplexity entropy={0}/>
-    </div>
-    <div style={{width: "49%", marginRight: "1%"}}>
-      <PasswordComplexity entropy={0} error={true}/>
+      <PasswordComplexity error={true}/>
     </div>
     <div style={{width: "49%", marginRight: "1%"}}>
       <PasswordComplexity entropy={29.9}/>
     </div>
     <div style={{width: "49%", marginRight: "1%"}}>
-      <PasswordComplexity entropy={49.9} error={true}/>
+      <PasswordComplexity entropy={65.9} error={true}/>
+    </div>
+    <div style={{width: "49%", marginRight: "1%"}}>
+      <PasswordComplexity entropy={87.9} error={true}/>
     </div>
     <div style={{width: "49%", marginRight: "1%"}}>
       <PasswordComplexity entropy={117.98}/>
