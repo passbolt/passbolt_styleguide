@@ -23,28 +23,11 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 async function init() {
   AuthLogin.legacyAuthLogin();
 
-  if (!await isBrowserExtensionConfigured()) {
-    return;
-  }
-
   QuickAccessEvent.fillForm();
 
   const siteSettings = await getSiteSettings();
   if (siteSettings?.canIUse('inFormIntegration')) {
     InFormManager.initialize();
-  }
-}
-
-/**
- * Check if the browser extension is configured.
- * @returns {Promise<unknown>}
- */
-async function isBrowserExtensionConfigured() {
-  try {
-    return await port.request('passbolt.addon.is-configured');
-  } catch (error) {
-    console.error(error);
-    return false;
   }
 }
 
