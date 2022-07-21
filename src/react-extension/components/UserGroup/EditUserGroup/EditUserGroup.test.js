@@ -39,8 +39,12 @@ describe("See the Edit User Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       requestMock = mockContextRequest(context, requestGpgMockImpl);
       page = new EditUserGroupTestPage(context, props);
+      jest.useFakeTimers();
     });
 
+    afterEach(() => {
+      jest.clearAllTimers();
+    });
 
     it('As AD I should change the name of the group', async() => {
       expect.assertions(3);
@@ -97,7 +101,10 @@ describe("See the Edit User Group", () => {
 
       expect(page.canAdd).toBeTruthy();
 
-      await page.addGroupMember('dame');
+      await page.type('dame', page.usernameInput);
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {});
+      await page.click(page.getAutocompleteItem(0));
 
       expect(page.groupMembersCount).toBe(3);
       expect(page.groupMember(3).name).toBe("Dame Steve Shirley");

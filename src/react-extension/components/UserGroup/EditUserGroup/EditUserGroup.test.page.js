@@ -108,6 +108,23 @@ export default class EditUserGroupTestPage {
   }
 
   /**
+   * Returns the username input
+   */
+  get usernameInput() {
+    return this._page.container.querySelector('#user-name-input');
+  }
+
+  /**
+   * Returns the nth items in the autocomplete list
+   * @param {integer} index
+   * @returns {HTMLElement}
+   */
+  getAutocompleteItem(index) {
+    const autocompleteItems = this._page.container.querySelectorAll('#autocomplete-item .row.selected .main-cell-wrapper .main-cell a');
+    return autocompleteItems[index];
+  }
+
+  /**
    * Returns the i-th group member
    * @param index The rank of the group member
    */
@@ -128,20 +145,6 @@ export default class EditUserGroupTestPage {
         return element.querySelector('.aro-name span').innerHTML;
       }
     };
-  }
-
-  /**
-   * Add an user to the group
-   */
-  async addGroupMember(username) {
-    const element = this._page.container.querySelector('#user-name-input');
-    const inputEvent = {target: {value: username}};
-    fireEvent.change(element, inputEvent);
-    await waitFor(() => {});
-    const autocompleteElement = this._page.container.querySelector('#autocomplete-item .row.selected .main-cell-wrapper .main-cell a');
-    const leftClick = {button: 0};
-    fireEvent.click(autocompleteElement, leftClick);
-    await waitFor(() => {});
   }
 
   /**
@@ -186,6 +189,26 @@ export default class EditUserGroupTestPage {
   async close() {
     const leftClick = {button: 0};
     fireEvent.click(this.closeButton, leftClick);
+    await waitFor(() => {});
+  }
+
+  async type(text, element) {
+    fireEvent.input(element, {
+      target: {
+        value: text
+      }
+    });
+
+    await waitFor(() => {
+      if (element.value !== text) {
+        throw new Error("The field has not changed yet.");
+      }
+    });
+  }
+
+  async click(element) {
+    const event = {button: 0};
+    fireEvent.click(element, event);
     await waitFor(() => {});
   }
 }

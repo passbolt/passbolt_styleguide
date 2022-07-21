@@ -672,6 +672,7 @@ class EditUserGroup extends Component {
     return (
       <EditUserGroupItem
         key={editUserGroupItemKey}
+        itemKey={editUserGroupItemKey}
         isMemberChanged={isMemberChanged}
         isMemberAdded={isMemberAdded}
         groupUser={groupUser}
@@ -767,7 +768,7 @@ class EditUserGroup extends Component {
                   itemsRenderer={this.renderContainer}
                   length={this.groupsUsers.length}
                   minSize={4}
-                  type="uniform"
+                  type={this.groupsUsers.length < 3 ? "simple" : "uniform"}
                   threshold={30}>
                 </ReactList>
               }
