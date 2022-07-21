@@ -34,6 +34,11 @@ beforeAll(() => {
 
 beforeEach(() => {
   jest.resetModules();
+  jest.useFakeTimers();
+});
+
+afterEach(() => {
+  jest.clearAllTimers();
 });
 
 describe("As Lu I should see the share dialog", () => {
@@ -58,16 +63,24 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a success toaster message after sharing resources to users and groups with success', async() => {
-      expect.assertions(19);
+      expect.assertions(18);
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 3 resources');
       expect(page.count).toBe(11);
 
-      const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
-      mockContextRequest(requestAutocompleteResultMockImpl);
+      const requestKeyInfoMockImpl = () => ({
+        fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"
+      });
+
+      mockContextRequest(requestKeyInfoMockImpl);
       await page.searchName("adm");
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.search-aros', 'adm', shareDialogProps.resourcesIds);
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {
+        if (!page.userOrGroupAutocomplete(1)) {
+          throw new Error("Page is not ready yet.");
+        }
+      });
       await page.selectUserOrGroup(1);
 
       expect(page.warningMessage).toBe('Click save to apply your pending changes.');
@@ -79,8 +92,8 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.aroDetails(2)).toBe('betty@passbolt.com');
       expect(page.aroName(3)).toBe('Board');
       expect(page.aroDetails(3)).toBe('Group');
-      expect(page.aroName(12)).toBe('Administrator');
-      expect(page.aroDetails(12)).toBe('Group');
+      expect(page.aroName(12)).toBe('Admin User');
+      expect(page.aroDetails(12)).toBe('admin@passbolt.com');
       expect(page.selectRights(12).textContent).toBe('can read');
 
       const requestMockImpl = jest.fn();
@@ -89,10 +102,10 @@ describe("As Lu I should see the share dialog", () => {
 
       await page.savePermissions();
 
-      const permissionDto = [{"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[0], "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[1], "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1}];
+      const permissionDto = [{"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[0], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
+        {"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[1], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
+        {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
+        {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", resources, permissionDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
@@ -110,7 +123,12 @@ describe("As Lu I should see the share dialog", () => {
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
       mockContextRequest(requestAutocompleteResultMockImpl);
       await page.searchName("adm");
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.search-aros', 'adm', shareDialogProps.resourcesIds);
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {
+        if (!page.userOrGroupAutocomplete(1)) {
+          throw new Error("Page is not ready yet.");
+        }
+      });
       await page.selectUserOrGroup(1);
 
       // Mock the request function to make it the expected result
@@ -163,11 +181,16 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
-      expect.assertions(2);
+      expect.assertions(1);
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
       mockContextRequest(requestAutocompleteResultMockImpl);
       await page.searchName("adm");
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.search-aros', 'adm', shareDialogProps.resourcesIds);
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {
+        if (!page.userOrGroupAutocomplete(1)) {
+          throw new Error("Page is not ready yet.");
+        }
+      });
       await page.selectUserOrGroup(1);
 
       // Mock the request function to make it return an error.
@@ -198,7 +221,7 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a success toaster message after sharing one resource to users and groups with success', async() => {
-      expect.assertions(13);
+      expect.assertions(12);
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share resource');
@@ -208,12 +231,17 @@ describe("As Lu I should see the share dialog", () => {
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
       mockContextRequest(requestAutocompleteResultMockImpl);
       await page.searchName("adm");
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.search-aros', 'adm', shareDialogProps.resourcesIds);
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {
+        if (!page.userOrGroupAutocomplete(1)) {
+          throw new Error("Page is not ready yet.");
+        }
+      });
       await page.selectUserOrGroup(1);
 
       expect(page.count).toBe(12);
-      expect(page.aroName(12)).toBe('Administrator');
-      expect(page.aroDetails(12)).toBe('Group');
+      expect(page.aroName(12)).toBe('Admin User');
+      expect(page.aroDetails(12)).toBe('admin@passbolt.com');
       expect(page.selectRights(12).textContent).toBe('can read');
 
       const requestMockImpl = jest.fn();
@@ -222,10 +250,10 @@ describe("As Lu I should see the share dialog", () => {
 
       await page.savePermissions();
 
-      const permissionDto = [{"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[0], "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "daaf057e-7fc3-5537-a8a9-e8c151890878", "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1},
-        {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "Group", "aro_foreign_key": "469edf9d-ca1e-5003-91d6-3a46755d5a50", "is_new": true, "type": 1}];
+      const permissionDto = [{"aco": "Resource", "aco_foreign_key": shareDialogProps.resourcesIds[0], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
+        {"aco": "Resource", "aco_foreign_key": "daaf057e-7fc3-5537-a8a9-e8c151890878", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
+        {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
+        {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", resources, permissionDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
@@ -248,22 +276,30 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a success toaster message after sharing one folder to users and groups with success', async() => {
-      expect.assertions(13);
+      expect.assertions(12);
       expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-folders', shareDialogProps.foldersIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share folder');
       expect(page.subtitle).toBe('apache');
       expect(page.count).toBe(2);
 
-      const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
-      mockContextRequest(requestAutocompleteResultMockImpl);
-      await page.searchName("adm");
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.search-aros', 'adm', shareDialogProps.foldersIds);
+      const requestKeyInfoMockImpl = () => ({
+        fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"
+      });
+      mockContextRequest(requestKeyInfoMockImpl);
+
+      await page.searchName("ad");
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {
+        if (!page.userOrGroupAutocomplete(2)) {
+          throw new Error("Page is not ready yet.");
+        }
+      });
       await page.selectUserOrGroup(2);
 
       expect(page.count).toBe(3);
-      expect(page.aroName(3)).toBe('Admin User');
-      expect(page.aroDetails(3)).toBe('admin@passbolt.com');
+      expect(page.aroName(3)).toBe('Adele Goldstine');
+      expect(page.aroDetails(3)).toBe('adele@passbolt.com');
       expect(page.selectRights(3).textContent).toBe('can read');
 
       const requestMockImpl = jest.fn();
@@ -272,7 +308,7 @@ describe("As Lu I should see the share dialog", () => {
 
       await page.savePermissions();
 
-      const permissionDto = [{"aco": "Folder", "aco_foreign_key": shareDialogProps.foldersIds[0], "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
+      const permissionDto = [{"aco": "Folder", "aco_foreign_key": shareDialogProps.foldersIds[0], "aro": "User", "aro_foreign_key": "af5e1f70-a0ee-5b76-935b-c846f8a6a190", "is_new": true, "type": 1}];
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.share.folders.save", folders, permissionDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
@@ -296,14 +332,19 @@ describe("As Lu I should see the share dialog", () => {
     });
 
     it('As LU I see a error dialog message after try to sharing folders and resources at the same time', async() => {
-      expect.assertions(4);
+      expect.assertions(3);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 2 items');
 
       const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
       mockContextRequest(requestAutocompleteResultMockImpl);
       await page.searchName("adm");
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.search-aros', 'adm', shareDialogProps.resourcesIds);
+      jest.runOnlyPendingTimers();
+      await waitFor(() => {
+        if (!page.userOrGroupAutocomplete(1)) {
+          throw new Error("Page is not ready yet.");
+        }
+      });
       await page.selectUserOrGroup(1);
 
       await page.savePermissions();

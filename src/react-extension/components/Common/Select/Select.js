@@ -196,15 +196,38 @@ class Select extends Component {
   }
 
   /**
+   * Get the first parent from this element that have a transfrom CSS property set.
+   * It's useful for calculation of a correction of an offset for the dropdown
+   */
+  getFirstParentWithTransform() {
+    let currentElement = this.selectedItemRef.current.parentElement;
+    while (currentElement !== null && currentElement.style.getPropertyValue("transform") === "") {
+      currentElement = currentElement.parentElement;
+    }
+    return currentElement;
+  }
+
+  /**
    * Force the visibility of the select with fixed position
    */
   forceVisibilitySelect() {
-    const {width, height} = this.selectedItemRef.current.getBoundingClientRect();
+    const boundingRect = this.selectedItemRef.current.getBoundingClientRect();
+    const {width, height} = boundingRect;
+    let {top, left} = boundingRect;
+
+    const relativeParent = this.getFirstParentWithTransform();
+    if (relativeParent) {
+      const relativeParentPosition = relativeParent.getBoundingClientRect();
+      top -= relativeParentPosition.top;
+      left -= relativeParentPosition.left;
+    }
     const style = {
       position: 'fixed',
       zIndex: 1,
       width,
       height,
+      top,
+      left
     };
     this.setState({style});
   }

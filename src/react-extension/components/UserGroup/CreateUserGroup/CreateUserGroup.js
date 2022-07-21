@@ -472,6 +472,7 @@ class CreateUserGroup extends Component {
     return (
       <EditUserGroupItem
         key={createUserGroupItemKey}
+        itemKey={createUserGroupItemKey}
         groupUser={groupUser}
         onMemberRoleChange={event => this.handleSelectUpdate(event, groupUser.user.id)}
         onMemberRemoved={event => this.handleDeleteClickEvent(event, groupUser.user.id)}
@@ -541,7 +542,7 @@ class CreateUserGroup extends Component {
                   itemsRenderer={this.renderContainer}
                   length={this.state.groups_users.length}
                   minSize={4}
-                  type="uniform"
+                  type={this.state.groups_users.length < 3 ? "simple" : "uniform"}
                   threshold={30}>
                 </ReactList>
               }

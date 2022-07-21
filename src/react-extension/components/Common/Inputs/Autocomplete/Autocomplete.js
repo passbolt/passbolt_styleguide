@@ -31,7 +31,6 @@ class Autocomplete extends Component {
     this.bindCallbacks();
     this.createInputRefs();
     this.state = this.getDefaultState();
-    this.getItemsDebounced = debounce(this.getItems, 150, {leading: true});
     this.cache = [];
     this.cacheExpiry = 10000; // in ms (aka 10s)
   }
@@ -104,7 +103,7 @@ class Autocomplete extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.selectNext = this.selectNext.bind(this);
     this.selectPrevious = this.selectPrevious.bind(this);
-    this.handleAutocompleteChange = this.handleAutocompleteChange.bind(this);
+    this.handleAutocompleteChangeDebounced = debounce(this.handleAutocompleteChange.bind(this), 150);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -127,7 +126,7 @@ class Autocomplete extends Component {
    */
   async autocompleteSearch(keyword) {
     if (!this.cache[keyword] || this.cache[keyword].cacheExpiry < (new Date()).getTime()) {
-      this.cache[keyword] = await this.getItemsDebounced(keyword);
+      this.cache[keyword] = await this.getItems(keyword);
       this.cache[keyword].cacheExpiry = (new Date()).getTime() + this.cacheExpiry;
     }
     return this.cache[keyword];
@@ -210,7 +209,7 @@ class Autocomplete extends Component {
   handleAfterNameUpdate() {
     if (this.state.name) {
       if (!this.state.name.endsWith(' ')) {
-        this.handleAutocompleteChange();
+        this.handleAutocompleteChangeDebounced();
       }
     } else {
       this.closeAutocomplete();

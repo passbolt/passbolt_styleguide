@@ -1,7 +1,7 @@
 import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../test/fixture/Settings/userSettings";
+import {users, groups} from "../../contexts/UserWorkspaceContext.test.data";
 import MockPort from "../../test/mock/MockPort";
-
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
@@ -14,6 +14,8 @@ export function defaultAppContext(appContext) {
   const defaultAppContext = {
     userSettings,
     port,
+    users,
+    groups,
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);

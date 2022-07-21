@@ -271,12 +271,70 @@ class ShareDialog extends Component {
    * @returns {Promise<Object>} aros,
    */
   async fetchAutocompleteItems(keyword) {
-    const ids = this.props.context.shareDialogProps.resourcesIds || this.props.context.shareDialogProps.foldersIds;
-    const items = await this.props.context.port.request('passbolt.share.search-aros', keyword, ids);
-    return items.filter(item => {
-      const found = this.state.permissions.filter(permission => (permission.aro.id === item.id));
-      return found.length === 0;
+    keyword = keyword.toLowerCase();
+    const words = (keyword && keyword.split(/\s+/)) || [''];
+    // Test match of some escaped test words against the name / username
+    const escapeWord = word => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const wordToRegex = word => new RegExp(escapeWord(word), 'i');
+    const matchWord = (word, value) => wordToRegex(word).test(value);
+
+    const matchUsernameProperty = (word, user) => matchWord(word, user.username);
+    const matchNameProperty = (word, user) => matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
+    const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
+    const matchUserText = user => words.every(word => matchUser(word, user));
+
+    const matchGroup = (word, group) => matchWord(word, group.name);
+    const matchGroupText = group => words.every(word => matchGroup(word, group));
+
+    const permissions = this.state.permissions;
+
+    const hasPermissionsOnResources = aro_id =>
+      permissions.some(permission => permission.id === aro_id);
+
+    let currentcount = 0;
+    const groups = this.props.context.groups.filter(group => {
+      const isMatching = currentcount < Autocomplete.DISPLAY_LIMIT
+        && matchGroupText(group)
+        && !hasPermissionsOnResources(group.id);
+
+      if (isMatching) {
+        currentcount++;
+      }
+
+      return isMatching;
     });
+
+    const users = this.props.context.users.filter(user => {
+      const isMatching = currentcount < Autocomplete.DISPLAY_LIMIT
+        && user.active === true
+        && matchUserText(user)
+        && !hasPermissionsOnResources(user.id);
+
+      if (isMatching) {
+        currentcount++;
+      }
+
+      return isMatching;
+    });
+
+    await Promise.all(users.map(async user => {
+      if (!user.gpgkey) {
+        user.gpgkey = {
+          fingerprint: await this.getFingerprintForUser(user.id)
+        };
+      }
+    }));
+    return [...users, ...groups];
+  }
+
+  /**
+   * Find a user gpg key
+   * @param {string} userId
+   * @returns {Promise<object>}
+   */
+  async getFingerprintForUser(userId) {
+    const keyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
+    return keyInfo.fingerprint;
   }
 
   /**
@@ -497,7 +555,7 @@ class ShareDialog extends Component {
                 itemsRenderer={this.renderContainer}
                 length={this.state.permissions.length}
                 minSize={this.props.listMinSize}
-                type="uniform"
+                type={this.state.permissions.length < 3 ? "simple" : "uniform"}
                 ref={this.permissionListRef}
                 threshold={30}>
               </ReactList>
