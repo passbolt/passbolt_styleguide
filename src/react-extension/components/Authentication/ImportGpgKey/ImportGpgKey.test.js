@@ -223,5 +223,24 @@ describe("ImportGpgKey", () => {
       await page.verifyKey();
       expect(page.hasInvalidPrivateKeyError).toBeFalsy();
     });
+
+    it("As AN I should see a warning if the private key has an expiration date", async() => {
+      const props = defaultProps({
+        validatePrivateGpgKey: jest.fn(() => { throw new Error("The private key should be a valid armored GPG key."); }),
+        hasKeyExpirationDate: jest.fn(() => Promise.resolve(true))
+      });
+      props.context.port.request.mockImplementation(() => ({
+        expires: "2100-01-01 00:00:00.000",
+        revoked: false
+      }));
+      const page = new ImportGpgKeyPage(props);
+
+      expect.assertions(3);
+      await page.fill('Some private key');
+      await page.verifyKey();
+      expect(page.hasInvalidPrivateKeyError).toBeTruthy();
+      expect(page.warningMessage).toContain("The private key should not have an expiry date.");
+      expect(page.warningMessage).toContain("Once expired you will not be able to connect to your account.");
+    });
   });
 });
