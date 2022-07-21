@@ -226,7 +226,12 @@ class ConfirmSaveAccountRecoverySettings extends Component {
             <Trans>Warning, Please review carefully this configuration as it will not be trivial to change this later.</Trans>
           </div>
           <div className="submit-wrapper clearfix">
-            <button className={`button button-left ${this.isProcessing ? "disabled" : ''}`} type="button">{this.translate("Learn more")}</button>
+            <a
+              target="_blank" rel="noopener noreferrer"
+              href="https://help.passbolt.com/configure/account-recovery"
+              className={`button button-left ${this.isProcessing ? "disabled" : ''}`}>
+              <Trans>Learn more</Trans>
+            </a>
             <FormCancelButton
               onClick={this.handleClose}
               disabled={this.isProcessing}/>
