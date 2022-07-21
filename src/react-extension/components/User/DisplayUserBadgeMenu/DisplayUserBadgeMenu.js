@@ -18,7 +18,7 @@ import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -189,14 +189,6 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
@@ -256,7 +248,6 @@ DisplayUserBadgeMenu.propTypes = {
   accountRecoveryContext: PropTypes.object, // The account recovery context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withNavigationContext(withAccountRecovery(withTranslation('common')(DisplayUserBadgeMenu))));
+export default withAppContext(withNavigationContext(withAccountRecovery(DisplayUserBadgeMenu)));

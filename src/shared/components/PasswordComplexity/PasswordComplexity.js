@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {SecretGeneratorComplexity} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
 
 /**
@@ -145,4 +145,4 @@ PasswordComplexity.propTypes = {
   error: PropTypes.bool, // The error
 };
 
-export default withTranslation('common')(PasswordComplexity);
+export default PasswordComplexity;

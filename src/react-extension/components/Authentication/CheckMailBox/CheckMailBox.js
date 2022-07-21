@@ -12,18 +12,9 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
-import PropTypes from "prop-types";
+import {Trans} from "react-i18next";
 
 class CheckMailBox extends Component {
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -42,7 +33,6 @@ class CheckMailBox extends Component {
 }
 
 CheckMailBox.propTypes = {
-  t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(CheckMailBox);
+export default CheckMailBox;

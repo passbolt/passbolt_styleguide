@@ -39,14 +39,6 @@ class HomePage extends React.Component {
     };
   }
 
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   handleStorageChange(changes) {
     if (changes.resources) {
       const resources = changes.resources.newValue;

@@ -58,7 +58,7 @@ class HandleAccountRecoveryUserSettingsRoute extends React.Component {
    * Notify the user that the enrollment has been done already.
    */
   async showAlreadyEnrolledFeedback() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("You already enrolled to the account recovery program"));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("You already enrolled to the account recovery program"));
   }
 
   /**
@@ -66,14 +66,6 @@ class HandleAccountRecoveryUserSettingsRoute extends React.Component {
    */
   redirectToSettingsPage() {
     this.props.history.push("/app/settings/account-recovery");
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

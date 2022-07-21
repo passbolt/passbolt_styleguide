@@ -45,7 +45,7 @@ describe("As AD I can see a Breadcrumb", () => {
     page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
     expect(page.count).toBe(3);
     expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Multi factor authentication");
+    expect(page.item(2)).toBe("Multi Factor Authentication");
     expect(page.item(3)).toBe("Settings");
   });
 

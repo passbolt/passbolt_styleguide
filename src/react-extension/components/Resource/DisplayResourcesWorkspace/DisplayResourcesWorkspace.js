@@ -40,14 +40,6 @@ class Workspace extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
@@ -60,7 +52,7 @@ class Workspace extends Component {
         <div className="header second">
           <Logo/>
           <FilterResourcesByText
-            placeholder={this.translate("Search passwords")}/>
+            placeholder={this.props.t("Search passwords")}/>
           <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
         </div>
         <div className="header third">

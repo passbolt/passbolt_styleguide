@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
+import {Trans} from "react-i18next";
 
 /**
  * This component represent a password input field with some additional properties
@@ -135,7 +136,7 @@ class Password extends Component {
               {this.state.viewPassword &&
                 <Icon name='eye-close'/>
               }
-              <span className="visually-hidden">view</span>
+              <span className="visually-hidden"><Trans>View</Trans></span>
             </a>
           </div>
         }

@@ -273,14 +273,6 @@ class EnterNewPassphrase extends React.Component {
     this.setState({isObfuscated: !this.state.isObfuscated});
   }
 
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   render() {
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
@@ -333,7 +325,7 @@ class EnterNewPassphrase extends React.Component {
                 <button className="button cancel" type="button" disabled={!this.areActionsAllowed} onClick={this.handleCancel}>
                   <Trans>Cancel</Trans>
                 </button>
-                <FormSubmitButton primary={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.translate('Update')}/>
+                <FormSubmitButton primary={true} disabled={this.mustBeDisabled} processing={this.isProcessing} value={this.props.t('Update')}/>
               </div>
             </form>
           </div>

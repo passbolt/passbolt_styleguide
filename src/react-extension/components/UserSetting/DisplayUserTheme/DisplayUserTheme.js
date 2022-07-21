@@ -99,7 +99,7 @@ class DisplayUserTheme extends React.Component {
    */
   async onSelectSuccess() {
     await this.props.loadingContext.remove();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The theme has been updated successfully"));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The theme has been updated successfully"));
   }
 
   /**
@@ -111,14 +111,6 @@ class DisplayUserTheme extends React.Component {
       error: error
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

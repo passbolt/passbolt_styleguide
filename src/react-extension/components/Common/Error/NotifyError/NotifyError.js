@@ -68,7 +68,7 @@ class NotifyError extends Component {
   getTitle() {
     return this.props.title
       ? this.props.title
-      : this.translate("There was an unexpected error...");
+      : this.props.t("There was an unexpected error...");
   }
 
   /**
@@ -107,14 +107,6 @@ class NotifyError extends Component {
    */
   get hasErrorDetails() {
     return Boolean(this.props.error.data?.body) || Boolean(this.props.error.details);
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

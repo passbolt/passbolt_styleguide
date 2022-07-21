@@ -314,7 +314,7 @@ class ResourceViewPage extends React.Component {
                 </span>
               }
             </div>
-            <a role="button" className={`button button-transparent property-action ${!this.state.resource.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("copy to clipboard")}>
+            <a role="button" className={`button button-transparent property-action ${!this.state.resource.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("Copy to clipboard")}>
               <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
                 {status => (
                   <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
@@ -371,12 +371,12 @@ class ResourceViewPage extends React.Component {
                         </span>
                       )}
                     </Transition>
-                    <span className="visually-hidden">view</span>
+                    <span className="visually-hidden"><Trans>View</Trans></span>
                   </a>
                 }
               </div>
             </div>
-            <a role="button" className="button button-transparent property-action" onClick={this.handleCopyPasswordClick} title={this.translate("copy to clipboard")}>
+            <a role="button" className="button button-transparent property-action" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
               <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
                 {status => (
                   <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>

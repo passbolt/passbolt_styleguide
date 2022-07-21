@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {CirclePicker} from "react-color";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 
@@ -349,4 +349,4 @@ ChooseSecurityToken.propTypes = {
   onComplete: PropTypes.func.isRequired, // The callback function to call when the form is submitted
 };
 
-export default withTranslation('common')(ChooseSecurityToken);
+export default ChooseSecurityToken;

@@ -132,9 +132,9 @@ class PassphraseDialog extends React.Component {
           <a className="primary-action">
             <span className="primary-action-title"><Trans>Passphrase required</Trans></span>
           </a>
-          <a onClick={this.handleCloseButtonClick} className="secondary-action button-transparent button" title={this.translate("cancel the operation")}>
+          <a onClick={this.handleCloseButtonClick} className="secondary-action button-transparent button" title={this.translate("Cancel the operation")}>
             <Icon name="close"/>
-            <span className="visually-hidden"><Trans>cancel</Trans></span>
+            <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </a>
         </div>
         {this.state.attempt < 3 &&
@@ -142,7 +142,7 @@ class PassphraseDialog extends React.Component {
             <div className="form-container">
               <div className={`input-password-wrapper input required ${this.state.passphraseError ? 'error' : ''}`} >
                 <label htmlFor="passphrase"><Trans>Please enter your passphrase</Trans></label>
-                <Password name="passphrase" placeholder={this.translate('passphrase')} id="passphrase" inputRef={this.passphraseInputRef}
+                <Password name="passphrase" placeholder={this.translate('Passphrase')} id="passphrase" inputRef={this.passphraseInputRef}
                   value={this.state.passphrase} onChange={this.handleInputChange} disabled={this.state.processing}
                   securityToken={this.props.context.userSettings.getSecurityToken()} autoComplete="off"/>
                 {this.state.passphraseError &&
@@ -157,7 +157,7 @@ class PassphraseDialog extends React.Component {
             <div className="submit-wrapper">
               <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
                 disabled={this.state.processing}>
-                <Trans>submit</Trans>
+                <Trans>Submit</Trans>
                 {this.state.processing &&
                   <Icon name="spinner"/>
                 }
@@ -172,7 +172,7 @@ class PassphraseDialog extends React.Component {
             </div>
             <div className="submit-wrapper">
               <a className="button primary big full-width" role="button" onClick={this.handleCloseButtonClick}>
-                <Trans>close</Trans>
+                <Trans>Close</Trans>
               </a>
             </div>
           </div>

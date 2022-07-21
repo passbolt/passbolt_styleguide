@@ -138,7 +138,7 @@ class DisplayResourceDetailsDescription extends React.Component {
         description: undefined,
         isSecretDecrypting: false,
         error: true,
-        errorMsg: this.translate("Decryption failed, click here to retry") + (error.message || '')
+        errorMsg: this.props.t("Decryption failed, click here to retry") + (error.message || '')
       });
 
       return false;
@@ -273,14 +273,6 @@ class DisplayResourceDetailsDescription extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -304,7 +296,7 @@ class DisplayResourceDetailsDescription extends React.Component {
           {this.canEdit() &&
           <a className="section-action button button-transparent" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
-            <span className="visuallyhidden"><Trans>edit</Trans></span>
+            <span className="visuallyhidden"><Trans>Edit</Trans></span>
           </a>
           }
           {this.state.isSecretDecrypting &&

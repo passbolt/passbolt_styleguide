@@ -162,7 +162,7 @@ class GeneratePasswordPage extends React.Component {
             <Link to="/data/quickaccess.html" className="secondary-action button-transparent button"
               title={this.translate("Cancel")}>
               <Icon name="close"/>
-              <span className="visually-hidden"><Trans>cancel</Trans></span>
+              <span className="visually-hidden"><Trans>Cancel</Trans></span>
             </Link>
           </div>
           <form onSubmit={this.handleSubmit} noValidate>
@@ -182,7 +182,7 @@ class GeneratePasswordPage extends React.Component {
                     disabled={this.state.processing}/>
                   <a onClick={this.handleGeneratePasswordButtonClick} className="password-generate button button-icon">
                     <Icon name="dice"/>
-                    <span className="visually-hidden"><Trans>generate</Trans></span>
+                    <span className="visually-hidden"><Trans>Generate</Trans></span>
                   </a>
                   <a onClick={this.handleCopyPassword} className="copy-to-clipboard button button-icon">
                     <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
@@ -206,7 +206,7 @@ class GeneratePasswordPage extends React.Component {
                         </span>
                       )}
                     </Transition>
-                    <span className="visually-hidden"><Trans>copy</Trans></span>
+                    <span className="visually-hidden"><Trans>Copy</Trans></span>
                   </a>
                 </div>
                 <PasswordComplexity entropy={passwordEntropy}/>

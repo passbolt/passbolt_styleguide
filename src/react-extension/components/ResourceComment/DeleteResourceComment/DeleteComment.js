@@ -13,6 +13,7 @@
  */
 
 import React from "react";
+import {Trans} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
@@ -53,7 +54,7 @@ class DeleteComment extends React.Component {
         <span className="svg-icon">
           <Icon name="trash"/>
         </span>
-        <span className="visuallyhidden">delete</span>
+        <span className="visuallyhidden"><Trans>Delete</Trans></span>
       </a>
     );
   }

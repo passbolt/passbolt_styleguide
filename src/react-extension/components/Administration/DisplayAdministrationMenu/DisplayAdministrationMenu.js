@@ -19,7 +19,7 @@ import {
 } from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 
@@ -184,14 +184,6 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -279,7 +271,6 @@ DisplayAdministrationMenu.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   history: PropTypes.object, // The router history
   navigationContext: PropTypes.any, // The application navigation context
-  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationMenu)))));
+export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace((DisplayAdministrationMenu)))));

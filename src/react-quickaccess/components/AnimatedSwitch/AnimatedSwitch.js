@@ -156,7 +156,6 @@ AnimatedSwitch.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
-  t: PropTypes.func, // The translation function
 };
 
 export default withRouter(AnimatedSwitch);

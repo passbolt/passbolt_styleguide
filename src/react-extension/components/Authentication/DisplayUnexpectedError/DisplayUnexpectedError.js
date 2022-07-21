@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 class DisplayUnexpectedError extends Component {
@@ -119,7 +119,7 @@ class DisplayUnexpectedError extends Component {
 }
 
 DisplayUnexpectedError.defaultProps = {
-  title: <Trans>Something went wrong.</Trans>,
+  title: <Trans>Something went wrong!</Trans>,
   message: <Trans>The operation failed with the following error:</Trans>,
 };
 
@@ -136,4 +136,4 @@ DisplayUnexpectedError.propTypes = {
   ]),
   error: PropTypes.any, // The error to display
 };
-export default withTranslation('common')(DisplayUnexpectedError);
+export default DisplayUnexpectedError;

@@ -218,7 +218,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
                 <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
                 <a className="button" href="https://help.passbolt.com" target="_blank" rel="noopener noreferrer">
                   <Icon name="life-ring"/>
-                  <span><Trans>Read documentation</Trans></span>
+                  <span><Trans>Read the documentation</Trans></span>
                 </a>
               </div>
             </div>

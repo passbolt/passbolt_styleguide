@@ -118,7 +118,7 @@ class DeleteResourceTag extends Component {
   render() {
     return (
       <DialogWrapper
-        title="Delete tag?"
+        title={this.translate("Delete tag?")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-tag-dialog">

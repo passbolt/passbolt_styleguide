@@ -17,7 +17,7 @@ import EditResourceTagsItemViewer from "../../ResourceTag/EditResourceTags/EditR
 import EditResourceTags from "../../ResourceTag/EditResourceTags/EditResourceTags";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class DisplayResourceDetailsTag extends React.Component {
   /**
@@ -73,14 +73,6 @@ class DisplayResourceDetailsTag extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -107,7 +99,7 @@ class DisplayResourceDetailsTag extends React.Component {
         <div className="accordion-content">
           <a className="section-action button button-transparent" onClick={this.toggleInputTagEditor}>
             <Icon name="edit"/>
-            <span className="visuallyhidden">edit</span>
+            <span className="visuallyhidden"><Trans>Edit</Trans></span>
           </a>
 
           {!this.state.showTagEditor &&
@@ -133,7 +125,6 @@ class DisplayResourceDetailsTag extends React.Component {
 DisplayResourceDetailsTag.propTypes = {
   history: PropTypes.any,
   resourceWorkspaceContext: PropTypes.any,
-  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsTag));
+export default withResourceWorkspace(DisplayResourceDetailsTag);

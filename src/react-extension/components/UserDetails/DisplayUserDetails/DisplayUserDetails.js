@@ -22,7 +22,7 @@ import DisplayUserDetailsInformation from "../DisplayUserDetailsInformation/Disp
 import DisplayUserDetailsGroups from "../DisplayUserDetailsGroups/DisplayUserDetailsGroups";
 import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayUserDetailsPublicKey";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withTranslation} from "react-i18next";
+import {withTranslation, Trans} from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
 
 class DisplayUserDetails extends React.Component {
@@ -130,14 +130,14 @@ class DisplayUserDetails extends React.Component {
                 <span className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</span>
                 <a className="title-link" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
-                  <span className="visuallyhidden">Copy the link to this user</span>
+                  <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
                 </a>
               </div>
               <span className="subtitle">{this.user.username}</span>
             </h3>
             <a className="dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
-              <span className="visuallyhidden">Close</span>
+              <span className="visuallyhidden"><Trans>Close</Trans></span>
             </a>
           </div>
           <DisplayUserDetailsInformation/>

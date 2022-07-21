@@ -220,7 +220,7 @@ class SaveResource extends React.Component {
             <a className="cancel" role="button" onClick={this.handleClose}>{this.translate("no, thanks")}</a>
             <button type="submit" className={`button primary big ${this.state.processing ? "processing" : ""}`} role="button"
               disabled={this.state.processing}>
-              <Trans>save</Trans>
+              <Trans>Save</Trans>
               {this.state.processing &&
                 <Icon name="spinner"/>
               }

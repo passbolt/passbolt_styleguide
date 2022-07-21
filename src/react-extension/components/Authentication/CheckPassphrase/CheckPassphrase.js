@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
@@ -253,14 +253,6 @@ class CheckPassphrase extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
@@ -354,6 +346,5 @@ CheckPassphrase.propTypes = {
   ]), // Defines how the form should be displayed and behaves
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
-  t: PropTypes.func, // The translation function
 };
-export default withTranslation('common')(CheckPassphrase);
+export default CheckPassphrase;

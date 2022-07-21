@@ -486,7 +486,7 @@ class DisplayUserWorkspaceActions extends React.Component {
                 className={`button button-toggle info ${this.hasDetailsLocked() ? "selected" : ""}`}
                 onClick={this.handleDetailsLockedEvent}>
                 <Icon name="info-circle" big={true}/>
-                <span className="visuallyhidden">View detail</span>
+                <span className="visuallyhidden"><Trans>View detail</Trans></span>
               </a>
             </li>
           </ul>

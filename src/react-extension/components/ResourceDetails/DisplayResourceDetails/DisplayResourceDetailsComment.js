@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class DisplayResourceDetailsComment extends React.Component {
   /**
@@ -130,14 +130,6 @@ class DisplayResourceDetailsComment extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -190,7 +182,6 @@ class DisplayResourceDetailsComment extends React.Component {
 
 DisplayResourceDetailsComment.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource context
-  t: PropTypes.func, // The translation function
 };
 
-export default withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsComment));
+export default withResourceWorkspace(DisplayResourceDetailsComment);

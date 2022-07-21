@@ -12,6 +12,7 @@
  * @since         3.2.0
  */
 import React, {Component} from "react";
+import {Trans} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 
@@ -51,7 +52,7 @@ class AnnouncementWrapper extends Component {
           {this.props.canClose &&
           <a className="announcement-close dialog-close button button-transparent" onClick={this.handleClose} role="button">
             <Icon name='close'/>
-            <span className="visually-hidden">Close</span>
+            <span className="visually-hidden"><Trans>Close</Trans></span>
           </a>
           }
           {this.props.children}

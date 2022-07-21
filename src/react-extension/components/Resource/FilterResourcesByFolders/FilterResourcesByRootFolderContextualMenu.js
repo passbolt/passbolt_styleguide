@@ -19,7 +19,7 @@ import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/Crea
 import {withDialog} from "../../../contexts/DialogContext";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class FilterResourcesByRootFolderContextualMenu extends React.Component {
   /**
@@ -89,14 +89,6 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -144,7 +136,6 @@ FilterResourcesByRootFolderContextualMenu.propTypes = {
   className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withDialog(withTranslation('common')(FilterResourcesByRootFolderContextualMenu))));
+export default withAppContext(withResourceWorkspace(withDialog(FilterResourcesByRootFolderContextualMenu)));

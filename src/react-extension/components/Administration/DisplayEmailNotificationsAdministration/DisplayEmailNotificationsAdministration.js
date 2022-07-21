@@ -321,7 +321,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The email notification settings were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The email notification settings were updated."));
     this.setState({processing: false});
   }
 
@@ -388,14 +388,6 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    */
   canUseAccountRecovery() {
     return this.props.context.siteSettings.canIUse("accountRecovery");
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

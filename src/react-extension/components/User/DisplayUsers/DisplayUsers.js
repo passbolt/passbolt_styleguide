@@ -407,7 +407,7 @@ class DisplayUsers extends React.Component {
                     <th className="cell-multiple-select selections s-cell">
                       <div className="input checkbox">
                         <input type="checkbox" name="select all" checked={false} readOnly={true}/>
-                        <span className="visually-hidden">select all</span>
+                        <span className="visually-hidden"><Trans>Select all</Trans></span>
                       </div>
                     </th>
                     {this.hasAttentionRequiredColumn() &&

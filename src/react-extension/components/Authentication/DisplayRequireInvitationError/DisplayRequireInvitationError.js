@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class DisplayRequireInvitationError extends Component {
   /**
@@ -42,4 +42,4 @@ class DisplayRequireInvitationError extends Component {
 DisplayRequireInvitationError.propTypes = {
   context: PropTypes.any, // The application context
 };
-export default withAppContext(withTranslation('common')(DisplayRequireInvitationError));
+export default withAppContext(DisplayRequireInvitationError);

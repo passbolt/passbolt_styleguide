@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * This component allows to select shortcut filters applied on resources
@@ -71,7 +71,7 @@ class FilterResourcesByShortcuts extends React.Component {
   }
 
   /**
-   * Returns true if the Recently Modified shortcut is currently selected
+   * Returns true if the Recently modified shortcut is currently selected
    */
   get isRecentlyModifiedSelected() {
     return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
@@ -117,14 +117,6 @@ class FilterResourcesByShortcuts extends React.Component {
     this.props.history.push({pathname: '/app/passwords', state: {filter}});
   }
 
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   render() {
     return (
       <div className="navigation-secondary navigation-shortcuts">
@@ -156,7 +148,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a>
-                    <span><Trans>Recently Modified</Trans></span>
+                    <span><Trans>Recently modified</Trans></span>
                   </a>
                 </div>
               </div>
@@ -193,7 +185,6 @@ class FilterResourcesByShortcuts extends React.Component {
 FilterResourcesByShortcuts.propTypes = {
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
-  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withTranslation('common')(FilterResourcesByShortcuts)));
+export default withRouter(withResourceWorkspace(FilterResourcesByShortcuts));

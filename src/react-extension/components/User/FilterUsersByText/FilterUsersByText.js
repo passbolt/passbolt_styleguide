@@ -98,14 +98,6 @@ class FilterUsersByText extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
@@ -114,7 +106,7 @@ class FilterUsersByText extends Component {
       <SearchBar
         disabled={this.props.disabled}
         onSearch={this.handleSearchEvent}
-        placeholder={this.translate("Search users")}
+        placeholder={this.props.t("Search users")}
         value={this.state.text} />
     );
   }

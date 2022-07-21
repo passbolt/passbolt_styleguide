@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withAdminAccountRecovery} from "../../../../contexts/AdminAccountRecoveryContext";
 import {AccountRecoveryUserContextProvider} from "../../../../contexts/AccountRecoveryUserContext";
 import {withWorkflow} from "../../../../contexts/WorkflowContext";
@@ -90,15 +90,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     return this.props.adminAccountRecoveryContext.hasPolicyChanges();
   }
 
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -132,7 +123,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
 DisplayAdministrationWorkspaceActions.propTypes = {
   adminAccountRecoveryContext: PropTypes.object, // The admin account recovery context
   workflowContext: PropTypes.any, // the workflow context
-  t: PropTypes.func, // The translation function
 };
 
-export default withWorkflow(withAdminAccountRecovery(withTranslation('common')(DisplayAdministrationWorkspaceActions)));
+export default withWorkflow(withAdminAccountRecovery(DisplayAdministrationWorkspaceActions));

@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * Child component that displays a single action feedback
@@ -169,4 +169,4 @@ ShareActionFeedback.propTypes = {
   displayTimeInMs: PropTypes.number, // The time the feedback should be displayed
 };
 
-export default withTranslation('common')(ShareActionFeedback);
+export default ShareActionFeedback;

@@ -69,21 +69,13 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Organization Recovery Key")}
+        title={this.props.t("Organization Recovery Key")}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="organization-recover-key-dialog">

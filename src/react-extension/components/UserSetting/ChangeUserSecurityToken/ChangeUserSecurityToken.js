@@ -205,7 +205,7 @@ class ChangeUserSecurityToken extends Component {
     };
     try {
       await this.props.userSettingsContext.onUpdateSecurityTokenRequested(securityTokenDto);
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The security token has been updated successfully"));
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The security token has been updated successfully"));
       await this.toggleProcessing();
     } catch (error) {
       await this.onSaveFailure(error);
@@ -301,14 +301,6 @@ class ChangeUserSecurityToken extends Component {
     return this.state.errors
       && (this.state.errors.emptyCode
         || this.state.errors.lengthCode);
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

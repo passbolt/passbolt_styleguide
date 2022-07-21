@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * The component display variations.
@@ -57,4 +57,4 @@ DisplayAlreadyLoggedInError.propTypes = {
   ]).isRequired, // Defines how the disalog should be displayed
   onLogoutButtonClick: PropTypes.func.isRequired, // The callback function that should trigger a log out of the current user
 };
-export default withTranslation('common')(DisplayAlreadyLoggedInError);
+export default DisplayAlreadyLoggedInError;

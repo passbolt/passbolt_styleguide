@@ -679,13 +679,13 @@ class EditResource extends Component {
                 <a onClick={this.handleGeneratePasswordButtonClick}
                   className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                   <Icon name='dice' big={true}/>
-                  <span className="visually-hidden">generate</span>
+                  <span className="visually-hidden"><Trans>Generate</Trans></span>
                 </a>
                 {this.canUsePasswordGenerator &&
                   <a onClick={this.handleOpenGenerator}
                     className={`password-generator button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='settings' big={true}/>
-                    <span className="visually-hidden">open generator</span>
+                    <span className="visually-hidden"><Trans>Open generator</Trans></span>
                   </a>
                 }
               </div>

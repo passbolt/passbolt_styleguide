@@ -134,7 +134,7 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
   async handleSave(privateGpgKeyDto) {
     try {
       await this.props.context.port.request('passbolt.account-recovery.review-request', this.state.accountRecoveryRequest.id, this.state.responseStatus, privateGpgKeyDto);
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery review has been saved successfully"));
+      await this.props.actionFeedbackContext.displaySuccess(this.props.t("The account recovery review has been saved successfully"));
       this.props.onStop();
     } catch (e) {
       if (e.name === "UserAbortsOperationError") {
@@ -158,14 +158,6 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
     this.props.dialogContext.open(NotifyError, errorDialogProps);
     this.props.onStop();
     this.props.dialogContext.close(this.state.currentOpenedDialog);
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

@@ -18,7 +18,7 @@ import EditResourceTag from "../../ResourceTag/EditResourceTag/EditResourceTag";
 import DeleteResourceTag from "../../ResourceTag/DeleteResourceTag/DeleteResourceTag";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class FilterResourcesByTagsListContextualMenu extends React.Component {
   /**
@@ -68,14 +68,6 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component.
    * @returns {JSX}
    */
@@ -90,7 +82,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit-tag" onClick={this.handleEditClickEvent}><span><Trans>Edit Tag</Trans></span></a>
+                <a id="edit-tag" onClick={this.handleEditClickEvent}><span><Trans>Edit tag</Trans></span></a>
               </div>
             </div>
           </div>
@@ -118,7 +110,6 @@ FilterResourcesByTagsListContextualMenu.propTypes = {
   selectedTag: PropTypes.object,
   className: PropTypes.string, // Class name to add
   dialogContext: PropTypes.any,
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withTranslation('common')(FilterResourcesByTagsListContextualMenu)));
+export default withAppContext(withDialog(FilterResourcesByTagsListContextualMenu));

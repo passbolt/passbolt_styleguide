@@ -53,12 +53,12 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
     const names = {
       profile: this.translate("Profile"),
       passphrase: this.translate("Passphrase"),
-      'security-token': this.translate("Security Token"),
+      'security-token': this.translate("Security token"),
       theme: this.translate("Theme"),
       mfa: this.translate("Multi Factor Authentication"),
       keys: this.translate("Keys inspector"),
       mobile: this.translate("Mobile transfer"),
-      'account-recovery': this.translate("Account recovery"),
+      'account-recovery': this.translate("Account Recovery"),
     };
     const matchedKey = Object.keys(names).find(matchPathSuffix);
     return names[matchedKey];

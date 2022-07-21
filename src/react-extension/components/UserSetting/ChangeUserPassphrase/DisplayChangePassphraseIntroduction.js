@@ -16,7 +16,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * This component displays the user profile information
@@ -164,7 +164,6 @@ class DisplayChangePassphraseIntroduction extends React.Component {
 
 DisplayChangePassphraseIntroduction.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
-  t: PropTypes.func, // The translation function
 };
 
-export default withUserSettings(withTranslation('common')(DisplayChangePassphraseIntroduction));
+export default withUserSettings(DisplayChangePassphraseIntroduction);
