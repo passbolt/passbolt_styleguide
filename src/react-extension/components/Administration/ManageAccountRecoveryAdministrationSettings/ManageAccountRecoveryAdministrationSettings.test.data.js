@@ -54,7 +54,7 @@ export function hasChangedPolicyProps(props = {}) {
 }
 
 const defaultKeyInfo = {
-  user_ids: [{name:"Test Test", email:"test@passbolt.com"}],
+  user_ids: [{name: "Test Test", email: "test@passbolt.com"}],
   armored_key: "new-public-key",
   fingerprint: "848E95CC7493129AD862583129B81CA8936023DD",
   algorithm: "RSA",
