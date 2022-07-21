@@ -50,6 +50,7 @@ class RecoverAuthentication extends Component {
           onComplete={this.props.authenticationRecoverContext.importGpgKey.bind(this)}
           onSecondaryActionClick={this.props.authenticationRecoverContext.needHelpCredentialsLost.bind(this)}
           validatePrivateGpgKey={this.props.authenticationRecoverContext.validatePrivateKey.bind(this)}
+          hasKeyExpirationDate={this.props.authenticationRecoverContext.hasKeyExpirationDate.bind(this)}
         />;
       case AuthenticationRecoverWorkflowStates.VALIDATE_PASSPHRASE:
         return <CheckPassphrase

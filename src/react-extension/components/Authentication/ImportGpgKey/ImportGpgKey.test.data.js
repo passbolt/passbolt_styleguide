@@ -28,7 +28,8 @@ export function defaultProps(props) {
         request: jest.fn(async() => ({}))
       }
     },
-    validatePrivateGpgKey: jest.fn()
+    validatePrivateGpgKey: jest.fn(),
+    shouldShowExpiryDateWarning: jest.fn(() => Promise.resolve(false))
   };
   return Object.assign(defaultProps, props || {});
 }

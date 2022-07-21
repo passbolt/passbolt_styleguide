@@ -55,7 +55,8 @@ class ImportGpgKey extends Component {
         emptyPrivateKey: false, // True if the private key is empty
         invalidPrivateKey: false, // True if the private key is invalid
       },
-      errorMessage: '' // The error messag if required
+      errorMessage: '', // The error message if isRequired
+      keyHasAnExpirationDate: false, // True if the key being imported has an expiration date
     };
   }
 
@@ -95,6 +96,7 @@ class ImportGpgKey extends Component {
     this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this);
     this.handleSelectPrivateKeyFile = this.handleSelectPrivateKeyFile.bind(this);
     this.handleSelectFile = this.handleSelectFile.bind(this);
+    this.checkExpiryDate = this.checkExpiryDate.bind(this);
   }
 
   /**
@@ -114,9 +116,24 @@ class ImportGpgKey extends Component {
     await this.validate();
 
     if (this.isValid) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       await this.save();
     }
+  }
+
+  /**
+   * Check the expiration date of the given private key.
+   * If the key has an expiry date, it shows a warning to the user.
+   * @param {string} privateKey
+   */
+  async checkExpiryDate(privateKey) {
+    if (!this.props.hasKeyExpirationDate) {
+      return;
+    }
+
+    // we do not display the warning message if the key can't be read.
+    const keyHasAnExpirationDate = await this.props.hasKeyExpirationDate(privateKey).catch(() => false);
+    this.setState({keyHasAnExpirationDate});
   }
 
   /**
@@ -126,6 +143,8 @@ class ImportGpgKey extends Component {
   async handleChangePrivateKey(event) {
     const privateKey = event.target.value;
     this.setState({privateKey});
+    await this.checkExpiryDate(privateKey);
+
     if (this.state.hasBeenValidated) {
       await this.validate();
     }
@@ -152,6 +171,7 @@ class ImportGpgKey extends Component {
   async handleSelectPrivateKeyFile(event) {
     const [privateKeyFile] = event.target.files;
     const privateKey = await this.readPrivateKeyFile(privateKeyFile);
+    await this.checkExpiryDate(privateKey);
     this.setState({privateKey, selectedFile: privateKeyFile});
     if (this.state.hasBeenValidated) {
       await this.validate();
@@ -171,9 +191,9 @@ class ImportGpgKey extends Component {
    * @param {Error} error The error
    * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError.
    */
-  async onSaveFailure(error) {
+  onSaveFailure(error) {
     // It can happen when some key validation went wrong.
-    await this.toggleProcessing();
+    this.toggleProcessing();
     if (error.name === "GpgKeyError") {
       this.setState({errors: {invalidPrivateKey: true}, errorMessage: error.message});
     } else {
@@ -224,8 +244,8 @@ class ImportGpgKey extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
-    await this.setState({actions: {processing: !this.state.actions.processing}});
+  toggleProcessing() {
+    this.setState({actions: {processing: !this.state.actions.processing}});
   }
 
   /**
@@ -275,6 +295,12 @@ class ImportGpgKey extends Component {
                 <span><Trans>Choose a file</Trans></span>
               </button>
             </div>
+            {this.state.keyHasAnExpirationDate &&
+              <div className="warning-message">
+                <Trans>The private key should not have an expiry date.</Trans>&nbsp;
+                <Trans>Once expired you will not be able to connect to your account.</Trans>
+              </div>
+            }
             {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPrivateKey &&
@@ -323,5 +349,6 @@ ImportGpgKey.propTypes = {
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
   validatePrivateGpgKey: PropTypes.func, // The callback to check the validity of the gpg key
+  hasKeyExpirationDate: PropTypes.func, // The callback to check if the key has an expiration date
 };
 export default withAppContext(withTranslation('common')(ImportGpgKey));

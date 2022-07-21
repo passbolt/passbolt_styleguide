@@ -109,6 +109,10 @@ export default class ImportGpgKeyPage {
     return !this.privateKeyInput.hasAttribute('disabled');
   }
 
+  get warningMessage() {
+    return this._page.container.querySelector('.warning-message').textContent;
+  }
+
   /**
    * Change the private key input value
    * @param privateKey The new passphrase

@@ -65,7 +65,9 @@ export const AuthenticationRecoverContext = React.createContext({
   validatePrivateKey: () => {
   }, // Whenever we need to verify the imported private key
   requestHelpCredentialsLost: () => {
-  } // Whenever the user wants to request help because it lost its credentials.
+  }, // Whenever the user wants to request help because it lost its credentials.
+  hasKeyExpirationDate: () => {
+  }, // Whenever the key to check has an expiration date
 });
 
 /**
@@ -103,6 +105,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       generateAccountRecoveryGpgKey: this.generateAccountRecoveryGpgKey.bind(this), // Whenever the user wants to create an account recovery gpg key.
       chooseAccountRecoverySecurityToken: this.chooseAccountRecoverySecurityToken.bind(this), // Whenever the user chose its account recovery security token preferences.
       validatePrivateKey: this.validatePrivateKey.bind(this), // Whenever we need to verify the imported private key
+      hasKeyExpirationDate: this.hasKeyExpirationDate.bind(this), // Whenever the expiration date needs to be checked
     };
   }
 
@@ -284,6 +287,16 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async validatePrivateKey(key) {
     await this.props.context.port.request('passbolt.recover.validate-private-key', key);
+  }
+
+  /**
+   * Returns true if the key has an expiry date
+   * @param {string} key the private to check in its armored form
+   * @returns {Promise<boolean>}
+   */
+  async hasKeyExpirationDate(armoredKey) {
+    const keyInfo = await this.props.context.port.request('passbolt.keyring.get-key-info', armoredKey);
+    return keyInfo.expires && keyInfo.expires !== 'Infinity';
   }
 
   /**
