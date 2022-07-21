@@ -33,7 +33,7 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -44,7 +44,7 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
     return (
       <AnnouncementWrapper className="subscription" onClose={this.props.onClose} canClose={true}>
         <p>
-          <Trans>Warning: </Trans>
+          <Trans>Warning:</Trans>&nbsp;
           <Trans>your subscription key will expire</Trans> {this.formatDateTimeAgo(this.props.expiry)}.
           <a onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
@@ -60,6 +60,7 @@ DisplayGoingToExpireSubscriptionAnnouncement.propTypes = {
   expiry: PropTypes.string, // The subscription expiry date
   navigationContext: PropTypes.any, // The application navigation context
   onClose: PropTypes.func, // The close function
+  t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(withNavigationContext(withAnnouncement(withTranslation('common')(DisplayGoingToExpireSubscriptionAnnouncement))));

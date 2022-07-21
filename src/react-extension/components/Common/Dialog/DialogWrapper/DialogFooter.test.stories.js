@@ -26,7 +26,7 @@ const Template = args =>
     <div className="dialog">
       <div className="dialog-content">
         <div className="dialog-footer">
-          <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn More</Trans></button>
+          <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn more</Trans></button>
           <a className={`cancel ${args.disabled ? 'disabled' : ''}`}>
             <Trans>Cancel</Trans>
           </a>

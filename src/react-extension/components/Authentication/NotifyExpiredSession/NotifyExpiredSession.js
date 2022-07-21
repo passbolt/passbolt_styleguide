@@ -63,18 +63,10 @@ class NotifyExpiredSession extends Component {
     return `${baseUrl}/auth/login`;
   }
 
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Session Expired")}
+        title={this.props.t("Session Expired")}
         onClose={this.handleCloseClick}
         className="session-expired-dialog">
         <div className="form-content">

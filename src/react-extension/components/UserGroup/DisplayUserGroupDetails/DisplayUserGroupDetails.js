@@ -110,7 +110,7 @@ class DisplayUserGroupDetails extends React.Component {
             </h3>
             <a className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
               <Icon name="close"/>
-              <span className="visuallyhidden">Close</span>
+              <span className="visuallyhidden"><Trans>Close</Trans></span>
             </a>
           </div>
         </div>

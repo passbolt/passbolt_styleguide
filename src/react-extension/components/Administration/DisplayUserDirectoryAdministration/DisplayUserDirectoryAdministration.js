@@ -794,13 +794,13 @@ class DisplayUserDirectoryAdministration extends React.Component {
                   <div className={`input text first-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Username</Trans></label>
                     <input id="username-input" type="text" className="fluid form-element" name="username"
-                      value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("username")}
+                      value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                       disabled={this.hasAllInputDisabled()}/>
                   </div>
                   <div className={`input text last-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Password</Trans></label>
                     <input id="password-input" className="fluid form-element" name="password"
-                      value={this.state.password} onChange={this.handleInputChange} placeholder={this.translate("password")} type="password"
+                      value={this.state.password} onChange={this.handleInputChange} placeholder={this.translate("Password")} type="password"
                       disabled={this.hasAllInputDisabled()}/>
                   </div>
                 </div>
@@ -837,7 +837,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Group path</Trans></label>
                   <input id="group-path-input" type="text" name="groupPath" value={this.state.groupPath}
-                    onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("Group Path")}
+                    onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("Group path")}
                     disabled={this.hasAllInputDisabled()}/>
                   <div className="help-message">
                     <Trans>Group path is used in addition to the base DN while searching groups.</Trans> <Trans>Leave empty if users and groups are in the same DN.</Trans>
@@ -846,7 +846,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>User path</Trans></label>
                   <input id="user-path-input" type="text" name="userPath" value={this.state.userPath}
-                    onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("User Path")}
+                    onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("User path")}
                     disabled={this.hasAllInputDisabled()}/>
                   <div className="help-message"><Trans>User path is used in addition to base DN while searching users.</Trans></div>
                 </div>
@@ -888,7 +888,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <div className={`input text first-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                       <label><Trans>Email prefix</Trans></label>
                       <input id="email-prefix-input" type="text" name="emailPrefix" checked={this.state.emailPrefix}
-                        onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("username")}
+                        onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.translate("Username")}
                         disabled={this.hasAllInputDisabled()}/>
                       <div className="help-message">
                         <Trans>The attribute you would like to use for the first part of the email (usually username).</Trans>

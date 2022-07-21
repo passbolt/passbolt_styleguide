@@ -18,7 +18,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -298,14 +298,6 @@ class FilterResourcesByTagsList extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -363,10 +355,9 @@ FilterResourcesByTagsList.propTypes = {
   history: PropTypes.any,
   dialogContext: PropTypes.any, // The dialog context
   dragContext: PropTypes.any, // The drag and drop context
-  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withAppContext(withDialog(withResourceWorkspace(withContextualMenu(withDrag(withTranslation('common')(FilterResourcesByTagsList)))))));
+export default withRouter(withAppContext(withDialog(withResourceWorkspace(withContextualMenu(withDrag(FilterResourcesByTagsList))))));
 
 export const filterByTagsOptions = {
   all: "all",

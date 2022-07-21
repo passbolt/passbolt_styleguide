@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 class EditResourceTagsItemViewer extends React.Component {
@@ -59,14 +59,6 @@ class EditResourceTagsItemViewer extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -107,7 +99,6 @@ EditResourceTagsItemViewer.propTypes = {
   toggleInputTagEditor: PropTypes.func,
   resourceWorkspaceContext: PropTypes.any,
   history: PropTypes.any,
-  t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withResourceWorkspace(withTranslation('common')(EditResourceTagsItemViewer)));
+export default withRouter(withResourceWorkspace(EditResourceTagsItemViewer));

@@ -373,7 +373,7 @@ class DisplayResourceDetailsInformation extends React.Component {
               <a onClick={this.handleViewPasswordButtonClick}
                 className="password-view button button-transparent">
                 <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
-                <span className="visually-hidden">view</span>
+                <span className="visually-hidden"><Trans>View</Trans></span>
               </a>
               }
             </div>

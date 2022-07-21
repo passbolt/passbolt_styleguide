@@ -329,7 +329,7 @@ class ResourceCreatePage extends React.Component {
           </a>
           <Link to="/data/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
             <Icon name="close"/>
-            <span className="visually-hidden"><Trans>cancel</Trans></span>
+            <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
         <form onSubmit={this.handleFormSubmit}>
@@ -367,13 +367,13 @@ class ResourceCreatePage extends React.Component {
                   <a onClick={this.handleGeneratePasswordButtonClick}
                     className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
                     <Icon name='dice'/>
-                    <span className="visually-hidden">generate</span>
+                    <span className="visually-hidden"><Trans>Generate</Trans></span>
                   </a>
                   {this.canUsePasswordGenerator &&
                     <a onClick={this.handleOpenGenerator}
                       className="password-generator button-icon button">
                       <Icon name='settings'/>
-                      <span className="visually-hidden">open generator</span>
+                      <span className="visually-hidden"><Trans>Open generator</Trans></span>
                     </a>
                   }
                 </div>
@@ -387,7 +387,7 @@ class ResourceCreatePage extends React.Component {
           <div className="submit-wrapper input">
             <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
               disabled={this.state.processing}>
-              <Trans>save</Trans>
+              <Trans>Save</Trans>
               {this.state.processing &&
                 <Icon name="spinner"/>
               }

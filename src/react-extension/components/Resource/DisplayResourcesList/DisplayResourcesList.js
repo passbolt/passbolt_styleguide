@@ -553,7 +553,7 @@ class DisplayResourcesList extends React.Component {
           <div className="ready">
             <a className={`no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
               <Icon name="star"/>
-              <span className="visuallyhidden">fav</span>
+              <span className="visuallyhidden"><Trans>fav</Trans></span>
             </a>
           </div>
         </td>
@@ -580,7 +580,7 @@ class DisplayResourcesList extends React.Component {
           {this.canUsePreviewPassword &&
             <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button button-transparent">
               <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
-              <span className="visually-hidden">view</span>
+              <span className="visually-hidden"><Trans>View</Trans></span>
             </a>
           }
         </td>
@@ -682,13 +682,13 @@ class DisplayResourcesList extends React.Component {
                           name="select all"
                           checked={selectAll}
                           onChange={this.handleSelectAllChange}/>
-                        <span className="visually-hidden">select all</span>
+                        <span className="visually-hidden"><Trans>Select all</Trans></span>
                       </div>
                     </th>
                     <th className="cell-favorite selections s-cell sortable">
                       <a onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav">
                         <Icon name="star"/>
-                        <span className="visuallyhidden">fav</span>
+                        <span className="visuallyhidden"><Trans>fav</Trans></span>
                         <span className="cell-header-icon-sort">
                           {this.isSortedColumn("favorite") && this.isSortedAsc() &&
                           <Icon name="ascending"/>

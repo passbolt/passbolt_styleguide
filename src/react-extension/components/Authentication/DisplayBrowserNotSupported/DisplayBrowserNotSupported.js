@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 const DOWNLOAD_FIREFOX_URL = "https://www.mozilla.org/firefox/download/thanks/";
 const DOWNLOAD_CHROME_URL = "https://www.google.com/chrome/";
@@ -60,4 +60,4 @@ class DisplayBrowserNotSupported extends Component {
 DisplayBrowserNotSupported.propTypes = {
   context: PropTypes.any, // The application context
 };
-export default withAppContext(withTranslation('common')(DisplayBrowserNotSupported));
+export default withAppContext(DisplayBrowserNotSupported);

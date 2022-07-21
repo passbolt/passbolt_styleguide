@@ -19,7 +19,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user settings
@@ -62,14 +62,6 @@ class DisplayUserSettingsWorkspaceActions extends React.Component {
    */
   async handleDownloadPrivateKey() {
     await this.props.context.port.request("passbolt.keyring.download-my-private-key");
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**
@@ -121,7 +113,6 @@ DisplayUserSettingsWorkspaceActions.propTypes = {
   context: PropTypes.any, // The application context
   match: PropTypes.object, // The router match
   dialogContext: PropTypes.any, // the dialog context
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withDialog(withTranslation('common')(DisplayUserSettingsWorkspaceActions))));
+export default withAppContext(withRouter(withDialog(DisplayUserSettingsWorkspaceActions)));

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import {
   AuthenticationSetupWorkflowStates,
@@ -85,7 +85,7 @@ class SetupAuthentication extends Component {
         />;
       case AuthenticationSetupWorkflowStates.SIGNING_IN:
         return <LoadingSpinner
-          title={<Trans>Signing in, please wait...</Trans>}
+          title={<Trans>Signing in, please wait.</Trans>}
         />;
       case AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
@@ -102,4 +102,4 @@ SetupAuthentication.propTypes = {
   authenticationSetupContext: PropTypes.any.isRequired, // The authentication setup context
 };
 
-export default withAppContext(withAuthenticationSetupContext(withTranslation('common')(SetupAuthentication)));
+export default withAppContext(withAuthenticationSetupContext(SetupAuthentication));

@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 class DisplayLoadingDialog extends Component {
@@ -90,14 +90,6 @@ class DisplayLoadingDialog extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render
    * @returns {JSX}
    */
@@ -127,7 +119,6 @@ class DisplayLoadingDialog extends Component {
 DisplayLoadingDialog.propTypes = {
   onClose: PropTypes.func,
   title: PropTypes.string,
-  t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(DisplayLoadingDialog);
+export default DisplayLoadingDialog;

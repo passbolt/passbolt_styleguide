@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
@@ -80,14 +80,6 @@ class Footer extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
@@ -99,7 +91,6 @@ class Footer extends Component {
             {this.isUnsafeMode &&
             <li className="error-message">
               <a
-                title="terms of service"
                 href={this.unsafeUrl}
                 target="_blank" rel="noopener noreferrer">
                 <Trans>Unsafe mode</Trans>
@@ -159,8 +150,7 @@ class Footer extends Component {
 }
 
 Footer.propTypes = {
-  context: PropTypes.any, // The app context
-  t: PropTypes.func, // The translation function
+  context: PropTypes.any, // The app context‡
 };
 
-export default withAppContext(withTranslation('common')(Footer));
+export default withAppContext(Footer);

@@ -151,7 +151,7 @@ class DisplayUserProfile extends React.Component {
                 </div>
                 <button
                   className="button edit-avatar-action"
-                  title="Change Avatar"
+                  title={this.translate("Upload a new avatar picture")}
                   type="button"
                   onClick={this.handleUploadPicture}>
                   <Icon name="upload"/>

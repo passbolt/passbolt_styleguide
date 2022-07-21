@@ -12,6 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
+import {Trans} from "react-i18next";
 import PropTypes from "prop-types";
 
 import Icon from "../../../shared/components/Icons/Icon";
@@ -33,7 +34,7 @@ class SharePermissionDeleteButton extends Component {
     return (
       <a className={this.getClassName()} onClick={this.handleCloseClick.bind(this)} role="button">
         <Icon name='close' />
-        <span className="visually-hidden">Remove</span>
+        <span className="visually-hidden"><Trans>Remove</Trans></span>
       </a>
     );
   }

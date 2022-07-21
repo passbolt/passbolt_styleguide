@@ -42,14 +42,6 @@ class LoginPage extends React.Component {
     this.passphraseInputRef.current.focus();
   }
 
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   async handleFormSubmit(event) {
     event.preventDefault();
     this.setState({processing: true, error: ""});
@@ -102,7 +94,7 @@ class LoginPage extends React.Component {
                 <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
                 <div className="password with-token">
                   <Password
-                    name="passphrase" placeholder={this.translate('passphrase')}
+                    name="passphrase" placeholder={this.props.t('Passphrase')}
                     id="passphrase"
                     autoComplete="off"
                     inputRef={this.passphraseInputRef}

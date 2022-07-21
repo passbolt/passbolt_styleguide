@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
+import {withTranslation, Trans} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
 import Icon from "../../../shared/components/Icons/Icon";
 
@@ -84,13 +84,13 @@ class Search extends React.Component {
     return (
       <div className="search-wrapper">
         <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""}`}>
-          <label className="visually-hidden">search</label>
-          <input name="search" maxLength="50" type="search" placeholder={this.translate("search")} autoComplete="off"
+          <label className="visually-hidden"><Trans>Search</Trans></label>
+          <input name="search" maxLength="50" type="search" placeholder={this.translate("Search")} autoComplete="off"
             ref={this.searchInputRef} onChange={this.handleInputChange} value={this.props.context.search} />
           <div className="search-button-wrapper">
-            <button className="button button-transparent" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit">
+            <button className="button button-transparent" value={this.translate("Search")} onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit">
               <Icon name="search"/>
-              <span className="visuallyhidden">Search</span>
+              <span className="visuallyhidden"><Trans>Search</Trans></span>
             </button>
           </div>
         </div>

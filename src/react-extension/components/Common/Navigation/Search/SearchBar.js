@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class SearchBar extends Component {
   /**
@@ -102,16 +102,16 @@ class SearchBar extends Component {
       <div className="col2 search-wrapper">
         <form className="search" onSubmit={this.handleOnSubmitEvent}>
           <div className={`input search required ${this.state.hasSubmitButtonFocus ? "no-focus" : ""} ${this.props.disabled ? 'disabled' : ''}`}>
-            <label>Search</label>
+            <label><Trans>Search</Trans></label>
             <input ref={this.searchInputRef} className="required" type="search"
               disabled={this.props.disabled ? 'disabled' : ''}
               onChange={this.handleChangeEvent}
               placeholder={this.props.placeholder || this.props.t('Search')}
               value={this.props.value}/>
             <div className="search-button-wrapper">
-              <button className="button button-transparent" value="search" onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
+              <button className="button button-transparent" value={this.props.t("Search")} onBlur={this.handleSubmitButtonBlur} onFocus={this.handleSubmitButtonFocus} type="submit" disabled={this.props.disabled ? 'disabled' : ''}>
                 <Icon name="search"/>
-                <span className="visuallyhidden">Search</span>
+                <span className="visuallyhidden"><Trans>Search</Trans></span>
               </button>
             </div>
           </div>
@@ -130,7 +130,7 @@ SearchBar.propTypes = {
 };
 
 SearchBar.defaultProps = {
-  disabled: false
+  disabled: false,
 };
 
-export default withTranslation('common')(SearchBar);
+export default withTranslation("common")(SearchBar);

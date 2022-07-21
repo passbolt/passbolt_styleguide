@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 
 /**
@@ -88,4 +88,4 @@ AskForAuthenticationHelpCredentialLost.propTypes = {
   canRequestHelp: PropTypes.bool, // Can the user request administrator help. @deprecated since v3.6 the request help feature was added with v3.6
 };
 
-export default withAppContext(withTranslation('common')(AskForAuthenticationHelpCredentialLost));
+export default withAppContext(AskForAuthenticationHelpCredentialLost);

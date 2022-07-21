@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
@@ -37,14 +37,6 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    */
   get canIUseThemeCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**
@@ -113,7 +105,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
-                    <span><Trans>Security Token</Trans></span>
+                    <span><Trans>Security token</Trans></span>
                   </a>
                 </div>
               </div>
@@ -191,8 +183,7 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
   location: PropTypes.object,
-  hasPendingAccountRecoveryChoice: PropTypes.bool,
-  t: PropTypes.func, // The translation function
+  hasPendingAccountRecoveryChoice: PropTypes.bool
 };
 
-export default withAppContext(withRouter(withNavigationContext(withTranslation('common')(NavigateIntoUserSettingsWorkspace))));
+export default withAppContext(withRouter(withNavigationContext(NavigateIntoUserSettingsWorkspace)));

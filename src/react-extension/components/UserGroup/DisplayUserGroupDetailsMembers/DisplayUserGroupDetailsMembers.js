@@ -20,7 +20,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../contexts/DialogContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * This component displays the group details about members
@@ -91,14 +91,6 @@ class DisplayUserGroupDetailsMembers extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
@@ -107,7 +99,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
         <div className="accordion-header">
           <h4>
             <a onClick={this.handleTitleClicked}  role="button">
-              <Trans>Group Members</Trans>
+              <Trans>Group members</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </a>
@@ -116,7 +108,7 @@ class DisplayUserGroupDetailsMembers extends React.Component {
         <div className="accordion-content">
           <a className="section-action button button-transparent" onClick={this.handleEditGroup}>
             <Icon name="edit"/>
-            <span className="visuallyhidden">Edit</span>
+            <span className="visuallyhidden"><Trans>Edit</Trans></span>
           </a>
           {this.isLoading() &&
           <div className="processing-wrapper">
@@ -145,7 +137,6 @@ DisplayUserGroupDetailsMembers.propTypes = {
   context: PropTypes.any, // The application context
   userWorkspaceContext: PropTypes.object, // The user workspace context
   dialogContext: PropTypes.object, // The dialog context
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withUserWorkspace(withTranslation('common')(DisplayUserGroupDetailsMembers))));
+export default withAppContext(withDialog(withUserWorkspace(DisplayUserGroupDetailsMembers)));

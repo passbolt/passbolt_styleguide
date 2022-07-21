@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import Password from "../../../../shared/components/Password/Password";
@@ -342,7 +342,6 @@ CreateGpgKey.propTypes = {
     CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
   ]), // Defines how the form should be displayed and behaves
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
-  t: PropTypes.func.isRequired, // The translation function
 };
 
-export default withTranslation('common')(CreateGpgKey);
+export default CreateGpgKey;

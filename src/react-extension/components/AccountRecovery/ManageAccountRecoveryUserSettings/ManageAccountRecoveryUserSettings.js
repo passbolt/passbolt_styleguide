@@ -281,7 +281,7 @@ class ManageAccountRecoveryUserSettings extends Component {
               className={`button button-left ${this.isProcessing ? "disabled" : ""}`}
               type="button"
               disabled={this.isProcessing}>
-              {this.translate("Learn More")}
+              {this.translate("Learn more")}
             </button>
             <FormCancelButton
               disabled={this.isProcessing}

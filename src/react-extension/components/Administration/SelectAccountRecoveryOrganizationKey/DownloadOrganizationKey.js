@@ -56,21 +56,13 @@ class DownloadOrganizationKey extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Confirm Organization Recovery Key download")}
+        title={this.props.t("Confirm Organization Recovery Key download")}
         onClose={this.handleCloseClick}
         disabled={false}
         className="organization-recover-key-download-dialog">

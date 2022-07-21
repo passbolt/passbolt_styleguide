@@ -50,7 +50,7 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
   getLastBreadcrumbItemName() {
     switch (this.props.administrationWorkspaceContext.selectedAdministration) {
       case AdministrationWorkspaceMenuTypes.MFA:
-        return this.translate("Multi factor authentication");
+        return this.translate("Multi Factor Authentication");
       case AdministrationWorkspaceMenuTypes.USER_DIRECTORY:
         return this.translate("Users Directory");
       case AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION:

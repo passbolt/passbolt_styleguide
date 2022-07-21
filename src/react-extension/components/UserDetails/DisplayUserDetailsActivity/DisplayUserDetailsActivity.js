@@ -161,7 +161,7 @@ class DisplayUserDetailsActivity extends React.Component {
   formatDateTimeAgo(date) {
     const dateTime = DateTime.fromISO(date);
     const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -402,14 +402,6 @@ class DisplayUserDetailsActivity extends React.Component {
    */
   get user() {
     return this.props.userWorkspaceContext.details.user;
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

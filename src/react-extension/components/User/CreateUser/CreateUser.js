@@ -371,10 +371,10 @@ class CreateUser extends Component {
         <form className="user-create-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-first-name-input"><Trans>First Name</Trans></label>
+              <label htmlFor="user-first-name-input"><Trans>First name</Trans></label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef}
-                type="text" value={this.state.first_name} placeholder={this.translate("first name")}
+                type="text" value={this.state.first_name} placeholder={this.translate("First name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleFirstNameInputKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -384,10 +384,10 @@ class CreateUser extends Component {
               }
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-last-name-input"><Trans>Last Name</Trans></label>
+              <label htmlFor="user-last-name-input"><Trans>Last name</Trans></label>
               <input id="user-last-name-input" name="last_name"
                 ref={this.lastNameRef}
-                type="text" value={this.state.last_name} placeholder={this.translate("last name")}
+                type="text" value={this.state.last_name} placeholder={this.translate("Last name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}
@@ -399,7 +399,7 @@ class CreateUser extends Component {
             <div className={`input text required ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
               <input id="user-username-input" name="username"
-                ref={this.usernameRef} type="text" value={this.state.username} placeholder={this.translate("email")}
+                ref={this.usernameRef} type="text" value={this.state.username} placeholder={this.translate("Email")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleUsernameInputOnKeyUp} onChange={this.handleInputChange}
                 autoComplete='off' autoFocus={true}

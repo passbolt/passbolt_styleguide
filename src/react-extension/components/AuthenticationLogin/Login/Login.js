@@ -256,14 +256,6 @@ class Login extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
@@ -288,7 +280,7 @@ class Login extends Component {
               autoComplete="off"
               inputRef={this.passphraseInputRef}
               name="passphrase"
-              placeholder={this.translate('Passphrase')}
+              placeholder={this.props.t('Passphrase')}
               value={this.state.passphrase}
               onChange={this.handleChangePassphrase}
               disabled={!this.areActionsAllowed}

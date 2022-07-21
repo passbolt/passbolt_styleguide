@@ -157,7 +157,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
    */
   render() {
     return (
-      <DialogWrapper className='ldap-test-settings-dialog' title="Test settings report"
+      <DialogWrapper className='ldap-test-settings-dialog' title={this.translate("Test settings report")}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
         <div className="form-content">
           <p>

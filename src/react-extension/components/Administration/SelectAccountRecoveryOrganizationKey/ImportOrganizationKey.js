@@ -232,7 +232,7 @@ class ImportOrganizationKey extends React.Component {
             <textarea id="organization-recover-form-key" name="key" value={this.state.key}
               onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
-              placeholder='Add Open PGP Public key' required="required" autoComplete="off" autoFocus={true} />
+              placeholder={this.translate('Add Open PGP Public key')} required="required" autoComplete="off" autoFocus={true} />
           </div>
           <div className="input file">
             <input

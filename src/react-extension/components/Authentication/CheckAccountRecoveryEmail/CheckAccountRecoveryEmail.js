@@ -12,7 +12,7 @@
  * @since         3.6.0
  */
 import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class CheckAccountRecoveryEmail extends Component {
   /**
@@ -33,4 +33,4 @@ class CheckAccountRecoveryEmail extends Component {
   }
 }
 
-export default withTranslation('common')(CheckAccountRecoveryEmail);
+export default CheckAccountRecoveryEmail;

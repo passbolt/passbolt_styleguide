@@ -89,7 +89,7 @@ describe("See Resource FilterResourcesByShortcuts", () => {
       const props = defaultProps(ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED); // The props
       page = new FilterResourcesByShortcutsPage(context, props);
       await page.selectItem(3);
-      expect(page.itemSelected).toBe("Recently Modified");
+      expect(page.itemSelected).toBe("Recently modified");
       const pathname = '/app/passwords';
       const state = {
         filter: {

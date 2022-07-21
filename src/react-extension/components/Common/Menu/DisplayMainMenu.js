@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class DisplayMainMenu extends Component {
   /**
@@ -43,14 +43,6 @@ class DisplayMainMenu extends Component {
    */
   isLoggedInUserAdmin() {
     return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**
@@ -129,7 +121,6 @@ DisplayMainMenu.propTypes = {
   navigationContext: PropTypes.any, // The navigation context
   history: PropTypes.object, // The router history
   location: PropTypes.object, // Router location prop
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withNavigationContext(withTranslation('common')(DisplayMainMenu))));
+export default withAppContext(withRouter(withNavigationContext(DisplayMainMenu)));

@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AnnouncementWrapper
   from "../AnnouncementWrapper/AnnouncementWrapper";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import {withAnnouncement} from "../../../contexts/AnnouncementContext";
 
 /**
@@ -31,7 +31,7 @@ class DisplayInvalidSubscriptionAnnouncement extends React.Component {
     return (
       <AnnouncementWrapper className="subscription" onClose={this.props.onClose} canClose={false}>
         <p>
-          <Trans>Warning: </Trans>
+          <Trans>Warning:</Trans>&nbsp;
           <Trans>your subscription key is not valid. The stability of the application is at risk.</Trans>
           <a onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
@@ -48,4 +48,4 @@ DisplayInvalidSubscriptionAnnouncement.propTypes = {
   i18n: PropTypes.any
 };
 
-export default withNavigationContext(withAnnouncement(withTranslation('common')(DisplayInvalidSubscriptionAnnouncement)));
+export default withNavigationContext(withAnnouncement(DisplayInvalidSubscriptionAnnouncement));

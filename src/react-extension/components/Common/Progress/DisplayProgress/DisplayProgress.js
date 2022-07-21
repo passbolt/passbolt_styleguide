@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {withAppContext} from "../../../../contexts/AppContext";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
 
@@ -129,14 +129,6 @@ class DisplayProgress extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render
    * @returns {JSX.Element}
    */
@@ -179,7 +171,6 @@ class DisplayProgress extends Component {
 
 DisplayProgress.propTypes = {
   context: PropTypes.any, // The application context
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withTranslation('common')(DisplayProgress));
+export default withAppContext(DisplayProgress);

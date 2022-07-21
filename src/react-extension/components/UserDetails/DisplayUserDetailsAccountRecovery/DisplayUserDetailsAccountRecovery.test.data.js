@@ -47,7 +47,7 @@ export function defaultProps(props = {}) {
 export function formatDateTimeAgo(date) {
   const dateTime = DateTime.fromISO(date);
   const duration = dateTime.diffNow().toMillis();
-  return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative();
+  return duration > -1000 && duration < 0 ? 'Just now' : dateTime.toRelative();
 }
 
 export const oneUserAccountRequestsPending = [{

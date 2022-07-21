@@ -368,16 +368,6 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    /*
-     * The parser can't find the translation for passwordStrength.label
-     * To fix that we can use it in comment
-     * this.translate("n/a")
-     * this.translate("very weak")
-     * this.translate("weak")
-     * this.translate("fair")
-     * this.translate("strong")
-     * this.translate("very strong")
-     */
     return (
       <DialogWrapper
         title={this.translate("Organization Recovery Key")}
@@ -391,7 +381,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
               <textarea id="organization-recover-form-key" name="key" value={this.state.key}
                 onKeyUp={this.handleKeyInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.keyInputRef} className="required"
-                placeholder='Paste the OpenPGP Private key here' required="required" autoComplete="off" autoFocus={true}/>
+                placeholder={this.translate('Paste the OpenPGP Private key here')} required="required" autoComplete="off" autoFocus={true}/>
             </div>
             <div className="input file">
               <input

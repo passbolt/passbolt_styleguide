@@ -20,7 +20,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ImportResources from "../ImportResources/ImportResources";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
 
 /**
@@ -213,14 +213,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -274,7 +266,6 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(withTranslation('common')(DisplayResourcesWorkspaceMainMenu))));
+export default withAppContext(withDialog(withResourceWorkspace(DisplayResourcesWorkspaceMainMenu)));

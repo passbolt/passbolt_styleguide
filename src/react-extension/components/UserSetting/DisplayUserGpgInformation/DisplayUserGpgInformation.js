@@ -231,7 +231,7 @@ class DisplayUserGpgInformation extends React.Component {
                   <td className="expires">{this.gpgKeyInfo.expires}</td>
                 </tr>
                 <tr>
-                  <td><Trans>Key Length</Trans></td>
+                  <td><Trans>Key length</Trans></td>
                   <td className="length">{this.gpgKeyInfo.length}</td>
                 </tr>
                 <tr>

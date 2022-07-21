@@ -63,20 +63,20 @@ const Template = () =>
     </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Secondary button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button className="button" type="button">Learn More</button>
+      <button className="button" type="button">Learn more</button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
-      <button className="button" disabled={true} type="button">Learn More</button>
+      <button className="button" disabled={true} type="button">Learn more</button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button processing" type="button">
-        Learn More
+        Learn more
         <Icon name="spinner"/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button processing disabled" type="button">
-        Learn More
+        Learn more
         <Icon name="spinner"/>
       </button>
     </div>

@@ -185,14 +185,6 @@ class DisplayResourceDetailsPermission extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -216,7 +208,7 @@ class DisplayResourceDetailsPermission extends React.Component {
           {this.canShare() &&
           <a onClick={this.handlePermissionsEditClickEvent} className="section-action button button-transparent">
             <Icon name="edit"/>
-            <span className="visuallyhidden">modify</span>
+            <span className="visuallyhidden"><Trans>modify</Trans></span>
           </a>
           }
           {this.isLoading() &&
@@ -232,7 +224,7 @@ class DisplayResourceDetailsPermission extends React.Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <div className="name">{this.getPermissionAroName(permission)}</div>
-                    <div className="subinfo">{this.translate(PERMISSIONS_LABEL[permission.type])}</div>
+                    <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
                   </div>
                 </div>
                 {permission.user &&

@@ -155,12 +155,12 @@ class FilterResourcesByFavoritePage extends React.Component {
           <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Go back")}>
             <Icon name="chevron-left"/>
             <span className="primary-action-title">
-              {this.translate('Favorite')}
+              <Trans>Favorite</Trans>
             </span>
           </a>
           <Link to="/data/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
             <Icon name="close"/>
-            <span className="visually-hidden"><Trans>cancel</Trans></span>
+            <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
         </div>
         <div className="list-container">

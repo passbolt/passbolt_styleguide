@@ -47,14 +47,6 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    */
   render() {
@@ -65,7 +57,7 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
         <div className="content-wrapper">
           <div className="content">
             <div className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</div>
-            <div className="subinfo">{this.translate(this.roleName)}</div>
+            <div className="subinfo">{this.props.t(this.roleName)}</div>
           </div>
         </div>
         <UserAvatar

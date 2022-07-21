@@ -41,20 +41,12 @@ class DisplayExpiredAccountRecovery extends Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
   render() {
     return (
-      <DialogWrapper className="expired-account-recover-dialog" title={this.translate("Account recovery error")}
+      <DialogWrapper className="expired-account-recover-dialog" title={this.props.t("Account recovery error")}
         onClose={this.handleClose}>
         <div className="form-content">
           <p>

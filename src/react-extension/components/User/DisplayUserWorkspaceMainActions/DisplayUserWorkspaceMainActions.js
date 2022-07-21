@@ -19,7 +19,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import CreateUser from "../CreateUser/CreateUser";
 import {withDialog} from "../../../contexts/DialogContext";
 import CreateUserGroup from "../../UserGroup/CreateUserGroup/CreateUserGroup";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -170,14 +170,6 @@ class DisplayUserWorkspaceMainActions extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -224,7 +216,6 @@ class DisplayUserWorkspaceMainActions extends React.Component {
 DisplayUserWorkspaceMainActions.propTypes = {
   context: PropTypes.any, // The application context
   dialogContext: PropTypes.any, // the dialog context
-  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withTranslation('common')(DisplayUserWorkspaceMainActions)));
+export default withAppContext(withDialog(DisplayUserWorkspaceMainActions));

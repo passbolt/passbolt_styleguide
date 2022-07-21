@@ -131,7 +131,7 @@ class DisplayInternationalizationAdministration extends React.Component {
    */
   async handleSaveSuccess() {
     this.props.context.onRefreshLocaleRequested(this.state.locale);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The internationalization settings were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The internationalization settings were updated."));
     this.setState({processing: false});
   }
 
@@ -177,14 +177,6 @@ class DisplayInternationalizationAdministration extends React.Component {
       return this.props.context.siteSettings.supportedLocales.map(supportedLocale => ({value: supportedLocale.locale, label: supportedLocale.label}));
     }
     return [];
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**

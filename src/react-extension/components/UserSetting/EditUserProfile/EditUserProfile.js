@@ -304,12 +304,12 @@ class EditUserProfile extends Component {
           <div className="form-content">
 
             <div className={`input text required ${firstnameErrorSelector} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-              <label htmlFor="user-profile-firstname-input"><Trans>First Name</Trans></label>
+              <label htmlFor="user-profile-firstname-input"><Trans>First name</Trans></label>
               <input
                 id="user-profile-firstname-input"
                 name="first_name"
                 type="text"
-                placeholder={this.translate("first name")}
+                placeholder={this.translate("First name")}
                 required="required"
                 autoComplete="off"
                 autoFocus={true}
@@ -325,12 +325,12 @@ class EditUserProfile extends Component {
             </div>
 
             <div className={`input text required ${lastnameErrorSelector} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-              <label htmlFor="user-profile-lastname-input"><Trans>Last Name</Trans></label>
+              <label htmlFor="user-profile-lastname-input"><Trans>Last name</Trans></label>
               <input
                 id="user-profile-lastname-input"
                 name="last_name"
                 type="text"
-                placeholder={this.translate("last name")}
+                placeholder={this.translate("Last name")}
                 required="required"
                 autoComplete="off"
                 ref={this.lastnameRef}

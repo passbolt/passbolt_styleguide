@@ -115,7 +115,7 @@ class EditUserGroupItem extends Component {
   get isManagerSelectOptions() {
     return [
       {value: false, label: (<Trans>Member</Trans>)},
-      {value: true, label: (<Trans>Group Manager</Trans>)}
+      {value: true, label: (<Trans>Group manager</Trans>)}
     ];
   }
 
@@ -161,11 +161,11 @@ class EditUserGroupItem extends Component {
 
             <div className="actions">
               <a
-                title="remove"
+                title={this.props.t("Remove")}
                 className={`remove-item button button-transparent ${!this.props.areActionsAllowed ? "disabled" : ""}`}
                 onClick={event => this.props.onMemberRemoved(event, this.props.groupUser)}>
                 <Icon name="close"/>
-                <span className="visuallyhidden">remove</span>
+                <span className="visuallyhidden"><Trans>Remove</Trans></span>
               </a>
             </div>
           </>

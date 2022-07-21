@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByTagsOptions} from "./FilterResourcesByTagsList";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class FilterResourcesByTagsContextualMenu extends React.Component {
   /**
@@ -52,14 +52,6 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
       this.props.onBeforeHide();
     }
     this.props.hide();
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
   }
 
   /**
@@ -112,7 +104,6 @@ FilterResourcesByTagsContextualMenu.propTypes = {
   onBeforeHide: PropTypes.func, // On before hide callBack
   top: PropTypes.number, // top position in px of the menu
   className: PropTypes.string, // Class name to add
-  t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(FilterResourcesByTagsContextualMenu);
+export default FilterResourcesByTagsContextualMenu;

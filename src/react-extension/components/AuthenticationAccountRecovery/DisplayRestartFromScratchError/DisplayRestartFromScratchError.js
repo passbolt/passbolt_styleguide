@@ -15,7 +15,7 @@
 import React, {Component} from "react";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class DisplayRestartFromScratchError extends Component {
   /**
@@ -44,4 +44,4 @@ class DisplayRestartFromScratchError extends Component {
 DisplayRestartFromScratchError.propTypes = {
   context: PropTypes.any, // The application context
 };
-export default withAppContext(withTranslation('common')(DisplayRestartFromScratchError));
+export default withAppContext(DisplayRestartFromScratchError);

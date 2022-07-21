@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 import PropTypes from "prop-types";
 
 /**
@@ -181,4 +181,4 @@ AcceptLoginServerKeyChange.propTypes = {
   onAccept: PropTypes.func.isRequired, // Callback to trigger when the user accepts the new key
 };
 
-export default withTranslation('common')(AcceptLoginServerKeyChange);
+export default AcceptLoginServerKeyChange;

@@ -23,7 +23,7 @@ import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission
 import {withAppContext} from "../../../contexts/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withTranslation} from "react-i18next";
+import {withTranslation, Trans} from "react-i18next";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -112,14 +112,14 @@ class DisplayResourceDetails extends React.Component {
                 <span className="name">{this.props.resourceWorkspaceContext.details.resource.name}</span>
                 <a className="title-link" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
-                  <span className="visuallyhidden">Copy the link to this password</span>
+                  <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
                 </a>
               </div>
               <span className="subtitle">{this.subtitle}</span>
             </h3>
             <a className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
               <Icon name="close"/>
-              <span className="visuallyhidden">Close</span>
+              <span className="visuallyhidden"><Trans>Close</Trans></span>
             </a>
           </div>
           <DisplayResourceDetailsInformation/>

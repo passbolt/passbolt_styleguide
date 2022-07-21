@@ -24,7 +24,7 @@ import DisplaySimulateSynchronizeUserDirectoryAdministration
 import {withDialog} from "../../../contexts/DialogContext";
 import DisplaySynchronizeUserDirectoryAdministration
   from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -142,14 +142,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
   }
 
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -208,7 +200,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
 DisplayAdministrationWorkspaceActions.propTypes = {
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   dialogContext: PropTypes.any, // The dialog context
-  t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withAdministrationWorkspace(withTranslation('common')(DisplayAdministrationWorkspaceActions)));
+export default withDialog(withAdministrationWorkspace(DisplayAdministrationWorkspaceActions));

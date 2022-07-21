@@ -226,7 +226,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
             <Trans>Warning, Please review carefully this configuration as it will not be trivial to change this later.</Trans>
           </div>
           <div className="submit-wrapper clearfix">
-            <button className={`button button-left ${this.isProcessing ? "disabled" : ''}`} type="button">{this.translate("Learn More")}</button>
+            <button className={`button button-left ${this.isProcessing ? "disabled" : ''}`} type="button">{this.translate("Learn more")}</button>
             <FormCancelButton
               onClick={this.handleClose}
               disabled={this.isProcessing}/>

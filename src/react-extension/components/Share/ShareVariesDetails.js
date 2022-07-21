@@ -13,17 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 class ShareVariesDetails extends Component {
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
   render() {
     return (
       <span className="share-varies-details">
@@ -46,7 +38,6 @@ class ShareVariesDetails extends Component {
 
 ShareVariesDetails.propTypes = {
   variesDetails: PropTypes.object,
-  t: PropTypes.func, // The translation function
 };
 
-export default withTranslation('common')(ShareVariesDetails);
+export default ShareVariesDetails;
