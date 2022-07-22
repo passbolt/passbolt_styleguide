@@ -178,6 +178,8 @@ object-assign
 
 /*! ../../modules/esnext.symbol.metadata */
 
+/*! ../../modules/esnext.symbol.metadata-key */
+
 /*! ../../modules/esnext.symbol.observable */
 
 /*! ../../modules/esnext.symbol.pattern-match */
@@ -528,6 +530,8 @@ object-assign
 
 /*! ./cjs/scheduler.production.min.js */
 
+/*! ./context */
+
 /*! ./factoryWithThrowingShims */
 
 /*! ./iterableToArrayLimit.js */
@@ -547,6 +551,10 @@ object-assign
 /*! ./stringify.js */
 
 /*! ./unsupportedIterableToArray.js */
+
+/*! ./useTranslation */
+
+/*! ./utils */
 
 /*! ./validate.js */
 
@@ -609,6 +617,10 @@ object-assign
 /*! @babel/runtime/helpers/esm/inheritsLoose */
 
 /*! @babel/runtime/helpers/esm/objectWithoutPropertiesLoose */
+
+/*! @babel/runtime/helpers/objectWithoutProperties */
+
+/*! @babel/runtime/helpers/slicedToArray */
 
 /*! core-js-pure/features/array/from */
 
@@ -677,6 +689,10 @@ object-assign
   \*************************************/
 
 /*!*****************************************!*\
+  !*** ./node_modules/jssha/dist/sha.mjs ***!
+  \*****************************************/
+
+/*!*****************************************!*\
   !*** ./node_modules/react-dom/index.js ***!
   \*****************************************/
 
@@ -742,6 +758,10 @@ object-assign
 
 /*!*****************************************************!*\
   !*** ./node_modules/core-js-pure/internals/path.js ***!
+  \*****************************************************/
+
+/*!*****************************************************!*\
+  !*** ./node_modules/debounce-promise/dist/index.js ***!
   \*****************************************************/
 
 /*!*****************************************************!*\
@@ -1244,6 +1264,10 @@ object-assign
   !*** ./node_modules/i18next/dist/esm/i18next.js + 6 modules ***!
   \**************************************************************/
 
+/*!**************************************************************!*\
+  !*** ./node_modules/react-i18next/dist/es/useTranslation.js ***!
+  \**************************************************************/
+
 /*!***************************************************************!*\
   !*** ./node_modules/@babel/runtime-corejs3/core-js/symbol.js ***!
   \***************************************************************/
@@ -1314,6 +1338,10 @@ object-assign
 
 /*!***************************************************************!*\
   !*** ./node_modules/core-js-pure/stable/instance/index-of.js ***!
+  \***************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/react-i18next/dist/es/withTranslation.js ***!
   \***************************************************************/
 
 /*!***************************************************************!*\
@@ -1478,6 +1506,10 @@ object-assign
 
 /*!******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js ***!
+  \******************************************************************/
+
+/*!******************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js ***!
   \******************************************************************/
 
 /*!******************************************************************!*\
@@ -1773,6 +1805,10 @@ object-assign
   \*************************************************************************/
 
 /*!*************************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js ***!
+  \*************************************************************************/
+
+/*!*************************************************************************!*\
   !*** ./node_modules/core-js-pure/internals/correct-prototype-getter.js ***!
   \*************************************************************************/
 
@@ -1794,6 +1830,10 @@ object-assign
 
 /*!*************************************************************************!*\
   !*** ./node_modules/core-js-pure/internals/require-object-coercible.js ***!
+  \*************************************************************************/
+
+/*!*************************************************************************!*\
+  !*** ./node_modules/core-js-pure/modules/esnext.symbol.metadata-key.js ***!
   \*************************************************************************/
 
 /*!**************************************************************************!*\
@@ -1826,10 +1866,6 @@ object-assign
 
 /*!***************************************************************************!*\
   !*** ./node_modules/core-js-pure/modules/web.dom-collections.iterator.js ***!
-  \***************************************************************************/
-
-/*!***************************************************************************!*\
-  !*** ./node_modules/react-i18next/dist/es/withTranslation.js + 3 modules ***!
   \***************************************************************************/
 
 /*!****************************************************************************!*\
@@ -1976,7 +2012,7 @@ object-assign
   !*** ./node_modules/hoist-non-react-statics/node_modules/react-is/cjs/react-is.production.min.js ***!
   \***************************************************************************************************/
 
-/** @license React v0.19.1
+/** @license React v0.20.2
  * scheduler.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -1994,7 +2030,7 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v16.14.0
+/** @license React v17.0.2
  * react-dom.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -2003,7 +2039,7 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/** @license React v16.14.0
+/** @license React v17.0.2
  * react.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
