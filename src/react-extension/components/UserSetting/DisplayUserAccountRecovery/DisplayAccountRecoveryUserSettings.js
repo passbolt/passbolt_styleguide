@@ -216,7 +216,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
               <div className="sidebar-help">
                 <h3><Trans>Need some help?</Trans></h3>
                 <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-                <a className="button" href="https://help.passbolt.com" target="_blank" rel="noopener noreferrer">
+                <a className="button" href="https://help.passbolt.com/faq/start/account-recovery/subscribe" target="_blank" rel="noopener noreferrer">
                   <Icon name="life-ring"/>
                   <span><Trans>Read the documentation</Trans></span>
                 </a>

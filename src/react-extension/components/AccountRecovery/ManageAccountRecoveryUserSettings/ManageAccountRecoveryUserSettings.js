@@ -277,12 +277,13 @@ class ManageAccountRecoveryUserSettings extends Component {
             </div>
           </div>
           <div className="submit-wrapper clearfix">
-            <button
+            <a
+              target="_blank" rel="noopener noreferrer"
+              href="https://help.passbolt.com/faq/start/account-recovery/subscribe"
               className={`button button-left ${this.isProcessing ? "disabled" : ""}`}
-              type="button"
               disabled={this.isProcessing}>
-              {this.translate("Learn more")}
-            </button>
+              <Trans>Learn more</Trans>
+            </a>
             <FormCancelButton
               disabled={this.isProcessing}
               onClick={this.close}/>

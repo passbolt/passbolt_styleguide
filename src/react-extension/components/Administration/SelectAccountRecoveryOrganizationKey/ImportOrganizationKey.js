@@ -266,7 +266,7 @@ class ImportOrganizationKey extends React.Component {
         {!this.state.hasAlreadyBeenValidated &&
           <div className="message notice">
             <Icon baseline={true} name="info-circle" />
-            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/hosting/install/ce/from-source.html#generate-an-openpgp-key" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
+            <strong><Trans>Pro tip</Trans>:</strong> <Trans>Learn how to <a href="https://help.passbolt.com/configure/account-recovery" target="_blank" rel="noopener noreferrer">generate a key separately.</a></Trans>
           </div>
         }
         <div className="submit-wrapper clearfix">
