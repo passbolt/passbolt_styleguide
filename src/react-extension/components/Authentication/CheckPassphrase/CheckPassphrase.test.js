@@ -19,9 +19,14 @@ import {defaultProps} from "./CheckPassphrase.test.data";
 import CheckPassphrasePage from "./CheckPassphrase.test.page";
 import each from "jest-each";
 import {CheckPassphraseVariations} from "./CheckPassphrase";
+import PwnedPasswords from "../../../../shared/lib/Secret/PwnedPasswords";
+import {waitFor} from "@testing-library/dom";
+
+jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
 
 beforeEach(() => {
   jest.resetModules();
+  PwnedPasswords.pwnedPasswords.mockResolvedValue(false);
 });
 
 describe("Check passphrase", () => {
@@ -126,7 +131,11 @@ describe("Check passphrase", () => {
       await page.toggleRememberMe();
       expect(page.rememberMe).toBe("true");
       await page.fillPassphrase('some passphrase');
-      await page.verify();
+      await page.verify(() => {
+        if (!props.onComplete.mock.calls.length) {
+          throw new Error("The page is still processing");
+        }
+      });
       expect(props.onComplete).toHaveBeenCalledWith("some passphrase", true);
     });
 
@@ -137,7 +146,11 @@ describe("Check passphrase", () => {
       expect.assertions(2);
       expect(page.rememberMe).toBe("false");
       await page.fillPassphrase('some passphrase');
-      await page.verify();
+      await page.verify(() => {
+        if (!props.onComplete.mock.calls.length) {
+          throw new Error("The page is still processing");
+        }
+      });
       expect(props.onComplete).toHaveBeenCalledWith("some passphrase", false);
     });
   });
@@ -161,6 +174,66 @@ describe("Check passphrase", () => {
       expect(page.secondaryActionLink.textContent).toContain("Help, I lost my passphrase.");
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
+    });
+  });
+
+  describe("Check pwned passphrase", () => {
+    it("As AN completing the setup I should not be able to use a passphrase that is part of a data breach.", async() => {
+      let pwnedResolve;
+      const pwnedServiceImpl = () => new Promise(resolve => {
+        pwnedResolve = resolve;
+      });
+
+      PwnedPasswords.pwnedPasswords.mockImplementation(pwnedServiceImpl);
+      props = defaultProps({displayAs: CheckPassphraseVariations.SETUP});
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(1);
+      await page.fillPassphrase('test@test.com');
+      await page.verify();
+
+      await waitFor(() => {
+        if (pwnedResolve === undefined) {
+          throw new Error("Service is not called yet!");
+        }
+      });
+      await pwnedResolve(1);
+      await waitFor(() => {
+        if (page.isProcessing) {
+          throw new Error("The page is still processing");
+        }
+      });
+
+      expect(props.onComplete).not.toHaveBeenCalled();
+    });
+
+    it("As AN completing the recover I should be able to recover my account even if my passphrase is part of a data breach.", async() => {
+      let pwnedResolve;
+      const pwnedServiceImpl = () => new Promise(resolve => {
+        pwnedResolve = resolve;
+      });
+
+      PwnedPasswords.pwnedPasswords.mockImplementation(pwnedServiceImpl);
+      props = defaultProps({displayAs: CheckPassphraseVariations.RECOVER});
+      page = new CheckPassphrasePage(props);
+
+      expect.assertions(1);
+      await page.fillPassphrase('test@test.com');
+      await page.verify();
+
+      await waitFor(() => {
+        if (pwnedResolve === undefined) {
+          throw new Error("Service is not called yet!");
+        }
+      });
+      await pwnedResolve(1);
+      await waitFor(() => {
+        if (page.isProcessing) {
+          throw new Error("The page is still processing");
+        }
+      });
+
+      expect(props.onComplete).toHaveBeenCalledWith("test@test.com", false);
     });
   });
 });

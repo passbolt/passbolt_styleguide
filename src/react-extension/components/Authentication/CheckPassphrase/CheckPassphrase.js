@@ -80,7 +80,8 @@ class CheckPassphrase extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return Object.values(this.state.errors).every(value => !value);
+    return (!this.state.passphraseInDictionnary || this.isPwnedPassphraseAllowed)
+      && Object.values(this.state.errors).every(value => !value);
   }
 
   /**
@@ -95,6 +96,10 @@ class CheckPassphrase extends Component {
    */
   get hasErrors() {
     return this.state.errors.emptyPassphrase || this.state.errors.invalidPassphrase;
+  }
+
+  get isPwnedPassphraseAllowed() {
+    return this.props.displayAs === CheckPassphraseVariations.RECOVER;
   }
 
   /**
@@ -127,6 +132,7 @@ class CheckPassphrase extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     this.validate();
+    await this.isPwndProcessingPromise;
 
     if (this.isValid) {
       this.toggleProcessing();
