@@ -85,6 +85,14 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
+   * Can the user access the mobile capability.
+   * @returns {bool}
+   */
+  get canIUseMobileCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+  }
+
+  /**
    * Handle click events on document. Hide the component if the click occurred outside of the component.
    * @param {ReactEvent} event The event
    */
@@ -226,7 +234,8 @@ class DisplayUserBadgeMenu extends Component {
               </div>
             </li>
             }
-            <li key="logout">
+            {this.canIUseMobileCapability &&
+            <li key="mobile">
               <div className="row">
                 <a role="button" tabIndex="3" onClick={this.handleMobileAppsClick}>
                   <span><Trans>Mobile Apps</Trans></span>
@@ -234,6 +243,7 @@ class DisplayUserBadgeMenu extends Component {
                 </a>
               </div>
             </li>
+            }
           </ul>
           }
         </div>
