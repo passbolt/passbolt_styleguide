@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ShareVariesDetails extends Component {
   render() {
@@ -40,4 +40,4 @@ ShareVariesDetails.propTypes = {
   variesDetails: PropTypes.object,
 };
 
-export default ShareVariesDetails;
+export default withTranslation("common")(ShareVariesDetails);

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
 
 class IntroduceExtension extends Component {
@@ -93,4 +93,4 @@ class IntroduceExtension extends Component {
 IntroduceExtension.propTypes = {
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user complete the step.
 };
-export default IntroduceExtension;
+export default withTranslation("common")(IntroduceExtension);

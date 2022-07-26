@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
@@ -66,4 +66,4 @@ DeleteComment.propTypes = {
   dialogContext: PropTypes.any // The dialog context
 };
 
-export default withAppContext(withDialog(DeleteComment));
+export default withAppContext(withDialog(withTranslation("common")(DeleteComment)));

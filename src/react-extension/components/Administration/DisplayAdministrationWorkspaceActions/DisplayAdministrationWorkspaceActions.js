@@ -24,7 +24,7 @@ import DisplaySimulateSynchronizeUserDirectoryAdministration
 import {withDialog} from "../../../contexts/DialogContext";
 import DisplaySynchronizeUserDirectoryAdministration
   from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -202,4 +202,4 @@ DisplayAdministrationWorkspaceActions.propTypes = {
   dialogContext: PropTypes.any, // The dialog context
 };
 
-export default withDialog(withAdministrationWorkspace(DisplayAdministrationWorkspaceActions));
+export default withDialog(withAdministrationWorkspace(withTranslation("common")(DisplayAdministrationWorkspaceActions)));

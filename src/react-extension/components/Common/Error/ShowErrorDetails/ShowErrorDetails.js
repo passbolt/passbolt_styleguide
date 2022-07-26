@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ShowErrorDetails extends Component {
   /**
@@ -123,4 +123,4 @@ ShowErrorDetails.propTypes = {
   error: PropTypes.object,
 };
 
-export default ShowErrorDetails;
+export default withTranslation("common")(ShowErrorDetails);

@@ -17,7 +17,7 @@ import EditResourceTagsItemViewer from "../../ResourceTag/EditResourceTags/EditR
 import EditResourceTags from "../../ResourceTag/EditResourceTags/EditResourceTags";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayResourceDetailsTag extends React.Component {
   /**
@@ -127,4 +127,4 @@ DisplayResourceDetailsTag.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
 };
 
-export default withResourceWorkspace(DisplayResourceDetailsTag);
+export default withResourceWorkspace(withTranslation("common")(DisplayResourceDetailsTag));

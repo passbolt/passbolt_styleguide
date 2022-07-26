@@ -16,7 +16,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
 
 /**
@@ -78,4 +78,4 @@ DownloadRecoveryKit.propTypes = {
   userSettingsContext: PropTypes.object // The user settings context
 };
 
-export default withUserSettings(DownloadRecoveryKit);
+export default withUserSettings(withTranslation("common")(DownloadRecoveryKit));

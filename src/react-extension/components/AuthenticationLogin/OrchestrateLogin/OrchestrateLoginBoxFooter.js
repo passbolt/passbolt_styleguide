@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import {
   AuthenticationLoginWorkflowStates,
@@ -45,4 +45,4 @@ OrchestrateLoginBoxFooter.propTypes = {
   context: PropTypes.any.isRequired, // The application context
   authenticationLoginContext: PropTypes.any.isRequired, // The authentication login context
 };
-export default withAppContext(withAuthenticationLoginContext(OrchestrateLoginBoxFooter));
+export default withAppContext(withAuthenticationLoginContext(withTranslation("common")(OrchestrateLoginBoxFooter)));

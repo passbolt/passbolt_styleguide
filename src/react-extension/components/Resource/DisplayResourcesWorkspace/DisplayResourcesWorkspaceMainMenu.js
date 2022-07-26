@@ -20,7 +20,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ImportResources from "../ImportResources/ImportResources";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
 
 /**
@@ -268,4 +268,4 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(DisplayResourcesWorkspaceMainMenu)));
+export default withAppContext(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))));

@@ -18,7 +18,7 @@ import EditResourceTag from "../../ResourceTag/EditResourceTag/EditResourceTag";
 import DeleteResourceTag from "../../ResourceTag/DeleteResourceTag/DeleteResourceTag";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FilterResourcesByTagsListContextualMenu extends React.Component {
   /**
@@ -112,4 +112,4 @@ FilterResourcesByTagsListContextualMenu.propTypes = {
   dialogContext: PropTypes.any,
 };
 
-export default withAppContext(withDialog(FilterResourcesByTagsListContextualMenu));
+export default withAppContext(withDialog(withTranslation("common")(FilterResourcesByTagsListContextualMenu)));

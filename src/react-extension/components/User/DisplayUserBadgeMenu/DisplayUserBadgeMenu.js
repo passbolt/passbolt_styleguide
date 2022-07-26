@@ -18,7 +18,7 @@ import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -250,4 +250,4 @@ DisplayUserBadgeMenu.propTypes = {
   user: PropTypes.object,
 };
 
-export default withAppContext(withNavigationContext(withAccountRecovery(DisplayUserBadgeMenu)));
+export default withAppContext(withNavigationContext(withAccountRecovery(withTranslation("common")(DisplayUserBadgeMenu))));

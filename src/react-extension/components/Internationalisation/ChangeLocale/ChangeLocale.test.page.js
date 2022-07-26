@@ -16,6 +16,7 @@ import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import ChangeLocale from "./ChangeLocale";
 import {waitFor} from "@testing-library/dom";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The ChangeLocale component represented as a page
@@ -27,7 +28,9 @@ export default class ChangeLocalePage {
    */
   constructor(props) {
     this._page = render(
-      <ChangeLocale {...props}/>
+      <MockTranslationProvider>
+        <ChangeLocale {...props}/>
+      </MockTranslationProvider>
     );
   }
 

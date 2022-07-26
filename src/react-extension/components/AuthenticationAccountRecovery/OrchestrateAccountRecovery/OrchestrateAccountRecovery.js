@@ -14,7 +14,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import {
   AuthenticationAccountRecoveryWorkflowStates,
@@ -81,4 +81,4 @@ OrchestrateAccountRecovery.propTypes = {
   authenticationAccountRecoveryContext: PropTypes.any.isRequired, // The authentication account recovery context
 };
 
-export default withAppContext(withAuthenticationAccountRecoveryContext(OrchestrateAccountRecovery));
+export default withAppContext(withAuthenticationAccountRecoveryContext(withTranslation("common")(OrchestrateAccountRecovery)));

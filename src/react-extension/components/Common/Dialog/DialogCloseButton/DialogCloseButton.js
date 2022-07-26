@@ -12,7 +12,7 @@
  * @since         2.13.0
  */
 import React, {Component} from "react";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
 
@@ -73,4 +73,4 @@ DialogCloseButton.propTypes = {
   disabled: PropTypes.bool
 };
 
-export default DialogCloseButton;
+export default withTranslation("common")(DialogCloseButton);

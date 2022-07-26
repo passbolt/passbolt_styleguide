@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
@@ -153,4 +153,4 @@ Footer.propTypes = {
   context: PropTypes.any, // The app context‡
 };
 
-export default withAppContext(Footer);
+export default withAppContext(withTranslation("common")(Footer));

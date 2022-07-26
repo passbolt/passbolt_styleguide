@@ -22,7 +22,7 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import ReactList from "react-list";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 
 // Root virtual folder identifier.
@@ -388,4 +388,4 @@ FilterResourcesByFolders.propTypes = {
   dragContext: PropTypes.any,
 };
 
-export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(withDrag(FilterResourcesByFolders))))));
+export default withRouter(withDialog(withContextualMenu(withResourceWorkspace(withAppContext(withDrag(withTranslation("common")(FilterResourcesByFolders)))))));

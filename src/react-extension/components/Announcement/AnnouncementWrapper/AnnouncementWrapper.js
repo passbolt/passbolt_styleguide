@@ -12,7 +12,7 @@
  * @since         3.2.0
  */
 import React, {Component} from "react";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 
@@ -69,4 +69,4 @@ AnnouncementWrapper.propTypes = {
   onClose: PropTypes.func
 };
 
-export default AnnouncementWrapper;
+export default withTranslation("common")(AnnouncementWrapper);

@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 class EditResourceTagsItemViewer extends React.Component {
@@ -101,4 +101,4 @@ EditResourceTagsItemViewer.propTypes = {
   history: PropTypes.any,
 };
 
-export default withRouter(withResourceWorkspace(EditResourceTagsItemViewer));
+export default withRouter(withResourceWorkspace(withTranslation("common")(EditResourceTagsItemViewer)));

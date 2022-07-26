@@ -21,7 +21,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import DeleteUserGroup from "../../UserGroup/DeleteUserGroup/DeleteUserGroup";
 import EditUserGroup from "../../UserGroup/EditUserGroup/EditUserGroup";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayGroupContextualMenu extends React.Component {
   /**
@@ -185,4 +185,4 @@ DisplayGroupContextualMenu.propTypes = {
   userWorkspaceContext: PropTypes.object, // The user workspace context
 };
 
-export default withAppContext(withUserWorkspace(withDialog(DisplayGroupContextualMenu)));
+export default withAppContext(withUserWorkspace(withDialog(withTranslation("common")(DisplayGroupContextualMenu))));

@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
 class DownloadRecoveryKit extends Component {
@@ -75,4 +75,4 @@ DownloadRecoveryKit.propTypes = {
   onComplete: PropTypes.func.isRequired, // Callback to trigger when the step is completed.
 };
 
-export default DownloadRecoveryKit;
+export default withTranslation("common")(DownloadRecoveryKit);

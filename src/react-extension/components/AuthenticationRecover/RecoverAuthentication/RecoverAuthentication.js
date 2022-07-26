@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import {
   AuthenticationRecoverWorkflowStates,
@@ -116,4 +116,4 @@ RecoverAuthentication.propTypes = {
   authenticationRecoverContext: PropTypes.any.isRequired, // The authentication recover context
 };
 
-export default withAppContext(withAuthenticationRecoverContext(RecoverAuthentication));
+export default withAppContext(withAuthenticationRecoverContext(withTranslation("common")(RecoverAuthentication)));

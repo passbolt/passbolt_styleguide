@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import Password from "../../../../shared/components/Password/Password";
@@ -344,4 +344,4 @@ CreateGpgKey.propTypes = {
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
 };
 
-export default CreateGpgKey;
+export default withTranslation("common")(CreateGpgKey);

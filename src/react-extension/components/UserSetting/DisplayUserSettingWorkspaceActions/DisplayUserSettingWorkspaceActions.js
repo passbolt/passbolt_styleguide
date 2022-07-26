@@ -19,7 +19,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component is a container of multiple actions applicable on user settings
@@ -115,4 +115,4 @@ DisplayUserSettingsWorkspaceActions.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
 };
 
-export default withAppContext(withRouter(withDialog(DisplayUserSettingsWorkspaceActions)));
+export default withAppContext(withRouter(withDialog(withTranslation("common")(DisplayUserSettingsWorkspaceActions))));

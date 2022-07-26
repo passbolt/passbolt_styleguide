@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component allows to select shortcut filters applied on users
@@ -106,4 +106,4 @@ FilterUsersByShortcut.propTypes = {
   userWorkspaceContext: PropTypes.object,
 };
 
-export default withRouter(withUserWorkspace(FilterUsersByShortcut));
+export default withRouter(withUserWorkspace(withTranslation("common")(FilterUsersByShortcut)));
