@@ -256,11 +256,23 @@ class Login extends Component {
   }
 
   /**
+   * Get the security token
+   * @returns {{backgroundColor, code, textColor}}
+   */
+  get securityToken() {
+    return this.props.userSettings?.getSecurityToken() || {
+      code: this.props.account.security_token.code,
+      backgroundColor: this.props.account.security_token.color,
+      textColor: this.props.account.security_token.textcolor
+    };
+  }
+
+  /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
-    const securityToken = this.props.userSettings?.getSecurityToken() || this.props.account.security_token;
+    const securityToken = this.securityToken;
 
     return (
       <div className="login">
