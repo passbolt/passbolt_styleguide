@@ -14,7 +14,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ChooseAccountRecoveryPreference extends Component {
   /**
@@ -188,4 +188,4 @@ ChooseAccountRecoveryPreference.propTypes = {
   canGenerateNewKeyInstead: PropTypes.bool, // Can generate new key
   onGenerateNewKeyInstead: PropTypes.func, // Callback to trigger when the user wants to generate a new key instead.
 };
-export default ChooseAccountRecoveryPreference;
+export default withTranslation("common")(ChooseAccountRecoveryPreference);

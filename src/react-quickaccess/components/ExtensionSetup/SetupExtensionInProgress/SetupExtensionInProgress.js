@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 import React from "react";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withRouter} from "react-router-dom";
 
 /**
@@ -35,4 +35,4 @@ class SetupExtensionInProgress extends React.Component {
 SetupExtensionInProgress.propTypes = {
 };
 
-export default withRouter(SetupExtensionInProgress);
+export default withRouter(withTranslation("common")(SetupExtensionInProgress));

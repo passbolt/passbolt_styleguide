@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * The component display variations.
@@ -67,4 +67,4 @@ RequestAccountRecovery.propTypes = {
   onPrimaryActionClick: PropTypes.func.isRequired, // The callback to trigger clicks on the primary action
   onSecondaryActionClick: PropTypes.func.isRequired, // The callback to trigger clicks on the secondary action
 };
-export default RequestAccountRecovery;
+export default withTranslation("common")(RequestAccountRecovery);

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import {
   AuthenticationSetupWorkflowStates,
@@ -102,4 +102,4 @@ SetupAuthentication.propTypes = {
   authenticationSetupContext: PropTypes.any.isRequired, // The authentication setup context
 };
 
-export default withAppContext(withAuthenticationSetupContext(SetupAuthentication));
+export default withAppContext(withAuthenticationSetupContext(withTranslation("common")(SetupAuthentication)));

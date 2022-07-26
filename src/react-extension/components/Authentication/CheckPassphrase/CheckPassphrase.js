@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
@@ -347,4 +347,4 @@ CheckPassphrase.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
 };
-export default CheckPassphrase;
+export default withTranslation("common")(CheckPassphrase);

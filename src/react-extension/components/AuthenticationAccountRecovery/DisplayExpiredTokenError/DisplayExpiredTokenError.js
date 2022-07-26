@@ -15,7 +15,7 @@
 import React, {Component} from "react";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayExpiredTokenError extends Component {
   /**
@@ -43,4 +43,4 @@ class DisplayExpiredTokenError extends Component {
 DisplayExpiredTokenError.propTypes = {
   context: PropTypes.any, // The application context
 };
-export default withAppContext(DisplayExpiredTokenError);
+export default withAppContext(withTranslation("common")(DisplayExpiredTokenError));

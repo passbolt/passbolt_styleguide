@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByGroupsOptions} from "./FilterUsersByGroup";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FilterUsersByGroupContextualMenu extends React.Component {
   /**
@@ -106,4 +106,4 @@ FilterUsersByGroupContextualMenu.propTypes = {
   className: PropTypes.string, // Class name to add
 };
 
-export default FilterUsersByGroupContextualMenu;
+export default withTranslation("common")(FilterUsersByGroupContextualMenu);

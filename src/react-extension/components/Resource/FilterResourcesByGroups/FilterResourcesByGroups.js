@@ -17,7 +17,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component display groups to filter the resources
@@ -171,4 +171,4 @@ FilterResourcesByGroups.propTypes = {
   history: PropTypes.object,
 };
 
-export default withRouter(withAppContext(withResourceWorkspace(FilterResourcesByGroups)));
+export default withRouter(withAppContext(withResourceWorkspace(withTranslation("common")(FilterResourcesByGroups))));

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../../shared/components/Icons/Icon";
 
 /**
@@ -47,5 +47,5 @@ LoadingSpinner.defaultProps = {
   title: <Trans>Please wait...</Trans>
 };
 
-export default LoadingSpinner;
+export default withTranslation("common")(LoadingSpinner);
 

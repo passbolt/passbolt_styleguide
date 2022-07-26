@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import AnnouncementWrapper
   from "../AnnouncementWrapper/AnnouncementWrapper";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAnnouncement} from "../../../contexts/AnnouncementContext";
 
 /**
@@ -48,4 +48,4 @@ DisplayExpiredSubscriptionAnnouncement.propTypes = {
   i18n: PropTypes.any
 };
 
-export default withNavigationContext(withAnnouncement(DisplayExpiredSubscriptionAnnouncement));
+export default withNavigationContext(withAnnouncement(withTranslation("common")(DisplayExpiredSubscriptionAnnouncement)));

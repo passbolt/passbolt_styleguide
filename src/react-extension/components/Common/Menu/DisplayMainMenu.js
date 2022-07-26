@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayMainMenu extends Component {
   /**
@@ -123,4 +123,4 @@ DisplayMainMenu.propTypes = {
   location: PropTypes.object, // Router location prop
 };
 
-export default withAppContext(withRouter(withNavigationContext(DisplayMainMenu)));
+export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(DisplayMainMenu))));

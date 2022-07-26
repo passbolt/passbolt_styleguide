@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import {filterByTagsOptions} from "./FilterResourcesByTagsList";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FilterResourcesByTagsContextualMenu extends React.Component {
   /**
@@ -106,4 +106,4 @@ FilterResourcesByTagsContextualMenu.propTypes = {
   className: PropTypes.string, // Class name to add
 };
 
-export default FilterResourcesByTagsContextualMenu;
+export default withTranslation("common")(FilterResourcesByTagsContextualMenu);

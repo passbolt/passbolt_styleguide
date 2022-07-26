@@ -20,7 +20,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../contexts/DialogContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * This component displays the group details about members
@@ -139,4 +139,4 @@ DisplayUserGroupDetailsMembers.propTypes = {
   dialogContext: PropTypes.object, // The dialog context
 };
 
-export default withAppContext(withDialog(withUserWorkspace(DisplayUserGroupDetailsMembers)));
+export default withAppContext(withDialog(withUserWorkspace(withTranslation("common")(DisplayUserGroupDetailsMembers))));

@@ -15,7 +15,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import CustomPropTypes from "../../../../shared/lib/PropTypes/CustomPropTypes";
 
 /**
@@ -463,4 +463,4 @@ Select.propTypes = {
   onChange: PropTypes.func, // The on change event callback
 };
 
-export default Select;
+export default withTranslation("common")(Select);

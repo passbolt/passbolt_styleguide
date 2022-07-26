@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 class DisplayUnexpectedError extends Component {
@@ -136,4 +136,4 @@ DisplayUnexpectedError.propTypes = {
   ]),
   error: PropTypes.any, // The error to display
 };
-export default DisplayUnexpectedError;
+export default withTranslation("common")(DisplayUnexpectedError);

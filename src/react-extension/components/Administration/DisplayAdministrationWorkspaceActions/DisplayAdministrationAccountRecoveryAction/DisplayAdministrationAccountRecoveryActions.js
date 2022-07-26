@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withAdminAccountRecovery} from "../../../../contexts/AdminAccountRecoveryContext";
 import {AccountRecoveryUserContextProvider} from "../../../../contexts/AccountRecoveryUserContext";
 import {withWorkflow} from "../../../../contexts/WorkflowContext";
@@ -125,4 +125,4 @@ DisplayAdministrationWorkspaceActions.propTypes = {
   workflowContext: PropTypes.any, // the workflow context
 };
 
-export default withWorkflow(withAdminAccountRecovery(DisplayAdministrationWorkspaceActions));
+export default withWorkflow(withAdminAccountRecovery(withTranslation("common")(DisplayAdministrationWorkspaceActions)));

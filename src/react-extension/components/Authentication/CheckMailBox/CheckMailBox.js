@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class CheckMailBox extends Component {
   /**
@@ -35,4 +35,4 @@ class CheckMailBox extends Component {
 CheckMailBox.propTypes = {
 };
 
-export default CheckMailBox;
+export default withTranslation("common")(CheckMailBox);

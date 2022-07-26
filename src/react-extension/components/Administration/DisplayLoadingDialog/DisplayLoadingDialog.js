@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 class DisplayLoadingDialog extends Component {
@@ -121,4 +121,4 @@ DisplayLoadingDialog.propTypes = {
   title: PropTypes.string,
 };
 
-export default DisplayLoadingDialog;
+export default withTranslation("common")(DisplayLoadingDialog);

@@ -19,7 +19,7 @@ import PropTypes from "prop-types";
 import DisplayResourceCommentList from "../../ResourceComment/DisplayResourceCommentList/DisplayResourceCommentList";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class DisplayResourceDetailsComment extends React.Component {
   /**
@@ -184,4 +184,4 @@ DisplayResourceDetailsComment.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource context
 };
 
-export default withResourceWorkspace(DisplayResourceDetailsComment);
+export default withResourceWorkspace(withTranslation("common")(DisplayResourceDetailsComment));

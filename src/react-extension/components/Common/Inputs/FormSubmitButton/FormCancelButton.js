@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FormCancelButton extends Component {
   /**
@@ -71,4 +71,4 @@ FormCancelButton.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default FormCancelButton;
+export default withTranslation("common")(FormCancelButton);

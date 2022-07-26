@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {withAppContext} from "../../../../contexts/AppContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
 
@@ -173,4 +173,4 @@ DisplayProgress.propTypes = {
   context: PropTypes.any, // The application context
 };
 
-export default withAppContext(DisplayProgress);
+export default withAppContext(withTranslation("common")(DisplayProgress));

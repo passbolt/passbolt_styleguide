@@ -22,7 +22,7 @@ import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/Dele
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   /**
@@ -250,4 +250,4 @@ FilterResourcesByFoldersItemContextualMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
 };
 
-export default withAppContext(withResourceWorkspace(withDialog(FilterResourcesByFoldersItemContextualMenu)));
+export default withAppContext(withResourceWorkspace(withDialog(withTranslation("common")(FilterResourcesByFoldersItemContextualMenu))));

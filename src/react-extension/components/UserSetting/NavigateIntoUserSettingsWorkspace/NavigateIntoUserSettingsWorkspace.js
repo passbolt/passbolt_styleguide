@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
@@ -186,4 +186,4 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   hasPendingAccountRecoveryChoice: PropTypes.bool
 };
 
-export default withAppContext(withRouter(withNavigationContext(NavigateIntoUserSettingsWorkspace)));
+export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace))));

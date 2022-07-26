@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ConfigurePasswordGenerator extends React.Component {
   /**
@@ -188,4 +188,4 @@ ConfigurePasswordGenerator.propTypes = {
   disabled: PropTypes.bool, // The disabled attribute
 };
 
-export default ConfigurePasswordGenerator;
+export default withTranslation("common")(ConfigurePasswordGenerator);

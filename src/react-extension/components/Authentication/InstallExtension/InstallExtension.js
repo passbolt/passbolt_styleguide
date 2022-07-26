@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import {BROWSER_NAMES, detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
 import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 const CHROME_STORE_BROWSER_EXTENSION_URL = "https://chrome.google.com/webstore/detail/passbolt-extension/didegimhafipceonhjepacocaffmoppf";
 const FIREFOX_STORE_BROWSER_EXTENSION_URL = "https://addons.mozilla.org/firefox/addon/passbolt";
@@ -127,4 +127,4 @@ class InstallExtension extends Component {
 InstallExtension.propTypes = {
   context: PropTypes.any, // The application context
 };
-export default withAppContext(InstallExtension);
+export default withAppContext(withTranslation("common")(InstallExtension));

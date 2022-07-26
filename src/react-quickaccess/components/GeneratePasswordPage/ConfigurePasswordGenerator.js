@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 class ConfigurePasswordGenerator extends React.Component {
   /**
@@ -185,4 +185,4 @@ ConfigurePasswordGenerator.propTypes = {
   onChanged: PropTypes.func, // Called whenever the generator configuration changed
 };
 
-export default ConfigurePasswordGenerator;
+export default withTranslation("common")(ConfigurePasswordGenerator);
