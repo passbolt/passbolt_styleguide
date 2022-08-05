@@ -21,7 +21,7 @@ import {
 
 
 export default {
-  title: 'Passbolt Component/Administration/ConfirmSaveAccountRecoverySettings',
+  title: 'Components/Administration/ConfirmSaveAccountRecoverySettings',
   component: ConfirmSaveAccountRecoverySettings
 };
 

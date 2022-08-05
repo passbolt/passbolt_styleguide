@@ -6,7 +6,7 @@ import ChangeUserSecurityToken from "./ChangeUserSecurityToken";
 
 
 export default {
-  title: 'Passbolt Component/UserSetting/ChangeUserSecurityToken',
+  title: 'Components/UserSetting/ChangeUserSecurityToken',
   component: ChangeUserSecurityToken
 };
 

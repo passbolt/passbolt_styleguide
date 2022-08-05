@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration";
 
 export default {
-  title: 'Passbolt Component/Administration/DisplayInternationalizationAdministration',
+  title: 'Components/Administration/DisplayInternationalizationAdministration',
   component: DisplayInternationalizationAdministration
 };
 

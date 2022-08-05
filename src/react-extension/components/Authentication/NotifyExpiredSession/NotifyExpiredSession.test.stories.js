@@ -18,7 +18,7 @@ import NotifyExpiredSession from "./NotifyExpiredSession";
 import {defaultProps} from "./NotifyExpiredSession.test.data";
 
 export default {
-  title: 'Passbolt Component/Authentication/NotifyExpiredSession',
+  title: 'Components/Authentication/NotifyExpiredSession',
   component: NotifyExpiredSession
 };
 

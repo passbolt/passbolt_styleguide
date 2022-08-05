@@ -7,7 +7,7 @@ import DisplayResourceFolderDetailsPermissions from "./DisplayResourceFolderDeta
 
 
 export default {
-  title: 'Passbolt Component/ResourceFolderDetails/DisplayResourceFolderDetailsPermissions',
+  title: 'Components/ResourceFolderDetails/DisplayResourceFolderDetailsPermissions',
   component: DisplayResourceFolderDetailsPermissions
 };
 

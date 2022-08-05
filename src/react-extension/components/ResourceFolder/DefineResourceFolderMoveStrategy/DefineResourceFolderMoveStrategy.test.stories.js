@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/ResourceFolder/DefineResourceFolderMoveStrategy',
+  title: 'Components/ResourceFolder/DefineResourceFolderMoveStrategy',
   component: DefineResourceFolderMoveStrategy
 };
 

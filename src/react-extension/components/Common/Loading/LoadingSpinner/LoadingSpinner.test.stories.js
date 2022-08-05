@@ -18,7 +18,7 @@ import MockTranslationProvider from "../../../../test/mock/components/Internatio
 import LoadingSpinner from "./LoadingSpinner";
 
 export default {
-  title: 'Passbolt Component/Common/LoadingSpinner',
+  title: 'Components/Common/LoadingSpinner',
   component: LoadingSpinner
 };
 

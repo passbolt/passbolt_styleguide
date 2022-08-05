@@ -7,7 +7,7 @@ import DisplayUserDetailsGroups from "./DisplayUserDetailsGroups";
 
 
 export default {
-  title: 'Passbolt Component/UserDetails/DisplayUserDetailsGroups',
+  title: 'Components/UserDetails/DisplayUserDetailsGroups',
   component: DisplayUserDetailsGroups
 };
 

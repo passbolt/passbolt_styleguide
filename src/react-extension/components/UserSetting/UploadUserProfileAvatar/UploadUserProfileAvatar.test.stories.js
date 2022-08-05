@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/UserSetting/UploadUserProfileAvatar',
+  title: 'Components/UserSetting/UploadUserProfileAvatar',
   component: UploadUserProfileAvatar
 };
 

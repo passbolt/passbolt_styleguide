@@ -6,7 +6,7 @@ import AppContext from "../../contexts/AppContext";
 import {defaultAppContext, mockResults} from "./FilterResourcesByTagPage.test.data";
 
 export default {
-  title: 'Passbolt Component/QuickAccess/FilterResourcesByTag',
+  title: 'Components/QuickAccess/FilterResourcesByTag',
   component: FilterResourcesByTagPage
 };
 

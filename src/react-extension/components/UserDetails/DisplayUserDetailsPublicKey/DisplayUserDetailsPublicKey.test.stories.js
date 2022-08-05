@@ -6,7 +6,7 @@ import DisplayUserDetailsPublicKey from "./DisplayUserDetailsPublicKey";
 import {mockGpgKey, mockInvalidGpgKey} from "./DisplayUserDetailsPublicKey.test.data";
 
 export default {
-  title: 'Passbolt Component/UserDetails/DisplayUserDetailsPublicKey',
+  title: 'Components/UserDetails/DisplayUserDetailsPublicKey',
   component: DisplayUserDetailsPublicKey
 };
 

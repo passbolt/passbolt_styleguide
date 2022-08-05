@@ -10,7 +10,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/ResourceDescription/EditResourceDescription',
+  title: 'Components/ResourceDescription/EditResourceDescription',
   component: EditResourceDescription
 };
 

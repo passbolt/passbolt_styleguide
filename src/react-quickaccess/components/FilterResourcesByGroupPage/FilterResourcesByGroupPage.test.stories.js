@@ -6,7 +6,7 @@ import AppContext from "../../contexts/AppContext";
 import {defaultAppContext, mockResults} from "./FilterResourcesByGroupPage.test.data";
 
 export default {
-  title: 'Passbolt Component/QuickAccess/FilterResourcesByGroup',
+  title: 'Components/QuickAccess/FilterResourcesByGroup',
   component: FilterResourcesByGroupPage
 };
 

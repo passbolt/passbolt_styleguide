@@ -6,7 +6,7 @@ import DisplayTestUserDirectoryAdministration from "./DisplayTestUserDirectoryAd
 
 
 export default {
-  title: 'Passbolt Component/Administration/DisplayTestUserDirectoryAdministration',
+  title: 'Components/Administration/DisplayTestUserDirectoryAdministration',
   component: DisplayTestUserDirectoryAdministration
 };
 

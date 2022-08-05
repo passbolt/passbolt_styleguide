@@ -22,7 +22,7 @@ import {
 } from "./DisplayUnexpectedError.test.data";
 
 export default {
-  title: 'Passbolt Component/Authentication/DisplayUnexpectedError',
+  title: 'Components/Authentication/DisplayUnexpectedError',
   component: DisplayUnexpectedError
 };
 

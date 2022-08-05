@@ -5,7 +5,7 @@ import ExportResources from "./ExportResources";
 
 
 export default {
-  title: 'Passbolt Component/Resource/ExportResources/ExportResources',
+  title: 'Components/Resource/ExportResources/ExportResources',
   component: ExportResources
 };
 

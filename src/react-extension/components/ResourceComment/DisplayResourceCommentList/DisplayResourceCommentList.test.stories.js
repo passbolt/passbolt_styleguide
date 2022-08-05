@@ -5,7 +5,7 @@ import DisplayResourceCommentList from "./DisplayResourceCommentList";
 
 
 export default {
-  title: 'Passbolt Component/ResourceComment/DisplayResourceCommentList',
+  title: 'Components/ResourceComment/DisplayResourceCommentList',
   component: DisplayResourceCommentList
 };
 

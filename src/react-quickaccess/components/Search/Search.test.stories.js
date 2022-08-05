@@ -6,7 +6,7 @@ import Search from "./Search";
 import {defaultAppContext} from "./Search.test.data";
 
 export default {
-  title: 'Passbolt Component/QuickAccess/Search',
+  title: 'Components/QuickAccess/Search',
   component: Search
 };
 

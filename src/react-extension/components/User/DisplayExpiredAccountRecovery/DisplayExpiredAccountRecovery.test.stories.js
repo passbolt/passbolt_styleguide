@@ -18,7 +18,7 @@ import MockTranslationProvider from "../../../test/mock/components/International
 import DisplayExpiredAccountRecovery from "./DisplayExpiredAccountRecovery";
 
 export default {
-  title: 'Passbolt Component/User/DisplayExpiredAccountRecovery',
+  title: 'Components/User/DisplayExpiredAccountRecovery',
   component: DisplayExpiredAccountRecovery
 };
 

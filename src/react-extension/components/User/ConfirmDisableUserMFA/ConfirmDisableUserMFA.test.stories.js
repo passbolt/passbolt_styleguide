@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/User/ConfirmDisableUserMFA',
+  title: 'Components/User/ConfirmDisableUserMFA',
   component: ConfirmDisableUserMFA
 };
 

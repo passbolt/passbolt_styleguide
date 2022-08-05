@@ -7,7 +7,7 @@ import EditUserGroup from "./EditUserGroup";
 
 
 export default {
-  title: 'Passbolt Component/UserGroup/EditUserGroup',
+  title: 'Components/UserGroup/EditUserGroup',
   component: EditUserGroup
 };
 

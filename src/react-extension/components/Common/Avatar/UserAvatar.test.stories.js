@@ -20,7 +20,7 @@ import UserAvatar from "./UserAvatar";
 import {defaultProps} from "./UserAvatar.test.data";
 
 export default {
-  title: 'Passbolt Component/Common/UserAvatar',
+  title: 'Components/Common/UserAvatar',
   component: UserAvatar
 };
 

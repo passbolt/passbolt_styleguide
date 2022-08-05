@@ -5,7 +5,7 @@ import CreateResourceFolder from "./CreateResourceFolder";
 
 
 export default {
-  title: 'Passbolt Component/ResourceFolder/CreateResourceFolder',
+  title: 'Components/ResourceFolder/CreateResourceFolder',
   component: CreateResourceFolder
 };
 

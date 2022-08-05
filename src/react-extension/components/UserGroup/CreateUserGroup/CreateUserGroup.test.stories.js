@@ -7,7 +7,7 @@ import {mockGpgKey, mockUsers} from "./CreateUserGroup.test.data";
 
 
 export default {
-  title: 'Passbolt Component/UserGroup/CreateUserGroup',
+  title: 'Components/UserGroup/CreateUserGroup',
   component: CreateUserGroup
 };
 

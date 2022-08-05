@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import DisplayUserGpgInformation from "./DisplayUserGpgInformation";
 
 export default {
-  title: 'Passbolt Component/UserSetting/DisplayUserGpgInformation',
+  title: 'Components/UserSetting/DisplayUserGpgInformation',
   component: DisplayUserGpgInformation
 };
 

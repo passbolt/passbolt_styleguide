@@ -20,7 +20,7 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
 
 export default {
-  title: 'Passbolt Component/WebIntegration/AskInFormMenuDisplay',
+  title: 'Components/WebIntegration/AskInFormMenuDisplay',
   component: AskInFormMenuDisplay
 };
 

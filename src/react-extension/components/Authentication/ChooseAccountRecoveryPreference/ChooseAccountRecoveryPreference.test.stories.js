@@ -24,7 +24,7 @@ import {
 
 
 export default {
-  title: 'Passbolt Component/Authentication/ChooseAccountRecoveryPreference',
+  title: 'Components/Authentication/ChooseAccountRecoveryPreference',
   component: ChooseAccountRecoveryPreference
 };
 

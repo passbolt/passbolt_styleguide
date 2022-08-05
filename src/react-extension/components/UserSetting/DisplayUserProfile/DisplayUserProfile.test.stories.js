@@ -6,7 +6,7 @@ import DisplayUserProfile from "./DisplayUserProfile";
 
 
 export default {
-  title: 'Passbolt Component/UserSetting/DisplayUserProfile',
+  title: 'Components/UserSetting/DisplayUserProfile',
   component: DisplayUserProfile
 };
 

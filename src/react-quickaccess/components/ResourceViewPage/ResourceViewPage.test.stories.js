@@ -6,7 +6,7 @@ import AppContext from "../../contexts/AppContext";
 import {defaultAppContext} from "./ResourceViewPage.test.data";
 
 export default {
-  title: 'Passbolt Component/QuickAccess/ResourceView',
+  title: 'Components/QuickAccess/ResourceView',
   component: ResourceViewPage
 };
 

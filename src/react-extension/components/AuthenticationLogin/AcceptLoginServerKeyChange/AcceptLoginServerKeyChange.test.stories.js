@@ -18,7 +18,7 @@ import AcceptLoginServerKeyChange from "./AcceptLoginServerKeyChange";
 import {defaultProps} from "./AcceptLoginServerKeyChange.test.data";
 
 export default {
-  title: 'Passbolt Component/AuthenticationLogin/AcceptLoginServerKeyChange',
+  title: 'Components/AuthenticationLogin/AcceptLoginServerKeyChange',
   component: AcceptLoginServerKeyChange
 };
 

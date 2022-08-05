@@ -1,4 +1,4 @@
-export default {
+const siteSettings = (isProEdition = true) => ({
   "app": {
     "version": {
       "number": "3.5.0",
@@ -22,11 +22,11 @@ export default {
         "url": "https://passbolt.com/terms"
       }
     },
-    "edition": "pro",
+    "edition": isProEdition ? "pro" : "ce",
     "plugins": {
       "accountRecovery": {
         "version": "1.0.0",
-        "enabled": true,
+        "enabled": isProEdition,
       },
       "import": {
         "version": "2.0.1",
@@ -50,7 +50,8 @@ export default {
         "version": "2.0.0"
       },
       "ee": {
-        "version": "3.0.0"
+        "version": "3.0.0",
+        "enabled": isProEdition
       },
       "accountSettings": {
         "version": "1.0.0",
@@ -81,22 +82,27 @@ export default {
         "version": "1.0.0"
       },
       "multiFactorAuthentication": {
-        "version": "1.1.0"
+        "version": "1.1.0",
+        "enabled": isProEdition
       },
       "directorySync": {
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "enabled": isProEdition
       },
       "tags": {
-        "version": "1.0.1"
+        "version": "1.0.1",
+        "enabled": isProEdition
       },
       "log": {
         "version": "1.0.0"
       },
       "audit_log": {
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "enabled": isProEdition
       },
       "folders": {
-        "version": "2.0.0"
+        "version": "2.0.0",
+        "enabled": isProEdition
       },
       "previewPassword": {
         "version": "3.0.0"
@@ -140,8 +146,14 @@ export default {
         "version": "1.0.0"
       },
       "accountRecoveryRequestHelp": {
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "enabled": isProEdition
       }
     }
   }
-};
+});
+
+const siteSettingsPro = siteSettings(true);
+export default siteSettingsPro;
+
+export const siteSettingsCe = siteSettings(false);

@@ -19,7 +19,7 @@ import RequestAccountRecovery from "./RequestAccountRecovery";
 import {defaultProps} from "./RequestAccountRecovery.test.data";
 
 export default {
-  title: 'Passbolt Component/Authentication/InitiateRecoverAccount',
+  title: 'Components/Authentication/InitiateRecoverAccount',
   component: RequestAccountRecovery
 };
 

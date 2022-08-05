@@ -20,7 +20,7 @@ import {defaultProps} from "./ReviewAccountRecoveryRequest.test.data";
 
 
 export default {
-  title: 'Passbolt Component/AccountRecovery/ReviewAccountRecoveryRequest',
+  title: 'Components/AccountRecovery/ReviewAccountRecoveryRequest',
   component: ReviewAccountRecoveryRequest
 };
 

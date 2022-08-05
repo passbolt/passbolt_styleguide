@@ -16,7 +16,7 @@ import FormSubmitButton from "../../Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans} from "react-i18next";
 
 export default {
-  title: 'Passbolt Component/Common/DialogFooter',
+  title: 'Components/Common/DialogFooter',
   component: "DialogFooter"
 };
 

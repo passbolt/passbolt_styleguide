@@ -21,7 +21,7 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 
 export default {
-  title: 'Passbolt Component/Administration/DownloadOrganizationKey',
+  title: 'Components/Administration/DownloadOrganizationKey',
   component: DownloadOrganizationKey
 };
 

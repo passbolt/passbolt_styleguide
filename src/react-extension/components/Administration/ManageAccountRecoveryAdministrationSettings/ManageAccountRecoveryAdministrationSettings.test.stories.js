@@ -22,7 +22,7 @@ import {
 } from "./ManageAccountRecoveryAdministrationSettings.test.data";
 
 export default {
-  title: 'Passbolt Component/Administration/ManageAccountRecoveryAdministrationSettings',
+  title: 'Components/Administration/ManageAccountRecoveryAdministrationSettings',
   component: ManageAccountRecoveryAdministrationSettings
 };
 

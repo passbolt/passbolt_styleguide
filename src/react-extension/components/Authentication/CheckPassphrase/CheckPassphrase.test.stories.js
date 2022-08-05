@@ -18,7 +18,7 @@ import CheckPassphrase, {CheckPassphraseVariations} from "./CheckPassphrase";
 import {defaultProps} from "./CheckPassphrase.test.data";
 
 export default {
-  title: 'Passbolt Component/Authentication/CheckPassphrase',
+  title: 'Components/Authentication/CheckPassphrase',
   component: CheckPassphrase
 };
 
