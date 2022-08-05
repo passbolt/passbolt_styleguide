@@ -18,7 +18,7 @@ import DisplayExpiredTokenError from "./DisplayExpiredTokenError";
 import {defaultProps} from "./DisplayExpiredTokenError.test.data";
 
 export default {
-  title: 'Passbolt Component/AuthenticationAccountRecovery/DisplayExpiredTokenError',
+  title: 'Components/AuthenticationAccountRecovery/DisplayExpiredTokenError',
   component: DisplayExpiredTokenError
 };
 

@@ -4,7 +4,7 @@ import FilterUsersByText from "./FilterUsersByText";
 
 
 export default {
-  title: 'Passbolt Component/User/FilterUsersByText',
+  title: 'Components/User/FilterUsersByText',
   component: FilterUsersByText
 };
 

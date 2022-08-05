@@ -24,7 +24,7 @@ import {
 
 
 export default {
-  title: 'Passbolt Component/User/DisplayUserWorkspaceActions',
+  title: 'Components/User/DisplayUserWorkspaceActions',
   component: DisplayUserWorkspaceActions
 };
 

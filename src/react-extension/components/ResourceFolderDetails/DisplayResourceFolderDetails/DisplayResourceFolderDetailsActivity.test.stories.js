@@ -7,7 +7,7 @@ import DisplayResourceFolderDetailsActivity from "./DisplayResourceFolderDetails
 
 
 export default {
-  title: 'Passbolt Component/ResourceFolderDetails/DisplayResourceFolderDetailsActivity',
+  title: 'Components/ResourceFolderDetails/DisplayResourceFolderDetailsActivity',
   component: DisplayResourceFolderDetailsActivity
 };
 

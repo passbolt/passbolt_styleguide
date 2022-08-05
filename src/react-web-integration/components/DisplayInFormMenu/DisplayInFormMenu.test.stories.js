@@ -17,7 +17,7 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import DisplayInFormMenu from "./DisplayInFormMenu";
 
 export default {
-  title: 'Passbolt Component/WebIntegration/InFormMenu',
+  title: 'Components/WebIntegration/InFormMenu',
   component: DisplayInFormMenu
 };
 

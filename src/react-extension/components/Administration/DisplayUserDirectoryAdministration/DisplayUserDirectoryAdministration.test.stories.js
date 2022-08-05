@@ -5,7 +5,7 @@ import {mockUserDirectorySettings, mockUsers} from "./DisplayUserDirectoryAdmini
 
 
 export default {
-  title: 'Passbolt Component/Administration/DisplayUserDirectoryAdministration',
+  title: 'Components/Administration/DisplayUserDirectoryAdministration',
   component: DisplayUserDirectoryAdministration
 };
 

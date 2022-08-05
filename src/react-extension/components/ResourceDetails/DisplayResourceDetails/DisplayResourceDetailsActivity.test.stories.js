@@ -8,7 +8,7 @@ import TranslationProvider from "../../Common/Internationalisation/TranslationPr
 
 
 export default {
-  title: 'Passbolt Component/ResourceDetails/DisplayResourceDetailsActivity',
+  title: 'Components/ResourceDetails/DisplayResourceDetailsActivity',
   component: DisplayResourceDetailsActivity
 };
 

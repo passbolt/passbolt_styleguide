@@ -24,7 +24,7 @@ import {
 
 
 export default {
-  title: 'Passbolt Component/User/DisplayUsersContextualMenu',
+  title: 'Components/User/DisplayUsersContextualMenu',
   component: DisplayUsersContextualMenu
 };
 

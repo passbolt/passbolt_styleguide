@@ -5,7 +5,7 @@ import FilterResourcesByBreadcrumb from "./FilterResourcesByBreadcrumb";
 
 
 export default {
-  title: 'Passbolt Component/Resource/FilterResourcesByBreadcrumb',
+  title: 'Components/Resource/FilterResourcesByBreadcrumb',
   component: FilterResourcesByBreadcrumb
 };
 

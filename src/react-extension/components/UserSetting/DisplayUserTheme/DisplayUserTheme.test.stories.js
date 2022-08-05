@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/UserSetting/DisplayUserTheme',
+  title: 'Components/UserSetting/DisplayUserTheme',
   component: DisplayUserTheme
 };
 

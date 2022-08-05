@@ -15,9 +15,11 @@
 import MockStorage from "../../../src/react-extension/test/mock/MockStorage";
 import resourceTypes from "../fixture/resourceTypes";
 
+const baseURL = new URL(window.location.href).origin;
+
 const _passbolt_data = {
   "config": {
-    "user.settings.trustedDomain": "http://localhost:3000",
+    "user.settings.trustedDomain": baseURL,
     "user.firstname": "Ada",
     "user.id": "f848277c-5398-58f8-a82a-72397af2d450",
     "user.lastname": "Lovelace",
@@ -27,7 +29,7 @@ const _passbolt_data = {
     "user.settings.theme": {
       "id": "9a5ecc88-f4df-5cc2-b152-6ca310127a67",
       "name": "default",
-      "preview": "http:\/\/localhost:3000\/img\/themes\/default.png"
+      "preview": `${baseURL}\/img\/themes\/default.png`
     },
     "user.username": "ada@passbolt.com",
   }

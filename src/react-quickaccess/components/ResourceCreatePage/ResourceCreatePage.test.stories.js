@@ -6,7 +6,7 @@ import ResourceCreatePage from "./ResourceCreatePage";
 import {defaultAppContext, mockResults} from "./ResourceCreatePage.test.data";
 
 export default {
-  title: 'Passbolt Component/QuickAccess/ResourceCreate',
+  title: 'Components/QuickAccess/ResourceCreate',
   component: ResourceCreatePage
 };
 

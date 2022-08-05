@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import IntroduceExtension from "./IntroduceExtension";
 
 export default {
-  title: 'Passbolt Component/Authentication/IntroduceExtension',
+  title: 'Components/Authentication/IntroduceExtension',
   component: IntroduceExtension
 };
 

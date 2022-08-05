@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
  * EditResource stories
  */
 export default {
-  title: 'Passbolt Component/Resource/EditResource',
+  title: 'Components/Resource/EditResource',
   component: EditResource
 };
 

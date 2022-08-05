@@ -5,7 +5,7 @@ import FilterResourcesByShortcuts from "./FilterResourcesByShortcuts";
 
 
 export default {
-  title: 'Passbolt Component/Resource/FilterResourcesByShortcuts',
+  title: 'Components/Resource/FilterResourcesByShortcuts',
   component: FilterResourcesByShortcuts
 };
 

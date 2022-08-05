@@ -6,7 +6,7 @@ import {defaultProps} from "./DisplayUserBadgeMenu.test.data";
 
 
 export default {
-  title: 'Passbolt Component/User/DisplayUserBadgeMenu',
+  title: 'Components/User/DisplayUserBadgeMenu',
   component: DisplayUserBadgeMenu
 };
 

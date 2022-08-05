@@ -4,7 +4,7 @@ import DisplayMfaAdministration from "./DisplayMfaAdministration";
 
 
 export default {
-  title: 'Passbolt Component/Administration/DisplayMfaAdministration',
+  title: 'Components/Administration/DisplayMfaAdministration',
   component: DisplayMfaAdministration
 };
 

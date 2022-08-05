@@ -9,7 +9,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/ResourceDetails/DisplayResourceDetailsTag',
+  title: 'Components/ResourceDetails/DisplayResourceDetailsTag',
   component: DisplayResourceDetailsTag
 };
 

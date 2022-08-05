@@ -17,7 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import DisplayRequireInvitationError from "./DisplayRequireInvitationError";
 
 export default {
-  title: 'Passbolt Component/Authentication/DisplayRequireInvitationError',
+  title: 'Components/Authentication/DisplayRequireInvitationError',
   component: DisplayRequireInvitationError
 };
 

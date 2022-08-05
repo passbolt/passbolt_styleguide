@@ -7,7 +7,7 @@ import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
-  title: 'Passbolt Component/UserGroup/DeleteUserGroup',
+  title: 'Components/UserGroup/DeleteUserGroup',
   component: DeleteUserGroup
 };
 

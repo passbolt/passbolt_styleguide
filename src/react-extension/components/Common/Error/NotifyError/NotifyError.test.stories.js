@@ -16,7 +16,7 @@ import React from "react";
 import NotifyError from "./NotifyError";
 
 export default {
-  title: 'Passbolt Component/Common/Error/NotifyError',
+  title: 'Components/Common/Error/NotifyError',
   component: NotifyError
 };
 

@@ -4,7 +4,7 @@ import SetupExtensionInProgress from "./SetupExtensionInProgress";
 import Header from "../../Header/Header";
 
 export default {
-  title: 'Passbolt Component/QuickAccess/SetupExtensionInProgress',
+  title: 'Components/QuickAccess/SetupExtensionInProgress',
   component: SetupExtensionInProgress
 };
 

@@ -6,7 +6,7 @@ import FilterResourcesByTags from "./FilterResourcesByTags";
 
 
 export default {
-  title: 'Passbolt Component/Resource/FilterResourcesByTags',
+  title: 'Components/Resource/FilterResourcesByTags',
   component: FilterResourcesByTags,
 };
 
