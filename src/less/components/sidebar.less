@@ -8,8 +8,8 @@
     width: 30%;
     bottom: 0;
     height: 100%;
-    background: @sidebar-background;
-    box-shadow: 0 0 1rem 0 rgba(0,0,0, @shadow-opacity-panel-info);
+    background: @info-panel-background;
+    box-shadow: 0 0 1rem 0 rgba(0,0,0, @shadow-opacity-info-panel);
 
     /* Controls */
     .sidebar-header {
@@ -39,14 +39,14 @@
                     height: 100%;
                   }
                   &:hover {
-                    --icon-color: @font-focus;
+                    --icon-color: @text-focus-color;
                   }
                 }
             }
             .subtitle {
                 font-size: 1.2rem;
                 line-height: 1.6rem;
-                color: @panel-info-header-subtitle-font-color;
+                color: @info-panel-header-subtitle-text-color;
                 font-weight: 400;
                 display: block;
                 .ellipsis();
@@ -59,11 +59,11 @@
             float: left;
             width: 4.2rem;
             height: 4.2rem;
-            background: @panel-info-header-icon-background;
+            background: @info-panel-header-icon-background;
             text-align: center;
             border-radius: 50%;
             .svg-icon {
-                --icon-color: @panel-info-header-icon-color;
+                --icon-color: @info-panel-header-icon-color;
                 &.exclamation {
                     svg {
                         width: 1.2rem;
@@ -88,9 +88,9 @@
     }
 
     .sidebar-section {
-        border-top:1px solid @panel-info-border;
+        border-top:1px solid @info-panel-section-border;
         font-size: 1.4rem;
-        background: @panel-info-background;
+        background: @info-panel-section-header-background;
 
         .accordion-header {
           padding: 1.6rem;
@@ -108,7 +108,7 @@
 
         .accordion-content {
             padding: 1.6rem;
-            background: @panel-info-content-background;
+            background: @info-panel-section-content-background;
 
             // button displayed next to caret that open/close
             .section-action {
@@ -236,7 +236,7 @@
                 a {
                   border: 0;
                   &:hover {
-                    --icon-color: @font-focus;
+                    --icon-color: @text-focus-color;
                   }
                 }
             }
@@ -316,7 +316,7 @@
             margin: 1.6rem -1.6rem 0 -1.6rem;
             font-size: 1.2rem;
             line-height: 1.6rem;
-            background: @panel-info-notice-background;
+            background: @info-panel-section-notice-background;
 
             span:last-child {
                 display: inline-block;

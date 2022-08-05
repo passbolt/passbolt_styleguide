@@ -1,6 +1,6 @@
 /* left panel navigation */
 .navigation-secondary {
-    box-shadow: inset 0 -.1rem 0 @border-default; // border bottom
+    box-shadow: inset 0 -.1rem 0 @default-border; // border bottom
     padding: 1.2rem 0;
 
     &:last-child {
@@ -31,27 +31,32 @@
 
         // Hover
         &:hover, &.highlight {
-            background: @navigation-menu-hover-background;
+            background: @workspace-left-menu-hover-background;
         }
         &.no-hover:hover {
             background: transparent;
         }
 
-        // Focus
-        &:focus {
-          background: @navigation-menu-background-focus;
-          box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 .1rem @navigation-menu-border-focus;
-          .main-cell a {
-            color: @font-focus-navigation;
-          }
-        }
-
         // Selected
         &.selected {
-          background: @navigation-menu-hover-background;
-          .main-cell a {
-            font-weight: 700;
-          }
+            background: @workspace-left-menu-hover-background;
+            .main-cell a {
+                font-weight: 700;
+            }
+        }
+
+        // Focus
+        &:focus {
+            background: @workspace-left-menu-focus-background;
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @workspace-left-menu-focus-border;
+            .main-cell a {
+                color: @workspace-left-menu-focus-text-color;
+                .svg-icon {
+                    &.caret-right,&.caret-down {
+                        --icon-color: @icon-primary-background-color;
+                    }
+                }
+            }
         }
 
         /*
@@ -104,7 +109,7 @@
                 border: 0;
                 padding: 0 1.6rem;
                 font-weight: 400;
-                color: @font-default;
+                color: @default-text-color;
                 display: flex;
                 align-items: center;
 
@@ -127,7 +132,7 @@
             a {
                 display:none;
                 padding: .8rem;
-                color:@font-light;
+                color:@text-light-color;
                 box-shadow: none;
                 border: none;
                 background: none;
@@ -148,14 +153,14 @@
 
                 // hover
                 &:hover {
-                    color: @font-focus;
+                    color: @text-focus-color;
                     background: @button-background;
                     box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
                 }
 
                 // focus
                 &:focus {
-                    box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
+                    box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
                 }
 
                 // pressed

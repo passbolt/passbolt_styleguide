@@ -5,27 +5,27 @@ a {
     cursor: pointer;
     font-size: 1.5rem;
     line-height: 2rem;
-    border-bottom: 1px solid @border-link-default;
+    border-bottom: 1px solid @link-border;
 
     &:link, &:visited {
-        color: @font-default;
+        color: @default-text-color;
     }
     &:hover {
         text-decoration: none;
         cursor: pointer;
-        color: @font-focus;
-        border-bottom: 1px solid @border-link-focus;
+        color: @text-focus-color;
+        border-bottom: 1px solid @link-hover-border;
     }
     &:active, &:focus {
         outline: 0;
-        color: @font-focus;
+        color: @text-focus-color;
         border: none;
     }
     &.disabled {
         outline: 0;
         text-decoration: none;
         cursor: default;
-        color: @font-default;
+        color: @default-text-color;
         opacity: .5;
         pointer-events: none;
     }

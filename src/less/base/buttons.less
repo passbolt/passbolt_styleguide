@@ -18,7 +18,7 @@ button,
     text-decoration: none;
     border: none;
     box-shadow: inset 0 0 0 1px @button-border;
-    color: @font-default;
+    color: @default-text-color;
     background: @button-background;
     border-radius: .4rem;
     box-sizing: border-box;
@@ -27,15 +27,15 @@ button,
     /* hover */
     &:hover {
         box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
-        color: @font-default;
+        color: @default-text-color;
         text-decoration: none;
         border: none;
     }
 
     /* focus */
     &:focus, &:focus-visible {
-        box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
-        color: @font-default;
+        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        color: @default-text-color;
         text-decoration: none;
         border: none;
     }
@@ -44,7 +44,7 @@ button,
     &:active {
         box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
         background: @button-active-background;
-        color: @font-default;
+        color: @default-text-color;
         text-decoration: none;
         border: none;
     }
@@ -76,7 +76,7 @@ button,
         /* hover */
         &:hover {
           box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-icon-border;
-          color: @font-default;
+          color: @default-text-color;
           text-decoration: none;
           border: none;
         }
@@ -113,7 +113,7 @@ button,
         /* focus visible */
         &:focus-visible {
             background: @button-transparent-background;
-            box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
         }
 
         /* active */
@@ -142,7 +142,7 @@ button,
 
         /* focus */
         &:focus {
-            box-shadow: 0 0 .4rem @shadow-focus, inset 0 0 0 1px @button-focus-border;
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
         }
 
         /* active */
@@ -169,8 +169,8 @@ button,
         color: @button-primary-color;
 
         svg {
-            --icon-color: @icon-color-button-primary;
-            --icon-background-color: @icon-background-color-button-primary;
+            --icon-color: @icon-primary-color;
+            --icon-background-color: @icon-primary-background-color;
         }
 
         &.processing {
@@ -183,8 +183,8 @@ button,
             }
 
             .svg-icon.spinner {
-                --spinner-color: @spinner-color-button-primary;
-                --spinner-background: rgba(@spinner-background-button-primary, 0.25);
+                --spinner-color: @icon-spinner-primary-color;
+                --spinner-background: rgba(@icon-spinner-primary-background, 0.25);
             }
         }
 
@@ -193,7 +193,7 @@ button,
         }
 
         &:focus {
-            box-shadow: 0 0 .4rem @shadow-focus;
+            box-shadow: 0 0 .4rem @shadow-focus-color;
         }
 
         &:active {
@@ -214,8 +214,8 @@ button,
         color: @button-warning-color;
 
         svg {
-            --icon-color: @icon-color-button-warning;
-            --icon-background-color: @icon-background-color-button-warning;
+            --icon-color: @icon-warning-color;
+            --icon-background-color: @icon-warning-background-color;
         }
 
         &.processing {
@@ -228,8 +228,8 @@ button,
             }
 
             .svg-icon.spinner {
-                --spinner-color: @spinner-color-button-warning;
-                --spinner-background: rgba(@spinner-background-button-warning, 0.25);
+                --spinner-color: @icon-spinner-warning-color;
+                --spinner-background: rgba(@icon-spinner-warning-background, 0.25);
             }
         }
 
@@ -238,7 +238,7 @@ button,
         }
 
         &:focus {
-            box-shadow: 0 0 .4rem @shadow-focus;
+            box-shadow: 0 0 .4rem @shadow-focus-color;
         }
 
         &:active {
@@ -272,7 +272,7 @@ button,
 .button-toggle.selected {
     box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
     background: @button-active-background;
-    color: @font-default;
+    color: @default-text-color;
     text-decoration: none;
     border: none;
 }

@@ -4,9 +4,9 @@ body {
 
 .web-integration {
   .in-form-menu {
-    background: @background-default;
+    background: @default-background;
     font-size:1.4rem;
-    color: @font-default;
+    color: @default-text-color;
     width: 35rem;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
     margin: auto;
@@ -74,7 +74,7 @@ body {
 
       &-content {
         flex: 1;
-        color: @font-default;
+        color: @default-text-color;
 
         &-header{
           width: 280px;
@@ -95,8 +95,8 @@ body {
               width: 100%;
               content: "";
               background: linear-gradient(to left,
-                rgba(@background-default , 1) 20%,
-                rgba(@background-default , 0) 80%);
+                rgba(@default-background , 1) 20%,
+                rgba(@default-background , 0) 80%);
               pointer-events: none; /* so the text is still selectable */
             }
           }
@@ -105,7 +105,7 @@ body {
         &-description {
           width: 280px;
           .ellipsis();
-          color: @font-dim;
+          color: @text-info-color;
         }
       }
     }

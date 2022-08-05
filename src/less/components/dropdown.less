@@ -9,8 +9,8 @@
             z-index: 801;
             background: @dropdown-background;
             border-radius: .4rem .4rem 0 0;
-            box-shadow: inset .1rem 0 0 0 @border-default, inset -.1rem 0 0 0 @border-default, inset 0 .1rem 0 0 @border-default;
-            color: @font-default;
+            box-shadow: inset .1rem 0 0 0 @default-border, inset -.1rem 0 0 0 @default-border, inset 0 .1rem 0 0 @default-border;
+            color: @default-text-color;
             padding-bottom: 1.4rem;
 
             svg {
@@ -46,7 +46,7 @@
         position: absolute;
         z-index: 800;
         display: none;
-        border: 1px solid @border-default;
+        border: 1px solid @default-border;
         box-sizing: border-box;
         background: @dropdown-background;
         padding: .4rem 0 .8rem 0;
@@ -73,7 +73,7 @@
 
         // Separator of contextual menu item
         .separator-after {
-            border-bottom: 1px solid @border-default;
+            border-bottom: 1px solid @default-border;
             margin-bottom: .4rem;
             a {
                 margin-bottom: .4rem;
@@ -106,21 +106,21 @@
 
                 // Dropdown menu item hover
                 &:hover {
-                    color: @font-default;
+                    color: @default-text-color;
                     background: @dropdown-item-hover-background;
                 }
 
                 // Dropdown menu item focus
                 &:focus {
-                    color: @font-dropdown-focus;
+                    color: @dropdown-focus-text-color;
                     background: @dropdown-focus-background;
-                    box-shadow: 0 0 .4rem @shadow-focus;
+                    box-shadow: 0 0 .4rem @shadow-focus-color;
                     outline: none;
                 }
 
                 // Dropdown menu item pressed
                 &:active {
-                    color: @font-default;
+                    color: @default-text-color;
                     background: @dropdown-item-hover-background;
                     box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
                 }

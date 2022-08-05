@@ -1,7 +1,7 @@
 .move-folder-dialog {
     .folders-list-wrapper {
-        border-bottom: 1px solid @border-default;
-        border-top: 1px solid @border-default;
+        border-bottom: 1px solid @default-border;
+        border-top: 1px solid @default-border;
     }
     .breadcrumbs {
         height:auto;
@@ -57,7 +57,7 @@
                 user-select: none;
             }
             .folder-permission {
-                color: @font-dim;
+                color: @text-info-color;
                 font-size: 0.8em;
                 margin-left: 0.4em;
                 user-select: none;
@@ -67,11 +67,11 @@
                 margin-top:-.25em;
                 margin-right:-.25em;
                 padding:.25em .5em;
-                border:1px solid @background-default;
+                border:1px solid @dialog-folder-move-border;
                 .rounded();
 
                 &:hover {
-                    border:1px solid @border-default;
+                    border:1px solid @default-border;
                 }
             }
         }
