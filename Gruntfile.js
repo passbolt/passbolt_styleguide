@@ -50,6 +50,30 @@ module.exports = function(grunt) {
         dest: "src/css/themes/midgar",
         ext: ".css"
       },
+      theme_solarized_light: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/solarized_light",
+        src: "*.less",
+        dest: "src/css/themes/solarized_light",
+        ext: ".css"
+      },
+      theme_solarized_dark: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/solarized_dark",
+        src: "*.less",
+        dest: "src/css/themes/solarized_dark",
+        ext: ".css"
+      },
+      theme_custom: {
+        expand: true,
+        flatten: true,
+        cwd: "src/less/themes/custom",
+        src: "*.less",
+        dest: "src/css/themes/custom",
+        ext: ".css"
+      },
 		},
 		shell: {
       'build-apps': {

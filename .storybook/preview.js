@@ -71,7 +71,10 @@ export const globalTypes = {
       icon: 'photo',
       items: [
         { value: 'default', title: 'Default'},
-        { value: 'midgar', title: 'Midgar'}
+        { value: 'midgar', title: 'Midgar'},
+        { value: 'solarized_light', title: 'Solarized Light'},
+        { value: 'solarized_dark', title: 'Solarized Dark'},
+        { value: 'custom', title: 'Custom'}
       ],
     },
   }
