@@ -115,8 +115,8 @@ class ChooseAccountRecoveryPreference extends Component {
         }[this.props.policy]})</h1>
         <form onSubmit={this.handleSubmit}>
           <p>
-            <Trans>It is possible and recommended to share securely a copy of your private key and passphrase
-              with your organization recovery contacts.</Trans> <Trans>They will be able to help you in case you lose them.</Trans>
+            <Trans>It is possible and recommended to share securely your recovery kit with your organization recovery
+              contacts.</Trans> <Trans>They will be able to help you in case you lose it.</Trans>
           </p>
           <div className="radiolist-alt">
             {this.canReject() &&
