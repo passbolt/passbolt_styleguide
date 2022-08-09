@@ -96,6 +96,8 @@
     "build-storybook": "build-storybook",
     "preversion": "npm test && npm run eslint",
     "version": "npx grunt && git add -A",
-    "deploy-storybook": "storybook-to-ghpages --remote github"
+    "deploy-storybook": "storybook-to-ghpages --remote github",
+    "dev:build:custom-theme": "npx grunt build_custom_theme",
+    "dev:watch:custom-theme": "npx grunt watch_custom_theme"
   }
 }

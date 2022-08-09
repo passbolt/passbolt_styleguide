@@ -5,6 +5,9 @@ npm-debug.log
 bower_components
 src/css
 
+# custom theme
+src/less/abstractions/colors_custom.less
+
 #jest test coverage
 /coverage
 

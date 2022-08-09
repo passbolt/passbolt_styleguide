@@ -65,15 +65,7 @@ module.exports = function(grunt) {
         src: "*.less",
         dest: "src/css/themes/solarized_dark",
         ext: ".css"
-      },
-      theme_custom: {
-        expand: true,
-        flatten: true,
-        cwd: "src/less/themes/custom",
-        src: "*.less",
-        dest: "src/css/themes/custom",
-        ext: ".css"
-      },
+      }
 		},
 		shell: {
       'build-apps': {
@@ -159,29 +151,29 @@ module.exports = function(grunt) {
         ]
       },
     },
-		watch: {
-			less: {
-				files: [
-					'Gruntfile.js',
-					'package.json',
-					'src/less/*.less',
-					'src/less/**/*.less'
+    watch: {
+      less: {
+        files: [
+          'Gruntfile.js',
+          'package.json',
+          'src/less/*.less',
+          'src/less/**/*.less'
         ],
-				tasks: ['css']
-			}
-		}
-	});
+        tasks: ['css']
+      }
+    }
+  });
 
 	// ========================================================================
 	// Initialise
 
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-symlink');
-	grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-header');
-	grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-shell');
 
 	// ========================================================================
 	// Register Tasks
@@ -190,7 +182,32 @@ module.exports = function(grunt) {
 
 	// 'grunt' will check code quality, and if no errors,
 	// compile LESS to CSS, and minify and concatonate all JS and CSS
-	grunt.registerTask('default', [ 'clean:all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
+  grunt.registerTask('default', ['clean:all', 'less', 'cssmin', 'header', 'shell:build-apps', 'externalize-locale-string', 'symlink']);
   grunt.registerTask('css', [ 'clean:css', 'less', 'cssmin']);
   grunt.registerTask('externalize-locale-string', ['shell:externalize']);
+
+  // Tasks to add the custom theme in the less and watch config
+  grunt.registerTask('custom_theme', 'Add the custom theme in less task', function() {
+    grunt.config.data.less.theme_custom = {
+      expand: true,
+      flatten: true,
+      cwd: "src/less/themes/custom",
+      src: "*.less",
+      dest: "src/css/themes/custom",
+      ext: ".css"
+    };
+  });
+  grunt.registerTask('custom_theme_watch', 'Add the custom theme in less task', function() {
+    grunt.config.data.watch = {
+      less: {
+        files: [
+          'src/less/*.less',
+          'src/less/**/*.less'
+        ],
+        tasks: ['build_custom_theme']
+      }
+    };
+  });
+  grunt.registerTask('build_custom_theme', ['custom_theme', 'less']);
+  grunt.registerTask('watch_custom_theme', ['custom_theme_watch', 'watch']);
 };
