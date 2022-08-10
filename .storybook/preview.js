@@ -74,7 +74,7 @@ export const globalTypes = {
         { value: 'midgar', title: 'Midgar'},
         { value: 'solarized_light', title: 'Solarized Light'},
         { value: 'solarized_dark', title: 'Solarized Dark'},
-        { value: 'custom', title: 'Custom'}
+        ...(process.env.STORYBOOK_DEV ? [{ value: 'custom', title: 'Custom'}] : [])
       ],
     },
   }

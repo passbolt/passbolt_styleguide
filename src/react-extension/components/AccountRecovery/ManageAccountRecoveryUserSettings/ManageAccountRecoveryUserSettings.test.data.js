@@ -21,7 +21,8 @@ export function defaultProps(policy) {
     context: {
       locale: "en-US",
       userSettings: {
-        getTrustedDomain: () => new URL(window.location).origin
+        // eslint-disable-next-line no-undef
+        getTrustedDomain: () => process.env.ORIGIN_URL
       },
       port: {
         request: jest.fn()
