@@ -232,7 +232,6 @@ class DisplayAccountRecoveryUserSettings extends Component {
 DisplayAccountRecoveryUserSettings.propTypes = {
   context: PropTypes.any, // The application context
   accountRecoveryContext: PropTypes.any, // The account recovery context
-  requestor: PropTypes.any, // The admin user at the origin of the request
   date: PropTypes.string, // The date of the request
   t: PropTypes.func, // The translation function
   dialogContext: PropTypes.object, // The dialog context

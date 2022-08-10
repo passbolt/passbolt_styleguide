@@ -36,7 +36,8 @@ OptOut.args = {
   context: {
     locale: "en-US",
     userSettings: {
-      getTrustedDomain: () => new URL(window.location).origin
+      // eslint-disable-next-line no-undef
+      getTrustedDomain: () => process.env.ORIGIN_URL
     }
   },
   organizationPolicy: {
@@ -60,7 +61,8 @@ OptIn.args = {
   context: {
     locale: "en-US",
     userSettings: {
-      getTrustedDomain: () => new URL(window.location).origin
+      // eslint-disable-next-line no-undef
+      getTrustedDomain: () => process.env.ORIGIN_URL
     }
   },
   organizationPolicy: {
@@ -84,7 +86,8 @@ Mandatory.args = {
   context: {
     locale: "en-US",
     userSettings: {
-      getTrustedDomain: () => new URL(window.location).origin
+      // eslint-disable-next-line no-undef
+      getTrustedDomain: () => process.env.ORIGIN_URL
     }
   },
   organizationPolicy: {

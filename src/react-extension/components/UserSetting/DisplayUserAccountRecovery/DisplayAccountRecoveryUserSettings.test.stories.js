@@ -35,21 +35,29 @@ const getTemplateArgs = () => ({
   context: {
     locale: "en-US",
     userSettings: {
-      getTrustedDomain: () => new URL(window.location).origin
+      // eslint-disable-next-line no-undef
+      getTrustedDomain: () => process.env.ORIGIN_URL
     }
   },
-  accountRecovery: {
-    status: "enabled",
-    requestor: {
-      profile: {
-        first_name: "Ada",
-        last_name: "Lovelace"
-      },
-      gpgkey: {
-        fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-      }
+  accountRecoveryContext: {
+    status: "approved",
+    loadAccountRecoveryPolicy: () => {},
+    getPolicy: () => {
+      return {
+        policy: "opt-out",
+      };
     },
-    requestedDate: "2021-05-25T09:08:34.123"
+    getRequestor: () => {
+      return {
+        profile: {
+          first_name: "Ada",
+          last_name: "Lovelace"
+        },
+        gpgkey: {
+          fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
+        }};
+    },
+    getRequestedDate: () => "2021-05-25T09:08:34.123"
   }
 });
 
@@ -58,8 +66,8 @@ Enabled.args = getTemplateArgs();
 
 export const Pending = Template.bind({});
 Pending.args = getTemplateArgs();
-Pending.args.accountRecovery.status = "pending";
+Pending.args.accountRecoveryContext.status = "pending";
 
 export const Disabled = Template.bind({});
 Disabled.args = getTemplateArgs();
-Disabled.args.accountRecovery.status = "disabled";
+Disabled.args.accountRecoveryContext.status = "rejected";

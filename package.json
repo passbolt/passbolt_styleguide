@@ -92,7 +92,7 @@
     "i18n:externalize": "i18next -c ./i18next-parser.config.js",
     "eslint": "eslint -c .eslintrc.json --ext js --ext jsx src/react-extension src/react-quickaccess src/react-web-integration src/shared",
     "eslint-fix": "eslint -c .eslintrc.json --ext js --ext jsx --fix src/react-extension src/react-quickaccess src/react-web-integration src/shared",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "STORYBOOK_DEV=true start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "preversion": "npm test && npm run eslint",
     "version": "npx grunt && git add -A",

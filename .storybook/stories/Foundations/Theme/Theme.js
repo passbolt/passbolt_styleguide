@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.7.0
  */
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 
@@ -254,6 +254,8 @@ class  Theme extends Component {
       return {red: rgba[0], green: rgba[1], blue: rgba[2], alpha: rgba[3]};
     } else if (this.isHsla(color)) {
       return this.hslaToRgba(color);
+    } else {
+      return {red: 0, green: 0, blue: 0, alpha: 0};
     }
   }
 
@@ -292,8 +294,8 @@ class  Theme extends Component {
   hexToRgba(color) {
     const c = color.substr(1).match(/(\S{2})/g);
     const r = parseInt(c[0], 16);
-    const g = parseInt(c[1], 16);
-    const b = parseInt(c[2], 16);
+    const g = parseInt(c[1], 16) || parseInt(c[0], 16);
+    const b = parseInt(c[2], 16) || parseInt(c[0], 16);
     return {red: r, green: g, blue: b, alpha: 1};
   }
 
@@ -442,7 +444,7 @@ class  Theme extends Component {
       <div style={{display: "flex", flexWrap: "wrap", paddingBottom: "1rem"}}>
         <h1 style={{width: "100%"}}>Theme color variables</h1>
         {Object.entries(theme).map(([colorVariableName, value]) =>
-          <>
+          <Fragment key={colorVariableName}>
             {this.isNewCategory(colorVariableName) &&
               <div style={{width: "100%", fontWeight: "bold", border: "1px solid", marginTop: "1.6rem", padding: "1rem"}}>Category: <span style={{textTransform: "uppercase"}}>{this.getCategory(colorVariableName)}</span></div>
             }
@@ -467,7 +469,7 @@ class  Theme extends Component {
               }
               <div style={{flex: "1", marginLeft: "1rem"}}>Description: {this.getDescription(colorVariableName)}</div>
             </div>
-          </>
+          </Fragment>
         )}
       </div>
     );
