@@ -42,21 +42,18 @@ const getTemplateArgs = () => ({
   accountRecoveryContext: {
     status: "approved",
     loadAccountRecoveryPolicy: () => {},
-    getPolicy: () => {
-      return {
-        policy: "opt-out",
-      };
-    },
-    getRequestor: () => {
-      return {
-        profile: {
-          first_name: "Ada",
-          last_name: "Lovelace"
-        },
-        gpgkey: {
-          fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-        }};
-    },
+    getPolicy: () => ({
+      policy: "opt-out",
+    }),
+    getRequestor: () => ({
+      profile: {
+        first_name: "Ada",
+        last_name: "Lovelace"
+      },
+      gpgkey: {
+        fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
+      }
+    }),
     getRequestedDate: () => "2021-05-25T09:08:34.123"
   }
 });
