@@ -274,6 +274,7 @@ class EnterNewPassphrase extends React.Component {
   }
 
   render() {
+    const entropy = this.state.hintClassNames.notInDictionary === "error" ? 0 : this.state.passphraseEntropy;
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
@@ -291,7 +292,7 @@ class EnterNewPassphrase extends React.Component {
                     securityToken={this.props.context.userSettings.getSecurityToken()}
                     onChange={this.handlePassphraseChange}
                     disabled={!this.areActionsAllowed}/>
-                  <PasswordComplexity entropy={this.state.passphraseEntropy}/>
+                  <PasswordComplexity entropy={entropy}/>
                 </div>
                 <div className="password-hints">
                   <ul>
