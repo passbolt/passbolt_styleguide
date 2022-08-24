@@ -29,6 +29,7 @@ export const AuthenticationSetupWorkflowStates = {
   COMPLETING_SETUP: 'Completing setup',
   UNEXPECTED_ERROR: 'Unexpected Error',
   VALIDATE_PASSPHRASE: 'Validate passphrase',
+  CONFIGURING_SSO: "Configuing SSO"
 };
 
 /**
@@ -283,6 +284,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
   async chooseSecurityToken(securityTokenDto) {
     try {
       await this.props.context.port.request("passbolt.setup.set-security-token", securityTokenDto);
+      await this.configuringSso();
       this.setState({state: AuthenticationSetupWorkflowStates.COMPLETING_SETUP});
       await this.props.context.port.request('passbolt.setup.complete');
       this.setState({state: AuthenticationSetupWorkflowStates.SIGNING_IN});
@@ -290,6 +292,26 @@ export class AuthenticationSetupContextProvider extends React.Component {
     } catch (error) {
       await this.setState({state: AuthenticationSetupWorkflowStates.UNEXPECTED_ERROR, error: error});
     }
+  }
+
+  /**
+   * Whenever the SSO needs to be check for configuration
+   * @returns {Promise<void>}
+   */
+  async configuringSso() {
+    const canIUseSso = this.props.context.siteSettings.canIUse('sso');
+    if (!canIUseSso) {
+      return;
+    }
+
+    const ssoConfiguration = await this.props.context.port.request("passbolt.setup.get-sso-configuration");
+    // If no admin configured the SSO feature null is received
+    if (!ssoConfiguration) {
+      return;
+    }
+
+    this.setState({state: AuthenticationSetupWorkflowStates.CONFIGURING_SSO});
+    await this.props.context.port.request("passbolt.setup.set-sso-user-setting");
   }
 
   /**
