@@ -39,6 +39,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the users wants to navigate to the administration workspace account recovery
   onGoToAdministrationSmtpSettingsRequested: () => {
   }, // Whenever the users wants to navigate to the administration workspace SMTP settings
+  onGoToAdministrationSsoRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace sso
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -96,6 +98,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
       onGoToAdministrationSmtpSettingsRequested: this.onGoToAdministrationSmtpSettingsRequested.bind(this), // Whenever the users wants to navigate to the administration workspace SMTP settings
       onGoToAdministrationSelfRegistrationRequested: this.onGoToAdministrationSelfRegistrationRequested.bind(this), //Whenever the users wants to navigate to the administration workspace self registration settings
+      onGoToAdministrationSsoRequested: this.onGoToAdministrationSsoRequested.bind(this), // Whenever the user wants to navigate to the administration workspace sso
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -223,6 +226,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationAccountRecoveryRequested() {
     await this.goTo("browser-extension", "/app/administration/account-recovery");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace sso.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationSsoRequested() {
+    await this.goTo("api", "/app/administration/sso");
   }
 
   /**

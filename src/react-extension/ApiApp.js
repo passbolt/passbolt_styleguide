@@ -41,6 +41,7 @@ import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa
 import AdminUserDirectoryContextProvider from './contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
 import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AdminSelfRegistrationContextProvider from "./contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import AdminSsoContextProvider from "./contexts/AdminSsoContext";
 
 /**
  * The passbolt application served by the API.
@@ -88,13 +89,15 @@ class ApiApp extends Component {
                                     <AdminUserDirectoryContextProvider>
                                       <AdminSelfRegistrationContextProvider>
                                         <ManageDialogs/>
-                                        <AdminMfaContextProvider>
-                                          <AdminEmailNotificationContextProvider>
-                                            <AdminInternationalizationContextProvider>
-                                              <AdministrationWorkspace/>
-                                            </AdminInternationalizationContextProvider>
-                                          </AdminEmailNotificationContextProvider>
-                                        </AdminMfaContextProvider>
+                                        <AdminSsoContextProvider>
+                                          <AdminMfaContextProvider>
+                                            <AdminEmailNotificationContextProvider>
+                                              <AdminInternationalizationContextProvider>
+                                                <AdministrationWorkspace/>
+                                              </AdminInternationalizationContextProvider>
+                                            </AdminEmailNotificationContextProvider>
+                                          </AdminMfaContextProvider>
+                                        </AdminSsoContextProvider>
                                       </AdminSelfRegistrationContextProvider>
                                     </AdminUserDirectoryContextProvider>
                                   </AdminSmtpSettingsContextProvider>
