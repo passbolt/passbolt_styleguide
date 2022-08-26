@@ -6,10 +6,13 @@
 .mfa.iframe {
     background: @workspace-middle-background;
     .grid-responsive-12, .grid {
-        width: 100%;
         height: 100%;
         margin-right: 1.6rem;
         max-width: none;
+
+        .row {
+          margin: 0;
+        }
 
         form {
           height: 100%;
@@ -20,9 +23,6 @@
         margin-top: 1.6rem;
         clear: both;
 
-        a {
-          margin-left: auto;
-        }
         a + a, a + button {
           margin-left: 1.6rem;
         }
@@ -94,6 +94,52 @@
                 }
             }
         }
+    }
+
+    .yubikey-setup {
+      .input.password {
+        display: block;
+        background: initial;
+        margin-bottom: 1.6rem;
+        box-shadow: none;
+
+        label {
+          margin-bottom: 1.2rem;
+        }
+
+        input[type=password] {
+          color: @default-text-color;
+          background: @input-background;
+          padding: .8rem .8rem;
+          margin-bottom: 1.2rem;
+          box-shadow: inset 0 0 0 .1rem @input-border;
+          border-radius: .4rem;
+          max-width: 64rem;
+
+          // Fields hover
+          &:hover {
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
+          }
+
+          // Fields focus
+          &:focus {
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
+            outline: 0;
+          }
+
+          // Fields pressed
+          &:active {
+            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
+          }
+
+          // Disabled fields.
+          &:disabled {
+            cursor: default;
+            box-shadow: inset 0 0 0 .1rem @input-border;
+            opacity: .5;
+          }
+        }
+      }
     }
 
     .how-it-works {
