@@ -17,9 +17,10 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 
 export const SsoContext = React.createContext({
-  ssoConfig: null, // The current sso configuration
+  ssoServerConfig: null, // The current sso server configuration
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
   getProvider: () => {}, // Return the current sso configuration from the context state
+  isBrowserExtensionConfigured: () => {}, // Returns true if the client data is configured for SSO
 });
 
 /**
@@ -40,9 +41,11 @@ export class SsoContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      ssoConfig: null, // The current sso configuration
+      ssoServerConfig: null, // The current sso configuration
+      isSsoClientDataSet: false, // Is the SSO data configured for the current browser extension
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getProvider: this.getProvider.bind(this), // Return the current sso provider configured
+      isBrowserExtensionConfigured: this.isBrowserExtensionConfigured.bind(this), // Returns true if the current browser extension is configured for SSO.
     };
   }
 
@@ -51,14 +54,17 @@ export class SsoContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async loadSsoConfiguration() {
+    console.log("loadSsoConfiguration");
     //@todo @mock
-    const ssoConfig = {
+    const ssoServerConfig = {
       provider: "azure",
       data: {
         url: "https://login.microsoftonline.com/passbolt-app"
       }
     };
-    this.setState({ssoConfig});
+    const ssoClientConfiguration = await this.props.context.port.request("passbolt.auth.get-sso-client-data");
+    const isSsoClientDataSet = Boolean(ssoClientConfiguration);
+    this.setState({ssoServerConfig, isSsoClientDataSet});
   }
 
   /**
@@ -66,7 +72,15 @@ export class SsoContextProvider extends React.Component {
    * @returns {string}
    */
   getProvider() {
-    return this.state.ssoConfig?.provider;
+    return this.state.ssoServerConfig?.provider;
+  }
+
+  /**
+   * Returns true if there is a configuration set for the current browser extension
+   * @returns {boolean}
+   */
+  isBrowserExtensionConfigured() {
+    return this.state.isSsoClientDataSet;
   }
 
   /**

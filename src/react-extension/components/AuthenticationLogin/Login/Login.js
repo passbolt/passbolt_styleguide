@@ -294,6 +294,14 @@ class Login extends Component {
   }
 
   /**
+   * Returns true if the browser extension is configured for SSO.
+   * @returns {bool}
+   */
+  get isClientSsoConfigured() {
+    return this.props.ssoContext.isBrowserExtensionConfigured();
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -340,7 +348,7 @@ class Login extends Component {
           </div>
           {this.props.displayAs === LoginVariations.SIGN_IN &&
             <>
-              {this.isAzureSsoEnabled &&
+              {this.isAzureSsoEnabled && this.isClientSsoConfigured &&
                 <>
                   <div><Trans>or</Trans></div>
                   <div className="form-actions">

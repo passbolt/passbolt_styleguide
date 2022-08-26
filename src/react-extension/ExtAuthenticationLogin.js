@@ -22,7 +22,7 @@ import UserSettings from "../shared/lib/Settings/UserSettings";
 import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxMain";
 import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
-import {SsoContextProvider} from "./contexts/SsoContext";
+import SsoContextProvider from "./contexts/SsoContext";
 
 /**
  * The login application served by the browser extension.
