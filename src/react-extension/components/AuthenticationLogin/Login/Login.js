@@ -17,6 +17,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Password from "../../../../shared/components/Password/Password";
+import {withSso} from "../../../contexts/SsoContext";
 
 /**
  * The component display variations.
@@ -123,6 +124,7 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
+    this.handleSignInWithAzureSso = this.handleSignInWithAzureSso.bind(this);
   }
 
   /**
@@ -135,7 +137,8 @@ class Login extends Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.ssoContext.loadSsoConfiguration();
     this.focusOnPassphrase();
   }
 
@@ -251,8 +254,22 @@ class Login extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
-    await this.setState({actions: {processing: true}});
+  toggleProcessing() {
+    this.setState({actions: {processing: !this.state.actions.processing}});
+  }
+
+  /**
+   * Handle a third party sign in process of Azure.
+   */
+  async handleSignInWithAzureSso() {
+    try {
+      this.toggleProcessing();
+      const passphrase = await this.props.context.port.request("passbolt.auth.sso-azure");
+      await this.props.onSignIn(passphrase, this.state.rememberMe);
+      this.toggleProcessing();
+    } catch (error) {
+      this.toggleProcessing();
+    }
   }
 
   /**
@@ -265,6 +282,15 @@ class Login extends Component {
       backgroundColor: this.props.account.security_token.color,
       textColor: this.props.account.security_token.textcolor
     };
+  }
+
+  /**
+   * Returns true if SSO is enabled and configured for Azure.
+   * @return {bool}
+   */
+  get isAzureSsoEnabled() {
+    const ssoProvider = this.props.ssoContext.getProvider();
+    return ssoProvider === "azure";
   }
 
   /**
@@ -312,6 +338,26 @@ class Login extends Component {
             </>
             }
           </div>
+          {this.props.displayAs === LoginVariations.SIGN_IN &&
+            <>
+              {this.isAzureSsoEnabled &&
+                <>
+                  <div><Trans>or</Trans></div>
+                  <div className="form-actions">
+                    <button
+                      id="sso-auth-azure"
+                      type="button"
+                      className={`button sso-auth-button primary big full-width ${processingClassName}`}
+                      role="button"
+                      disabled={this.isProcessing}
+                      onClick={this.handleSignInWithAzureSso}>
+                      <Trans>Sign in with Azure</Trans>
+                    </button>
+                  </div>
+                </>
+              }
+            </>
+          }
           {this.props.canRememberMe &&
             <div className="input checkbox">
               <input
@@ -358,6 +404,7 @@ Login.propTypes = {
     LoginVariations.ACCOUNT_RECOVERY,
   ]), // Defines how the form should be displayed and behaves
   context: PropTypes.any, // The application context
+  ssoContext: PropTypes.object, // The SSO context
   account: PropTypes.object, // The user account
   userSettings: PropTypes.object, // The user settings
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
@@ -366,4 +413,4 @@ Login.propTypes = {
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withTranslation('common')(Login));
+export default withAppContext(withSso(withTranslation('common')(Login)));
