@@ -157,9 +157,6 @@ class AcceptLoginServerKeyChange extends Component {
             <label htmlFor="accept-new-key">
               <Trans>Yes I checked and it is all fine.</Trans>
             </label>
-            {this.state.hasBeenValidated && this.state.errors.hasNotAccepted &&
-            <div className="has-not-accepted error-message"><Trans>You must accept the new server key</Trans></div>
-            }
           </div>
           <div className="form-actions">
             <button

@@ -47,6 +47,6 @@ describe("AcceptLoginServerKeyChange", () => {
     expect.assertions(2);
     await page.accept();
     expect(props.onAccept).not.toHaveBeenCalled();
-    expect(page.checkedInputErrorMessage).toBe("You must accept the new server key");
+    expect(page.inputContainer.className).toBe("input checkbox error");
   });
 });
