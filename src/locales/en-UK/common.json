@@ -64,7 +64,7 @@
   "A host is required.": "A host is required.",
   "A hostname is required.": "A hostname is required.",
   "A last name is required.": "A last name is required.",
-  "A name can not be more than 64 char in length.": "A name can not be more than 64 char in length.",
+  "A name can not be more than 256 char in length.": "A name can not be more than 256 char in length.",
   "A name is required.": "A name is required.",
   "A passphrase is required.": "A passphrase is required.",
   "A password is required.": "A password is required.",
