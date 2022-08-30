@@ -41,6 +41,28 @@ beforeEach(() => {
 
 describe("As AN I should see not supported browser page", () => {
   let page; // The page to test against
+  const browserInfo = [
+    {
+      name: "Mozilla Firefox",
+      url: "https://www.mozilla.org/"
+    },
+    {
+      name: "Google Chrome",
+      url: "https://www.google.com/chrome/"
+    },
+    {
+      name: "Microsoft Edge",
+      url: "https://www.microsoft.com/edge"
+    },
+    {
+      name: "Brave",
+      url: "https://www.brave.com/"
+    },
+    {
+      name: "Vivaldi",
+      url: "https://www.vivaldi.com/"
+    },
+  ];
 
   describe('As AN I should be able to be requested to download a compatible browser during the setup of my account', () => {
     /**
@@ -52,19 +74,20 @@ describe("As AN I should see not supported browser page", () => {
       page = new DisplayBrowserNotSupportedPage();
     });
 
-    it('As AN I should see that my browser is not supported', () => {
+    it('As AN I should see that my browser is not supported', async() => {
+      expect.assertions(3 + browserInfo.length * 2);
+
       expect(page.exists()).toBeTruthy();
       // title
       expect(page.title).toBe("Sorry, your browser is not supported.");
       // message
-      expect(page.message).toBe('Please download chrome or firefox to get started with passbolt.');
-      // download
-      expect(page.downloadFirefox).toBe('Download Firefox');
-      expect(page.downloadChrome).toBe('Download Chrome');
-      /*
-       * link
-       * expect(page.link).toBe('Why is my browser not supported?');
-       */
+      expect(page.message).toBe('Please download one of these browsers to get started with passbolt:');
+      for (let i = 0; i < browserInfo.length; i++) {
+        await page.clickOnBrowserButton(i);
+        // download
+        expect(page.downloadButton).toBe(`Download ${browserInfo[i].name}`);
+        expect(page.downloadLink).toBe(browserInfo[i].url);
+      }
     });
   });
 });

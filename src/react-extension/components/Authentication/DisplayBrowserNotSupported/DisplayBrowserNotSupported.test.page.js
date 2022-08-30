@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 
-import {render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplayBrowserNotSupported from "./DisplayBrowserNotSupported";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -47,24 +47,27 @@ export default class DisplayBrowserNotSupportedPage {
   }
 
   /**
-   * Returns the download firefox button
+   * Returns the download button
    */
-  get downloadFirefox() {
-    return this._page.container.querySelectorAll('.browser-not-supported .form-actions .button.primary.big')[0].textContent;
+  get downloadButton() {
+    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').textContent;
   }
 
   /**
-   * Returns the download firefox button
+   * Returns the current link on the download button
    */
-  get downloadChrome() {
-    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[1].textContent;
+  get downloadLink() {
+    return this._page.container.querySelector('.browser-not-supported .form-actions .button.primary.big').getAttribute('href');
   }
 
   /**
-   * Returns the link why browser not supported
+   * Simulate a click on the desired button from the browser button list.
+   * @param {number} buttonIndex
    */
-  get link() {
-    return this._page.container.querySelectorAll('.browser-not-supported .form-actions a')[2].textContent;
+  async clickOnBrowserButton(buttonIndex) {
+    const button = this._page.container.querySelectorAll('.browser-not-supported .browser-button-list button')[buttonIndex];
+    fireEvent.click(button, {button: 0});
+    await waitFor(() => {});
   }
 
   /**

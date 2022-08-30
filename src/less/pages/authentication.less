@@ -137,6 +137,29 @@ html, body {
         margin-right: auto;
       }
     }
+
+    .browser-button-list {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 1.025rem;
+      padding-top: 0.8rem;
+
+      button.browser {
+        width: 5.6rem;
+        height: 5.6rem;
+        min-width: 0;
+        min-height: 0;
+        padding: 0.8rem;
+
+        &.focused {
+          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+          color: @default-text-color;
+          text-decoration: none;
+          border: none;
+        }
+      }
+    }
   }
 
   .recovery-account-setup-extension {
