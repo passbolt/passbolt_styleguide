@@ -34,7 +34,7 @@ class InsertAppIframe extends Component {
    * @returns {void}
    */
   loadAppIframe() {
-    const url = new URL(`${this.props.browserExtensionUrl}data/passbolt-iframe-app.html`);
+    const url = new URL(`${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-app.html`);
     url.searchParams.append("passbolt", "passbolt-iframe-app");
 
     // If the user aims to a location, extract it and add it as parameter of the iframe url.

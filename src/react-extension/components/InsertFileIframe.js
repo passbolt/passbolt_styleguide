@@ -33,7 +33,7 @@ class InsertFileIframe extends Component {
    * @returns {void}
    */
   loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}data/passbolt-iframe-file.html?passbolt=passbolt-iframe-file`;
+    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-file.html?passbolt=passbolt-iframe-file`;
     this.iframeRef.current.contentWindow.location = iframeUrl;
   }
 

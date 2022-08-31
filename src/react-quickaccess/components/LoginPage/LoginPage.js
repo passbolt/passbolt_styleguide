@@ -64,7 +64,7 @@ class LoginPage extends React.Component {
 
     if (!isMfaRequired) {
       this.props.loginSuccessCallback();
-      this.props.history.push("/data/quickaccess.html");
+      this.props.history.push("/webAccessibleResources/quickaccess.html");
     } else {
       this.props.mfaRequiredCallback(this.props.context.userSettings.getTrustedDomain());
     }

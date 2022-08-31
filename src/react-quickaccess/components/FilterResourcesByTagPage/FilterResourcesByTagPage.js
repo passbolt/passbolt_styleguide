@@ -76,7 +76,7 @@ class FilterResourcesByTagPage extends React.Component {
     this.props.context.updateSearch("");
     // Push the tag as state of the component.
     const selectedTag = this.state.tags.find(tag => tag.id === tagId);
-    this.props.history.push(`/data/quickaccess/resources/tag/${tagId}`, {selectedTag});
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tagId}`, {selectedTag});
   }
 
   handleSelectResourceClick(ev, resourceId) {
@@ -88,7 +88,7 @@ class FilterResourcesByTagPage extends React.Component {
      */
     this.props.context.searchHistory[this.props.location.pathname] = this.props.context.search;
     this.props.context.updateSearch("");
-    this.props.history.push(`/data/quickaccess/resources/view/${resourceId}`);
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resourceId}`);
   }
 
   async findAndLoadTags() {
@@ -254,7 +254,7 @@ class FilterResourcesByTagPage extends React.Component {
               {this.state.selectedTag && this.state.selectedTag.slug || <Trans>Tags</Trans>}
             </span>
           </a>
-          <Link to="/data/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+          <Link to="/webAccessibleResources/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
             <Icon name="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
@@ -325,7 +325,7 @@ class FilterResourcesByTagPage extends React.Component {
           </ul>
         </div>
         <div className="submit-wrapper">
-          <Link to="/data/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
+          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>

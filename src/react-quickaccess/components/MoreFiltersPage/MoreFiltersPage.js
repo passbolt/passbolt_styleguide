@@ -37,7 +37,7 @@ class MoreFiltersPage extends React.Component {
               <Trans>Filters</Trans>
             </span>
           </a>
-          <Link to="/data/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+          <Link to="/webAccessibleResources/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
             <Icon name="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
@@ -45,28 +45,28 @@ class MoreFiltersPage extends React.Component {
         <div className="list-section">
           <ul className="list-items">
             <li className="filter-entry">
-              <Link to={"/data/quickaccess/resources/favorite"}>
+              <Link to={"/webAccessibleResources/quickaccess/resources/favorite"}>
                 <Icon name="star-stroke"/>
                 <span className="filter-title"><Trans>Favorites</Trans></span>
                 <Icon name="chevron-right"/>
               </Link>
             </li>
             <li className="filter-entry">
-              <Link to={"/data/quickaccess/resources/owned-by-me"}>
+              <Link to={"/webAccessibleResources/quickaccess/resources/owned-by-me"}>
                 <Icon name="user"/>
                 <span className="filter-title"><Trans>Items I own</Trans></span>
                 <Icon name="chevron-right"/>
               </Link>
             </li>
             <li className="filter-entry">
-              <Link to={"/data/quickaccess/resources/recently-modified"}>
+              <Link to={"/webAccessibleResources/quickaccess/resources/recently-modified"}>
                 <Icon name="clock"/>
                 <span className="filter-title"><Trans>Recently modified</Trans></span>
                 <Icon name="chevron-right"/>
               </Link>
             </li>
             <li className="filter-entry">
-              <Link to={"/data/quickaccess/resources/shared-with-me"}>
+              <Link to={"/webAccessibleResources/quickaccess/resources/shared-with-me"}>
                 <Icon name="share"/>
                 <span className="filter-title"><Trans>Shared with me</Trans></span>
                 <Icon name="chevron-right"/>
@@ -75,7 +75,7 @@ class MoreFiltersPage extends React.Component {
           </ul>
         </div>
         <div className="submit-wrapper">
-          <Link to="/data/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
+          <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
