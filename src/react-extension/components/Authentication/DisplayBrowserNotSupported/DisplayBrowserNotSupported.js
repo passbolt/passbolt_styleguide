@@ -27,6 +27,7 @@ class DisplayBrowserNotSupported extends Component {
    */
   getDefaultState() {
     return {
+      //we should always have a browser selected in the list, so by default the first one in the list is selected
       selectedBrowser: this.compatibleBrowserList[0]
     };
   }
