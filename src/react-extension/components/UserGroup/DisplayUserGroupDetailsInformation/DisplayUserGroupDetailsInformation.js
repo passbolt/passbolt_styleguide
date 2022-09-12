@@ -107,11 +107,11 @@ class DisplayUserGroupDetailsInformation extends React.Component {
           <ul>
             <li className="created">
               <span className="label"><Trans>Created</Trans></span>
-              <span className="value">{created}</span>
+              <span className="value" title={this.group.created}>{created}</span>
             </li>
             <li className="modified">
               <span className="label"><Trans>Modified</Trans></span>
-              <span className="value">{modified}</span>
+              <span className="value" title={this.group.modified}>{modified}</span>
             </li>
             <li className="modified-by">
               <span className="label"><Trans>Modified by</Trans></span>

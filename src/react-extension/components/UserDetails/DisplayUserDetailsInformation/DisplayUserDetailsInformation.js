@@ -158,7 +158,7 @@ class DisplayUserDetailsInformation extends React.Component {
             </li>
             <li className="modified">
               <span className="label"><Trans>Modified</Trans></span>
-              <span className="value">{modified}</span>
+              <span className="value" title={this.user.modified}>{modified}</span>
             </li>
             <li className="status">
               <span className="label"><Trans>Status</Trans></span>
