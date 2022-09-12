@@ -1,0 +1,3 @@
+{
+    "jest.jestCommandLine": "jest --no-cache ./src --maxWorkers=4"
+}
