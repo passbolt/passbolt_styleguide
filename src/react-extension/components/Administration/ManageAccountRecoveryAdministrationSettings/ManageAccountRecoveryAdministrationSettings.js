@@ -72,8 +72,14 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
    */
   async componentDidUpdate() {
     const publicArmoredKey = this.props?.adminAccountRecoveryContext?.policyChanges?.publicKey || this.props?.adminAccountRecoveryContext?.currentPolicy?.account_recovery_organization_public_key?.armored_key;
-    if (Boolean(publicArmoredKey) && this.state.keyInfoDto?.armored_key !== publicArmoredKey) {
-      const keyInfoDto = await this.props.adminAccountRecoveryContext.getKeyInfo(publicArmoredKey);
+    const keyInfoDto = await this.props?.adminAccountRecoveryContext?.getKeyInfo(publicArmoredKey);
+    /*
+     * Formerly, we compared the armored key together to check if the key changed.
+     * This yield into a bug sometimes where the react updates in an infinite loop.
+     * The reason was that openpgpjs might produce another amored key string than the original one and the comparison failed everytime.
+     * So comparing fingerprints avoid to have this infinite refresh loop.
+     */
+    if (Boolean(publicArmoredKey) && this.state.keyInfoDto?.fingerprint !== keyInfoDto?.fingerprint) {
       this.setState({keyInfoDto});
     } else if (!publicArmoredKey && this.state.keyInfoDto) {
       this.setState({keyInfoDto: null});

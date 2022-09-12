@@ -536,7 +536,9 @@ class DisplayResourcesList extends React.Component {
 
     return (
       <tr id={`resource_${resource.id}`} key={key} draggable="true" className={isSelected ? "selected" : ""}
+        /* eslint-disable react/no-unknown-property */
         unselectable={this.state.selectStrategy === "range" ? "on" : ""}
+        /* eslint-enable react/no-unknown-property */
         onClick={ev => this.handleResourceSelected(ev, resource)}
         onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
         onDragStart={event => this.handleDragStartEvent(event, resource)}

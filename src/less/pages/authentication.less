@@ -117,12 +117,13 @@ html, body {
       height: 25rem;
     }
     .arrow {
-      background: transparent url('@{images}/illustrations/wave-pin_my_extension.svg') center top no-repeat;
+      background-color: @icon-color;
+      -webkit-mask: url('@{images}/illustrations/wave-pin_my_extension.svg') center top no-repeat;
       width: 10rem;
       height: 10rem;
       position: absolute;
       top: 0;
-      right: calc(3.75rem - calc(100vw - 100%)); // positioning the arrow - the width of the scrollbar
+      right: calc(7rem - calc(100vw - 100%)); // positioning the arrow - the width of the scrollbar
     }
   }
 
@@ -134,6 +135,29 @@ html, body {
         display: block;
         margin-left: auto;
         margin-right: auto;
+      }
+    }
+
+    .browser-button-list {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 1.025rem;
+      padding-top: 0.8rem;
+
+      button.browser {
+        width: 5.6rem;
+        height: 5.6rem;
+        min-width: 0;
+        min-height: 0;
+        padding: 0.8rem;
+
+        &.focused {
+          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+          color: @default-text-color;
+          text-decoration: none;
+          border: none;
+        }
       }
     }
   }

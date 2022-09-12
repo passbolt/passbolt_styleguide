@@ -41,17 +41,17 @@ export default class AcceptLoginServerKeyChangePage {
   }
 
   /**
+   * Returns the input container
+   */
+  get inputContainer() {
+    return this._page.container.querySelector('.input.checkbox');
+  }
+
+  /**
    * Returns the check input
    */
   get checkedInput() {
     return this._page.container.querySelector('#accept-new-key');
-  }
-
-  /**
-   * Returns the checked input error message
-   */
-  get checkedInputErrorMessage() {
-    return this._page.container.querySelector(".has-not-accepted.error-message")?.textContent;
   }
 
   /**

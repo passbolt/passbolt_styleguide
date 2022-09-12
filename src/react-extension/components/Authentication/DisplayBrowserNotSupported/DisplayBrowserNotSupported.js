@@ -16,9 +16,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 
-const DOWNLOAD_FIREFOX_URL = "https://www.mozilla.org/firefox/download/thanks/";
-const DOWNLOAD_CHROME_URL = "https://www.google.com/chrome/";
-
 class DisplayBrowserNotSupported extends Component {
   constructor(props) {
     super(props);
@@ -29,11 +26,50 @@ class DisplayBrowserNotSupported extends Component {
    * Returns the default component state
    */
   getDefaultState() {
-    const currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? "black" : "white";
-
     return {
-      theme: currentTheme
+      //we should always have a browser selected in the list, so by default the first one in the list is selected
+      selectedBrowser: this.compatibleBrowserList[0]
     };
+  }
+
+  handleBrowserButtonClick(browserInfo) {
+    this.setState({
+      selectedBrowser: browserInfo
+    });
+  }
+
+  /**
+   * Returns the list of compatible browsers and their associated information.
+   * @returns {Array<object>}
+   */
+  get compatibleBrowserList() {
+    return [
+      {
+        name: "Mozilla Firefox",
+        img: "firefox.svg",
+        url: "https://www.mozilla.org/"
+      },
+      {
+        name: "Google Chrome",
+        img: "chrome.svg",
+        url: "https://www.google.com/chrome/"
+      },
+      {
+        name: "Microsoft Edge",
+        img: "edge.svg",
+        url: "https://www.microsoft.com/edge"
+      },
+      {
+        name: "Brave",
+        img: "brave.svg",
+        url: "https://www.brave.com/"
+      },
+      {
+        name: "Vivaldi",
+        img: "vivaldi.svg",
+        url: "https://www.vivaldi.com/"
+      },
+    ];
   }
   /**
    * Render the component
@@ -43,14 +79,16 @@ class DisplayBrowserNotSupported extends Component {
     return (
       <div className="browser-not-supported">
         <h1><Trans>Sorry, your browser is not supported.</Trans></h1>
-        <p><Trans>Please download chrome or firefox to get started with passbolt.</Trans></p>
-        <a href={`${DOWNLOAD_FIREFOX_URL}`} className="browser" target="_blank" rel="noopener noreferrer">
-          <img src={`${this.props.context.trustedDomain}/img/third_party/firefox_logo-${this.state.theme}.png`} />
-        </a>
+        <p><Trans>Please download one of these browsers to get started with passbolt:</Trans></p>
+        <div className="browser-button-list">
+          {this.compatibleBrowserList.map((browserInfo, key) =>
+            <button key={key} className={`browser${browserInfo.name === this.state.selectedBrowser.name ? ' focused' : ''}`} target="_blank" onClick={() => this.handleBrowserButtonClick(browserInfo)}>
+              <img src={`${this.props.context.trustedDomain}/img/third_party/${browserInfo.img}`} />
+            </button>
+          )}
+        </div>
         <div className="form-actions">
-          <a href={DOWNLOAD_FIREFOX_URL} className="button primary big full-width" role="button" target="_blank" rel="noopener noreferrer"><Trans>Download Firefox</Trans></a>
-          <a href={DOWNLOAD_CHROME_URL} role="button" target="_blank" rel="noopener noreferrer"><Trans>Download Chrome</Trans></a>
-          {/*<a role="button">Why is my browser not supported?</a>*/}
+          <a href={this.state.selectedBrowser.url} rel="noopener noreferrer" className="button primary big full-width" role="button" target="_blank"><Trans>Download {{browserName: this.state.selectedBrowser.name}}</Trans></a>
         </div>
       </div>
     );

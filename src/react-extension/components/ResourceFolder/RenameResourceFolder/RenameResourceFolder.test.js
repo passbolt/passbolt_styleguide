@@ -78,9 +78,9 @@ describe("Rename Folder", () => {
       expect(page.hasInvalidName).toBeTruthy();
     });
 
-    it('AS LU I should not fill a folder name longer than 64 characters', async() => {
+    it('AS LU I should not fill a folder name longer than 256 characters', async() => {
       expect.assertions(1);
-      await page.rename({name: '1111111111 1111111111 1111111111 1111111111 1111111111 1111111111 1111'});
+      await page.rename({name: '11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111'});
       expect(page.hasInvalidName).toBeTruthy();
     });
   });

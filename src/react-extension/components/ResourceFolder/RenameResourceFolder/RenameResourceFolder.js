@@ -276,8 +276,8 @@ class RenameResourceFolder extends Component {
     if (!name.length) {
       nameError = this.translate("A name is required.");
     }
-    if (name.length > 64) {
-      nameError = this.translate("A name can not be more than 64 char in length.");
+    if (name.length > 256) {
+      nameError = this.translate("A name can not be more than 256 char in length.");
     }
     return new Promise(resolve => {
       this.setState({nameError: nameError}, resolve);
@@ -323,7 +323,7 @@ class RenameResourceFolder extends Component {
               <input id="folder-name-input" name="name"
                 ref={this.nameRef}
                 type="text" value={this.state.name} placeholder={this.translate("Untitled folder")}
-                maxLength="64" required="required"
+                maxLength="256" required="required"
                 onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()}
                 autoComplete="off" autoFocus={true}
