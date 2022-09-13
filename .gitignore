@@ -4,6 +4,7 @@ node_modules
 npm-debug.log
 bower_components
 src/css
+.vscode
 
 # custom theme
 src/less/abstractions/colors_custom.less
