@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "3.7.3-alpha1",
+  "version": "3.7.4-alpha1",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2022 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
