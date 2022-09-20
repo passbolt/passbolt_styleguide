@@ -65,7 +65,6 @@ import mockRequestHasUserEnabledAccountRecovery from "./request/mockRequestHasUs
 
 export default (storage) => {
   const mockPort = new MockPort(storage);
-  mockPort.addRequestListener("passbolt.clipboard.copy", mockRequestClipboardCopy);
   mockPort.addRequestListener("passbolt.folders.create", mockRequestFoldersCreate);
   mockPort.addRequestListener("passbolt.folders.delete", mockRequestFoldersDelete);
   mockPort.addRequestListener("passbolt.folders.update", mockRequestFoldersUpdate);

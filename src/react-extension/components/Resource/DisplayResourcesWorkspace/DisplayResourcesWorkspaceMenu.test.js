@@ -26,10 +26,15 @@ import {
   defaultPropsOneResourceOwned
 } from "./DisplayResourcesWorkspaceMenu.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("See Workspace Menu", () => {
@@ -66,7 +71,8 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.editMenuDisabled).toBeNull();
     });
 
-    it('As LU I can start copying a resource\'s permalink via the workspace main menu', () => {
+    it('As LU I can start copying a resource\'s permalink via the workspace main menu', async() => {
+      expect.assertions(6);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();
@@ -76,13 +82,13 @@ describe("See Workspace Menu", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
 
-      page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuPermalink);
-      waitFor(() => {
-        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      });
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuPermalink);
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id}`);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As LU I should be able to copy a resource username from the workspace main menu', () => {
+    it('As LU I should be able to copy a resource username from the workspace main menu', async() => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();
@@ -92,10 +98,10 @@ describe("See Workspace Menu", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
 
-      page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
-      waitFor(() => {
-        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      });
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
+
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].username);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
     it('As LU I can start sharing a resource via the workspace main menu', () => {
@@ -104,19 +110,24 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.shareMenuDisabled).toBeNull();
     });
 
-    it('As LU I should be able to copy a resource secret from the workspace main menu', () => {
+    it('As LU I should be able to copy a resource secret from the workspace main menu', async() => {
+      expect.assertions(5);
       expect(page.displayMenu.copyMenu).not.toBeNull();
       expect(page.displayMenu.copyMenuDisabled).toBeNull();
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
-      page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
-      waitFor(() => {
-        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      });
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id, {showProgress: true});
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As LU I should be able to copy a resource secret from the more menu', () => {
+    it('As LU I should be able to copy a resource secret from the more menu', async() => {
+      expect.assertions(7);
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();
@@ -125,19 +136,20 @@ describe("See Workspace Menu", () => {
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
 
-      page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
-      waitFor(() => {
-        expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      });
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id, {showProgress: true});
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
-    it('As LU I can toggle the resource sidebar', () => {
+    it('As LU I can toggle the resource sidebar', async() => {
+      expect.assertions(2);
       expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
-      page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
-      waitFor(() => {
-        expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
-      });
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
+      expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
     });
   });
 

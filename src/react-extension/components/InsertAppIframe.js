@@ -75,7 +75,7 @@ class InsertAppIframe extends Component {
    */
   render() {
     return (
-      <iframe id="passbolt-iframe-app" ref={this.iframeRef} className="full-screen"/>
+      <iframe id="passbolt-iframe-app" ref={this.iframeRef} className="full-screen" allow={`clipboard-write ${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-app.html`}/>
     );
   }
 }

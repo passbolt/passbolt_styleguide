@@ -29,6 +29,12 @@ import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextual
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display Resources", () => {
@@ -204,7 +210,6 @@ describe("Display Resources", () => {
     });
 
     it('As LU, I should be able to favorite a resources', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(2).selectFavorite();
       await waitFor(() => {
@@ -214,7 +219,6 @@ describe("Display Resources", () => {
     });
 
     it('As LU, I should be able to unfavorite a resources', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectFavorite();
       await waitFor(() => {
@@ -224,10 +228,9 @@ describe("Display Resources", () => {
     });
 
     it('As LU, I should be able to copy the username of a resource', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectUsername();
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', props.resourceWorkspaceContext.filteredResources[0].username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -236,7 +239,7 @@ describe("Display Resources", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectPassword();
       await waitFor(() => expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id, {showProgress: true}));
-      await waitFor(() => expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', 'secret-copy'));
+      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy'));
       await waitFor(() => expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled());
     });
 

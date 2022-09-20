@@ -22,6 +22,12 @@ import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display User Details", () => {
@@ -36,10 +42,11 @@ describe("Display User Details", () => {
   });
 
   it('As LU I should follow a permalink to see the details of a user', async() => {
+    expect.assertions(2);
     mockContextRequest(context, () => {});
     jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/users/view/54c6278e-f824-5fda-91ff-3e946b18d994");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
   });
 
