@@ -223,20 +223,21 @@ const findInputElementInIframe = function(type, iframeDocument) {
 const getPasswordElement = function(formData) {
   const passwordElements = document.querySelectorAll(PASSWORD_INPUT_SELECTOR);
 
-  let passwordElement = null;
-
   // A password element has been found.
   if (passwordElements.length) {
-    passwordElement = passwordElements[0];
+    for(const passwordElement of passwordElements) {
+      if (passwordElement.offsetWidth > 0) {
+        return passwordElement;
+      }
+    }
   } else {
     /*
      * If no password element found on the page, the login form could be served by an iframe.
      * Search the password element in the page iframes. By instance reddit.com login page serves its login
      * form in an iframe.
      */
-    passwordElement = getInputElementFromIframe('password', formData);
+    return getInputElementFromIframe('password', formData);
   }
-  return passwordElement;
 };
 
 /**
