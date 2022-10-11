@@ -33,7 +33,7 @@ class InsertSetupAuthenticationIframe extends Component {
    * @returns {void}
    */
   loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}data/passbolt-iframe-setup.html?passbolt=passbolt-iframe-setup`;
+    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-setup.html?passbolt=passbolt-iframe-setup`;
     this.iframeRef.current.contentWindow.location = iframeUrl;
   }
 

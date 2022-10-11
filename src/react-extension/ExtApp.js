@@ -81,7 +81,7 @@ class ExtApp extends Component {
       <ExtAppContextProvider port={this.props.port} storage={this.props.storage}>
         <AppContext.Consumer>
           {appContext =>
-            <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+            <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
               <AccountRecoveryUserContextProvider accountRecoveryUserService={accountRecoveryUserService}>
                 <WorkflowContextProvider>
                   <ActionFeedbackContextProvider>
@@ -114,7 +114,7 @@ class ExtApp extends Component {
                                 <HandleExtAppRouteChanged/>
                                 <Switch>
                                   { /* The application first load route points to an html document */ }
-                                  <Route path="/data/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
+                                  <Route path="/webAccessibleResources/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
                                   { /* The following routes are not handled by the browser extension application. */}
                                   <Route exact path={[
                                     "/app/administration",

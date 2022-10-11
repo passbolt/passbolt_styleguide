@@ -42,7 +42,7 @@ class InsertAccountRecoveryIframe extends Component {
    * @returns {void}
    */
   loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}data/passbolt-iframe-account-recovery.html?passbolt=passbolt-iframe-account-recovery`;
+    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-account-recovery.html?passbolt=passbolt-iframe-account-recovery`;
     this.iframeRef.current.contentWindow.location = iframeUrl;
   }
 

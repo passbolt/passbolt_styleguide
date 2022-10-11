@@ -344,7 +344,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.closeMoreMenu();
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
-    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
+    await navigator.clipboard.writeText(permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
