@@ -38,7 +38,7 @@ describe("See the Create Resource", () => {
   };
 
   const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
-
+  const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
   describe('As LU I can start adding a password', () => {
     /**
      * I should see the create password dialog
@@ -297,5 +297,16 @@ describe("See the Create Resource", () => {
       await page.passwordCreate.openPasswordGenerator();
       expect(page.passwordCreate.passwordGeneratorDialog).not.toBeNull();
     });
+
+    it("As a user I should see a feedback when the password or descriptions fields content is truncated by a field limit", async() => {
+      expect.assertions(2);
+      page.passwordCreate.fillInput(page.passwordCreate.password, 'a'.repeat(4097));
+      page.passwordCreate.fillInput(page.passwordCreate.description, 'a'.repeat(10000));
+      page.passwordCreate.keyUpInput(page.passwordCreate.password);
+      page.passwordCreate.keyUpInput(page.passwordCreate.description);
+      expect(page.passwordCreate.passwordWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordCreate.descriptionWarningMessage.textContent).toEqual(truncatedWarningMessage);
+    });
   });
 });
+
