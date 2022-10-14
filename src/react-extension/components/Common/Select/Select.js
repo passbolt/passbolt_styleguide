@@ -448,11 +448,21 @@ const isValueInItems = (props, propName, componentName) => {
   }
 };
 
+/**
+ * enumeration for select direction
+ */
+export const DirectionEnum = {
+  top: 'top',
+  bottom: 'bottom',
+  left: 'left',
+  right: 'right'
+};
+
 Select.propTypes = {
   id: PropTypes.string, // The select field id
   name: PropTypes.string, // The select field name
   className: PropTypes.string, // The class name
-  direction: PropTypes.string,
+  direction: PropTypes.oneOf(Object.values(DirectionEnum)),
   search: PropTypes.bool, // The search field property
   items: PropTypes.array.isRequired, // The item list of the select field
   value: CustomPropTypes.allPropTypes(
