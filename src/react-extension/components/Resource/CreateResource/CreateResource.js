@@ -635,7 +635,7 @@ class CreateResource extends Component {
               <div className="error-message">{this.state.descriptionError}</div>
               }
               {this.state.descriptionWarning &&
-              <div className="warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
+              <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
               }
             </div>
           </div>
