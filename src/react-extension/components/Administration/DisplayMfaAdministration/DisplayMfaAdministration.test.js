@@ -181,6 +181,18 @@ describe("See the MFA settings", () => {
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
+
+    it('As AD I want to see the passwords I entered in the MFA administration settings forms', async() => {
+      await page.checkDuo();
+
+      await page.toggleObfuscate(page.duoSecretKeyButton);
+      await page.toggleObfuscate(page.duoSaltKeyButton);
+      await page.toggleObfuscate(page.yubikeySecretKeyButton);
+
+      expect(page.isObfuscated(page.yubikeySecretKeyButton)).toBeFalsy();
+      expect(page.isObfuscated(page.duoSecretKeyButton)).toBeFalsy();
+      expect(page.isObfuscated(page.duoSaltKeyButton)).toBeFalsy();
+    });
   });
 
   describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
