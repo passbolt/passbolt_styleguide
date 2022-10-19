@@ -9,8 +9,9 @@ export default {
 };
 
 const Template = args =>
-  <div className="grid grid-responsive-12">
+  <div className="page administration"><div className="grid grid-responsive-12">
     <DisplayMfaAdministration {...args}/>
+  </div>
   </div>;
 
 Template.propTypes = {
