@@ -30,9 +30,7 @@ describe("See Delete User Dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-  const deleteUserDialogProps = {
-    user: mockUser
-  };
+  const user = mockUser();
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
@@ -45,7 +43,7 @@ describe("See Delete User Dialog", () => {
      */
 
     beforeEach(() => {
-      context.setContext({deleteUserDialogProps});
+      context.setContext({deleteUserDialogProps: {user}});
       page = new DeleteUserPage(context, props);
     });
 
@@ -63,7 +61,7 @@ describe("See Delete User Dialog", () => {
       expect(page.displayDeleteUserDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteUserDialog.cancelButton.textContent).toBe('Cancel');
       // user name
-      expect(page.displayDeleteUserDialog.userName.textContent).toBe(`${mockUser.profile.first_name} ${mockUser.profile.last_name} (${mockUser.username})`);
+      expect(page.displayDeleteUserDialog.userName.textContent).toBe(`${user.profile.first_name} ${user.profile.last_name} (${user.username})`);
     });
 
     it('As AD I should see a toaster message after deleting a user', async() => {
@@ -75,7 +73,7 @@ describe("See Delete User Dialog", () => {
       });
 
       await page.displayDeleteUserDialog.click(submitButton);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", mockUser.id);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", user.id);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -132,6 +130,9 @@ describe("See Delete User Dialog", () => {
       // Throw general error message
       expect(page.displayDeleteUserDialog.errorDialog).not.toBeNull();
       expect(page.displayDeleteUserDialog.errorDialogMessage).not.toBeNull();
+    });
+    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+      expect(page.displayDeleteUserDialog.userName.classList.contains("dialog-variable")).toBeTruthy();
     });
   });
 });

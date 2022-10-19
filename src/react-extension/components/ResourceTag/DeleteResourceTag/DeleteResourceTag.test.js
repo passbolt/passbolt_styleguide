@@ -113,6 +113,10 @@ describe("See the Delete Tag Dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
+    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+      expect(page.tagDelete.tagName.classList.contains("dialog-variable")).toBeTruthy();
+    });
+
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
       // Mock the request function to make it return an error.
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
