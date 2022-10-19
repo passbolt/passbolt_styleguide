@@ -214,7 +214,7 @@ class DeleteResourceFolder extends Component {
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete the folder <strong>{{folderName: this.state.name}}</strong>?
+                Are you sure you want to delete the folder <strong className="dialog-variable">{{folderName: this.state.name}}</strong>?
               </Trans>
             </p>
             <p><Trans>This action can’t be undone. Other users may lose access.</Trans></p>

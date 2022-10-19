@@ -114,6 +114,10 @@ describe("See Password Delete Dialog", () => {
       expect(page.deleteResourcePageObject.errorDialog).not.toBeNull();
       expect(page.deleteResourcePageObject.errorDialogMessage).not.toBeNull();
     });
+
+    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+      expect(page.deleteResourcePageObject.tagName.classList.contains("dialog-variable")).toBeTruthy();
+    });
   });
 
   describe('As LU I can delete multiple resources', () => {

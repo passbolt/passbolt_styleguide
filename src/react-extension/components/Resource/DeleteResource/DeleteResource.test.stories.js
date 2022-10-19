@@ -2,7 +2,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import AppContext from "../../../contexts/AppContext";
 import DeleteResource from "./DeleteResource";
-import MockPort from "../../../test/mock/MockPort";
+import {defaultAppContext} from "./DeleteResource.test.data";
 
 
 export default {
@@ -17,32 +17,28 @@ const Template = context => args =>
     </MemoryRouter>
   </AppContext.Provider>;
 
-const singleContext = {
-  passwordDeleteDialogProps: {
-    resources: [
-      {name: "My Password"}
-    ]
-  },
-  setContext: () => {},
-  port: new MockPort(),
-};
-export const SinglePassword = Template(singleContext).bind({});
+export const SinglePassword = Template(defaultAppContext()).bind({});
 SinglePassword.args = {
   onClose: () => {}
 };
 
-const multipleContext = {
-  passwordDeleteDialogProps: {
-    resources: [
-      {name: "My Password"},
-      {name: "My Another Password"}
-    ]
-  },
-  setContext: () => {},
-  port: new MockPort(),
-};
-export const MultiplePassword = Template(multipleContext).bind({});
+export const MultiplePassword = Template(defaultAppContext({passwordDeleteDialogProps: {
+  resources: [
+    {name: "My Password"},
+    {name: "My Another Password"}
+  ]
+}})).bind({});
 MultiplePassword.args = {
   onClose: () => {}
 };
 
+
+
+export const WithLongPassword = Template(defaultAppContext({passwordDeleteDialogProps: {
+  resources: [
+    {name: "MyPassword".repeat(10)},
+  ]
+}})).bind({});
+MultiplePassword.args = {
+  onClose: () => {}
+};

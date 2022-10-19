@@ -135,6 +135,13 @@ class DeleteGroupWithConflictsDialogPageObject {
   }
 
   /**
+   * Returns the tag name input element
+   */
+  get tagName() {
+    return this._container.querySelector('.form-content p strong');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
