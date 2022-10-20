@@ -15,6 +15,7 @@
 import React from "react";
 import {render, fireEvent, waitFor} from "@testing-library/react";
 import Select from "./Select";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The SelectPage component represented as a page
@@ -25,7 +26,11 @@ export default class SelectPage {
    * @param props Props to attach
    */
   constructor(props) {
-    this._page = render(<Select {...props}></Select>);
+    this._page = render(
+      <MockTranslationProvider>
+        <Select {...props}></Select>
+      </MockTranslationProvider>
+    );
   }
 
   /**
