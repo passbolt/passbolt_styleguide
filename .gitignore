@@ -14,3 +14,4 @@ src/less/abstractions/colors_custom.less
 # CI                 #
 ######################
 junit.xml
+.gitlab-ci-local

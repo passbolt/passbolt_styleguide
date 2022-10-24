@@ -3,8 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByFavoritePage from "./FilterResourcesByFavoritePage";
 import AppContext from "../../contexts/AppContext";
-import {defaultAppContext, mockResources} from "./FilterResourcesByFavoritePage.test.data";
-
+import {defaultProps, noResourcesProps, withFilteredResourcesProps} from "./FilterResourcesByFavoritePage.test.data";
 
 export default {
   title: 'Components/QuickAccess/FilterResourcesByFavorite',
@@ -27,29 +26,13 @@ const parameters = {
 };
 
 export const InitialLoad = Template.bind({});
-InitialLoad.args = {
-  context: defaultAppContext()
-};
+InitialLoad.args = defaultProps();
 InitialLoad.parameters = parameters;
 
-const contextNoResource = {
-  port: {
-    request: () => []
-  },
-};
 export const NoFavoriteResource = Template.bind({});
-NoFavoriteResource.args = {
-  context: defaultAppContext(contextNoResource)
-};
+NoFavoriteResource.args = noResourcesProps();
 NoFavoriteResource.parameters = parameters;
 
-const contextWithResources = {
-  port: {
-    request: () => mockResources
-  },
-};
 export const FavoriteResources = Template.bind({});
-FavoriteResources.args = {
-  context: defaultAppContext(contextWithResources)
-};
+FavoriteResources.args = withFilteredResourcesProps();
 FavoriteResources.parameters = parameters;

@@ -48,7 +48,8 @@ export function defaultAppContext(appContext) {
     roles: [{
       id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
       name: 'Admin'
-    }]
+    }],
+    setContext: jest.fn()
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
