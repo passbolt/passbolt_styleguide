@@ -18,3 +18,19 @@ export function defaultAppContext(appContext) {
 export function defaultProps() {
   return {};
 }
+
+/**
+ * Returns the default administration context for the unit test
+ * @param context An existing administration context
+ * @returns {object}
+ */
+export function defaultAdministrationWorkspaceContext(context = {}) {
+  const defaultContext = {
+    must: {
+      editSubscriptionKey: false,
+      refreshSubscriptionKey: false
+    },
+    onResetActionsSettings: jest.fn()
+  };
+  return Object.assign(defaultContext, context);
+}
