@@ -225,7 +225,7 @@ const getPasswordElement = function(formData) {
 
   // A password element has been found.
   if (passwordElements.length) {
-    for(const passwordElement of passwordElements) {
+    for (const passwordElement of passwordElements) {
       if (passwordElement.offsetWidth > 0) {
         return passwordElement;
       }
