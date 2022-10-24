@@ -35,6 +35,7 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import AppContext from "./contexts/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
 import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
+import AdminEmailNotificationContextProvider from "./contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 
 /**
  * The passbolt application served by the API.
@@ -79,7 +80,9 @@ class ApiApp extends Component {
                                   <ManageDialogs/>
                                   <ManageContextualMenu/>
                                   <ManageAnnouncements/>
-                                  <AdministrationWorkspace/>
+                                  <AdminEmailNotificationContextProvider>
+                                    <AdministrationWorkspace/>
+                                  </AdminEmailNotificationContextProvider>
                                 </AdministrationWorkspaceContextProvider>
                               </Route>
                               <Route path="/app/settings/mfa">
