@@ -41,19 +41,6 @@ export default class DisplayEmailNotificationsAdministrationPage {
     );
   }
 
-  rerender(appContext, props) {
-    this._page.rerender(
-      <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <AdminEmailNotificationContextProvider  {...props}>
-            <DisplayAdministrationEmailNotificationActions />
-            <DisplayEmailNotificationsAdministration {...props}/>
-          </AdminEmailNotificationContextProvider>
-        </AppContext.Provider>
-      </MockTranslationProvider>
-    );
-  }
-
   /**
    * Returns the totp input element
    */
