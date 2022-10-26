@@ -48,8 +48,6 @@ export const AdministrationWorkspaceContext = React.createContext({
   onGetSimulateSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user simulate synchronize the users directory settings
   onGetSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user synchronize the users directory settings
   onGetUsersRequested: () => {}, // Whenever we need get the users
-  onGetEmailNotificationsRequested: () => {}, // Whenever the user access to the email notifications page
-  onSaveEmailNotificationsRequested: () => {}, // Whenever the user save the email notifications settings
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
   onSaveLocaleRequested: () => {}, // Whenever the user access save the locale settings
   onSaveEnabled: () => {}, // Whenever a user change settings
@@ -106,8 +104,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       onGetSimulateSynchronizeUsersDirectoryRequested: this.onGetSimulateSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user simulate synchronize the users directory settings
       onGetSynchronizeUsersDirectoryRequested: this.onGetSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user synchronize the users directory settings
       onGetUsersRequested: this.onGetUsersRequested.bind(this), // Whenever we need get the users
-      onGetEmailNotificationsRequested: this.onGetEmailNotificationsRequested.bind(this), // Whenever the user access to the email notifications page
-      onSaveEmailNotificationsRequested: this.onSaveEmailNotificationsRequested.bind(this), // Whenever the user save the email notifications settings
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
       onSaveLocaleRequested: this.onSaveLocaleRequested.bind(this), // Whenever the user save the locale settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
@@ -361,26 +357,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("users");
     const apiClient = new ApiClient(apiClientOptions);
     return apiClient.findAll();
-  }
-
-  /**
-   * Whenever the email notifications is requested.
-   * @return {Promise<object>}
-   */
-  async onGetEmailNotificationsRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("settings/emails/notifications");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.findAll();
-  }
-
-  /**
-   * Whenever the save email notifications is requested.
-   * @return {Promise<object>}
-   */
-  async onSaveEmailNotificationsRequested(mfa) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("settings/emails/notifications");
-    const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(mfa);
   }
 
   /**

@@ -188,7 +188,7 @@ class ExtApp extends Component {
                                   {/* Subscription and Account Recovery settings */}
                                   <Route exact path={[
                                     "/app/administration/subscription",
-                                    "/app/administration/account-recovery"
+                                    "/app/administration/account-recovery",
                                   ]}>
                                     <AdministrationWorkspaceContextProvider>
                                       <AdminAccountRecoveryContextProvider>
