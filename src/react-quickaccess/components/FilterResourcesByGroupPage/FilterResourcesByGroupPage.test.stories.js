@@ -3,7 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByGroupPage from "./FilterResourcesByGroupPage";
 import AppContext from "../../contexts/AppContext";
-import {defaultAppContext, mockResults} from "./FilterResourcesByGroupPage.test.data";
+import {defaultProps, noGroupsProps, withFilteredResourcesProps} from "./FilterResourcesByGroupPage.test.data";
 
 export default {
   title: 'Components/QuickAccess/FilterResourcesByGroup',
@@ -27,29 +27,13 @@ const parameters = {
 };
 
 export const InitialLoad = Template.bind({});
-InitialLoad.args = {
-  context: defaultAppContext()
-};
+InitialLoad.args = defaultProps();
 InitialLoad.parameters = parameters;
 
-const contextNoGroup = {
-  port: {
-    request: () => []
-  }
-};
 export const NoGroups = Template.bind({});
-NoGroups.args = {
-  context: defaultAppContext(contextNoGroup)
-};
+NoGroups.args = noGroupsProps();
 NoGroups.parameters = parameters;
 
-const contextGroupsAndResources = {
-  port: {
-    request: path => mockResults[path]
-  }
-};
 export const GroupsResourcesMatched = Template.bind({});
-GroupsResourcesMatched.args = {
-  context: defaultAppContext(contextGroupsAndResources)
-};
+GroupsResourcesMatched.args = withFilteredResourcesProps();
 GroupsResourcesMatched.parameters = parameters;

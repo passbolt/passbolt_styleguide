@@ -19,6 +19,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DisplayAdministrationMfaActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaActions/DisplayAdministrationMfaActions";
 import {withAdminMfa} from "../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
 import MfaFormService from '../../../../shared/services/forms/Mfa/MfaFormService';
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * This component allows to display the MFA for the administration
@@ -139,12 +140,19 @@ class DisplayMfaAdministration extends React.Component {
               <div className="yubikey_client_identifier error-message">{errors.yubikeyClientIdentifierError}</div>
               }
             </div>
-            <div className={`input text required ${errors.yubikeySecretKeyError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+            <div className={`input required input-secret ${this.state.yubikeySecretKeyError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label><Trans>Secret key</Trans></label>
-              <input id="yubikeySecretKey" name="yubikeySecretKey" required="required" className="required fluid form-element" placeholder="**********" type="password"
-                onChange={this.handleInputChange} value={settings.yubikeySecretKey} disabled={this.hasAllInputDisabled()} onBlur={e => this.mfaFormService.validateYubikeySecretKey(e.target.value)}/>
-              {errors.yubikeySecretKeyError  && isSubmitted &&
-              <div className="yubikey_secret_key error-message">{errors.yubikeySecretKeyError}</div>
+              <Password
+                id="yubikeySecretKey"
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                name="yubikeySecretKey"
+                placeholder="**********"
+                disabled={this.hasAllInputDisabled()}
+                value={this.state.yubikeySecretKey}
+                preview={true}></Password>
+              {this.state.yubikeySecretKeyError &&
+              <div className="yubikey_secret_key error-message">{this.state.yubikeySecretKeyError}</div>
               }
             </div>
           </>
@@ -186,18 +194,32 @@ class DisplayMfaAdministration extends React.Component {
             </div>
             <div className={`input text required ${errors.duoSaltError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label><Trans>Salt</Trans></label>
-              <input id="duoSalt" name="duoSalt" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
-                value={settings.duoSalt} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} onBlur={e => this.mfaFormService.validateDuoSalt(e.target.value)}/>
-              {(errors.duoSaltError  && isSubmitted) &&
-              <div className="duo_salt error-message">{errors.duoSaltError}</div>
+              <Password
+                id="duoSalt"
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                name="duoSalt"
+                placeholder="**********"
+                disabled={this.hasAllInputDisabled()}
+                value={this.state.duoSalt}
+                preview={true}></Password>
+              {this.state.duoSaltError &&
+              <div className="duo_salt error-message">{this.state.duoSaltError}</div>
               }
             </div>
             <div className={`input text required ${errors.duoSecretKeyError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label><Trans>Secret key</Trans></label>
-              <input id="duoSecretKey" name="duoSecretKey" required="required" className="required fluid form-element ready" placeholder="**********" type="password"
-                value={settings.duoSecretKey} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} onBlur={e => this.mfaFormService.validateDuoSecretKey(e.target.value)}/>
-              {(errors.duoSecretKeyError  && isSubmitted) &&
-              <div className="duo_secret_key error-message">{errors.duoSecretKeyError}</div>
+              <Password
+                id="duoSecretKey"
+                onChange={this.handleInputChange}
+                autoComplete="off"
+                name="duoSecretKey"
+                placeholder="**********"
+                disabled={this.hasAllInputDisabled()}
+                value={this.state.duoSecretKey}
+                preview={true}></Password>
+              {this.state.duoSecretKeyError &&
+              <div className="duo_secret_key error-message">{this.state.duoSecretKeyError}</div>
               }
             </div>
           </>

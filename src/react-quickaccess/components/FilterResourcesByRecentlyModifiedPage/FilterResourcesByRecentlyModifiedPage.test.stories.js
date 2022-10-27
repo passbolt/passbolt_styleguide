@@ -1,10 +1,23 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.7.4
+ */
+
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByRecentlyModifiedPage from "./FilterResourcesByRecentlyModifiedPage";
 import AppContext from "../../contexts/AppContext";
-import {defaultAppContext, mockNoResource, mockResources} from "./FilterResourcesByRecentlyModifiedPage.test.data";
-
+import {defaultProps, noResourcesProps, suggestedResourcesProps} from "../HomePage/HomePage.test.data";
 
 export default {
   title: 'Components/QuickAccess/FilterResourcesByRecentlyModified',
@@ -27,33 +40,13 @@ const parameters = {
 };
 
 export const InitialLoad = Template.bind({});
-InitialLoad.args = {
-  context: defaultAppContext()
-};
+InitialLoad.args = defaultProps();
 InitialLoad.parameters = parameters;
 
-const contextNoResource = {
-  storage: {
-    local: {
-      get: () => mockNoResource
-    }
-  }
-};
 export const NoRecentlyModifiedResource = Template.bind({});
-NoRecentlyModifiedResource.args = {
-  context: defaultAppContext(contextNoResource)
-};
+NoRecentlyModifiedResource.args = noResourcesProps();
 NoRecentlyModifiedResource.parameters = parameters;
 
-const contextResources = {
-  storage: {
-    local: {
-      get: () => mockResources
-    }
-  }
-};
 export const RecentlyModifiedResources = Template.bind({});
-RecentlyModifiedResources.args = {
-  context: defaultAppContext(contextResources)
-};
+RecentlyModifiedResources.args = suggestedResourcesProps();
 RecentlyModifiedResources.parameters = parameters;

@@ -120,7 +120,7 @@ class Password extends Component {
         <input id={this.props.id} name={this.props.name}
           maxLength="4096"
           placeholder={this.props.placeholder}
-          type={this.state.viewPassword ? "text" : "password"}
+          type={this.state.viewPassword && !this.props.disabled ? "text" : "password"}
           onKeyUp={this.props.onKeyUp} value={this.props.value}
           onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
           onChange={this.handleInputChange} disabled={this.props.disabled}

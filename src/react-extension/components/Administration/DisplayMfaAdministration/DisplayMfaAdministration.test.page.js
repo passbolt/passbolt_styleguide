@@ -111,6 +111,21 @@ export default class DisplayMfaAdministrationPage {
     return this._page.container.querySelector('#duoSecretKey');
   }
 
+
+  /**
+   * Returns the eye button for duoSecretKey
+   */
+  get duoSecretKeyButton() {
+    return this._page.container.querySelectorAll('.password-view .svg-icon')[2];
+  }
+
+  /**
+   * Returns the eye button for duoSalt
+   */
+  get duoSaltKeyButton() {
+    return this._page.container.querySelectorAll('.password-view .svg-icon')[1];
+  }
+
   /**
    * Returns the yubikey client identifier error mesage input element
    */
@@ -123,6 +138,13 @@ export default class DisplayMfaAdministrationPage {
    */
   get yubikeySecretKeyErrorMessage() {
     return this._page.container.querySelector('.yubikey_secret_key.error-message').textContent;
+  }
+
+  /**
+   * Returns the eye button for yubikeySecretKey
+   */
+  get yubikeySecretKeyButton() {
+    return this._page.container.querySelectorAll('.password-view .svg-icon')[0];
   }
 
   /**
@@ -220,6 +242,19 @@ export default class DisplayMfaAdministrationPage {
   /** Click on the yubikey element */
   async checkYubikey() {
     await this.click(this.yubikey);
+  }
+  /**
+   * Toggle the obfuscate mode
+   */
+  async toggleObfuscate(component) {
+    await this.click(component);
+  }
+
+  /**
+   * Returns true if the component is in an obfuscated mode
+   */
+  isObfuscated(component) {
+    return component.getAttribute('type') === "password";
   }
 
   /**
