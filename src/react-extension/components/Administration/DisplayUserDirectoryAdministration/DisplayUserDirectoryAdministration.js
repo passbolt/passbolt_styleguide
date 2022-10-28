@@ -45,59 +45,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   get defaultState() {
     return {
-      loading: true, // component is loading or not
-      processing: false, // component is processing or not
-
       hasFieldFocus: false, // true if the form field has focus
-
-      openCredentials: true, // section credential open
-      openDirectoryConfiguration: false, // section directory configuration open
-      openSynchronizationOptions: false, // section synchronization options open
-
       openConnectionType: false, // select connection type
-      openDefaultAdmin: false, // select default user admin
-      openDefaultGroupAdmin: false, // select default group user admin
-
-      // FORM FIELDS
-      userDirectoryToggle: false, // User directory toggle value
-      // CREDENTIALS FIELDS
-      directoryType: "ad",
-      connectionType: "plain",
-      host: "",
-      hostError: null,
-      port: "389",
-      portError: null,
-      username: "",
-      password: "",
-      domain: "",
-      domainError: null,
-      baseDn: "",
-      // DIRECTORY CONFIGURATION FIELDS
-      groupPath: "",
-      userPath: "",
-      groupObjectClass: "",
-      userObjectClass: "",
-      useEmailPrefix: false,
-      emailPrefix: "",
-      emailSuffix: "",
-      // SYNCHRONIZATION OPTIONS
-      defaultAdmin: "",
-      defaultGroupAdmin: "",
-      groupsParentGroup: "",
-      usersParentGroup: "",
-      enabledUsersOnly: false,
-      createUsers: true,
-      deleteUsers: true,
-      createGroups: true,
-      deleteGroups: true,
-      updateGroups: true,
-      // The search field to select a default user
-      defaultAdminSearch: "",
-      defaultGroupAdminSearch: "",
-
-      users: null, // all users
-
-      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
     };
   }
 
@@ -136,7 +85,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleDomainInputKeyUp = this.handleDomainInputKeyUp.bind(this);
     this.handleFieldFocus = this.handleFieldFocus.bind(this);
     this.handleFieldBlur = this.handleFieldBlur.bind(this);
-    this.stopPropagation = this.stopPropagation.bind(this);
     this.handleConnectionTypeChange = this.handleConnectionTypeChange.bind(this);
   }
 
@@ -167,14 +115,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
     if (this.connectionTypeRef.current !== null && !this.connectionTypeRef.current.contains(event.target)) {
       this.setState({openConnectionType: false});
     }
-  }
-
-  /**
-   * Stop propagation event
-   * @param event
-   */
-  stopPropagation(event) {
-    event.stopPropagation();
   }
 
   /**
@@ -670,17 +610,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   displayUser(user) {
     return `${user.profile.first_name} ${user.profile.last_name} (${user.username})`;
-  }
-
-  /**
-   * Display default admin
-   */
-  displayDefaultAdmin() {
-    if (this.state.users !== null && this.state.defaultAdmin !== "") {
-      const user = this.state.users.find(user => user.id === this.state.defaultAdmin);
-      return this.displayUser(user);
-    }
-    return "";
   }
 
   /**

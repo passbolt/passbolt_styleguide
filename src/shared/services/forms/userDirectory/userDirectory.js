@@ -50,5 +50,4 @@ class UserDirectoryFormService {
   }
 }
 
-
 export default UserDirectoryFormService;
