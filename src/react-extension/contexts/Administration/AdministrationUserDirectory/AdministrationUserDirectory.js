@@ -35,6 +35,7 @@ export const AdminUserDirectoryContext = React.createContext({
   getErrors: () => {}, // Return current errors
   setError: () => {}, // Init errors object message
   simulateUsers: () => {}, // synchronize users directory request.
+  synchronizeSettings: () => {}, //
   isSubmitted: () => {}, // returns the value submitted
   setSubmitted: () => {}, // Set the submitted variab
   setErrors: () => {}, // Set errors to object object
