@@ -18,8 +18,8 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectory";
 
 class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   /**
@@ -63,7 +63,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    */
   async componentDidMount() {
     try {
-      const result = await this.props.administrationWorkspaceContext.onGetSimulateSynchronizeUsersDirectoryRequested();
+      const result = await this.props.adminUserDirectory.simulateUsers();
       const userDirectorySimulateSynchronizeResult = result.body;
       this.setState({loading: false, userDirectorySimulateSynchronizeResult});
     } catch (error) {
@@ -101,7 +101,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * Handle synchronize button click.
    */
   handleSynchronize() {
-    this.props.administrationWorkspaceContext.onMustSynchronizeSettings();
+    this.props.adminUserDirectory.synchronizeSettings();
     this.handleClose();
   }
 
@@ -353,8 +353,8 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
 DisplaySimulateSynchronizeUserDirectoryAdministration.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  adminUserDirectory: PropTypes.object, // The administration workspace context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplaySimulateSynchronizeUserDirectoryAdministration)));
+export default withActionFeedback(withAdminUserDirectory(withTranslation('common')(DisplaySimulateSynchronizeUserDirectoryAdministration)));
