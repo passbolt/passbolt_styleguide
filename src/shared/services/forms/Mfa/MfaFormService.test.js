@@ -1,5 +1,4 @@
 /**
- *import { AdminMfaContext } from '../../../../react-extension/contexts/Administration/AdministrationMfa/AdministrationMfaContext';
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
@@ -44,7 +43,7 @@ describe("MfaFormService", () => {
       expect(mfaFormService).toBeDefined();
     });
 
-    it("should not create a new instance -", () => {
+    it("should not create a new instance", () => {
       const newInstance = MfaFormService.getInstance();
       expect(mfaFormService).toEqual(newInstance);
     });
