@@ -16,9 +16,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../../shared/components/Icons/Icon";
-import withActionFeedback from '../../../Common/ActionFeedback/DisplayActionFeedbacks';
 import DisplaySimulateSynchronizeUserDirectoryAdministration from "../../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 import DisplaySynchronizeUserDirectoryAdministration from "../../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
+import UserDirectoryFormService from '../../../../../shared/services/forms/userDirectory/UserDirectoryFormService';
+import {withAdminUserDirectory} from "../../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
+import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../../contexts/DialogContext";
+import DisplayTestUserDirectoryAdministration from "../../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
+import {withAppContext} from "../../../../contexts/AppContext";
+
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -32,25 +38,69 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
-    this.mfaFormService = MfaFormService.getInstance(this.props.adminMfaContext, this.props.t);
+    this.state = this.defaultState;
+    this.userDirectoryFormService = UserDirectoryFormService.getInstance(this.props.adminUserDirectoryContext, this.props.t);
   }
+
+  /**
+   * Get default state
+   * @returns {*}
+   */
+  get defaultState() {
+    return {
+      canSynchronize: false
+    };
+  }
+
 
   /**
    * Handle save settings
    */
   async handleSaveClick() {
+    const settings = this.props.adminUserDirectoryContext.getSettings();
+    if (settings.userDirectoryToggle) {
+      await this.props.adminUserDirectoryContext.save();
+      this.setState({canSynchronize: true});
+    } else {
+      await this.props.adminUserDirectoryContext.delete();
+      this.setState({canSynchronize: false});
+    }
+    this.handleSaveSuccess();
+  }
+
+
+  async handleFormSubmit(action) {
     try {
-      const isValid = await this.mfaFormService.validate();
+      const isValid = await this.userDirectoryFormService.validate();
       if (isValid) {
-        await this.props.adminUserDirectoryContext.save();
-        this.handleSaveSuccess();
+        switch (action) {
+          case 'save':
+            await this.handleSaveClick();
+            break;
+          case 'test':
+            await this.handleTestClick();
+            break;
+        }
       }
     } catch (error) {
-      this.handleSaveError(error);
+      this.handleSubmitError(error);
     } finally {
       this.props.adminUserDirectoryContext.setSubmitted(true);
       this.props.adminUserDirectoryContext.setProcessing(false);
     }
+  }
+
+
+  /**
+   * handle test settings
+   */
+  async handleTestClick() {
+    const result = await this.props.adminUserDirectoryContext.test();
+    const displayTestUserDirectoryDialogProps = {
+      userDirectoryTestResult: result.body
+    };
+    this.props.context.setContext({displayTestUserDirectoryDialogProps});
+    this.props.dialogContext.open(DisplayTestUserDirectoryAdministration);
   }
 
   /**
@@ -58,7 +108,15 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return !this.props.dialogContext.isProcessing() && this.props.adminUserDirectoryContext.hasSettingsChanges();
+    return !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.hasSettingsChanges();
+  }
+
+  /**
+   * Is Synchronize button is enable
+   * @returns {boolean}
+   */
+  isSynchronizeEnabled() {
+    return !this.props.adminUserDirectoryContext.isProcessing() && this.canSynchronize;
   }
 
   /**
@@ -69,13 +127,6 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
     this.handleTestClick = this.handleTestClick.bind(this);
     this.handleSimulateSynchronizeClick = this.handleSimulateSynchronizeClick.bind(this);
     this.handleSynchronizeClick = this.handleSynchronizeClick.bind(this);
-  }
-
-  /**
-   * Handle test settings
-   */
-  handleTestClick() {
-    this.props.adminUserDirectoryContext.test();
   }
 
   /**
@@ -96,15 +147,15 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The multi factor authentication settings for the organization were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The user directory settings for the organization were updated."));
   }
 
   /**
    * Handle save operation error.
    * @param {object} error The returned error
    */
-  async handleSaveError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
+  async handleSubmitError(error) {
+    // It can happen when the userx has closed the passphrase entry dialog by instance.
     if (error.name !== "UserAbortsOperationError") {
       // Unexpected error occurred.
       console.error(error);
@@ -130,15 +181,15 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
+              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('save')}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
               </a>
             </li>
             <li>
-              <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
+              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('test')}>
                 <Icon name="plug"/>
-                <span><Trans>Test settings</Trans></span>
+                <span><Trans>Test settings (test)</Trans></span>
               </a>
             </li>
             <li>
@@ -161,10 +212,11 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
 }
 
 DisplayAdministrationUserDirectoryActions.propTypes = {
+  context: PropTypes.object, // Application context
   dialogContext: PropTypes.object, // The dialog notification context
   adminUserDirectoryContext: PropTypes.object, // The email notification context
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminMfa(withActionFeedback(withTranslation("common")(DisplayAdministrationUserDirectoryActions)));
+export default withAppContext(withAdminUserDirectory(withActionFeedback(withDialog(withTranslation("common")(DisplayAdministrationUserDirectoryActions)))));

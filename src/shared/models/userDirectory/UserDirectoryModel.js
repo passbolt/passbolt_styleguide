@@ -20,9 +20,9 @@ class UserDirectoryModel {
    * @param {UserDirectoryDTO} userDirectoryDTO
    * @param {UserDirectoryDTO} userDirectoryDTO
    */
-  constructor(userDirectoryDTO, userId = "") {
+  constructor(userDirectoryDTO = [], userId = "") {
     //Sections opened
-    this.openCredentiaks = false;
+    this.openCredentials = true;
     this.openDirectoryConfiguration = false;
     this.openSynchronizationOptions = false;
     //Form field option

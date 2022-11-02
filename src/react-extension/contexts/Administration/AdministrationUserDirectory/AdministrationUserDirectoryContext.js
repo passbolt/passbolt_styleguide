@@ -15,9 +15,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../AppContext";
-import MfaModel from '../../../../shared/models/Mfa/MfaModel';
-import MfaDTO from '../../../../shared/models/Mfa/MfaDTO';
-import MfaService from "../../../../shared/services/api/MFA/MfaService";
+import UserDirectoryService from '../../../../shared/services/api/userDirectory/UserDirectoryService';
+import UserService from '../../../../shared/services/api/user/UserService';
+import UserDirectoryModel from '../../../../shared/models/userDirectory/UserDirectoryModel';
+import UserDirectoryDTO from '../../../../shared/models/userDirectory/UserDirectoryDTO';
 
 /**
  * The Administration user directory Context
@@ -29,8 +30,9 @@ export const AdminUserDirectoryContext = React.createContext({
   setSettings: () => {}, // Set the settings object with changes
   getUsers: () => {}, // Returns users for UI changes
   hasSettingsChanges: () => {}, // Check if the policy has changes
-  findUserDirectorySettings: () => {}, // Find the current Mfa settings and store it in the state
+  findUserDirectorySettings: () => {}, // Find the current user directory settings and store it in the state
   save: () => {}, // Save settings
+  test: () => {}, // Test settings method
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
   getErrors: () => {}, // Return current errors
@@ -44,7 +46,7 @@ export const AdminUserDirectoryContext = React.createContext({
 });
 
 /**
- * The Administration Mfa context provider
+ * The Administration user directory context provider
  */
 export class AdminUserDirectoryContextProvider extends React.Component {
   /**
@@ -54,8 +56,8 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    const apiClientOptions = props.context.getApiClientOptions();
-    this.mfaService = new MfaService(apiClientOptions);
+    this.userDirectoryService = new UserDirectoryService(props.context.getApiClientOptions());
+    this.userService = new UserService(props.context.getApiClientOptions());
   }
 
   /**
@@ -63,24 +65,29 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   get defaultState() {
     return {
+      users: [], //The users from server
       errors: this.initErrors(),
       currentSettings: null, // The current settings
-      settings: new MfaModel(), // Change done to the settings object
+      settings: new UserDirectoryModel(), // Change done to the settings object
       submitted: false, // The informations about the form state
       processing: true, // Context is processing data
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
       setSettings: this.setSettings.bind(this),  // Set the settings object with changes
-      findUserDirectorySettings: this.findMfaSettings.bind(this), // Find the current settings and store it in the state
+      findUserDirectorySettings: this.findUserDirectorySettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       isSubmitted: this.isSubmitted.bind(this), // returns the value submitted
       setSubmitted: this.setSubmitted.bind(this), // Set the submitted variable
-      setProcessing: this.setProcessing.bind(this),
+      setProcessing: this.setProcessing.bind(this), // Set the processing
+      simulateUsers: this.simulateUsers.bind(this), // synchronize users directory request.
+      synchronizeSettings: this.synchronizeUsers.bind(this), // simulate synchronize users directory
       save: this.save.bind(this), // Save the policy changes
+      test: this.test.bind(this), // test the settings for the user directory
       getErrors: this.getErrors.bind(this), // Return current errors
       setError: this.setError.bind(this), // Set an error to object object
       setErrors: this.setErrors.bind(this), // Set errors to object object
+      getUsers: this.getUsers.bind(this), // return the users object
       clearContext: this.clearContext.bind(this), // put the data to its default state value
     };
   }
@@ -91,12 +98,9 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   initErrors() {
     return {
-      yubikeyClientIdentifierError: null, // yubikey client identifier error
-      yubikeySecretKeyError: null, // yubikey secret key error
-      duoHostnameError: null, // duo hostname error
-      duoIntegrationKeyError: null, // duo integration key error
-      duoSaltError: null, // duo salt error
-      duoSecretKeyError: null, // duo secret key error
+      hostError: null, // host error
+      portError: null, // port error
+      domainError: null, // domain error
     };
   }
 
@@ -106,14 +110,30 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   async findUserDirectorySettings() {
     this.setProcessing(true);
-    const result = await this.mfaService.findAllSettings();
-    const currentSettings = new MfaModel(result);
+    const result = await this.userDirectoryService.findAll();
+    const usersResult = await this.userService.findAll();
+
+    const userLogged = usersResult.body.find(user => this.props.context.loggedInUser.id === user.id);
+    const currentSettings = new UserDirectoryModel(result.body, userLogged.id);
+    //Init users
+    this.setState({users: this.sortUsers(usersResult.body)});
     //Init saved setting
     this.setState({currentSettings});
     //Init setting which will interact with UI
     this.setState({settings: Object.assign({}, currentSettings)});
 
     this.setProcessing(false);
+  }
+
+  /**
+   * sort users
+   * @param {Array<User>} users
+   * @return {Promise<void>}
+   */
+  sortUsers(users) {
+    const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
+    const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
+    return users.sort(nameSorter);
   }
 
   /**
@@ -125,7 +145,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   }
 
   /**
-   * Returns the Mfa settings that have been fetch previously.
+   * Returns the User directory settings that have been fetch previously.
    * @returns {object}
    */
   getSettings() {
@@ -199,9 +219,34 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   async save() {
     this.setProcessing(true);
-    const newSettings = new MfaDTO(this.state.settings);
-    await this.mfaService.save(newSettings);
-    await this.findMfaSettings();
+    const newSettings = new UserDirectoryDTO(this.state.settings);
+    await this.userDirectoryService.update(newSettings);
+    await this.findUserDirectorySettings();
+  }
+
+  /**
+   * Whenever the test has been requested
+   */
+  async test() {
+    this.setProcessing(true);
+    const newSettings = new UserDirectoryDTO(this.state.settings);
+    const result  = await this.userDirectoryService.test(newSettings);
+    this.setProcessing(false);
+    return result;
+  }
+
+  /**
+   * Whenever the simulate users has been requested
+   */
+  async simulateUsers() {
+    return await this.userDirectoryService.simulate();
+  }
+
+  /**
+   * Whenever the synchronize users has been requested
+   */
+  async synchronizeUsers() {
+    return await this.userDirectoryService.synchronize();
   }
 
   /**
@@ -219,6 +264,12 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     this.setState({errors});
   }
 
+  /**
+   * return the users object
+   */
+  getUsers() {
+    return this.state.users;
+  }
 
   /**
    * set errors to object
@@ -259,7 +310,7 @@ export function withAdminUserDirectory(WrappedComponent) {
       return (
         <AdminUserDirectoryContext.Consumer>
           {
-            adminMfaContext => <WrappedComponent adminMfaContext={adminMfaContext} {...this.props} />
+            adminUserDirectoryContext => <WrappedComponent adminUserDirectoryContext={adminUserDirectoryContext} {...this.props} />
           }
         </AdminUserDirectoryContext.Consumer>
       );

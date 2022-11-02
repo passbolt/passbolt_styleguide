@@ -1,7 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
-import {mockUserDirectorySettings, mockUsers} from "./DisplayUserDirectoryAdministration.test.data";
+import {defaultProps, mockUsers, mockResult} from "./DisplayUserDirectoryAdministration.test.data";
+import {AdminUserDirectoryContextProvider} from '../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
+import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
+import MockFetch from '../../../test/mock/MockFetch';
 
 
 export default {
@@ -9,34 +12,23 @@ export default {
   component: DisplayUserDirectoryAdministration
 };
 
+const mockFetch = new MockFetch();
+mockFetch.addGetFetchRequest(/directorysync\/settings/, async() => mockApiResponse(mockResult));
+mockFetch.addGetFetchRequest(/users/, async() => mockApiResponse(mockUsers));
+
+
 const Template = args =>
-  <div className="grid grid-responsive-12">
-    <DisplayUserDirectoryAdministration {...args}/>
-  </div>;
+  <AdminUserDirectoryContextProvider {...args}>
+    <div className="panel middle">
+      <div className="grid grid-responsive-12">
+        <DisplayUserDirectoryAdministration {...args}/>
+      </div>
+    </div>
+  </AdminUserDirectoryContextProvider>;
 
 Template.propTypes = {
   context: PropTypes.object,
 };
 
 export const Initial = Template.bind({});
-Initial.args = {
-  administrationWorkspaceContext: {
-    must: {
-      save: false,
-      test: false
-    },
-    onResetActionsSettings: () => {},
-    can: {
-      save: false
-    },
-    onSaveEnabled: () => {},
-    onTestEnabled: () => {},
-    onSynchronizeEnabled: () => {},
-    onGetUsersDirectoryRequested: () => mockUserDirectorySettings,
-    onGetUsersRequested: () => mockUsers,
-    onTestUsersDirectoryRequested: () => mockUserDirectorySettings,
-  },
-  dialogContext: {
-    open: () => {}
-  }
-};
+Initial.args = defaultProps(null, mockUsers[4].id);

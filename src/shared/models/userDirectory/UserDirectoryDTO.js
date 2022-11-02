@@ -11,54 +11,47 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
+
 /**
  * Model related to the user dto
  */
 class UserDirectoryDTO {
   /**
    * Constructor
-   * @param {UserDirectoryDTO} userDirectoryDTO
+   * @param {UserDirectoryModel} userDirectoryModel
    */
-  constructor(userDirectoryDTO) {
-    //Sections opened
-    this.openCredentials = userDirectoryDTO.length !== 0;
-    this.openDirectoryConfiguration =  userDirectoryDTO.length !== 0 ? false;
-    this.openSynchronizationOptions = false;
-    //Form field option
-    this.userDirectoryToggle = false;
+  constructor(userDirectoryModel) {
+    this.enabled =  userDirectoryModel.userDirectoryToggle;
     // CREDENTIALS FIELDS
-    this.directoryType = "ad";
-    this.connectionType = "plain";
-    this.host = "";
-    this.hostError = null;
-    this.port = "389";
-    this.portError = null;
-    this.username = "";
-    this.password = "";
-    this.domain = "";
-    this.domainError = null;
-    this.baseDn = "";
+    this.directory_type = userDirectoryModel.directoryType;
+    this.connection_type =  userDirectoryModel.connectionType;
+    this.server = userDirectoryModel.host;
+    this.port = parseInt(userDirectoryModel.port);
+    this.username =  userDirectoryModel.username;
+    this.password =  userDirectoryModel.password;
+    this.domain_name =  userDirectoryModel.domain;
+    this.base_dn = userDirectoryModel.baseDn;
     // DIRECTORY CONFIGURATION FIELDS
-    this.groupPath = "";
-    this.userPath = "";
-    this.groupObjectClass = "";
-    this.userObjectClass = "";
-    this.useEmailPrefix = false;
-    this.emailPrefix = "";
-    this.emailSuffix = "";
+    this.group_path = userDirectoryModel.groupPath;
+    this.user_path = userDirectoryModel.userPath;
+    this.group_object_class = this.directory_type === "openldap" ? userDirectoryModel.groupObjectClass : "";
+    this.user_object_class = this.directory_type === "openldap"  ? userDirectoryModel.userObjectClass : "";
+    this.useEmailPrefix = this.directory_type === "openldap" ? userDirectoryModel.useEmailPrefix : false;
+    this.emailPrefix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailPrefix : "";
+    this.emailSuffix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailSuffix : "";
     // SYNCHRONIZATION OPTIONS
-    this.defaultAdmin = "";
-    this.defaultGroupAdmin = "";
-    this.groupsParentGroup = "";
-    this.usersParentGroup = "";
-    this.enabledUsersOnly = false;
-    this.createUsers = true;
-    this.deleteUsers = true;
-    this.createGroups = true;
-    this.deleteGroups = true;
-    this.updateGroups = true;
+    this.default_user = userDirectoryModel.defaultAdmin;
+    this.default_group_admin_user = userDirectoryModel.defaultGroupAdmin;
+    this.groups_parent_group = userDirectoryModel.groupsParentGroup;
+    this.users_parent_group = userDirectoryModel.usersParentGroup;
+    this.enabled_users_only = userDirectoryModel.enabledUsersOnly;
+    this.sync_users_create =  userDirectoryModel.createUsers;
+    this.sync_users_delete = userDirectoryModel.deleteUsers;
+    this.sync_groups_create = userDirectoryModel.createGroups;
+    this.sync_groups_delete = userDirectoryModel.deleteGroups;
+    this.sync_groups_update = userDirectoryModel.updateGroups;
   }
 }
 
-export default UserDirectoryModel;
+export default UserDirectoryDTO;
 

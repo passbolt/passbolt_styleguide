@@ -19,7 +19,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectory";
+import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 
 class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   /**
@@ -233,19 +233,19 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   getUsersFullReport() {
     let userFullReport = '';
     if (this.usersSuccess.length > 0 || this.usersError.length > 0 || this.usersIgnored.length > 0) {
-      const usersHeader = `-----------------------------------------------\n${this.translate("Users")}\n-----------------------------------------------\n`;
+      const usersHeader = `-----------------------------------------------\n${this.props.t("Users")}\n-----------------------------------------------\n`;
       userFullReport = userFullReport.concat(usersHeader);
       const addMessage = user => userFullReport = userFullReport.concat(`- ${user.message}\n`);
       if (this.usersSuccess.length > 0) {
-        userFullReport = userFullReport.concat(`\n${this.translate("Success:")}\n`);
+        userFullReport = userFullReport.concat(`\n${this.props.t("Success:")}\n`);
         this.usersSuccess.map(addMessage);
       }
       if (this.usersError.length > 0) {
-        userFullReport = userFullReport.concat(`\n${this.translate("Errors:")}\n`);
+        userFullReport = userFullReport.concat(`\n${this.props.t("Errors:")}\n`);
         this.usersError.map(addMessage);
       }
       if (this.usersIgnored.length > 0) {
-        userFullReport = userFullReport.concat(`\n${this.translate("Ignored:")}\n`);
+        userFullReport = userFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
         this.usersIgnored.map(addMessage);
       }
     }
@@ -259,19 +259,19 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   getGroupsFullReport() {
     let groupFullReport = '';
     if (this.groupsSuccess.length > 0 || this.groupsError.length > 0 || this.groupsIgnored.length > 0) {
-      const groupsHeader = `-----------------------------------------------\n${this.translate("Groups")}\n-----------------------------------------------\n`;
+      const groupsHeader = `-----------------------------------------------\n${this.props.t("Groups")}\n-----------------------------------------------\n`;
       groupFullReport = groupFullReport.concat(groupsHeader);
       const addMessage = group => groupFullReport = groupFullReport.concat(`- ${group.message}\n`);
       if (this.groupsSuccess.length > 0) {
-        groupFullReport = groupFullReport.concat(`\n${this.translate("Success:")}\n`);
+        groupFullReport = groupFullReport.concat(`\n${this.props.t("Success:")}\n`);
         this.groupsSuccess.map(addMessage);
       }
       if (this.groupsError.length > 0) {
-        groupFullReport = groupFullReport.concat(`\n${this.translate("Errors:")}\n`);
+        groupFullReport = groupFullReport.concat(`\n${this.props.t("Errors:")}\n`);
         this.groupsError.map(addMessage);
       }
       if (this.groupsIgnored.length > 0) {
-        groupFullReport = groupFullReport.concat(`\n${this.translate("Ignored:")}\n`);
+        groupFullReport = groupFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
         this.groupsIgnored.map(addMessage);
       }
     }
@@ -294,10 +294,10 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
     return (
       <div>
         {this.isLoading() &&
-        <DisplayLoadingDialog onClose={this.handleClose} title={this.translate("Synchronize simulation")}></DisplayLoadingDialog>
+        <DisplayLoadingDialog onClose={this.handleClose} title={this.props.t("Synchronize simulation")}></DisplayLoadingDialog>
         }
         {!this.isLoading() &&
-        <DialogWrapper className='ldap-simulate-synchronize-dialog' title={this.translate("Synchronize simulation report")}
+        <DialogWrapper className='ldap-simulate-synchronize-dialog' title={this.props.t("Synchronize simulation report")}
           onClose={this.handleClose} disabled={this.isLoading()}>
           <div className="form-content" onSubmit={this.handleFormSubmit}>
             <p>
@@ -307,11 +307,11 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
             {this.hasSuccessResource() &&
               <p id="resources-synchronize">
                 {this.hasSuccessUserResource() &&
-                  <>{this.translate("{{count}} user will be synchronized.", {count: this.usersSuccess.length})}</>
+                  <>{this.props.t("{{count}} user will be synchronized.", {count: this.usersSuccess.length})}</>
                 }
                 {this.hasSuccessUserResource() && this.hasSuccessGroupResource() && <br/>}
                 {this.hasSuccessGroupResource() &&
-                  <>{this.translate("{{count}} group will be synchronized.", {count: this.groupsSuccess.length})}</>
+                  <>{this.props.t("{{count}} group will be synchronized.", {count: this.groupsSuccess.length})}</>
                 }
               </p>
             }
@@ -353,7 +353,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
 DisplaySimulateSynchronizeUserDirectoryAdministration.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  adminUserDirectory: PropTypes.object, // The administration workspace context
+  adminUserDirectory: PropTypes.object, // The administration user directory context
   t: PropTypes.func, // The translation function
 };
 

@@ -20,14 +20,14 @@ import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
  * @param {Object} appContext (Optional)Properties to override
  * @returns {Object}
  */
-export function defaultAppContext(appContext = {}) {
+export function defaultAppContext(appContext = {}, userId = uuidv4()) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: 'en-UK',
     siteSettings,
     trustedDomain: "http://localhost:6006",
     loggedInUser: {
-      id: uuidv4(),
+      id: userId,
       username: "user@passbolt.com",
       role: {
         name: 'admin'

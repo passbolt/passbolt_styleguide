@@ -36,21 +36,10 @@ class UserDirectoryService {
    *
    * @return {Promise<Array<SmtpSettingsDto>>|null>}
    */
-  async find() {
+  async findAll() {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}/settings`);
     const apiClient = new ApiClient(this.apiClientOptions);
     return (await apiClient.findAll()).body;
-  }
-
-  /**
-   * Save the given user directory using Passbolt API
-   * @param {UserDirectoryDto} UserDirectoryDto
-   * @returns {Promise<UserDirectoryDto>}
-   */
-  async save(userDirectoryDto) {
-    this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}`);
-    const apiClient = new ApiClient(this.apiClientOptions);
-    return (await apiClient.create(userDirectoryDto)).body;
   }
 
   /**

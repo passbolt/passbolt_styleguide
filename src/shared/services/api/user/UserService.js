@@ -12,43 +12,34 @@
  * @since         3.8.0
  */
 
+import {ApiClient} from "../../../lib/apiClient/apiClient";
+
+const USER_DIRECTORY_RESOURCE_NAME = "users";
 
 /**
- * Model related to the User Directory form settings
+ * Model related to the user service
  */
-class UserDirectoryFormService {
+class UserService {
   /**
    * Constructor
    *
-   * @param {context} context
+   * @param {ApiClientOptions} apiClientOptions
    * @public
    */
-  constructor(context, translation) {
-    this.context = context;
-    this.translation = translation;
+  constructor(apiClientOptions) {
+    this.apiClientOptions = apiClientOptions;
+    apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}`);
   }
 
   /**
-   * getInstance for singleton pattern
-   * @param {context} context
-   * @public
+   * Whenever the users is requested.
+   * @return {Promise<object>}
    */
-  static getInstance(context, translation) {
-    if (!this.instance) {
-      this.instance = new UserDirectoryFormService(context, translation);
-    }
-    return this.instance;
-  }
-
-  /**
-   * killInstance singleton
-   * @param {context} context
-   * @public
-   */
-  static killInstance() {
-    this.instance = null;
+  async findAll() {
+    const apiClient = new ApiClient(this.apiClientOptions);
+    return apiClient.findAll();
   }
 }
 
+export default UserService;
 
-export default UserDirectoryFormService;
