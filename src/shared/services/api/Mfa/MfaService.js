@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -37,7 +36,7 @@ class MFAService {
    *
    * @return {Promise<Array<MFADto>>|null>}
    */
-  async find() {
+  async findAllSettings() {
     return (await this.apiClient.findAll()).body;
   }
 
