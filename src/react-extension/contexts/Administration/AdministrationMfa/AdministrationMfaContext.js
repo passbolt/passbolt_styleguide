@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../AppContext";
 import MfaModel from '../../../../shared/models/Mfa/MfaModel';
 import MfaDTO from '../../../../shared/models/Mfa/MfaDTO';
-import MfaService from "../../../../shared/services/api/MFA/MfaService";
+import MfaService from "../../../../shared/services/api/Mfa/MfaService";
 
 /**
  * The Administration Email Notification Context
