@@ -14,23 +14,22 @@ export function defaultAppContext(appContext) {
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultProps(selectedAdministration) {
-  return {
+export function defaultProps(data = {}) {
+  return Object.assign({
     context: {
       siteSettings: {
         canIUse: () => true
       }
     },
-    administrationWorkspaceContext: {
-      selectedAdministration
-    },
+    administrationWorkspaceContext: {},
     navigationContext: {
       onGoToAdministrationSubscriptionRequested: jest.fn(),
       onGoToAdministrationEmailNotificationsRequested: jest.fn(),
       onGoToAdministrationUsersDirectoryRequested: jest.fn(),
       onGoToAdministrationMfaRequested: jest.fn(),
       onGoToAdministrationInternationalizationRequested: jest.fn(),
-      onGoToAdministrationAccountRecoveryRequested: jest.fn()
+      onGoToAdministrationAccountRecoveryRequested: jest.fn(),
+      onGoToAdministrationSmtpSettingsRequested: jest.fn()
     }
-  };
+  }, data);
 }
