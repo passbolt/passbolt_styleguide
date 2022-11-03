@@ -39,6 +39,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('Matches the styleguide', () => {
+      expect.assertions(12);
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
 
@@ -63,6 +64,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should be able to enter my new password', async() => {
+      expect.assertions(3);
       const expectedPassphrase = 'La belle vie';
       await page.insertPassword(expectedPassphrase);
       expect(page.password).toBe(expectedPassphrase);
@@ -71,16 +73,33 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should initially see the passphrase I typed as obfuscated', async() => {
+      expect.assertions(1);
       const passphrase = 'La belle vie';
       await page.insertPassword(passphrase);
       expect(page.isObfuscated).toBeTruthy();
     });
 
     it('As LU I should be able to see the non-obfuscate passphrase I typed', async() => {
+      expect.assertions(1);
       const passphrase = 'La belle vie';
       await page.insertPassword(passphrase);
       await page.toggleObfuscate();
       expect(page.isObfuscated).toBeFalsy();
+    });
+
+    it('As LU I should see the password obfuscated if the field is disabled', async() => {
+      expect.assertions(2);
+      const passphrase = 'La belle vie';
+      const props = defaultProps();
+      const page = new PasswordPage(props);
+      await page.insertPassword(passphrase);
+      await page.toggleObfuscate();
+      expect(page.isObfuscated).toBeFalsy();
+
+      props.disabled = true;
+      page.rerender(props);
+
+      expect(page.isObfuscated).toBeTruthy();
     });
   });
 });

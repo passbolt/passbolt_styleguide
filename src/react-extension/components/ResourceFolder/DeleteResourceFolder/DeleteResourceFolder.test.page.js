@@ -91,6 +91,13 @@ export default class DeleteResourceFolderPage {
   }
 
   /**
+   * Returns the tag name input element
+   */
+  get tagName() {
+    return this._page.container.querySelector('.form-content p strong');
+  }
+
+  /**
    * Returns the close button element
    */
   get closeButton() {

@@ -53,7 +53,7 @@ class DisplayResourceFolderDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/folders/view/${this.props.resourceWorkspaceContext.details.folder.id}`;
-    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
+    await navigator.clipboard.writeText(permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 

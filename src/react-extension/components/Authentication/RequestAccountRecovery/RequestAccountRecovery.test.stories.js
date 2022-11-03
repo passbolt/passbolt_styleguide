@@ -13,7 +13,6 @@
  */
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import "../../../../css/themes/default/ext_authentication.css";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import RequestAccountRecovery from "./RequestAccountRecovery";
 import {defaultProps} from "./RequestAccountRecovery.test.data";

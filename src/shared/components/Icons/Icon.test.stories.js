@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "./Icon";
-import "../../../css/themes/default/api_main.css";
-
 
 export default {
   title: 'Foundations/Icon'

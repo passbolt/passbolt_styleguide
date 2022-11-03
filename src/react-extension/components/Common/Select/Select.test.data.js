@@ -12,25 +12,49 @@
  * @since         3.6.0
  */
 
+import {DirectionEnum} from "./Select";
+
 /**
  * Default props
  * @returns {{}}
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
-    items: [
-      {value: "0", label: "list item #1"},
-      {value: "1", label: "list item #2"},
-      {value: "2", label: "list item #3"},
-      {value: "3", label: "list item #4"},
-      {value: "4", label: "list item #5"},
-      {value: "5", label: "list item #6"},
-      {value: "6", label: "list item #7"},
-    ],
+    items: items(),
     value: "0",
     onChange: () => jest.fn()
   };
   return Object.assign(defaultProps, props || {});
+}
+
+/**
+ * items for select
+ * @returns {[]}
+ */
+export function items() {
+  return [
+    {value: "0", label: "list item #1"},
+    {value: "1", label: "list item #2"},
+    {value: "2", label: "list item #3"},
+    {value: "3", label: "list item #4"},
+    {value: "4", label: "list item #5"},
+    {value: "5", label: "list item #6"},
+    {value: "6", label: "list item #7"},
+  ];
+}
+/**
+ * Default full props
+ * @returns {{}}
+ */
+export function defaultAllProps() {
+  return Object.assign(defaultProps(), {
+    id: "id-jest",
+    name: "name-select",
+    className: "inline",
+    disabled: true,
+    search: true,
+    direction: DirectionEnum.top
+  });
 }
 
 /**
@@ -68,3 +92,16 @@ export function defaultInlineLdapProps(props = {}) {
   };
   return Object.assign(defaultProps, props || {});
 }
+
+/**
+ * Default inline props
+ * @returns {{}}
+ */
+export function defaultPropsWithSearch(props = {}) {
+  const _props = defaultProps();
+  _props.search = true;
+  return Object.assign(_props, props || {});
+}
+
+
+

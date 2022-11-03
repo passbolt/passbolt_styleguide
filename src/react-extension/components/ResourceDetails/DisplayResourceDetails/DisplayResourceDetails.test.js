@@ -32,6 +32,12 @@ jest.mock("./DisplayResourceDetailsComment", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("See Resource Sidebar", () => {
@@ -58,13 +64,14 @@ describe("See Resource Sidebar", () => {
     });
 
     it('I should be able to identify the name and the permalink', async() => {
+      expect.assertions(4);
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.name);
       expect(page.subtitle).toBe('Resource');
       await page.selectPermalink();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", `${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
     });
 

@@ -33,6 +33,12 @@ import HandleReviewAccountRecoveryWorkflow from "../../AccountRecovery/HandleRev
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display Users Contextual Menu", () => {
@@ -46,11 +52,10 @@ describe("Display Users Contextual Menu", () => {
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", `${context.userSettings.getTrustedDomain()}/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74`);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/users/view/640ebc06-5ec1-5322-a1ae-6120ed2f3a74`);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });
@@ -61,11 +66,11 @@ describe("Display Users Contextual Menu", () => {
     await waitFor(() => {});
 
     const gpgKey = "some key";
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({armored_key: gpgKey}));
+    jest.spyOn(context.port, 'request').mockImplementation(() => ({armored_key: gpgKey}));
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyPublicKey();
-    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.clipboard.copy", gpgKey);
+    expect(navigator.clipboard.writeText).toHaveBeenLastCalledWith(gpgKey);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });
@@ -75,11 +80,10 @@ describe("Display Users Contextual Menu", () => {
     page = new DisplayUsersContextualMenuPage(context, props);
     await waitFor(() => {});
 
-    jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
     jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(() => {});
     jest.spyOn(props, 'hide').mockImplementationOnce(() => {});
     await page.copyEmail();
-    expect(context.port.request).toHaveBeenLastCalledWith("passbolt.clipboard.copy",  "carol@passbolt.com");
+    expect(navigator.clipboard.writeText).toHaveBeenLastCalledWith("carol@passbolt.com");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
     expect(props.hide).toHaveBeenCalled();
   });

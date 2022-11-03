@@ -53,7 +53,7 @@ class ExtInForm extends React.Component {
   render() {
     return (
       <AppContext.Provider value={this.state}>
-        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json" locale={this.state.locale}>
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json" locale={this.state.locale}>
           <div className="web-integration">
             <DisplayInFormMenu/>
           </div>

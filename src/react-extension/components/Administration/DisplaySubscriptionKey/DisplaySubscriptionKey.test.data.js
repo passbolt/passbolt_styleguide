@@ -1,31 +1,94 @@
 /**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.7.4
+ */
+
+/**
  * Default props
  * @returns {*}
  */
-import MockPort from "../../../test/mock/MockPort";
 import {DateTime} from "luxon";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
+import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
+import MockPort from "../../../test/mock/MockPort";
 
-export function defaultProps(props) {
-  const defaultProps = {
-    context: {
-      port: new MockPort(),
-      onGetSubscriptionKeyRequested: () => mockSubscription,
-      setContext: jest.fn()
-    },
-    administrationWorkspaceContext: {
-      must: {
-        editSubscriptionKey: false,
-        refreshSubscriptionKey: false
-      }
-    },
-    dialogContext: {
-      open: jest.fn()
-    },
-    navigationContext: {
-      onGoToNewTab: jest.fn()
-    }
+/**
+ * Default component props
+ * @param props
+ * @return {Object}
+ */
+export function defaultProps(props = {}) {
+  const port = new MockPort();
+  port.addRequestListener('passbolt.users.get-all', () => mockUsers);
+  const defaultContext = {
+    onGetSubscriptionKeyRequested: () => mockSubscription,
+    port: port
   };
-  return Object.assign(defaultProps, props || {});
+
+  const defaultProps = {
+    context: defaultAppContext(Object.assign(defaultContext, props?.context)),
+    administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
+    dialogContext: defaultDialogContext(),
+    navigationContext: defaultNavigationContext()
+  };
+  delete props.context; // Treated in the default
+
+  return Object.assign(defaultProps, props);
+}
+
+/**
+ * Going to expire props
+ * @return {Object}
+ */
+export function goingToExpireProps() {
+  const context = {
+    onGetSubscriptionKeyRequested: () => mockSubscriptionGoingToExpire,
+  };
+  return defaultProps({context});
+}
+
+/**
+ * Expired props
+ * @return {Object}
+ */
+export function expiredProps() {
+  const context = {
+    onGetSubscriptionKeyRequested: () => mockSubscriptionExpired,
+  };
+  return defaultProps({context});
+}
+
+/**
+ * Users exceeded props
+ * @return {Object}
+ */
+export function usersExceededProps() {
+  const context = {
+    onGetSubscriptionKeyRequested: () => mockSubscriptionUsersExceeded,
+  };
+  return defaultProps({context});
+}
+
+/**
+ * Not found props
+ * @return {Object}
+ */
+export function notFoundProps() {
+  const context = {
+    onGetSubscriptionKeyRequested: () => {},
+  };
+  return defaultProps({context});
 }
 
 /**
@@ -35,7 +98,7 @@ export function defaultProps(props) {
  */
 export function formatDate(date) {
   try {
-    return DateTime.fromISO(date).toLocaleString(DateTime.DATE_SHORT);
+    return DateTime.fromISO(date).setLocale('en-UK').toLocaleString(DateTime.DATE_SHORT);
   } catch (error) {
     return "";
   }
@@ -52,7 +115,7 @@ export const mockSubscription = {
   "subscription_id": "1n6BPvHRWfizhmARz",
   "users": 5,
   "email": "ada@passbolt.com",
-  "created": "2020-12-01",
+  "created": "2020-12-01T00:00:00.661Z",
   "expiry": expiredDate.toISOString(),
   "data": "data"
 };
@@ -62,8 +125,8 @@ export const mockSubscriptionUsersExceeded = {
   "subscription_id": "1n6BPvHRWfizhmARz",
   "users": 2,
   "email": "ada@passbolt.com",
-  "created": "2020-12-01",
-  "expiry": "2021-12-01",
+  "created": "2020-12-01T00:00:00.661Z",
+  "expiry": "2021-12-01T00:00:00.661Z",
   "data": "data"
 };
 
@@ -72,8 +135,8 @@ export const mockSubscriptionGoingToExpire = {
   "subscription_id": "1n6BPvHRWfizhmARz",
   "users": 5,
   "email": "ada@passbolt.com",
-  "created": "2019-12-01",
-  "expiry":  goingToExpireDate.toISOString(),
+  "created": "2019-12-01T00:00:00.661Z",
+  "expiry": goingToExpireDate.toISOString(),
   "data": "data"
 };
 
@@ -82,8 +145,8 @@ export const mockSubscriptionExpired = {
   "subscription_id": "1n6BPvHRWfizhmARz",
   "users": 5,
   "email": "ada@passbolt.com",
-  "created": "2019-12-01",
-  "expiry": "2020-11-01",
+  "created": "2019-12-01T00:00:00.661Z",
+  "expiry": "2020-11-01T00:00:00.661Z",
   "data": "data"
 };
 
@@ -92,8 +155,8 @@ export const mockSubscriptionUpdated = {
   "subscription_id": "1n6BPvHRWfizhmARz",
   "users": 10,
   "email": "admin@passbolt.com",
-  "created": "2020-12-16",
-  "expiry": "2021-12-16",
+  "created": "2020-12-16T00:00:00.661Z",
+  "expiry": "2021-12-16T00:00:00.661Z",
   "data": "data"
 };
 

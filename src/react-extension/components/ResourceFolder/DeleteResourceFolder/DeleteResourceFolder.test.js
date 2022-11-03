@@ -81,6 +81,10 @@ describe("Delete Folder", () => {
       await page.delete(false);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
     });
+
+    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+      expect(page.tagName.classList.contains("dialog-variable")).toBeTruthy();
+    });
   });
 
   describe('AS LU I should cancel the operation', () => {

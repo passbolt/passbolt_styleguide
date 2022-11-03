@@ -151,6 +151,10 @@ describe("See Delete User Dialog", () => {
       expect(props.onClose).toBeCalled();
     });
 
+    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+      expect(page.displayDeleteUserWithConflictsDialog.userName.classList.contains("dialog-variable")).toBeTruthy();
+    });
+
     it('Displays an error when the API call fail', async() => {
       const submitButton = page.displayDeleteUserWithConflictsDialog.saveButton;
       // Mock the request function to make it return an error.

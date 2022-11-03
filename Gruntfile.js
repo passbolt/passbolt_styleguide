@@ -100,6 +100,20 @@ module.exports = function(grunt) {
         src: ['*.css', '!*.min.css'],
         dest: 'build/css/themes/midgar',
         ext: '.min.css'
+      },
+      theme_solarized_light: {
+        expand: true,
+        cwd: 'src/css/themes/solarized_light',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/solarized_light',
+        ext: '.min.css'
+      },
+      theme_solarized_dark: {
+        expand: true,
+        cwd: 'src/css/themes/solarized_dark',
+        src: ['*.css', '!*.min.css'],
+        dest: 'build/css/themes/solarized_dark',
+        ext: '.min.css'
       }
 		},
     header: {

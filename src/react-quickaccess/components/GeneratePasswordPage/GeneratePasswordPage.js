@@ -159,7 +159,7 @@ class GeneratePasswordPage extends React.Component {
               <Icon name="chevron-left"/>
               <span className="primary-action-title"><Trans>Generate password</Trans></span>
             </a>
-            <Link to="/data/quickaccess.html" className="secondary-action button-transparent button"
+            <Link to="/webAccessibleResources/quickaccess.html" className="secondary-action button-transparent button"
               title={this.translate("Cancel")}>
               <Icon name="close"/>
               <span className="visually-hidden"><Trans>Cancel</Trans></span>

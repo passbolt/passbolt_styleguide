@@ -29,7 +29,8 @@ export function defaultPropsOneResourceOwned() {
       selectedResources: [resourcesMock[0]],
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn()
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn()
     }
   };
 }
@@ -44,7 +45,8 @@ export function defaultPropsOneResourceNotOwned() {
       selectedResources: [resourcesMock[1]],
       lockDisplayDetail: false,
       onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn()
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn()
     }
   };
 }
@@ -59,7 +61,8 @@ export function defaultPropsNoResource() {
       selectedResources: [],
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn()
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn()
     }
   };
 }
@@ -74,7 +77,8 @@ export function defaultPropsMultipleResource() {
       selectedResources: resourcesMock,
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn()
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn()
     }
   };
 }
@@ -90,7 +94,8 @@ export function defaultPropsMultipleResourceUpdateRights() {
       selectedResources,
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn()
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn()
     }
   };
 }

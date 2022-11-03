@@ -21,6 +21,12 @@ import DisplayUserGroupDetailsPage from "./DisplayUserGroupDetails.test.page";
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display User Details", () => {
@@ -35,10 +41,11 @@ describe("Display User Details", () => {
   });
 
   it('As LU I should follow a permalink to see the details of a group', async() => {
+    expect.assertions(2);
     mockContextRequest(context, () => {});
     jest.spyOn(props.actionFeedbackContext, "displaySuccess").mockImplementationOnce(() => {});
     await page.copyPermalink();
-    expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", "http://localhost/app/groups/view/516c2db6-0aed-52d8-854f-b3f3499995e7");
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/app/groups/view/516c2db6-0aed-52d8-854f-b3f3499995e7");
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalled();
   });
 

@@ -129,7 +129,7 @@ class DeleteUserGroup extends Component {
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete the group <strong>{{groupName: this.group.name}}</strong>?
+                Are you sure you want to delete the group <strong className="dialog-variable">{{groupName: this.group.name}}</strong>?
               </Trans>
             </p>
             <p><Trans>This action can’t be undone. Users in this group may lose access to the content shared with it.</Trans></p>

@@ -37,6 +37,7 @@ describe("See the Edit Resource", () => {
   };
 
   const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
   describe('As LU I can start adding a password', () => {
     /**
@@ -309,6 +310,16 @@ describe("See the Edit Resource", () => {
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
       await page.passwordEdit.openPasswordGenerator();
       expect(props.dialogContext.open).toBeCalled();
+    });
+
+    it("As a user I should see a feedback when the password or descriptions fields content is truncated by a field limit", async() => {
+      expect.assertions(2);
+      page.passwordEdit.fillInput(page.passwordEdit.password, 'a'.repeat(4097));
+      page.passwordEdit.fillInput(page.passwordEdit.description, 'a'.repeat(10000));
+      await page.passwordEdit.keyUpInput(page.passwordEdit.password);
+      await page.passwordEdit.keyUpInput(page.passwordEdit.description);
+      expect(page.passwordEdit.passwordWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordEdit.descriptionWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

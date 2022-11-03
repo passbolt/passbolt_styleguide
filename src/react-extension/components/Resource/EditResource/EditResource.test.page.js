@@ -169,6 +169,14 @@ class PasswordEditPageObject {
   }
 
   /**
+   * Returns the password warning mesage input element
+   */
+  get passwordWarningMessage() {
+    return this._container.querySelector('.password.warning-message');
+  }
+
+
+  /**
    * Returns the complexity text input element
    */
   get complexityText() {
@@ -188,6 +196,14 @@ class PasswordEditPageObject {
   get descriptionEncryptedLock() {
     return this._container.querySelector('.lock-toggle');
   }
+
+  /**
+   * Returns the description warning mesage input element
+   */
+  get descriptionWarningMessage() {
+    return this._container.querySelector('.description.warning-message');
+  }
+
 
   /**
    * Returns the progress bar element
@@ -239,6 +255,8 @@ class PasswordEditPageObject {
     return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
   }
 
+
+
   /**
    * Returns true if the page object exists in the container
    */
@@ -280,6 +298,12 @@ class PasswordEditPageObject {
   /** blur the input element with data */
   blurInput(element)  {
     fireEvent.blur(element);
+  }
+
+  /** on keypup element */
+  async keyUpInput(component)  {
+    fireEvent.keyUp(component, {keyCode: 38});
+    await waitFor(() => {});
   }
 
   /** Open the password generator*/

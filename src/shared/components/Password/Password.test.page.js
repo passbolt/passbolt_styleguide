@@ -33,6 +33,14 @@ export default class PasswordPage {
     );
   }
 
+  rerender(props) {
+    this._page.rerender(
+      <MockTranslationProvider>
+        <Password {...props}/>
+      </MockTranslationProvider>
+    );
+  }
+
   /**
    * Returns the password wrapper element
    */

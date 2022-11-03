@@ -25,3 +25,12 @@ export function defaultProps() {
     onClose: jest.fn()
   };
 }
+
+/**
+ * tags to delete Object
+ * @return {{ id: number,slug: string}}
+ */
+
+export function tagToDelete(slug) {
+  return {id: 1, slug};
+}

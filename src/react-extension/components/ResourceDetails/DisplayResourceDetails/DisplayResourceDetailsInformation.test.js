@@ -27,6 +27,12 @@ import {DateTime} from "luxon";
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("See information", () => {
@@ -82,6 +88,7 @@ describe("See information", () => {
     });
 
     it('AS LU, I should be able to copy the username of a resource to clipboard', async() => {
+      expect.assertions(3);
       page = new DisplayResourceDetailsInformationPage(context, props);
       await waitFor(() => {});
       mockContextRequest(copyClipboardMockImpl);
@@ -90,7 +97,7 @@ describe("See information", () => {
       await page.displayInformationList.click(page.displayInformationList.username);
 
       expect.assertions(2);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.clipboard.copy", props.resourceWorkspaceContext.details.resource.username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.details.resource.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The username has been copied to clipboard");
     });
 
