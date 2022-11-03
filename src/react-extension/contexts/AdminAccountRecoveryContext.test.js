@@ -16,7 +16,7 @@ import {defaultProps} from "./AdminAccountRecoveryContext.test.data";
 import {AdminAccountRecoveryContextProvider} from "./AdminAccountRecoveryContext";
 
 describe("AdminAccountRecoveryContext", () => {
-  let adminAccountRecoveryContext; // The adminAccountRecoveryContext to text
+  let adminAccountRecoveryContext; // The adminAccountRecoveryContext to test
   const props = defaultProps(); // The props to pass
 
 
