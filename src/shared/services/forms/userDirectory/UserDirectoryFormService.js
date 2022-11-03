@@ -56,10 +56,6 @@ class UserDirectoryFormService {
    */
   async validate() {
     // Validate the form inputs.
-    console.log(this.validateHostInput());
-    console.log(this.validatePortInput());
-    console.log(this.validateDomainInput());
-
     const validation = {
       ...this.validateHostInput(),
       ...this.validatePortInput(),

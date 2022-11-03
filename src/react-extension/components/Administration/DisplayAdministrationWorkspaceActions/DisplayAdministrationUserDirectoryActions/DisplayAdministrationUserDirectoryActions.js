@@ -43,27 +43,14 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   }
 
   /**
-   * Get default state
-   * @returns {*}
-   */
-  get defaultState() {
-    return {
-      canSynchronize: false
-    };
-  }
-
-
-  /**
    * Handle save settings
    */
   async handleSaveClick() {
     const settings = this.props.adminUserDirectoryContext.getSettings();
     if (settings.userDirectoryToggle) {
       await this.props.adminUserDirectoryContext.save();
-      this.setState({canSynchronize: true});
     } else {
       await this.props.adminUserDirectoryContext.delete();
-      this.setState({canSynchronize: false});
     }
     this.handleSaveSuccess();
   }
@@ -83,13 +70,13 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
         }
       }
     } catch (error) {
+      console.log(error);
       this.handleSubmitError(error);
     } finally {
       this.props.adminUserDirectoryContext.setSubmitted(true);
       this.props.adminUserDirectoryContext.setProcessing(false);
     }
   }
-
 
   /**
    * handle test settings
@@ -112,11 +99,20 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   }
 
   /**
+   * Is test button is enable
+   * @returns {boolean}
+   */
+  isTestEnabled() {
+    return !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.getSettings().userDirectoryToggle;
+  }
+
+
+  /**
    * Is Synchronize button is enable
    * @returns {boolean}
    */
   isSynchronizeEnabled() {
-    return !this.props.adminUserDirectoryContext.isProcessing() && this.canSynchronize;
+    return !this.props.adminUserDirectoryContext.isProcessing() && this.props.adminUserDirectoryContext.getSettings().userDirectoryToggle && this.props.adminUserDirectoryContext.getCurrentSettings().userDirectoryToggle;
   }
 
   /**
@@ -187,7 +183,7 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
               </a>
             </li>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('test')}>
+              <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('test')}>
                 <Icon name="plug"/>
                 <span><Trans>Test settings (test)</Trans></span>
               </a>
@@ -219,4 +215,4 @@ DisplayAdministrationUserDirectoryActions.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminUserDirectory(withActionFeedback(withDialog(withTranslation("common")(DisplayAdministrationUserDirectoryActions)))));
+export default withAppContext(withActionFeedback(withDialog(withAdminUserDirectory(withTranslation("common")(DisplayAdministrationUserDirectoryActions)))));

@@ -16,6 +16,8 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import DisplayAdministrationUserDirectoryActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserDirectoryActions/DisplayAdministrationUserDirectoryActions";
+import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 
 /**
  * The DisplayUserDirectoryAdministration component represented as a page
@@ -30,17 +32,10 @@ export default class DisplayUserDirectoryAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplayUserDirectoryAdministration {...props}/>
-        </AppContext.Provider>
-      </MockTranslationProvider>
-    );
-  }
-
-  rerender(appContext, props) {
-    this._page.rerender(
-      <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <DisplayUserDirectoryAdministration {...props}/>
+          <AdminUserDirectoryContextProvider {...props}>
+            <DisplayAdministrationUserDirectoryActions />
+            <DisplayUserDirectoryAdministration {...props}/>
+          </AdminUserDirectoryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -65,6 +60,22 @@ export default class DisplayUserDirectoryAdministrationPage {
    */
   get directoryConfigurationTitle() {
     return this._page.container.querySelector('.accordion.section-directory-configuration .accordion-header a');
+  }
+
+  /**
+   * Returns the HTMLElement button of the toolbar that is the "Save Settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsSaveButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+  }
+
+  /**
+   * Returns the HTMLElement button of the toolbar that is the "Test Settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsTestButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[1];
   }
 
   /**
@@ -297,6 +308,41 @@ export default class DisplayUserDirectoryAdministrationPage {
   exists() {
     return this.userDirectorySettings !== null;
   }
+
+  /**
+   * Returns true if the save button in the toolbar is enabled.
+   * @returns {boolean}
+   */
+  isSaveButtonEnabled() {
+    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+  }
+
+  /**
+   * Returns true if the test button in the toolbar is enabled.
+   * @returns {boolean}
+   */
+  isTestButtonEnabled() {
+    return !this.toolbarActionsTestButton.className.toString().includes("disabled");
+  }
+
+  /**
+   * Simulates a click on the "Save settings" button.
+   * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
+   * @returns {Promise<void>}
+   */
+  async saveSettings() {
+    await this.click(this.toolbarActionsSaveButton);
+  }
+
+  /**
+   * Simulates a click on the "Test settings" button.
+   * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
+   * @returns {Promise<void>}
+   */
+  async testSettings() {
+    await this.click(this.toolbarActionsTestButton);
+  }
+
 
   /** Click on the element */
   async click(element) {

@@ -104,7 +104,29 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.props.adminUserDirectoryContext.setSettings(name, value);
+    this.validateInput(name, value);
   }
+
+  /**
+   * validate the input
+   * @params {string} The input name
+   * @params {string} The input valude
+   * @returns {void}
+   */
+  validateInput(name, value) {
+    switch (name) {
+      case 'host':
+        this.userDirectoryFormService.validateHostInput(value);
+        break;
+      case 'domain':
+        this.userDirectoryFormService.validateDomainInput(value);
+        break;
+      case 'port':
+        this.userDirectoryFormService.validatePortInput(value);
+        break;
+    }
+  }
+
 
   /**
    * Should input be disabled? True if state is loading or processing
@@ -194,7 +216,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   render() {
     const settings = this.props.adminUserDirectoryContext.getSettings();
-    console.log(settings);
     const errors = this.props.adminUserDirectoryContext.getErrors();
     const isSubmitted = this.props.adminUserDirectoryContext.isSubmitted();
 
@@ -249,14 +270,14 @@ class DisplayUserDirectoryAdministration extends React.Component {
                   <label><Trans>Server url</Trans></label>
                   <div className={`input text singleline connection_info ad openldap`}>
                     <input id="server-input" type="text" className="required host ad openldap form-element" name="host"
-                      value={settings.host} onChange={this.handleInputChange} onKeyUp={this.handleHostInputKeyUp}
+                      value={settings.host} onChange={this.handleInputChange}
                       placeholder={this.props.t("host")} disabled={this.hasAllInputDisabled()}/>
                     <div className="protocol">
                       <Select className="inline" name="connectionType" items={this.connectionType} value={settings.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     </div>
                     <div className="port ad openldap">
                       <input id="port-input" type="number" className="required in-field form-element" name="port"
-                        value={settings.port}onChange={this.handleInputChange} onKeyUp={this.handlePortInputKeyUp} placeholder={this.props.t("port")}
+                        value={settings.port}onChange={this.handleInputChange} placeholder={this.props.t("port")}
                         disabled={this.hasAllInputDisabled()}/>
                     </div>
                   </div>
@@ -284,7 +305,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                 <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                   <label><Trans>Domain</Trans></label>
                   <input id="domain-name-input" type="text" name="domain" value={settings.domain}
-                    onChange={this.handleInputChange} className="required fluid form-element" onKeyUp={this.handleDomainInputKeyUp}
+                    onChange={this.handleInputChange} className="required fluid form-element"
                     placeholder="domain.ext" disabled={this.hasAllInputDisabled()}/>
                   {errors.domainError && isSubmitted &&
                   <div id="domain-name-input-feedback" className="error-message">{errors.domainError}</div>
@@ -372,6 +393,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                       </div>
                     </div>
                     <div className={`input text last-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+
                       <label><Trans>Email suffix</Trans></label>
                       <input id="email-suffix-input" type="text" name="emailSuffix" value={settings.emailSuffix}
                         onChange={this.handleInputChange} className="required form-element"

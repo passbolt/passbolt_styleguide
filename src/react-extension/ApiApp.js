@@ -79,10 +79,10 @@ class ApiApp extends Component {
                               ]}/>
                               <Route path="/app/administration">
                                 <AdministrationWorkspaceContextProvider>
-                                  <ManageDialogs/>
                                   <ManageContextualMenu/>
                                   <ManageAnnouncements/>
                                   <AdminUserDirectoryContextProvider>
+                                    <ManageDialogs/>
                                     <AdminMfaContextProvider>
                                       <AdminEmailNotificationContextProvider>
                                         <AdministrationWorkspace/>

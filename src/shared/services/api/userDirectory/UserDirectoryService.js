@@ -59,7 +59,7 @@ class UserDirectoryService {
   async delete() {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}`);
     const apiClient = new ApiClient(this.apiClientOptions);
-    return await apiClient.delete();
+    return apiClient.delete("settings");
   }
 
 
@@ -80,7 +80,7 @@ class UserDirectoryService {
   async simulate() {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}`);
     const apiClient = new ApiClient(this.apiClientOptions);
-    return apiClient.get("synchronize/dry-run");
+    return (await apiClient.get("synchronize/dry-run")).body;
   }
 
   /**
@@ -90,7 +90,7 @@ class UserDirectoryService {
   async synchronize() {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}/synchronize`);
     const apiClient = new ApiClient(this.apiClientOptions);
-    return apiClient.create({});
+    return (await apiClient.create({})).body;
   }
 
 

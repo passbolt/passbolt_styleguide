@@ -33,6 +33,7 @@ export function defaultAppContext(appContext = {}, userId = uuidv4()) {
         name: 'admin'
       }
     },
+    setContext: jest.fn(),
     baseUrl: "http://localhost:6006",
     getApiClientOptions: () => new ApiClientOptions()
       .setBaseUrl("http://localhost:6006")

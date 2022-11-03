@@ -32,13 +32,14 @@ export const AdminUserDirectoryContext = React.createContext({
   hasSettingsChanges: () => {}, // Check if the policy has changes
   findUserDirectorySettings: () => {}, // Find the current user directory settings and store it in the state
   save: () => {}, // Save settings
+  delete: () => {}, // Save the current settings
   test: () => {}, // Test settings method
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
   getErrors: () => {}, // Return current errors
   setError: () => {}, // Init errors object message
   simulateUsers: () => {}, // synchronize users directory request.
-  synchronizeSettings: () => {}, // simulate synchronize users directory
+  synchronizeUsers: () => {}, // simulate synchronize users directory
   isSubmitted: () => {}, // returns the value submitted
   setSubmitted: () => {}, // Set the submitted variab
   setErrors: () => {}, // Set errors to object object
@@ -81,8 +82,9 @@ export class AdminUserDirectoryContextProvider extends React.Component {
       setSubmitted: this.setSubmitted.bind(this), // Set the submitted variable
       setProcessing: this.setProcessing.bind(this), // Set the processing
       simulateUsers: this.simulateUsers.bind(this), // synchronize users directory request.
-      synchronizeSettings: this.synchronizeUsers.bind(this), // simulate synchronize users directory
+      synchronizeUsers: this.synchronizeUsers.bind(this), // simulate synchronize users directory
       save: this.save.bind(this), // Save the policy changes
+      delete: this.delete.bind(this), // Save the current settings
       test: this.test.bind(this), // test the settings for the user directory
       getErrors: this.getErrors.bind(this), // Return current errors
       setError: this.setError.bind(this), // Set an error to object object
@@ -114,7 +116,8 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     const usersResult = await this.userService.findAll();
 
     const userLogged = usersResult.body.find(user => this.props.context.loggedInUser.id === user.id);
-    const currentSettings = new UserDirectoryModel(result.body, userLogged.id);
+
+    const currentSettings = new UserDirectoryModel(result, userLogged.id);
     //Init users
     this.setState({users: this.sortUsers(usersResult.body)});
     //Init saved setting
@@ -225,6 +228,15 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the delete has been requested
+   */
+  async delete() {
+    this.setProcessing(true);
+    await this.userDirectoryService.delete();
+    await this.findUserDirectorySettings();
+  }
+
+  /**
    * Whenever the test has been requested
    */
   async test() {
@@ -239,14 +251,14 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * Whenever the simulate users has been requested
    */
   async simulateUsers() {
-    return await this.userDirectoryService.simulate();
+    return this.userDirectoryService.simulate();
   }
 
   /**
    * Whenever the synchronize users has been requested
    */
   async synchronizeUsers() {
-    return await this.userDirectoryService.synchronize();
+    return this.userDirectoryService.synchronize();
   }
 
   /**

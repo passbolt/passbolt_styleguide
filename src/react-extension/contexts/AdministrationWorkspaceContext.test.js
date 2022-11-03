@@ -112,11 +112,6 @@ describe("Administration Workspace Context", () => {
       expect(page.mustSaveSettings).toBeTruthy();
     });
 
-    it("As AD I should enabled must test settings", async() => {
-      await page.onMustTestSettings();
-      expect(page.mustTestSettings).toBeTruthy();
-    });
-
     it("As AD I should enabled must synchronize settings", async() => {
       await page.onMustSynchronizeSettings();
       expect(page.mustSynchronizeSettings).toBeTruthy();
@@ -134,19 +129,13 @@ describe("Administration Workspace Context", () => {
 
     it("As AD I should enabled reset all action settings", async() => {
       await page.onMustSaveSettings();
-      await page.onMustTestSettings();
-      await page.onMustSynchronizeSettings();
       await page.onMustEditSubscriptionKey();
       await page.onMustRefreshSubscriptionKey();
       expect(page.mustSaveSettings).toBeTruthy();
-      expect(page.mustTestSettings).toBeTruthy();
-      expect(page.mustSynchronizeSettings).toBeTruthy();
       expect(page.mustEditSubscriptionKey).toBeTruthy();
       expect(page.mustRefreshSubscriptionKey).toBeTruthy();
       await page.onResetActionsSettings();
       expect(page.mustSaveSettings).toBeFalsy();
-      expect(page.mustTestSettings).toBeFalsy();
-      expect(page.mustSynchronizeSettings).toBeFalsy();
       expect(page.mustEditSubscriptionKey).toBeFalsy();
       expect(page.mustRefreshSubscriptionKey).toBeFalsy();
     });

@@ -26,27 +26,19 @@ export const AdministrationWorkspaceContext = React.createContext({
   selectedAdministration: null, // The current menu administration selected
   can: {
     save: false, // If the button save settings is enable
-    test: false, // If the button test settings is enable
-    synchronize: false // If the button synchronize settings is enable
   },
   must: {
     save: false, // Must save settings
-    test: false, // Must test settings
-    synchronize: false, // Must synchronize settings
     editSubscriptionKey: false, // Must edit subscription key
     refreshSubscriptionKey: false // Must refresh the subscription key
   },
   administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
   setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
   resetDisplayAdministrationWorkspaceAction: () => {}, // Whenever the reset of the display workspace action is requested
-  onGetUsersDirectoryRequested: () => {}, // Whenever the user access to the users directory page
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
   onSaveLocaleRequested: () => {}, // Whenever the user access save the locale settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
-  onTestEnabled: () => {}, // Whenever a user change settings
-  onSynchronizeEnabled: () => {}, // Whenever a user have settings to be synchronized
-  onMustSynchronizeSettings: () => {}, // Whenever a user wants synchronized settings
   onMustEditSubscriptionKey: () => {}, // Whenever a user wants edit the susbcription key
   onMustRefreshSubscriptionKey: () => {}, // Whenever the susbcription key needs to be refreshed
   onResetActionsSettings: () => {}, // Reset states after a user do an action for the settings
@@ -73,28 +65,19 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration: AdministrationWorkspaceMenuTypes.NONE, // The current menu administration selected
       can: {
         save: false, // If the button save settings is enable
-        test: false, // If the button test settings is enable
-        synchronize: false // If the button synchronize settings is enable
       },
       must: {
         save: false, // Must save settings
-        test: false, // Must test settings
-        synchronize: false, // Must synchronize settings
         editSubscriptionKey: false, // Must edit subscription key
         refreshSubscriptionKey: false // Must refresh the susbcription key
       },
       administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
       setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
       resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
-      onGetMfaRequested: this.onGetMfaRequested.bind(this), // Whenever the user access to the Mfa page
-      onSaveMfaRequested: this.onSaveMfaRequested.bind(this), // Whenever the user wants save the Mfa page
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
       onSaveLocaleRequested: this.onSaveLocaleRequested.bind(this), // Whenever the user save the locale settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
-      onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
-      onSynchronizeEnabled: this.handleSynchronizeEnabled.bind(this), // Whenever a user have settings to be synchronized
-      onMustSynchronizeSettings: this.handleMustSynchronizeSettings.bind(this), // Whenever a user wants synchronized settings
       onMustEditSubscriptionKey: this.handleMustEditSubscriptionKey.bind(this), // Whenever a user wants edit the susbcription key
       onMustRefreshSubscriptionKey: this.handleMustRefreshSubscriptionKey.bind(this), // Whenever the susbcription key needs to be refreshed
       onResetActionsSettings: this.handleResetActionsSettings.bind(this), // Reset states after a user do an action for the settings
@@ -128,27 +111,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   async handleMustSaveSettings() {
     await this.setState({must: {...this.state.must, save: true}});
-  }
-
-  /**
-   * Handle test enabled
-   */
-  async handleTestEnabled(boolean) {
-    await this.setState({can: {...this.state.can, test: boolean}});
-  }
-
-  /**
-   * Handle synchronize enabled
-   */
-  async handleSynchronizeEnabled(boolean) {
-    await this.setState({can: {...this.state.can, synchronize: boolean}});
-  }
-
-  /**
-   * Handle must synchronize settings
-   */
-  async handleMustSynchronizeSettings() {
-    await this.setState({must: {...this.state.must, synchronize: true}});
   }
 
   /**
@@ -243,26 +205,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   resetDisplayAdministrationWorkspaceAction() {
     this.setState({administrationWorkspaceAction: DisplayAdministrationWorkspaceActions});
-  }
-
-  /**
-   * Whenever the mfa is requested.
-   * @return {Promise<object>}
-   */
-  async onGetMfaRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("mfa/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.findAll();
-  }
-
-  /**
-   * Whenever the save mfa is requested.
-   * @return {Promise<object>}
-   */
-  async onSaveMfaRequested(mfa) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("mfa/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(mfa);
   }
 
   /**

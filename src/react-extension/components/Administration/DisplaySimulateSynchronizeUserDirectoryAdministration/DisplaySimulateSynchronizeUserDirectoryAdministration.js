@@ -63,9 +63,8 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    */
   async componentDidMount() {
     try {
-      const result = await this.props.adminUserDirectory.simulateUsers();
-      const userDirectorySimulateSynchronizeResult = result.body;
-      this.setState({loading: false, userDirectorySimulateSynchronizeResult});
+      const result = await this.props.adminUserDirectoryContext.simulateUsers();
+      this.setState({loading: false, userDirectorySimulateSynchronizeResult: result});
     } catch (error) {
       await this.handleError(error);
     }
@@ -101,7 +100,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * Handle synchronize button click.
    */
   handleSynchronize() {
-    this.props.adminUserDirectory.synchronizeSettings();
+    this.props.adminUserDirectoryContext.synchronizeUsers();
     this.handleClose();
   }
 
@@ -353,7 +352,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
 DisplaySimulateSynchronizeUserDirectoryAdministration.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  adminUserDirectory: PropTypes.object, // The administration user directory context
+  adminUserDirectoryContext: PropTypes.object, // The administration user directory context
   t: PropTypes.func, // The translation function
 };
 
