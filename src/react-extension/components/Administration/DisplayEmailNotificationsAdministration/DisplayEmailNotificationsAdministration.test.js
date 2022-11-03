@@ -16,15 +16,18 @@
  * Unit tests on DisplayEmailNotificationsAdministration in regard of specifications
  */
 import {
-  defaultAppContext,
+  defaultEmailNotificationSettings,
   defaultProps,
-  mockResult
 } from "./DisplayEmailNotificationsAdministration.test.data";
 import DisplayEmailNotificationsAdministrationPage from "./DisplayEmailNotificationsAdministration.test.page";
 import {waitFor} from "@testing-library/react";
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import {enableFetchMocks} from "jest-fetch-mock";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
 beforeEach(() => {
+  enableFetchMocks();
   jest.resetModules();
 });
 
@@ -32,12 +35,13 @@ describe("See the Email Notifications Settings", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-
+  const settings = defaultEmailNotificationSettings();
   describe('As AD I should see the Email Notifications on the administration settings page', () => {
     /**
      * I should see the Email Notifications provider activation state on the administration settings page
      */
     beforeEach(() => {
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
     });
 
@@ -68,121 +72,55 @@ describe("See the Email Notifications Settings", () => {
       expect(page.showComment.checked).toBeTruthy();
     });
 
-    it('As AD I should save email notifications on the administration settings page', async() => {
-      await waitFor(() => {});
-      await page.checkCommentAdd();
-      expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn(),
-          onSaveEmailNotificationsRequested: jest.fn()
-        }
-      };
+    it('As AD I should save email notifications on the administration settings page and see a confirmation message', async() => {
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      //Call to save the settings
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse({}));
+      //Call to API to retrieve the settings
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-
-      page.rerender(context, propsUpdated);
-      await waitFor(() => {});
-      expect(propsUpdated.administrationWorkspaceContext.onSaveEmailNotificationsRequested).toHaveBeenCalledWith(mockResult);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
-      expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
-    });
-
-    it('As AD I should see a processing feedback while submitting the form', async() => {
-      await waitFor(() => {});
       await page.checkCommentAdd();
+      await page.saveSettings();
 
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn(),
-          onSaveEmailNotificationsRequested: jest.fn()
-        }
-      };
-      // Mock the request function to make it the expected result
-      let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
-      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveEmailNotificationsRequested').mockImplementation(requestMockImpl);
+      await waitFor(() => {});
 
-      page.rerender(context, propsUpdated);
-      // API calls are made on submit, wait they are resolved.
-      await waitFor(() => {
-        expect(page.passwordCreate.getAttribute("disabled")).not.toBeNull();
-        expect(page.passwordUpdate.getAttribute("disabled")).not.toBeNull();
-        expect(page.passwordDelete.getAttribute("disabled")).not.toBeNull();
-        expect(page.passwordShare.getAttribute("disabled")).not.toBeNull();
-        expect(page.folderCreate.getAttribute("disabled")).not.toBeNull();
-        expect(page.folderUpdate.getAttribute("disabled")).not.toBeNull();
-        expect(page.folderDelete.getAttribute("disabled")).not.toBeNull();
-        expect(page.folderShare.getAttribute("disabled")).not.toBeNull();
-        expect(page.commentAdd.getAttribute("disabled")).not.toBeNull();
-        expect(page.groupDelete.getAttribute("disabled")).not.toBeNull();
-        expect(page.groupUserAdd.getAttribute("disabled")).not.toBeNull();
-        expect(page.groupUserDelete.getAttribute("disabled")).not.toBeNull();
-        expect(page.groupUserUpdate.getAttribute("disabled")).not.toBeNull();
-        expect(page.groupManagerUpdate.getAttribute("disabled")).not.toBeNull();
-        expect(page.userCreate.getAttribute("disabled")).not.toBeNull();
-        expect(page.userRecover.getAttribute("disabled")).not.toBeNull();
-        expect(page.showUsername.getAttribute("disabled")).not.toBeNull();
-        expect(page.showUri.getAttribute("disabled")).not.toBeNull();
-        expect(page.showSecret.getAttribute("disabled")).not.toBeNull();
-        expect(page.showDescription.getAttribute("disabled")).not.toBeNull();
-        expect(page.showComment.getAttribute("disabled")).not.toBeNull();
-        updateResolve();
-      });
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
+      // We expect the button to be disable
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
     it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
-      await waitFor(() => {});
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkCommentAdd();
-
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn(),
-          onSaveEmailNotificationsRequested: jest.fn()
-        }
-      };
 
       // Mock the request function to make it return an error.
       const error = {message: "The service is unavailable"};
-      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveEmailNotificationsRequested').mockImplementation(() => Promise.reject(error));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 
-      page.rerender(context, propsUpdated);
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => Promise.reject(error));
+
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      await page.saveSettings();
+
       await waitFor(() => {});
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
-  });
 
-  describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
-    const context = defaultAppContext(); // The applicative context
-    /**
-     * Given the email notifications setting
-     * And the email notifications setting are not loaded yet
-     */
+    it('As AD I should not be able to click on save if there is no change', async() => {
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      await page.checkCommentAdd();
+      //We set the value by default
+      await page.checkCommentAdd();
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+    });
+
     it('I should see all fields disabled”', () => {
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
       expect(page.passwordCreate.getAttribute("disabled")).not.toBeNull();
       expect(page.passwordUpdate.getAttribute("disabled")).not.toBeNull();

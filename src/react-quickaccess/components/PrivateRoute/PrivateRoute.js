@@ -20,7 +20,7 @@ class PrivateRoute extends Component {
             {!this.props.context.isAuthenticated &&
               <Redirect
                 to={{
-                  pathname: "/data/quickaccess/login",
+                  pathname: "/webAccessibleResources/quickaccess/login",
                   search: props.location.search,
                   state: {from: props.location}
                 }}

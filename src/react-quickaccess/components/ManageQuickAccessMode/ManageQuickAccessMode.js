@@ -53,10 +53,10 @@ class ManageQuickAccessMode extends Component {
     switch (this.queryParameters.get("feature")) {
       case "create-new-credentials":
       case "save-credentials":
-        this.props.history.push({pathname: "/data/quickaccess/resources/create"});
+        this.props.history.push({pathname: "/webAccessibleResources/quickaccess/resources/create"});
         break;
       case "autosave-credentials":
-        this.props.history.push({pathname: "/data/quickaccess/resources/autosave"});
+        this.props.history.push({pathname: "/webAccessibleResources/quickaccess/resources/autosave"});
         break;
       default:
         break;

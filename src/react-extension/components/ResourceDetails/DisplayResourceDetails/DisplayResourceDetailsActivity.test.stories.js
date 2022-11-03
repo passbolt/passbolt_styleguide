@@ -34,7 +34,7 @@ const context = {
 };
 
 const Template = args =>
-  <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+  <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
     <AppContext.Provider value={context}>
       <MemoryRouter initialEntries={['/']}>
         <div className="panel aside">

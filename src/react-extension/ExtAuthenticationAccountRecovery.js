@@ -144,7 +144,7 @@ class ExtAuthenticationAccountRecovery extends Component {
     return (
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
-        <TranslationProvider loadingPath="/data/locales/{{lng}}/{{ns}}.json">
+        <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
           <AuthenticationAccountRecoveryContextProvider>
             <div id="container" className="container page login">
               <div className="content">

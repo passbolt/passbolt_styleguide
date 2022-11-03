@@ -3,8 +3,9 @@ import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import HomePage from "./HomePage";
 import AppContext from "../../contexts/AppContext";
-import {defaultAppContext, mockNoResource, mockResources} from "./HomePage.test.data";
-
+import {
+  loadingProps, noResourcesProps, searchNoResultProps, searchWithResultProps, suggestedResourcesProps
+} from "./HomePage.test.data";
 
 export default {
   title: 'Components/QuickAccess/Home',
@@ -27,73 +28,21 @@ const parameters = {
 };
 
 export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext()
-};
+Initial.args = loadingProps();
 Initial.parameters = parameters;
 
-const contextNoResource = {
-  storage: {
-    onChanged: {
-      addListener: () => {}
-    },
-    local: {
-      get: () => mockNoResource
-    }
-  },
-};
 export const NoResource = Template.bind({});
-NoResource.args = {
-  context: defaultAppContext(contextNoResource)
-};
+NoResource.args = noResourcesProps();
 NoResource.parameters = parameters;
 
-const contextSearchNotFoundResource = {
-  storage: {
-    onChanged: {
-      addListener: () => {}
-    },
-    local: {
-      get: () => mockNoResource
-    }
-  },
-  search: "apache",
-};
 export const NoFoundResource = Template.bind({});
-NoFoundResource.args = {
-  context: defaultAppContext(contextSearchNotFoundResource)
-};
+NoFoundResource.args = searchNoResultProps();
 NoFoundResource.parameters = parameters;
 
-const contextSearchResources = {
-  storage: {
-    onChanged: {
-      addListener: () => {}
-    },
-    local: {
-      get: () => mockResources
-    }
-  },
-  search: "apache",
-};
 export const SearchResources = Template.bind({});
-SearchResources.args = {
-  context: defaultAppContext(contextSearchResources)
-};
+SearchResources.args = searchWithResultProps();
 SearchResources.parameters = parameters;
 
-const contextResources = {
-  storage: {
-    onChanged: {
-      addListener: () => {}
-    },
-    local: {
-      get: () => mockResources
-    }
-  }
-};
 export const SuggestedResources = Template.bind({});
-SuggestedResources.args = {
-  context: defaultAppContext(contextResources)
-};
+SuggestedResources.args = suggestedResourcesProps();
 SuggestedResources.parameters = parameters;

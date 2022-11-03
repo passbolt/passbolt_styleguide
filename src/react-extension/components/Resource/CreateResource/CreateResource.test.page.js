@@ -165,6 +165,13 @@ class PasswordCreatePageObject {
   }
 
   /**
+   * Returns the password warning mesage input element
+   */
+  get passwordWarningMessage() {
+    return this._container.querySelector('.password.warning-message');
+  }
+
+  /**
    * Returns the complexity text input element
    */
   get complexityText() {
@@ -184,6 +191,13 @@ class PasswordCreatePageObject {
    */
   get descriptionEncryptedLock() {
     return this._container.querySelector('.lock-toggle');
+  }
+
+  /**
+   * Returns the description warning mesage input element
+   */
+  get descriptionWarningMessage() {
+    return this._container.querySelector('.description.warning-message');
   }
 
   /**
@@ -278,6 +292,11 @@ class PasswordCreatePageObject {
   /** focus the input element with data */
   focusInput(element)  {
     fireEvent.focus(element);
+  }
+
+  /** on keypup element */
+  keyUpInput(component)  {
+    fireEvent.keyUp(component, {keyCode: 38});
   }
 
   /** blur the input element with data */

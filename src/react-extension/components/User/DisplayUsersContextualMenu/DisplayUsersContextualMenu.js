@@ -93,7 +93,7 @@ class DisplayUsersContextualMenu extends React.Component {
   async handlePermalinkCopy() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
-    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
+    await navigator.clipboard.writeText(permalink);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
@@ -103,7 +103,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handleUsernameCopy() {
     const username = `${this.user.username}`;
-    await this.props.context.port.request("passbolt.clipboard.copy", username);
+    await navigator.clipboard.writeText(username);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The email has been copied to clipboard"));
     this.props.hide();
   }
@@ -113,7 +113,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handlePublicKeyCopy() {
     const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    await this.props.context.port.request("passbolt.clipboard.copy", gpgkeyInfo.armored_key);
+    await navigator.clipboard.writeText(gpgkeyInfo.armored_key);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
     this.props.hide();
   }

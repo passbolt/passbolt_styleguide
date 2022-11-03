@@ -787,7 +787,7 @@
   "This is not a valid integration key.": "This is not a valid integration key.",
   "This is not a valid passphrase.": "This is not a valid passphrase.",
   "This is not a valid secret key.": "This is not a valid secret key.",
-  "this is the maximum size for this field, make sure your data was not truncated": "",
+  "this is the maximum size for this field, make sure your data was not truncated": "this is the maximum size for this field, make sure your data was not truncated.",
   "This passphrase is the only passphrase you will need to remember from now on, choose wisely!": "This passphrase is the only passphrase you will need to remember from now on, choose wisely!",
   "This secret key is not valid.": "This secret key is not valid.",
   "This security token will be displayed when your passphrase is requested, so you can quickly verify the form is coming from passbolt.": "This security token will be displayed when your passphrase is requested, so you can quickly verify the form is coming from passbolt.",

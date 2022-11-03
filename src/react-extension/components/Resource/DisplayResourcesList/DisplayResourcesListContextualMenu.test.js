@@ -27,6 +27,12 @@ import DisplayResourcesListContextualMenuPage from "./DisplayResourcesListContex
 
 beforeEach(() => {
   jest.resetModules();
+  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
+  const mockClipboard = {
+    writeText: jest.fn(data => clipboardData = data),
+    readText: jest.fn(() => document.activeElement.value = clipboardData),
+  };
+  global.navigator.clipboard = mockClipboard;
 });
 
 describe("As LU I should see each menu", () => {
@@ -57,34 +63,35 @@ describe("As LU I should see each menu", () => {
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
+      expect.assertions(3);
       await page.copyUsername();
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', props.resource.username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
 
     it('As LU I can start to copy the password of a resource', async() => {
+      expect.assertions(4);
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
       await page.copyPassword();
       expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id, {showProgress: true});
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', 'secret-copy');
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
 
     it('As LU I can start to copy the uri of a resource', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
+      expect.assertions(3);
       await page.copyUri();
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy', props.resource.uri);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.uri);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
 
     it('As LU I can start to copy the permalink of a resource', async() => {
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {});
+      expect.assertions(3);
       await page.copyPermalink();
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.clipboard.copy',  `${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resource.id}`);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });

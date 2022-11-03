@@ -16,7 +16,6 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
 import InsertAppIframe from "./components/InsertAppIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
-import InsertClipboardIframe from "./components/InsertClipboardIframe";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import HandleLegacyAppjs from "./components/Common/Legacy/HandleLegacyAppjs";
 import HandleExtAppBootstrapRouteChangeRequested from "./components/Common/Route/HandleExtAppBootstrapRouteChangeRequested";
@@ -163,7 +162,6 @@ class ExtBootstrapApp extends Component {
               <CleanupLegacyAppjs/>
               }
               <InsertAppIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
-              <InsertClipboardIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
               <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
             </Route>
           </Switch>

@@ -125,7 +125,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Handle when the user select the username of the resource
    */
   async handleUsernameClickEvent() {
-    await this.props.context.port.request("passbolt.clipboard.copy", this.resource.username);
+    await navigator.clipboard.writeText(this.resource.username);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -211,7 +211,7 @@ class DisplayResourceDetailsInformation extends React.Component {
         return;
       }
     }
-    await this.props.context.port.request("passbolt.clipboard.copy", password);
+    await navigator.clipboard.writeText(password);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }

@@ -1,5 +1,6 @@
 .idea
 .DS_Store
+.vscode
 node_modules
 npm-debug.log
 bower_components
@@ -15,3 +16,4 @@ src/less/abstractions/colors_custom.less
 # CI                 #
 ######################
 junit.xml
+.gitlab-ci-local

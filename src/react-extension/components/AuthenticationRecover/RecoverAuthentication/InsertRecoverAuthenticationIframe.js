@@ -33,7 +33,7 @@ class InsertRecoverAuthenticationIframe extends Component {
    * @returns {void}
    */
   loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}data/passbolt-iframe-recover.html?passbolt=passbolt-iframe-recover`;
+    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-recover.html?passbolt=passbolt-iframe-recover`;
     this.iframeRef.current.contentWindow.location = iframeUrl;
   }
 

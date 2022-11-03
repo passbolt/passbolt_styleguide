@@ -19,7 +19,7 @@
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {fireEvent, waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {defaultAppContext, defaultProps, mockGroup} from "./DeleteUserGroupWithConflicts.test.data";
+import {defaultAppContext, defaultProps, mockGroup} from "./DeleteUserGroup.test.data";
 import DeleteUserGroupPage from "./DeleteUserGroup.test.page";
 
 beforeEach(() => {
@@ -30,9 +30,7 @@ describe("See Delete Group Dialog", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-  const deleteGroupDialogProps = {
-    group: mockGroup
-  };
+  const group = mockGroup();
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
@@ -45,7 +43,9 @@ describe("See Delete Group Dialog", () => {
      */
 
     beforeEach(() => {
-      context.setContext({deleteGroupDialogProps});
+      context.setContext({deleteGroupDialogProps: {
+        group
+      }});
       page = new DeleteUserGroupPage(context, props);
     });
 
@@ -63,7 +63,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteGroupDialog.cancelButton.textContent).toBe('Cancel');
       // user name
-      expect(page.displayDeleteGroupDialog.groupName.textContent).toBe(`${mockGroup.name}`);
+      expect(page.displayDeleteGroupDialog.groupName.textContent).toBe(`${group.name}`);
     });
 
     it('As AD I should see a toaster message after deleting a group', async() => {
@@ -75,7 +75,7 @@ describe("See Delete Group Dialog", () => {
       });
 
       await page.displayDeleteGroupDialog.click(submitButton);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.delete", mockGroup.id);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.groups.delete", group.id);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -132,6 +132,10 @@ describe("See Delete Group Dialog", () => {
       // Throw general error message
       expect(page.displayDeleteGroupDialog.errorDialog).not.toBeNull();
       expect(page.displayDeleteGroupDialog.errorDialogMessage).not.toBeNull();
+    });
+
+    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+      expect(page.displayDeleteGroupDialog.tagName.classList.contains("dialog-variable")).toBeTruthy();
     });
   });
 });

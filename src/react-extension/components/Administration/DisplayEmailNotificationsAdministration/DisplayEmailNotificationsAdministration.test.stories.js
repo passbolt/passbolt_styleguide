@@ -9,96 +9,70 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.6.0
+ * @since         3.8.0
  */
 
-import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
-import PropTypes from "prop-types";
 import DisplayEmailNotificationsAdministration from "./DisplayEmailNotificationsAdministration";
+import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import MockFetch from "../../../test/mock/MockFetch";
+import {defaultEmailNotificationSettings, defaultProps, defaultPropsCE, withFileSourceSettings, withoutDatabaseSourceSettings} from "./DisplayEmailNotificationsAdministration.test.data";
+import {AdminEmailNotificationContextProvider} from "../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 
 export default {
   title: 'Components/Administration/DisplayEmailNotificationsAdministration',
   component: DisplayEmailNotificationsAdministration
 };
 
-const Template = ({context, ...args}) =>
-  <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <div className="panel middle">
-        <div className="grid grid-responsive-12">
-          <Route component={routerProps => <DisplayEmailNotificationsAdministration {...args} {...routerProps}/>}></Route>
-        </div>
-      </div>
-    </MemoryRouter>
-  </AppContext.Provider>;
-
-Template.propTypes = {
-  context: PropTypes.object,
-};
-
-const administrationWorkspaceContext = {
-  onGetEmailNotificationsRequested: () => ({
-    body: {
-      sources_database: true,
-      sources_file: true,
-      send_password_create: true,
-      send_password_share: true,
-      send_password_update: true,
-      send_password_delete: true,
-      send_folder_create: true,
-      send_folder_update: true,
-      send_folder_delete: true,
-      send_folder_share: true,
-      send_comment_add: true,
-      send_group_delete: true,
-      send_group_user_add: true,
-      send_group_user_delete: true,
-      send_group_user_update: true,
-      send_group_manager_update: true,
-      send_user_create: true,
-      send_user_recover: true,
-      send_admin_user_recover_complete: true,
-      send_admin_user_setup_completed: true,
-      show_description: true,
-      show_secret: true,
-      show_uri: true,
-      show_username: true,
-      show_comment: true,
-      send_account_recovery_impossible_admin: true,
-      send_account_recovery_initiated: true,
-      send_account_recovery_processed: true,
-      send_account_recovery_policy_changed: true,
-      send_account_recovery_impossible_user: true,
-      send_account_recovery_approved: true,
-      send_account_recovery_rejected: true,
+let currentStory = null;
+const mockFetch = new MockFetch();
+mockFetch.addGetFetchRequest(/settings\/emails\/notifications\.json/, async() => {
+  switch (currentStory) {
+    case 'components-administration-displayemailnotificationsadministration--all-notifications':
+    case 'components-administration-displayemailnotificationsadministration--all-notifications-for-ce': {
+      return mockApiResponse(defaultEmailNotificationSettings());
     }
-  }),
-  must: {
-    save: true
-  },
-  can: {
-    save: true
+    case 'components-administration-displayemailnotificationsadministration--both-sources-exist': {
+      return mockApiResponse(withFileSourceSettings());
+    }
+    case 'components-administration-displayemailnotificationsadministration--only-file-setting-exist': {
+      return mockApiResponse(withoutDatabaseSourceSettings());
+    }
   }
-};
+  throw new Error("Unsupported story");
+});
+
+const decorators = [
+  (Story, context) => {
+    currentStory = context.id;
+    return <>
+      <Story/>
+    </>;
+  }
+];
+
+const Template = args =>
+  <AdminEmailNotificationContextProvider {...args}>
+    <div className="panel middle">
+      <div className="grid grid-responsive-12">
+        <DisplayEmailNotificationsAdministration {...args}/>
+      </div>
+    </div>
+  </AdminEmailNotificationContextProvider>;
+
 
 export const AllNotifications = Template.bind({});
-AllNotifications.args = {
-  context: {
-    siteSettings: {
-      canIUse: () => true
-    }
-  },
-  administrationWorkspaceContext: administrationWorkspaceContext
-};
+AllNotifications.args = defaultProps();
+AllNotifications.decorators = decorators;
+
+export const BothSourcesExist = Template.bind({});
+BothSourcesExist.args = defaultProps();
+BothSourcesExist.decorators = decorators;
+
+export const OnlyFileSettingExist = Template.bind({});
+OnlyFileSettingExist.args = defaultProps();
+OnlyFileSettingExist.decorators = decorators;
 
 export const AllNotificationsForCE = Template.bind({});
-AllNotificationsForCE.args = {
-  context: {
-    siteSettings: {
-      canIUse: () => false
-    }
-  },
-  administrationWorkspaceContext: administrationWorkspaceContext
-};
+AllNotificationsForCE.args = defaultPropsCE();
+AllNotificationsForCE.decorators = decorators;

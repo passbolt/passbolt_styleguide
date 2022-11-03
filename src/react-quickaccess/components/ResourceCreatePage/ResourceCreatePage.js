@@ -231,7 +231,7 @@ class ResourceCreatePage extends React.Component {
       const goToComponentState = {
         goBackEntriesCount: -2
       };
-      this.props.history.push(`/data/quickaccess/resources/view/${resource.id}`, goToComponentState);
+      this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resource.id}`, goToComponentState);
     } catch (error) {
       this.handleSubmitError(error);
     }
@@ -303,7 +303,7 @@ class ResourceCreatePage extends React.Component {
       password: this.state.password
     };
     this.props.prepareResourceContext.onPrepareResource(resource);
-    this.props.history.push('/data/quickaccess/resources/generate-password');
+    this.props.history.push('/webAccessibleResources/quickaccess/resources/generate-password');
   }
 
   loadPassword(password) {
@@ -327,7 +327,7 @@ class ResourceCreatePage extends React.Component {
             <Icon name="chevron-left"/>
             <span className="primary-action-title"><Trans>Create password</Trans></span>
           </a>
-          <Link to="/data/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+          <Link to="/webAccessibleResources/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
             <Icon name="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>

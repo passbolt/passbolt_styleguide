@@ -3,21 +3,12 @@ import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteResourceTag from "./DeleteResourceTag";
-import MockPort from "../../../test/mock/MockPort";
+import {defaultAppContext, tagToDelete} from "./DeleteResourceTag.test.data";
 
 
 export default {
   title: 'Components/ResourceTag/DeleteResourceTag',
   component: DeleteResourceTag
-};
-
-const defaultContext = {
-  tagToDelete: {
-    id: 1,
-    slug: "apache"
-  },
-  port: new MockPort(),
-  setContext: () => {}
 };
 
 
@@ -35,7 +26,16 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: defaultContext
+  context: defaultAppContext({
+    tagToDelete: tagToDelete("apache")
+  })
+};
+
+export const WithLongTagName = Template.bind({});
+WithLongTagName.args = {
+  context: defaultAppContext({
+    tagToDelete: tagToDelete("tagname".repeat(10))
+  })
 };
 
 Initial.argTypes = {

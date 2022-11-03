@@ -369,7 +369,7 @@ class DeleteUserGroupWithConflicts extends Component {
           <div className="form-content intro">
             <p>
               <Trans>
-                You are about to delete the group <strong>{{groupName: this.groupToDelete.name}}</strong>.
+                You are about to delete the group <strong className="dialog-variable">{{groupName: this.groupToDelete.name}}</strong>.
               </Trans>
             </p>
             <p><Trans>This group is the sole owner of some content. You need to transfer the ownership to others to continue.</Trans></p>

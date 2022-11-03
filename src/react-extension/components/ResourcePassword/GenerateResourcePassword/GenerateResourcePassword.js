@@ -142,7 +142,7 @@ class GenerateResourcePassword extends Component {
    * Whenever one wants to copy the password
    */
   async handleCopyPassword() {
-    await this.props.context.port.request("passbolt.clipboard.copy", this.state.password);
+    await navigator.clipboard.writeText(this.state.password);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been copied to clipboard"));
   }
 

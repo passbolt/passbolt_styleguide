@@ -165,7 +165,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleCloseMoreMenu();
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
-    await this.props.context.port.request("passbolt.clipboard.copy", permalink);
+    await navigator.clipboard.writeText(permalink);
     this.displaySuccessNotification(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -174,7 +174,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
-    await this.props.context.port.request("passbolt.clipboard.copy", this.selectedResources[0].username);
+    await navigator.clipboard.writeText(this.selectedResources[0].username);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -190,10 +190,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
-      await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto);
+      await navigator.clipboard.writeText(plaintextDto);
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await this.props.context.port.request("passbolt.clipboard.copy", plaintextDto.password);
+        await navigator.clipboard.writeText(plaintextDto.password);
       } else {
         throw new TypeError(this.translate("The password field is not defined."));
       }

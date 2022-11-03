@@ -102,9 +102,9 @@ class DomUtils {
       return fields[0];
     } else {
       let parent = callToActionClickedField;
-      let field = null;
+      let field;
       // We loop to find the field with the lowest common ancestors
-      while (parent && field === null) {
+      while (parent && !field) {
         parent = parent.offsetParent || parent.parentElement;
         field = fields.find(callToActionField => parent.contains(callToActionField.field));
       }

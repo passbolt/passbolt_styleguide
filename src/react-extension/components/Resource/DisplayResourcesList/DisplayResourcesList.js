@@ -222,7 +222,7 @@ class DisplayResourcesList extends React.Component {
     // Avoid the grid to select the resource while copying a resource username.
     ev.stopPropagation();
 
-    await this.props.context.port.request("passbolt.clipboard.copy", resource.username);
+    await navigator.clipboard.writeText(resource.username);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
   }
 
@@ -288,7 +288,7 @@ class DisplayResourcesList extends React.Component {
         return;
       }
     }
-    await this.props.context.port.request("passbolt.clipboard.copy", password);
+    await navigator.clipboard.writeText(password);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }

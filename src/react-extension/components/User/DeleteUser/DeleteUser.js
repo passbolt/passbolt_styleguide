@@ -137,7 +137,7 @@ class DeleteUser extends Component {
           <div className="form-content">
             <p>
               <Trans>
-                Are you sure you want to delete <strong>{{user: this.getUser()}}</strong>?
+                Are you sure you want to delete <strong className="dialog-variable">{{user: this.getUser()}}</strong>?
               </Trans>
             </p>
             <p><Trans>This action can’t be undone. All the data associated with this user will be permanently deleted.</Trans></p>

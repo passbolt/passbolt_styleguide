@@ -179,7 +179,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   async handlePublicKeyCopy() {
     const armoredKey = this.state.gpgkeyInfo.armoredKey;
-    await this.props.context.port.request("passbolt.clipboard.copy", armoredKey);
+    await navigator.clipboard.writeText(armoredKey);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
   }
 
