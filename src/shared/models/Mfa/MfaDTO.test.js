@@ -1,8 +1,5 @@
 /**
- *import { AdminMfaContext } from '../../../../react-extension/contexts/Administration/AdministrationMfa/AdministrationMfaContext';
- *import Yubikey from './Yubikey';
- *Pimport Yubikey from './Yubikey';
- *assbolt ~ Open source password manager for teams
+ * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
