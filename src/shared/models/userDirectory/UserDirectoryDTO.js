@@ -36,9 +36,9 @@ class UserDirectoryDTO {
     this.user_path = userDirectoryModel.userPath;
     this.group_object_class = this.directory_type === "openldap" ? userDirectoryModel.groupObjectClass : "";
     this.user_object_class = this.directory_type === "openldap"  ? userDirectoryModel.userObjectClass : "";
-    this.useEmailPrefix = this.directory_type === "openldap" ? userDirectoryModel.useEmailPrefix : false;
-    this.emailPrefix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailPrefix : "";
-    this.emailSuffix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailSuffix : "";
+    this.use_email_prefix_suffix = this.directory_type === "openldap" ? userDirectoryModel.useEmailPrefix : false;
+    this.email_prefix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailPrefix : "";
+    this.email_suffix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailSuffix : "";
     // SYNCHRONIZATION OPTIONS
     this.default_user = userDirectoryModel.defaultAdmin;
     this.default_group_admin_user = userDirectoryModel.defaultGroupAdmin;

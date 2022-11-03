@@ -19,11 +19,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import DisplaySimulateSynchronizeUserDirectoryAdministration
-  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 import {withDialog} from "../../../contexts/DialogContext";
-import DisplaySynchronizeUserDirectoryAdministration
-  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 import {Trans, withTranslation} from "react-i18next";
 
 /**

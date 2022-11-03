@@ -39,6 +39,8 @@ export const AdminUserDirectoryContext = React.createContext({
   getErrors: () => {}, // Return current errors
   setError: () => {}, // Init errors object message
   simulateUsers: () => {}, // synchronize users directory request.
+  requestSynchronization: () => {}, // request a synchronization,
+  mustOpenSynchronizePopUp: () => {}, // return the mustSynchronize value
   synchronizeUsers: () => {}, // simulate synchronize users directory
   isSubmitted: () => {}, // returns the value submitted
   setSubmitted: () => {}, // Set the submitted variab
@@ -68,6 +70,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     return {
       users: [], //The users from server
       errors: this.initErrors(),
+      mustSynchronize: false, // request a synchronization with a popup
       currentSettings: null, // The current settings
       settings: new UserDirectoryModel(), // Change done to the settings object
       submitted: false, // The informations about the form state
@@ -90,6 +93,8 @@ export class AdminUserDirectoryContextProvider extends React.Component {
       setError: this.setError.bind(this), // Set an error to object object
       setErrors: this.setErrors.bind(this), // Set errors to object object
       getUsers: this.getUsers.bind(this), // return the users object
+      requestSynchronization: this.requestSynchronization.bind(this), // request a synchronization,
+      mustOpenSynchronizePopUp: this.mustOpenSynchronizePopUp.bind(this), // return the mustSynchronize value
       clearContext: this.clearContext.bind(this), // put the data to its default state value
     };
   }
@@ -153,6 +158,22 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   getSettings() {
     return this.state.settings;
+  }
+
+  /**
+   * Request to open the synchronization popup
+   * @returns {object}
+   */
+  requestSynchronization(result) {
+    this.setState({mustSynchronize: result});
+  }
+
+  /**
+   * Return the mustSynchronize value
+   * @returns {object}
+   */
+  mustOpenSynchronizePopUp() {
+    return this.state.mustSynchronize;
   }
 
   /**

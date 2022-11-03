@@ -57,6 +57,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.userDirectoryFormService = null;
   }
 
+
   /**
    * Bind callbacks methods
    */
@@ -277,7 +278,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     </div>
                     <div className="port ad openldap">
                       <input id="port-input" type="number" className="required in-field form-element" name="port"
-                        value={settings.port}onChange={this.handleInputChange} placeholder={this.props.t("port")}
+                        value={settings.port}onChange={this.handleInputChange}
                         disabled={this.hasAllInputDisabled()}/>
                     </div>
                   </div>

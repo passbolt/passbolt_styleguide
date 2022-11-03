@@ -79,6 +79,23 @@ export default class DisplayUserDirectoryAdministrationPage {
   }
 
   /**
+   * Returns the HTMLElement button of the toolbar that is the "Simulate Settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsSimulateButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[2];
+  }
+
+
+  /**
+   * Returns the HTMLElement button of the toolbar that is the "Synchronize Settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsSynchronizeButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[3];
+  }
+
+  /**
    * Returns the synchronization options title element
    */
   get synchronizationOptionsTitle() {
@@ -326,6 +343,22 @@ export default class DisplayUserDirectoryAdministrationPage {
   }
 
   /**
+   * Returns true if the synchronize button in the toolbar is enabled.
+   * @returns {boolean}
+   */
+  isSynchronizeButtonEnabled() {
+    return !this.toolbarActionsSynchronizeButton.className.toString().includes("disabled");
+  }
+
+  /**
+   * Returns true if the simulate button in the toolbar is enabled.
+   * @returns {boolean}
+   */
+  isSimulateButtonEnabled() {
+    return !this.toolbarActionsSimulateButton.className.toString().includes("disabled");
+  }
+
+  /**
    * Simulates a click on the "Save settings" button.
    * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
    * @returns {Promise<void>}
@@ -341,6 +374,24 @@ export default class DisplayUserDirectoryAdministrationPage {
    */
   async testSettings() {
     await this.click(this.toolbarActionsTestButton);
+  }
+
+  /**
+   * Simulates a click on the "Simutate settings" button.
+   * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
+   * @returns {Promise<void>}
+   */
+  async simulateSettings() {
+    await this.click(this.toolbarActionsSimulateButton);
+  }
+
+  /**
+   * Simulates a click on the "Synchronize settings" button.
+   * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
+   * @returns {Promise<void>}
+   */
+  async synchronizeSettings() {
+    await this.click(this.toolbarActionsSynchronizeButton);
   }
 
 

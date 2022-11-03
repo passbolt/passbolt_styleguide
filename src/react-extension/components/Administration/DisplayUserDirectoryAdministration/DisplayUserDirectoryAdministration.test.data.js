@@ -23,7 +23,10 @@ export function defaultProps(data = {}, userId) {
   return Object.assign(defaultProps, data);
 }
 
-
+/**
+ * mock for settings object from API.
+ * @returns {object}
+ */
 export const mockResult = {
   "base_dn": "DC=passbolt,DC=local",
   "connection_type": "plain",
@@ -53,38 +56,73 @@ export const mockResult = {
   "users_parent_group": undefined,
 };
 
-export const mockUserDirectorySettings = {
-  "header": {
-    "id": "3d385c64-e47d-4051-b87a-95a45d8ab6d9",
-    "status": "success",
-    "servertime": 1604585526,
-    "title": "app__view_success",
-    "action": "9f7e766d-a30e-50d5-b16d-5cdc474fd1e8",
-    "message": "The operation was successful.",
-    "url": "\/directorysync\/settings.json?api-version=v2",
-    "code": 200
-  },
-  "body": {
-    "source": "db",
-    "directory_type": "ad",
-    "domain_name": "passbolt.local",
-    "username": "username",
-    "password": "password",
-    "base_dn": "DC=passbolt,DC=local",
-    "server": "127.0.0.1",
-    "port": 389,
-    "default_user": "8b262b2c-2e79-4b48-bf8c-eb3ca5a7eb79",
-    "default_group_admin_user": "8b262b2c-2e79-4b48-bf8c-eb3ca5a7eb79",
-    "enabled_users_only": false,
-    "sync_users_create": true,
-    "sync_users_delete": true,
-    "sync_groups_create": true,
-    "sync_groups_delete": true,
-    "sync_groups_update": true,
-    "connection_type": "plain"
-  }
+/**
+ * mock for errors object.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export function mockErrors(data = {}) {
+  return {
+    ...{
+      "hostError": "A host is required.",
+      "portError": "An port is required.",
+      "domainError": "A domain is required.",
+    },
+    ...data
+  };
+}
+
+/**
+ * mock for model object.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export const mockModel = {
+  openCredentials: true,
+  openDirectoryConfiguration: false,
+  openSynchronizationOptions: false,
+  userDirectoryToggle: true,
+  directoryType: 'ad',
+  connectionType: 'plain',
+  host: '127.0.0.1',
+  hostError: null,
+  port: '389',
+  portError: null,
+  username: 'username',
+  password: 'password',
+  domain: 'passbolt.local',
+  domainError: null,
+  baseDn: 'DC=passbolt,DC=local',
+  groupPath: undefined,
+  userPath: undefined,
+  groupObjectClass: '',
+  userObjectClass: '',
+  useEmailPrefix: false,
+  emailPrefix: '',
+  emailSuffix: '',
+  defaultAdmin: 'd57c10f5-639d-5160-9c81-8a0c6c4ec856',
+  defaultGroupAdmin: 'd57c10f5-639d-5160-9c81-8a0c6c4ec856',
+  groupsParentGroup: undefined,
+  usersParentGroup: undefined,
+  enabledUsersOnly: false,
+  createUsers: true,
+  deleteUsers: true,
+  createGroups: true,
+  deleteGroups: true,
+  updateGroups: true
 };
 
+/**
+ * mock for model object with default value.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export const defaultMockModel = {"baseDn": "", "connectionType": "plain", "createGroups": true, "createUsers": true, "defaultAdmin": "", "defaultGroupAdmin": "", "deleteGroups": true, "deleteUsers": true, "directoryType": "ad", "domain": "", "domainError": null, "emailPrefix": "", "emailSuffix": "", "enabledUsersOnly": false, "groupObjectClass": "", "groupPath": "", "groupsParentGroup": "", "host": "", "hostError": null, "openCredentials": true, "openDirectoryConfiguration": false, "openSynchronizationOptions": false, "password": "", "port": "389", "portError": null, "updateGroups": true, "useEmailPrefix": false, "userDirectoryToggle": false, "userObjectClass": "", "userPath": "", "username": "", "usersParentGroup": ""};
+
+/**
+ * mock for users object from API.
+ * @returns {object}
+ */
 export const mockUsers = [
   {
     "id": "54c6278e-f824-5fda-91ff-3e946b18d994",

@@ -20,10 +20,6 @@
 import DisplayUserWorkspaceActionsPage from "./DisplayAdministrationWorkspaceActions.test.page";
 import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 import {defaultAppContext, defaultProps} from "./DisplayAdministrationWorkspaceActions.test.data";
-import DisplaySimulateSynchronizeUserDirectoryAdministration
-  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
-import DisplaySynchronizeUserDirectoryAdministration
-  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 
 beforeEach(() => {
   jest.resetModules();
@@ -113,66 +109,6 @@ describe("As AD I can see the administration menu", () => {
     page = new DisplayUserWorkspaceActionsPage(context, props);
     await page.save();
     expect(props.administrationWorkspaceContext.onMustSaveSettings).toHaveBeenCalled();
-  });
-
-  it('As AD I can test a user directory', async() => {
-    const props = {
-      administrationWorkspaceContext: {
-        selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        can: {
-          save: true,
-          test: true,
-          synchronize: false
-        },
-        onMustTestSettings: jest.fn(),
-      },
-      dialogContext: {
-        open: jest.fn()
-      }
-    };
-    page = new DisplayUserWorkspaceActionsPage(context, props);
-    await page.test();
-    expect(props.administrationWorkspaceContext.onMustTestSettings).toHaveBeenCalled();
-  });
-
-  it('As AD I can simulate synchronize a user directory', async() => {
-    const props = {
-      administrationWorkspaceContext: {
-        selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        can: {
-          save: true,
-          test: true,
-          synchronize: true
-        },
-        onMustTestSettings: jest.fn(),
-      },
-      dialogContext: {
-        open: jest.fn()
-      }
-    };
-    page = new DisplayUserWorkspaceActionsPage(context, props);
-    await page.simulateSynchronize();
-    expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySimulateSynchronizeUserDirectoryAdministration);
-  });
-
-  it('As AD I can synchronize a user directory', async() => {
-    const props = {
-      administrationWorkspaceContext: {
-        selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY,
-        can: {
-          save: true,
-          test: true,
-          synchronize: true
-        },
-        onMustTestSettings: jest.fn(),
-      },
-      dialogContext: {
-        open: jest.fn()
-      }
-    };
-    page = new DisplayUserWorkspaceActionsPage(context, props);
-    await page.synchronize();
-    expect(props.dialogContext.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
   });
 
   it('As AD I can edit a subscription key', async() => {

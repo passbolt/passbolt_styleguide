@@ -12,6 +12,7 @@
  * @since         3.8.0
  */
 
+import XRegExp from 'xregexp';
 
 /**
  * Model related to the User Directory form settings
@@ -23,9 +24,9 @@ class UserDirectoryFormService {
    * @param {context} context
    * @public
    */
-  constructor(context, translation) {
+  constructor(context, translate) {
     this.context = context;
-    this.translation = translation;
+    this.translate = translate;
   }
 
   /**
@@ -33,9 +34,9 @@ class UserDirectoryFormService {
    * @param {context} context
    * @public
    */
-  static getInstance(context, translation) {
+  static getInstance(context, translate) {
     if (!this.instance) {
-      this.instance = new UserDirectoryFormService(context, translation);
+      this.instance = new UserDirectoryFormService(context, translate);
     }
     return this.instance;
   }
@@ -48,7 +49,71 @@ class UserDirectoryFormService {
   static killInstance() {
     this.instance = null;
   }
+
+  /**
+   * Validate the form.
+   * @returns {Promise<boolean>}
+   */
+  async validate() {
+    // Validate the form inputs.
+    const validation = {
+      ...this.validateHostInput(),
+      ...this.validatePortInput(),
+      ...this.validateDomainInput()
+    };
+
+    await this.context.setErrors(validation);
+    //Check if we have errors
+    return Object.values(validation).filter(x => x).length === 0;
+  }
+
+  /**
+   * Validate the host input.
+   * @returns {Promise<void>}
+   */
+  validateHostInput() {
+    const settings = this.context.getSettings();
+    let hostError = null;
+    const host = settings.host.trim();
+    if (!host.length) {
+      hostError = this.translate("A host is required.");
+    }
+    this.context.setError(hostError);
+    return {hostError};
+  }
+
+  /**
+   * Validate the port input.
+   * @returns {Promise<void>}
+   */
+  validatePortInput() {
+    const settings = this.context.getSettings();
+    let portError = null;
+    const port = settings.port.trim();
+    if (!port.length) {
+      portError = this.translate("A port is required.");
+    } else if (!XRegExp("^[0-9]+").test(port)) {
+      portError = this.translate("Only numeric characters allowed.");
+    }
+    this.context.setError({portError});
+    return {portError};
+  }
+
+  /**
+   * Validate the domain input.
+   * @returns {Promise<void>}
+   */
+  validateDomainInput() {
+    const settings = this.context.getSettings();
+    let domainError = null;
+    const domain = settings.domain.trim();
+    if (!domain.length) {
+      domainError = this.translate("A domain name is required.");
+    }
+    this.context.setError({domainError});
+    return {domainError};
+  }
 }
 
-
 export default UserDirectoryFormService;
+

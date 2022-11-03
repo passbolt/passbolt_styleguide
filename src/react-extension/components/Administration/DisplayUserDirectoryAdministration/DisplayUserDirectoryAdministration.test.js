@@ -24,6 +24,8 @@ import DisplayTestUserDirectoryAdministration from "../DisplayTestUserDirectoryA
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 import {DialogContext} from '../../../contexts/DialogContext';
+import DisplaySynchronizeUserDirectoryAdministration from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
+import DisplaySimulateSynchronizeUserDirectoryAdministration from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -110,7 +112,7 @@ describe("As AD I should see the user directory settings", () => {
       expect.assertions(3);
 
       expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplayTestUserDirectoryAdministration);
-      expect(context.setContext).toHaveBeenCalledWith({displayTestUserDirectoryDialogProps: {userDirectoryTestResult:   mockResult}});
+      expect(context.setContext).toHaveBeenCalledWith({displayTestUserDirectoryDialogProps: {userDirectoryTestResult: mockResult}});
     });
 
 
@@ -125,6 +127,8 @@ describe("As AD I should see the user directory settings", () => {
 
       await page.fillPort("404");
 
+      expect.assertions(6);
+
       //button should be enable with the changes
       expect(page.isSaveButtonEnabled()).toBeTruthy();
 
@@ -133,6 +137,9 @@ describe("As AD I should see the user directory settings", () => {
 
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The user directory settings for the organization were updated.");
       expect(page.isSaveButtonEnabled()).toBeFalsy();
+      //Simulate buttons and synchronize buttons should be enable
+      expect(page.isSynchronizeButtonEnabled()).toBeTruthy();
+      expect(page.isSimulateButtonEnabled()).toBeTruthy();
     });
 
 
@@ -159,6 +166,9 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.domainName).toBeNull();
       expect(page.baseDn).toBeNull();
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The user directory settings for the organization were updated.");
+      //Simulate buttons and synchronize buttons should not be enable
+      expect(page.isSynchronizeButtonEnabled()).toBeFalsy();
+      expect(page.isSimulateButtonEnabled()).toBeFalsy();
     });
 
 
@@ -176,92 +186,72 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.domainErrorMessage).toBe("A domain name is required.");
     });
 
-    /*
-     *it('As AD I should see a processing feedback while submitting the form', async() => {
-     * await waitFor(() => {});
-     *
-     * const propsUpdated = {
-     *   administrationWorkspaceContext: {
-     *     must: {
-     *       save: true,
-     *       test: false
-     *     },
-     *     onResetActionsSettings: jest.fn(),
-     *     can: {
-     *       save: true
-     *     },
-     *     onSaveEnabled: jest.fn(),
-     *     onTestEnabled: jest.fn(),
-     *     onSynchronizeEnabled: jest.fn(),
-     *     onUpdateUsersDirectoryRequested: jest.fn(),
-     *   },
-     * };
-     * // Mock the request function to make it the expected result
-     * let updateResolve;
-     * const requestMockImpl = jest.fn(() => new Promise(resolve => {
-     *   updateResolve = resolve;
-     * }));
-     *
-     * jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onUpdateUsersDirectoryRequested').mockImplementation(requestMockImpl);
-     *
-     * page.rerender(context, propsUpdated);
-     * // API calls are made on submit, wait they are resolved.
-     * await waitFor(() => {
-     *   expect(page.userDirectory.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.activeDirectory.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.connectionTypeSelect.className).toBe("selected-value disabled");
-     *   expect(page.serverHost.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.port.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.username.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.password.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.domainName.getAttribute("disabled")).not.toBeNull();
-     *   expect(page.baseDn.getAttribute("disabled")).not.toBeNull();
-     *   updateResolve();
-     * });
-     *});
-     *
-     *it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
-     * await waitFor(() => {});
-     * await page.click(page.directoryConfigurationTitle);
-     * const propsUpdated = {
-     *   administrationWorkspaceContext: {
-     *     must: {
-     *       save: true,
-     *       test: false
-     *     },
-     *     onResetActionsSettings: jest.fn(),
-     *     can: {
-     *       save: true
-     *     },
-     *     onSaveEnabled: jest.fn(),
-     *     onUpdateUsersDirectoryRequested: jest.fn()
-     *   }
-     * };
-     *
-     * // Mock the request function to make it return an error.
-     * const error = {message: "The service is unavailable"};
-     * jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onUpdateUsersDirectoryRequested').mockImplementation(() => Promise.reject(error));
-     * jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
-     *
-     * page.rerender(context, propsUpdated);
-     * await waitFor(() => {});
-     * // Throw general error message
-     * expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
-     *});
-     *});
-     */
-    /*
-     *describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
-     * /**
-     * Given the users directory setting
-     * And the users directory are not loaded yet
-     */
+    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      // Mock the request function to make it return an error.
+      const error = {message: "The service is unavailable"};
 
-    /*
-     * it('As AD I should see all fields disabled”', () => {
-     * page = new DisplayUserDirectoryAdministrationPage(props);
-     * expect(page.userDirectory.getAttribute("disabled")).not.toBeNull();
-     * });
-     */
+      fetch.doMockOnceIf(/directorysync*/, () => Promise.reject(error));
+
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      await page.saveSettings();
+
+      await waitFor(() => {});
+      // Throw general error message
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
+    });
+
+    it('As AD I should be able to simulate the synchronization', async() => {
+      //button should be enable has we have data
+      expect(page.isSimulateButtonEnabled()).toBeTruthy();
+
+      //Call to save the settings
+      fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockResult));
+      fetch.doMockOnceIf(/users*/, () => mockApiResponse(mockUsers));
+      jest.spyOn(DialogContext._currentValue, 'open').mockImplementationOnce(jest.fn);
+
+      // Click on simulate button
+      await page.simulateSettings();
+
+      expect.assertions(2);
+
+      expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySimulateSynchronizeUserDirectoryAdministration);
+    });
+
+    it('As AD I should be able to synchronize the users', async() => {
+      //button should be enable has we have data
+      expect(page.isSynchronizeButtonEnabled()).toBeTruthy();
+
+      //Call to synchronize the settings
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockResult));
+      fetch.doMockOnceIf(/users*/, () => mockApiResponse(mockUsers));
+
+      jest.spyOn(DialogContext._currentValue, 'open').mockImplementationOnce(jest.fn);
+
+      // Click on synchronize button
+      await page.synchronizeSettings();
+
+      expect.assertions(2);
+
+      expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
+    });
+
+    it('As AD I should see the synchronize popup when requested by simulate', async() => {
+      //Call to simulate the settings
+      fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockResult));
+      fetch.doMockOnceIf(/users*/, () => mockApiResponse(mockUsers));
+
+      //Call to synchronize the settings
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockResult));
+      fetch.doMockOnceIf(/users*/, () => mockApiResponse(mockUsers));
+
+      jest.spyOn(DialogContext._currentValue, 'open').mockImplementationOnce(jest.fn);
+
+      // Click on synchronize button
+      await page.simulateSettings();
+
+      DialogContext._currentValue.close();
+
+      expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
+    });
   });
 });

@@ -78,7 +78,7 @@ class UserDirectoryFormService {
     if (!host.length) {
       hostError = this.translate("A host is required.");
     }
-    this.context.setError(hostError);
+    this.context.setError("hostError", hostError);
     return {hostError};
   }
 
@@ -95,7 +95,7 @@ class UserDirectoryFormService {
     } else if (!XRegExp("^[0-9]+").test(port)) {
       portError = this.translate("Only numeric characters allowed.");
     }
-    this.context.setError({portError});
+    this.context.setError("portError", portError);
     return {portError};
   }
 
@@ -110,7 +110,7 @@ class UserDirectoryFormService {
     if (!domain.length) {
       domainError = this.translate("A domain name is required.");
     }
-    this.context.setError({domainError});
+    this.context.setError("domainError", domainError);
     return {domainError};
   }
 }

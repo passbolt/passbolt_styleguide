@@ -16,13 +16,18 @@
  * Unit tests on DisplaySimulateSynchronizeUserDirectoryAdministrationDialog in regard of specifications
  */
 import {
-  defaultAppContext,
-  defaultProps,
+  defaultProps, mockSimulateSynchronizeBody,
 } from "./DisplaySimulateSynchronizeUserDirectoryAdministration.test.data";
 import DisplaySimulateSynchronizeUserDirectoryAdministrationPage
   from "./DisplaySimulateSynchronizeUserDirectoryAdministration.test.page";
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {enableFetchMocks} from 'jest-fetch-mock';
+import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
+import {waitFor} from '@testing-library/react';
+import {mockResult} from '../DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
 
 beforeEach(() => {
+  enableFetchMocks();
   jest.resetModules();
 });
 
@@ -36,10 +41,14 @@ describe("See the simulate synchronize user directory administration dialog", ()
      * I should see the simulate synchronize report dialog page
      */
     beforeEach(() => {
+      fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockSimulateSynchronizeBody));
       page = new DisplaySimulateSynchronizeUserDirectoryAdministrationPage(context, props);
     });
 
     it('As AD I should see The full report in the dialog for my simulate synchronize report', async() => {
+      await waitFor(() => {});
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockResult));
+
       expect(page.title.hyperlink.textContent).toBe("Synchronize simulation report");
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe('2 users will be synchronized.60 groups will be synchronized.');
@@ -48,7 +57,6 @@ describe("See the simulate synchronize user directory administration dialog", ()
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.fullReport);
       expect(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
       await page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.click(page.displaySimulateSynchronizeUserDirectoryAdministrationDialog.synchronize);
-      expect(props.administrationWorkspaceContext.onMustSynchronizeSettings).toBeCalled();
       expect(props.onClose).toBeCalled();
     });
   });

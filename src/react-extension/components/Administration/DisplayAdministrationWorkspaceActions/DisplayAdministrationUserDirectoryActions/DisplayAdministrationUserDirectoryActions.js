@@ -43,6 +43,17 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
   }
 
   /**
+   * Whenever the component has updated in terms of props or state
+   * @param prevProps
+   */
+  componentDidUpdate() {
+    if (this.props.adminUserDirectoryContext.mustOpenSynchronizePopUp()) {
+      this.props.adminUserDirectoryContext.requestSynchronization(false);
+      this.handleSynchronizeClick();
+    }
+  }
+
+  /**
    * Handle save settings
    */
   async handleSaveClick() {
@@ -70,7 +81,6 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
         }
       }
     } catch (error) {
-      console.log(error);
       this.handleSubmitError(error);
     } finally {
       this.props.adminUserDirectoryContext.setSubmitted(true);
@@ -185,7 +195,7 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
             <li>
               <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('test')}>
                 <Icon name="plug"/>
-                <span><Trans>Test settings (test)</Trans></span>
+                <span><Trans>Test settings</Trans></span>
               </a>
             </li>
             <li>

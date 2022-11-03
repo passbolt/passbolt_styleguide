@@ -100,7 +100,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * Handle synchronize button click.
    */
   handleSynchronize() {
-    this.props.adminUserDirectoryContext.synchronizeUsers();
+    this.props.adminUserDirectoryContext.requestSynchronization(true);
     this.handleClose();
   }
 
@@ -351,6 +351,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
 
 DisplaySimulateSynchronizeUserDirectoryAdministration.propTypes = {
   onClose: PropTypes.func,
+  dialogContext: PropTypes.object, // The dialog notification context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   adminUserDirectoryContext: PropTypes.object, // The administration user directory context
   t: PropTypes.func, // The translation function
