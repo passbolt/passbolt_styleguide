@@ -36,6 +36,7 @@ import AppContext from "./contexts/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
 import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
 import AdminSmtpSettingsContextProvider from "./contexts/AdminSmtpSettingsContext";
+import AdminEmailNotificationContextProvider from "./contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 
 /**
  * The passbolt application served by the API.
@@ -73,19 +74,21 @@ class ApiApp extends Component {
                               { /* The following routes are not handled by the browser extension application. */}
                               <Route exact path={[
                                 "/app/administration/subscription",
-                                "/app/administration/account-recovery"
+                                "/app/administration/account-recovery",
                               ]}/>
                               <Route path="/app/administration">
                                 <AdministrationWorkspaceContextProvider>
-                                  <ManageDialogs/>
-                                  <ManageContextualMenu/>
-                                  <ManageAnnouncements/>
                                   <AdminSmtpSettingsContextProvider>
-                                    <AdministrationWorkspace/>
+                                    <ManageDialogs/>
+                                    <ManageContextualMenu/>
+                                    <ManageAnnouncements/>
+                                    <AdminEmailNotificationContextProvider>
+                                      <AdministrationWorkspace/>
+                                    </AdminEmailNotificationContextProvider>
                                   </AdminSmtpSettingsContextProvider>
                                 </AdministrationWorkspaceContextProvider>
                               </Route>
-                              <Route path={["/app/settings/mfa", "/app/administration/smtp-settings"]}>
+                              <Route path={["/app/settings/mfa"]}>
                                 <ManageDialogs/>
                                 <ManageContextualMenu/>
                                 <ManageAnnouncements/>
