@@ -14,7 +14,10 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey";
+import DisplaySubscriptionKeyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import AppContext from "../../../contexts/AppContext";
+import {AdminSubscriptionContextProvider} from '../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription';
 
 /**
  * The DisplaySubscriptionKey component represented as a page
@@ -25,18 +28,15 @@ export default class DisplaySubscriptionKeyPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplaySubscriptionKey {...props}/>
-      </MockTranslationProvider>
-    );
-  }
-
-  rerender(props) {
-    this._page.rerender(
-      <MockTranslationProvider>
-        <DisplaySubscriptionKey {...props}/>
+        <AppContext.Provider value={appContext}>
+          <AdminSubscriptionContextProvider {...props}>
+            <DisplaySubscriptionKeyActions {...props}/>
+            <DisplaySubscriptionKey {...props}/>
+          </AdminSubscriptionContextProvider>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
   }
@@ -133,6 +133,14 @@ export default class DisplaySubscriptionKeyPage {
   }
 
   /**
+   * Returns the HTMLElement button of the toolbar that is the "Update key"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsUpdateButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -153,7 +161,7 @@ export default class DisplaySubscriptionKeyPage {
    */
   async updateKey() {
     const leftClick = {button: 0};
-    fireEvent.click(this.renewKeyButton, leftClick);
+    fireEvent.click(this.toolbarActionsUpdateButton, leftClick);
     await waitFor(() => {});
   }
 }

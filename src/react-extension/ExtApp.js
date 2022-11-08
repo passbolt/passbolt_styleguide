@@ -61,6 +61,7 @@ import WorkflowContextProvider from "./contexts/WorkflowContext";
 import ManageWorkflows from "./components/Common/Workflow/ManageWorkflows/ManageWorkflows";
 import AdminAccountRecoveryContextProvider from "./contexts/AdminAccountRecoveryContext";
 import HandleApplicationFirstLoadRoute from "./components/Common/Route/HandleApplicationFirstLoadRoute";
+import AdminSubscriptionContextProvider from "./contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 
 /**
  * The passbolt application served by the browser extension.
@@ -192,9 +193,11 @@ class ExtApp extends Component {
                                   ]}>
                                     <AdministrationWorkspaceContextProvider>
                                       <AdminAccountRecoveryContextProvider>
-                                        <ManageDialogs/>
-                                        <ManageWorkflows/>
-                                        <AdministrationWorkspace/>
+                                        <AdminSubscriptionContextProvider>
+                                          <ManageDialogs/>
+                                          <ManageWorkflows/>
+                                          <AdministrationWorkspace/>
+                                        </AdminSubscriptionContextProvider>
                                       </AdminAccountRecoveryContextProvider>
                                     </AdministrationWorkspaceContextProvider>
                                   </Route>
