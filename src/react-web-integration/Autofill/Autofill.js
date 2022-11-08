@@ -230,6 +230,8 @@ const getPasswordElement = function(formData) {
         return passwordElement;
       }
     }
+    // If all passwords are hidden return null to autofill only the username input (PB-20173)
+    return null;
   } else {
     /*
      * If no password element found on the page, the login form could be served by an iframe.
