@@ -17,7 +17,7 @@
  */
 import {
   defaultProps, formatDate,
-  mockSubscription, mockSubscriptionExpired, mockSubscriptionUpdated,
+  mockSubscription, mockSubscriptionExpired,
   mockSubscriptionUsersExceeded,
   mockUsers
 } from "./DisplaySubscriptionKey.test.data";
@@ -27,7 +27,6 @@ import {waitFor} from "@testing-library/react";
 import {DateTime} from "luxon";
 import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import PassboltSubscriptionError from "../../../lib/Error/PassboltSubscriptionError";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();

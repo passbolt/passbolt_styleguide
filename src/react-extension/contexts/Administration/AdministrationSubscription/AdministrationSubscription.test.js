@@ -14,6 +14,7 @@
 
 import {defaultProps, mockSubscriptionModel} from "../../../../react-extension/components/Administration/DisplaySubscriptionKey/DisplaySubscriptionKey.test.data";
 import {AdminSubscriptionContextProvider} from "./AdministrationSubscription";
+import PassboltSubscriptionError from '../../../lib/Error/PassboltSubscriptionError';
 
 describe("AdminSubscriptionContext", () => {
   let adminSubscribeContext; // The adminSubscribeContext to test
@@ -36,7 +37,7 @@ describe("AdminSubscriptionContext", () => {
     });
 
     it("should init subscription with error in case of PassboltSubscriptionError", async() => {
-      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementation(() => { throw {name: "PassboltSubscriptionError"}; });
+      jest.spyOn(props.context, "onGetSubscriptionKeyRequested").mockImplementation(() => { throw new PassboltSubscriptionError("error", {}); });
       await adminSubscribeContext.findSubscriptionKey();
 
       expect.assertions(3);
