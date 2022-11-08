@@ -24,6 +24,7 @@ export function defaultAppContext(appContext = {}) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     locale: 'en-UK',
+    onRefreshLocaleRequested: jest.fn(),
     siteSettings,
     trustedDomain: "http://localhost:6006",
     loggedInUser: {

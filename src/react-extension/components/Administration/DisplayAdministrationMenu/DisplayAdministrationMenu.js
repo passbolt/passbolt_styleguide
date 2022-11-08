@@ -19,7 +19,7 @@ import {
 } from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
@@ -307,4 +307,4 @@ DisplayAdministrationMenu.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace((DisplayAdministrationMenu)))));
+export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withTranslation("common")(DisplayAdministrationMenu)))));

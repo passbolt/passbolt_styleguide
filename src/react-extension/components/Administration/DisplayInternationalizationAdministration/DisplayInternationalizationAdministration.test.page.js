@@ -13,7 +13,10 @@
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
+import {AdminInternationalizationContextProvider} from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
+import AppContext from "../../../contexts/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration";
 
 /**
@@ -28,19 +31,15 @@ export default class DisplayInternationalizationAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayInternationalizationAdministration {...props}/>
+        <AppContext.Provider value={{appContext: props.context}}>
+          <AdminInternationalizationContextProvider  {...props}>
+            <DisplayAdministrationInternationalisationActions/>
+            <DisplayInternationalizationAdministration {...props}/>
+          </AdminInternationalizationContextProvider>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
   }
-
-  rerender(props) {
-    this._page.rerender(
-      <MockTranslationProvider>
-        <DisplayInternationalizationAdministration {...props}/>
-      </MockTranslationProvider>
-    );
-  }
-
   /**
    * Returns the totp input element
    */
@@ -60,6 +59,14 @@ export default class DisplayInternationalizationAdministrationPage {
    */
   get locale() {
     return this._page.container.querySelector('#locale-input');
+  }
+
+  /**
+   * Returns the HTMLElement button of the toolbar that is the "Save Settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsSaveButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
   }
 
   /**
@@ -83,6 +90,14 @@ export default class DisplayInternationalizationAdministrationPage {
     return this._page.container.querySelectorAll('#locale-input .option')[index - 1];
   }
 
+  /**
+   * Returns true if the save button in the toolbar is enabled.
+   * @returns {boolean}
+   */
+  isSaveButtonEnabled() {
+    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+  }
+
   /** click on the element */
   async click(element) {
     fireEvent.click(element);
@@ -90,9 +105,31 @@ export default class DisplayInternationalizationAdministrationPage {
     });
   }
 
+  /**
+   * Simulates a click on the "Save locale" button.
+   * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
+   * @returns {Promise<void>}
+   */
+  async saveLocale() {
+    await this.click(this.toolbarActionsSaveButton);
+  }
+
   /** select the french language */
   async selectLanguageFr() {
     await this.click(this.locale);
     await this.click(this.getLocaleList(3));
+  }
+
+  /** select the english language */
+  async selectLanguageEn() {
+    await this.click(this.locale);
+    await this.click(this.getLocaleList(2));
+  }
+
+
+  /** select the spain language */
+  async selectLanguageEs() {
+    await this.click(this.locale);
+    await this.click(this.getLocaleList(4));
   }
 }
