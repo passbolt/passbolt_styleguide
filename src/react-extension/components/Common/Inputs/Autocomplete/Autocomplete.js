@@ -31,7 +31,7 @@ class Autocomplete extends Component {
     this.bindCallbacks();
     this.createInputRefs();
     this.state = this.getDefaultState();
-    this.cache = [];
+    this.cache = {};
     this.cacheExpiry = 10000; // in ms (aka 10s)
   }
 
@@ -137,7 +137,7 @@ class Autocomplete extends Component {
    * @return {void}
    */
   closeAutocomplete() {
-    this.cache = [];
+    this.cache = {};
     this.setState({processing: false, autocompleteItems: null, selected: null});
     this.props.onClose();
   }
@@ -177,7 +177,7 @@ class Autocomplete extends Component {
    */
   handleSelect(selected) {
     const obj = this.state.autocompleteItems[selected];
-    this.cache = [];
+    this.cache = {};
     this.setState({name: ''});
     this.props.onSelect(obj);
     this.closeAutocomplete();
@@ -320,13 +320,12 @@ class Autocomplete extends Component {
       const fitOffset = visibleHeight - (itemHeight * howManyFits);
       const currentItemPosition = itemHeight * this.state.selected;
       const currentScroll = this.listRef.current.scrollTop;
-      if ((currentItemPosition - fitOffset) < currentScroll) {
+      if (currentItemPosition === 0) {
+        this.listRef.current.scrollTop = 0;
+      } else if ((currentItemPosition - fitOffset) < currentScroll) {
         this.listRef.current.scrollTop = this.listRef.current.scrollTop - visibleHeight;
-        return;
-      }
-      if (currentItemPosition > (currentScroll + visibleHeight)) {
+      } else if (currentItemPosition > (currentScroll + visibleHeight)) {
         this.listRef.current.scrollTop = currentItemPosition;
-        return;
       }
     }
   }
