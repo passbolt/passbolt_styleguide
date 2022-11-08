@@ -49,7 +49,6 @@ export const AdministrationWorkspaceContext = React.createContext({
   onGetSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user synchronize the users directory settings
   onGetUsersRequested: () => {}, // Whenever we need get the users
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
-  onSaveLocaleRequested: () => {}, // Whenever the user access save the locale settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onTestEnabled: () => {}, // Whenever a user change settings
@@ -105,7 +104,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       onGetSynchronizeUsersDirectoryRequested: this.onGetSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user synchronize the users directory settings
       onGetUsersRequested: this.onGetUsersRequested.bind(this), // Whenever we need get the users
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
-      onSaveLocaleRequested: this.onSaveLocaleRequested.bind(this), // Whenever the user save the locale settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
@@ -369,17 +367,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   async onUpdateSubscriptionKeyRequested(keyDto) {
     return this.props.context.port.request("passbolt.subscription.update", keyDto);
-  }
-
-  /**
-   * Whenever the locale is requested.
-   * @param {string} value the locale
-   * @return {Promise<object>}
-   */
-  async onSaveLocaleRequested(value) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("locale/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.create({value});
   }
 
   /**

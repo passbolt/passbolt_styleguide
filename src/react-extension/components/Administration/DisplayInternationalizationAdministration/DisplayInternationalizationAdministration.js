@@ -13,12 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withActionFeedback} from "../../../../react-extension/contexts/ActionFeedbackContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import Select from "../../Common/Select/Select";
+import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";
+import {withAdminInternationalization} from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -35,28 +36,22 @@ class DisplayInternationalizationAdministration extends React.Component {
   }
 
   /**
-   * Get default state
-   * @returns {*}
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
    */
-  get defaultState() {
-    return {
-      loading: true, // component is loading or not
-      processing: false, // component is processing or not
-
-      locale: "" // The default app locale
-    };
-  }
-
   async componentDidMount() {
-    this.setState({locale: this.props.context.siteSettings.locale});
+    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationInternationalisationActions);
+    this.props.adminInternationalizationContext.findLocale();
   }
 
   /**
-   * Whenever the component has updated in terms of props or state
-   * @param prevProps
+   * componentWillUnmount
+   * Use to clear the data from the form in case the user put something that needs to be cleared.
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleMustSave(prevProps.administrationWorkspaceContext.must.save);
+  componentWillUnmount() {
+    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
+    this.props.adminInternationalizationContext.clearContext();
   }
 
   /**
@@ -67,107 +62,13 @@ class DisplayInternationalizationAdministration extends React.Component {
   }
 
   /**
-   * Handle the must save change
-   * @param previousMustSaveSettings Previous must save settings
-   */
-  async handleMustSave(previousMustSaveSettings) {
-    const hasMustSaveChanged = this.props.administrationWorkspaceContext.must.save !== previousMustSaveSettings;
-    if (hasMustSaveChanged && this.props.administrationWorkspaceContext.must.save) {
-      await this.handleFormSubmit();
-      this.props.administrationWorkspaceContext.onResetActionsSettings();
-    }
-  }
-
-  /**
    * Handle form input changes.
    * @params {ReactEvent} The react event
    * @returns {void}
    */
   handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    this.setState({[name]: value});
-    this.handleEnabledSaveButton();
+    this.props.adminInternationalizationContext.setLocale(event.target.value);
   }
-
-  /**
-   * Handle enabled the save button
-   */
-  handleEnabledSaveButton() {
-    if (!this.props.administrationWorkspaceContext.can.save) {
-      this.props.administrationWorkspaceContext.onSaveEnabled();
-    }
-  }
-
-  /**
-   * Should input be disabled? True if state is loading or processing
-   * @returns {boolean}
-   */
-  hasAllInputDisabled() {
-    return this.state.processing || this.state.loading;
-  }
-
-  /**
-   * Handle form submit event.
-   * @params {ReactEvent} The react event
-   * @returns {void}
-   */
-  async handleFormSubmit() {
-    // Do not re-submit an already processing form
-    if (!this.state.processing) {
-      await this.toggleProcessing();
-      try {
-        await this.props.administrationWorkspaceContext.onSaveLocaleRequested(this.state.locale);
-        await this.handleSaveSuccess();
-      } catch (error) {
-        await this.handleSaveError(error);
-      }
-    }
-  }
-
-  /**
-   * Handle save operation success.
-   */
-  async handleSaveSuccess() {
-    this.props.context.onRefreshLocaleRequested(this.state.locale);
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The internationalization settings were updated."));
-    this.setState({processing: false});
-  }
-
-  /**
-   * Handle save operation error.
-   * @param {object} error The returned error
-   */
-  async handleSaveError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
-    } else {
-      // Unexpected error occurred.
-      console.error(error);
-      await this.handleError(error);
-      this.setState({processing: false});
-    }
-  }
-
-  /**
-   * handle error to display the error dialog
-   * @param error
-   */
-  async handleError(error) {
-    await this.props.actionFeedbackContext.displayError(error.message);
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({processing: !prev});
-  }
-
   /**
    * Get the supported locales
    * @returns {array}
@@ -184,6 +85,8 @@ class DisplayInternationalizationAdministration extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const lang = this.props.adminInternationalizationContext.getLocale();
+
     return (
       <div className="row">
         <div className="internationalisation-settings col7 main-column">
@@ -191,7 +94,7 @@ class DisplayInternationalizationAdministration extends React.Component {
           <form className="form">
             <div className="select-wrapper input">
               <label htmlFor="app-locale-input"><Trans>Language</Trans></label>
-              <Select className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={this.state.locale} onChange={this.handleInputChange}/>
+              <Select className="medium" id="locale-input" name="locale" items={this.supportedLocales} value={lang} onChange={this.handleInputChange}/>
               <p><Trans>The default language of the organisation.</Trans></p>
             </div>
           </form>
@@ -214,8 +117,8 @@ class DisplayInternationalizationAdministration extends React.Component {
 DisplayInternationalizationAdministration.propTypes = {
   context: PropTypes.object, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
-  actionFeedbackContext: PropTypes.any, // The action feedback context
+  adminInternationalizationContext: PropTypes.object, // The administration internationalization context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplayInternationalizationAdministration))));
+export default withAppContext(withAdminInternationalization(withAdministrationWorkspace(withTranslation('common')(DisplayInternationalizationAdministration))));
