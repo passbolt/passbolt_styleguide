@@ -3,8 +3,8 @@
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
-import DisplayAdministrationWorkspaceActions
-  from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
+
+import DisplayAdministrationEmailNotificationActions from "./DisplayAdministrationWorkspaceActions/DisplayAdministrationEmailNotificationActions/DisplayAdministrationEmailNotificationActions";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
@@ -25,7 +25,7 @@ export function defaultProps(selectedAdministration) {
     },
     administrationWorkspaceContext: {
       selectedAdministration,
-      administrationWorkspaceAction: DisplayAdministrationWorkspaceActions
+      administrationWorkspaceAction: DisplayAdministrationEmailNotificationActions
     }
   };
 }
