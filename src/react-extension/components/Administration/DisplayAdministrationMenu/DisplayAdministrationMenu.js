@@ -19,7 +19,7 @@ import {
 } from "../../../contexts/AdministrationWorkspaceContext";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
@@ -81,6 +81,15 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the SMTP settings plugin
+   * @returns {boolean}
+   */
+  get canIUseSmtpSettings() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('smtpSettings');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -90,6 +99,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSubscriptionClick = this.handleSubscriptionClick.bind(this);
     this.handleInternationalizationClick = this.handleInternationalizationClick.bind(this);
     this.handleAccountRecoveryClick = this.handleAccountRecoveryClick.bind(this);
+    this.handleSmtpSettingsClick = this.handleSmtpSettingsClick.bind(this);
   }
 
   /**
@@ -132,6 +142,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleAccountRecoveryClick() {
     this.props.navigationContext.onGoToAdministrationAccountRecoveryRequested();
+  }
+
+  /**
+   * Handle when the user click on the smtp settings menu
+   */
+  handleSmtpSettingsClick() {
+    this.props.navigationContext.onGoToAdministrationSmtpSettingsRequested();
   }
 
   /**
@@ -180,6 +197,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isAccountRecoverySelected() {
     return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If SMTP settings menu is selected
+   * @returns {boolean}
+   */
+  isSmtpSettingsSelected() {
+    return AdministrationWorkspaceMenuTypes.SMTP_SETTINGS === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -256,6 +281,19 @@ class DisplayAdministrationMenu extends React.Component {
             </div>
           </li>
           }
+          {this.canIUseSmtpSettings &&
+          <li id="smtp_settings_menu">
+            <div className={`row  ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleSmtpSettingsClick}>
+                    <span><Trans>Email server</Trans></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
         </ul>
       </div>
     );
@@ -269,4 +307,4 @@ DisplayAdministrationMenu.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace((DisplayAdministrationMenu)))));
+export default withRouter(withAppContext(withNavigationContext(withAdministrationWorkspace(withTranslation("common")(DisplayAdministrationMenu)))));

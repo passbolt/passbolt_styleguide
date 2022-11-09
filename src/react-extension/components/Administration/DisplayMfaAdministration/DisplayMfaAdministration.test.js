@@ -45,6 +45,8 @@ describe("See the MFA settings", () => {
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
       await waitFor(() => {});
 
+      expect.assertions(10);
+
       expect(page.exists()).toBeTruthy();
       // check fields in the form
       expect(page.totp.checked).toBeTruthy();
@@ -69,11 +71,13 @@ describe("See the MFA settings", () => {
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
+
       await page.checkYubikey();
       await page.saveSettings();
 
       await waitFor(() => {});
 
+      expect.assertions(3);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The multi factor authentication settings for the organization were updated.");
       // We expect the button to be disable
       expect(page.isSaveButtonEnabled()).toBeFalsy();
@@ -93,6 +97,8 @@ describe("See the MFA settings", () => {
       await page.saveSettings();
 
       await waitFor(() => {});
+
+      expect.assertions(2);
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
@@ -110,6 +116,8 @@ describe("See the MFA settings", () => {
       await page.saveSettings();
 
       await waitFor(() => {});
+
+      expect.assertions(7);
       // Throw general error message
       expect(page.yubikeyClientIdentifierErrorMessage).toBe("A client identifier is required.");
       expect(page.yubikeySecretKeyErrorMessage).toBe("A secret key is required.");
@@ -121,6 +129,7 @@ describe("See the MFA settings", () => {
 
 
     it('As AD I should not be able to click on save if there is no change', async() => {
+      expect.assertions(2);
       //button should be disable by default
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkYubikey();
@@ -135,6 +144,8 @@ describe("See the MFA settings", () => {
       await page.toggleObfuscate(page.duoSaltKeyButton);
       await page.toggleObfuscate(page.yubikeySecretKeyButton);
 
+      expect.assertions(3);
+
       expect(page.isObfuscated(page.yubikeySecretKeyButton)).toBeFalsy();
       expect(page.isObfuscated(page.duoSecretKeyButton)).toBeFalsy();
       expect(page.isObfuscated(page.duoSaltKeyButton)).toBeFalsy();
@@ -142,6 +153,9 @@ describe("See the MFA settings", () => {
 
     it('I should see all fields disabled”', () => {
       fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
+
+      expect.assertions(3);
+
       page = new DisplayMfaAdministrationPage(context, props);
       expect(page.totp.getAttribute("disabled")).not.toBeNull();
       expect(page.yubikey.getAttribute("disabled")).not.toBeNull();

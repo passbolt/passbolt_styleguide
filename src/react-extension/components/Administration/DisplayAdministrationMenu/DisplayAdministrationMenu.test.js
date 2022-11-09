@@ -34,7 +34,10 @@ describe("As AD I can see the administration menu", () => {
   const context = defaultAppContext(); // The applicative context
 
   it('As AD I should be able to go to mfa', async() => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.MFA); // The props to pass
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
+    }); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToMfa();
@@ -43,7 +46,10 @@ describe("As AD I can see the administration menu", () => {
   });
 
   it('As AD I should be able to go to user directory', async() => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.USER_DIRECTORY); // The props to pass
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_DIRECTORY}
+    }); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToUserDirectory();
@@ -52,7 +58,10 @@ describe("As AD I can see the administration menu", () => {
   });
 
   it('As AD I should be able to go to email notifications', async() => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION); // The props to pass
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION}
+    }); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToEmailNotifications();
@@ -61,7 +70,10 @@ describe("As AD I can see the administration menu", () => {
   });
 
   it('As AD I should be able to go to subscription', async() => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.SUBSCRIPTION); // The props to pass
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SUBSCRIPTION}
+    }); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToSubscription();
@@ -70,7 +82,10 @@ describe("As AD I can see the administration menu", () => {
   });
 
   it('As AD I should be able to go to internationalisation', async() => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION); // The props to pass
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION}
+    }); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToInternationalization();
@@ -79,11 +94,44 @@ describe("As AD I can see the administration menu", () => {
   });
 
   it('As AD I should be able to go to account recovery', async() => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY); // The props to pass
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY}
+    }); // The props to pass
     page = new DisplayAdministrationMenuPage(context, props);
     expect(page.exists()).toBeTruthy();
     await page.goToAccountRecovery();
     expect(page.menuSelected).toBe('Account Recovery');
     expect(props.navigationContext.onGoToAdministrationAccountRecoveryRequested).toHaveBeenCalled();
+  });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the Email server setting option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.goToSmtpSettings();
+      expect(page.smtpSettings).toBeTruthy();
+      expect(page.menuSelected).toBe('Email server');
+      expect(props.navigationContext.onGoToAdministrationSmtpSettingsRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "smtpSettings"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.smtpSettings).toBeNull();
+    });
   });
 });

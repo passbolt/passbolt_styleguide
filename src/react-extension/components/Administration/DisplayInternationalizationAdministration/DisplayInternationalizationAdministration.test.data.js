@@ -2,24 +2,22 @@
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 
 
 export function defaultProps() {
   return {
-    context: {
-      siteSettings: new SiteSettings(siteSettingsFixture)
-    },
+    context: defaultAppContext(),
     administrationWorkspaceContext: {
-      must: {
-        save: false
-      },
-      onResetActionsSettings: jest.fn(),
-      can: {
-        save: false
-      },
-      onSaveEnabled: jest.fn(),
+      setDisplayAdministrationWorkspaceAction: jest.fn(),
+      resetDisplayAdministrationWorkspaceAction: jest.fn()
+    },
+    actionFeedbackContext: {
+      displaySuccess: () => jest.fn(),
+      displayError: jest.fn()
     }
   };
 }
+
+
+export const defaultLocale = "en-UK";

@@ -36,7 +36,6 @@ export const AdministrationWorkspaceContext = React.createContext({
   setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
   resetDisplayAdministrationWorkspaceAction: () => {}, // Whenever the reset of the display workspace action is requested
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
-  onSaveLocaleRequested: () => {}, // Whenever the user access save the locale settings
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
   onMustEditSubscriptionKey: () => {}, // Whenever a user wants edit the susbcription key
@@ -75,7 +74,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
       resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
-      onSaveLocaleRequested: this.onSaveLocaleRequested.bind(this), // Whenever the user save the locale settings
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
       onMustEditSubscriptionKey: this.handleMustEditSubscriptionKey.bind(this), // Whenever a user wants edit the susbcription key
@@ -162,6 +160,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isSubscriptionLocation = this.props.location.pathname.includes('subscription');
     const isInternationalizationLocation = this.props.location.pathname.includes('internationalization');
     const isAccountRecoveryLocation = this.props.location.pathname.includes('account-recovery');
+    const isSmtpSettingsLocation = this.props.location.pathname.includes('smtp-settings');
     const can = {
       save: false,
       test: false,
@@ -188,6 +187,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
     } else if (isAccountRecoveryLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
+    } else if (isSmtpSettingsLocation) {
+      selectedAdministration =  AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
     }
     await this.setState({selectedAdministration, can, must});
   }
@@ -214,17 +215,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   async onUpdateSubscriptionKeyRequested(keyDto) {
     return this.props.context.port.request("passbolt.subscription.update", keyDto);
-  }
-
-  /**
-   * Whenever the locale is requested.
-   * @param {string} value the locale
-   * @return {Promise<object>}
-   */
-  async onSaveLocaleRequested(value) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("locale/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.create({value});
   }
 
   /**
@@ -280,6 +270,7 @@ export const AdministrationWorkspaceMenuTypes = {
   USER_DIRECTORY: 'USER-DIRECTORY', // User directory administration menu selected
   EMAIL_NOTIFICATION: 'EMAIL-NOTIFICATION', // Email notification administration menu selected
   SUBSCRIPTION: 'SUBSCRIPTION', // Subscription administration menu selected
-  INTERNATIONALIZATION: 'INTERNATIONALIZATION', // Email notification administration menu selected
-  ACCOUNT_RECOVERY: 'ACCOUNT-RECOVERY', // Email notification administration menu selected
+  INTERNATIONALIZATION: 'INTERNATIONALIZATION', // Internationalization administration menu selected
+  ACCOUNT_RECOVERY: 'ACCOUNT-RECOVERY', // Account Recovery administration menu selected
+  SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
 };

@@ -34,8 +34,10 @@ import ApiAppContextProvider from "./contexts/ApiAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AppContext from "./contexts/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
-import ApiAppAccountRecoveryUserService from "../shared/services/api/accountRecovery/ApiAppAccountRecoveryUserService";
+import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
+import AdminSmtpSettingsContextProvider from "./contexts/AdminSmtpSettingsContext";
 import AdminEmailNotificationContextProvider from "./contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
+import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa/AdministrationMfaContext";
 import AdminUserDirectoryContextProvider from './contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
 
@@ -75,23 +77,27 @@ class ApiApp extends Component {
                               { /* The following routes are not handled by the browser extension application. */}
                               <Route exact path={[
                                 "/app/administration/subscription",
-                                "/app/administration/account-recovery"
+                                "/app/administration/account-recovery",
                               ]}/>
                               <Route path="/app/administration">
                                 <AdministrationWorkspaceContextProvider>
+                                  <AdminSmtpSettingsContextProvider>
                                   <ManageContextualMenu/>
                                   <ManageAnnouncements/>
                                   <AdminUserDirectoryContextProvider>
                                     <ManageDialogs/>
                                     <AdminMfaContextProvider>
                                       <AdminEmailNotificationContextProvider>
-                                        <AdministrationWorkspace/>
+                                        <AdminInternationalizationContextProvider>
+                                          <AdministrationWorkspace/>
+                                        </AdminInternationalizationContextProvider>
                                       </AdminEmailNotificationContextProvider>
                                     </AdminMfaContextProvider>
                                   </AdminUserDirectoryContextProvider>
+                                  </AdminSmtpSettingsContextProvider>
                                 </AdministrationWorkspaceContextProvider>
                               </Route>
-                              <Route path="/app/settings/mfa">
+                              <Route path={["/app/settings/mfa"]}>
                                 <ManageDialogs/>
                                 <ManageContextualMenu/>
                                 <ManageAnnouncements/>

@@ -21,14 +21,13 @@ import {defaultProps} from "./DisplayInternationalizationAdministration.test.dat
 import DisplayInternationalisationAdministrationPage from "./DisplayInternationalizationAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import {enableFetchMocks} from 'jest-fetch-mock';
+import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
 
 beforeEach(() => {
+  enableFetchMocks();
   jest.resetModules();
 });
-
 
 describe("As AD I should see the internationalisation page", () => {
   let page; // The page to test against
@@ -50,51 +49,47 @@ describe("As AD I should see the internationalisation page", () => {
     });
 
     it('As AD I should be able to see a visual feedback after I saved the internationalisation settings in the administration internationalisation page', async() => {
-      await page.selectLanguageFr();
-      expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
-      const propsUpdated = {
-        context: {
-          siteSettings: new SiteSettings(siteSettingsFixture),
-          onRefreshLocaleRequested: jest.fn()
-        },
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          onSaveLocaleRequested: jest.fn()
-        }
-      };
-      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveLocaleRequested').mockImplementationOnce(() => {});
+      //Call to save the settings
+      fetch.doMockOnceIf(/locale\/settings*/, () => mockApiResponse({}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
-      page.rerender(propsUpdated);
+
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+
+      await page.selectLanguageEs();
+      expect(page.isSaveButtonEnabled()).toBeTruthy();
+      await page.saveLocale();
       await waitFor(() => {});
-      expect(propsUpdated.administrationWorkspaceContext.onSaveLocaleRequested).toHaveBeenCalledWith("fr-FR");
-      expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
-      expect(propsUpdated.context.onRefreshLocaleRequested).toHaveBeenCalledWith("fr-FR");
+
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The internationalization settings were updated.");
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
-    it('As AD I should be able to see an error notification after I got an error when I saved the default language of the organisation in the administration internationalisation page', async() => {
-      const propsUpdated = {
-        context: {
-          siteSettings: new SiteSettings(siteSettingsFixture)
-        },
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          onSaveLocaleRequested: jest.fn(),
-        }
-      };
-      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveLocaleRequested').mockImplementationOnce(() => {
-        throw new PassboltApiFetchError("Error");
-      });      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
-      page.rerender(propsUpdated);
+    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      // Mock the request function to make it return an error.
+      const error = {message: "The service is unavailable"};
+      fetch.doMockOnceIf(/locale\/settings*/, () => Promise.reject(error));
+
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      await page.selectLanguageFr();
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      await page.saveLocale();
       await waitFor(() => {});
-      expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("Error");
+
+      expect(page.title).toBe("Internationalisation");
+      // Throw general error message
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
+    });
+
+    it('As AD I should not be able to click on save if there is no change', async() => {
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      await page.selectLanguageFr();
+      //We set the value by default
+      await page.selectLanguageEn();
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
   });
 });
