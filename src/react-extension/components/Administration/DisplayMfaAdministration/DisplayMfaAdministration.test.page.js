@@ -16,6 +16,8 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayMfaAdministration from "./DisplayMfaAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {AdminMfaContextProvider} from "../../../contexts/Administration/AdministrationMfa/AdministrationMfaContext";
+import DisplayAdministrationMfaActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaActions/DisplayAdministrationMfaActions";
 
 /**
  * The DisplayMfaAdministration component represented as a page
@@ -30,17 +32,10 @@ export default class DisplayMfaAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplayMfaAdministration {...props}/>
-        </AppContext.Provider>
-      </MockTranslationProvider>
-    );
-  }
-
-  rerender(appContext, props) {
-    this._page.rerender(
-      <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <DisplayMfaAdministration {...props}/>
+          <AdminMfaContextProvider  {...props}>
+            <DisplayAdministrationMfaActions />
+            <DisplayMfaAdministration {...props}/>
+          </AdminMfaContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
@@ -181,6 +176,14 @@ export default class DisplayMfaAdministrationPage {
   }
 
   /**
+   * Returns the HTMLElement button of the toolbar that is the "Save Settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsSaveButton() {
+    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -211,14 +214,24 @@ export default class DisplayMfaAdministrationPage {
     this.fillInput(this.yubikeySecretKey, data);
   }
 
-  /** fill the duo secret element with data */
-  fillDuoSecret(data) {
-    this.fillInput(this.duoSecretKey, data);
-  }
-
   /** fill the duo salt element with data */
   fillDuoSalt(data) {
     this.fillInput(this.duoSalt, data);
+  }
+
+  /** fill the duo hostname element with data */
+  fillDuoHostname(data) {
+    this.fillInput(this.duoHostname, data);
+  }
+
+  /** fill the duo integration key with data */
+  fillIntegrationKey(data) {
+    this.fillInput(this.duoIntegrationKey, data);
+  }
+
+  /** fill the duo secret key with data */
+  fillSecretKey(data) {
+    this.fillInput(this.duoSecretKey, data);
   }
 
   /** Click on the duo element */
@@ -242,5 +255,22 @@ export default class DisplayMfaAdministrationPage {
    */
   isObfuscated(component) {
     return component.getAttribute('type') === "password";
+  }
+
+  /**
+   * Returns true if the save button in the toolbar is enabled.
+   * @returns {boolean}
+   */
+  isSaveButtonEnabled() {
+    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+  }
+
+  /**
+   * Simulates a click on the "Save settings" button.
+   * To work properly, the form needs to be valid otherwise the sate doesn't change and this blocks the test.
+   * @returns {Promise<void>}
+   */
+  async saveSettings() {
+    await this.click(this.toolbarActionsSaveButton);
   }
 }

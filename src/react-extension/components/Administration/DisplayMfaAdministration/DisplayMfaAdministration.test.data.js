@@ -1,55 +1,141 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.8.0
+ */
+
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
+ * Default props.
+ * @param {Object} props The props to override
+ * @returns {object}
  */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
-
-/**
- * Default props
- * @returns {{resource: {id: string, name: string}}}
- */
-export function defaultProps() {
-  return {
+export function defaultProps(data = {}) {
+  const defaultProps = {
+    context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
-      must: {
-        save: false
-      },
-      onResetActionsSettings: jest.fn(),
-      can: {
-        save: false
-      },
-      onSaveEnabled: jest.fn(),
-      onGetMfaRequested: () => mockMfaSettings,
-      onSaveMfaRequested: jest.fn()
-    }
+      setDisplayAdministrationWorkspaceAction: jest.fn(),
+      resetDisplayAdministrationWorkspaceAction: jest.fn()
+    },
+    actionFeedbackContext: {
+      displaySuccess: () => jest.fn(),
+      displayError: jest.fn()
+    },
   };
+  return Object.assign(defaultProps, data);
 }
 
+/**
+ * Mock settings result from server
+ * @returns {object}
+ */
 export const mockMfaSettings = {
-  "header": {
-    "id": "eae592b6-19d5-4b07-9103-49d04b135093",
-    "status": "success",
-    "servertime": 1604490709,
-    "title": "app_orgsettings_get_success",
-    "action": "6d616537-c449-589d-bebe-b2d5883e9d35",
-    "message": "The operation was successful.",
-    "url": "\/mfa\/settings.json?api-version=v2",
-    "code": 200
+  "providers": [
+    "totp",
+    "yubikey",
+    "duo"
+  ],
+  "yubikey": {
+    "clientId": "80412",
+    "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"
   },
-  "body": {
-    "providers": [
-      "totp",
-      "yubikey"
-    ],
-    "yubikey": {
-      "clientId": "43664",
-      "secretKey": "a6zf3pavrJEjvmXm6dfkm8jfkNY="
-    }
+  "duo": {
+    "hostName": "api-123456af.duosecurity.com",
+    "integrationKey": "PAGI605APMFKP8YSME6T",
+    "salt": "salt1".repeat(8),
+    "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
   }
 };
+
+export const mockDefaultMfaModel = {
+  "duoHostname": "",
+  "duoIntegrationKey": "",
+  "duoSalt": "",
+  "duoSecretKey": "",
+  "duoToggle": false,
+  "totpProviderToggle": false,
+  "yubikeyClientIdentifier": "",
+  "yubikeySecretKey": "",
+  "yubikeyToggle": false,
+};
+
+
+/**
+ * Mock settings model for UI
+ * @returns {object}
+ */
+export const mockModel = {
+  totpProviderToggle: true,
+  yubikeyToggle: true,
+  duoToggle: true,
+  yubikeyClientIdentifier: "80412",
+  yubikeySecretKey: "pas6lyijz2AIhX3D9eLIYAxv63lt@",
+  duoHostname: "api-123456af.duosecurity.com",
+  duoIntegrationKey: "PAGI605APMFKP8YSME6T",
+  duoSalt: "salt1".repeat(8),
+  duoSecretKey: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
+};
+
+/**
+ * Default mfa settings.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export function defaultMfaSettings(data = {}) {
+  return {
+    ...mockMfaSettings,
+    ...data
+  };
+}
+
+/**
+ * mock for yubikey errors.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export function mockYubikeyError(data = {}) {
+  return {
+    ...{
+      "yubikeyClientIdentifierError": "A client identifier is required.",
+      "yubikeySecretKeyError": "A secret key is required.",
+    },
+    ...data
+  };
+}
+
+/**
+ * mock for duo errors.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export function mockDuoError(data = {}) {
+  return {
+    ...{
+      "duoHostnameError": "A hostname is required.",
+      "duoIntegrationKeyError": "An integration key is required.",
+      "duoSaltError": "A salt is required.",
+      "duoSecretKeyError": "A secret key is required.",
+    },
+    ...data
+  };
+}
+/**
+ * mfa settings for UI.
+ * @param {Object} data The settings to override
+ * @returns {object}
+ */
+export function defaultSettingsModel(data = {}) {
+  return {
+    ...mockModel,
+    ...data
+  };
+}
