@@ -39,8 +39,6 @@ export const AdministrationWorkspaceContext = React.createContext({
   administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
   setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
   resetDisplayAdministrationWorkspaceAction: () => {}, // Whenever the reset of the display workspace action is requested
-  onGetMfaRequested: () => {}, // Whenever the user access to the Mfa page
-  onSaveMfaRequested: () => {}, // Whenever the user wants save Mfa settings
   onGetUsersDirectoryRequested: () => {}, // Whenever the user access to the users directory page
   onUpdateUsersDirectoryRequested: () => {}, // Whenever the user update the users directory settings
   onDeleteUsersDirectoryRequested: () => {}, // Whenever the user delete the users directory settings

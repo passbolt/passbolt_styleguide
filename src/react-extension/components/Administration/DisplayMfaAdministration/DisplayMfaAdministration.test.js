@@ -15,12 +15,16 @@
 /**
  * Unit tests on DisplayMfaAdministration in regard of specifications
  */
-import {defaultAppContext, defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
+import {defaultProps, mockMfaSettings} from "./DisplayMfaAdministration.test.data";
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import DisplayMfaAdministrationPage from "./DisplayMfaAdministration.test.page";
 import {waitFor} from "@testing-library/react";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
+import {enableFetchMocks} from 'jest-fetch-mock';
 
 beforeEach(() => {
+  enableFetchMocks();
   jest.resetModules();
 });
 
@@ -34,116 +38,87 @@ describe("See the MFA settings", () => {
      * I should see the MFA provider activation state on the administration settings page
      */
     beforeEach(() => {
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
       page = new DisplayMfaAdministrationPage(context, props);
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
-      await waitFor(() => {
-      });
+      await waitFor(() => {});
+
+      expect.assertions(10);
+
       expect(page.exists()).toBeTruthy();
       // check fields in the form
       expect(page.totp.checked).toBeTruthy();
       expect(page.yubikey.checked).toBeTruthy();
-      expect(page.duo.checked).toBe(false);
+      expect(page.duo.checked).toBeTruthy();
       await page.checkDuo();
 
-      expect(page.yubikeyClientIdentifier.value).toBe(mockMfaSettings.body.yubikey.clientId);
-      expect(page.yubikeySecretKey.value).toBe(mockMfaSettings.body.yubikey.secretKey);
-      expect(page.duoHostname.value).toBe("");
-      expect(page.duoIntegrationKey.value).toBe("");
-      expect(page.duoSalt.value).toBe("");
-      expect(page.duoSecretKey.value).toBe("");
+      expect(page.yubikeyClientIdentifier.value).toBe(mockMfaSettings.yubikey.clientId);
+      expect(page.yubikeySecretKey.value).toBe(mockMfaSettings.yubikey.secretKey);
+      expect(page.duoHostname).toBe(null);
+      expect(page.duoIntegrationKey).toBe(null);
+      expect(page.duoSalt).toBe(null);
+      expect(page.duoSecretKey).toBe(null);
     });
 
     it('As AD I should save mfa on the administration settings page', async() => {
-      await waitFor(() => {});
-      await page.checkYubikey();
-      expect(props.administrationWorkspaceContext.onSaveEnabled).toHaveBeenCalled();
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn(),
-          onGetMfaRequested: () => mockMfaSettings,
-          onSaveMfaRequested: jest.fn()
-        }
-      };
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      //Call to save the settings
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse({}));
+      //Call to API to retrieve the settings
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      const result = {
-        "duo": null,
-        "providers": ["totp"],
-        "yubikey": null,
-      };
-      page.rerender(context, propsUpdated);
+
+      await page.checkYubikey();
+      await page.saveSettings();
+
       await waitFor(() => {});
-      expect(propsUpdated.administrationWorkspaceContext.onSaveMfaRequested).toHaveBeenCalledWith(result);
+
+      expect.assertions(3);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The multi factor authentication settings for the organization were updated.");
-      expect(propsUpdated.administrationWorkspaceContext.onResetActionsSettings).toHaveBeenCalled();
+      // We expect the button to be disable
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
-    it('As AD I should see a processing feedback while submitting the form', async() => {
-      await waitFor(() => {});
+    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkYubikey();
 
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn(),
-          onGetMfaRequested: () => mockMfaSettings,
-          onSaveMfaRequested: jest.fn()
-        }
-      };
-      // Mock the request function to make it the expected result
-      let updateResolve;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => {
-        updateResolve = resolve;
-      }));
-      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveMfaRequested').mockImplementation(requestMockImpl);
+      // Mock the request function to make it return an error.
+      const error = {message: "The service is unavailable"};
 
-      page.rerender(context, propsUpdated);
-      // API calls are made on submit, wait they are resolved.
-      await waitFor(() => {
-        expect(page.totp.getAttribute("disabled")).not.toBeNull();
-        expect(page.yubikey.getAttribute("disabled")).not.toBeNull();
-        expect(page.duo.getAttribute("disabled")).not.toBeNull();
-        updateResolve();
-      });
+      fetch.doMockOnceIf(/mfa\/settings*/, () => Promise.reject(error));
+
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      await page.saveSettings();
+
+      await waitFor(() => {});
+
+      expect.assertions(2);
+      // Throw general error message
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
 
-    it('As AD I shouldn’t be able to submit the form if there is an invalid field', async() => {
-      await waitFor(() => {});
-      await page.checkDuo();
-      page.fillYubikeyClientIdentifier("");
+    it('As AD I should see an error message if inputs are empty', async() => {
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
       page.fillYubikeySecret("");
+      page.fillYubikeyClientIdentifier("");
+      page.fillSecretKey("");
+      page.fillIntegrationKey("");
+      page.fillDuoHostname("");
+      page.fillDuoSalt("");
 
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn()
-        }
-      };
+      await page.saveSettings();
 
-      page.rerender(context, propsUpdated);
       await waitFor(() => {});
-      // Throw error message
+
+      expect.assertions(7);
+      // Throw general error message
       expect(page.yubikeyClientIdentifierErrorMessage).toBe("A client identifier is required.");
       expect(page.yubikeySecretKeyErrorMessage).toBe("A secret key is required.");
       expect(page.duoHostnameErrorMessage).toBe("A hostname is required.");
@@ -152,56 +127,35 @@ describe("See the MFA settings", () => {
       expect(page.duoSecretKeyErrorMessage).toBe("A secret key is required.");
     });
 
-    it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
-      await waitFor(() => {});
+
+    it('As AD I should not be able to click on save if there is no change', async() => {
+      expect.assertions(2);
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
       await page.checkYubikey();
-
-      const propsUpdated = {
-        administrationWorkspaceContext: {
-          must: {
-            save: true
-          },
-          onResetActionsSettings: jest.fn(),
-          can: {
-            save: true
-          },
-          onSaveEnabled: jest.fn(),
-          onGetMfaRequested: () => mockMfaSettings,
-          onSaveMfaRequested: jest.fn()
-        }
-      };
-
-      // Mock the request function to make it return an error.
-      const error = {message: "The service is unavailable"};
-      jest.spyOn(propsUpdated.administrationWorkspaceContext, 'onSaveMfaRequested').mockImplementation(() => Promise.reject(error));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
-
-      page.rerender(context, propsUpdated);
-      await waitFor(() => {});
-      // Throw general error message
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
+      //We set the value by default
+      await page.checkYubikey();
+      //button should be disable by default
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
     });
 
     it('As AD I want to see the passwords I entered in the MFA administration settings forms', async() => {
-      await page.checkDuo();
-
       await page.toggleObfuscate(page.duoSecretKeyButton);
       await page.toggleObfuscate(page.duoSaltKeyButton);
       await page.toggleObfuscate(page.yubikeySecretKeyButton);
+
+      expect.assertions(3);
 
       expect(page.isObfuscated(page.yubikeySecretKeyButton)).toBeFalsy();
       expect(page.isObfuscated(page.duoSecretKeyButton)).toBeFalsy();
       expect(page.isObfuscated(page.duoSaltKeyButton)).toBeFalsy();
     });
-  });
-
-  describe('As AD I see all fields disabled if mfa setting are not yet fetched', () => {
-    /**
-     * Given the mfa settings
-     * And the mfa settings are not loaded yet
-     */
 
     it('I should see all fields disabled”', () => {
+      fetch.doMockOnceIf(/mfa\/settings*/, () => mockApiResponse(mockMfaSettings));
+
+      expect.assertions(3);
+
       page = new DisplayMfaAdministrationPage(context, props);
       expect(page.totp.getAttribute("disabled")).not.toBeNull();
       expect(page.yubikey.getAttribute("disabled")).not.toBeNull();
