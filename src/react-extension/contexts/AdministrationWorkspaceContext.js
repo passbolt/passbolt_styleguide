@@ -15,7 +15,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
-import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import DisplayAdministrationWorkspaceActions
   from "../components/Administration/DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
 

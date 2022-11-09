@@ -82,18 +82,18 @@ class ApiApp extends Component {
                               <Route path="/app/administration">
                                 <AdministrationWorkspaceContextProvider>
                                   <AdminSmtpSettingsContextProvider>
-                                  <ManageContextualMenu/>
-                                  <ManageAnnouncements/>
-                                  <AdminUserDirectoryContextProvider>
-                                    <ManageDialogs/>
-                                    <AdminMfaContextProvider>
-                                      <AdminEmailNotificationContextProvider>
-                                        <AdminInternationalizationContextProvider>
-                                          <AdministrationWorkspace/>
-                                        </AdminInternationalizationContextProvider>
-                                      </AdminEmailNotificationContextProvider>
-                                    </AdminMfaContextProvider>
-                                  </AdminUserDirectoryContextProvider>
+                                    <ManageContextualMenu/>
+                                    <ManageAnnouncements/>
+                                    <AdminUserDirectoryContextProvider>
+                                      <ManageDialogs/>
+                                      <AdminMfaContextProvider>
+                                        <AdminEmailNotificationContextProvider>
+                                          <AdminInternationalizationContextProvider>
+                                            <AdministrationWorkspace/>
+                                          </AdminInternationalizationContextProvider>
+                                        </AdminEmailNotificationContextProvider>
+                                      </AdminMfaContextProvider>
+                                    </AdminUserDirectoryContextProvider>
                                   </AdminSmtpSettingsContextProvider>
                                 </AdministrationWorkspaceContextProvider>
                               </Route>
