@@ -156,6 +156,8 @@ describe("As AD I should see the user directory settings", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       await page.saveSettings();
 
+      expect.assertions(12);
+
       expect(page.userDirectory.checked).toBeFalsy();
       // Expect the values do not exist
       expect(page.activeDirectory).toBeNull();
@@ -179,7 +181,7 @@ describe("As AD I should see the user directory settings", () => {
       page.fillDomain("");
 
       await page.saveSettings();
-
+      expect.assertions(3);
       // Throw error message
       expect(page.serverHostErrorMessage).toBe("A host is required.");
       expect(page.portErrorMessage).toBe("A port is required.");
@@ -196,6 +198,7 @@ describe("As AD I should see the user directory settings", () => {
       await page.saveSettings();
 
       await waitFor(() => {});
+      expect.assertions(1);
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
@@ -250,7 +253,7 @@ describe("As AD I should see the user directory settings", () => {
       await page.simulateSettings();
 
       DialogContext._currentValue.close();
-
+      expect.assertions(1);
       expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
     });
   });

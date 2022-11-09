@@ -21,11 +21,13 @@ describe("UserDirectoryModel model", () => {
   describe("UserDirectoryModel::constructor", () => {
     it("should init model with default value", () => {
       const model = new UserDirectoryModel();
+      expect.assertions(1);
       expect(model).toEqual(defaultMockModel);
     });
 
     it("should init model with dto", () => {
       const model = new UserDirectoryModel(mockResult);
+      expect.assertions(1);
       expect(model).toEqual(mockModel);
     });
   });

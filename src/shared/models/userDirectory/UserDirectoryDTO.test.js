@@ -21,11 +21,13 @@ describe("UserDirectoryDTO model", () => {
   describe("UserDirectoryDTO::constructor", () => {
     it("should init dto with model", () => {
       const dto = new UserDirectoryDTO(mockModel);
+      expect.assertions(1);
       expect(dto).toEqual(mockResult);
     });
     it("should init with default value if directory type is openldap", () => {
       const model = Object.assign({}, mockModel, {userDirectoryModel: "openldap"});
       const dto = new UserDirectoryDTO(model);
+      expect.assertions(5);
       expect(dto.group_object_class).toEqual("");
       expect(dto.user_object_class).toEqual("");
       expect(dto.use_email_prefix_suffix).toEqual(false);

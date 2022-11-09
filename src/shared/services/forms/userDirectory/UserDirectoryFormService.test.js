@@ -40,11 +40,13 @@ describe("UserDirectoryFormService", () => {
 
   describe("UserDirectoryFormService::getInstance", () => {
     it("should be a singleton", () => {
+      expect.assertions(1);
       expect(userDirectoryFormService).toBeDefined();
     });
 
     it("should not create a new instance -", () => {
       const newInstance = UserDirectoryFormService.getInstance();
+      expect.assertions(1);
       expect(userDirectoryFormService).toEqual(newInstance);
     });
   });
@@ -54,6 +56,7 @@ describe("UserDirectoryFormService", () => {
     it("should kill the instance and create a new one", () => {
       UserDirectoryFormService.killInstance();
       userDirectoryFormService = UserDirectoryFormService.getInstance(null, null);
+      expect.assertions(1);
       expect(userDirectoryFormService).toEqual({"context": null, "translate": null});
     });
   });
@@ -63,12 +66,14 @@ describe("UserDirectoryFormService", () => {
       userDirectoryContext.setSettings("host", "");
       const requiredMessage = {"hostError": "A host is required."};
       const result = userDirectoryFormService.validateHostInput();
+      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
       expect(userDirectoryContext.getErrors().hostError).toEqual(requiredMessage.hostError);
     });
     it("should not return message", () => {
       userDirectoryContext.setSettings("host", "192.0.0.0");
       const result = userDirectoryFormService.validateHostInput();
+      expect.assertions(2);
       expect(result.hostError).toEqual(null);
       expect(userDirectoryContext.getErrors().hostError).toEqual(null);
     });
@@ -79,6 +84,7 @@ describe("UserDirectoryFormService", () => {
       userDirectoryContext.setSettings("port", "");
       const requiredMessage = {"portError": "A port is required."};
       const result = userDirectoryFormService.validatePortInput();
+      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
       expect(userDirectoryContext.getErrors().portError).toEqual(requiredMessage.portError);
     });
@@ -87,12 +93,14 @@ describe("UserDirectoryFormService", () => {
       userDirectoryContext.setSettings("port", "ABC");
       const regExMessage = {"portError": "Only numeric characters allowed."};
       const result = userDirectoryFormService.validatePortInput();
+      expect.assertions(2);
       expect(result).toEqual(regExMessage);
       expect(userDirectoryContext.getErrors().portError).toEqual(regExMessage.portError);
     });
     it("should not return message", () => {
       userDirectoryContext.setSettings("port", "389");
       const result = userDirectoryFormService.validatePortInput();
+      expect.assertions(2);
       expect(result.portError).toEqual(null);
       expect(userDirectoryContext.getErrors().portError).toEqual(null);
     });
@@ -103,12 +111,14 @@ describe("UserDirectoryFormService", () => {
       userDirectoryContext.setSettings("domain", "");
       const requiredMessage = {"domainError": "A domain name is required."};
       const result = userDirectoryFormService.validateDomainInput();
+      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
       expect(userDirectoryContext.getErrors().domainError).toEqual(requiredMessage.domainError);
     });
     it("should not return message", () => {
       userDirectoryContext.setSettings("domain", "passbolt.com");
       const result = userDirectoryFormService.validateDomainInput();
+      expect.assertions(2);
       expect(result.domainError).toEqual(null);
       expect(userDirectoryContext.getErrors().domainError).toEqual(null);
     });

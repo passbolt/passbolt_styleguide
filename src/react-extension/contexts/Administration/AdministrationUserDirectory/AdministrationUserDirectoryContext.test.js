@@ -74,6 +74,7 @@ describe("AdminUserDirectoryContext", () => {
       try {
         await adminUserDirectoryContext.findUserDirectorySettings();
       } catch {
+        expect.assertions(1);
         expect(adminUserDirectoryContext.isProcessing()).toBeTruthy();
       }
     });
@@ -209,6 +210,7 @@ describe("AdminUserDirectoryContext", () => {
     it("should update error object with all properties ", async() => {
       const mockError = mockErrors();
       adminUserDirectoryContext.setErrors(mockError);
+      expect.assertions(3);
       expect(adminUserDirectoryContext.getErrors().hostError).toEqual(mockError.hostError);
       expect(adminUserDirectoryContext.getErrors().domainError).toEqual(mockError.domainError);
       expect(adminUserDirectoryContext.getErrors().portError).toEqual(mockError.portError);
