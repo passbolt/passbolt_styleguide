@@ -127,6 +127,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
 
     it('As AD I should open edit subscription key', async() => {
+      expect.assertions(2);
       page = new DisplaySubscriptionKeyPage(props.context, props);
 
       await waitFor(() => {});
