@@ -40,6 +40,7 @@ describe("SubscriptionActionService", () => {
 
   describe("MfaFormService::getInstance", () => {
     it("should be a singleton", () => {
+      expect.assertions(1);
       expect(subscriptionActionService).toBeDefined();
     });
     it("should not create a new instance", () => {
