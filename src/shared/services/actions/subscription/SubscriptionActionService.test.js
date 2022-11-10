@@ -52,6 +52,7 @@ describe("SubscriptionActionService", () => {
 
   describe("MfaFormService::killInstance", () => {
     it("should kill the instance and create a new one", () => {
+      expect.assertions(1);
       SubscriptionActionService.killInstance();
       subscriptionActionService = SubscriptionActionService.getInstance({"context": null, "dialogContext": null, "adminSubcriptionContext": null});
       expect(subscriptionActionService).toEqual({"context": null, "dialogContext": null, "subscriptionContext": null});
