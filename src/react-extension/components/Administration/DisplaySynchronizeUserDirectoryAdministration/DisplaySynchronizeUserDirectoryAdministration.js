@@ -17,8 +17,8 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayLoadingDialog from "../DisplayLoadingDialog/DisplayLoadingDialog";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withAdminUserDirectory} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 
 class DisplaySynchronizeUserDirectoryAdministration extends Component {
   /**
@@ -62,9 +62,8 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
    */
   async componentDidMount() {
     try {
-      const result = await this.props.administrationWorkspaceContext.onGetSynchronizeUsersDirectoryRequested();
-      const userDirectorySynchronizeResult = result.body;
-      this.setState({loading: false, userDirectorySynchronizeResult});
+      const result = await this.props.adminUserDirectoryContext.synchronizeUsers();
+      this.setState({loading: false, userDirectorySynchronizeResult: result});
     } catch (error) {
       await this.handleError(error);
     }
@@ -350,8 +349,8 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
 DisplaySynchronizeUserDirectoryAdministration.propTypes = {
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
-  administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  adminUserDirectoryContext: PropTypes.object, // The administration user directory context
   t: PropTypes.func, // The translation function
 };
 
-export default withActionFeedback(withAdministrationWorkspace(withTranslation('common')(DisplaySynchronizeUserDirectoryAdministration)));
+export default withActionFeedback(withAdminUserDirectory(withTranslation('common')(DisplaySynchronizeUserDirectoryAdministration)));

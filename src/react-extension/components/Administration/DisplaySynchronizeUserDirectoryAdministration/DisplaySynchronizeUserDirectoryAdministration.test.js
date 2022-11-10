@@ -16,13 +16,17 @@
  * Unit tests on DisplaySynchronizeUserDirectoryAdministrationDialog in regard of specifications
  */
 import {
-  defaultAppContext,
   defaultProps,
+  mockSynchronizeBody,
 } from "./DisplaySynchronizeUserDirectoryAdministration.test.data";
-import DisplaySynchronizeUserDirectoryAdministrationPage
-  from "./DisplaySynchronizeUserDirectoryAdministration.test.page";
+import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
+import DisplaySynchronizeUserDirectoryAdministrationPage from './DisplaySynchronizeUserDirectoryAdministration.test.page';
+import {enableFetchMocks} from 'jest-fetch-mock';
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {waitFor} from '@testing-library/react';
 
 beforeEach(() => {
+  enableFetchMocks();
   jest.resetModules();
 });
 
@@ -36,10 +40,12 @@ describe("See the synchronize user directory administration dialog", () => {
      * I should see the simulate synchronize report dialog page
      */
     beforeEach(() => {
+      fetch.doMockOnceIf(/directorysync\/synchronize*/, () => mockApiResponse(mockSynchronizeBody));
       page = new DisplaySynchronizeUserDirectoryAdministrationPage(context, props);
     });
 
     it('As AD I should see The full report in the dialog for my synchronize report', async() => {
+      await waitFor(() => {});
       expect(page.title.hyperlink.textContent).toBe("Synchronize report");
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.exists()).toBeTruthy();
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.resourceSynchronize).toBe('2 users have been synchronized.60 groups have been synchronized.');
@@ -49,6 +55,7 @@ describe("See the synchronize user directory administration dialog", () => {
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.synchronize);
       expect(props.onClose).toBeCalled();
+      expect.assertions(7);
     });
   });
 
@@ -61,6 +68,7 @@ describe("See the synchronize user directory administration dialog", () => {
       expect(page.title.hyperlink.textContent).toBe("Synchronize");
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.dialogClose);
       expect(props.onClose).toBeCalled();
+      expect.assertions(2);
     });
   });
 });

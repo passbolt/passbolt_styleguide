@@ -37,8 +37,9 @@ import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserCo
 import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
 import AdminSmtpSettingsContextProvider from "./contexts/AdminSmtpSettingsContext";
 import AdminEmailNotificationContextProvider from "./contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
-import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa/AdministrationMfaContext";
+import AdminUserDirectoryContextProvider from './contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
+import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 
 /**
  * The passbolt application served by the API.
@@ -81,16 +82,18 @@ class ApiApp extends Component {
                               <Route path="/app/administration">
                                 <AdministrationWorkspaceContextProvider>
                                   <AdminSmtpSettingsContextProvider>
-                                    <ManageDialogs/>
                                     <ManageContextualMenu/>
                                     <ManageAnnouncements/>
-                                    <AdminMfaContextProvider>
-                                      <AdminEmailNotificationContextProvider>
-                                        <AdminInternationalizationContextProvider>
-                                          <AdministrationWorkspace/>
-                                        </AdminInternationalizationContextProvider>
-                                      </AdminEmailNotificationContextProvider>
-                                    </AdminMfaContextProvider>
+                                    <AdminUserDirectoryContextProvider>
+                                      <ManageDialogs/>
+                                      <AdminMfaContextProvider>
+                                        <AdminEmailNotificationContextProvider>
+                                          <AdminInternationalizationContextProvider>
+                                            <AdministrationWorkspace/>
+                                          </AdminInternationalizationContextProvider>
+                                        </AdminEmailNotificationContextProvider>
+                                      </AdminMfaContextProvider>
+                                    </AdminUserDirectoryContextProvider>
                                   </AdminSmtpSettingsContextProvider>
                                 </AdministrationWorkspaceContextProvider>
                               </Route>

@@ -55,7 +55,7 @@ import HandleErrorEvents from "./components/Common/Error/HandleErrorEvents/Handl
 import DisplayResourcesWorkspace from "./components/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace";
 import DragContextProvider from "./contexts/DragContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
-import ExtAppAccountRecoveryUserService from "../shared/services/accountRecovery/ExtAppAccountRecoveryUserService";
+import ExtAppAccountRecoveryUserService from "../shared/services/api/accountRecovery/ExtAppAccountRecoveryUserService";
 import HandleAccountRecoveryStatusCheck from "./components/AccountRecovery/HandleAccountRecoveryStatusCheck/HandleAccountRecoveryStatusCheck";
 import WorkflowContextProvider from "./contexts/WorkflowContext";
 import ManageWorkflows from "./components/Common/Workflow/ManageWorkflows/ManageWorkflows";
