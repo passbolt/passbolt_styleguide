@@ -359,7 +359,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.sender_email_error.textContent).toBe("Sender email must be a valid email");
       expect(page.sender_name_error?.textContent).toBeFalsy();
       expect(page.host_error?.textContent).toBeFalsy();
-      expect(page.port_error.textContent).toBe("Port must be a number betwwen 1 and 65535");
+      expect(page.port_error.textContent).toBe("Port must be a number between 1 and 65535");
     });
   });
 

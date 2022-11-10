@@ -434,7 +434,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     }
 
     if (portNum < 1 || portNum > 65535) {
-      errors.port = this.props.t("Port must be a number betwwen 1 and 65535");
+      errors.port = this.props.t("Port must be a number between 1 and 65535");
       return false;
     }
 
