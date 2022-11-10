@@ -39,7 +39,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
 
   /**
    * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
+   * Invoked immediately after the component is inserted into the tree
    * @return {void}
    */
   get defaultState() {
