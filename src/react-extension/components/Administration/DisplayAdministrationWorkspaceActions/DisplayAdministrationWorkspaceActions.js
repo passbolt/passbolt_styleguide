@@ -19,11 +19,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import DisplaySimulateSynchronizeUserDirectoryAdministration
-  from "../DisplaySimulateSynchronizeUserDirectoryAdministration/DisplaySimulateSynchronizeUserDirectoryAdministration";
 import {withDialog} from "../../../contexts/DialogContext";
-import DisplaySynchronizeUserDirectoryAdministration
-  from "../DisplaySynchronizeUserDirectoryAdministration/DisplaySynchronizeUserDirectoryAdministration";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -44,9 +40,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    */
   bindCallbacks() {
     this.handleSaveClick = this.handleSaveClick.bind(this);
-    this.handleTestClick = this.handleTestClick.bind(this);
-    this.handleSimulateSynchronizeClick = this.handleSimulateSynchronizeClick.bind(this);
-    this.handleSynchronizeClick = this.handleSynchronizeClick.bind(this);
     this.handleEditSubscriptionClick = this.handleEditSubscriptionClick.bind(this);
   }
 
@@ -74,27 +67,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    */
   handleSaveClick() {
     this.props.administrationWorkspaceContext.onMustSaveSettings();
-  }
-
-  /**
-   * Handle test settings
-   */
-  handleTestClick() {
-    this.props.administrationWorkspaceContext.onMustTestSettings();
-  }
-
-  /**
-   * Handle simulate synchronize settings
-   */
-  handleSimulateSynchronizeClick() {
-    this.props.dialogContext.open(DisplaySimulateSynchronizeUserDirectoryAdministration);
-  }
-
-  /**
-   * Handle synchronize settings
-   */
-  handleSynchronizeClick() {
-    this.props.dialogContext.open(DisplaySynchronizeUserDirectoryAdministration);
   }
 
   /**

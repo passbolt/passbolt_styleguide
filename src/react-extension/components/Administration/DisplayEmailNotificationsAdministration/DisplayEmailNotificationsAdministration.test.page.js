@@ -218,23 +218,6 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
-   * Simulates a click on the given HTML element.
-   * The clicks is consider done when the callback returns {true}.
-   * @param {HTMLElement} element The HTML element onto simulate the click
-   * @param {function} callback The callback to be used in the waitFor method to ensure the click is done (returns true when it's done)
-   * @returns {Promise<void>}
-   */
-  async clickOn(element, callback) {
-    const leftClick = {button: 0};
-    fireEvent.click(element, leftClick);
-    await waitFor(() => {
-      if (!callback()) {
-        throw new Error("Page didn't react yet on the event.");
-      }
-    });
-  }
-
-  /**
    * Returns true if the save button in the toolbar is enabled.
    * @returns {boolean}
    */

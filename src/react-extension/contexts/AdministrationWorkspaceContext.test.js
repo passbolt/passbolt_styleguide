@@ -94,32 +94,12 @@ describe("Administration Workspace Context", () => {
       await page.onSaveEnabled();
       expect(page.isSaveEnabled).toBeTruthy();
     });
-
-    it("As AD I should have the test enabled", async() => {
-      await page.onTestEnabled();
-      expect(page.isTestEnabled).toBeTruthy();
-    });
-
-    it("As AD I should have the synchronize enabled", async() => {
-      await page.onSynchronizeEnabled();
-      expect(page.isSynchronizeEnabled).toBeTruthy();
-    });
   });
 
   describe("As AD I should have the appropriate action enable at any time", () => {
     it("As AD I should enabled must save settings", async() => {
       await page.onMustSaveSettings();
       expect(page.mustSaveSettings).toBeTruthy();
-    });
-
-    it("As AD I should enabled must test settings", async() => {
-      await page.onMustTestSettings();
-      expect(page.mustTestSettings).toBeTruthy();
-    });
-
-    it("As AD I should enabled must synchronize settings", async() => {
-      await page.onMustSynchronizeSettings();
-      expect(page.mustSynchronizeSettings).toBeTruthy();
     });
 
     it("As AD I should enabled must edit subscription key", async() => {
@@ -134,19 +114,13 @@ describe("Administration Workspace Context", () => {
 
     it("As AD I should enabled reset all action settings", async() => {
       await page.onMustSaveSettings();
-      await page.onMustTestSettings();
-      await page.onMustSynchronizeSettings();
       await page.onMustEditSubscriptionKey();
       await page.onMustRefreshSubscriptionKey();
       expect(page.mustSaveSettings).toBeTruthy();
-      expect(page.mustTestSettings).toBeTruthy();
-      expect(page.mustSynchronizeSettings).toBeTruthy();
       expect(page.mustEditSubscriptionKey).toBeTruthy();
       expect(page.mustRefreshSubscriptionKey).toBeTruthy();
       await page.onResetActionsSettings();
       expect(page.mustSaveSettings).toBeFalsy();
-      expect(page.mustTestSettings).toBeFalsy();
-      expect(page.mustSynchronizeSettings).toBeFalsy();
       expect(page.mustEditSubscriptionKey).toBeFalsy();
       expect(page.mustRefreshSubscriptionKey).toBeFalsy();
     });

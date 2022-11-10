@@ -16,6 +16,7 @@ import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplaySimulateSynchronizeUserDirectoryAdministration from "./DisplaySimulateSynchronizeUserDirectoryAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {AdminUserDirectoryContextProvider} from "../../../contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext";
 
 /**
  * The DisplaySimulateSynchronizeUserDirectoryAdministration component represented as a page
@@ -30,7 +31,9 @@ export default class DDisplaySimulateSynchronizeUserDirectoryAdministrationPage 
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <DisplaySimulateSynchronizeUserDirectoryAdministration {...props}/>
+          <AdminUserDirectoryContextProvider {...props}>
+            <DisplaySimulateSynchronizeUserDirectoryAdministration {...props}/>
+          </AdminUserDirectoryContextProvider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );

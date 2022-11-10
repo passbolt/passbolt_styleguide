@@ -12,8 +12,8 @@
  * @since         3.6.0
  */
 
-import {ApiClient} from "../../lib/apiClient/apiClient";
-import {ApiClientOptions} from "../../lib/apiClient/apiClientOptions";
+import {ApiClient} from "../../../lib/apiClient/apiClient";
+import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 
 export default class ApiAppAccountRecoveryUserService {
   constructor() {

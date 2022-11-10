@@ -15,7 +15,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
-import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import DisplayAdministrationWorkspaceActions
   from "../components/Administration/DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
 
@@ -26,33 +25,18 @@ export const AdministrationWorkspaceContext = React.createContext({
   selectedAdministration: null, // The current menu administration selected
   can: {
     save: false, // If the button save settings is enable
-    test: false, // If the button test settings is enable
-    synchronize: false // If the button synchronize settings is enable
   },
   must: {
     save: false, // Must save settings
-    test: false, // Must test settings
-    synchronize: false, // Must synchronize settings
     editSubscriptionKey: false, // Must edit subscription key
     refreshSubscriptionKey: false // Must refresh the subscription key
   },
   administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
   setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
   resetDisplayAdministrationWorkspaceAction: () => {}, // Whenever the reset of the display workspace action is requested
-  onGetUsersDirectoryRequested: () => {}, // Whenever the user access to the users directory page
-  onUpdateUsersDirectoryRequested: () => {}, // Whenever the user update the users directory settings
-  onDeleteUsersDirectoryRequested: () => {}, // Whenever the user delete the users directory settings
-  onTestUsersDirectoryRequested: () => {}, // Whenever the user test the users directory settings
-  onGetSimulateSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user simulate synchronize the users directory settings
-  onGetSynchronizeUsersDirectoryRequested: () => {}, // Whenever the user synchronize the users directory settings
-  onGetUsersRequested: () => {}, // Whenever we need get the users
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
   onSaveEnabled: () => {}, // Whenever a user change settings
   onMustSaveSettings: () => {}, // Whenever a user wants save settings
-  onTestEnabled: () => {}, // Whenever a user change settings
-  onMustTestSettings: () => {}, // Whenever a user wants save settings
-  onSynchronizeEnabled: () => {}, // Whenever a user have settings to be synchronized
-  onMustSynchronizeSettings: () => {}, // Whenever a user wants synchronized settings
   onMustEditSubscriptionKey: () => {}, // Whenever a user wants edit the susbcription key
   onMustRefreshSubscriptionKey: () => {}, // Whenever the susbcription key needs to be refreshed
   onResetActionsSettings: () => {}, // Reset states after a user do an action for the settings
@@ -79,35 +63,18 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration: AdministrationWorkspaceMenuTypes.NONE, // The current menu administration selected
       can: {
         save: false, // If the button save settings is enable
-        test: false, // If the button test settings is enable
-        synchronize: false // If the button synchronize settings is enable
       },
       must: {
         save: false, // Must save settings
-        test: false, // Must test settings
-        synchronize: false, // Must synchronize settings
         editSubscriptionKey: false, // Must edit subscription key
         refreshSubscriptionKey: false // Must refresh the susbcription key
       },
       administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
       setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
       resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
-      onGetMfaRequested: this.onGetMfaRequested.bind(this), // Whenever the user access to the Mfa page
-      onSaveMfaRequested: this.onSaveMfaRequested.bind(this), // Whenever the user wants save the Mfa page
-      onGetUsersDirectoryRequested: this.onGetUsersDirectoryRequested.bind(this), // Whenever the user access to the users directory page
-      onUpdateUsersDirectoryRequested: this.onUpdateUsersDirectoryRequested.bind(this), // Whenever the user update the users directory settings
-      onDeleteUsersDirectoryRequested: this.onDeleteUsersDirectoryRequested.bind(this), // Whenever the user delete the users directory settings
-      onTestUsersDirectoryRequested: this.onTestUsersDirectoryRequested.bind(this), // Whenever the user test the users directory settings
-      onGetSimulateSynchronizeUsersDirectoryRequested: this.onGetSimulateSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user simulate synchronize the users directory settings
-      onGetSynchronizeUsersDirectoryRequested: this.onGetSynchronizeUsersDirectoryRequested.bind(this), // Whenever the user synchronize the users directory settings
-      onGetUsersRequested: this.onGetUsersRequested.bind(this), // Whenever we need get the users
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
       onSaveEnabled: this.handleSaveEnabled.bind(this), // Whenever a user change settings
       onMustSaveSettings: this.handleMustSaveSettings.bind(this), // Whenever a user wants save settings
-      onTestEnabled: this.handleTestEnabled.bind(this), // Whenever a user have settings to be tested
-      onMustTestSettings: this.handleMustTestSettings.bind(this), // Whenever a user wants test settings
-      onSynchronizeEnabled: this.handleSynchronizeEnabled.bind(this), // Whenever a user have settings to be synchronized
-      onMustSynchronizeSettings: this.handleMustSynchronizeSettings.bind(this), // Whenever a user wants synchronized settings
       onMustEditSubscriptionKey: this.handleMustEditSubscriptionKey.bind(this), // Whenever a user wants edit the susbcription key
       onMustRefreshSubscriptionKey: this.handleMustRefreshSubscriptionKey.bind(this), // Whenever the susbcription key needs to be refreshed
       onResetActionsSettings: this.handleResetActionsSettings.bind(this), // Reset states after a user do an action for the settings
@@ -141,34 +108,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   async handleMustSaveSettings() {
     await this.setState({must: {...this.state.must, save: true}});
-  }
-
-  /**
-   * Handle test enabled
-   */
-  async handleTestEnabled(boolean) {
-    await this.setState({can: {...this.state.can, test: boolean}});
-  }
-
-  /**
-   * Handle must test settings
-   */
-  async handleMustTestSettings() {
-    await this.setState({must: {...this.state.must, test: true}});
-  }
-
-  /**
-   * Handle synchronize enabled
-   */
-  async handleSynchronizeEnabled(boolean) {
-    await this.setState({can: {...this.state.can, synchronize: boolean}});
-  }
-
-  /**
-   * Handle must synchronize settings
-   */
-  async handleMustSynchronizeSettings() {
-    await this.setState({must: {...this.state.must, synchronize: true}});
   }
 
   /**
@@ -266,96 +205,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   resetDisplayAdministrationWorkspaceAction() {
     this.setState({administrationWorkspaceAction: DisplayAdministrationWorkspaceActions});
-  }
-
-  /**
-   * Whenever the mfa is requested.
-   * @return {Promise<object>}
-   */
-  async onGetMfaRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("mfa/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.findAll();
-  }
-
-  /**
-   * Whenever the save mfa is requested.
-   * @return {Promise<object>}
-   */
-  async onSaveMfaRequested(mfa) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("mfa/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(mfa);
-  }
-
-  /**
-   * Whenever the users directory is requested.
-   * @return {Promise<object>}
-   */
-  async onGetUsersDirectoryRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync/settings");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.findAll();
-  }
-
-  /**
-   * Whenever the update users directory is requested.
-   * @return {Promise<object>}
-   */
-  async onUpdateUsersDirectoryRequested(usersDirectory) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.update('settings', usersDirectory);
-  }
-
-  /**
-   * Whenever the delete users directory is requested.
-   * @return {Promise<object>}
-   */
-  async onDeleteUsersDirectoryRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.delete('settings');
-  }
-
-  /**
-   * Whenever the test users directory is requested.
-   * @return {Promise<object>}
-   */
-  async onTestUsersDirectoryRequested(usersDirectory) {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync/settings/test");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.create(usersDirectory);
-  }
-
-  /**
-   * Whenever the simulate synchronize users directory is requested.
-   * @return {Promise<object>}
-   */
-  async onGetSimulateSynchronizeUsersDirectoryRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.get("synchronize/dry-run");
-  }
-
-  /**
-   * Whenever the simulate synchronize users directory is requested.
-   * @return {Promise<object>}
-   */
-  async onGetSynchronizeUsersDirectoryRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("directorysync/synchronize");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.create({});
-  }
-
-  /**
-   * Whenever the users is requested.
-   * @return {Promise<object>}
-   */
-  async onGetUsersRequested() {
-    const apiClientOptions = this.props.context.getApiClientOptions().setResourceName("users");
-    const apiClient = new ApiClient(apiClientOptions);
-    return apiClient.findAll();
   }
 
   /**
