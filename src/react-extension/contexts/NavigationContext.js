@@ -35,6 +35,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the users wants to navigate to the administration workspace internationalization
   onGoToAdministrationAccountRecoveryRequested: () => {
   }, // Whenever the users wants to navigate to the administration workspace account recovery
+  onGoToAdministrationSmtpSettingsRequested: () => {
+  }, // Whenever the users wants to navigate to the administration workspace SMTP settings
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -90,6 +92,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationSubscriptionRequested: this.onGoToAdministrationSubscriptionRequested.bind(this), // Whenever the user wants to navigate to the administration workspace subscription
       onGoToAdministrationInternationalizationRequested: this.onGoToAdministrationInternationalizationRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
+      onGoToAdministrationSmtpSettingsRequested: this.onGoToAdministrationSmtpSettingsRequested.bind(this), // Whenever the users wants to navigate to the administration workspace SMTP settings
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -146,6 +149,8 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/mfa";
     } else if (this.isUserDirectoryEnabled) {
       pathname = "/app/administration/users-directory";
+    } else if (this.isSmtpSettingsEnable) {
+      pathname = "/app/administration/smtp-settings";
     }
     await this.goTo("api", pathname);
   }
@@ -172,6 +177,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationEmailNotificationsRequested() {
     await this.goTo("api", "/app/administration/email-notification");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace email notifications.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationSmtpSettingsRequested() {
+    await this.goTo("api", "/app/administration/smtp-settings");
   }
 
   /**
@@ -214,6 +227,15 @@ class NavigationContextProvider extends React.Component {
   get isUserDirectoryEnabled() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('directorySync');
+  }
+
+  /**
+   * Returns true if the user has the SMTP settings capability
+   * @returns {boolean}
+   */
+  get isSmtpSettingsEnable() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('smtpSettings');
   }
 
   /*

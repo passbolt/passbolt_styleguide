@@ -182,8 +182,8 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'caret-down' &&
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1.10999 1.5L4.78999 5.18L8.46999 1.5" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 3L5 7L9 3" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         }
         {/*
@@ -192,8 +192,8 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'caret-left' &&
-          <svg width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.40546 1.41887L1.72546 5.09887L5.40546 8.77887" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="10" height="10" transform="rotate(90)" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 3L5 7L9 3" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         }
         {/*
@@ -202,8 +202,8 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'caret-right' &&
-          <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1.46997 9.02L5.14996 5.34L1.46997 1.66" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="10" height="10" transform="rotate(270)" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 3L5 7L9 3" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         }
         {/*
@@ -212,8 +212,8 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'caret-up' &&
-          <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.11 5.18L4.43 1.5L0.75 5.18" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="10" height="10" transform="rotate(180)" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 3L5 7L9 3" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         }
         {/*
