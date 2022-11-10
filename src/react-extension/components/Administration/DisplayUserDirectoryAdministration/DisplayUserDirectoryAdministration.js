@@ -31,8 +31,21 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.userDirectoryFormService = UserDirectoryFormService.getInstance(this.props.adminUserDirectoryContext, this.props.t);
     this.bindCallbacks();
+  }
+
+
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
+  get defaultState() {
+    return {
+      hasFieldFocus: false, // true if the form field has focus
+    };
   }
 
   /**
@@ -65,6 +78,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleCredentialTitleClicked = this.handleCredentialTitleClicked.bind(this);
     this.handleDirectoryConfigurationTitleClicked = this.handleDirectoryConfigurationTitleClicked.bind(this);
     this.handleSynchronizationOptionsTitleClicked = this.handleSynchronizationOptionsTitleClicked.bind(this);
+    this.handleFieldFocus = this.handleFieldFocus.bind(this);
+    this.handleFieldBlur = this.handleFieldBlur.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
@@ -128,6 +143,20 @@ class DisplayUserDirectoryAdministration extends React.Component {
     }
   }
 
+  /**
+   * Handle field focus
+   */
+  handleFieldFocus() {
+    this.setState({hasFieldFocus: true});
+  }
+
+
+  /**
+   * Handle field blur
+   */
+  handleFieldBlur() {
+    this.setState({hasFieldFocus: false});
+  }
 
   /**
    * Should input be disabled? True if state is loading or processing
@@ -219,7 +248,6 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const settings = this.props.adminUserDirectoryContext.getSettings();
     const errors = this.props.adminUserDirectoryContext.getErrors();
     const isSubmitted = this.props.adminUserDirectoryContext.isSubmitted();
-
     return (
       <div className="row">
         <div className="ldap-settings col7 main-column">
@@ -273,12 +301,13 @@ class DisplayUserDirectoryAdministration extends React.Component {
                     <input id="server-input" type="text" className="required host ad openldap form-element" name="host"
                       value={settings.host} onChange={this.handleInputChange}
                       placeholder={this.props.t("host")} disabled={this.hasAllInputDisabled()}/>
-                    <div className="protocol">
+                    <div className="protocol" onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}>
                       <Select className="inline" name="connectionType" items={this.connectionType} value={settings.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                     </div>
                     <div className="port ad openldap">
                       <input id="port-input" type="number" className="required in-field form-element" name="port"
-                        value={settings.port}onChange={this.handleInputChange}
+                        value={settings.port} onChange={this.handleInputChange}
+                        onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}
                         disabled={this.hasAllInputDisabled()}/>
                     </div>
                   </div>

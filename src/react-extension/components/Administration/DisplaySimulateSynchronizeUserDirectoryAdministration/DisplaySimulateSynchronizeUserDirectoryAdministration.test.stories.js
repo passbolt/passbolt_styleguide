@@ -14,7 +14,7 @@ export default {
 };
 
 const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/directorysync*/, async() => mockApiResponse(mockSynchronizeBody));
+mockFetch.addGetFetchRequest(/directorysync\/synchronize\/dry-run/, async() => mockApiResponse(mockSynchronizeBody));
 
 const Template = args =>
   <AdminUserDirectoryContextProvider {...args}>

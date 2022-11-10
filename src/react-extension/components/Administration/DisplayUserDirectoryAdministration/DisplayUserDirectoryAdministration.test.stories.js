@@ -13,8 +13,8 @@ export default {
 };
 
 const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/directorysync\/settings/, async() => mockApiResponse(mockResult));
-mockFetch.addGetFetchRequest(/users/, async() => mockApiResponse(mockUsers));
+mockFetch.addGetFetchRequest(/directorysync\/settings.json/, async() => mockApiResponse(mockResult));
+mockFetch.addGetFetchRequest(/users*/, async() => mockApiResponse(mockUsers));
 
 
 const Template = args =>

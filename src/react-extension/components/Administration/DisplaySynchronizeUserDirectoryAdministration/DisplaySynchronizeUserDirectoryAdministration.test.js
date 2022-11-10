@@ -55,6 +55,7 @@ describe("See the synchronize user directory administration dialog", () => {
       expect(page.displaySynchronizeUserDirectoryAdministrationDialog.textareaReport).not.toBeNull();
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.synchronize);
       expect(props.onClose).toBeCalled();
+      expect.assertions(7);
     });
   });
 
@@ -67,6 +68,7 @@ describe("See the synchronize user directory administration dialog", () => {
       expect(page.title.hyperlink.textContent).toBe("Synchronize");
       await page.displaySynchronizeUserDirectoryAdministrationDialog.click(page.displaySynchronizeUserDirectoryAdministrationDialog.dialogClose);
       expect(props.onClose).toBeCalled();
+      expect.assertions(2);
     });
   });
 });
