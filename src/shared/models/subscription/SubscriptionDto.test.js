@@ -20,6 +20,7 @@ import {mockSubscription, mockSubscriptionModel} from '../../../react-extension/
 describe("SubscriptionDto model", () => {
   describe("SubscriptionDto::constructor", () => {
     it("should init dto with model", () => {
+      expect.assertions(1);
       const dto = new SubscriptionDto(mockSubscriptionModel);
       expect(dto).toEqual(mockSubscription);
     });
