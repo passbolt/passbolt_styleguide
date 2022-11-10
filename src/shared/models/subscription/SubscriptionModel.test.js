@@ -24,6 +24,7 @@ describe("SubscriptionModel model", () => {
       expect(model).toEqual(mockSubscriptionModel);
     });
     it("should init model default value without param", () => {
+      expect.assertions(1);
       const model = new SubscriptionModel();
       expect(model).toEqual({
         customerId: "",
