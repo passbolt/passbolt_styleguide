@@ -152,6 +152,7 @@ describe("DisplaySubscriptionKeyPage", () => {
 
 
     it('As AD I should see an error if no subscription key was found', async() => {
+      expect.assertions(4);
       jest.spyOn(props.context, 'onGetSubscriptionKeyRequested').mockImplementationOnce(() => {
         throw new PassboltApiFetchError("no subscription key", "");
       });
