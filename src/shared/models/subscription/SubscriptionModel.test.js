@@ -20,6 +20,7 @@ import SubscriptionModel from './SubscriptionModel';
 describe("SubscriptionModel model", () => {
   describe("SubscriptionModel::constructor", () => {
     it("should init model with dto", () => {
+      expect.assertions(1);
       const model = new SubscriptionModel(mockSubscription);
       expect(model).toEqual(mockSubscriptionModel);
     });
