@@ -44,6 +44,7 @@ describe("SubscriptionActionService", () => {
       expect(subscriptionActionService).toBeDefined();
     });
     it("should not create a new instance", () => {
+      expect.assertions(1);
       const newInstance = SubscriptionActionService.getInstance();
       expect(subscriptionActionService).toEqual(newInstance);
     });
