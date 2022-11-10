@@ -61,6 +61,7 @@ describe("SubscriptionActionService", () => {
 
   describe("MfaFormService::editSubscription", () => {
     it("should kill the instance and create a new one", () => {
+      expect.assertions(1);
       const editSubscriptionKey = {
         key: props.adminSubcriptionContext.getSubscription().data
       };
