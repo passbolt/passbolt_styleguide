@@ -36,6 +36,7 @@ describe("SubscriptionModel model", () => {
       });
     });
     it("should init model with N/A value if email and subscriptionId not exist", () => {
+      expect.assertions(2);
       const model = new SubscriptionModel({});
       expect(model.subscriptionId).toEqual("N/A");
       expect(model.email).toEqual("N/A");
