@@ -32,7 +32,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.userDirectoryFormService = new UserDirectoryFormService(this.props.adminUserDirectoryContext, this.props.t);
+    this.userDirectoryFormService = UserDirectoryFormService.getInstance(this.props.adminUserDirectoryContext, this.props.t);
     this.bindCallbacks();
   }
 
@@ -65,6 +65,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
   componentWillUnmount() {
     this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
     this.props.adminUserDirectoryContext.clearContext();
+    UserDirectoryFormService.killInstance();
+    this.userDirectoryFormService = null;
   }
 
 

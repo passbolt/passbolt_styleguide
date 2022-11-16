@@ -196,7 +196,6 @@ describe("As AD I should see the user directory settings", () => {
       await page.saveSettings();
 
       await waitFor(() => {});
-      expect.assertions(1);
       // Throw general error message
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
     });
@@ -256,3 +255,4 @@ describe("As AD I should see the user directory settings", () => {
     });
   });
 });
+
