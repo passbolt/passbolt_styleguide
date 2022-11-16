@@ -37,8 +37,8 @@ class SsoSettingsService {
    *
    * @return {Promise<Array<SmtpSettingsDto>>|null>}
    */
-  async find() {
-    return (await this.apiClient.findAll()).body;
+  async getCurrent() {
+    return (await this.apiClient.get('current', 'contain[data]=1')).body;
   }
 }
 

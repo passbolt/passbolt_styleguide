@@ -129,7 +129,6 @@ class ExtBootstrapApp extends Component {
               "/app/administration/email-notification",
               "/app/administration/smtp-settings",
               "/app/settings/mfa",
-              "/app/administration/sso",
             ]}>
               <>
                 {this.isLegacyAppjs &&
@@ -141,6 +140,7 @@ class ExtBootstrapApp extends Component {
               "/app/account-recovery/requests/review/:accountRecoveryRequestId",
               "/app/administration/subscription",
               "/app/administration/account-recovery",
+              "/app/administration/sso",
               "/app/folders/view/:filterByFolderId",
               "/app/groups/view/:selectedGroupId",
               "/app/groups/edit/:selectedGroupId",

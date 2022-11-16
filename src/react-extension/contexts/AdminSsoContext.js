@@ -15,10 +15,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
-import SsoSettingsService from "../../shared/services/api/sso/SsoSettingsService";
 import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 import {withDialog} from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
+import {withTranslation} from "react-i18next";
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -42,8 +42,6 @@ export class AdminSsoContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    const apiClientOptions = props.context.getApiClientOptions();
-    this.ssoSettingsService = new SsoSettingsService(apiClientOptions);
     this.providerList = [];
   }
 
@@ -52,7 +50,17 @@ export class AdminSsoContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      ssoConfig: null, // The current sso configuration
+      ssoConfig: {
+        provider: null,
+        data: {
+          url: "",
+          redirect_url: "",
+          client_id: "",
+          tenant_id: "",
+          client_secret: "",
+          client_secret_expiry: "",
+        }
+      }, // The current sso configuration
       isLoaded: false, // is the SSO settings data loading from the server finished
       isDataReady: this.isDataReady.bind(this), // returns true if the data has been loaded from the API already
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
@@ -73,21 +81,27 @@ export class AdminSsoContextProvider extends React.Component {
   async loadSsoConfiguration() {
     let ssoConfig = null;
     try {
-      ssoConfig = await this.ssoSettingsService.find();
+      ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
       this.setProviderList(ssoConfig.providers);
+
       if (ssoConfig?.provider) {
         const providerData = SsoProviders.find(provider => provider.id === ssoConfig.provider);
         ssoConfig.data.redirect_url = providerData.defaultConfig.redirect_url;
       }
+
+      // Ensures the format of the date in compatible with the input
+      if (ssoConfig?.data?.client_secret_expiry) {
+        ssoConfig.data.client_secret_expiry = ssoConfig.data.client_secret_expiry.substr(0, 10);
+      }
     } catch (error) {
-      this.setProviderListFromBext();
+      this.setProviderListFromBext(); //avoids to have an empty and non working UI
       this.props.dialogContext.open(NotifyError, {error});
     }
 
     this.setState({
       ssoConfig: {
-        provider: ssoConfig?.provider,
-        data: ssoConfig?.data
+        ...ssoConfig,
+        data: Object.assign({}, this.state.ssoConfig.data, ssoConfig?.data)
       },
       isLoaded: true
     });
@@ -100,6 +114,9 @@ export class AdminSsoContextProvider extends React.Component {
    * @private
    */
   setProviderList(providerIdList) {
+    if (!providerIdList) {
+      throw new Error(this.props.t("No SSP provider available"));
+    }
     /*
      * providers must be known on both side (API / Bext) in order to work.
      * Obviously, the API can't work with an unknown provider.
@@ -204,9 +221,7 @@ export class AdminSsoContextProvider extends React.Component {
     this.setState({
       ssoConfig: {
         provider: selectedProvider.id,
-        data: {
-          ...selectedProvider?.defaultConfig,
-        }
+        data: Object.assign({}, this.state.ssoConfig.data, selectedProvider?.defaultConfig)
       }
     });
   }
@@ -229,8 +244,9 @@ AdminSsoContextProvider.propTypes = {
   children: PropTypes.any, // The children components
   accountRecoveryContext: PropTypes.object, // The account recovery context
   dialogContext: PropTypes.object, // The dialog context
+  t: PropTypes.func, // The translation function
 };
-export default withAppContext(withDialog(AdminSsoContextProvider));
+export default withAppContext(withDialog(withTranslation('common')(AdminSsoContextProvider)));
 
 /**
  * Resource Workspace Context Consumer HOC

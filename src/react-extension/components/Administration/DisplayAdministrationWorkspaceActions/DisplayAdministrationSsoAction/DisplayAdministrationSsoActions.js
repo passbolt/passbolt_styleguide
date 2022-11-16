@@ -35,47 +35,23 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleSaveClick = this.handleSaveClick.bind(this);
     this.handleTestConfigurationClick = this.handleTestConfigurationClick.bind(this);
   }
 
-  /**
-   * Handle save settings
-   */
-  handleSaveClick() {
-    //@todo @mock
-    const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
-    console.log("click saved sso config", ssoConfig);
-    this.props.adminSsoContext.save(ssoConfig);
-  }
-
-  /**
-   * Handle reset account recovery policy settings
-   */
-  handleTestConfigurationClick() {
-    //@todo @mock
-    console.log("test configuration");
+  async handleTestAndSaveClick() {
+    if (!this.props.adminSsoContext.validateData()) {
+      return;
+    }
+    await this.props.adminSsoContext.saveAndTestConfiguration();
   }
 
   /**
    * Is save button enable
    * @returns {boolean}
    */
-  isSaveEnabled() {
-    const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
-    return ssoConfig?.provider
-      && ssoConfig?.data?.url
-      && ssoConfig?.data?.app_id
-      && ssoConfig?.data?.directory_id
-      && ssoConfig?.data?.secret;
-  }
-
-  /**
-   * Is save button enable
-   * @returns {boolean}
-   */
-  isTestConfigurationEnabled() {
-    return this.isSaveEnabled();
+  isTestAndSaveEnabled() {
+    return true;
+    return this.props.adminSsoContext.hasFormChanged();
   }
 
   /**
@@ -88,17 +64,9 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
+              <a className={`button ${this.isTestAndSaveEnabled() ? "" : "disabled"}`} onClick={this.handleTestAndSaveClick}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
-              </a>
-            </li>
-          </div>
-          <div>
-            <li>
-              <a className={`button ${this.isTestConfigurationEnabled() ? "" : "disabled"}`} onClick={this.handleTestConfigurationClick}>
-                <Icon name="edit"/>
-                <span><Trans>Test your configuration</Trans></span>
               </a>
             </li>
           </div>

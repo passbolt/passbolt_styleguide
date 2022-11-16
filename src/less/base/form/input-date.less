@@ -1,0 +1,12 @@
+input[type=date] {
+    height: 3.6rem;
+    position: relative;
+
+    &::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+
+    &.empty {
+        color: fade(@default-text-color, 50%);
+    }
+}

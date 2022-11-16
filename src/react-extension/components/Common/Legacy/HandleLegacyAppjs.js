@@ -84,7 +84,6 @@ class HandleLegacyAppjs extends Component {
       "/app/administration/email-notification",
       "/app/administration/internationalisation",
       "/app/settings/mfa",
-      "/app/administration/sso"
     ];
     return apiPaths.some(apiPath => path.endsWith(apiPath));
   }

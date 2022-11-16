@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props.

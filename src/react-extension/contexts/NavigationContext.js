@@ -233,7 +233,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationSsoRequested() {
-    await this.goTo("api", "/app/administration/sso");
+    await this.goTo("browser-extension", "/app/administration/sso");
   }
 
   /**

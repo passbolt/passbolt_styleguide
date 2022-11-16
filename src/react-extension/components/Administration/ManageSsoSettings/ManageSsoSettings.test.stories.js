@@ -17,8 +17,6 @@ import React from "react";
 import ManageSsoSettings from "./ManageSsoSettings";
 import AdminSsoSettingsContextProvider from "../../../contexts/AdminSsoContext";
 import {defaultProps, disabledSso, azureConfiguredSso} from "./ManageSsoSettings.test.data";
-import MockFetch from "../../../test/mock/MockFetch";
-import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import DisplayActionFeedbacks from "../../Common/ActionFeedback/DisplayActionFeedbacks";
 import ActionFeedbackContextProvider from "../../../contexts/ActionFeedbackContext";
 
@@ -26,32 +24,6 @@ export default {
   title: 'Components/Administration/ManageSsoSettings',
   component: ManageSsoSettings
 };
-
-let currentStory = null;
-const mockFetch = new MockFetch();
-mockFetch.addGetFetchRequest(/sso\/settings\.json/, async() => {
-  switch (currentStory) {
-    case 'components-administration-managessosettings--default': {
-      return mockApiResponse(disabledSso());
-    }
-    case 'components-administration-managessosettings--azure': {
-      return mockApiResponse(azureConfiguredSso());
-    }
-    case 'components-administration-managessosettings--error-from-the-server': {
-      throw new Error("Something went wrong!");
-    }
-  }
-  throw new Error("Unsupported story");
-});
-
-const decorators = [
-  (Story, context) => {
-    currentStory = context.id;
-    return <>
-      <Story/>
-    </>;
-  }
-];
 
 const Template = args =>
   <DialogContextProvider>
@@ -72,21 +44,12 @@ const Template = args =>
 
 export const Default = Template.bind({});
 Default.args = defaultProps();
-Default.decorators = decorators;
-Default.parameters = {
-  css: "api_main"
-};
+Default.args.context.port.addRequestListener("passbolt.sso.get-current", disabledSso);
 
 export const Azure = Template.bind({});
 Azure.args = defaultProps();
-Azure.decorators = decorators;
-Azure.parameters = {
-  css: "api_main"
-};
+Azure.args.context.port.addRequestListener("passbolt.sso.get-current", azureConfiguredSso);
 
 export const ErrorFromTheServer = Template.bind({});
 ErrorFromTheServer.args = defaultProps();
-ErrorFromTheServer.decorators = decorators;
-ErrorFromTheServer.parameters = {
-  css: "api_main"
-};
+ErrorFromTheServer.args.context.port.addRequestListener("passbolt.sso.get-current", () => { throw new Error("Something went wrong"); });

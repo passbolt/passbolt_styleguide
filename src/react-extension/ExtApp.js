@@ -62,6 +62,7 @@ import ManageWorkflows from "./components/Common/Workflow/ManageWorkflows/Manage
 import AdminAccountRecoveryContextProvider from "./contexts/AdminAccountRecoveryContext";
 import HandleApplicationFirstLoadRoute from "./components/Common/Route/HandleApplicationFirstLoadRoute";
 import AdminSubscriptionContextProvider from "./contexts/Administration/AdministrationSubscription/AdministrationSubscription";
+import AdminSsoContextProvider from "./contexts/AdminSsoContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -124,7 +125,6 @@ class ExtApp extends Component {
                                     "/app/administration/email-notification",
                                     "/app/administration/smtp-settings",
                                     "/app/settings/mfa",
-                                    "/app/administration/sso",
                                   ]}/>
                                   {/* Passwords workspace */}
                                   <Route path={[
@@ -188,17 +188,20 @@ class ExtApp extends Component {
                                       </div>
                                     </UserSettingsContextProvider>
                                   </Route>
-                                  {/* Subscription and Account Recovery settings */}
+                                  {/* SSO, Subscription and Account Recovery settings */}
                                   <Route exact path={[
                                     "/app/administration/subscription",
                                     "/app/administration/account-recovery",
+                                    "/app/administration/sso",
                                   ]}>
                                     <AdministrationWorkspaceContextProvider>
                                       <AdminAccountRecoveryContextProvider>
                                         <AdminSubscriptionContextProvider>
-                                          <ManageDialogs/>
-                                          <ManageWorkflows/>
-                                          <AdministrationWorkspace/>
+                                          <AdminSsoContextProvider>
+                                            <ManageDialogs/>
+                                            <ManageWorkflows/>
+                                            <AdministrationWorkspace/>
+                                          </AdminSsoContextProvider>
                                         </AdminSubscriptionContextProvider>
                                       </AdminAccountRecoveryContextProvider>
                                     </AdministrationWorkspaceContextProvider>

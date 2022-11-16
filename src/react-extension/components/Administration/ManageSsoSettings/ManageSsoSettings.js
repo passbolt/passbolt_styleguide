@@ -36,6 +36,7 @@ class ManageSsoSettings extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.createRefs();
   }
 
   /**
@@ -58,34 +59,18 @@ class ManageSsoSettings extends React.Component {
   }
 
   /**
-   * Whenever the component has updated in terms of props or state
-   * @param prevProps
-   */
-  async componentDidUpdate(prevProps) {
-    await this.handleMustSave(prevProps.administrationWorkspaceContext.must.save);
-  }
-
-  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleProviderInputChange = this.handleProviderInputChange.bind(this);
-    this.isValidUrl = this.isValidUrl.bind(this);
     this.handleSsoSettingToggle = this.handleSsoSettingToggle.bind(this);
     this.handleCopyRedirectUrl = this.handleCopyRedirectUrl.bind(this);
+    this.handleShowDatePicker = this.handleShowDatePicker.bind(this);
   }
 
-  /**
-   * Handle the must save change
-   * @param previousMustSaveSettings Previous must save settings
-   */
-  async handleMustSave(previousMustSaveSettings) {
-    const hasMustSaveChanged = this.props.administrationWorkspaceContext.must.save !== previousMustSaveSettings;
-    if (hasMustSaveChanged && this.props.administrationWorkspaceContext.must.save) {
-      await this.handleFormSubmit();
-      this.props.administrationWorkspaceContext.onResetActionsSettings();
-    }
+  createRefs() {
+    this.datePickerRef = React.createRef();
   }
 
   /**
@@ -126,47 +111,19 @@ class ManageSsoSettings extends React.Component {
   }
 
   /**
+   * Handles the click on the "show date picker" button
+   */
+  handleShowDatePicker(event) {
+    event.preventDefault();
+    this.datePickerRef.current.showPicker();
+  }
+
+  /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
    */
   hasAllInputDisabled() {
     return this.state.processing || this.state.loading;
-  }
-
-  /**
-   * Validate the form.
-   * @returns {Promise<void>}
-   */
-  async validate() {
-    // Validate the form inputs.
-    await Promise.all([
-      this.validateAzureInput(),
-    ]);
-  }
-
-  /**
-   * Validate the yubikey input.
-   * @returns {Promise<void>}
-   */
-  async validateAzureInput() {
-    const data = this.state.ssoConfig.data;
-    return this.isValidUrl(data.url)
-      && data.tenant_id !== ""
-      && data.client_id !== ""
-      && data.client_secret !== "";
-  }
-
-  /**
-   * Returns true if the url is valid;
-   * @param {string} url
-   */
-  isValidUrl(string) {
-    try {
-      const url = new URL(string);
-      return url.protocol === "http:" || url.protocol === "https:";
-    } catch (_) {
-      return false;
-    }
   }
 
   /**
@@ -186,30 +143,8 @@ class ManageSsoSettings extends React.Component {
     return !data?.url
       || !data?.tenant_id
       || !data?.client_id
-      || !data?.client_secret;
-  }
-
-  /**
-   * Handle form submit event.
-   * @params {ReactEvent} The react event
-   * @returns {Promise<void>}
-   */
-  async handleFormSubmit() {
-    // Do not re-submit an already processing form
-    if (!this.state.processing) {
-      await this.toggleProcessing();
-      await this.validate();
-      if (this.hasValidationError()) {
-        await this.toggleProcessing();
-        return;
-      }
-      try {
-        await this.saveSso();
-        await this.handleSaveSuccess();
-      } catch (error) {
-        await this.handleSaveError(error);
-      }
-    }
+      || !data?.client_secret
+      || !data?.client_secret_expiry;
   }
 
   /**
@@ -297,128 +232,135 @@ class ManageSsoSettings extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
     const ssoContext = this.props.adminSsoContext;
+    const ssoConfig = ssoContext.getSsoConfiguration();
     const isSsoActivated = ssoContext.isSsoConfigActivated();
+    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
     return (
-      <div className="grid grid-responsive-12">
-        <div className="row">
-          <div className="third-party-provider-settings sso-settings col8 main-column">
-            <h3>
-              <span className="input toggle-switch form-element">
-                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="ssoToggle"
-                  onChange={this.handleSsoSettingToggle} checked={isSsoActivated} disabled={this.hasAllInputDisabled()}
-                  id="ssoToggle"/>
-                <label htmlFor="ssoToggle"><Trans>Single Sign-On</Trans></label>
-              </span>
-            </h3>
-            {this.isReady() && !isSsoActivated &&
-              <>
-                <h4 className="no-border"><Trans>Select a provider</Trans></h4>
-                <div className="provider-list">
-                  {SsoProviders.map(provider =>
-                    <div key={provider.id} className={`provider button ${provider.disabled ? "disabled" : ""}`} id={provider.id} onClick={() => this.props.adminSsoContext.changeProvider(provider)}>
-                      <div className="provider-logo">
-                        <img src={`${this.props.context.trustedDomain}/img/third_party/${provider.icon}`}/>
-                      </div>
-                      <p className="provider-name">{provider.name}<br/>
-                        {provider.disabled &&
-                          <Trans>(not yet available)</Trans>
-                        }
-                      </p>
+      <div className="row">
+        <div className="third-party-provider-settings sso-settings col8 main-column">
+          <h3>
+            <span className="input toggle-switch form-element">
+              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="ssoToggle"
+                onChange={this.handleSsoSettingToggle} checked={isSsoActivated} disabled={this.hasAllInputDisabled()}
+                id="ssoToggle"/>
+              <label htmlFor="ssoToggle"><Trans>Single Sign-On</Trans></label>
+            </span>
+          </h3>
+          {this.isReady() && !isSsoActivated &&
+            <>
+              <h4 className="no-border"><Trans>Select a provider</Trans></h4>
+              <div className="provider-list">
+                {SsoProviders.map(provider =>
+                  <div key={provider.id} className={`provider button ${provider.disabled ? "disabled" : ""}`} id={provider.id} onClick={() => this.props.adminSsoContext.changeProvider(provider)}>
+                    <div className="provider-logo">
+                      <img src={`${trustedDomain}/img/third_party/${provider.icon}`}/>
                     </div>
-                  )}
-                </div>
-              </>
-            }
-            {this.isReady() && isSsoActivated &&
-              <form className="form">
-                <div className="select-wrapper input">
-                  <label htmlFor="sso-provider-input"><Trans>Single Sign-On provider</Trans></label>
-                  <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
-                </div>
-                {ssoConfig?.provider === "azure" &&
-                  <>
-                    <hr/>
-                    <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Login URL</Trans></label>
-                      <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url"
-                        value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
-                        disabled={this.hasAllInputDisabled()}/>
-                      <p>
-                        <Trans>The Azure AD authentication endpoint. See <a href="" rel="noopener noreferrer">alternatives</a>.</Trans>
-                      </p>
+                    <p className="provider-name">{provider.name}<br/>
+                      {provider.disabled &&
+                        <Trans>(not yet available)</Trans>
+                      }
+                    </p>
+                  </div>
+                )}
+              </div>
+            </>
+          }
+          {this.isReady() && isSsoActivated &&
+            <form className="form">
+              <div className="select-wrapper input">
+                <label htmlFor="sso-provider-input"><Trans>Single Sign-On provider</Trans></label>
+                <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
+              </div>
+              {ssoConfig?.provider === "azure" &&
+                <>
+                  <hr/>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Login URL</Trans></label>
+                    <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url"
+                      value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <p>
+                      <Trans>The Azure AD authentication endpoint. See <a href="" rel="noopener noreferrer">alternatives</a>.</Trans>
+                    </p>
+                  </div>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Redirect URL</Trans></label>
+                    <div className="button-inline">
+                      <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
+                        value={ssoConfig?.data?.redirect_url} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+                      <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
+                        <Icon name="copy-to-clipboard"/>
+                      </a>
                     </div>
-                    <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Redirect URL</Trans></label>
-                      <div className="button-inline">
-                        <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-                          value={ssoConfig?.data?.redirect_url} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
-                        <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-                          <span>
-                            <Icon name="copy-to-clipboard"/>
-                          </span>
-                        </a>
-                      </div>
-                      <p>
-                        <Trans>The URL to provide to Azure when registering the application.</Trans>
-                      </p>
+                    <p>
+                      <Trans>The URL to provide to Azure when registering the application.</Trans>
+                    </p>
+                  </div>
+                  <hr/>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Application (client) ID</Trans></label>
+                    <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id"
+                      value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <p>
+                      <Trans>The public identifier for the app in Azure in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
+                    </p>
+                  </div>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Directory (tenant) ID</Trans></label>
+                    <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id"
+                      value={ssoConfig?.data?.tenant_id} onChange={this.handleInputChange} placeholder={this.translate("Directory ID")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <p>
+                      <Trans>The Azure Active Directory tenant ID, in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
+                    </p>
+                  </div>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Secret</Trans></label>
+                    <input id="sso-azure-secret-input" type="text" className="fluid form-element" name="client_secret"
+                      value={ssoConfig?.data?.client_secret} onChange={this.handleInputChange} placeholder={this.translate("Secret")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <p>
+                      <Trans>Allows Azure and Passbolt API to securely share information. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
+                    </p>
+                  </div>
+                  <div className={`input text input-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Secret expiry</Trans></label>
+                    <div className="button-inline">
+                      <input id="sso-azure-secret-expiry-input" type="date" ref={this.datePickerRef} className={`fluid form-element ${ssoConfig.data.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"
+                        value={ssoConfig?.data?.client_secret_expiry} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
+                      <a onClick={this.handleShowDatePicker} className="show-date-picker button button-icon">
+                        <Icon name="calendar"/>
+                      </a>
                     </div>
-                    <hr/>
-                    <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Application (client) ID</Trans></label>
-                      <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id"
-                        value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
-                        disabled={this.hasAllInputDisabled()}/>
-                      <p>
-                        <Trans>The public identifier for the app in Azure in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
-                      </p>
-                    </div>
-                    <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Directory (tenant) ID</Trans></label>
-                      <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id"
-                        value={ssoConfig?.data?.tenant_id} onChange={this.handleInputChange} placeholder={this.translate("Directory ID")}
-                        disabled={this.hasAllInputDisabled()}/>
-                      <p>
-                        <Trans>The Azure Active Directory tenant ID, in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
-                      </p>
-                    </div>
-                    <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                      <label><Trans>Secret</Trans></label>
-                      <input id="sso-azure-secret-input" type="text" className="fluid form-element" name="client_secret"
-                        value={ssoConfig?.data?.client_secret} onChange={this.handleInputChange} placeholder={this.translate("Secret")}
-                        disabled={this.hasAllInputDisabled()}/>
-                      <p>
-                        <Trans>Allows Azure and Passbolt API to securely share information. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
-                      </p>
-                    </div>
-                    <div className="warning message">
-                      <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
-                    </div>
-                  </>
-                }
-              </form>
-            }
+                  </div>
+                  <div className="warning message">
+                    <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
+                  </div>
+                </>
+              }
+            </form>
+          }
+        </div>
+        <div className="col4 last">
+          <div className="sidebar-help">
+            <h3><Trans>Need some help?</Trans></h3>
+            <p><Trans>For more information about SSO, checkout the dedicated page on the help website.</Trans></p>
+            <a className="button" href="https://help.passbolt.com/configure/sso" target="_blank" rel="noopener noreferrer">
+              <Icon name="document"/>
+              <span><Trans>Read the documentation</Trans></span>
+            </a>
           </div>
-          <div className="col4 last">
-            <div className="sidebar-help">
-              <h3><Trans>Need some help?</Trans></h3>
-              <p><Trans>For more information about SSO, checkout the dedicated page on the help website.</Trans></p>
-              <a className="button" href="https://help.passbolt.com/configure/sso" target="_blank" rel="noopener noreferrer">
-                <Icon name="document"/>
-                <span><Trans>Read the documentation</Trans></span>
-              </a>
-            </div>
-            {ssoConfig?.provider === "azure" &&
-            <div className="sidebar-help">
-              <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
-              <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
-                <Icon name="external-link"/>
-                <span><Trans>Read the documentation</Trans></span>
-              </a>
-            </div>
-            }
+          {ssoConfig?.provider === "azure" &&
+          <div className="sidebar-help">
+            <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
+            <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
+              <Icon name="external-link"/>
+              <span><Trans>Read the documentation</Trans></span>
+            </a>
           </div>
+          }
         </div>
       </div>
     );

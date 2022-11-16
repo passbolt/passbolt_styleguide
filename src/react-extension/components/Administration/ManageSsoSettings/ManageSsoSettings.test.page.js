@@ -193,4 +193,12 @@ export default class ManageSsoSettingsPage {
   get client_secret() {
     return this.select(".sso-settings #sso-azure-secret-input");
   }
+
+  /**
+   * Returns the client_secret input HTML element
+   * @returns {HTMLElement}
+   */
+  get client_secret_expiry() {
+    return this.select(".sso-settings #sso-azure-secret-expiry-input");
+  }
 }
