@@ -34,7 +34,7 @@ import ApiAppContextProvider from "./contexts/ApiAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AppContext from "./contexts/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
-import ApiAppAccountRecoveryUserService from "../shared/services/accountRecovery/ApiAppAccountRecoveryUserService";
+import ApiAppAccountRecoveryUserService from "../shared/services/api/accountRecovery/ApiAppAccountRecoveryUserService";
 import AdminSmtpSettingsContextProvider from "./contexts/AdminSmtpSettingsContext";
 import AdminEmailNotificationContextProvider from "./contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa/AdministrationMfaContext";
