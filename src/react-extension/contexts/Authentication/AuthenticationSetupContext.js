@@ -299,7 +299,6 @@ export class AuthenticationSetupContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async configuringSso() {
-    console.log(this.props.context.siteSettings.canIUse('sso'));
     const canIUseSso = true; //@todo @mock: redo change /  this.props.context.siteSettings.canIUse('sso');
     if (!canIUseSso) {
       return;

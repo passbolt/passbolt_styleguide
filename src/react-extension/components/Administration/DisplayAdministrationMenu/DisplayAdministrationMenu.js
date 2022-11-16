@@ -233,7 +233,6 @@ class DisplayAdministrationMenu extends React.Component {
     return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
-
   /**
    * If SSO menu is selected
    * @returns {boolean}
@@ -364,7 +363,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleSsoClick}>
-                    <span><Trans>SSO</Trans></span>
+                    <span><Trans>Single Sign-On</Trans></span>
                   </a>
                 </div>
               </div>
