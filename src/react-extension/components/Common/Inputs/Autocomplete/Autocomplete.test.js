@@ -15,6 +15,7 @@
 /**
  * Unit tests on Autocomplete in regard of specifications
  */
+import {groups} from "../../../UserDetails/DisplayUserDetails/DisplayUserDetails.test.data";
 import {defaultProps} from "./Autocomplete.test.data";
 import AutocompletePage from "./Autocomplete.test.page";
 
@@ -71,6 +72,17 @@ describe("See the Autocomplete", () => {
       await page.clickOnItem(1);
       expect(props.onSelect).toHaveBeenCalledWith(items[0]);
       expect(props.onClose).toHaveBeenCalled();
+    });
+
+    it('As LU I should see an item with the number of user into the group', async() => {
+      expect.assertions(1);
+      const items = [
+        {name: "group", groups_users: groups}
+      ];
+      const requestMockImpl = jest.fn(() => items);
+      jest.spyOn(props, 'searchCallback').mockImplementation(requestMockImpl);
+      await page.fillInput("at");
+      expect(page.getAutocompleteItemDetails(1)).toBe("10 group members");
     });
 
     it('As LU I should see autocomplete empty', async() => {
