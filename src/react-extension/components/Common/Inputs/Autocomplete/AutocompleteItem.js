@@ -55,8 +55,8 @@ class AutocompleteItem extends Component {
       const longId = this.props.user.gpgkey.fingerprint.substr(this.props.user.gpgkey.fingerprint.length - 16);
       return longId.replace(/(.{4})/g, "$1 ");
     } else {
-      if (this.props.group.user_count > 1) {
-        return `${this.props.group.user_count} group members`;
+      if (this.props.group?.groups_users?.length > 1) {
+        return `${this.props.group.groups_users.length} group members`;
       } else {
         return `One group member`;
       }
