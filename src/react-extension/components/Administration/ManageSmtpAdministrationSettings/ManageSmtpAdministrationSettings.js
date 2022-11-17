@@ -25,6 +25,13 @@ import Select from "../../Common/Select/Select";
 import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
 import DisplayAdministrationSmtpSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSmtpSettingsActions/DisplayAdministrationSmtpSettingsActions";
 
+/*
+ * Supported authentication methods.
+ */
+const AUTHENTICATION_METHOD_NONE = "None";
+const AUTHENTICATION_METHOD_USERNAME = "Username only";
+const AUTHENTICATION_METHOD_USERNAME_PASSWORD = "Username & password";
+
 class ManageSmtpAdministrationSettings extends React.Component {
   /**
    * Constructor
@@ -107,15 +114,35 @@ class ManageSmtpAdministrationSettings extends React.Component {
     this.handleAdvancedSettingsToggle = this.handleAdvancedSettingsToggle.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleProviderChange = this.handleProviderChange.bind(this);
+    this.handleAuthenticationMethodChange = this.handleAuthenticationMethodChange.bind(this);
   }
 
   /**
    * Handle provider change from select field.
+   * @params {ReactEvent} The react event
    */
   handleProviderChange(event) {
     const providerId = event.target.value;
     const provider = SmtpProviders.find(item => item.id === providerId);
     this.props.adminSmtpSettingsContext.changeProvider(provider);
+  }
+
+  /**
+   * Handle provider change from select field.
+   * @params {ReactEvent} The react event
+   */
+  handleAuthenticationMethodChange(event) {
+    let username = null;
+    let password = null;
+
+    if (event.target.value === AUTHENTICATION_METHOD_USERNAME) {
+      username = "";
+    } else if (event.target.value === AUTHENTICATION_METHOD_USERNAME_PASSWORD) {
+      username = "";
+      password = "";
+    }
+
+    this.props.adminSmtpSettingsContext.setData({username, password});
   }
 
   /**
@@ -125,7 +152,7 @@ class ManageSmtpAdministrationSettings extends React.Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    this.props.adminSmtpSettingsContext.setData(target.name, target.value);
+    this.props.adminSmtpSettingsContext.setData({[target.name]: target.value});
   }
 
   /**
@@ -155,6 +182,18 @@ class ManageSmtpAdministrationSettings extends React.Component {
   }
 
   /**
+   * Return the list of available authentication method.
+   * @returns {Array<object>}
+   */
+  get authenticationMethodList() {
+    return [
+      {value: AUTHENTICATION_METHOD_NONE, label: this.translate('None')},
+      {value: AUTHENTICATION_METHOD_USERNAME, label: this.translate('Username only')},
+      {value: AUTHENTICATION_METHOD_USERNAME_PASSWORD, label: this.translate('Username & password')},
+    ];
+  }
+
+  /**
    * Returns a list of available choice for the 'TLS' select field.
    * @returns {Array<object>}
    */
@@ -169,6 +208,40 @@ class ManageSmtpAdministrationSettings extends React.Component {
         label: this.translate("No"),
       }
     ];
+  }
+
+  /**
+   * Return the selected authentication method.
+   * @return {string}
+   */
+  get authenticationMethod() {
+    const smtpContext = this.props.adminSmtpSettingsContext;
+    const smtpSettings = smtpContext.getCurrentSmtpSettings();
+
+    if (smtpSettings?.username === null) {
+      return AUTHENTICATION_METHOD_NONE;
+    } else if (smtpSettings?.password === null) {
+      return AUTHENTICATION_METHOD_USERNAME;
+    } else {
+      return AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+    }
+  }
+
+  /**
+   * Return true if the username field should be displayed
+   * @return {boolean}
+   */
+  shouldDisplayUsername() {
+    return this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME
+      || this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+  }
+
+  /**
+   * Return true if the password field should be displayed
+   * @return {boolean}
+   */
+  shouldDisplayPassword() {
+    return this.authenticationMethod === AUTHENTICATION_METHOD_USERNAME_PASSWORD;
   }
 
   /**
@@ -242,30 +315,38 @@ class ManageSmtpAdministrationSettings extends React.Component {
                     <label htmlFor="smtp-settings-form-provider"><Trans>Email provider</Trans></label>
                     <Select id="smtp-settings-form-provider" name="provider" items={this.providerList} value={settings.provider.id} onChange={this.handleProviderChange} disabled={this.isProcessing()}/>
                   </div>
-                  <div className={`input text ${errors.username ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                    <label htmlFor="smtp-settings-form-username"><Trans>Username</Trans></label>
-                    <input id="smtp-settings-form-username" ref={this.usernameFieldRef} name="username" className="fluid" maxLength="256" type="text"
-                      autoComplete="off" value={settings.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
-                      disabled={this.isProcessing()}/>
-                    {errors.username &&
-                    <div className="error-message">{errors.username}</div>
-                    }
+                  <div className={`select-wrapper input required ${this.isProcessing() ? 'disabled' : ''}`}>
+                    <label htmlFor="smtp-settings-form-authentication-method"><Trans>Authentication method</Trans></label>
+                    <Select id="smtp-settings-form-authentication-method" name="authentication-method" items={this.authenticationMethodList} value={this.authenticationMethod} onChange={this.handleAuthenticationMethodChange} disabled={this.isProcessing()}/>
                   </div>
-                  <div className={`input-password-wrapper input ${errors.password ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
-                    <label htmlFor="smtp-settings-form-password"><Trans>Password</Trans></label>
-                    <Password id="smtp-settings-form-password"
-                      name="password"
-                      autoComplete="new-password"
-                      placeholder={this.translate("Password")}
-                      preview={true}
-                      value={settings.password}
-                      onChange={this.handleInputChange}
-                      disabled={this.isProcessing()}
-                      inputRef={this.passwordFieldRef}/>
-                    {errors.password &&
-                      <div className="password error-message">{errors.password}</div>
-                    }
-                  </div>
+                  {this.shouldDisplayUsername() &&
+                    <div className={`input text ${errors.username ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
+                      <label htmlFor="smtp-settings-form-username"><Trans>Username</Trans></label>
+                      <input id="smtp-settings-form-username" ref={this.usernameFieldRef} name="username" className="fluid" maxLength="256" type="text"
+                        autoComplete="off" value={settings.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
+                        disabled={this.isProcessing()}/>
+                      {errors.username &&
+                        <div className="error-message">{errors.username}</div>
+                      }
+                    </div>
+                  }
+                  {this.shouldDisplayPassword() &&
+                    <div className={`input-password-wrapper input ${errors.password ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
+                      <label htmlFor="smtp-settings-form-password"><Trans>Password</Trans></label>
+                      <Password id="smtp-settings-form-password"
+                        name="password"
+                        autoComplete="new-password"
+                        placeholder={this.translate("Password")}
+                        preview={true}
+                        value={settings.password}
+                        onChange={this.handleInputChange}
+                        disabled={this.isProcessing()}
+                        inputRef={this.passwordFieldRef}/>
+                      {errors.password &&
+                        <div className="password error-message">{errors.password}</div>
+                      }
+                    </div>
+                  }
                   <div className="accordion-header">
                     <a onClick={this.handleAdvancedSettingsToggle}>
                       <Icon name={this.state.showAdvancedSettings ? "caret-down" : "caret-right"}/><Trans>Advanced settings</Trans>
