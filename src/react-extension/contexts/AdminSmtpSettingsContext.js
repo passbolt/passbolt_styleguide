@@ -208,11 +208,10 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Set a given state field of this context.
-   * @param {string} key the state field to set
-   * @param {*} value the new value of the field
+   * @param {object} data Settings data to update as key value object.
    */
-  setData(key, value) {
-    const newSettings = Object.assign({}, this.state.currentSmtpSettings, {[key]: value});
+  setData(data) {
+    const newSettings = Object.assign({}, this.state.currentSmtpSettings, data);
     const newState = {
       currentSmtpSettings: {
         ...newSettings,
@@ -221,14 +220,10 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       settingsModified: true
     };
 
-    if (this.state.hasSumittedForm) {
-      const errors = {...this.state.errors};
-      delete errors[key];
-      this[`validate_${key}`](value, errors);
-      newState.errors = errors;
-    }
-
     this.setState(newState);
+    if (this.state.hasSumittedForm) {
+      this.validateData(newSettings);
+    }
   }
 
   /**
@@ -286,14 +281,14 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Validates the current data in the state
+   * @param {object} settings (Optional) The settings to validate, if not provided use the settings from the state.
    * @returns {boolean} true if the data is valid, false otherwise
    */
-  validateData() {
-    const settings = this.state.currentSmtpSettings;
+  validateData(settings) {
+    settings = settings || this.state.currentSmtpSettings;
     const errors = {};
 
     let isFormValid = true;
-
     isFormValid = this.validate_host(settings.host, errors) && isFormValid;
     isFormValid = this.validate_sender_email(settings.sender_email, errors) && isFormValid;
     isFormValid = this.validate_sender_name(settings.sender_name, errors) && isFormValid;
@@ -377,11 +372,14 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Returns true if the username value is valid
-   * @param {string} data the data to validate
+   * @param {string|null} data the data to validate
    * @param {object} errors a ref object to put the validation onto
    * @returns {boolean}
    */
   validate_username(data, errors) {
+    if (data === null) {
+      return true;
+    }
     if (typeof data !== "string") {
       errors.username = this.props.t("Username must be a valid string");
       return false;
@@ -392,11 +390,14 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Returns true if the password value is valid
-   * @param {string} data the data to validate
+   * @param {string|null} data the data to validate
    * @param {object} errors a ref object to put the validation onto
    * @returns {boolean}
    */
   validate_password(data, errors) {
+    if (data === null) {
+      return true;
+    }
     if (typeof data !== "string") {
       errors.password = this.props.t("Password must be a valid string");
       return false;
