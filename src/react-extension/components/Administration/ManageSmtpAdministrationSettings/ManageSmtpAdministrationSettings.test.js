@@ -16,6 +16,7 @@
  * Unit tests on ManageSmtpAdministrationSettings in regard of specifications
  */
 import SmtpProviders from "./SmtpProviders.data";
+import {ManageSmtpAdministrationSettings} from "./ManageSmtpAdministrationSettings";
 import ManageSmtpAdministrationSettingsPage from "./ManageSmtpAdministrationSettings.test.page";
 import {waitFor} from "@testing-library/react";
 import {defaultProps} from "./ManageSmtpAdministrationSettings.test.data";
@@ -27,6 +28,8 @@ import {
   withExistingSmtpSettings,
   withAwsSesSmtpSettings,
   withKnownProviderSmtpSettings,
+  withNoAuthenticationMethod,
+  withUsernameAuthenticationMethod,
 } from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import {enableFetchMocks} from "jest-fetch-mock";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
@@ -262,6 +265,48 @@ describe("ManageSmtpAdministrationSettings", () => {
         error: expectedError
       });
     });
+
+    it('As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to “Username and password” if both username and password returned by the API are set', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const smtpSettings = withExistingSmtpSettings();
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      const page = new ManageSmtpAdministrationSettingsPage(props);
+
+      await waitFor(() => {});
+
+      expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_USERNAME_PASSWORD);
+      expect(page.username.value).toBe(smtpSettings.username);
+      expect(page.password.value).toBe(smtpSettings.password);
+    });
+
+    it('As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to “Username only” if username is set but password returned by the API is set to null', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const smtpSettings = withUsernameAuthenticationMethod();
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      const page = new ManageSmtpAdministrationSettingsPage(props);
+
+      await waitFor(() => {});
+
+      expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_USERNAME);
+      expect(page.username.value).toBe(smtpSettings.username);
+      expect(page.isPasswordVisible).toBeFalsy();
+    });
+
+    it('As a signed-in administrator in the Email server settings I can see that a selected authentication method is set to “None” if username and password returned by the API are set to null', async() => {
+      expect.assertions(3);
+      const props = defaultProps();
+      const smtpSettings = withNoAuthenticationMethod();
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      const page = new ManageSmtpAdministrationSettingsPage(props);
+
+      await waitFor(() => {});
+
+      expect(page.authenticationMethodValue).toBe(ManageSmtpAdministrationSettings.AUTHENTICATION_METHOD_NONE);
+      expect(page.isUsernameVisible).toBeFalsy();
+      expect(page.isPasswordVisible).toBeFalsy();
+    });
   });
 
   describe("As a signed-in administrator I can access the different help pages", () => {
@@ -490,6 +535,85 @@ describe("ManageSmtpAdministrationSettings", () => {
       await waitFor(() => {});
 
       expect(page.username.disabled).toBe(false);
+    });
+
+    it("As a signed-in administrator on the “Email server” settings page, I can update the authentication method to 'None' and save the form", async() => {
+      expect.assertions(6);
+
+      const smtpSettings = withKnownProviderSmtpSettings();
+      const expectedSettingsToSave = {
+        ...smtpSettings,
+        username: null,
+        password: null
+      };
+
+      //first call is a GET call for the settings
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+
+      //second call is a POST to save the settings
+      let promiseResolution = null;
+      fetch.doMockOnceIf(/smtp\/settings.json/, data => new Promise(resolve => {
+        const requestBody = JSON.parse(data.body.toString());
+        expect(requestBody).toStrictEqual(expectedSettingsToSave);
+        promiseResolution = resolve;
+      }));
+
+      const props = defaultProps();
+      const page = new ManageSmtpAdministrationSettingsPage(props);
+      await waitFor(() => {});
+
+      await page.selectAuthenticationMethod(0);
+
+      expect(page.isSaveButtonEnabled()).toBe(true);
+      expect(page.isUsernameVisible).toBe(false);
+      expect(page.isPasswordVisible).toBe(false);
+
+      await page.saveSettings();
+      promiseResolution(mockApiResponse(expectedSettingsToSave));
+      await waitFor(() => {});
+
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The SMTP settings have been saved successfully");
+    });
+
+    it("As a signed-in administrator on the “Email server” settings page, I can update the authentication method to 'Username only' and save the form", async() => {
+      expect.assertions(6);
+
+      const smtpSettings = withKnownProviderSmtpSettings();
+      const expectedSettingsToSave = {
+        ...smtpSettings,
+        username: 'username-only',
+        password: null
+      };
+
+      //first call is a GET call for the settings
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+
+      //second call is a POST to save the settings
+      let promiseResolution = null;
+      fetch.doMockOnceIf(/smtp\/settings.json/, data => new Promise(resolve => {
+        const requestBody = JSON.parse(data.body.toString());
+        expect(requestBody).toStrictEqual(expectedSettingsToSave);
+        promiseResolution = resolve;
+      }));
+
+      const props = defaultProps();
+      const page = new ManageSmtpAdministrationSettingsPage(props);
+      await waitFor(() => {});
+
+      await page.selectAuthenticationMethod(1);
+
+      expect(page.isSaveButtonEnabled()).toBe(true);
+      expect(page.isUsernameVisible).toBe(true);
+      expect(page.isPasswordVisible).toBe(false);
+
+      await page.setFormWith({username: expectedSettingsToSave.username});
+      await page.saveSettings();
+      promiseResolution(mockApiResponse(expectedSettingsToSave));
+      await waitFor(() => {});
+
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The SMTP settings have been saved successfully");
     });
 
     it("As a signed-in administrator in the “Email server” setting, I cannot save the “Email server” setting when the form does not validate\nAs a signed-in administrator when the SMTP server is configured, I can save the Email server setting when the form validates", async() => {
