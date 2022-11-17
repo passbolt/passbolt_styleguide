@@ -15,12 +15,11 @@
 import {defaultProps} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import {AdminMfaContextProvider} from "./AdministrationMfaContext";
 import {enableFetchMocks} from 'jest-fetch-mock';
-import {mockMfaSettings} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import {mockMfaSettings, mockDuoError} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import MfaModel from '../../../../shared/models/Mfa/MfaModel';
 import {mockDefaultMfaModel} from '../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
 import MfaDTO from '../../../../shared/models/Mfa/MfaDTO';
-import {mockDuoError} from '../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
 
 describe("AdminMfaContext", () => {
   let adminMfaContext; // The adminMfaContext to test
@@ -175,4 +174,5 @@ describe("AdminMfaContext", () => {
     });
   });
 });
+
 

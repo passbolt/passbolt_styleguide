@@ -74,6 +74,7 @@ describe("AdminUserDirectoryContext", () => {
       try {
         await adminUserDirectoryContext.findUserDirectorySettings();
       } catch {
+        expect.assertions(1);
         expect(adminUserDirectoryContext.isProcessing()).toBeTruthy();
       }
     });

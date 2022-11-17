@@ -1,5 +1,6 @@
 import React from "react";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey";
+import {AdminSubscriptionContextProvider} from '../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription';
 import {
   defaultProps, expiredProps, goingToExpireProps, notFoundProps, usersExceededProps
 } from "./DisplaySubscriptionKey.test.data";
@@ -11,9 +12,14 @@ export default {
 };
 
 const Template = args =>
-  <div className="grid grid-responsive-12">
-    <DisplaySubscriptionKey {...args}/>
-  </div>;
+  <AdminSubscriptionContextProvider{...args}>
+    <div className="panel middle">
+      <div className="grid grid-responsive-12">
+        <DisplaySubscriptionKey {...args}/>
+      </div>
+    </div>
+  </AdminSubscriptionContextProvider>
+;
 
 
 export const Initial = Template.bind({});

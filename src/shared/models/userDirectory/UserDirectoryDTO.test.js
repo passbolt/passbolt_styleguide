@@ -21,6 +21,7 @@ describe("UserDirectoryDTO model", () => {
   describe("UserDirectoryDTO::constructor", () => {
     it("should init dto with model", () => {
       const dto = new UserDirectoryDTO(mockModel);
+      expect.assertions(1);
       expect(dto).toEqual(mockResult);
     });
     it("should init with default value if directory type is openldap", () => {
