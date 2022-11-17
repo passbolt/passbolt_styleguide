@@ -83,7 +83,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   componentDidMount() {
     this.handleAdministrationMenuRouteChange();
-    console.log("demo with Benja");
   }
 
   /**
