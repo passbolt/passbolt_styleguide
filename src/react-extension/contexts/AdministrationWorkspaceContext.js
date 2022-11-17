@@ -15,9 +15,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
-import DisplayAdministrationWorkspaceActions
-  from "../components/Administration/DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
-
 /**
  * Context related to resources ( filter, current selections, etc.)
  */
@@ -86,6 +83,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   componentDidMount() {
     this.handleAdministrationMenuRouteChange();
+    console.log("demo with Benja");
   }
 
   /**
