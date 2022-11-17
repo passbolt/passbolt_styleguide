@@ -15,59 +15,26 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration";
+import {AdminInternationalizationContextProvider} from '../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext';
+import {defaultProps} from "./DisplayInternationalizationAdministration.test.data";
 
 export default {
   title: 'Components/Administration/DisplayInternationalizationAdministration',
   component: DisplayInternationalizationAdministration
 };
 
-const Template = ({...args}) =>
-  <div className="panel middle">
-    <div className="grid grid-responsive-12">
-      <DisplayInternationalizationAdministration {...args}/>
+const Template = args =>
+  <AdminInternationalizationContextProvider {...args}>
+    <div className="panel middle">
+      <div className="grid grid-responsive-12">
+        <DisplayInternationalizationAdministration {...args}/>
+      </div>
     </div>
-  </div>;
+  </AdminInternationalizationContextProvider>;
 
 Template.propTypes = {
   context: PropTypes.object,
 };
 
 export const Initial = Template.bind({});
-Initial.args = {
-  context: {
-    siteSettings: {
-      canIUse: () => true,
-      locale: "en-UK",
-      supportedLocales: [
-        {
-          locale: "de-DE",
-          label: "Deutsch"
-        }, {
-          locale: "en-UK",
-          label: "English"
-        }, {
-          locale: "es-ES",
-          label: "Español"
-        }, {
-          locale: "fr-FR",
-          label: "Français"
-        }, {
-          locale: "ja-JP",
-          label: "日本語"
-        }, {
-          locale: "lt-LT",
-          label: "Lietuvių"
-        }, {
-          locale: "nl-NL",
-          label: "Nederlands"
-        }, {
-          locale: "pl-PL",
-          label: "Polski"
-        }, {
-          locale: "sv-SE",
-          label: "Svenska"
-        }
-      ]
-    }
-  }
-};
+Initial.args = defaultProps();

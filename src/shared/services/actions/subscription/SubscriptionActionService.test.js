@@ -40,9 +40,11 @@ describe("SubscriptionActionService", () => {
 
   describe("MfaFormService::getInstance", () => {
     it("should be a singleton", () => {
+      expect.assertions(1);
       expect(subscriptionActionService).toBeDefined();
     });
     it("should not create a new instance", () => {
+      expect.assertions(1);
       const newInstance = SubscriptionActionService.getInstance();
       expect(subscriptionActionService).toEqual(newInstance);
     });
@@ -50,6 +52,7 @@ describe("SubscriptionActionService", () => {
 
   describe("MfaFormService::killInstance", () => {
     it("should kill the instance and create a new one", () => {
+      expect.assertions(1);
       SubscriptionActionService.killInstance();
       subscriptionActionService = SubscriptionActionService.getInstance({"context": null, "dialogContext": null, "adminSubcriptionContext": null});
       expect(subscriptionActionService).toEqual({"context": null, "dialogContext": null, "subscriptionContext": null});
@@ -58,6 +61,7 @@ describe("SubscriptionActionService", () => {
 
   describe("MfaFormService::editSubscription", () => {
     it("should kill the instance and create a new one", () => {
+      expect.assertions(1);
       const editSubscriptionKey = {
         key: props.adminSubcriptionContext.getSubscription().data
       };

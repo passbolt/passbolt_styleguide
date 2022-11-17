@@ -148,7 +148,11 @@ const siteSettings = (isProEdition = true) => ({
       "accountRecoveryRequestHelp": {
         "version": "1.0.0",
         "enabled": isProEdition
-      }
+      },
+      "smtpSettings": {
+        "version": "1.0.0",
+        "enabled": true,
+      },
     }
   }
 });

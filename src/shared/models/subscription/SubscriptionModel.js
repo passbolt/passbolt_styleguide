@@ -20,13 +20,13 @@ class SubscriptionModel {
    * @param {SubscriptionDto} subscriptionDto
    */
   constructor(subscriptionDto) {
-    this.customerId = subscriptionDto ? subscriptionDto.customer_id : "";
+    this.customerId = subscriptionDto?.customer_id || "";
     this.subscriptionId = subscriptionDto ? "subscription_id" in subscriptionDto ? subscriptionDto.subscription_id : "N/A" : "";
-    this.users = subscriptionDto ? subscriptionDto.users : null;
+    this.users = subscriptionDto?.users || null;
     this.email = subscriptionDto ? "email" in subscriptionDto ? subscriptionDto.email : "N/A" : "";
-    this.expiry  = subscriptionDto ? subscriptionDto.expiry : null;
-    this.created  = subscriptionDto ? subscriptionDto.created : null;
-    this.data  = subscriptionDto && "data" in subscriptionDto ? subscriptionDto.data : null;
+    this.expiry  = subscriptionDto?.expiry || null;
+    this.created  = subscriptionDto?.created || null;
+    this.data  = subscriptionDto?.data || null;
   }
 }
 

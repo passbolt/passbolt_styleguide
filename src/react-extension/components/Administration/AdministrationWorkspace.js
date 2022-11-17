@@ -34,6 +34,8 @@ import DisplayInternationalizationAdministration
   from "./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration";
 import ManageAccountRecoveryAdministrationSettings
   from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
+import ManageSmtpAdministrationSettings
+  from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -84,6 +86,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If SMTP settings menu is selected
+   * @returns {boolean}
+   */
+  isSmtpSettingsSelected() {
+    return AdministrationWorkspaceMenuTypes.SMTP_SETTINGS === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -127,6 +137,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isAccountRecoverySelected() &&
                   <ManageAccountRecoveryAdministrationSettings/>
+                  }
+                  {this.isSmtpSettingsSelected() &&
+                  <ManageSmtpAdministrationSettings/>
                   }
                 </div>
               </div>

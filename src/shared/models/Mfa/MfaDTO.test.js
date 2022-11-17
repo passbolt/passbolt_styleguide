@@ -21,6 +21,9 @@ describe("MfaDTO model", () => {
   describe("MfaDTO::constructor", () => {
     it("should init dto with model", () => {
       const dto = new MfaDTO(mockModel);
+
+      expect.assertions(3);
+
       expect(dto.providers).toEqual([MfaProviders.totp, MfaProviders.yubikey, MfaProviders.duo]);
       expect(dto.duo).toEqual({"hostName": "api-123456af.duosecurity.com", "integrationKey": "PAGI605APMFKP8YSME6T", "salt": "salt1salt1salt1salt1salt1salt1salt1salt1", "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"});
       expect(dto.yubikey).toEqual({"clientId": "80412", "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"});
@@ -32,6 +35,8 @@ describe("MfaDTO model", () => {
       model.duoToggle = false;
       model.totpProviderToggle = false;
       const dto = new MfaDTO(model);
+
+      expect.assertions(3);
 
       expect(dto.providers).toEqual([]);
       expect(dto.duo).toEqual({});

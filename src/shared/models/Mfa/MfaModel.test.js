@@ -21,11 +21,13 @@ describe("MFAModel", () => {
   describe("MFAModel::constructor", () => {
     it("should init model with default value", () => {
       const model = new MfaModel();
+      expect.assertions(1);
       expect(model).toEqual(mockDefaultMfaModel);
     });
 
     it("should init model with dto value", () => {
       const model = new MfaModel(mockMfaSettings);
+      expect.assertions(1);
       expect(model).toEqual(mockModel);
     });
   });

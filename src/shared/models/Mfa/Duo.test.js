@@ -31,6 +31,8 @@ describe("Duo model", () => {
       };
       const duo = new Duo(duoParam);
 
+      expect.assertions(4);
+
       expect(duo.hostName).toEqual(duoParam.hostName);
       expect(duo.secretKey).toEqual(duoParam.secretKey);
       expect(duo.salt).toEqual(duoParam.salt);
@@ -44,6 +46,8 @@ describe("Duo model", () => {
         duoSecretKey: randomKey,
       };
       const duo = new Duo(duoParam);
+
+      expect.assertions(4);
 
       expect(duo.hostName).toEqual(duoParam.duoHostname);
       expect(duo.secretKey).toEqual(duoParam.duoSecretKey);

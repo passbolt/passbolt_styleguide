@@ -35,9 +35,11 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import AppContext from "./contexts/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
 import ApiAppAccountRecoveryUserService from "../shared/services/api/accountRecovery/ApiAppAccountRecoveryUserService";
+import AdminSmtpSettingsContextProvider from "./contexts/AdminSmtpSettingsContext";
 import AdminEmailNotificationContextProvider from "./contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa/AdministrationMfaContext";
 import AdminUserDirectoryContextProvider from './contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
+import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 
 /**
  * The passbolt application served by the API.
@@ -75,23 +77,27 @@ class ApiApp extends Component {
                               { /* The following routes are not handled by the browser extension application. */}
                               <Route exact path={[
                                 "/app/administration/subscription",
-                                "/app/administration/account-recovery"
+                                "/app/administration/account-recovery",
                               ]}/>
                               <Route path="/app/administration">
                                 <AdministrationWorkspaceContextProvider>
-                                  <ManageContextualMenu/>
-                                  <ManageAnnouncements/>
-                                  <AdminUserDirectoryContextProvider>
-                                    <ManageDialogs/>
-                                    <AdminMfaContextProvider>
-                                      <AdminEmailNotificationContextProvider>
-                                        <AdministrationWorkspace/>
-                                      </AdminEmailNotificationContextProvider>
-                                    </AdminMfaContextProvider>
-                                  </AdminUserDirectoryContextProvider>
+                                  <AdminSmtpSettingsContextProvider>
+                                    <ManageContextualMenu/>
+                                    <ManageAnnouncements/>
+                                    <AdminUserDirectoryContextProvider>
+                                      <ManageDialogs/>
+                                      <AdminMfaContextProvider>
+                                        <AdminEmailNotificationContextProvider>
+                                          <AdminInternationalizationContextProvider>
+                                            <AdministrationWorkspace/>
+                                          </AdminInternationalizationContextProvider>
+                                        </AdminEmailNotificationContextProvider>
+                                      </AdminMfaContextProvider>
+                                    </AdminUserDirectoryContextProvider>
+                                  </AdminSmtpSettingsContextProvider>
                                 </AdministrationWorkspaceContextProvider>
                               </Route>
-                              <Route path="/app/settings/mfa">
+                              <Route path={["/app/settings/mfa"]}>
                                 <ManageDialogs/>
                                 <ManageContextualMenu/>
                                 <ManageAnnouncements/>

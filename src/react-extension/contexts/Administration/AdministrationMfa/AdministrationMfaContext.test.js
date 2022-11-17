@@ -15,12 +15,11 @@
 import {defaultProps} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import {AdminMfaContextProvider} from "./AdministrationMfaContext";
 import {enableFetchMocks} from 'jest-fetch-mock';
-import {mockMfaSettings} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
+import {mockMfaSettings, mockDuoError} from "../../../../react-extension/components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import MfaModel from '../../../../shared/models/Mfa/MfaModel';
 import {mockDefaultMfaModel} from '../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
 import MfaDTO from '../../../../shared/models/Mfa/MfaDTO';
-import {mockDuoError} from '../../../components/Administration/DisplayMfaAdministration/DisplayMfaAdministration.test.data';
 
 describe("AdminMfaContext", () => {
   let adminMfaContext; // The adminMfaContext to test
@@ -72,6 +71,7 @@ describe("AdminMfaContext", () => {
       try {
         await adminMfaContext.findMfaSettings();
       } catch {
+        expect.assertions(1);
         expect(adminMfaContext.isProcessing()).toBeTruthy();
       }
     });
@@ -157,12 +157,16 @@ describe("AdminMfaContext", () => {
     });
 
     it("should init errors with default property", async() => {
+      expect.assertions(1);
       expect(adminMfaContext.getErrors()).toEqual(adminMfaContext.initErrors());
     });
 
     it("should update error object with all properties ", async() => {
       const mockError = mockDuoError();
       adminMfaContext.setErrors(mockError);
+
+      expect.assertions(4);
+
       expect(adminMfaContext.getErrors().duoSaltError).toEqual(mockError.duoSaltError);
       expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(mockError.duoIntegrationKeyError);
       expect(adminMfaContext.getErrors().duoHostnameError).toEqual(mockError.duoHostnameError);
@@ -170,4 +174,5 @@ describe("AdminMfaContext", () => {
     });
   });
 });
+
 

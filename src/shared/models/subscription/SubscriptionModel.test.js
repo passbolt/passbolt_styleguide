@@ -20,10 +20,12 @@ import SubscriptionModel from './SubscriptionModel';
 describe("SubscriptionModel model", () => {
   describe("SubscriptionModel::constructor", () => {
     it("should init model with dto", () => {
+      expect.assertions(1);
       const model = new SubscriptionModel(mockSubscription);
       expect(model).toEqual(mockSubscriptionModel);
     });
     it("should init model default value without param", () => {
+      expect.assertions(1);
       const model = new SubscriptionModel();
       expect(model).toEqual({
         customerId: "",
@@ -36,6 +38,7 @@ describe("SubscriptionModel model", () => {
       });
     });
     it("should init model with N/A value if email and subscriptionId not exist", () => {
+      expect.assertions(2);
       const model = new SubscriptionModel({});
       expect(model.subscriptionId).toEqual("N/A");
       expect(model.email).toEqual("N/A");

@@ -25,6 +25,9 @@ describe("YubiKey model", () => {
         secretKey: randomKey,
       };
       const yubikey = new Yubikey(yubikeyParam);
+
+      expect.assertions(2);
+
       expect(yubikey.clientId).toEqual(yubikeyParam.clientId);
       expect(yubikey.secretKey).toEqual(yubikeyParam.secretKey);
     });
@@ -34,6 +37,9 @@ describe("YubiKey model", () => {
         yubikeySecretKey: randomKey,
       };
       const yubikey = new Yubikey(yubikeyParam);
+
+      expect.assertions(2);
+
       expect(yubikey.clientId).toEqual(yubikeyParam.yubikeyClientIdentifier);
       expect(yubikey.secretKey).toEqual(yubikeyParam.yubikeySecretKey);
     });

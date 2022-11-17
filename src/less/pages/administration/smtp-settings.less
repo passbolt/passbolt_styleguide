@@ -1,0 +1,81 @@
+.smtp-settings {
+  .smtp-provider-list {
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+
+    .svg-icon.envelope svg{
+      width: 6.4rem;
+      height: 6.4rem;
+    }
+  }
+
+  .smtp-provider {
+    width: 11rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    .smtp-provider-logo {
+      margin: 1.6rem 3.9rem;
+      width: 6.4rem;
+      height: 6.4rem;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+    }
+
+    p {
+      margin: 0 0 1.2rem;
+    }
+  }
+
+  input[type="text"] {
+    max-width: 100%;
+  }
+
+  .accordion-header a {
+    border-bottom: 0;
+
+    .svg-icon {
+      margin-right: 0.8rem;
+    }
+  }
+}
+
+.send-test-email-dialog .dialog {
+  .accordion-header {
+    margin-bottom: 0;
+
+    a {
+      font-weight: bold;
+      border: 0;
+      font-size: 1.5rem;
+    }
+  }
+
+  .accordion-content {
+    margin-bottom: 0;
+  }
+
+  textarea {
+    margin-top: 1.2rem;
+    margin-bottom: 0;
+  }
+
+  a.faq-link {
+    margin: 0.8rem 0;
+    display: inline-block;
+  }
+
+  #recipient, .input {
+    margin-bottom: 0;
+  }
+}
+
+.grid .row .main-column.smtp-settings .message.warning {
+  margin: 1.2rem 1.6rem;
+  border-radius: 0.4rem;
+}

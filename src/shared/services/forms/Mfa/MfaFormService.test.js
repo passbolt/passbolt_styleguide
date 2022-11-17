@@ -40,11 +40,13 @@ describe("MfaFormService", () => {
 
   describe("MfaFormService::getInstance", () => {
     it("should be a singleton", () => {
+      expect.assertions(1);
       expect(mfaFormService).toBeDefined();
     });
 
     it("should not create a new instance", () => {
       const newInstance = MfaFormService.getInstance();
+      expect.assertions(1);
       expect(mfaFormService).toEqual(newInstance);
     });
   });
@@ -54,6 +56,7 @@ describe("MfaFormService", () => {
     it("should kill the instance and create a new one", () => {
       MfaFormService.killInstance();
       mfaFormService = MfaFormService.getInstance(null, null);
+      expect.assertions(1);
       expect(mfaFormService).toEqual({"context": null, "translation": null});
     });
   });
@@ -62,6 +65,7 @@ describe("MfaFormService", () => {
     it("should return required message", () => {
       const requiredMessage = "A client identifier is required.";
       const result = mfaFormService.validateYubikeyClientIdentifier("");
+      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
       expect(adminMfaContext.getErrors().yubikeyClientIdentifierError).toEqual(requiredMessage);
     });
@@ -69,6 +73,8 @@ describe("MfaFormService", () => {
       const errorMessage = "The client identifier should be an integer.";
       //Letters are not allowed
       let result = mfaFormService.validateYubikeyClientIdentifier("FFFF");
+
+      expect.assertions(4);
       expect(result).toEqual(errorMessage);
       //Max size 64
       result = mfaFormService.validateYubikeyClientIdentifier("F".repeat(65));
@@ -81,6 +87,7 @@ describe("MfaFormService", () => {
     it("should not return message", () => {
       //Only numbers are allowed
       const result = mfaFormService.validateYubikeyClientIdentifier("123456789");
+      expect.assertions(2);
       expect(result).toEqual(null);
       expect(adminMfaContext.getErrors().yubikeyClientIdentifierError).toEqual(null);
     });
@@ -90,6 +97,7 @@ describe("MfaFormService", () => {
     it("should return required message", () => {
       const requiredMessage = "A secret key is required.";
       const result = mfaFormService.validateYubikeySecretKey("");
+      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
       expect(adminMfaContext.getErrors().yubikeySecretKeyError).toEqual(requiredMessage);
     });
@@ -97,6 +105,7 @@ describe("MfaFormService", () => {
       const errorMessage = "The client identifier should be an integer.";
       //only / = + characters are allowed
       let result = mfaFormService.validateYubikeyClientIdentifier("FFFFF12345**");
+      expect.assertions(4);
       expect(result).toEqual(errorMessage);
       //Max size 128
       result = mfaFormService.validateYubikeyClientIdentifier("F".repeat(129));
@@ -115,6 +124,7 @@ describe("MfaFormService", () => {
       result = mfaFormService.validateYubikeySecretKey("mk6lyijz2AIhX3D9eLIYAxv63Co/");
       expect(result).toEqual(null);
       expect(adminMfaContext.getErrors().yubikeySecretKeyError).toEqual(null);
+      expect.assertions(4);
     });
   });
 
@@ -124,6 +134,7 @@ describe("MfaFormService", () => {
       const result = mfaFormService.validateDuoHostname("");
       expect(result).toEqual(requiredMessage);
       expect(adminMfaContext.getErrors().duoHostnameError).toEqual(requiredMessage);
+      expect.assertions(2);
     });
     it("should return regex message", () => {
       const errorMessage = "This is not a valid hostname.";
@@ -141,9 +152,11 @@ describe("MfaFormService", () => {
       result = mfaFormService.validateDuoHostname("api-1L-duosecurity.com");
       expect(result).toEqual(errorMessage);
       expect(adminMfaContext.getErrors().duoHostnameError).toEqual(errorMessage);
+      expect.assertions(4);
     });
     it("should not return message", () => {
       const result = mfaFormService.validateDuoHostname("api-634253af.duosecurity.com");
+      expect.assertions(2);
       expect(result).toEqual(null);
       expect(adminMfaContext.getErrors().duoHostnameError).toEqual(null);
     });
@@ -153,6 +166,7 @@ describe("MfaFormService", () => {
     it("should return required message", () => {
       const requiredMessage = "An integration key is required.";
       const result = mfaFormService.validateDuoIntegrationKey("");
+      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
       expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(requiredMessage);
     });
@@ -168,12 +182,14 @@ describe("MfaFormService", () => {
       result = mfaFormService.validateDuoIntegrationKey("@&'");
       expect(result).toEqual(errorMessage);
       expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(errorMessage);
+      expect.assertions(4);
     });
     it("should not return message", () => {
       //only upper and lowercase letters with numbers
       const result = mfaFormService.validateDuoIntegrationKey("0123456789AZERTY");
       expect(result).toEqual(null);
       expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(null);
+      expect.assertions(2);
     });
   });
 
@@ -183,6 +199,7 @@ describe("MfaFormService", () => {
       const result = mfaFormService.validateDuoSecretKey("");
       expect(result).toEqual(requiredMessage);
       expect(adminMfaContext.getErrors().duoSecretKeyError).toEqual(requiredMessage);
+      expect.assertions(2);
     });
     it("should return regex message", () => {
       const errorMessage = "This is not a valid secret key.";
@@ -197,12 +214,14 @@ describe("MfaFormService", () => {
       result = mfaFormService.validateDuoSecretKey("@$ù=");
       expect(result).toEqual(errorMessage);
       expect(adminMfaContext.getErrors().duoSecretKeyError).toEqual(errorMessage);
+      expect.assertions(4);
     });
     it("should not return message", () => {
       //only upper and lowercase letters with numbers
       const result = mfaFormService.validateDuoSecretKey("aZ7".repeat(11));
       expect(result).toEqual(null);
       expect(adminMfaContext.getErrors().duoSecretKeyError).toEqual(null);
+      expect.assertions(2);
     });
   });
 
@@ -212,6 +231,7 @@ describe("MfaFormService", () => {
       const result = mfaFormService.validateDuoSalt("");
       expect(result).toEqual(requiredMessage);
       expect(adminMfaContext.getErrors().duoSaltError).toEqual(requiredMessage);
+      expect.assertions(2);
     });
     it("should return regex message", () => {
       const errorMessage = "The salt should be between 40 and 128 characters in length.";
@@ -223,12 +243,14 @@ describe("MfaFormService", () => {
       result = mfaFormService.validateDuoSalt("F".repeat(129));
       expect(result).toEqual(errorMessage);
       expect(adminMfaContext.getErrors().duoSaltError).toEqual(errorMessage);
+      expect.assertions(3);
     });
     it("should not return message", () => {
       //Oall characters allowed
       const result = mfaFormService.validateDuoSalt("aZ7@".repeat(10));
       expect(result).toEqual(null);
       expect(adminMfaContext.getErrors().duoSaltError).toEqual(null);
+      expect.assertions(2);
     });
   });
 
@@ -237,6 +259,7 @@ describe("MfaFormService", () => {
       adminMfaContext.setSettings("duoToggle", false);
       const result = mfaFormService.validateDuoInputs();
       expect(result).toEqual({});
+      expect.assertions(1);
     });
 
     it("should validate if duo is selected", () => {
@@ -256,6 +279,7 @@ describe("MfaFormService", () => {
       expect(mfaFormService.validateDuoSecretKey).toHaveBeenCalledWith(settings.duoSecretKey);
       expect(mfaFormService.validateDuoSalt).toHaveBeenCalledWith(settings.duoSalt);
       expect(result).toEqual(mockDuoError());
+      expect.assertions(5);
     });
   });
 
@@ -280,6 +304,7 @@ describe("MfaFormService", () => {
       expect(mfaFormService.validateYubikeyClientIdentifier).toHaveBeenCalledWith(settings.yubikeyClientIdentifier);
       expect(mfaFormService.validateYubikeySecretKey).toHaveBeenCalledWith(settings.yubikeySecretKey);
       expect(result).toEqual(mockYubikeyError());
+      expect.assertions(3);
     });
   });
 
@@ -298,6 +323,7 @@ describe("MfaFormService", () => {
       expect(mfaFormService.validateYubikeyInputs).toHaveBeenCalled();
       expect(mfaFormService.validateDuoInputs).toHaveBeenCalled();
       expect(errors).toEqual(Object.assign(mockYubikeyError(), mockDuoError()));
+      expect.assertions(4);
     });
     it("should return true if validation succeed", async() => {
       jest.spyOn(mfaFormService, "validateYubikeyInputs");
@@ -308,6 +334,7 @@ describe("MfaFormService", () => {
       expect(result).toBeTruthy();
       expect(mfaFormService.validateYubikeyInputs).toHaveBeenCalled();
       expect(mfaFormService.validateDuoInputs).toHaveBeenCalled();
+      expect.assertions(3);
     });
   });
 });
