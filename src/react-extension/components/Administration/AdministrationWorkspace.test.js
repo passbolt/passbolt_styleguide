@@ -23,7 +23,6 @@ import AdministrationWorkspacePage from "./AdministrationWorkspace.test.page";
 import {waitFor} from "@testing-library/dom";
 import {AdministrationWorkspaceMenuTypes} from "../../contexts/AdministrationWorkspaceContext";
 
-jest.mock("./DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions", () => () => <></>); // eslint-disable-line no-use-before-define
 jest.mock("./DisplayAdministrationMenu/DisplayAdministrationMenu", () => () => <></>);
 jest.mock("./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb", () => () => <></>);
 jest.mock("./DisplayMfaAdministration/DisplayMfaAdministration", () => () => <span className="mfa-details"></span>);

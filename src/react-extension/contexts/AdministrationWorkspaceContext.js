@@ -15,9 +15,6 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
-import DisplayAdministrationWorkspaceActions
-  from "../components/Administration/DisplayAdministrationWorkspaceActions/DisplayAdministrationWorkspaceActions";
-
 /**
  * Context related to resources ( filter, current selections, etc.)
  */
@@ -31,7 +28,7 @@ export const AdministrationWorkspaceContext = React.createContext({
     editSubscriptionKey: false, // Must edit subscription key
     refreshSubscriptionKey: false // Must refresh the subscription key
   },
-  administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
+  administrationWorkspaceAction: null, // Class of the component to display the actions of the users
   setDisplayAdministrationWorkspaceAction: () => {}, // Whenever the component to display workspace action is requested
   resetDisplayAdministrationWorkspaceAction: () => {}, // Whenever the reset of the display workspace action is requested
   onUpdateSubscriptionKeyRequested: () => {}, // Whenever the user update the subscription key
@@ -69,7 +66,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
         editSubscriptionKey: false, // Must edit subscription key
         refreshSubscriptionKey: false // Must refresh the susbcription key
       },
-      administrationWorkspaceAction: DisplayAdministrationWorkspaceActions, // Class of the component to display the actions of the users
+      administrationWorkspaceAction: () => <></>, // Class of the component to display the actions of the users
       setDisplayAdministrationWorkspaceAction: this.setDisplayAdministrationWorkspaceAction.bind(this), // Whenever the component to display workspace action is requested
       resetDisplayAdministrationWorkspaceAction: this.resetDisplayAdministrationWorkspaceAction.bind(this), // Whenever the reset of the display workspace action is requested
       onUpdateSubscriptionKeyRequested: this.onUpdateSubscriptionKeyRequested.bind(this), // Whenever the user update the subscription key
@@ -204,7 +201,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * Reset the display of the administration workspace action
    */
   resetDisplayAdministrationWorkspaceAction() {
-    this.setState({administrationWorkspaceAction: DisplayAdministrationWorkspaceActions});
+    this.setState({administrationWorkspaceAction: () => <></>});
   }
 
   /**
