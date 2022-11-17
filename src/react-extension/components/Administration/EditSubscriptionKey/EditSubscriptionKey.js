@@ -22,6 +22,7 @@ import FormSubmitButton from "../../../../react-extension/components/Common/Inpu
 import FormCancelButton from "../../../../react-extension/components/Common/Inputs/FormSubmitButton/FormCancelButton";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 
 /**
  * Component allows the user to edit the subscription key from a dialog
@@ -167,7 +168,6 @@ class EditSubscriptionKey extends Component {
 
     await this.setState({hasBeenValidated: true});
     await this.toggleProcessing();
-
     if (!await this.validate()) {
       this.handleValidateError();
       await this.toggleProcessing();
@@ -181,6 +181,7 @@ class EditSubscriptionKey extends Component {
     try {
       await this.props.administrationWorkspaceContext.onUpdateSubscriptionKeyRequested(keyDto);
       await this.handleSaveSuccess();
+      await this.props.adminSubcriptionContext.findSubscriptionKey();
     } catch (error) {
       await this.toggleProcessing();
       this.handleSaveError(error);
@@ -335,9 +336,10 @@ EditSubscriptionKey.propTypes = {
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  adminSubcriptionContext: PropTypes.object, // The email notification context
   dialogContext: PropTypes.any, // The dialog congtext
   administrationWorkspaceContext: PropTypes.any, // The administration workspace context
   t: PropTypes.func
 };
 
-export default withAppContext(withAdministrationWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditSubscriptionKey)))));
+export default withAppContext(withAdminSubscription(withAdministrationWorkspace(withActionFeedback(withDialog(withTranslation('common')(EditSubscriptionKey))))));
