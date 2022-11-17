@@ -29,6 +29,7 @@ export const AdminSsoContext = React.createContext({
   save: () => {}, // Save the sso configuration changes
   disableSso: () => {}, // Disable the SSO configuration
   getProviderList: () => {}, // Returns the list of providers that the API supports
+  hasFormChanged: () => {}, // Returns true if the current form changed
 });
 
 /**
@@ -62,6 +63,8 @@ export class AdminSsoContextProvider extends React.Component {
         }
       }, // The current sso configuration
       isLoaded: false, // is the SSO settings data loading from the server finished
+      hasSettingsChanged: false, // has the current form changed
+      hasFormChanged: this.hasFormChanged.bind(this), // Returns true if the current form changed
       isDataReady: this.isDataReady.bind(this), // returns true if the data has been loaded from the API already
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getSsoConfiguration: this.getSsoConfiguration.bind(this), // Return the current sso configuration from the context state
@@ -168,6 +171,14 @@ export class AdminSsoContextProvider extends React.Component {
   }
 
   /**
+   * Returns true if the current form changed
+   * @returns {boolean}
+   */
+  hasFormChanged() {
+    return this.state.hasSettingsChanged;
+  }
+
+  /**
    * Set an SSO settings value to the current config
    * @param {string} key
    * @param {string} value
@@ -175,7 +186,7 @@ export class AdminSsoContextProvider extends React.Component {
   setValue(key, value) {
     const ssoConfig = this.getSsoConfiguration();
     ssoConfig.data[key] = value;
-    this.setState({ssoConfig});
+    this.setState({ssoConfig, hasSettingsChanged: true});
   }
 
   /**

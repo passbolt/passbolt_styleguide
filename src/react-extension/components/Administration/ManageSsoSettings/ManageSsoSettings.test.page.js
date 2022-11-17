@@ -17,7 +17,7 @@ import React from "react";
 import ManageSsoSettings from "./ManageSsoSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import AdminSsoContextProvider from "../../../contexts/AdminSsoContext";
-import DisplayAdministrationSmtpSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSmtpSettingsActions/DisplayAdministrationSmtpSettingsActions";
+import DisplayAdministrationSsoSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoActions/DisplayAdministrationSsoActions";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import SendTestMailDialog from "../SendTestMailDialog/SendTestMailDialog";
 
@@ -46,7 +46,7 @@ export default class ManageSsoSettingsPage {
         <AdminSsoContextProvider {...props}>
           <ManageSsoSettings {...props}/>
           <SendTestMailDialog {...props}/>
-          <DisplayAdministrationSmtpSettingsActions/>
+          <DisplayAdministrationSsoSettingsActions/>
         </AdminSsoContextProvider>
       </DialogContextProvider>
     </MockTranslationProvider>);
@@ -200,5 +200,13 @@ export default class ManageSsoSettingsPage {
    */
   get client_secret_expiry() {
     return this.select(".sso-settings #sso-azure-secret-expiry-input");
+  }
+
+  /**
+   * Returns the HTMLElement button of the toolbar that is the "Test and save settings"
+   * @returns {HTMLElement}
+   */
+  get toolbarActionsTestAndSaveSettingsButton() {
+    return this.selectAll(".actions-wrapper .actions a")[0];
   }
 }

@@ -19,7 +19,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
-import DisplayAdministrationSsoActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoAction/DisplayAdministrationSsoActions";
+import DisplayAdministrationSsoActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoActions/DisplayAdministrationSsoActions";
 import {withAdminSso} from "../../../contexts/AdminSsoContext";
 import SsoProviders from "./SsoProviders.data";
 import {withAppContext} from "../../../contexts/AppContext";

@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.7.3
+ * @since         3.9.0
  */
 
 import React from "react";
@@ -35,7 +35,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleTestConfigurationClick = this.handleTestConfigurationClick.bind(this);
+    this.handleTestAndSaveClick = this.handleTestAndSaveClick.bind(this);
   }
 
   async handleTestAndSaveClick() {
@@ -50,7 +50,6 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isTestAndSaveEnabled() {
-    return true;
     return this.props.adminSsoContext.hasFormChanged();
   }
 

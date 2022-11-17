@@ -107,4 +107,29 @@ describe("ManageSsoSettings", () => {
       expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
   });
+
+  describe("As a signed-in administrator I can save the SSO server settings", () => {
+    it('As a signed-in administrator when the “Single Sign On” settings have not changed, I cannot trigger the “Test and save settings” action', async() => {
+      expect.assertions(2);
+      const settingsData = withAzureSsoSettings();
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
+
+      const page = new ManageSsoSettingsPage(props);
+
+      await waitFor(() => {
+        if (!page.url) {
+          throw new Error("Page is not loaded yet");
+        }
+      });
+
+      expect(page.toolbarActionsTestAndSaveSettingsButton.classList.contains("disabled")).toBeTruthy();
+
+      await page.setFormWith({
+        tenant_id: "tenant id test"
+      });
+
+      expect(page.toolbarActionsTestAndSaveSettingsButton.classList.contains("disabled")).toBeFalsy();
+    });
+  });
 });
