@@ -18,10 +18,12 @@ import {DateTime} from "luxon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withDialog} from "../../../../react-extension/contexts/DialogContext";
-import EditSubscriptionKey from "../EditSubscriptionKey/EditSubscriptionKey";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedback";
+import SubscriptionActionService from '../../../../shared/services/actions/subscription/SubscriptionActionService';
+import DisplayAdministrationSubscriptionActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
+import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 
 /**
  * This component allows to display the subscription key for the administration
@@ -35,6 +37,7 @@ class DisplaySubscriptionKey extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.subscriptionActionService = SubscriptionActionService.getInstance(this.props);
   }
 
   /**
@@ -43,34 +46,31 @@ class DisplaySubscriptionKey extends React.Component {
    */
   get defaultState() {
     return {
-      loading: true, // component is loading or not
-
-      // Subscription Key
-      customerId: "", // Chargebee customer id
-      subscriptionId: "", // Chargebee subscription id
-      users: null, // The number of users the subscription is valid for
-      email: "", // The email used to manage the subscription
-      expiry: null, // The date when the license key expires
-      created: null, // The date when the license key was created
-      data: null, // Base64 encoded subscription, the original subscription key
-
       // active users
       activeUsers: null // The number of active users
     };
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   async componentDidMount() {
+    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationSubscriptionActions);
     this.findActiveUsers();
-    this.findSubscriptionKey();
+    await this.findSubscriptionKey();
   }
 
   /**
-   * Whenever the component has updated in terms of props or state
-   * @param prevProps
+   * componentWillUnmount
+   * Use to clear the data from the form in case the user put something that needs to be cleared.
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleMustRefreshSubscriptionKey(prevProps.administrationWorkspaceContext.must.refreshSubscriptionKey);
-    await this.handleMustEditSubscriptionKey(prevProps.administrationWorkspaceContext.must.editSubscriptionKey);
+  componentWillUnmount() {
+    this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
+    this.props.adminSubcriptionContext.clearContext();
+    SubscriptionActionService.killInstance();
+    this.mfaFormService = null;
   }
 
   /**
@@ -82,43 +82,10 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
-   * Handle the must refresh subscription key
-   * @param previousRefreshSubscriptionKey Previous refresh subscription key
-   */
-  async handleMustRefreshSubscriptionKey(previousRefreshSubscriptionKey) {
-    const hasRefreshSubscriptionKeyChanged = this.props.administrationWorkspaceContext.must.refreshSubscriptionKey !== previousRefreshSubscriptionKey;
-    if (hasRefreshSubscriptionKeyChanged && this.props.administrationWorkspaceContext.must.refreshSubscriptionKey) {
-      await this.findActiveUsers();
-      await this.findSubscriptionKey();
-      this.props.administrationWorkspaceContext.onResetActionsSettings();
-    }
-  }
-
-  /**
-   * Handle the must edit subscription key
-   * @param previousEditSubscriptionKey Previous edit subscription key
-   */
-  async handleMustEditSubscriptionKey(previousEditSubscriptionKey) {
-    const hasEditSubscriptionKeyChanged = this.props.administrationWorkspaceContext.must.editSubscriptionKey !== previousEditSubscriptionKey;
-    if (hasEditSubscriptionKeyChanged && this.props.administrationWorkspaceContext.must.editSubscriptionKey) {
-      this.openEditSubscriptionKey();
-      this.props.administrationWorkspaceContext.onResetActionsSettings();
-    }
-  }
-
-  openEditSubscriptionKey() {
-    const editSubscriptionKey = {
-      key: this.state.data
-    };
-    this.props.context.setContext({editSubscriptionKey});
-    this.props.dialogContext.open(EditSubscriptionKey);
-  }
-
-  /**
    * fetch the active users
    */
   async findActiveUsers() {
-    const activeUsers = await this.getActiveUsers();
+    const activeUsers = await this.props.adminSubcriptionContext.getActiveUsers();
     this.setState({activeUsers});
   }
 
@@ -126,69 +93,18 @@ class DisplaySubscriptionKey extends React.Component {
    * fetch the subscription key
    */
   async findSubscriptionKey() {
-    try {
-      const subscription = await this.props.context.onGetSubscriptionKeyRequested();
-      const customerId = subscription.customer_id;
-      const subscriptionId = subscription.subscription_id;
-      const users = subscription.users;
-      const email = subscription.email;
-      const expiry = subscription.expiry;
-      const created = subscription.created;
-      const data = subscription.data;
-
-      this.setState({
-        loading: false,
-        customerId,
-        subscriptionId,
-        users,
-        email,
-        expiry,
-        created,
-        data
-      });
-    } catch (error) {
-      this.handleSubscriptionError(error);
-    }
-  }
-
-  /**
-   * Handle subscription error
-   * @param error
-   */
-  handleSubscriptionError(error) {
-    if (error.name === "PassboltSubscriptionError") {
-      const subscription = error.subscription;
-      const customerId = subscription.customer_id || "N/A";
-      const subscriptionId = subscription.subscription_id;
-      const users = subscription.users;
-      const email = subscription.email || "N/A";
-      const expiry = subscription.expiry;
-      const created = subscription.created;
-      const data = subscription.data;
-
-      this.setState({
-        loading: false,
-        customerId,
-        subscriptionId,
-        users,
-        email,
-        expiry,
-        created,
-        data,
-      });
-    } else {
-      this.setState({loading: false});
-    }
+    this.props.adminSubcriptionContext.findSubscriptionKey();
   }
 
   /**
    * Handle renew key click event
    */
   handleRenewKey() {
+    const subscription = this.props.adminSubcriptionContext.getSubscription();
     if (this.hasLimitUsersExceeded()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${this.state.subscriptionId}&customer_id=${this.state.customerId}`);
+      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/qty?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`);
     } else if (this.hasSubscriptionKeyExpired() || this.hasSubscriptionKeyGoingToExpire()) {
-      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${this.state.subscriptionId}&customer_id=${this.state.customerId}`);
+      this.props.navigationContext.onGoToNewTab(`https://www.passbolt.com/subscription/ee/update/renew?subscription_id=${subscription.subscriptionId}&customer_id=${subscription.customerId}`);
     }
   }
 
@@ -196,15 +112,7 @@ class DisplaySubscriptionKey extends React.Component {
    * Handle update key click event
    */
   handleUpdateKey() {
-    this.openEditSubscriptionKey();
-  }
-
-  /**
-   * True if state is loading
-   * @returns {boolean}
-   */
-  isLoading() {
-    return this.state.loading;
+    this.subscriptionActionService.editSubscription();
   }
 
   /**
@@ -212,7 +120,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKeyExpired() {
-    return DateTime.fromISO(this.state.expiry) < DateTime.now();
+    return DateTime.fromISO(this.props.adminSubcriptionContext.getSubscription().expiry) < DateTime.now();
   }
 
   /**
@@ -220,7 +128,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKeyGoingToExpire() {
-    return DateTime.fromISO(this.state.expiry) < DateTime.now().plus({days: 30}) && !this.hasSubscriptionKeyExpired();
+    return DateTime.fromISO(this.props.adminSubcriptionContext.getSubscription().expiry) < DateTime.now().plus({days: 30}) && !this.hasSubscriptionKeyExpired();
   }
 
   /**
@@ -228,7 +136,7 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasSubscriptionKey() {
-    return Boolean(this.state.data);
+    return Boolean(this.props.adminSubcriptionContext.getSubscription().data);
   }
 
   /**
@@ -236,7 +144,8 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {boolean}
    */
   hasLimitUsersExceeded() {
-    return this.state.users < this.state.activeUsers;
+    const subscription = this.props.adminSubcriptionContext.getSubscription();
+    return subscription.users < this.state.activeUsers;
   }
 
   /**
@@ -289,17 +198,6 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
-   * Get active users
-   * @returns {*}
-   * @constructor
-   */
-  async getActiveUsers() {
-    const users = await this.props.context.port.request("passbolt.users.get-all");
-    const filterActiveUsers = user => user.active;
-    return users.filter(filterActiveUsers).length;
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -312,9 +210,11 @@ class DisplaySubscriptionKey extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const subscription = this.props.adminSubcriptionContext.getSubscription();
+    const isProcessing = this.props.adminSubcriptionContext.isProcessing();
     return (
       <div className="row">
-        {!this.isLoading() &&
+        {!isProcessing &&
         <div className="subscription-key col8 main-column">
           <h3><Trans>Subscription key details</Trans></h3>
           <div className="feedback-card">
@@ -349,31 +249,31 @@ class DisplaySubscriptionKey extends React.Component {
               <ul>
                 <li className="customer-id">
                   <span className="label"><Trans>Customer id:</Trans></span>
-                  <span className="value">{this.state.customerId}</span>
+                  <span className="value">{subscription.customerId}</span>
                 </li>
                 <li className="subscription-id">
                   <span className="label"><Trans>Subscription id:</Trans></span>
-                  <span className="value">{this.state.subscriptionId}</span>
+                  <span className="value">{subscription.subscriptionId}</span>
                 </li>
                 <li className="email">
                   <span className="label"><Trans>Email:</Trans></span>
-                  <span className="value">{this.state.email}</span>
+                  <span className="value">{subscription.email}</span>
                 </li>
                 <li className="users">
                   <span
                     className={`label ${this.hasLimitUsersExceeded() ? "error" : ""}`}><Trans>Users limit:</Trans></span>
                   <span
-                    className={`value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{this.state.users} (<Trans>currently:</Trans> {this.state.activeUsers})</span>
+                    className={`value ${this.hasLimitUsersExceeded() ? "error" : ""}`}>{subscription.users} (<Trans>currently:</Trans> {this.state.activeUsers})</span>
                 </li>
                 <li className="created">
                   <span className="label"><Trans>Valid from:</Trans></span>
-                  <span className="value">{this.formatDate(this.state.created)}</span>
+                  <span className="value">{this.formatDate(subscription.created)}</span>
                 </li>
                 <li className="expiry">
                   <span
                     className={`label ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}><Trans>Expires on:</Trans></span>
                   <span
-                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(this.state.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${this.formatDateTimeAgo(this.state.expiry)}`})</span>
+                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${this.formatDateTimeAgo(subscription.expiry)}`})</span>
                 </li>
               </ul>
               }
@@ -396,7 +296,7 @@ class DisplaySubscriptionKey extends React.Component {
           </div>
         </div>
         }
-        {!this.isLoading() &&
+        {!isProcessing &&
         <div className="col4 last">
           <div className="sidebar-help">
             <h3><Trans>Need help?</Trans></h3>
@@ -417,8 +317,9 @@ DisplaySubscriptionKey.propTypes = {
   context: PropTypes.any, // The application context
   navigationContext: PropTypes.any, // The application navigation context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
+  adminSubcriptionContext: PropTypes.object, // The administration subscription context
   dialogContext: PropTypes.any, // The dialog congtext
   t: PropTypes.func,
 };
 
-export default withAppContext(withNavigationContext(withAdministrationWorkspace(withDialog(withTranslation('common')(DisplaySubscriptionKey)))));
+export default withAppContext(withNavigationContext(withAdminSubscription(withAdministrationWorkspace(withDialog(withTranslation('common')(DisplaySubscriptionKey))))));

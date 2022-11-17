@@ -20,7 +20,6 @@ import {DateTime} from "luxon";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultNavigationContext} from "../../../contexts/NavigationContext.test.data";
-import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
 /**
@@ -33,12 +32,15 @@ export function defaultProps(props = {}) {
   port.addRequestListener('passbolt.users.get-all', () => mockUsers);
   const defaultContext = {
     onGetSubscriptionKeyRequested: () => mockSubscription,
-    port: port
+    port: port,
   };
 
   const defaultProps = {
     context: defaultAppContext(Object.assign(defaultContext, props?.context)),
-    administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
+    administrationWorkspaceContext: {
+      setDisplayAdministrationWorkspaceAction: jest.fn(),
+      resetDisplayAdministrationWorkspaceAction: jest.fn()
+    },
     dialogContext: defaultDialogContext(),
     navigationContext: defaultNavigationContext()
   };
@@ -118,6 +120,16 @@ export const mockSubscription = {
   "created": "2020-12-01T00:00:00.661Z",
   "expiry": expiredDate.toISOString(),
   "data": "data"
+};
+
+export const mockSubscriptionModel = {
+  "created": "2020-12-01T00:00:00.661Z",
+  "customerId": "1n6BPvHRWfizhmARz",
+  "data": "data",
+  "email": "ada@passbolt.com",
+  "expiry": expiredDate.toISOString(),
+  "subscriptionId": "1n6BPvHRWfizhmARz",
+  "users": 5,
 };
 
 export const mockSubscriptionUsersExceeded = {
