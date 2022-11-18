@@ -74,3 +74,16 @@ export function withAwsSesSmtpSettings(data = {}) {
     ...data
   });
 }
+
+export function withNoAuthenticationMethod(data = {}) {
+  const settings = withExistingSmtpSettings(data);
+  settings.username = null;
+  settings.password = null;
+  return settings;
+}
+
+export function withUsernameAuthenticationMethod(data = {}) {
+  const settings = withExistingSmtpSettings(data);
+  settings.password = null;
+  return settings;
+}

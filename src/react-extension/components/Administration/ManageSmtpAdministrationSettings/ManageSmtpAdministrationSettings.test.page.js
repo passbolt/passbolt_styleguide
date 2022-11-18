@@ -187,6 +187,19 @@ export default class ManageSmtpAdministrationSettingsPage {
   }
 
   /**
+   * Clicks on the nth authentication method in the authentication method list (from the first screen when there is no data).
+   * @param {integer} authenticationMethodIndex
+   * @returns {Promise<void>}
+   */
+  async selectAuthenticationMethod(authenticationMethodIndex) {
+    const currentAuthenticationMethodValue = this.providerValue;
+
+    await this.clickOn(this.authenticationMethod, () => true);
+    const authenticationMethodItem = this.authenticationMethodSelectFieldItems[authenticationMethodIndex];
+    await this.clickOn(authenticationMethodItem, () => currentAuthenticationMethodValue !== this.authenticationMethodValue);
+  }
+
+  /**
    * Set the current form with the given data (only work with the inputs (not our Select component for instance))
    * @param {object} formData a key value pairs object that contains the field name as a key (must match a getter method on this page) and the desired value
    * @returns {Promise<void>}
@@ -259,11 +272,26 @@ export default class ManageSmtpAdministrationSettingsPage {
   }
 
   /**
+   * Returns all the available custom Select options for the authentication methods.
+   * @returns {NodeList}
+   */
+  get authenticationMethodSelectFieldItems() {
+    return this.selectAll(".smtp-settings  #smtp-settings-form-authentication-method .items .option");
+  }
+
+  /**
    * Returns the username field
    * @returns {HTMLElement}
    */
   get username() {
     return this.select(".smtp-settings #smtp-settings-form-username");
+  }
+
+  /**
+   * Returns true if the username field is visible
+   */
+  get isUsernameVisible() {
+    return Boolean(this.username);
   }
 
   /**
@@ -280,6 +308,13 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   get password() {
     return this.select(".smtp-settings #smtp-settings-form-password");
+  }
+
+  /**
+   * Returns true if the password field is visible
+   */
+  get isPasswordVisible() {
+    return Boolean(this.password);
   }
 
   /**
@@ -408,6 +443,22 @@ export default class ManageSmtpAdministrationSettingsPage {
    */
   get providerValue() {
     return this.select(".smtp-settings #smtp-settings-form-provider .value").textContent;
+  }
+
+  /**
+   * Returns the authentication method HTMLElement
+   * @returns {HTMLElement}
+   */
+  get authenticationMethod() {
+    return this.select(".smtp-settings #smtp-settings-form-authentication-method");
+  }
+
+  /**
+   * Returns the selected value from the provider in the second screen.
+   * @returns {string}
+   */
+  get authenticationMethodValue() {
+    return this.select(".smtp-settings #smtp-settings-form-authentication-method .value").textContent;
   }
 
   /**

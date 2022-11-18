@@ -32,10 +32,35 @@ const AUTHENTICATION_METHOD_NONE = "None";
 const AUTHENTICATION_METHOD_USERNAME = "Username only";
 const AUTHENTICATION_METHOD_USERNAME_PASSWORD = "Username & password";
 
-class ManageSmtpAdministrationSettings extends React.Component {
+export class ManageSmtpAdministrationSettings extends React.Component {
+  /**
+   * The no authentication method.
+   * @returns {string}
+   */
+  static get AUTHENTICATION_METHOD_NONE() {
+    return AUTHENTICATION_METHOD_NONE;
+  }
+
+  /**
+   * The authentication method username only
+   * @returns {string}
+   */
+  static get AUTHENTICATION_METHOD_USERNAME() {
+    return AUTHENTICATION_METHOD_USERNAME;
+  }
+
+  /**
+   * The authentication method username and password
+   * @returns {string}
+   */
+  static get AUTHENTICATION_METHOD_USERNAME_PASSWORD() {
+    return AUTHENTICATION_METHOD_USERNAME_PASSWORD;
+  }
+
   /**
    * Constructor
    * @param {Object} props
+   * @constructor
    */
   constructor(props) {
     super(props);
