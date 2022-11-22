@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-
 import React from "react";
 import PropTypes from "prop-types";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -46,7 +45,6 @@ class ManageSsoSettings extends React.Component {
   get defaultState() {
     return {
       loading: true,
-      processing: false,
     };
   }
 
@@ -66,7 +64,7 @@ class ManageSsoSettings extends React.Component {
     this.handleProviderInputChange = this.handleProviderInputChange.bind(this);
     this.handleSsoSettingToggle = this.handleSsoSettingToggle.bind(this);
     this.handleCopyRedirectUrl = this.handleCopyRedirectUrl.bind(this);
-    this.handleShowDatePicker = this.handleShowDatePicker.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
   createRefs() {
@@ -110,12 +108,13 @@ class ManageSsoSettings extends React.Component {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The redirection URL has been copied to the clipboard."));
   }
 
-  /**
-   * Handles the click on the "show date picker" button
-   */
-  handleShowDatePicker(event) {
+  async handleFormSubmit(event) {
     event.preventDefault();
-    this.datePickerRef.current.showPicker();
+    const context = this.props.adminSsoContext;
+    if (!context.hasFormChanged() || !context.validateData()) {
+      return;
+    }
+    await context.saveAndTestConfiguration();
   }
 
   /**
@@ -123,80 +122,7 @@ class ManageSsoSettings extends React.Component {
    * @returns {boolean}
    */
   hasAllInputDisabled() {
-    return this.state.processing || this.state.loading;
-  }
-
-  /**
-   * Return true if the form has some validation error
-   * @returns {boolean}
-   */
-  hasValidationError() {
-    return this.hasAzureError();
-  }
-
-  /**
-   * If Azure form has an error
-   * @returns {boolean}
-   */
-  hasAzureError() {
-    const data = this.state.ssoConfig?.data;
-    return !data?.url
-      || !data?.tenant_id
-      || !data?.client_id
-      || !data?.client_secret
-      || !data?.client_secret_expiry;
-  }
-
-  /**
-   * save Sso settings
-   * @returns {Promise<void>}
-   */
-  async saveSso() {
-    await this.props.administrationWorkspaceContext.onSaveSsoRequested({...this.state.ssoConfig});
-  }
-
-  /**
-   * Handle save operation success.
-   * @returns {Promise<void>}
-   */
-  async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The SSO settings for the organization were updated."));
-    this.setState({processing: false});
-  }
-
-  /**
-   * Handle save operation error.
-   * @param {object} error The returned error
-   * @returns {Promise<void>}
-   */
-  async handleSaveError(error) {
-    // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      this.setState({processing: false});
-    } else {
-      // Unexpected error occurred.
-      console.error(error);
-      await this.handleError(error);
-      this.setState({processing: false});
-    }
-  }
-
-  /**
-   * handle error to display the error dialog
-   * @param error
-   * @returns {Promise<void>}
-   */
-  async handleError(error) {
-    await this.props.actionFeedbackContext.displayError(error.message);
-  }
-
-  /**
-   * Toggle processing state
-   * @returns {Promise<void>}
-   */
-  async toggleProcessing() {
-    const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    return this.props.adminSsoContext.isProcessing() || this.state.loading;
   }
 
   /**
@@ -235,6 +161,7 @@ class ManageSsoSettings extends React.Component {
     const ssoContext = this.props.adminSsoContext;
     const ssoConfig = ssoContext.getSsoConfiguration();
     const isSsoActivated = ssoContext.isSsoConfigActivated();
+    const errors = ssoContext.getErrors();
     const trustedDomain = this.props.context.userSettings.getTrustedDomain();
     return (
       <div className="row">
@@ -267,7 +194,7 @@ class ManageSsoSettings extends React.Component {
             </>
           }
           {this.isReady() && isSsoActivated &&
-            <form className="form">
+            <form className="form" onSubmit={this.handleFormSubmit}>
               <div className="select-wrapper input">
                 <label htmlFor="sso-provider-input"><Trans>Single Sign-On provider</Trans></label>
                 <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
@@ -280,6 +207,9 @@ class ManageSsoSettings extends React.Component {
                     <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url"
                       value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
                       disabled={this.hasAllInputDisabled()}/>
+                    {errors.url &&
+                      <div className="error-message">{errors.url}</div>
+                    }
                     <p>
                       <Trans>The Azure AD authentication endpoint. See <a href="" rel="noopener noreferrer">alternatives</a>.</Trans>
                     </p>
@@ -303,6 +233,9 @@ class ManageSsoSettings extends React.Component {
                     <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id"
                       value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
                       disabled={this.hasAllInputDisabled()}/>
+                    {errors.client_id &&
+                      <div className="error-message">{errors.client_id}</div>
+                    }
                     <p>
                       <Trans>The public identifier for the app in Azure in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
                     </p>
@@ -312,6 +245,9 @@ class ManageSsoSettings extends React.Component {
                     <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id"
                       value={ssoConfig?.data?.tenant_id} onChange={this.handleInputChange} placeholder={this.translate("Directory ID")}
                       disabled={this.hasAllInputDisabled()}/>
+                    {errors.tenant_id &&
+                      <div className="error-message">{errors.tenant_id}</div>
+                    }
                     <p>
                       <Trans>The Azure Active Directory tenant ID, in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
                     </p>
@@ -321,19 +257,23 @@ class ManageSsoSettings extends React.Component {
                     <input id="sso-azure-secret-input" type="text" className="fluid form-element" name="client_secret"
                       value={ssoConfig?.data?.client_secret} onChange={this.handleInputChange} placeholder={this.translate("Secret")}
                       disabled={this.hasAllInputDisabled()}/>
+                    {errors.client_secret &&
+                      <div className="error-message">{errors.client_secret}</div>
+                    }
                     <p>
                       <Trans>Allows Azure and Passbolt API to securely share information. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
                     </p>
                   </div>
-                  <div className={`input text input-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                  <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Secret expiry</Trans></label>
                     <div className="button-inline">
-                      <input id="sso-azure-secret-expiry-input" type="date" ref={this.datePickerRef} className={`fluid form-element ${ssoConfig.data.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"
+                      <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.data.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"
                         value={ssoConfig?.data?.client_secret_expiry} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                      <a onClick={this.handleShowDatePicker} className="show-date-picker button button-icon">
-                        <Icon name="calendar"/>
-                      </a>
+                      <Icon name="calendar"/>
                     </div>
+                    {errors.client_secret_expiry &&
+                      <div className="error-message">{errors.client_secret_expiry}</div>
+                    }
                   </div>
                   <div className="warning message">
                     <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>

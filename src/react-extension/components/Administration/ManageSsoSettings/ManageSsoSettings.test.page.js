@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import ManageSsoSettings from "./ManageSsoSettings";
@@ -19,7 +18,6 @@ import MockTranslationProvider from "../../../test/mock/components/International
 import AdminSsoContextProvider from "../../../contexts/AdminSsoContext";
 import DisplayAdministrationSsoSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoActions/DisplayAdministrationSsoActions";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import SendTestMailDialog from "../SendTestMailDialog/SendTestMailDialog";
 
 /**
  * The ManageSsoSettings component represented as a page
@@ -45,25 +43,10 @@ export default class ManageSsoSettingsPage {
       <DialogContextProvider>
         <AdminSsoContextProvider {...props}>
           <ManageSsoSettings {...props}/>
-          <SendTestMailDialog {...props}/>
           <DisplayAdministrationSsoSettingsActions/>
         </AdminSsoContextProvider>
       </DialogContextProvider>
     </MockTranslationProvider>);
-  }
-
-  /**
-   * Launch another rendering of the page without the ManageSsoSettings component (causes a call to unmount of the component)
-   */
-  unmountManagerComponent() {
-    this.render(this.props, false);
-  }
-
-  /**
-   * Launch another rendering of the page with the ManageSsoSettings component
-   */
-  remountManagerComponent() {
-    this.render(this.props, true);
   }
 
   /**
@@ -119,6 +102,14 @@ export default class ManageSsoSettingsPage {
   async selectProvider(providerIndex) {
     const providerButton = this.providerButtons[providerIndex];
     await this.clickOn(providerButton, () => this.form !== null);
+  }
+
+  /**
+   * Clicks on the Save Settings button and wait for the given callback to return true before continuing.
+   * @param {function} readyCheckCallback a callback to tell the caller when the action is considered to be done
+   */
+  async saveSettings(readyCheckCallback) {
+    await this.clickOn(this.toolbarActionsSaveSettingsButton, readyCheckCallback);
   }
 
   /**
@@ -203,10 +194,10 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
-   * Returns the HTMLElement button of the toolbar that is the "Test and save settings"
+   * Returns the HTMLElement button of the toolbar that is the "Save settings"
    * @returns {HTMLElement}
    */
-  get toolbarActionsTestAndSaveSettingsButton() {
+  get toolbarActionsSaveSettingsButton() {
     return this.selectAll(".actions-wrapper .actions a")[0];
   }
 }

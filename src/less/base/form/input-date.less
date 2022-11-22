@@ -1,12 +1,24 @@
-input[type=date] {
-    height: 3.6rem;
+.date-wrapper .button-inline {
     position: relative;
-
-    &::-webkit-calendar-picker-indicator {
-        display: none;
+    .svg-icon {
+        position: absolute;
+        right: 0.9rem;
+        top: 0.9rem;
+        width: 1.6rem;
+        height: 1.6rem;
+        pointer-events: none
     }
 
-    &.empty {
-        color: fade(@default-text-color, 50%);
+    input[type=date] {
+        height: 3.6rem;
+        position: relative;
+
+        &::-webkit-calendar-picker-indicator {
+            opacity: 0;
+        }
+
+        &.empty {
+            color: fade(@default-text-color, 50%);
+        }
     }
 }

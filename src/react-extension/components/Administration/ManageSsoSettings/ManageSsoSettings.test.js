@@ -24,6 +24,8 @@ import {
   withAzureSsoSettings,
 } from "../../../contexts/AdminSsoContext.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {v4 as uuid} from "uuid";
+import TestSsoSettingsDialog from "../TestSsoSettingsDialog/TestSsoSettingsDialog";
 
 beforeEach(() => {
   jest.resetModules();
@@ -109,7 +111,7 @@ describe("ManageSsoSettings", () => {
   });
 
   describe("As a signed-in administrator I can save the SSO server settings", () => {
-    it('As a signed-in administrator when the “Single Sign On” settings have not changed, I cannot trigger the “Test and save settings” action', async() => {
+    it('As a signed-in administrator when the “Single Sign On” settings have not changed, I cannot trigger the “Save settings” action', async() => {
       expect.assertions(2);
       const settingsData = withAzureSsoSettings();
       const props = defaultProps();
@@ -123,13 +125,66 @@ describe("ManageSsoSettings", () => {
         }
       });
 
-      expect(page.toolbarActionsTestAndSaveSettingsButton.classList.contains("disabled")).toBeTruthy();
+      expect(page.toolbarActionsSaveSettingsButton.classList.contains("disabled")).toBeTruthy();
 
       await page.setFormWith({
         tenant_id: "tenant id test"
       });
 
-      expect(page.toolbarActionsTestAndSaveSettingsButton.classList.contains("disabled")).toBeFalsy();
+      expect(page.toolbarActionsSaveSettingsButton.classList.contains("disabled")).toBeFalsy();
+    });
+
+    it('As AD I cannot save the SSO settings before testing them', async() => {
+      expect.assertions(2);
+      const settingsData = withAzureSsoSettings();
+      const mockDialogContext = {
+        dialogContext: {
+          open: jest.fn()
+        }
+      };
+      const props = defaultProps(mockDialogContext);
+
+      const formData = {
+        url: "https://fakeurl.passbolt.com/",
+        client_id: uuid(),
+        tenant_id: uuid(),
+        client_secret: uuid(),
+        client_secret_expiry: "2050-12-31"
+      };
+
+      props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
+      props.context.port.addRequestListener("passbolt.sso.save-draft", async ssoSettings => {
+        expect(ssoSettings).toStrictEqual({
+          provider: settingsData.provider,
+          data: {
+            url: formData.url,
+            tenant_id: formData.tenant_id,
+            client_id: formData.client_id,
+            client_secret: formData.client_secret,
+            client_secret_expiry: formData.client_secret_expiry,
+          },
+        });
+        return Object.assign({}, settingsData, ssoSettings);
+      });
+
+      const page = new ManageSsoSettingsPage(props);
+
+      await waitFor(() => {
+        if (!page.url) {
+          throw new Error("Page is not loaded yet");
+        }
+      });
+
+      await page.setFormWith(formData);
+
+      await page.saveSettings(() => mockDialogContext.dialogContext.open.mock.calls.length > 0);
+
+      expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
+        provider: SsoProviders.find(provider => provider.id === "azure"),
+        configurationId: settingsData.id,
+        handleClose: expect.any(Function),
+        onSuccessfulSettingsActivation: expect.any(Function),
+      }));
     });
   });
 });
