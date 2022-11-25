@@ -199,7 +199,7 @@ class ConfirmPassphrase extends React.Component {
                     <div className="error-message">{this.state.passphraseError}</div>
                   }
                   {!this.state.passphraseError &&
-                    <div className="help-message">You need to enter your current passphrase.</div>
+                    <div className="help-message"><Trans>You need to enter your current passphrase.</Trans></div>
                   }
                 </div>
               </div>
