@@ -22,6 +22,7 @@ import DisplayAdministrationSsoActions from "../DisplayAdministrationWorkspaceAc
 import {withAdminSso} from "../../../contexts/AdminSsoContext";
 import SsoProviders from "./SsoProviders.data";
 import {withAppContext} from "../../../contexts/AppContext";
+import Password from "../../../../shared/components/Password/Password";
 
 /**
  * This component displays the SSO administration settings
@@ -174,6 +175,13 @@ class ManageSsoSettings extends React.Component {
               <label htmlFor="ssoToggle"><Trans>Single Sign-On</Trans></label>
             </span>
           </h3>
+          {this.props.adminSsoContext.hasFormChanged() &&
+            <div className="warning message" id="sso-setting-overridden-banner">
+              <p>
+                <Trans>Warning, Don&apos;t forget to save your settings to apply your modification.</Trans>
+              </p>
+            </div>
+          }
           {this.isReady() && !isSsoActivated &&
             <>
               <h4 className="no-border"><Trans>Select a provider</Trans></h4>
@@ -218,7 +226,7 @@ class ManageSsoSettings extends React.Component {
                     <label><Trans>Redirect URL</Trans></label>
                     <div className="button-inline">
                       <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-                        value={ssoConfig?.data?.redirect_url} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+                        value={`${trustedDomain}${ssoConfig?.data?.redirect_url}`} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
                       <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
                         <Icon name="copy-to-clipboard"/>
                       </a>
@@ -237,7 +245,7 @@ class ManageSsoSettings extends React.Component {
                       <div className="error-message">{errors.client_id}</div>
                     }
                     <p>
-                      <Trans>The public identifier for the app in Azure in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
+                      <Trans>The public identifier for the app in Azure in UUID format. <a href="" rel="noopener noreferrer">Where to find it?</a></Trans>
                     </p>
                   </div>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
@@ -249,19 +257,26 @@ class ManageSsoSettings extends React.Component {
                       <div className="error-message">{errors.tenant_id}</div>
                     }
                     <p>
-                      <Trans>The Azure Active Directory tenant ID, in UUID format. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
+                      <Trans>The Azure Active Directory tenant ID, in UUID format. <a href="" rel="noopener noreferrer">Where to find it?</a></Trans>
                     </p>
                   </div>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Secret</Trans></label>
-                    <input id="sso-azure-secret-input" type="text" className="fluid form-element" name="client_secret"
-                      value={ssoConfig?.data?.client_secret} onChange={this.handleInputChange} placeholder={this.translate("Secret")}
-                      disabled={this.hasAllInputDisabled()}/>
+                    <Password
+                      id="sso-azure-secret-input"
+                      className="fluid form-element"
+                      onChange={this.handleInputChange}
+                      autoComplete="off"
+                      name="client_secret"
+                      placeholder={this.translate("Secret")}
+                      disabled={this.hasAllInputDisabled()}
+                      value={ssoConfig?.data?.client_secret}
+                      preview={true}/>
                     {errors.client_secret &&
                       <div className="error-message">{errors.client_secret}</div>
                     }
                     <p>
-                      <Trans>Allows Azure and Passbolt API to securely share information. <a href="" rel="noopener noreferrer">Where to find?</a></Trans>
+                      <Trans>Allows Azure and Passbolt API to securely share information. <a href="" rel="noopener noreferrer">Where to find it?</a></Trans>
                     </p>
                   </div>
                   <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>

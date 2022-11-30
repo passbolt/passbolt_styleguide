@@ -35,22 +35,32 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleTestAndSaveClick = this.handleTestAndSaveClick.bind(this);
+    this.handleSaveClick = this.handleSaveClick.bind(this);
   }
 
-  async handleTestAndSaveClick() {
-    if (!this.props.adminSsoContext.validateData()) {
+  /**
+   * Handles the click event for the "Save settings" button.
+   * @returns {Promise<void>}
+   */
+  async handleSaveClick() {
+    const ssoContext = this.props.adminSsoContext;
+    if (ssoContext.canDeleteSettings()) {
+      ssoContext.showDeleteConfirmationDialog();
       return;
     }
-    await this.props.adminSsoContext.saveAndTestConfiguration();
+
+    if (!ssoContext.validateData()) {
+      return;
+    }
+    await ssoContext.saveAndTestConfiguration();
   }
 
   /**
    * Is save button enable
    * @returns {boolean}
    */
-  isTestAndSaveEnabled() {
-    return this.props.adminSsoContext.hasFormChanged();
+  isSaveEnabled() {
+    return this.props.adminSsoContext.hasFormChanged() || this.props.adminSsoContext.canDeleteSettings();
   }
 
   /**
@@ -63,7 +73,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isTestAndSaveEnabled() ? "" : "disabled"}`} onClick={this.handleTestAndSaveClick}>
+              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
               </a>

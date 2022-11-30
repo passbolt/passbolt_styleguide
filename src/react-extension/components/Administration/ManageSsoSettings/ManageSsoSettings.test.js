@@ -59,6 +59,8 @@ describe("ManageSsoSettings", () => {
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
 
+      const exepectedRedirectUrl = `${props.context.userSettings.getTrustedDomain()}${providerDefaultConfig.defaultConfig.redirect_url}`;
+
       const page = new ManageSsoSettingsPage(props);
 
       await waitFor(() => {
@@ -78,7 +80,7 @@ describe("ManageSsoSettings", () => {
       expect(page.client_secret_expiry).toBeTruthy();
 
       expect(page.url.value).toBe(settingsData.data.url);
-      expect(page.redirect_url.value).toBe(providerDefaultConfig.defaultConfig.redirect_url);
+      expect(page.redirect_url.value).toBe(exepectedRedirectUrl);
       expect(page.tenant_id.value).toBe(settingsData.data.tenant_id);
       expect(page.client_id.value).toBe(settingsData.data.client_id);
       expect(page.client_secret.value).toBe(settingsData.data.client_secret);
@@ -107,6 +109,37 @@ describe("ManageSsoSettings", () => {
       });
 
       expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+    });
+
+    it("As an administrator I can disable SSO Settings", async() => {
+      expect.assertions(4);
+      const settingsData = withAzureSsoSettings();
+
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
+      props.context.port.addRequestListener("passbolt.sso.delete-settings", async settingsId => {
+        expect(settingsId).toStrictEqual(settingsData.id);
+      });
+
+      const page = new ManageSsoSettingsPage(props);
+
+      await waitFor(() => {
+        if (!page.url) {
+          throw new Error("Page is not loaded yet");
+        }
+      });
+
+      await page.toggleSsoSettings();
+
+      expect(page.toolbarActionsSaveSettingsButton.classList.contains("disabled")).toBeFalsy();
+
+      await page.saveSettings(() => Boolean(page.deleteConfirmationDialog));
+
+      expect(page.deleteConfirmationDialog).toBeTruthy();
+
+      await page.confirmDelete();
+
+      expect(page.deleteConfirmationDialog).toBeFalsy();
     });
   });
 

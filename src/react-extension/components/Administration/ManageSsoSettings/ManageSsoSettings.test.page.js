@@ -18,6 +18,7 @@ import MockTranslationProvider from "../../../test/mock/components/International
 import AdminSsoContextProvider from "../../../contexts/AdminSsoContext";
 import DisplayAdministrationSsoSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoActions/DisplayAdministrationSsoActions";
 import DialogContextProvider from "../../../contexts/DialogContext";
+import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 
 /**
  * The ManageSsoSettings component represented as a page
@@ -42,6 +43,7 @@ export default class ManageSsoSettingsPage {
     this._page = render(<MockTranslationProvider>
       <DialogContextProvider>
         <AdminSsoContextProvider {...props}>
+          <ManageDialogs/>
           <ManageSsoSettings {...props}/>
           <DisplayAdministrationSsoSettingsActions/>
         </AdminSsoContextProvider>
@@ -95,6 +97,23 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
+   * Set the current form with the given data (only work with the inputs (not our Select component for instance))
+   * @param {object} formData a key value pairs object that contains the field name as a key (must match a getter method on this page) and the desired value
+   * @returns {Promise<void>}
+   */
+  async setFormWith(formData) {
+    let key;
+    for (key in formData) {
+      fireEvent.input(this[key], {target: {value: formData[key]}});
+    }
+    await waitFor(() => {
+      if (this[key].value !== formData[key].toString()) {
+        throw new Error("Form is not udpated yet.");
+      }
+    });
+  }
+
+  /**
    * Clicks on the nth provider in the provider list (from the first screen when there is no data).
    * @param {integer} providerIndex
    * @returns {Promise<void>}
@@ -113,20 +132,19 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
-   * Set the current form with the given data (only work with the inputs (not our Select component for instance))
-   * @param {object} formData a key value pairs object that contains the field name as a key (must match a getter method on this page) and the desired value
-   * @returns {Promise<void>}
+   * Clicks on SSO Settings feature toggle.
+   * @param {function} readyCheckCallback a callback to tell the caller when the action is considered to be done
    */
-  async setFormWith(formData) {
-    let key;
-    for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
-    }
-    await waitFor(() => {
-      if (this[key].value !== formData[key].toString()) {
-        throw new Error("Form is not udpated yet.");
-      }
-    });
+  async toggleSsoSettings() {
+    const currentState = this.toggleButton.checked;
+    await this.clickOn(this.toggleButton, () => this.toggleButton.checked !== currentState);
+  }
+
+  /**
+   * Simulates a click on the "Delete Settings" button from the dialog
+   */
+  async confirmDelete() {
+    await this.clickOn(this.deleteSettingsButton, () => this.deleteConfirmationDialog === null);
   }
 
   /**
@@ -199,5 +217,29 @@ export default class ManageSsoSettingsPage {
    */
   get toolbarActionsSaveSettingsButton() {
     return this.selectAll(".actions-wrapper .actions a")[0];
+  }
+
+  /**
+   * Returns the SSO Settings toggle button HTML element
+   * @returns {HTMLElement}
+   */
+  get toggleButton() {
+    return this.select(".sso-settings .toggle-switch input");
+  }
+
+  /**
+   * Returns the delete SSO Settings dialog HTML element
+   * @returns {HTMLElement}
+   */
+  get deleteConfirmationDialog() {
+    return this.select(".delete-sso-settings-dialog");
+  }
+
+  /**
+   * Returns the delete SSO Settings dialog HTML element
+   * @returns {HTMLElement}
+   */
+  get deleteSettingsButton() {
+    return this.select(".delete-sso-settings-dialog button[type='submit']");
   }
 }

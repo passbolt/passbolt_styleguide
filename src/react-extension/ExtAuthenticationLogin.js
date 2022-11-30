@@ -160,4 +160,3 @@ ExtAuthenticationLogin.propTypes = {
 };
 
 export default ExtAuthenticationLogin;
-

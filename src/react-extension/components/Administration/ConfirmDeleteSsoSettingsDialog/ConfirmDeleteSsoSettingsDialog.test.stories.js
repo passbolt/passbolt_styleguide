@@ -11,23 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
+import React from "react";
+import ConfirmDeleteSsoSettingsDialog from "./ConfirmDeleteSsoSettingsDialog";
+import {defaultProps} from "./ConfirmDeleteSsoSettingsDialog.test.data";
 
-const SsoProviders = [
-  {
-    id: "azure",
-    name: "Microsoft",
-    icon: "microsoft.svg",
-    defaultConfig: {
-      url: "https://login.microsoftonline.com",
-      redirect_url: "/sso/azure/redirect",
-    }
-  },
-  {
-    id: "google",
-    name: "Google",
-    disabled: true,
-    icon: "google.svg"
-  },
-];
 
-export default SsoProviders;
+export default {
+  title: 'Components/Administration/ConfirmDeleteSsoSettingsDialog',
+  component: ConfirmDeleteSsoSettingsDialog
+};
+
+const Template = args => <ConfirmDeleteSsoSettingsDialog {...args}/>;
+
+export const Default = Template.bind({});
+Default.args = defaultProps();

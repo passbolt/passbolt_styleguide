@@ -38,7 +38,7 @@ describe("TestSsoSettingsDialog", () => {
       const props = defaultProps();
       const page = new TestSsoSettingsDialogPage(props);
 
-      expect(page.title.textContent).toBe("Test your Single Sign-On configuration");
+      expect(page.title.textContent).toBe("Test Single Sign-On configuration");
       expect(page.ssoLoginButton).toBeTruthy();
       expect(page.saveButton).toBeTruthy();
       expect(page.saveButton.classList.contains("disabled")).toBeTruthy();
@@ -84,7 +84,7 @@ describe("TestSsoSettingsDialog", () => {
         }
       });
 
-      expect(page.title.textContent).toBe("Everything is alright");
+      expect(page.title.textContent).toBe("Save Single Sign-On configuration");
 
       expect(page.saveButton.classList.contains("disabled")).toBeFalsy();
       await page.saveSettings();

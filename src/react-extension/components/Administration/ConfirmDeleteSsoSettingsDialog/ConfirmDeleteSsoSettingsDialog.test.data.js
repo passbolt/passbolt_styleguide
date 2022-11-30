@@ -12,22 +12,12 @@
  * @since         3.9.0
  */
 
-const SsoProviders = [
-  {
-    id: "azure",
-    name: "Microsoft",
-    icon: "microsoft.svg",
-    defaultConfig: {
-      url: "https://login.microsoftonline.com",
-      redirect_url: "/sso/azure/redirect",
-    }
-  },
-  {
-    id: "google",
-    name: "Google",
-    disabled: true,
-    icon: "google.svg"
-  },
-];
-
-export default SsoProviders;
+export function defaultProps(props = {}) {
+  const _props = {
+    adminSsoContext: {
+      deleteSettings: () => { console.log("Delete settings confirmed!"); }
+    },
+    onClose: () => { console.log("Close dialog called"); }
+  };
+  return Object.assign(_props, props);
+}

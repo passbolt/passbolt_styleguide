@@ -9,9 +9,8 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.6.0
+ * @since         3.9.0
  */
-
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
@@ -20,6 +19,8 @@ import {withDialog} from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
 import {withTranslation} from "react-i18next";
 import TestSsoSettingsDialog from "../components/Administration/TestSsoSettingsDialog/TestSsoSettingsDialog";
+import ConfirmDeleteSsoSettingsDialog from "../components/Administration/ConfirmDeleteSsoSettingsDialog/ConfirmDeleteSsoSettingsDialog";
+import {withActionFeedback} from "./ActionFeedbackContext";
 
 // taken from Validator.isUUID()
 const UUID_REGEXP = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
@@ -40,6 +41,8 @@ export const AdminSsoContext = React.createContext({
   openTestDialog: () => {}, // Opens the test SSO settings dialog
   handleError: () => {}, // Handles error by displaying a NotifyError dialog
   getErrors: () => {}, // Returns the errors detected during validation
+  deleteSettings: () => {}, // Delete the current SSO settings
+  showDeleteConfirmationDialog: () => {}, // Show the delete SSO settings confirmation dialog
 });
 
 /**
@@ -63,17 +66,7 @@ export class AdminSsoContextProvider extends React.Component {
     this.handleTestConfigCloseDialog = this.handleTestConfigCloseDialog.bind(this); // Handles the closing of the SSO test configuration dialog
     this.handleSettingsActivation = this.handleSettingsActivation.bind(this); // Handles the UI processing after a successful settings activation
     return {
-      ssoConfig: {
-        provider: null,
-        data: {
-          url: "",
-          redirect_url: "",
-          client_id: "",
-          tenant_id: "",
-          client_secret: "",
-          client_secret_expiry: "",
-        }
-      }, // The current sso configuration
+      ssoConfig: this.defaultSsoSettings, // The current sso configuration
       errors: {}, // The errors detected during the data validation
       isLoaded: false, // is the SSO settings data loading from the server finished
       hasSettingsChanged: false, // has the current form changed
@@ -93,6 +86,27 @@ export class AdminSsoContextProvider extends React.Component {
       validateData: this.validateData.bind(this), // Validates the current data in the state
       saveAndTestConfiguration: this.saveAndTestConfiguration.bind(this), // Saves the current settings as a new draft and run the test dialog
       handleError: this.handleError.bind(this), // Handles error by displaying a NotifyError dialog
+      deleteSettings: this.deleteSettings.bind(this), // Delete the current SSO settings
+      canDeleteSettings: this.canDeleteSettings.bind(this), // Returns true if it is possible to call for a settings deletion
+      showDeleteConfirmationDialog: this.showDeleteConfirmationDialog.bind(this), // Show the delete SSO settings confirmation dialog
+    };
+  }
+
+  /**
+   * Returns a default empty SSO settings.
+   * @returns {object}
+   */
+  get defaultSsoSettings() {
+    return {
+      provider: null,
+      data: {
+        url: "",
+        redirect_url: "",
+        client_id: "",
+        tenant_id: "",
+        client_secret: "",
+        client_secret_expiry: "",
+      }
     };
   }
 
@@ -102,11 +116,13 @@ export class AdminSsoContextProvider extends React.Component {
    */
   async loadSsoConfiguration() {
     let ssoConfig = null;
+    let isSsoConfigExisting = false;
     try {
       ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
       this.setProviderList(ssoConfig.providers);
 
       if (ssoConfig?.provider) {
+        isSsoConfigExisting = true;
         const providerData = SsoProviders.find(provider => provider.id === ssoConfig.provider);
         ssoConfig.data.redirect_url = providerData.defaultConfig.redirect_url;
       }
@@ -120,7 +136,8 @@ export class AdminSsoContextProvider extends React.Component {
         ...ssoConfig,
         data: Object.assign({}, this.state.ssoConfig.data, ssoConfig?.data)
       },
-      isLoaded: true
+      isLoaded: true,
+      isSsoConfigExisting
     });
   }
 
@@ -237,12 +254,8 @@ export class AdminSsoContextProvider extends React.Component {
    * Disable the Sso configuration.
    */
   disableSso() {
-    this.setState({
-      ssoConfig: {
-        provider: null,
-        data: {}
-      }
-    });
+    const ssoConfig = Object.assign({}, this.state.ssoConfig, {provider: null, data: {}});
+    this.setState({ssoConfig});
   }
 
   /**
@@ -354,7 +367,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   validateDataFromProvider_azure(data, errors) {
-    const {url, client_id, tenant_id, client_secret} = data;
+    const {url, client_id, tenant_id, client_secret, client_secret_expiry} = data;
     let isDataValid = true;
     if (!url || !(url?.length)) {
       errors.url = this.props.t("The Login URL is required");
@@ -395,6 +408,12 @@ export class AdminSsoContextProvider extends React.Component {
       isDataValid = false;
     }
 
+    // Validation of client_secret_expiry
+    if (!client_secret_expiry) {
+      errors.client_secret_expiry = this.props.t("The Secret expiry is required");
+      isDataValid = false;
+    }
+
     return isDataValid;
   }
 
@@ -419,7 +438,6 @@ export class AdminSsoContextProvider extends React.Component {
     return UUID_REGEXP.test(stringUuid);
   }
 
-
   /**
    * Saves the current settings as a new draft and run the test dialog
    */
@@ -434,6 +452,43 @@ export class AdminSsoContextProvider extends React.Component {
       });
     } catch (e) {
       this.handleError(e);
+    }
+  }
+
+  /**
+   * Returns true if a SSo configuration exist on the API and the user disabled the settings.
+   * @returns {boolean}
+   */
+  canDeleteSettings() {
+    const config = this.getSsoConfiguration();
+    return this.state.isSsoConfigExisting && config.provider === null;
+  }
+
+  /**
+   * Show the delete settings confirmation dialog.
+   */
+  showDeleteConfirmationDialog() {
+    this.props.dialogContext.open(ConfirmDeleteSsoSettingsDialog);
+  }
+
+  /**
+   * Delete the current SSO settings.
+   * @return {Promise<void>}
+   */
+  async deleteSettings() {
+    this.setState({processing: true});
+    try {
+      const ssoSettings = this.getSsoConfiguration();
+      await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettings.id);
+      this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings has been deleted successfully"));
+      this.setState({
+        ssoConfig: this.defaultSsoSettings,
+        isSsoConfigExisting: false,
+        processing: false,
+      });
+    } catch (e) {
+      this.handleError(e);
+      this.setState({processing: false});
     }
   }
 
@@ -493,9 +548,10 @@ AdminSsoContextProvider.propTypes = {
   children: PropTypes.any, // The children components
   accountRecoveryContext: PropTypes.object, // The account recovery context
   dialogContext: PropTypes.object, // The dialog context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withDialog(withTranslation('common')(AdminSsoContextProvider)));
+export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(AdminSsoContextProvider))));
 
 /**
  * Resource Workspace Context Consumer HOC

@@ -112,7 +112,6 @@ class TestSsoSettingsDialog extends React.Component {
 
   /**
    * Returns true if the input must be disabled.
-   * It's true when the data is under process in the admin SMTP context.
    * @returns {boolean}
    */
   hasAllInputDisabled() {
@@ -132,8 +131,8 @@ class TestSsoSettingsDialog extends React.Component {
    */
   get title() {
     const stateTitles = {
-      form: this.translate("Test your Single Sign-On configuration"),
-      success: this.translate("Everything is alright"),
+      form: this.translate("Test Single Sign-On configuration"),
+      success: this.translate("Save Single Sign-On configuration"),
     };
 
     return stateTitles[this.state.uiState] || "";
@@ -185,7 +184,7 @@ class TestSsoSettingsDialog extends React.Component {
 
 TestSsoSettingsDialog.propTypes = {
   context: PropTypes.object, // Application context
-  adminSsoContext: PropTypes.object, // The administration SMTP settings context
+  adminSsoContext: PropTypes.object, // The administration SSO settings context
   onClose: PropTypes.func, // The close dialog callback
   t: PropTypes.func, // The translation function
   provider: PropTypes.object, // The selected SSO provider to test
