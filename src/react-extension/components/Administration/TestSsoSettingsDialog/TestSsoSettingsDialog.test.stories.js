@@ -29,6 +29,3 @@ const Template = args =>
 
 export const Default = Template.bind({});
 Default.args = defaultProps({provider: SsoProviders.at(0)});
-Default.parameters = {
-  css: "api_main"
-};

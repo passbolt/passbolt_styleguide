@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.6.0
+ * @since         3.9.0
  */
 
 import React from "react";
@@ -17,10 +17,10 @@ import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 
 export const SsoContext = React.createContext({
-  ssoServerConfig: null, // The current sso server configuration
+  //ssoServerConfig: null, // The current sso server configuration
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
   getProvider: () => {}, // Return the current sso configuration from the context state
-  isBrowserExtensionConfigured: () => {}, // Returns true if the client data is configured for SSO
+  hasUserAnSsoKit: () => {}, // Returns true if the current user has an SSO kit built locally
 });
 
 /**
@@ -41,11 +41,11 @@ export class SsoContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      ssoServerConfig: null, // The current sso configuration
-      isSsoClientDataSet: false, // Is the SSO data configured for the current browser extension
+      //ssoServerConfig: null, // The current sso configuration
+      ssoLocalConfiguredProvider: null, // the provider configured for the local SSO kit if any, null otherwise
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getProvider: this.getProvider.bind(this), // Return the current sso provider configured
-      isBrowserExtensionConfigured: this.isBrowserExtensionConfigured.bind(this), // Returns true if the current browser extension is configured for SSO.
+      hasUserAnSsoKit: this.hasUserAnSsoKit.bind(this), // Returns true if the current user has an SSO kit built locally
     };
   }
 
@@ -54,17 +54,8 @@ export class SsoContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async loadSsoConfiguration() {
-    console.log("loadSsoConfiguration");
-    //@todo @mock
-    const ssoServerConfig = {
-      provider: "azure",
-      data: {
-        url: "https://login.microsoftonline.com/passbolt-app"
-      }
-    };
-    const ssoClientConfiguration = await this.props.context.port.request("passbolt.auth.get-sso-client-data");
-    const isSsoClientDataSet = Boolean(ssoClientConfiguration);
-    this.setState({ssoServerConfig, isSsoClientDataSet});
+    const ssoLocalConfiguredProvider = await this.props.context.port.request("passbolt.sso.get-local-configured-provider");
+    this.setState({ssoLocalConfiguredProvider});
   }
 
   /**
@@ -72,15 +63,15 @@ export class SsoContextProvider extends React.Component {
    * @returns {string}
    */
   getProvider() {
-    return this.state.ssoServerConfig?.provider;
+    return this.state.ssoLocalConfiguredProvider;
   }
 
   /**
-   * Returns true if there is a configuration set for the current browser extension
+   * Returns true if the current user has an SSO kit built locally
    * @returns {boolean}
    */
-  isBrowserExtensionConfigured() {
-    return this.state.isSsoClientDataSet;
+  hasUserAnSsoKit() {
+    return Boolean(this.state.ssoLocalConfiguredProvider);
   }
 
   /**

@@ -153,14 +153,14 @@ class TestSsoSettingsDialog extends React.Component {
   render() {
     const trustedDomain = this.props.context.userSettings.getTrustedDomain();
     return (
-      <DialogWrapper className='test-sso-settings-dialog' title={this.title}
+      <DialogWrapper className='test-sso-settings-dialog sso-login-form' title={this.title}
         onClose={this.handleCloseDialog} disabled={this.hasAllInputDisabled()}>
         <form onSubmit={this.handleActivateSsoSettings}>
           <div className="form-content">
             {this.state.uiState === uiStateEnum.FORM &&
               <>
                 <p><Trans>Before saving the settings, we need to test if the configuration is working.</Trans></p>
-                <a className={`button sso-login-button ${this.hasAllInputDisabled() ? "disabled" : ""}`} onClick={this.handleSignInTestClick} disabled={this.hasAllInputDisabled()} >
+                <a className={`button sso-login-button ${this.hasAllInputDisabled() ? "disabled" : ""} ${this.props.provider.id}`} onClick={this.handleSignInTestClick} disabled={this.hasAllInputDisabled()} >
                   <span className="provider-logo">
                     <img src={`${trustedDomain}/img/third_party/${this.props.provider.icon}`}/>
                   </span>
