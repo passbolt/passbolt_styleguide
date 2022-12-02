@@ -104,8 +104,7 @@ class ManageSsoSettings extends React.Component {
    * Handle the copy to clipboard button
    */
   async handleCopyRedirectUrl() {
-    const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
-    await navigator.clipboard.writeText(ssoConfig.data.redirect_url);
+    await navigator.clipboard.writeText(this.fullRedirectUrl);
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The redirection URL has been copied to the clipboard."));
   }
 
@@ -135,6 +134,15 @@ class ManageSsoSettings extends React.Component {
       value: provider.id,
       label: provider.name
     }));
+  }
+
+  /**
+   * Get the full redirection URL;
+   */
+  get fullRedirectUrl() {
+    const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
+    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
+    return `${trustedDomain}${ssoConfig?.data?.redirect_url}`;
   }
 
   /**
@@ -226,7 +234,7 @@ class ManageSsoSettings extends React.Component {
                     <label><Trans>Redirect URL</Trans></label>
                     <div className="button-inline">
                       <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-                        value={`${trustedDomain}${ssoConfig?.data?.redirect_url}`} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+                        value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
                       <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
                         <Icon name="copy-to-clipboard"/>
                       </a>

@@ -43,6 +43,7 @@ class OrchestrateLoginBoxMain extends Component {
           onSignIn={this.props.authenticationLoginContext.signIn}
           onCheckPassphrase={this.props.authenticationLoginContext.checkPassphrase}
           onSecondaryActionClick={this.props.authenticationLoginContext.needHelpCredentialsLost}
+          onSsoLoginError={this.props.authenticationLoginContext.handleSsoLoginError}
         />;
       case AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY:
         return <AcceptLoginServerKeyChange

@@ -54,6 +54,8 @@ export const AuthenticationLoginContext = React.createContext({
   }, // Whenever the user wants to request help because it lost its credentials.
   goToValidatePassphrase: () => {
   }, // Whenever the users wants to go to the validate passphrase.
+  handleSsoLoginError: () => {
+  }, // Handles the SSO login error
 });
 
 /**
@@ -88,6 +90,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
       needHelpCredentialsLost: this.needHelpCredentialsLost.bind(this), // Whenever a user lost its passphrase.
       requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user wants to request help because it lost its credentials.
       goToValidatePassphrase: this.goToValidatePassphrase.bind(this), // Whenever the users wants to go to the validate passphrase.
+      handleSsoLoginError: this.handleSsoLoginError.bind(this), // Handles the SSO login error
     };
   }
 
@@ -176,6 +179,14 @@ export class AuthenticationLoginContextProvider extends React.Component {
   handleSwitchAccount() {
     const url = `${this.props.context.userSettings.getTrustedDomain()}/users/recover?locale=${this.props.context.locale}`;
     window.open(url, '_parent', 'noopener,noreferrer');
+  }
+
+  /**
+   * Handles the SSO login error
+   * @param {error} e
+   */
+  handleSsoLoginError(e) {
+    this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: e});
   }
 
   /**

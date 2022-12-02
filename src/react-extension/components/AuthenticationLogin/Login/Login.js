@@ -127,9 +127,9 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
-    this.handleSignInWithAzureSso = this.handleSignInWithAzureSso.bind(this);
     this.handleSwitchToSso = this.handleSwitchToSso.bind(this);
     this.handleSwitchToPassphrase = this.handleSwitchToPassphrase.bind(this);
+    this.handleSignInWithSso = this.handleSignInWithSso.bind(this);
   }
 
   /**
@@ -143,11 +143,11 @@ class Login extends Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
+    this.focusOnPassphrase();
     await this.props.ssoContext.loadSsoConfiguration();
     if (this.props.ssoContext.hasUserAnSsoKit()) {
       this.setState({isSsoAvailable: true});
     }
-    this.focusOnPassphrase();
   }
 
   /**
@@ -267,20 +267,6 @@ class Login extends Component {
   }
 
   /**
-   * Handle a third party sign in process of Azure.
-   */
-  async handleSignInWithAzureSso() {
-    try {
-      this.toggleProcessing();
-      const passphrase = await this.props.context.port.request("passbolt.auth.sso-azure");
-      await this.props.onSignIn(passphrase, this.state.rememberMe);
-      this.toggleProcessing();
-    } catch (error) {
-      this.toggleProcessing();
-    }
-  }
-
-  /**
    * Switches the UI to the SSO mode.
    */
   handleSwitchToSso(event) {
@@ -294,6 +280,33 @@ class Login extends Component {
   handleSwitchToPassphrase(event) {
     event.preventDefault();
     this.setState({displaySso: false});
+  }
+
+  /**
+   * Handle the click on the SSO login button.
+   * @returns {Promise<void>}
+   */
+  async handleSignInWithSso(event) {
+    event.preventDefault();
+    this.setState({actions: {
+      processing: true
+    }});
+    try {
+      await this.props.ssoContext.runSignInProcess();
+    } catch (e) {
+      if (e.name === "UserClosedSsoPopUp") {
+        this.setState({
+          displaySso: false
+        });
+      } else {
+        this.props.onSsoLoginError(e);
+      }
+    }
+    this.setState({
+      actions: {
+        processing: false
+      }
+    });
   }
 
   /**
@@ -314,15 +327,19 @@ class Login extends Component {
    */
   get isAzureSsoEnabled() {
     const ssoProvider = this.props.ssoContext.getProvider();
-    return ssoProvider.provider === "azure";
+    return ssoProvider === "azure";
   }
 
+  /**
+   * Returns the provider information of the current SSO provider configured.
+   * @return {object}
+   */
   get ssoProviderData() {
     const ssoProvider = this.props.ssoContext.getProvider();
     if (!ssoProvider) {
       return null;
     }
-    return SsoProviders.find(provider => provider.id === ssoProvider.provider);
+    return SsoProviders.find(provider => provider.id === ssoProvider);
   }
 
   /**
@@ -332,8 +349,6 @@ class Login extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     const securityToken = this.securityToken;
     const ssoProviderData = this.ssoProviderData;
-    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
-
     return (
       <div className="login">
         <div className="login-user">
@@ -413,21 +428,19 @@ class Login extends Component {
         }
         {this.state.displaySso &&
           <>
-            {this.isAzureSsoEnabled &&
-              <>
-                <div className="form-actions sso-login-form">
-                  <a className={`button sso-login-button ${this.processing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
-                    <span className="provider-logo">
-                      <img src={`${trustedDomain}/img/third_party/${ssoProviderData.icon}`}/>
-                    </span>
-                    {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
-                  </a>
-                  <a onClick={this.handleSwitchToPassphrase}>
-                    <Trans>Sign in with my passphrase.</Trans>
-                  </a>
-                </div>
-              </>
-            }
+            <div className="form-actions sso-login-form">
+              {this.isAzureSsoEnabled &&
+                <a className={`button sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
+                  <span className="provider-logo">
+                    <img src={`${this.trustedDomain}/img/third_party/${ssoProviderData.icon}`}/>
+                  </span>
+                  {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
+                </a>
+              }
+              <a onClick={this.handleSwitchToPassphrase}>
+                <Trans>Sign in with my passphrase.</Trans>
+              </a>
+            </div>
           </>
         }
       </div>
@@ -452,6 +465,7 @@ Login.propTypes = {
   onSignIn: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to sign-in
   onCheckPassphrase: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to check the passphrase
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
+  onSsoLoginError: PropTypes.func, // Callback when an error during SSO login happened
   t: PropTypes.func, // The translation function
 };
 export default withAppContext(withSso(withTranslation('common')(Login)));
