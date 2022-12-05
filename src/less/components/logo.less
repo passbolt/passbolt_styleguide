@@ -39,3 +39,23 @@ only screen and (min-resolution: 1.5dppx) {
         }
     }
 }
+
+.logo-svg {
+    &.no-img {
+        width: 150px;
+        height: 26px;
+    }
+    h1 {
+        display: none;
+    }
+
+    &.bigger {
+        width: 200px;
+        height: 45px;
+    }
+}
+
+// logo should always fit
+.header.second .col1 {
+    min-width:200px;
+}
