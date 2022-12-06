@@ -153,6 +153,8 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
         delete dto.provider;
         await this.smtpSettingsModel.saveSmtpSettings(dto);
         this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
+        const newSettings = Object.assign({}, this.state.currentSmtpSettings, {"source": "db"});
+        this.setState({currentSmtpSettings: newSettings});
       } catch (e) {
         this.handleError(e);
       }

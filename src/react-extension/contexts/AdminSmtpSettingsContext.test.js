@@ -78,7 +78,7 @@ describe("AdminSmtpSettingsContext", () => {
 
   describe("AdminSmtpSettingsContextProvider::saveSettings()", () => {
     it("should get the current SMTP settings and store them in its state with the corresponding provider", async() => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const currentSmtpSettings = {
         id: uuid(),
@@ -126,9 +126,11 @@ describe("AdminSmtpSettingsContext", () => {
       }
 
       await adminSmtpContext.saveSmtpSettings();
+      const settings = await adminSmtpContext.getCurrentSmtpSettings();
 
       // 1 call is a GET, the other is the POST
       expect(smtpSettingsCallMock).toHaveBeenCalledTimes(2);
+      expect(settings.source).toEqual("db");
     });
   });
 });
