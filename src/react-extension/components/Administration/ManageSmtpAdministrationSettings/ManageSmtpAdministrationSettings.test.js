@@ -184,6 +184,22 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.settingsFromFileWarningMessage).toBeTruthy();
     });
 
+    it('As a signed-in administrator when the Email server settings are configured via configuration file, I can see a source warning message when I modify a field.', async() => {
+      expect.assertions(2);
+      const props = defaultProps();
+      const smtpSettings = withExistingSmtpSettings({source: "env"});
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
+      const page = new ManageSmtpAdministrationSettingsPage(props);
+
+      await waitFor(() => {});
+
+      expect(page.settingsFromFileWarningMessage).toBeFalsy();
+
+      await page.setFormWith({username: "test"});
+
+      expect(page.settingsFromFileWarningMessage).toBeTruthy();
+    });
+
     it('As a signed-in administrator when the Email server settings are configured via the database, I do not see a source warning message when I modify a field. ', async() => {
       expect.assertions(2);
       const props = defaultProps();

@@ -275,7 +275,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
    */
   shouldShowSourceWarningMessage() {
     const smtpContext = this.props.adminSmtpSettingsContext;
-    return smtpContext.getCurrentSmtpSettings().source === "file" && smtpContext.isSettingsModified();
+    return smtpContext.getCurrentSmtpSettings().source !== "db" && smtpContext.isSettingsModified();
   }
 
   /**
