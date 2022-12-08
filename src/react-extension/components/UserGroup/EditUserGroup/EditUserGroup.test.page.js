@@ -45,10 +45,17 @@ export default class EditUserGroupTestPage {
   }
 
   /**
+   * Returns the name input element
+   */
+  get name() {
+    return this._page.container.querySelector('#group-name-input');
+  }
+
+  /**
    * Return the group name input
    */
   get groupName() {
-    return this._page.container.querySelector('#group-name-input').value;
+    return this.name.value;
   }
 
   /**
@@ -105,6 +112,13 @@ export default class EditUserGroupTestPage {
    */
   get canAdd() {
     return ! this._page.container.querySelector('.cannot-add-user');
+  }
+
+  /**
+   * Returns the name warning mesage input element
+   */
+  get nameWarningMessage() {
+    return this._page.container.querySelector('.name.warning-message');
   }
 
   /**
@@ -204,6 +218,17 @@ export default class EditUserGroupTestPage {
         throw new Error("The field has not changed yet.");
       }
     });
+  }
+
+  /** fill the input element with data */
+  fillInput(element, data) {
+    const dataInputEvent = {target: {value: data}};
+    fireEvent.change(element, dataInputEvent);
+  }
+
+  /** on keypup element */
+  keyUpInput(component)  {
+    fireEvent.keyUp(component, {keyCode: 38});
   }
 
   async click(element) {

@@ -31,13 +31,13 @@ import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGene
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-
-
-/** Resource password max length */
-const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
-
-/** Resource description max length */
-const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
+import {maxSizeValidation} from "../../../lib/Error/InputValidator";
+import {
+  RESOURCE_NAME_MAX_LENGTH,
+  RESOURCE_PASSWORD_MAX_LENGTH,
+  RESOURCE_URI_MAX_LENGTH,
+  RESOURCE_DESCRIPTION_MAX_LENGTH,
+} from "../../../../shared/constants/inputs.const";
 
 class CreateResource extends Component {
   constructor() {
@@ -51,10 +51,13 @@ class CreateResource extends Component {
     return {
       name: "",
       nameError: "",
+      nameWarning: "",
       username: "",
       usernameError: "",
+      usernameWarning: "",
       uri: "",
       uriError: "",
+      uriWarning: "",
       password: "",
       passwordError: "",
       passwordWarning: "",
@@ -62,7 +65,7 @@ class CreateResource extends Component {
       descriptionError: "",
       descriptionWarning: "",
       encryptDescription: false,
-      hasAlreadyBeenValidated: false // True if the form has already been submitted once
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
     };
   }
 
@@ -75,6 +78,8 @@ class CreateResource extends Component {
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
     this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
+    this.handleUriInputKeyUp = this.handleUriInputKeyUp.bind(this);
+    this.handleUsernameInputKeyUp = this.handleUsernameInputKeyUp.bind(this);
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleLastGeneratedPasswordChanged = this.handleLastGeneratedPasswordChanged.bind(this);
   }
@@ -101,7 +106,9 @@ class CreateResource extends Component {
    * @param prevProps The previous component props
    */
   componentDidUpdate(prevProps) {
-    this.handleLastGeneratedPasswordChanged(prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword);
+    this.handleLastGeneratedPasswordChanged(
+      prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword
+    );
   }
 
   /*
@@ -111,7 +118,9 @@ class CreateResource extends Component {
    */
   get currentGeneratorConfiguration() {
     const type = this.props.resourcePasswordGeneratorContext.settings.default_generator;
-    return this.props.resourcePasswordGeneratorContext.settings.generators.find(generator => generator.type === type);
+    return this.props.resourcePasswordGeneratorContext.settings.generators.find(
+      generator => generator.type === type
+    );
   }
 
   /**
@@ -205,7 +214,7 @@ class CreateResource extends Component {
       uriError: "",
       usernameError: "",
       passwordError: "",
-      descriptionError: ""
+      descriptionError: "",
     });
 
     // Validate the form inputs.
@@ -263,7 +272,7 @@ class CreateResource extends Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      folder_parent_id: this.props.context.resourceCreateDialogProps.folderParentId
+      folder_parent_id: this.props.context.resourceCreateDialogProps.folderParentId,
     };
 
     // No resource types, legacy case
@@ -369,7 +378,7 @@ class CreateResource extends Component {
    */
   handleError(error) {
     const errorDialogProps = {
-      error: error
+      error: error,
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
   }
@@ -421,7 +430,7 @@ class CreateResource extends Component {
     const value = target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -432,6 +441,9 @@ class CreateResource extends Component {
     if (this.state.hasAlreadyBeenValidated) {
       const state = this.validateNameInput();
       this.setState(state);
+    } else {
+      const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate)
+      this.setState({nameWarning});
     }
   }
 
@@ -443,9 +455,7 @@ class CreateResource extends Component {
       const state = this.validatePasswordInput();
       this.setState(state);
     } else {
-      const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
-      const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-      const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
+      const passwordWarning = maxSizeValidation(this.state.password, RESOURCE_PASSWORD_MAX_LENGTH, this.translate)
       this.setState({passwordWarning});
     }
   }
@@ -459,9 +469,10 @@ class CreateResource extends Component {
     }
 
     const password = SecretGenerator.generate(this.currentGeneratorConfiguration);
+
     this.setState({
       password: password,
-      passwordError: ""
+      passwordError: "",
     });
   }
 
@@ -498,11 +509,28 @@ class CreateResource extends Component {
    */
   handleDescriptionInputKeyUp() {
     if (!this.state.hasAlreadyBeenValidated) {
-      const hasResourceDescriptionMaxLength = this.state.description.length >= RESOURCE_DESCRIPTION_MAX_LENGTH;
-
-      const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-      const descriptionWarning = hasResourceDescriptionMaxLength ? warningMessage : '';
+      const descriptionWarning = maxSizeValidation(this.state.description, RESOURCE_DESCRIPTION_MAX_LENGTH, this.translate)
       this.setState({descriptionWarning});
+    }
+  }
+
+  /**
+   * Whenever the user input keys in the name area
+   */
+  handleUriInputKeyUp() {
+    if (!this.state.hasAlreadyBeenValidated) {
+      const uriWarning = maxSizeValidation(this.state.uri, RESOURCE_URI_MAX_LENGTH, this.translate)
+      this.setState({uriWarning});
+    }
+  }
+
+  /**
+   * Whenever the user input keys in the username area
+   */
+  handleUsernameInputKeyUp() {
+    if (!this.state.hasAlreadyBeenValidated) {
+      const usernameWarning = maxSizeValidation(this.state.username, RESOURCE_NAME_MAX_LENGTH, this.translate)
+      this.setState({usernameWarning});
     }
   }
 
@@ -511,7 +539,7 @@ class CreateResource extends Component {
    * @returns {boolean}
    */
   get canUsePasswordGenerator() {
-    return this.props.context.siteSettings.canIUse('passwordGenerator');
+    return this.props.context.siteSettings.canIUse("passwordGenerator");
   }
 
   /**
@@ -536,7 +564,7 @@ class CreateResource extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-name"><Trans>Name</Trans></label>
+              <label htmlFor="create-password-form-name"><Trans>Name</Trans>{this.state.nameWarning && <Icon name="exclamation" />}</label>
               <input id="create-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
@@ -544,24 +572,39 @@ class CreateResource extends Component {
               {this.state.nameError &&
               <div className="name error-message">{this.state.nameError}</div>
               }
+              {this.state.nameWarning && (
+                <div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                </div>
+              )}
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-uri"><Trans>URI</Trans></label>
-              <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
+              <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{this.state.uriWarning && <Icon name="exclamation" />}</label>
+              <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text" onKeyUp={this.handleUriInputKeyUp}
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
               {this.state.uriError &&
               <div className="error-message">{this.state.uriError}</div>
               }
+              {this.state.uriWarning && (
+                <div className="uri warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.uriWarning}
+                </div>
+              )}
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-password-form-username"><Trans>Username</Trans></label>
-              <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"
+              <label htmlFor="create-password-form-username"><Trans>Username</Trans>{this.state.usernameWarning && <Icon name="exclamation" />}</label>
+              <input id="create-password-form-username" name="username" type="text" className="fluid" maxLength="255"   onKeyUp={this.handleUsernameInputKeyUp}
                 autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
                 disabled={this.state.processing}/>
               {this.state.usernameError &&
               <div className="error-message">{this.state.usernameError}</div>
               }
+              {this.state.usernameWarning && (
+                <div className="username warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.usernameWarning}
+                </div>
+              )}
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-password">
@@ -660,3 +703,4 @@ CreateResource.propTypes = {
 };
 
 export default  withResourcePasswordGeneratorContext(withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource))))));
+

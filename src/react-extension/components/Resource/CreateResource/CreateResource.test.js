@@ -298,14 +298,25 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.passwordGeneratorDialog).not.toBeNull();
     });
 
-    it("As a user I should see a feedback when the password or descriptions fields content is truncated by a field limit", async() => {
-      expect.assertions(2);
+    it("As a user I should see a feedback when the password, descriptions, name, username or uri fields content is truncated by a field limit", async() => {
+      expect.assertions(5);
       page.passwordCreate.fillInput(page.passwordCreate.password, 'a'.repeat(4097));
       page.passwordCreate.fillInput(page.passwordCreate.description, 'a'.repeat(10000));
-      page.passwordCreate.keyUpInput(page.passwordCreate.password);
-      page.passwordCreate.keyUpInput(page.passwordCreate.description);
+      page.passwordCreate.fillInput(page.passwordCreate.name, 'a'.repeat(256));
+      page.passwordCreate.fillInput(page.passwordCreate.username, 'a'.repeat(255));
+      page.passwordCreate.fillInput(page.passwordCreate.uri, 'a'.repeat(1025));
+
+      await page.passwordCreate.keyUpInput(page.passwordCreate.password);
+      await page.passwordCreate.keyUpInput(page.passwordCreate.description);
+      await page.passwordCreate.keyUpInput(page.passwordCreate.username);
+      await page.passwordCreate.keyUpInput(page.passwordCreate.name);
+      await page.passwordCreate.keyUpInput(page.passwordCreate.uri);
+
       expect(page.passwordCreate.passwordWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordCreate.descriptionWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordCreate.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordCreate.uriWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordCreate.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

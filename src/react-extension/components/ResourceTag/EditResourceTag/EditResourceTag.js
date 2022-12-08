@@ -24,6 +24,9 @@ import {withLoading} from "../../../contexts/LoadingContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import Icon from "../../../../shared/components/Icons/Icon";
+import {maxSizeValidation} from '../../../lib/Error/InputValidator';
+import {RESOURCE_TAG_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
 
 /**
  * Component allows the user to edit a tag from a dialog
@@ -40,6 +43,7 @@ class EditResourceTag extends Component {
     return {
       name: '',
       nameError: "",
+      nameWarning: "",
       processing: false
     };
   }
@@ -97,6 +101,8 @@ class EditResourceTag extends Component {
   handleNameInputKeyUp() {
     const state = this.validateNameInput();
     this.setState(state);
+    const nameWarning = maxSizeValidation(this.state.name, RESOURCE_TAG_MAX_LENGTH, this.translate);
+    this.setState({nameWarning});
   }
 
   /**
@@ -265,7 +271,9 @@ class EditResourceTag extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-tag-form-name"><Trans>Tag name</Trans></label>
+              <label htmlFor="edit-tag-form-name"><Trans>Tag name</Trans>{this.state.nameWarning &&
+                  <Icon name="exclamation"/>
+              }</label>
               <input id="edit-tag-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid"
@@ -274,6 +282,11 @@ class EditResourceTag extends Component {
               {this.state.nameError &&
                   <div className="name error-message">{this.state.nameError}</div>
               }
+              {this.state.nameWarning && (
+                <div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                </div>
+              )}
             </div>
           </div>
           <div className="submit-wrapper clearfix">

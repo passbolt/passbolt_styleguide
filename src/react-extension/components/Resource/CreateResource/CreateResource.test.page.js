@@ -137,6 +137,13 @@ class PasswordCreatePageObject {
   }
 
   /**
+   * Returns the name warning mesage input element
+   */
+  get nameWarningMessage() {
+    return this._container.querySelector('.name.warning-message');
+  }
+
+  /**
    * Returns the uri input element
    */
   get uri() {
@@ -144,10 +151,24 @@ class PasswordCreatePageObject {
   }
 
   /**
+   * Returns the uri warning mesage input element
+   */
+  get uriWarningMessage() {
+    return this._container.querySelector('.uri.warning-message');
+  }
+
+  /**
    * Returns the username / email input element
    */
   get username() {
     return this._container.querySelector('#create-password-form-username');
+  }
+
+  /**
+   * Returns the username warning mesage input element
+   */
+  get usernameWarningMessage() {
+    return this._container.querySelector('.username.warning-message');
   }
 
   /**
@@ -228,16 +249,12 @@ class PasswordCreatePageObject {
     return this._container.querySelector('.password-generator');
   }
 
-
-
   /**
    * Returns the save button element
    */
   get saveButton() {
     return this._container.querySelector('.submit-wrapper button[type=\"submit\"]');
   }
-
-
 
   /**
    * Returns the cancel button element
@@ -253,8 +270,6 @@ class PasswordCreatePageObject {
   get errorDialogMessage() {
     return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
   }
-
-
 
   /**
    * Returns true if the page object exists in the container

@@ -25,6 +25,9 @@ import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import EditUserGroupItem from "../EditUserGroup/EditUserGroupItem";
+import {maxSizeValidation} from '../../../lib/Error/InputValidator';
+import Icon from "../../../../shared/components/Icons/Icon";
+import {RESOURCE_GROUP_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 
 class CreateUserGroup extends Component {
   /**
@@ -51,6 +54,7 @@ class CreateUserGroup extends Component {
       // Input fields
       name: '',
       nameError: "",
+      nameWarning: "",
 
       // group users list
       groups_users: [],
@@ -143,6 +147,8 @@ class CreateUserGroup extends Component {
   handleNameInputKeyUp() {
     const state = this.validateNameInput();
     this.setState(state);
+    const nameWarning = maxSizeValidation(this.state.name, RESOURCE_GROUP_NAME_MAX_LENGTH, this.translate);
+    this.setState({nameWarning});
   }
 
   /**
@@ -520,12 +526,19 @@ class CreateUserGroup extends Component {
         <form className="group-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="group_name"><Trans>Group name</Trans></label>
+              <label htmlFor="group_name"><Trans>Group name</Trans>{this.state.nameWarning &&
+                  <Icon name="exclamation"/>
+              }</label>
               <input id="group-name-input" name="name" className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef}/>
               {this.state.nameError &&
               <div className="name error-message">{this.state.nameError}</div>
+              }
+              {this.state.nameWarning &&
+                (<div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                </div>)
               }
             </div>
 
@@ -562,6 +575,11 @@ class CreateUserGroup extends Component {
               <span><Trans>You need to click save for the changes to take place.</Trans></span>
             </div>
             }
+            {this.state.nameWarning && (
+              <div className="message warning">
+                <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+              </div>
+            )}
             <div className="form-content permission-add">
               <Autocomplete
                 id="user-name-input"

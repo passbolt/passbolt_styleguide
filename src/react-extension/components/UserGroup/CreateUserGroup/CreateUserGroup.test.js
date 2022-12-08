@@ -21,6 +21,8 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 
+const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
+
 describe("See the Create Dialog Group", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
@@ -212,6 +214,13 @@ describe("See the Create Dialog Group", () => {
 
       // display groupname error message
       expect(page.createGroup.nameErrorMessage.textContent).toBe("The group name test already exists.");
+    });
+
+    it("As an user I should see a feedback when name field content is truncated by a field limit", async() => {
+      expect.assertions(1);
+      page.createGroup.fillInput(page.createGroup.name, 'a'.repeat(255));
+      await page.createGroup.keyUpInput(page.createGroup.name);
+      expect(page.createGroup.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });
