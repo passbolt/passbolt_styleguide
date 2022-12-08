@@ -250,6 +250,13 @@ class CreateGroupPageObject {
   }
 
   /**
+   * Returns the name warning mesage input element
+   */
+  get nameWarningMessage() {
+    return this._container.querySelector('.name.warning-message');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -280,6 +287,11 @@ class CreateGroupPageObject {
   fillInput(element, data) {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+  }
+
+  /** on keypup element */
+  keyUpInput(component)  {
+    fireEvent.keyUp(component, {keyCode: 38});
   }
 
   /** select item */

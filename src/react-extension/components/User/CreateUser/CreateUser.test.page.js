@@ -187,6 +187,27 @@ class CreateUserPageObject {
   }
 
   /**
+   * Returns the username warning mesage input element
+   */
+  get usernameWarningMessage() {
+    return this._container.querySelector('.username.warning-message');
+  }
+
+  /**
+   * Returns the first name warning mesage input element
+   */
+  get firstnameWarningMessage() {
+    return this._container.querySelector('.firstname.warning-message');
+  }
+
+  /**
+   * Returns the last name warning mesage input element
+   */
+  get lastnameWarningMessage() {
+    return this._container.querySelector('.lastname.warning-message');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -217,6 +238,11 @@ class CreateUserPageObject {
   fillInput(element, data)  {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+  }
+
+  /** on keypup element */
+  keyUpInput(component)  {
+    fireEvent.keyUp(component, {keyCode: 38});
   }
 }
 

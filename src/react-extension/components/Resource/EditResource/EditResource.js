@@ -29,12 +29,9 @@ import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePas
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-
-/** Resource password max length */
-const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
-
-/** Resource description max length */
-const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
+import {maxSizeValidation} from "../../../lib/Error/InputValidator";
+import {RESOURCE_PASSWORD_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import {RESOURCE_NAME_MAX_LENGTH, RESOURCE_DESCRIPTION_MAX_LENGTH, RESOURCE_URI_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 
 class EditResource extends Component {
   constructor(props) {
@@ -51,10 +48,13 @@ class EditResource extends Component {
       nameOriginal: resource.name || "",
       name: resource.name || "",
       nameError: "",
+      nameWarning: "",
       username: resource.username || "",
       usernameError: "",
+      usernameWarning: "",
       uri: resource.uri || "",
       uriError: "",
+      uriWarning: "",
       password: "",
       passwordError: "",
       passwordWarning: "",
@@ -71,7 +71,6 @@ class EditResource extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
     this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
@@ -79,6 +78,9 @@ class EditResource extends Component {
     this.handleDescriptionInputBlur = this.handleDescriptionInputBlur.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
     this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
+    this.handleUriInputKeyUp = this.handleUriInputKeyUp.bind(this);
+    this.handleUsernameInputKeyUp = this.handleUsernameInputKeyUp.bind(this);
+    this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
   }
 
   /**
@@ -439,19 +441,18 @@ class EditResource extends Component {
   /**
    * Handle name input keyUp event.
    */
-  handleNameInputKeyUp() {
-    const state = this.validateNameInput();
-    this.setState(state);
+  async handleNameInputKeyUp() {
+    await this.validateNameInput();
+    const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate);
+    this.setState({nameWarning});
   }
 
   /**
    * Handle password input keyUp event.
    */
   async handlePasswordInputKeyUp() {
-    const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
     await this.validatePasswordInput();
-    const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-    const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
+    const passwordWarning = maxSizeValidation(this.state.password, RESOURCE_PASSWORD_MAX_LENGTH, this.translate);
     this.setState({passwordWarning});
   }
 
@@ -501,12 +502,27 @@ class EditResource extends Component {
    * Whenever the user input keys in the description area
    */
   handleDescriptionInputKeyUp() {
-    const hasResourceDescriptionMaxLength = this.state.description.length >= RESOURCE_DESCRIPTION_MAX_LENGTH;
-
-    const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
-    const descriptionWarning = hasResourceDescriptionMaxLength ? warningMessage : '';
+    const descriptionWarning = maxSizeValidation(this.state.description, RESOURCE_DESCRIPTION_MAX_LENGTH, this.translate);
     this.setState({descriptionWarning});
   }
+
+
+  /**
+   * Whenever the user input keys in the name area
+   */
+  handleUriInputKeyUp() {
+    const uriWarning = maxSizeValidation(this.state.uri, RESOURCE_URI_MAX_LENGTH, this.translate);
+    this.setState({uriWarning});
+  }
+
+  /**
+   * Whenever the user input keys in the username area
+   */
+  handleUsernameInputKeyUp() {
+    const usernameWarning = maxSizeValidation(this.state.username, RESOURCE_NAME_MAX_LENGTH, this.translate);
+    this.setState({usernameWarning});
+  }
+
 
   /*
    * =============================================================
@@ -636,7 +652,9 @@ class EditResource extends Component {
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-name"><Trans>Name</Trans></label>
+              <label htmlFor="edit-password-form-name"><Trans>Name</Trans>{this.state.nameWarning &&
+                  <Icon name="exclamation"/>
+              }</label>
               <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="255"
@@ -644,24 +662,46 @@ class EditResource extends Component {
               {this.state.nameError &&
               <div className="name error-message">{this.state.nameError}</div>
               }
+              {this.state.nameWarning && (
+                <div className="name warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                </div>
+              )}
             </div>
             <div className={`input text ${this.state.uriError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans></label>
+              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans>{this.state.uriWarning &&
+                  <Icon name="exclamation"/>
+              }</label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
+                onKeyUp={this.handleUriInputKeyUp}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.uriError &&
               <div className="error-message">{this.state.uriError}</div>
               }
+              {this.state.uriWarning && (
+                <div className="uri warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.uriWarning}
+                </div>
+              )}
             </div>
             <div className={`input text ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-username"><Trans>Username</Trans></label>
+              <label htmlFor="edit-password-form-username"><Trans>Username</Trans>{this.state.usernameWarning &&
+                <Icon name="exclamation"/>
+              }</label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="255"
-                autoComplete="off" value={this.state.username} onChange={this.handleInputChange} placeholder={this.translate("Username")}
+                autoComplete="off" value={this.state.username} onChange={this.handleInputChange}
+                onKeyUp={this.handleUsernameInputKeyUp}
+                placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
               {this.state.usernameError &&
               <div className="error-message">{this.state.usernameError}</div>
               }
+              {this.state.usernameWarning && (
+                <div className="username warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.usernameWarning}
+                </div>
+              )}
             </div>
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">

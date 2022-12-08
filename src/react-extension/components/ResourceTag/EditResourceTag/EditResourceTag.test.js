@@ -24,6 +24,7 @@ import {defaultAppContext, defaultProps} from "./EditResourceTag.test.data";
 beforeEach(() => {
   jest.resetModules();
 });
+const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
 describe("See the Edit Tag Dialog", () => {
   let page; // The page to test against
@@ -147,6 +148,13 @@ describe("See the Edit Tag Dialog", () => {
       // Throw general error message
       expect(page.tagEdit.errorDialog).not.toBeNull();
       expect(page.tagEdit.errorDialogMessage).not.toBeNull();
+    });
+
+    it("As a user I should see a feedback when name field content is truncated by a field limit", async() => {
+      expect.assertions(1);
+      page.tagEdit.fillInput(page.tagEdit.tagName, 'a'.repeat(255));
+      await page.tagEdit.keyUpInput(page.tagEdit.tagName);
+      expect(page.tagEdit.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

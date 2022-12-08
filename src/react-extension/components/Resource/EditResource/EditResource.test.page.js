@@ -141,10 +141,24 @@ class PasswordEditPageObject {
   }
 
   /**
+   * Returns the name warning mesage input element
+   */
+  get nameWarningMessage() {
+    return this._container.querySelector('.name.warning-message');
+  }
+
+  /**
    * Returns the uri input element
    */
   get uri() {
     return this._container.querySelector('#edit-password-form-uri');
+  }
+
+  /**
+   * Returns the uri warning mesage input element
+   */
+  get uriWarningMessage() {
+    return this._container.querySelector('.uri.warning-message');
   }
 
   /**
@@ -159,6 +173,13 @@ class PasswordEditPageObject {
    */
   get password() {
     return this._container.querySelector('#edit-password-form-password');
+  }
+
+  /**
+   * Returns the username warning mesage input element
+   */
+  get usernameWarningMessage() {
+    return this._container.querySelector('.username.warning-message');
   }
 
   /**

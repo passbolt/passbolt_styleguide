@@ -24,6 +24,7 @@ import {defaultAppContext, defaultProps} from "./EditUser.test.data";
 beforeEach(() => {
   jest.resetModules();
 });
+const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
 describe("See the Create Dialog User", () => {
   let page; // The page to test against
@@ -147,6 +148,17 @@ describe("See the Create Dialog User", () => {
       // Throw general error message
       expect(page.editUser.errorDialog).not.toBeNull();
       expect(page.editUser.errorDialogMessage).not.toBeNull();
+    });
+    it("As a user I should see a feedback when firstname or lastname field content is truncated by a field limit", async() => {
+      expect.assertions(2);
+      page.editUser.fillInput(page.editUser.firstName, 'a'.repeat(128));
+      page.editUser.fillInput(page.editUser.lastName, 'a'.repeat(128));
+
+      await page.editUser.keyUpInput(page.editUser.firstName);
+      await page.editUser.keyUpInput(page.editUser.lastName);
+
+      expect(page.editUser.firstnameWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.editUser.lastnameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

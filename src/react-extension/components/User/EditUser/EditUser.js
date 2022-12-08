@@ -21,6 +21,9 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
+import {maxSizeValidation} from '../../../lib/Error/InputValidator';
+import Icon from "../../../../shared/components/Icons/Icon";
+import {USER_INPUT_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 
 class EditUser extends Component {
   /**
@@ -49,8 +52,10 @@ class EditUser extends Component {
       // Fields and errors
       first_name: user.profile.first_name,
       first_nameError: null,
+      first_nameWarning: "",
       last_name: user.profile.last_name,
       last_nameError: null,
+      last_nameWarning: "",
       username: user.username,
       is_admin: role.name === 'admin',
       hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
@@ -139,6 +144,9 @@ class EditUser extends Component {
     if (this.state.hasAlreadyBeenValidated) {
       const state = this.validateFirstNameInput();
       this.setState(state);
+    } else {
+      const first_nameWarning = maxSizeValidation(this.state.first_name, USER_INPUT_MAX_LENGTH, this.translate);
+      this.setState({first_nameWarning});
     }
   }
 
@@ -149,6 +157,9 @@ class EditUser extends Component {
     if (this.state.hasAlreadyBeenValidated) {
       const state = this.validateLastNameInput();
       this.setState(state);
+    } else {
+      const last_nameWarning = maxSizeValidation(this.state.last_name, USER_INPUT_MAX_LENGTH, this.translate);
+      this.setState({last_nameWarning});
     }
   }
 
@@ -343,7 +354,9 @@ class EditUser extends Component {
         <form className="user-edit-form" onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
             <div className={`input text required ${this.state.first_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="user-first-name-input"><Trans>First name</Trans></label>
+              <label htmlFor="user-first-name-input"><Trans>First name</Trans>{this.state.first_nameWarning &&
+                  <Icon name="exclamation"/>
+              }</label>
               <input id="user-first-name-input" name="first_name"
                 ref={this.firstNameRef} type="text" value={this.state.first_name} placeholder={this.translate("First name")}
                 required="required" disabled={this.hasAllInputDisabled()}
@@ -353,10 +366,16 @@ class EditUser extends Component {
               {this.state.first_nameError &&
               <div className="first_name error-message">{this.state.first_nameError}</div>
               }
+              {this.state.first_nameWarning && (
+                <div className="firstname warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.first_nameWarning}
+                </div>
+              )}
             </div>
             <div className={`input text required ${this.state.last_nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="user-last-name-input"><Trans>Last name</Trans></label>
               <input id="user-last-name-input" name="last_name"
+                maxLength="128"
                 ref={this.lastNameRef} type="text" value={this.state.last_name} placeholder={this.translate("Last name")}
                 required="required" disabled={this.hasAllInputDisabled()}
                 onKeyUp={this.handleLastNameInputOnKeyUp} onChange={this.handleInputChange}
@@ -365,10 +384,18 @@ class EditUser extends Component {
               {this.state.last_nameError &&
               <div className="last_name error-message">{this.state.last_nameError}</div>
               }
+              {this.state.last_nameWarning && (
+                <div className="lastname warning-message">
+                  <strong><Trans>Warning:</Trans></strong> {this.state.last_nameWarning}
+                </div>
+              )}
             </div>
             <div className="input text required disabled">
-              <label htmlFor="user-username-input"><Trans>Username / Email</Trans></label>
+              <label htmlFor="user-username-input"><Trans>Username / Email</Trans>{this.state.last_nameWarning &&
+                  <Icon name="exclamation"/>
+              }</label>
               <input id="user-username-input" name="username"
+                maxLength="128"
                 type="text" value={this.state.username} placeholder={this.translate("Username")}
                 required="required" disabled={true}
                 autoComplete='off' autoFocus={true}

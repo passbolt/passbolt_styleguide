@@ -24,6 +24,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 beforeEach(() => {
   jest.resetModules();
 });
+const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
 describe("See the Edit User Group", () => {
   let page; // The page to test against
@@ -178,6 +179,13 @@ describe("See the Edit User Group", () => {
       page.groupMember(2).role = 1;
       await waitFor(() => {});
       expect(page.hasNoManager).toBeTruthy();
+    });
+
+    it("As an user I should see a feedback when name field content is truncated by a field limit", async() => {
+      expect.assertions(1);
+      page.fillInput(page.name, 'a'.repeat(255));
+      await page.keyUpInput(page.name);
+      expect(page.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

@@ -312,14 +312,25 @@ describe("See the Edit Resource", () => {
       expect(props.dialogContext.open).toBeCalled();
     });
 
-    it("As a user I should see a feedback when the password or descriptions fields content is truncated by a field limit", async() => {
-      expect.assertions(2);
+    it("As a user I should see a feedback when the password, descriptions, name, username or uri fields content is truncated by a field limit", async() => {
+      expect.assertions(5);
       page.passwordEdit.fillInput(page.passwordEdit.password, 'a'.repeat(4097));
       page.passwordEdit.fillInput(page.passwordEdit.description, 'a'.repeat(10000));
+      page.passwordEdit.fillInput(page.passwordEdit.name, 'a'.repeat(256));
+      page.passwordEdit.fillInput(page.passwordEdit.username, 'a'.repeat(255));
+      page.passwordEdit.fillInput(page.passwordEdit.uri, 'a'.repeat(1025));
+
       await page.passwordEdit.keyUpInput(page.passwordEdit.password);
       await page.passwordEdit.keyUpInput(page.passwordEdit.description);
+      await page.passwordEdit.keyUpInput(page.passwordEdit.username);
+      await page.passwordEdit.keyUpInput(page.passwordEdit.name);
+      await page.passwordEdit.keyUpInput(page.passwordEdit.uri);
+
       expect(page.passwordEdit.passwordWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordEdit.descriptionWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordEdit.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordEdit.uriWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordEdit.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

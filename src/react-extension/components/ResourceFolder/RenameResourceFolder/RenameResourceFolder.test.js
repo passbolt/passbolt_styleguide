@@ -22,6 +22,7 @@ import RenameResourceFolderPage from "./RenameResourceFolder.test.page";
 beforeEach(() => {
   jest.resetModules();
 });
+const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
 describe("Rename Folder", () => {
   let page; // The page to test against
@@ -156,6 +157,13 @@ describe("Rename Folder", () => {
         expect(page.canSubmit).toBeFalsy();
       };
       await page.rename({name: 'My super folder'}, inProgressFn);
+    });
+
+    it("As a user I should see a feedback when name field content is truncated by a field limit", async() => {
+      expect.assertions(1);
+      page.fillInput(page.inputName, 'a'.repeat(256));
+      await page.keyUpInput(page.inputName);
+      expect(page.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });
