@@ -30,6 +30,7 @@ import SaveResource from "./components/ResourceAutoSave/SaveResource";
 import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePasswordPage";
 import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
 import Icon from "../shared/components/Icons/Icon";
+import SsoContextProvider from "./contexts/SsoContext";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess.html',
@@ -272,10 +273,12 @@ class ExtQuickAccess extends React.Component {
                   <PrepareResourceContextProvider>
                     <AnimatedSwitch>
                       <Route path="/webAccessibleResources/quickaccess/login" render={() => (
-                        <LoginPage
-                          loginSuccessCallback={this.loginSuccessCallback}
-                          mfaRequiredCallback={this.mfaRequiredCallback}
-                          canRememberMe={this.canRememberMe}/>
+                        <SsoContextProvider>
+                          <LoginPage
+                            loginSuccessCallback={this.loginSuccessCallback}
+                            mfaRequiredCallback={this.mfaRequiredCallback}
+                            canRememberMe={this.canRememberMe}/>
+                        </SsoContextProvider>
                       )}/>
                       <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
                       <PrivateRoute path="/webAccessibleResources/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
