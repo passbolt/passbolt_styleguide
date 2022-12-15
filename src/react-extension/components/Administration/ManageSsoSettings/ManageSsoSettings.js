@@ -171,7 +171,6 @@ class ManageSsoSettings extends React.Component {
     const ssoConfig = ssoContext.getSsoConfiguration();
     const isSsoActivated = ssoContext.isSsoConfigActivated();
     const errors = ssoContext.getErrors();
-    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
     return (
       <div className="row">
         <div className="third-party-provider-settings sso-settings col8 main-column">
@@ -197,7 +196,7 @@ class ManageSsoSettings extends React.Component {
                 {SsoProviders.map(provider =>
                   <div key={provider.id} className={`provider button ${provider.disabled ? "disabled" : ""}`} id={provider.id} onClick={() => this.props.adminSsoContext.changeProvider(provider)}>
                     <div className="provider-logo">
-                      <img src={`${trustedDomain}/img/third_party/${provider.icon}`}/>
+                      {provider.icon}
                     </div>
                     <p className="provider-name">{provider.name}<br/>
                       {provider.disabled &&

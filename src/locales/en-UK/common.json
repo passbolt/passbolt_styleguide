@@ -818,6 +818,7 @@
   "The settings displayed in the form below are the one stored in your database and have precedence over others.": "The settings displayed in the form below are the one stored in your database and have precedence over others.",
   "The Single Sign-On provider must be a supported provider.": "The Single Sign-On provider must be a supported provider.",
   "The SMTP settings have been saved successfully": "The SMTP settings have been saved successfully",
+  "The SSO kit is outdated and can't be used to decrypt your passphrase: {{error}}": "The SSO kit is outdated and can't be used to decrypt your passphrase: {{error}}",
   "The SSO settings has been deleted successfully": "The SSO settings has been deleted successfully",
   "The subscription key has been updated successfully.": "The subscription key has been updated successfully.",
   "The subscription key is invalid.": "The subscription key is invalid.",

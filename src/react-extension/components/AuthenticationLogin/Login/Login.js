@@ -432,7 +432,7 @@ class Login extends Component {
               {this.isAzureSsoEnabled &&
                 <a className={`button sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
                   <span className="provider-logo">
-                    <img src={`${this.trustedDomain}/img/third_party/${ssoProviderData.icon}`}/>
+                    {ssoProviderData.icon}
                   </span>
                   {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
                 </a>
