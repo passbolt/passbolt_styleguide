@@ -210,9 +210,10 @@ describe("Login", () => {
       const page = new LoginPage(props);
       await waitFor(() => {});
 
+      expect(page.azureLoginButton).toBeTruthy();
+
       expect(props.ssoContext.loadSsoConfiguration).toHaveBeenCalledTimes(1);
       expect(props.ssoContext.hasUserAnSsoKit).toHaveBeenCalledTimes(1);
-      expect(page.secondaryActionLink.textContent).toStrictEqual("Sign in with Single Sign-On.");
     });
 
     it('As AN I can use the SSO login feature to sign in to Passbolt', async() => {
@@ -234,14 +235,12 @@ describe("Login", () => {
       const page = new LoginPage(props);
       await waitFor(() => {});
 
-      await page.clickSecondaryActionLink();
-
       expect(page.azureLoginButton).toBeTruthy();
 
       await page.clickOnSsoLogin();
+      expect(page.azureLoginButton.classList.contains('disabled')).toBeTruthy();
 
       expect(props.ssoContext.runSignInProcess).toHaveBeenCalledTimes(1);
-      expect(page.azureLoginButton.classList.contains('disabled')).toBeTruthy();
 
       await signInPromiseResolver();
 

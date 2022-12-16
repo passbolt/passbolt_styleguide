@@ -40,6 +40,11 @@ export function defaultProps(props = {}) {
     onSignIn: jest.fn(() => Promise.resolve()),
     onCheckPassphrase: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
+    ssoContext: {
+      loadSsoConfiguration: () => Promise.resolve(),
+      hasUserAnSsoKit: () => false,
+      getProvider: () => null,
+    }
   };
   return Object.assign(defaultProps, props);
 }

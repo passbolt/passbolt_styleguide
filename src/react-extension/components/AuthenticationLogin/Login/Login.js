@@ -62,7 +62,7 @@ class Login extends Component {
       },
       isSsoAvailable: false, // true if the current user has an SSO kit built locally
       displaySso: false, // true if the UI should display the SSO login button
-      isLoaded: false, // true when the UI finished to load the initial data
+      isLoaded: false, // true when the data is loaded
     };
   }
 
@@ -145,11 +145,15 @@ class Login extends Component {
    */
   async componentDidMount() {
     await this.props.ssoContext.loadSsoConfiguration();
+    const isSsoAvailable = this.props.ssoContext.hasUserAnSsoKit();
     this.setState({
       isLoaded: true,
-      isSsoAvailable:  this.props.ssoContext.hasUserAnSsoKit()
+      isSsoAvailable: isSsoAvailable,
+      displaySso: isSsoAvailable,
     });
-    this.focusOnPassphrase();
+    if (!isSsoAvailable) {
+      this.focusOnPassphrase();
+    }
   }
 
   /**
@@ -422,7 +426,7 @@ class Login extends Component {
                 }[this.props.displayAs]}
               </button>
               {this.state.isSsoAvailable &&
-                <a onClick={this.handleSwitchToSso}>
+                <a className="switchToSso" onClick={this.handleSwitchToSso}>
                   <Trans>Sign in with Single Sign-On.</Trans>
                 </a>
               }
