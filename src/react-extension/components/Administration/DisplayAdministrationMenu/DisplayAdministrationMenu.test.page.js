@@ -104,6 +104,14 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the self registration menu
+   */
+  get selfRegistration() {
+    return this._page.container.querySelector('#self_registration_menu .row .main-cell-wrapper .main-cell a');
+  }
+
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -151,6 +159,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the smtp settings element */
   async goToSmtpSettings() {
     await this.click(this.smtpSettings);
+  }
+
+  /** Click on the self registration settings element */
+  async goToSelfRegistration() {
+    await this.click(this.selfRegistration);
   }
 }
 

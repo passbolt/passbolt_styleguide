@@ -31,6 +31,7 @@ jest.mock("./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAd
 jest.mock("./DisplaySubscriptionKey/DisplaySubscriptionKey", () => () => <span className="subscription-key-details"></span>);
 jest.mock("./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration", () => () => <span className="internationalization-details"></span>);
 jest.mock("./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings", () => () => <span className="account-recovery-details"></span>);
+jest.mock("./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration", () => () => <span className="self-registration-details"></span>);
 
 beforeEach(() => {
   jest.resetModules();
@@ -104,6 +105,18 @@ describe("Display Administration Workspace", () => {
     expect(page.isSubscriptionKeySelected).toBeFalsy();
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeTruthy();
+  });
+
+  it('As AD, I should see the self registration details area', async() => {
+    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.SELF_REGISTRATION));
+    await waitFor(() => {});
+    expect(page.isMfaSelected).toBeFalsy();
+    expect(page.isUserDirectorySelected).toBeFalsy();
+    expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
+    expect(page.isSelfRegistrationSelected).toBeTruthy();
   });
 });
 

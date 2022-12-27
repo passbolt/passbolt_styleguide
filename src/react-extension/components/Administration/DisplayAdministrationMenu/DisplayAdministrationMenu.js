@@ -90,6 +90,15 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the self registration settings plugin
+   * @returns {boolean}
+   */
+  get canIUseSelfRegistrationSettings() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('selfRegistration');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -100,6 +109,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleInternationalizationClick = this.handleInternationalizationClick.bind(this);
     this.handleAccountRecoveryClick = this.handleAccountRecoveryClick.bind(this);
     this.handleSmtpSettingsClick = this.handleSmtpSettingsClick.bind(this);
+    this.handleSelfRegistrationClick = this.handleSelfRegistrationClick.bind(this);
   }
 
   /**
@@ -149,6 +159,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleSmtpSettingsClick() {
     this.props.navigationContext.onGoToAdministrationSmtpSettingsRequested();
+  }
+
+  /**
+   * Handle when the user click on the self registration settings menu
+   */
+  handleSelfRegistrationClick() {
+    this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested();
   }
 
   /**
@@ -205,6 +222,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isSmtpSettingsSelected() {
     return AdministrationWorkspaceMenuTypes.SMTP_SETTINGS === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Self registration settings menu is selected
+   * @returns {boolean}
+   */
+  isSelfRegistrationSettingsSelected() {
+    return AdministrationWorkspaceMenuTypes.SELF_REGISTRATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -288,6 +313,19 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <a onClick={this.handleSmtpSettingsClick}>
                     <span><Trans>Email server</Trans></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseSelfRegistrationSettings &&
+          <li id="self_registration_menu">
+            <div className={`row  ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleSelfRegistrationClick}>
+                    <span><Trans>Self Registration</Trans></span>
                   </a>
                 </div>
               </div>

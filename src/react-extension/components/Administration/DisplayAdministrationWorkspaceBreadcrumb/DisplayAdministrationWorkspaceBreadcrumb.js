@@ -63,6 +63,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Account Recovery");
       case AdministrationWorkspaceMenuTypes.SMTP_SETTINGS:
         return this.translate("Email server");
+      case AdministrationWorkspaceMenuTypes.SELF_REGISTRATION:
+        return this.translate("Self Registration");
       default:
         return "";
     }
