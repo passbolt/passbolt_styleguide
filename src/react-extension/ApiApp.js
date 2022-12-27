@@ -40,6 +40,7 @@ import AdminEmailNotificationContextProvider from "./contexts/Administration/Adm
 import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa/AdministrationMfaContext";
 import AdminUserDirectoryContextProvider from './contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
 import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
+import AdminSelfRegistrationContextProvider from "./contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 
 /**
  * The passbolt application served by the API.
@@ -85,14 +86,16 @@ class ApiApp extends Component {
                                     <ManageContextualMenu/>
                                     <ManageAnnouncements/>
                                     <AdminUserDirectoryContextProvider>
-                                      <ManageDialogs/>
-                                      <AdminMfaContextProvider>
-                                        <AdminEmailNotificationContextProvider>
-                                          <AdminInternationalizationContextProvider>
-                                            <AdministrationWorkspace/>
-                                          </AdminInternationalizationContextProvider>
-                                        </AdminEmailNotificationContextProvider>
-                                      </AdminMfaContextProvider>
+                                      <AdminSelfRegistrationContextProvider>
+                                        <ManageDialogs/>
+                                        <AdminMfaContextProvider>
+                                          <AdminEmailNotificationContextProvider>
+                                            <AdminInternationalizationContextProvider>
+                                              <AdministrationWorkspace/>
+                                            </AdminInternationalizationContextProvider>
+                                          </AdminEmailNotificationContextProvider>
+                                        </AdminMfaContextProvider>
+                                      </AdminSelfRegistrationContextProvider>
                                     </AdminUserDirectoryContextProvider>
                                   </AdminSmtpSettingsContextProvider>
                                 </AdministrationWorkspaceContextProvider>

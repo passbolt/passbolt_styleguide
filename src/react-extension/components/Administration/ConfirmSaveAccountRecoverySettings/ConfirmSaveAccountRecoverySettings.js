@@ -223,7 +223,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
             }
           </div>
           <div className="warning message">
-            <Trans>Warning, Please review carefully this configuration as it will not be trivial to change this later.</Trans>
+            <Trans>Please review carefully this configuration as it will not be trivial to change this later.</Trans>
           </div>
           <div className="submit-wrapper clearfix">
             <a

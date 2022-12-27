@@ -280,7 +280,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
           {this.props.adminAccountRecoveryContext.hasPolicyChanges() &&
             <div className="warning message" id="email-notification-setting-overridden-banner">
               <p>
-                <Trans>Warning, Don&apos;t forget to save your settings to apply your modification.</Trans>
+                <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
               </p>
             </div>
           }
@@ -309,7 +309,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                   <span className="name"><Trans>Mandatory</Trans></span>
                   <span className="info">
                     <Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/>
-                    <Trans>Warning: You should inform your users not to store personal passwords.</Trans>
+                    <Trans>You should inform your users not to store personal passwords.</Trans>
                   </span>
                 </label>
               </div>
@@ -355,7 +355,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                   <span className="name"><Trans>Disable (Default)</Trans></span>
                   <span className="info">
                     <Trans>Backup of the private key and passphrase will not be stored. This is the safest option.</Trans>
-                    <Trans>Warning: If users lose their private key and passphrase they will not be able to recover their account.</Trans>
+                    <Trans>If users lose their private key and passphrase they will not be able to recover their account.</Trans>
                   </span>
                 </label>
               </div>

@@ -95,6 +95,6 @@ describe("As AD I should see the account recovery settings", () => {
     await page.clickOnOptInPolicyButton();
     const newPolicy = "opt-in";
     expect(props.adminAccountRecoveryContext.changePolicy).toHaveBeenCalledWith(newPolicy);
-    expect(page.warningMessage).toBe("Warning, Don't forget to save your settings to apply your modification.");
+    expect(page.warningMessage).toBe("Don't forget to save your settings to apply your modification.");
   });
 });

@@ -82,5 +82,12 @@ export default class AdministrationWorkspacePage {
   get isAccountRecoverySelected() {
     return Boolean(this._page.container.querySelector('.account-recovery-details'));
   }
+
+  /**
+   * Returns true if the account recovery area is visible
+   */
+  get isSelfRegistrationSelected() {
+    return Boolean(this._page.container.querySelector('.self-registration-details'));
+  }
 }
 

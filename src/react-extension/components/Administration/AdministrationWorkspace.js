@@ -36,6 +36,7 @@ import ManageAccountRecoveryAdministrationSettings
   from "./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings";
 import ManageSmtpAdministrationSettings
   from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
+import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -94,6 +95,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.SMTP_SETTINGS === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If Self registration settings menu is selected
+   * @returns {boolean}
+   */
+  isSelfRegistrationSelected() {
+    return AdministrationWorkspaceMenuTypes.SELF_REGISTRATION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -140,6 +149,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isSmtpSettingsSelected() &&
                   <ManageSmtpAdministrationSettings/>
+                  }
+                  {this.isSelfRegistrationSelected() &&
+                  <DisplaySelfRegistrationAdministration/>
                   }
                 </div>
               </div>

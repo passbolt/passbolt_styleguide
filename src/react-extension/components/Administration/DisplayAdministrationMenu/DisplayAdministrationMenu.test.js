@@ -134,4 +134,34 @@ describe("As AD I can see the administration menu", () => {
       expect(page.smtpSettings).toBeNull();
     });
   });
+
+  describe("As a logged in administrator in the administrator workspace, I can see the User self registration settings option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.goToSelfRegistration();
+      expect(page.selfRegistration).toBeTruthy();
+      expect(page.menuSelected).toBe('Self Registration');
+      expect(props.navigationContext.onGoToAdministrationSelfRegistrationRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "selfRegistration"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.selfRegistration).toBeNull();
+    });
+  });
 });

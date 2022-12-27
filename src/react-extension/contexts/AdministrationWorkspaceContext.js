@@ -157,6 +157,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isInternationalizationLocation = this.props.location.pathname.includes('internationalization');
     const isAccountRecoveryLocation = this.props.location.pathname.includes('account-recovery');
     const isSmtpSettingsLocation = this.props.location.pathname.includes('smtp-settings');
+    const isSelfRegistrationLocation = this.props.location.pathname.includes('self-registration');
     const can = {
       save: false,
       test: false,
@@ -185,6 +186,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
     } else if (isSmtpSettingsLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
+    } else if (isSelfRegistrationLocation) {
+      selectedAdministration =  AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
     }
     await this.setState({selectedAdministration, can, must});
   }
@@ -269,4 +272,5 @@ export const AdministrationWorkspaceMenuTypes = {
   INTERNATIONALIZATION: 'INTERNATIONALIZATION', // Internationalization administration menu selected
   ACCOUNT_RECOVERY: 'ACCOUNT-RECOVERY', // Account Recovery administration menu selected
   SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
+  SELF_REGISTRATION: 'SELF-REGISTRATION', // Self registration settings administration menu selected
 };
