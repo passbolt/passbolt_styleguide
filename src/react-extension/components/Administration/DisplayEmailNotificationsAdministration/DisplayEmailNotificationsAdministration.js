@@ -320,21 +320,21 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestAdmin" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={settings.accountRecoveryRequestAdmin} id="account-recovery-request-admin-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-request-admin-toggle-button">
-                      <Trans>When an account recovery is requested, notify the administrators.</Trans>
+                      <Trans>When an account recovery is requested, notify all the administrators.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestPolicyUpdate" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={settings.accountRecoveryRequestPolicyUpdate} id="account-recovery-policy-update-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-policy-update-toggle-button">
-                      <Trans>When an account recovery policy is updated, notify the administrators.</Trans>
+                      <Trans>When an account recovery policy is updated, notify all the administrators.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestCreatedAmin" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={settings.accountRecoveryRequestCreatedAmin} id="account-recovery-response-created-admin-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-response-created-admin-toggle-button">
-                      <Trans>When an administrator answered to an account recovery request, notify the administrator.</Trans>
+                      <Trans>When an administrator answered to an account recovery request, notify the administrator at the origin of the action.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
