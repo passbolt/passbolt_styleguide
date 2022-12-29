@@ -327,7 +327,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="accountRecoveryRequestPolicyUpdate" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={settings.accountRecoveryRequestPolicyUpdate} id="account-recovery-policy-update-toggle-button"/>
                     <label className="text" htmlFor="account-recovery-policy-update-toggle-button">
-                      <Trans>When an account recovery policy is updated, notify the all administrators.</Trans>
+                      <Trans>When an account recovery policy is updated, notify all the administrators.</Trans>
                     </label>
                   </span>
                   <span className="input toggle-switch form-element">
