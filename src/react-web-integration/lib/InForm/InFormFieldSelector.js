@@ -20,15 +20,18 @@ export default {
    * Selectors to detect username inputs (input type text or not type with id or class or name contain user)
    * The selector create-account-input is for ovh.com website
    * The selector benutzerkennung is for german website
+   * The selector utilisateur is for french website
    */
   USERNAME_FIELD_SELECTOR: `input[type='text' i][name*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='login' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='benutzerkennung' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='login' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='benutzerkennung' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='create-account-input' i]:not([hidden]):not([disabled]),
@@ -42,10 +45,12 @@ export default {
   input[name*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='login' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='login' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='create-account-input' i]:not([type]):not([hidden]):not([disabled]),
