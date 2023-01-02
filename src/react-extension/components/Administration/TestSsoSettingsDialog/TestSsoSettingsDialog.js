@@ -93,6 +93,7 @@ class TestSsoSettingsDialog extends React.Component {
     try {
       this.setState({processing: true});
       await this.props.context.port.request("passbolt.sso.activate-settings", this.props.configurationId, this.state.ssoToken);
+      await this.props.context.port.request("passbolt.sso.generate-sso-kit", this.props.provider.id);
       this.props.onSuccessfulSettingsActivation();
       this.handleCloseDialog();
       await this.props.actionFeedbackContext.displaySuccess(this.props.t("SSO settings have been registered successfully"));
