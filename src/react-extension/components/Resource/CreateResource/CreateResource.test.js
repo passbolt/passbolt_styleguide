@@ -37,7 +37,7 @@ describe("See the Create Resource", () => {
     folderParentId: null
   };
 
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
   const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
   describe('As LU I can start adding a password', () => {
     /**
@@ -46,6 +46,11 @@ describe("See the Create Resource", () => {
     beforeEach(() => {
       context.setContext({resourceCreateDialogProps});
       page = new CreateResourcePage(context, props);
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.clearAllTimers();
     });
 
     it('matches the styleguide', () => {
@@ -102,8 +107,10 @@ describe("See the Create Resource", () => {
 
     it('views password when clicking on the view button.', async() => {
       expect.assertions(8);
+      mockContextRequest(() => Promise(0));
       const passwordValue = "secret-decrypted";
-      page.passwordCreate.fillInput(page.passwordCreate.password, passwordValue);
+      await page.passwordCreate.fillInputPassword(passwordValue);
+
       // View password
       await page.passwordCreate.click(page.passwordCreate.passwordViewButton);
       expect(page.passwordCreate.password.value).toBe(passwordValue);
@@ -137,7 +144,8 @@ describe("See the Create Resource", () => {
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
       page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
-      page.passwordCreate.fillInput(page.passwordCreate.password, resourceMeta.password);
+      await page.passwordCreate.fillInputPassword(resourceMeta.password);
+
       expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
@@ -180,7 +188,7 @@ describe("See the Create Resource", () => {
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
       page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
-      page.passwordCreate.fillInput(page.passwordCreate.password, resourceMeta.password);
+      await page.passwordCreate.fillInputPassword(resourceMeta.password);
       expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
@@ -235,7 +243,7 @@ describe("See the Create Resource", () => {
       }));
 
       page.passwordCreate.fillInput(page.passwordCreate.name, "name");
-      page.passwordCreate.fillInput(page.passwordCreate.password, "password");
+      await page.passwordCreate.fillInputPassword("password");
 
       // Mock the request function to make it the expected result
       mockContextRequest(requestMockImpl);
@@ -271,7 +279,7 @@ describe("See the Create Resource", () => {
       expect.assertions(1);
       // Mock the request function to make it return an error.
       page.passwordCreate.fillInput(page.passwordCreate.name, "name");
-      page.passwordCreate.fillInput(page.passwordCreate.password, "password");
+      await page.passwordCreate.fillInputPassword("password");
 
       const error = new PassboltApiFetchError("Jest simulate API error.");
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
@@ -317,6 +325,21 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordCreate.uriWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordCreate.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
+    });
+
+    it("As a signed-in user creating a password on the application, I should get warn when I enter a pwned password and not be blocked", async() => {
+      expect.assertions(2);
+
+      mockContextRequest(() => Promise.resolve(2));
+      await page.passwordCreate.fillInputPassword('hello-world');
+      // we expect a warning to inform about powned password
+      await waitFor(() => {});
+      expect(page.passwordCreate.pwnedWarningMessage.textContent).toEqual("The password is part of an exposed data breach.");
+      mockContextRequest(() => Promise.reject());
+      await page.passwordCreate.fillInputPassword('another test');
+      // we expect a warning to inform about a network issue
+      await waitFor(() => {});
+      expect(page.passwordCreate.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
     });
   });
 });

@@ -21,16 +21,22 @@ import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
+import debounce from "debounce-promise";
+import PownedService from '../../../shared/services/api/secrets/pownedService';
 
 class SaveResource extends React.Component {
   constructor(props) {
     super(props);
     this.initEventHandlers();
     this.state = this.getDefaultState();
+    this.isPwndProcessingPromise = null;
+    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   componentDidMount() {
+    this.pownedService = new PownedService(this.props.context.port);
     this.loadPasswordMetaFromTabForm();
+    this.evaluatePasswordIsInDictionaryDebounce();
   }
 
   initEventHandlers() {
@@ -53,6 +59,8 @@ class SaveResource extends React.Component {
       password: "",
       passwordError: "",
       passwordEntropy: null,
+      isPwnedServiceAvailable: true,
+      passwordInDictionary: false
     };
   }
 
@@ -154,6 +162,9 @@ class SaveResource extends React.Component {
   }
 
   handlePasswordChange(event) {
+    if (event.target.value.length) {
+      this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+    }
     this.loadPassword(event.target.value);
   }
 
@@ -170,6 +181,17 @@ class SaveResource extends React.Component {
   loadPassword(password) {
     const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
     this.setState({password, passwordEntropy});
+  }
+
+  /**
+   * Evaluate to check if password is in a dictionary.
+   * @return {Promise}
+   */
+  async evaluatePasswordIsInDictionaryDebounce() {
+    if (this.state.isPwnedServiceAvailable) {
+      const result = await this.pownedService.evaluateSecret(this.state.password);
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary: result.inDictionary});
+    }
   }
 
   render() {
@@ -204,7 +226,10 @@ class SaveResource extends React.Component {
                 }
               </div>
               <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-                <label htmlFor="password"><Trans>Password</Trans></label>
+                <label htmlFor="password"><Trans>Password</Trans>
+                  {(this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
+                  <Icon name="exclamation"/>
+                  }</label>
                 <div className="password-button-inline">
                   <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
                     placeholder={this.translate('Password')} id="password" autoComplete="new-password"/>
@@ -213,6 +238,13 @@ class SaveResource extends React.Component {
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }
+                {!this.state.isPwnedServiceAvailable &&
+                    <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                }
+                {this.state.passwordInDictionary &&
+                    <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+                }
+
               </div>
             </div>
           </div>

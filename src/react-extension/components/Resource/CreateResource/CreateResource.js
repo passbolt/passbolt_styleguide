@@ -38,6 +38,8 @@ import {
   RESOURCE_URI_MAX_LENGTH,
   RESOURCE_DESCRIPTION_MAX_LENGTH,
 } from "../../../../shared/constants/inputs.const";
+import debounce from "debounce-promise";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
 
 class CreateResource extends Component {
   constructor() {
@@ -45,6 +47,8 @@ class CreateResource extends Component {
     this.state = this.getDefaultState();
     this.initEventHandlers();
     this.createInputRef();
+    this.isPwndProcessingPromise = null;
+    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   getDefaultState() {
@@ -66,6 +70,8 @@ class CreateResource extends Component {
       descriptionWarning: "",
       encryptDescription: false,
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
+      isPwnedServiceAvailable: true,
+      passwordInDictionary: false
     };
   }
 
@@ -96,6 +102,7 @@ class CreateResource extends Component {
    * Whenever the component has been mounted
    */
   componentDidMount() {
+    this.pownedService = new PownedService(this.props.context.port);
     if (this.isEncryptedDescriptionEnabled()) {
       this.setState({encryptDescription: true});
     }
@@ -164,7 +171,6 @@ class CreateResource extends Component {
    */
   async handleFormSubmit(event) {
     event.preventDefault();
-
     if (this.state.processing) {
       return;
     }
@@ -256,6 +262,17 @@ class CreateResource extends Component {
     return new Promise(resolve => {
       this.setState({nameError: nameError}, resolve);
     });
+  }
+
+  /**
+   * Evaluate to check if password is in a dictionary.
+   * @return {Promise}
+   */
+  async evaluatePasswordIsInDictionaryDebounce() {
+    if (this.state.isPwnedServiceAvailable) {
+      const result = await this.pownedService.evaluateSecret(this.state.password);
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary: result.inDictionary});
+    }
   }
 
   /*
@@ -429,6 +446,12 @@ class CreateResource extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+
+    if (name === "password") {
+      if (value.length) {
+        this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+      }
+    }
     this.setState({
       [name]: value,
     });
@@ -442,7 +465,7 @@ class CreateResource extends Component {
       const state = this.validateNameInput();
       this.setState(state);
     } else {
-      const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate)
+      const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate);
       this.setState({nameWarning});
     }
   }
@@ -455,7 +478,7 @@ class CreateResource extends Component {
       const state = this.validatePasswordInput();
       this.setState(state);
     } else {
-      const passwordWarning = maxSizeValidation(this.state.password, RESOURCE_PASSWORD_MAX_LENGTH, this.translate)
+      const passwordWarning = maxSizeValidation(this.state.password, RESOURCE_PASSWORD_MAX_LENGTH, this.translate);
       this.setState({passwordWarning});
     }
   }
@@ -509,7 +532,7 @@ class CreateResource extends Component {
    */
   handleDescriptionInputKeyUp() {
     if (!this.state.hasAlreadyBeenValidated) {
-      const descriptionWarning = maxSizeValidation(this.state.description, RESOURCE_DESCRIPTION_MAX_LENGTH, this.translate)
+      const descriptionWarning = maxSizeValidation(this.state.description, RESOURCE_DESCRIPTION_MAX_LENGTH, this.translate);
       this.setState({descriptionWarning});
     }
   }
@@ -519,7 +542,7 @@ class CreateResource extends Component {
    */
   handleUriInputKeyUp() {
     if (!this.state.hasAlreadyBeenValidated) {
-      const uriWarning = maxSizeValidation(this.state.uri, RESOURCE_URI_MAX_LENGTH, this.translate)
+      const uriWarning = maxSizeValidation(this.state.uri, RESOURCE_URI_MAX_LENGTH, this.translate);
       this.setState({uriWarning});
     }
   }
@@ -529,7 +552,7 @@ class CreateResource extends Component {
    */
   handleUsernameInputKeyUp() {
     if (!this.state.hasAlreadyBeenValidated) {
-      const usernameWarning = maxSizeValidation(this.state.username, RESOURCE_NAME_MAX_LENGTH, this.translate)
+      const usernameWarning = maxSizeValidation(this.state.username, RESOURCE_NAME_MAX_LENGTH, this.translate);
       this.setState({usernameWarning});
     }
   }
@@ -609,7 +632,7 @@ class CreateResource extends Component {
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-password">
                 <Trans>Password</Trans>
-                {this.state.passwordWarning &&
+                {(this.state.passwordWarning || this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable) &&
                   <Icon name="exclamation"/>
                 }
               </label>
@@ -643,6 +666,12 @@ class CreateResource extends Component {
               }
               {this.state.passwordWarning &&
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
+              }
+              {!this.state.isPwnedServiceAvailable &&
+                    <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+              }
+              {this.state.passwordInDictionary &&
+                    <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
               }
             </div>
             <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>

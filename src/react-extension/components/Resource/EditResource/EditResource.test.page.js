@@ -127,6 +127,13 @@ class PasswordEditPageObject {
   }
 
   /**
+   * Returns the pwned warning message
+   */
+  get pwnedWarningMessage() {
+    return this._container.querySelector('.pwned-password.warning-message');
+  }
+
+  /**
    * Returns the name input element
    */
   get name() {
@@ -276,8 +283,6 @@ class PasswordEditPageObject {
     return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
   }
 
-
-
   /**
    * Returns true if the page object exists in the container
    */
@@ -309,6 +314,13 @@ class PasswordEditPageObject {
   fillInput(element, data)  {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+  }
+
+  /** fill the input password with data */
+  async fillInputPassword(data)  {
+    const dataInputEvent = {target: {value: data}};
+    fireEvent.change(this.password, dataInputEvent);
+    jest.runAllTimers();
   }
 
   /** focus the input element with data */

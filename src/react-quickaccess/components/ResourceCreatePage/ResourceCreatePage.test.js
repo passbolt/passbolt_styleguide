@@ -11,6 +11,7 @@ import {defaultAppContext, defaultProps} from "./ResourceCreatePage.test.data";
 
 // Reset the modules before each test.
 beforeEach(() => {
+  jest.useFakeTimers();
   jest.resetModules();
 });
 
@@ -18,6 +19,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup();
   delete window.passbolt;
+  jest.clearAllTimers();
 });
 
 describe("ResourceCreatePage", () => {
@@ -148,10 +150,18 @@ describe("ResourceCreatePage", () => {
       const createPasswordEventMockCallback = jest.fn();
       const context = defaultAppContext();
       const props = defaultProps();
+      const inputPasswordChange = async password => {
+        const passwordInput = component.container.querySelector('[name="password"]');
+        const passwordInputEvent = {target: {value: password}};
+        fireEvent.change(passwordInput, passwordInputEvent);
+        jest.runAllTimers();
+      };
+
+      const pwnedWarningMessage = () => component.container.querySelector('.pwned-password.warning-message');
       // Mock the passbolt messaging layer.
       context.port = {
-        request: function(event) {
-          return new Promise(resolve => {
+        request: function(event, value) {
+          return new Promise((resolve, reject) => {
             if (event === "passbolt.quickaccess.prepare-resource") {
               resolve({
                 name: "Passbolt Browser Extension Test",
@@ -162,6 +172,14 @@ describe("ResourceCreatePage", () => {
               resolve({
                 id: "newly-created-resource-id"
               });
+            } else if (event === "passbolt.secrets.powned-password") {
+              if (value === "hello-world") {
+                resolve(3);
+              } else if (value === "unavailable") {
+                reject();
+              } else {
+                resolve(0);
+              }
             }
           });
         }
@@ -175,6 +193,8 @@ describe("ResourceCreatePage", () => {
         </MockTranslationProvider>
       );
 
+      expect.assertions(4);
+
       // Wait the passbolt.request executed in the ComponentDidMount is resolved.
       await waitFor(() => {
         if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
@@ -186,9 +206,17 @@ describe("ResourceCreatePage", () => {
       const usernameInput = component.container.querySelector('[name="username"]');
       const usernameInputEvent = {target: {value: "test@passbolt.com"}};
       fireEvent.change(usernameInput, usernameInputEvent);
-      const passwordInput = component.container.querySelector('[name="password"]');
-      const passwordInputEvent = {target: {value: "P4ssb0lt"}};
-      fireEvent.change(passwordInput, passwordInputEvent);
+
+      await inputPasswordChange("P4ssb0lt");
+      expect(pwnedWarningMessage()).toBe(null);
+      //Powned password should raise a warning and not block submit
+      await inputPasswordChange("hello-world");
+      await waitFor(() => {});
+      expect(pwnedWarningMessage().textContent).toBe("The password is part of an exposed data breach.");
+      //Service for powned password unavailable should not block
+      await inputPasswordChange("unavailable");
+      await waitFor(() => {});
+      expect(pwnedWarningMessage().textContent).toBe("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
 
       // Submit the form.
       const submitButton = component.container.querySelector('button[type="submit"]');
@@ -203,8 +231,9 @@ describe("ResourceCreatePage", () => {
         uri: "https://passbolt-browser-extension/test",
         username: "test@passbolt.com"
       };
-      expect.assertions(1);
-      expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, "P4ssb0lt");
+      expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, "unavailable");
     });
   });
 });
+
+
