@@ -32,6 +32,8 @@ import PasswordComplexity from "../../../../shared/components/PasswordComplexity
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import {RESOURCE_PASSWORD_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 import {RESOURCE_NAME_MAX_LENGTH, RESOURCE_DESCRIPTION_MAX_LENGTH, RESOURCE_URI_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import debounce  from 'debounce-promise';
+import PownedService from '../../../../shared/services/api/secrets/pownedService';
 
 class EditResource extends Component {
   constructor(props) {
@@ -39,6 +41,8 @@ class EditResource extends Component {
     this.state = this.defaultState;
     this.initEventHandlers();
     this.createInputRef();
+    this.isPwndProcessingPromise = null;
+    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionary, 300);
   }
 
   get defaultState() {
@@ -63,7 +67,9 @@ class EditResource extends Component {
       descriptionWarning: "",
       isSecretDecrypting: true,
       encryptDescription: null,
-      resourceTypeId: resource.resource_type_id || ""
+      resourceTypeId: resource.resource_type_id || "",
+      isPwnedServiceAvailable: true,
+      passwordInDictionary: false
     };
   }
 
@@ -96,6 +102,7 @@ class EditResource extends Component {
    * Whenever the component has been mounted
    */
   componentDidMount() {
+    this.pownedService = new PownedService(this.props.context.port);
     this.initialize();
   }
 
@@ -113,6 +120,7 @@ class EditResource extends Component {
       const encrypt = this.mustEncryptDescription();
       this.setState({encryptDescription: encrypt});
     }
+    this.evaluatePasswordIsInDictionary();
   }
 
   /*
@@ -263,6 +271,17 @@ class EditResource extends Component {
     return new Promise(resolve => {
       this.setState({passwordError: passwordError}, resolve);
     });
+  }
+
+  /**
+   * Evaluate to check if password is in a dictionary.
+   * @return {Promise}
+   */
+  async evaluatePasswordIsInDictionary() {
+    if (this.state.isPwnedServiceAvailable) {
+      const result = await this.pownedService.evaluateSecret(this.state.password, this.state.isPwnedServiceAvailable);
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary: result.inDictionary});
+    }
   }
 
   /*
@@ -417,6 +436,13 @@ class EditResource extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
+
+    if (name === "password") {
+      if (value.length) {
+        this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+      }
+    }
+
     this.setState({
       [name]: value
     });
@@ -706,7 +732,7 @@ class EditResource extends Component {
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">
                 <Trans>Password</Trans>
-                {this.state.passwordWarning &&
+                {(this.state.passwordWarning || this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
                   <Icon name="exclamation"/>
                 }
               </label>
@@ -735,6 +761,12 @@ class EditResource extends Component {
               }
               {this.state.passwordWarning &&
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
+              }
+              {!this.state.isPwnedServiceAvailable &&
+                    <div className="pwned-password invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+              }
+              {this.state.passwordInDictionary &&
+                    <div className="pwned-password invalid-passphrase warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
               }
             </div>
             <div className={`input textarea ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>

@@ -20,7 +20,6 @@ import DialogContextProvider from "../../../contexts/DialogContext";
 import {MemoryRouter} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateResource from "./CreateResource";
-
 /**
  * The PasswordCreateDialog component represented as a page
  */
@@ -193,6 +192,13 @@ class PasswordCreatePageObject {
   }
 
   /**
+   * Returns the pwned warning message
+   */
+  get pwnedWarningMessage() {
+    return this._container.querySelector('.pwned-password.warning-message');
+  }
+
+  /**
    * Returns the complexity text input element
    */
   get complexityText() {
@@ -302,6 +308,13 @@ class PasswordCreatePageObject {
   fillInput(element, data)  {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+  }
+
+  /** fill the input password with data */
+  async fillInputPassword(data)  {
+    const dataInputEvent = {target: {value: data}};
+    fireEvent.change(this.password, dataInputEvent);
+    jest.runAllTimers();
   }
 
   /** focus the input element with data */
