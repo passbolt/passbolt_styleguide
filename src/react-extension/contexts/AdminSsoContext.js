@@ -436,11 +436,13 @@ export class AdminSsoContextProvider extends React.Component {
       const ssoSettings = this.getSsoConfigurationDto();
       const draftConfiguration = await this.props.context.port.request("passbolt.sso.save-draft", ssoSettings);
       await this.runTestConfig(draftConfiguration);
-      this.setState({
-        ssoConfig: draftConfiguration
-      });
+      const providerData = SsoProviders.find(provider => provider.id === draftConfiguration.provider);
+      const ssoConfig = Object.assign({}, this.state.ssoConfig, draftConfiguration);
+      ssoConfig.data.redirect_url = providerData.defaultConfig.redirect_url;
+      this.setState({ssoConfig});
     } catch (e) {
       this.handleError(e);
+      this.setState({processing: false});
     }
   }
 
