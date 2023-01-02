@@ -34,6 +34,8 @@ describe("Login", () => {
       const props = defaultProps(_props);
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       const expectedPassphrase = "some passphrase";
       await page.fillPassphrase(expectedPassphrase);
@@ -46,6 +48,8 @@ describe("Login", () => {
       const props = defaultProps({..._props, canRememberMe: false});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       expect(page.canRememberMe).toBeFalsy();
       const expectedPassphrase = "some passphrase";
@@ -57,6 +61,8 @@ describe("Login", () => {
     it(`As AN I should be able to remember my passphrase if the feature is enabled, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps({..._props, canRememberMe: true});
       const page = new LoginPage(props);
+
+      await waitFor(() => {});
 
       expect.assertions(2);
       expect(page.canRememberMe).toBeTruthy();
@@ -71,6 +77,8 @@ describe("Login", () => {
       const props = defaultProps({..._props});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(1);
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
@@ -81,6 +89,8 @@ describe("Login", () => {
       const onSignIn = jest.fn(() => new Promise(resolve => checkResolve = resolve));
       const props = defaultProps({..._props, onSignIn});
       const page = new LoginPage(props);
+
+      await waitFor(() => {});
 
       expect.hasAssertions();
       const inProgressFn = () => {
@@ -99,6 +109,8 @@ describe("Login", () => {
       const props = defaultProps({..._props, onSignIn});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.hasAssertions();
       const inProgressFn = () => {
         expect(page.isProcessing).toBeTruthy();
@@ -114,6 +126,8 @@ describe("Login", () => {
       const props = defaultProps(_props);
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(1);
       const emptyPassphrase = ' ';
       await page.fillPassphrase(emptyPassphrase);
@@ -127,6 +141,8 @@ describe("Login", () => {
       const props = defaultProps({..._props, onCheckPassphrase});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(1);
       await page.fillPassphrase('some passphrase');
       await page.signIn();
@@ -139,6 +155,8 @@ describe("Login", () => {
       const props = defaultProps({displayAs: LoginVariations.SIGN_IN});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Sign in");
       expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
@@ -149,6 +167,8 @@ describe("Login", () => {
     it('As AN on the account recovery workflow I should be able to be prompted to enter a passphrase and complete the account recovery', async() => {
       const props = defaultProps({displayAs: LoginVariations.ACCOUNT_RECOVERY});
       const page = new LoginPage(props);
+
+      await waitFor(() => {});
 
       expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Complete recovery");

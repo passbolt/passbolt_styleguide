@@ -62,6 +62,7 @@ class Login extends Component {
       },
       isSsoAvailable: false, // true if the current user has an SSO kit built locally
       displaySso: false, // true if the UI should display the SSO login button
+      isLoaded: false, // true when the UI finished to load the initial data
     };
   }
 
@@ -143,11 +144,12 @@ class Login extends Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    this.focusOnPassphrase();
     await this.props.ssoContext.loadSsoConfiguration();
-    if (this.props.ssoContext.hasUserAnSsoKit()) {
-      this.setState({isSsoAvailable: true});
-    }
+    this.setState({
+      isLoaded: true,
+      isSsoAvailable:  this.props.ssoContext.hasUserAnSsoKit()
+    });
+    this.focusOnPassphrase();
   }
 
   /**
@@ -349,6 +351,10 @@ class Login extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     const securityToken = this.securityToken;
     const ssoProviderData = this.ssoProviderData;
+    if (!this.state.isLoaded) {
+      return null;
+    }
+
     return (
       <div className="login">
         <div className="login-user">
@@ -379,7 +385,9 @@ class Login extends Component {
                 <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
                 }
                 {this.state.errors.invalidPassphrase &&
-                <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
+                <div className="invalid-passphrase error-message">
+                  <Trans>The passphrase is invalid.</Trans> {this.state.isSsoAvailable && <a onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></a>}
+                </div>
                 }
                 {this.state.errors.invalidGpgKey &&
                 <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
