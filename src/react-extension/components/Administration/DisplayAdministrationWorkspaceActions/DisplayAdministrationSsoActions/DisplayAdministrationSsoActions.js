@@ -49,10 +49,9 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
       return;
     }
 
-    if (!ssoContext.validateData()) {
-      return;
+    if (ssoContext.validateData()) {
+      await ssoContext.saveAndTestConfiguration();
     }
-    await ssoContext.saveAndTestConfiguration();
   }
 
   /**

@@ -144,6 +144,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
 
   /**
    * Register the settings against the API
+   * @returns {Promise<void>}
    */
   async saveSmtpSettings() {
     this._doProcess(async() => {

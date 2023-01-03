@@ -78,7 +78,6 @@ export class AdminSsoContextProvider extends React.Component {
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getSsoConfiguration: this.getSsoConfiguration.bind(this), // Return the current sso configuration from the context state
       isSsoConfigActivated: this.isSsoConfigActivated.bind(this), // Returns true if the sso settings are set to active
-      save: this.save.bind(this), // Save the sso configuration changes
       changeProvider: this.changeProvider.bind(this), // change the provider
       disableSso: this.disableSso.bind(this), // Disable the SSO configuration
       setValue: this.setValue.bind(this), // Set an SSO settings value to the current config
@@ -149,7 +148,7 @@ export class AdminSsoContextProvider extends React.Component {
    */
   setProviderList(providerIdList) {
     if (!providerIdList) {
-      throw new Error(this.props.t("No SSP provider available"));
+      throw new Error(this.props.t("No SSO provider available"));
     }
     /*
      * providers must be known on both side (API / Bext) in order to work.
@@ -238,16 +237,6 @@ export class AdminSsoContextProvider extends React.Component {
     const ssoConfig = this.getSsoConfiguration();
     ssoConfig.data[key] = value;
     this.setState({ssoConfig, hasSettingsChanged: true});
-  }
-
-  /**
-   * Whenever the save has been requested
-   * @param {Object} ssoConfig The current sso configuration
-   */
-  async save(ssoConfig) {
-    //@todo @mock
-    this.setState({ssoConfig});
-    console.log("Saved sso config:", ssoConfig);
   }
 
   /**

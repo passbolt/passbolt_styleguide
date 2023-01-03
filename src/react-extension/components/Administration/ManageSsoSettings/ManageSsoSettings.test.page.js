@@ -114,16 +114,6 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
-   * Clicks on the nth provider in the provider list (from the first screen when there is no data).
-   * @param {integer} providerIndex
-   * @returns {Promise<void>}
-   */
-  async selectProvider(providerIndex) {
-    const providerButton = this.providerButtons[providerIndex];
-    await this.clickOn(providerButton, () => this.form !== null);
-  }
-
-  /**
    * Clicks on the Save Settings button and wait for the given callback to return true before continuing.
    * @param {function} readyCheckCallback a callback to tell the caller when the action is considered to be done
    */

@@ -17,7 +17,6 @@ import {withAppContext} from "./AppContext";
 import {withTranslation} from "react-i18next";
 
 export const SsoContext = React.createContext({
-  //ssoServerConfig: null, // The current sso server configuration
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
   getProvider: () => {}, // Return the current sso configuration from the context state
   hasUserAnSsoKit: () => {}, // Returns true if the current user has an SSO kit built locally
@@ -43,7 +42,6 @@ export class SsoContextProvider extends React.Component {
   get defaultState() {
     this.handleSpecificError.bind(this);
     return {
-      //ssoServerConfig: null, // The current sso configuration
       ssoLocalConfiguredProvider: null, // the provider configured for the local SSO kit if any, null otherwise
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getProvider: this.getProvider.bind(this), // Return the current sso provider configured
