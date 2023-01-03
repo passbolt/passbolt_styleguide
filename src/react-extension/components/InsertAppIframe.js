@@ -33,9 +33,10 @@ class InsertAppIframe extends Component {
    * Load the react app iframe
    * @returns {void}
    */
-  loadAppIframe() {
+  async loadAppIframe() {
+    const portId = await this.props.port.request("passbolt.port.generate-id");
     const url = new URL(`${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-app.html`);
-    url.searchParams.append("passbolt", "passbolt-iframe-app");
+    url.searchParams.append("passbolt", portId);
 
     // If the user aims to a location, extract it and add it as parameter of the iframe url.
     const pathname = this.getPagePathname();
@@ -83,6 +84,7 @@ class InsertAppIframe extends Component {
 InsertAppIframe.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
   location: PropTypes.object, // Router location prop
+  port: PropTypes.object, // The communication port
 };
 
 export default withRouter(InsertAppIframe);
