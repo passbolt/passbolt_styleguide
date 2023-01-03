@@ -32,9 +32,9 @@ class InsertLoginAuthenticationIframe extends Component {
    * Load the react app iframe
    * @returns {void}
    */
-  loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-login.html?passbolt=passbolt-iframe-login`;
-    this.iframeRef.current.contentWindow.location = iframeUrl;
+  async loadIframe() {
+    const portId = await this.props.port.request("passbolt.port.generate-id");
+    this.iframeRef.current.contentWindow.location = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-login.html?passbolt=${portId}`;
   }
 
   /**
@@ -50,6 +50,7 @@ class InsertLoginAuthenticationIframe extends Component {
 
 InsertLoginAuthenticationIframe.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
+  port: PropTypes.object, // The communication port
 };
 
 export default InsertLoginAuthenticationIframe;
