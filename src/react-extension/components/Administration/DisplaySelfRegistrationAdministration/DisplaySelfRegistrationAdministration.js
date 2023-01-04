@@ -274,7 +274,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    * @returns {void}
    */
   async validateForm() {
-    await this.isPublicDomainProcessingPromise;
     await this.props.adminSelfRegistrationContext.validateForm();
   }
 
