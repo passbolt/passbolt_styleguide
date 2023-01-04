@@ -40,6 +40,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
   const props = defaultProps(); // The props to pass
   const context = defaultAppContext();
   const gmailDomain = "gmail.com";
+  const requiredDomain = "A domain is required.";
 
 
   describe("As a logged in administrator I can enable the User self registration", () => {
@@ -217,7 +218,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       await page.fillInput(page.inputByIndex(1), "");
       await page.clickOnSave();
 
-      expect(page.errorMessage.textContent).toBe("A domain is required.");
+      expect(page.errorMessage.textContent).toBe(requiredDomain);
       expect(page.subtitle.classList.contains('error')).toBeTruthy();
       // Check if input is focus
       expect(page.inputByIndex(1).focus).toHaveBeenCalled();
@@ -303,6 +304,24 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.inputByIndex(3)).not.toBeNull();
       //New input should be prepopulate with the domain of the organization
       expect(page.firstInputRow.value).toEqual("passbolt.com");
+    });
+
+    it("As an administrator on the self registration admin settings form, I should not see an error when I enable the settings which previously were containing error", async() => {
+      expect.assertions(4);
+
+      //We generate an error
+      await page.fillInput(page.inputByIndex(1), "");
+      await page.clickOnSave();
+
+      expect(page.errorMessage.textContent).toBe(requiredDomain);
+      expect(page.subtitle.classList.contains('error')).toBeTruthy();
+
+      // We disable self registration
+      await page.clickOnToggle();
+      // We enable it agzain
+      await page.clickOnToggle();
+      expect(page.errorMessage).toBeNull();
+      expect(page.subtitle.classList.contains('error')).toBeFalsy();
     });
   });
 });

@@ -228,6 +228,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
         this.setupSettings();
       } else {
         this.props.adminSelfRegistrationContext.setDomains({allowedDomains: new Map()});
+        this.props.adminSelfRegistrationContext.setErrors(new Map());
       }
     });
   }
