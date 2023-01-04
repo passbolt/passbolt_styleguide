@@ -1,3 +1,10 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ *
+ * @url           https://gist.github.com/ammarshah/f5c2624d767f91a7cbdc4e54db8dd0bf
+ * @author        ammarshah
+ */
+
 export const nonProfessionalDomains = [
   "0-mail.com",
   "007addict.com",
