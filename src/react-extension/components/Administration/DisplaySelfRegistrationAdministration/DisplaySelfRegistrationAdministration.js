@@ -208,7 +208,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    * Check if inputs has warnings
    */
   hasWarnings() {
-    return this.state.warnings.size > 0 && (this.props.adminSelfRegistrationContext.getErrors().size === 0 || !this.props.adminSelfRegistrationContext.isSubmitted());
+    return this.state.warnings.size > 0;
   }
 
   /**

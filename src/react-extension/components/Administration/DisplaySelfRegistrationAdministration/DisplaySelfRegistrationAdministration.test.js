@@ -226,6 +226,32 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.errorMessage.textContent).toBe("This domain already exist");
       expect(page.subtitle.classList.contains('error')).toBeTruthy();
     });
+
+    it('As an administrator on the self registration admin settings form, I want to see the warning message on a row domain even when there are errors on other domains rows', async() => {
+      expect.assertions(4);
+      //Mock API calls
+      fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
+
+      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+
+      await waitFor(() => {});
+      jest.spyOn(page.inputByIndex(1), 'focus');
+
+      // fill with non profession domain
+      await page.fillInput(page.inputByIndex(1), "");
+      await page.clickOnSave();
+
+      expect(page.errorMessage.textContent).toBe("A domain is required.");
+
+      // Lets add a new domain
+      await page.addDomain();
+      await page.fillInput(page.inputByIndex(2), gmailDomain);
+      await page.focusOut(page.inputByIndex(2));
+
+      expect(page.warningMessage).toBeDefined();
+      expect(page.warningMessage.textContent).toBe("This is not a safe professional domain");
+      expect(page.subtitle.classList.contains('warning')).toBeTruthy();
+    });
   });
   describe("As a logged administrator I can remove a domain from the list", () => {
     beforeEach(() => {
