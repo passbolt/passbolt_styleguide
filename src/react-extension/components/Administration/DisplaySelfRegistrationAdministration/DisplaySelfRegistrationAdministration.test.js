@@ -132,6 +132,14 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.deleteButtonByIndex(3)).toBeDefined();
     });
 
+    it("As an administrator on the self registration admin settings form, I want to see the new row having focus when I click on the add a new row button", async() => {
+      expect.assertions(1);
+      await page.addDomain();
+
+      expect(page.hasFocus(page.inputByIndex(3))).toBeTruthy();
+    });
+
+
     it('As a logged in administrator I can add a new non-professional domain to the User self registration but I should see a warning message', async() => {
       expect.assertions(7);
 
