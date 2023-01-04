@@ -108,12 +108,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     return this.props.adminSelfRegistrationContext.getAllowedDomains();
   }
 
-  /**
-   * return the self registration setting
-   */
-  get settings() {
-    return this.props.adminSelfRegistrationContext.getCurrentSettings();
-  }
 
   /**
    * Bind callbacks methods
@@ -162,6 +156,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     }
   }
 
+
   /**
    * in case of saved settings we should check warnings again
    */
@@ -187,7 +182,11 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    * @param {string} domain
    */
   addRow(value = "") {
-    this.props.adminSelfRegistrationContext.setAllowedDomains(uuidv4(), value);
+    const uuid = uuidv4();
+    this.props.adminSelfRegistrationContext.setAllowedDomains(uuid, value, () => {
+      const inputRef = this.dynamicRefs.getRef(uuid);
+      inputRef?.current.focus();
+    });
   }
 
   /**

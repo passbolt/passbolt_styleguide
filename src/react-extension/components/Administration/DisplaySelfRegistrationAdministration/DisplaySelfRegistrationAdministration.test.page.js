@@ -239,4 +239,9 @@ export default class DisplaySelfRegistrationAdministrationPage {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
   }
+
+  /** check if item has focus */
+  hasFocus(element) {
+    return element === document.activeElement;
+  }
 }
