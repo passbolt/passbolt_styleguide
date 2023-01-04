@@ -19,6 +19,7 @@ import EnterUsernameForm from "../../Authentication/EnterUsernameForm/EnterUsern
 import EnterNameForm from "../../Authentication/EnterNameForm/EnterNameForm";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
 import DisplayRequireInvitationError from "../../Authentication/DisplayRequireInvitationError/DisplayRequireInvitationError";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 
 /**
  * The component orchestrates the api triage workflow.
@@ -52,6 +53,10 @@ class OrchestrateApiTriage extends Component {
         return <EnterNameForm/>;
       case ApiTriageContextState.ERROR_STATE:
         return <DisplayRequireInvitationError/>;
+      case ApiTriageContextState.UNEXPECTED_ERROR_STATE:
+        return <DisplayUnexpectedError
+          error={this.props.apiTriageContext.unexpectedError}
+        />;
       default:
         return <LoadingSpinner/>;
     }
