@@ -24,6 +24,7 @@ import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {Trans, withTranslation} from "react-i18next";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -165,7 +166,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleCloseMoreMenu();
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
-    await navigator.clipboard.writeText(permalink);
+    await ClipBoard.copy(permalink, this.props.context.port);
     this.displaySuccessNotification(this.translate("The permalink has been copied to clipboard"));
   }
 
@@ -174,7 +175,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
-    await navigator.clipboard.writeText(this.selectedResources[0].username);
+    await ClipBoard.copy(this.selectedResources[0].username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -190,10 +191,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
-      await navigator.clipboard.writeText(plaintextDto);
+      await ClipBoard.copy(plaintextDto, this.props.context.port);
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await navigator.clipboard.writeText(plaintextDto.password);
+        await ClipBoard.copy(plaintextDto.password, this.props.context.port);
       } else {
         throw new TypeError(this.translate("The password field is not defined."));
       }
