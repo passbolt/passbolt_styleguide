@@ -5,6 +5,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../shared/components/Icons/Icon";
+import ClipBoard from '../../../shared/lib/Browser/clipBoard';
 
 class ResourceViewPage extends React.Component {
   constructor(props) {
@@ -81,7 +82,7 @@ class ResourceViewPage extends React.Component {
 
     try {
       this.setState({copyLoginState: 'processing'});
-      await navigator.clipboard.writeText(this.state.resource.username);
+      await ClipBoard.copy(this.state.resource.username, this.props.context.port);
       this.setState({copyLoginState: 'done'});
       setTimeout(() => {
         this.setState({copyLoginState: 'default'});
@@ -130,7 +131,7 @@ class ResourceViewPage extends React.Component {
       }
     }
 
-    await navigator.clipboard.writeText(password);
+    await ClipBoard.copy(password, this.props.context.port);
     this.setState({copySecretState: 'done'});
     setTimeout(() => {
       this.setState({copySecretState: 'default'});

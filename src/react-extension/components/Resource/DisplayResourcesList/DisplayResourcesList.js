@@ -31,6 +31,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -221,8 +222,7 @@ class DisplayResourcesList extends React.Component {
   async handleCopyUsernameClick(ev, resource) {
     // Avoid the grid to select the resource while copying a resource username.
     ev.stopPropagation();
-
-    await navigator.clipboard.writeText(resource.username);
+    await ClipBoard.copy(resource.username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
   }
 
@@ -288,7 +288,7 @@ class DisplayResourcesList extends React.Component {
         return;
       }
     }
-    await navigator.clipboard.writeText(password);
+    await ClipBoard.copy(password, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }

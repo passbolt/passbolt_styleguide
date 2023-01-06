@@ -20,6 +20,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {DateTime} from "luxon";
 import {Trans, withTranslation} from "react-i18next";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 /**
  * This component displays the user details about public key
@@ -179,7 +180,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
    */
   async handlePublicKeyCopy() {
     const armoredKey = this.state.gpgkeyInfo.armoredKey;
-    await navigator.clipboard.writeText(armoredKey);
+    await ClipBoard.copy(armoredKey, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
   }
 

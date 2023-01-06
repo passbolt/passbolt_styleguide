@@ -28,6 +28,7 @@ import {Trans, withTranslation} from "react-i18next";
 import HandleReviewAccountRecoveryRequestWorkflow
   from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 /**
  * This component is a container of multiple actions applicable on user
@@ -344,7 +345,7 @@ class DisplayUserWorkspaceActions extends React.Component {
     this.closeMoreMenu();
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.selectedUser.id}`;
-    await navigator.clipboard.writeText(permalink);
+    await ClipBoard.copy(permalink, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 

@@ -24,6 +24,7 @@ import DisplayUserDetailsPublicKey from "../DisplayUserDetailsPublicKey/DisplayU
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation, Trans} from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -67,7 +68,7 @@ class DisplayUserDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
-    await navigator.clipboard.writeText(permalink);
+    await ClipBoard.copy(permalink, this.props.context.port);
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
