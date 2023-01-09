@@ -23,7 +23,7 @@ import ConfirmDeleteSsoSettingsDialog from "../components/Administration/Confirm
 import {withActionFeedback} from "./ActionFeedbackContext";
 
 // taken from Validator.isUUID()
-const UUID_REGEXP = /^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i;
+const UUID_REGEXP = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/;
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -34,7 +34,7 @@ export const AdminSsoContext = React.createContext({
   isDataReady: () => {}, // Returns true if the data has been loaded from the API already
   save: () => {}, // Save the sso configuration changes
   disableSso: () => {}, // Disable the SSO configuration
-  getProviderList: () => {}, // Returns the list of providers that the API supports
+  getProvidersList: () => {}, // Returns the list of providers that the API supports
   hasFormChanged: () => {}, // Returns true if the current form changed
   validateData: () => {}, // Validates the current data in the state
   saveAndTestConfiguration: () => {}, // Saves the current settings as a new draft and run the test dialog
@@ -55,16 +55,15 @@ export class AdminSsoContextProvider extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.providerList = [];
+    this.state = this.defaultState;
+    this.bindCallbacks();
   }
 
   /**
    * Returns the default component state
    */
   get defaultState() {
-    this.handleTestConfigCloseDialog = this.handleTestConfigCloseDialog.bind(this); // Handles the closing of the SSO test configuration dialog
-    this.handleSettingsActivation = this.handleSettingsActivation.bind(this); // Handles the UI processing after a successful settings activation
     return {
       ssoConfig: this.defaultSsoSettings, // The current sso configuration
       errors: {}, // The errors detected during the data validation
@@ -81,7 +80,7 @@ export class AdminSsoContextProvider extends React.Component {
       changeProvider: this.changeProvider.bind(this), // change the provider
       disableSso: this.disableSso.bind(this), // Disable the SSO configuration
       setValue: this.setValue.bind(this), // Set an SSO settings value to the current config
-      getProviderList: this.getProviderList.bind(this), // Returns the list of providers that the API supports
+      getProvidersList: this.getProvidersList.bind(this), // Returns the list of providers that the API supports
       validateData: this.validateData.bind(this), // Validates the current data in the state
       saveAndTestConfiguration: this.saveAndTestConfiguration.bind(this), // Saves the current settings as a new draft and run the test dialog
       handleError: this.handleError.bind(this), // Handles error by displaying a NotifyError dialog
@@ -110,6 +109,14 @@ export class AdminSsoContextProvider extends React.Component {
   }
 
   /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleTestConfigCloseDialog = this.handleTestConfigCloseDialog.bind(this); // Handles the closing of the SSO test configuration dialog
+    this.handleSettingsActivation = this.handleSettingsActivation.bind(this); // Handles the UI processing after a successful settings activation
+  }
+
+  /**
    * Find the sso configuration
    * @return {Promise<void>}
    */
@@ -126,15 +133,12 @@ export class AdminSsoContextProvider extends React.Component {
         ssoConfig.data.redirect_url = providerData.defaultConfig.redirect_url;
       }
     } catch (error) {
-      this.setProviderListFromBext(); //avoids to have an empty and non working UI
+      this.setDefaultProvidersList(); //avoids to have an empty and non working UI
       this.props.dialogContext.open(NotifyError, {error});
     }
 
     this.setState({
-      ssoConfig: {
-        ...ssoConfig,
-        data: Object.assign({}, this.state.ssoConfig.data, ssoConfig?.data)
-      },
+      ssoConfig: ssoConfig,
       isLoaded: true,
       isSsoConfigExisting
     });
@@ -168,7 +172,7 @@ export class AdminSsoContextProvider extends React.Component {
    *
    * @private
    */
-  setProviderListFromBext() {
+  setDefaultProvidersList() {
     SsoProviders.forEach(provider => {
       if (!provider.disabled) {
         this.providerList.push(provider);
@@ -208,7 +212,7 @@ export class AdminSsoContextProvider extends React.Component {
    * Get the current list of third party sso provider compatible with the API.
    * @returns {Object}
    */
-  getProviderList() {
+  getProvidersList() {
     return this.providerList;
   }
 
@@ -358,35 +362,26 @@ export class AdminSsoContextProvider extends React.Component {
   validateDataFromProvider_azure(data, errors) {
     const {url, client_id, tenant_id, client_secret, client_secret_expiry} = data;
     let isDataValid = true;
-    if (!url || !(url?.length)) {
+    if (!url || !(url?.length)) { // Validation of url
       errors.url = this.props.t("The Login URL is required");
       isDataValid = false;
-    }
-
-    // Validation of url
-    if (!this.isValidUrl(url)) {
+    } else if (!this.isValidUrl(url)) {
       errors.url = this.props.t("The Login URL must be a valid URL");
       isDataValid = false;
     }
 
-    if (!client_id || !(client_id?.length)) {
+    if (!client_id || !(client_id?.length)) { // Validation of client_id
       errors.client_id = this.props.t("The Application (client) ID is required");
       isDataValid = false;
-    }
-
-    // Validation of client_id
-    if (!this.isValidUuid(client_id)) {
+    } else if (!this.isValidUuid(client_id)) {
       errors.client_id = this.props.t("The Application (client) ID must be a valid UUID");
       isDataValid = false;
     }
 
-    if (!tenant_id || !(tenant_id?.length)) {
+    if (!tenant_id || !(tenant_id?.length)) { // Validation of tenant_id
       errors.tenant_id = this.props.t("The Directory (tenant) ID is required");
       isDataValid = false;
-    }
-
-    // Validation of tenant_id
-    if (!this.isValidUuid(tenant_id)) {
+    } else if (!this.isValidUuid(tenant_id)) {
       errors.tenant_id = this.props.t("The Directory (tenant) ID must be a valid UUID");
       isDataValid = false;
     }

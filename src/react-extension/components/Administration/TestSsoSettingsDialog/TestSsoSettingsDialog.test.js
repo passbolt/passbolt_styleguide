@@ -162,7 +162,7 @@ describe("TestSsoSettingsDialog", () => {
       expect.assertions(3);
 
       const expectedError = new Error("User closed the popup!");
-      expectedError.name = 'UserClosedSsoPopUp';
+      expectedError.name = 'UserClosedSsoPopUpError';
 
       const props = defaultProps({
         configurationId: uuid(),

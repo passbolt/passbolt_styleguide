@@ -300,7 +300,7 @@ class Login extends Component {
     try {
       await this.props.ssoContext.runSignInProcess();
     } catch (e) {
-      if (e.name === "UserClosedSsoPopUp") {
+      if (e.name === "UserClosedSsoPopUpError") {
         this.setState({
           displaySso: false
         });

@@ -29,7 +29,7 @@ export const AuthenticationSetupWorkflowStates = {
   COMPLETING_SETUP: 'Completing setup',
   UNEXPECTED_ERROR: 'Unexpected Error',
   VALIDATE_PASSPHRASE: 'Validate passphrase',
-  CONFIGURING_SSO: "Configuing SSO"
+  CONFIGURING_SSO: "Configuring SSO"
 };
 
 /**

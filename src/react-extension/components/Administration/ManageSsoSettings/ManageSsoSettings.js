@@ -129,7 +129,7 @@ class ManageSsoSettings extends React.Component {
    * Get the supported SSO providers.
    */
   get supportedSsoProviders() {
-    const supportedProviders = this.props.adminSsoContext.getProviderList();
+    const supportedProviders = this.props.adminSsoContext.getProvidersList();
     return supportedProviders.map(provider => ({
       value: provider.id,
       label: provider.name

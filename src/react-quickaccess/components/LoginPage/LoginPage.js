@@ -125,7 +125,7 @@ class LoginPage extends React.Component {
       await this.props.ssoContext.runSignInProcess();
       await this.handleLoginSuccess();
     } catch (e) {
-      if (e.name === "UserClosedSsoPopUp") {
+      if (e.name === "UserClosedSsoPopUpError") {
         this.setState({
           displaySso: false
         });

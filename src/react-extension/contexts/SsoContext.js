@@ -40,7 +40,7 @@ export class SsoContextProvider extends React.Component {
    * Returns the default component state
    */
   get defaultState() {
-    this.handleSpecificError.bind(this);
+    this.handleSpecificError = this.handleSpecificError.bind(this);
     return {
       ssoLocalConfiguredProvider: null, // the provider configured for the local SSO kit if any, null otherwise
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
