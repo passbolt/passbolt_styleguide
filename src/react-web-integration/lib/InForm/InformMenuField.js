@@ -54,13 +54,13 @@ class InFormMenuField {
   /**
    * Insert an in-form menu iframe
    */
-  insertInformMenuIframe() {
+  async insertInformMenuIframe() {
     const iframes = document.querySelectorAll('iframe');
     // Use of Array prototype some method cause NodeList is not an array !
-    const iframeId =  this.iframeId;
+    const iframeId = this.iframeId;
     const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
     if (!isIframeAlreadyInserted) {
-      const iframe = this.createMenuIframe();
+      const iframe = await this.createMenuIframe();
       this.handleMenuClicked(iframe);
     }
   }
@@ -69,21 +69,22 @@ class InFormMenuField {
    * Create an iframe dedicated to the menu
    * @return {HTMLIFrameElement} The created iframe
    */
-  createMenuIframe() {
+  async createMenuIframe() {
     // IMPORTANT: Calculate position before inserting iframe in document to avoid issue
     const {top, left} = this.calculateIframePosition();
+    const portId = await port.request("passbolt.port.generate-id", "InFormMenu");
     const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
     iframe.style.top = `${top}px`;
-    iframe.style.left =  `${left}px`;
+    iframe.style.left = `${left}px`;
     iframe.style.border = 0;
     iframe.style.width = '370px'; // width of the menu 350px + 20px to display shadows
     iframe.style.height = '220px'; // For 3 items in a row to be display
     iframe.style.zIndex = "123456";
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=passbolt-iframe-in-form-menu`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-menu.html?passbolt=${portId}`;
     return iframe;
   }
 
