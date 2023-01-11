@@ -76,6 +76,23 @@
   "overrides": {
     "glob-stream": {
       "glob-parent": "5.1.2"
+    },
+    "eslint-plugin-import": {
+      "debug": "3.2.7"
+    },
+    "webpack-dev-server": {
+      "compression": {
+        "debug": "3.2.7"
+      },
+      "express": {
+        "debug": "3.2.7"
+      },
+      "serve-index": {
+        "debug": "3.2.7"
+      }
+    },
+    "i18next-parser": {
+      "debug": "3.2.7"
     }
   },
   "scripts": {
