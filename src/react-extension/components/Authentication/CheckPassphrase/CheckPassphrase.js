@@ -17,10 +17,11 @@ import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * The component display variations.
@@ -106,6 +107,7 @@ class CheckPassphrase extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
+    this.pownedService = new PownedService(this.props.context.port);
     this.focusOnPassphrase();
   }
 
@@ -133,7 +135,6 @@ class CheckPassphrase extends Component {
     event.preventDefault();
     this.validate();
     await this.isPwndProcessingPromise;
-
     if (this.isValid) {
       this.toggleProcessing();
       await this.check();
@@ -150,12 +151,13 @@ class CheckPassphrase extends Component {
       return;
     }
 
-    const passphrase = this.state.passphrase;
     let passphraseInDictionnary = false;
     let passphraseEntropy = this.state.passphraseEntropy;
 
     try {
-      passphraseInDictionnary = await SecretComplexity.ispwned(passphrase);
+      const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
+      passphraseInDictionnary = result.inDictionary;
+      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
       if (passphraseInDictionnary) {
         passphraseEntropy = 0;
       }
@@ -183,6 +185,7 @@ class CheckPassphrase extends Component {
   handleChangePassphrase(event) {
     const passphrase = event.target.value;
     let passphraseEntropy = null;
+
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
@@ -345,6 +348,7 @@ CheckPassphrase.defaultProps = {
 };
 
 CheckPassphrase.propTypes = {
+  context: PropTypes.any, // The application context
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to verify its passphrase
   displayAs: PropTypes.PropTypes.oneOf([
     CheckPassphraseVariations.SETUP,
@@ -353,4 +357,4 @@ CheckPassphrase.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
 };
-export default withTranslation("common")(CheckPassphrase);
+export default withAppContext(withTranslation("common")(CheckPassphrase));

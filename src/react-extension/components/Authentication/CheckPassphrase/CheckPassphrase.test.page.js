@@ -124,6 +124,7 @@ export default class CheckPassphrasePage {
    */
   async fillPassphrase(passphrase) {
     fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
+    jest.runAllTimers();
     await waitFor(() => {});
   }
 

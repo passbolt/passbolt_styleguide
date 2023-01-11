@@ -182,6 +182,13 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   /**
+   * Returns the password warning mesage input element
+   */
+  get passwordWarningMessage() {
+    return this._page.container.querySelector('.password.warning-message');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -272,5 +279,6 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
         throw new Error("The field has not changed yet.");
       }
     });
+    jest.runAllTimers();
   }
 }
