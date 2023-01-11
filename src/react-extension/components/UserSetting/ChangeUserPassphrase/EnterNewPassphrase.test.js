@@ -20,20 +20,22 @@ import {defaultProps} from "./EnterNewPassphrase.test.data";
 import {waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
-import PwnedPasswords from "../../../../shared/lib/Secret/PwnedPasswords";
 
 jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
-
-beforeEach(() => {
-  jest.useFakeTimers();
-  jest.resetModules();
-  jest.clearAllMocks();
-  PwnedPasswords.pwnedPasswords.mockResolvedValue(false);
-});
 
 describe("As LU I should see the user confirm passphrase page", () => {
   let page; // The page to test against
   const props = defaultProps();
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.resetModules();
+    jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
+  });
 
   describe('As LU I can start confirm my passphrase', () => {
     /**
@@ -71,7 +73,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see the passphrase very weak strength updated on change', async() => {
-      const veryWeakPassphrase = 'blabla';
+      const veryWeakPassphrase = 'blablabla';
       await page.insertPassphrase(veryWeakPassphrase);
       await waitFor(() => expect(page.isVeryWeakPassphrase).toBeTruthy());
     });
@@ -166,11 +168,11 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(page.updateButton.className).toBe('button primary disabled');
 
       // Fill the form
-      page.insertPassphrase("passphrase");
+      await page.insertPassphrase("passphrase");
+
       await waitFor(() => expect(page.canUpdate).toBeTruthy());
       const mockReject = error => jest.fn(() => new Promise((resolve, reject) => reject(error)));
       jest.spyOn(props.userSettingsContext, 'onUpdatePassphraseRequested').mockImplementationOnce(mockReject(new PassboltApiFetchError("Jest simulate API error.")));
-
       await page.update(() => {
         if (!page.notInDictionaryHint.classList.contains("success")) {
           throw new Error("The page state didn't change yet.");
@@ -178,6 +180,14 @@ describe("As LU I should see the user confirm passphrase page", () => {
       });
       const ErrorDialogProps = {error: new Error("Jest simulate API error.")};
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
+    });
+
+    it('As LU I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
+      expect.assertions(2);
+      await page.insertPassphrase("Service is unavailable");
+      expect(page.notInDictionaryHint.classList.contains("unavailable")).toBeTruthy();
+      expect(page.tootltip.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
   });
 });

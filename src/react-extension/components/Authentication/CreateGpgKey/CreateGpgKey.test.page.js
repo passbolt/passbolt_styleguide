@@ -151,13 +151,29 @@ export default class CreateGpgKeyPage {
     return Boolean(this._page.container.querySelector('#import-key-link'));
   }
 
+
+  /**
+   * Returns the list item concerning the 'not in dictionnary" hints
+   */
+  get notInDictionaryHint() {
+    return this._page.container.querySelectorAll(".password-hints li")[4];
+  }
+
+  /**
+   * Returns the tooltip for service unavailable for powned password
+   */
+  get tootltip() {
+    return this._page.container.querySelector(".password-hints .unavailable .tooltip .tooltip-text");
+  }
+
   /**
    * Change the passphrase input value
    * @param passphrase The new passphrase
    */
   async fill(passphrase) {
     fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
-    await waitFor(async() => {});
+    jest.runAllTimers();
+    await waitFor(() => {});
   }
 
   /**

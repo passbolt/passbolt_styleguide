@@ -12,6 +12,7 @@
  * @since         3.0.0
  */
 import {CreateGpgKeyVariation} from "./CreateGpgKey";
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props
@@ -19,6 +20,9 @@ import {CreateGpgKeyVariation} from "./CreateGpgKey";
  */
 export function defaultProps(props) {
   const defaultProps = {
+    context: defaultAppContext({port: {
+      request: () => Promise.resolve(0)
+    }}),
     displayAs: CreateGpgKeyVariation.SETUP,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),

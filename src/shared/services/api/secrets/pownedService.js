@@ -37,7 +37,6 @@ class PownedService {
   async evaluateSecret(secret) {
     let inDictionary = true;
     let isPwnedServiceAvailable = true;
-
     if (secret.length >= 8) {
       try {
         inDictionary = await this.checkIfPasswordPowned(secret);
