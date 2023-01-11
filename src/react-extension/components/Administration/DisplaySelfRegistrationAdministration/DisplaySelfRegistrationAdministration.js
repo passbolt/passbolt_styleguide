@@ -39,7 +39,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.dynamicRefs = useDynamicRefs();
-    this.isPublicDomainProcessingPromise = null;
     this.checkForPublicDomainDebounce = debounce(this.checkForWarnings, 300);
     this.bindCallbacks();
   }
@@ -266,7 +265,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     const value = event.target.value;
     const uuid = event.target.name;
     this.props.adminSelfRegistrationContext.setAllowedDomains(uuid, value, () => this.validateForm());
-    this.isPublicDomainProcessingPromise = this.checkForPublicDomainDebounce();
+    this.checkForPublicDomainDebounce();
   }
 
   /**
