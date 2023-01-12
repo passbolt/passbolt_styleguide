@@ -128,8 +128,8 @@ class ExtAuthenticationLogin extends Component {
         {this.isReady() &&
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
           <Router>
-            <AuthenticationLoginContextProvider>
-              <SsoContextProvider>
+            <SsoContextProvider>
+              <AuthenticationLoginContextProvider>
                 <div id="container" className="container page login">
                   <div className="content">
                     <div className="header">
@@ -143,9 +143,9 @@ class ExtAuthenticationLogin extends Component {
                     </div>
                   </div>
                 </div>
-              </SsoContextProvider>
-              <Footer/>
-            </AuthenticationLoginContextProvider>
+                <Footer/>
+              </AuthenticationLoginContextProvider>
+            </SsoContextProvider>
           </Router>
         </TranslationProvider>
         }

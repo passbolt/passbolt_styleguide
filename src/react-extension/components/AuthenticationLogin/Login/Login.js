@@ -17,8 +17,6 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
 import Password from "../../../../shared/components/Password/Password";
-import {withSso} from "../../../contexts/SsoContext";
-import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 /**
  * The component display variations.
@@ -62,7 +60,6 @@ class Login extends Component {
       },
       isSsoAvailable: false, // true if the current user has an SSO kit built locally
       displaySso: false, // true if the UI should display the SSO login button
-      isLoaded: false, // true when the data is loaded
     };
   }
 
@@ -143,11 +140,9 @@ class Login extends Component {
   /**
    * Whenever the component is mounted
    */
-  async componentDidMount() {
-    await this.props.ssoContext.loadSsoConfiguration();
-    const isSsoAvailable = this.props.ssoContext.hasUserAnSsoKit();
+  componentDidMount() {
+    const isSsoAvailable = Boolean(this.ssoProviderData);
     this.setState({
-      isLoaded: true,
       isSsoAvailable: isSsoAvailable,
       displaySso: isSsoAvailable,
     });
@@ -298,15 +293,11 @@ class Login extends Component {
       processing: true
     }});
     try {
-      await this.props.ssoContext.runSignInProcess();
+      await this.props.onSsoSignIn();
     } catch (e) {
-      if (e.name === "UserClosedSsoPopUpError") {
-        this.setState({
-          displaySso: false
-        });
-      } else {
-        this.props.onSsoLoginError(e);
-      }
+      this.setState({
+        displaySso: false
+      });
     }
     this.setState({
       actions: {
@@ -332,8 +323,7 @@ class Login extends Component {
    * @return {bool}
    */
   get isAzureSsoEnabled() {
-    const ssoProvider = this.props.ssoContext.getProvider();
-    return ssoProvider === "azure";
+    return this.ssoProviderData?.id === "azure";
   }
 
   /**
@@ -341,11 +331,7 @@ class Login extends Component {
    * @return {object}
    */
   get ssoProviderData() {
-    const ssoProvider = this.props.ssoContext.getProvider();
-    if (!ssoProvider) {
-      return null;
-    }
-    return SsoProviders.find(provider => provider.id === ssoProvider);
+    return this.props.ssoProvider;
   }
 
   /**
@@ -355,9 +341,6 @@ class Login extends Component {
     const processingClassName = this.isProcessing ? 'processing' : '';
     const securityToken = this.securityToken;
     const ssoProviderData = this.ssoProviderData;
-    if (!this.state.isLoaded) {
-      return null;
-    }
 
     return (
       <div className="login">
@@ -476,8 +459,9 @@ Login.propTypes = {
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSignIn: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to sign-in
   onCheckPassphrase: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to check the passphrase
+  onSsoSignIn: PropTypes.func, // Callback to trigger whenever the user wants to sign-in using SSO
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
-  onSsoLoginError: PropTypes.func, // Callback when an error during SSO login happened
+  ssoProvider: PropTypes.object, // The SSO provider if any
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withSso(withTranslation('common')(Login)));
+export default withAppContext(withTranslation('common')(Login));

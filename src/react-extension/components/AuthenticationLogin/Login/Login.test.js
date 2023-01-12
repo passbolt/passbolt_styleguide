@@ -20,6 +20,7 @@ import LoginPage from "./Login.test.page";
 import {LoginVariations} from "./Login";
 import {defaultProps} from "./Login.test.data";
 import {waitFor} from "@testing-library/dom";
+import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -177,43 +178,32 @@ describe("Login", () => {
   });
 
   describe("As a registered user I can use the SSO feature to sign in to passbolt", () => {
+    const ssoProvider = SsoProviders.find(provider => provider.id === "azure");
+
     it('As AN I cannot see the SSO login button if I do not have an SSO kit set on my browser profile', async() => {
-      expect.assertions(3);
+      expect.assertions(1);
       const props = defaultProps({
         displayAs: LoginVariations.SIGN_IN,
-        ssoContext: {
-          getProvider: () => null,
-          loadSsoConfiguration: jest.fn(),
-          hasUserAnSsoKit: jest.fn().mockImplementation(() => false)
-        }
+        ssoProvider: null,
       });
 
       const page = new LoginPage(props);
       await waitFor(() => {});
 
-      expect(props.ssoContext.loadSsoConfiguration).toHaveBeenCalledTimes(1);
-      expect(props.ssoContext.hasUserAnSsoKit).toHaveBeenCalledTimes(1);
       expect(page.secondaryActionLink.textContent).toStrictEqual("Help, I lost my passphrase.");
     });
 
     it('As AN I can see the SSO login button if I have an SSO kit set on my browser profile', async() => {
-      expect.assertions(3);
+      expect.assertions(1);
       const props = defaultProps({
         displayAs: LoginVariations.SIGN_IN,
-        ssoContext: {
-          getProvider: () => "azure",
-          loadSsoConfiguration: jest.fn(),
-          hasUserAnSsoKit: jest.fn().mockImplementation(() => true)
-        }
+        ssoProvider,
       });
 
       const page = new LoginPage(props);
       await waitFor(() => {});
 
       expect(page.azureLoginButton).toBeTruthy();
-
-      expect(props.ssoContext.loadSsoConfiguration).toHaveBeenCalledTimes(1);
-      expect(props.ssoContext.hasUserAnSsoKit).toHaveBeenCalledTimes(1);
     });
 
     it('As AN I can use the SSO login feature to sign in to Passbolt', async() => {
@@ -222,14 +212,10 @@ describe("Login", () => {
       let signInPromiseResolver = null;
       const props = defaultProps({
         displayAs: LoginVariations.SIGN_IN,
-        ssoContext: {
-          getProvider: () => "azure",
-          loadSsoConfiguration: jest.fn(),
-          hasUserAnSsoKit: jest.fn().mockImplementation(() => true),
-          runSignInProcess: jest.fn().mockImplementation(() => new Promise(resolve => {
-            signInPromiseResolver = resolve;
-          })),
-        }
+        onSsoSignIn: jest.fn().mockImplementation(() => new Promise(resolve => {
+          signInPromiseResolver = resolve;
+        })),
+        ssoProvider,
       });
 
       const page = new LoginPage(props);
@@ -240,7 +226,7 @@ describe("Login", () => {
       await page.clickOnSsoLogin();
       expect(page.azureLoginButton.classList.contains('disabled')).toBeTruthy();
 
-      expect(props.ssoContext.runSignInProcess).toHaveBeenCalledTimes(1);
+      expect(props.onSsoSignIn).toHaveBeenCalledTimes(1);
 
       await signInPromiseResolver();
 
