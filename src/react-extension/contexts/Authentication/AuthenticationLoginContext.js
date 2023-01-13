@@ -14,6 +14,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../AppContext";
+import {withSso} from "../SsoContext";
+import SsoProviders from "../../components/Administration/ManageSsoSettings/SsoProviders.data";
 
 // The authentication login workflow states.
 export const AuthenticationLoginWorkflowStates = {
@@ -44,6 +46,8 @@ export const AuthenticationLoginContext = React.createContext({
   }, // Whenever a user passphrase check is required.
   signIn: () => {
   }, // Whenever a user sign-in is required.
+  handleSsoSignIn: () => {
+  }, // Whenever a user sign-in via SSO is required.
   handleSwitchAccount: () => {
   }, // Whenever a switch account is required.
   acceptNewServerKey: () => {
@@ -56,6 +60,8 @@ export const AuthenticationLoginContext = React.createContext({
   }, // Whenever the users wants to go to the validate passphrase.
   handleSsoLoginError: () => {
   }, // Handles the SSO login error
+  getSsoProvider: () => {
+  }, // Returns the current SSO provider if any
 });
 
 /**
@@ -85,20 +91,23 @@ export class AuthenticationLoginContextProvider extends React.Component {
       // Public workflow mutators.
       checkPassphrase: this.checkPassphrase.bind(this), // Whenever a user passphrase check is required.
       signIn: this.signIn.bind(this), // Whenever a user sign-in is required.
+      handleSsoSignIn: this.handleSsoSignIn.bind(this), // Whenever a user sign-in via SSO is required.
       handleSwitchAccount: this.handleSwitchAccount.bind(this), // Whenever a switch account is required.
       acceptNewServerKey: this.acceptNewServerKey.bind(this), // Whenever a new server gpg key is accepted.
       needHelpCredentialsLost: this.needHelpCredentialsLost.bind(this), // Whenever a user lost its passphrase.
       requestHelpCredentialsLost: this.requestHelpCredentialsLost.bind(this), // Whenever the user wants to request help because it lost its credentials.
       goToValidatePassphrase: this.goToValidatePassphrase.bind(this), // Whenever the users wants to go to the validate passphrase.
       handleSsoLoginError: this.handleSsoLoginError.bind(this), // Handles the SSO login error
+      getSsoProvider: this.getSsoProvider.bind(this), // Returns the current SSO provider if any
     };
   }
 
   /**
    * Whenever the component is initialized
    */
-  componentDidMount() {
-    this.initialize();
+  async componentDidMount() {
+    await this.initialize();
+    await this.props.ssoContext.loadSsoConfiguration();
   }
 
   /**
@@ -174,6 +183,23 @@ export class AuthenticationLoginContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to sign in using SSO.
+   * @returns {Promise<void>}
+   */
+  async handleSsoSignIn() {
+    try {
+      await this.props.ssoContext.runSignInProcess();
+      this.setState({state: AuthenticationLoginWorkflowStates.SIGNING_IN});
+    } catch (e) {
+      if (e.name === "UserClosedSsoPopUpError") {
+        throw e; // the error needs to be sent to Login.js in order to display the right form
+      } else {
+        this.handleSsoLoginError(e);
+      }
+    }
+  }
+
+  /**
    * Whenever the user wants to switch account.
    */
   handleSwitchAccount() {
@@ -237,6 +263,18 @@ export class AuthenticationLoginContextProvider extends React.Component {
   }
 
   /**
+   * Returns the current SSO provider if any, null otherwise
+   * @returns {object}
+   */
+  getSsoProvider() {
+    const ssoProvider = this.props.ssoContext.getProvider();
+    if (!ssoProvider) {
+      return null;
+    }
+    return SsoProviders.find(provider => provider.id === ssoProvider);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -251,9 +289,10 @@ export class AuthenticationLoginContextProvider extends React.Component {
 
 AuthenticationLoginContextProvider.propTypes = {
   context: PropTypes.any, // The application context
-  children: PropTypes.any // The children components
+  children: PropTypes.any, // The children components
+  ssoContext: PropTypes.object, // The SSO user context
 };
-export default withAppContext(AuthenticationLoginContextProvider);
+export default withAppContext(withSso(AuthenticationLoginContextProvider));
 
 /**
  * Authentication login context consumer HOC
