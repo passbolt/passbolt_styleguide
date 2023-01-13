@@ -2,8 +2,12 @@
  * Default props
  * @returns {*}
  */
+
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
+
 export function defaultProps() {
   return {
+    context: defaultAppContext(),
     prepareResourceContext: {
       settings: {
         default_generator: "passphrase",

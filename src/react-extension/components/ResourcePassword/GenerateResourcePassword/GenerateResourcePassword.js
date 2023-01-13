@@ -28,6 +28,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 /**
  * This component generate password or passphrase following configuration
@@ -142,7 +143,7 @@ class GenerateResourcePassword extends Component {
    * Whenever one wants to copy the password
    */
   async handleCopyPassword() {
-    await navigator.clipboard.writeText(this.state.password);
+    await ClipBoard.copy(this.state.password, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been copied to clipboard"));
   }
 

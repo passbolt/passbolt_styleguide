@@ -25,6 +25,7 @@ import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -125,7 +126,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Handle when the user select the username of the resource
    */
   async handleUsernameClickEvent() {
-    await navigator.clipboard.writeText(this.resource.username);
+    await ClipBoard.copy(this.resource.username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -211,7 +212,7 @@ class DisplayResourceDetailsInformation extends React.Component {
         return;
       }
     }
-    await navigator.clipboard.writeText(password);
+    await ClipBoard.copy(password, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }

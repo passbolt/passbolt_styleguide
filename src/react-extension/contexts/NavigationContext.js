@@ -96,6 +96,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationAccountRecoveryRequested: this.onGoToAdministrationAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the administration workspace account recovery
       onGoToAdministrationSmtpSettingsRequested: this.onGoToAdministrationSmtpSettingsRequested.bind(this), // Whenever the users wants to navigate to the administration workspace SMTP settings
       onGoToAdministrationSelfRegistrationRequested: this.onGoToAdministrationSelfRegistrationRequested.bind(this), //Whenever the users wants to navigate to the administration workspace self registration settings
+      onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -166,6 +167,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationMfaRequested() {
     await this.goTo("api", "/app/administration/mfa");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace mfa policy.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationMfaPolicyRequested() {
+    await this.goTo("api", "/app/administration/mfa-policy");
   }
 
   /**

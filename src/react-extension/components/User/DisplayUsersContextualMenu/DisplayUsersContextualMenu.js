@@ -24,8 +24,8 @@ import DeleteUser from "../DeleteUser/DeleteUser";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
-import HandleReviewAccountRecoveryRequestWorkflow
-  from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 class DisplayUsersContextualMenu extends React.Component {
   /**
@@ -93,7 +93,7 @@ class DisplayUsersContextualMenu extends React.Component {
   async handlePermalinkCopy() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/users/view/${this.user.id}`;
-    await navigator.clipboard.writeText(permalink);
+    await ClipBoard.copy(permalink, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
@@ -103,7 +103,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handleUsernameCopy() {
     const username = `${this.user.username}`;
-    await navigator.clipboard.writeText(username);
+    await ClipBoard.copy(username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The email has been copied to clipboard"));
     this.props.hide();
   }
@@ -113,7 +113,7 @@ class DisplayUsersContextualMenu extends React.Component {
    */
   async handlePublicKeyCopy() {
     const gpgkeyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.user.id);
-    await navigator.clipboard.writeText(gpgkeyInfo.armored_key);
+    await ClipBoard.copy(gpgkeyInfo.armored_key, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The public key has been copied to clipboard"));
     this.props.hide();
   }

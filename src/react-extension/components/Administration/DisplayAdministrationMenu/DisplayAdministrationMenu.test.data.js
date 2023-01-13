@@ -30,7 +30,8 @@ export function defaultProps(data = {}) {
       onGoToAdministrationInternationalizationRequested: jest.fn(),
       onGoToAdministrationAccountRecoveryRequested: jest.fn(),
       onGoToAdministrationSmtpSettingsRequested: jest.fn(),
-      onGoToAdministrationSelfRegistrationRequested: jest.fn()
+      onGoToAdministrationSelfRegistrationRequested: jest.fn(),
+      onGoToAdministrationMfaPolicyRequested: jest.fn()
     }
   }, data);
 }
