@@ -27,6 +27,10 @@ export function defaultProps(data = {}, userId) {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn()
     },
+    actionFeedbackContext: {
+      displaySuccess: jest.fn(),
+      displayError: jest.fn()
+    },
     t: text => text
   };
   return Object.assign(defaultProps, data);

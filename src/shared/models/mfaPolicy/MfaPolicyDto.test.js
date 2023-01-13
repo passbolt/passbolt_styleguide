@@ -16,13 +16,13 @@ import {MfaPolicyEnumerationTypes} from "./MfaPolicyEnumeration";
 import MfaPolicyDto from "./MfaPolicyDto";
 
 describe("MfaPolicyDto", () => {
-  test("should create an instance with default values", () => {
+  it("should create an instance with default values", () => {
     const dto = new MfaPolicyDto();
     expect(dto.policy).toBe(MfaPolicyEnumerationTypes.OPTIN);
     expect(dto.remember_me_for_a_month).toBeFalsy();
   });
 
-  test("should create an instance with provided values", () => {
+  it("should create an instance with provided values", () => {
     const settings = {
       policy: MfaPolicyEnumerationTypes.MANDATORY,
       rememberMeForAMonth: true,

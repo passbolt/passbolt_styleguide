@@ -14,6 +14,7 @@
 
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {mockApiResponse} from '../../../../../test/mocks/mockApiResponse';
+import {ActionFeedbackContext} from '../../../contexts/ActionFeedbackContext';
 import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
 import {defaultProps, settingDto} from './DisplayMfaPolicyAdministration.test.data';
 import DisplayMfaPolicyAdministrationPage from './DisplayMfaPolicyAdministration.test.page';
@@ -72,4 +73,54 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/mfa-policy');
     });
   });
+
+  describe("As a logged in administrator I can update the MFA policy of my organization", () => {
+    beforeEach(() => {
+      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse(settingDto));
+      page = new DisplayMfaPolicyAdministrationPage(context, props);
+    });
+
+    it('As a logged in administrator I should see a change banner when I change a setting of the MFA policy', async() => {
+      expect.assertions(3);
+
+      expect(page.settingsChangedBanner).toBeNull();
+      await page.selectMandatory();
+      expect(page.settingsChangedBanner).not.toBeNull();
+      //put back the value should not show a banner again
+      await page.selectOptin();
+      expect(page.settingsChangedBanner).toBeNull();
+    });
+    it('As a logged in administrator I can update the “MFA policy” setting <<Success>', async() => {
+      expect.assertions(3);
+      //save mock
+      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse({}));
+      //get settings
+      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse(settingDto));
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      await page.selectMandatory();
+      expect(page.settingsChangedBanner).not.toBeNull();
+
+      await page.clickOnSave();
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
+      expect(page.settingsChangedBanner).toBeNull();
+    });
+
+    it('As a logged in administrator I can update the “MFA policy” setting <<Error>', async() => {
+      expect.assertions(3);
+      //save mock
+      const error = {message: "The service is unavailable"};
+      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => Promise.reject(error));
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+
+      await page.selectMandatory();
+      expect(page.settingsChangedBanner).not.toBeNull();
+
+      await page.clickOnSave();
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
+      expect(page.settingsChangedBanner).not.toBeNull();
+    });
+  });
 });
+
+

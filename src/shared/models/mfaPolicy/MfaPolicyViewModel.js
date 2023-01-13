@@ -12,8 +12,6 @@
  * @since         3.10.0
  */
 
-import {MfaPolicyEnumerationTypes} from "./MfaPolicyEnumeration";
-
 /**
  * Model related to the mfa policy use only with the UI
  */
@@ -22,8 +20,8 @@ class MfaPolicyViewModel {
    * Constructor
    * @param {MfaPolicyDto} settings
    */
-  constructor(settings = {remember_me_for_a_month: true}) {
-    this.policy = settings.policy || MfaPolicyEnumerationTypes.OPTIN;
+  constructor(settings = {remember_me_for_a_month: false}) {
+    this.policy = settings.policy;
     this.rememberMeForAMonth = settings.remember_me_for_a_month;
   }
 }

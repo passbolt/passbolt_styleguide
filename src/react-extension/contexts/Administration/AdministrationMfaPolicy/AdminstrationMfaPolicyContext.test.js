@@ -83,7 +83,7 @@ describe("AdministrationMfaPolicyContext", () => {
     });
   });
 
-  describe("AdminUserDirectoryContext::clearContext", () => {
+  describe("AdministrationMfaPolicyContext::clearContext", () => {
     beforeEach(async() => {
       await initContext();
     });
@@ -96,6 +96,25 @@ describe("AdministrationMfaPolicyContext", () => {
       expect(adminMfaPolicyContextProvider.isProcessing()).toBeTruthy();
       expect(adminMfaPolicyContextProvider.getCurrentSettings()).toEqual(new MfaPolicyViewModel());
       expect(adminMfaPolicyContextProvider.getSettings()).toEqual(new MfaPolicyViewModel());
+    });
+  });
+
+  describe("AdministrationMfaPolicyContext::save", () => {
+    beforeEach(async() => {
+      await initContext();
+    });
+    it("As a logged in administrator I can update the “MFA policy” setting", async() => {
+      expect.assertions(3);
+
+      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse({}));
+      jest.spyOn(adminMfaPolicyContextProvider, "findSettings").mockImplementation();
+
+      await adminMfaPolicyContextProvider.save();
+
+      //Save should set processing to false in any case
+      expect(adminMfaPolicyContextProvider.isProcessing()).toBeTruthy();
+      expect(adminMfaPolicyContextProvider.findSettings).toHaveBeenCalled();
+      expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual(expect.objectContaining(settingDto));
     });
   });
 });

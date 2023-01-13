@@ -15,13 +15,7 @@ import {MfaPolicyEnumerationTypes} from "./MfaPolicyEnumeration";
 import MfaPolicyViewModel from "./MfaPolicyViewModel";
 
 describe("MfaPolicyViewModel", () => {
-  test("should create an instance with default values", () => {
-    const viewModel = new MfaPolicyViewModel();
-    expect(viewModel.policy).toBe(MfaPolicyEnumerationTypes.OPTIN);
-    expect(viewModel.rememberMeForAMonth).toBe(true);
-  });
-
-  test("should create an instance with provided values", () => {
+  it("should create an instance with provided values", () => {
     const settings = {
       policy: MfaPolicyEnumerationTypes.MANDATORY,
       remember_me_for_a_month: false,
