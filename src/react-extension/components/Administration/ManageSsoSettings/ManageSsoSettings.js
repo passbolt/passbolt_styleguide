@@ -226,7 +226,7 @@ class ManageSsoSettings extends React.Component {
                       <div className="error-message">{errors.url}</div>
                     }
                     <p>
-                      <Trans>The Azure AD authentication endpoint. See <a href="" rel="noopener noreferrer">alternatives</a>.</Trans>
+                      <Trans>The Azure AD authentication endpoint. See <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/authentication-national-cloud#azure-ad-authentication-endpoints" rel="noopener noreferrer" target="_blank">alternatives</a>.</Trans>
                     </p>
                   </div>
                   <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
@@ -252,7 +252,7 @@ class ManageSsoSettings extends React.Component {
                       <div className="error-message">{errors.client_id}</div>
                     }
                     <p>
-                      <Trans>The public identifier for the app in Azure in UUID format. <a href="" rel="noopener noreferrer">Where to find it?</a></Trans>
+                      <Trans>The public identifier for the app in Azure in UUID format.</Trans> <Trans><a href="https://learn.microsoft.com/en-gb/azure/active-directory/develop/quickstart-register-app" rel="noopener noreferrer" target="_blank">Where to find it?</a></Trans>
                     </p>
                   </div>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
@@ -264,7 +264,7 @@ class ManageSsoSettings extends React.Component {
                       <div className="error-message">{errors.tenant_id}</div>
                     }
                     <p>
-                      <Trans>The Azure Active Directory tenant ID, in UUID format. <a href="" rel="noopener noreferrer">Where to find it?</a></Trans>
+                      <Trans>The Azure Active Directory tenant ID, in UUID format.</Trans> <Trans><a href="https://learn.microsoft.com/en-gb/azure/active-directory/develop/quickstart-create-new-tenant#create-a-new-azure-ad-tenant" rel="noopener noreferrer" target="_blank">Where to find it?</a></Trans>
                     </p>
                   </div>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
@@ -283,7 +283,7 @@ class ManageSsoSettings extends React.Component {
                       <div className="error-message">{errors.client_secret}</div>
                     }
                     <p>
-                      <Trans>Allows Azure and Passbolt API to securely share information. <a href="" rel="noopener noreferrer">Where to find it?</a></Trans>
+                      <Trans>Allows Azure and Passbolt API to securely share information.</Trans> <Trans><a href="https://learn.microsoft.com/en-gb/azure/active-directory/develop/quickstart-register-app#add-a-client-secret" rel="noopener noreferrer" target="_blank">Where to find it?</a></Trans>
                     </p>
                   </div>
                   <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
