@@ -41,6 +41,7 @@ import AdminMfaContextProvider from "./contexts/Administration/AdministrationMfa
 import AdminUserDirectoryContextProvider from './contexts/Administration/AdministrationUserDirectory/AdministrationUserDirectoryContext';
 import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AdminSelfRegistrationContextProvider from "./contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
+import AdminMfaPolicyContextProvider from "./contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 
 /**
  * The passbolt application served by the API.
@@ -89,11 +90,13 @@ class ApiApp extends Component {
                                       <AdminSelfRegistrationContextProvider>
                                         <ManageDialogs/>
                                         <AdminMfaContextProvider>
-                                          <AdminEmailNotificationContextProvider>
-                                            <AdminInternationalizationContextProvider>
-                                              <AdministrationWorkspace/>
-                                            </AdminInternationalizationContextProvider>
-                                          </AdminEmailNotificationContextProvider>
+                                          <AdminMfaPolicyContextProvider>
+                                            <AdminEmailNotificationContextProvider>
+                                              <AdminInternationalizationContextProvider>
+                                                <AdministrationWorkspace/>
+                                              </AdminInternationalizationContextProvider>
+                                            </AdminEmailNotificationContextProvider>
+                                          </AdminMfaPolicyContextProvider>
                                         </AdminMfaContextProvider>
                                       </AdminSelfRegistrationContextProvider>
                                     </AdminUserDirectoryContextProvider>

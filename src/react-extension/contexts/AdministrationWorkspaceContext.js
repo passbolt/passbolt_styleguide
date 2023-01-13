@@ -151,6 +151,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    */
   async handleAdministrationMenuRouteChange() {
     const isMfaLocation = this.props.location.pathname.includes('mfa');
+    const isMfaPolicyLocation = this.props.location.pathname.includes('mfa-policy');
     const isUserDirectoryLocation = this.props.location.pathname.includes('users-directory');
     const isEmailNotificationLocation = this.props.location.pathname.includes('email-notification');
     const isSubscriptionLocation = this.props.location.pathname.includes('subscription');
@@ -172,7 +173,10 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     };
 
     let selectedAdministration;
-    if (isMfaLocation) {
+
+    if (isMfaPolicyLocation) {
+      selectedAdministration =  AdministrationWorkspaceMenuTypes.MFA_POLICY;
+    } else if (isMfaLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA;
     } else if (isUserDirectoryLocation) {
       selectedAdministration =  AdministrationWorkspaceMenuTypes.USER_DIRECTORY;
@@ -266,6 +270,7 @@ export function withAdministrationWorkspace(WrappedComponent) {
 export const AdministrationWorkspaceMenuTypes = {
   NONE: 'NONE', // Initial administration menu selected
   MFA: 'MFA', // MFA administration menu selected
+  MFA_POLICY: 'MFA-POLICY', //MFA Policy menu seleted
   USER_DIRECTORY: 'USER-DIRECTORY', // User directory administration menu selected
   EMAIL_NOTIFICATION: 'EMAIL-NOTIFICATION', // Email notification administration menu selected
   SUBSCRIPTION: 'SUBSCRIPTION', // Subscription administration menu selected

@@ -98,6 +98,11 @@ class DisplayAdministrationMenu extends React.Component {
     return siteSettings && siteSettings.canIUse('selfRegistration');
   }
 
+  get canIUseMfaPolicy() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('mfaPolicies');
+  }
+
   /**
    * Bind callbacks methods
    */
@@ -110,6 +115,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleAccountRecoveryClick = this.handleAccountRecoveryClick.bind(this);
     this.handleSmtpSettingsClick = this.handleSmtpSettingsClick.bind(this);
     this.handleSelfRegistrationClick = this.handleSelfRegistrationClick.bind(this);
+    this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
   }
 
   /**
@@ -168,12 +174,28 @@ class DisplayAdministrationMenu extends React.Component {
     this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested();
   }
 
+
+  /**
+   * Handle when the user click on the Mfa policy settings menu
+   */
+  handleMfaPolicyClick() {
+    this.props.navigationContext.onGoToAdministrationMfaPolicyRequested();
+  }
+
   /**
    * If MFA menu is selected
    * @returns {boolean}
    */
   isMfaSelected() {
     return AdministrationWorkspaceMenuTypes.MFA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If MFA policiy menu is selected
+   * @returns {boolean}
+   */
+  isMfaPolicySelected() {
+    return AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -246,6 +268,17 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <a onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></a>
+                  </div>
+                </div>
+              </div>
+            </li>
+          }
+          {this.canIUseMfaPolicy &&
+            <li id="mfa_policy_menu">
+              <div className={`row  ${this.isMfaPolicySelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <a onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></a>
                   </div>
                 </div>
               </div>

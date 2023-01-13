@@ -26,6 +26,7 @@ import {
 } from "../../../contexts/ResourceWorkspaceContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -77,7 +78,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle username resource
    */
   async handleUsernameClickEvent() {
-    await navigator.clipboard.writeText(this.resource.username);
+    await ClipBoard.copy(this.resource.username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
     this.props.hide();
   }
@@ -86,7 +87,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle uri resource
    */
   async handleUriClickEvent() {
-    await navigator.clipboard.writeText(this.resource.uri);
+    await ClipBoard.copy(this.resource.uri, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The uri has been copied to clipboard"));
     this.props.hide();
   }
@@ -97,7 +98,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
   async handlePermalinkClickEvent() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.resource.id}`;
-    await navigator.clipboard.writeText(permalink);
+    await ClipBoard.copy(permalink, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
     this.props.hide();
   }
@@ -114,11 +115,11 @@ class DisplayResourcesListContextualMenu extends React.Component {
       throw new TypeError(this.translate("The password is empty."));
     }
     if (typeof plaintextDto === 'string') {
-      await navigator.clipboard.writeText(plaintextDto);
+      await ClipBoard.copy(plaintextDto, this.props.context.port);
       this.props.resourceWorkspaceContext.onResourceCopied();
     } else {
       if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await navigator.clipboard.writeText(plaintextDto.password);
+        await ClipBoard.copy(plaintextDto.password, this.props.context.port);
         this.props.resourceWorkspaceContext.onResourceCopied();
       } else {
         throw new TypeError(this.translate("The password field is not defined."));

@@ -40,6 +40,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
   const props = defaultProps(); // The props to pass
   const context = defaultAppContext();
   const gmailDomain = "gmail.com";
+  const requiredDomain = "A domain is required.";
 
 
   describe("As a logged in administrator I can enable the User self registration", () => {
@@ -132,6 +133,14 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.deleteButtonByIndex(3)).toBeDefined();
     });
 
+    it("As an administrator on the self registration admin settings form, I want to see the new row having focus when I click on the add a new row button", async() => {
+      expect.assertions(1);
+      await page.addDomain();
+
+      expect(page.hasFocus(page.inputByIndex(3))).toBeTruthy();
+    });
+
+
     it('As a logged in administrator I can add a new non-professional domain to the User self registration but I should see a warning message', async() => {
       expect.assertions(7);
 
@@ -209,7 +218,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       await page.fillInput(page.inputByIndex(1), "");
       await page.clickOnSave();
 
-      expect(page.errorMessage.textContent).toBe("A domain is required.");
+      expect(page.errorMessage.textContent).toBe(requiredDomain);
       expect(page.subtitle.classList.contains('error')).toBeTruthy();
       // Check if input is focus
       expect(page.inputByIndex(1).focus).toHaveBeenCalled();
@@ -225,6 +234,32 @@ describe("DisplaySelfRegistrationAdministration", () => {
       //Check duplication
       expect(page.errorMessage.textContent).toBe("This domain already exist");
       expect(page.subtitle.classList.contains('error')).toBeTruthy();
+    });
+
+    it('As an administrator on the self registration admin settings form, I want to see the warning message on a row domain even when there are errors on other domains rows', async() => {
+      expect.assertions(4);
+      //Mock API calls
+      fetch.doMockIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
+
+      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+
+      await waitFor(() => {});
+      jest.spyOn(page.inputByIndex(1), 'focus');
+
+      // fill with non profession domain
+      await page.fillInput(page.inputByIndex(1), "");
+      await page.clickOnSave();
+
+      expect(page.errorMessage.textContent).toBe("A domain is required.");
+
+      // Lets add a new domain
+      await page.addDomain();
+      await page.fillInput(page.inputByIndex(2), gmailDomain);
+      await page.focusOut(page.inputByIndex(2));
+
+      expect(page.warningMessage).toBeDefined();
+      expect(page.warningMessage.textContent).toBe("This is not a safe professional domain");
+      expect(page.subtitle.classList.contains('warning')).toBeTruthy();
     });
   });
   describe("As a logged administrator I can remove a domain from the list", () => {
@@ -269,6 +304,24 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.inputByIndex(3)).not.toBeNull();
       //New input should be prepopulate with the domain of the organization
       expect(page.firstInputRow.value).toEqual("passbolt.com");
+    });
+
+    it("As an administrator on the self registration admin settings form, I should not see an error when I enable the settings which previously were containing error", async() => {
+      expect.assertions(4);
+
+      //We generate an error
+      await page.fillInput(page.inputByIndex(1), "");
+      await page.clickOnSave();
+
+      expect(page.errorMessage.textContent).toBe(requiredDomain);
+      expect(page.subtitle.classList.contains('error')).toBeTruthy();
+
+      // We disable self registration
+      await page.clickOnToggle();
+      // We enable it agzain
+      await page.clickOnToggle();
+      expect(page.errorMessage).toBeNull();
+      expect(page.subtitle.classList.contains('error')).toBeFalsy();
     });
   });
 });

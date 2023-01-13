@@ -24,6 +24,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withTranslation, Trans} from "react-i18next";
+import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -72,7 +73,7 @@ class DisplayResourceDetails extends React.Component {
   async handlePermalinkClick() {
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.props.resourceWorkspaceContext.details.resource.id}`;
-    await navigator.clipboard.writeText(permalink);
+    await ClipBoard.copy(permalink, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The permalink has been copied to clipboard"));
   }
 
