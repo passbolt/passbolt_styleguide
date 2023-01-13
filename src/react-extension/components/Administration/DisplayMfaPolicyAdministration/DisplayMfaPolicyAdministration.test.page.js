@@ -48,6 +48,7 @@ export default class DisplayMfaPolicyAdministrationPage {
     return this._page.container.querySelector('.mfa-policy-settings');
   }
 
+
   /**
    * Returns the save settings button
    */
@@ -87,21 +88,21 @@ export default class DisplayMfaPolicyAdministrationPage {
    * Returns the opt-in policy radio box
    */
   get optInPolicy() {
-    return this._page.container.querySelector('#mfa-policy-policy-opt-in-radio');
+    return this._page.container.querySelector('#mfa-policy-opt-in-radio');
   }
 
   /**
    * Returns the opt-in policy name
    */
   get optInPolicyName() {
-    return this._page.container.querySelector('#mfa-policy-policy-opt-in .name');
+    return this._page.container.querySelector('#mfa-policy-opt-in .name');
   }
 
   /**
    * Returns the opt-in policy info
    */
   get optInPolicyInfo() {
-    return this._page.container.querySelector('#mfa-policy-policy-opt-in .info');
+    return this._page.container.querySelector('#mfa-policy-opt-in .info');
   }
 
   /**
@@ -194,6 +195,23 @@ export default class DisplayMfaPolicyAdministrationPage {
   async clickOnSave() {
     return this.click(this.saveSettingsButton);
   }
+
+
+  /**
+   * click on save settings button
+   */
+  async selectMandatory() {
+    return this.click(this.mandatoryPolicy);
+  }
+
+
+  /**
+   * click on opt-in settings button
+   */
+  async selectOptin() {
+    return this.click(this.optInPolicy);
+  }
+
 
   /**
    * Click on the element

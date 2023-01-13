@@ -118,22 +118,22 @@ class DisplayMfaPolicyAdministration extends React.Component {
                   checked={settings.policy === "mandatory"}
                   id="mfa-policy-mandatory-radio"
                   disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="mfaPolicyPolicyMandatory">
+                <label htmlFor="mfa-policy-mandatory-radio">
                   <span className="name"><Trans>Mandatory</Trans></span>
                   <span className="info">
                     <Trans>Users have to enable multi factor authentication. If they don&apos;t, they will be reminded every time they log in.</Trans>
                   </span>
                 </label>
               </div>
-              <div className={`input radio ${settings.policy === "opt-in" ? 'checked' : ''}`} id="mfa-policy-policy-opt-in">
+              <div className={`input radio ${settings.policy === "opt-in" ? 'checked' : ''}`} id="mfa-policy-opt-in">
                 <input type="radio"
                   value="opt-in"
                   onChange={this.handleInputChange}
                   name="policy"
                   checked={settings.policy === "opt-in"}
-                  id="mfa-policy-policy-opt-in-radio"
+                  id="mfa-policy-opt-in-radio"
                   disabled={this.hasAllInputDisabled()}/>
-                <label htmlFor="mfaPolicyPolicyOptIn">
+                <label htmlFor="mfa-policy-opt-in-radio">
                   <span className="name"><Trans>Optional, Opt-in</Trans></span>
                   <span className="info">
                     <Trans>Users have the choice to enable multi factor authentication in their profile workspace.</Trans>

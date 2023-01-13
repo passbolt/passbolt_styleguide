@@ -32,6 +32,7 @@ export const AdminMfaPolicyContext = React.createContext({
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
   clearContext: () => {}, // put the data to its default state value
+  save: () => {}, // Save settings,
 });
 
 /**
@@ -67,6 +68,7 @@ export class AdminMfaPolicyContextProvider extends React.Component {
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       setProcessing: this.setProcessing.bind(this),
       clearContext: this.clearContext.bind(this), // put the data to its default state value
+      save: this.save.bind(this), // Save the policy changes
     };
   }
 
