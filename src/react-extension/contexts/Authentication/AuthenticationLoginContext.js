@@ -107,7 +107,6 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async componentDidMount() {
     await this.initialize();
-    await this.props.ssoContext.loadSsoConfiguration();
   }
 
   /**
@@ -115,6 +114,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async initialize() {
+    await this.props.ssoContext.loadSsoConfiguration();
     await this.verifyServerKey();
   }
 
