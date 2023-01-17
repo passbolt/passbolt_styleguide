@@ -26,9 +26,6 @@ export function defaultProps(data = {}) {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn()
     },
-    dialogContext: {
-      open: jest.fn()
-    },
     actionFeedbackContext: {
       displaySuccess: jest.fn()
     },

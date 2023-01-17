@@ -87,6 +87,13 @@ export default class LoginPage {
   }
 
   /**
+   * Returns the Azure SSO login button element
+   */
+  get azureLoginButton() {
+    return this._page.container.querySelector('.sso-login-form .sso-login-button');
+  }
+
+  /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {
@@ -150,6 +157,15 @@ export default class LoginPage {
   async clickSecondaryActionLink(inProgressFn = () => {}) {
     const leftClick = {button: 0};
     fireEvent.click(this.secondaryActionLink, leftClick);
+    await waitFor(inProgressFn);
+  }
+
+  /**
+   * Click on the secondary action link.
+   */
+  async clickOnSsoLogin(inProgressFn = () => {}) {
+    const leftClick = {button: 0};
+    fireEvent.click(this.azureLoginButton, leftClick);
     await waitFor(inProgressFn);
   }
 }

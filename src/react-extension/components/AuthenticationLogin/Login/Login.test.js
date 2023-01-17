@@ -19,6 +19,8 @@ import each from "jest-each";
 import LoginPage from "./Login.test.page";
 import {LoginVariations} from "./Login";
 import {defaultProps} from "./Login.test.data";
+import {waitFor} from "@testing-library/dom";
+import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -33,6 +35,8 @@ describe("Login", () => {
       const props = defaultProps(_props);
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       const expectedPassphrase = "some passphrase";
       await page.fillPassphrase(expectedPassphrase);
@@ -45,6 +49,8 @@ describe("Login", () => {
       const props = defaultProps({..._props, canRememberMe: false});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       expect(page.canRememberMe).toBeFalsy();
       const expectedPassphrase = "some passphrase";
@@ -56,6 +62,8 @@ describe("Login", () => {
     it(`As AN I should be able to remember my passphrase if the feature is enabled, scenario: ${JSON.stringify(_props)}`, async() => {
       const props = defaultProps({..._props, canRememberMe: true});
       const page = new LoginPage(props);
+
+      await waitFor(() => {});
 
       expect.assertions(2);
       expect(page.canRememberMe).toBeTruthy();
@@ -70,6 +78,8 @@ describe("Login", () => {
       const props = defaultProps({..._props});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(1);
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
@@ -80,6 +90,8 @@ describe("Login", () => {
       const onSignIn = jest.fn(() => new Promise(resolve => checkResolve = resolve));
       const props = defaultProps({..._props, onSignIn});
       const page = new LoginPage(props);
+
+      await waitFor(() => {});
 
       expect.hasAssertions();
       const inProgressFn = () => {
@@ -98,6 +110,8 @@ describe("Login", () => {
       const props = defaultProps({..._props, onSignIn});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.hasAssertions();
       const inProgressFn = () => {
         expect(page.isProcessing).toBeTruthy();
@@ -113,6 +127,8 @@ describe("Login", () => {
       const props = defaultProps(_props);
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(1);
       const emptyPassphrase = ' ';
       await page.fillPassphrase(emptyPassphrase);
@@ -126,6 +142,8 @@ describe("Login", () => {
       const props = defaultProps({..._props, onCheckPassphrase});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(1);
       await page.fillPassphrase('some passphrase');
       await page.signIn();
@@ -138,6 +156,8 @@ describe("Login", () => {
       const props = defaultProps({displayAs: LoginVariations.SIGN_IN});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Sign in");
       expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
@@ -149,9 +169,68 @@ describe("Login", () => {
       const props = defaultProps({displayAs: LoginVariations.ACCOUNT_RECOVERY});
       const page = new LoginPage(props);
 
+      await waitFor(() => {});
+
       expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Complete recovery");
       expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
+    });
+  });
+
+  describe("As a registered user I can use the SSO feature to sign in to passbolt", () => {
+    const ssoProvider = SsoProviders.find(provider => provider.id === "azure");
+
+    it('As AN I cannot see the SSO login button if I do not have an SSO kit set on my browser profile', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        displayAs: LoginVariations.SIGN_IN,
+        ssoProvider: null,
+      });
+
+      const page = new LoginPage(props);
+      await waitFor(() => {});
+
+      expect(page.secondaryActionLink.textContent).toStrictEqual("Help, I lost my passphrase.");
+    });
+
+    it('As AN I can see the SSO login button if I have an SSO kit set on my browser profile', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        displayAs: LoginVariations.SIGN_IN,
+        ssoProvider,
+      });
+
+      const page = new LoginPage(props);
+      await waitFor(() => {});
+
+      expect(page.azureLoginButton).toBeTruthy();
+    });
+
+    it('As AN I can use the SSO login feature to sign in to Passbolt', async() => {
+      expect.assertions(4);
+
+      let signInPromiseResolver = null;
+      const props = defaultProps({
+        displayAs: LoginVariations.SIGN_IN,
+        onSsoSignIn: jest.fn().mockImplementation(() => new Promise(resolve => {
+          signInPromiseResolver = resolve;
+        })),
+        ssoProvider,
+      });
+
+      const page = new LoginPage(props);
+      await waitFor(() => {});
+
+      expect(page.azureLoginButton).toBeTruthy();
+
+      await page.clickOnSsoLogin();
+      expect(page.azureLoginButton.classList.contains('disabled')).toBeTruthy();
+
+      expect(props.onSsoSignIn).toHaveBeenCalledTimes(1);
+
+      await signInPromiseResolver();
+
+      expect(page.azureLoginButton.classList.contains('disabled')).toBeFalsy();
     });
   });
 });

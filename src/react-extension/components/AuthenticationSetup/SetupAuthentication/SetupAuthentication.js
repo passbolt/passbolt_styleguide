@@ -79,6 +79,10 @@ class SetupAuthentication extends Component {
         return <ChooseSecurityToken
           onComplete={this.props.authenticationSetupContext.chooseSecurityToken}
         />;
+      case AuthenticationSetupWorkflowStates.CONFIGURING_SSO:
+        return <LoadingSpinner
+          title={<Trans>Configuring SSO access, please wait...</Trans>}
+        />;
       case AuthenticationSetupWorkflowStates.COMPLETING_SETUP:
         return <LoadingSpinner
           title={<Trans>Completing setup, please wait...</Trans>}

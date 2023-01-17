@@ -18,3 +18,13 @@ export function defaultAppContext(appContext) {
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
+
+export function defaultSsoContext(ssoContext) {
+  const defaultSsoContext = {
+    loadSsoConfiguration: () => Promise.resolve(),
+    hasUserAnSsoKit: () => true,
+    getProvider: () => "azure",
+    runSignInProcess: () => Promise.resolve()
+  };
+  return Object.assign(defaultSsoContext, ssoContext || {});
+}

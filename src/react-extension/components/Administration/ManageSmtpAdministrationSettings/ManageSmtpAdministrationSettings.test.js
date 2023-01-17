@@ -271,7 +271,11 @@ describe("ManageSmtpAdministrationSettings", () => {
     it('As a signed-in administrator in the Email server settings I can see an error dialog with error details if an error occurs during the fetch of the SMTP settings', async() => {
       expect.assertions(1);
       const expectedError = new PassboltApiFetchError("Something went wrong");
-      const props = defaultProps();
+      const props = defaultProps({
+        dialogContext: {
+          open: jest.fn()
+        }
+      });
       fetch.doMockOnceIf(/smtp\/settings.json/, () => { throw expectedError; });
       new ManageSmtpAdministrationSettingsPage(props);
 
