@@ -260,7 +260,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {NodeList}
    */
   get providerButtons() {
-    return this.selectAll(".smtp-settings .smtp-provider-list .smtp-provider");
+    return this.selectAll(".smtp-settings .provider-list .provider");
   }
 
   /**

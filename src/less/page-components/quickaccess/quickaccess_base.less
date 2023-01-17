@@ -54,8 +54,15 @@ body {
         .clearfix();
         background: @quickaccess-footer-background;
         padding: 1.6rem;
+        display: flex;
+        flex-direction: column;
+
         .button.primary.big {
           line-height: 2.3rem;
+
+          & + a {
+            margin: 1.6rem auto 0;
+          }
         }
         .cancel {
             padding-right: 3rem;
@@ -92,5 +99,9 @@ body {
             position: relative;
             margin-left: .8rem;
         }
+    }
+
+    .error-message {
+        color: @text-error-color;
     }
 }

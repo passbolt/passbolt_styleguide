@@ -59,9 +59,18 @@ export function defaultAuthenticationLoginAppContextWithAccountRecoveryDisabled(
  * @returns {object}
  */
 export function defaultProps(props) {
+  const ssoContext = Object.assign({
+    loadSsoConfiguration: () => {},
+    runSignInProcess: () => {}
+  }, props?.ssoContext);
+
   const defaultProps = {
-    context: defaultAuthenticationLoginAppContext()
+    context: defaultAuthenticationLoginAppContext(),
+    ssoContext: ssoContext
   };
+
+  delete props?.ssoContext;
+
   return Object.assign(defaultProps, props || {});
 }
 

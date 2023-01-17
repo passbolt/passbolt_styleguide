@@ -14,6 +14,7 @@
 
 import {LoginVariations} from "./Login";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -21,19 +22,21 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
  * @returns {Object}
  */
 export function defaultProps(props = {}) {
+  const userSettings = new UserSettings({
+    "user.settings.securityToken.code": "TST",
+    "user.settings.securityToken.color": "#f44336",
+    "user.settings.securityToken.textColor": "#ffffff",
+    "user.settings.trustedDomain": (new URL(window.location.href)).origin,
+    "user.id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    "user.username": "admin@passbolt.com",
+    "user.firstname": "Admin",
+    "user.lastname": "User",
+    "user.settings.locale": "fr-FR"
+  });
   const defaultProps = {
     displayAs: LoginVariations.SIGN_IN,
-    userSettings: new UserSettings({
-      "user.settings.securityToken.code": "TST",
-      "user.settings.securityToken.color": "#f44336",
-      "user.settings.securityToken.textColor": "#ffffff",
-      "user.settings.trustedDomain": (new URL(window.location.href)).origin,
-      "user.id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-      "user.username": "admin@passbolt.com",
-      "user.firstname": "Admin",
-      "user.lastname": "User",
-      "user.settings.locale": "fr-FR"
-    }),
+    context: defaultAppContext({userSettings}),
+    userSettings: userSettings,
     onSignIn: jest.fn(() => Promise.resolve()),
     onCheckPassphrase: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
