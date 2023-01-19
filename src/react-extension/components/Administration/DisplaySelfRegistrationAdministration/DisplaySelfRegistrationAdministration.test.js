@@ -34,6 +34,11 @@ describe("DisplaySelfRegistrationAdministration", () => {
     enableFetchMocks();
     jest.resetModules();
     jest.restoreAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
   });
 
   let page; // The page to test against
@@ -151,7 +156,6 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
       await page.addDomain();
       await page.fillInput(page.inputByIndex(3), gmailDomain);
-      await page.focusOut(page.inputByIndex(3));
 
       expect(page.warningMessage).toBeDefined();
       expect(page.warningMessage.textContent).toBe("This is not a safe professional domain");
@@ -230,7 +234,6 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
       await page.fillInput(page.inputByIndex(1), "passbolt.com");
       await page.fillInput(page.inputByIndex(2), "passbolt.com");
-
       //Check duplication
       expect(page.errorMessage.textContent).toBe("This domain already exist");
       expect(page.subtitle.classList.contains('error')).toBeTruthy();
