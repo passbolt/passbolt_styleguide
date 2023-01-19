@@ -12,6 +12,7 @@
  * @since         3.0.0
  */
 
+import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import {CheckPassphraseVariations} from "./CheckPassphrase";
 
 /**
@@ -20,6 +21,9 @@ import {CheckPassphraseVariations} from "./CheckPassphrase";
  */
 export function defaultProps(props) {
   const defaultProps = {
+    context: defaultAppContext({port: {
+      request: () => Promise.resolve(0)
+    }}),
     displayAs: CheckPassphraseVariations.SETUP,
     canRememberMe: false,
     onComplete: jest.fn(() => Promise.resolve()),

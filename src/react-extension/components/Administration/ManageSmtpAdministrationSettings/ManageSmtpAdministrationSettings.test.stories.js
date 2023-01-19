@@ -77,19 +77,34 @@ const Template = args =>
 export const Default = Template.bind({});
 Default.args = defaultProps();
 Default.decorators = decorators;
+Default.parameters = {
+  css: "api_main"
+};
 
 export const WithSmtpSettings = Template.bind({});
 WithSmtpSettings.args = defaultProps();
 WithSmtpSettings.decorators = decorators;
+WithSmtpSettings.parameters = {
+  css: "api_main"
+};
 
 export const WithSmtpSettingsFromFile = Template.bind({});
 WithSmtpSettingsFromFile.args = defaultProps();
 WithSmtpSettingsFromFile.decorators = decorators;
+WithSmtpSettingsFromFile.parameters = {
+  css: "api_main"
+};
 
 export const WithKnownSmtpSettings = Template.bind({});
 WithKnownSmtpSettings.args = defaultProps();
 WithKnownSmtpSettings.decorators = decorators;
+WithKnownSmtpSettings.parameters = {
+  css: "api_main"
+};
 
 export const WithErrorFromServer = Template.bind({});
 WithErrorFromServer.args = defaultProps();
 WithErrorFromServer.decorators = decorators;
+WithErrorFromServer.parameters = {
+  css: "api_main"
+};

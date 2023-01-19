@@ -164,6 +164,37 @@ describe("As AD I can see the administration menu", () => {
       expect(page.selfRegistration).toBeNull();
     });
   });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the SSO setting option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.SSO}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.goToSsoSettings();
+      expect(page.ssoSettings).toBeTruthy();
+      expect(page.menuSelected).toBe('Single Sign-On');
+      expect(props.navigationContext.onGoToAdministrationSsoRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "sso"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.ssoSettings).toBeNull();
+    });
+  });
+
   describe("As a logged in administrator in the administrator workspace, I can see the Mfa Policy settings option in the left-side bar", () => {
     it('If the feature flag is true, the menu should be visible', async() => {
       expect.assertions(4);

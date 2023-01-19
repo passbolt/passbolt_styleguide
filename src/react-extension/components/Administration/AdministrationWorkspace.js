@@ -37,6 +37,7 @@ import ManageAccountRecoveryAdministrationSettings
 import ManageSmtpAdministrationSettings
   from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
+import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
 
 class AdministrationWorkspace extends Component {
@@ -112,6 +113,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.SELF_REGISTRATION === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If SSO menu is selected
+   * @returns {boolean}
+   */
+  isSsoSelected() {
+    return AdministrationWorkspaceMenuTypes.SSO === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -164,6 +173,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isSelfRegistrationSelected() &&
                   <DisplaySelfRegistrationAdministration/>
+                  }
+                  {this.isSsoSelected() &&
+                  <ManageSsoSettings/>
                   }
                 </div>
               </div>

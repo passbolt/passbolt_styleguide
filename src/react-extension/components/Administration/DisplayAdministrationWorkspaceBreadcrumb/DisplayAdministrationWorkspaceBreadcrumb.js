@@ -65,6 +65,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Email server");
       case AdministrationWorkspaceMenuTypes.SELF_REGISTRATION:
         return this.translate("Self Registration");
+      case AdministrationWorkspaceMenuTypes.SSO:
+        return this.translate("Single Sign-On");
       case AdministrationWorkspaceMenuTypes.MFA_POLICY:
         return this.translate("MFA Policy");
       default:

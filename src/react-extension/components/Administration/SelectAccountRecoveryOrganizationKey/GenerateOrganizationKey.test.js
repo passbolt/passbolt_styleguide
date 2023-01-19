@@ -24,6 +24,9 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 function defaultProps() {
   return {
     context: {
+      port: {
+        request: () => Promise.resolve(0)
+      },
       userSettings: new UserSettings(userSettingsFixture)
     },
     dialogContext: {
@@ -35,7 +38,13 @@ function defaultProps() {
 
 beforeEach(() => {
   jest.resetModules();
+  jest.useFakeTimers();
 });
+
+afterEach(() => {
+  jest.clearAllTimers();
+});
+
 
 describe('As AD I can generate an ORK', () => {
   /**
@@ -221,5 +230,23 @@ describe('As AD I can generate an ORK', () => {
 
     expect(page.passphraseFieldError).not.toBeNull();
     expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'`);
+  });
+
+  it('As AD I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
+    expect.assertions(1);
+    const props = defaultProps();
+    jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
+    const page = new SelectAccountRecoveryOrganizationKeyPage(props);
+    await waitFor(() => {});
+
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
+    await page.type("This a strong passphrase to test a service not working", page.passphraseField);
+    await waitFor(() => {});
+
+    expect(page.passwordWarningMessage.textContent).toBe("Warning: The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
   });
 });

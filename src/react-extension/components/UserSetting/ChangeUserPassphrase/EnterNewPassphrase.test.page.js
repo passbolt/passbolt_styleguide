@@ -160,6 +160,13 @@ export default class EnterNewPassphrasePage {
   }
 
   /**
+   * Returns the tooltip for service unavailable for powned password
+   */
+  get tootltip() {
+    return this._page.container.querySelector(".password-hints .unavailable .tooltip .tooltip-text");
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -186,8 +193,10 @@ export default class EnterNewPassphrasePage {
   }
 
   /** fill the passphrase input element with data */
-  insertPassphrase(data)  {
+  async insertPassphrase(data)  {
     this.fillInput(this.passphraseInput, data);
+    jest.runAllTimers();
+    await waitFor(() => {});
   }
 
   /** click update */

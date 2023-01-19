@@ -305,15 +305,15 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     return (
       <div className="grid grid-responsive-12">
         <div className="row">
-          <div className="smtp-settings col8 main-column">
+          <div className="third-party-provider-settings smtp-settings col8 main-column">
             <h3><Trans>Email server</Trans></h3>
             {this.isReady() && !settings?.provider &&
               <>
                 <h4 className="no-border"><Trans>Select a provider</Trans></h4>
-                <div className="smtp-provider-list">
+                <div className="provider-list">
                   {SmtpProviders.map(provider =>
-                    <div key={provider.id} className="smtp-provider button" id={provider.id} onClick={() => this.props.adminSmtpSettingsContext.changeProvider(provider)}>
-                      <div className="smtp-provider-logo">
+                    <div key={provider.id} className="provider button" id={provider.id} onClick={() => this.props.adminSmtpSettingsContext.changeProvider(provider)}>
+                      <div className="provider-logo">
                         {provider.id === "other" &&
                           <Icon name="envelope"/>
                         }
@@ -321,7 +321,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                           <img src={`${this.props.context.trustedDomain}/img/third_party/${provider.icon}`}/>
                         }
                       </div>
-                      <p className="smtp-provider-name">{provider.name}</p>
+                      <p className="provider-name">{provider.name}</p>
                     </div>
                   )}
                 </div>

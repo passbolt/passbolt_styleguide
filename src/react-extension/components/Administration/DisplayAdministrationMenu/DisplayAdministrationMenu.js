@@ -98,6 +98,15 @@ class DisplayAdministrationMenu extends React.Component {
     return siteSettings && siteSettings.canIUse('selfRegistration');
   }
 
+  /**
+   * Can I use the sso plugin
+   * @returns {boolean}
+   */
+  get canIUseSso() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('sso');
+  }
+
   get canIUseMfaPolicy() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('mfaPolicies');
@@ -115,6 +124,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleAccountRecoveryClick = this.handleAccountRecoveryClick.bind(this);
     this.handleSmtpSettingsClick = this.handleSmtpSettingsClick.bind(this);
     this.handleSelfRegistrationClick = this.handleSelfRegistrationClick.bind(this);
+    this.handleSsoClick = this.handleSsoClick.bind(this);
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
   }
 
@@ -172,6 +182,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleSelfRegistrationClick() {
     this.props.navigationContext.onGoToAdministrationSelfRegistrationRequested();
+  }
+
+  /**
+   * Handle when the user click on the sso menu
+   */
+  handleSsoClick() {
+    this.props.navigationContext.onGoToAdministrationSsoRequested();
   }
 
 
@@ -236,6 +253,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isAccountRecoverySelected() {
     return AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If SSO menu is selected
+   * @returns {boolean}
+   */
+  isSsoSelected() {
+    return AdministrationWorkspaceMenuTypes.SSO === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -359,6 +384,19 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <a onClick={this.handleSelfRegistrationClick}>
                     <span><Trans>Self Registration</Trans></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseSso &&
+          <li id="sso_menu">
+            <div className={`row  ${this.isSsoSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleSsoClick}>
+                    <span><Trans>Single Sign-On</Trans></span>&nbsp;<span className="beta chips"><Trans>Beta</Trans></span>
                   </a>
                 </div>
               </div>

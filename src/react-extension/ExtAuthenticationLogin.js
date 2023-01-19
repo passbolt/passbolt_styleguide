@@ -22,6 +22,7 @@ import UserSettings from "../shared/lib/Settings/UserSettings";
 import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxMain";
 import Footer from "./components/Common/Footer/Footer";
 import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
+import SsoContextProvider from "./contexts/SsoContext";
 
 /**
  * The login application served by the browser extension.
@@ -127,22 +128,24 @@ class ExtAuthenticationLogin extends Component {
         {this.isReady() &&
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
           <Router>
-            <AuthenticationLoginContextProvider>
-              <div id="container" className="container page login">
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <OrchestrateLoginBoxMain/>
-                  </div>
-                  <div className="login-box-footer">
-                    <OrchestrateLoginBoxFooter/>
+            <SsoContextProvider>
+              <AuthenticationLoginContextProvider>
+                <div id="container" className="container page login">
+                  <div className="content">
+                    <div className="header">
+                      <div className="logo"><span className="visually-hidden">Passbolt</span></div>
+                    </div>
+                    <div className="login-form">
+                      <OrchestrateLoginBoxMain/>
+                    </div>
+                    <div className="login-box-footer">
+                      <OrchestrateLoginBoxFooter/>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <Footer/>
-            </AuthenticationLoginContextProvider>
+                <Footer/>
+              </AuthenticationLoginContextProvider>
+            </SsoContextProvider>
           </Router>
         </TranslationProvider>
         }
@@ -157,4 +160,3 @@ ExtAuthenticationLogin.propTypes = {
 };
 
 export default ExtAuthenticationLogin;
-

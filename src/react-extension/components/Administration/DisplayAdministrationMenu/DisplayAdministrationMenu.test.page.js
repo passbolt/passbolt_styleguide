@@ -118,6 +118,12 @@ export default class DisplayAdministrationMenuPage {
     return this._page.container.querySelector('#self_registration_menu .row .main-cell-wrapper .main-cell a');
   }
 
+  /**
+   * Returns the Single Sign-On menu
+   */
+  get ssoSettings() {
+    return this._page.container.querySelector('#sso_menu .row .main-cell-wrapper .main-cell a');
+  }
 
   /**
    * Returns true if the page object exists in the container
@@ -174,13 +180,13 @@ export default class DisplayAdministrationMenuPage {
     await this.click(this.selfRegistration);
   }
 
+  /** Click on the SSO settings element */
+  async goToSsoSettings() {
+    await this.click(this.ssoSettings);
+  }
+
   /** Click on the Mfa policy settings element */
   async gotoMfaPolicy() {
     await this.click(this.mfaPolicy);
   }
 }
-
-
-
-
-

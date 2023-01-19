@@ -26,9 +26,9 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -78,6 +78,12 @@ class GenerateOrganizationKey extends React.Component {
     };
   }
 
+  /**
+   * Whenever the component is mounted
+   */
+  componentDidMount() {
+    this.pownedService = new PownedService(this.props.context.port);
+  }
   /**
    * Bind callbacks methods
    */
@@ -172,7 +178,6 @@ class GenerateOrganizationKey extends React.Component {
       : this.state.passphraseErrorState;
 
     this.setState({passphrase, passphraseEntropy, passphraseErrorState});
-
     if (passphraseEntropy >= FAIR_STRENGTH_ENTROPY) {
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
     }
@@ -216,7 +221,11 @@ class GenerateOrganizationKey extends React.Component {
 
     let isPwned;
     try {
-      isPwned = await SecretComplexity.ispwned(this.state.passphrase);
+      const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
+      isPwned = result.inDictionary;
+      this.setState({
+        isPwnedServiceAvailable: result.isPwnedServiceAvailable
+      });
     } catch (error) {
       // If the service is unavailable don't block the user journey.
       if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {

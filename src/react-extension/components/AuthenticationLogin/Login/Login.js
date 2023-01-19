@@ -57,7 +57,9 @@ class Login extends Component {
         emptyPassphrase: false, // True if the passphrase is empty
         invalidPassphrase: false, // True if the passphrase is invalid
         invalidGpgKey: false, // True if the gpg key is invalid
-      }
+      },
+      isSsoAvailable: false, // true if the current user has an SSO kit built locally
+      displaySso: false, // true if the UI should display the SSO login button
     };
   }
 
@@ -123,6 +125,9 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
     this.handleToggleRememberMe = this.handleToggleRememberMe.bind(this);
+    this.handleSwitchToSso = this.handleSwitchToSso.bind(this);
+    this.handleSwitchToPassphrase = this.handleSwitchToPassphrase.bind(this);
+    this.handleSignInWithSso = this.handleSignInWithSso.bind(this);
   }
 
   /**
@@ -136,7 +141,14 @@ class Login extends Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.focusOnPassphrase();
+    const isSsoAvailable = Boolean(this.ssoProviderData);
+    this.setState({
+      isSsoAvailable: isSsoAvailable,
+      displaySso: isSsoAvailable,
+    });
+    if (!isSsoAvailable) {
+      this.focusOnPassphrase();
+    }
   }
 
   /**
@@ -251,8 +263,47 @@ class Login extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
-    await this.setState({actions: {processing: true}});
+  toggleProcessing() {
+    this.setState({actions: {processing: !this.state.actions.processing}});
+  }
+
+  /**
+   * Switches the UI to the SSO mode.
+   */
+  handleSwitchToSso(event) {
+    event.preventDefault();
+    this.setState({displaySso: true});
+  }
+
+  /**
+   * Switches the UI to the passphrase mode.
+   */
+  handleSwitchToPassphrase(event) {
+    event.preventDefault();
+    this.setState({displaySso: false});
+  }
+
+  /**
+   * Handle the click on the SSO login button.
+   * @returns {Promise<void>}
+   */
+  async handleSignInWithSso(event) {
+    event.preventDefault();
+    this.setState({actions: {
+      processing: true
+    }});
+    try {
+      await this.props.onSsoSignIn();
+    } catch (e) {
+      this.setState({
+        displaySso: false
+      });
+    }
+    this.setState({
+      actions: {
+        processing: false
+      }
+    });
   }
 
   /**
@@ -268,11 +319,28 @@ class Login extends Component {
   }
 
   /**
+   * Returns true if SSO is enabled and configured for Azure.
+   * @return {bool}
+   */
+  get isAzureSsoEnabled() {
+    return this.ssoProviderData?.id === "azure";
+  }
+
+  /**
+   * Returns the provider information of the current SSO provider configured.
+   * @return {object}
+   */
+  get ssoProviderData() {
+    return this.props.ssoProvider;
+  }
+
+  /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
     const securityToken = this.securityToken;
+    const ssoProviderData = this.ssoProviderData;
 
     return (
       <div className="login">
@@ -281,68 +349,95 @@ class Login extends Component {
           <p className="login-user-name">{this.fullname}</p>
           <p className="login-user-email">{this.username}</p>
         </div>
-
-        <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
-          <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""}`}>
-            <label htmlFor="passphrase">
-              <Trans>Passphrase</Trans>
-            </label>
-            <Password
-              id="passphrase"
-              autoComplete="off"
-              inputRef={this.passphraseInputRef}
-              name="passphrase"
-              placeholder={this.props.t('Passphrase')}
-              value={this.state.passphrase}
-              onChange={this.handleChangePassphrase}
-              disabled={!this.areActionsAllowed}
-              preview={true}
-              securityToken={securityToken}/>
-            {this.state.hasBeenValidated &&
-            <>
-              {this.state.errors.emptyPassphrase &&
-              <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
-              }
-              {this.state.errors.invalidPassphrase &&
-              <div className="invalid-passphrase error-message"><Trans>The passphrase is invalid.</Trans></div>
-              }
-              {this.state.errors.invalidGpgKey &&
-              <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
-              }
-            </>
-            }
-          </div>
-          {this.props.canRememberMe &&
-            <div className="input checkbox">
-              <input
-                id="remember-me"
-                type="checkbox"
-                name="remember-me"
-                value={this.state.rememberMe}
-                onChange={this.handleToggleRememberMe}
-                disabled={!this.areActionsAllowed}/>
-              <label htmlFor="remember-me">
-                <Trans>Remember until signed out.</Trans>
+        {!this.state.displaySso &&
+          <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
+            <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""}`}>
+              <label htmlFor="passphrase">
+                <Trans>Passphrase</Trans>
               </label>
+              <Password
+                id="passphrase"
+                autoComplete="off"
+                inputRef={this.passphraseInputRef}
+                name="passphrase"
+                placeholder={this.props.t('Passphrase')}
+                value={this.state.passphrase}
+                onChange={this.handleChangePassphrase}
+                disabled={!this.areActionsAllowed}
+                preview={true}
+                securityToken={securityToken}/>
+              {this.state.hasBeenValidated &&
+              <>
+                {this.state.errors.emptyPassphrase &&
+                <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
+                }
+                {this.state.errors.invalidPassphrase &&
+                <div className="invalid-passphrase error-message">
+                  <Trans>The passphrase is invalid.</Trans> {this.state.isSsoAvailable && <a onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></a>}
+                </div>
+                }
+                {this.state.errors.invalidGpgKey &&
+                <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
+                }
+              </>
+              }
             </div>
-          }
+            {this.props.canRememberMe &&
+              <div className="input checkbox">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  name="remember-me"
+                  value={this.state.rememberMe}
+                  onChange={this.handleToggleRememberMe}
+                  disabled={!this.areActionsAllowed}/>
+                <label htmlFor="remember-me">
+                  <Trans>Remember until signed out.</Trans>
+                </label>
+              </div>
+            }
 
-          <div className="form-actions">
-            <button
-              type="submit"
-              className={`button primary big full-width ${processingClassName}`}
-              role="button"
-              disabled={this.isProcessing}>
-              {{
-                [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
-                [LoginVariations.ACCOUNT_RECOVERY]: <Trans>Complete recovery</Trans>,
-              }[this.props.displayAs]}
-            </button>
-            <a onClick={this.props.onSecondaryActionClick}>
-              <Trans>Help, I lost my passphrase.</Trans>
-            </a>
-          </div>
-        </form>
+            <div className="form-actions">
+              <button
+                type="submit"
+                className={`button primary big full-width ${processingClassName}`}
+                role="button"
+                disabled={this.isProcessing}>
+                {{
+                  [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
+                  [LoginVariations.ACCOUNT_RECOVERY]: <Trans>Complete recovery</Trans>,
+                }[this.props.displayAs]}
+              </button>
+              {this.state.isSsoAvailable &&
+                <a className="switchToSso" onClick={this.handleSwitchToSso}>
+                  <Trans>Sign in with Single Sign-On.</Trans>
+                </a>
+              }
+              {!this.state.isSsoAvailable &&
+                <a onClick={this.props.onSecondaryActionClick}>
+                  <Trans>Help, I lost my passphrase.</Trans>
+                </a>
+              }
+            </div>
+          </form>
+        }
+        {this.state.displaySso &&
+          <>
+            <div className="form-actions sso-login-form">
+              {this.isAzureSsoEnabled &&
+                <a className={`button sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
+                  <span className="provider-logo">
+                    {ssoProviderData.icon}
+                  </span>
+                  {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
+                </a>
+              }
+              <a onClick={this.handleSwitchToPassphrase}>
+                <Trans>Sign in with my passphrase.</Trans>
+              </a>
+            </div>
+          </>
+        }
       </div>
     );
   }
@@ -358,12 +453,15 @@ Login.propTypes = {
     LoginVariations.ACCOUNT_RECOVERY,
   ]), // Defines how the form should be displayed and behaves
   context: PropTypes.any, // The application context
+  ssoContext: PropTypes.object, // The SSO context
   account: PropTypes.object, // The user account
   userSettings: PropTypes.object, // The user settings
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSignIn: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to sign-in
   onCheckPassphrase: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to check the passphrase
+  onSsoSignIn: PropTypes.func, // Callback to trigger whenever the user wants to sign-in using SSO
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
+  ssoProvider: PropTypes.object, // The SSO provider if any
   t: PropTypes.func, // The translation function
 };
 export default withAppContext(withTranslation('common')(Login));

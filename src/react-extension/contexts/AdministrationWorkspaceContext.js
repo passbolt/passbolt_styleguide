@@ -159,6 +159,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isAccountRecoveryLocation = this.props.location.pathname.includes('account-recovery');
     const isSmtpSettingsLocation = this.props.location.pathname.includes('smtp-settings');
     const isSelfRegistrationLocation = this.props.location.pathname.includes('self-registration');
+    const isSso = this.props.location.pathname.includes('sso');
     const can = {
       save: false,
       test: false,
@@ -179,19 +180,21 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     } else if (isMfaLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA;
     } else if (isUserDirectoryLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.USER_DIRECTORY;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.USER_DIRECTORY;
     } else if (isEmailNotificationLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION;
     } else if (isSubscriptionLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.SUBSCRIPTION;
     } else if (isInternationalizationLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION;
     } else if (isAccountRecoveryLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY;
     } else if (isSmtpSettingsLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.SMTP_SETTINGS;
     } else if (isSelfRegistrationLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
+    } else if (isSso) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
     }
     await this.setState({selectedAdministration, can, must});
   }
@@ -278,4 +281,5 @@ export const AdministrationWorkspaceMenuTypes = {
   ACCOUNT_RECOVERY: 'ACCOUNT-RECOVERY', // Account Recovery administration menu selected
   SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
   SELF_REGISTRATION: 'SELF-REGISTRATION', // Self registration settings administration menu selected
+  SSO: "SSO", // SSO administration menu selected
 };
