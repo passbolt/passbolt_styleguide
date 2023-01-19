@@ -34,7 +34,7 @@ class InsertAppIframe extends Component {
    * @returns {void}
    */
   async loadAppIframe() {
-    const portId = await this.props.port.request("passbolt.port.generate-id");
+    const portId = await this.props.port.request("passbolt.port.generate-id", "App");
     const url = new URL(`${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-app.html`);
     url.searchParams.append("passbolt", portId);
 

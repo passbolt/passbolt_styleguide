@@ -33,7 +33,7 @@ class InsertRecoverAuthenticationIframe extends Component {
    * @returns {void}
    */
   async loadIframe() {
-    const portId = await this.props.port.request("passbolt.port.generate-id");
+    const portId = await this.props.port.request("passbolt.port.generate-id", "Recover");
     this.iframeRef.current.contentWindow.location = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-recover.html?passbolt=${portId}`;
   }
 

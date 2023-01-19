@@ -33,7 +33,7 @@ class InsertLoginAuthenticationIframe extends Component {
    * @returns {void}
    */
   async loadIframe() {
-    const portId = await this.props.port.request("passbolt.port.generate-id");
+    const portId = await this.props.port.request("passbolt.port.generate-id", "Auth");
     this.iframeRef.current.contentWindow.location = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-login.html?passbolt=${portId}`;
   }
 
