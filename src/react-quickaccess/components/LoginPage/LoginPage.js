@@ -204,7 +204,7 @@ class LoginPage extends React.Component {
                 }
               </button>
               {this.state.isSsoAvailable &&
-                <a onClick={this.handleSwitchToSso}>
+                <a className="show-sso-form-button" onClick={this.handleSwitchToSso}>
                   <Trans>Sign in with Single Sign-On.</Trans>
                 </a>
               }
@@ -222,7 +222,7 @@ class LoginPage extends React.Component {
                   {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
                 </a>
               }
-              <a onClick={this.handleSwitchToPassphrase}>
+              <a className="show-passphrase-form-button" onClick={this.handleSwitchToPassphrase}>
                 <Trans>Sign in with my passphrase.</Trans>
               </a>
               {this.state.ssoError &&
