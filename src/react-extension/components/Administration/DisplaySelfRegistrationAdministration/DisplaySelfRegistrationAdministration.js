@@ -25,6 +25,7 @@ import {withAdminSelfRegistration} from "../../../contexts/Administration/Admini
 import useDynamicRefs from "../../../lib/Map/DynamicRef";
 import {withDialog} from "../../../contexts/DialogContext";
 import SelfRegistrationDomainsViewModel from "../../../../shared/models/selfRegistration/SelfRegistrationDomainsViewModel";
+import debounce from "debounce-promise";
 
 /**
  * This component allows to display the Self registration for the administration
@@ -38,6 +39,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.dynamicRefs = useDynamicRefs();
+    this.checkForPublicDomainDebounce = debounce(this.checkForWarnings, 300);
     this.bindCallbacks();
   }
 
@@ -90,7 +92,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     this.handleToggleClicked = this.handleToggleClicked.bind(this);
     this.handleAddRowClick = this.handleAddRowClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleFieldBlur = this.handleFieldBlur.bind(this);
     this.handleDeleteRow = this.handleDeleteRow.bind(this);
   }
 
@@ -241,15 +242,6 @@ class DisplaySelfRegistrationAdministration extends React.Component {
   }
 
   /**
-   * handle blur event
-   */
-  handleFieldBlur(event) {
-    const value = event.target.value;
-    const uuid = event.target.name;
-    this.checkDomainIsProfessional(uuid, value);
-  }
-
-  /**
    * check if domain is a professional one
    */
   checkDomainIsProfessional(uuid, value) {
@@ -272,6 +264,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     const value = event.target.value;
     const uuid = event.target.name;
     this.props.adminSelfRegistrationContext.setAllowedDomains(uuid, value, () => this.validateForm());
+    this.checkForPublicDomainDebounce();
   }
 
   /**
@@ -335,7 +328,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
                 <div key={key} className="input">
                   <div className="domain-row">
                     <input type="text" className="full-width" onChange={this.handleInputChange} id={`input-${key}`} name={key} value={this.allowedDomains.get(key)}
-                      onBlur={this.handleFieldBlur} disabled={!this.hasAllInputDisabled} ref={this.dynamicRefs.setRef(key)} placeholder={this.props.t("domain")} />
+                      disabled={!this.hasAllInputDisabled} ref={this.dynamicRefs.setRef(key)} placeholder={this.props.t("domain")} />
                     <a className={`button button-icon ${this.canDelete() || 'disabled'}`} id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><Icon name="trash"/></a>
                   </div>
                   {this.hasWarnings() && this.state.warnings.get(key) &&
