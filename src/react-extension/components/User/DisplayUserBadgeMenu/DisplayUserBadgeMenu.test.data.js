@@ -25,6 +25,13 @@ export function defaultProps(props) {
         "last_name": "Shaw"
       }
     },
+    mfaContext: {
+      checkMfaChoiceRequired: jest.fn(),
+      isMfaChoiceRequired: jest.fn()
+    },
+    accountRecoveryContext: {
+      isAccountRecoveryChoiceRequired: jest.fn()
+    },
     context: {
       onLogoutRequested: () => {
       },

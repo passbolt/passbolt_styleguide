@@ -15,6 +15,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
+import {MfaPolicyEnumerationTypes} from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import MFAService from "../../shared/services/api/Mfa/MfaService";
+import MfaPolicyService from "../../shared/services/api/mfaPolicy/MfaPolicyService";
 
 
 /**
@@ -27,6 +30,8 @@ export const MfaContext = React.createContext({
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
   clearContext: () => {}, // put the data to its default state value
+  isMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
+  checkMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
 });
 
 /**
@@ -40,6 +45,10 @@ export class MfaContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    if (this.props.context.getApiClientOptions) {
+      this.mfaService = new MFAService(this.props.context.getApiClientOptions());
+      this.mfaPolicyService = new MfaPolicyService(this.props.context.getApiClientOptions());
+    }
   }
 
   /**
@@ -50,6 +59,7 @@ export class MfaContextProvider extends React.Component {
       policy: null,
       processing: true, // Context is processing data
       mfaSettings: null, // Check if settings are defined
+      mfaChoiceRequired: false, // Check if user has to perform mfa
       getPolicy: this.getPolicy.bind(this), // Returns policy for MFA Policy
       findPolicy: this.findPolicy.bind(this), // Find the current MFA Policy
       findMfaSettings: this.findMfaSettings.bind(this), // Find the current MFA settings
@@ -57,6 +67,8 @@ export class MfaContextProvider extends React.Component {
       setProcessing: this.setProcessing.bind(this), // set processing
       hasMfaSettings: this.hasMfaSettings.bind(this), // returns if user has already defined his mfa settings
       clearContext: this.clearContext.bind(this), // put the data to its default state value
+      checkMfaChoiceRequired: this.checkMfaChoiceRequired.bind(this), //return is an user has to perform a mfa or not
+      isMfaChoiceRequired: this.isMfaChoiceRequired.bind(this) //return is an user has to perform a mfa or not
     };
   }
 
@@ -66,7 +78,12 @@ export class MfaContextProvider extends React.Component {
    */
   async findPolicy() {
     this.setProcessing(true);
-    const policy =  await this.props.context.port.request("passbolt.mfa-policy.get-policy");
+    let policy = null;
+    if (this.mfaPolicyService) {
+      policy =  (await this.mfaPolicyService.find()).policy;
+    } else {
+      policy =  await this.props.context.port.request("passbolt.mfa-policy.get-policy");
+    }
     this.setState({policy});
     this.setProcessing(false);
   }
@@ -77,7 +94,12 @@ export class MfaContextProvider extends React.Component {
    */
   async findMfaSettings() {
     this.setProcessing(true);
-    const mfaSettings =  await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
+    let mfaSettings =  null;
+    if (this.mfaService) {
+      mfaSettings = (await this.mfaService.getUserSettings()).MfaAccountSettings;
+    } else {
+      mfaSettings =  await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
+    }
     this.setState({mfaSettings});
     this.setProcessing(false);
   }
@@ -95,6 +117,7 @@ export class MfaContextProvider extends React.Component {
    * @returns {object}
    */
   hasMfaSettings() {
+    if (!this.state.mfaSettings) { return; }
     return Object.values(this.state.mfaSettings).some(value => value);
   }
 
@@ -125,6 +148,29 @@ export class MfaContextProvider extends React.Component {
       policy,
       processing,
     });
+  }
+
+
+  /**
+   * checkMfaChoiceRequired if mfa settings is required
+   * @returns {bool}
+   */
+  async checkMfaChoiceRequired() {
+    await this.findPolicy();
+    if (this.getPolicy() === null || this.getPolicy() !== MfaPolicyEnumerationTypes.MANDATORY) {
+      return false;
+    }
+    await this.findMfaSettings();
+    this.setState({mfaChoiceRequired: !this.hasMfaSettings()});
+  }
+
+
+  /**
+   * Returns true if the current user has to choose for a mfa setting.
+   * @returns {bool}
+   */
+  isMfaChoiceRequired() {
+    return this.state.mfaChoiceRequired;
   }
 
   /**

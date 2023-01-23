@@ -70,7 +70,7 @@ class DisplayAdministrationMfaPolicyActions extends React.Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The email notification settings were updated."));
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The MFA policy settings were updated."));
   }
   /**
    * Handle save operation error.

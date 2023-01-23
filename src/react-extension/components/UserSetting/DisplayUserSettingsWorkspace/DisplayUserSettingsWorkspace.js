@@ -33,6 +33,7 @@ import DisplayUserChooseSecurityToken from "../ChangeUserSecurityToken/ChangeUse
 import TransferToMobile from "../TransferToMobile/TransferToMobile";
 import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings';
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import {withMfa} from '../../../contexts/MFAContext';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -63,6 +64,14 @@ class DisplayUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Return if user has to define mfa.
+   * @returns {bool}
+   */
+  get isMfaChoiceRequired() {
+    return this.props.mfaContext.isMfaChoiceRequired();
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -80,7 +89,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
         </div>
         <div className="panel main">
           <div className="panel left">
-            <NavigateIntoUserSettingsWorkspace hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
+            <NavigateIntoUserSettingsWorkspace hasPendingMfaChoice={this.isMfaChoiceRequired} hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
           </div>
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
@@ -108,6 +117,7 @@ DisplayUserSettingsWorkspace.propTypes = {
   context: PropTypes.any, // The application context
   match: PropTypes.any,
   accountRecoveryContext: PropTypes.object, // The account recovery context
+  mfaContext: PropTypes.object
 };
 
-export default withAppContext(withAccountRecovery(withRouter(DisplayUserSettingsWorkspace)));
+export default withAppContext(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace))));

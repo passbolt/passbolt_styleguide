@@ -14,7 +14,7 @@
 
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 
-const MFA_RESOURCE_NAME = "mfa/settings";
+const MFA_RESOURCE_NAME = "mfa";
 
 /**
  * Model related to the MFA service settings
@@ -27,8 +27,7 @@ class MFAService {
    * @public
    */
   constructor(apiClientOptions) {
-    apiClientOptions.setResourceName(MFA_RESOURCE_NAME);
-    this.apiClient = new ApiClient(apiClientOptions);
+    this.apiClientOptions = apiClientOptions;
   }
 
   /**
@@ -37,6 +36,7 @@ class MFAService {
    * @return {Promise<Array<MFADto>>|null>}
    */
   async findAllSettings() {
+    this.initClient();
     return (await this.apiClient.findAll()).body;
   }
 
@@ -46,7 +46,29 @@ class MFAService {
    * @returns {Promise<MFASettingDto>}
    */
   async save(MFASetting) {
+    this.initClient();
     return (await this.apiClient.create(MFASetting)).body;
+  }
+
+  /**
+   * retrieve settings from the user
+   *
+   * @returns {Promise<*>} Response body
+   * @public
+   */
+  async getUserSettings() {
+    this.initClient("setup/select");
+    return (await this.apiClient.findAll()).body;
+  }
+
+  /**
+   * Initializes the API client with the specified resource name.
+   * @param {string} [path='settings'] - The resource name to use for the API client.
+   * @returns {void}
+   */
+  initClient(path = "settings") {
+    this.apiClientOptions.setResourceName(`${MFA_RESOURCE_NAME}/${path}`);
+    this.apiClient = new ApiClient(this.apiClientOptions);
   }
 }
 

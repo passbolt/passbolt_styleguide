@@ -42,6 +42,7 @@ import AdminUserDirectoryContextProvider from './contexts/Administration/Adminis
 import AdminInternationalizationContextProvider from "./contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
 import AdminSelfRegistrationContextProvider from "./contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 import AdminMfaPolicyContextProvider from "./contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
+import MfaContextProvider from "./contexts/MFAContext";
 
 /**
  * The passbolt application served by the API.
@@ -59,71 +60,73 @@ class ApiApp extends Component {
           {appContext =>
             <TranslationProvider loadingPath={`${appContext.trustedDomain}/locales/{{lng}}/{{ns}}.json`}>
               <AccountRecoveryUserContextProvider accountRecoveryUserService={accountRecoveryUserService}>
-                <ActionFeedbackContextProvider>
-                  <DialogContextProvider>
-                    <AnnouncementContextProvider>
-                      <ContextualMenuContextProvider>
-                        { /* Action Feedback Management */}
-                        <DisplayActionFeedbacks/>
-                        { /* Session expired handler */}
-                        <HandleSessionExpired/>
+                <MfaContextProvider>
+                  <ActionFeedbackContextProvider>
+                    <DialogContextProvider>
+                      <AnnouncementContextProvider>
+                        <ContextualMenuContextProvider>
+                          { /* Action Feedback Management */}
+                          <DisplayActionFeedbacks/>
+                          { /* Session expired handler */}
+                          <HandleSessionExpired/>
 
-                        { /* Announcement Management */}
-                        {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
+                          { /* Announcement Management */}
+                          {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
                         && appContext.siteSettings.canIUse('ee')
                         && <HandleSubscriptionAnnouncement/>}
 
-                        <Router basename={appContext.basename}>
-                          <NavigationContextProvider>
-                            <Switch>
-                              { /* The following routes are not handled by the browser extension application. */}
-                              <Route exact path={[
-                                "/app/administration/subscription",
-                                "/app/administration/account-recovery",
-                              ]}/>
-                              <Route path="/app/administration">
-                                <AdministrationWorkspaceContextProvider>
-                                  <AdminSmtpSettingsContextProvider>
-                                    <ManageContextualMenu/>
-                                    <ManageAnnouncements/>
-                                    <AdminUserDirectoryContextProvider>
-                                      <AdminSelfRegistrationContextProvider>
-                                        <ManageDialogs/>
-                                        <AdminMfaContextProvider>
-                                          <AdminMfaPolicyContextProvider>
-                                            <AdminEmailNotificationContextProvider>
-                                              <AdminInternationalizationContextProvider>
-                                                <AdministrationWorkspace/>
-                                              </AdminInternationalizationContextProvider>
-                                            </AdminEmailNotificationContextProvider>
-                                          </AdminMfaPolicyContextProvider>
-                                        </AdminMfaContextProvider>
-                                      </AdminSelfRegistrationContextProvider>
-                                    </AdminUserDirectoryContextProvider>
-                                  </AdminSmtpSettingsContextProvider>
-                                </AdministrationWorkspaceContextProvider>
-                              </Route>
-                              <Route path={["/app/settings/mfa"]}>
-                                <ManageDialogs/>
-                                <ManageContextualMenu/>
-                                <ManageAnnouncements/>
-                                <div id="container" className="page settings">
-                                  <div id="app" className="app" tabIndex="1000">
-                                    <div className="header first">
-                                      <DisplayMainMenu/>
+                          <Router basename={appContext.basename}>
+                            <NavigationContextProvider>
+                              <Switch>
+                                { /* The following routes are not handled by the browser extension application. */}
+                                <Route exact path={[
+                                  "/app/administration/subscription",
+                                  "/app/administration/account-recovery",
+                                ]}/>
+                                <Route path="/app/administration">
+                                  <AdministrationWorkspaceContextProvider>
+                                    <AdminSmtpSettingsContextProvider>
+                                      <ManageContextualMenu/>
+                                      <ManageAnnouncements/>
+                                      <AdminUserDirectoryContextProvider>
+                                        <AdminSelfRegistrationContextProvider>
+                                          <ManageDialogs/>
+                                          <AdminMfaContextProvider>
+                                            <AdminMfaPolicyContextProvider>
+                                              <AdminEmailNotificationContextProvider>
+                                                <AdminInternationalizationContextProvider>
+                                                  <AdministrationWorkspace/>
+                                                </AdminInternationalizationContextProvider>
+                                              </AdminEmailNotificationContextProvider>
+                                            </AdminMfaPolicyContextProvider>
+                                          </AdminMfaContextProvider>
+                                        </AdminSelfRegistrationContextProvider>
+                                      </AdminUserDirectoryContextProvider>
+                                    </AdminSmtpSettingsContextProvider>
+                                  </AdministrationWorkspaceContextProvider>
+                                </Route>
+                                <Route path={["/app/settings/mfa"]}>
+                                  <ManageDialogs/>
+                                  <ManageContextualMenu/>
+                                  <ManageAnnouncements/>
+                                  <div id="container" className="page settings">
+                                    <div id="app" className="app" tabIndex="1000">
+                                      <div className="header first">
+                                        <DisplayMainMenu/>
+                                      </div>
+                                      <DisplayApiUserSettingsWorkspace/>
                                     </div>
-                                    <DisplayApiUserSettingsWorkspace/>
                                   </div>
-                                </div>
-                              </Route>
-                            </Switch>
-                          </NavigationContextProvider>
-                        </Router>
-                        <Footer/>
-                      </ContextualMenuContextProvider>
-                    </AnnouncementContextProvider>
-                  </DialogContextProvider>
-                </ActionFeedbackContextProvider>
+                                </Route>
+                              </Switch>
+                            </NavigationContextProvider>
+                          </Router>
+                          <Footer/>
+                        </ContextualMenuContextProvider>
+                      </AnnouncementContextProvider>
+                    </DialogContextProvider>
+                  </ActionFeedbackContextProvider>
+                </MfaContextProvider>
               </AccountRecoveryUserContextProvider>
             </TranslationProvider>
           }

@@ -23,11 +23,20 @@ import DisplayUserSettingsWorkspaceBreadcrumb
 import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
 import PropTypes from "prop-types";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
+import {withMfa} from '../../../contexts/MFAContext';
 
 /**
  * This component is a container for all the user settings workspace features
  */
 class DisplayApiUserSettingsWorkspace extends React.Component {
+  /**
+   * Return if user has to define mfa.
+   * @returns {bool}
+   */
+  get isMfaChoiceRequired() {
+    return this.props.mfaContext.isMfaChoiceRequired();
+  }
+
   /**
    * Render the component
    * @return {JSX}
@@ -44,7 +53,7 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
         </div>
         <div className="panel main">
           <div className="panel left">
-            <NavigateIntoUserSettingsWorkspace/>
+            <NavigateIntoUserSettingsWorkspace hasPendingMfaChoice={this.isMfaChoiceRequired}/>
           </div>
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
@@ -58,6 +67,7 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
 
 DisplayApiUserSettingsWorkspace.propTypes = {
   context: PropTypes.any, // The application context provider
+  mfaContext: PropTypes.object
 };
 
-export default withRouter(withAppContext(DisplayApiUserSettingsWorkspace));
+export default withRouter(withAppContext(withMfa(DisplayApiUserSettingsWorkspace)));
