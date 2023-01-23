@@ -48,18 +48,18 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.saveSettingsButton).not.toBeNull();
       expect(page.title.textContent).toBe("MFA Policy");
       expect(page.subtitle.textContent).toBe("Default users multi factor authentication policy");
-      expect(page.description.textContent).toBe("You can choose the default behaviour of multi factor authentication for all users");
+      expect(page.description.textContent).toBe("You can choose the default behaviour of multi factor authentication for all users.");
       //Remember toggle
       expect(page.subtitleRemember.textContent).toBe("Remember a device for a month");
       expect(page.toggleRemember.checked).toBeTruthy();
-      expect(page.toggleRememberLabel.textContent).toBe('Allow “Remember this device for a month“. option during MFA');
+      expect(page.toggleRememberLabel.textContent).toBe('Allow “Remember this device for a month.“ option during MFA.');
       // mandatory policy
       expect(page.mandatoryPolicy.checked).toBeFalsy();
       expect(page.mandatoryPolicyName.textContent).toEqual("Mandatory");
       expect(page.mandatoryPolicyInfo.textContent).toEqual("Users have to enable multi factor authentication. If they don't, they will be reminded every time they log in.");
       // opt-in policy
       expect(page.optInPolicy.value).toBeTruthy();
-      expect(page.optInPolicyName.textContent).toEqual("Optional, Opt-in");
+      expect(page.optInPolicyName.textContent).toEqual("Opt-in (default)");
       expect(page.optInPolicyInfo.textContent).toEqual("Users have the choice to enable multi factor authentication in their profile workspace.");
     });
 

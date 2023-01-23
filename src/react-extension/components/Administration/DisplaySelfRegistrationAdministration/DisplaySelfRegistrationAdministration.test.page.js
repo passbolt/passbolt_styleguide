@@ -246,9 +246,4 @@ export default class DisplaySelfRegistrationAdministrationPage {
   hasFocus(element) {
     return element === document.activeElement;
   }
-
-  /** check if item has focus */
-  hasFocus(element) {
-    return element === document.activeElement;
-  }
 }

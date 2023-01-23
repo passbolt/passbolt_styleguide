@@ -107,7 +107,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
           <form className="form">
             <h4 className="no-border" id="mfa-policy-subtitle"><Trans>Default users multi factor authentication policy</Trans></h4>
             <p id="mfa-policy-description">
-              <Trans>You can choose the default behaviour of multi factor authentication for all users</Trans>
+              <Trans>You can choose the default behaviour of multi factor authentication for all users.</Trans>
             </p>
             <div className="radiolist-alt">
               <div className={`input radio ${settings.policy === "mandatory" ? 'checked' : ''}`} id="mfa-policy-mandatory">
@@ -134,7 +134,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
                   id="mfa-policy-opt-in-radio"
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="mfa-policy-opt-in-radio">
-                  <span className="name"><Trans>Optional, Opt-in</Trans></span>
+                  <span className="name"><Trans>Opt-in (default)</Trans></span>
                   <span className="info">
                     <Trans>Users have the choice to enable multi factor authentication in their profile workspace.</Trans>
                   </span>
@@ -146,7 +146,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
             </h4>
             <span className="input toggle-switch form-element ">
               <input type="checkbox" className="toggle-switch-checkbox checkbox" name="rememberMeForAMonth" onChange={this.handleInputChange}  disabled={this.hasAllInputDisabled()} checked={settings.rememberMeForAMonth} id="remember-toggle-button" />
-              <label htmlFor="remember-toggle-button"><Trans>Allow &ldquo;Remember this device for a month&ldquo;. option during MFA</Trans></label>
+              <label htmlFor="remember-toggle-button"><Trans>Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.</Trans></label>
             </span>
           </form>
         </div>
