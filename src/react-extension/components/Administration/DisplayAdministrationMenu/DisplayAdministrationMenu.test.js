@@ -194,7 +194,6 @@ describe("As AD I can see the administration menu", () => {
       expect(page.ssoSettings).toBeNull();
     });
   });
-
   describe("As a logged in administrator in the administrator workspace, I can see the Mfa Policy settings option in the left-side bar", () => {
     it('If the feature flag is true, the menu should be visible', async() => {
       expect.assertions(4);
