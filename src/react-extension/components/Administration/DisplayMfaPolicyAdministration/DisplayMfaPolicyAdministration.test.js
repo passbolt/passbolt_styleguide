@@ -102,7 +102,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.settingsChangedBanner).not.toBeNull();
 
       await page.clickOnSave();
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The email notification settings were updated.");
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The MFA policy settings were updated.");
       expect(page.settingsChangedBanner).toBeNull();
     });
 

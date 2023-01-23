@@ -23,6 +23,9 @@ export function defaultProps(selectedAdministration) {
         getTrustedDomain: jest.fn()
       }
     },
+    mfaContext: {
+      checkMfaChoiceRequired: jest.fn()
+    },
     administrationWorkspaceContext: {
       selectedAdministration,
       administrationWorkspaceAction: DisplayAdministrationEmailNotificationActions

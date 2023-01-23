@@ -1,3 +1,4 @@
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -11,28 +12,22 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.10.0
  */
-
-import {MfaPolicyEnumerationTypes} from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
-
-export function mockMfaSettings(data = {}) {
-  const settings = {
-    totp: true,
-    duo: false,
-    yubikey: true
+/**
+ * Default props
+ * @returns {any}
+ */
+export function defaultProps(props) {
+  const defaultProps = {
+    hasPendingAccountRecoveryChoice: false,
+    hasPendingMfaChoice: false,
+    context: {
+      onLogoutRequested: () => {
+      },
+      siteSettings: {
+        canIUse: () => true
+      }
+    }
   };
-
-  return Object.assign(settings, data);
+  return Object.assign(defaultProps, props || {});
 }
-
-
-export const noMfaDefined = {
-  totp: false,
-  duo: false,
-  yubikey: false
-};
-
-
-export const MfaPolicy = {
-  policy: MfaPolicyEnumerationTypes.MANDATORY
-};
 

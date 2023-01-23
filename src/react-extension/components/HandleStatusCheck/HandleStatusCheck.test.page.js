@@ -21,7 +21,7 @@ import HandleStatusCheck from "./HandleStatusCheck";
 /**
  * The HandleStatusCheck component represented as a page
  */
-export default class HHandleStatusCheckPage {
+export default class HandleStatusCheckPage {
   /**
    * Default constructor
    * @param props Props to attach

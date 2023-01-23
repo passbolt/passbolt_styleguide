@@ -133,6 +133,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                   <div className="main-cell">
                     <a onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
                       <span><Trans>Multi Factor Authentication</Trans></span>
+                      {this.props.hasPendingMfaChoice &&
+                      <Icon name="exclamation" baseline={true}/>
+                      }
                     </a>
                   </div>
                 </div>
@@ -183,7 +186,8 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   navigationContext: PropTypes.any, // The application navigation context
   history: PropTypes.object,
   location: PropTypes.object,
-  hasPendingAccountRecoveryChoice: PropTypes.bool
+  hasPendingAccountRecoveryChoice: PropTypes.bool,
+  hasPendingMfaChoice: PropTypes.bool
 };
 
 export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace))));
