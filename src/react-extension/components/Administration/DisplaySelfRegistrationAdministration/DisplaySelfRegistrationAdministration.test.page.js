@@ -238,6 +238,8 @@ export default class DisplaySelfRegistrationAdministrationPage {
     element.focus();
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
+    jest.runAllTimers();
+    await waitFor(() => {});
   }
 
   /** check if item has focus */
