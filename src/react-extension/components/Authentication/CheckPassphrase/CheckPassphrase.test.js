@@ -196,13 +196,33 @@ describe("Check passphrase", () => {
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(2));
       page = new CheckPassphrasePage(props);
 
-      expect.assertions(1);
+      expect.assertions(2);
       await page.fillPassphrase('test@test.com');
+      await waitFor(() => {});
+
+      expect(page.warningMessage !== null).toBeTruthy();
+      expect(page.warningMessage.textContent).toEqual("The passphrase is part of an exposed data breach.");
+    });
+
+    it("As a user recovering my account, I should not see that the passphrase I entered has been pwned if it is not the valid pasphrase.", async() => {
+      const expectedError = {name: 'InvalidMasterPasswordError'};
+      const onComplete = jest.fn(() => Promise.reject(expectedError));
+      props = defaultProps({...{displayAs: CheckPassphraseVariations.RECOVER}, onComplete});
+      page = new CheckPassphrasePage(props);
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(2));
+
+      expect.assertions(5);
+      await page.fillPassphrase('test@test.com');
+      expect(page.warningMessage !== null).toBeTruthy();
+      expect(page.warningMessage.textContent).toEqual("The passphrase is part of an exposed data breach.");
+
       await page.verify();
 
       await waitFor(() => {});
-
       expect(props.onComplete).toHaveBeenCalledWith("test@test.com", false);
+      expect(page.warningMessage !== null).toBeFalsy();
+      expect(page.hasInvalidPassphraseError).toBeTruthy();
     });
   });
 });

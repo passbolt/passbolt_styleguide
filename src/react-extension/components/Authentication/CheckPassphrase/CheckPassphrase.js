@@ -22,6 +22,7 @@ import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceEr
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../contexts/AppContext";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
  * The component display variations.
@@ -215,7 +216,8 @@ class CheckPassphrase extends Component {
 
   /**
    * Whenever the gpg key import failed
-   * @param {Error} error The error
+   * @param {Error} error import Icon from '../../../../shared/components/Icons/Icon';
+   *The error
    * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError.
    */
   onCheckFailure(error) {
@@ -262,6 +264,18 @@ class CheckPassphrase extends Component {
   }
 
   /**
+   * Check if warning should be display
+   */
+  shouldDisplayWarningMessage() {
+    const hasMinimumSize = this.state.passphrase?.length > 0;
+    if (this.props.displayAs === CheckPassphraseVariations.RECOVER) {
+      return hasMinimumSize && !this.state.errors.invalidPassphrase;
+    }
+
+    return hasMinimumSize;
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -273,7 +287,10 @@ class CheckPassphrase extends Component {
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
           <div className="form-content">
             <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-              <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
+              <label htmlFor="passphrase"><Trans>Passphrase</Trans>
+                {this.shouldDisplayWarningMessage() && (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary) &&
+                <Icon name="exclamation"/>
+                }</label>
               <Password
                 id="passphrase"
                 autoComplete="off"
@@ -294,7 +311,7 @@ class CheckPassphrase extends Component {
                 }
               </>
               }
-              {this.state.passphrase?.length > 0 &&
+              {this.shouldDisplayWarningMessage() &&
                 <>
                   {!this.state.isPwnedServiceAvailable &&
                     <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
