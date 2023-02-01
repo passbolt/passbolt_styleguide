@@ -247,12 +247,13 @@ describe('As AD I can generate an ORK', () => {
     await page.type("This a strong passphrase to test a service not working", page.passphraseField);
     await waitFor(() => {});
 
-    expect(page.passwordWarningMessage.textContent).toBe("Warning: The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.");
+    expect(page.passwordWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
   });
 
-  it("As an administrator generating an account recovery organization key, I should see the warning banner after submiting the form", async() => {
-    expect.assertions(1);
+  it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned", async() => {
+    expect.assertions(4);
     const props = defaultProps();
+    jest.spyOn(props.context.port, "request").mockImplementation(() => 2);
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
@@ -261,7 +262,17 @@ describe('As AD I can generate an ORK', () => {
         throw new Error("Changes are not available yet");
       }
     });
+    await page.type("Testtestest", page.passphraseField);
+    await waitFor(() => {});
 
-    expect(page.warningImportInstead.textContent).toBe("Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.");
+    expect(page.passwordWarningMessage.textContent).toBe("The passphrase is part of an exposed data breach.");
+    await page.clickOnGenerateButton(() => {
+      if (page.passphraseFieldError === null) {
+        throw new Error("Changes are not available yet");
+      }
+    });
+    expect(page.passwordWarningMessage === null).toBeTruthy();
+    expect(page.passphraseFieldError).not.toBeNull();
+    expect(page.passphraseFieldError.textContent).toBe(`The passphrase should not be part of an exposed data breach.`);
   });
 });
