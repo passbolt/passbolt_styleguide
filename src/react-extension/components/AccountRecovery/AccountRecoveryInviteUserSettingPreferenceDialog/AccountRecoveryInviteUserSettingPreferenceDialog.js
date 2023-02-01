@@ -18,7 +18,6 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
-import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 
 /**
  * The component display variations.
@@ -89,8 +88,7 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
             </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              onClick={this.handleCancel}/>
+            <a className="cancel" role="button" onClick={this.handleCancel}><Trans>Later</Trans></a>
             <FormSubmitButton
               value={this.translate("Continue")}/>
           </div>
