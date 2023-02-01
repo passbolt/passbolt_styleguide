@@ -30,9 +30,7 @@ class ApiError extends Component {
 
   get defaultState() {
     return {
-      isReady: false,
       displayLogs: false,
-      errorDetails: "",
     };
   }
 
@@ -45,33 +43,10 @@ class ApiError extends Component {
   }
 
   /**
-   * ComponentDidMount
-   * Invoked immediately after component is inserted into the tree
-   * @return {void}
-   */
-  componentDidMount() {
-    const errorDetailNode = document.getElementById("api-error-details");
-    const state = {
-      isReady: true,
-      errorDetails: errorDetailNode?.textContent
-    };
-
-    this.setState(state);
-  }
-
-  /**
    * Handles the click on the display logs button.
    */
   handleDisplayLogsClick() {
     this.setState({displayLogs: !this.state.displayLogs});
-  }
-
-  /**
-   * Returns true after the initial load of the page
-   * @returns {boolean}
-   */
-  isReady() {
-    return this.state.isReady;
   }
 
   /**
@@ -80,30 +55,26 @@ class ApiError extends Component {
    */
   render() {
     return (
-      <div id="container" className="container api-error page">
+      <div id="container" className="container api-feedback page">
         <div className="content">
           <div className="header">
             <div className="logo"><span className="visually-hidden">Passbolt</span></div>
           </div>
-          <div className="api-error-card">
-            {this.isReady() &&
-              <>
-                <AnimatedFeedback name="attention"/>
-                <p>
-                  <Trans>Something went wrong!</Trans><br/>
-                  <Trans>Please try again later or contact your administrator.</Trans>
-                </p>
-                <div className="accordion-header">
-                  <a onClick={this.handleDisplayLogsClick}>
-                    <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
-                  </a>
-                </div>
-                {this.state.displayLogs &&
-                  <div className="accordion-content">
-                    <textarea readOnly={true} value={this.state.errorDetails}/>
-                  </div>
-                }
-              </>
+          <div className="api-feedback-card">
+            <AnimatedFeedback name="attention"/>
+            <p>
+              <Trans>Something went wrong!</Trans><br/>
+              <Trans>Please try again later or contact your administrator.</Trans>
+            </p>
+            <div className="accordion-header">
+              <a onClick={this.handleDisplayLogsClick}>
+                <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
+              </a>
+            </div>
+            {this.state.displayLogs &&
+              <div className="accordion-content">
+                <textarea readOnly={true} value={this.props.message}/>
+              </div>
             }
           </div>
         </div>
@@ -113,6 +84,7 @@ class ApiError extends Component {
 }
 
 ApiError.propTypes = {
+  message: PropTypes.string.isRequired, // The message to display on the UI
   t: PropTypes.func // the translation function
 };
 

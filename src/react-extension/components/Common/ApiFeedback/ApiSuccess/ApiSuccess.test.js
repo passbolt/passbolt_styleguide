@@ -9,16 +9,23 @@
  * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.10.0
  */
-import React from "react";
-import ReactDOM from "react-dom";
-import ApiFeedbackOrchestrator from "./components/Common/ApiFeedback/ApiFeedbackOrchestrator";
+import ApiSuccessPage from "./ApiSuccess.test.page";
 
-/**
- * Entry point - Passbolt application served by the API.
- * This entry point will be used to compile the production code see webpack-api.config.js
- */
+beforeEach(() => {
+  jest.resetModules();
+});
 
-const appDomElement = document.createElement("div");
-document.body.appendChild(appDomElement);
-ReactDOM.render(<ApiFeedbackOrchestrator/>, appDomElement);
+describe("ApiSuccess", () => {
+  it('Should display the given message from the content of the page', async() => {
+    expect.assertions(2);
+    const props = {
+      message: "You successfully authenticated."
+    };
+    const page = new ApiSuccessPage(props);
+
+    expect(page.exists()).toBeTruthy();
+    expect(page.message.textContent).toStrictEqual(props.message);
+  });
+});

@@ -9,13 +9,12 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.9.0
+ * @since         3.10.0
  */
-
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import ApiError from "./ApiError";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import ApiFeedbackOrchestrator from "./ApiFeedbackOrchestrator";
 
 /**
  * The ApiErrorPage component represented as a page
@@ -25,14 +24,21 @@ export default class ApiErrorPage {
    * Default constructor
    * @param props Props to attach
    */
-  constructor({errorDetails, ...props}) {
+  constructor({errorMessage, successMessage, ...props}) {
     this._page = render(
       <MockTranslationProvider>
         <>
-          <ApiError {...props}/>
-          <div id="api-error-details" className="visually-hidden">
-            {errorDetails}
-          </div>
+          <ApiFeedbackOrchestrator {...props}/>
+          {errorMessage &&
+            <div id="api-error-details">
+              {errorMessage}
+            </div>
+          }
+          {successMessage &&
+            <div id="api-success">
+              {successMessage}
+            </div>
+          }
         </>
       </MockTranslationProvider>
     );
@@ -78,7 +84,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get panel() {
-    return this.select('.api-error-card');
+    return this.select('.api-feedback-card');
   }
 
   /**
@@ -86,7 +92,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logToggle() {
-    return this.select('.api-error-card .accordion-header a');
+    return this.select('.api-feedback-card .accordion-header a');
   }
 
   /**
@@ -94,7 +100,15 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logDetails() {
-    return this.select('.api-error-card .accordion-content textarea');
+    return this.select('.api-feedback-card .accordion-content textarea');
+  }
+
+  /**
+   * Returns the textarea containing the log details
+   * @return {HTMLElement}
+   */
+  get successMessage() {
+    return this.select('.api-feedback-card p');
   }
 
   /**
