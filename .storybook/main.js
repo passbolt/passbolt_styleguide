@@ -15,7 +15,8 @@ module.exports = {
     }
   ],
   "core": {
-    "builder": "webpack5"
+    "builder": "webpack5",
+    "disableTelemetry": true,
   },
   "staticDirs": ['../src'],
   "env": (config) => ({
