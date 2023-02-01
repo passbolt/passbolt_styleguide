@@ -15,10 +15,10 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import DialogWrapper from '../Common/Dialog/DialogWrapper/DialogWrapper';
-import FormCancelButton from "../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {withAppContext} from "../../contexts/AppContext";
 import {withNavigationContext} from "../../contexts/NavigationContext";
+import {Trans} from 'react-i18next';
 
 
 /**
@@ -84,8 +84,7 @@ class MfaInviteUserSettingsPreferenceDialog extends Component {
             </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <FormCancelButton
-              onClick={this.handleCancel}/>
+            <a className="cancel" role="button" onClick={this.handleCancel}><Trans>Later</Trans></a>
             <FormSubmitButton
               value={this.translate("Go to MFA settings")}/>
           </div>
