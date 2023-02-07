@@ -94,7 +94,7 @@ describe("Quickaccess::LoginPage", () => {
     expect.assertions(1);
 
     const expectedError = new Error("The user closed the popup");
-    expectedError.name = "UserClosedSsoPopUpError";
+    expectedError.name = "UserAbortsOperationError";
 
     const props = defaultPropsWithSsoEnabled({
       ssoContext: {

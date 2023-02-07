@@ -46,6 +46,7 @@ class ManageSsoSettings extends React.Component {
   get defaultState() {
     return {
       loading: true,
+      providers: []
     };
   }
 
@@ -53,8 +54,35 @@ class ManageSsoSettings extends React.Component {
     this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationSsoActions);
     await this.props.adminSsoContext.loadSsoConfiguration();
     this.setState({
-      loading: false
+      loading: false,
+      providers: this.props.adminSsoContext.getSsoConfiguration()?.providers || []
     });
+  }
+
+  componentDidUpdate() {
+    if (!this.props.adminSsoContext.shouldFocusOnError()) {
+      return;
+    }
+
+    const errors = this.props.adminSsoContext.getErrors();
+    const fieldToFocus = this.getFirstFieldInError(errors, ["url", "client_id", "tenant_id", "client_secret", "client_secret_expiry"]);
+    switch (fieldToFocus) {
+      case "url":
+        this.urlInputRef.current.focus();
+        break;
+      case "client_id":
+        this.clientIdInputRef.current.focus();
+        break;
+      case "tenant_id":
+        this.tenantIdInputRef.current.focus();
+        break;
+      case "client_secret":
+        this.clientSecretInputRef.current.focus();
+        break;
+      case "client_secret_expiry":
+        this.clientSecretExpiryInputRef.current.focus();
+        break;
+    }
   }
 
   /**
@@ -69,7 +97,11 @@ class ManageSsoSettings extends React.Component {
   }
 
   createRefs() {
-    this.datePickerRef = React.createRef();
+    this.urlInputRef = React.createRef();
+    this.clientIdInputRef = React.createRef();
+    this.tenantIdInputRef = React.createRef();
+    this.clientSecretInputRef = React.createRef();
+    this.clientSecretExpiryInputRef = React.createRef();
   }
 
   /**
@@ -129,11 +161,21 @@ class ManageSsoSettings extends React.Component {
    * Get the supported SSO providers.
    */
   get supportedSsoProviders() {
-    const supportedProviders = this.props.adminSsoContext.getProvidersList();
-    return supportedProviders.map(provider => ({
-      value: provider.id,
-      label: provider.name
-    }));
+    const providerIdList = this.state.providers;
+    /*
+     * providers must be known on both side (API / Bext) in order to work.
+     * Obviously, the API can't work with an unknown provider.
+     * On Bext side, we can't provide a third-party SSO provider specific form if it's is unknown
+     */
+    return providerIdList.map(providerId => {
+      const providerData = SsoProviders.find(provider => provider.id === providerId);
+      if (providerData && !providerData.disabled) {
+        return {
+          value: providerData.id,
+          label: providerData.name
+        };
+      }
+    });
   }
 
   /**
@@ -142,7 +184,7 @@ class ManageSsoSettings extends React.Component {
   get fullRedirectUrl() {
     const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
     const trustedDomain = this.props.context.userSettings.getTrustedDomain();
-    return `${trustedDomain}${ssoConfig?.data?.redirect_url}`;
+    return `${trustedDomain}/sso/${ssoConfig?.provider}/redirect`;
   }
 
   /**
@@ -152,6 +194,22 @@ class ManageSsoSettings extends React.Component {
    */
   isReady() {
     return this.props.adminSsoContext.isDataReady();
+  }
+
+  /**
+   * Returns the first field with an error (first in the given list)
+   * @param {object} errors a map of erroneous field
+   * @param {Array<string>} fieldPriority the ordered list of field to check
+   * @returns {string|null}
+   */
+  getFirstFieldInError(errors, fieldPriority) {
+    for (let i = 0; i < fieldPriority.length; i++) {
+      const fieldName = fieldPriority[i];
+      if (typeof(errors[fieldName]) !== "undefined") {
+        return fieldName;
+      }
+    }
+    return null;
   }
 
   /**
@@ -219,7 +277,7 @@ class ManageSsoSettings extends React.Component {
                   <hr/>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Login URL</Trans></label>
-                    <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url"
+                    <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
                       value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
                       disabled={this.hasAllInputDisabled()}/>
                     {errors.url &&
@@ -245,7 +303,7 @@ class ManageSsoSettings extends React.Component {
                   <hr/>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Application (client) ID</Trans></label>
-                    <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id"
+                    <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
                       value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
                       disabled={this.hasAllInputDisabled()}/>
                     {errors.client_id &&
@@ -257,7 +315,7 @@ class ManageSsoSettings extends React.Component {
                   </div>
                   <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Directory (tenant) ID</Trans></label>
-                    <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id"
+                    <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id" ref={this.tenantIdInputRef}
                       value={ssoConfig?.data?.tenant_id} onChange={this.handleInputChange} placeholder={this.translate("Directory ID")}
                       disabled={this.hasAllInputDisabled()}/>
                     {errors.tenant_id &&
@@ -278,7 +336,8 @@ class ManageSsoSettings extends React.Component {
                       placeholder={this.translate("Secret")}
                       disabled={this.hasAllInputDisabled()}
                       value={ssoConfig?.data?.client_secret}
-                      preview={true}/>
+                      preview={true}
+                      inputRef={this.clientSecretInputRef}/>
                     {errors.client_secret &&
                       <div className="error-message">{errors.client_secret}</div>
                     }
@@ -289,7 +348,7 @@ class ManageSsoSettings extends React.Component {
                   <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                     <label><Trans>Secret expiry</Trans></label>
                     <div className="button-inline">
-                      <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.data.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"
+                      <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.data.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"  ref={this.clientSecretExpiryInputRef}
                         value={ssoConfig?.data?.client_secret_expiry} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                       <Icon name="calendar"/>
                     </div>

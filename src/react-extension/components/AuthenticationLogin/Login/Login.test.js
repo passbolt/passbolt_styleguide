@@ -20,7 +20,6 @@ import LoginPage from "./Login.test.page";
 import {LoginVariations} from "./Login";
 import {defaultProps} from "./Login.test.data";
 import {waitFor} from "@testing-library/dom";
-import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -178,13 +177,11 @@ describe("Login", () => {
   });
 
   describe("As a registered user I can use the SSO feature to sign in to passbolt", () => {
-    const ssoProvider = SsoProviders.find(provider => provider.id === "azure");
-
     it('As AN I cannot see the SSO login button if I do not have an SSO kit set on my browser profile', async() => {
       expect.assertions(1);
       const props = defaultProps({
         displayAs: LoginVariations.SIGN_IN,
-        ssoProvider: null,
+        isSsoAvailable: false,
       });
 
       const page = new LoginPage(props);
@@ -197,40 +194,31 @@ describe("Login", () => {
       expect.assertions(1);
       const props = defaultProps({
         displayAs: LoginVariations.SIGN_IN,
-        ssoProvider,
+        isSsoAvailable: true,
       });
 
       const page = new LoginPage(props);
       await waitFor(() => {});
 
-      expect(page.azureLoginButton).toBeTruthy();
+      expect(page.secondaryActionLink.textContent).toStrictEqual("Sign in with Single Sign-On.");
     });
 
-    it('As AN I can use the SSO login feature to sign in to Passbolt', async() => {
-      expect.assertions(4);
-
-      let signInPromiseResolver = null;
+    it('As AN with an SSO kit, I can switch to Sign-in with SSO', async() => {
+      expect.assertions(2);
       const props = defaultProps({
+        switchToSsoLogin: jest.fn(),
         displayAs: LoginVariations.SIGN_IN,
-        onSsoSignIn: jest.fn().mockImplementation(() => new Promise(resolve => {
-          signInPromiseResolver = resolve;
-        })),
-        ssoProvider,
+        isSsoAvailable: true,
       });
 
       const page = new LoginPage(props);
       await waitFor(() => {});
 
-      expect(page.azureLoginButton).toBeTruthy();
+      expect(page.secondaryActionLink.textContent).toStrictEqual("Sign in with Single Sign-On.");
 
-      await page.clickOnSsoLogin();
-      expect(page.azureLoginButton.classList.contains('disabled')).toBeTruthy();
+      await page.clickSecondaryActionLink();
 
-      expect(props.onSsoSignIn).toHaveBeenCalledTimes(1);
-
-      await signInPromiseResolver();
-
-      expect(page.azureLoginButton.classList.contains('disabled')).toBeFalsy();
+      expect(props.switchToSsoLogin).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -286,7 +286,7 @@ describe("AuthenticationLoginContextProvider", () => {
 
     it("When the user closes the popup, the state should remain on SIGN_IN and the error should be thrown back", async() => {
       const error = new Error("The user closed the pop-up");
-      error.name = "UserClosedSsoPopUpError";
+      error.name = "UserAbortsOperationError";
 
       const props = defaultProps({
         ssoContext: {

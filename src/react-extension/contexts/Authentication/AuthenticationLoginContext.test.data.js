@@ -61,7 +61,8 @@ export function defaultAuthenticationLoginAppContextWithAccountRecoveryDisabled(
 export function defaultProps(props) {
   const ssoContext = Object.assign({
     loadSsoConfiguration: () => {},
-    runSignInProcess: () => {}
+    runSignInProcess: () => {},
+    hasUserAnSsoKit: () => false
   }, props?.ssoContext);
 
   const defaultProps = {
