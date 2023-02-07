@@ -15,12 +15,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
+import SelfRegistrationService from '../../shared/services/api/selfRegistration/selfRegistrationService';
+import {SelfRegistrationProviderTypes} from '../../shared/models/selfRegistration/SelfRegistrationEnumeration';
+import PassboltServiceUnavailableError from '../../shared/lib/Error/PassboltServiceUnavailableError';
 
 /**
  * The Api triage context.
  * @type {React.Context<object>}
  */
 export const ApiTriageContext = React.createContext({
+  unexpectedError: null, // The unexpected error obejct if any
   state: null, // The current triage workflow state
   onInitializeTriageRequested: () => {
   }, // Whenever the initialization of the triage is requested.
@@ -33,7 +37,7 @@ export const ApiTriageContext = React.createContext({
 /**
  * The related context provider
  */
-class ApiTriageContextProvider extends React.Component {
+export class ApiTriageContextProvider extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -48,6 +52,7 @@ class ApiTriageContextProvider extends React.Component {
    */
   get defaultState() {
     return {
+      unexpectedError: null, // The unexpected error obejct if any
       state: ApiTriageContextState.INITIAL_STATE,
       onInitializeTriageRequested: this.onInitializeTriageRequested.bind(this),
       onTriageRequested: this.onTriageRequested.bind(this),
@@ -90,14 +95,20 @@ class ApiTriageContextProvider extends React.Component {
    */
   async handleTriageError(error, username) {
     const userNotFound = error.data && error.data.code === 404;
-    if (userNotFound) {
-      const isRegistrationPublic = this.props.context.siteSettings.registrationPublic;
-      if (isRegistrationPublic) {
-        this.setState({username, state: ApiTriageContextState.NAME_STATE});
-      } else {
-        this.setState({username, state: ApiTriageContextState.ERROR_STATE});
+    let nextState = ApiTriageContextState.ERROR_STATE;
+    if (userNotFound && this.canIUseSelfRegistrationSettings) {
+      try {
+        await this.isDomainAllowedToSelfRegister(username);
+        nextState = ApiTriageContextState.NAME_STATE;
+      } catch (exception) {
+        const notAllowedErrorResponse = exception.data && (exception.data.code === 400 || exception.data.code === 403);
+        if (!notAllowedErrorResponse) {
+          this.setState({unexpectedError: new PassboltServiceUnavailableError(exception.message)});
+          nextState = ApiTriageContextState.UNEXPECTED_ERROR_STATE;
+        }
       }
     }
+    this.setState({username, state: nextState});
     /*
      * @todo handle unexpected error.
      * else {
@@ -122,12 +133,7 @@ class ApiTriageContextProvider extends React.Component {
         last_name: lastName
       }
     };
-    const apiClientOptions = this.props.context.getApiClientOptions()
-      .setResourceName("users/register");
-    const apiClient = new ApiClient(apiClientOptions);
-    await apiClient.create(registrationDto)
-      .then(this.handleRegistrationSuccess.bind(this))
-      .catch(this.handleRegistrationError.bind(this));
+    this.register(registrationDto);
   }
 
   /**
@@ -143,6 +149,40 @@ class ApiTriageContextProvider extends React.Component {
    */
   async handleRegistrationError() {
     this.setState({state: ApiTriageContextState.ERROR_STATE});
+  }
+
+  /**
+   * Can I use the self registration settings plugin
+   * @returns {boolean}
+   */
+  get canIUseSelfRegistrationSettings() {
+    return this.props.context.siteSettings.canIUse('selfRegistration');
+  }
+
+  /**
+   * Check if a domain is allowed to self-register
+   * @param {string} username - The email address to check
+   * @returns {Promise<void>} - Resolves if the domain is allowed, rejects otherwise
+   */
+  async isDomainAllowedToSelfRegister(username) {
+    const apiClientOptions = this.props.context.getApiClientOptions();
+    const selfRegistrationService = new SelfRegistrationService(apiClientOptions);
+    const payload = {email: username, provider: SelfRegistrationProviderTypes.EMAILDOMAINS};
+    await selfRegistrationService.checkDomainAllowed(payload);
+  }
+
+  /**
+   * Register a new user
+   * @param {Object} registrationDto - The registration data
+   * @returns {Promise<void>} - Resolves if the registration is successful, rejects otherwise
+   */
+  async register(registrationDto) {
+    const apiClientOptions = this.props.context.getApiClientOptions()
+      .setResourceName("users/register");
+    const apiClient = new ApiClient(apiClientOptions);
+    await apiClient.create(registrationDto)
+      .then(this.handleRegistrationSuccess.bind(this))
+      .catch(this.handleRegistrationError.bind(this));
   }
 
   /**
@@ -192,4 +232,5 @@ export const ApiTriageContextState = {
   CHECK_MAILBOX_STATE: 'Check mailbox state',
   NAME_STATE: 'Enter name state',
   NAME_ERROR: 'Error state',
+  UNEXPECTED_ERROR_STATE: 'Unexpected error state',
 };

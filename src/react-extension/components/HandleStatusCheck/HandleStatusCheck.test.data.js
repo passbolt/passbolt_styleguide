@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultAppContext} from "../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -23,7 +23,14 @@ export function defaultProps(data = {}) {
 
   const defaultData = {
     dialogContext: {
-      open: jest.fn()
+      open: jest.fn(),
+      dialogs: []
+    },
+    mfaContext: {
+      findPolicy: jest.fn(),
+      getPolicy: jest.fn(),
+      findMfaSettings: jest.fn(),
+      hasMfaSettings: jest.fn()
     },
     context: context
   };

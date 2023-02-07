@@ -9,26 +9,25 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.6.0
+ * @since         3.10.0
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {Trans, withTranslation} from "react-i18next";
-import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
-import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../contexts/AppContext";
-import {withRouter} from "react-router-dom";
+import {withTranslation} from "react-i18next";
+import DialogWrapper from '../Common/Dialog/DialogWrapper/DialogWrapper';
+import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
+import {withAppContext} from "../../contexts/AppContext";
+import {withNavigationContext} from "../../contexts/NavigationContext";
+import {Trans} from 'react-i18next';
+
 
 /**
  * The component display variations.
  * @type {Object}
  */
-export const PolicyVariations = {
-  MANDATORY: 'mandatory',
-  OPT_OUT: 'opt-out'
-};
 
-class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
+
+class MfaInviteUserSettingsPreferenceDialog extends Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
@@ -48,15 +47,15 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
+    await this.props.navigationContext.onGoToUserSettingsMfaRequested();
     this.props.onClose();
-    await this.props.history.push({pathname: "/app/settings/account-recovery/edit"});
   }
 
   /**
    * Handle click on cancel buttons
    */
   async handleCancel() {
-    await this.props.context.port.request('passbolt.account-recovery.postpone-user-setting-invitation');
+    await this.props.context.port.request('passbolt.mfa-policy.postpone-user-setting-invitation');
     this.props.onClose();
   }
 
@@ -75,22 +74,19 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
   render() {
     return (
       <DialogWrapper
-        title={`${this.translate("Account recovery enrollment")}`}
+        title={`${this.translate("Enable Multi Factor Authentication")}`}
         onClose={this.handleCancel}
-        className="recovery-account-policy-dialog">
+        className="mfa-policy-dialog" >
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
             <p>
-              {{
-                [PolicyVariations.MANDATORY]: <Trans>It is mandatory to share securely a copy of your private key with your organization recovery contacts. Would you like to continue?</Trans>,
-                [PolicyVariations.OPT_OUT]: <Trans>It is recommended to share securely a copy of your private key with your organization recovery contacts. Would you like to continue?</Trans>,
-              }[this.props.policy]}
+              Your administrator requires you to configure a Multi Factor Authentication method for your account.
             </p>
           </div>
           <div className="submit-wrapper clearfix">
             <a className="cancel" role="button" onClick={this.handleCancel}><Trans>Later</Trans></a>
             <FormSubmitButton
-              value={this.translate("Continue")}/>
+              value={this.translate("Go to MFA settings")}/>
           </div>
         </form>
       </DialogWrapper>
@@ -98,11 +94,11 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
   }
 }
 
-AccountRecoveryInviteUserSettingPreferenceDialog.propTypes = {
+MfaInviteUserSettingsPreferenceDialog.propTypes = {
   context: PropTypes.object, // The application context
-  policy: PropTypes.string, // The organization policy details
+  navigationContext: PropTypes.any, // The application navigation context
   onClose: PropTypes.func, // The close callback
   t: PropTypes.func, // The translation function
   history: PropTypes.object, // The navigation history
 };
-export default withRouter(withAppContext(withTranslation("common")(AccountRecoveryInviteUserSettingPreferenceDialog)));
+export default withNavigationContext(withAppContext(withTranslation("common")(MfaInviteUserSettingsPreferenceDialog)));

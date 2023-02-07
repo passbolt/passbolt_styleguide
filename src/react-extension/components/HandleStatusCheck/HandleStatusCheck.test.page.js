@@ -14,14 +14,14 @@
 import {render} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
-import AccountRecoveryUserContextProvider from "../../../contexts/AccountRecoveryUserContext";
-import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import HandleAccountRecoveryStatusCheck from "./HandleAccountRecoveryStatusCheck";
+import AccountRecoveryUserContextProvider from "../../contexts/AccountRecoveryUserContext";
+import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
+import HandleStatusCheck from "./HandleStatusCheck";
 
 /**
- * The HandleAccountRecoveryStatusCheck component represented as a page
+ * The HandleStatusCheck component represented as a page
  */
-export default class HandleAccountRecoveryStatusCheckPage {
+export default class HandleStatusCheckPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -31,7 +31,7 @@ export default class HandleAccountRecoveryStatusCheckPage {
       <AccountRecoveryUserContextProvider accountRecoveryUserService={mockedAccountRecoveryUserService} context={props.context}>
         <MockTranslationProvider>
           <Router>
-            <HandleAccountRecoveryStatusCheck {...props}/>
+            <HandleStatusCheck {...props}/>
           </Router>
         </MockTranslationProvider>
       </AccountRecoveryUserContextProvider>
