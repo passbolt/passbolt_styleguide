@@ -54,12 +54,11 @@ describe("ManageSsoSettings", () => {
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Azure settings', async() => {
       expect.assertions(15);
       const settingsData = withAzureSsoSettings();
-      const providerDefaultConfig = SsoProviders.find(provider => provider.id === settingsData.provider);
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
 
-      const exepectedRedirectUrl = `${props.context.userSettings.getTrustedDomain()}${providerDefaultConfig.defaultConfig.redirect_url}`;
+      const exepectedRedirectUrl = `${props.context.userSettings.getTrustedDomain()}/sso/${settingsData.provider}/redirect`;
 
       const page = new ManageSsoSettingsPage(props);
 

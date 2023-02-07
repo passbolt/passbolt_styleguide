@@ -22,6 +22,7 @@ export const AuthenticationLoginWorkflowStates = {
   ACCEPT_NEW_SERVER_KEY: "Accept new server key",
   LOADING: "Loading",
   SIGN_IN: "Sign in",
+  SIGN_IN_SSO: "Sign in SSO",
   SIGN_IN_ERROR: "Sign in error",
   SIGNING_IN: "Signing in",
   INITIATE_ACCOUNT_RECOVERY: "Initiate account recovery",
@@ -62,6 +63,8 @@ export const AuthenticationLoginContext = React.createContext({
   }, // Handles the SSO login error
   getSsoProvider: () => {
   }, // Returns the current SSO provider if any
+  isSsoAvailable: () => {
+  }, // Returns true is the SSO feature is enabled
 });
 
 /**
@@ -99,6 +102,9 @@ export class AuthenticationLoginContextProvider extends React.Component {
       goToValidatePassphrase: this.goToValidatePassphrase.bind(this), // Whenever the users wants to go to the validate passphrase.
       handleSsoLoginError: this.handleSsoLoginError.bind(this), // Handles the SSO login error
       getSsoProvider: this.getSsoProvider.bind(this), // Returns the current SSO provider if any
+      isSsoAvailable: this.isSsoAvailable.bind(this), // Returns the current SSO provider if any
+      handleSwitchToPassphrase: this.handleSwitchToPassphrase.bind(this), // Whenever the user want to sign-in via passphrase
+      handleSwitchToSso: this.handleSwitchToSso.bind(this), // Whenever the user want to sign-in via sso
     };
   }
 
@@ -125,9 +131,14 @@ export class AuthenticationLoginContextProvider extends React.Component {
   async verifyServerKey() {
     try {
       await this.props.context.port.request('passbolt.auth.verify-server-key');
-      await this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
     } catch (error) {
       await this.handleVerifyServerKeyFailure(error);
+      return;
+    }
+    if (this.isSsoAvailable()) {
+      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
+    } else {
+      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
     }
   }
 
@@ -191,12 +202,29 @@ export class AuthenticationLoginContextProvider extends React.Component {
       await this.props.ssoContext.runSignInProcess();
       this.setState({state: AuthenticationLoginWorkflowStates.SIGNING_IN});
     } catch (e) {
-      if (e.name === "UserClosedSsoPopUpError") {
+      if (e.name === "UserAbortsOperationError") {
+        this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
         throw e; // the error needs to be sent to Login.js in order to display the right form
       } else {
         this.handleSsoLoginError(e);
       }
     }
+  }
+
+  /**
+   * Whenever the user want to sign-in via SSO
+   * @returns {Promise<void>}
+   */
+  async handleSwitchToSso() {
+    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
+  }
+
+  /**
+   * Whenever the user want to sign-in via passphrase
+   * @returns {Promise<void>}
+   */
+  async handleSwitchToPassphrase() {
+    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
   }
 
   /**
@@ -272,6 +300,14 @@ export class AuthenticationLoginContextProvider extends React.Component {
       return null;
     }
     return SsoProviders.find(provider => provider.id === ssoProvider);
+  }
+
+  /**
+   * Returns true if the user has an SSO kit registered locally
+   * @returns {boolean}
+   */
+  isSsoAvailable() {
+    return this.props.ssoContext.hasUserAnSsoKit();
   }
 
   /**

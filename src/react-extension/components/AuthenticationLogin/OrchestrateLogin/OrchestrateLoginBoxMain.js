@@ -13,6 +13,7 @@
  */
 import React, {Component} from "react";
 import Login from "../Login/Login";
+import SsoLogin from "../SsoLogin/SsoLogin";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
@@ -41,10 +42,18 @@ class OrchestrateLoginBoxMain extends Component {
           canRememberMe={this.props.context.siteSettings.hasRememberMeUntilILogoutOption}
           userSettings={this.props.context.userSettings}
           onSignIn={this.props.authenticationLoginContext.signIn}
+          isSsoAvailable={this.props.authenticationLoginContext.isSsoAvailable()}
           onCheckPassphrase={this.props.authenticationLoginContext.checkPassphrase}
+          onSecondaryActionClick={this.props.authenticationLoginContext.needHelpCredentialsLost}
+          switchToSsoLogin={this.props.authenticationLoginContext.handleSwitchToSso}
+        />;
+      case AuthenticationLoginWorkflowStates.SIGN_IN_SSO:
+        return <SsoLogin
+          userSettings={this.props.context.userSettings}
           onSecondaryActionClick={this.props.authenticationLoginContext.needHelpCredentialsLost}
           onSsoSignIn={this.props.authenticationLoginContext.handleSsoSignIn}
           ssoProvider={this.props.authenticationLoginContext.getSsoProvider()}
+          switchToPassphraseLogin={this.props.authenticationLoginContext.handleSwitchToPassphrase}
         />;
       case AuthenticationLoginWorkflowStates.ACCEPT_NEW_SERVER_KEY:
         return <AcceptLoginServerKeyChange
