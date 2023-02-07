@@ -202,10 +202,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
       await this.props.ssoContext.runSignInProcess();
       this.setState({state: AuthenticationLoginWorkflowStates.SIGNING_IN});
     } catch (e) {
-      if (e.name === "UserAbortsOperationError") {
-        this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
-        throw e; // the error needs to be sent to Login.js in order to display the right form
-      } else {
+      if (e.name !== "UserAbortsOperationError") {
         this.handleSsoLoginError(e);
       }
     }
