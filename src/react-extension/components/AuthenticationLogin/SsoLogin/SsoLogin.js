@@ -112,18 +112,19 @@ class SsoLogin extends Component {
    */
   async handleSignInWithSso(event) {
     event.preventDefault();
-    this.setState({actions: {
-      processing: true
-    }});
-    try {
-      await this.props.onSsoSignIn();
-    } catch (e) {
-      this.setState({
-        actions: {
-          processing: false
-        }
-      });
-    }
+    this.setState({
+      actions: {
+        processing: true
+      }
+    });
+
+    await this.props.onSsoSignIn();
+
+    this.setState({
+      actions: {
+        processing: false
+      }
+    });
   }
 
   /**

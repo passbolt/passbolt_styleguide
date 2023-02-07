@@ -90,7 +90,7 @@ describe("Quickaccess::LoginPage", () => {
     expect(page.switchToSsoFormButton).toBeFalsy();
   });
 
-  it(`As AN when I try to sign from the quickaccess via SSO, If I close the SSO login popup, the quickaccess switches to passphrase login automatically`, async() => {
+  it(`As AN when I try to sign from the quickaccess via SSO, If I close the SSO login popup, the quickaccess should stay on the SSO form`, async() => {
     expect.assertions(1);
 
     const expectedError = new Error("The user closed the popup");
@@ -107,7 +107,7 @@ describe("Quickaccess::LoginPage", () => {
 
     await page.clickOnSsoLoginButton();
 
-    expect(page.passphraseInput).toBeTruthy();
+    expect(page.passphraseInput).toBeFalsy();
   });
 
   it(`As AN when I attempt to sign in from the quickaccess via SSO and an error occurs after a successful SSO third party login, I can see an error message with the error details`, async() => {

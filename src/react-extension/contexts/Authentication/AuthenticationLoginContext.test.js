@@ -284,7 +284,7 @@ describe("AuthenticationLoginContextProvider", () => {
       expect(contextProvider.state.error.message).toEqual(error.message);
     });
 
-    it("When the user closes the popup, the state should remain on SIGN_IN and the error should be thrown back", async() => {
+    it("When the user closes the popup, the state should remain on SIGN_IN_SSO", async() => {
       const error = new Error("The user closed the pop-up");
       error.name = "UserAbortsOperationError";
 
@@ -297,16 +297,13 @@ describe("AuthenticationLoginContextProvider", () => {
       const contextProvider = new AuthenticationLoginContextProvider(props);
       mockComponentSetState(contextProvider);
       await contextProvider.componentDidMount();
+      contextProvider.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
 
-      expect.assertions(2);
+      expect.assertions(1);
 
-      try {
-        await contextProvider.handleSsoSignIn();
-      } catch (e) {
-        expect(e).toStrictEqual(error);
-      }
+      await contextProvider.handleSsoSignIn();
 
-      expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.SIGN_IN);
+      expect(contextProvider.state.state).toEqual(AuthenticationLoginWorkflowStates.SIGN_IN_SSO);
     });
   });
 });
