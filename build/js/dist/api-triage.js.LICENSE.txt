@@ -1,5 +1,5 @@
 /*!*************************************************************!*\
-  !*** ./src/react-extension/ApiTriage.entry.js + 27 modules ***!
+  !*** ./src/react-extension/ApiTriage.entry.js + 30 modules ***!
   \*************************************************************/
 
 /**
