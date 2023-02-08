@@ -133,7 +133,7 @@ class ContextualMenuWrapper extends Component {
     const contextMenuHeight = this.elementRef.current.offsetHeight;
     const isWindowExceeded = this.props.top + contextMenuHeight > window.innerHeight;
     if (isWindowExceeded) {
-      this.setState({positionY: window.innerHeight - contextMenuHeight})
+      this.setState({positionY: window.innerHeight - contextMenuHeight});
       this.elementRef.current.style.zIndex = 1000;
     }
   }
