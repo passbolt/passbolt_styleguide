@@ -247,7 +247,7 @@ describe('As AD I can generate an ORK', () => {
     await page.type("This a strong passphrase to test a service not working", page.passphraseField);
     await waitFor(() => {});
 
-    expect(page.passwordWarningMessage.textContent).toBe("Warning: The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.");
+    expect(page.passwordWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.");
   });
 
   it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned", async() => {

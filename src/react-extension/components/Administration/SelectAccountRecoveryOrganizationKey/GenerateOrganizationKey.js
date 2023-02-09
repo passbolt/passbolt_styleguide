@@ -455,7 +455,7 @@ class GenerateOrganizationKey extends React.Component {
             {this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated &&
                 <>
                   {!this.state.isPwnedServiceAvailable &&
-                    <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
+                    <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
                   }
                   {this.state.passphraseErrorState === PASSPHRASE_ERROR_STATES.PWNED &&
                     <div className="password warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
