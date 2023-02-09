@@ -14,7 +14,7 @@
 
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 
-const SELF_REGISTRATION_SETTINGS_RESOURCE_NAME = "self-registration/settings";
+const SELF_REGISTRATION_SETTINGS_RESOURCE_NAME = "self-registration";
 
 /**
  * Model related to the Self registration settings API
@@ -27,8 +27,7 @@ class SelfRegistrationService {
    * @public
    */
   constructor(apiClientOptions) {
-    apiClientOptions.setResourceName(SELF_REGISTRATION_SETTINGS_RESOURCE_NAME);
-    this.apiClient = new ApiClient(apiClientOptions);
+    this.apiClientOptions = apiClientOptions;
   }
 
   /**
@@ -37,6 +36,7 @@ class SelfRegistrationService {
    * @return {Promise<SelfRegistrationDto>}
    */
   async find() {
+    this.initClient();
     const selfRegistrationSettings = await this.apiClient.findAll();
     const settings = selfRegistrationSettings?.body;
     return settings;
@@ -48,6 +48,7 @@ class SelfRegistrationService {
    * @return {Promise<SelfRegistrationDto>}
    */
   async save(dto) {
+    this.initClient();
     await this.apiClient.create(dto);
   }
 
@@ -56,7 +57,28 @@ class SelfRegistrationService {
    * @param  {String} id
    */
   async delete(id) {
+    this.initClient();
     await this.apiClient.delete(id);
+  }
+
+  /**
+   * checks if a domain is allowed for self registration.
+   * @param {string} domain - The domain to check.
+   * @returns {Promise} - A promise that resolves when the domain has been checked.
+   */
+  async checkDomainAllowed(payload) {
+    this.initClient("dry-run");
+    await this.apiClient.create(payload);
+  }
+
+  /**
+   * Initializes the API client with the specified resource name.
+   * @param {string} [path='settings'] - The resource name to use for the API client.
+   * @returns {void}
+   */
+  initClient(path = "settings") {
+    this.apiClientOptions.setResourceName(`${SELF_REGISTRATION_SETTINGS_RESOURCE_NAME}/${path}`);
+    this.apiClient = new ApiClient(this.apiClientOptions);
   }
 }
 

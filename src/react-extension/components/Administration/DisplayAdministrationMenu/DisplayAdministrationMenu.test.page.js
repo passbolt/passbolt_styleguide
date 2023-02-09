@@ -61,6 +61,14 @@ export default class DisplayAdministrationMenuPage {
     return this._page.container.querySelector('#mfa_menu .row .main-cell-wrapper .main-cell a');
   }
 
+
+  /**
+   * Returns the mfa policy menu
+   */
+  get mfaPolicy() {
+    return this._page.container.querySelector('#mfa_policy_menu .row .main-cell-wrapper .main-cell a');
+  }
+
   /**
    * Returns the user directory menu
    */
@@ -175,5 +183,10 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the SSO settings element */
   async goToSsoSettings() {
     await this.click(this.ssoSettings);
+  }
+
+  /** Click on the Mfa policy settings element */
+  async gotoMfaPolicy() {
+    await this.click(this.mfaPolicy);
   }
 }

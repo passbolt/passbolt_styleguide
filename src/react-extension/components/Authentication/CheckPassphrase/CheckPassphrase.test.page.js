@@ -80,6 +80,13 @@ export default class CheckPassphrasePage {
   }
 
   /**
+   * Returns the warning message for powned password
+   */
+  get warningMessage() {
+    return this._page.container.querySelector('.warning-message');
+  }
+
+  /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {

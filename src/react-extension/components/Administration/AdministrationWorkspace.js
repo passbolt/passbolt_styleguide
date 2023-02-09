@@ -38,6 +38,7 @@ import ManageSmtpAdministrationSettings
   from "./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings.js";
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
+import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -46,6 +47,14 @@ class AdministrationWorkspace extends Component {
    */
   isMfaSelected() {
     return AdministrationWorkspaceMenuTypes.MFA === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If MFA policy menu is selected
+   * @returns {boolean}
+   */
+  isMfaPolicySelected() {
+    return AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -140,6 +149,9 @@ class AdministrationWorkspace extends Component {
                 <div className="grid grid-responsive-12">
                   {this.isMfaSelected() &&
                   <DisplayMfaAdministration/>
+                  }
+                  {this.isMfaPolicySelected() &&
+                  <DisplayMfaPolicyAdministration/>
                   }
                   {this.isUserDirectorySelected() &&
                   <DisplayUserDirectoryAdministration/>

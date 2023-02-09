@@ -73,7 +73,6 @@ class GenerateOrganizationKey extends React.Component {
       passphraseWarning: "",
       passphraseEntropy: null,
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
-      isPwned: false,
       isPwnedServiceAvailable: true // True if the isPwned service can be reached
     };
   }
@@ -177,15 +176,23 @@ class GenerateOrganizationKey extends React.Component {
       ? PASSPHRASE_ERROR_STATES.NONE
       : this.state.passphraseErrorState;
 
-    this.setState({passphrase, passphraseEntropy, passphraseErrorState});
-    if (passphraseEntropy >= FAIR_STRENGTH_ENTROPY) {
+    this.setState({passphrase, passphraseEntropy, passphraseErrorState}, () => this.checkPassphraseValidity());
+  }
+
+
+  /**
+   * Validate the passphrase for powned password or validation entropy.
+   * @return {Promise<boolean>}
+   */
+  async checkPassphraseValidity() {
+    if (this.state.passphrase.length > 0) {
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
     }
 
     if (this.state.hasAlreadyBeenValidated) {
-      await this.validatePassphraseInput(passphrase, passphraseEntropy);
+      await this.validatePassphraseInput(this.state.passphrase, this.state.passphraseEntropy);
     } else {
-      const hasResourcePassphraseMaxLength = passphrase.length >= RESOURCE_PASSWORD_MAX_LENGTH;
+      const hasResourcePassphraseMaxLength = this.state.passphrase.length >= RESOURCE_PASSWORD_MAX_LENGTH;
       const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
       const passphraseWarning = hasResourcePassphraseMaxLength ? warningMessage : '';
       this.setState({passphraseWarning});
@@ -241,11 +248,10 @@ class GenerateOrganizationKey extends React.Component {
     let passphraseErrorState = this.state.passphraseErrorState;
     let passphraseEntropy = this.state.passphraseEntropy;
     if (isPwned) {
-      passphraseErrorState = PASSPHRASE_ERROR_STATES.PWNED;
       passphraseEntropy = 0;
+      passphraseErrorState = PASSPHRASE_ERROR_STATES.PWNED;
     }
-
-    this.setState({isPwned, passphraseEntropy, passphraseErrorState});
+    this.setState({passphraseEntropy, passphraseErrorState});
     return isPwned;
   }
 
@@ -291,9 +297,10 @@ class GenerateOrganizationKey extends React.Component {
     if (this.state.processing) {
       return;
     }
+    this.setState({hasAlreadyBeenValidated: true});
 
     await this.isPwndProcessingPromise;
-    if (this.state.isPwned) {
+    if (this.state.passphraseErrorState === PASSPHRASE_ERROR_STATES.PWNED) {
       return;
     }
 
@@ -304,7 +311,6 @@ class GenerateOrganizationKey extends React.Component {
    * Save the changes.
    */
   async save() {
-    this.setState({hasAlreadyBeenValidated: true});
     this.toggleProcessing();
 
     if (!await this.validate()) {
@@ -366,6 +372,15 @@ class GenerateOrganizationKey extends React.Component {
   }
 
   /**
+   * check if passphrase has warnings to display
+   * @returns {function(...[*]=)}
+   */
+  get isPassphraseWarning() {
+    return this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated &&
+    (!this.state.isPwnedServiceAvailable || this.state.passphraseErrorState === PASSPHRASE_ERROR_STATES.PWNED);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -414,10 +429,10 @@ class GenerateOrganizationKey extends React.Component {
               className="fluid" type="text"
               autoComplete="off" disabled={true} />
           </div>
-          <div className={`input-password-wrapper input required ${this.state.passphraseErrorState !== PASSPHRASE_ERROR_STATES.NONE ? "error" : ""}`}>
+          <div className={`input-password-wrapper input required ${this.state.passphraseErrorState !== PASSPHRASE_ERROR_STATES.NONE && this.state.hasAlreadyBeenValidated ? "error" : ""}`}>
             <label htmlFor="generate-organization-key-form-password">
               <Trans>Organization key passphrase</Trans>
-              {this.state.passphraseWarning &&
+              {this.isPassphraseWarning &&
                 <Icon name="exclamation"/>
               }
             </label>
@@ -428,7 +443,7 @@ class GenerateOrganizationKey extends React.Component {
               onChange={this.handlePassphraseChange} disabled={this.hasAllInputDisabled()}
               inputRef={this.passphraseInputRef}/>
             <PasswordComplexity entropy={this.state.passphraseEntropy}/>
-            {this.state.passphraseErrorState !== PASSPHRASE_ERROR_STATES.NONE &&
+            {this.state.passphraseErrorState !== PASSPHRASE_ERROR_STATES.NONE && this.state.hasAlreadyBeenValidated &&
               <div className="password error-message">
                 {{
                   [PASSPHRASE_ERROR_STATES.REQUIRED]: <Trans>A passphrase is required.</Trans>,
@@ -437,8 +452,15 @@ class GenerateOrganizationKey extends React.Component {
                 }[this.state.passphraseErrorState]}
               </div>
             }
-            {this.state.passphraseWarning &&
-              <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passphraseWarning}</div>
+            {this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated &&
+                <>
+                  {!this.state.isPwnedServiceAvailable &&
+                    <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
+                  }
+                  {this.state.passphraseErrorState === PASSPHRASE_ERROR_STATES.PWNED &&
+                    <div className="password warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+                  }
+                </>
             }
             {!this.state.isPwnedServiceAvailable &&
               <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>

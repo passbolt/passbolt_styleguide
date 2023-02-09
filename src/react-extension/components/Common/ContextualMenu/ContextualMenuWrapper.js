@@ -34,8 +34,15 @@ class ContextualMenuWrapper extends Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.createRefs();
     this.bindCallbacks();
+  }
+
+  get defaultState() {
+    return {
+      positionY: this.props.top
+    };
   }
 
   /**
@@ -61,6 +68,7 @@ class ContextualMenuWrapper extends Component {
    * @return {void}
    */
   componentDidMount() {
+    this.adjustPositionY();
     document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
     document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
     document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
@@ -121,6 +129,15 @@ class ContextualMenuWrapper extends Component {
     this.props.hide();
   }
 
+  adjustPositionY() {
+    const contextMenuHeight = this.elementRef.current.offsetHeight;
+    const isWindowExceeded = this.props.top + contextMenuHeight > window.innerHeight;
+    if (isWindowExceeded) {
+      this.setState({positionY: window.innerHeight - contextMenuHeight});
+      this.elementRef.current.style.zIndex = 1000;
+    }
+  }
+
   /**
    * Get the contextual menu style.
    */
@@ -129,7 +146,7 @@ class ContextualMenuWrapper extends Component {
       position: "absolute",
       display: "block",
       left: this.props.left,
-      top: this.props.top
+      top: this.state.positionY
     };
   }
 

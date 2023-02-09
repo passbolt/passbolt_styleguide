@@ -19,6 +19,7 @@ import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext"
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import {withMfa} from "../../../contexts/MFAContext";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -61,6 +62,7 @@ class DisplayUserBadgeMenu extends Component {
     document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
     document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
     document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
+    this.props.mfaContext.checkMfaChoiceRequired();
   }
 
   componentWillUnmount() {
@@ -193,7 +195,7 @@ class DisplayUserBadgeMenu extends Component {
    * @return {bool}
    */
   get attentionRequired() {
-    return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired();
+    return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired() || this.props.mfaContext.isMfaChoiceRequired();
   }
 
   /**
@@ -255,9 +257,10 @@ class DisplayUserBadgeMenu extends Component {
 DisplayUserBadgeMenu.propTypes = {
   context: PropTypes.object, // The application context
   navigationContext: PropTypes.any, // The application navigation context
+  mfaContext: PropTypes.object, // The mfa context
   accountRecoveryContext: PropTypes.object, // The account recovery context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
 };
 
-export default withAppContext(withNavigationContext(withAccountRecovery(withTranslation("common")(DisplayUserBadgeMenu))));
+export default withAppContext(withNavigationContext(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu)))));

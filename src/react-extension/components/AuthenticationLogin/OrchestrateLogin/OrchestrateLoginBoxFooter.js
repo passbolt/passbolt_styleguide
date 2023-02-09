@@ -30,6 +30,7 @@ class OrchestrateLoginBoxFooter extends Component {
   render() {
     switch (this.props.authenticationLoginContext.state) {
       case AuthenticationLoginWorkflowStates.SIGN_IN:
+      case AuthenticationLoginWorkflowStates.SIGN_IN_SSO:
         return <div className="login-box-footer-actions">
           <a onClick={this.props.authenticationLoginContext.handleSwitchAccount}>
             <Trans>Or switch to another account.</Trans>

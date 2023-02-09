@@ -76,7 +76,7 @@ class TestSsoSettingsDialog extends React.Component {
       });
     } catch (e) {
       // The user might manually close the popup but other errors than this one are unexpected
-      if (e?.name !== "UserClosedSsoPopUpError") {
+      if (e?.name !== "UserAbortsOperationError") {
         this.props.adminSsoContext.handleError(e);
       }
     }

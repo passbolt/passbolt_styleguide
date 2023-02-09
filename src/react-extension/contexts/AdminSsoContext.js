@@ -34,7 +34,6 @@ export const AdminSsoContext = React.createContext({
   isDataReady: () => {}, // Returns true if the data has been loaded from the API already
   save: () => {}, // Save the sso configuration changes
   disableSso: () => {}, // Disable the SSO configuration
-  getProvidersList: () => {}, // Returns the list of providers that the API supports
   hasFormChanged: () => {}, // Returns true if the current form changed
   validateData: () => {}, // Validates the current data in the state
   saveAndTestConfiguration: () => {}, // Saves the current settings as a new draft and run the test dialog
@@ -43,6 +42,7 @@ export const AdminSsoContext = React.createContext({
   getErrors: () => {}, // Returns the errors detected during validation
   deleteSettings: () => {}, // Delete the current SSO settings
   showDeleteConfirmationDialog: () => {}, // Show the delete SSO settings confirmation dialog
+  shouldFocusOnError: () => {}, // Returns true the first time it is asked after a form validation process detected an error
 });
 
 /**
@@ -55,9 +55,10 @@ export class AdminSsoContextProvider extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.providerList = [];
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.isSsoConfigExisting = false;
+    this.hasError = false;
   }
 
   /**
@@ -80,13 +81,13 @@ export class AdminSsoContextProvider extends React.Component {
       changeProvider: this.changeProvider.bind(this), // change the provider
       disableSso: this.disableSso.bind(this), // Disable the SSO configuration
       setValue: this.setValue.bind(this), // Set an SSO settings value to the current config
-      getProvidersList: this.getProvidersList.bind(this), // Returns the list of providers that the API supports
       validateData: this.validateData.bind(this), // Validates the current data in the state
       saveAndTestConfiguration: this.saveAndTestConfiguration.bind(this), // Saves the current settings as a new draft and run the test dialog
       handleError: this.handleError.bind(this), // Handles error by displaying a NotifyError dialog
       deleteSettings: this.deleteSettings.bind(this), // Delete the current SSO settings
       canDeleteSettings: this.canDeleteSettings.bind(this), // Returns true if it is possible to call for a settings deletion
       showDeleteConfirmationDialog: this.showDeleteConfirmationDialog.bind(this), // Show the delete SSO settings confirmation dialog
+      shouldFocusOnError: this.shouldFocusOnError.bind(this), // Returns true the first time it is asked after a form validation process detected an error
     };
   }
 
@@ -99,7 +100,6 @@ export class AdminSsoContextProvider extends React.Component {
       provider: null,
       data: {
         url: "",
-        redirect_url: "",
         client_id: "",
         tenant_id: "",
         client_secret: "",
@@ -122,62 +122,26 @@ export class AdminSsoContextProvider extends React.Component {
    */
   async loadSsoConfiguration() {
     let ssoConfig = null;
-    let isSsoConfigExisting = false;
     try {
       ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
-      this.setProviderList(ssoConfig.providers);
-
-      if (ssoConfig?.provider) {
-        isSsoConfigExisting = true;
-        const providerData = SsoProviders.find(provider => provider.id === ssoConfig.provider);
-        ssoConfig.data.redirect_url = providerData.defaultConfig.redirect_url;
-      }
     } catch (error) {
-      this.setDefaultProvidersList(); //avoids to have an empty and non working UI
       this.props.dialogContext.open(NotifyError, {error});
     }
+
+    this.isSsoConfigExisting = Boolean(ssoConfig?.provider);
 
     this.setState({
       ssoConfig: ssoConfig,
       isLoaded: true,
-      isSsoConfigExisting
     });
   }
 
   /**
-   * Sets the list of provider compatible with the API and the browser extension.
-   *
-   * @param {Array<string>} providerIdList
-   * @private
+   * Returns true if an SSO settings exists
+   * @returns {boolean}
    */
-  setProviderList(providerIdList) {
-    if (!providerIdList) {
-      throw new Error(this.props.t("No SSO provider available"));
-    }
-    /*
-     * providers must be known on both side (API / Bext) in order to work.
-     * Obviously, the API can't work with an unknown provider.
-     * On Bext side, we can't provide a third-party SSO provider specific form if it's is unknown
-     */
-    providerIdList.forEach(providerId => {
-      const provider = SsoProviders.find(provider => provider.id === providerId);
-      if (provider && !provider.disabled) {
-        this.providerList.push(provider);
-      }
-    });
-  }
-
-  /**
-   * Sets the list of provider from the data known by the browser extension only.
-   *
-   * @private
-   */
-  setDefaultProvidersList() {
-    SsoProviders.forEach(provider => {
-      if (!provider.disabled) {
-        this.providerList.push(provider);
-      }
-    });
+  isSsoSettingsExisting() {
+    return this.state.ssoConfig?.provider;
   }
 
   /**
@@ -206,14 +170,6 @@ export class AdminSsoContextProvider extends React.Component {
         client_secret_expiry: data.client_secret_expiry,
       }
     };
-  }
-
-  /**
-   * Get the current list of third party sso provider compatible with the API.
-   * @returns {Object}
-   */
-  getProvidersList() {
-    return this.providerList;
   }
 
   /**
@@ -275,7 +231,7 @@ export class AdminSsoContextProvider extends React.Component {
       return;
     }
 
-    const selectedProvider = this.providerList.find(p => p.id === provider.id);
+    const selectedProvider = SsoProviders.find(p => p.id === provider.id);
 
     this.setState({
       ssoConfig: {
@@ -294,22 +250,6 @@ export class AdminSsoContextProvider extends React.Component {
   }
 
   /**
-   * Returns the first field with an error (first in the given list)
-   * @param {object} errors a ref object to put the validation onto
-   * @param {Array<string>} fieldPriority the ordered list of field to check
-   * @returns {string|null}
-   */
-  getFirstFieldInError(errors, fieldPriority) {
-    for (let i = 0; i < fieldPriority.length; i++) {
-      const fieldName = fieldPriority[i];
-      if (typeof(errors[fieldName]) !== "undefined") {
-        return fieldName;
-      }
-    }
-    return null;
-  }
-
-  /**
    * Validates the current data in the state
    * @returns {boolean} true if the data is valid, false otherwise
    */
@@ -320,17 +260,12 @@ export class AdminSsoContextProvider extends React.Component {
     const isProviderValid = this.validate_provider(settings.provider, errors);
 
     if (!isProviderValid) {
-      this.fieldToFocus = "provider";
       this.setState({errors, hasSumittedForm: true});
       return false;
     }
 
     const validationCallback = `validateDataFromProvider_${settings.provider}`;
     const isFormValid = this[validationCallback](settings.data, errors);
-
-    if (!isFormValid) {
-      this.fieldToFocus = this.getFirstFieldInError(errors, ["url", "client_id", "tenant_id", "client_secret"]);
-    }
 
     this.setState({errors, hasSumittedForm: true});
 
@@ -343,14 +278,13 @@ export class AdminSsoContextProvider extends React.Component {
    * @param {object} errors a ref object to put the validation onto
    */
   validate_provider(provider, errors) {
-    const isProviderValid = this.providerList.find(p => p.id === provider);
+    const isProviderValid = SsoProviders.find(p => p.id === provider);
 
     if (!isProviderValid) {
       errors.provider = this.props.t("The Single Sign-On provider must be a supported provider.");
-      return false;
     }
 
-    return true;
+    return isProviderValid;
   }
 
   /**
@@ -398,7 +332,18 @@ export class AdminSsoContextProvider extends React.Component {
       isDataValid = false;
     }
 
+    this.hasError = true;
     return isDataValid;
+  }
+
+  /**
+   * Returns true the first time it is asked after a form validation process detected an error
+   * @returns {boolean}
+   */
+  shouldFocusOnError() {
+    const hasError = this.hasError;
+    this.hasError = false;
+    return hasError;
   }
 
   /**
@@ -427,18 +372,20 @@ export class AdminSsoContextProvider extends React.Component {
    */
   async saveAndTestConfiguration() {
     this.setState({processing: true});
+    const ssoSettings = this.getSsoConfigurationDto();
+
+    let draftConfiguration;
     try {
-      const ssoSettings = this.getSsoConfigurationDto();
-      const draftConfiguration = await this.props.context.port.request("passbolt.sso.save-draft", ssoSettings);
-      await this.runTestConfig(draftConfiguration);
-      const providerData = SsoProviders.find(provider => provider.id === draftConfiguration.provider);
-      const ssoConfig = Object.assign({}, this.state.ssoConfig, draftConfiguration);
-      ssoConfig.data.redirect_url = providerData.defaultConfig.redirect_url;
-      this.setState({ssoConfig});
+      draftConfiguration = await this.props.context.port.request("passbolt.sso.save-draft", ssoSettings);
     } catch (e) {
       this.handleError(e);
       this.setState({processing: false});
+      return;
     }
+
+    await this.runTestConfig(draftConfiguration);
+    const ssoConfig = Object.assign({}, this.state.ssoConfig, draftConfiguration);
+    this.setState({ssoConfig});
   }
 
   /**
@@ -447,7 +394,7 @@ export class AdminSsoContextProvider extends React.Component {
    */
   canDeleteSettings() {
     const config = this.getSsoConfiguration();
-    return this.state.isSsoConfigExisting && config.provider === null;
+    return this.isSsoConfigExisting && config.provider === null;
   }
 
   /**
@@ -467,9 +414,9 @@ export class AdminSsoContextProvider extends React.Component {
       const ssoSettings = this.getSsoConfiguration();
       await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettings.id);
       this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings has been deleted successfully"));
+      this.isSsoConfigExisting = false;
       this.setState({
         ssoConfig: this.defaultSsoSettings,
-        isSsoConfigExisting: false,
         processing: false,
       });
     } catch (e) {

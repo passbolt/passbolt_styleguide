@@ -386,7 +386,7 @@ class ImportResources extends Component {
                 accept=".csv, .kdbx, .kdb"/>
               <label htmlFor="dialog-import-passwords">
                 <Trans>Select a file to import</Trans>&nbsp;
-                <Tooltip message={this.translate("csv exports from keepassx, lastpass and 1password are supported")}>
+                <Tooltip message={this.translate("csv exports from browsers (chrome, edge, brave, opera, vivaldi), keepassx, lastpass, 1password and bitwarden are supported")}>
                   (<a role="link">csv</a>
                 </Tooltip>
                 &nbsp;{this.translate("or")}&nbsp;

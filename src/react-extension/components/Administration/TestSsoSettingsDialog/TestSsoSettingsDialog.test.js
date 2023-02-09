@@ -45,14 +45,15 @@ describe("TestSsoSettingsDialog", () => {
     });
 
     it('As AD I need to successfully sign in with the new SSO settings before saving them (happy path)', async() => {
-      expect.assertions(7);
+      expect.assertions(8);
 
       const expectedSsoToken = uuid();
       const expectedConfigurationId = uuid();
+      const expectedProviderId = "azure";
 
       const props = defaultProps({
         configurationId: expectedConfigurationId,
-        provider: SsoProviders.find(provider => provider.id === "azure"),
+        provider: SsoProviders.find(provider => provider.id === expectedProviderId),
         onClose: jest.fn()
       });
 
@@ -67,6 +68,10 @@ describe("TestSsoSettingsDialog", () => {
       props.context.port.addRequestListener("passbolt.sso.activate-settings", async(configurationId, ssoToken) => {
         expect(configurationId).toBe(expectedConfigurationId);
         expect(ssoToken).toBe(expectedSsoToken);
+      });
+
+      props.context.port.addRequestListener("passbolt.sso.generate-sso-kit", providerId => {
+        expect(providerId).toBe(expectedProviderId);
       });
 
       const page = new TestSsoSettingsDialogPage(props);
@@ -162,7 +167,7 @@ describe("TestSsoSettingsDialog", () => {
       expect.assertions(3);
 
       const expectedError = new Error("User closed the popup!");
-      expectedError.name = 'UserClosedSsoPopUpError';
+      expectedError.name = 'UserAbortsOperationError';
 
       const props = defaultProps({
         configurationId: uuid(),

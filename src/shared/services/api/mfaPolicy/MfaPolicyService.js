@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
@@ -10,17 +9,17 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.8.0
+ * @since         3.10.0
  */
 
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 
-const EMAIL_NOTIFICATION_RESOURCE_NAME = "settings/emails/notifications";
+const MFA_RESOURCE_NAME = "mfa-policies/settings";
 
 /**
- * Model related to the Email service settings
+ * Model related to the mfa policy service settings
  */
-class EmailNotificationService {
+class MfaPolicyService {
   /**
    * Constructor
    *
@@ -28,27 +27,27 @@ class EmailNotificationService {
    * @public
    */
   constructor(apiClientOptions) {
-    apiClientOptions.setResourceName(EMAIL_NOTIFICATION_RESOURCE_NAME);
+    apiClientOptions.setResourceName(MFA_RESOURCE_NAME);
     this.apiClient = new ApiClient(apiClientOptions);
   }
 
   /**
-   * Find the email notification setting using Passbolt API
+   * Find the MFA policy setting using Passbolt API
    *
-   * @return {Promise<Array<SmtpSettingsDto>>|null>}
+   * @return {Promise<Array<MFADto>>|null>}
    */
   async find() {
     return (await this.apiClient.findAll()).body;
   }
 
   /**
-   * Save the given email settings settings using Passbolt API
-   * @param {EmailNotificationSettingDto} emailNotificationSetting
-   * @returns {Promise<EmailNotificationSettingDto>}
+   * save a the mfa policy settings using Passbolt API
+   * @param  {MfaPolicy} dto
    */
-  async save(emailNotificationSetting) {
-    return (await this.apiClient.create(emailNotificationSetting)).body;
+  async save(dto) {
+    await this.apiClient.create(dto);
   }
 }
 
-export default EmailNotificationService;
+export default MfaPolicyService;
+
