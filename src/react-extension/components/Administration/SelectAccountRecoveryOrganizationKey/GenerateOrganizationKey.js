@@ -455,22 +455,23 @@ class GenerateOrganizationKey extends React.Component {
             {this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated &&
                 <>
                   {!this.state.isPwnedServiceAvailable &&
-                    <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
+                    <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
                   }
                   {this.state.passphraseErrorState === PASSPHRASE_ERROR_STATES.PWNED &&
                     <div className="password warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
                   }
                 </>
             }
+            {!this.state.isPwnedServiceAvailable &&
+              <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
+            }
           </div>
         </div>
-        {!this.state.hasAlreadyBeenValidated &&
-          <div className="warning message" id="generate-organization-key-setting-overridden-banner">
-            <p>
-              <Trans>Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
-            </p>
-          </div>
-        }
+        <div className="warning message" id="generate-organization-key-setting-overridden-banner">
+          <p>
+            <Trans>Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.</Trans>
+          </p>
+        </div>
         <div className="submit-wrapper clearfix">
           <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.props.onClose} />
           <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Generate & Apply")} />
