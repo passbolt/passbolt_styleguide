@@ -41,9 +41,9 @@ class InsertAccountRecoveryIframe extends Component {
    * Load the react app iframe
    * @returns {void}
    */
-  loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-account-recovery.html?passbolt=passbolt-iframe-account-recovery`;
-    this.iframeRef.current.contentWindow.location = iframeUrl;
+  async loadIframe() {
+    const portId = await this.props.port.request("passbolt.port.generate-id", "AccountRecovery");
+    this.iframeRef.current.contentWindow.location = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-account-recovery.html?passbolt=${portId}`;
   }
 
   /**
@@ -59,6 +59,7 @@ class InsertAccountRecoveryIframe extends Component {
 
 InsertAccountRecoveryIframe.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
+  port: PropTypes.object, // The communication port
 };
 
 export default InsertAccountRecoveryIframe;
