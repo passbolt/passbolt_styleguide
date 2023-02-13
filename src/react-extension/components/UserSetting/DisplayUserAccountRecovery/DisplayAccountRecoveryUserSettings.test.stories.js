@@ -41,6 +41,7 @@ const getTemplateArgs = () => ({
   },
   accountRecoveryContext: {
     status: "approved",
+    isReady: () => true,
     loadAccountRecoveryPolicy: () => {},
     getPolicy: () => ({
       policy: "opt-out",
