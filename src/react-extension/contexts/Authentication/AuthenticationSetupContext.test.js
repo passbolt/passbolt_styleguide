@@ -363,4 +363,18 @@ describe("AuthenticationSetupContextProvider", () => {
       expect(contextProvider.state.error.message).toEqual("Unexpected error");
     });
   });
+
+  describe("AuthenticationSetupContextProvider::retrySetup", () => {
+    it("When the port is disconnected, the machine state should be set to: RETRY_SETUP", async() => {
+      const props = defaultProps();
+      const contextProvider = new AuthenticationSetupContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(2);
+      await contextProvider.componentDidMount();
+      expect(props.context.port._port.onDisconnect.addListener).toHaveBeenCalledWith(contextProvider.retrySetup);
+      await contextProvider.retrySetup();
+      expect(contextProvider.state.state).toEqual(AuthenticationSetupWorkflowStates.RETRY_SETUP);
+    });
+  });
 });

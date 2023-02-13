@@ -32,6 +32,11 @@ export function defaultAuthenticationSetupAppContext(appContext) {
   port.addRequestListener("passbolt.setup.set-security-token", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.setup.complete", jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.setup.sign-in", jest.fn(() => Promise.resolve()));
+  port._port = {
+    onDisconnect: {
+      addListener: jest.fn()
+    }
+  };
 
   const defaultAuthenticationSetupAppContext = {
     port: port,
