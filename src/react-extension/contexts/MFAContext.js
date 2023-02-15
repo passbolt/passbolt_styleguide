@@ -58,14 +58,17 @@ export class MfaContextProvider extends React.Component {
     return {
       policy: null,
       processing: true, // Context is processing data
-      mfaSettings: null, // Check if settings are defined
+      mfaUserSettings: null, // Check if settings are defined
+      mfaOrganisationSettings: null, // Check if settings are defined
       mfaChoiceRequired: false, // Check if user has to perform mfa
       getPolicy: this.getPolicy.bind(this), // Returns policy for MFA Policy
       findPolicy: this.findPolicy.bind(this), // Find the current MFA Policy
       findMfaSettings: this.findMfaSettings.bind(this), // Find the current MFA settings
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       setProcessing: this.setProcessing.bind(this), // set processing
-      hasMfaSettings: this.hasMfaSettings.bind(this), // returns if user has already defined his mfa settings
+      hasMfaSettings: this.hasMfaSettings.bind(this), // returns if user and organisation has already defined his mfa settings
+      hasMfaOrganisationSettings: this.hasMfaOrganisationSettings.bind(this), // returns if organisation has already defined his mfa settings
+      hasMfaUserSettings: this.hasMfaUserSettings.bind(this), // returns if user has already defined his mfa settings
       clearContext: this.clearContext.bind(this), // put the data to its default state value
       checkMfaChoiceRequired: this.checkMfaChoiceRequired.bind(this), //return is an user has to perform a mfa or not
       isMfaChoiceRequired: this.isMfaChoiceRequired.bind(this) //return is an user has to perform a mfa or not
@@ -94,13 +97,18 @@ export class MfaContextProvider extends React.Component {
    */
   async findMfaSettings() {
     this.setProcessing(true);
-    let mfaSettings =  null;
+    let settings = null;
+    let mfaUserSettings =  null;
+    let mfaOrganisationSettings = null;
     if (this.mfaService) {
-      mfaSettings = (await this.mfaService.getUserSettings()).MfaAccountSettings;
+      settings = await this.mfaService.getUserSettings();
     } else {
-      mfaSettings =  await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
+      settings = await this.props.context.port.request("passbolt.mfa-policy.get-mfa-settings");
     }
-    this.setState({mfaSettings});
+    mfaUserSettings = settings.MfaAccountSettings;
+    mfaOrganisationSettings = settings.MfaOrganizationSettings;
+    this.setState({mfaUserSettings});
+    this.setState({mfaOrganisationSettings});
     this.setProcessing(false);
   }
 
@@ -117,14 +125,30 @@ export class MfaContextProvider extends React.Component {
    * @returns {object}
    */
   hasMfaSettings() {
-    if (!this.state.mfaSettings) { return; }
-    return Object.values(this.state.mfaSettings).some(value => value);
+    return !this.hasMfaOrganisationSettings() || this.hasMfaUserSettings();
+  }
+
+  /**
+   * Returns true organization settings has MFA defined
+   * @returns {boolean}
+   */
+  hasMfaOrganisationSettings() {
+    return this.state.mfaOrganisationSettings &&
+      Object.values(this.state.mfaOrganisationSettings).some(value => value);
+  }
+
+  /**
+   * Returns true user settings has MFA defined
+   * @returns {boolean}
+   */
+  hasMfaUserSettings() {
+    return this.state.mfaUserSettings &&
+      Object.values(this.state.mfaUserSettings).some(value => value);
   }
 
   /**
    * Returns true when the data is under processing
    * @returns {boolean}
-   *
    */
   isProcessing() {
     return this.state.processing;
