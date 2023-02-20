@@ -89,7 +89,7 @@
     "test:unit": "jest --no-cache ./src --maxWorkers=4",
     "test:coverage": "jest --no-cache ./src --maxWorkers=4 --coverage",
     "test:storybook": "test-storybook",
-    "i18n:update": "git checkout l10n_release -- src/locales/de-DE src/locales/en-UK src/locales/es-ES src/locales/fr-FR src/locales/ja-JP src/locales/lt-LT src/locales/nl-NL src/locales/pl-PL src/locales/sv-SE",
+    "i18n:update": "git checkout l10n_release -- src/locales/de-DE src/locales/en-UK src/locales/es-ES src/locales/fr-FR src/locales/it-IT src/locales/ja-JP src/locales/ko-KR src/locales/lt-LT src/locales/nl-NL src/locales/pl-PL src/locales/pt-BR src/locales/ro-RO src/locales/sv-SE",
     "i18n:externalize": "i18next -c ./i18next-parser.config.js",
     "eslint": "eslint -c .eslintrc.json --ext js --ext jsx src/react-extension src/react-quickaccess src/react-web-integration src/shared",
     "eslint-fix": "eslint -c .eslintrc.json --ext js --ext jsx --fix src/react-extension src/react-quickaccess src/react-web-integration src/shared",

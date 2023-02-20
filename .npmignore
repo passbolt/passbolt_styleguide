@@ -17,6 +17,7 @@ src/video
 src/img/card_teasers
 src/img/papericon
 src/img/screenshots
+scripts
 storybook-static
 webpack-api.config.js
 webpack-ext.config.js
