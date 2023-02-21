@@ -91,9 +91,8 @@ export class AdminMfaContextProvider extends React.Component {
       yubikeyClientIdentifierError: null, // yubikey client identifier error
       yubikeySecretKeyError: null, // yubikey secret key error
       duoHostnameError: null, // duo hostname error
-      duoIntegrationKeyError: null, // duo integration key error
-      duoSaltError: null, // duo salt error
-      duoSecretKeyError: null, // duo secret key error
+      duoClientIdError: null, // duo client key error
+      duoClientSecretError: null, // duo secret key error
     };
   }
 

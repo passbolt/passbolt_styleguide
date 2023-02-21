@@ -24,13 +24,10 @@ class Duo {
    * @public
    */
   constructor(duo = {}) {
-    this.hostName = "duoHostname" in duo ? duo.duoHostname : duo.hostName;
-    this.integrationKey = "duoIntegrationKey" in duo ? duo.duoIntegrationKey : duo.integrationKey;
-    this.salt = "duoSalt" in duo ? duo.duoSalt : duo.salt;
-    this.secretKey = "duoSecretKey" in duo ? duo.duoSecretKey : duo.secretKey;
+    this.apiHostName = duo.duoHostname;
+    this.clientId = duo.duoClientId;
+    this.clientSecret = duo.duoClientSecret;
   }
 }
 
 export default Duo;
-
-

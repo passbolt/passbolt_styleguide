@@ -25,7 +25,7 @@ describe("MfaDTO model", () => {
       expect.assertions(3);
 
       expect(dto.providers).toEqual([MfaProviders.totp, MfaProviders.yubikey, MfaProviders.duo]);
-      expect(dto.duo).toEqual({"hostName": "api-123456af.duosecurity.com", "integrationKey": "PAGI605APMFKP8YSME6T", "salt": "salt1salt1salt1salt1salt1salt1salt1salt1", "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"});
+      expect(dto.duo).toEqual({"apiHostName": "api-123456af.duosecurity.com", "clientId": "PAGI605APMFKP8YSME6T", "clientSecret": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"});
       expect(dto.yubikey).toEqual({"clientId": "80412", "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"});
     });
 

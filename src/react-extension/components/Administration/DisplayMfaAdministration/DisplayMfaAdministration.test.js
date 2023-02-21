@@ -45,7 +45,7 @@ describe("See the MFA settings", () => {
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
       await waitFor(() => {});
 
-      expect.assertions(10);
+      expect.assertions(9);
 
       expect(page.exists()).toBeTruthy();
       // check fields in the form
@@ -57,9 +57,8 @@ describe("See the MFA settings", () => {
       expect(page.yubikeyClientIdentifier.value).toBe(mockMfaSettings.yubikey.clientId);
       expect(page.yubikeySecretKey.value).toBe(mockMfaSettings.yubikey.secretKey);
       expect(page.duoHostname).toBe(null);
-      expect(page.duoIntegrationKey).toBe(null);
-      expect(page.duoSalt).toBe(null);
-      expect(page.duoSecretKey).toBe(null);
+      expect(page.duoClientId).toBe(null);
+      expect(page.duoClientSecret).toBe(null);
     });
 
     it('As AD I should save mfa on the administration settings page', async() => {
@@ -108,23 +107,21 @@ describe("See the MFA settings", () => {
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       page.fillYubikeySecret("");
       page.fillYubikeyClientIdentifier("");
-      page.fillSecretKey("");
-      page.fillIntegrationKey("");
+      page.fillClientSecret("");
+      page.fillClientId("");
       page.fillDuoHostname("");
-      page.fillDuoSalt("");
 
       await page.saveSettings();
 
       await waitFor(() => {});
 
-      expect.assertions(7);
+      expect.assertions(6);
       // Throw general error message
       expect(page.yubikeyClientIdentifierErrorMessage).toBe("A client identifier is required.");
       expect(page.yubikeySecretKeyErrorMessage).toBe("A secret key is required.");
       expect(page.duoHostnameErrorMessage).toBe("A hostname is required.");
-      expect(page.duoIntegrationKeyErrorMessage).toBe("An integration key is required.");
-      expect(page.duoSaltErrorMessage).toBe("A salt is required.");
-      expect(page.duoSecretKeyErrorMessage).toBe("A secret key is required.");
+      expect(page.duoClientIdErrorMessage).toBe("A client id is required.");
+      expect(page.duoClientSecretErrorMessage).toBe("A client secret is required.");
     });
 
 
@@ -140,15 +137,13 @@ describe("See the MFA settings", () => {
     });
 
     it('As AD I want to see the passwords I entered in the MFA administration settings forms', async() => {
-      await page.toggleObfuscate(page.duoSecretKeyButton);
-      await page.toggleObfuscate(page.duoSaltKeyButton);
+      await page.toggleObfuscate(page.duoClientSecretButton);
       await page.toggleObfuscate(page.yubikeySecretKeyButton);
 
-      expect.assertions(3);
+      expect.assertions(2);
 
       expect(page.isObfuscated(page.yubikeySecretKeyButton)).toBeFalsy();
-      expect(page.isObfuscated(page.duoSecretKeyButton)).toBeFalsy();
-      expect(page.isObfuscated(page.duoSaltKeyButton)).toBeFalsy();
+      expect(page.isObfuscated(page.duoClientSecretButton)).toBeFalsy();
     });
 
     it('I should see all fields disabled”', () => {

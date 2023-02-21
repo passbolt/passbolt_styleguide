@@ -16,43 +16,24 @@ import Duo from "./Duo";
 
 
 describe("Duo model", () => {
-  const randomKey = "random-key";
-  const randomSalt = "random-salt";
+  const randomClientId = "random-client-id";
   const randomHostname = "random-hostname";
-  const randomIntegrationKey  = "random-integration-key";
+  const randomClientSecret  = "random-client-secret";
 
   describe("Duo::constructor", () => {
     it("should init with hostName, integrationKey, salt and secretKey", () => {
       const duoParam = {
-        hostName: randomHostname,
-        integrationKey: randomIntegrationKey,
-        salt: randomSalt,
-        secretKey: randomKey,
-      };
-      const duo = new Duo(duoParam);
-
-      expect.assertions(4);
-
-      expect(duo.hostName).toEqual(duoParam.hostName);
-      expect(duo.secretKey).toEqual(duoParam.secretKey);
-      expect(duo.salt).toEqual(duoParam.salt);
-      expect(duo.integrationKey).toEqual(duoParam.integrationKey);
-    });
-    it("should init with duoHostname, duoIntegrationKey, duoSalt and duoSecretKey", () => {
-      const duoParam = {
         duoHostname: randomHostname,
-        duoIntegrationKey: randomIntegrationKey,
-        duoSalt: randomSalt,
-        duoSecretKey: randomKey,
+        duoClientId: randomClientId,
+        duoClientSecret: randomClientSecret,
       };
       const duo = new Duo(duoParam);
 
-      expect.assertions(4);
+      expect.assertions(3);
 
-      expect(duo.hostName).toEqual(duoParam.duoHostname);
-      expect(duo.secretKey).toEqual(duoParam.duoSecretKey);
-      expect(duo.salt).toEqual(duoParam.duoSalt);
-      expect(duo.integrationKey).toEqual(duoParam.duoIntegrationKey);
+      expect(duo.apiHostName).toEqual(duoParam.duoHostname);
+      expect(duo.clientId).toEqual(duoParam.duoClientId);
+      expect(duo.clientSecret).toEqual(duoParam.duoClientSecret);
     });
   });
 });
