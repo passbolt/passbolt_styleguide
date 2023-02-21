@@ -67,7 +67,8 @@ class CheckPassphrase extends Component {
         invalidPassphrase: false, // True if the passphrase is invalid
       },
       passphraseInDictionnary: false, // True if the passphrase is part of a data breach
-      isPwnedServiceAvailable: true // True if the isPwned service can be reached
+      isPwnedServiceAvailable: true, // True if the isPwned service can be reached
+      passwordEntropy: null
     };
   }
 
@@ -82,8 +83,7 @@ class CheckPassphrase extends Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    return (!this.state.passphraseInDictionnary || this.isPwnedPassphraseAllowed)
-      && Object.values(this.state.errors).every(value => !value);
+    return Object.values(this.state.errors).every(value => !value);
   }
 
   /**
@@ -98,10 +98,6 @@ class CheckPassphrase extends Component {
    */
   get hasErrors() {
     return this.state.errors.emptyPassphrase || this.state.errors.invalidPassphrase;
-  }
-
-  get isPwnedPassphraseAllowed() {
-    return this.props.displayAs === CheckPassphraseVariations.RECOVER;
   }
 
   /**
@@ -190,10 +186,14 @@ class CheckPassphrase extends Component {
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+    } else {
+      this.setState({
+        passphraseInDictionnary: false,
+        passwordEntropy: null,
+      });
     }
 
     this.setState({passphrase, passphraseEntropy});
-
     if (this.state.hasBeenValidated) {
       this.validate();
     }
@@ -264,23 +264,11 @@ class CheckPassphrase extends Component {
   }
 
   /**
-   * Check if warning should be display
-   */
-  shouldDisplayWarningMessage() {
-    const hasMinimumSize = this.state.passphrase?.length > 0;
-    if (this.props.displayAs === CheckPassphraseVariations.RECOVER) {
-      return hasMinimumSize && !this.state.errors.invalidPassphrase;
-    }
-
-    return hasMinimumSize;
-  }
-
-  /**
    * Render the component
    */
   render() {
     const processingClassName = this.isProcessing ? 'processing' : '';
-    const entropy = this.state.passphrase?.length ? this.state.passphraseEntropy : null;
+    const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
     return (
       <div className="check-passphrase">
         <h1><Trans>Please enter your passphrase to continue.</Trans></h1>
@@ -288,7 +276,7 @@ class CheckPassphrase extends Component {
           <div className="form-content">
             <div className={`input-password-wrapper input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
               <label htmlFor="passphrase"><Trans>Passphrase</Trans>
-                {this.shouldDisplayWarningMessage() && (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary) &&
+                {!this.state.hasBeenValidated && (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary) &&
                 <Icon name="exclamation"/>
                 }</label>
               <Password
@@ -300,7 +288,7 @@ class CheckPassphrase extends Component {
                 preview={true}
                 onChange={this.handleChangePassphrase}
                 disabled={!this.areActionsAllowed}/>
-              <PasswordComplexity entropy={entropy}/>
+              <PasswordComplexity entropy={passphraseEntropy}/>
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPassphrase &&
@@ -311,7 +299,7 @@ class CheckPassphrase extends Component {
                 }
               </>
               }
-              {this.shouldDisplayWarningMessage() &&
+              {!this.state.hasBeenValidated &&
                 <>
                   {!this.state.isPwnedServiceAvailable &&
                     <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>

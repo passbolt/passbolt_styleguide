@@ -229,7 +229,7 @@ describe('As AD I can generate an ORK', () => {
     });
 
     expect(page.passphraseFieldError).not.toBeNull();
-    expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'`);
+    expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'.`);
   });
 
   it('As AD I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
@@ -290,4 +290,23 @@ describe('As AD I can generate an ORK', () => {
 
     expect(page.warningImportInstead.textContent).toBe("Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.");
   });
+
+  it("As an administrator generating an account recovery organization key, I should see a complexity as Quality if the passphrase is empty", async() => {
+    expect.assertions(3);
+    const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
+    await waitFor(() => {});
+    // Dialog title exists and correct
+    expect(page.exists()).toBeTruthy();
+    await page.clickOnGenerateTab(() => {
+      if (!page.isGenerateTabSeletect()) {
+        throw new Error("Changes are not available yet");
+      }
+    });
+
+    await page.type("", page.passphraseField);
+
+    expect(page.passphraseStrength.textContent).toBe("Quality");
+    expect(page.passphraseFieldError).toBeNull();
+  });
 });
+

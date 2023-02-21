@@ -321,6 +321,7 @@ class PasswordEditPageObject {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(this.password, dataInputEvent);
     jest.runAllTimers();
+    await waitFor(() => {});
   }
 
   /** focus the input element with data */

@@ -41,7 +41,6 @@ class EditResource extends Component {
     this.state = this.defaultState;
     this.initEventHandlers();
     this.createInputRef();
-    this.isPwndProcessingPromise = null;
     this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionary, 300);
   }
 
@@ -69,7 +68,8 @@ class EditResource extends Component {
       encryptDescription: null,
       resourceTypeId: resource.resource_type_id || "",
       isPwnedServiceAvailable: true,
-      passwordInDictionary: false
+      passwordInDictionary: false,
+      passwordEntropy: null,
     };
   }
 
@@ -269,7 +269,7 @@ class EditResource extends Component {
     }
 
     return new Promise(resolve => {
-      this.setState({passwordError: passwordError}, resolve);
+      this.setState({passwordError}, resolve);
     });
   }
 
@@ -278,10 +278,14 @@ class EditResource extends Component {
    * @return {Promise}
    */
   async evaluatePasswordIsInDictionary() {
+    let passwordEntropy = null;
     if (this.state.isPwnedServiceAvailable) {
+      passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
       const result = await this.pownedService.evaluateSecret(this.state.password, this.state.isPwnedServiceAvailable);
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary: result.inDictionary});
+      const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
     }
+    this.setState({passwordEntropy});
   }
 
   /*
@@ -439,7 +443,12 @@ class EditResource extends Component {
 
     if (name === "password") {
       if (value.length) {
-        this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+        this.evaluatePasswordIsInDictionaryDebounce();
+      } else {
+        this.setState({
+          passwordInDictionary: false,
+          passwordEntropy: null,
+        });
       }
     }
 
@@ -490,7 +499,8 @@ class EditResource extends Component {
       return;
     }
     const password = SecretGenerator.generate(this.currentGeneratorConfiguration);
-    this.setState({password: password});
+    const passwordEntropy = SecretGenerator.entropy(password);
+    this.setState({password: password, passwordEntropy, passwordInDictionary: false});
   }
 
   /**
@@ -669,9 +679,8 @@ class EditResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
+    const passwordEntropy = this.state.passwordInDictionary  ? 0 : this.state.passwordEntropy;
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
-
     return (
       <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.nameOriginal} className="edit-password-dialog"
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>

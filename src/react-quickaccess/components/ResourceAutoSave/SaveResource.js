@@ -60,7 +60,7 @@ class SaveResource extends React.Component {
       passwordError: "",
       passwordEntropy: null,
       isPwnedServiceAvailable: true,
-      passwordInDictionary: false
+      passwordInDictionary: false,
     };
   }
 
@@ -164,6 +164,10 @@ class SaveResource extends React.Component {
   handlePasswordChange(event) {
     if (event.target.value.length) {
       this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+    } else {
+      this.setState({
+        passwordInDictionary: false,
+      });
     }
     this.loadPassword(event.target.value);
   }
@@ -188,13 +192,19 @@ class SaveResource extends React.Component {
    * @return {Promise}
    */
   async evaluatePasswordIsInDictionaryDebounce() {
+    let passwordEntropy = null;
     if (this.state.isPwnedServiceAvailable) {
+      passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
       const result = await this.pownedService.evaluateSecret(this.state.password);
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary: result.inDictionary});
+      const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
     }
+    this.setState({passwordEntropy});
   }
 
   render() {
+    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
+
     return (
       <div className="resource-auto-save">
         <h1 className="title"><Trans>Would you like to save this credential ?</Trans></h1>
@@ -234,7 +244,7 @@ class SaveResource extends React.Component {
                   <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
                     placeholder={this.translate('Password')} id="password" autoComplete="new-password"/>
                 </div>
-                <PasswordComplexity entropy={this.state.passwordEntropy} error={Boolean(this.state.passwordError)}/>
+                <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }

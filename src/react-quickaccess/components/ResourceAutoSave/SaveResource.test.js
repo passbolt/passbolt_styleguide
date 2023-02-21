@@ -54,6 +54,16 @@ describe("See the Create Resource - save resource", () => {
     // we expect a warning to inform about a network issue
     expect(page.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
   });
+
+  it("As a signed-in user creating a password on the quickaccess, I should see a complexity as Quality if the passphrase is empty", async() => {
+    expect.assertions(2);
+
+    await page.fillInputPassword('');
+    await waitFor(() => {});
+
+    expect(page.pwnedWarningMessage).toBeNull();
+    expect(page.passwordComplexity.textContent).toBe("Quality");
+  });
 });
 
 

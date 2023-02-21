@@ -51,6 +51,13 @@ export default class SaveResourcePage {
     return this._page.container.querySelector('.pwned-password.warning-message');
   }
 
+  /**
+   * Returns the password complexity
+   */
+  get passwordComplexity() {
+    return this._page.container.querySelector('.complexity-text');
+  }
+
   /** fill the input password with data */
   async fillInputPassword(data)  {
     const dataInputEvent = {target: {value: data}};

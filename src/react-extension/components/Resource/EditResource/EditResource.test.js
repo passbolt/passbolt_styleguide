@@ -136,7 +136,7 @@ describe("See the Edit Resource", () => {
         name: "Password name",
         uri: "https://uri.dev",
         username: "Password username",
-        password: "password-value",
+        password: "password-value12345",
         description: "Password description"
       };
       // Fill the form
@@ -149,6 +149,7 @@ describe("See the Edit Resource", () => {
       });
       await page.passwordEdit.fillInputPassword(resourceMeta.password);
       await page.passwordEdit.blurInput(page.passwordEdit.password);
+
       expect(page.passwordEdit.complexityText.textContent).not.toBe("Quality");
       expect(page.passwordEdit.progressBar.classList.contains("error")).toBe(false);
 
@@ -352,6 +353,15 @@ describe("See the Edit Resource", () => {
       await waitFor(() => {});
       // we expect a warning to inform about a network issue
       expect(page.passwordEdit.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
+    });
+
+    it("As a signed-in user editing a password on the application, I should see a complexity as Quality if the passphrase is empty", async() => {
+      expect.assertions(2);
+
+      await page.passwordEdit.fillInputPassword("");
+      await waitFor(() => {});
+      expect(page.passwordEdit.pwnedWarningMessage).toBeNull();
+      expect(page.passwordEdit.complexityText.textContent).toBe("Quality");
     });
   });
 });
