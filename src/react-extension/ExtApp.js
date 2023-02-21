@@ -126,6 +126,7 @@ class ExtApp extends Component {
                                       "/app/administration/email-notification",
                                       "/app/administration/smtp-settings",
                                       "/app/settings/mfa",
+                                      "/app/settings/mfa/duo"
                                     ]}/>
                                     {/* Passwords workspace */}
                                     <Route path={[

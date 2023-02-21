@@ -49,18 +49,16 @@ export const mockMfaSettings = {
     "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"
   },
   "duo": {
-    "hostName": "api-123456af.duosecurity.com",
-    "integrationKey": "PAGI605APMFKP8YSME6T",
-    "salt": "salt1".repeat(8),
-    "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
+    "apiHostName": "api-123456af.duosecurity.com",
+    "clientId": "PAGI605APMFKP8YSME6T",
+    "clientSecret": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
   }
 };
 
 export const mockDefaultMfaModel = {
   "duoHostname": "",
-  "duoIntegrationKey": "",
-  "duoSalt": "",
-  "duoSecretKey": "",
+  "duoClientId": "",
+  "duoClientSecret": "",
   "duoToggle": false,
   "totpProviderToggle": false,
   "yubikeyClientIdentifier": "",
@@ -80,9 +78,8 @@ export const mockModel = {
   yubikeyClientIdentifier: "80412",
   yubikeySecretKey: "pas6lyijz2AIhX3D9eLIYAxv63lt@",
   duoHostname: "api-123456af.duosecurity.com",
-  duoIntegrationKey: "PAGI605APMFKP8YSME6T",
-  duoSalt: "salt1".repeat(8),
-  duoSecretKey: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
+  duoClientId: "PAGI605APMFKP8YSME6T",
+  duoClientSecret: "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
 };
 
 /**
@@ -121,9 +118,8 @@ export function mockDuoError(data = {}) {
   return {
     ...{
       "duoHostnameError": "A hostname is required.",
-      "duoIntegrationKeyError": "An integration key is required.",
-      "duoSaltError": "A salt is required.",
-      "duoSecretKeyError": "A secret key is required.",
+      "duoClientIdError": "A client id is required.",
+      "duoClientSecretError": "A client secret is required.",
     },
     ...data
   };
