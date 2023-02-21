@@ -177,7 +177,7 @@ describe("Check passphrase", () => {
   });
 
   describe("Check pwned passphrase", () => {
-    it("As AN completing the setup I should not be able to use a passphrase that is part of a data breach.", async() => {
+    it("As AN completing the setup I should be able to use a passphrase that is part of a data breach.", async() => {
       props = defaultProps({displayAs: CheckPassphraseVariations.SETUP});
       page = new CheckPassphrasePage(props);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(80));
@@ -188,7 +188,7 @@ describe("Check passphrase", () => {
 
       await waitFor(() => {});
 
-      expect(props.onComplete).not.toHaveBeenCalled();
+      expect(props.onComplete).toHaveBeenCalled();
     });
 
     it("As AN completing the recover I should be able to recover my account even if my passphrase is part of a data breach.", async() => {

@@ -341,6 +341,16 @@ describe("See the Create Resource", () => {
       await waitFor(() => {});
       expect(page.passwordCreate.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
     });
+
+    it("As a signed-in user creating a password on the application, I should see a complexity as Quality if the passphrase is empty", async() => {
+      expect.assertions(2);
+
+      page.passwordCreate.fillInput(page.passwordCreate.password, '');
+      await page.passwordCreate.keyUpInput(page.passwordCreate.password);
+
+      expect(page.passwordCreate.complexityText.textContent).toBe("Quality");
+      expect(page.passwordCreate.pwnedWarningMessage).toBeNull();
+    });
   });
 });
 
