@@ -23,9 +23,10 @@ import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import {withTranslation} from "react-i18next";
 import XRegExp from "xregexp";
+import DomainUtil from "../lib/Domain/DomainUtil";
 
-const HOSTNAME_REGEXP = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
-const EMAIL_REGEXP = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${HOSTNAME_REGEXP}$`;
+const EMAIL_HOSTNAME_REGEXP = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
+const EMAIL_REGEXP = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${EMAIL_HOSTNAME_REGEXP}$`;
 
 export const AdminSmtpSettingsContext = React.createContext({
   getCurrentSmtpSettings: () => {}, // Returns the current SMTP settings
@@ -76,6 +77,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
         host: "",
         tls: true,
         port: "",
+        client: "",
         sender_email: "",
         sender_name: "Passbolt",
       },
@@ -109,27 +111,24 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       return;
     }
 
+    let currentSmtpSettings = this.state.currentSmtpSettings;
+
     try {
-      const currentSmtpSettings = await this.smtpSettingsModel.findSmtpSettings();
-      if (!currentSmtpSettings.sender_email) {
-        currentSmtpSettings.sender_email = this.props.context.loggedInUser.username;
-      }
-
-      if (currentSmtpSettings.host && currentSmtpSettings.port) {
-        currentSmtpSettings.provider = this.detectProvider(currentSmtpSettings);
-      }
-
+      currentSmtpSettings = await this.smtpSettingsModel.findSmtpSettings();
       this.setState({currentSmtpSettings, isLoaded: true});
     } catch (e) {
-      this.setState({
-        isLoaded: true,
-        currentSmtpSettings: {
-          ...this.state.currentSmtpSettings,
-          sender_email: this.props.context.loggedInUser.username
-        }
-      });
+      // In case of error, the user should still be able to update the settings.
       this.handleError(e);
     }
+
+    if (!currentSmtpSettings.sender_email) {
+      currentSmtpSettings.sender_email = this.props.context.loggedInUser.username;
+    }
+    if (currentSmtpSettings.host && currentSmtpSettings.port) {
+      currentSmtpSettings.provider = this.detectProvider(currentSmtpSettings);
+    }
+
+    this.setState({currentSmtpSettings, isLoaded: true});
   }
 
   /**
@@ -151,6 +150,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       try {
         const dto = {...this.state.currentSmtpSettings};
         delete dto.provider;
+        dto.client = dto.client || null;
         await this.smtpSettingsModel.saveSmtpSettings(dto);
         this.props.actionFeedbackContext.displaySuccess(this.props.t("The SMTP settings have been saved successfully"));
         const newSettings = Object.assign({}, this.state.currentSmtpSettings, {"source": "db"});
@@ -298,9 +298,10 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
     isFormValid = this.validate_password(settings.password, errors) && isFormValid;
     isFormValid = this.validate_port(settings.port, errors) && isFormValid;
     isFormValid = this.validate_tls(settings.tls, errors) && isFormValid;
+    isFormValid = this.validate_client(settings.client, errors) && isFormValid;
 
     if (!isFormValid) {
-      this.fieldToFocus = this.getFirstFieldInError(errors, ["username", "password", "host", "tls", "port", "sender_name", "sender_email"]);
+      this.fieldToFocus = this.getFirstFieldInError(errors, ["username", "password", "host", "tls", "port", "client", "sender_name", "sender_email"]);
     }
 
     this.setState({errors, hasSumittedForm: true});
@@ -325,6 +326,20 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Returns true if the client value is valid
+   * @param {string|null} data the data to validate
+   * @param {object} errors a ref object to put the validation onto
+   * @returns {boolean}
+   */
+  validate_client(data, errors) {
+    if(data.length === 0 || (DomainUtil.isValidHostname(data) && data.length <= 2048)) {
+      return true;
+    }
+    errors.client = this.props.t("SMTP client should be a valid domain or IP address");
+    return false;
   }
 
   /**

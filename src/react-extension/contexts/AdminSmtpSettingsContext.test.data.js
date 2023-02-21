@@ -48,6 +48,7 @@ export function withExistingSmtpSettings(data = {}) {
     host: "smtp.test.com",
     tls: false,
     port: 25,
+    client: null,
     username: "test username",
     password: "test password",
     sender_email: "server@passbolt.com",

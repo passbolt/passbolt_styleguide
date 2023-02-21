@@ -14,6 +14,7 @@
 
 import XRegExp from 'xregexp';
 import {nonProfessionalDomains} from './Domains';
+import ipRegex from "ip-regex";
 
 const HOSTNAMEREGEX = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
 
@@ -64,6 +65,16 @@ class DomainUtil {
     } catch (error) {
       throw new Error("Cannot parse domain. The domain is not valid.");
     }
+  }
+
+  /**
+   * Is the domain is valid hostname or ip address
+   * @param {string} domain
+   * @returns {boolean}
+   */
+  static isValidHostname(domain) {
+    const regex = XRegExp(`^${HOSTNAMEREGEX}$`);
+    return regex.test(domain) || ipRegex({exact: true}).test(domain);
   }
 }
 

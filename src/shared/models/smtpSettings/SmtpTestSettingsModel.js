@@ -33,17 +33,19 @@ class SmtpTestSettingsModel {
    * @return {Promise<SmtpSettingsDto|null>}
    */
   sendTestEmail(settings, recipient) {
-    const {sender_name, sender_email, host, port, username, password, tls} = settings;
+    const {sender_name, sender_email, host, port, client, username, password, tls} = settings;
     const dto = {
       sender_name,
       sender_email,
       host,
       port,
+      client,
       username,
       password,
       tls,
       email_test_to: recipient
     };
+    dto.client = dto.client || null;
     return this.smtpTestSettingsService.sendTestEmail(dto);
   }
 }

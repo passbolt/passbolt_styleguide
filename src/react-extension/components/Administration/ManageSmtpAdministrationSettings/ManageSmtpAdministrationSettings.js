@@ -88,6 +88,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     this.passwordFieldRef = React.createRef();
     this.hostFieldRef = React.createRef();
     this.portFieldRef = React.createRef();
+    this.clientFieldRef = React.createRef();
     this.senderEmailFieldRef = React.createRef();
     this.senderNameFieldRef = React.createRef();
   }
@@ -399,6 +400,15 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                           disabled={this.isProcessing()}/>
                         {errors.port &&
                         <div className="error-message">{errors.port}</div>
+                        }
+                      </div>
+                      <div className={`input text ${errors.client ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
+                        <label htmlFor="smtp-settings-form-client"><Trans>SMTP client</Trans></label>
+                        <input id="smtp-settings-form-client" ref={this.clientFieldRef} name="client" maxLength="2048" type="text"
+                          autoComplete="off" value={settings.client} onChange={this.handleInputChange} placeholder={this.translate("SMTP client address")}
+                          disabled={this.isProcessing()}/>
+                        {errors.client &&
+                          <div className="error-message">{errors.client}</div>
                         }
                       </div>
                     </div>

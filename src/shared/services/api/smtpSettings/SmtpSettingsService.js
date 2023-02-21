@@ -39,6 +39,7 @@ class SmtpSettingsService {
   async find() {
     const smtpSettings = await this.apiClient.findAll();
     const settings = smtpSettings?.body;
+    settings.client = settings.client ?? "";
     settings.tls = Boolean(settings?.tls); //could be null from the API, we need it to be false then
     return settings;
   }
