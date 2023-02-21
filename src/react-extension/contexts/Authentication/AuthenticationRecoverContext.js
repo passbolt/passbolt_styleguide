@@ -128,6 +128,13 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the component is unmount
+   */
+  componentWillUnmount() {
+    this.props.context.port._port.onDisconnect.removeListener(this.retryRecover);
+  }
+
+  /**
    * Initialize the authentication recover workflow
    * @returns {Promise<void>}
    */

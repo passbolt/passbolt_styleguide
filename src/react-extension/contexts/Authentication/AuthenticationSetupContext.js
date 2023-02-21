@@ -124,6 +124,13 @@ export class AuthenticationSetupContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the component is unmount
+   */
+  componentWillUnmount() {
+    this.props.context.port._port.onDisconnect.removeListener(this.retrySetup);
+  }
+
+  /**
    * Initialize the authentication setup workflow
    * @returns {Promise<void>}
    */
