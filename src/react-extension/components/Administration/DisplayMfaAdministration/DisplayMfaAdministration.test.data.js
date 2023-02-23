@@ -49,9 +49,9 @@ export const mockMfaSettings = {
     "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"
   },
   "duo": {
-    "apiHostName": "api-123456af.duosecurity.com",
-    "clientId": "PAGI605APMFKP8YSME6T",
-    "clientSecret": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
+    "hostName": "api-123456af.duosecurity.com",
+    "integrationKey": "PAGI605APMFKP8YSME6T",
+    "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
   }
 };
 
