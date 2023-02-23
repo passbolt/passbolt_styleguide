@@ -81,10 +81,10 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.sender_name.value).toBe(initialForm.sender_name);
       expect(page.sender_email.value).toBe(initialForm.sender_email);
 
-      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "gmail");
+      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "google-mail");
       await page.selectProviderInSelectField(gmailSmtpProviderIndex);
 
-      expect(page.providerValue).toBe("Gmail");
+      expect(page.providerValue).toBe("Google Mail");
       expect(page.username.value).toBe(initialForm.username);
       expect(page.password.value).toBe(initialForm.password);
       expect(page.sender_name.value).toBe(initialForm.sender_name);
@@ -139,7 +139,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.tlsValue).toBe("Yes");
       expect(page.port.value).toBe("");
 
-      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "gmail");
+      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "google-mail");
       await page.selectProviderInSelectField(gmailSmtpProviderIndex);
       await page.showAdvancedSettings();
       const provider = SmtpProviders[gmailSmtpProviderIndex];
