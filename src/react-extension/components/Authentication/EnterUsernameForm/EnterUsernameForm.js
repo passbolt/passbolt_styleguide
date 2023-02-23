@@ -315,6 +315,11 @@ class EnterUsernameForm extends Component {
               disabled={this.hasAllInputDisabled()} big={true} processing={this.state.processing} fullWidth={true}
               value={this.translate("Next")}
             />
+            {this.props.isSsoRecoverEnabled &&
+              <a onClick={this.props.onSecondaryActionClick}>
+                <Trans>Continue with SSO.</Trans>
+              </a>
+            }
           </div>
         </form>
       </div>
@@ -322,9 +327,15 @@ class EnterUsernameForm extends Component {
   }
 }
 
+EnterUsernameForm.defaultProps = {
+  isSsoRecoverEnabled: false
+};
+
 EnterUsernameForm.propTypes = {
   apiTriageContext: PropTypes.object, // The api triage context
   context: PropTypes.any, // The application context provider
+  isSsoRecoverEnabled: PropTypes.bool.isRequired, // Is the Sso recover plugin enabled
+  onSecondaryActionClick: PropTypes.func, // The callback for the secondary action if any
   t: PropTypes.func, // The translation function
 };
 
