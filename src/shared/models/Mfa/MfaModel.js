@@ -36,9 +36,9 @@ class MfaModel {
 
     // DUO
     this.duoToggle = "providers" in mfaDTO ? mfaDTO.providers.includes(MfaProviders.duo) : false; //  yubikey toggle value
-    this.duoHostname = "duo" in mfaDTO ? mfaDTO.duo.apiHostName : ""; // duo hostname
-    this.duoClientId = "duo" in mfaDTO ? mfaDTO.duo.clientId : ""; // duo client id
-    this.duoClientSecret = "duo" in mfaDTO ? mfaDTO.duo.clientSecret : ""; // duo client key
+    this.duoHostname = "duo" in mfaDTO ? mfaDTO.duo.hostName : ""; // duo hostname
+    this.duoClientId = "duo" in mfaDTO ? mfaDTO.duo.integrationKey : ""; // duo client id
+    this.duoClientSecret = "duo" in mfaDTO ? mfaDTO.duo.secretKey : ""; // duo client key
   }
 }
 
