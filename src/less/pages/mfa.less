@@ -12,11 +12,19 @@
 
         .row {
           margin: 0;
+          form .actions-wrapper {
+            margin-top: 3.6rem;
+          }
         }
+
+        form.yubikey-setup {
+          height: 100%;
+        }
+
     }
     .actions-wrapper {
         display: flex;
-        margin-top: 1.6rem;
+        margin-top: 3.6rem;
         clear: both;
 
         a + a, a + button {
@@ -141,7 +149,6 @@
     .how-it-works {
         .instruction {
           display: flex;
-          padding-bottom: 1.6rem;
           width: calc(100% - 3.2rem);
           max-width: 100.8rem;
           gap: 1.6rem;
