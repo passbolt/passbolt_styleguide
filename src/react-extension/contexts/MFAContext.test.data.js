@@ -60,7 +60,11 @@ export const noMfaUserDefinedWithoutTotp = {
 };
 
 
-export const MfaPolicy = {
+export const MfaMandatoryPolicy = {
   policy: MfaPolicyEnumerationTypes.MANDATORY
 };
 
+
+export const MfaOptInPolicy = {
+  policy: MfaPolicyEnumerationTypes.OPTIN
+};
