@@ -128,6 +128,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/users-directory",
               "/app/administration/email-notification",
               "/app/administration/smtp-settings",
+              "/app/settings/mfa/:provider",
               "/app/settings/mfa",
             ]}>
               <>

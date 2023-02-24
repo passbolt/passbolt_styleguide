@@ -105,7 +105,7 @@ class ApiApp extends Component {
                                     </AdminSmtpSettingsContextProvider>
                                   </AdministrationWorkspaceContextProvider>
                                 </Route>
-                                <Route path={["/app/settings/mfa", "/app/settings/mfa/duo"]}>
+                                <Route path={["/app/settings/mfa"]}>
                                   <ManageDialogs/>
                                   <ManageContextualMenu/>
                                   <ManageAnnouncements/>

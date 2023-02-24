@@ -335,7 +335,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
    * @returns {boolean}
    */
   validate_client(data, errors) {
-    if(data.length === 0 || (DomainUtil.isValidHostname(data) && data.length <= 2048)) {
+    if (data.length === 0 || (DomainUtil.isValidHostname(data) && data.length <= 2048)) {
       return true;
     }
     errors.client = this.props.t("SMTP client should be a valid domain or IP address");
