@@ -73,7 +73,7 @@ class ExtBootstrapLogin extends Component {
     }
 
     return (
-      <InsertLoginAuthenticationIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+      <InsertLoginAuthenticationIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
     );
   }
 }

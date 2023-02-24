@@ -414,6 +414,22 @@ export default class ManageSmtpAdministrationSettingsPage {
   }
 
   /**
+   * Returns the client field
+   * @returns {HTMLElement}
+   */
+  get client() {
+    return this.select(".smtp-settings #smtp-settings-form-client");
+  }
+
+  /**
+   * Returns the client error HTMLElement
+   * @returns {HTMLElement}
+   */
+  get client_error() {
+    return this.select(".smtp-settings #smtp-settings-form-client + .error-message");
+  }
+
+  /**
    * Returns the advanced settings HTMLElements
    * @returns {HTMLElement}
    */

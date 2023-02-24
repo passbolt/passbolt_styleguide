@@ -19,6 +19,7 @@ import {withAppContext} from "./AppContext";
 export const AccountRecoveryUserContext = React.createContext({
   accountRecoveryOrganizationPolicy: null, // The current organization policy
   status: null, // The current account recovery user settings status
+  isDataLoaded: false, // True when the data has been loaded
   findAccountRecoveryPolicy: () => {},
   getOrganizationPolicy: () => {},
   getRequestor: () => {},
@@ -29,6 +30,7 @@ export const AccountRecoveryUserContext = React.createContext({
   isPolicyEnabled: () => {},
   loadAccountRecoveryPolicy: () => {},
   reloadAccountRecoveryPolicy: () => {},
+  isReady: () => {},
 });
 
 const ACCOUNT_RECOVERY_STATUS_PENDING = 'pending';
@@ -56,6 +58,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
     return {
       accountRecoveryOrganizationPolicy: null, // The current organization policy
       status: null, // The current account recovery user settings status
+      isDataLoaded: false, // True when the data has been loaded
       findAccountRecoveryPolicy: this.findAccountRecoveryPolicy.bind(this), // Whenever the account recovery policy is requested
       getOrganizationPolicy: this.getOrganizationPolicy.bind(this), // The current organization account recovery policy details
       getRequestor: this.getRequestor.bind(this), // The current organization account recovery policy requestor
@@ -67,6 +70,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
       isPolicyEnabled: this.isPolicyEnabled.bind(this), // Return true is the policy is enabled
       loadAccountRecoveryPolicy: this.loadAccountRecoveryPolicy.bind(this), // Run the initial load of the account recovery policy
       reloadAccountRecoveryPolicy: this.reloadAccountRecoveryPolicy.bind(this), // Reload the account recovery policy regardless of having it cached or not
+      isReady: this.isReady.bind(this), // True when the data has been loaded
     };
   }
 
@@ -74,7 +78,7 @@ export class AccountRecoveryUserContextProvider extends React.Component {
    * Run the initial load of the account recovery policy.
    */
   async loadAccountRecoveryPolicy() {
-    if (this.state.accountRecoveryOrganizationPolicy !== null) {
+    if (this.state.isDataLoaded) {
       return;
     }
 
@@ -105,8 +109,17 @@ export class AccountRecoveryUserContextProvider extends React.Component {
     const status = loggedInUser.account_recovery_user_setting?.status || AccountRecoveryUserContextProvider.STATUS_PENDING;
     this.setState({
       accountRecoveryOrganizationPolicy,
-      status
+      status,
+      isDataLoaded: true
     });
+  }
+
+  /**
+   * Returns true when the data has been loaded
+   * @returns {boolean}
+   */
+  isReady() {
+    return this.state.isDataLoaded;
   }
 
   /**

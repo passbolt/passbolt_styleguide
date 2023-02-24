@@ -15,11 +15,11 @@
 import {defaultProps} from '../components/HandleStatusCheck/HandleStatusCheck.test.data';
 import {MfaContextProvider} from './MFAContext';
 import {MfaPolicyEnumerationTypes} from '../../shared/models/mfaPolicy/MfaPolicyEnumeration';
-import {mockMfaSettings, noMfaDefined} from './MFAContext.test.data';
+import {MfaMandatoryPolicy, mockMfaSettings, noMfaUserDefinedWithoutTotp, noMfaUserDefinedWithTotp} from './MFAContext.test.data';
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {defaultAppContext} from './ApiAppContext.test.data';
-import {MfaPolicy} from './MFAContext.test.data';
 import {mockApiResponse} from '../../../test/mocks/mockApiResponse';
+import {MfaOptInPolicy} from './MFAContext.test.data';
 
 describe("MFAContext", () => {
   let mfaContextProvider; // The MFAContextProvider to test
@@ -27,7 +27,7 @@ describe("MFAContext", () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
-    jest.spyOn(props.context.port, "request").mockImplementation(() => MfaPolicyEnumerationTypes.MANDATORY);
+    jest.spyOn(props.context.port, "request").mockImplementation(() => MfaMandatoryPolicy);
     mfaContextProvider = new MfaContextProvider(props);
     mockState(mfaContextProvider);
     enableFetchMocks();
@@ -43,7 +43,7 @@ describe("MFAContext", () => {
     });
 
     it("should get the current policy and store it in its state, using API", async() => {
-      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse(MfaPolicy));
+      fetch.doMockOnceIf(/mfa-policies\/settings*/, () => mockApiResponse(MfaMandatoryPolicy));
 
       mfaContextProvider = new MfaContextProvider(defaultProps({
         context: defaultAppContext()
@@ -74,20 +74,9 @@ describe("MFAContext", () => {
   });
 
   describe("AdministrationMfaPolicyContext::checkMfaChoiceRequired", () => {
-    it("should return false if we do not have policy", async() => {
-      expect.assertions(2);
-      jest.spyOn(props.context.port, "request").mockImplementation(() => null);
-
-      await mfaContextProvider.findPolicy();
-      await mfaContextProvider.checkMfaChoiceRequired();
-
-      expect(mfaContextProvider.getPolicy()).toEqual(null);
-      expect(mfaContextProvider.isMfaChoiceRequired()).toBeFalsy();
-    });
-
     it("should return false if policy is not mandatory", async() => {
       expect.assertions(2);
-      jest.spyOn(props.context.port, "request").mockImplementation(() => MfaPolicyEnumerationTypes.OPTIN);
+      jest.spyOn(props.context.port, "request").mockImplementation(() => MfaOptInPolicy);
 
       await mfaContextProvider.findPolicy();
       await mfaContextProvider.checkMfaChoiceRequired();
@@ -99,8 +88,8 @@ describe("MFAContext", () => {
     it("should return false if settings are defined", async() => {
       expect.assertions(1);
       jest.spyOn(props.context.port, "request").mockImplementation(event => {
-        if (event === "passbolt.mfa-policy.get-policy") { return MfaPolicyEnumerationTypes.MANDATORY; }
-        if (event === "passbolt.mfa-policy.get-mfa-settings") { return mockMfaSettings(); }
+        if (event === "passbolt.mfa-policy.get-policy") { return MfaMandatoryPolicy; }
+        if (event === "passbolt.mfa-policy.get-mfa-settings") { return noMfaUserDefinedWithoutTotp.settings; }
       });
 
       await mfaContextProvider.checkMfaChoiceRequired();
@@ -108,16 +97,46 @@ describe("MFAContext", () => {
       expect(mfaContextProvider.isMfaChoiceRequired()).toBeFalsy();
     });
 
-    it("should return true if settings are not defined", async() => {
+    it("should return true if settings are not defined and organisation settings are defined", async() => {
       expect.assertions(1);
       jest.spyOn(props.context.port, "request").mockImplementation(event => {
-        if (event === "passbolt.mfa-policy.get-policy") { return MfaPolicyEnumerationTypes.MANDATORY; }
-        if (event === "passbolt.mfa-policy.get-mfa-settings") { return mockMfaSettings(noMfaDefined); }
+        if (event === "passbolt.mfa-policy.get-policy") { return MfaMandatoryPolicy; }
+        if (event === "passbolt.mfa-policy.get-mfa-settings") {
+          return noMfaUserDefinedWithTotp.settings;
+        }
       });
 
       await mfaContextProvider.checkMfaChoiceRequired();
 
       expect(mfaContextProvider.isMfaChoiceRequired()).toBeTruthy();
+    });
+
+    it("should return false if settings are not defined and organisation settings are not defined", async() => {
+      expect.assertions(1);
+      jest.spyOn(props.context.port, "request").mockImplementation(event => {
+        if (event === "passbolt.mfa-policy.get-policy") { return MfaMandatoryPolicy; }
+        if (event === "passbolt.mfa-policy.get-mfa-settings") {
+          return noMfaUserDefinedWithoutTotp.settings;
+        }
+      });
+
+      await mfaContextProvider.checkMfaChoiceRequired();
+
+      expect(mfaContextProvider.isMfaChoiceRequired()).toBeFalsy();
+    });
+
+    it("should return false if settings are not defined and organisation settings are not defined", async() => {
+      expect.assertions(1);
+      jest.spyOn(props.context.port, "request").mockImplementation(event => {
+        if (event === "passbolt.mfa-policy.get-policy") { return MfaPolicyEnumerationTypes.MANDATORY; }
+        if (event === "passbolt.mfa-policy.get-mfa-settings") {
+          return noMfaUserDefinedWithoutTotp.settings;
+        }
+      });
+
+      await mfaContextProvider.checkMfaChoiceRequired();
+
+      expect(mfaContextProvider.isMfaChoiceRequired()).toBeFalsy();
     });
   });
 
@@ -130,17 +149,17 @@ describe("MFAContext", () => {
 
       expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
 
-      jest.spyOn(props.context.port, "request").mockImplementation(() => mockMfaSettings(noMfaDefined));
+      jest.spyOn(props.context.port, "request").mockImplementation(() => mockMfaSettings(noMfaUserDefinedWithTotp));
       await mfaContextProvider.findMfaSettings();
 
-      expect(mfaContextProvider.hasMfaSettings()).toBeFalsy();
+      expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
       expect(mfaContextProvider.isProcessing()).toBeFalsy();
     });
 
     it("should retrieve data for current mfa settings, using API", async() => {
       expect.assertions(2);
 
-      fetch.doMockOnceIf(/mfa\/setup*/, () => mockApiResponse({MfaAccountSettings: noMfaDefined}));
+      fetch.doMockOnceIf(/mfa\/setup*/, () => mockApiResponse(mockMfaSettings(noMfaUserDefinedWithTotp)));
 
       mfaContextProvider = new MfaContextProvider(defaultProps({
         context: defaultAppContext()
@@ -149,7 +168,7 @@ describe("MFAContext", () => {
 
       await mfaContextProvider.findMfaSettings();
 
-      expect(mfaContextProvider.hasMfaSettings()).toBeFalsy();
+      expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
       expect(mfaContextProvider.isProcessing()).toBeFalsy();
     });
   });

@@ -126,4 +126,70 @@ describe("DomainUtil", () => {
       });
     });
   });
+
+  describe("DomainUtil::isValidHostname", () => {
+    each([
+      {
+        scenario: "TLD",
+        domain: passboltDomain,
+      },
+      {
+        scenario: "TLD with subdomain",
+        domain: `test.${passboltDomain}`,
+      },
+      {
+        scenario: "TLD with 4 subdomain",
+        domain: `${("test.").repeat(4)}${passboltDomain}`,
+      },
+      {
+        scenario: "IP v4",
+        domain: "127.0.0.1",
+      },
+      {
+        scenario: "IP v6",
+        domain: "2001:db8:3333:4444:5555:6666:7777:8888",
+      },
+    ]).describe("should validate", _props => {
+      it(`should validate: ${_props.scenario}`, () => {
+        expect.assertions(1);
+        expect(DomainUtil.isValidHostname(_props.domain)).toBeTruthy();
+      });
+    });
+
+    each([
+      {
+        scenario: "No domain",
+        domain: "/passwords",
+      },
+      {
+        scenario: "Not a domain allowed",
+        domain: "passbolt.io/passwords",
+      },
+      {
+        scenario: "Regex wild mark attack",
+        domain: "passboltxdev",
+      },
+      {
+        scenario: "IP v6 with port",
+        domain: "[0:0:0:0:0:0:0:1]:4443",
+      },
+      {
+        scenario: "IP v4 with port",
+        domain: "127.0.0.1:4443",
+      },
+      {
+        scenario: "TLD with Port",
+        domain: "passbolt.dev:4443",
+      },
+      {
+        scenario: "TLD valid but not respecting max size",
+        domain: `${("test.").repeat(20)}${passboltDomain}`,
+      },
+    ]).describe("should not parse", _props => {
+      it(`should not validate: ${_props.scenario}`, () => {
+        expect.assertions(1);
+        expect(DomainUtil.isValidHostname(_props.url)).toBeFalsy();
+      });
+    });
+  });
 });

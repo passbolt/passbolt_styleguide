@@ -75,7 +75,7 @@ class ExtBootstrapRecover extends Component {
 
     return (
       <>
-        <InsertRecoverAuthenticationIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertRecoverAuthenticationIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
       </>
     );
   }

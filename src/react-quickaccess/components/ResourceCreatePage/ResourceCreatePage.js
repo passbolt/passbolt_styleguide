@@ -26,6 +26,7 @@ class ResourceCreatePage extends React.Component {
     this.pownedService = new PownedService(this.props.context.port);
     await this.handlePreparedResource();
     this.handleLastGeneratedPassword();
+    this.evaluatePasswordIsInDictionaryDebounce();
   }
 
   initEventHandlers() {
@@ -272,10 +273,14 @@ class ResourceCreatePage extends React.Component {
    * @return {Promise}
    */
   async evaluatePasswordIsInDictionaryDebounce() {
+    let passwordEntropy = null;
     if (this.state.isPwnedServiceAvailable) {
+      passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
       const result = await this.pownedService.evaluateSecret(this.state.password);
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary: result.inDictionary});
+      const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
     }
+    this.setState({passwordEntropy});
   }
 
   formatValidationFieldError(fieldErrors) {
@@ -288,6 +293,10 @@ class ResourceCreatePage extends React.Component {
   handlePasswordChange(event) {
     if (event.target.value.length) {
       this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+    } else {
+      this.setState({
+        passwordInDictionary: false,
+      });
     }
 
     this.loadPassword(event.target.value);
@@ -331,7 +340,7 @@ class ResourceCreatePage extends React.Component {
 
   loadPassword(password) {
     const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
-    this.setState({password, passwordEntropy});
+    this.setState({password, passwordEntropy, passwordInDictionary: false, passwordError: "",});
   }
 
   /**
@@ -343,6 +352,8 @@ class ResourceCreatePage extends React.Component {
   }
 
   render() {
+    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
+
     return (
       <div className="resource-create">
         <div className="back-link">
@@ -403,7 +414,7 @@ class ResourceCreatePage extends React.Component {
                     </a>
                   }
                 </div>
-                <PasswordComplexity entropy={this.state.passwordEntropy} error={Boolean(this.state.passwordError)}/>
+                <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }

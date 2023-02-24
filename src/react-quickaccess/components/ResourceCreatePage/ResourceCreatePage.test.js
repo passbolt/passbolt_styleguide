@@ -158,6 +158,7 @@ describe("ResourceCreatePage", () => {
       };
 
       const pwnedWarningMessage = () => component.container.querySelector('.pwned-password.warning-message');
+      const complexityText = () => component.container.querySelector('.complexity-text');
       // Mock the passbolt messaging layer.
       context.port = {
         request: function(event, value) {
@@ -193,7 +194,7 @@ describe("ResourceCreatePage", () => {
         </MockTranslationProvider>
       );
 
-      expect.assertions(4);
+      expect.assertions(6);
 
       // Wait the passbolt.request executed in the ComponentDidMount is resolved.
       await waitFor(() => {
@@ -209,6 +210,9 @@ describe("ResourceCreatePage", () => {
 
       await inputPasswordChange("P4ssb0lt");
       expect(pwnedWarningMessage()).toBe(null);
+      await inputPasswordChange("");
+      expect(pwnedWarningMessage()).toBe(null);
+      expect(complexityText().textContent).toBe("Quality");
       //Powned password should raise a warning and not block submit
       await inputPasswordChange("hello-world");
       await waitFor(() => {});

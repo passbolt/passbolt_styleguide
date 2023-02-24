@@ -189,5 +189,11 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(page.notInDictionaryHint.classList.contains("unavailable")).toBeTruthy();
       expect(page.tootltip.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
+    it('As LU I should see a complexity as Quality if the passphrase is empty', async() => {
+      expect.assertions(2);
+      await page.insertPassphrase("");
+      expect(page.notInDictionaryHint.classList.length).toBe(0);
+      expect(page.isEmptyPassphrase).toBeTruthy();
+    });
   });
 });
