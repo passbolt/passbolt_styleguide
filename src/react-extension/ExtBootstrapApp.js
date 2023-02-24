@@ -164,7 +164,7 @@ class ExtBootstrapApp extends Component {
               {this.isLegacyAppjs &&
               <CleanupLegacyAppjs/>
               }
-              <InsertAppIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+              <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
               <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
             </Route>
           </Switch>

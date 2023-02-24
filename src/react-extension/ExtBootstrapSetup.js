@@ -75,7 +75,7 @@ class ExtBootstrapSetup extends Component {
 
     return (
       <>
-        <InsertSetupAuthenticationIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertSetupAuthenticationIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
         <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
       </>
     );
