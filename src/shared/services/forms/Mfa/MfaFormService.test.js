@@ -162,94 +162,65 @@ describe("MfaFormService", () => {
     });
   });
 
-  describe("MfaFormService::validateDuoIntegrationKey", () => {
+  describe("MfaFormService::validateDuoClientId", () => {
     it("should return required message", () => {
-      const requiredMessage = "An integration key is required.";
-      const result = mfaFormService.validateDuoIntegrationKey("");
+      const requiredMessage = "A client id is required.";
+      const result = mfaFormService.validateDuoClientId("");
       expect.assertions(2);
       expect(result).toEqual(requiredMessage);
-      expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(requiredMessage);
+      expect(adminMfaContext.getErrors().duoClientIdError).toEqual(requiredMessage);
     });
     it("should return regex message", () => {
-      const errorMessage = "This is not a valid integration key.";
+      const errorMessage = "This is not a valid client id.";
       //Min size 64
-      let result = mfaFormService.validateDuoIntegrationKey("F".repeat(15));
+      let result = mfaFormService.validateDuoClientId("F".repeat(15));
       expect(result).toEqual(errorMessage);
       //Max size 64
-      result = mfaFormService.validateDuoIntegrationKey("F".repeat(33));
+      result = mfaFormService.validateDuoClientId("F".repeat(33));
       expect(result).toEqual(errorMessage);
       //No special characters
-      result = mfaFormService.validateDuoIntegrationKey("@&'");
+      result = mfaFormService.validateDuoClientId("@&'");
       expect(result).toEqual(errorMessage);
-      expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(errorMessage);
+      expect(adminMfaContext.getErrors().duoClientIdError).toEqual(errorMessage);
       expect.assertions(4);
     });
     it("should not return message", () => {
       //only upper and lowercase letters with numbers
-      const result = mfaFormService.validateDuoIntegrationKey("0123456789AZERTY");
+      const result = mfaFormService.validateDuoClientId("0123456789AZERTY");
       expect(result).toEqual(null);
-      expect(adminMfaContext.getErrors().duoIntegrationKeyError).toEqual(null);
+      expect(adminMfaContext.getErrors().duoClientIdError).toEqual(null);
       expect.assertions(2);
     });
   });
 
-  describe("MfaFormService::validateDuoSecretKey", () => {
+  describe("MfaFormService::validateDuoClientSecret", () => {
     it("should return required message", () => {
-      const requiredMessage = "A secret key is required.";
-      const result = mfaFormService.validateDuoSecretKey("");
+      const requiredMessage = "A client secret is required.";
+      const result = mfaFormService.validateDuoClientSecret("");
       expect(result).toEqual(requiredMessage);
-      expect(adminMfaContext.getErrors().duoSecretKeyError).toEqual(requiredMessage);
+      expect(adminMfaContext.getErrors().duoClientSecretError).toEqual(requiredMessage);
       expect.assertions(2);
     });
     it("should return regex message", () => {
-      const errorMessage = "This is not a valid secret key.";
+      const errorMessage = "This is not a valid client secret.";
 
       //Min size 32
-      let result = mfaFormService.validateDuoSecretKey("F".repeat(31));
+      let result = mfaFormService.validateDuoClientSecret("F".repeat(31));
       expect(result).toEqual(errorMessage);
       //Max size 129
-      result = mfaFormService.validateDuoSecretKey("F".repeat(129));
+      result = mfaFormService.validateDuoClientSecret("F".repeat(129));
       expect(result).toEqual(errorMessage);
       //No special characters
-      result = mfaFormService.validateDuoSecretKey("@$ù=");
+      result = mfaFormService.validateDuoClientSecret("@$ù=");
       expect(result).toEqual(errorMessage);
-      expect(adminMfaContext.getErrors().duoSecretKeyError).toEqual(errorMessage);
+      expect(adminMfaContext.getErrors().duoClientSecretError).toEqual(errorMessage);
       expect.assertions(4);
     });
     it("should not return message", () => {
       //only upper and lowercase letters with numbers
-      const result = mfaFormService.validateDuoSecretKey("aZ7".repeat(11));
+      const result = mfaFormService.validateDuoClientSecret("aZ7".repeat(11));
       expect(result).toEqual(null);
-      expect(adminMfaContext.getErrors().duoSecretKeyError).toEqual(null);
-      expect.assertions(2);
-    });
-  });
-
-  describe("MfaFormService::validateDuoSalt", () => {
-    it("should return required message", () => {
-      const requiredMessage = "A salt is required.";
-      const result = mfaFormService.validateDuoSalt("");
-      expect(result).toEqual(requiredMessage);
-      expect(adminMfaContext.getErrors().duoSaltError).toEqual(requiredMessage);
-      expect.assertions(2);
-    });
-    it("should return regex message", () => {
-      const errorMessage = "The salt should be between 40 and 128 characters in length.";
-
-      //Min size 32
-      let result = mfaFormService.validateDuoSalt("F".repeat(39));
-      expect(result).toEqual(errorMessage);
-      //Max size 129
-      result = mfaFormService.validateDuoSalt("F".repeat(129));
-      expect(result).toEqual(errorMessage);
-      expect(adminMfaContext.getErrors().duoSaltError).toEqual(errorMessage);
-      expect.assertions(3);
-    });
-    it("should not return message", () => {
-      //Oall characters allowed
-      const result = mfaFormService.validateDuoSalt("aZ7@".repeat(10));
-      expect(result).toEqual(null);
-      expect(adminMfaContext.getErrors().duoSaltError).toEqual(null);
+      expect(adminMfaContext.getErrors().duoClientSecretError).toEqual(null);
       expect.assertions(2);
     });
   });
@@ -266,20 +237,18 @@ describe("MfaFormService", () => {
       adminMfaContext.setSettings("duoToggle", true);
 
       jest.spyOn(mfaFormService, "validateDuoHostname");
-      jest.spyOn(mfaFormService, "validateDuoIntegrationKey");
-      jest.spyOn(mfaFormService, "validateDuoSecretKey");
-      jest.spyOn(mfaFormService, "validateDuoSalt");
+      jest.spyOn(mfaFormService, "validateDuoClientId");
+      jest.spyOn(mfaFormService, "validateDuoClientSecret");
 
       const result = mfaFormService.validateDuoInputs();
       const settings = adminMfaContext.getSettings();
 
 
       expect(mfaFormService.validateDuoHostname).toHaveBeenCalledWith(settings.duoHostname);
-      expect(mfaFormService.validateDuoIntegrationKey).toHaveBeenCalledWith(settings.duoIntegrationKey);
-      expect(mfaFormService.validateDuoSecretKey).toHaveBeenCalledWith(settings.duoSecretKey);
-      expect(mfaFormService.validateDuoSalt).toHaveBeenCalledWith(settings.duoSalt);
+      expect(mfaFormService.validateDuoClientId).toHaveBeenCalledWith(settings.duoClientId);
+      expect(mfaFormService.validateDuoClientSecret).toHaveBeenCalledWith(settings.duoClientSecret);
       expect(result).toEqual(mockDuoError());
-      expect.assertions(5);
+      expect.assertions(4);
     });
   });
 

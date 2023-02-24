@@ -28,6 +28,10 @@ const portsData = {
   "588": {
     port: 588,
     tls: true
+  },
+  "465": {
+    port: 465,
+    tls: true
   }
 };
 
@@ -110,14 +114,23 @@ const ElasticEmail = {
 };
 ElasticEmail.defaultConfiguration = getConfiguration(ElasticEmail, 587, "smtp.elasticemail.com");
 
-const Gmail = {
-  id: "gmail",
-  name: "Gmail",
+const GoogleWorkspace = {
+  id: "google-workspace",
+  name: "Google Workspace",
   icon: "gmail.svg",
   help_page: "https://support.google.com/a/answer/2956491",
   availableConfigurations: generateConfiguration(["smtp-relay.gmail.com"], [25, 587])
 };
-Gmail.defaultConfiguration = getConfiguration(Gmail, 587);
+GoogleWorkspace.defaultConfiguration = getConfiguration(GoogleWorkspace, 587);
+
+const GoogleMail = {
+  id: "google-mail",
+  name: "Google Mail",
+  icon: "gmail.svg",
+  help_page: "https://support.google.com/a/answer/2956491",
+  availableConfigurations: generateConfiguration(["smtp.gmail.com"], [587])
+};
+GoogleMail.defaultConfiguration = getConfiguration(GoogleMail, 587);
 
 const MailGun = {
   id: "mailgun",
@@ -188,7 +201,8 @@ const Other = {
 const SmtpProviders = [
   AwsSes,
   ElasticEmail,
-  Gmail,
+  GoogleMail,
+  GoogleWorkspace,
   MailGun,
   Mailjet,
   Mandrill,

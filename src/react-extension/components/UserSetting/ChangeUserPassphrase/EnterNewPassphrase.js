@@ -144,6 +144,13 @@ class EnterNewPassphrase extends React.Component {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+    } else {
+      this.setState({
+        hintClassNames: {
+          ...this.state.hintClassNames,
+          notInDictionary: "unavailable"
+        }
+      });
     }
 
     this.setState({passphrase, passphraseEntropy, hintClassNames});
@@ -188,7 +195,7 @@ class EnterNewPassphrase extends React.Component {
     let notInDictionaryHint = "success";
 
     if (passphrase.length < 8) {
-      notInDictionaryHint = "error";
+      notInDictionaryHint = passphrase.length > 0 ? "error" : "unavailable";
     } else {
       try {
         const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
@@ -276,7 +283,7 @@ class EnterNewPassphrase extends React.Component {
   }
 
   render() {
-    const entropy = this.state.hintClassNames.notInDictionary === "error" ? 0 : this.state.passphraseEntropy;
+    const passphraseEntropy = this.state.hintClassNames.notInDictionary === "error" ? 0 : this.state.passphraseEntropy;
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
@@ -294,7 +301,7 @@ class EnterNewPassphrase extends React.Component {
                     securityToken={this.props.context.userSettings.getSecurityToken()}
                     onChange={this.handlePassphraseChange}
                     disabled={!this.areActionsAllowed}/>
-                  <PasswordComplexity entropy={entropy}/>
+                  <PasswordComplexity entropy={passphraseEntropy}/>
                 </div>
                 <div className="password-hints">
                   <ul>

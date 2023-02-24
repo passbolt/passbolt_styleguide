@@ -335,5 +335,6 @@ class PasswordCreatePageObject {
   /** Open the password generator*/
   async openPasswordGenerator() {
     await this.click(this.passwordGeneratorButton);
+    jest.runAllTimers();
   }
 }

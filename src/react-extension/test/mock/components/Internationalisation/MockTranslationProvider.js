@@ -19,10 +19,14 @@ import deTranslations from "../../../../../locales/de-DE/common.json";
 import enTranslations from "../../../../../locales/en-UK/common.json";
 import esTranslations from "../../../../../locales/es-ES/common.json";
 import frTranslations from "../../../../../locales/fr-FR/common.json";
+import itTranslations from "../../../../../locales/it-IT/common.json";
 import jaTranslations from "../../../../../locales/ja-JP/common.json";
+import koTranslations from "../../../../../locales/ko-KR/common.json";
 import ltTranslations from "../../../../../locales/lt-LT/common.json";
 import nlTranslations from "../../../../../locales/nl-NL/common.json";
 import plTranslations from "../../../../../locales/pl-PL/common.json";
+import ptBrTranslations from "../../../../../locales/pt-BR/common.json";
+import roTranslations from "../../../../../locales/ro-RO/common.json";
 import svTranslations from "../../../../../locales/sv-SE/common.json";
 
 /**
@@ -55,8 +59,14 @@ class MockTranslationProvider extends Component {
           "fr-FR": {
             common: frTranslations
           },
+          "it-IT": {
+            common: itTranslations
+          },
           "ja-JP": {
             common: jaTranslations
+          },
+          "ko-KR": {
+            common: koTranslations
           },
           "lt-LT": {
             common:  ltTranslations
@@ -66,6 +76,12 @@ class MockTranslationProvider extends Component {
           },
           "pl-PL": {
             common: plTranslations
+          },
+          "pt-BR": {
+            common: ptBrTranslations
+          },
+          "ro-RO": {
+            common: roTranslations
           },
           "sv-SE": {
             common: svTranslations

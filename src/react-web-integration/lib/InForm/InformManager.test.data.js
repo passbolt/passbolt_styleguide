@@ -13,6 +13,7 @@
  */
 
 import MockPort from "../../../react-extension/test/mock/MockPort";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Create a login form with name attribute username in DOM
@@ -410,6 +411,7 @@ export const domElementWithNoUsernamePassword =
  */
 export const initializeWindow = () => {
   window.port = new MockPort();
+  jest.spyOn(window.port, "request").mockImplementation(() => uuidv4());
   window.port._port = {
     onDisconnect: {
       addListener: () => {}

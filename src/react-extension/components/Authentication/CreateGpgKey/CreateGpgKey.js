@@ -148,6 +148,13 @@ class CreateGpgKey extends Component {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+    } else {
+      this.setState({
+        hintClassNames: {
+          ...this.state.hintClassNames,
+          notInDictionary: "unavailable"
+        }
+      });
     }
 
     this.setState({passphrase, passphraseEntropy, hintClassNames});
@@ -193,7 +200,7 @@ class CreateGpgKey extends Component {
     let notInDictionaryHint = "success";
 
     if (passphrase.length < 8) {
-      notInDictionaryHint = "error";
+      notInDictionaryHint = passphrase.length > 0 ? "error" : "unavailable";
     } else {
       try {
         const result = await this.pownedService.evaluateSecret(passphrase);
@@ -256,6 +263,7 @@ class CreateGpgKey extends Component {
    * Render the component
    */
   render() {
+    const passphraseEntropy = this.state.hintClassNames.notInDictionary ===  "error" ? 0 : this.state.passphraseEntropy;
     const processingClassName = this.isProcessing ? 'processing' : '';
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
@@ -281,7 +289,7 @@ class CreateGpgKey extends Component {
               preview={true}
               onChange={this.handlePassphraseChange}
               disabled={!this.areActionsAllowed}/>
-            <PasswordComplexity entropy={this.state.passphraseEntropy}/>
+            <PasswordComplexity entropy={passphraseEntropy}/>
           </div>
 
           <div className="password-hints">

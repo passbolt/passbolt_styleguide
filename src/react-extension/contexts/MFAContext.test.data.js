@@ -15,10 +15,17 @@
 import {MfaPolicyEnumerationTypes} from "../../shared/models/mfaPolicy/MfaPolicyEnumeration";
 
 export function mockMfaSettings(data = {}) {
-  const settings = {
-    totp: true,
-    duo: false,
-    yubikey: true
+  const  settings = {
+    "MfaOrganizationSettings": {
+      "totp": true,
+      "duo": false,
+      "yubikey": true
+    },
+    "MfaAccountSettings": {
+      "totp": true,
+      "duo": false,
+      "yubikey": true
+    }
   };
 
   return Object.assign(settings, data);
@@ -32,7 +39,32 @@ export const noMfaDefined = {
 };
 
 
-export const MfaPolicy = {
+export const mfaDefined = {
+  totp: true,
+  duo: false,
+  yubikey: false
+};
+
+export const noMfaUserDefinedWithTotp = {
+  settings: {
+    "MfaOrganizationSettings": mfaDefined,
+    "MfaAccountSettings": noMfaDefined,
+  }
+};
+
+export const noMfaUserDefinedWithoutTotp = {
+  settings: {
+    "MfaOrganizationSettings": noMfaDefined,
+    "MfaAccountSettings": noMfaDefined,
+  }
+};
+
+
+export const MfaMandatoryPolicy = {
   policy: MfaPolicyEnumerationTypes.MANDATORY
 };
 
+
+export const MfaOptInPolicy = {
+  policy: MfaPolicyEnumerationTypes.OPTIN
+};

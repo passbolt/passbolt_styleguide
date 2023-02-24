@@ -75,9 +75,9 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
 
       expect.assertions(1);
-      const veryWeakPassphrase = 'blabla';
+      const veryWeakPassphrase = 'blablablabla';
       await page.fill(veryWeakPassphrase);
-      await waitFor(() => expect(page.isVeryWeakPassphrase).toBeTruthy());
+      expect(page.isVeryWeakPassphrase).toBeTruthy();
     });
 
     it(`As AN I should see the passphrase weak strength updated on change, scenario: ${JSON.stringify(_props)}`, async() => {
@@ -225,6 +225,17 @@ describe("CreateGpgKey", () => {
       await page.fill("Service is unavailable");
       expect(page.notInDictionaryHint.classList.contains("unavailable")).toBeTruthy();
       expect(page.tootltip.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
+    });
+
+    it("As AN I should see a complexity as Quality if the passphrase is empty", async() => {
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
+      expect.assertions(2);
+
+      await page.fill("");
+
+      expect(page.isEmptyPassphrase).toBeTruthy();
+      expect(page.notInDictionaryHint.classList.length).toBe(0);
     });
   });
 });

@@ -32,9 +32,9 @@ class InsertRecoverAuthenticationIframe extends Component {
    * Load the react app iframe
    * @returns {void}
    */
-  loadIframe() {
-    const iframeUrl = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-recover.html?passbolt=passbolt-iframe-recover`;
-    this.iframeRef.current.contentWindow.location = iframeUrl;
+  async loadIframe() {
+    const portId = await this.props.port.request("passbolt.port.generate-id", "Recover");
+    this.iframeRef.current.contentWindow.location = `${this.props.browserExtensionUrl}webAccessibleResources/passbolt-iframe-recover.html?passbolt=${portId}`;
   }
 
   /**
@@ -50,6 +50,7 @@ class InsertRecoverAuthenticationIframe extends Component {
 
 InsertRecoverAuthenticationIframe.propTypes = {
   browserExtensionUrl: PropTypes.string, // The browser extension url
+  port: PropTypes.object, // The communication port
 };
 
 export default InsertRecoverAuthenticationIframe;

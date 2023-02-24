@@ -91,38 +91,24 @@ export default class DisplayMfaAdministrationPage {
   }
 
   /**
-   * Returns the duo integration key input element
+   * Returns the duo client id input element
    */
-  get duoIntegrationKey() {
-    return this._page.container.querySelector('#duoIntegrationKey');
+  get duoClientId() {
+    return this._page.container.querySelector('#duoClientId');
   }
 
   /**
-   * Returns the duo salt input element
+   * Returns the duo client secret input element
    */
-  get duoSalt() {
-    return this._page.container.querySelector('#duoSalt');
-  }
-
-  /**
-   * Returns the duo secret key input element
-   */
-  get duoSecretKey() {
-    return this._page.container.querySelector('#duoSecretKey');
+  get duoClientSecret() {
+    return this._page.container.querySelector('#duoClientSecret');
   }
 
 
   /**
-   * Returns the eye button for duoSecretKey
+   * Returns the eye button for duoClientSecret
    */
-  get duoSecretKeyButton() {
-    return this._page.container.querySelectorAll('.password-view .svg-icon')[2];
-  }
-
-  /**
-   * Returns the eye button for duoSalt
-   */
-  get duoSaltKeyButton() {
+  get duoClientSecretButton() {
     return this._page.container.querySelectorAll('.password-view .svg-icon')[1];
   }
 
@@ -157,22 +143,15 @@ export default class DisplayMfaAdministrationPage {
   /**
    * Returns the duo integration key error mesage input element
    */
-  get duoIntegrationKeyErrorMessage() {
-    return this._page.container.querySelector('.duo_integration_key.error-message').textContent;
-  }
-
-  /**
-   * Returns the duo salt error mesage input element
-   */
-  get duoSaltErrorMessage() {
-    return this._page.container.querySelector('.duo_salt.error-message').textContent;
+  get duoClientIdErrorMessage() {
+    return this._page.container.querySelector('.duo_client_id.error-message').textContent;
   }
 
   /**
    * Returns the duo secret key error mesage input element
    */
-  get duoSecretKeyErrorMessage() {
-    return this._page.container.querySelector('.duo_secret_key.error-message').textContent;
+  get duoClientSecretErrorMessage() {
+    return this._page.container.querySelector('.duo_client_secret.error-message').textContent;
   }
 
   /**
@@ -214,24 +193,20 @@ export default class DisplayMfaAdministrationPage {
     this.fillInput(this.yubikeySecretKey, data);
   }
 
-  /** fill the duo salt element with data */
-  fillDuoSalt(data) {
-    this.fillInput(this.duoSalt, data);
-  }
 
   /** fill the duo hostname element with data */
   fillDuoHostname(data) {
     this.fillInput(this.duoHostname, data);
   }
 
-  /** fill the duo integration key with data */
-  fillIntegrationKey(data) {
-    this.fillInput(this.duoIntegrationKey, data);
+  /** fill the duo client id with data */
+  fillClientId(data) {
+    this.fillInput(this.duoClientId, data);
   }
 
-  /** fill the duo secret key with data */
-  fillSecretKey(data) {
-    this.fillInput(this.duoSecretKey, data);
+  /** fill the duo client secret with data */
+  fillClientSecret(data) {
+    this.fillInput(this.duoClientSecret, data);
   }
 
   /** Click on the duo element */

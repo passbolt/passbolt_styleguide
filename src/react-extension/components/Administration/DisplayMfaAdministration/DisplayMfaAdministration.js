@@ -94,14 +94,11 @@ class DisplayMfaAdministration extends React.Component {
       case 'duoHostname':
         this.mfaFormService.validateDuoHostname(value);
         break;
-      case 'duoIntegrationKey':
-        this.mfaFormService.validateDuoIntegrationKey(value);
+      case 'duoClientId':
+        this.mfaFormService.validateDuoClientId(value);
         break;
-      case 'duoSalt':
-        this.mfaFormService.validateDuoSalt(value);
-        break;
-      case 'duoSecretKey':
-        this.mfaFormService.validateDuoSecretKey(value);
+      case 'duoClientSecret':
+        this.mfaFormService.validateDuoClientSecret(value);
         break;
     }
   }
@@ -213,43 +210,28 @@ class DisplayMfaAdministration extends React.Component {
               <div className="duo_hostname error-message">{errors.duoHostnameError}</div>
               }
             </div>
-            <div className={`input text required ${errors.duoIntegrationKeyError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label><Trans>Integration key</Trans></label>
-              <input id="duoIntegrationKey" type="text" name="duoIntegrationKey" required="required" className="required fluid form-element ready"
-                placeholder="HASJKDSQJO213123KQSLDF" value={settings.duoIntegrationKey}
+            <div className={`input text required ${errors.duoClientIdError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label><Trans>Client id</Trans></label>
+              <input id="duoClientId" type="text" name="duoClientId" required="required" className="required fluid form-element ready"
+                placeholder="HASJKDSQJO213123KQSLDF" value={settings.duoClientId}
                 onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-              {(errors.duoIntegrationKeyError  && isSubmitted) &&
-              <div className="duo_integration_key error-message">{errors.duoIntegrationKeyError}</div>
+              {(errors.duoClientIdError  && isSubmitted) &&
+              <div className="duo_client_id error-message">{errors.duoClientIdError}</div>
               }
             </div>
-            <div className={`input text required ${errors.duoSaltError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label><Trans>Salt</Trans></label>
+            <div className={`input text required ${errors.duoClientSecretError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label><Trans>Client secret</Trans></label>
               <Password
-                id="duoSalt"
+                id="duoClientSecret"
                 onChange={this.handleInputChange}
                 autoComplete="off"
-                name="duoSalt"
+                name="duoClientSecret"
                 placeholder="**********"
                 disabled={this.hasAllInputDisabled()}
-                value={settings.duoSalt}
+                value={settings.duoClientSecret}
                 preview={true}></Password>
-              {(errors.duoSaltError && isSubmitted) &&
-              <div className="duo_salt error-message">{errors.duoSaltError}</div>
-              }
-            </div>
-            <div className={`input text required ${errors.duoSecretKeyError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label><Trans>Secret key</Trans></label>
-              <Password
-                id="duoSecretKey"
-                onChange={this.handleInputChange}
-                autoComplete="off"
-                name="duoSecretKey"
-                placeholder="**********"
-                disabled={this.hasAllInputDisabled()}
-                value={settings.duoSecretKey}
-                preview={true}></Password>
-              {(errors.duoSecretKeyError  && isSubmitted) &&
-              <div className="duo_secret_key error-message">{errors.duoSecretKeyError}</div>
+              {(errors.duoClientSecretError  && isSubmitted) &&
+              <div className="duo_client_secret error-message">{errors.duoClientSecretError}</div>
               }
             </div>
           </>

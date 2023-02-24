@@ -104,13 +104,13 @@ class InFormCallToActionField {
   /**
    * Insert an in-form call-to-action iframe
    */
-  insertInformCallToActionIframe() {
+  async insertInformCallToActionIframe() {
     const iframes = document.querySelectorAll('iframe');
     // Use of Array prototype some method cause NodeList is not an array !
-    const iframeId =  this.iframeId;
+    const iframeId = this.iframeId;
     const isIframeAlreadyInserted = Array.prototype.some.call(iframes, iframe => iframe.id === iframeId);
     if (!isIframeAlreadyInserted) {
-      const iframe = this.createCallToActionIframe();
+      const iframe = await this.createCallToActionIframe();
       this.handleCallToActionClicked(iframe);
     }
   }
@@ -119,21 +119,22 @@ class InFormCallToActionField {
    * Create an iframe dedicated to the call-to-action
    * @return {HTMLIFrameElement} The created iframe
    */
-  createCallToActionIframe() {
+  async createCallToActionIframe() {
     // IMPORTANT: Calculate position before inserting iframe in document to avoid issue
     const {top, left} = this.calculateFieldPosition();
+    const portId = await port.request("passbolt.port.generate-id", "InFormCallToAction");
     const iframe = document.createElement('iframe');
     document.body.appendChild(iframe);
     const browserExtensionUrl = browser.runtime.getURL("/");
     iframe.id = this.iframeId;
     iframe.style.position = "fixed";
     iframe.style.top = `${top}px`;
-    iframe.style.left =  `${left}px`;
+    iframe.style.left = `${left}px`;
     iframe.style.border = 0;
     iframe.style.width = '18px';
     iframe.style.height = '18px';
     iframe.style.zIndex = "123456";  // For you Yahoo with love
-    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=passbolt-iframe-in-form-call-to-action`;
+    iframe.contentWindow.location = `${browserExtensionUrl}webAccessibleResources/passbolt-iframe-in-form-call-to-action.html?passbolt=${portId}`;
     return iframe;
   }
 

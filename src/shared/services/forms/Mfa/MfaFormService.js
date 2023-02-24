@@ -103,35 +103,24 @@ class MfaFormService {
   }
 
   /**
-   * Validate the duo integration key input.
+   * Validate the duo client id input.
    * @returns {Promise<void>}
    */
-  validateDuoIntegrationKey(value) {
-    const messages = {required: "An integration key is required.", regex: "This is not a valid integration key."};
+  validateDuoClientId(value) {
+    const messages = {required: "A client id is required.", regex: "This is not a valid client id."};
     const result = this.validateInput(value, "^[a-zA-Z0-9]{16,32}$", messages);
-    this.context.setError("duoIntegrationKeyError", result);
+    this.context.setError("duoClientIdError", result);
     return result;
   }
 
   /**
-   * Validate the duo secret key input.
+   * Validate the duo client secret input.
    * @returns {Promise<void>}
    */
-  validateDuoSecretKey(value) {
-    const messages = {required: "A secret key is required.", regex: "This is not a valid secret key."};
+  validateDuoClientSecret(value) {
+    const messages = {required: "A client secret is required.", regex: "This is not a valid client secret."};
     const result = this.validateInput(value, "^[a-zA-Z0-9]{32,128}$", messages);
-    this.context.setError("duoSecretKeyError", result);
-    return result;
-  }
-
-  /**
-   * Validate the duo salt input.
-   * @returns {Promise<void>}
-   */
-  validateDuoSalt(value) {
-    const messages = {required: "A salt is required.", regex: "The salt should be between 40 and 128 characters in length."};
-    const result = this.validateInput(value, "^.{40,128}$", messages);
-    this.context.setError("duoSaltError", result);
+    this.context.setError("duoClientSecretError", result);
     return result;
   }
 
@@ -159,19 +148,16 @@ class MfaFormService {
    */
   validateDuoInputs() {
     let duoHostnameError = null;
-    let duoIntegrationKeyError = null;
-    let duoSaltError = null;
-    let duoSecretKeyError = null;
+    let duoClientIdError = null;
+    let duoClientSecretError = null;
     let result = {};
 
     const settings = this.context.getSettings();
     if (settings.duoToggle) {
       duoHostnameError = this.validateDuoHostname(settings.duoHostname),
-      duoIntegrationKeyError = this.validateDuoIntegrationKey(settings.duoIntegrationKey),
-      duoSecretKeyError = this.validateDuoSecretKey(settings.duoSecretKey);
-      duoSaltError = this.validateDuoSalt(settings.duoSalt),
-
-      result =  {duoHostnameError, duoIntegrationKeyError, duoSaltError, duoSecretKeyError};
+      duoClientIdError = this.validateDuoClientId(settings.duoClientId),
+      duoClientSecretError = this.validateDuoClientSecret(settings.duoClientSecret);
+      result =  {duoHostnameError, duoClientIdError, duoClientSecretError};
     }
     return result;
   }
@@ -191,5 +177,4 @@ class MfaFormService {
 }
 
 export default MfaFormService;
-
 

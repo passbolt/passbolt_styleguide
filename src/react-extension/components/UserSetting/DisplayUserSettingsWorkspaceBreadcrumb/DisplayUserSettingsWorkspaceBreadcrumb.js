@@ -56,6 +56,7 @@ class DisplayUserSettingsWorkspaceBreadcrumb extends Component {
       'security-token': this.translate("Security token"),
       theme: this.translate("Theme"),
       mfa: this.translate("Multi Factor Authentication"),
+      duo: this.translate("Multi Factor Authentication"),
       keys: this.translate("Keys inspector"),
       mobile: this.translate("Mobile transfer"),
       'account-recovery': this.translate("Account Recovery"),

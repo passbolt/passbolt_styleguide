@@ -128,6 +128,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/users-directory",
               "/app/administration/email-notification",
               "/app/administration/smtp-settings",
+              "/app/settings/mfa/:provider",
               "/app/settings/mfa",
             ]}>
               <>
@@ -163,7 +164,7 @@ class ExtBootstrapApp extends Component {
               {this.isLegacyAppjs &&
               <CleanupLegacyAppjs/>
               }
-              <InsertAppIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+              <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
               <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
             </Route>
           </Switch>

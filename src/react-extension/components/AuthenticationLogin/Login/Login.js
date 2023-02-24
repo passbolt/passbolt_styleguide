@@ -278,14 +278,6 @@ class Login extends Component {
   }
 
   /**
-   * Returns true if SSO is enabled and configured for Azure.
-   * @return {bool}
-   */
-  get isAzureSsoEnabled() {
-    return this.ssoProviderData?.id === "azure";
-  }
-
-  /**
    * Returns the provider information of the current SSO provider configured.
    * @return {object}
    */

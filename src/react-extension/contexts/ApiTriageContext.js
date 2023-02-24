@@ -18,6 +18,7 @@ import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import SelfRegistrationService from '../../shared/services/api/selfRegistration/selfRegistrationService';
 import {SelfRegistrationProviderTypes} from '../../shared/models/selfRegistration/SelfRegistrationEnumeration';
 import PassboltServiceUnavailableError from '../../shared/lib/Error/PassboltServiceUnavailableError';
+import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 
 /**
  * The Api triage context.
@@ -26,12 +27,19 @@ import PassboltServiceUnavailableError from '../../shared/lib/Error/PassboltServ
 export const ApiTriageContext = React.createContext({
   unexpectedError: null, // The unexpected error obejct if any
   state: null, // The current triage workflow state
+  isSsoRecoverEnabled: false, // Is the organization feature flag sso_recover enabled
+  getSsoProviderId: () => {
+  }, // Returns the current SSO provider configured for the organisation
   onInitializeTriageRequested: () => {
   }, // Whenever the initialization of the triage is requested.
   onTriageRequested: () => {
   }, // Whenever the user wants to submit their username for triage
   onRegistrationRequested: () => {
   }, // Whenever the user wants to register
+  handleSwitchToSsoSignInState: () => {
+  }, // Whenever the user switches to SSO_SIGN_IN_STATE state
+  handleSwitchToUsernameState: () => {
+  }, // Whenever the user switches to USERNAME_STATE state
 });
 
 /**
@@ -51,21 +59,74 @@ export class ApiTriageContextProvider extends React.Component {
    * Returns the default component state
    */
   get defaultState() {
+    this.findSsoProviderId = this.findSsoProviderId.bind(this);
     return {
       unexpectedError: null, // The unexpected error obejct if any
       state: ApiTriageContextState.INITIAL_STATE,
+      isSsoRecoverEnabled: false,
+      ssoProviderId: null,
+      getSsoProviderId: this.getSsoProviderId.bind(this),
       onInitializeTriageRequested: this.onInitializeTriageRequested.bind(this),
       onTriageRequested: this.onTriageRequested.bind(this),
       onRegistrationRequested: this.onRegistrationRequested.bind(this),
+      handleSwitchToSsoSignInState: this.handleSwitchToSsoSignInState.bind(this),
+      handleSwitchToUsernameState: this.handleSwitchToUsernameState.bind(this),
     };
   }
 
   /**
    * Initialize the triage
-   * @return {Promise<void>}
    */
   async onInitializeTriageRequested() {
-    return this.setState({state: ApiTriageContextState.USERNAME_STATE});
+    const isSsoRecoverFeatureFlagEnabled = this.props.context.siteSettings.canIUse("ssoRecover");
+    const ssoProviderId = isSsoRecoverFeatureFlagEnabled ? await this.findSsoProviderId() : null;
+    const isSsoRecoverEnabled = isSsoRecoverFeatureFlagEnabled && Boolean(ssoProviderId);
+
+    this.setState({
+      ssoProviderId,
+      isSsoRecoverEnabled,
+      state: isSsoRecoverEnabled
+        ? ApiTriageContextState.SSO_SIGN_IN_STATE
+        : ApiTriageContextState.USERNAME_STATE,
+    });
+  }
+
+  /**
+   * Returns the current SSO provider configured for the organisation
+   * @returns {string|null}
+   */
+  getSsoProviderId() {
+    return this.state.ssoProviderId;
+  }
+
+  /**
+   * Finds the current SSO provider configuration
+   * @returns {Promise<string|null>} the provider id
+   */
+  async findSsoProviderId() {
+    const apiClientOptions = this.props.context.getApiClientOptions();
+    apiClientOptions.setResourceName("sso/settings/current");
+    const apiClient = new ApiClient(apiClientOptions);
+    let response = null;
+    try {
+      response = await apiClient.findAll();
+    } catch (e) {
+      console.log(e);
+      this.handleTriageError(e);
+      return;
+    }
+
+    const providerId = response.body.provider;
+
+    const isProviderValid = SsoProviders.some(provider => provider.id === providerId);
+    if (!isProviderValid) {
+      const error = new Error("The given SSO provider id is not valid");
+      console.error(error);
+      this.handleTriageError(error);
+      return;
+    }
+
+    return providerId;
   }
 
   /**
@@ -152,6 +213,20 @@ export class ApiTriageContextProvider extends React.Component {
   }
 
   /**
+   * Handle switch to SSO_SIGN_IN_STATE state
+   */
+  handleSwitchToSsoSignInState() {
+    this.setState({state: ApiTriageContextState.SSO_SIGN_IN_STATE});
+  }
+
+  /**
+   * Handle switch to USERNAME_STATE state
+   */
+  handleSwitchToUsernameState() {
+    this.setState({state: ApiTriageContextState.USERNAME_STATE});
+  }
+
+  /**
    * Can I use the self registration settings plugin
    * @returns {boolean}
    */
@@ -229,6 +304,7 @@ export function withApiTriageContext(WrappedComponent) {
 export const ApiTriageContextState = {
   INITIAL_STATE: 'Initial State',
   USERNAME_STATE: 'Enter username state',
+  SSO_SIGN_IN_STATE: 'SSO Sign in state',
   CHECK_MAILBOX_STATE: 'Check mailbox state',
   NAME_STATE: 'Enter name state',
   NAME_ERROR: 'Error state',

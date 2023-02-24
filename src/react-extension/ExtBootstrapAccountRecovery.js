@@ -78,7 +78,7 @@ class ExtBootstrapAccountRecovery extends Component {
 
     return (
       <>
-        <InsertAccountRecoveryIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
+        <InsertAccountRecoveryIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
         <InsertFileIframe browserExtensionUrl={this.props.browserExtensionUrl}/>
       </>
     );

@@ -70,7 +70,7 @@ describe("ManageSmtpAdministrationSettings", () => {
         username: "username test",
         password: "password test",
         sender_name: "sender name test",
-        sender_email: "sender email test"
+        sender_email: "sender email test",
       };
 
       await page.setFormWith(initialForm);
@@ -81,10 +81,10 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.sender_name.value).toBe(initialForm.sender_name);
       expect(page.sender_email.value).toBe(initialForm.sender_email);
 
-      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "gmail");
+      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "google-mail");
       await page.selectProviderInSelectField(gmailSmtpProviderIndex);
 
-      expect(page.providerValue).toBe("Gmail");
+      expect(page.providerValue).toBe("Google Mail");
       expect(page.username.value).toBe(initialForm.username);
       expect(page.password.value).toBe(initialForm.password);
       expect(page.sender_name.value).toBe(initialForm.sender_name);
@@ -139,7 +139,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.tlsValue).toBe("Yes");
       expect(page.port.value).toBe("");
 
-      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "gmail");
+      const gmailSmtpProviderIndex = SmtpProviders.findIndex(provider => provider.id === "google-mail");
       await page.selectProviderInSelectField(gmailSmtpProviderIndex);
       await page.showAdvancedSettings();
       const provider = SmtpProviders[gmailSmtpProviderIndex];
@@ -151,9 +151,9 @@ describe("ManageSmtpAdministrationSettings", () => {
 
   describe("As a signed-in administrator I can see the current SMTP settings", () => {
     it('As a signed-in administrator on the administration workspace, I can see the Email server settings populated with the configuration file settings', async() => {
-      expect.assertions(7);
+      expect.assertions(8);
       const props = defaultProps();
-      const smtpSettings = withExistingSmtpSettings({source: "file"});
+      const smtpSettings = withExistingSmtpSettings({client: "passbolt.dev", source: "file"});
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
       const page = new ManageSmtpAdministrationSettingsPage(props);
 
@@ -164,6 +164,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.host.value).toBe(smtpSettings.host);
       expect(page.tlsValue).toBe(smtpSettings.tls ? "Yes" : "No");
       expect(page.port.value).toBe(smtpSettings.port.toString());
+      expect(page.client.value).toBe(smtpSettings.client.toString());
       expect(page.sender_email.value).toBe(smtpSettings.sender_email);
       expect(page.sender_name.value).toBe(smtpSettings.sender_name);
     });
@@ -385,7 +386,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       const smtpSettings = withExistingSmtpSettings();
       fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(smtpSettings));
 
-      expect.assertions(12);
+      expect.assertions(14);
       const props = defaultProps();
       const page = new ManageSmtpAdministrationSettingsPage(props);
 
@@ -397,7 +398,8 @@ describe("ManageSmtpAdministrationSettings", () => {
         sender_email: "",
         sender_name: "",
         host: "",
-        port: ""
+        port: "",
+        client: "passbolt.dev:9090"
       };
       await page.setFormWith(emptyFields);
       await page.clickOn(page.toolbarActionsSaveButton, () => true);
@@ -408,6 +410,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.sender_name_error.textContent).toBe("Sender name is required");
       expect(page.host_error.textContent).toBe("SMTP Host is required");
       expect(page.port_error.textContent).toBe("Port must be a valid number");
+      expect(page.client_error.textContent).toBe("SMTP client should be a valid domain or IP address");
 
       const withFieldErroneous = {
         username: 1234,
@@ -415,7 +418,8 @@ describe("ManageSmtpAdministrationSettings", () => {
         sender_email: "email at passbolt dot com",
         sender_name: 1234,
         host: "this is no host",
-        port: -1
+        port: -1,
+        client: "passboltveryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryeryerylongdomain.subdomain.dev",
       };
       await page.setFormWith(withFieldErroneous);
 
@@ -425,6 +429,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       expect(page.sender_name_error?.textContent).toBeFalsy();
       expect(page.host_error?.textContent).toBeFalsy();
       expect(page.port_error.textContent).toBe("Port must be a number between 1 and 65535");
+      expect(page.client_error.textContent).toBe("SMTP client should be a valid domain or IP address");
     });
   });
 
