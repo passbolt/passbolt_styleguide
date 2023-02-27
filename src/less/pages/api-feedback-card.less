@@ -1,9 +1,9 @@
-.page.api-error {
+.page.api-feedback {
     width: 100%;
     margin: auto;
 
     .content {
-        .api-error-card {
+        .api-feedback-card {
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -46,16 +46,16 @@
         background:@authentication-background;
     }
 
-    .page.api-error {
+    .page.api-feedback {
         display: grid;
         height: calc(100% - 4rem);
         grid-template-columns: 1fr 1.5fr 1fr;
         grid-template-rows: 0 1fr 0.05fr;
         grid-gap: 1px;
-        grid-template-areas: ". . ." ". api-error-card ." "footer footer footer";
+        grid-template-areas: ". . ." ". api-feedback-card ." "footer footer footer";
 
         .content {
-            grid-area: api-error-card;
+            grid-area: api-feedback-card;
 
             .logo {
                 margin: 1.6em auto;
@@ -63,7 +63,7 @@
                 background-size: 20rem auto;
             }
 
-            .api-error-card {
+            .api-feedback-card {
                 box-shadow: 0 0 1rem @dialog-box-shadow-color;
                 border-radius: 0.3rem;
                 max-width: 37.2rem;
