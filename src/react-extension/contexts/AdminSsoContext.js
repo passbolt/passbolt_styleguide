@@ -27,6 +27,7 @@ const UUID_REGEXP = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
+  canDeleteSettings: () => {}, // Returns true if it is possible to call for a settings deletion
   isProcessing: () => {}, // true when the form is being processed
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
   getSsoConfiguration: () => {}, // Return the current sso configuration from the context state
