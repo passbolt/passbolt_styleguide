@@ -50,6 +50,7 @@ describe("Display Administration Workspace", () => {
     expect(page.isSubscriptionKeySelected).toBeFalsy();
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeFalsy();
+    expect(page.isMfaPolicySelected).toBeFalsy();
   });
 
   it('As AD, I should see the user directory details area', async() => {
@@ -61,6 +62,7 @@ describe("Display Administration Workspace", () => {
     expect(page.isSubscriptionKeySelected).toBeFalsy();
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeFalsy();
+    expect(page.isMfaPolicySelected).toBeFalsy();
   });
 
   it('As AD, I should see the email notifications details area', async() => {
@@ -72,6 +74,7 @@ describe("Display Administration Workspace", () => {
     expect(page.isSubscriptionKeySelected).toBeFalsy();
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeFalsy();
+    expect(page.isMfaPolicySelected).toBeFalsy();
   });
 
   it('As AD, I should see the subscription key details area', async() => {
@@ -83,6 +86,7 @@ describe("Display Administration Workspace", () => {
     expect(page.isSubscriptionKeySelected).toBeTruthy();
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeFalsy();
+    expect(page.isMfaPolicySelected).toBeFalsy();
   });
 
   it('As AD, I should see the internationalization details area', async() => {
@@ -105,6 +109,7 @@ describe("Display Administration Workspace", () => {
     expect(page.isSubscriptionKeySelected).toBeFalsy();
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeTruthy();
+    expect(page.isMfaPolicySelected).toBeFalsy();
   });
 
   it('As AD, I should see the self registration details area', async() => {
@@ -117,6 +122,19 @@ describe("Display Administration Workspace", () => {
     expect(page.isInternationalizationSelected).toBeFalsy();
     expect(page.isAccountRecoverySelected).toBeFalsy();
     expect(page.isSelfRegistrationSelected).toBeTruthy();
+    expect(page.isMfaPolicySelected).toBeFalsy();
+  });
+
+  it('As AD, I should see the mfa policies details area', async() => {
+    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.MFA_POLICY));
+    await waitFor(() => {});
+    expect(page.isMfaSelected).toBeFalsy();
+    expect(page.isUserDirectorySelected).toBeFalsy();
+    expect(page.isEmailNotificationsSelected).toBeFalsy();
+    expect(page.isSubscriptionKeySelected).toBeFalsy();
+    expect(page.isInternationalizationSelected).toBeFalsy();
+    expect(page.isAccountRecoverySelected).toBeFalsy();
+    expect(page.isMfaPolicySelected).toBeTruthy();
   });
 });
 
