@@ -49,6 +49,13 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
+   * Returns true if the mfa policy area is visible
+   */
+  get isMfaPolicySelected() {
+    return Boolean(this._page.container.querySelector('.mfa-policy-settings'));
+  }
+
+  /**
    * Returns true if the user directory area is visible
    */
   get isUserDirectorySelected() {
