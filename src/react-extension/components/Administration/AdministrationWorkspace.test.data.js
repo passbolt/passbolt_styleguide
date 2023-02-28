@@ -8,6 +8,9 @@ import DisplayAdministrationEmailNotificationActions from "./DisplayAdministrati
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
+    siteSettings: {
+      canIUse: () => true
+    },
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

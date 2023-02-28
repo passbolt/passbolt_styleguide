@@ -56,4 +56,16 @@ describe("DisplayUserBadgeMenu", () => {
     await waitFor(() => {});
     expect(page.attentionRequired).toBeTruthy();
   });
+
+  it("As a signin user I should not have a 404 error with the flag mfa policy disable", async() => {
+    expect.assertions(1);
+    const propsWithoutPolicy = defaultProps({context: {siteSettings: {
+      canIUse: () => false
+    }}});
+    page = new DisplayUserBadgeMenuPage(defaultAppContext, propsWithoutPolicy);
+
+    jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
+    await waitFor(() => {});
+    expect(page.attentionRequired).toBeFalsy();
+  });
 });
