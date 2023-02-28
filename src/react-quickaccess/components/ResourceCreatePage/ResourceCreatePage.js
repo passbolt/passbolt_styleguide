@@ -316,7 +316,9 @@ class ResourceCreatePage extends React.Component {
     if (this.state.processing) {
       return;
     }
-
+    this.setState({
+      passwordInDictionary: false,
+    });
     const password = SecretGenerator.generate(await this.getCurrentGeneratorConfiguration());
     this.loadPassword(password);
   }
@@ -340,7 +342,7 @@ class ResourceCreatePage extends React.Component {
 
   loadPassword(password) {
     const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
-    this.setState({password, passwordEntropy, passwordInDictionary: false, passwordError: "",});
+    this.setState({password, passwordEntropy});
   }
 
   /**
