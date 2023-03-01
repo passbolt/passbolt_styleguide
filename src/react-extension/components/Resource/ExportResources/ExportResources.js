@@ -170,7 +170,8 @@ class ExportResources extends React.Component {
       {label: "csv (lastpass)", value: "csv-lastpass"},
       {label: "csv (1password)", value: "csv-1password"},
       {label: "csv (chromium based browsers)", value: "csv-chromium"},
-      {label: "csv (bitwarden)", value: "csv-bitwarden"}
+      {label: "csv (bitwarden)", value: "csv-bitwarden"},
+      {label: "csv (mozilla)", value: "csv-mozilla"},
     ];
   }
 
