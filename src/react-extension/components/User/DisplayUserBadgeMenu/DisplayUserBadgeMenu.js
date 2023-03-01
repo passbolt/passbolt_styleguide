@@ -62,7 +62,9 @@ class DisplayUserBadgeMenu extends Component {
     document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
     document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
     document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-    this.props.mfaContext.checkMfaChoiceRequired();
+    if (this.props.context.siteSettings.canIUse('mfaPolicies')) {
+      this.props.mfaContext.checkMfaChoiceRequired();
+    }
   }
 
   componentWillUnmount() {

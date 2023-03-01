@@ -110,12 +110,12 @@ class DisplayMfaPolicyAdministration extends React.Component {
               <Trans>You can choose the default behaviour of multi factor authentication for all users.</Trans>
             </p>
             <div className="radiolist-alt">
-              <div className={`input radio ${settings.policy === "mandatory" ? 'checked' : ''}`} id="mfa-policy-mandatory">
+              <div className={`input radio ${settings?.policy === "mandatory" ? 'checked' : ''}`} id="mfa-policy-mandatory">
                 <input type="radio"
                   value="mandatory"
                   onChange={this.handleInputChange}
                   name="policy"
-                  checked={settings.policy === "mandatory"}
+                  checked={settings?.policy === "mandatory"}
                   id="mfa-policy-mandatory-radio"
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="mfa-policy-mandatory-radio">
@@ -125,12 +125,12 @@ class DisplayMfaPolicyAdministration extends React.Component {
                   </span>
                 </label>
               </div>
-              <div className={`input radio ${settings.policy === "opt-in" ? 'checked' : ''}`} id="mfa-policy-opt-in">
+              <div className={`input radio ${settings?.policy === "opt-in" ? 'checked' : ''}`} id="mfa-policy-opt-in">
                 <input type="radio"
                   value="opt-in"
                   onChange={this.handleInputChange}
                   name="policy"
-                  checked={settings.policy === "opt-in"}
+                  checked={settings?.policy === "opt-in"}
                   id="mfa-policy-opt-in-radio"
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="mfa-policy-opt-in-radio">
@@ -145,7 +145,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
                 Remember a device for a month
             </h4>
             <span className="input toggle-switch form-element ">
-              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="rememberMeForAMonth" onChange={this.handleInputChange}  disabled={this.hasAllInputDisabled()} checked={settings.rememberMeForAMonth} id="remember-toggle-button" />
+              <input type="checkbox" className="toggle-switch-checkbox checkbox" name="rememberMeForAMonth" onChange={this.handleInputChange}  disabled={this.hasAllInputDisabled()} checked={settings?.rememberMeForAMonth} id="remember-toggle-button" />
               <label htmlFor="remember-toggle-button"><Trans>Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.</Trans></label>
             </span>
           </form>
