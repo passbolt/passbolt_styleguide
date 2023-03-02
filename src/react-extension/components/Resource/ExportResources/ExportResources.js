@@ -175,6 +175,7 @@ class ExportResources extends React.Component {
       {label: "csv (safari)", value: "csv-safari"},
       {label: "csv (dashlane)", value: "csv-dashlane"},
       {label: "csv (nordpass)", value: "csv-nordpass"},
+      {label: "csv (logmeonce)", value: "csv-logmeonce"}
     ];
   }
 
