@@ -13,21 +13,19 @@
  */
 
 import React from "react";
-import {MemoryRouter, Route} from "react-router-dom";
-import EnterUsernameForm from "./EnterUsernameForm";
+import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
+import IdentifyWithSso from "./IdentifyWithSso";
 
 export default {
-  title: 'Components/Authentication/EnterUsernameForm',
-  component: EnterUsernameForm
+  title: 'Components/Authentication/IdentifyWithSso',
+  component: IdentifyWithSso
 };
 
 const Template = args =>
   <div id="container" className="container page login">
     <div className="content">
       <div className="login-form">
-        <MemoryRouter initialEntries={['/']}>
-          <Route component={routerProps => <EnterUsernameForm {...args} {...routerProps}/>}/>
-        </MemoryRouter>
+        <IdentifyWithSso {...args}/>
       </div>
     </div>
   </div>;
@@ -37,11 +35,13 @@ Initial.parameters = {
   css: "ext_authentication"
 };
 
-export const WithSsoRecoverEnabled = Template.bind({});
-WithSsoRecoverEnabled.parameters = {
-  css: "ext_authentication"
-};
-
-WithSsoRecoverEnabled.args = {
-  isSsoRecoverEnabled: true
+Initial.args = {
+  context: {
+    getApiClientOptions: () => ({
+      getBaseUrl: () => self.location.origin,
+      setResourceName: () => {},
+      getResourceName: () => "sso-recover"
+    })
+  },
+  ssoProvider: SsoProviders.find(provider => provider.id === "azure")
 };

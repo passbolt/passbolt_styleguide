@@ -96,6 +96,23 @@ describe("As AN I should see the Enter Username Form Page", () => {
     });
   });
 
+  describe("As AN I can switch to identify myself with SSO if the organisation allows it", () => {
+    it("As AN I should see a secondary action to switch to SSO login", async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        isSsoRecoverEnabled: true,
+        onSecondaryActionClick: jest.fn()
+      });
+
+      page = new EnterUsernameFormPage(props);
+
+      expect(page.secondaryActionButton).toBeTruthy();
+      await page.click(page.secondaryActionButton);
+
+      expect(props.onSecondaryActionClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
   /*
    * @todo to move to the relative apiTriageContext tests
    * it('As AN I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
