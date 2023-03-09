@@ -20,12 +20,12 @@ const AZURE_POPUP_WINDOW_WIDTH = 380;
 class AzurePopupHandlerService {
   /**
    * AzurePopupHandlerService ctor
-   * @param {string} siteDomain
+   * @param {URL} siteDomain
    */
   constructor(siteDomain) {
     this.popup = null;
     this.intervalCheck = null;
-    this.expectedUrl = `${siteDomain}sso/recover/azure/success`;
+    this.expectedUrl = `${siteDomain.toString().replace(/\/$/, "")}/sso/recover/azure/success`;
     this.resolvePromise = null;
     this.rejectPromise = null;
     this.verifyPopup = this.verifyPopup.bind(this);

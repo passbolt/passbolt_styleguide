@@ -16,11 +16,13 @@ import {ApiClientOptions} from "../../../../shared/lib/apiClient/apiClientOption
 import SsoProviders from "../../Administration/ManageSsoSettings/SsoProviders.data";
 
 export function defaultAppContext(context) {
+  const baseUrl = "http://localhost:6006";
   const apiClientOptions = new ApiClientOptions()
-    .setBaseUrl("http://localhost:6006");
+    .setBaseUrl(baseUrl);
 
   const defaultAppContext = {
-    getApiClientOptions: () => apiClientOptions
+    getApiClientOptions: () => apiClientOptions,
+    trustedDomain: `${baseUrl}/subfolder`
   };
   return Object.assign(defaultAppContext, context || {});
 }

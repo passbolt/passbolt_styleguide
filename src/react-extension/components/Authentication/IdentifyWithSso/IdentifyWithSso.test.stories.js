@@ -41,7 +41,8 @@ Initial.args = {
       getBaseUrl: () => self.location.origin,
       setResourceName: () => {},
       getResourceName: () => "sso-recover"
-    })
+    }),
+    trustedDomain: self.location.origin
   },
   ssoProvider: SsoProviders.find(provider => provider.id === "azure")
 };
