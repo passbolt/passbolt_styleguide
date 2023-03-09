@@ -1,3 +1,8 @@
+/**
+ * @deprecated should use siteSettings.test.data.js
+ * @param isProEdition
+ * @returns {{app: {image_storage: {public_path: string}, debug: number, server_timezone: string, locale: string, version: {number: string, name: string}, url: string, session_timeout: number}, passbolt: {plugins: {resourceTypes: {version: string}, reports: {version: string}, folders: {version: string, enabled: boolean}, import: {version: string, config: {format: string[]}}, log: {version: string}, accountRecovery: {version: string, enabled: boolean}, locale: {options: [{label: string, locale: string},{label: string, locale: string},{label: string, locale: string},{label: string, locale: string},{label: string, locale: string},null,null,null,null,null,null,null,null]}, previewPassword: {version: string}, smtpSettings: {version: string, enabled: boolean}, export: {version: string}, multiFactorAuthentication: {version: string, enabled: boolean}, ee: {version: string, enabled: boolean}, directorySync: {version: string, enabled: boolean}, emailNotificationSettings: {version: string}, audit_log: {version: string, enabled: boolean}, mobile: {version: string}, emailDigest: {version: string}, accountRecoveryRequestHelp: {version: string, enabled: boolean}, passbolt_test_data: {version: string}, tags: {version: string, enabled: boolean}, license: {version: string}, passwordGenerator: {version: string}, rememberMe: {options: {"1800": string, "300": string, "3600": string, "-1": string, "900": string}, version: string}, accountSettings: {themes: {css: string}, version: string}, selenium_api: {version: string}}, legal: {terms: {url: string}, privacy_policy: {url: string}}, edition: (string)}}}
+ */
 const siteSettings = (isProEdition = true) => ({
   "app": {
     "version": {

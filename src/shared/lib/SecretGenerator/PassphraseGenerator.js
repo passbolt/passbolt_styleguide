@@ -51,10 +51,12 @@ function extractWordWithCase(words, wordCase) {
  * @param secret
  */
 function detectPassphrase(secret) {
+  const passwordDetected = {
+    isPassphrase: false
+  };
+
   if (!secret) {
-    return {
-      isPassphrase: false
-    };
+    return passwordDetected;
   }
 
   // Remove all the words from the dictionary present in the secret and keep the count.
@@ -67,16 +69,34 @@ function detectPassphrase(secret) {
     };
   }, {numberReplacement: 0, remainingSecret: secret.toLowerCase()});
 
-  // From the remaining, check if a separator can be identified.
+  const remainingSecret = separatorsSecret.remainingSecret;
+
+  /*
+   * For a passphrase we exepect to have a separator count of <n-detected-words> - 1
+   * If 2 words are detected, we expected to have only 1 separator. But, with the modulo
+   * computation that happens next, the entropy will be erronous in that case (every interger is a multiple of 1)
+   * So we handle that specific case and expect the following format:
+   * `${word1}${separator}${word2}`
+   */
   const numberSeparators = separatorsSecret.numberReplacement - 1;
-  const lengthSeparators = separatorsSecret.remainingSecret.length / numberSeparators;
-  const cannotBeSplitSeparatorsWithSameLength = separatorsSecret.remainingSecret.length % numberSeparators !== 0;
-  const hasEmptySeparator = separatorsSecret.remainingSecret.length == 0;
-  if (cannotBeSplitSeparatorsWithSameLength) {
+  if (numberSeparators === 1) {
+    // the resulting string might not be present at all due to the way we remove the words previously
+    const isPassword = secret.indexOf(remainingSecret) === -1
+      || secret.startsWith(remainingSecret)
+      || secret.endsWith(remainingSecret);
+
+    if (isPassword) {
+      return passwordDetected;
+    }
+
     return {
-      isPassphrase: false
+      numberWords: 2,
+      separator: remainingSecret,
+      isPassphrase: true
     };
   }
+
+  const hasEmptySeparator = remainingSecret.length == 0;
   if (hasEmptySeparator) {
     return {
       numberWords: separatorsSecret.numberReplacement,
@@ -85,9 +105,16 @@ function detectPassphrase(secret) {
     };
   }
 
-  const firstSeparator = separatorsSecret.remainingSecret.substring(0, lengthSeparators);
+  // From the remaining, check if a separator can be identified.
+  const cannotBeSplitSeparatorsWithSameLength = remainingSecret.length % numberSeparators !== 0;
+  if (cannotBeSplitSeparatorsWithSameLength) {
+    return passwordDetected;
+  }
+
+  const lengthSeparators = remainingSecret.length / numberSeparators;
+  const firstSeparator = remainingSecret.substring(0, lengthSeparators);
   const firstSeparatorRegexEscaped = String(firstSeparator).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1');
-  const isPassphrase = separatorsSecret.remainingSecret.replace(new RegExp(firstSeparatorRegexEscaped, 'g'), '').length === 0;
+  const isPassphrase = remainingSecret.replace(new RegExp(firstSeparatorRegexEscaped, 'g'), '').length === 0;
   return {
     numberWords: separatorsSecret.numberReplacement,
     separator: firstSeparator,

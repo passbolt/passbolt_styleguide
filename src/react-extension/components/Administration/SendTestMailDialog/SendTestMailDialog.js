@@ -20,17 +20,14 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import XRegExp from "xregexp";
 import Icon from "../../../../shared/components/Icons/Icon";
+import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 
 const uiStateEnum = {
   FORM: "form",
   ERROR: "error",
   SUCCESS: "success"
 };
-
-const HOSTNAME_REGEXP = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
-const EMAIL_REGEXP = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${HOSTNAME_REGEXP}$`;
 
 class SendTestMailDialog extends React.Component {
   /**
@@ -107,7 +104,7 @@ class SendTestMailDialog extends React.Component {
    * @returns {Promise<Boolean>} true if the form is valid, false otherwise
    */
   validateForm() {
-    const isValid = XRegExp(EMAIL_REGEXP).test(this.state.recipient);
+    const isValid = AppEmailValidatorService.validate(this.state.recipient, this.props.context.siteSettings);
     this.setState({
       recipientError: isValid ? "" : this.translate("Recipient must be a valid email")
     });

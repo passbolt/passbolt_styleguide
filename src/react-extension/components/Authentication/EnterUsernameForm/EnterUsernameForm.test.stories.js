@@ -36,3 +36,12 @@ export const Initial = Template.bind({});
 Initial.parameters = {
   css: "ext_authentication"
 };
+
+export const WithSsoRecoverEnabled = Template.bind({});
+WithSsoRecoverEnabled.parameters = {
+  css: "ext_authentication"
+};
+
+WithSsoRecoverEnabled.args = {
+  isSsoRecoverEnabled: true
+};

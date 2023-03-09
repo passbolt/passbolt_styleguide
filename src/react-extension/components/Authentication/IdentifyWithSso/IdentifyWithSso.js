@@ -107,6 +107,10 @@ class IdentifyWithSso extends Component {
     this.setState({processing: !prev});
   }
 
+  isProcessing() {
+    return this.state.processing;
+  }
+
   /**
    * Render
    * @returns {JSX.Element}
@@ -116,12 +120,14 @@ class IdentifyWithSso extends Component {
     if (!ssoProvider) {
       return null;
     }
+    const isDisabled = this.isProcessing();
+    const processingClassName = isDisabled ? 'disabled' : '';
     return (
       <div className="enter-username">
         <h1><Trans>Welcome back!</Trans></h1>
         <p><Trans>Your browser is not configured to work with this passbolt instance.</Trans> <Trans>Please authenticate with the Single Sign-On provider to continue.</Trans></p>
         <div className="sso-login-form form-actions">
-          <a className={`button sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProvider.id}`} onClick={this.handleSsoRecoverClick} disabled={this.isProcessing} >
+          <a className={`button sso-login-button ${processingClassName} ${ssoProvider.id}`} onClick={this.handleSsoRecoverClick} disabled={isDisabled} >
             <span className="provider-logo">
               {ssoProvider.icon}
             </span>
@@ -140,7 +146,6 @@ IdentifyWithSso.propTypes = {
   ssoProvider: PropTypes.object, // The
   onSecondaryActionClick: PropTypes.func, // the callback for the secondary action button
   context: PropTypes.any, // The application context provider
-  history: PropTypes.object, // The router history
   t: PropTypes.func, // The translation function
 };
 
