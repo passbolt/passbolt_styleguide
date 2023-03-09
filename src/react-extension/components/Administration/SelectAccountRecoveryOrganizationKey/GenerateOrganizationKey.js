@@ -14,7 +14,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import XRegExp from "xregexp";
 import debounce from "debounce-promise";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -29,6 +28,7 @@ import PasswordComplexity from "../../../../shared/components/PasswordComplexity
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -139,22 +139,11 @@ class GenerateOrganizationKey extends React.Component {
     const email = this.state.email.trim();
     if (!email.length) {
       emailError = this.translate("An email is required.");
-    } else if (!this.isEmail(email)) {
+    } else if (!AppEmailValidatorService.validate(email, this.props.context.siteSettings)) {
       emailError = this.translate("Please enter a valid email address.");
     }
     this.setState({email, emailError});
     return emailError === null;
-  }
-
-  /**
-   * Check that a given string is a valid email
-   * @param {string} email the email to test
-   */
-  isEmail(email) {
-    const hostnameRegexp = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
-    const emailRegexp = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${hostnameRegexp}$`;
-    const xregexp = XRegExp(emailRegexp);
-    return xregexp.test(email);
   }
 
   /**

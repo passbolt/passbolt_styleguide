@@ -13,7 +13,6 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import XRegExp from "xregexp";
 import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
@@ -25,6 +24,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {USER_INPUT_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
+import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 
 class CreateUser extends Component {
   /**
@@ -334,21 +334,10 @@ class CreateUser extends Component {
     const username = this.state.username.trim();
     if (!username.length) {
       usernameError = this.translate("A username is required.");
-    } else if (!this.isEmail(username)) {
+    } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("The username should be a valid username address.");
     }
     return this.setState({usernameError});
-  }
-
-  /**
-   * Check that a username is a valid email
-   * @param {string }username the username to test
-   */
-  isEmail(username) {
-    const hostnameRegexp = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
-    const emailRegexp = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${hostnameRegexp}$`;
-    const xregexp = XRegExp(emailRegexp);
-    return xregexp.test(username);
   }
 
   /**

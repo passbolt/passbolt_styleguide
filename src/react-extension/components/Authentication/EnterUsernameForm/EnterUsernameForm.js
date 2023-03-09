@@ -12,12 +12,12 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import XRegExp from "xregexp";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans, withTranslation} from "react-i18next";
+import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 
 class EnterUsernameForm extends Component {
   /**
@@ -194,21 +194,10 @@ class EnterUsernameForm extends Component {
     const username = this.state.username.trim();
     if (!username.length) {
       usernameError = this.translate("A username is required.");
-    } else if (!this.isEmail(username)) {
+    } else if (!AppEmailValidatorService.validate(username, this.props.context.siteSettings)) {
       usernameError = this.translate("Please enter a valid email address.");
     }
     return this.setState({username, usernameError});
-  }
-
-  /**
-   * Check that a username is a valid email
-   * @param {string }username the username to test
-   */
-  isEmail(username) {
-    const hostnameRegexp = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
-    const emailRegexp = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${hostnameRegexp}$`;
-    const xregexp = XRegExp(emailRegexp);
-    return xregexp.test(username);
   }
 
   /**
