@@ -26,8 +26,7 @@ class IdentifyViaSsoService {
    */
   constructor(context) {
     this.apiClientOptions = context.getApiClientOptions();
-
-    const siteDomain = this.apiClientOptions.getBaseUrl();
+    const siteDomain = new URL(context.trustedDomain);
     this.getUrlForSsoIdentificationService = new GetUrlForSsoIdentificationService(context.getApiClientOptions());
     this.getRecoverUrlService = new GetRecoverUrlService(siteDomain, context.getApiClientOptions());
     this.azurePopupHandler = new AzurePopupHandlerService(siteDomain);

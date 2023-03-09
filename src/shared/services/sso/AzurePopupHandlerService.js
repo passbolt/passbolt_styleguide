@@ -18,10 +18,14 @@ const AZURE_POPUP_WINDOW_WIDTH = 380;
  * Handles the Azure SSO login popup for the SSO identification process.
  */
 class AzurePopupHandlerService {
+  /**
+   * AzurePopupHandlerService ctor
+   * @param {URL} siteDomain
+   */
   constructor(siteDomain) {
     this.popup = null;
     this.intervalCheck = null;
-    this.expectedUrl = `${siteDomain}sso/recover/azure/success`;
+    this.expectedUrl = `${siteDomain.toString().replace(/\/$/, "")}/sso/recover/azure/success`;
     this.resolvePromise = null;
     this.rejectPromise = null;
     this.verifyPopup = this.verifyPopup.bind(this);
@@ -93,6 +97,7 @@ class AzurePopupHandlerService {
     this.rejectPromise = null;
     this.resolvePromise = null;
     this.popup?.close();
+    this.popup = null;
     clearInterval(this.intervalCheck);
   }
 }

@@ -16,7 +16,44 @@ import sanitizeUrl from "../../../react-extension/lib/Sanitize/sanitizeUrl";
 
 export default class SiteSettings {
   constructor(settings) {
-    this.settings = settings;
+    this.settings = this.sanitizeDto(settings);
+  }
+
+  /**
+   * Sanitized the given dto.
+   * It accepts both old and new version of the dto and sets new fields with new ones if any.
+   *
+   * @param {Object} dto
+   * @returns {Object}
+   */
+  sanitizeDto(dto) {
+    const sanitizedDto = JSON.parse(JSON.stringify(dto));
+
+    this.sanitizeEmailValidateRegex(sanitizedDto);
+
+    return sanitizedDto;
+  }
+
+  /**
+   * Sanitize email validate regex
+   * @param {Object} dto The dto to sanitize
+   * @returns {void}
+   */
+  sanitizeEmailValidateRegex(dto) {
+    const emailValidateRegex = dto?.passbolt?.email?.validate?.regex;
+
+    if (
+      !emailValidateRegex
+      || typeof emailValidateRegex !== 'string'
+      || !emailValidateRegex.trim().length
+    ) {
+      return;
+    }
+
+    dto.passbolt.email.validate.regex = emailValidateRegex
+      .trim()
+      .replace(/^\/+/, '') // Trim starting slash
+      .replace(/\/+$/, '');   // Trim trailing slash
   }
 
   /**
@@ -173,6 +210,14 @@ export default class SiteSettings {
    */
   get generatorConfiguration() {
     return getPropValue(this.settings, "passbolt.plugins.generator.configuration");
+  }
+
+  /**
+   * Get the site email custom validation regex.
+   * @return {string|null}
+   */
+  get emailValidateRegex() {
+    return this.settings?.passbolt?.email?.validate?.regex || null;
   }
 
   /**

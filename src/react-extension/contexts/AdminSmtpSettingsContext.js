@@ -22,11 +22,8 @@ import {withDialog} from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import {withTranslation} from "react-i18next";
-import XRegExp from "xregexp";
 import DomainUtil from "../lib/Domain/DomainUtil";
-
-const EMAIL_HOSTNAME_REGEXP = "(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[a-z]{2,})";
-const EMAIL_REGEXP = `^[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&'*+\/=?^_\`{|}~-]+)*@${EMAIL_HOSTNAME_REGEXP}$`;
+import AppEmailValidatorService from "../../shared/services/validator/AppEmailValidatorService";
 
 export const AdminSmtpSettingsContext = React.createContext({
   getCurrentSmtpSettings: () => {}, // Returns the current SMTP settings
@@ -359,7 +356,7 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       return false;
     }
 
-    if (!this.isEmail(data)) {
+    if (!AppEmailValidatorService.validate(data, this.props.context.siteSettings)) {
       errors.sender_email = this.props.t("Sender email must be a valid email");
       return false;
     }
@@ -473,14 +470,6 @@ export class AdminSmtpSettingsContextProvider extends React.Component {
       }
     }
     return null;
-  }
-
-  /**
-   * Check that a given string is a valid email
-   * @param {string} data the data to test
-   */
-  isEmail(data) {
-    return XRegExp(EMAIL_REGEXP).test(data);
   }
 
   /**

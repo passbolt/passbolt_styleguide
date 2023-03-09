@@ -44,5 +44,35 @@ describe("PassphraseGenerator", () => {
       const result = PassphraseGenerator.detectPassphrase(secret);
       expect(result).toEqual({"isPassphrase": false, "numberWords": 0, "separator": ""});
     });
+
+    it("detectPassphrase if a secret has 2 words but is not structured like a passphrase", () => {
+      const secret = "step@bolt.";
+      const result = PassphraseGenerator.detectPassphrase(secret);
+      expect(result).toEqual({"isPassphrase": false});
+    });
+
+    it("detectPassphrase if a secret has 2 words and is structured like a passphrase", () => {
+      const secret = "step@@@@bolt";
+      const result = PassphraseGenerator.detectPassphrase(secret);
+      expect(result).toEqual({"isPassphrase": true, "numberWords": 2, "separator": "@@@@"});
+    });
+
+    it("detectPassphrase if a secret has 2 words but secret starts with the detected separator", () => {
+      const secret = "@stepbolt";
+      const result = PassphraseGenerator.detectPassphrase(secret);
+      expect(result).toEqual({"isPassphrase": false});
+    });
+
+    it("detectPassphrase if a secret has 2 words but secret ends with the detected separator", () => {
+      const secret = "stepbolt&";
+      const result = PassphraseGenerator.detectPassphrase(secret);
+      expect(result).toEqual({"isPassphrase": false});
+    });
+
+    it("detectPassphrase if a secret has 1 word", () => {
+      const secret = "bolt";
+      const result = PassphraseGenerator.detectPassphrase(secret);
+      expect(result).toEqual({"isPassphrase": true, "separator": "", "numberWords": 1});
+    });
   });
 });
