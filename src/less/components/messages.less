@@ -53,6 +53,11 @@
   &.warning {
     color:@message-warning-text-color;
     background: @message-warning-background;
+
+    a:link, a:visited {
+      color: @message-warning-text-color;
+      border-bottom: 1px dotted @message-link-border;
+    }
   }
 
   p:last-child {
