@@ -396,7 +396,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleSsoClick}>
-                    <span><Trans>Single Sign-On</Trans></span>&nbsp;<span className="beta chips"><Trans>Beta</Trans></span>
+                    <span><Trans>Single Sign-On</Trans></span>
                   </a>
                 </div>
               </div>
