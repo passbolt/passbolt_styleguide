@@ -29,13 +29,17 @@ beforeEach(() => {
 describe("IdentifyWithSsoService", () => {
   describe('IdentifyWithSsoService::exec', () => {
     it('Should run the SSO login process and get back an URL for the user to proceed', () => {
-      expect.assertions(4);
-      const service = new IdentifyViaSsoService(defaultAppContext());
-
+      expect.assertions(5);
       const expectedSsoProvider = "azure";
       const ssoLoginUrl = "https://login.microsoft.com";
       const thirdPartyToken = uuid();
       const recoverUrl = "/sso/azure/recover.json";
+
+      const successCallback = jest.fn(url => {
+        expect(url).toStrictEqual(recoverUrl);
+      });
+
+      const service = new IdentifyViaSsoService(defaultAppContext(), successCallback);
 
       jest.spyOn(GetUrlForSsoIdentificationService.prototype, 'getUrl').mockImplementation(async providerId => {
         expect(providerId).toStrictEqual(expectedSsoProvider);
@@ -44,7 +48,10 @@ describe("IdentifyWithSsoService", () => {
 
       jest.spyOn(AzurePopupHandlerService.prototype, 'getSsoTokenFromThirdParty').mockImplementation(async url => {
         expect(url).toStrictEqual(ssoLoginUrl);
-        return thirdPartyToken;
+        return {
+          token: thirdPartyToken,
+          case: "default"
+        };
       });
 
       jest.spyOn(GetRecoverUrlService.prototype, 'getRecoverUrl').mockImplementation(async token => {
@@ -52,8 +59,36 @@ describe("IdentifyWithSsoService", () => {
         return recoverUrl;
       });
 
-      return expect(service.exec(expectedSsoProvider)).resolves.toStrictEqual(recoverUrl);
+      return expect(service.exec(expectedSsoProvider)).resolves.toStrictEqual(undefined);
     });
+  });
+
+  it('Should run the self_registration process if the user can self-register', () => {
+    expect.assertions(4);
+    const expectedSsoProvider = "azure";
+    const ssoLoginUrl = "https://login.microsoft.com";
+    const userEmail = "user@registered-domain.com";
+
+    const registrationRequiredCallback = jest.fn(email => {
+      expect(email).toStrictEqual(userEmail);
+    });
+
+    const service = new IdentifyViaSsoService(defaultAppContext(), null, registrationRequiredCallback);
+
+    jest.spyOn(GetUrlForSsoIdentificationService.prototype, 'getUrl').mockImplementation(async providerId => {
+      expect(providerId).toStrictEqual(expectedSsoProvider);
+      return ssoLoginUrl;
+    });
+
+    jest.spyOn(AzurePopupHandlerService.prototype, 'getSsoTokenFromThirdParty').mockImplementation(async url => {
+      expect(url).toStrictEqual(ssoLoginUrl);
+      return {
+        email: userEmail,
+        case: "registration_required"
+      };
+    });
+
+    return expect(service.exec(expectedSsoProvider)).resolves.toStrictEqual(undefined);
   });
 
   describe('IdentifyWithSsoService::stop', () => {

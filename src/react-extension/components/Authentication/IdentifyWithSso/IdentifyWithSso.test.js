@@ -19,6 +19,10 @@ import IdentifyWithSsoPage from "./IdentifyWithSso.test.page";
 import {defaultProps} from "./IdentifyWithSso.test.data";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
 import {waitFor} from "@testing-library/dom";
+import GetUrlForSsoIdentificationService from "../../../../shared/services/api/sso/GetUrlForSsoIdentificationService";
+import AzurePopupHandlerService from "../../../../shared/services/sso/AzurePopupHandlerService";
+import {v4 as uuid} from "uuid";
+import GetRecoverUrlService from "../../../../shared/services/api/sso/GetRecoverUrlService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -39,7 +43,10 @@ describe("IdentifyWithSso", () => {
     });
 
     it('As AN I want to be redirected to the setup or recover page after a successful login attempt', async() => {
+      expect.assertions(3);
       const expectedUrl = "https://www.passbolt.test";
+      const popupUrl = "https://third-party.auth.com";
+      const expectedToken = uuid();
       const location = window.location;
       delete window.location;
 
@@ -47,23 +54,57 @@ describe("IdentifyWithSso", () => {
         href: "/"
       };
 
-      expect.assertions(3);
+      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async() => popupUrl);
+      jest.spyOn(AzurePopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
+        expect(url).toStrictEqual(popupUrl);
+        return {
+          case: 'default',
+          token: expectedToken
+        };
+      });
+
+      jest.spyOn(GetRecoverUrlService.prototype, "getRecoverUrl").mockImplementation(token => {
+        expect(token).toStrictEqual(expectedToken);
+        return expectedUrl;
+      });
+
       const props = defaultProps();
-      const page = new IdentifyWithSsoPage(props, history);
+      const page = new IdentifyWithSsoPage(props);
       await waitFor(() => {});
 
-      let resolvePromise = null;
-      jest.spyOn(IdentifyViaSsoService.prototype, "exec").mockImplementation(() => new Promise(resolve => { resolvePromise = resolve; }));
-
       // start the SSO process
-      expect(page.isProcessing()).toBeFalsy();
       await page.clickOnSsoButton();
-      expect(page.isProcessing()).toBeTruthy();
-      resolvePromise(expectedUrl);
       await waitFor(() => {});
       expect(window.location.href).toStrictEqual(expectedUrl);
 
       window.location = location;
+    });
+
+    it('As AN I want to be redirected to the self_registration a successful login attempt and if I am not a registered user', async() => {
+      expect.assertions(2);
+      const popupUrl = "https://third-party.auth.com";
+      const expectedEmail = "user@registered-domain.com";
+
+      jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async() => popupUrl);
+      jest.spyOn(AzurePopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
+        expect(url).toStrictEqual(popupUrl);
+        return {
+          case: 'registration_required',
+          token: expectedEmail
+        };
+      });
+
+      const onUserRegistrationRequired = jest.fn(email => {
+        expect(email).toStrictEqual(expectedEmail);
+      });
+
+      const props = defaultProps({onUserRegistrationRequired});
+      const page = new IdentifyWithSsoPage(props);
+      await waitFor(() => {});
+
+      // start the SSO process
+      await page.clickOnSsoButton();
+      await waitFor(() => {});
     });
 
     it('As a user without the extension configured, I can cancel and retry the SSO process', async() => {

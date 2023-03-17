@@ -15,7 +15,7 @@
 /**
  * Unit tests on IdentifyWithSsoSerivce in regard of specifications
  */
-import AzurePopupHandlerService from "./AzurePopupHandlerService";
+import AzurePopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./AzurePopupHandlerService";
 import {v4 as uuid} from 'uuid';
 
 const mockWindowOpen = () => {
@@ -74,7 +74,8 @@ describe("AzurePopupHandlerService", () => {
     it('Should return the token when the popup is on the expected url', async() => {
       expect.assertions(4);
       const expectedPopupUrl = "http://passbolt.test";
-      const siteDomain = "http://localhost:6006/";
+      const siteDomain = "http://localhost:6006";
+      const invalidTolen = "invalid-token";
       const expectedToken = uuid();
       const wrongToken = uuid();
 
@@ -83,16 +84,72 @@ describe("AzurePopupHandlerService", () => {
       const promise = service.getSsoTokenFromThirdParty(expectedPopupUrl);
 
       const popup = service.popup;
-      popup.location.href = `${siteDomain}sso/recover?token=${wrongToken}`;
+      popup.location.href = `${siteDomain}/sso/recover?token=${wrongToken}`;
       jest.advanceTimersByTime(200);
-      popup.location.href = `${siteDomain}sso/recover/azure/success?token=${expectedToken}`;
+      popup.location.href = `${siteDomain}/sso/recover/azure/success?token=${invalidTolen}`;
+      jest.advanceTimersByTime(200);
+      popup.location.href = `${siteDomain}/sso/recover/azure/success?token=${expectedToken}`;
       jest.advanceTimersByTime(200);
 
       const returnedToken = await promise;
-      expect(returnedToken).toStrictEqual(expectedToken);
+      expect(returnedToken).toStrictEqual({
+        case: AUTHENTICATION_SUCCESS_CASES.DEFAULT,
+        token: expectedToken
+      });
       expect(popup.close).toHaveBeenCalledTimes(1);
       expect(service.popup).toBeNull();
       expect(closeSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should return the user email if its available for self_registration when the popup is on the erroneous url with an email', async() => {
+      expect.assertions(4);
+      const expectedPopupUrl = "http://passbolt.test";
+      const siteDomain = "http://localhost:6006";
+      const expectedEmail = "user@registered-domain.com";
+      const invalidEmail = "user-email";
+      const wrongEmail = "user@not-registered-domain.com";
+
+      const service = new AzurePopupHandlerService(siteDomain);
+      const closeSpy = jest.spyOn(service, "close");
+      const promise = service.getSsoTokenFromThirdParty(expectedPopupUrl);
+
+      const popup = service.popup;
+      popup.location.href = `${siteDomain}/sso/recover?email=${wrongEmail}`;
+      jest.advanceTimersByTime(200);
+      popup.location.href = `${siteDomain}/sso/recover/error?email=${invalidEmail}`;
+      jest.advanceTimersByTime(200);
+      popup.location.href = `${siteDomain}/sso/recover/error?email=${expectedEmail}`;
+      jest.advanceTimersByTime(200);
+
+      const returnedEmail = await promise;
+      expect(returnedEmail).toStrictEqual({
+        case: AUTHENTICATION_SUCCESS_CASES.REGISTRATION_REQUIRED,
+        email: expectedEmail
+      });
+      expect(popup.close).toHaveBeenCalledTimes(1);
+      expect(service.popup).toBeNull();
+      expect(closeSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('Should not return when the popup is on the erroneous url without an email', async() => {
+      expect.assertions(4);
+      const expectedPopupUrl = "http://passbolt.test";
+      const siteDomain = "http://localhost:6006";
+      const expectedPopupUrlError = `${siteDomain}/sso/recover/error`;
+
+      const service = new AzurePopupHandlerService(siteDomain);
+      const closeSpy = jest.spyOn(service, "close");
+      const checkUrlSpy = jest.spyOn(service, "verifyPopup").mockImplementation(() => {
+        expect(service.popup.closed).toBeFalsy();
+        expect(service.popup.location.href).toBe(expectedPopupUrlError);
+      });
+      service.getSsoTokenFromThirdParty(expectedPopupUrl);
+      const popup = service.popup;
+      popup.location.href = expectedPopupUrlError;
+      jest.advanceTimersByTime(300);
+
+      expect(closeSpy).not.toHaveBeenCalled();
+      expect(checkUrlSpy).toHaveBeenCalledTimes(1);
     });
 
     it('Should stop the process if the popup is closed', async() => {

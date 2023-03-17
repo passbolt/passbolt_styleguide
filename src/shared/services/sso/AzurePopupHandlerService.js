@@ -11,9 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.11.0
  */
-const UUID_REGEXP = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/;
+import {isValidEmail, isValidUuid} from "../../utils/assertions";
+
 const AZURE_POPUP_WINDOW_HEIGHT = 600;
 const AZURE_POPUP_WINDOW_WIDTH = 380;
+
+export const AUTHENTICATION_SUCCESS_CASES = {
+  DEFAULT: "default",
+  REGISTRATION_REQUIRED: "registration_required"
+};
+
 /**
  * Handles the Azure SSO login popup for the SSO identification process.
  */
@@ -25,11 +32,14 @@ class AzurePopupHandlerService {
   constructor(siteDomain) {
     this.popup = null;
     this.intervalCheck = null;
-    this.expectedUrl = `${siteDomain.toString().replace(/\/$/, "")}/sso/recover/azure/success`;
+    this.expectedSuccessUrl = `${siteDomain}/sso/recover/azure/success`;
+    this.expectedErrorUrl = `${siteDomain}/sso/recover/error`;
     this.resolvePromise = null;
     this.rejectPromise = null;
     this.verifyPopup = this.verifyPopup.bind(this);
     this.handlePopupVerification = this.handlePopupVerification.bind(this);
+    this.processSuccessUrl = this.processSuccessUrl.bind(this);
+    this.processErrorUrl = this.processErrorUrl.bind(this);
   }
 
   /**
@@ -76,18 +86,56 @@ class AzurePopupHandlerService {
       return;
     }
 
-    if (!popupUrl.startsWith(this.expectedUrl)) {
+    if (popupUrl.startsWith(this.expectedSuccessUrl)) {
+      this.processSuccessUrl(popupUrl);
+    } else if (popupUrl.startsWith(this.expectedErrorUrl)) {
+      this.processErrorUrl(popupUrl);
+    }
+  }
+
+  /**
+   * Process the given URL for a successful SSO authentication.
+   * The URL is expected to contain a parameter `token` with a UUID.
+   *
+   * @param {string} url
+   * @private
+   */
+  processSuccessUrl(url) {
+    const parsedUrl = new URL(url);
+    const token = parsedUrl.searchParams.get("token");
+
+    if (!isValidUuid(token)) {
       return;
     }
 
-    const parsedUrl = new URL(popupUrl);
-    const code = parsedUrl.searchParams.get("token");
+    this.resolvePromise({
+      case: AUTHENTICATION_SUCCESS_CASES.DEFAULT,
+      token: token
+    });
+    this.close();
+  }
 
-    if (UUID_REGEXP.test(code)) {
-      this.resolvePromise(code);
-      this.close();
+  /**
+   * Process the given URL for a SSO authentication that succeed but failed on Passbolt instace.
+   * The URL might contain a parameter `email` if the user is allowed to self_register.
+   *
+   * @param {string} url
+   * @private
+   */
+  processErrorUrl(url) {
+    const parsedUrl = new URL(url);
+    const email = parsedUrl.searchParams.get("email");
+
+    if (!isValidEmail(email)) {
+      return;
     }
-    return;
+
+    this.resolvePromise({
+      case: AUTHENTICATION_SUCCESS_CASES.REGISTRATION_REQUIRED,
+      email: email
+    });
+
+    this.close();
   }
 
   /**
@@ -103,5 +151,3 @@ class AzurePopupHandlerService {
 }
 
 export default AzurePopupHandlerService;
-
-
