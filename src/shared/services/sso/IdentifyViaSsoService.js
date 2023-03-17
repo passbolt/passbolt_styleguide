@@ -14,7 +14,7 @@
 
 import GetRecoverUrlService from "../api/sso/GetRecoverUrlService";
 import GetUrlForSsoIdentificationService from "../api/sso/GetUrlForSsoIdentificationService";
-import AzurePopupHandlerService from "./AzurePopupHandlerService";
+import AzurePopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./AzurePopupHandlerService";
 
 /**
  * Handles the SSO login for the recover process.
@@ -23,13 +23,18 @@ class IdentifyViaSsoService {
   /**
    * IdentifyViaSsoService constructor
    * @param {AppContext} context
+   * @param {function} successCallback the callback to be used after a successful SSO login
+   * @param {function} registrationRequiredCallback the callback when the user needs to self register
    */
-  constructor(context) {
+  constructor(context, successCallback, registrationRequiredCallback) {
     this.apiClientOptions = context.getApiClientOptions();
-    const siteDomain = new URL(context.trustedDomain);
+
+    const siteDomain = context.trustedDomain.replace(/\/$/, '');
     this.getUrlForSsoIdentificationService = new GetUrlForSsoIdentificationService(context.getApiClientOptions());
     this.getRecoverUrlService = new GetRecoverUrlService(siteDomain, context.getApiClientOptions());
     this.azurePopupHandler = new AzurePopupHandlerService(siteDomain);
+    this.successCallback = successCallback;
+    this.registrationRequiredCallback = registrationRequiredCallback;
   }
 
   /**
@@ -40,9 +45,14 @@ class IdentifyViaSsoService {
    */
   async exec(providerId) {
     const popupUrl = await this.getUrlForSsoIdentificationService.getUrl(providerId);
-    const ssoToken = await this.azurePopupHandler.getSsoTokenFromThirdParty(popupUrl);
-    const recoverUrl = await this.getRecoverUrlService.getRecoverUrl(ssoToken);
-    return recoverUrl.toString();
+    const ssoAuthResult = await this.azurePopupHandler.getSsoTokenFromThirdParty(popupUrl);
+
+    if (ssoAuthResult.case === AUTHENTICATION_SUCCESS_CASES.DEFAULT) {
+      const recoverUrl = await this.getRecoverUrlService.getRecoverUrl(ssoAuthResult.token);
+      this.successCallback(recoverUrl.toString());
+    } else if (ssoAuthResult.case === AUTHENTICATION_SUCCESS_CASES.REGISTRATION_REQUIRED) {
+      this.registrationRequiredCallback(ssoAuthResult.email);
+    }
   }
 
   /**
