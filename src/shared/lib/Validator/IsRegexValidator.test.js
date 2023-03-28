@@ -20,6 +20,7 @@ describe("IsRegexValidator", () => {
       {value: '12345', regex: '(?<!\\S)\\d+(?!\\S)'},
       {value: '123456', regex: '.*'},
       {value: '1234567', regex: '^[0-9A-Za-z\\s&]*$'},
+      {value: 'test@PASSBOLT.COM', regex: '^[\\p{L}0-9!#$%&\'*+\\/=?^_\\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&\'*+\\/=?^_\\`{|}~-]+)*@(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[A-Za-z]{2,})$'},
     ]).describe("Should accept.", props => {
       it(`should accept: ${props.value}`, async() => {
         expect.assertions(1);
@@ -32,6 +33,7 @@ describe("IsRegexValidator", () => {
       {value: '123.45', regex: '(?<!\\S)\\d+(?!\\S)'},
       {value: 1, regex: '^[0-9A-Za-z\\s&]*$'},
       {value: ['input is not string'], regex: '^[0-9A-Za-z\\s&]*$'},
+      {value: 'ÊXÃMPLÊ@HÕST.ÇÕM', regex: '/^[\\p{L}0-9!#$%&\'*+\\/=?^_\\`{|}~-]+(?:\\.[\\p{L}0-9!#$%&\'*+\\/=?^_\\`{|}~-]+)*@(?:[_\\p{L}0-9][-_\\p{L}0-9]*\\.)*(?:[\\p{L}0-9][-\\p{L}0-9]{0,62})\\.(?:(?:[a-z]{2}\\.)?[A-Za-z]{2,})$/ui'}
     ]).describe("Should not accept.", props => {
       it(`should not accept: ${props.value}`, async() => {
         expect.assertions(1);
