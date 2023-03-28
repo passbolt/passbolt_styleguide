@@ -67,7 +67,12 @@ describe("IsEmailValidator", () => {
       // Unicode
       "some@eräume.foo",
       "äu@öe.eräume.foo",
-      "Nyrée.surname@example.com"
+      "Nyrée.surname@example.com",
+      // Uppercase
+      "example@host.COM",
+      "example@HOST.ORG",
+      "EXAMPLE@HOST.LU",
+      "ÊXÃMPLÊ@HÕST.LU"
     ]).describe("Should accept.", value => {
       it(`should accept: ${value}`, async() => {
         expect.assertions(1);
@@ -96,6 +101,7 @@ describe("IsEmailValidator", () => {
       "abc@yahoo!.com",
       "abc@example_underscored.com",
       "raw@test.ra.ru....com",
+      "ÊXÃMPLÊ@HÕST.ÇÕM",
       1,
       true,
       false,
