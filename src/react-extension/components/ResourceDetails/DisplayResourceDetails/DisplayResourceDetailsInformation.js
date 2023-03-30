@@ -342,7 +342,7 @@ class DisplayResourceDetailsInformation extends React.Component {
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClickEvent} role="button">
+            <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
               <Trans>Information</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -350,39 +350,39 @@ class DisplayResourceDetailsInformation extends React.Component {
               {!this.state.open &&
               <Icon name="caret-right"/>
               }
-            </a>
+            </button>
           </h4>
         </div>
         <ul className="accordion-content">
           <li className="username">
             <span className="label"><Trans>Username</Trans></span>
-            <span className="value"><a onClick={this.handleUsernameClickEvent}>{this.resource.username}</a></span>
+            <span className="value"><button type="button" className="link no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.username}</span></button></span>
           </li>
           <li className="password">
             <span className="label"><Trans>Password</Trans></span>
             <div className="value">
               <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
                 title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
-                <a onClick={this.handlePasswordClickEvent}>
+                <button type="button" className="link no-border" onClick={this.handlePasswordClickEvent}>
                   <span>
                     {isPasswordPreviewed && this.state.previewedPassword}
                     {!isPasswordPreviewed && <Trans>Copy password to clipboard</Trans>}
                   </span>
-                </a>
+                </button>
               </div>
               {this.canUsePreviewPassword &&
-              <a onClick={this.handleViewPasswordButtonClick}
-                className="password-view button button-transparent">
+              <button type="button" onClick={this.handleViewPasswordButtonClick}
+                className="password-view button-transparent">
                 <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
                 <span className="visually-hidden"><Trans>View</Trans></span>
-              </a>
+              </button>
               }
             </div>
           </li>
           <li className="uri">
             <span className="label"><Trans>URI</Trans></span>
             <span className="value">
-              {this.safeUri && <a onClick={this.handleGoToResourceUriClick}>{this.resource.uri}</a>}
+              {this.safeUri && <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}><span>{this.resource.uri}</span></button>}
               {!this.safeUri && <span>{this.resource.uri}</span>}
             </span>
           </li>
@@ -406,9 +406,10 @@ class DisplayResourceDetailsInformation extends React.Component {
           <li className="location">
             <span className="label"><Trans>Location</Trans></span>
             <span className="value">
-              <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.context.folders ? "disabled" : ""}`}>
-                <Icon name="folder"/> {this.getFolderName(this.resource.folder_parent_id)}
-              </a>
+              <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
+                <Icon name="folder"/>
+                <span>{this.getFolderName(this.resource.folder_parent_id)}</span>
+              </button>
             </span>
           </li>
           }

@@ -81,7 +81,7 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the header
    */
   get hyperlink() {
-    return this._container.querySelector(".accordion-header h4 a");
+    return this._container.querySelector(".accordion-header h4 button");
   }
 
   /** Click on the title */
@@ -119,7 +119,7 @@ class DisplayInformationPageObject {
    * Returns the username elements of information
    */
   get username() {
-    return this._container.querySelector('.username .value a');
+    return this._container.querySelector('.username .value button');
   }
 
   /**
@@ -133,7 +133,7 @@ class DisplayInformationPageObject {
    * Returns the password elements of information
    */
   get password() {
-    return this._container.querySelector('.secret a span');
+    return this._container.querySelector('.secret button span');
   }
 
   /**
@@ -154,7 +154,7 @@ class DisplayInformationPageObject {
    * Returns the uri elements of information
    */
   get uri() {
-    return this._container.querySelector('.uri .value a');
+    return this._container.querySelector('.uri .value button');
   }
 
   /**
@@ -196,7 +196,7 @@ class DisplayInformationPageObject {
    * Returns the location elements of information
    */
   get location() {
-    return this._container.querySelector('.location .value a');
+    return this._container.querySelector('.location .value button');
   }
 
   /**

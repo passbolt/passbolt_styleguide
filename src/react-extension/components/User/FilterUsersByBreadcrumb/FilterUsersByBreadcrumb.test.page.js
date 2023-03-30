@@ -31,13 +31,13 @@ export default class FilterUsersByBreadcrumbPage {
    * @param index The index of the breadcrumb label
    */
   breadcrumbLabels(index) {
-    const breadcrumbElements = this._page.container.querySelectorAll('li a');
+    const breadcrumbElements = this._page.container.querySelectorAll('li button');
     if (breadcrumbElements && breadcrumbElements.length > 1) {
       return breadcrumbElements[index - 1].innerHTML;
     } else if (index > 1) {
       return undefined;
     } else {
-      return this._page.container.querySelector('li a').innerHTML;
+      return this._page.container.querySelector('li button').innerHTML;
     }
   }
 }

@@ -41,7 +41,7 @@ export default class MfaInviteUserSettingsPreferenceDialogPage {
   }
 
   get cancelButton() {
-    return this.selector('.mfa-policy-dialog a.cancel');
+    return this.selector('.mfa-policy-dialog button.cancel');
   }
 
   get cancelCross() {

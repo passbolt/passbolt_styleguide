@@ -107,7 +107,7 @@ export default class TestSsoSettingsDialogPage {
    * @returns {HTMLElement}
    */
   get ssoLoginButton() {
-    return this.select(".test-sso-settings-dialog a.sso-login-button");
+    return this.select(".test-sso-settings-dialog button.sso-login-button");
   }
 
   /**

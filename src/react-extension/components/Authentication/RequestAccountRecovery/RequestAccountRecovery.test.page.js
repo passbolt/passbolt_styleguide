@@ -50,7 +50,7 @@ export default class RequestAccountRecoveryPage {
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions a');
+    return this._page.container.querySelector('.form-actions button.link');
   }
 
   /**

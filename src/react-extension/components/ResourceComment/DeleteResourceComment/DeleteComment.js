@@ -50,12 +50,12 @@ class DeleteComment extends React.Component {
 
   render() {
     return (
-      <a className="delete-comment button button-transparent" onClick={this.delete}>
+      <button type="button" className="delete-comment button-transparent" onClick={this.delete}>
         <span className="svg-icon">
           <Icon name="trash"/>
         </span>
         <span className="visuallyhidden"><Trans>Delete</Trans></span>
-      </a>
+      </button>
     );
   }
 }

@@ -20,7 +20,7 @@ export default {
 
 
 const Template = () =>
-  <div className="radiolist" style={{display: "flex", flexWrap: "wrap"}}>
+  <div className="radiolist" style={{display: "flex", flexWrap: "wrap", gap: "1.6rem"}}>
     <div className="input radio" style={{width: "25%"}}>
       <input type="radio" checked={false} disabled={false} readOnly={true}/>
       <label/>

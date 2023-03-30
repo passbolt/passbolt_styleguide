@@ -363,51 +363,55 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
         <div className="actions">
           <ul>
             <li id="password_action">
-              <a className={`button ${this.hasOneResourceSelected() ? "" : "disabled"}`}
+              <button type="button" disabled={!this.hasOneResourceSelected()}
                 onClick={this.handleCopySecretClickEvent}>
                 <Icon name="copy-to-clipboard"/>
                 <span><Trans>Copy</Trans></span>
-              </a>
+              </button>
             </li>
             <li id="edit_action">
-              <a className={`button ${this.hasOneResourceSelected() && this.canUpdate() ? "" : "disabled"}`}
+              <button type="button" disabled={!this.hasOneResourceSelected() || !this.canUpdate()}
                 onClick={this.handleEditClickEvent}>
                 <Icon name="edit"/>
                 <span><Trans>Edit</Trans></span>
-              </a>
+              </button>
             </li>
             <li id="share_action">
-              <a className={`button ${this.hasResourceSelected() && this.canShare() ? "" : "disabled"}`}
+              <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
                 onClick={this.handleShareClickEvent}>
                 <Icon name="share"/>
                 <span><Trans>Share</Trans></span>
-              </a>
+              </button>
             </li>
             <li id="export_action">
-              <a
-                className={`button ${this.hasResourceSelected() && this.canExport() ? "" : "disabled"}`}
+              <button
+                type="button"
+                disabled={!this.hasResourceSelected() || !this.canExport()}
                 onClick={this.handleExportClickEvent}>
                 <Icon name="download"/>
                 <span><Trans>Export</Trans></span>
-              </a>
+              </button>
             </li>
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
-                <a className={`button more ${this.state.moreMenuOpen ? "open" : ""} ${this.hasMoreActionAllowed() ? "" : "disabled"}`}
+                <button type="button" className={`more ${this.state.moreMenuOpen ? "open" : ""}`}
+                  disabled={!this.hasMoreActionAllowed()}
                   onClick={this.handleMoreClickEvent}>
                   <span><Trans>More</Trans></span>
                   <Icon name="caret-down"/>
-                </a>
+                </button>
                 <ul className={`dropdown-content menu right ${this.state.moreMenuOpen ? "visible" : ""}`}>
                   <li id="username_action">
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
-                          <a
-                            className={`${this.canCopyUsername() ? "" : "disabled"}`}
+                          <button
+                            type="button"
+                            disabled={!this.canCopyUsername()}
+                            className="link no-border"
                             onClick={this.handleCopyUsernameClickEvent}>
                             <span><Trans>Copy username to clipboard</Trans></span>
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -416,10 +420,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
-                          <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
                             onClick={this.handleCopySecretClickEvent}>
                             <span><Trans>Copy password to clipboard</Trans></span>
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -428,10 +432,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
-                          <a className={`${this.canUpdate() ? "" : "disabled"}`}
+                          <button type="button" disabled={!this.canUpdate()} className="link no-border"
                             onClick={this.handleDeleteClickEvent}>
                             <span><Trans>Delete</Trans></span>
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -440,10 +444,10 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
-                          <a className={`${this.hasOneResourceSelected() ? "" : "disabled"}`}
+                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
                             onClick={this.handleCopyPermalinkClickEvent}>
                             <span><Trans>Copy permalink to clipboard</Trans></span>
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -456,11 +460,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
         <div className="actions secondary">
           <ul>
             <li>
-              <a className={`button button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
+              <button type="button" className={`button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
                 <Icon name="info-circle" big={true}/>
                 <span className="visuallyhidden"><Trans>View detail</Trans></span>
-              </a>
+              </button>
             </li>
           </ul>
         </div>

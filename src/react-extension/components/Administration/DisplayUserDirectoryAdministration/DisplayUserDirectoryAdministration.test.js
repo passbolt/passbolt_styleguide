@@ -190,6 +190,13 @@ describe("As AD I should see the user directory settings", () => {
     });
 
     it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(3);
+      //button should not be enable without changes
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      // change field
+      await page.fillPort("404");
+      //button should be enable with changes
+      expect(page.isSaveButtonEnabled()).toBeTruthy();
       // Mock the request function to make it return an error.
       const error = {message: "The service is unavailable"};
 

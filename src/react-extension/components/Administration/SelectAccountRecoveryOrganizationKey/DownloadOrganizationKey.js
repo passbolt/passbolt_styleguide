@@ -78,7 +78,6 @@ class DownloadOrganizationKey extends React.Component {
           </button>
           <button
             className="button primary"
-            role="button"
             type='button'
             onClick={this.handleCloseClick}
             disabled={this.isProcessing}>

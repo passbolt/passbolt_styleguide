@@ -751,17 +751,17 @@ class EditResource extends Component {
                   placeholder={passwordPlaceholder} onChange={this.handleInputChange}
                   autoComplete="new-password" disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}
                   preview={true} inputRef={this.passwordInputRef}/>
-                <a onClick={this.handleGeneratePasswordButtonClick}
-                  className={`password-generate button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                <button type="button" onClick={this.handleGeneratePasswordButtonClick}
+                  className={`password-generate button-icon ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                   <Icon name='dice' big={true}/>
                   <span className="visually-hidden"><Trans>Generate</Trans></span>
-                </a>
+                </button>
                 {this.canUsePasswordGenerator &&
-                  <a onClick={this.handleOpenGenerator}
-                    className={`password-generator button-icon button ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                  <button type="button" onClick={this.handleOpenGenerator}
+                    className={`password-generator button-icon ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
                     <Icon name='settings' big={true}/>
                     <span className="visually-hidden"><Trans>Open generator</Trans></span>
-                  </a>
+                  </button>
                 }
               </div>
               <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
@@ -789,22 +789,22 @@ class EditResource extends Component {
                 </Tooltip>
                 }
                 {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
-                <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
+                <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
                   </Tooltip>
-                </a>
+                </button>
                 }
                 {this.areResourceTypesEnabled() && this.state.encryptDescription &&
-                <a role="button" onClick={this.handleDescriptionToggle} className="lock-toggle">
+                <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")}>
                     <Icon name="lock"/>
                   </Tooltip>
-                </a>
+                </button>
                 }
               </label>
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
-                className="required" placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
+                className="required" aria-required={true} placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
                 disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
                 onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}
                 onKeyUp={this.handleDescriptionInputKeyUp}>

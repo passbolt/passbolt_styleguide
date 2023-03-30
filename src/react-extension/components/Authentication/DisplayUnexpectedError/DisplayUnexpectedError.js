@@ -88,10 +88,10 @@ class DisplayUnexpectedError extends Component {
         {this.hasErrorDetails &&
           <div className="accordion error-details">
             <div className="accordion-header">
-              <a onClick={this.handleErrorDetailsToggle}>
+              <button className="link no-border" type="button" onClick={this.handleErrorDetailsToggle}>
                 <Trans>Error details</Trans>
                 <Icon name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
-              </a>
+              </button>
             </div>
             {this.state.showErrorDetails &&
               <div className="accordion-content">

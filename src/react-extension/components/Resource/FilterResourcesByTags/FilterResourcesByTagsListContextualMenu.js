@@ -82,7 +82,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit-tag" onClick={this.handleEditClickEvent}><span><Trans>Edit tag</Trans></span></a>
+                <button type="button" className="link no-border" id="edit-tag" onClick={this.handleEditClickEvent}><span><Trans>Edit tag</Trans></span></button>
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@ class FilterResourcesByTagsListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete-tag" onClick={this.handleDeleteClickEvent}><span><Trans>Delete Tag</Trans></span></a>
+                <button type="button" className="link no-border" id="delete-tag" onClick={this.handleDeleteClickEvent}><span><Trans>Delete Tag</Trans></span></button>
               </div>
             </div>
           </div>

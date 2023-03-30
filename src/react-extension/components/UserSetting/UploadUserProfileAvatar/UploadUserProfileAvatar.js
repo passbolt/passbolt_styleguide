@@ -312,6 +312,7 @@ class UploadUserProfileAvatar extends React.Component {
           <div className="form-content">
             <div className={`input file required ${this.areActionsAllowed ? "" : "disabled"} ${this.hasValidationError ? "error" : ""}`}>
               <input
+                aria-required={true}
                 id="dialog-upload-avatar-input"
                 type="file"
                 ref={this.fileUploaderRef}
@@ -326,11 +327,13 @@ class UploadUserProfileAvatar extends React.Component {
                   disabled={true}
                   placeholder={this.translate("No file selected")}
                   defaultValue={this.selectedFilename}/>
-                <a
-                  className={`button primary ${this.areActionsAllowed ? "" : "disabled"}`}
+                <button
+                  type='button'
+                  disabled={!this.areActionsAllowed}
+                  className="primary"
                   onClick={this.handleSelectFile}>
                   <span className='ellipsis'><Trans>Choose a file</Trans></span>
-                </a>
+                </button>
               </div>
               {this.state.errors.message &&
               <div className="error-message">{this.state.errors.message}</div>

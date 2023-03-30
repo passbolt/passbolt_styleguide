@@ -97,11 +97,17 @@ describe("As LU I should see each menu", () => {
     });
 
     it('As LU I should see all menu disabled', async() => {
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(1).className).toBe("disabled");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(2).className).toBe("disabled");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(3).className).toBe("disabled");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(4).className).toBe("");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(5).className).toBe("disabled");
+      expect.assertions(10);
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(1).className).toBe("link no-border");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(1).hasAttribute("disabled")).toBeTruthy();
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(2).className).toBe("link no-border");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(2).hasAttribute("disabled")).toBeTruthy();
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(3).className).toBe("link no-border");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(3).hasAttribute("disabled")).toBeTruthy();
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(4).className).toBe("link no-border");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(4).hasAttribute("disabled")).toBeFalsy();
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(5).className).toBe("link no-border");
+      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(5).hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

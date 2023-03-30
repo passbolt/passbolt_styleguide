@@ -7,21 +7,24 @@
         flex-direction: row;
         margin: 0;
 
-        .logo {
+        .logo-svg {
             margin: 1.6rem;
-            background: transparent @logourl 0 0 no-repeat;
-            background-size: 10rem auto;
-            width: 10rem;
-            height: 1.75rem;
             flex: 1 1 auto;
 
             a {
                 display:block;
-                width: 10rem;
-                height: 2.2rem;
+
                 border:0;
+                --icon-color: @icon-logo-color;
+                width: 10rem;
+                height: 1.75rem;
+            }
+
+            h1 {
+              display: none;
             }
         }
+
         .option-link {
             margin-right: 1.6rem;
         }

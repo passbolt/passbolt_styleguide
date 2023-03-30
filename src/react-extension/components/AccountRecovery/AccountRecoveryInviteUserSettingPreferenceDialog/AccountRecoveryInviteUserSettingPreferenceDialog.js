@@ -88,7 +88,7 @@ class AccountRecoveryInviteUserSettingPreferenceDialog extends Component {
             </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className="cancel" role="button" onClick={this.handleCancel}><Trans>Later</Trans></a>
+            <button type="button" className="link cancel" onClick={this.handleCancel}><Trans>Later</Trans></button>
             <FormSubmitButton
               value={this.translate("Continue")}/>
           </div>

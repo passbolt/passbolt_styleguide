@@ -187,28 +187,28 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('save')}>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
-              </a>
+              </button>
             </li>
             <li>
-              <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={() => this.handleFormSubmit('test')}>
+              <button type="button" disabled={!this.isTestEnabled()} onClick={() => this.handleFormSubmit('test')}>
                 <Icon name="plug"/>
                 <span><Trans>Test settings</Trans></span>
-              </a>
+              </button>
             </li>
             <li>
-              <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSimulateSynchronizeClick}>
+              <button type="button" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSimulateSynchronizeClick}>
                 <Icon name="magic-wand"/>
                 <span><Trans>Simulate synchronize</Trans></span>
-              </a>
+              </button>
             </li>
             <li>
-              <a className={`button ${this.isSynchronizeEnabled() ? "" : "disabled"}`} onClick={this.handleSynchronizeClick}>
+              <button type="button" disabled={!this.isSynchronizeEnabled()} onClick={this.handleSynchronizeClick}>
                 <Icon name="refresh"/>
                 <span><Trans>Synchronize</Trans></span>
-              </a>
+              </button>
             </li>
           </div>
         </div>

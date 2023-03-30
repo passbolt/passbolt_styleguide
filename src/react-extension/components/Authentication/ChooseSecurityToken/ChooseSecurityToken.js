@@ -287,6 +287,7 @@ class ChooseSecurityToken extends Component {
               ref={this.tokenCodeInputRef}
               type="text"
               className="input text required"
+              aria-required={true}
               name="text"
               maxLength="3"
               style={this.securityTokenStyle}
@@ -304,12 +305,12 @@ class ChooseSecurityToken extends Component {
               colors={this.defaultColors}
             />
             <div className="randomize-button-wrapper">
-              <a
-                className="randomize-button"
-                role="button"
+              <button
+                type="button"
+                className="randomize-button link"
                 onClick={this.handleRandomize}>
                 <Trans>Randomize</Trans>
-              </a>
+              </button>
             </div>
           </div>
           {this.state.hasBeenValidated &&
@@ -334,7 +335,6 @@ class ChooseSecurityToken extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              role="button"
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
             </button>

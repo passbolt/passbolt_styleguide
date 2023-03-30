@@ -374,15 +374,15 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                     </div>
                   }
                   <div className="accordion-header">
-                    <a onClick={this.handleAdvancedSettingsToggle}>
+                    <button type="button" className="link no-border" onClick={this.handleAdvancedSettingsToggle}>
                       <Icon name={this.state.showAdvancedSettings ? "caret-down" : "caret-right"}/><Trans>Advanced settings</Trans>
-                    </a>
+                    </button>
                   </div>
                   {this.state.showAdvancedSettings &&
                     <div className="advanced-settings">
                       <div className={`input text required ${errors.host ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
                         <label htmlFor="smtp-settings-form-host"><Trans>SMTP host</Trans></label>
-                        <input id="smtp-settings-form-host" ref={this.hostFieldRef} name="host" className="fluid" maxLength="256" type="text"
+                        <input id="smtp-settings-form-host" ref={this.hostFieldRef} name="host" aria-required={true} className="fluid" maxLength="256" type="text"
                           autoComplete="off" value={settings.host} onChange={this.handleInputChange} placeholder={this.translate("SMTP server address")}
                           disabled={this.isProcessing()}/>
                         {errors.host &&
@@ -395,7 +395,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                       </div>
                       <div className={`input text required ${errors.port ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
                         <label htmlFor="smtp-settings-form-port"><Trans>Port</Trans></label>
-                        <input id="smtp-settings-form-port" ref={this.portFieldRef} name="port" className="fluid" maxLength="256" type="text"
+                        <input id="smtp-settings-form-port" aria-required={true} ref={this.portFieldRef} name="port" className="fluid" maxLength="256" type="text"
                           autoComplete="off" value={settings.port} onChange={this.handleInputChange} placeholder={this.translate("Port number")}
                           disabled={this.isProcessing()}/>
                         {errors.port &&
@@ -416,7 +416,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                   <h4><Trans>Sender configuration</Trans></h4>
                   <div className={`input text required ${errors.sender_name ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
                     <label htmlFor="smtp-settings-form-sender-name"><Trans>Sender name</Trans></label>
-                    <input id="smtp-settings-form-sender-name" ref={this.senderNameFieldRef} name="sender_name" className="fluid" maxLength="256" type="text"
+                    <input id="smtp-settings-form-sender-name" ref={this.senderNameFieldRef} name="sender_name" aria-required={true} className="fluid" maxLength="256" type="text"
                       autoComplete="off" value={settings.sender_name} onChange={this.handleInputChange} placeholder={this.translate("Sender name")}
                       disabled={this.isProcessing()}/>
                     {errors.sender_name &&
@@ -428,7 +428,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
                   </div>
                   <div className={`input text required ${errors.sender_email ? "error" : ""} ${this.isProcessing() ? 'disabled' : ''}`}>
                     <label htmlFor="smtp-settings-form-sender-name"><Trans>Sender email</Trans></label>
-                    <input id="smtp-settings-form-sender-email" ref={this.senderEmailFieldRef} name="sender_email" className="fluid" maxLength="256" type="text"
+                    <input id="smtp-settings-form-sender-email" ref={this.senderEmailFieldRef} name="sender_email" aria-required={true} className="fluid" maxLength="256" type="text"
                       autoComplete="off" value={settings.sender_email} onChange={this.handleInputChange} placeholder={this.translate("Sender email")}
                       disabled={this.isProcessing()}/>
                     {errors.sender_email &&

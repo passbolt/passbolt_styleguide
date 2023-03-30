@@ -553,10 +553,10 @@ class DisplayResourcesList extends React.Component {
         </td>
         <td className="cell-favorite selections s-cell">
           <div className="ready">
-            <a className={`no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
+            <button type="button" className={`link no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
               <Icon name="star"/>
               <span className="visuallyhidden"><Trans>fav</Trans></span>
-            </a>
+            </button>
           </div>
         </td>
         <td className="cell-name m-cell uri">
@@ -566,30 +566,30 @@ class DisplayResourcesList extends React.Component {
         </td>
         <td className="cell-username m-cell username">
           <div title={resource.username}>
-            <a onClick={ev => this.handleCopyUsernameClick(ev, resource)}>{resource.username}</a>
+            <button className="link no-border" type="button" onClick={ev => this.handleCopyUsernameClick(ev, resource)}><span>{resource.username}</span></button>
           </div>
         </td>
         <td className="cell-secret m-cell password">
           <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
             title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
-            <a onClick={async ev => this.handleCopyPasswordClick(ev, resource)}>
+            <button type="button" className="link no-border" onClick={async ev => this.handleCopyPasswordClick(ev, resource)}>
               <span>
                 {isPasswordPreviewed && this.state.previewedPassword.password}
                 {!isPasswordPreviewed && "Copy password to clipboard"}
               </span>
-            </a>
+            </button>
           </div>
           {this.canUsePreviewPassword &&
-            <a onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button button-transparent">
+            <button type="button" onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button-transparent">
               <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
               <span className="visually-hidden"><Trans>View</Trans></span>
-            </a>
+            </button>
           }
         </td>
         <td className="cell-uri l-cell">
           <div title={resource.uri}>
             {safeUri &&
-            <a onClick={() => this.handleGoToResourceUriClick(resource)}>{resource.uri}</a>
+              <button className="link no-border" type="button" onClick={() => this.handleGoToResourceUriClick(resource)}><span>{resource.uri}</span></button>
             }
             {!safeUri &&
             <span>{resource.uri}</span>
@@ -688,7 +688,7 @@ class DisplayResourcesList extends React.Component {
                       </div>
                     </th>
                     <th className="cell-favorite selections s-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav">
+                      <button type="button" onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav link no-border">
                         <Icon name="star"/>
                         <span className="visuallyhidden"><Trans>fav</Trans></span>
                         <span className="cell-header-icon-sort">
@@ -699,10 +699,10 @@ class DisplayResourcesList extends React.Component {
                           <Icon name="descending"/>
                           }
                         </span>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-name m-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Resource</Trans>
@@ -716,10 +716,10 @@ class DisplayResourcesList extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-username m-cell username sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Username</Trans>
@@ -733,7 +733,7 @@ class DisplayResourcesList extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-secret m-cell password">
                       <div className="cell-header">
@@ -743,7 +743,7 @@ class DisplayResourcesList extends React.Component {
                       </div>
                     </th>
                     <th className="cell-uri l-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
+                      <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>URI</Trans>
@@ -757,10 +757,10 @@ class DisplayResourcesList extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-modified m-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
+                      <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Modified</Trans>
@@ -774,7 +774,7 @@ class DisplayResourcesList extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                   </tr>
                 </thead>

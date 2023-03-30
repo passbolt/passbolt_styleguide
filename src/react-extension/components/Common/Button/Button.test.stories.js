@@ -214,18 +214,18 @@ const Template = () =>
     <span style={{width: "100%", marginTop: "3rem"}}>Close button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
-        <a className="dialog-close button button-transparent" role="button">
+        <button className="dialog-close button button-transparent" role="button">
           <Icon name='close'/>
           <span className="visually-hidden">Close</span>
-        </a>
+        </button>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
-        <a className="dialog-close button button-transparent disabled" role="button">
+        <button className="dialog-close button button-transparent disabled" role="button">
           <Icon name='close'/>
           <span className="visually-hidden">Close</span>
-        </a>
+        </button>
       </div>
     </div>
   </div>

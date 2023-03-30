@@ -32,8 +32,8 @@
                     .ellipsis();
                 }
                 .title-link {
-                  border: 0;
                   margin-left: .8rem;
+                  display: inline-block;
                   .svg-icon svg{
                     width: 1.1rem;
                     height: 100%;
@@ -97,10 +97,12 @@
           h4 {
               margin:0;
               display:block;
-              a {
+              button {
                 font-size: 1.6rem;
                 font-weight: 700;
                 line-height: 2.1rem;
+                width: 100%;
+                justify-content: space-between;
               }
             }
         }
@@ -117,7 +119,7 @@
                 font-size: 1.6rem;
                 position:absolute;
                 margin-top: -5.1rem;
-                right: 3.6rem;
+                right: 4.2rem;
                 z-index:401;
                 border:0;
                 padding: 0;
@@ -163,16 +165,16 @@
           width: 60%;
           display: inline-block;
           float: left;
-          a {
+          button {
             font-size: 1.4rem;
             font-weight: 400;
             line-height: 1.9rem;
+            width: 100%;
 
             &.folder-link {
               display: flex;
               border: 0;
               .svg-icon {
-                margin-right: .8rem;
                 svg {
                   width: 100%;
                   height: 1.6rem;
@@ -233,7 +235,7 @@
             .description-lock {
                 margin-right: auto;
 
-                a {
+                button {
                   border: 0;
                   &:hover {
                     --icon-color: @text-focus-color;
@@ -273,7 +275,7 @@
           height: 1.8em;
         }
         &.key {
-          a.button.copy-public-key {
+          button.copy-public-key {
             height: 2.5rem;
             svg {
               width: inherit;

@@ -43,27 +43,15 @@ class DialogCloseButton extends Component {
   }
 
   /**
-   * Get the close button classname
-   * @returns {string}
-   */
-  getClassName() {
-    let className = 'dialog-close button button-transparent';
-    if (this.props.disabled) {
-      className += ' disabled';
-    }
-    return className;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
-      <a className={this.getClassName()} onClick={this.handleCloseClick} role="button">
+      <button type="button" disabled={this.props.disabled} className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
         <Icon name='close'/>
         <span className="visually-hidden"><Trans>Close</Trans></span>
-      </a>
+      </button>
     );
   }
 }

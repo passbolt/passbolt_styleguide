@@ -127,7 +127,8 @@ class ConfigurePassphraseGenerator extends Component {
               value={this.numberOfWords.default}
               type="range"
               onChange={this.handleInputChange}
-              disabled={this.props.disabled}/>
+              disabled={this.props.disabled}
+            />
             <input
               type="number"
               id="configure-passphrase-generator-form-word-count"

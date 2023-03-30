@@ -133,14 +133,15 @@ describe("As LU I should see each menu", () => {
     });
 
     it('As LU I should see 3 menu disabled', async() => {
-      expect(page.menuItem(1).className).toBe("");
-      expect(page.menuItem(2).className).toBe("");
-      expect(page.menuItem(3).className).toBe("");
-      expect(page.menuItem(4).className).toBe("");
-      expect(page.menuItem(5).className).toBe("");
-      expect(page.menuItem(6).className).toBe("disabled");
-      expect(page.menuItem(7).className).toBe("disabled");
-      expect(page.menuItem(8).className).toBe("disabled");
+      expect.assertions(8);
+      expect(page.menuItem(1).hasAttribute('disabled')).toBeFalsy();
+      expect(page.menuItem(2).hasAttribute('disabled')).toBeFalsy();
+      expect(page.menuItem(3).hasAttribute('disabled')).toBeFalsy();
+      expect(page.menuItem(4).hasAttribute('disabled')).toBeFalsy();
+      expect(page.menuItem(5).hasAttribute('disabled')).toBeFalsy();
+      expect(page.menuItem(6).hasAttribute('disabled')).toBeTruthy();
+      expect(page.menuItem(7).hasAttribute('disabled')).toBeTruthy();
+      expect(page.menuItem(8).hasAttribute('disabled')).toBeTruthy();
     });
   });
 });

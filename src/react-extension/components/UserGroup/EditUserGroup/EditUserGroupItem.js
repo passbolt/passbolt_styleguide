@@ -160,13 +160,15 @@ class EditUserGroupItem extends Component {
             </div>
 
             <div className="actions">
-              <a
+              <button
+                type="button"
                 title={this.props.t("Remove")}
-                className={`remove-item button button-transparent ${!this.props.areActionsAllowed ? "disabled" : ""}`}
+                className="remove-item button-transparent"
+                disabled={!this.props.areActionsAllowed}
                 onClick={event => this.props.onMemberRemoved(event, this.props.groupUser)}>
                 <Icon name="close"/>
                 <span className="visuallyhidden"><Trans>Remove</Trans></span>
-              </a>
+              </button>
             </div>
           </>
         }

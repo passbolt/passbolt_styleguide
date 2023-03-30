@@ -32,10 +32,10 @@ class SharePermissionDeleteButton extends Component {
 
   render() {
     return (
-      <a className={this.getClassName()} onClick={this.handleCloseClick.bind(this)} role="button">
+      <button type="button" className={this.getClassName()} onClick={this.handleCloseClick.bind(this)}>
         <Icon name='close' />
         <span className="visually-hidden"><Trans>Remove</Trans></span>
-      </a>
+      </button>
     );
   }
 }

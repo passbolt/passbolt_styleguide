@@ -74,8 +74,8 @@ describe("As LU I should see each menu", () => {
     });
 
     it('As LU I should see all menu disabled', async() => {
-      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(1).className).toBe("");
-      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2).className).toBe("disabled");
+      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(1).hasAttribute("disabled")).toBeFalsy();
+      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2).hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

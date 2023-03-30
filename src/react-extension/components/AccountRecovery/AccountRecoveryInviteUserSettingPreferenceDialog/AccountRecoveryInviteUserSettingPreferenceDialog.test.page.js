@@ -46,7 +46,7 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
   }
 
   get cancelButton() {
-    return this.selector('.recovery-account-policy-dialog a.cancel');
+    return this.selector('.recovery-account-policy-dialog button.cancel');
   }
 
   get cancelCross() {

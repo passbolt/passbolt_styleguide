@@ -172,11 +172,13 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button
+                  type="button"
                   onClick={this.handleCreateFolderItemClickEvent}
-                  className={`${canUpdate ? "" : "disabled"}`}>
+                  disabled={!canUpdate}
+                  className="link no-border">
                   <span><Trans>Create folder</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -185,11 +187,13 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button
+                  type="button"
                   onClick={this.handleRenameFolderItemClickEvent}
-                  className={`${canUpdate ? "" : "disabled"}`}>
+                  disabled={!canUpdate}
+                  className="link no-border">
                   <span><Trans>Rename</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -198,11 +202,13 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button
+                  type="button"
                   onClick={this.handleShareFolderItemClickEvent}
-                  className={`${canShare ? "" : "disabled"}`}>
+                  disabled={!canShare}
+                  className="link no-border">
                   <span><Trans>Share</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -211,11 +217,13 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
-                  className={`${canExport ? "" : "disabled"}`}
+                <button
+                  type="button"
+                  disabled={!canExport}
+                  className="link no-border"
                   onClick={this.handleExportFolderItemClickEvent}>
                   <span><Trans>Export</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -224,11 +232,13 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button
+                  type="button"
                   onClick={this.handleDeleteFolderItemClickEvent}
-                  className={`${canUpdate ? "" : "disabled"}`}>
+                  disabled={!canUpdate}
+                  className="link no-border">
                   <span><Trans>Delete</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>

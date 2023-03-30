@@ -45,11 +45,11 @@ class AutocompleteItem extends Component {
         <div className={`autocomplete-suggestion ${this.getClassName()} `}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
-              <a role="button" onClick={event => this.onClick(event)}>
+              <button type="button" className="link no-border" onClick={event => this.onClick(event)}>
                 <div className="user">
                   <span className="name ellipsis">{this.props.slug}</span>
                 </div>
-              </a>
+              </button>
             </div>
           </div>
         </div>

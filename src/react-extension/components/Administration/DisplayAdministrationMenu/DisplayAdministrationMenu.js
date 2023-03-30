@@ -292,7 +292,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isMfaSelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></a>
+                    <button className="link no-border" type="button" onClick={this.handleMfaClick}><span><Trans>Multi Factor Authentication</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -303,7 +303,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isMfaPolicySelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></a>
+                    <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -314,7 +314,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className={`row  ${this.isUserDirectorySelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></a>
+                    <button className="link no-border" type="button" onClick={this.handleUserDirectoryClick}><span><Trans>Users Directory</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -324,7 +324,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isEmailNotificationsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></a>
+                  <button className="link no-border" type="button" onClick={this.handleEmailNotificationsClick}><span><Trans>Email Notifications</Trans></span></button>
                 </div>
               </div>
             </div>
@@ -334,7 +334,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isInternationalizationSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></a>
+                  <button className="link no-border" type="button" onClick={this.handleInternationalizationClick}><span><Trans>Internationalisation</Trans></span></button>
                 </div>
               </div>
             </div>
@@ -345,7 +345,7 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isSubscriptionSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></a>
+                  <button className="link no-border" type="button" onClick={this.handleSubscriptionClick}><span><Trans>Subscription</Trans></span></button>
                 </div>
               </div>
             </div>
@@ -356,9 +356,9 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isAccountRecoverySelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleAccountRecoveryClick}>
+                  <button className="link no-border" type="button" onClick={this.handleAccountRecoveryClick}>
                     <span><Trans>Account Recovery</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -369,9 +369,9 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isSmtpSettingsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleSmtpSettingsClick}>
+                  <button className="link no-border" type="button" onClick={this.handleSmtpSettingsClick}>
                     <span><Trans>Email server</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -382,9 +382,9 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isSelfRegistrationSettingsSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleSelfRegistrationClick}>
+                  <button className="link no-border" type="button" onClick={this.handleSelfRegistrationClick}>
                     <span><Trans>Self Registration</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -395,9 +395,9 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isSsoSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleSsoClick}>
+                  <button className="link no-border" type="button" onClick={this.handleSsoClick}>
                     <span><Trans>Single Sign-On</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

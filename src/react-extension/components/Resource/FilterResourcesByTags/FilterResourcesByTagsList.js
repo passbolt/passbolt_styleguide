@@ -325,14 +325,14 @@ class FilterResourcesByTagsList extends React.Component {
                   onClick={() => this.handleOnClickTag(tag)}
                   onContextMenu={event => this.handleContextualMenuEvent(event, tag)}>
                   <div className="main-cell">
-                    <a title={tag.slug}><span className="ellipsis tag-name">{tag.slug}</span></a>
+                    <button className="link no-border" type="button" title={tag.slug}><span className="ellipsis tag-name">{tag.slug}</span></button>
                   </div>
                 </div>
                 {!tag.is_shared &&
                 <div className="dropdown right-cell more-ctrl">
-                  <a className={`button ${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`} onClick={event => this.handleMoreClickEvent(event, tag)}>
+                  <button type="button" className={`${this.state.moreMenuOpenTagId === tag.id ? "open" : ""}`} onClick={event => this.handleMoreClickEvent(event, tag)}>
                     <Icon name="3-dots-h"/>
-                  </a>
+                  </button>
                 </div>
                 }
               </div>

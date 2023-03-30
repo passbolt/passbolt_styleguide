@@ -81,7 +81,7 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the header
    */
   get hyperlink() {
-    return this._container.querySelector(".accordion-header h4 a");
+    return this._container.querySelector(".accordion-header h4 button");
   }
 
   /** Click on the title */
@@ -154,7 +154,7 @@ class DisplayInformationPageObject {
    * Returns the location elements of information
    */
   get location() {
-    return this._container.querySelector('.location .value a');
+    return this._container.querySelector('.location .value button');
   }
 
   /**

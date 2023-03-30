@@ -238,7 +238,7 @@ class PasswordCreatePageObject {
    * Returns the password view button element
    */
   get passwordViewButton() {
-    return this._container.querySelector('.password-view.button .svg-icon');
+    return this._container.querySelector('.password-view .svg-icon');
   }
 
   /**

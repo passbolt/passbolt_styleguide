@@ -27,7 +27,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="username"><span><Trans>Copy username</Trans></span></a>
+            <button type="button" className="link no-border" id="username"><span><Trans>Copy username</Trans></span></button>
           </div>
         </div>
       </div>
@@ -36,7 +36,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="password"><span><Trans>Copy password</Trans></span></a>
+            <button type="button" className="link no-border" id="password"><span><Trans>Copy password</Trans></span></button>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="username"><span><Trans>Copy URI</Trans></span></a>
+            <button type="button" className="link no-border" id="username"><span><Trans>Copy URI</Trans></span></button>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="permalink"><span><Trans>Copy permalink</Trans></span></a>
+            <button type="button" className="link no-border" id="permalink"><span><Trans>Copy permalink</Trans></span></button>
           </div>
         </div>
       </div>
@@ -63,7 +63,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="permalink"><span><Trans>Open URI in a new Tab</Trans></span></a>
+            <button type="button" className="link no-border" id="permalink"><span><Trans>Open URI in a new Tab</Trans></span></button>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="edit"><span><Trans>Edit</Trans></span></a>
+            <button type="button" className="link no-border" id="edit"><span><Trans>Edit</Trans></span></button>
           </div>
         </div>
       </div>
@@ -81,7 +81,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="share" className="disabled"><span><Trans>Share</Trans></span></a>
+            <button type="button" className="link no-border" disabled id="share"><span><Trans>Share</Trans></span></button>
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <a id="delete"><span><Trans>Delete</Trans></span></a>
+            <button type="button" className="link no-border" disabled id="delete"><span><Trans>Delete</Trans></span></button>
           </div>
         </div>
       </div>

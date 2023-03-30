@@ -41,14 +41,24 @@
     }
 
     // Toggle focus
-    &:focus-visible {
+    &:focus, &:focus-visible {
       box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @input-toggle-focus-border;
-      outline: 0;
+      outline: @outline-default-border;
+
+      + label {
+        background: @input-focus-background;
+        color: @input-focus-text-color;
+      }
     }
 
     // Toggle pressed
     &:active {
       box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+
+      + label {
+        background: @label-active-background;
+        color: @label-active-text-color;
+      }
     }
 
     // Toggle dot pressed
@@ -89,6 +99,7 @@
       opacity: .5;
       border: none;
       box-shadow: none;
+      outline: 0;
 
       &:before{
         box-shadow: none;

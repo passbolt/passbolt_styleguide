@@ -11,12 +11,14 @@
         div {
             display: inline-block;
         }
-        a {
+        button {
+            background: transparent;
             display: inline-block;
             padding: .4em 1.75em;
             margin-left: 1.25em;
             font-size: 1.5rem;
             border: 0;
+            box-shadow: none;
 
             &.selected {
                 margin-bottom: -1px;
@@ -44,10 +46,10 @@
         }
 
         &:hover {
-          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);;
+          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
         }
 
-        a {
+        button {
           margin-left: 0;
           padding: .4rem 1.6rem;
           font-weight: 400;
@@ -64,7 +66,7 @@
           margin-bottom: -10px;
           background-color: @tab-selected-background;
 
-          a {
+          button {
             font-weight: 700;
           }
 

@@ -49,15 +49,10 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
 
   describe("As a logged in administrator I can enable the User self registration", () => {
-    beforeEach(() => {
-      fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
-      page = new DisplaySelfRegistrationAdministrationPage(context, props);
-    });
-
     it('As a logged in administrator when the User self registration is not configured, I can access the User self registration settings page', async() => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult(null, false)));
       page = new DisplaySelfRegistrationAdministrationPage(context, props);
-
+      await waitFor(() => {});
       expect.assertions(7);
 
       expect(page.exists()).toBeTruthy();
@@ -67,10 +62,13 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.helpBoxButton).toBeDefined();
       expect(page.saveSettingsButton).toBeDefined();
       // We expect to have the button disable for the first usage
-      expect(page.saveSettingsButton.className.includes("disabled")).toBeTruthy();
+      expect(page.saveSettingsButton.hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As a logged in administrator I can enable the User self registration setting', async() => {
+      fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
+      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await waitFor(() => {});
       expect.assertions(3);
 
       expect(page.helpBoxButton).toBeDefined();
@@ -79,6 +77,9 @@ describe("DisplaySelfRegistrationAdministration", () => {
     });
 
     it('As a logged in administrator I can enable the User self registration setting', async() => {
+      fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult([])));
+      page = new DisplaySelfRegistrationAdministrationPage(context, props);
+      await waitFor(() => {});
       expect.assertions(5);
 
       await page.clickOnToggle();
@@ -88,7 +89,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.enabledDescription).toBeDefined();
       // We should pre-populate with profesional domain
       expect(page.firstInputRow.value).toEqual("passbolt.com");
-      expect(page.firstDeleteButton.getAttribute("disabled")).toBeNull();
+      expect(page.firstDeleteButton.hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As a logged in administrator I can enable the User self registration setting', async() => {
@@ -111,7 +112,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.enabledDescription).toBeDefined();
       // We should not pre-populate with public domain
       expect(page.firstInputRow.value).toEqual("");
-      expect(page.firstDeleteButton.getAttribute("disabled")).toBeNull();
+      expect(page.firstDeleteButton.hasAttribute("disabled")).toBeTruthy();
     });
   });
   describe("As a logged administrator I can add domains to the User self registration list", () => {
@@ -288,7 +289,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
       expect(page.inputByIndex(1)).toBeNull();
       expect(page.inputByIndex(2)).toBeNull();
 
-      expect(page.deleteButtonByIndex(0).classList.contains("disabled")).toBeTruthy();
+      expect(page.deleteButtonByIndex(0).hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As a logged in administrator I can reset the “User self registration” settings when I disable and enable the setting', async() => {

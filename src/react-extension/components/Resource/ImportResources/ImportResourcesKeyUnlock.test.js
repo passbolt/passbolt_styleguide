@@ -87,7 +87,9 @@ describe("As LU I should see the password unlock Keypass dialog", () => {
         expect(page.password.getAttribute("disabled")).not.toBeNull();
         expect(page.continueImportButton.getAttribute("disabled")).not.toBeNull();
         expect(page.continueImportButton.className).toBe("button primary disabled processing");
-        expect(page.cancelButton.className).toBe("cancel disabled");
+        expect(page.continueImportButton.hasAttribute("disabled")).toBeTruthy();
+        expect(page.cancelButton.className).toBe("link cancel");
+        expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         updateResolve();
       });
     });

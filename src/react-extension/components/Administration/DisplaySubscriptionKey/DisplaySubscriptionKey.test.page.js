@@ -137,7 +137,7 @@ export default class DisplaySubscriptionKeyPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsUpdateButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
   }
 
   /**

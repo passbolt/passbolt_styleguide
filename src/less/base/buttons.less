@@ -12,7 +12,7 @@ button,
     justify-content: center;
     align-items: center;
     vertical-align: middle;
-    outline: none;
+    outline: 0;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -38,6 +38,7 @@ button,
         color: @default-text-color;
         text-decoration: none;
         border: none;
+        outline: @outline-default-border;
     }
 
     /* active */
@@ -55,6 +56,7 @@ button,
         background: @button-background;
         box-shadow: inset 0 0 0 1px @button-border;
         opacity: .5;
+        outline: 0;
     }
 
     /* button-action-icon */
@@ -192,8 +194,9 @@ button,
             box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-primary-border;
         }
 
-        &:focus {
+        &:focus, &:focus-visible {
             box-shadow: 0 0 .4rem @shadow-focus-color;
+            outline: @outline-primary-border;
         }
 
         &:active {
@@ -204,6 +207,7 @@ button,
         /* disabled */
         &.disabled, &:disabled {
           box-shadow: none;
+          outline: 0;
         }
     }
 

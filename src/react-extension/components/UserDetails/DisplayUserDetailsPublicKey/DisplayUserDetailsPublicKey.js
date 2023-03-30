@@ -203,11 +203,11 @@ class DisplayUserDetailsPublicKey extends React.Component {
       <div className={`key-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClicked} role="button">
+            <button type="button" onClick={this.handleTitleClicked} className="link no-border">
               <Trans>Public key</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
-            </a>
+            </button>
           </h4>
         </div>
         <div className="accordion-content">
@@ -240,11 +240,12 @@ class DisplayUserDetailsPublicKey extends React.Component {
             <li className="key">
               <span className="label"><Trans>Public key</Trans></span>
               <span className="value">
-                <a
-                  className="button button-icon copy-public-key"
+                <button
+                  type="button"
+                  className="button-icon copy-public-key"
                   onClick={this.handlePublicKeyCopy}>
                   <Icon name="copy-to-clipboard"/>
-                </a>
+                </button>
               </span>
             </li>
             <li className="gpgkey">

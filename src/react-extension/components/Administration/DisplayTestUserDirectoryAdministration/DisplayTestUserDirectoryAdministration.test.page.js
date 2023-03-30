@@ -184,7 +184,7 @@ class DisplayTestUserDirectoryAdministrationDialogPageObject {
    * Returns the error textarea element
    */
   get buttonOk() {
-    return this._container.querySelector('.button.primary');
+    return this._container.querySelector('button.primary');
   }
 
   /**

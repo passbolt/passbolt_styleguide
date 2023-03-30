@@ -39,13 +39,23 @@
         &:focus-visible {
             box-shadow: 0 0 .4rem @shadow-focus-color;
             border: 1px solid @input-checkbox-focus-border;
-            outline: 0;
+            outline: @outline-default-border;
+
+            + label {
+              background: @input-focus-background;
+              color: @input-focus-text-color;
+            }
         }
 
         // Box pressed
         &:active {
           box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-checkbox-border;
           border: none;
+
+          + label {
+            background: @label-active-background;
+            color: @label-active-text-color;
+          }
         }
 
         // Disabled state label.
@@ -60,6 +70,7 @@
             box-shadow: none;
             background: @input-checkbox-disabled-background;
             border: 1px solid @input-checkbox-disabled-border;
+            outline: 0;
         }
 
         // Checkmark. Could be replaced with an image
@@ -68,7 +79,8 @@
             width: 1rem;
             height: 1rem;
             background-size: 1rem 1rem;
-            background-image: @controls-check;
+            background-color: @input-checkbox-control-check-color;
+            mask: @controls-check;
             -webkit-mask-image: @controls-check;
             mask-image: @controls-check;
         }
