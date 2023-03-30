@@ -32,6 +32,7 @@ import Icon from "../shared/components/Icons/Icon";
 import SsoContextProvider from "./contexts/SsoContext";
 import RbacsCollection from "../shared/models/entity/rbac/rbacsCollection";
 import AppContext from "../shared/context/AppContext/AppContext";
+import PasswordSettingsContextProvider from "./contexts/PasswordSettingsContext";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess.html',
@@ -300,31 +301,33 @@ class ExtQuickAccess extends React.Component {
                     <Search ref={el => this.searchRef = el}/>
                   )}/>
                   <PrepareResourceContextProvider>
-                    <AnimatedSwitch>
-                      <Route path="/webAccessibleResources/quickaccess/login" render={() => (
-                        <SsoContextProvider>
-                          <LoginPage
-                            loginSuccessCallback={this.loginSuccessCallback}
-                            mfaRequiredCallback={this.mfaRequiredCallback}
-                            canRememberMe={this.canRememberMe}/>
-                        </SsoContextProvider>
-                      )}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/create" component={ResourceCreatePage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/autosave" component={SaveResource}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/view/:id" component={ResourceViewPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess.html" component={HomePage}/>
-                    </AnimatedSwitch>
+                    <PasswordSettingsContextProvider>
+                      <AnimatedSwitch>
+                        <Route path="/webAccessibleResources/quickaccess/login" render={() => (
+                          <SsoContextProvider>
+                            <LoginPage
+                              loginSuccessCallback={this.loginSuccessCallback}
+                              mfaRequiredCallback={this.mfaRequiredCallback}
+                              canRememberMe={this.canRememberMe}/>
+                          </SsoContextProvider>
+                        )}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
+                        <PrivateRoute path="/webAccessibleResources/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
+                        <PrivateRoute path="/webAccessibleResources/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
+                        <PrivateRoute path="/webAccessibleResources/quickaccess/resources/create" component={ResourceCreatePage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/autosave" component={SaveResource}/>
+                        <PrivateRoute path="/webAccessibleResources/quickaccess/resources/view/:id" component={ResourceViewPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
+                        <PrivateRoute path="/webAccessibleResources/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
+                        <PrivateRoute exact path="/webAccessibleResources/quickaccess.html" component={HomePage}/>
+                      </AnimatedSwitch>
+                    </PasswordSettingsContextProvider>
                   </PrepareResourceContextProvider>
                 </div>
               </React.Fragment>

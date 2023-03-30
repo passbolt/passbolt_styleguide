@@ -11,6 +11,8 @@ import PasswordComplexity from "../../../shared/components/PasswordComplexity/Pa
 import debounce from 'debounce-promise';
 import PownedService from "../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withPasswordSettings} from "../../contexts/PasswordSettingsContext";
+import PasswordConfiguration from "../../../shared/models/passwordPolicy/PasswordConfiguration";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {
@@ -22,13 +24,22 @@ class ResourceCreatePage extends React.Component {
     this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
+  /**
+   * when the component is mounted
+   * @returns {Promise<void>}
+   */
   async componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
+    await this.initPasswordPolicies();
+    this.initPasswordGeneratorConfiguration();
     await this.handlePreparedResource();
     this.handleLastGeneratedPassword();
     this.evaluatePasswordIsInDictionaryDebounce();
   }
 
+  /**
+   * initialize event handlers
+   * @returns {void}
+   */
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -38,6 +49,52 @@ class ResourceCreatePage extends React.Component {
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
   }
 
+  /**
+   * Initialize the password policies
+   * @returns {Promise<void>}
+   */
+  async initPasswordPolicies() {
+    let passwordPolicies = null;
+
+    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
+    if (canIUsePasswordPolicies) {
+      await this.props.passwordSettingsContext.findPolicies();
+      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
+    }
+
+    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
+    if (shouldInitPownedService) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
+  }
+
+  /**
+   * Returns the possible generators
+   */
+  get generators() {
+    return this.props.prepareResourceContext.settings.generators;
+  }
+
+  /**
+   * Initialize the passwor dgenerator configuration
+   */
+  initPasswordGeneratorConfiguration() {
+    if (this.props.prepareResourceContext.isCustomGeneratorInitialised()) {
+      return;
+    }
+    const passwordOrganisationPolicy = this.props.passwordSettingsContext.getPolicies() || {};
+    const type = this.props.passwordSettingsContext.getPolicies()?.provider || this.props.prepareResourceContext.settings.default_generator;
+    const initialGenerator = this.props.prepareResourceContext.getGeneratorForType(type);
+    const generator = new PasswordConfiguration(initialGenerator, passwordOrganisationPolicy);
+    this.props.prepareResourceContext.initCustomGenerator(generator);
+  }
+
+  /**
+   * Get the default state
+   * @returns {void}
+   */
   getDefaultState() {
     return {
       loaded: false,
@@ -76,9 +133,8 @@ class ResourceCreatePage extends React.Component {
    *  Resource password generator
    * =============================================================
    */
-  async getCurrentGeneratorConfiguration() {
-    const type = (await this.props.prepareResourceContext.getSettings()).default_generator;
-    return this.props.prepareResourceContext.settings.generators.find(generator => generator.type === type);
+  getCurrentGeneratorConfiguration() {
+    return this.props.prepareResourceContext.getCurrentGenerator();
   }
 
   /**
@@ -144,7 +200,7 @@ class ResourceCreatePage extends React.Component {
       if (tabInfo.secret_clear?.length > 0) {
         password = tabInfo.secret_clear;
       } else {
-        password = SecretGenerator.generate(await this.getCurrentGeneratorConfiguration());
+        password = this.generateSecret();
       }
     } catch (error) {
       console.error(error);
@@ -273,8 +329,12 @@ class ResourceCreatePage extends React.Component {
    * @return {Promise}
    */
   async evaluatePasswordIsInDictionaryDebounce() {
+    if (this.pownedService === null) {
+      return;
+    }
+
     let passwordEntropy = null;
-    if (this.state.isPwnedServiceAvailable) {
+    if (this.state.isPwnedServiceAvailable && this.pownedService) {
       passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
       const result = await this.pownedService.evaluateSecret(this.state.password);
       const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
@@ -291,7 +351,7 @@ class ResourceCreatePage extends React.Component {
   }
 
   handlePasswordChange(event) {
-    if (event.target.value.length) {
+    if (event.target.value.length && this.pownedService) {
       this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
     } else {
       this.setState({
@@ -312,15 +372,20 @@ class ResourceCreatePage extends React.Component {
     });
   }
 
-  async handleGeneratePasswordButtonClick() {
+  handleGeneratePasswordButtonClick() {
     if (this.state.processing) {
       return;
     }
     this.setState({
       passwordInDictionary: false,
     });
-    const password = SecretGenerator.generate(await this.getCurrentGeneratorConfiguration());
+    const password = this.generateSecret();
     this.loadPassword(password);
+  }
+
+  generateSecret() {
+    const configuration = this.getCurrentGeneratorConfiguration();
+    return SecretGenerator.generate(configuration);
   }
 
   /**
@@ -369,6 +434,7 @@ class ResourceCreatePage extends React.Component {
           </Link>
         </div>
         <form onSubmit={this.handleFormSubmit}>
+
           <div className="resource-create-form">
             <div className="form-container">
               <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
@@ -397,7 +463,7 @@ class ResourceCreatePage extends React.Component {
               </div>
               <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
                 <label htmlFor="password"><Trans>Password</Trans>
-                  {(this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
+                  {(this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  && this.pownedService &&
                   <Icon name="exclamation"/>
                   }</label>
                 <div className="password-button-inline">
@@ -420,11 +486,16 @@ class ResourceCreatePage extends React.Component {
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }
-                {!this.state.isPwnedServiceAvailable &&
-                    <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-                }
-                {this.state.passwordInDictionary &&
-                    <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+
+                {this.pownedService &&
+                  <>
+                    {!this.state.isPwnedServiceAvailable && this.pownedService !== null &&
+                      <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                    }
+                    {this.state.passwordInDictionary && this.pownedService !== null &&
+                      <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+                    }
+                  </>
                 }
               </div>
             </div>
@@ -453,6 +524,7 @@ ResourceCreatePage.propTypes = {
   history: PropTypes.object,
   location: PropTypes.any,
   t: PropTypes.func, // The translation function
+  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withRouter(withPrepareResourceContext(withTranslation('common')(ResourceCreatePage))));
+export default withAppContext(withRouter(withPrepareResourceContext(withPasswordSettings(withTranslation('common')(ResourceCreatePage)))));

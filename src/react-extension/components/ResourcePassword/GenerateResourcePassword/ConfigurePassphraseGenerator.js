@@ -45,8 +45,7 @@ class ConfigurePassphraseGenerator extends Component {
     const configuration = {...this.state.configuration};
     configuration.default_options[name] = value;
 
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
@@ -57,8 +56,7 @@ class ConfigurePassphraseGenerator extends Component {
     const configuration = {...this.state.configuration};
     configuration.default_options.word_count = event.target.value;
 
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
@@ -92,7 +90,7 @@ class ConfigurePassphraseGenerator extends Component {
 
   /**
    * Get word case list
-   * @returns {[{label: string, value: string},{label: string, value: string},{label: string, value: string}]}
+   * @returns {Array<{label: string, value: string}>}
    */
   get wordCaseList() {
     return [
@@ -155,7 +153,7 @@ class ConfigurePassphraseGenerator extends Component {
 
 ConfigurePassphraseGenerator.propTypes = {
   configuration: PropTypes.object, // The default generator configuration
-  onChanged: PropTypes.func, // Called whenever the generator configuration changed
+  onConfigurationChanged: PropTypes.func, // Called whenever the generator configuration changed
   disabled: PropTypes.bool, // The disabled attribute
   t: PropTypes.func, // The translation function
 };

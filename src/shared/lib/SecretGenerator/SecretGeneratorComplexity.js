@@ -51,7 +51,7 @@ const STRENGTH = [
 ];
 
 // @todo the tool should use the masks provided by the background page.
-const MASKS = [
+export const MASKS = [
   {
     "name": "upper",
     "label": "A-Z",

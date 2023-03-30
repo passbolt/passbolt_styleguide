@@ -23,6 +23,10 @@ export const PrepareResourceContext = React.createContext({
   settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
   resourcePrepared: null, // The resource prepared
+  initCustomGenerator: () => {}, // Initialise the generator with the given configuration
+  isCustomGeneratorInitialised: () => {}, // returns true if the generator initialisation has been initialised
+  getCurrentGenerator: () => {}, // Get the current password generator set
+  getGeneratorForType: () => {}, // Returns the generator of the given type
   onPrepareResource: () => {}, // Whenever a resource has been prepared
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
   onLastGeneratedPasswordCleared: () => {}, // Whenever the last generated password must be cleared
@@ -52,6 +56,12 @@ class PrepareResourceContextProvider extends React.Component {
       settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
       resourcePrepared: null, // The resource prepared
+      isInitialised: false, // true if the generator has already been initialised
+      initCustomGenerator: this.initCustomGenerator.bind(this), // Initialise the generator with the given configuration
+      isCustomGeneratorInitialised: this.isCustomGeneratorInitialised.bind(this), // returns true if the generator initialisation has been initialised
+      getGeneratorForType: this.getGeneratorForType.bind(this), // Returns the generator of the given type
+      getCurrentGenerator: this.getCurrentGenerator.bind(this), // Get the current password generator set
+      changeGenerator: this.changeGenerator.bind(this), // Change the default password generator
       onPrepareResource: this.onPrepareResource.bind(this), // Whenever a resource has been prepared
       onPasswordGenerated: this.onPasswordGenerated.bind(this), // Whenever the a password has been generated with the generator
       getSettings: this.getSettings.bind(this), // Whenever the settings must be get
@@ -64,7 +74,7 @@ class PrepareResourceContextProvider extends React.Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    this.initializePasswordGenerator();
+    await this.initializePasswordGenerator();
   }
 
   /**
@@ -72,11 +82,34 @@ class PrepareResourceContextProvider extends React.Component {
    */
   async initializePasswordGenerator() {
     if (this.props.context.isAuthenticated) {
-      const generatorSettings = await this.props.context.port.request('passbolt.password-generator.settings');
-      await this.setState({
-        settings: generatorSettings
-      });
+      const settings = await this.props.context.port.request('passbolt.password-generator.settings');
+      this.setState({settings});
     }
+  }
+
+  /**
+   * Init the password generator configuration based on a custom configuration (default settings + organisation settings)
+   * It's made to be used once to avoid multiple time initialisation.
+   * It can happens with the <ResourceCreatePage/> when clicking on the generator configuration and then go back to the page
+   * (for instance the componentDidMount is called again, so the component is initialised twice is this case).
+   * @param {object} passwordConfiguration
+   */
+  initCustomGenerator(passwordGeneratorConfiguration) {
+    if (this.state.isInitialised) {
+      return;
+    }
+    const settings = {... this.state.settings};
+    settings.default_generator = passwordGeneratorConfiguration.type;
+    settings.generators = settings.generators.map(defaultGenerator => defaultGenerator.type === passwordGeneratorConfiguration.type ? passwordGeneratorConfiguration : defaultGenerator);
+    this.setState({settings, isInitialised: true});
+  }
+
+  /**
+   * Returns true if 'initCustomeGenerator' has already been called.
+   * @returns {boolean}
+   */
+  isCustomGeneratorInitialised() {
+    return this.state.isInitialised;
   }
 
   /**
@@ -95,7 +128,7 @@ class PrepareResourceContextProvider extends React.Component {
     // This is a way to tell that the user has been authenticated
     const isAuthenticatedNow = !previousIsAuthenticated && this.props.context.isAuthenticated;
     if (isAuthenticatedNow) {
-      this.initializePasswordGenerator();
+      await this.initializePasswordGenerator();
     }
   }
 
@@ -103,16 +136,16 @@ class PrepareResourceContextProvider extends React.Component {
    * Whenever a password has been generated with the generator
    * @param password The generated password
    */
-  async onPasswordGenerated(password, generator) {
-    await this.changeGenerator(generator);
-    await this.updateGeneratedPassword(password);
+  onPasswordGenerated(password, generator) {
+    this.changeGenerator(generator);
+    this.updateGeneratedPassword(password);
   }
 
   /**
    * Whenever a resource has been prepared by the user
    * @param resource The prepared resource
    */
-  async onPrepareResource(resource) {
+  onPrepareResource(resource) {
     this.setState({resourcePrepared: resource});
   }
 
@@ -142,11 +175,30 @@ class PrepareResourceContextProvider extends React.Component {
   }
 
   /**
+   * Get the currently selected and configured generator
+   * @returns {Object} the current generator set
+   */
+  getCurrentGenerator() {
+    const type = this.state.settings.default_generator;
+    return this.getGeneratorForType(type);
+  }
+
+  /**
+   * Returns the currently set generator of the given type
+   * @param {string} type the generator type
+   */
+  getGeneratorForType(type) {
+    return this.state.settings.generators.find(
+      generator => generator.type === type
+    );
+  }
+
+  /**
    * Updates the last generated password
    * @param lastGeneratedPassword The last generated password
    */
-  async updateGeneratedPassword(lastGeneratedPassword) {
-    await this.setState({lastGeneratedPassword});
+  updateGeneratedPassword(lastGeneratedPassword) {
+    this.setState({lastGeneratedPassword});
   }
 
   /**

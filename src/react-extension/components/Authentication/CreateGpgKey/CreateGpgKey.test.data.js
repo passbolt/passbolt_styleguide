@@ -20,12 +20,23 @@ import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
  */
 export function defaultProps(props) {
   const defaultProps = {
-    context: defaultAppContext({port: {
-      request: () => Promise.resolve(0)
-    }}),
+    context: defaultAppContext({
+      siteSettings: {
+        canIUse: () => true,
+      },
+      port: {
+        request: () => Promise.resolve(128)
+      }}
+    ),
     displayAs: CreateGpgKeyVariation.SETUP,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
+    passwordSettingsContext: {
+      findPolicies: jest.fn(async() => {}),
+      getPolicies: jest.fn(() => ({
+        policyPassphraseExternalServices: false
+      }))
+    }
   };
   return Object.assign(defaultProps, props || {});
 }

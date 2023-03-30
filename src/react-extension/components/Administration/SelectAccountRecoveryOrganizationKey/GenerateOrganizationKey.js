@@ -29,6 +29,7 @@ import ExternalServiceUnavailableError from "../../../../shared/lib/Error/Extern
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
+import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -75,8 +76,8 @@ class GenerateOrganizationKey extends React.Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
+  async componentDidMount() {
+    await this.initPasswordPolicies();
   }
   /**
    * Bind callbacks methods
@@ -96,6 +97,27 @@ class GenerateOrganizationKey extends React.Component {
     this.nameInputRef = React.createRef();
     this.emailInputRef = React.createRef();
     this.passphraseInputRef = React.createRef();
+  }
+
+  /**
+   * Initialize the password policies
+   * @returns {Promise<void>}
+   */
+  async initPasswordPolicies() {
+    let passwordPolicies = null;
+
+    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
+    if (canIUsePasswordPolicies) {
+      await this.props.passwordSettingsContext.findPolicies();
+      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
+    }
+
+    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
+    if (shouldInitPownedService) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
   }
 
   /**
@@ -155,7 +177,6 @@ class GenerateOrganizationKey extends React.Component {
     this.setState({passphrase}, () => this.checkPassphraseValidity());
   }
 
-
   /**
    * Validate the passphrase for powned password or validation entropy.
    * @return {Promise<boolean>}
@@ -165,7 +186,9 @@ class GenerateOrganizationKey extends React.Component {
 
     if (this.state.passphrase.length > 0) {
       passphraseEntropy = SecretGenerator.entropy(this.state.passphrase);
-      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+      if (this.pownedService) {
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+      }
     } else {
       this.setState({
         passphraseInDictionnary: false,
@@ -198,7 +221,7 @@ class GenerateOrganizationKey extends React.Component {
    *
    * @returns {boolean} True if the passphrase has strong enough entropy, false otherwise.
    */
-  hasStrongPassword() {
+  hasWeakPassword() {
     return this.state.passphraseEntropy < FAIR_STRENGTH_ENTROPY;
   }
 
@@ -288,8 +311,11 @@ class GenerateOrganizationKey extends React.Component {
     }
     this.setState({hasAlreadyBeenValidated: true});
 
-    await this.isPwndProcessingPromise;
-    if (this.state.passphraseInDictionnary) {
+    if (this.pownedService) {
+      await this.isPwndProcessingPromise;
+    }
+
+    if (this.state.passphraseInDictionnary && this.pownedService) {
       return;
     }
 
@@ -301,7 +327,14 @@ class GenerateOrganizationKey extends React.Component {
    * @return {Boolean}
    */
   hasAnyErrors() {
-    return this.isEmptyPassword() || this.hasStrongPassword() || this.state.passphraseInDictionnary;
+    const validations = [
+      this.isEmptyPassword(),
+      this.state.passphraseInDictionnary,
+    ];
+    validations.push(this.hasWeakPassword());
+    validations.push(!this.pownedService && this.state.passphrase.length < 8);
+
+    return validations.includes(true);
   }
 
   /**
@@ -333,6 +366,10 @@ class GenerateOrganizationKey extends React.Component {
     return isNameValid && isEmailValid && isPassphraseValid;
   }
 
+  /**
+   * Generate an ORK with the current configuration set.
+   * @returns {Promise<Object>}
+   */
   async generateKey() {
     const generateGpgKeyDto = {
       name: this.state.name,
@@ -447,7 +484,7 @@ class GenerateOrganizationKey extends React.Component {
                 {this.isEmptyPassword() &&
                   <div className="empty-passphrase error-message"><Trans>A passphrase is required.</Trans></div>
                 }
-                {this.hasStrongPassword() && passphraseEntropy > 0 &&
+                {this.hasWeakPassword() && passphraseEntropy > 0 &&
                   <div className="invalid-passphrase error-message"><Trans>A strong passphrase is required. The minimum complexity must be &#39;fair&#39;.</Trans></div>
                 }
                 {this.state.passphraseInDictionnary && passphraseEntropy === 0 && !this.isEmptyPassword() &&
@@ -455,7 +492,7 @@ class GenerateOrganizationKey extends React.Component {
                 }
               </div>
             }
-            {this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated &&
+            {this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated && this.pownedService &&
                 <>
                   {!this.state.isPwnedServiceAvailable &&
                     <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
@@ -465,7 +502,7 @@ class GenerateOrganizationKey extends React.Component {
                   }
                 </>
             }
-            {!this.state.isPwnedServiceAvailable &&
+            {!this.state.isPwnedServiceAvailable && this.pownedService !== null &&
               <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
             }
           </div>
@@ -489,6 +526,7 @@ GenerateOrganizationKey.propTypes = {
   onUpdateOrganizationKey: PropTypes.func,
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
+  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withDialog(withTranslation('common')(GenerateOrganizationKey)));
+export default withAppContext(withDialog(withPasswordSettings(withTranslation('common')(GenerateOrganizationKey))));

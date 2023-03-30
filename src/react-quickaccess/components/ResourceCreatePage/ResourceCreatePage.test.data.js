@@ -23,12 +23,18 @@ export function defaultAppContext(appContext) {
  * @returns {*}
  */
 export function defaultProps() {
+  let isInit = false;
   return {
     prepareResourceContext: {
       getSettings: () => settingsPasswordGenerator,
       settings: settingsPasswordGenerator,
       getPreparedResource: jest.fn(),
-      getLastGeneratedPassword: jest.fn(() => "AAAAAAAAAAAAAAAAAA")
+      getLastGeneratedPassword: jest.fn(() => "AAAAAAAAAAAAAAAAAA"),
+      isCustomGeneratorInitialised: () => isInit,
+      getGeneratorForType: type => settingsPasswordGenerator.generators.find(g => g.type === type),
+      initCustomGenerator: () => {
+        isInit = true;
+      }
     }
   };
 }

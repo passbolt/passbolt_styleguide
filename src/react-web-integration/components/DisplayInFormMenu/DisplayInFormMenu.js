@@ -18,6 +18,8 @@ import {withTranslation} from "react-i18next";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
 import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import PasswordConfiguration from "../../../shared/models/passwordPolicy/PasswordConfiguration";
+import {withPasswordSettings} from "../../contexts/PasswordSettingsContext";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -49,7 +51,8 @@ class DisplayInFormMenu extends React.Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
+  async componentDidMount() {
+    await this.initPasswordGeneratorConfiguration();
     this.handleDisplayConfigurationReceivedEvent();
     document.addEventListener('click', this.handleInFormMenuClickEvent, {capture: true});
   }
@@ -95,7 +98,8 @@ class DisplayInFormMenu extends React.Component {
         secretGeneratorConfiguration: null, // A secret generator configuration
       }, // The display configuration of the menu
       generatedPassword: null, // Generated password
-      resourceIdProcessing: null // The resource id processing
+      resourceIdProcessing: null, // The resource id processing
+      passwordConfiguration: null, // the organisation password policies generator configuration or default generator configuration
     };
   }
 
@@ -278,6 +282,21 @@ class DisplayInFormMenu extends React.Component {
     ]), []);
   }
 
+  async initPasswordGeneratorConfiguration() {
+    const generatorSettings = await this.props.context.port.request('passbolt.password-generator.settings');
+    await this.props.passwordSettingsContext.findPolicies();
+    const passwordPolicies = this.props.passwordSettingsContext.getPolicies();
+
+    const passwordType = passwordPolicies
+      ? passwordPolicies.provider
+      : generatorSettings.default_generator;
+
+    const defaultGenerator = generatorSettings.generators.find(generator => generator.type === passwordType);
+    const passwordConfiguration = new PasswordConfiguration(defaultGenerator, passwordPolicies);
+
+    this.setState({passwordConfiguration});
+  }
+
   /**
    * Whenever the display configuration of the menu is received
    */
@@ -286,8 +305,17 @@ class DisplayInFormMenu extends React.Component {
     this.setState({configuration});
     if (!this.isPasswordFilled) {
       // Pre-generate the password
-      this.setState({generatedPassword: SecretGenerator.generate(configuration.secretGeneratorConfiguration)});
+      this.setState({generatedPassword: this.generateSecret()});
     }
+  }
+
+  /**
+   * Generates a new secret based on the given configuration
+   * @param {Object} secretGeneratorConfiguration
+   * @returns {string}
+   */
+  generateSecret() {
+    return SecretGenerator.generate(this.state.passwordConfiguration);
   }
 
   /**
@@ -316,13 +344,13 @@ class DisplayInFormMenu extends React.Component {
    * @param resourceId
    */
   async handleUseSuggestedResourceRequestedEvent(resourceId) {
-    await this.setState({resourceIdProcessing: resourceId});
+    this.setState({resourceIdProcessing: resourceId});
     try {
       await this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
     } catch (error) {
       console.error(error);
     }
-    await this.setState({resourceIdProcessing: null});
+    this.setState({resourceIdProcessing: null});
   }
 
   /**
@@ -331,7 +359,6 @@ class DisplayInFormMenu extends React.Component {
   handleGeneratePasswordRequestedEvent() {
     this.props.context.port.request('passbolt.in-form-menu.fill-password', this.state.generatedPassword);
   }
-
 
   /**
    * Render the component
@@ -353,6 +380,7 @@ class DisplayInFormMenu extends React.Component {
 DisplayInFormMenu.propTypes = {
   context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
+  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withTranslation('common')(DisplayInFormMenu));
+export default withAppContext(withPasswordSettings(withTranslation('common')(DisplayInFormMenu)));

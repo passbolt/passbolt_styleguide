@@ -25,9 +25,12 @@ function defaultProps() {
   return {
     context: {
       port: {
-        request: () => Promise.resolve(0)
+        request: async() => 0
       },
-      userSettings: new UserSettings(userSettingsFixture)
+      userSettings: new UserSettings(userSettingsFixture),
+      siteSettings: {
+        canIUse: () => true
+      }
     },
     dialogContext: {
       open: jest.fn()

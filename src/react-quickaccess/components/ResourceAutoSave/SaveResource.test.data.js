@@ -6,11 +6,14 @@
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
+import {defaultProSiteSettings} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
+import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
-    userSettings: new UserSettings(userSettingsFixture)
+    userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: new SiteSettings(defaultProSiteSettings())
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

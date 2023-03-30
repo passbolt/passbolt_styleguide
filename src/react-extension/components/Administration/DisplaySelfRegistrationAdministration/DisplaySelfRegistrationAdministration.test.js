@@ -28,13 +28,13 @@ jest.mock('uuid');
 /**
  * Unit tests on DisplaySelfRegistrationAdministration in regard of specifications
  */
-
 describe("DisplaySelfRegistrationAdministration", () => {
   beforeEach(() => {
     enableFetchMocks();
     jest.resetModules();
     jest.restoreAllMocks();
     jest.useFakeTimers();
+    mockUuidGeneration();
   });
 
   afterEach(() => {
@@ -119,8 +119,6 @@ describe("DisplaySelfRegistrationAdministration", () => {
     beforeEach(() => {
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
       page = new DisplaySelfRegistrationAdministrationPage(context, props);
-      let index = 0;
-      jest.spyOn(uuid, 'v4').mockImplementation(() => (index++).toString());
     });
 
     it('As a logged in administrator I can add a new input field to the User self registration list', async() => {
@@ -172,7 +170,6 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
   describe("As a logged administrator I can save a list of domains", () => {
     beforeEach(() => {
-      mockUuidGeneration();
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
     });
 
@@ -268,7 +265,6 @@ describe("DisplaySelfRegistrationAdministration", () => {
   });
   describe("As a logged administrator I can remove a domain from the list", () => {
     beforeEach(() => {
-      mockUuidGeneration();
       fetch.doMockOnceIf(/self-registration\/settings*/, () => mockApiResponse(mockResult()));
       page = new DisplaySelfRegistrationAdministrationPage(context, props);
     });

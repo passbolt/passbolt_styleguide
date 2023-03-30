@@ -29,6 +29,8 @@ import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePa
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
+import PasswordConfiguration from "../../../../shared/models/passwordPolicy/PasswordConfiguration";
 
 /**
  * This component generate password or passphrase following configuration
@@ -54,10 +56,10 @@ class GenerateResourcePassword extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    const type = this.props.resourcePasswordGeneratorContext.settings.default_generator;
+    await this.props.passwordSettingsContext.findPolicies();
+    const type = this.props.passwordSettingsContext.getPolicies()?.provider || this.props.resourcePasswordGeneratorContext.settings.default_generator;
     const initialGenerator = this.generators.find(generator => generator.type === type);
-
-    await this.handleGeneratorChanged(initialGenerator);
+    this.handleGeneratorChanged(initialGenerator);
     this.setState({loading: false});
   }
 
@@ -71,6 +73,7 @@ class GenerateResourcePassword extends Component {
     this.handleViewPasswordToggle = this.handleViewPasswordToggle.bind(this);
     this.handleGeneratePassword = this.handleGeneratePassword.bind(this);
     this.handleGeneratorChanged = this.handleGeneratorChanged.bind(this);
+    this.handleGeneratorConfigurationChanged = this.handleGeneratorConfigurationChanged.bind(this);
     this.handleCopyPassword = this.handleCopyPassword.bind(this);
   }
 
@@ -78,24 +81,35 @@ class GenerateResourcePassword extends Component {
    * Returns the possible generators
    */
   get generators() {
-    return  this.props.resourcePasswordGeneratorContext.settings.generators;
+    return this.props.resourcePasswordGeneratorContext.settings.generators;
+  }
+
+  /**
+   * Handle when the generator changed
+   * @param generator The generator configuration
+   */
+  handleGeneratorChanged(generatorConfiguration) {
+    const passwordOrganisationPolicy = this.props.passwordSettingsContext.getPolicies() || {};
+    const generator = new PasswordConfiguration(generatorConfiguration, passwordOrganisationPolicy);
+    this.generatePassword(generator);
+    this.setState({generator});
   }
 
   /**
    * Handle when the generator configuration has changed
    * @param generatorConfiguration The generator configuration
-   * @returns {Promise<void>}
    */
-  async handleGeneratorChanged(generatorConfiguration) {
-    await this.setState({generator: generatorConfiguration});
-    this.generatePassword();
+  handleGeneratorConfigurationChanged(newGeneratorConfiguration) {
+    const generator = new PasswordConfiguration(newGeneratorConfiguration);
+    this.generatePassword(generator);
+    this.setState({generator});
   }
 
   /**
    * Handle when one wants to generate password
    */
   handleGeneratePassword() {
-    this.generatePassword();
+    this.generatePassword(this.state.generator);
   }
 
   /**
@@ -132,10 +146,10 @@ class GenerateResourcePassword extends Component {
    * Handle the submission of the generated password.
    * @params {ReactEvent} The react event
    */
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
-    await this.setState({processing: true});
-    await this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generator);
+    this.setState({processing: true});
+    this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generator);
     this.props.onClose();
   }
 
@@ -150,8 +164,8 @@ class GenerateResourcePassword extends Component {
   /**
    * Generate the password
    */
-  generatePassword() {
-    const password = SecretGenerator.generate(this.state.generator);
+  generatePassword(generator) {
+    const password = SecretGenerator.generate(generator);
     this.setState({password});
   }
 
@@ -209,7 +223,7 @@ class GenerateResourcePassword extends Component {
                 </div>
                 <PasswordComplexity entropy={passwordEntropy}/>
               </div>
-
+              {this.state.generator &&
               <Tabs activeTabName={this.state.generator.name}>
                 {this.generators.map(generator =>
                   <Tab
@@ -220,18 +234,19 @@ class GenerateResourcePassword extends Component {
                     {generator.type === "password" &&
                     <ConfigurePasswordGenerator
                       configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}
+                      onConfigurationChanged={this.handleGeneratorConfigurationChanged}
                       disabled={this.state.processing}/>
                     }
                     {generator.type === "passphrase" &&
                     <ConfigurePassphraseGenerator
                       configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}
+                      onConfigurationChanged={this.handleGeneratorConfigurationChanged}
                       disabled={this.state.processing}/>
                     }
                   </Tab>
                 )}
-              </Tabs>
+              </Tabs>}
+
             </div>
             <div className="submit-wrapper clearfix">
               <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
@@ -251,6 +266,7 @@ GenerateResourcePassword.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func, // Whenever the component must be closed
   t: PropTypes.func, // The translation function
+  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withActionFeedback(withResourcePasswordGeneratorContext(withTranslation('common')(GenerateResourcePassword))));
+export default withAppContext(withActionFeedback(withPasswordSettings(withResourcePasswordGeneratorContext(withTranslation('common')(GenerateResourcePassword)))));

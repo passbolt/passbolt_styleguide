@@ -5,6 +5,7 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
 import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
+import {defaultSecretConfigurationSettings} from "../../../../shared/models/passwordPolicy/PasswordConfiguration.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -35,86 +36,18 @@ export function defaultAppContext(appContext) {
  * @returns {{resource: {id: string, name: string}}}
  */
 export function defaultProps() {
-  return {
+  const generatorsSettings = defaultSecretConfigurationSettings();
+  const props = {
     resourcePasswordGeneratorContext: {
-      settings: {
-        "default_generator": "passphrase",
-        "generators": [
-          {
-            "name": "Password",
-            "type": "password",
-            "default_options": {
-              "length": 18,
-              "look_alike": true,
-              "min_length": 8,
-              "max_length": 128,
-            },
-            "masks": [
-              {
-                "name": "upper",
-                "label": "A-Z",
-                "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-              },
-              {
-                "name": "lower",
-                "label": "a-z",
-                "characters": "abcdefghijklmnopqrstuvwxyz",
-              },
-              {
-                "name": "digit",
-                "label": "0-9",
-                "characters": "0123456789",
-                "required": true,
-              },
-              {
-                "name": "parenthesis",
-                "label": "{ [ ( | ) ] ] }",
-                "characters": "([|])",
-              },
-              {
-                "name": "special_char1",
-                "label": "# $ % & @ ^ ~",
-                "characters": "#$%&@^~"
-              },
-              {
-                "name": "special_char2",
-                "label": ". , : ;",
-                "characters": ".,:;"
-              },
-              {
-                "name": "special_char5",
-                "label": "< * + ! ? =",
-                "characters": "<*+!?="
-              },
-              {
-                "name": "emoji",
-                "label": "😘",
-                "characters": "😀😃😄😁😆😅😂🤣🥲☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾"
-              },
-              {
-                "name": "ascii",
-                "label": "ascii",
-                "characters": "%&¡¢£¤¥¦§¨©ª«¬®¯°±²³µ¶·¸¹º»¼½¾¿ÀÁ ÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿŒœŠšŸƒ—„†‡•…‰€™"
-              }
-            ],
-          },
-          {
-            "name": "Passphrase",
-            "type": "passphrase",
-            "default_options": {
-              "word_count": 8,
-              "word_case": "lowercase",
-              "min_word": 4,
-              "max_word": 40,
-              "separator": " "
-            },
-          }
-        ]
-      }
+      settings: {...generatorsSettings},
+      getGeneratorForType: type => generatorsSettings.generators.find(g => g.type === type),
+      getCurrentGenerator: () => generatorsSettings.generators.find(g => g.type === "passphrase"),
+      changeGenerator: () => {},
     },
     onClose: () => {},
     dialogContext: {
       open: () => {},
     }
   };
+  return props;
 }

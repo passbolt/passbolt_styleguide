@@ -9,8 +9,11 @@ export function defaultProps() {
   const props = {
     context: {
       userSettings: new UserSettings(userSettingsFixture),
+      siteSettings: {
+        canIUse: () => true,
+      },
       port: {
-        request: () => Promise.resolve(0)
+        request: async() => 0
       }
     },
     userSettingsContext: {
@@ -19,7 +22,7 @@ export function defaultProps() {
     },
     dialogContext: {
       open: jest.fn()
-    }
+    },
   };
 
   return props;

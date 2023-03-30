@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.3.0
+ */
+
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
@@ -13,6 +27,8 @@ import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
+import PasswordConfiguration from '../../../shared/models/passwordPolicy/PasswordConfiguration';
+import {withPasswordSettings} from "../../../react-extension/contexts/PasswordSettingsContext";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
@@ -35,9 +51,10 @@ class GeneratePasswordPage extends React.Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    const type = this.props.prepareResourceContext.settings.default_generator;
+    await this.props.passwordSettingsContext.findPolicies();
+    const type = this.props.passwordSettingsContext.getPolicies()?.provider || this.props.prepareResourceContext.settings.default_generator;
     const initialGenerator = this.generators.find(generator => generator.type === type);
-    await this.handleGeneratorChanged(initialGenerator);
+    this.handleGeneratorChanged(initialGenerator);
   }
 
   /**
@@ -57,24 +74,25 @@ class GeneratePasswordPage extends React.Component {
    * Returns the possible generators
    */
   get generators() {
-    return  this.props.prepareResourceContext.settings.generators;
+    return this.props.prepareResourceContext.settings.generators;
   }
 
   /**
    * Handle when the generator configuration has changed
    * @param generatorConfiguration The generator configuration
-   * @returns {Promise<void>}
    */
-  async handleGeneratorChanged(generatorConfiguration) {
-    await this.setState({generator: generatorConfiguration});
-    this.generatePassword();
+  handleGeneratorChanged(generatorConfiguration) {
+    const passwordOrganisationPolicy = this.props.passwordSettingsContext.getPolicies() || {};
+    const generator = new PasswordConfiguration(generatorConfiguration, passwordOrganisationPolicy);
+    this.generatePassword(generator);
+    this.setState({generator});
   }
 
   /**
    * Handle when one wants to generate password
    */
   handleGeneratePasswordButtonClick() {
-    this.generatePassword();
+    this.generatePassword(this.state.generator);
   }
 
   /**
@@ -104,10 +122,10 @@ class GeneratePasswordPage extends React.Component {
    * Handle the submission of the generated password.
    * @params {ReactEvent} The react event
    */
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
-    await this.setState({processing: true});
-    await this.props.prepareResourceContext.onPasswordGenerated(this.state.password, this.state.generator);
+    this.setState({processing: true});
+    this.props.prepareResourceContext.onPasswordGenerated(this.state.password, this.state.generator);
     this.props.history.goBack();
   }
 
@@ -125,9 +143,10 @@ class GeneratePasswordPage extends React.Component {
 
   /**
    * Generate the password
+   * @param {object} generatorConfiguration
    */
-  generatePassword() {
-    const password = SecretGenerator.generate(this.state.generator);
+  generatePassword(generatorConfiguration) {
+    const password = SecretGenerator.generate(generatorConfiguration);
     this.setState({password});
   }
 
@@ -259,6 +278,7 @@ GeneratePasswordPage.propTypes = {
   prepareResourceContext: PropTypes.any, // The password generator context
   history: PropTypes.any, // The history router
   t: PropTypes.func, // The translation function
+  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withRouter(withPrepareResourceContext(withTranslation('common')(GeneratePasswordPage)));
+export default withRouter(withPrepareResourceContext(withPasswordSettings(withTranslation('common')(GeneratePasswordPage))));

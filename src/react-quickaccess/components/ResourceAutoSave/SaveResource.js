@@ -23,6 +23,7 @@ import PasswordComplexity from "../../../shared/components/PasswordComplexity/Pa
 import debounce from "debounce-promise";
 import PownedService from '../../../shared/services/api/secrets/pownedService';
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withPasswordSettings} from "../../../react-extension/contexts/PasswordSettingsContext";
 
 class SaveResource extends React.Component {
   constructor(props) {
@@ -33,9 +34,9 @@ class SaveResource extends React.Component {
     this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
-  componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
+  async componentDidMount() {
     this.loadPasswordMetaFromTabForm();
+    await this.initPasswordPolicies();
     this.evaluatePasswordIsInDictionaryDebounce();
   }
 
@@ -62,6 +63,27 @@ class SaveResource extends React.Component {
       isPwnedServiceAvailable: true,
       passwordInDictionary: false,
     };
+  }
+
+  /**
+   * Initialize the password policies
+   * @returns {Promise<void>}
+   */
+  async initPasswordPolicies() {
+    let passwordPolicies = null;
+
+    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
+    if (canIUsePasswordPolicies) {
+      await this.props.passwordSettingsContext.findPolicies();
+      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
+    }
+
+    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
+    if (shouldInitPownedService) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
   }
 
   /**
@@ -162,7 +184,7 @@ class SaveResource extends React.Component {
   }
 
   handlePasswordChange(event) {
-    if (event.target.value.length) {
+    if (event.target.value.length && this.pownedService) {
       this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
     } else {
       this.setState({
@@ -189,11 +211,15 @@ class SaveResource extends React.Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce() {
+    if (this.pownedService === null) {
+      return;
+    }
+
     let passwordEntropy = null;
-    if (this.state.isPwnedServiceAvailable) {
+    if (this.state.isPwnedServiceAvailable && this.pownedService) {
       passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
       const result = await this.pownedService.evaluateSecret(this.state.password);
       const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
@@ -237,7 +263,7 @@ class SaveResource extends React.Component {
               </div>
               <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
                 <label htmlFor="password"><Trans>Password</Trans>
-                  {(this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
+                  {this.pownedService && (this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
                   <Icon name="exclamation"/>
                   }</label>
                 <div className="password-button-inline">
@@ -248,13 +274,16 @@ class SaveResource extends React.Component {
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }
-                {!this.state.isPwnedServiceAvailable &&
-                    <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                {this.pownedService &&
+                  <>
+                    {!this.state.isPwnedServiceAvailable &&
+                        <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                    }
+                    {this.state.passwordInDictionary &&
+                        <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+                    }
+                  </>
                 }
-                {this.state.passwordInDictionary &&
-                    <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-                }
-
               </div>
             </div>
           </div>
@@ -281,6 +310,7 @@ SaveResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
+  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withRouter(withTranslation('common')(SaveResource)));
+export default withAppContext(withRouter(withPasswordSettings(withTranslation('common')(SaveResource))));

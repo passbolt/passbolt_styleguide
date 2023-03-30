@@ -22,26 +22,15 @@ class ConfigurePasswordGenerator extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
   }
-
-  /**
-   * Returns the default state
-   */
-  get defaultState() {
-    return {
-      configuration: JSON.parse(JSON.stringify(this.props.configuration))
-    };
-  }
-
 
   /**
    * Returns the current values of length option
    * @return {{default: number, min: number, max: number}}
    */
   get length() {
-    const {default_options} = this.state.configuration;
+    const {default_options} = this.props.configuration;
     return {
       default: default_options.length,
       min: default_options.min_length,
@@ -51,16 +40,18 @@ class ConfigurePasswordGenerator extends React.Component {
 
   /**
    * Returns the current masks
+   * @returns {Array<object>}
    */
   get masks() {
-    return this.state.configuration.masks;
+    return this.props.configuration.masks;
   }
 
   /**
    * Returns true if the options exclude-look-alike-characters is true
+   * @returns {Boolean}
    */
   get isExcludeLookAlikeCharacters() {
-    return this.state.configuration.default_options.look_alike;
+    return this.props.configuration.default_options.look_alike;
   }
 
   /**
@@ -77,11 +68,9 @@ class ConfigurePasswordGenerator extends React.Component {
    */
   handleLengthChanged(event) {
     const value = event.target.value;
-    const configuration = {...this.state.configuration};
+    const configuration = {...this.props.configuration};
     configuration.default_options.length = value;
-
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
@@ -92,26 +81,23 @@ class ConfigurePasswordGenerator extends React.Component {
   handleMaskToggled(maskName, event) {
     // Avoid side effect
     event.preventDefault();
-    const configuration = {...this.state.configuration};
+    const configuration = {...this.props.configuration};
     configuration.masks = configuration.masks.map(mask => {
       if (mask.name === maskName && !mask.required) {
-        return {...mask, active: !mask.active};
-      } else {
-        return mask;
+        mask.active = !mask.active;
       }
+      return mask;
     });
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
    * Whenever the exclude-look-alike-character option has been toggled on/off
    */
   handleExcludeLookAlikeCharactersToggled() {
-    const configuration = {...this.state.configuration};
+    const configuration = {...this.props.configuration};
     configuration.default_options.look_alike = !configuration.default_options.look_alike;
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
@@ -185,7 +171,7 @@ class ConfigurePasswordGenerator extends React.Component {
 
 ConfigurePasswordGenerator.propTypes = {
   configuration: PropTypes.object, // The current generator options configuration
-  onChanged: PropTypes.func, // Called whenever the generator configuration changed
+  onConfigurationChanged: PropTypes.func, // Called whenever the generator configuration changed
   disabled: PropTypes.bool, // The disabled attribute
 };
 

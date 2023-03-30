@@ -95,7 +95,6 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.cancelButton.textContent).toBe("Cancel");
     });
 
-
     it('generates password when clicking on the generate button.', async() => {
       page.passwordEdit.focusInput(page.passwordEdit.password);
       await waitFor(() => {

@@ -103,13 +103,21 @@ describe("As AD I can see a Breadcrumb", () => {
     expect(page.item(3)).toBe("Settings");
   });
 
-
   it('As AD I should see a breadcrumb for MFA policy', () => {
     const props = defaultProps(AdministrationWorkspaceMenuTypes.MFA_POLICY); // The props to pass
     page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
     expect(page.count).toBe(3);
     expect(page.item(1)).toBe("Administration");
     expect(page.item(2)).toBe("MFA Policy");
+    expect(page.item(3)).toBe("Settings");
+  });
+
+  it('As AD I should see a breadcrumb password policy', () => {
+    const props = defaultProps(AdministrationWorkspaceMenuTypes.PASSWORD_POLICY);
+    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
+    expect(page.count).toBe(3);
+    expect(page.item(1)).toBe("Administration");
+    expect(page.item(2)).toBe("Password Policy");
     expect(page.item(3)).toBe("Settings");
   });
 });

@@ -187,7 +187,7 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   hasPendingAccountRecoveryChoice: PropTypes.bool,
-  hasPendingMfaChoice: PropTypes.bool
+  hasPendingMfaChoice: PropTypes.bool,
 };
 
 export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace))));
