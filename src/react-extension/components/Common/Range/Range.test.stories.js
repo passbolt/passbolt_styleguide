@@ -13,24 +13,24 @@
  */
 
 import React from "react";
-import GetStartedDesktop from "./GetStartedDesktop";
+import Range from "./Range";
+import {title, labels, valuesEntropy, required} from "./Range.test.data";
 
 
 export default {
-  title: 'Components/Desktop/GetStartedDesktop',
-  component: GetStartedDesktop
+  title: 'Foundations/Range',
+  component: Range
 };
 
-const Template = () =>
-  <div id="container" className="container page login">
-    <div className="content">
-      <div className="login-form"><GetStartedDesktop />
-      </div>
-    </div>
+const Template = args =>
+  <div>
+    <Range {...args} />
   </div>;
 
-const defaultParameters = {
-  css: "ext_authentication"
-};
 export const Default = Template.bind({});
-Default.parameters = defaultParameters;
+Default.args = {
+  title,
+  values: valuesEntropy,
+  labels,
+  required,
+};
