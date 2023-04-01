@@ -25,6 +25,8 @@ import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {UI_ACTION_RESOURCES_EXPORT} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -290,10 +292,12 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Returns true if the user can export
+   * Check if the user can export.
+   * @return {boolean}
    */
   canExport() {
-    return this.hasResourceSelected() && this.props.context.siteSettings.canIUse("export");
+    return this.props.context.siteSettings.canIUse("export")
+      && this.props.rbacContext.canIUseUiAction(UI_ACTION_RESOURCES_EXPORT);
   }
 
   /**
@@ -383,15 +387,17 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                 <span><Trans>Share</Trans></span>
               </button>
             </li>
-            <li id="export_action">
-              <button
-                type="button"
-                disabled={!this.hasResourceSelected() || !this.canExport()}
-                onClick={this.handleExportClickEvent}>
-                <Icon name="download"/>
-                <span><Trans>Export</Trans></span>
-              </button>
-            </li>
+            {this.canExport() &&
+              <li id="export_action">
+                <button
+                  type="button"
+                  disabled={!this.hasResourceSelected()}
+                  onClick={this.handleExportClickEvent}>
+                  <Icon name="download"/>
+                  <span><Trans>Export</Trans></span>
+                </button>
+              </li>
+            }
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
                 <button type="button" className={`more ${this.state.moreMenuOpen ? "open" : ""}`}
@@ -475,10 +481,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
 DisplayResourcesWorkspaceMenu.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based action control context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   dialogContext: PropTypes.any, // the dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))));
+export default withAppContext(withRbac(withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))));

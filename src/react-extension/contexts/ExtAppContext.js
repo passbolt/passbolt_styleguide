@@ -18,6 +18,7 @@ import PropTypes from "prop-types";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettings";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
+import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 
 /**
  * The ExtApp context provider
@@ -73,6 +74,8 @@ class ExtAppContextProvider extends React.Component {
       users: null, // The current list of all users
       groups: null,
 
+      loggedInUser: null,
+      rbacs: null,
       siteSettings: null,
       userSettings: null,
       extensionVersion: null, // The extension version
@@ -174,8 +177,16 @@ class ExtAppContextProvider extends React.Component {
     }
   }
 
+  /**
+   * Check if the application is ready to render with minimal data.
+   * @returns {boolean}
+   */
   isReady() {
-    return this.state.userSettings !== null && this.state.siteSettings !== null && this.state.locale !== null;
+    return this.state.loggedInUser !== null
+      && this.state.rbacs !== null
+      && this.state.userSettings !== null
+      && this.state.siteSettings !== null
+      && this.state.locale !== null;
   }
 
   /*
@@ -188,7 +199,9 @@ class ExtAppContextProvider extends React.Component {
    */
   async getLoggedInUser() {
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    this.setState({loggedInUser});
+    const rbacsDto = await this.props.port.request("passbolt.rbacs.find-me")
+    const rbacs = new RbacsCollection(rbacsDto);
+    this.setState({loggedInUser, rbacs});
   }
 
   /**
@@ -379,10 +392,9 @@ class ExtAppContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const isReady = this.isReady();
     return (
       <AppContext.Provider value={this.state}>
-        {isReady && this.props.children}
+        {this.isReady() && this.props.children}
       </AppContext.Provider>
     );
   }

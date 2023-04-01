@@ -282,4 +282,5 @@ export const AdministrationWorkspaceMenuTypes = {
   SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
   SELF_REGISTRATION: 'SELF-REGISTRATION', // Self registration settings administration menu selected
   SSO: "SSO", // SSO administration menu selected
+  RBAC: "RBAC" // RBAC administration menu selected
 };

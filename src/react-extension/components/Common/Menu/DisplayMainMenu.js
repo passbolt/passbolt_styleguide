@@ -17,6 +17,8 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {UI_ACTION_USERS_VIEW_WORKSPACE} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayMainMenu extends Component {
@@ -76,6 +78,8 @@ class DisplayMainMenu extends Component {
    * @return {JSX}
    */
   render() {
+    const canViewUsersWorkspace = this.props.rbacContext.canIUseUiAction(UI_ACTION_USERS_VIEW_WORKSPACE);
+
     return (
       <nav>
         <div className="primary navigation top">
@@ -89,16 +93,20 @@ class DisplayMainMenu extends Component {
                 </div>
               </div>
             </li>
-            <li key="users">
-              <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button
-                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}><span><Trans>users</Trans></span></button>
+            {canViewUsersWorkspace &&
+              <li key="users">
+                <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button
+                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}>
+                        <span><Trans>users</Trans></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            }
             {this.isLoggedInUserAdmin() &&
             <li key="administration">
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
@@ -148,10 +156,11 @@ class DisplayMainMenu extends Component {
 
 DisplayMainMenu.propTypes = {
   context: PropTypes.object, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   navigationContext: PropTypes.any, // The navigation context
   history: PropTypes.object, // The router history
   location: PropTypes.object, // Router location prop
   dialogContext: PropTypes.object, // the dialog context prop
 };
 
-export default withAppContext(withRouter(withNavigationContext(withDialog(withTranslation("common")(DisplayMainMenu)))));
+export default withAppContext(withRbac(withRouter(withNavigationContext(withDialog(withTranslation("common")(DisplayMainMenu))))));

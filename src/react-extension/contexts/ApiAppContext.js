@@ -20,6 +20,8 @@ import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
 import {CsrfToken} from "../../shared/lib/apiClient/csrfToken";
+import RbacMeService from "../../shared/services/api/rbac/rbacMeService";
+import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AuthService from "../../shared/services/api/auth/AuthService";
 
 const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
@@ -41,6 +43,7 @@ class ApiAppContextProvider extends React.Component {
    */
   async componentDidMount() {
     await this.getLoggedInUser();
+    await this.getRbacs();
     await this.getSiteSettings();
     this.initLocale();
     this.removeSplashScreen();
@@ -61,6 +64,7 @@ class ApiAppContextProvider extends React.Component {
     return {
       name: "api", // The application name
       loggedInUser: null, // The logged in user
+      rbacs: null, // The logged in user
       siteSettings: null, // The site settings
       trustedDomain: this.baseUrl, // The site domain (use trusted domain for compatibility with browser extension applications)
       basename: (new URL(this.baseUrl)).pathname, // Base path to be used for routing if needed ex. /workspace
@@ -95,8 +99,10 @@ class ApiAppContextProvider extends React.Component {
    * Returns true when the component can be rendered
    */
   get isReady() {
-    // Waiting for the site settings and locale to have the appropriate redirection
-    return this.state.siteSettings !== null && this.state.locale !== null;
+    return this.state.loggedInUser !== null
+      && this.state.rbacs !== null
+      && this.state.siteSettings !== null
+      && this.state.locale !== null;
   }
 
   /**
@@ -132,6 +138,18 @@ class ApiAppContextProvider extends React.Component {
     const result = await apiClient.get("me");
     const loggedInUser = result.body;
     this.setState({loggedInUser});
+  }
+
+  /**
+   * Retrieve the rbacs.
+   * @returns {Promise<object>}
+   */
+  async getRbacs() {
+    const apiClientOptions = this.getApiClientOptions().setResourceName("users");
+    const rbacService = new RbacMeService(apiClientOptions);
+    const rbacsDto = await rbacService.findMe({ui_action: true});
+    const rbacs = new RbacsCollection(rbacsDto);
+    this.setState({rbacs});
   }
 
   /**
@@ -271,10 +289,9 @@ class ApiAppContextProvider extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const isReady = this.isReady;
     return (
       <AppContext.Provider value={this.state}>
-        {isReady && this.props.children}
+        {this.isReady && this.props.children}
       </AppContext.Provider>
     );
   }

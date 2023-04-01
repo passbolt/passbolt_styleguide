@@ -113,6 +113,15 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can if the user can use RBACS
+   * @returns {boolean}
+   */
+  get canIUseRbacs() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('rbacs');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -126,6 +135,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSelfRegistrationClick = this.handleSelfRegistrationClick.bind(this);
     this.handleSsoClick = this.handleSsoClick.bind(this);
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
+    this.handleRbacsClick = this.handleRbacsClick.bind(this);
   }
 
   /**
@@ -191,6 +201,12 @@ class DisplayAdministrationMenu extends React.Component {
     this.props.navigationContext.onGoToAdministrationSsoRequested();
   }
 
+  /**
+   * Handle when the user click on the rbac menu
+   */
+  handleRbacsClick() {
+    this.props.navigationContext.onGoToAdministrationRbacsRequested();
+  }
 
   /**
    * Handle when the user click on the Mfa policy settings menu
@@ -261,6 +277,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isSsoSelected() {
     return AdministrationWorkspaceMenuTypes.SSO === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If RBAC menu is selected
+   * @returns {boolean}
+   */
+  isRbacSelected() {
+    return AdministrationWorkspaceMenuTypes.RBAC === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -398,6 +422,19 @@ class DisplayAdministrationMenu extends React.Component {
                   <button className="link no-border" type="button" onClick={this.handleSsoClick}>
                     <span><Trans>Single Sign-On</Trans></span>
                   </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseRbacs &&
+          <li id="rbacs_menu">
+            <div className={`row  ${this.isRbacSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <a onClick={this.handleRbacsClick}>
+                    <span><Trans>Role based action control</Trans></span>
+                  </a>
                 </div>
               </div>
             </div>

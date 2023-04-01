@@ -26,6 +26,8 @@ import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {UI_ACTION_SECRETS_PREVIEW} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -323,14 +325,6 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 
   /**
-   * Returns true if the logged in user can use the preview password capability.
-   * @returns {boolean}
-   */
-  get canUsePreviewPassword() {
-    return this.props.context.siteSettings.canIUse('previewPassword');
-  }
-
-  /**
    * Whenever the user wants to follow a resource uri.
    */
   handleGoToResourceUriClick() {
@@ -359,6 +353,8 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   render() {
     const canUseFolders = this.props.context.siteSettings.canIUse("folders");
+    const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
+      && this.props.rbacContext.canIUseUiAction(UI_ACTION_SECRETS_PREVIEW);
     const creatorUsername = this.getUserUsername(this.resource.created_by);
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
@@ -397,12 +393,12 @@ class DisplayResourceDetailsInformation extends React.Component {
                   </span>
                 </button>
               </div>
-              {this.canUsePreviewPassword &&
-            <button type="button" onClick={this.handleViewPasswordButtonClick}
-              className="password-view button-transparent">
-              <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
-              <span className="visually-hidden"><Trans>View</Trans></span>
-            </button>
+              {canPreviewSecret &&
+                <button type="button" onClick={this.handleViewPasswordButtonClick}
+                   className="password-view button-transparent">
+                  <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
+                  <span className="visually-hidden"><Trans>View</Trans></span>
+                </button>
               }
             </div>
           </li>
@@ -448,6 +444,7 @@ class DisplayResourceDetailsInformation extends React.Component {
 
 DisplayResourceDetailsInformation.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   onSelectFolderParent: PropTypes.func,
   onSelectRoot: PropTypes.func,
   history: PropTypes.object,
@@ -456,4 +453,4 @@ DisplayResourceDetailsInformation.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsInformation)))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsInformation))))));

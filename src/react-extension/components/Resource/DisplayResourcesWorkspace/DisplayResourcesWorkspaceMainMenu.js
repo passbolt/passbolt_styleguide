@@ -22,6 +22,11 @@ import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/Crea
 import ImportResources from "../ImportResources/ImportResources";
 import {Trans, withTranslation} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
+import {
+  UI_ACTION_RESOURCES_EXPORT,
+  UI_ACTION_RESOURCES_IMPORT
+} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 /**
  * This component allows the current user to create a new resource
@@ -198,13 +203,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
-   * Returns true if the current user can import a CSV/KDBX file
-   */
-  get canImport() {
-    return this.props.context.siteSettings.canIUse("import");
-  }
-
-  /**
    * can create a resource
    * @returns {boolean}
    */
@@ -217,6 +215,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canImport = this.props.context.siteSettings.canIUse("import")
+      && this.props.rbacContext.canIUseUiAction(UI_ACTION_RESOURCES_IMPORT);
+
     return (
       <>
         <div className="dropdown" ref={this.createMenuRef}>
@@ -249,11 +250,10 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
             </li>
           </ul>
         </div>
-        {this.canImport &&
+        {canImport &&
           <button
             type="button"
-            className="button-action-icon"
-            onClick={this.handleImportClickEvent}>
+            className="button-action-icon" onClick={this.handleImportClickEvent}>
             <Icon name="upload" />
             <span className="visuallyhidden"><Trans>upload</Trans></span>
           </button>
@@ -265,8 +265,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
 
 DisplayResourcesWorkspaceMainMenu.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))));
+export default withAppContext(withRbac(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)))));

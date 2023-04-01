@@ -29,6 +29,8 @@ import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMe
 import {withTranslation} from "react-i18next";
 import FilterResourcesByGroups from "../FilterResourcesByGroups/FilterResourcesByGroups";
 import DisplayResourcesList from "../DisplayResourcesList/DisplayResourcesList";
+import {UI_ACTION_RESOURCES_EXPORT} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class Workspace extends Component {
   /**
@@ -90,8 +92,9 @@ class Workspace extends Component {
 
 Workspace.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The rbac context
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(Workspace)));
+export default withAppContext(withRbac(withResourceWorkspace(withTranslation('common')(Workspace))));
