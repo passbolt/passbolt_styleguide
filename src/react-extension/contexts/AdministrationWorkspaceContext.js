@@ -160,6 +160,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isSmtpSettingsLocation = this.props.location.pathname.includes('smtp-settings');
     const isSelfRegistrationLocation = this.props.location.pathname.includes('self-registration');
     const isSso = this.props.location.pathname.includes('sso');
+    const rbac = this.props.location.pathname.includes('rbac');
     const can = {
       save: false,
       test: false,
@@ -195,6 +196,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
     } else if (isSso) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
+    } else if (rbac) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.RBAC;
     }
     await this.setState({selectedAdministration, can, must});
   }
