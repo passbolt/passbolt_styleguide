@@ -12,7 +12,11 @@
  * @since         4.0.0
  */
 
-import {controlFunctions} from "./controlFunctionEnumeration";
+import {
+  controlFunctionResolutions,
+  defaultAdminUiActionControlResolution,
+  defaultUserUiActionControlResolution
+} from "./controlFunctionEnumeration";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
 
@@ -24,7 +28,7 @@ export default class GetControlFunctionService {
    * DenyControlFunction is return.
    */
   static getByRbac(rbac) {
-    const controlFunction = controlFunctions[rbac.controlFunction];
+    const controlFunction = controlFunctionResolutions[rbac.controlFunction];
 
     if (!controlFunction) {
       console.warn(`Could not find control function for the given rbac entity (${rbac.id})`);
@@ -40,7 +44,7 @@ export default class GetControlFunctionService {
    * @returns {ControlFunction}
    */
   static getDefaultForAdminAndUiAction(uiActionName) {
-    return AllowControlFunction;
+    return defaultAdminUiActionControlResolution[uiActionName] || AllowControlFunction;
   }
 
   /**
@@ -49,6 +53,6 @@ export default class GetControlFunctionService {
    * @returns {ControlFunction}
    */
   static getDefaultForUserAndUiAction(uiActionName) {
-    return AllowControlFunction;
+    return defaultUserUiActionControlResolution[uiActionName] || AllowControlFunction;
   }
 }

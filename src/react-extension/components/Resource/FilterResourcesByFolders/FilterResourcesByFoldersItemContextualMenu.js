@@ -24,7 +24,7 @@ import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {UI_ACTION_RESOURCES_EXPORT} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class FilterResourcesByFoldersItemContextualMenu extends React.Component {
   /**
@@ -135,7 +135,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   canExport() {
     return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(UI_ACTION_RESOURCES_EXPORT);
+      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**
@@ -170,7 +170,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleCreateFolderItemClickEvent}
                   disabled={!canUpdate}
-                  className="link no-border">
+                  className="create link no-border">
                   <span><Trans>Create folder</Trans></span>
                 </button>
               </div>
@@ -185,7 +185,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleRenameFolderItemClickEvent}
                   disabled={!canUpdate}
-                  className="link no-border">
+                  className="rename link no-border">
                   <span><Trans>Rename</Trans></span>
                 </button>
               </div>
@@ -200,7 +200,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleShareFolderItemClickEvent}
                   disabled={!canShare}
-                  className="link no-border">
+                  className="share link no-border">
                   <span><Trans>Share</Trans></span>
                 </button>
               </div>
@@ -214,7 +214,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                 <div className="main-cell">
                   <button
                     type="button"
-                    className="link no-border"
+                    className="export link no-border"
                     onClick={this.handleExportFolderItemClickEvent}>
                     <span><Trans>Export</Trans></span>
                   </button>
@@ -231,7 +231,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
                   type="button"
                   onClick={this.handleDeleteFolderItemClickEvent}
                   disabled={!canUpdate}
-                  className="link no-border">
+                  className="delete link no-border">
                   <span><Trans>Delete</Trans></span>
                 </button>
               </div>
@@ -245,7 +245,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
 
 FilterResourcesByFoldersItemContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based action control context
+  rbacContext: PropTypes.any, // The role based access control context
   folder: PropTypes.object,
   hide: PropTypes.func, // Hide the contextual menu
   onBeforeHide: PropTypes.func, // On before hide callBack

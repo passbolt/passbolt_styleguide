@@ -11,11 +11,18 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+
+import fetch from 'cross-fetch';
 import ApiClient from "./apiClient";
 import ApiClientOptions from "./apiClientOptions";
 import PassboltServiceUnavailableError from '../../../error/passboltServiceUnavailableError';
 
 const done = undefined;
+
+// Reset the modules before each test.
+beforeEach(() => {
+  window.fetch = fetch;
+});
 
 describe("Integration test with real fetch", () => {
   it("should throw an error if base url is missing", () => {

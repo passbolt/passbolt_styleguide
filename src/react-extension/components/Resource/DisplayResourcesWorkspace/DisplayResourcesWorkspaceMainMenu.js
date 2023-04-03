@@ -22,11 +22,8 @@ import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/Crea
 import ImportResources from "../ImportResources/ImportResources";
 import {Trans, withTranslation} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
-import {
-  UI_ACTION_RESOURCES_EXPORT,
-  UI_ACTION_RESOURCES_IMPORT
-} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows the current user to create a new resource
@@ -216,7 +213,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    */
   render() {
     const canImport = this.props.context.siteSettings.canIUse("import")
-      && this.props.rbacContext.canIUseUiAction(UI_ACTION_RESOURCES_IMPORT);
+      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_IMPORT);
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
 
     return (
       <>
@@ -237,23 +236,25 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </div>
               </div>
             </li>
-            <li id="folder_action">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
-                      <span><Trans>New folder</Trans></span>
-                    </button>
+            {canUseFolders &&
+              <li id="folder_action">
+                <div className="row">
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
+                        <span><Trans>New folder</Trans></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            }
           </ul>
         </div>
         {canImport &&
           <button
             type="button"
-            className="button-action-icon" onClick={this.handleImportClickEvent}>
+            className="import button-action-icon" onClick={this.handleImportClickEvent}>
             <Icon name="upload" />
             <span className="visuallyhidden"><Trans>upload</Trans></span>
           </button>

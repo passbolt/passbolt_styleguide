@@ -199,7 +199,7 @@ class ExtAppContextProvider extends React.Component {
    */
   async getLoggedInUser() {
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = await this.props.port.request("passbolt.rbacs.find-me")
+    const rbacsDto = await this.props.port.request("passbolt.rbacs.find-me");
     const rbacs = new RbacsCollection(rbacsDto);
     this.setState({loggedInUser, rbacs});
   }

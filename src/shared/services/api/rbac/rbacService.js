@@ -1,19 +1,20 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.0.0
+ * @since         4.O.0
  */
+
 import AbstractService from "../abstract/abstractService";
 
-const RBAC_SERVICE_RESOURCE_NAME = '/rbac';
+const RBAC_SERVICE_RESOURCE_NAME = '/rbacs';
 
 class RbacService extends AbstractService {
   /**
@@ -56,15 +57,17 @@ class RbacService extends AbstractService {
     return response.body;
   }
 
-  // /**
-  //  * Update all the given rbac
-  //  * @param {uuid} ssoSettingsId
-  //  * @param {SsoSettingsActivationDto} activationDto
-  //  */
-  // async updateAll(rbacsCollectionDto) {
-  //   const response = await this.apiClient.update(ssoSettingsId, activationDto);
-  //   return response.body;
-  // }
+  /**
+   * Update all the given rbacs.
+   * @param {array} rbacsUpdatedDto A list of update rbacs dto.
+   * @param {object} contains
+   * @returns {object}
+   */
+  async updateAll(rbacsUpdatedDto, contains = {}) {
+    const options = contains ? this.formatContainOptions(contains, RbacService.getSupportedContainOptions()) : null;
+    const response = await this.apiClient.updateAll(rbacsUpdatedDto, options);
+    return response.body;
+  }
 }
 
 export default RbacService;

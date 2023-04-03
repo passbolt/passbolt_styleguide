@@ -29,8 +29,8 @@ import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMe
 import {withTranslation} from "react-i18next";
 import FilterResourcesByGroups from "../FilterResourcesByGroups/FilterResourcesByGroups";
 import DisplayResourcesList from "../DisplayResourcesList/DisplayResourcesList";
-import {UI_ACTION_RESOURCES_EXPORT} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class Workspace extends Component {
   /**
@@ -46,8 +46,10 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
-    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+    const canUseTags = this.props.context.siteSettings.canIUse("tags")
+      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
 
     return (
       <div>

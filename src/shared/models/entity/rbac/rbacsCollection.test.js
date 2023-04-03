@@ -13,7 +13,7 @@
  */
 import RbacsCollection from "./rbacsCollection";
 import EntitySchema from "../abstract/entitySchema";
-import {defaultRbacData, defaultRbacWithActionData} from "./rbacEntity.test.data";
+import {defaultRbacData} from "./rbacEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("Rbacs Collection", () => {
@@ -41,7 +41,7 @@ describe("Rbacs Collection", () => {
     try {
       const collectionDto = [defaultRbacData(), defaultRbacData({id: 'invalid-data'})];
       new RbacsCollection(collectionDto);
-    } catch(error) {
+    } catch (error) {
       expect(error).toBeInstanceOf(EntityValidationError);
       expect(error.hasError('id', 'format')).toBeTruthy();
     }

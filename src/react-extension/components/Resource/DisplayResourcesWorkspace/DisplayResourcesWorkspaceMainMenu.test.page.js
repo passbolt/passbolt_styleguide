@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -17,8 +16,6 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import PropTypes from "prop-types";
-import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../../../contexts/DialogContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
 
@@ -28,18 +25,12 @@ import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMe
 export default class DisplayResourcesWorkspaceMainMenuPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContextProvider context={appContext}>
-          <DialogContextProvider>
-            <ManageDialogs/>
-            <DisplayResourcesWorkspaceMainMenu {...props}/>
-          </DialogContextProvider>
-        </AppContextProvider>
+        <DisplayResourcesWorkspaceMainMenu {...props}/>
       </MockTranslationProvider>
     );
     this.setupPageObjects();
@@ -91,6 +82,13 @@ class DisplayMainMenuPageObject {
    */
   hasCreateMenuDisabled() {
     return this.createMenu.hasAttribute("disabled");
+  }
+
+  /**
+   * Returns the import menu elements of password workspace menu
+   */
+  get importMenu() {
+    return this._container.querySelector('.button.import.button-action-icon');
   }
 
   /**

@@ -14,7 +14,7 @@
 
 import ControlFunction from "./ControlFunction";
 
-export default class AllowControlFunction extends ControlFunction{
+export default class AllowControlFunction extends ControlFunction {
   /**
    * The cool control.
    * @returns {boolean}

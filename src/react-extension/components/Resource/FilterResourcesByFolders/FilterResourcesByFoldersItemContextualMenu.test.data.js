@@ -1,101 +1,77 @@
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.11.0
+ */
+
+import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {
+  defaultFolderDto,
+  folderWithReadPermissionDto, folderWithUpdatePermissionDto
+} from "../../../../shared/models/entity/folder/folderEntity.test.data";
 
 /**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
+ * Default component props with folder having owner permission
+ * @param {object} data Override the default props.
+ * @returns {object}
  */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    siteSettings: new SiteSettings(siteSettingsFixture),
-    setContext: function(newContext) {
-      // In this scope this reference the object context.
-      Object.assign(this, newContext);
-    },
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
-
-/**
- * Default props
- * @returns {any}
- */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   return {
-    folder: foldersMock[1],
+    context: defaultUserAppContext(),
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+    dialogContext: defaultDialogContext(),
+    folder: defaultFolderDto(),
     hide: jest.fn(),
     left: 0,
     top: 0,
-    dialogContext: {
-      open: jest.fn()
-    },
-    resourceWorkspaceContext: {
-      onResourcesToExport: jest.fn()
-    }
+    ...data
   };
 }
 
 /**
- * Default props
- * @returns {any}
+ * Props with folder having read permission
+ * @param {object} data Override the default props.
+ * @returns {object}
  */
-export function propsFolderOnlyRead() {
-  return {
-    folder: foldersMock[0],
-    hide: jest.fn(),
-    left: 0,
-    top: 0,
-    dialogContext: {
-      open: jest.fn()
-    },
-    resourceWorkspaceContext: {
-      onResourcesToExport: jest.fn()
-    }
-  };
+export function propsWithFolderPermissionRead(data = {}) {
+  return defaultProps({
+    folder: folderWithReadPermissionDto(),
+    ...data
+  });
 }
 
 /**
- * Mocked list of resources
+ * Props with folder having read permission
+ * @param {object} data Override the default props.
+ * @returns {object}
  */
-export const foldersMock = [
-  {
-    "id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
-    "name": "Accounting",
-    "created": "2020-02-01T00:00:00+00:00",
-    "modified": "2020-02-01T00:00:00+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "permission": {
-      "id": "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf",
-      "aco": "Folder",
-      "aco_foreign_key": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 1,
-      "created": "2020-05-11T10:11:13+00:00",
-      "modified": "2020-05-11T10:11:13+00:00"
-    },
-    "folder_parent_id": null,
-    "personal": false
-  }, {
-    "id": "299f613b-0706-570a-8636-956186384e0a",
-    "name": "Certificates",
-    "created": "2020-02-01T00:00:00+00:00",
-    "modified": "2020-02-01T00:00:00+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "permission": {
-      "id": "3a2611ed-cbcb-523f-b095-a130187173ae",
-      "aco": "Folder",
-      "aco_foreign_key": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 15,
-      "created": "2020-05-11T10:11:13+00:00",
-      "modified": "2020-05-11T10:11:13+00:00"
-    },
-    "folder_parent_id": null,
-    "personal": false
-  }
-];
+export function propsWithFolderPermissionUpdate(data = {}) {
+  return defaultProps({
+    folder: folderWithUpdatePermissionDto(),
+    ...data
+  });
+}
+
+/**
+ * Props with denied UI action.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function propsWithDenyUiAction(data = {}) {
+  return defaultProps({
+    rbacContext: denyRbacContext(),
+    ...data
+  });
+}

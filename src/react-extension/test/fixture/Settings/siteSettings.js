@@ -107,7 +107,7 @@ const siteSettings = (isProEdition = true) => ({
       },
       "folders": {
         "version": "2.0.0",
-        "enabled": isProEdition
+        "enabled": true
       },
       "previewPassword": {
         "version": "3.0.0"

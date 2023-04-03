@@ -21,7 +21,7 @@ import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {UI_ACTION_RESOURCES_EXPORT} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class FilterResourcesByRootFolderContextualMenu extends React.Component {
   /**
@@ -79,7 +79,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
    */
   canExport() {
     return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(UI_ACTION_RESOURCES_EXPORT);
+      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**

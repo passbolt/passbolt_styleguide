@@ -145,7 +145,7 @@ class ApiAppContextProvider extends React.Component {
    * @returns {Promise<object>}
    */
   async getRbacs() {
-    const apiClientOptions = this.getApiClientOptions().setResourceName("users");
+    const apiClientOptions = this.getApiClientOptions();
     const rbacService = new RbacMeService(apiClientOptions);
     const rbacsDto = await rbacService.findMe({ui_action: true});
     const rbacs = new RbacsCollection(rbacsDto);

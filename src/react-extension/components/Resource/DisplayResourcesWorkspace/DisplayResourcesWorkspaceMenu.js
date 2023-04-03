@@ -26,7 +26,7 @@ import ExportResources from "../ExportResources/ExportResources";
 import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {UI_ACTION_RESOURCES_EXPORT} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -297,7 +297,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   canExport() {
     return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(UI_ACTION_RESOURCES_EXPORT);
+      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**
@@ -362,6 +362,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
@@ -380,13 +383,15 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                 <span><Trans>Edit</Trans></span>
               </button>
             </li>
-            <li id="share_action">
-              <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
-                onClick={this.handleShareClickEvent}>
-                <Icon name="share"/>
-                <span><Trans>Share</Trans></span>
-              </button>
-            </li>
+            {canViewShare &&
+              <li id="share_action">
+                <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
+                  onClick={this.handleShareClickEvent}>
+                  <Icon name="share"/>
+                  <span><Trans>Share</Trans></span>
+                </button>
+              </li>
+            }
             {this.canExport() &&
               <li id="export_action">
                 <button
@@ -422,18 +427,20 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                       </div>
                     </div>
                   </li>
-                  <li id="secret_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
-                            onClick={this.handleCopySecretClickEvent}>
-                            <span><Trans>Copy password to clipboard</Trans></span>
-                          </button>
+                  {canCopySecret &&
+                    <li id="secret_action">
+                      <div className="row">
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
+                              onClick={this.handleCopySecretClickEvent}>
+                              <span><Trans>Copy password to clipboard</Trans></span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
+                    </li>
+                  }
                   <li id="delete_action">
                     <div className="row">
                       <div className="main-cell-wrapper">
@@ -481,7 +488,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
 DisplayResourcesWorkspaceMenu.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based action control context
+  rbacContext: PropTypes.any, // The role based access control context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   dialogContext: PropTypes.any, // the dialog context
