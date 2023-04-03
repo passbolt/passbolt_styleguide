@@ -33,7 +33,8 @@ import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {UI_ACTION_SECRETS_PREVIEW} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -222,11 +223,9 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Handle copy password button click.
+   * @param {ResourceEntity} resource The resource to copy the secret
    */
-  async handleCopyPasswordClick(ev, resource) {
-    // Avoid the grid to select the resource while copying a resource secret.
-    ev.stopPropagation();
-
+  async handleCopyPasswordClick(resource) {
     await this.copyPasswordToClipboard(resource.id);
   }
 
@@ -521,7 +520,9 @@ class DisplayResourcesList extends React.Component {
   }
 
   renderItem(index, key) {
-    const canPreviewSecret = this.props.context.siteSettings.canIUse('previewPassword') && this.props.rbacContext.canIUseUiAction(UI_ACTION_SECRETS_PREVIEW);
+    const canPreviewSecret = this.props.context.siteSettings.canIUse('previewPassword')
+      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
     const resource = this.resources[index];
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
@@ -567,12 +568,10 @@ class DisplayResourcesList extends React.Component {
         <td className="cell-secret m-cell password">
           <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
             title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
-            <button type="button" className="link no-border" onClick={async ev => this.handleCopyPasswordClick(ev, resource)}>
-              <span>
-                {isPasswordPreviewed && this.state.previewedPassword.password}
-                {!isPasswordPreviewed && "Copy password to clipboard"}
-              </span>
-            </button>
+            <HiddenPassword
+              canClick={canCopySecret}
+              preview={this.state.previewedPassword?.password}
+              onClick={() => this.handleCopyPasswordClick(resource)} />
           </div>
           {canPreviewSecret &&
             <button type="button" onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button-transparent">

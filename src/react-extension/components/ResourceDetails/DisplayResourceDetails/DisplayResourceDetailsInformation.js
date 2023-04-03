@@ -26,8 +26,9 @@ import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {UI_ACTION_SECRETS_PREVIEW} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -325,9 +326,11 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
     const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
-      && this.props.rbacContext.canIUseUiAction(UI_ACTION_SECRETS_PREVIEW);
+      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
     const creatorUsername = this.getUserUsername(this.resource.created_by);
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
@@ -359,16 +362,14 @@ class DisplayResourceDetailsInformation extends React.Component {
             <div className="value">
               <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
                 title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
-                <button type="button" className="link no-border" onClick={this.handlePasswordClickEvent}>
-                  <span>
-                    {isPasswordPreviewed && this.state.previewedPassword}
-                    {!isPasswordPreviewed && <Trans>Copy password to clipboard</Trans>}
-                  </span>
-                </button>
+                <HiddenPassword
+                  canClick={canCopySecret}
+                  preview={this.state.previewedPassword}
+                  onClick={this.handlePasswordClickEvent} />
               </div>
               {canPreviewSecret &&
                 <button type="button" onClick={this.handleViewPasswordButtonClick}
-                   className="password-view button-transparent">
+                  className="password-view button-transparent">
                   <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
                   <span className="visually-hidden"><Trans>View</Trans></span>
                 </button>

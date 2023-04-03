@@ -26,6 +26,8 @@ import {withAppContext} from "../../../contexts/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 const FILE_TYPE_KDBX = "kdbx";
 
@@ -46,20 +48,35 @@ class ImportResources extends Component {
    * Returns the default state
    */
   get defaultState() {
-    const canUseTags = this.props.context.siteSettings.canIUse("tags");
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
-
     return {
       // Dialog states
       processing: false,
 
       fileToImport: null, // The file to import
       options: {
-        folders: canUseFolders, // Import all the folders specified in the CSV / KDBX file
-        tags: canUseTags // Mark all resource with a unique tag
+        folders: this.canUseFolders, // Import all the folders specified in the CSV / KDBX file
+        tags: this.canUseTags // Mark all resource with a unique tag
       }, // The current import options
       errors: {} // Validation errors
     };
+  }
+
+  /**
+   * Check if the user can use folders.
+   * @returns {boolean}
+   */
+  get canUseFolders() {
+    return this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+  }
+
+  /**
+   * Check if the user can use tags.
+   * @returns {boolean}
+   */
+  get canUseTags() {
+    return this.props.context.siteSettings.canIUse("tags")
+      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
   }
 
   /**
@@ -366,8 +383,6 @@ class ImportResources extends Component {
     const isInvalidCsvFile = errors && errors.invalidCsvFile;
     const isInvalidKdbxFile = errors && errors.invalidKdbxFile;
     const invalidFileClassName = isInvalidCsvFile || isInvalidKdbxFile ? 'errors' : '';
-    const canUseTags = this.props.context.siteSettings.canIUse("tags");
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
 
     return (
       <DialogWrapper
@@ -420,7 +435,7 @@ class ImportResources extends Component {
               }
             </div>
 
-            {canUseTags &&
+            {this.canUseTags &&
             <div className="input checkbox">
               <input
                 id="dialog-import-passwords-import-tags"
@@ -432,7 +447,7 @@ class ImportResources extends Component {
             </div>
             }
 
-            {canUseFolders &&
+            {this.canUseFolders &&
             <div className="input checkbox">
               <input
                 id="dialog-import-passwords-import-folders"
@@ -461,6 +476,7 @@ class ImportResources extends Component {
 
 ImportResources.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   onClose: PropTypes.func,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
@@ -468,4 +484,4 @@ ImportResources.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResources)))));
+export default withAppContext(withRbac(withResourceWorkspace(withActionFeedback(withDialog(withTranslation('common')(ImportResources))))));

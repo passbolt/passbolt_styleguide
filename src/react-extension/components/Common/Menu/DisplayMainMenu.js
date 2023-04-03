@@ -17,7 +17,7 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {UI_ACTION_USERS_VIEW_WORKSPACE} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class DisplayMainMenu extends Component {
   /**
@@ -52,7 +52,7 @@ class DisplayMainMenu extends Component {
    * @return {JSX}
    */
   render() {
-    const canViewUsersWorkspace = this.props.rbacContext.canIUseUiAction(UI_ACTION_USERS_VIEW_WORKSPACE);
+    const canViewUsersWorkspace = this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
 
     return (
       <nav>
@@ -62,7 +62,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToPasswordsRequested}><span><Trans>passwords</Trans></span></button>
+                    <button className="passwords link no-border" type="button" onClick={this.props.navigationContext.onGoToPasswordsRequested}><span><Trans>passwords</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -73,7 +73,7 @@ class DisplayMainMenu extends Component {
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
                       <button
-                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}>
+                      className="users link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}>
                         <span><Trans>users</Trans></span>
                       </button>
                     </div>
@@ -86,8 +86,9 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button
-                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToAdministrationRequested}><span><Trans>administration</Trans></span></button>
+                    <button className="administration link no-border" type="button" onClick={this.props.navigationContext.onGoToAdministrationRequested}>
+                      <span><Trans>administration</Trans></span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -97,7 +98,8 @@ class DisplayMainMenu extends Component {
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a href="https://help.passbolt.com"
+                    <a className="help"
+                      href="https://help.passbolt.com"
                       role="button"
                       target="_blank"
                       rel="noopener noreferrer">
@@ -112,7 +114,7 @@ class DisplayMainMenu extends Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button
-                      className="link no-border"
+                      className="sign-out link no-border"
                       type="button"
                       onClick={this.props.context.onLogoutRequested}>
                       <span><Trans>sign out</Trans></span>

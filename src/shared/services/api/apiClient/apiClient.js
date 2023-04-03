@@ -180,6 +180,24 @@ class ApiClient {
   }
 
   /**
+   * Update all.
+   *
+   * @param {Object} body (will be converted to JavaScript Object Notation (JSON) string)
+   * @param {Object} [urlOptions] Optional url parameters for example {"contain[something]": "1"}
+   * @throws {TypeError} if body is empty or cannot converted to valid JSON string
+   * @throws {PassboltServiceUnavailableError} if service is not reachable
+   * @throws {PassboltBadResponseError} if passbolt API responded with non parsable JSON
+   * @throws {PassboltApiFetchError} if passbolt API response is not OK (non 2xx status)
+   * @returns {Promise<*>}
+   * @public
+   */
+  async updateAll(body, urlOptions) {
+    const url = this.buildUrl(`${this.baseUrl}`, urlOptions || {});
+    const bodyString = body ? this.buildBody(body) : undefined;
+    return this.fetchAndHandleResponse('PUT', url, bodyString);
+  }
+
+  /**
    * Assert that an id is a valid non empty string
    *
    * @throws {TypeError} if id is empty or not a string

@@ -9,8 +9,9 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.0.0
+ * @since         4.O.0
  */
+
 import RbacEntity from "./rbacEntity";
 import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
@@ -72,6 +73,21 @@ class RbacsCollection extends EntityCollection {
 
   /*
    * ==================================================
+   * Serialization
+   * ==================================================
+   */
+
+  /**
+   * Return a DTO used to bulk update the rbacs
+   *
+   * @returns {array}
+   */
+  toBulkUpdateDto() {
+    return this.items.map(rbac => rbac.toUpdateDto());
+  }
+
+  /*
+   * ==================================================
    * Setters
    * ==================================================
    */
@@ -89,8 +105,10 @@ class RbacsCollection extends EntityCollection {
     }
     const entity = new RbacEntity(dto); // validate
 
-    // Build rules
-    // this.assertUniqueId(entity);
+    /*
+     * Build rules
+     * this.assertUniqueId(entity);
+     */
 
     super.push(entity);
   }
@@ -102,9 +120,58 @@ class RbacsCollection extends EntityCollection {
    * @returns {RbacEntity}
    */
   findRbacByRoleAndUiActionName(role, name) {
-    // assertUuid(roleId, "The role id should be a valid uuid.");
-    // assertString(name, "The name should be a valid string.");
+    /*
+     * assertUuid(roleId, "The role id should be a valid uuid.");
+     * assertString(name, "The name should be a valid string.");
+     */
     return this.rbacs.find(rbac => rbac.roleId === role.id && rbac.uiAction?.name === name);
+  }
+
+  /**
+   * Find the first rbac matching the given ui action name.
+   * @param {string} name The ui action name
+   * @returns {RbacEntity}
+   */
+  findRbacByActionName(name) {
+    /*
+     * assertUuid(roleId, "The role id should be a valid uuid.");
+     * assertString(name, "The name should be a valid string.");
+     */
+    return this.rbacs.find(rbac => rbac.uiAction?.name === name);
+  }
+
+  /**
+   * Add or replace an existing rbac entity.
+   * @param {RbacEntity} rbac The rbac entity to add or replace.
+   */
+  addOrReplace(rbac) {
+    const length = this.items.length;
+    let i = 0;
+    for (; i < length; i++) {
+      const existingRbac = this.items[i];
+      if (existingRbac.id === rbac.id) {
+        this._items[i] = rbac;
+        return;
+      }
+    }
+
+    this.push(rbac);
+  }
+
+  /**
+   * Remove a rbac
+   * @param {RbacEntity} rbac The rbac entity to add or replace.
+   */
+  remove(rbac) {
+    const length = this.items.length;
+    let i = 0;
+    for (; i < length; i++) {
+      const existingRbac = this.items[i];
+      if (existingRbac.id === rbac.id) {
+        this._items.splice(i, 1);
+        return;
+      }
+    }
   }
 
   /*

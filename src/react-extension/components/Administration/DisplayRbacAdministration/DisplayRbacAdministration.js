@@ -9,20 +9,21 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.11.2
+ * @since         4.O.0
  */
+
 import React from "react";
 import PropTypes from "prop-types";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../contexts/AppContext";
+import DisplayAdministrationRbacActions
+  from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationRbacsActions/DisplayAdministrationRbacActions";
+import {withAdminRbac} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
+import DisplayRbacSection from "./DisplayRbacSection";
+import DisplayRbacItem from "./DisplayRbacItem";
 import Icon from "../../../../shared/components/Icons/Icon";
-import Select from "../../Common/Select/Select";
-import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";
-import {withAdminInternationalization} from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
-import {FormConfig} from "./Rbac.data"
-import RbacItem from "./RbacItem"
-// import RBacMeService from "../../../../shared/services/api/rbac/rbacMeService"
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows to display the internationalisation for the administration
@@ -36,7 +37,7 @@ class DisplayRbacAdministration extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.rbacItems = {}; // Will store all the rbacItems so that we can parse them and retrieve their value.
-    this.bindCallbacks();
+    // this.bindCallbacks();
   }
 
   /**
@@ -45,8 +46,8 @@ class DisplayRbacAdministration extends React.Component {
    * @return {void}
    */
   async componentDidMount() {
-    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationInternationalisationActions);
-    this.props.adminInternationalizationContext.findLocale();
+    this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationRbacActions);
+    this.props.adminRbacContext.loadSettings();
   }
 
   /**
@@ -55,133 +56,72 @@ class DisplayRbacAdministration extends React.Component {
    */
   componentWillUnmount() {
     this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
-    this.props.adminInternationalizationContext.clearContext();
+    // this.props.adminInternationalizationContext.clearContext();
   }
-
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  /**
-   * Handle form input changes.
-   * @params {ReactEvent} The react event
-   * @returns {void}
-   */
-  handleInputChange(event) {
-    console.log('value', event.target);
-    console.log(this.rbacItems);
-   // this.props.adminInternationalizationContext.setLocale(event.target.value);
-  }
-  /**
-   * Get the supported locales
-   * @returns {array}
-   */
-  get supportedLocales() {
-    if (this.props.context.siteSettings.supportedLocales) {
-      return this.props.context.siteSettings.supportedLocales.map(supportedLocale => ({value: supportedLocale.locale, label: supportedLocale.label}));
-    }
-    return [];
-  }
-
-  get supportedRbac() {
-    return FormConfig;
-  }
-
-  get rbacFormConfig() {
-    return FormConfig;
-  }
-
-  renderHeader(item) {
-    let childItems = "";
-    if (item.items) {
-      childItems = this.renderItems(item.items);
-    }
-
-    return (
-      <>
-        <div className={`flex-container inner level-${item.level}`}>
-            <div className="flex-item first border-right">
-              <span><Icon name="caret-down" baseline={true}/>&nbsp;&nbsp;{item.name}</span>
-            </div>
-          <div className="flex-item border-right">
-            &nbsp;
-          </div>
-          <div className="flex-item">
-            &nbsp;
-          </div>
-        </div>
-        {childItems}
-      </>
-    )
-  }
-
-  renderItems(items) {
-    const self = this;
-    const listItems = items.map(item => {
-      return self.renderItem(item);
-    });
-
-    return listItems;
-  }
-
-  renderItem(item) {
-    if (item.type === "header") {
-      return this.renderHeader(item);
-    }
-    if (item.type === "ui_action") {
-      const UiActionItem = <RbacItem rbacItem={item} />;
-      this.rbacItems[item.slug] = UiActionItem;
-      return <RbacItem rbacItem={item} onChange={this.handleInputChange}/>;
-    }
-  }
-
-  renderForm(formData) {
-    const self = this;
-    const form = self.renderItems(formData);
-
-    return(
-      <form className="form">
-        <div className="flex-container outer">
-          <div className="flex-container inner header">
-            <div className="flex-item first border-right">
-              <label>
-                <Trans>UI Permissions</Trans>
-              </label>
-            </div>
-            <div className="flex-item border-right centered">
-              <label>
-                <Trans>Admin</Trans>
-              </label>
-            </div>
-            <div className="flex-item centered">
-              <label>
-                <Trans>User</Trans>
-              </label>
-            </div>
-          </div>
-          {form}
-        </div>
-      </form>
-    );
-  }
-
 
   /**
    * Render the component
    * @returns {JSX}
    */
   render() {
-    const rbacForm = this.renderForm(FormConfig);
-
     return (
       <div className="row">
-        <div className="rbac-settings col7 main-column">
+        <div className="rbac-settings col8 main-column">
           <h3><Trans>Role-Based Access Control</Trans></h3>
           <p><Trans>In this section you can define access controls for each user role.</Trans></p>
-          {rbacForm}
+          <form className="form">
+            <div className="flex-container outer">
+              <div className="flex-container inner header">
+                <div className="flex-item first border-right">
+                  <label><Trans>UI Permissions</Trans></label>
+                </div>
+                <div className="flex-item border-right centered">
+                  <label><Trans>Admin</Trans></label>
+                </div>
+                <div className="flex-item centered">
+                  <label><Trans>User</Trans></label>
+                </div>
+              </div>
+              {this.props.adminRbacContext.rbacs &&
+                <>
+                  <DisplayRbacSection label={this.props.t('Resources')} level={1}>
+                    <DisplayRbacSection label={this.props.t('Import/Export')} level={2}>
+                      <DisplayRbacItem label={this.props.t('Can import')}
+                        actionName={uiActions.RESOURCES_IMPORT} level={3}/>
+                      <DisplayRbacItem label={this.props.t('Can export')}
+                        actionName={uiActions.RESOURCES_EXPORT} level={3}/>
+                    </DisplayRbacSection>
+                    <DisplayRbacSection label={this.props.t('Password')} level={2}>
+                      <DisplayRbacItem label={this.props.t('Can preview')}
+                        actionName={uiActions.SECRETS_PREVIEW} level={3}/>
+                      <DisplayRbacItem label={this.props.t('Can copy')}
+                        actionName={uiActions.SECRETS_COPY} level={3}/>
+                    </DisplayRbacSection>
+                    <DisplayRbacSection label={this.props.t('Metadata')} level={2}>
+                      <DisplayRbacItem label={this.props.t('Can see passwords activities')}
+                        actionName={uiActions.RESOURCES_SEE_ACTIVITIES} level={3}/>
+                      <DisplayRbacItem label={this.props.t('Can see passwords comments')}
+                        actionName={uiActions.RESOURCES_SEE_COMMENTS} level={3}/>
+                    </DisplayRbacSection>
+                    <DisplayRbacSection label={this.props.t('Organization')} level={2}>
+                      <DisplayRbacItem label={this.props.t('Can use folders')}
+                        actionName={uiActions.FOLDERS_USE} level={3}/>
+                      <DisplayRbacItem label={this.props.t('Can use tags')}
+                        actionName={uiActions.TAGS_USE} level={3}/>
+                    </DisplayRbacSection>
+                    <DisplayRbacSection label={this.props.t('Sharing')} level={2}>
+                      <DisplayRbacItem label={this.props.t('Can see with whom passwords are shared with')}
+                        actionName={uiActions.SHARE_VIEW_LIST} level={3}/>
+                    </DisplayRbacSection>
+                  </DisplayRbacSection>
+                  <DisplayRbacSection label={this.props.t('Users')} level={1}>
+                    <DisplayRbacItem label={this.props.t('Can see users workspace')}
+                      actionName={uiActions.USERS_VIEW_WORKSPACE} level={3}/>
+                  </DisplayRbacSection>
+                </>
+              }
+            </div>
+          </form>
         </div>
         <div className="col4 last">
           <div className="sidebar-help">
@@ -201,8 +141,8 @@ class DisplayRbacAdministration extends React.Component {
 DisplayRbacAdministration.propTypes = {
   context: PropTypes.object, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
-  adminInternationalizationContext: PropTypes.object, // The administration internationalization context
+  adminRbacContext: PropTypes.object, // The administration rbac context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminInternationalization(withAdministrationWorkspace(withTranslation('common')(DisplayRbacAdministration))));
+export default withAppContext(withAdminRbac(withAdministrationWorkspace(withTranslation('common')(DisplayRbacAdministration))));

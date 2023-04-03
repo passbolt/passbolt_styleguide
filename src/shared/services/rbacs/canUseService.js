@@ -33,8 +33,8 @@ export default class CanUse {
       const rbac = rbacs.findRbacByRoleAndUiActionName(role, actionName);
       if (rbac) {
         controlFunction = GetControlFunctionService.getByRbac(rbac);
-      } else {
-        // If the action is not controlled by rbac get the default control function for non-administrator users.
+      }
+      if (!controlFunction) {
         controlFunction = GetControlFunctionService.getDefaultForUserAndUiAction(actionName);
       }
     }

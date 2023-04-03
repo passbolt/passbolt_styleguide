@@ -44,6 +44,7 @@ import AdminSelfRegistrationContextProvider from "./contexts/Administration/Admi
 import AdminMfaPolicyContextProvider from "./contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 import MfaContextProvider from "./contexts/MFAContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
+import AdminRbacContextProvider from "./contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 
 /**
  * The passbolt application served by the API.
@@ -97,7 +98,9 @@ class ApiApp extends Component {
                                               <AdminMfaPolicyContextProvider>
                                                 <AdminEmailNotificationContextProvider>
                                                   <AdminInternationalizationContextProvider>
-                                                    <AdministrationWorkspace/>
+                                                    <AdminRbacContextProvider>
+                                                      <AdministrationWorkspace/>
+                                                    </AdminRbacContextProvider>
                                                   </AdminInternationalizationContextProvider>
                                                 </AdminEmailNotificationContextProvider>
                                               </AdminMfaPolicyContextProvider>

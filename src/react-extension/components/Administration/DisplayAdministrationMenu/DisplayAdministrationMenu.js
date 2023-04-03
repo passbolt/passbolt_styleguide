@@ -433,7 +433,7 @@ class DisplayAdministrationMenu extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <a onClick={this.handleRbacsClick}>
-                    <span><Trans>Role based action control</Trans></span>
+                    <span><Trans>Role-Based Access Control</Trans></span>
                   </a>
                 </div>
               </div>

@@ -81,7 +81,7 @@ describe("RbacEntity", () => {
         });
         try {
           new RbacEntity(dto);
-        } catch(error) {
+        } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
           expect(error.hasError('id', test.rule)).toBeTruthy();
         }
@@ -100,7 +100,7 @@ describe("RbacEntity", () => {
         });
         try {
           new RbacEntity(dto);
-        } catch(error) {
+        } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
           expect(error.hasError('role_id', test.rule)).toBeTruthy();
         }
@@ -119,7 +119,7 @@ describe("RbacEntity", () => {
         });
         try {
           new RbacEntity(dto);
-        } catch(error) {
+        } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
           expect(error.hasError('foreign_model', test.rule)).toBeTruthy();
         }
@@ -138,7 +138,7 @@ describe("RbacEntity", () => {
         });
         try {
           new RbacEntity(dto);
-        } catch(error) {
+        } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
           expect(error.hasError('foreign_id', test.rule)).toBeTruthy();
         }
@@ -148,8 +148,10 @@ describe("RbacEntity", () => {
     each([
       {scenario: 'required', rule: 'type'},
       {scenario: 'not null', rule: 'type', value: null},
-      // @todo should ensure only allowed control function
-      // {scenario: 'valid uuid', rule: 'format', value: 'invalid-control-function'},
+      /*
+       * @todo should ensure only allowed control function
+       * {scenario: 'valid uuid', rule: 'format', value: 'invalid-control-function'},
+       */
     ]).describe("Should validate the control function", test => {
       it(`Should not accept: ${test.scenario}`, async() => {
         expect.assertions(2);
@@ -158,7 +160,7 @@ describe("RbacEntity", () => {
         });
         try {
           new RbacEntity(dto);
-        } catch(error) {
+        } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
           expect(error.hasError('control_function', test.rule)).toBeTruthy();
         }
@@ -172,7 +174,7 @@ describe("RbacEntity", () => {
       });
       try {
         new RbacEntity(dto);
-      } catch(error) {
+      } catch (error) {
         expect(error).toBeInstanceOf(EntityValidationError);
         expect(error.hasError('id', 'format')).toBeTruthy();
       }
@@ -185,7 +187,7 @@ describe("RbacEntity", () => {
       });
       try {
         new RbacEntity(dto);
-      } catch(error) {
+      } catch (error) {
         expect(error).toBeInstanceOf(EntityValidationError);
         expect(error.hasError('id', 'format')).toBeTruthy();
       }

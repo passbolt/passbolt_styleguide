@@ -9,8 +9,9 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.0.0
+ * @since         4.O.0
  */
+
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 import ActionEntity from "./actionEntity";
@@ -117,6 +118,18 @@ class RbacEntity extends Entity {
   }
 
   /**
+   * Return a to update DTO ready to send to the API.
+   *
+   * @returns {object}
+   */
+  toUpdateDto() {
+    return {
+      id: this.id,
+      control_function: this.controlFunction
+    };
+  }
+
+  /**
    * Customizes JSON stringification behavior
    * @returns {*}
    */
@@ -168,6 +181,16 @@ class RbacEntity extends Entity {
    */
   get controlFunction() {
     return this._props.control_function;
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties setters
+   * ==================================================
+   */
+  set controlFunction(controlFunction) {
+    // @todo Assert input
+    this._props.control_function = controlFunction;
   }
 
   /*
