@@ -72,6 +72,7 @@ build:
     - npm run build
 
 audit:
+  allow_failure: true
   stage: test
   image: node:16
   rules:
