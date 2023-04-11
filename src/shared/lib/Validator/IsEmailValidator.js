@@ -30,6 +30,6 @@ export default class IsEmailValidator {
       return false;
     }
 
-    return XRegExp(REGEX_EMAIL).test(value);
+    return XRegExp(REGEX_EMAIL, 'i').test(value);
   }
 }
