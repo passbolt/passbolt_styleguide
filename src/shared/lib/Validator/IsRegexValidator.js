@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.12.0
  */
+import XRegExp from "xregexp";
 
 export default class IsRegexValidator {
   /**
@@ -21,7 +22,7 @@ export default class IsRegexValidator {
     if (typeof regex !== 'string') {
       throw Error('The regex should be a string.');
     }
-    this.regex = new RegExp(regex);
+    this.regex = new XRegExp(regex);
   }
 
   /**
