@@ -122,6 +122,7 @@ describe("AdminUserDirectoryContext", () => {
       fetch.doMockOnceIf(/directorysync\/settings.json/, async req => {
         const body = await JSON.parse(await req.text());
         const expectedDto = Object.assign({}, new UserDirectoryDTO(new UserDirectoryModel()));
+        delete expectedDto.fields_mapping;
         expect(body).toStrictEqual(expectedDto);
         return mockApiResponse(expectedDto);
       });

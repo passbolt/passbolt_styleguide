@@ -44,8 +44,10 @@ describe("UserDirectoryModel model", () => {
 
     it("should init model with dto and authentication type sasl", () => {
       expect.assertions(1);
-      const result = Object.assign({}, mockResult, {authentication_type: "sasl"});
+      const result = Object.assign({}, mockResult);
+      result.domains.org_domain.authentication_type = "sasl";
       const userId = result.default_user;
+
       const model = new UserDirectoryModel(result, userId);
       const expectedData = mockedData({
         defaultAdmin: userId,

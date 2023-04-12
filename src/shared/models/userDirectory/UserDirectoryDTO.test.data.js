@@ -17,12 +17,8 @@
  * @returns {object}
  */
 export const mockedData = {
-  base_dn: "DC=passbolt,DC=local",
-  connection_type: "plain",
   default_group_admin_user: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   default_user: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-  directory_type: "ad",
-  domain_name: "passbolt.local",
   email_prefix: "",
   email_suffix: "",
   group_object_class: "",
@@ -33,9 +29,6 @@ export const mockedData = {
   group_path: undefined,
   groups_parent_group: undefined,
   group_custom_filters: undefined,
-  password: "password",
-  port: 389,
-  hosts: ["127.0.0.1"],
   sync_groups_create: true,
   sync_groups_delete: true,
   sync_groups_update: true,
@@ -44,7 +37,56 @@ export const mockedData = {
   sync_users_update: true,
   user_path: undefined,
   user_custom_filters: undefined,
-  username: "username",
   users_parent_group: undefined,
-  authentication_type: "basic",
+  domains: {
+    org_domain: {
+      base_dn: "DC=passbolt,DC=local",
+      connection_type: "plain",
+      directory_type: "ad",
+      domain_name: "passbolt.local",
+      password: "password",
+      port: 389,
+      hosts: ["127.0.0.1"],
+      username: "username",
+      authentication_type: "basic",
+    }
+  },
+  fields_mapping: {
+    ad: {
+      user: {
+        id: "objectGuid",
+        firstname: "givenName",
+        lastname: "sn",
+        username: "mail",
+        created: "whenCreated",
+        modified: "whenChanged",
+        groups: "memberOf",
+        enabled: "userAccountControl"
+      },
+      group: {
+        id: "objectGuid",
+        name: "cn",
+        created: "whenCreated",
+        modified: "whenChanged",
+        users: "member"
+      }
+    },
+    openldap: {
+      user: {
+        id: "entryUuid",
+        firstname: "givenname",
+        lastname: "sn",
+        username: "mail",
+        created: "createtimestamp",
+        modified: "modifytimestamp"
+      },
+      group: {
+        id: "entryUuid",
+        name: "cn",
+        created: "createtimestamp",
+        modified: "modifytimestamp",
+        users: "member"
+      }
+    }
+  },
 };
