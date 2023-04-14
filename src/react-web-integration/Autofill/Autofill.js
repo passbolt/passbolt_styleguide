@@ -84,17 +84,24 @@ const fillForm = function(formData) {
  * @return {Boolean} true
  */
 const isRequestInitiatedFromSameOrigin = function(requestedUrl, documentUrl) {
-  // requestedUrl - from quickaccess
-  const parsedRequestedUrl = new URL(requestedUrl);
-  // Request initiated document origin
-  const requestedOrigin = parsedRequestedUrl.origin;
-  // documentUrl - from current active page
-  const parsedDocumentUrl = new URL(documentUrl);
-  // Top level document/an iframe document origin
-  const documentOrigin = parsedDocumentUrl.origin;
+  try {
+    // requestedUrl - from quickaccess
+    const parsedRequestedUrl = new URL(requestedUrl);
+    // Request initiated document origin
+    const requestedOrigin = parsedRequestedUrl.origin;
+    // documentUrl - from current active page
+    const parsedDocumentUrl = new URL(documentUrl);
+    // Top level document/an iframe document origin
+    const documentOrigin = parsedDocumentUrl.origin;
 
-  // Requested document and top/iframe document origin is same
-  return requestedOrigin === documentOrigin;
+    // Requested document and top/iframe document origin is same
+    return requestedOrigin === documentOrigin;
+  } catch (error) {
+    console.error(error)
+    // Empty url or about:blank should not block all the process of autofill
+    return false;
+  }
+
 };
 
 /**
@@ -148,9 +155,9 @@ const fillInputField = function(element, value) {
 const getInputElementFromIframe = function(type, formData) {
   const iframes = document.querySelectorAll("iframe");
   let inputElement = null;
-  for (const i in iframes) {
+  for (const iframe of iframes) {
     // Get accessible iframe document
-    const contentDocument = getAccessedIframeContentDocument(iframes[i]);
+    const contentDocument = getAccessedIframeContentDocument(iframe);
     if (!contentDocument) {
       /*
        * The iframe document is not accessible.
