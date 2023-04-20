@@ -296,11 +296,42 @@ export class ApiClient {
   }
 
   /**
+   * Send a request to the API without handling the response
+   *
+   * @param {string} method example 'GET', 'POST'
+   * @param {URL} url object
+   * @param {*} [body] (optional)
+   * @param {Object} [options] (optional) more fetch options
+   * @throws {PassboltServiceUnavailableError} if service is not reachable
+   * @returns {Promise<*>}
+   * @public
+   */
+  async sendRequest(method, url, body, options) {
+    this.assertUrl(url);
+    this.assertMethod(method);
+    if (body) {
+      this.assertBody(body);
+    }
+
+    const fetchOptions = {...this.buildFetchOptions(), ...options};
+    fetchOptions.method = method;
+    if (body) {
+      fetchOptions.body = body;
+    }
+    try {
+      return await fetch(url.toString(), fetchOptions);
+    } catch (error) {
+      // Catch Network error such as connection lost.
+      throw new PassboltServiceUnavailableError(error.message);
+    }
+  }
+
+  /**
    * fetchAndHandleResponse
    *
    * @param {string} method example 'GET', 'POST'
    * @param {URL} url object
-   * @param {string} [body] (optional)
+   * @param {*} [body] (optional)
    * @param {Object} [options] (optional) more fetch options
    * @throws {TypeError} if method, url are not defined or of the wrong type
    * @throws {PassboltServiceUnavailableError} if service is not reachable
@@ -310,33 +341,18 @@ export class ApiClient {
    * @public
    */
   async fetchAndHandleResponse(method, url, body, options) {
-    this.assertUrl(url);
-    this.assertMethod(method);
-    if (body) {
-      this.assertBody(body);
-    }
-
-    let response, responseJson;
-    const fetchOptions = {...this.buildFetchOptions(), ...options};
-    fetchOptions.method = method;
-    if (body) {
-      fetchOptions.body = body;
-    }
-    try {
-      response = await fetch(url.toString(), fetchOptions);
-    } catch (error) {
-      // Catch Network error such as connection lost.
-      throw new PassboltServiceUnavailableError(error.message);
-    }
+    let responseJson;
+    const response = await this.sendRequest(method, url, body, options);
 
     try {
       responseJson = await response.json();
     } catch (error) {
+      console.error(url.toString(), error);
       /*
        * If the response cannot be parsed, it's not a Passbolt API response.
        * It can be a for example a proxy timeout error (504).
        */
-      throw new PassboltBadResponseError();
+      throw new PassboltBadResponseError(error, response);
     }
 
     if (!response.ok) {
