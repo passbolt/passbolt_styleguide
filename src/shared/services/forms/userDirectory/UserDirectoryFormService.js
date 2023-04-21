@@ -73,11 +73,8 @@ class UserDirectoryFormService {
    */
   validateHostInput() {
     const settings = this.context.getSettings();
-    let hostError = null;
-    const host = settings.host.trim();
-    if (!host.length) {
-      hostError = this.translate("A host is required.");
-    }
+    const host = settings.host?.trim();
+    const hostError = host.length ? null : this.translate("A host is required.");
     this.context.setError("hostError", hostError);
     return {hostError};
   }

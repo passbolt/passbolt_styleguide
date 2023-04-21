@@ -28,12 +28,8 @@ export function defaultProps(data = {}, userId) {
  * @returns {object}
  */
 export const mockResult = {
-  "base_dn": "DC=passbolt,DC=local",
-  "connection_type": "plain",
   "default_group_admin_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   "default_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-  "directory_type": "ad",
-  "domain_name": "passbolt.local",
   "email_prefix": "",
   "email_suffix": "",
   "group_object_class": "",
@@ -43,17 +39,68 @@ export const mockResult = {
   "enabled_users_only": false,
   "group_path": undefined,
   "groups_parent_group": undefined,
-  "password": "password",
-  "port": 389,
-  "server": "127.0.0.1",
+  "group_custom_filters": undefined,
+  "source": "db",
   "sync_groups_create": true,
   "sync_groups_delete": true,
   "sync_groups_update": true,
   "sync_users_create": true,
   "sync_users_delete": true,
+  "sync_users_update": true,
   "user_path": undefined,
-  "username": "username",
+  "user_custom_filters": undefined,
   "users_parent_group": undefined,
+  "domains": {
+    "org_domain": {
+      "directory_type": "ad",
+      "base_dn": "DC=passbolt,DC=local",
+      "connection_type": "plain",
+      "username": "username",
+      "authentication_type": "basic",
+      "password": "password",
+      "port": 389,
+      "hosts": ["127.0.0.1"],
+      "domain_name": "passbolt.local",
+    }
+  },
+  "fields_mapping": {
+    "ad": {
+      "user": {
+        "id": "objectGuid",
+        "firstname": "givenName",
+        "lastname": "sn",
+        "username": "mail",
+        "created": "whenCreated",
+        "modified": "whenChanged",
+        "groups": "memberOf",
+        "enabled": "userAccountControl"
+      },
+      "group": {
+        "id": "objectGuid",
+        "name": "cn",
+        "created": "whenCreated",
+        "modified": "whenChanged",
+        "users": "member"
+      }
+    },
+    "openldap": {
+      "user": {
+        "id": "entryUuid",
+        "firstname": "givenname",
+        "lastname": "sn",
+        "username": "mail",
+        "created": "createtimestamp",
+        "modified": "modifytimestamp"
+      },
+      "group": {
+        "id": "entryUuid",
+        "name": "cn",
+        "created": "createtimestamp",
+        "modified": "modifytimestamp",
+        "users": "member"
+      }
+    }
+  },
 };
 
 /**
@@ -78,6 +125,7 @@ export function mockErrors(data = {}) {
  * @returns {object}
  */
 export const mockModel = {
+  authenticationType: "basic",
   openCredentials: true,
   openDirectoryConfiguration: false,
   openSynchronizationOptions: false,
@@ -94,7 +142,9 @@ export const mockModel = {
   domainError: null,
   baseDn: 'DC=passbolt,DC=local',
   groupPath: undefined,
+  groupCustomFilters: undefined,
   userPath: undefined,
+  userCustomFilters: undefined,
   groupObjectClass: '',
   userObjectClass: '',
   useEmailPrefix: false,
@@ -107,9 +157,48 @@ export const mockModel = {
   enabledUsersOnly: false,
   createUsers: true,
   deleteUsers: true,
+  updateUsers: true,
   createGroups: true,
   deleteGroups: true,
-  updateGroups: true
+  updateGroups: true,
+  fieldsMapping: {
+    ad: {
+      user: {
+        id: "objectGuid",
+        firstname: "givenName",
+        lastname: "sn",
+        username: "mail",
+        created: "whenCreated",
+        modified: "whenChanged",
+        groups: "memberOf",
+        enabled: "userAccountControl"
+      },
+      group: {
+        id: "objectGuid",
+        name: "cn",
+        created: "whenCreated",
+        modified: "whenChanged",
+        users: "member"
+      }
+    },
+    openldap: {
+      user: {
+        id: "entryUuid",
+        firstname: "givenname",
+        lastname: "sn",
+        username: "mail",
+        created: "createtimestamp",
+        modified: "modifytimestamp"
+      },
+      group: {
+        id: "entryUuid",
+        name: "cn",
+        created: "createtimestamp",
+        modified: "modifytimestamp",
+        users: "member"
+      }
+    }
+  },
 };
 
 /**
@@ -117,7 +206,7 @@ export const mockModel = {
  * @param {Object} data The settings to override
  * @returns {object}
  */
-export const defaultMockModel = {"baseDn": "", "connectionType": "plain", "createGroups": true, "createUsers": true, "defaultAdmin": "", "defaultGroupAdmin": "", "deleteGroups": true, "deleteUsers": true, "directoryType": "ad", "domain": "", "domainError": null, "emailPrefix": "", "emailSuffix": "", "enabledUsersOnly": false, "groupObjectClass": "", "groupPath": "", "groupsParentGroup": "", "host": "", "hostError": null, "openCredentials": true, "openDirectoryConfiguration": false, "openSynchronizationOptions": false, "password": "", "port": "389", "portError": null, "updateGroups": true, "useEmailPrefix": false, "userDirectoryToggle": false, "userObjectClass": "", "userPath": "", "username": "", "usersParentGroup": ""};
+export const defaultMockModel = {"source": "db", "baseDn": "", "connectionType": "plain", "createGroups": true, "createUsers": true, "defaultAdmin": "", "defaultGroupAdmin": "", "deleteGroups": true, "deleteUsers": true, "directoryType": "ad", "domain": "", "domainError": null, "emailPrefix": "", "emailSuffix": "", "enabledUsersOnly": false, "groupObjectClass": "", "groupPath": "", "groupCustomFilters": "", "groupsParentGroup": "", "host": "", "hostError": null, "openCredentials": true, "openDirectoryConfiguration": false, "openSynchronizationOptions": false, "password": "", "port": "389", "portError": null, "updateGroups": true, "updateUsers": true, "useEmailPrefix": false, "userDirectoryToggle": false, "userObjectClass": "", "userPath": "", "userCustomFilters": "", "username": "", "usersParentGroup": ""};
 
 /**
  * mock for users object from API.

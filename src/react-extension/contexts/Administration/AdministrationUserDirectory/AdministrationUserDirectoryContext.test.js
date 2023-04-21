@@ -119,8 +119,15 @@ describe("AdminUserDirectoryContext", () => {
 
   describe("AdminUserDirectoryContext::save", () => {
     it("should save settings and call findUserDirectorySettings", async() => {
-      fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse({}));
-      const findSettings = jest.spyOn(adminUserDirectoryContext, "findUserDirectorySettings").mockImplementation();
+      fetch.doMockOnceIf(/directorysync\/settings.json/, async req => {
+        const body = await JSON.parse(await req.text());
+        const expectedDto = Object.assign({}, new UserDirectoryDTO(new UserDirectoryModel()));
+        delete expectedDto.fields_mapping;
+        expect(body).toStrictEqual(expectedDto);
+        return mockApiResponse(expectedDto);
+      });
+
+      const findSettings = jest.spyOn(adminUserDirectoryContext, "findUserDirectorySettings").mockImplementation(() => null);
 
       await adminUserDirectoryContext.save();
 
@@ -128,7 +135,6 @@ describe("AdminUserDirectoryContext", () => {
 
       expect(adminUserDirectoryContext.isProcessing()).toBeTruthy();
       expect(findSettings).toHaveBeenCalled();
-      expect(JSON.parse(fetch.mock.calls[0][1].body)).toEqual(expect.objectContaining(new UserDirectoryDTO(new UserDirectoryModel())));
     });
   });
 

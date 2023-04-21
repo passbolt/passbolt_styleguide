@@ -228,6 +228,15 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * Returns true if the source of the settings is from a config file instead of DB and the user has modified a field.
+   * @returns {boolean}
+   */
+  shouldShowSourceWarningMessage() {
+    const context = this.props.adminUserDirectoryContext;
+    return context.getCurrentSettings().source !== "db" && context.hasSettingsChanges();
+  }
+
+  /**
    * get the connection type
    */
   get connectionType() {
@@ -239,6 +248,16 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * get the supported authentication method
+   */
+  get supportedAuthenticationMethod() {
+    return [
+      {value: "basic", label: this.props.t("Basic")},
+      {value: "sasl", label: "SASL"},
+    ];
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -246,6 +265,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const settings = this.props.adminUserDirectoryContext.getSettings();
     const errors = this.props.adminUserDirectoryContext.getErrors();
     const isSubmitted = this.props.adminUserDirectoryContext.isSubmitted();
+    const hadDisabledSettings = this.props.adminUserDirectoryContext.hadDisabledSettings();
     return (
       <div className="row">
         <div className="ldap-settings col7 main-column">
@@ -258,12 +278,28 @@ class DisplayUserDirectoryAdministration extends React.Component {
             </span>
           </h3>
           {!this.isUserDirectoryChecked() &&
-           <p className="description">
-             <Trans>No Users Directory is configured. Enable it to synchronise your users and groups with passbolt.</Trans>
-           </p>
+            <>
+              {hadDisabledSettings &&
+                <div>
+                  <div className="message warning">
+                    <Trans>The configuration has been disabled has it needs to be checked to make it correct before using it.</Trans>
+                  </div>
+                </div>
+              }
+              {!hadDisabledSettings &&
+                <p className="description">
+                  <Trans>No Users Directory is configured. Enable it to synchronise your users and groups with passbolt.</Trans>
+                </p>
+              }
+            </>
           }
           {this.isUserDirectoryChecked() &&
            <>
+             {this.shouldShowSourceWarningMessage() &&
+              <div className="warning message">
+                <Trans><b>Warning:</b> These are the settings provided by a configuration file. If you save it, will ignore the settings on file and use the ones from the database.</Trans>
+              </div>
+             }
              <p className="description">
                <Trans>A Users Directory is configured. The users and groups of passbolt will synchronize with it.</Trans>
              </p>
@@ -316,20 +352,32 @@ class DisplayUserDirectoryAdministration extends React.Component {
                      <div id="port-input-feedback" className="error-message">{errors.portError}</div>
                    }
                  </div>
-                 <div className="singleline clearfix">
-                   <div className={`input text first-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>Username</Trans></label>
-                     <input id="username-input" type="text" className="fluid form-element" name="username"
-                       value={settings.username} onChange={this.handleInputChange} placeholder={this.props.t("Username")}
-                       disabled={this.hasAllInputDisabled()}/>
-                   </div>
-                   <div className={`input text last-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                     <label><Trans>Password</Trans></label>
-                     <input id="password-input" className="fluid form-element" name="password"
-                       value={settings.password} onChange={this.handleInputChange} placeholder={this.props.t("Password")} type="password"
-                       disabled={this.hasAllInputDisabled()}/>
-                   </div>
+                 <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                   <label><Trans>Authentication method</Trans></label>
+                   <Select items={this.supportedAuthenticationMethod}
+                     id="authentication-type-select"
+                     name="authenticationType"
+                     value={settings.authenticationType}
+                     onChange={this.handleInputChange}
+                     disabled={this.hasAllInputDisabled()}
+                   />
                  </div>
+                 {settings.authenticationType === "basic" &&
+                  <div className="singleline clearfix">
+                    <div className={`input text first-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>Username</Trans></label>
+                      <input id="username-input" type="text" className="fluid form-element" name="username"
+                        value={settings.username} onChange={this.handleInputChange} placeholder={this.props.t("Username")}
+                        disabled={this.hasAllInputDisabled()}/>
+                    </div>
+                    <div className={`input text last-field ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                      <label><Trans>Password</Trans></label>
+                      <input id="password-input" className="fluid form-element" name="password"
+                        value={settings.password} onChange={this.handleInputChange} placeholder={this.props.t("Password")} type="password"
+                        disabled={this.hasAllInputDisabled()}/>
+                    </div>
+                  </div>
+                 }
                  <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Domain</Trans></label>
                    <input id="domain-name-input" type="text" name="domain" value={settings.domain}
@@ -376,6 +424,24 @@ class DisplayUserDirectoryAdministration extends React.Component {
                      disabled={this.hasAllInputDisabled()}/>
                    <div className="help-message"><Trans>User path is used in addition to base DN while searching users.</Trans></div>
                  </div>
+                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                   <label><Trans>Group custom filters</Trans></label>
+                   <input id="group-custom-filters-input" type="text" name="groupCustomFilters" value={settings.groupCustomFilters}
+                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Group custom filters")}
+                     disabled={this.hasAllInputDisabled()}/>
+                   <div className="help-message">
+                     <Trans>Group custom filters are used in addition to the base DN and group path while searching groups.</Trans> <Trans>Leave empty if no additional filter is required.</Trans>
+                   </div>
+                 </div>
+                 <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                   <label><Trans>User custom filters</Trans></label>
+                   <input id="user-custom-filters-input" type="text" name="userCustomFilters" value={settings.userCustomFilters}
+                     onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("User custom filters")}
+                     disabled={this.hasAllInputDisabled()}/>
+                   <div className="help-message">
+                     <Trans>User custom filters are used in addition to the base DN and user path while searching users.</Trans> <Trans>Leave empty if no additional filter is required.</Trans>
+                   </div>
+                 </div>
                  {this.isOpenLdapChecked() &&
                  <div>
                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
@@ -384,7 +450,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                        value={settings.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
                        placeholder="GroupObjectClass" disabled={this.hasAllInputDisabled()}/>
                      <div className="help-message">
-                       <Trans>For Openldap only. Defines which group object to use.</Trans> (<Trans>Default</Trans>: posixGroup)
+                       <Trans>For Openldap only. Defines which group object to use.</Trans> (<Trans>Default</Trans>: groupOfUniqueNames)
                      </div>
                    </div>
                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
@@ -475,7 +541,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Groups parent group</Trans></label>
                    <input id="groups-parent-group-input" type="text" name="groupsParentGroup"
-                     value={settings.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Group name")}
+                     value={settings.groupsParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Groups parent group")}
                      disabled={this.hasAllInputDisabled()}/>
                    <div className="help-message">
                      <Trans>Synchronize only the groups which are members of this group.</Trans>
@@ -484,7 +550,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Users parent group</Trans></label>
                    <input id="users-parent-group-input" type="text" name="usersParentGroup"
-                     value={settings.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Group name")}
+                     value={settings.usersParentGroup} onChange={this.handleInputChange} className="fluid form-element" placeholder={this.props.t("Users parent group")}
                      disabled={this.hasAllInputDisabled()}/>
                    <div className="help-message">
                      <Trans>Synchronize only the users which are members of this group.</Trans>
@@ -515,6 +581,12 @@ class DisplayUserDirectoryAdministration extends React.Component {
                          checked={settings.deleteUsers} onChange={this.handleInputChange} id="sync-users-delete-toggle-button"
                          disabled={this.hasAllInputDisabled()}/>
                        <label className="text" htmlFor="sync-users-delete-toggle-button"><Trans>Delete users</Trans></label>
+                     </div>
+                     <div className="input toggle-switch ad openldap form-element">
+                       <input type="checkbox" className="toggle-switch-checkbox checkbox" name="updateUsers"
+                         checked={settings.updateUsers} onChange={this.handleInputChange} id="sync-users-update-toggle-button"
+                         disabled={this.hasAllInputDisabled()}/>
+                       <label className="text" htmlFor="sync-users-update-toggle-button"><Trans>Update users</Trans></label>
                      </div>
                    </div>
                    <div className="col6 last">

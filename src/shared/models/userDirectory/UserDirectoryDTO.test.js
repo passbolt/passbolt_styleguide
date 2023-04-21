@@ -12,7 +12,8 @@
  * @since         3.8.0
  */
 import UserDirectoryDTO from './UserDirectoryDTO';
-import {mockResult, mockModel} from '../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
+import {mockedData} from './UserDirectoryDTO.test.data';
+import {mockModel} from '../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data';
 
 /**
  * Test model related to the user dto
@@ -20,19 +21,33 @@ import {mockResult, mockModel} from '../../../react-extension/components/Adminis
 describe("UserDirectoryDTO model", () => {
   describe("UserDirectoryDTO::constructor", () => {
     it("should init dto with model", () => {
-      const dto = new UserDirectoryDTO(mockModel);
       expect.assertions(1);
-      expect(dto).toEqual(mockResult);
+      const dto = new UserDirectoryDTO(mockModel);
+      expect(dto).toEqual(mockedData);
     });
     it("should init with default value if directory type is openldap", () => {
+      expect.assertions(5);
       const model = Object.assign({}, mockModel, {userDirectoryModel: "openldap"});
       const dto = new UserDirectoryDTO(model);
-      expect.assertions(5);
       expect(dto.group_object_class).toEqual("");
       expect(dto.user_object_class).toEqual("");
       expect(dto.use_email_prefix_suffix).toEqual(false);
       expect(dto.email_suffix).toEqual("");
       expect(dto.email_prefix).toEqual("");
+    });
+
+    it("should init with sasl authentication type", () => {
+      expect.assertions(3);
+      const model = Object.assign({}, mockModel, {
+        userDirectoryModel: "openldap",
+        authenticationType: "sasl",
+        username: "username",
+        password: "password",
+      });
+      const dto = new UserDirectoryDTO(model);
+      expect(dto.domains.org_domain.authentication_type).toEqual("sasl");
+      expect(dto.domains.org_domain.password).toBeUndefined();
+      expect(dto.domains.org_domain.username).toBeUndefined();
     });
   });
 });
