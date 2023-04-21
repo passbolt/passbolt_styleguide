@@ -52,7 +52,7 @@ describe("As AD I should see the user directory settings", () => {
     });
 
     it('As AD I should see if the User Directory is enabled on my Passbolt instance', async() => {
-      expect.assertions(32);
+      expect.assertions(35);
 
       expect(page.exists()).toBeTruthy();
       // check fields in the form
@@ -70,6 +70,8 @@ describe("As AD I should see the user directory settings", () => {
       await page.click(page.directoryConfigurationTitle);
       expect(page.groupPath.value).toBe("");
       expect(page.userPath.value).toBe("");
+      expect(page.groupCustomFilters.value).toBe("");
+      expect(page.userCustomFilters.value).toBe("");
       expect(page.groupObjectClass).toBeNull();
       expect(page.userObjectClass).toBeNull();
       expect(page.useEmailPrefix).toBeNull();
@@ -81,6 +83,7 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.enabledUsersOnly.checked).toBe(false);
       expect(page.createUsers.checked).toBeTruthy();
       expect(page.deleteUsers.checked).toBeTruthy();
+      expect(page.updateUsers.checked).toBeTruthy();
       expect(page.createGroups.checked).toBeTruthy();
       expect(page.deleteGroups.checked).toBeTruthy();
       expect(page.updateGroups.checked).toBeTruthy();

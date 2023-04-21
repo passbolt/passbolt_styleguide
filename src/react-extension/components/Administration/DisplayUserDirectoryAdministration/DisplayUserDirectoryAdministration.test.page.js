@@ -194,6 +194,20 @@ export default class DisplayUserDirectoryAdministrationPage {
   }
 
   /**
+   * Returns the group custom filters input element
+   */
+  get groupCustomFilters() {
+    return this._page.container.querySelector('#group-custom-filters-input');
+  }
+
+  /**
+   * Returns the user custom filters input element
+   */
+  get userCustomFilters() {
+    return this._page.container.querySelector('#user-custom-filters-input');
+  }
+
+  /**
    * Returns the group object class input element
    */
   get groupObjectClass() {
@@ -275,6 +289,13 @@ export default class DisplayUserDirectoryAdministrationPage {
    */
   get deleteUsers() {
     return this._page.container.querySelector('#sync-users-delete-toggle-button');
+  }
+
+  /**
+   * Returns the update groups input element
+   */
+  get updateUsers() {
+    return this._page.container.querySelector('#sync-users-update-toggle-button');
   }
 
   /**
