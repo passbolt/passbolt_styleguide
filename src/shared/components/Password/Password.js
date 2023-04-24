@@ -53,7 +53,9 @@ class Password extends Component {
    * @params {ReactEvent} The react event.
    */
   handleInputChange(event) {
-    this.props.onChange(event);
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
   }
 
   /**
@@ -162,14 +164,14 @@ Password.propTypes = {
   context: PropTypes.any, // The application context
   id: PropTypes.string, // The id of the the input
   name: PropTypes.string, // The name of the the input
-  value: PropTypes.string.isRequired, // The value of the input
+  value: PropTypes.string, // The value of the input
   placeholder: PropTypes.string, // Placeholder of the input
   autoComplete: PropTypes.string, // The auto complete of the input
   inputRef: PropTypes.object, // The forwarded ref of the input
   disabled: PropTypes.bool, // Disabled input
   readOnly: PropTypes.bool, // Disabled input
   preview: PropTypes.bool, // Display preview button for the password
-  onChange: PropTypes.func.isRequired, // Function onChange of the input
+  onChange: PropTypes.func, // Function onChange of the input
   onKeyUp: PropTypes.func, // Function onKeyUp of the input
   securityToken: PropTypes.shape({
     code: PropTypes.string,
