@@ -15,14 +15,14 @@
  * Default props
  * @returns {{}}
  */
-export function defaultProps(props) {
+export function defaultProps(props = {}) {
   const defaultProps = {
     context: {
-      onCheckIsAuthenticatedRequested: jest.fn()
+      onExpiredSession: jest.fn(callback => callback())
     },
     dialogContext: {
       open: jest.fn()
     }
   };
-  return Object.assign(defaultProps, props || {});
+  return Object.assign(defaultProps, props);
 }
