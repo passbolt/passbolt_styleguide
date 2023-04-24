@@ -15,6 +15,15 @@
 import {defaultAppContext} from "./ExtAppContext.test.data";
 import MockPort from "../test/mock/MockPort";
 
+function mockedTranslation(string, parameters) {
+  let translatedString = string;
+  for (const key in parameters) {
+    const val = parameters[key];
+    translatedString = translatedString.replace(`{{${key}}}`, val);
+  }
+  return translatedString;
+}
+
 /**
  * Default context
  * @param {Object} data The props to override
@@ -30,7 +39,8 @@ export function defaultProps(data = {}, providerId = null) {
   const defaultAuthenticationLoginAppContext = {
     context: {
       port: port,
-    }
+    },
+    t: mockedTranslation
   };
   return Object.assign(defaultAppContext(defaultAuthenticationLoginAppContext), data);
 }

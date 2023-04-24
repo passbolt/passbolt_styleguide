@@ -13,8 +13,8 @@
  */
 import {isValidEmail, isValidUuid} from "../../utils/assertions";
 
-const AZURE_POPUP_WINDOW_HEIGHT = 600;
-const AZURE_POPUP_WINDOW_WIDTH = 380;
+const SSO_POPUP_WINDOW_HEIGHT = 600;
+const SSO_POPUP_WINDOW_WIDTH = 380;
 
 export const AUTHENTICATION_SUCCESS_CASES = {
   DEFAULT: "default",
@@ -22,17 +22,18 @@ export const AUTHENTICATION_SUCCESS_CASES = {
 };
 
 /**
- * Handles the Azure SSO login popup for the SSO identification process.
+ * Handles the SSO login popup for the identification process.
  */
-class AzurePopupHandlerService {
+class SsoPopupHandlerService {
   /**
-   * AzurePopupHandlerService ctor
+   * SsoPopupHandlerService ctor
    * @param {URL} siteDomain
+   * @param {string} providerId the third-party SSO provider identifier
    */
-  constructor(siteDomain) {
+  constructor(siteDomain, providerId) {
     this.popup = null;
     this.intervalCheck = null;
-    this.expectedSuccessUrl = `${siteDomain}/sso/recover/azure/success`;
+    this.expectedSuccessUrl = `${siteDomain}/sso/recover/${providerId}/success`;
     this.expectedErrorUrl = `${siteDomain}/sso/recover/error`;
     this.resolvePromise = null;
     this.rejectPromise = null;
@@ -48,7 +49,7 @@ class AzurePopupHandlerService {
    * @returns {Promise<string>} returns a promise that resolve with the code from the third party
    */
   getSsoTokenFromThirdParty(url) {
-    this.popup = window.open(undefined, "__blank", `popup,width=${AZURE_POPUP_WINDOW_WIDTH},height=${AZURE_POPUP_WINDOW_HEIGHT}`);
+    this.popup = window.open(undefined, "__blank", `popup,width=${SSO_POPUP_WINDOW_WIDTH},height=${SSO_POPUP_WINDOW_HEIGHT}`);
     this.popup.opener = null;
     this.popup.location.href = url.toString();
     return new Promise(this.handlePopupVerification);
@@ -150,4 +151,4 @@ class AzurePopupHandlerService {
   }
 }
 
-export default AzurePopupHandlerService;
+export default SsoPopupHandlerService;

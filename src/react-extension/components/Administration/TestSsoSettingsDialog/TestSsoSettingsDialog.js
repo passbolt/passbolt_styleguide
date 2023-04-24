@@ -68,7 +68,7 @@ class TestSsoSettingsDialog extends React.Component {
     event.preventDefault();
     try {
       this.setState({processing: true});
-      const ssoToken = await this.props.context.port.request(`passbolt.sso.test.${this.props.provider.id}`, this.props.configurationId);
+      const ssoToken = await this.props.context.port.request('passbolt.sso.dry-run', this.props.configurationId);
       this.setState({
         uiState: uiStateEnum.SUCCESS,
         hasSuccessfullySignedInWithSso: true,

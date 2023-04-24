@@ -87,7 +87,6 @@ export class SsoContextProvider extends React.Component {
     } catch (e) {
       console.error(e);
       this.handleSpecificError(e);
-      throw e;
     }
   }
 
@@ -96,19 +95,16 @@ export class SsoContextProvider extends React.Component {
    * @param {Error} e
    */
   handleSpecificError(e) {
-    let errorToThrow = e;
     switch (e.name) {
       case 'InvalidMasterPasswordError': {
-        errorToThrow = new Error(this.props.t("The passphrase from the SSO kit doesn't match your private key: {{error}}", {error: e.message}));
-        break;
+        throw new Error(this.props.t("The passphrase from the SSO kit doesn't match your private key: {{error}}", {error: e.message}));
       }
       case 'OutdatedSsoKitError': {
-        errorToThrow = new Error(this.props.t("The SSO kit is outdated and can't be used to decrypt your passphrase: {{error}}", {error: e.message}));
-        break;
+        throw new Error(this.props.t("The SSO kit is outdated and can't be used to decrypt your passphrase: {{error}}", {error: e.message}));
       }
     }
 
-    throw errorToThrow;
+    throw e;
   }
 
   /**

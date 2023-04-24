@@ -13,10 +13,11 @@
  */
 
 /**
- * Unit tests on IdentifyWithSsoSerivce in regard of specifications
+ * Unit tests on IdentifyWithSsoService in regard of specifications
  */
-import AzurePopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./AzurePopupHandlerService";
+import SsoPopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./SsoPopupHandlerService";
 import {v4 as uuid} from 'uuid';
+import each from 'jest-each';
 
 const mockWindowOpen = () => {
   window.originalOpen = window.open;
@@ -53,14 +54,19 @@ afterAll(() => {
   unmockWindowOpen();
 });
 
-describe("AzurePopupHandlerService", () => {
-  describe('AzurePopupHandlerService::exec', () => {
+const scenarios = [
+  {providerId: 'azure'},
+  {providerId: 'google'}
+];
+
+each(scenarios).describe("SsoPopupHandlerService", scenario => {
+  describe(`SsoPopupHandlerService::exec (with provider '${scenario.providerId}')`, () => {
     it('Should create a popup window', () => {
       expect.assertions(4);
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006";
 
-      const service = new AzurePopupHandlerService(siteDomain);
+      const service = new SsoPopupHandlerService(siteDomain, scenario.providerId);
       service.getSsoTokenFromThirdParty(expectedPopupUrl);
 
       const popup = service.popup;
@@ -79,16 +85,16 @@ describe("AzurePopupHandlerService", () => {
       const expectedToken = uuid();
       const wrongToken = uuid();
 
-      const service = new AzurePopupHandlerService(siteDomain);
+      const service = new SsoPopupHandlerService(siteDomain, scenario.providerId);
       const closeSpy = jest.spyOn(service, "close");
       const promise = service.getSsoTokenFromThirdParty(expectedPopupUrl);
 
       const popup = service.popup;
       popup.location.href = `${siteDomain}/sso/recover?token=${wrongToken}`;
       jest.advanceTimersByTime(200);
-      popup.location.href = `${siteDomain}/sso/recover/azure/success?token=${invalidTolen}`;
+      popup.location.href = `${siteDomain}/sso/recover/${scenario.providerId}/success?token=${invalidTolen}`;
       jest.advanceTimersByTime(200);
-      popup.location.href = `${siteDomain}/sso/recover/azure/success?token=${expectedToken}`;
+      popup.location.href = `${siteDomain}/sso/recover/${scenario.providerId}/success?token=${expectedToken}`;
       jest.advanceTimersByTime(200);
 
       const returnedToken = await promise;
@@ -109,7 +115,7 @@ describe("AzurePopupHandlerService", () => {
       const invalidEmail = "user-email";
       const wrongEmail = "user@not-registered-domain.com";
 
-      const service = new AzurePopupHandlerService(siteDomain);
+      const service = new SsoPopupHandlerService(siteDomain, scenario.providerId);
       const closeSpy = jest.spyOn(service, "close");
       const promise = service.getSsoTokenFromThirdParty(expectedPopupUrl);
 
@@ -137,7 +143,7 @@ describe("AzurePopupHandlerService", () => {
       const siteDomain = "http://localhost:6006";
       const expectedPopupUrlError = `${siteDomain}/sso/recover/error`;
 
-      const service = new AzurePopupHandlerService(siteDomain);
+      const service = new SsoPopupHandlerService(siteDomain, scenario.providerId);
       const closeSpy = jest.spyOn(service, "close");
       const checkUrlSpy = jest.spyOn(service, "verifyPopup").mockImplementation(() => {
         expect(service.popup.closed).toBeFalsy();
@@ -157,7 +163,7 @@ describe("AzurePopupHandlerService", () => {
       const expectedPopupUrl = "http://passbolt.test";
       const siteDomain = "http://localhost:6006/";
 
-      const service = new AzurePopupHandlerService(siteDomain);
+      const service = new SsoPopupHandlerService(siteDomain, scenario.providerId);
       const closeSpy = jest.spyOn(service, "close");
       const promise = service.getSsoTokenFromThirdParty(expectedPopupUrl);
 

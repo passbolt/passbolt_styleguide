@@ -160,16 +160,9 @@ export class AdminSsoContextProvider extends React.Component {
    */
   getSsoConfigurationDto() {
     const config = this.getSsoConfiguration();
-    const data = config.data;
     return {
       provider: config.provider,
-      data: {
-        url: data.url,
-        client_id: data.client_id,
-        tenant_id: data.tenant_id,
-        client_secret: data.client_secret,
-        client_secret_expiry: data.client_secret_expiry,
-      }
+      data: Object.assign({}, config.data),
     };
   }
 
@@ -237,7 +230,7 @@ export class AdminSsoContextProvider extends React.Component {
     this.setState({
       ssoConfig: {
         provider: selectedProvider.id,
-        data: Object.assign({}, this.state.ssoConfig.data, selectedProvider?.defaultConfig)
+        data: Object.assign({}, selectedProvider?.defaultConfig)
       }
     });
   }
@@ -297,7 +290,7 @@ export class AdminSsoContextProvider extends React.Component {
   validateDataFromProvider_azure(data, errors) {
     const {url, client_id, tenant_id, client_secret, client_secret_expiry} = data;
     let isDataValid = true;
-    if (!url || !(url?.length)) { // Validation of url
+    if (!url?.length) { // Validation of url
       errors.url = this.props.t("The Login URL is required");
       isDataValid = false;
     } else if (!this.isValidUrl(url)) {
@@ -305,7 +298,7 @@ export class AdminSsoContextProvider extends React.Component {
       isDataValid = false;
     }
 
-    if (!client_id || !(client_id?.length)) { // Validation of client_id
+    if (!client_id?.length) { // Validation of client_id
       errors.client_id = this.props.t("The Application (client) ID is required");
       isDataValid = false;
     } else if (!this.isValidUuid(client_id)) {
@@ -313,7 +306,7 @@ export class AdminSsoContextProvider extends React.Component {
       isDataValid = false;
     }
 
-    if (!tenant_id || !(tenant_id?.length)) { // Validation of tenant_id
+    if (!tenant_id?.length) { // Validation of tenant_id
       errors.tenant_id = this.props.t("The Directory (tenant) ID is required");
       isDataValid = false;
     } else if (!this.isValidUuid(tenant_id)) {
@@ -322,7 +315,7 @@ export class AdminSsoContextProvider extends React.Component {
     }
 
     // Validation of client_secret
-    if (!client_secret || !(client_secret?.length)) {
+    if (!client_secret?.length) {
       errors.client_secret = this.props.t("The Secret is required");
       isDataValid = false;
     }
@@ -330,6 +323,30 @@ export class AdminSsoContextProvider extends React.Component {
     // Validation of client_secret_expiry
     if (!client_secret_expiry) {
       errors.client_secret_expiry = this.props.t("The Secret expiry is required");
+      isDataValid = false;
+    }
+
+    this.hasError = true;
+    return isDataValid;
+  }
+
+  /**
+   * Validates the current data in the state assuming the SSO provider is Azure
+   * @param {string} data the data to validate
+   * @param {object} errors a ref object to put the validation onto
+   * @returns {boolean}
+   */
+  validateDataFromProvider_google(data, errors) {
+    const {client_id, client_secret} = data;
+    let isDataValid = true;
+    if (!client_id?.length) { // Validation of client_id
+      errors.client_id = this.props.t("The Application (client) ID is required");
+      isDataValid = false;
+    }
+
+    // Validation of client_secret
+    if (!client_secret?.length) {
+      errors.client_secret = this.props.t("The Secret is required");
       isDataValid = false;
     }
 

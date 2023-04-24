@@ -361,6 +361,57 @@ class ManageSsoSettings extends React.Component {
                   </div>
                 </>
               }
+              {ssoConfig?.provider === "google" &&
+                <>
+                  <hr/>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Redirect URL</Trans></label>
+                    <div className="button-inline">
+                      <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
+                        value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+                      <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
+                        <Icon name="copy-to-clipboard"/>
+                      </a>
+                    </div>
+                    <p>
+                      <Trans>The URL to provide to Google when registering the application.</Trans>
+                    </p>
+                  </div>
+                  <hr/>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Application (client) ID</Trans></label>
+                    <input id="sso-google-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
+                      value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    {errors.client_id &&
+                      <div className="error-message">{errors.client_id}</div>
+                    }
+                    <p>
+                      <Trans>The public identifier for the app in Google in UUID format.</Trans> <a href="https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
+                    </p>
+                  </div>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Secret</Trans></label>
+                    <Password
+                      id="sso-google-secret-input"
+                      className="fluid form-element"
+                      onChange={this.handleInputChange}
+                      autoComplete="off"
+                      name="client_secret"
+                      placeholder={this.translate("Secret")}
+                      disabled={this.hasAllInputDisabled()}
+                      value={ssoConfig?.data?.client_secret}
+                      preview={true}
+                      inputRef={this.clientSecretInputRef}/>
+                    {errors.client_secret &&
+                      <div className="error-message">{errors.client_secret}</div>
+                    }
+                    <p>
+                      <Trans>Allows Google and Passbolt API to securely share information.</Trans> <a href="https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
+                    </p>
+                  </div>
+                </>
+              }
             </form>
           }
         </div>
@@ -384,6 +435,15 @@ class ManageSsoSettings extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
             <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
+              <Icon name="external-link"/>
+              <span><Trans>Read the documentation</Trans></span>
+            </a>
+          </div>
+          }
+          {ssoConfig?.provider === "google" &&
+          <div className="sidebar-help">
+            <h3><Trans>How do I configure a Google SSO?</Trans></h3>
+            <a className="button" href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" rel="noopener noreferrer">
               <Icon name="external-link"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

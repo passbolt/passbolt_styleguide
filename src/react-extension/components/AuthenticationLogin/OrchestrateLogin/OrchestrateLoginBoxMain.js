@@ -27,6 +27,8 @@ import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/
 import RequestAccountRecovery, {RequestAccountRecoveryVariations} from "../../Authentication/RequestAccountRecovery/RequestAccountRecovery";
 import AskForAuthenticationHelp, {AskForAuthenticationHelpCredentialLostVariations} from "../../Authentication/AskForAuthenticationHelpCredentialLost/AskForAuthenticationHelpCredentialLost";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
+import DisplaySsoDisabledError from "../../Sso/DisplaySsoDisabledError";
+import DisplaySsoProviderMismatchError from "../../Sso/DisplaySsoProviderMismatchError";
 
 /**
  * The component orchestrates the login authentication box main content.
@@ -88,6 +90,15 @@ class OrchestrateLoginBoxMain extends Component {
       case AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR:
         return <DisplayUnexpectedError
           error={this.props.authenticationLoginContext.error}
+        />;
+      case AuthenticationLoginWorkflowStates.SSO_DISABLED_ERROR:
+        return <DisplaySsoDisabledError
+          onSignInWithPassphraseClick={this.props.authenticationLoginContext.handleUserConfirmSsoDisable}
+        />;
+      case AuthenticationLoginWorkflowStates.SSO_PROVIDER_MISMATCH_ERROR:
+        return <DisplaySsoProviderMismatchError
+          onAcceptNewProvider={this.props.authenticationLoginContext.handleUserConfirmSsoProviderChange}
+          newProvider={this.props.authenticationLoginContext.getNewSsoProvider()}
         />;
       case AuthenticationLoginWorkflowStates.LOADING:
         return <LoadingSpinner/>;
