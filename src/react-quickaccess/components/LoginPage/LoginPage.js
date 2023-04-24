@@ -29,7 +29,6 @@ class LoginPage extends React.Component {
       error: "",
       ssoError: null,
       processing: false,
-      passphrase: "",
       rememberMe: false,
       displaySso: false,
       isSsoAvailable: false,
@@ -74,7 +73,10 @@ class LoginPage extends React.Component {
   }
 
   async login() {
-    await this.props.context.port.request("passbolt.auth.login", this.state.passphrase, this.state.rememberMe);
+    let passphrase = this.passphraseInputRef.current.value;
+    await this.props.context.port.request("passbolt.auth.login", passphrase, this.state.rememberMe);
+    passphrase = null;
+    this.passphraseInputRef.current.value = null;
     await this.handleLoginSuccess();
   }
 
@@ -171,12 +173,11 @@ class LoginPage extends React.Component {
                 <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
                 <div className="password with-token">
                   <Password
-                    name="passphrase" placeholder={this.props.t('Passphrase')}
+                    name="passphrase"
+                    placeholder={this.props.t('Passphrase')}
                     id="passphrase"
                     autoComplete="off"
                     inputRef={this.passphraseInputRef}
-                    value={this.state.passphrase}
-                    onChange={this.handleInputChange}
                     preview={true}
                     securityToken={this.props.context.userSettings.getSecurityToken()}
                     disabled={this.state.processing}/>
