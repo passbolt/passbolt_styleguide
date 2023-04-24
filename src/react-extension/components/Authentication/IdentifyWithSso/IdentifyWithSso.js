@@ -26,7 +26,7 @@ class IdentifyWithSso extends Component {
     super(props);
     this.state = this.defaultState;
     this.bindEventHandlers();
-    this.identifyViaSsoService = new IdentifyViaSsoService(this.props.context, this.handleSsoAuthSuccess, this.handleSsoAuthSuccessForRegistration);
+    this.identifyViaSsoService = new IdentifyViaSsoService(this.props.ssoProvider.id, this.props.context, this.handleSsoAuthSuccess, this.handleSsoAuthSuccessForRegistration);
   }
 
   /**
@@ -87,7 +87,7 @@ class IdentifyWithSso extends Component {
     }
     this.toggleProcessing();
     try {
-      await this.identifyViaSsoService.exec(this.props.ssoProvider.id);
+      await this.identifyViaSsoService.exec();
     } catch (e) {}
     this.toggleProcessing();
   }

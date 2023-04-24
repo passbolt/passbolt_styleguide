@@ -20,7 +20,7 @@ import {defaultProps} from "./IdentifyWithSso.test.data";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
 import {waitFor} from "@testing-library/dom";
 import GetUrlForSsoIdentificationService from "../../../../shared/services/api/sso/GetUrlForSsoIdentificationService";
-import AzurePopupHandlerService from "../../../../shared/services/sso/AzurePopupHandlerService";
+import SsoPopupHandlerService from "../../../../shared/services/sso/SsoPopupHandlerService";
 import {v4 as uuid} from "uuid";
 import GetRecoverUrlService from "../../../../shared/services/api/sso/GetRecoverUrlService";
 
@@ -55,7 +55,7 @@ describe("IdentifyWithSso", () => {
       };
 
       jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async() => popupUrl);
-      jest.spyOn(AzurePopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
+      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
         expect(url).toStrictEqual(popupUrl);
         return {
           case: 'default',
@@ -86,7 +86,7 @@ describe("IdentifyWithSso", () => {
       const expectedEmail = "user@registered-domain.com";
 
       jest.spyOn(GetUrlForSsoIdentificationService.prototype, "getUrl").mockImplementation(async() => popupUrl);
-      jest.spyOn(AzurePopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
+      jest.spyOn(SsoPopupHandlerService.prototype, "getSsoTokenFromThirdParty").mockImplementation(async url => {
         expect(url).toStrictEqual(popupUrl);
         return {
           case: 'registration_required',

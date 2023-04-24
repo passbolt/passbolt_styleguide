@@ -17,6 +17,8 @@ import {withAppContext} from "../AppContext";
 import {withSso} from "../SsoContext";
 import SsoProviders from "../../components/Administration/ManageSsoSettings/SsoProviders.data";
 
+const EXPECTED_SSO_LOGIN_ERROR = ["SsoDisabledError", "SsoProviderMismatchError"];
+
 // The authentication login workflow states.
 export const AuthenticationLoginWorkflowStates = {
   ACCEPT_NEW_SERVER_KEY: "Accept new server key",
@@ -29,6 +31,8 @@ export const AuthenticationLoginWorkflowStates = {
   HELP_CREDENTIALS_LOST: "Help credentials lost",
   UNEXPECTED_ERROR: "Unexpected error",
   CHECK_MAILBOX: "Check mailbox",
+  SSO_DISABLED_ERROR: "SSO disabled error",
+  SSO_PROVIDER_MISMATCH_ERROR: "SSO provider mismatch error",
 };
 
 /**
@@ -41,6 +45,7 @@ export const AuthenticationLoginContext = React.createContext({
   state: null, // The current login workflow state.
   serverKey: null, // The server key, state used when the server key changed.
   error: null, // The current error if any, state used when an unexpected error occurred.
+  newSsoProvider: null, //The new SSO provider the user should use to sign in in case of a provider change
 
   // Public workflow mutators.
   checkPassphrase: () => {
@@ -65,6 +70,12 @@ export const AuthenticationLoginContext = React.createContext({
   }, // Returns the current SSO provider if any
   isSsoAvailable: () => {
   }, // Returns true is the SSO feature is enabled
+  handleUserConfirmSsoDisable: () => {
+  }, // Whenere the user confirms the SSO feature has been disabled by an admin
+  handleUserConfirmSsoProviderChange: () => {
+  }, // Whenere the user confirms the SSO provider has been changed by an admin
+  getNewSsoProvider: () => {
+  }, // returns the new provider found from the API configuration
 });
 
 /**
@@ -90,6 +101,7 @@ export class AuthenticationLoginContextProvider extends React.Component {
       state: AuthenticationLoginWorkflowStates.LOADING, // The current login workflow state.
       serverKey: null, // The server key, state used when the server key changed.
       error: null, // The current error if any.
+      newSsoProvider: null, //The new SSO provider the user should use to sign in in case of a provider change
 
       // Public workflow mutators.
       checkPassphrase: this.checkPassphrase.bind(this), // Whenever a user passphrase check is required.
@@ -105,6 +117,9 @@ export class AuthenticationLoginContextProvider extends React.Component {
       isSsoAvailable: this.isSsoAvailable.bind(this), // Returns the current SSO provider if any
       handleSwitchToPassphrase: this.handleSwitchToPassphrase.bind(this), // Whenever the user want to sign-in via passphrase
       handleSwitchToSso: this.handleSwitchToSso.bind(this), // Whenever the user want to sign-in via sso
+      handleUserConfirmSsoDisable: this.handleUserConfirmSsoDisable.bind(this), // Whenere the user confirms the SSO feature has been disabled by an admin
+      handleUserConfirmSsoProviderChange: this.handleUserConfirmSsoProviderChange.bind(this), // Whenere the user confirms the SSO provider has been changed by an admin
+      getNewSsoProvider: this.getNewSsoProvider.bind(this), // returns the new provider found from the API configuration
     };
   }
 
@@ -121,7 +136,32 @@ export class AuthenticationLoginContextProvider extends React.Component {
    */
   async initialize() {
     await this.props.ssoContext.loadSsoConfiguration();
-    await this.verifyServerKey();
+    const isKeyVerified = await this.verifyServerKey();
+    if (!isKeyVerified) {
+      return;
+    }
+
+    if (!this.isSsoAvailable()) {
+      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+      return;
+    }
+
+    const isSsoLoginErrorState = await this.props.context.port.request("passbolt.sso.has-sso-login-error");
+    if (isSsoLoginErrorState) {
+      const ssoError = await this.props.context.port.request("passbolt.sso.get-qualified-sso-login-error");
+      const isExpectedError = EXPECTED_SSO_LOGIN_ERROR.findIndex(errorType => errorType === ssoError.name) > -1;
+      if (isExpectedError) {
+        /*
+         * By this we avoid the blocking case where if the user hits an SSO login error URL with an SSO kit provider matching the API one.
+         * If we don't manage that case, the user will have the unexpected error displayed with the "Try again" button that refreshes the page.
+         * As the parameter 'case' is kept in the URL with a refresh, the UI will loop over and over on that state and blocks the user.
+         */
+        this.handleSsoLoginError(ssoError);
+        return;
+      }
+    }
+
+    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
   }
 
   /**
@@ -131,15 +171,11 @@ export class AuthenticationLoginContextProvider extends React.Component {
   async verifyServerKey() {
     try {
       await this.props.context.port.request('passbolt.auth.verify-server-key');
+      return true;
     } catch (error) {
       await this.handleVerifyServerKeyFailure(error);
-      return;
     }
-    if (this.isSsoAvailable()) {
-      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
-    } else {
-      this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
-    }
+    return false;
   }
 
   /**
@@ -237,7 +273,46 @@ export class AuthenticationLoginContextProvider extends React.Component {
    * @param {error} e
    */
   handleSsoLoginError(e) {
-    this.setState({state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR, error: e});
+    const newState = {
+      state: AuthenticationLoginWorkflowStates.UNEXPECTED_ERROR,
+      error: e
+    };
+
+    if (e.name === "SsoDisabledError") {
+      newState.state = AuthenticationLoginWorkflowStates.SSO_DISABLED_ERROR;
+    } else if (e.name === "SsoProviderMismatchError") {
+      newState.state = AuthenticationLoginWorkflowStates.SSO_PROVIDER_MISMATCH_ERROR;
+      newState.newSsoProvider = e.configuredProvider;
+    }
+    this.setState(newState);
+  }
+
+  /**
+   * Handles the confirmation of the removal of the SSO kit and switch the state to SIGN_IN
+   */
+  async handleUserConfirmSsoDisable() {
+    await this.props.context.port.request('passbolt.sso.delete-local-kit');
+    await this.props.ssoContext.loadSsoConfiguration();
+    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN});
+  }
+
+  /**
+   * Returns the new SSO provider the user should use to sign in.
+   * @returns {Object}
+   */
+  getNewSsoProvider() {
+    return SsoProviders.find(provider => this.state.newSsoProvider === provider.id);
+  }
+
+  /**
+   * Handles the confirmation of the removal of the SSO kit and switch the state to SIGN_IN
+   * @returns {Promise<void>}
+   */
+  async handleUserConfirmSsoProviderChange() {
+    const provider = this.getNewSsoProvider().id;
+    await this.props.context.port.request('passbolt.sso.update-provider-local-kit', provider);
+    await this.props.ssoContext.loadSsoConfiguration();
+    this.setState({state: AuthenticationLoginWorkflowStates.SIGN_IN_SSO});
   }
 
   /**

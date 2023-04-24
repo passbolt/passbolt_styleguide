@@ -18,6 +18,7 @@ const SSO_LOGIN_SUPPORTED_URLS = [
   'https://login.microsoftonline.com',
   'https://login.microsoftonline.us',
   'https://login.partner.microsoftonline.cn',
+  'https://accounts.google.com',
 ];
 
 /**

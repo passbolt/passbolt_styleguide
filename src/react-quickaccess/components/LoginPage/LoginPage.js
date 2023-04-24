@@ -127,6 +127,9 @@ class LoginPage extends React.Component {
       await this.props.ssoContext.runSignInProcess();
       await this.handleLoginSuccess();
     } catch (e) {
+      if (e.name === "SsoSettingsChangedError") {
+        window.close();
+      }
       if (e.name !== "UserAbortsOperationError") {
         this.setState({ssoError: e.message});
       }
@@ -140,9 +143,10 @@ class LoginPage extends React.Component {
    * Returns true if SSO is enabled and configured for Azure.
    * @return {bool}
    */
-  get isAzureSsoEnabled() {
+  get isSsoLocalKitPresent() {
     const ssoProvider = this.props.ssoContext.getProvider();
-    return ssoProvider === "azure";
+    const isProviderAvailable = SsoProviders.find(provider => ssoProvider === provider.id);
+    return isProviderAvailable;
   }
 
   /**
@@ -211,7 +215,7 @@ class LoginPage extends React.Component {
           {this.state.displaySso && this.state.isReady &&
           <>
             <div className="form-actions sso-login-form">
-              {this.isAzureSsoEnabled &&
+              {this.isSsoLocalKitPresent &&
                 <a className={`button sso-login-button ${this.state.processing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.state.processing} >
                   <span className="provider-logo">
                     {ssoProviderData.icon}
