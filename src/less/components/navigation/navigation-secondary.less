@@ -32,6 +32,11 @@
         // Hover
         &:hover, &.highlight {
             background: @workspace-left-menu-hover-background;
+            .main-cell button {
+              color: @workspace-left-menu-hover-text-color;
+              --icon-color: @workspace-left-menu-hover-text-color;
+              --icon-background-color: @workspace-left-menu-hover-background;
+            }
         }
         &.no-hover:hover {
             background: transparent;
@@ -39,9 +44,17 @@
 
         // Selected
         &.selected {
-            background: @workspace-left-menu-hover-background;
-            .main-cell a {
-                font-weight: 700;
+            background: @workspace-left-menu-selected-background;
+            .main-cell button {
+              font-weight: 700;
+              color: @workspace-left-menu-selected-text-color;
+              --icon-color: @workspace-left-menu-selected-text-color;
+              --icon-background-color: @workspace-left-menu-selected-background;
+            }
+
+            .right-cell button {
+              --icon-color: @workspace-left-menu-selected-text-color;
+              --icon-background-color: @workspace-left-menu-selected-background;
             }
         }
 
@@ -49,7 +62,7 @@
         &:focus {
             background: @workspace-left-menu-focus-background;
             box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @workspace-left-menu-focus-border;
-            .main-cell a {
+            .main-cell button {
                 color: @workspace-left-menu-focus-text-color;
                 .svg-icon {
                     &.caret-right,&.caret-down {
@@ -66,13 +79,7 @@
         */
         .main-cell-wrapper {
             flex: 1;
-            width: 100%;
-
-            &:active {
-                .main-cell a {
-                    font-weight: 700;
-                }
-            }
+            overflow: hidden;
         }
         .main-cell {
             h3 {
@@ -82,7 +89,7 @@
                 padding: .25em 0;
                 .ellipsis();
 
-                a {
+                button {
                     /* suppress a padding so that it looks the same
                         for all title if it is a link or not */
                     padding-top: 0;
@@ -105,13 +112,14 @@
                 }
             }
 
-            a {
+            button {
                 border: 0;
                 padding: 0 1.6rem;
                 font-weight: 400;
                 color: @default-text-color;
                 display: flex;
                 align-items: center;
+                width: 100%;
 
                 .svg-icon.exclamation {
                   margin-left: 0.8rem;
@@ -129,10 +137,11 @@
             float: right;
             margin-right: .5rem;
 
-            a {
+            button {
                 display:none;
                 padding: .8rem;
-                color:@text-light-color;
+                --icon-color: @workspace-left-menu-hover-text-color;
+                --icon-background-color: @workspace-left-menu-hover-background;
                 box-shadow: none;
                 border: none;
                 background: none;
@@ -144,6 +153,8 @@
                     align-items: center;
                     z-index: 999;
                     background: @button-background;
+                    --icon-color: @icon-color;
+                    --icon-background-color: @icon-background-color;
                     box-shadow: inset .1rem 0 0 0 @button-border, inset -.1rem 0 0 0 @button-border, inset 0 .1rem 0 0 @button-border;
 
                     &:hover {
@@ -153,13 +164,20 @@
 
                 // hover
                 &:hover {
-                    color: @text-focus-color;
                     background: @button-background;
+                    --icon-color: @icon-color;
+                    --icon-background-color: @icon-background-color;
                     box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
                 }
 
                 // focus
                 &:focus {
+                  box-shadow: none;
+                  --icon-color: @icon-color;
+                  --icon-background-color: @icon-background-color;
+                }
+
+                &:focus-visible {
                     box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
                 }
 
@@ -173,7 +191,7 @@
 
     .row:hover {
         .right-cell {
-            a {
+            button {
                 display: flex;
                 align-items: center;
             }

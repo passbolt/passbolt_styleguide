@@ -58,7 +58,7 @@ export default class ChooseSecurityTokenPage {
    * Returns the randomize link element
    */
   get randomizeLink() {
-    return this._page.container.querySelector('.randomize-button-wrapper a');
+    return this._page.container.querySelector('.randomize-button-wrapper button');
   }
 
   /**

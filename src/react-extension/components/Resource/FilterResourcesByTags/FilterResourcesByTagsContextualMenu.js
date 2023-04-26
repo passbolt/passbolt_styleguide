@@ -69,7 +69,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}><span><Trans>All tags</Trans></span></a>
+                <button type="button" className="link no-border" id="all-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.all)}><span><Trans>All tags</Trans></span></button>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}><span><Trans>My tags</Trans></span></a>
+                <button type="button" className="link no-border" id="personal-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.personal)}><span><Trans>My tags</Trans></span></button>
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@ class FilterResourcesByTagsContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}><span><Trans>Shared tags</Trans></span></a>
+                <button type="button" className="link no-border" id="shared-tag" onClick={() => this.handleFilterClickEvent(filterByTagsOptions.shared)}><span><Trans>Shared tags</Trans></span></button>
               </div>
             </div>
           </div>

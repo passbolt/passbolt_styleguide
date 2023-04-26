@@ -56,7 +56,7 @@ describe("DisplayProgress", () => {
     expect(progressDetailsElement).toBeNull();
 
     // Primary button exists
-    const primaryButton = container.querySelector(".button.processing");
+    const primaryButton = container.querySelector("button.processing");
     expect(primaryButton).not.toBeNull();
   });
 

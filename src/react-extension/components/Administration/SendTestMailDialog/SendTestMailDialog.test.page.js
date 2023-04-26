@@ -149,7 +149,7 @@ export default class SendTestMailDialogPage {
    * @returns {HTMLElement}
    */
   get logs() {
-    return this.select(".send-test-email-dialog .accordion-header a");
+    return this.select(".send-test-email-dialog .accordion-header button");
   }
 
   /**
@@ -165,6 +165,6 @@ export default class SendTestMailDialogPage {
    * @returns {HTMLElement}
    */
   get retryButton() {
-    return this.select(".send-test-email-dialog a.cancel");
+    return this.select(".send-test-email-dialog button.cancel");
   }
 }

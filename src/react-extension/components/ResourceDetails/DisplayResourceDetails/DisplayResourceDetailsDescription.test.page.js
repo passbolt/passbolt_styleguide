@@ -91,7 +91,7 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the header
    */
   get hyperlink() {
-    return this._container.querySelector(".accordion-header h4 a");
+    return this._container.querySelector(".accordion-header h4 button.link");
   }
 
   /** Click on the title */

@@ -106,11 +106,11 @@ class DisplayUserDetailsGroups extends React.Component {
       <div className={`detailed-user-groups accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClicked}  role="button">
+            <button type="button" className="link no-border" onClick={this.handleTitleClicked}>
               Groups
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
-            </a>
+            </button>
           </h4>
         </div>
         <div className="accordion-content">

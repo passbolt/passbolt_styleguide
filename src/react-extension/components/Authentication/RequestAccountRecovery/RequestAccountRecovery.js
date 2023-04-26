@@ -45,13 +45,13 @@ class RequestAccountRecovery extends Component {
           <button
             type="button"
             className={`button primary big full-width ${this.isProcessing ? "processing" : ""}`}
-            role="button"
+            disabled={this.isProcessing}
             onClick={this.props.onPrimaryActionClick}>
             <Trans>Request account recovery</Trans>
           </button>
-          <a onClick={this.props.onSecondaryActionClick}>
+          <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
             <Trans>I want to try again.</Trans>
-          </a>
+          </button>
         </div>
       </div>
     );

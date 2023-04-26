@@ -144,11 +144,13 @@ class DisplayGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button
+                  type="button"
+                  className="link no-border"
                   id="edit-group"
                   onClick={this.handleEditGroup}>
                   <span><Trans>Edit group</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -158,11 +160,13 @@ class DisplayGroupContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a
+                  <button
+                    type="button"
+                    className="link no-border"
                     id="delete-group"
                     onClick={this.handleDeleteClickEvent}>
                     <span><Trans>Delete Group</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

@@ -107,10 +107,10 @@ class DeleteGroupDialogPageObject {
   }
 
   /**
-   * Returns the cancel button disabled elements
+   * Returns true if the cancel button is disabled elements
    */
-  get cancelButtonDisabled() {
-    return this._container.querySelector('.submit-wrapper .cancel.disabled');
+  hasCancelButtonDisabled() {
+    return this.cancelButton.hasAttribute("disabled");
   }
 
   /**

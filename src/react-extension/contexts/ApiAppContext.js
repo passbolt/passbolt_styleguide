@@ -1,3 +1,16 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.2.0
+ */
 import React from "react";
 import AppContext from "./AppContext";
 import PropTypes from "prop-types";
@@ -7,6 +20,8 @@ import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
 import {CsrfToken} from "../../shared/lib/apiClient/csrfToken";
+
+const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
 
 /**
  * The ApiApp context provider
@@ -27,6 +42,13 @@ class ApiAppContextProvider extends React.Component {
     await this.getSiteSettings();
     this.initLocale();
     this.removeSplashScreen();
+  }
+
+  /**
+   * Whenever the component is unmount.
+   */
+  componentWillUnmount() {
+    clearTimeout(this.state.onExpiredSession);
   }
 
   /**
@@ -55,6 +77,9 @@ class ApiAppContextProvider extends React.Component {
       // Navigation
       onLogoutRequested: () => this.onLogoutRequested(),
       onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
+
+      // Expired session
+      onExpiredSession: this.onExpiredSession.bind(this),
 
       // Subscription
       onGetSubscriptionKeyRequested: () => this.onGetSubscriptionKeyRequested(),
@@ -189,6 +214,21 @@ class ApiAppContextProvider extends React.Component {
       }
       throw error;
     }
+  }
+
+  /**
+   * Check when the user session is expired and execute the callback.
+   * @param {function} callback The callback to execute
+   */
+  onExpiredSession(callback) {
+    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async() => {
+      const isAuthenticated = await this.onCheckIsAuthenticatedRequested();
+      if (!isAuthenticated) {
+        callback();
+      } else {
+        this.onExpiredSession(callback);
+      }
+    }, IS_AUTHENTICATED_CHECK_PERIOD);
   }
 
   /**

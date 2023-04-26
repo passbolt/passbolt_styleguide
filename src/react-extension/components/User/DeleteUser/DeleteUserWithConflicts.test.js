@@ -122,7 +122,7 @@ describe("See Delete User Dialog", () => {
       page.displayDeleteUserWithConflictsDialog.clickWithoutWaitFor(page.displayDeleteUserWithConflictsDialog.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.displayDeleteUserWithConflictsDialog.cancelButtonDisabled).not.toBeNull();
+        expect(page.displayDeleteUserWithConflictsDialog.hasCancelButtonDisabled()).toBeTruthy();
         expect(page.displayDeleteUserWithConflictsDialog.saveButton.getAttribute("disabled")).not.toBeNull();
         expect(page.displayDeleteUserWithConflictsDialog.saveButtonProcessing).not.toBeNull();
         updateResolve();

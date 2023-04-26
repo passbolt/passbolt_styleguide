@@ -82,7 +82,7 @@ class DisplayUserWorkspaceMainActionsPageObject {
    * Returns the create menu elements
    */
   get createMenu() {
-    return this._container.querySelector('.dropdown .button.create.primary');
+    return this._container.querySelector('.dropdown .create.primary');
   }
 
   /**

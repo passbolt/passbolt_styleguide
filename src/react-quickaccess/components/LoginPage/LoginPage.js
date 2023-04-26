@@ -29,7 +29,6 @@ class LoginPage extends React.Component {
       error: "",
       ssoError: null,
       processing: false,
-      passphrase: "",
       rememberMe: false,
       displaySso: false,
       isSsoAvailable: false,
@@ -74,7 +73,10 @@ class LoginPage extends React.Component {
   }
 
   async login() {
-    await this.props.context.port.request("passbolt.auth.login", this.state.passphrase, this.state.rememberMe);
+    let passphrase = this.passphraseInputRef.current.value;
+    await this.props.context.port.request("passbolt.auth.login", passphrase, this.state.rememberMe);
+    passphrase = null;
+    this.passphraseInputRef.current.value = null;
     await this.handleLoginSuccess();
   }
 
@@ -125,6 +127,9 @@ class LoginPage extends React.Component {
       await this.props.ssoContext.runSignInProcess();
       await this.handleLoginSuccess();
     } catch (e) {
+      if (e.name === "SsoSettingsChangedError") {
+        window.close();
+      }
       if (e.name !== "UserAbortsOperationError") {
         this.setState({ssoError: e.message});
       }
@@ -138,9 +143,10 @@ class LoginPage extends React.Component {
    * Returns true if SSO is enabled and configured for Azure.
    * @return {bool}
    */
-  get isAzureSsoEnabled() {
+  get isSsoLocalKitPresent() {
     const ssoProvider = this.props.ssoContext.getProvider();
-    return ssoProvider === "azure";
+    const isProviderAvailable = SsoProviders.find(provider => ssoProvider === provider.id);
+    return isProviderAvailable;
   }
 
   /**
@@ -171,12 +177,11 @@ class LoginPage extends React.Component {
                 <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
                 <div className="password with-token">
                   <Password
-                    name="passphrase" placeholder={this.props.t('Passphrase')}
+                    name="passphrase"
+                    placeholder={this.props.t('Passphrase')}
                     id="passphrase"
                     autoComplete="off"
                     inputRef={this.passphraseInputRef}
-                    value={this.state.passphrase}
-                    onChange={this.handleInputChange}
                     preview={true}
                     securityToken={this.props.context.userSettings.getSecurityToken()}
                     disabled={this.state.processing}/>
@@ -210,7 +215,7 @@ class LoginPage extends React.Component {
           {this.state.displaySso && this.state.isReady &&
           <>
             <div className="form-actions sso-login-form">
-              {this.isAzureSsoEnabled &&
+              {this.isSsoLocalKitPresent &&
                 <a className={`button sso-login-button ${this.state.processing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.state.processing} >
                   <span className="provider-logo">
                     {ssoProviderData.icon}

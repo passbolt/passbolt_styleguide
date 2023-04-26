@@ -129,4 +129,29 @@ describe("Quickaccess::LoginPage", () => {
 
     expect(page.ssoErrorMessage.textContent).toBe("An error occured during the sign-in via SSO.The decrypted passphrase can't decrypt the user's private key");
   });
+
+  it(`As AN when I attempt to sign in from the quickaccess via SSO and the API configuration changed, the quickaccess should close and I am redirected to the right tab`, async() => {
+    const originalWindowClose = window.close;
+    window.close = jest.fn();
+
+    expect.assertions(1);
+
+    const expectedError = new Error("SSO Login can't proceed via quickaccess");
+    expectedError.name = "SsoSettingsChangedError";
+
+    const props = defaultPropsWithSsoEnabled({
+      ssoContext: {
+        runSignInProcess: () => { throw expectedError; }
+      }
+    });
+    const page = new LoginPageTest(props);
+
+    await page.isReady();
+
+    await page.clickOnSsoLoginButton();
+
+    expect(window.close).toHaveBeenCalledTimes(1);
+
+    window.close = originalWindowClose;
+  });
 });

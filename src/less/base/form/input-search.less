@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     border-radius: .4rem;
-    color: @default-text-color;
+    color: @input-text-color;
     background: @input-background;
 
     input[type=search] {
@@ -20,7 +20,7 @@
 
         // Fields hover
         &:hover {
-            box-shadow: .1rem 0 0 @input-background, // border right
+            box-shadow: .1rem 0 0 @input-hover-background, // border right
               inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), // border left and top lighter
               .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), // border bottom darker
               inset 0 .1rem 0 @input-border,  // border top
@@ -95,19 +95,37 @@
         }
     }
 
+    // Hover input search
+    &:hover {
+      background: @input-hover-background;
+      color: @input-hover-text-color;
+    }
+
     // Focus within input search
     &:focus-within {
         box-shadow: 0 0 .4rem @shadow-focus-color;
+        outline: @outline-default-border;
+        background: @input-focus-background;
+        color: @input-focus-text-color;
     }
 
     // Focus within button search
     &.no-focus:focus-within {
       box-shadow: none;
+      outline: 0;
     }
 
     // Pressed
     &:active {
         box-shadow: none;
+        background: @input-active-background;
+        color: @input-active-text-color;
+    }
+
+    // Disabled
+    &.disabled {
+      background: @input-disabled-background;
+      color: @input-disabled-text-color;
     }
 }
 

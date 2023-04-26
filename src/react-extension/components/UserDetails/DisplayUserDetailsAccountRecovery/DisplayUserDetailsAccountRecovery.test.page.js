@@ -44,7 +44,7 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Returns the current status button
    */
   get currentStatusButton() {
-    return this._page.container.querySelector('.pending-request-status a');
+    return this._page.container.querySelector('.pending-request-status button');
   }
 
 
@@ -66,7 +66,7 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Returns true if the component is in a collapsed mode
    */
   get title() {
-    return this._page.container.querySelector('h4 a').textContent;
+    return this._page.container.querySelector('h4 button').textContent;
   }
 
   /**
@@ -87,7 +87,7 @@ export default class DisplayUserDetailsAccountRecoveryPage {
    * Toggle the collapse / expand component behavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('h4 a');
+    const element = this._page.container.querySelector('h4 button');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

@@ -84,7 +84,7 @@ class MfaInviteUserSettingsPreferenceDialog extends Component {
             </p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className="cancel" role="button" onClick={this.handleCancel}><Trans>Later</Trans></a>
+            <button type="button" className="cancel link" onClick={this.handleCancel}><Trans>Later</Trans></button>
             <FormSubmitButton
               value={this.translate("Go to MFA settings")}/>
           </div>

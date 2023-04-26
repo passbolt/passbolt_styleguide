@@ -71,7 +71,7 @@ export default class ImportResourcesResultPage {
    * Returns the reference got the index one
    */
   reference(index) {
-    return this._page.container.querySelectorAll('p a')[index - 1];
+    return this._page.container.querySelectorAll('p button')[index - 1];
   }
 
   /**
@@ -85,7 +85,7 @@ export default class ImportResourcesResultPage {
    * Returns the error details element
    */
   get errorDetails() {
-    return this._page.container.querySelector('.accordion-header a');
+    return this._page.container.querySelector('.accordion-header button');
   }
 
   /**

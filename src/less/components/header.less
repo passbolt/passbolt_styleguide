@@ -27,7 +27,7 @@
                 margin-left: 1.6rem;
             }
 
-            a {
+            a, button {
                 color: @header-main-menu-text-color;
                 font-size: 1.7rem;
                 line-height: 2.3rem;
@@ -59,11 +59,11 @@
 
         li {
             .row.selected {
-                a {
+                a, button {
                     color: @header-main-menu-hover-text-color;
-                }
-                a:focus {
-                    color: @text-focus-color;
+                    &:focus {
+                        color: @text-focus-color;
+                    }
                 }
             }
         }
@@ -93,7 +93,7 @@
   .header {
     .navigation.primary {
       li {
-        a {
+        a, button {
           font-size: 1.4rem;
         }
       }

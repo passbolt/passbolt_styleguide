@@ -19,22 +19,27 @@ import {ApiClientOptions} from "../../../lib/apiClient/apiClientOptions";
 import GetUrlForSsoIdentificationService from "./GetUrlForSsoIdentificationService";
 import {enableFetchMocks} from "jest-fetch-mock";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
+import each from 'jest-each';
 
 beforeEach(() => {
   jest.clearAllMocks();
   enableFetchMocks();
 });
 
-describe("GetUrlForSsoIdentificationService", () => {
-  describe('GetUrlForSsoIdentificationService::getUrl', () => {
+const scenarios = [
+  {providerId: 'azure'},
+  {providerId: 'google'},
+];
+
+each(scenarios).describe("GetUrlForSsoIdentificationService", scenario => {
+  describe(`GetUrlForSsoIdentificationService::getUrl (with provider '${scenario.providerId}')`, () => {
     it('Should return an URL for SSO identification given the provider id', async() => {
       expect.assertions(3);
       const baseUrl = "http://localhost:6006/";
       const apiClientOptions = new ApiClientOptions()
         .setBaseUrl(baseUrl);
 
-      const provider = "azure";
-      const expectedUrlCall = `${baseUrl}/sso/recover/${provider}.json?api-version=v2`;
+      const expectedUrlCall = `${baseUrl}/sso/recover/${scenario.providerId}.json?api-version=v2`;
       const expectedUrl = "https://login.microsoftonline.us";
 
       const service = new GetUrlForSsoIdentificationService(apiClientOptions);
@@ -45,7 +50,7 @@ describe("GetUrlForSsoIdentificationService", () => {
         return mockApiResponse({url: expectedUrl});
       });
 
-      return expect(service.getUrl(provider)).resolves.toStrictEqual(new URL(expectedUrl));
+      return expect(service.getUrl(scenario.providerId)).resolves.toStrictEqual(new URL(expectedUrl));
     });
 
     it('Should throw an Error if the domain in the response is not the exoected one', () => {
@@ -58,7 +63,7 @@ describe("GetUrlForSsoIdentificationService", () => {
       fetch.doMockOnce(() => mockApiResponse({url: 'https://evil.com'}));
 
       const exepectedError = new Error('The url should be part of the list of supported single sign-on urls.');
-      return expect(service.getUrl("azure")).rejects.toStrictEqual(exepectedError);
+      return expect(service.getUrl(scenario.providerId)).rejects.toStrictEqual(exepectedError);
     });
   });
 });

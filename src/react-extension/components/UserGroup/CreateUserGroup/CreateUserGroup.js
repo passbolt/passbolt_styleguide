@@ -425,15 +425,6 @@ class CreateUserGroup extends Component {
   }
 
   /**
-   * Get user full name
-   * @param user
-   * @returns {string}
-   */
-  getUserFullname(user) {
-    return `${user.profile.first_name} ${user.profile.last_name}`;
-  }
-
-  /**
    * Format fingerprint
    * @param fingerprint
    * @returns {JSX.Element}
@@ -441,18 +432,6 @@ class CreateUserGroup extends Component {
   formatFingerprint(fingerprint) {
     const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
     return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
-  }
-
-  /**
-   * Get the tooltip message
-   * @param groups_user The groups user
-   * @returns {JSX.Element}
-   */
-  getTooltipMessage(groups_user) {
-    return <>
-      <div className="email"><strong>{groups_user.user.username}</strong></div>
-      <div className="fingerprint">{this.formatFingerprint(groups_user.user.gpgkey.fingerprint)}</div>
-    </>;
   }
 
   /**
@@ -529,7 +508,7 @@ class CreateUserGroup extends Component {
               <label htmlFor="group_name"><Trans>Group name</Trans>{this.state.nameWarning &&
                   <Icon name="exclamation"/>
               }</label>
-              <input id="group-name-input" name="name" className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
+              <input id="group-name-input" name="name" aria-required={true} className="required" maxLength="50" type="text" placeholder={this.translate("group name")}
                 onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef}/>
               {this.state.nameError &&

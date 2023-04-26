@@ -145,7 +145,7 @@ class DisplaySimulateSynchronizeUserDirectoryAdministrationDialogPageObject {
    * Returns the synchronize button element
    */
   get synchronize() {
-    return this._container.querySelector('.submit-wrapper .button.primary');
+    return this._container.querySelector('.submit-wrapper button.primary');
   }
 
   /**

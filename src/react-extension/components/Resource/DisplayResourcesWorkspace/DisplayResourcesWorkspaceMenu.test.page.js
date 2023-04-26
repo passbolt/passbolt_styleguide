@@ -83,55 +83,55 @@ class DisplayMenuPageObject {
    * Returns the edit menu elements of password workspace menu
    */
   get editMenu() {
-    return this._container.querySelector('#edit_action .button');
+    return this._container.querySelector('#edit_action button');
   }
 
   /**
-   * Returns the edit menu disabled elements of password workspace menu
+   * Returns true if the edit menu elements of password workspace menu is disabled
    */
-  get editMenuDisabled() {
-    return this._container.querySelector('#edit_action .button.disabled');
+  hasEditMenuDisabled() {
+    return this.editMenu.hasAttribute("disabled");
   }
 
   /**
    * Returns the share menu elements of password workspace menu
    */
   get shareMenu() {
-    return this._container.querySelector('#share_action .button');
+    return this._container.querySelector('#share_action button');
   }
 
   /**
-   * Returns the share menu disabled elements of password workspace menu
+   * Returns true if the share menu elements of password workspace menu is disabled
    */
-  get shareMenuDisabled() {
-    return this._container.querySelector('#share_action .button.disabled');
+  hasShareMenuDisabled() {
+    return this.shareMenu.hasAttribute("disabled");
   }
 
   /**
    * Returns the share menu elements of password workspace menu
    */
   get copyMenu() {
-    return this._container.querySelector('#password_action .button');
+    return this._container.querySelector('#password_action button');
   }
 
   /**
-   * Returns the share menu disabled elements of password workspace menu
+   * Returns true if the copy menu elements of password workspace menu is disabled
    */
-  get copyMenuDisabled() {
-    return this._container.querySelector('#password_action .button.disabled');
+  hasCopyMenuDisabled() {
+    return this.copyMenu.hasAttribute("disabled");
   }
 
   /**
    * Returns the more menu elements of password workspace menu
    */
   get moreMenu() {
-    return this._container.querySelector('.dropdown .button');
+    return this._container.querySelector('.dropdown button');
   }
 
   /**
-   * Returns the more menu elements of password workspace menu
+   * Returns true if the more menu elements of password workspace menu is disabled
    */
-  get moreMenuDisabled() {
+  hasMoreMenuDisabled() {
     return this._container.querySelector('.dropdown .button.disabled');
   }
 
@@ -139,70 +139,70 @@ class DisplayMenuPageObject {
    * Returns the delete menu elements of password workspace menu
    */
   get dropdownMenuDelete() {
-    return this._container.querySelector('#delete_action .row .main-cell-wrapper .main-cell a');
+    return this._container.querySelector('#delete_action .row .main-cell-wrapper .main-cell button');
   }
 
   /**
-   * Returns the delete menu elements of password workspace menu
+   * Returns true if the delete menu elements of password workspace menu is disabled
    */
-  get dropdownMenuDeleteDisabled() {
-    return this._container.querySelector('#delete_action .row .main-cell-wrapper .main-cell a.disabled');
+  hasDropdownMenuDeleteDisabled() {
+    return this.dropdownMenuDelete.hasAttribute("disabled");
   }
 
   /**
    * Returns the permalink menu elements of password workspace menu
    */
   get dropdownMenuPermalink() {
-    return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell a');
+    return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell button');
   }
 
   /**
-   * Returns the permalink menu elements of password workspace menu
+   * Returns true if the permalink menu elements of password workspace menu is disabled
    */
-  get dropdownMenuPermalinkDisabled() {
-    return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell a.disabled');
+  hasDropdownMenuPermalinkDisabled() {
+    return this.dropdownMenuPermalink.hasAttribute("disabled");
   }
 
   /**
    * Returns the username menu elements of password workspace menu
    */
   get dropdownMenuUsername() {
-    return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell a');
+    return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell button');
   }
 
   /**
-   * Returns the username menu elements of password workspace menu
+   * Returns true if the username menu elements of password workspace menu is disabled
    */
-  get dropdownMenuUsernameDisabled() {
-    return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell a.disabled');
+  hasDropdownMenuUsernameDisabled() {
+    return this.dropdownMenuUsername.hasAttribute("disabled");
   }
 
   /**
    * Returns the username menu elements of password workspace menu
    */
   get dropdownMenuSecret() {
-    return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell a');
+    return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell button');
   }
 
   /**
-   * Returns the username menu elements of password workspace menu
+   * Returns true if the username menu elements of password workspace menu is disabled
    */
-  get dropdownMenuSecretDisabled() {
-    return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell a.disabled');
+  hasDropdownMenuSecretDisabled() {
+    return this.dropdownMenuSecret.hasAttribute("disabled");
   }
 
   /**
    * Returns the detail information button menu elements of password workspace menu
    */
   get menuDetailInformation() {
-    return this._container.querySelector('.actions.secondary .button.button-toggle');
+    return this._container.querySelector('.actions.secondary button.button-toggle');
   }
 
   /**
    * Returns the detail information button menu elements of password workspace menu
    */
   get menuDetailInformationSelected() {
-    return this._container.querySelector('.actions.secondary .button.button-toggle.selected');
+    return this._container.querySelector('.actions.secondary button.button-toggle.selected');
   }
 
   /**

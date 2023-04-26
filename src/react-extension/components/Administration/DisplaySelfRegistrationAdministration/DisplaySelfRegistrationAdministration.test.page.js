@@ -69,13 +69,6 @@ export default class DisplaySelfRegistrationAdministrationPage {
   /**
    * Returns the first domain row
    */
-  get domainRows() {
-    return this._page.container.querySelectorAll('.domain-row');
-  }
-
-  /**
-   * Returns the first domain row
-   */
   get firstInputRow() {
     return this._page.container.querySelector('.full-width');
   }
@@ -99,13 +92,6 @@ export default class DisplaySelfRegistrationAdministrationPage {
    */
   get enabledLabel() {
     return this._page.container.querySelector('#enabled-label');
-  }
-
-  /**
-   * Returns the save dialog confirmation
-   */
-  get saveDialogConfirmation() {
-    return this._page.container.querySelector(' save-self-recovery-settings-dialog');
   }
 
   /**
@@ -140,7 +126,7 @@ export default class DisplaySelfRegistrationAdministrationPage {
    * Returns the add domain button
    */
   get addDomainButton() {
-    return this._page.container.querySelector('.domain-add .button');
+    return this._page.container.querySelector('.domain-add button');
   }
 
   /**

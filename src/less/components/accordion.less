@@ -5,13 +5,13 @@
         a {
             display:block;
         }
-        a:hover {
+        a:hover, button:hover {
             color:@text-focus-color;
         }
     }
 
     h3.accordion-header {
-      a {
+      a, button {
         line-height: 3.2rem;
         border-bottom: 1px solid @default-border;
         .svg-icon {
@@ -43,7 +43,7 @@
 .dialog .accordion, .login .accordion {
     .accordion-header {
         margin-bottom: 1.2rem;
-        a {
+        button {
             display: flex;
             align-items: center;
             border-bottom: 0;
@@ -56,13 +56,11 @@
 }
 .accordion.sidebar-section {
     .accordion-header {
-        a {
+        button {
             border:0;
 
             .svg-icon {
-              position:absolute;
-              right:1.6rem;
-              margin-top: .8rem;
+              margin-right: .8rem;
               &.exclamation {
                 position: relative;
                 right: inherit;

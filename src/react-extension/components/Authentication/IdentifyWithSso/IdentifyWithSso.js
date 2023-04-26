@@ -26,7 +26,7 @@ class IdentifyWithSso extends Component {
     super(props);
     this.state = this.defaultState;
     this.bindEventHandlers();
-    this.identifyViaSsoService = new IdentifyViaSsoService(this.props.context);
+    this.identifyViaSsoService = new IdentifyViaSsoService(this.props.ssoProvider.id, this.props.context, this.handleSsoAuthSuccess, this.handleSsoAuthSuccessForRegistration);
   }
 
   /**
@@ -73,6 +73,8 @@ class IdentifyWithSso extends Component {
     this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
     this.handleSsoRecoverClick = this.handleSsoRecoverClick.bind(this);
     this.handleGoToEmailClick = this.handleGoToEmailClick.bind(this);
+    this.handleSsoAuthSuccess = this.handleSsoAuthSuccess.bind(this);
+    this.handleSsoAuthSuccessForRegistration = this.handleSsoAuthSuccessForRegistration.bind(this);
   }
 
   /**
@@ -85,10 +87,25 @@ class IdentifyWithSso extends Component {
     }
     this.toggleProcessing();
     try {
-      const recoverUrl = await this.identifyViaSsoService.exec(this.props.ssoProvider.id);
-      window.location.href = recoverUrl;
+      await this.identifyViaSsoService.exec();
     } catch (e) {}
     this.toggleProcessing();
+  }
+
+  /**
+   * Handles IdentifyViaSsoService success callback
+   * @param {string} recoverUrl the URL to redirect to
+   */
+  handleSsoAuthSuccess(recoverUrl) {
+    window.location.href = recoverUrl;
+  }
+
+  /**
+   * Handles IdentifyViaSsoService callback when SSO auth succeed but requires registration
+   * @param {string} email the user email to use for the registration
+   */
+  handleSsoAuthSuccessForRegistration(email) {
+    this.props.onUserRegistrationRequired(email);
   }
 
   /**
@@ -127,15 +144,15 @@ class IdentifyWithSso extends Component {
         <h1><Trans>Welcome back!</Trans></h1>
         <p><Trans>Your browser is not configured to work with this passbolt instance.</Trans> <Trans>Please authenticate with the Single Sign-On provider to continue.</Trans></p>
         <div className="sso-login-form form-actions">
-          <a className={`button sso-login-button ${processingClassName} ${ssoProvider.id}`} onClick={this.handleSsoRecoverClick} disabled={isDisabled} >
+          <button type="button" className={`sso-login-button ${processingClassName} ${ssoProvider.id}`} onClick={this.handleSsoRecoverClick} disabled={isDisabled} >
             <span className="provider-logo">
               {ssoProvider.icon}
             </span>
             {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProvider.name})}
-          </a>
-          <a onClick={this.handleGoToEmailClick}>
+          </button>
+          <button type="button" className="link" onClick={this.handleGoToEmailClick}>
             <Trans>Continue with my email.</Trans>
-          </a>
+          </button>
         </div>
       </div>
     );
@@ -145,6 +162,7 @@ class IdentifyWithSso extends Component {
 IdentifyWithSso.propTypes = {
   ssoProvider: PropTypes.object, // The
   onSecondaryActionClick: PropTypes.func, // the callback for the secondary action button
+  onUserRegistrationRequired: PropTypes.func, // the callback to call when the user needs to register
   context: PropTypes.any, // The application context provider
   t: PropTypes.func, // The translation function
 };

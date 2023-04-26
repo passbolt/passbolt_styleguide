@@ -161,7 +161,7 @@ class DisplayMfaAdministration extends React.Component {
             </p>
             <div className={`input text required ${errors.yubikeyClientIdentifierError && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label><Trans>Client identifier</Trans></label>
-              <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier" required="required" className="required fluid form-element ready" placeholder="123456789"
+              <input id="yubikeyClientIdentifier" type="text" name="yubikeyClientIdentifier"  aria-required={true} className="required fluid form-element ready" placeholder="123456789"
                 onChange={this.handleInputChange} value={settings.yubikeyClientIdentifier} disabled={this.hasAllInputDisabled()}/>
               {(errors.yubikeyClientIdentifierError  && isSubmitted) &&
               <div className="yubikey_client_identifier error-message">{errors.yubikeyClientIdentifierError}</div>
@@ -203,7 +203,7 @@ class DisplayMfaAdministration extends React.Component {
             </p>
             <div className={`input text required ${errors.duoHostnameError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label><Trans>Hostname</Trans></label>
-              <input id="duoHostname" type="text" name="duoHostname" required="required" className="required fluid form-element ready"
+              <input id="duoHostname" type="text" name="duoHostname" aria-required={true} className="required fluid form-element ready"
                 placeholder="api-24zlkn4.duosecurity.com" value={settings.duoHostname}
                 onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
               {(errors.duoHostnameError  && isSubmitted) &&
@@ -212,7 +212,7 @@ class DisplayMfaAdministration extends React.Component {
             </div>
             <div className={`input text required ${errors.duoClientIdError  && isSubmitted ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label><Trans>Client id</Trans></label>
-              <input id="duoClientId" type="text" name="duoClientId" required="required" className="required fluid form-element ready"
+              <input id="duoClientId" type="text" name="duoClientId" aria-required={true} className="required fluid form-element ready"
                 placeholder="HASJKDSQJO213123KQSLDF" value={settings.duoClientId}
                 onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
               {(errors.duoClientIdError  && isSubmitted) &&

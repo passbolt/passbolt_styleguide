@@ -322,11 +322,11 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             }
             <div className={`accordion operation-details ${this.state.openFullReport ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleFullReportClicked}>
-                <a role="link">
+                <button type="button" className="link no-border">
                   <Trans>Full report</Trans>
                   {this.state.openFullReport && <Icon name="caret-down"/>}
                   {!this.state.openFullReport && <Icon name="caret-right"/>}
-                </a>
+                </button>
               </div>
               <div className="accordion-content">
                 <div className="input text">
@@ -337,7 +337,7 @@ class DisplaySynchronizeUserDirectoryAdministration extends Component {
             <p></p>
           </div>
           <div className="submit-wrapper clearfix">
-            <a className={`button primary ${this.isLoading() ? "disabled" : ""}`} role="button" onClick={this.handleClose}><Trans>Ok</Trans></a>
+            <button disabled={this.isLoading()} className="primary" type="button" onClick={this.handleClose}><Trans>Ok</Trans></button>
           </div>
         </DialogWrapper>
         }

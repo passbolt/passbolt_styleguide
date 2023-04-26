@@ -212,6 +212,7 @@ class AddResourceComment extends React.Component {
               <div className="input textarea required">
                 <textarea ref={this.textareaRef}
                   placeholder={this.translate("Add a comment")}
+                  aria-required={true}
                   onChange={this.handleContentChanged}
                   onKeyDown={this.handleEscapeKeyPressed}
                   disabled={this.state.actions.processing}>
@@ -235,7 +236,6 @@ class AddResourceComment extends React.Component {
                   <button
                     type="button"
                     className="button cancel"
-                    role="button"
                     onClick={this.handleCancelEvent}
                     disabled={this.state.actions.processing}>
                     <span><Trans>Cancel</Trans></span>

@@ -125,9 +125,9 @@ class FilterResourcesByShortcuts extends React.Component {
             <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a>
+                  <button type="button" className="link no-border">
                     <span><Trans>All items</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -136,9 +136,9 @@ class FilterResourcesByShortcuts extends React.Component {
             <div className={`row ${this.isFavoriteSelected ? "selected" : ""}`} onClick={this.handleFavoriteClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a>
+                  <button type="button" className="link no-border">
                     <span><Trans>Favorites</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -147,9 +147,9 @@ class FilterResourcesByShortcuts extends React.Component {
             <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`} onClick={this.handleRecentlyModifiedClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a>
+                  <button type="button" className="link no-border">
                     <span><Trans>Recently modified</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -158,9 +158,9 @@ class FilterResourcesByShortcuts extends React.Component {
             <div className={`row ${this.isSharedWithMeSelected ? "selected" : ""}`} onClick={this.handleSharedWithMeClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a>
+                  <button type="button" className="link no-border">
                     <span><Trans>Shared with me</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -169,9 +169,9 @@ class FilterResourcesByShortcuts extends React.Component {
             <div className={`row ${this.isItemsIOwnSelected ? "selected" : ""}`} onClick={this.handleItemsIOwnClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a>
+                  <button type="button" className="link no-border">
                     <span><Trans>Owned by me</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

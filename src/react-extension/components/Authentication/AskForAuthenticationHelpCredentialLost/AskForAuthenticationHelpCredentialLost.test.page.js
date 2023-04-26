@@ -51,7 +51,7 @@ export default class AskForAuthenticationHelpCredentialLostTestPage {
    * Returns the try again link element
    */
   get tryAgainLink() {
-    return this._page.container.querySelector('.form-actions a:not(.primary)');
+    return this._page.container.querySelector('.form-actions button.link');
   }
 
   /**

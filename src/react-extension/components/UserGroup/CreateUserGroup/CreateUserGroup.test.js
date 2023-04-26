@@ -115,7 +115,7 @@ describe("See the Create Dialog Group", () => {
         expect(page.createGroup.name.getAttribute("disabled")).not.toBeNull();
         expect(page.createGroup.usernameInput.getAttribute("disabled")).not.toBeNull();
         expect(page.createGroup.selectRights(1).className).toBe('selected-value disabled');
-        expect(page.createGroup.removeUserDisabled(1)).not.toBeNull();
+        expect(page.createGroup.hasRemoveUserDisabled(1)).toBeTruthy();
         expect(page.createGroup.cancelButtonDisabled).not.toBeNull();
         expect(page.createGroup.saveButton.getAttribute("disabled")).not.toBeNull();
         expect(page.createGroup.saveButtonProcessing).not.toBeNull();

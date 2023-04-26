@@ -48,7 +48,7 @@ describe("See Workspace Main Menu", () => {
     it('As LU I cannot start adding a resource via the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
     });
   });
 
@@ -85,7 +85,7 @@ describe("See Workspace Main Menu", () => {
     it('As LU I can start deleting a resource via the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
     });
   });
 
@@ -107,7 +107,7 @@ describe("See Workspace Main Menu", () => {
     it('As LU I cannot start adding a resource or a folder via the workspace main menu', async() => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
 
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
 

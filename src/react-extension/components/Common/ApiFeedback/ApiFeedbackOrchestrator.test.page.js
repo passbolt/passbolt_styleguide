@@ -92,7 +92,7 @@ export default class ApiErrorPage {
    * @return {HTMLElement}
    */
   get logToggle() {
-    return this.select('.api-feedback-card .accordion-header a');
+    return this.select('.api-feedback-card .accordion-header button');
   }
 
   /**

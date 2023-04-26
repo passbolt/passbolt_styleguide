@@ -91,7 +91,9 @@ describe("As LU I should see the password import dialog", () => {
         expect(page.importFolder.getAttribute("disabled")).not.toBeNull();
         expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
         expect(page.saveButton.className).toBe("button primary disabled processing");
-        expect(page.cancelButton.className).toBe("cancel disabled");
+        expect(page.saveButton.hasAttribute('disabled')).toBeTruthy();
+        expect(page.cancelButton.className).toBe("link cancel");
+        expect(page.cancelButton.hasAttribute('disabled')).toBeTruthy();
         updateResolve();
       });
     });

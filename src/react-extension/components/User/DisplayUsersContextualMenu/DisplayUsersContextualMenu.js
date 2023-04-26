@@ -321,9 +321,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handlePermalinkCopy}>
+                <button className="link no-border" type="button"  onClick={this.handlePermalinkCopy}>
                   <span><Trans>Copy permalink</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -334,11 +334,12 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button type="button"
                   onClick={this.handlePublicKeyCopy}
-                  className={this.canCopyPublicKey() ? '' : 'disabled'}>
+                  disabled={!this.canCopyPublicKey()}
+                  className="link no-border">
                   <span><Trans>Copy public key</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -349,9 +350,9 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleUsernameCopy}>
+                <button className="link no-border" type="button"  onClick={this.handleUsernameCopy}>
                   <span><Trans>Copy email address</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -361,7 +362,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit" onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></a>
+                <button className="link no-border" type="button"  id="edit" onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></button>
               </div>
             </div>
           </div>
@@ -372,9 +373,10 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="resend"
+                <button type="button"  id="resend"
                   onClick={this.handleResendInviteClickEvent}
-                  className={`${this.canResendInviteToUser ? "" : "disabled"}`}><span><Trans>Resend invite</Trans></span></a>
+                  disabled={!this.canResendInviteToUser}
+                  className="link no-border"><span><Trans>Resend invite</Trans></span></button>
               </div>
             </div>
           </div>
@@ -385,12 +387,13 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
+                <button type="button"
                   id="disable-mfa"
                   onClick={this.handleDisableMfaEvent}
-                  className={this.canDisableMfaForUser ? '' : 'disabled'}>
+                  disabled={!this.canDisableMfaForUser}
+                  className="link no-border">
                   <span><Trans>Disable MFA</Trans></span>
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -401,7 +404,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="delete" onClick={this.handleDeleteClickEvent} className={`${!this.canDeleteUser() ? "disabled" : ""}`}><span><Trans>Delete</Trans></span></a>
+                <button type="button"  id="delete" onClick={this.handleDeleteClickEvent} disabled={!this.canDeleteUser()} className="link no-border"><span><Trans>Delete</Trans></span></button>
               </div>
             </div>
           </div>
@@ -412,7 +415,7 @@ class DisplayUsersContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} className={`${!this.hasPendingAccountRecoveryRequest() ? "disabled" : ""}`}><span><Trans>Review recovery request</Trans></span></a>
+                <button type="button"  id="review-recovery" onClick={this.handleReviewRecoveryRequestClickEvent} disabled={!this.hasPendingAccountRecoveryRequest()} className="link no-border"><span><Trans>Review recovery request</Trans></span></button>
               </div>
             </div>
           </div>

@@ -56,21 +56,21 @@ export default class GeneratePasswordTestPage {
    * Returns the generate password button
    */
   get generatePasswordButton() {
-    return this._page.container.querySelector('.password-generate.button');
+    return this._page.container.querySelector('a.password-generate');
   }
 
   /**
    * Returns the toggle password button
    */
   get toggleViewPasswordButton() {
-    return this._page.container.querySelector('.password-view.button');
+    return this._page.container.querySelector('.password-view button');
   }
 
   /**
    * Returns the copy password button
    */
   get copyPasswordButton() {
-    return this._page.container.querySelector('.copy-to-clipboard.button');
+    return this._page.container.querySelector('a.copy-to-clipboard');
   }
 
   /**
@@ -84,7 +84,7 @@ export default class GeneratePasswordTestPage {
    * Returns the active tab
    */
   get activeTab() {
-    return this._page.container.querySelector('.tab.active a').textContent;
+    return this._page.container.querySelector('.tab.active button').textContent;
   }
 
   /**

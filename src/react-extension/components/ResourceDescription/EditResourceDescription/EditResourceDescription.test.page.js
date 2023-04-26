@@ -56,6 +56,6 @@ export default class EditResourceDescriptionPageObject {
    * Returns the cancel button element
    */
   get cancelButton() {
-    return this._container.querySelector('.cancel.button');
+    return this._container.querySelector('button.cancel');
   }
 }

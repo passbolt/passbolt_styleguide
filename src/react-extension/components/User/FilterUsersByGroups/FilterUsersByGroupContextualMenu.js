@@ -69,7 +69,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="all-groups" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.all)}><span><Trans>All groups</Trans></span></a>
+                <button type="button" className="link no-border" id="all-groups" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.all)}><span><Trans>All groups</Trans></span></button>
               </div>
             </div>
           </div>
@@ -78,7 +78,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="groups-manage" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.manage)}><span><Trans>Groups I manage</Trans></span></a>
+                <button type="button" className="link no-border" id="groups-manage" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.manage)}><span><Trans>Groups I manage</Trans></span></button>
               </div>
             </div>
           </div>
@@ -87,7 +87,7 @@ class FilterUsersByGroupContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="groups-member" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.member)}><span><Trans>Groups I am member of</Trans></span></a>
+                <button type="button" className="link no-border" id="groups-member" onClick={() => this.handleFilterClickEvent(filterByGroupsOptions.member)}><span><Trans>Groups I am member of</Trans></span></button>
               </div>
             </div>
           </div>

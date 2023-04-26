@@ -50,10 +50,10 @@ class AnnouncementWrapper extends Component {
       <div className={`${this.props.className} announcement`}>
         <div className="announcement-content">
           {this.props.canClose &&
-          <a className="announcement-close dialog-close button button-transparent" onClick={this.handleClose} role="button">
+          <button type="button" className="announcement-close dialog-close button-transparent" onClick={this.handleClose}>
             <Icon name='close'/>
             <span className="visually-hidden"><Trans>Close</Trans></span>
-          </a>
+          </button>
           }
           {this.props.children}
         </div>

@@ -303,24 +303,24 @@ class ImportResourcesResult extends Component {
             {this.canIUseFolders && this.resultReferenceFolder &&
             <p>
               <Trans>
-                You can find these newly imported passwords in the folder <a onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</a>.
+                You can find these newly imported passwords in the folder <button type="button" className="link no-border" onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</button>.
               </Trans>
             </p>
             }
             {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag &&
             <p>
               <Trans>
-                You can find these newly imported passwords under the tag <a onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</a>.
+                You can find these newly imported passwords under the tag <button type="button" className="link no-border" onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</button>.
               </Trans>
             </p>
             }
             {this.resultHasErrors &&
             <div className="accordion error-details">
               <div className="accordion-header">
-                <a onClick={this.handleErrorDetailsToggle}>
+                <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
                   <Trans>Error details</Trans>
                   <Icon name={this.state.showErrorDetails ? "caret-up" : "caret-down"}/>
-                </a>
+                </button>
               </div>
               {this.state.showErrorDetails &&
               <div className="accordion-content">

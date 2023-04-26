@@ -52,7 +52,7 @@ describe("As AD I should see the user directory settings", () => {
     });
 
     it('As AD I should see if the User Directory is enabled on my Passbolt instance', async() => {
-      expect.assertions(32);
+      expect.assertions(35);
 
       expect(page.exists()).toBeTruthy();
       // check fields in the form
@@ -70,6 +70,8 @@ describe("As AD I should see the user directory settings", () => {
       await page.click(page.directoryConfigurationTitle);
       expect(page.groupPath.value).toBe("");
       expect(page.userPath.value).toBe("");
+      expect(page.groupCustomFilters.value).toBe("");
+      expect(page.userCustomFilters.value).toBe("");
       expect(page.groupObjectClass).toBeNull();
       expect(page.userObjectClass).toBeNull();
       expect(page.useEmailPrefix).toBeNull();
@@ -81,6 +83,7 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.enabledUsersOnly.checked).toBe(false);
       expect(page.createUsers.checked).toBeTruthy();
       expect(page.deleteUsers.checked).toBeTruthy();
+      expect(page.updateUsers.checked).toBeTruthy();
       expect(page.createGroups.checked).toBeTruthy();
       expect(page.deleteGroups.checked).toBeTruthy();
       expect(page.updateGroups.checked).toBeTruthy();
@@ -187,6 +190,13 @@ describe("As AD I should see the user directory settings", () => {
     });
 
     it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(3);
+      //button should not be enable without changes
+      expect(page.isSaveButtonEnabled()).toBeFalsy();
+      // change field
+      await page.fillPort("404");
+      //button should be enable with changes
+      expect(page.isSaveButtonEnabled()).toBeTruthy();
       // Mock the request function to make it return an error.
       const error = {message: "The service is unavailable"};
 

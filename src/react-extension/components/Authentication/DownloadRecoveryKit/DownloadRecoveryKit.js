@@ -55,15 +55,16 @@ class DownloadRecoveryKit extends Component {
           <button
             type="submit"
             className={`button primary big full-width`}
-            onClick={this.handleNext.bind(this)}
-            role="button">
+            onClick={this.handleNext.bind(this)}>
             <Trans>Next</Trans>
           </button>
-          <a
+          <button
+            className="link"
+            type="button"
             id="download-kit"
             onClick={this.handleDownload.bind(this)}>
             <Trans>Download the kit again!</Trans>
-          </a>
+          </button>
         </div>
       </div>
     );

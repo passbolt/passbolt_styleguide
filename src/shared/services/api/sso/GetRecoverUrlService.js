@@ -24,13 +24,13 @@ const SSO_RECOVER_START_CASES = {
 class GetRecoverUrlService {
   /**
    * GetRecoverUrlService constructor
-   * @param {URL} siteDomain
+   * @param {string} siteDomain
    * @param {ApiClientOptions} apiClientOptions
    */
   constructor(siteDomain, apiClientOptions) {
     apiClientOptions.setResourceName("/sso/recover/start");
     this.apiClient = new ApiClient(apiClientOptions);
-    this.expectedUrl = siteDomain;
+    this.expectedUrl = new URL(siteDomain);
   }
 
   /**

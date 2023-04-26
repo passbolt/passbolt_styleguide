@@ -83,14 +83,14 @@ class DisplayMainMenuPageObject {
    * Returns the create menu elements of password workspace menu
    */
   get createMenu() {
-    return this._container.querySelector('.dropdown .button.create.primary');
+    return this._container.querySelector('.dropdown button.create.primary');
   }
 
   /**
-   * Returns the create menu disabled elements of password workspace menu
+   * Returns true if the create menu is disabled elements of password workspace menu
    */
-  get createMenuDisabled() {
-    return this._container.querySelector('.dropdown .button.create.primary.disabled');
+  hasCreateMenuDisabled() {
+    return this.createMenu.hasAttribute("disabled");
   }
 
   /**

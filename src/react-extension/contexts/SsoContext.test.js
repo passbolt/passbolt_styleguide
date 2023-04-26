@@ -100,5 +100,47 @@ describe("SsoContextProvider", () => {
       expect(props.context.port.requestListeners["passbolt.sso.sign-in-with-azure"]).toHaveBeenCalledTimes(1);
       expect(props.context.port.requestListeners["passbolt.auth.post-login-redirect"]).not.toHaveBeenCalled();
     });
+
+    it("Should throw an error when the pasphrase mismatch", async() => {
+      const errorMessage = "Passphrase mismatch";
+      const error = new Error(errorMessage);
+      error.name = "InvalidMasterPasswordError";
+
+      const props = defaultProps(null, "azure");
+      props.context.port.addRequestListener("passbolt.auth.post-login-redirect", jest.fn(() => Promise.reject(error)));
+      const contextProvider = new SsoContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(1);
+
+      await contextProvider.loadSsoConfiguration();
+
+      try {
+        await contextProvider.runSignInProcess();
+      } catch (e) {
+        expect(e).toStrictEqual(new Error(`The passphrase from the SSO kit doesn't match your private key: ${errorMessage}`));
+      }
+    });
+
+    it("Should throw an OutdatedSsoKitError", async() => {
+      const errorMessage = "Passphrase can't be decrypted with the current kit";
+      const error = new Error(errorMessage);
+      error.name = "OutdatedSsoKitError";
+
+      const props = defaultProps(null, "azure");
+      props.context.port.addRequestListener("passbolt.auth.post-login-redirect", jest.fn(() => Promise.reject(error)));
+      const contextProvider = new SsoContextProvider(props);
+      mockComponentSetState(contextProvider);
+
+      expect.assertions(1);
+
+      await contextProvider.loadSsoConfiguration();
+
+      try {
+        await contextProvider.runSignInProcess();
+      } catch (e) {
+        expect(e).toStrictEqual(new Error(`The SSO kit is outdated and can't be used to decrypt your passphrase: ${errorMessage}`));
+      }
+    });
   });
 });

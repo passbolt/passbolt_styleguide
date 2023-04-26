@@ -14,7 +14,7 @@
 
 import GetRecoverUrlService from "../api/sso/GetRecoverUrlService";
 import GetUrlForSsoIdentificationService from "../api/sso/GetUrlForSsoIdentificationService";
-import AzurePopupHandlerService from "./AzurePopupHandlerService";
+import SsoPopupHandlerService, {AUTHENTICATION_SUCCESS_CASES} from "./SsoPopupHandlerService";
 
 /**
  * Handles the SSO login for the recover process.
@@ -22,34 +22,45 @@ import AzurePopupHandlerService from "./AzurePopupHandlerService";
 class IdentifyViaSsoService {
   /**
    * IdentifyViaSsoService constructor
+   * @param {string} providerId the SSO provider identifier
    * @param {AppContext} context
+   * @param {function} successCallback the callback to be used after a successful SSO login
+   * @param {function} registrationRequiredCallback the callback when the user needs to self register
    */
-  constructor(context) {
+  constructor(providerId, context, successCallback, registrationRequiredCallback) {
+    this.providerId = providerId;
     this.apiClientOptions = context.getApiClientOptions();
-    const siteDomain = new URL(context.trustedDomain);
+
+    const siteDomain = context.trustedDomain.replace(/\/$/, '');
     this.getUrlForSsoIdentificationService = new GetUrlForSsoIdentificationService(context.getApiClientOptions());
     this.getRecoverUrlService = new GetRecoverUrlService(siteDomain, context.getApiClientOptions());
-    this.azurePopupHandler = new AzurePopupHandlerService(siteDomain);
+    this.ssoPopupHandler = new SsoPopupHandlerService(siteDomain, providerId);
+    this.successCallback = successCallback;
+    this.registrationRequiredCallback = registrationRequiredCallback;
   }
 
   /**
    * Starts the SSO identification process
-   * @param {string} providerId the id of the SSO provider
    * @returns {Promise<string>} the URL to redirect the user to
    * @public
    */
-  async exec(providerId) {
-    const popupUrl = await this.getUrlForSsoIdentificationService.getUrl(providerId);
-    const ssoToken = await this.azurePopupHandler.getSsoTokenFromThirdParty(popupUrl);
-    const recoverUrl = await this.getRecoverUrlService.getRecoverUrl(ssoToken);
-    return recoverUrl.toString();
+  async exec() {
+    const popupUrl = await this.getUrlForSsoIdentificationService.getUrl(this.providerId);
+    const ssoAuthResult = await this.ssoPopupHandler.getSsoTokenFromThirdParty(popupUrl);
+
+    if (ssoAuthResult.case === AUTHENTICATION_SUCCESS_CASES.DEFAULT) {
+      const recoverUrl = await this.getRecoverUrlService.getRecoverUrl(ssoAuthResult.token);
+      this.successCallback(recoverUrl.toString());
+    } else if (ssoAuthResult.case === AUTHENTICATION_SUCCESS_CASES.REGISTRATION_REQUIRED) {
+      this.registrationRequiredCallback(ssoAuthResult.email);
+    }
   }
 
   /**
    * Stops the identification process SSO process.
    */
   stopProcess() {
-    this.azurePopupHandler.close();
+    this.ssoPopupHandler.close();
   }
 }
 

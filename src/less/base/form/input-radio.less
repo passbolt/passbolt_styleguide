@@ -39,6 +39,7 @@
         &:hover {
           box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-radio-border;
           border: none;
+          background: @input-hover-background;
         }
 
         // Radio dot hover
@@ -51,13 +52,23 @@
         &:focus-visible {
           box-shadow: 0 0 .4rem @shadow-focus-color;
           border: 1px solid @input-radio-focus-border;
-          outline: 0;
+          outline: @outline-default-border;
+
+          + label {
+            background: @input-focus-background;
+            color: @input-focus-text-color;
+          }
         }
 
         // Radio pressed
         &:active {
           box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-radio-border;
           border: none;
+
+          + label {
+            background: @label-active-background;
+            color: @label-active-text-color;
+          }
         }
 
         // Radio dot pressed
@@ -78,6 +89,7 @@
           background: @input-radio-disabled-background;
           border: 1px solid @input-radio-disabled-border;
           box-shadow: none;
+          outline: 0;
 
           &:before{
             box-shadow: none;
