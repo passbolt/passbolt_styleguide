@@ -321,7 +321,7 @@ class Login extends Component {
               }
               {this.state.errors.invalidPassphrase &&
               <div className="invalid-passphrase error-message">
-                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <a onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></a>}
+                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
               </div>
               }
               {this.state.errors.invalidGpgKey &&
@@ -348,7 +348,6 @@ class Login extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              role="button"
               disabled={this.isProcessing}>
               {{
                 [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
@@ -356,14 +355,14 @@ class Login extends Component {
               }[this.props.displayAs]}
             </button>
             {this.props.isSsoAvailable &&
-              <a className="switchToSso" onClick={this.handleSwitchToSso}>
+              <button type="button" className="link switchToSso" onClick={this.handleSwitchToSso}>
                 <Trans>Sign in with Single Sign-On.</Trans>
-              </a>
+              </button>
             }
             {!this.props.isSsoAvailable &&
-              <a onClick={this.props.onSecondaryActionClick}>
+              <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
                 <Trans>Help, I lost my passphrase.</Trans>
-              </a>
+              </button>
             }
           </div>
         </form>

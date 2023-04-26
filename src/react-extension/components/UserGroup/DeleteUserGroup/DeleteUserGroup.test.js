@@ -91,8 +91,8 @@ describe("See Delete Group Dialog", () => {
       page.displayDeleteGroupDialog.clickWithoutWaitFor(page.displayDeleteGroupDialog.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.displayDeleteGroupDialog.cancelButtonDisabled).not.toBeNull();
-        expect(page.displayDeleteGroupDialog.saveButton.getAttribute("disabled")).not.toBeNull();
+        expect(page.displayDeleteGroupDialog.hasCancelButtonDisabled()).toBeTruthy();
+        expect(page.displayDeleteGroupDialog.saveButton.hasAttribute("disabled")).toBeTruthy();
         expect(page.displayDeleteGroupDialog.saveButtonProcessing).not.toBeNull();
         updateResolve();
       });

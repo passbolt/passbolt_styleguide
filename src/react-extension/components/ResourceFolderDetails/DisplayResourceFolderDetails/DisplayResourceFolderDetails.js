@@ -81,17 +81,17 @@ class DisplayResourceFolderDetails extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name">{this.props.resourceWorkspaceContext.details.folder.name}</span>
-                <a className="title-link" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
+                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this folder")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden"><Trans>Copy the link to this folder</Trans></span>
-                </a>
+                </button>
               </div>
               <span className="subtitle"><Trans>folder</Trans></span>
             </h3>
-            <a className="dialog-close" onClick={this.handleCloseClick}>
+            <button type="button" className="link no-border dialog-close" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visuallyhidden"><Trans>Close</Trans></span>
-            </a>
+            </button>
           </div>
           <DisplayResourceFolderDetailsInformation/>
           <DisplayResourceFolderDetailsPermissions/>

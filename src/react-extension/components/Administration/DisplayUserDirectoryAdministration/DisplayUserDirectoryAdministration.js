@@ -305,11 +305,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
              </p>
              <div className={`accordion section-general ${settings.openCredentials ? "" : "closed"}`}>
                <h4 className="accordion-header">
-                 <a onClick={this.handleCredentialTitleClicked}>
+                 <button type="button" className="link no-border" onClick={this.handleCredentialTitleClicked}>
                    {settings.openCredentials && <Icon name="caret-down"/>}
                    {!settings.openCredentials && <Icon name="caret-right"/>}
                    <Trans>Credentials</Trans>
-                 </a>
+                 </button>
                </h4>
                <div className="accordion-content">
                  <div className="radiolist required">
@@ -331,15 +331,15 @@ class DisplayUserDirectoryAdministration extends React.Component {
                  </div>
                  <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Server url</Trans></label>
-                   <div className={`input text singleline connection_info ad openldap ${this.state.hasFieldFocus ? "no-focus" : ""}`}>
-                     <input id="server-input" type="text" className="required host ad openldap form-element" name="host"
+                   <div className={`input text singleline connection_info ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''} ${this.state.hasFieldFocus ? "no-focus" : ""}`}>
+                     <input id="server-input" type="text" aria-required={true} className="required host ad openldap form-element" name="host"
                        value={settings.host} onChange={this.handleInputChange}
                        placeholder={this.props.t("host")} disabled={this.hasAllInputDisabled()}/>
                      <div className="protocol" onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}>
                        <Select className="inline" name="connectionType" items={this.connectionType} value={settings.connectionType} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
                      </div>
                      <div className="port ad openldap">
-                       <input id="port-input" type="number" className="required in-field form-element" name="port"
+                       <input id="port-input" type="number" aria-required={true} className="required in-field form-element" name="port"
                          value={settings.port} onChange={this.handleInputChange}
                          onBlur={this.handleFieldBlur} onFocus={this.handleFieldFocus}
                          disabled={this.hasAllInputDisabled()}/>
@@ -380,7 +380,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                  }
                  <div className={`input text required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Domain</Trans></label>
-                   <input id="domain-name-input" type="text" name="domain" value={settings.domain}
+                   <input id="domain-name-input" aria-required={true}  type="text" name="domain" value={settings.domain}
                      onChange={this.handleInputChange} className="required fluid form-element"
                      placeholder="domain.ext" disabled={this.hasAllInputDisabled()}/>
                    {errors.domainError && isSubmitted &&
@@ -401,16 +401,16 @@ class DisplayUserDirectoryAdministration extends React.Component {
              <div
                className={`accordion section-directory-configuration ${settings.openDirectoryConfiguration ? "" : "closed"}`}>
                <h4 className="accordion-header">
-                 <a onClick={this.handleDirectoryConfigurationTitleClicked}>
+                 <button type="button" className="link no-border" onClick={this.handleDirectoryConfigurationTitleClicked}>
                    {settings.openDirectoryConfiguration && <Icon name="caret-down"/>}
                    {!settings.openDirectoryConfiguration && <Icon name="caret-right"/>}
                    <Trans>Directory configuration</Trans>
-                 </a>
+                 </button>
                </h4>
                <div className="accordion-content">
                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Group path</Trans></label>
-                   <input id="group-path-input" type="text" name="groupPath" value={settings.groupPath}
+                   <input id="group-path-input" type="text" aria-required={true} name="groupPath" value={settings.groupPath}
                      onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Group path")}
                      disabled={this.hasAllInputDisabled()}/>
                    <div className="help-message">
@@ -419,7 +419,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                  </div>
                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>User path</Trans></label>
-                   <input id="user-path-input" type="text" name="userPath" value={settings.userPath}
+                   <input id="user-path-input" type="text" aria-required={true} name="userPath" value={settings.userPath}
                      onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("User path")}
                      disabled={this.hasAllInputDisabled()}/>
                    <div className="help-message"><Trans>User path is used in addition to base DN while searching users.</Trans></div>
@@ -446,7 +446,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                  <div>
                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                      <label><Trans>Group object class</Trans></label>
-                     <input id="group-object-class-input" type="text" name="groupObjectClass"
+                     <input id="group-object-class-input" type="text" aria-required={true} name="groupObjectClass"
                        value={settings.groupObjectClass} onChange={this.handleInputChange} className="required fluid"
                        placeholder="GroupObjectClass" disabled={this.hasAllInputDisabled()}/>
                      <div className="help-message">
@@ -455,7 +455,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                    </div>
                    <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                      <label><Trans>User object class</Trans></label>
-                     <input id="user-object-class-input" type="text" name="userObjectClass"
+                     <input id="user-object-class-input" type="text" aria-required={true} name="userObjectClass"
                        value={settings.userObjectClass} onChange={this.handleInputChange} className="required fluid form-element"
                        placeholder="UserObjectClass" disabled={this.hasAllInputDisabled()}/>
                      <div className="help-message"><Trans>For Openldap only. Defines which user object to use.</Trans> (<Trans>Default</Trans>: inetOrgPerson)
@@ -479,7 +479,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                    <div className="singleline clearfix" id="use-email-prefix-suffix-options">
                      <div className={`input text first-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                        <label><Trans>Email prefix</Trans></label>
-                       <input id="email-prefix-input" type="text" name="emailPrefix" checked={settings.emailPrefix}
+                       <input id="email-prefix-input" type="text" aria-required={true} name="emailPrefix" checked={settings.emailPrefix}
                          onChange={this.handleInputChange} className="required fluid form-element" placeholder={this.props.t("Username")}
                          disabled={this.hasAllInputDisabled()}/>
                        <div className="help-message">
@@ -489,7 +489,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
                      <div className={`input text last-field openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
 
                        <label><Trans>Email suffix</Trans></label>
-                       <input id="email-suffix-input" type="text" name="emailSuffix" value={settings.emailSuffix}
+                       <input id="email-suffix-input" type="text" aria-required={true} name="emailSuffix" value={settings.emailSuffix}
                          onChange={this.handleInputChange} className="required form-element"
                          placeholder={this.props.t("@your-domain.com")} disabled={this.hasAllInputDisabled()}/>
                        <div className="help-message">
@@ -505,11 +505,11 @@ class DisplayUserDirectoryAdministration extends React.Component {
              <div
                className={`accordion section-sync-options ${settings.openSynchronizationOptions ? "" : "closed"}`}>
                <h4 className="accordion-header">
-                 <a onClick={this.handleSynchronizationOptionsTitleClicked}>
+                 <button type="button" className="link no-border" onClick={this.handleSynchronizationOptionsTitleClicked}>
                    {settings.openSynchronizationOptions && <Icon name="caret-down"/>}
                    {!settings.openSynchronizationOptions && <Icon name="caret-right"/>}
                    <Trans>Synchronization options</Trans>
-                 </a>
+                 </button>
                </h4>
                <div className="accordion-content">
                  <div className={`select-wrapper input required ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>

@@ -106,7 +106,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {boolean}
    */
   isSaveButtonEnabled() {
-    return !this.toolbarActionsSaveButton.classList.contains("disabled");
+    return !this.toolbarActionsSaveButton.hasAttribute("disabled");
   }
 
   /**
@@ -234,7 +234,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async showAdvancedSettings() {
-    return await this.clickOn(this.select(".smtp-settings .accordion-header a"), () => Boolean(this.advancedSettings));
+    return await this.clickOn(this.select(".smtp-settings .accordion-header button.link"), () => Boolean(this.advancedSettings));
   }
 
   /**
@@ -242,7 +242,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {Promise<void>}
    */
   async togglePasswordShow() {
-    const passwordToggle = this.select(".smtp-settings .password-view-wrapper a");
+    const passwordToggle = this.select(".smtp-settings .password-view-wrapper button");
     const passwordFiledtype = this.password.getAttribute("type");
     await this.clickOn(passwordToggle, () => passwordFiledtype !== this.password.getAttribute("type"));
   }
@@ -506,7 +506,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this.selectAll(".actions-wrapper .actions a")[0];
+    return this.selectAll(".actions-wrapper .actions button")[0];
   }
 
   /**
@@ -514,7 +514,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsTestButton() {
-    return this.selectAll(".actions-wrapper .actions a")[1];
+    return this.selectAll(".actions-wrapper .actions button")[1];
   }
 
   /**
@@ -546,7 +546,7 @@ export default class ManageSmtpAdministrationSettingsPage {
    * @returns {HTMLElement}
    */
   get showLogsButton() {
-    return this.select(".send-test-email-dialog .accordion-header a");
+    return this.select(".send-test-email-dialog .accordion-header button");
   }
 
   /**

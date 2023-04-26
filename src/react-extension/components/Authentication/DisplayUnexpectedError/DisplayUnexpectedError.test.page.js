@@ -51,7 +51,7 @@ export default class DisplayUnexpectedErrorTestPage {
    * Returns the more details cta element
    */
   get moreDetailsCta() {
-    return this._page.container.querySelector('.error-details a');
+    return this._page.container.querySelector('.error-details button');
   }
 
   /**

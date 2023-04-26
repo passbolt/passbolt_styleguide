@@ -310,7 +310,7 @@ class FilterUsersByGroup extends React.Component {
                 <div className="main-cell">
                   <h3>
                     <span className="folders-label" onClick={this.handleTitleClickEvent}>
-                      <a role="button" onContextMenu={this.handleTitleContextualMenuEvent}>
+                      <button type="button" className="link no-border" onContextMenu={this.handleTitleContextualMenuEvent}>
                         <>
                           {this.state.open &&
                             <Icon name="caret-down"/>
@@ -320,13 +320,13 @@ class FilterUsersByGroup extends React.Component {
                           }
                         </>
                         {this.state.title}
-                      </a>
+                      </button>
                     </span>
                   </h3>
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <a className={`button ${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></a>
+                <button type="button" className={`link no-border ${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></button>
               </div>
             </div>
           </li>
@@ -351,20 +351,23 @@ class FilterUsersByGroup extends React.Component {
                     onClick={event => this.handleGroupSelected(event, group)}
                     onContextMenu={event => this.handleContextualMenuEvent(event, group)}>
                     <div className="main-cell">
-                      <a
+                      <button
+                        type="button"
+                        className="link no-border"
                         title={group.name}>
                         <Icon name="users"/>
                         <span className="ellipsis">{group.name}</span>
-                      </a>
+                      </button>
                     </div>
                   </div>
                   {this.canShowMore(group) &&
                     <div className="dropdown right-cell more-ctrl">
-                      <a
+                      <button
+                        type="button"
                         onClick={event => this.handleMoreClickEvent(event, group)}
-                        className={`button ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
+                        className={`link no-border ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
                         <Icon name="3-dots-h"/>
-                      </a>
+                      </button>
                     </div>
                   }
                 </div>

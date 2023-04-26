@@ -728,7 +728,7 @@ describe("ManageSmtpAdministrationSettings", () => {
       await waitFor(() => {});
 
       expect(page.exists).toBeTruthy();
-      expect(page.toolbarActionsTestButton.classList.contains("disabled")).toBeTruthy();
+      expect(page.toolbarActionsTestButton.hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As a signed-in administrator in the “Email server” setting, I cannot trigger the “Send test email” workflow when the form does not validate\nAs a signed-in administrator when the “Email server” settings form validate, I can trigger the “Send test email” workflow', async() => {

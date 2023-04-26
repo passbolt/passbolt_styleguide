@@ -56,8 +56,8 @@ describe("See the Create Dialog User", () => {
       page.confirmWithoutWaitFor();
 
       await waitFor(() => {
-        expect(page.confirmButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.cancelButton.classList.contains("disabled")).toBeTruthy();
+        expect(page.confirmButton.hasAttribute("disabled")).toBeTruthy();
+        expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         confirmResolve();
       });
     });

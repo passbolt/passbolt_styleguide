@@ -220,18 +220,18 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     return (
       <>
         <div className="dropdown" ref={this.createMenuRef}>
-          <a className={`button create primary ${this.canCreate() ? "" : "disabled"} ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
+          <button type="button" className={`create primary ${this.state.createMenuOpen ? "open" : ""}`} disabled={!this.canCreate()} onClick={this.handleCreateClickEvent}>
             <Icon name="add"/>
             <span><Trans>Create</Trans></span>
-          </a>
+          </button>
           <ul className={`dropdown-content menu right ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="password_action">
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleCreateMenuPasswordClickEvent}>
+                    <button type="button" className="link no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
                       <span><Trans>New password</Trans></span>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -240,9 +240,9 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleMenuCreateFolderClickEvent}>
+                    <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
                       <span><Trans>New folder</Trans></span>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -250,12 +250,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
           </ul>
         </div>
         {this.canImport &&
-          <a
-            className="button button-action-icon"
+          <button
+            type="button"
+            className="button-action-icon"
             onClick={this.handleImportClickEvent}>
             <Icon name="upload" />
             <span className="visuallyhidden"><Trans>upload</Trans></span>
-          </a>
+          </button>
         }
       </>
     );

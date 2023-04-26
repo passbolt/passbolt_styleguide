@@ -320,6 +320,7 @@ class ChangeUserSecurityToken extends Component {
                   id="security-token-text"
                   ref={this.tokenCodeInputRef}
                   type="text"
+                  aria-required={true}
                   className="input text required"
                   name="text"
                   maxLength="3"
@@ -338,12 +339,13 @@ class ChangeUserSecurityToken extends Component {
                   colors={this.defaultColors}
                 />
                 <div className="randomize-button-wrapper">
-                  <a
-                    className={`randomize-button ${this.isProcessing ? "disabled" : ""}`}
-                    role="button"
+                  <button
+                    type="button"
+                    className={`randomize-button link ${this.isProcessing ? "disabled" : ""}`}
+                    disabled={this.isProcessing}
                     onClick={this.handleRandomize}>
                     <Trans>Randomize</Trans>
-                  </a>
+                  </button>
                 </div>
               </div>
               {this.state.hasBeenValidated &&

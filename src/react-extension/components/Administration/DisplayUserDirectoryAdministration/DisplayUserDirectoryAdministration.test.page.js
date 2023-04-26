@@ -52,14 +52,14 @@ export default class DisplayUserDirectoryAdministrationPage {
    * Returns the credential title element
    */
   get credentialTitle() {
-    return this._page.container.querySelector('.accordion.section-general .accordion-header a');
+    return this._page.container.querySelector('.accordion.section-general .accordion-header button');
   }
 
   /**
    * Returns the directory configuration title element
    */
   get directoryConfigurationTitle() {
-    return this._page.container.querySelector('.accordion.section-directory-configuration .accordion-header a');
+    return this._page.container.querySelector('.accordion.section-directory-configuration .accordion-header button');
   }
 
   /**
@@ -67,7 +67,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
   }
 
   /**
@@ -75,7 +75,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsTestButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[1];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[1];
   }
 
   /**
@@ -83,7 +83,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSimulateButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[2];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[2];
   }
 
 
@@ -92,14 +92,14 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSynchronizeButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[3];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[3];
   }
 
   /**
    * Returns the synchronization options title element
    */
   get synchronizationOptionsTitle() {
-    return this._page.container.querySelector('.accordion.section-sync-options .accordion-header a');
+    return this._page.container.querySelector('.accordion.section-sync-options .accordion-header button');
   }
 
   /**
@@ -352,7 +352,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {boolean}
    */
   isSaveButtonEnabled() {
-    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+    return !this.toolbarActionsSaveButton.hasAttribute("disabled");
   }
 
   /**
@@ -360,7 +360,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {boolean}
    */
   isTestButtonEnabled() {
-    return !this.toolbarActionsTestButton.className.toString().includes("disabled");
+    return !this.toolbarActionsTestButton.hasAttribute("disabled");
   }
 
   /**
@@ -368,7 +368,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {boolean}
    */
   isSynchronizeButtonEnabled() {
-    return !this.toolbarActionsSynchronizeButton.className.toString().includes("disabled");
+    return !this.toolbarActionsSynchronizeButton.hasAttribute("disabled");
   }
 
   /**
@@ -376,7 +376,7 @@ export default class DisplayUserDirectoryAdministrationPage {
    * @returns {boolean}
    */
   isSimulateButtonEnabled() {
-    return !this.toolbarActionsSimulateButton.className.toString().includes("disabled");
+    return !this.toolbarActionsSimulateButton.hasAttribute("disabled");
   }
 
   /**

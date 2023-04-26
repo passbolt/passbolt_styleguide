@@ -123,7 +123,9 @@ describe("Display Users Contextual Menu", () => {
 
   it("As LU I should resend an invite to an user if I have the capability to do it", async() => {
     expect.assertions(2);
-    page = new DisplayUsersContextualMenuPage(context, props);
+    const propsUserInactive = Object.assign(props, {});
+    propsUserInactive.user.active = false;
+    page = new DisplayUsersContextualMenuPage(context, propsUserInactive);
     await waitFor(() => {});
 
     // The logged user is admin
@@ -145,7 +147,9 @@ describe("Display Users Contextual Menu", () => {
 
   it("As LU I should disable an user MFA if I have the capability to do it", async() => {
     expect.assertions(3);
-    page = new DisplayUsersContextualMenuPage(context, props);
+    const propsUserMfaActive = Object.assign(props, {});
+    propsUserMfaActive.user.is_mfa_enabled = true;
+    page = new DisplayUsersContextualMenuPage(context, propsUserMfaActive);
     await waitFor(() => {});
 
     expect(page.canDisableMFA).toBeTruthy();

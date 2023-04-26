@@ -102,17 +102,17 @@ class DisplayUserGroupDetails extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name sidebar-header-title">{this.group.name}</span>
-                <a className="title-link" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
+                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this group")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden"><Trans>Copy the link to this group</Trans></span>
-                </a>
+                </button>
               </div>
               <span className="subtitle"><Trans>Group</Trans></span>
             </h3>
-            <a className="dialog-close button button-transparent" onClick={this.handleCloseClick}>
+            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visuallyhidden"><Trans>Close</Trans></span>
-            </a>
+            </button>
           </div>
         </div>
         <DisplayUserGroupDetailsInformation/>

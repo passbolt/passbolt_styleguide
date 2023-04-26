@@ -66,7 +66,7 @@ export default class DisplayInternationalizationAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
   }
 
   /**
@@ -95,7 +95,7 @@ export default class DisplayInternationalizationAdministrationPage {
    * @returns {boolean}
    */
   isSaveButtonEnabled() {
-    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+    return !this.toolbarActionsSaveButton.hasAttribute("disabled");
   }
 
   /** click on the element */

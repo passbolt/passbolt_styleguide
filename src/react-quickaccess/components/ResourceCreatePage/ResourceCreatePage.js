@@ -403,17 +403,17 @@ class ResourceCreatePage extends React.Component {
                 <div className="password-button-inline">
                   <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
                     autoComplete="new-password" placeholder={this.translate('Password')} id="password" inputRef={this.passwordInputRef}/>
-                  <a onClick={this.handleGeneratePasswordButtonClick}
+                  <button type="button" onClick={this.handleGeneratePasswordButtonClick}
                     className={`password-generate button-icon button ${this.state.processing ? "disabled" : ""}`}>
                     <Icon name='dice'/>
                     <span className="visually-hidden"><Trans>Generate</Trans></span>
-                  </a>
+                  </button>
                   {this.canUsePasswordGenerator &&
-                    <a onClick={this.handleOpenGenerator}
+                    <button type="button" onClick={this.handleOpenGenerator}
                       className="password-generator button-icon button">
                       <Icon name='settings'/>
                       <span className="visually-hidden"><Trans>Open generator</Trans></span>
-                    </a>
+                    </button>
                   }
                 </div>
                 <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>

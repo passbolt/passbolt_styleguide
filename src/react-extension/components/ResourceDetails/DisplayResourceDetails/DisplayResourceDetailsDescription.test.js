@@ -166,8 +166,10 @@ describe("See description", () => {
       await page.passwordSidebarDescriptionSection.waitForLoading(() => {
         expect(page.descriptionEditor.component).not.toBeNull();
         expect(page.descriptionEditor.descriptionInput.getAttribute("disabled")).not.toBeNull();
-        expect(page.descriptionEditor.saveButton.className).toBe("button primary description-editor-submit processing disabled");
-        expect(page.descriptionEditor.cancelButton.className).toBe("cancel button disabled");
+        expect(page.descriptionEditor.saveButton.className).toBe("primary description-editor-submit processing");
+        expect(page.descriptionEditor.saveButton.hasAttribute("disabled")).toBeTruthy();
+        expect(page.descriptionEditor.cancelButton.className).toBe("cancel");
+        expect(page.descriptionEditor.cancelButton.hasAttribute("disabled")).toBeTruthy();
         updateResolve();
       });
     });

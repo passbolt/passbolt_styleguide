@@ -116,18 +116,18 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
-              </a>
+              </button>
             </li>
           </div>
           <div>
             <li>
-              <a className={`button ${this.isTestEnabled() ? "" : "disabled"}`} onClick={this.handleTestClick}>
+              <button type="button" disabled={!this.isTestEnabled()} onClick={this.handleTestClick}>
                 <Icon name="plug"/>
                 <span><Trans>Send test email</Trans></span>
-              </a>
+              </button>
             </li>
           </div>
         </div>

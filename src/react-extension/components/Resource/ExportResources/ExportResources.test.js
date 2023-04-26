@@ -99,7 +99,9 @@ describe("As LU I should see the password export dialog", () => {
         expect(page.select.className).toBe("selected-value disabled");
         expect(page.exportButton.getAttribute("disabled")).not.toBeNull();
         expect(page.exportButton.className).toBe("button primary disabled processing");
-        expect(page.cancelButton.className).toBe("cancel disabled");
+        expect(page.exportButton.hasAttribute("disabled")).toBeTruthy();
+        expect(page.cancelButton.className).toBe("link cancel");
+        expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         updateResolve();
       });
     });

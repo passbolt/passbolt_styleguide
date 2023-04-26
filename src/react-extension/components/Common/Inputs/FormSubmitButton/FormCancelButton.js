@@ -44,24 +44,12 @@ class FormCancelButton extends Component {
   }
 
   /**
-   * Get the input button classname
-   * @returns {string}
-   */
-  getClassName() {
-    let name = 'cancel';
-    if (this.props.disabled) {
-      name += ' disabled';
-    }
-    return name;
-  }
-
-  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
-      <a className={this.getClassName()} role="button" onClick={this.handleClick}><Trans>Cancel</Trans></a>
+      <button type="button" disabled={this.props.disabled} className="link cancel" onClick={this.handleClick}><Trans>Cancel</Trans></button>
     );
   }
 }

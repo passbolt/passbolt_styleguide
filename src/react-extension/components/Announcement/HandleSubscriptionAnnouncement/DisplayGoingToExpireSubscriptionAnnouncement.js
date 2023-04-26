@@ -46,9 +46,9 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
         <p>
           <Trans>Warning:</Trans>&nbsp;
           <Trans>your subscription key will expire</Trans> {this.formatDateTimeAgo(this.props.expiry)}.
-          <a onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
+          <button type="button" onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
-          </a>
+          </button>
         </p>
       </AnnouncementWrapper>
     );

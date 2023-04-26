@@ -215,36 +215,36 @@ class DisplayUserBadgeMenu extends Component {
               <span className="email">{this.getUserUsername()}</span>
             </div>
             <div className="more right-cell">
-              <a role="button">
+              <button type="button" className="link no-border">
                 <Icon name="caret-down"/>
-              </a>
+              </button>
             </div>
           </div>
           {this.state.open &&
           <ul className="dropdown-content right visible">
             <li key="profile">
               <div className="row">
-                <a role="button" tabIndex="1" onClick={this.handleProfileClick}>
+                <button type="button" className="link no-border" onClick={this.handleProfileClick}>
                   <span><Trans>Profile</Trans></span>{this.attentionRequired && <Icon name="exclamation" baseline={true}/>}
-                </a>
+                </button>
               </div>
             </li>
             {this.canIUseThemeCapability &&
             <li key="theme">
               <div className="row">
-                <a role="button" tabIndex="2" onClick={this.handleThemeClick}>
+                <button type="button" className="link no-border" onClick={this.handleThemeClick}>
                   <span><Trans>Theme</Trans></span>
-                </a>
+                </button>
               </div>
             </li>
             }
             {this.canIUseMobileCapability &&
             <li key="mobile">
               <div className="row">
-                <a role="button" tabIndex="3" onClick={this.handleMobileAppsClick}>
+                <button type="button" className="link no-border" onClick={this.handleMobileAppsClick}>
                   <span><Trans>Mobile Apps</Trans></span>
                   <span className="chips new">new</span>
-                </a>
+                </button>
               </div>
             </li>
             }

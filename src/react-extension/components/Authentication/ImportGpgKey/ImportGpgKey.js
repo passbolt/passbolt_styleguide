@@ -276,6 +276,7 @@ class ImportGpgKey extends Component {
             <label htmlFor="private-key"><Trans>Private key</Trans></label>
             <textarea
               name="private-key"
+              aria-required={true}
               ref={this.privateKeyInputRef}
               placeholder={this.translate("Your OpenPGP private key block")}
               value={this.state.privateKey}
@@ -316,17 +317,16 @@ class ImportGpgKey extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              role="button"
               disabled={this.isProcessing}>
               <Trans>Next</Trans>
             </button>
             {this.props.onSecondaryActionClick &&
-            <a onClick={this.props.onSecondaryActionClick}>
+            <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
               {{
                 [ImportGpgKeyVariations.SETUP]: <Trans>Or generate a new private key.</Trans>,
                 [ImportGpgKeyVariations.RECOVER]: <Trans>Help, I lost my private key.</Trans>,
               }[this.props.displayAs]}
-            </a>
+            </button>
             }
           </div>
         </form>

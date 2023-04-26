@@ -219,9 +219,9 @@ class SendTestMailDialog extends React.Component {
                 <a className="faq-link" href="https://help.passbolt.com/faq/hosting/why-email-not-sent" rel="noopener noreferrer" target="_blank"><Trans>FAQ: Why are my emails not sent?</Trans></a>
               </p>
               <div className="accordion-header">
-                <a onClick={this.handleDisplayLogsClick}>
+                <button type="button" onClick={this.handleDisplayLogsClick}>
                   <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
-                </a>
+                </button>
               </div>
               {this.state.displayLogs &&
                 <div className="accordion-content">
@@ -230,10 +230,9 @@ class SendTestMailDialog extends React.Component {
               }
             </div>
             <div className="dialog-footer clearfix">
-              <a className="cancel" role="button" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></a>
+              <button type="button" className="cancel" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></button>
               <button
                 className="button primary"
-                role="button"
                 type='button'
                 onClick={this.props.handleClose}
                 disabled={this.isProcessing}>
@@ -247,9 +246,9 @@ class SendTestMailDialog extends React.Component {
             <div className="dialog-body">
               <p><Trans>The test email has been sent. Check your email box, you should receive it in a minute.</Trans></p>
               <div className="accordion-header">
-                <a onClick={this.handleDisplayLogsClick}>
+                <button type="button" onClick={this.handleDisplayLogsClick}>
                   <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
-                </a>
+                </button>
               </div>
               {this.state.displayLogs &&
                 <div className="accordion-content">
@@ -261,10 +260,9 @@ class SendTestMailDialog extends React.Component {
               <strong><Trans>Pro tip</Trans>:</strong> <Trans>Check your spam folder if you do not hear from us after a while.</Trans>
             </div>
             <div className="dialog-footer clearfix">
-              <a className="cancel" role="button" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></a>
+              <button type="button" className="cancel" disabled={this.hasAllInputDisabled()} onClick={this.handleRetryClick}><Trans>Retry</Trans></button>
               <button
                 className="button primary"
-                role="button"
                 type='button'
                 onClick={this.props.handleClose}
                 disabled={this.isProcessing}>

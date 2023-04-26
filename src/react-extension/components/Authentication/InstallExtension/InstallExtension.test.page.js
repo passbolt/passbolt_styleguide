@@ -66,14 +66,14 @@ export default class InstallExtensionTestPage {
    * Returns the link to refresh
    */
   get link() {
-    return this._page.container.querySelectorAll('.install-extension .form-actions a')[1];
+    return this._page.container.querySelector('.install-extension .form-actions button.link');
   }
 
   /**
    * Returns the link refresh content
    */
   get linkContent() {
-    return this._page.container.querySelectorAll('.install-extension .form-actions a')[1].textContent;
+    return this.link.textContent;
   }
 
   /**

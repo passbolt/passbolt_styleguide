@@ -161,7 +161,7 @@ describe("ManageSsoSettings", () => {
 
       await page.toggleSsoSettings();
 
-      expect(page.toolbarActionsSaveSettingsButton.classList.contains("disabled")).toBeFalsy();
+      expect(page.toolbarActionsSaveSettingsButton.hasAttribute("disabled")).toBeFalsy();
 
       await page.saveSettings(() => Boolean(page.deleteConfirmationDialog));
 
@@ -188,13 +188,13 @@ describe("ManageSsoSettings", () => {
         }
       });
 
-      expect(page.toolbarActionsSaveSettingsButton.classList.contains("disabled")).toBeTruthy();
+      expect(page.toolbarActionsSaveSettingsButton.hasAttribute("disabled")).toBeTruthy();
 
       await page.setFormWith({
         tenant_id: "tenant id test"
       });
 
-      expect(page.toolbarActionsSaveSettingsButton.classList.contains("disabled")).toBeFalsy();
+      expect(page.toolbarActionsSaveSettingsButton.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As AD I cannot save the SSO settings before testing them (with Azure settings)', async() => {

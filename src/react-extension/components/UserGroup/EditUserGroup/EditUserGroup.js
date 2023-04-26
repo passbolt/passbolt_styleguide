@@ -736,6 +736,7 @@ class EditUserGroup extends Component {
               <label htmlFor="js_field_name"><Trans>Group name</Trans></label>
               <input
                 id="group-name-input"
+                aria-required={true}
                 ref={this.references.name}
                 value={this.state.groupToEdit.name}
                 maxLength="50"

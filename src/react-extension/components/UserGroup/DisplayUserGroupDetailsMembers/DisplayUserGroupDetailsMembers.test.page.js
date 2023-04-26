@@ -80,7 +80,7 @@ export default class DisplayUserGroupDetailsMembersPage {
    * Toggle the collapse / expand component hbehavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('a');
+    const element = this._page.container.querySelector('button');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

@@ -85,7 +85,7 @@ class DisplayResourceDetailsTag extends React.Component {
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClickEvent} role="button">
+            <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
               <Trans>Tags</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -93,14 +93,14 @@ class DisplayResourceDetailsTag extends React.Component {
               {!this.state.open &&
               <Icon name="caret-right"/>
               }
-            </a>
+            </button>
           </h4>
         </div>
         <div className="accordion-content">
-          <a className="section-action button button-transparent" onClick={this.toggleInputTagEditor}>
+          <button type="button" className="section-action button-transparent" onClick={this.toggleInputTagEditor}>
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>Edit</Trans></span>
-          </a>
+          </button>
 
           {!this.state.showTagEditor &&
           <EditResourceTagsItemViewer

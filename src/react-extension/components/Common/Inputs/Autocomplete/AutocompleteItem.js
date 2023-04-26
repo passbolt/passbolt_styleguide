@@ -91,7 +91,7 @@ class AutocompleteItem extends Component {
         <div className={this.getClassName()}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
-              <a role="button" onClick={this.handleClick}>
+              <button type="button" className="link no-border" onClick={this.handleClick}>
                 {this.props.user &&
                 <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl}/>
                 }
@@ -102,7 +102,7 @@ class AutocompleteItem extends Component {
                   <span className="name">{this.getTitle()}</span>
                   <span className="details">{this.getSubtitle()}</span>
                 </div>
-              </a>
+              </button>
             </div>
           </div>
         </div>

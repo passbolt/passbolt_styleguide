@@ -56,7 +56,7 @@ export default class IdentifyWithSsoPage {
    * Returns the go to email Button
    */
   get secondaryActionButton() {
-    return this.select('.sso-login-form a:last-child');
+    return this.select('.sso-login-form button.link');
   }
 
   /**

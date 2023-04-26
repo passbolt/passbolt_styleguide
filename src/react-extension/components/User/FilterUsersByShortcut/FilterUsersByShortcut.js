@@ -77,9 +77,9 @@ class FilterUsersByShortcut extends React.Component {
             <div className={`row ${this.isAllItemsSelected ? "selected" : ""}`} onClick={this.handleAllItemsClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a id="all-users">
+                  <button className="link no-border" type="button" id="all-users">
                     <span><Trans>All users</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -88,9 +88,9 @@ class FilterUsersByShortcut extends React.Component {
             <div className={`row ${this.isRecentlyModifiedSelected ? "selected" : ""}`} onClick={this.handleRecentlyModifiedClick}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a id="recently-modified">
+                  <button className="link no-border" type="button" id="recently-modified">
                     <span><Trans>Recently modified</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,49 +1,14 @@
-.logo {
-    &.no-img {
-        background: transparent @logourl 0 0 no-repeat;
-        background-size: 150px auto;
-        width: 150px;
-        height: 26px;
-    }
-    h1 {
-        display: none;
-    }
-
-    &.bigger {
-        background: transparent @logourl 0 0 no-repeat;
-        background-size: 200px auto;
-        width: 200px;
-        height: 45px;
-    }
-}
 
 // logo should always fit
 .header.second .col1 {
     min-width:200px;
 }
 
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2),
-only screen and (-webkit-min-device-pixel-ratio: 1.5),
-only screen and (min-devicepixel-ratio: 1.5),
-only screen and (min-resolution: 1.5dppx) {
-
-    .logo {
-        &.no-img {
-            background: transparent @logourl 0 0 no-repeat;
-            background-size: 150px auto;
-        }
-        &.bigger {
-            background: transparent @logourl 0 0 no-repeat;
-            background-size: 200px auto;
-        }
-    }
-}
-
 .logo-svg {
     &.no-img {
         width: 150px;
         height: 26px;
+        --icon-color: @icon-logo-color;
     }
     h1 {
         display: none;

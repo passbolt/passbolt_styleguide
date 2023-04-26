@@ -21,7 +21,7 @@ class Breadcrumb extends Component {
    */
   render() {
     return (
-      <a onClick={this.props.onClick}>{this.props.name}</a>
+      <button type="button" className="link no-border inline" onClick={this.props.onClick}>{this.props.name}</button>
     );
   }
 }

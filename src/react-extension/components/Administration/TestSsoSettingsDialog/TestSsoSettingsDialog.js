@@ -160,12 +160,12 @@ class TestSsoSettingsDialog extends React.Component {
             {this.state.uiState === uiStateEnum.FORM &&
               <>
                 <p><Trans>Before saving the settings, we need to test if the configuration is working.</Trans></p>
-                <a className={`button sso-login-button ${this.hasAllInputDisabled() ? "disabled" : ""} ${this.props.provider.id}`} onClick={this.handleSignInTestClick} disabled={this.hasAllInputDisabled()} >
+                <button type="button" className={`sso-login-button ${this.props.provider.id}`} onClick={this.handleSignInTestClick} disabled={this.hasAllInputDisabled()} >
                   <span className="provider-logo">
                     {this.props.provider.icon}
                   </span>
                   {this.translate(`Sign in with {{providerName}}`, {providerName: this.props.provider.name})}
-                </a>
+                </button>
               </>
             }
             {this.state.uiState === uiStateEnum.SUCCESS &&

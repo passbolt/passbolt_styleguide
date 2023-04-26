@@ -148,7 +148,7 @@ class CreateGroupPageObject {
    * @returns {Element}
    */
   get userAutocomplete() {
-    return this._container.querySelector('#autocomplete-item .row.selected .main-cell-wrapper .main-cell a');
+    return this._container.querySelector('#autocomplete-item .row.selected .main-cell-wrapper .main-cell button');
   }
 
   /**
@@ -207,11 +207,11 @@ class CreateGroupPageObject {
   }
 
   /**
-   * Returns the close button disabled to remove user for the 'index' one
+   * Returns true if the close button is disabled to remove user for the 'index' one
    * @param index the display close button disabled to remove user
    */
-  removeUserDisabled(index) {
-    return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.remove-item.disabled');
+  hasRemoveUserDisabled(index) {
+    return this.removeUser(index).hasAttribute("disabled");
   }
 
   /**

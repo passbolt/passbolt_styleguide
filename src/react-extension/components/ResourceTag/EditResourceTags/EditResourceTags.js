@@ -533,12 +533,12 @@ class EditResourceTags extends React.Component {
           }
         </div>
         <div className="actions">
-          <a className={`button cancel tag-editor-cancel ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
-            onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></a>
-          <a className={`button primary tag-editor-submit ${this.hasAllInputDisabled() ? "processing disabled" : ""}`}
+          <button type="button" disabled={this.hasAllInputDisabled()} className="cancel tag-editor-cancel"
+            onClick={this.props.toggleInputTagEditor}><span><Trans>Cancel</Trans></span></button>
+          <button type="button" disabled={this.hasAllInputDisabled()} className={`primary tag-editor-submit ${this.hasAllInputDisabled() ? "processing" : ""}`}
             onClick={this.handleOnSubmit}>
             <span><Trans>Save</Trans></span>
-          </a>
+          </button>
         </div>
         {!this.state.errorMessage && this.props.isOwner &&
           <div className="message notice">

@@ -375,7 +375,7 @@ class EditResourceDescription extends React.Component {
       <form onKeyDown={this.handleKeyDown} noValidate className="description-editor">
         <div className="form-content" ref={this.elementRef}>
           <div className="input textarea required">
-            <textarea name="description" className="fluid" ref={this.textareaRef}
+            <textarea name="description" className="fluid" aria-required={true} ref={this.textareaRef}
               maxLength="10000" placeholder={this.translate("Enter a description")} value={this.description}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
@@ -391,27 +391,27 @@ class EditResourceDescription extends React.Component {
                 </Tooltip>
               }
               {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
-                <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
+                <button type="button" onClick={event => this.handleDescriptionToggle(event)} className="link no-border lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
                   </Tooltip>
-                </a>
+                </button>
               }
               {this.areResourceTypesEnabled() && this.state.encryptDescription &&
-                <a role="button" onClick={event => this.handleDescriptionToggle(event)} className="lock-toggle">
+                <button type="button" onClick={event => this.handleDescriptionToggle(event)} className="link no-border lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
                     <Icon name="lock"/>
                   </Tooltip>
-                </a>
+                </button>
               }
             </div>
-            <a className={`cancel button ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button"
+            <button type="button" disabled={this.hasAllInputDisabled()} className="cancel"
               onClick={this.handleCancel}><Trans>Cancel</Trans>
-            </a>
-            <a className={`button primary description-editor-submit ${this.hasAllInputDisabled() ? "processing disabled" : ""}`}
-              onClick={this.handleFormSubmit} role="button">
+            </button>
+            <button type="button" disabled={this.hasAllInputDisabled()} className={`primary description-editor-submit ${this.hasAllInputDisabled() ? "processing" : ""}`}
+              onClick={this.handleFormSubmit}>
               <span><Trans>Save</Trans></span>
-            </a>
+            </button>
           </div>
         </div>
       </form>

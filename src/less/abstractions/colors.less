@@ -73,6 +73,10 @@
 @text-error-api-color: @black;
 @text-notification-color: @black;
 
+/* label */
+@label-active-background: @white;
+@label-active-text-color: @black;
+
 /* header */
 @header-main-menu-background: @dark-charcoal;
 @header-main-menu-text-color: @bright-gray-2;
@@ -163,8 +167,17 @@
 @tooltip-text-color: @black;
 
 /* inputs */
+@input-text-color: @black;
+@input-hover-text-color: @black;
+@input-focus-text-color: @black;
+@input-active-text-color: @black;
+@input-disabled-text-color: @black;
 @input-background: @white;
-@input-disabled-background: @anti-flash-white;
+@input-hover-background: @white;
+@input-focus-background: @white;
+@input-active-background: @white;
+@input-disabled-background: @white;
+@input-loading-background: @anti-flash-white;
 @input-infield-background: @cultured-2;
 @input-border: @gray-x11;
 @input-infield-border: @chinese-white;
@@ -172,6 +185,7 @@
 
 /* checkbox */
 @input-checkbox-background: @white;
+@input-checkbox-control-check-color: @black;
 @input-checkbox-disabled-background: @silver-sand;
 @input-checkbox-disabled-image-background: @quick-silver-2;
 @input-checkbox-border: @quick-silver;
@@ -213,7 +227,10 @@
 @select-setup-extension-background: @white;
 @select-hover-background: @gainsboro;
 @select-focus-background: @bleu-de-france;
+@select-active-background: @gainsboro;
+@select-hover-text-color: @black;
 @select-focus-text-color: @white;
+@select-active-text-color: @black;
 @select-border: @chinese-white;
 @select-focus-border: @bleu-de-france;
 
@@ -242,8 +259,16 @@
 @chips-new-background: @bleu-de-france;
 
 /* autocomplete */
+@autocomplete-text-color: @black;
+@autocomplete-details-text-color: @spanish-gray;
+@autocomplete-hover-text-color: @black;
+@autocomplete-hover-details-text-color: @spanish-gray;
+@autocomplete-active-text-color: @black;
+@autocomplete-active-details-text-color: @spanish-gray;
+@autocomplete-selected-text-color: @black;
 @autocomplete-background: @white;
 @autocomplete-hover-background: @gainsboro-2;
+@autocomplete-active-background: @gainsboro-2;
 @autocomplete-selected-background: @cultured-2;
 @autocomplete-border: @gray-x11;
 
@@ -257,25 +282,51 @@
 @workspace-title-border: @chinese-white;
 
 /* left workspace menu */
-@workspace-left-menu-hover-background: @gainsboro-3;
-@workspace-left-menu-focus-border: @bleu-de-france;
-@workspace-left-menu-focus-background: @bleu-de-france;
+@workspace-left-menu-hover-text-color: @black;
 @workspace-left-menu-focus-text-color: @white;
+@workspace-left-menu-selected-text-color: @black;
+@workspace-left-menu-hover-background: @gainsboro-3;
+@workspace-left-menu-focus-background: @bleu-de-france;
+@workspace-left-menu-selected-background: @gainsboro-3;
+@workspace-left-menu-focus-border: @bleu-de-france;
 
 /* dropdown menus */
+@dropdown-item-text-color: @black;
+@dropdown-item-hover-text-color: @black;
+@dropdown-item-focus-text-color: @white;
+@dropdown-item-active-text-color: @black;
 @dropdown-background: @cultured-2;
-@dropdown-profile-background: @white;
-@dropdown-focus-background: @bleu-de-france;
-@dropdown-focus-text-color: @white;
 @dropdown-item-hover-background: @gainsboro-3;
+@dropdown-item-focus-background: @bleu-de-france;
+@dropdown-item-active-background: @gainsboro-3;
+@dropdown-profile-background: @white;
 
-/* grid */
+/* grid header */
+@tableview-header-text-color: @black;
+@tableview-header-background: @bright-gray;
+/* grid header checkbox */
+@tableview-header-checkbox-background: @white;
+@tableview-header-checkbox-control-check-color: @black;
+/* grid content */
+@tableview-content-text-color: @black;
+@tableview-content-even-text-color: @black;
+@tableview-content-hover-text-color: @black;
+@tableview-content-selected-text-color: @black;
 @tableview-background: @white;
 @tableview-even-background: @lotion;
 @tableview-hover-background: @bright-gray-3;
 @tableview-selected-background: @azureish-white;
-@tableview-header-background: @bright-gray;
 @tableview-shadow-color: @white;
+/* grid content checkbox */
+@tableview-content-checkbox-background: @white;
+@tableview-content-even-checkbox-background: @white;
+@tableview-content-hover-checkbox-background: @white;
+@tableview-content-selected-checkbox-background: @white;
+@tableview-content-checkbox-control-check-color: @black;
+@tableview-content-even-checkbox-control-check-color: @black;
+@tableview-content-hover-checkbox-control-check-color: @black;
+@tableview-content-selected-checkbox-control-check-color: @black;
+
 @breadcrumb-background: @lotion;
 
 /* info panel */
@@ -375,6 +426,9 @@
 /* success icon fill */
 @icon-success-color: @islamic-green-2;
 
+/* logo icon fill */
+@icon-logo-color: @black;
+
 /* box shadows */
 @shadow-opacity-hover-black: 0.2;
 @shadow-opacity-hover-white: 0.25;
@@ -385,3 +439,7 @@
 @shadow-opacity-info-panel: 0.3;
 @shadow-focus-color: @button-blue;
 @shadow-drag-color: @gray;
+
+/* accessibility */
+@outline-default-border: 0;
+@outline-primary-border: 0;

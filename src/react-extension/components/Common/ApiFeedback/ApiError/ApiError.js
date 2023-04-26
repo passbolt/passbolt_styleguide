@@ -67,9 +67,9 @@ class ApiError extends Component {
               <Trans>Please try again later or contact your administrator.</Trans>
             </p>
             <div className="accordion-header">
-              <a onClick={this.handleDisplayLogsClick}>
+              <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
                 <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
-              </a>
+              </button>
             </div>
             {this.state.displayLogs &&
               <div className="accordion-content">

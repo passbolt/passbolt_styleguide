@@ -228,11 +228,11 @@ class HomePage extends React.Component {
                 {(isReady && suggestedResources.length > 0) &&
                   suggestedResources.map(resource => (
                     <li className="suggested-resource-entry" key={resource.id}>
-                      <a role="button" className="resource-details" onClick={() => this.handleUseOnThisTabClick(resource)}>
+                      <button type="button" className="resource-details" onClick={() => this.handleUseOnThisTabClick(resource)}>
                         <span className="title">{resource.name}</span>
                         <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
                         <span className="url">{resource.uri}</span>
-                      </a>
+                      </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                         <Icon name="chevron-right"/>
                       </Link>

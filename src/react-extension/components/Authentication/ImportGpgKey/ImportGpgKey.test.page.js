@@ -85,7 +85,7 @@ export default class ImportGpgKeyPage {
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions a');
+    return this._page.container.querySelector('.form-actions button.link');
   }
 
   /**
@@ -93,13 +93,6 @@ export default class ImportGpgKeyPage {
    */
   get isProcessing() {
     return this.verifyButton.classList.contains('processing');
-  }
-
-  /**
-   * Returns true if one can go to the next step
-   */
-  get canGoToNextStep() {
-    return !this.verifyButton.classList.contains('disabled');
   }
 
   /**

@@ -41,14 +41,14 @@ export default class DisplayResourcesListContextualMenuPage {
    * Returns the menu item clickable for the index one
    */
   menuItem(index) {
-    return this._page.container.querySelectorAll('li .row .main-cell-wrapper .main-cell a')[index - 1];
+    return this._page.container.querySelectorAll('li .row .main-cell-wrapper .main-cell button')[index - 1];
   }
 
   /**
    * Returns the name for the index one
    */
   menuName(index) {
-    return this._page.container.querySelectorAll('li .row .main-cell-wrapper .main-cell a')[index - 1].textContent;
+    return this._page.container.querySelectorAll('li .row .main-cell-wrapper .main-cell button')[index - 1].textContent;
   }
 
   /** Click on the component */

@@ -281,7 +281,7 @@ class DisplayResourceDetailsDescription extends React.Component {
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClickEvent} role="button" className="section-opener">
+            <button type="button" onClick={this.handleTitleClickEvent} className="link no-border section-opener">
               <Trans>Description</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -289,15 +289,15 @@ class DisplayResourceDetailsDescription extends React.Component {
               {!this.state.open &&
               <Icon name="caret-right"/>
               }
-            </a>
+            </button>
           </h4>
         </div>
         <div className="accordion-content">
           {this.canEdit() &&
-          <a className="section-action button button-transparent" onClick={this.handleEditClickEvent}>
+          <button type="button" className="link no-border section-action button-transparent" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>Edit</Trans></span>
-          </a>
+          </button>
           }
           {this.state.isSecretDecrypting &&
           <p className="description-content">
@@ -309,9 +309,9 @@ class DisplayResourceDetailsDescription extends React.Component {
           }
           {this.state.error &&
           <p className="description-content error-message">
-            <a className="empty-content" onClick={this.handleRetryDecryptClickEvent}>
+            <button type="button" className="link no-border empty-content" onClick={this.handleRetryDecryptClickEvent}>
               {this.state.errorMsg}
-            </a>
+            </button>
           </p>
           }
           {this.mustShowEmptyDescription() &&

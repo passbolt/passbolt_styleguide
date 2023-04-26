@@ -63,14 +63,14 @@ export default class RenameResourceFolderPage {
    * Returns true it one can cancel the operation
    */
   get canCancel() {
-    return !Boolean(this._page.container.querySelector('.cancel.disabled')).valueOf();
+    return !this._page.container.querySelector('.cancel').hasAttribute('disabled');
   }
 
   /**
    * Returns true it one can close the dialog
    */
   get canClose() {
-    return !Boolean(this._page.container.querySelector('.dialog-close.disabled')).valueOf();
+    return !this._page.container.querySelector('.dialog-close').hasAttribute('disabled');
   }
 
   /**

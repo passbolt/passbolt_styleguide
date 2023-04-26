@@ -40,7 +40,7 @@ export default class LoginPage {
    * Returns the secondary action link element
    */
   get secondaryActionLink() {
-    return this._page.container.querySelector('.form-actions a:last-child');
+    return this._page.container.querySelector('.form-actions button.link');
   }
 
   /**

@@ -118,7 +118,7 @@ class Password extends Component {
    */
   render() {
     return (
-      <div className={`input password ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
+      <div className={`input password ${this.props.disabled ? "disabled" : ""} ${this.state.hasPassphraseFocus ? "" : "no-focus"} ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
         <input id={this.props.id} name={this.props.name}
           maxLength="4096"
           placeholder={this.props.placeholder}
@@ -127,11 +127,11 @@ class Password extends Component {
           onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
           onChange={this.handleInputChange} disabled={this.props.disabled}
           readOnly={this.props.readOnly} autoComplete={this.props.autoComplete}
-          ref={this.props.inputRef}/>
+          aria-required={true} ref={this.props.inputRef}/>
         {this.props.preview &&
           <div className="password-view-wrapper">
-            <a onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
-              className={`password-view infield button button-transparent ${this.props.disabled ? "disabled" : ""}`}>
+            <button type="button" onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
+              className={`password-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}>
               {!this.state.viewPassword &&
                 <Icon name='eye-open'/>
               }
@@ -139,7 +139,7 @@ class Password extends Component {
                 <Icon name='eye-close'/>
               }
               <span className="visually-hidden"><Trans>View</Trans></span>
-            </a>
+            </button>
           </div>
         }
         {this.props.securityToken &&

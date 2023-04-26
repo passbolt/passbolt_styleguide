@@ -324,16 +324,15 @@ class CreateGpgKey extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${disabledClassName} ${processingClassName}`}
-              role="button"
               disabled={this.mustBeDisabled || this.isProcessing}>
               <Trans>Next</Trans>
             </button>
             {this.props.onSecondaryActionClick &&
-            <a onClick={this.props.onSecondaryActionClick}>
+            <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
               {{
                 [CreateGpgKeyVariation.SETUP]: <Trans>Or use an existing private key.</Trans>,
               }[this.props.displayAs]}
-            </a>
+            </button>
             }
           </div>
         </form>

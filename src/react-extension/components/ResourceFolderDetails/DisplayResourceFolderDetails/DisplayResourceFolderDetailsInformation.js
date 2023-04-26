@@ -136,7 +136,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClickEvent} role="button">
+            <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
               <Trans>Information</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -144,7 +144,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
               {!this.state.open &&
               <Icon name="caret-right"/>
               }
-            </a>
+            </button>
           </h4>
         </div>
         <div className="accordion-content">
@@ -172,9 +172,9 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
             <li className="location">
               <span className="label"><Trans>Location</Trans></span>
               <span className="value">
-                <a onClick={this.handleFolderParentClickEvent} className={`folder-link ${!this.props.context.folders ? "disabled" : ""}`}>
+                <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
                   <Icon name="folder"/> {folderParentName}
-                </a>
+                </button>
               </span>
             </li>
           </ul>

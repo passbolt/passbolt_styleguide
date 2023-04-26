@@ -85,7 +85,7 @@ export class FilterResourcesByFoldersItemPageObject {
    * Returns the folder item caret for the index one
    */
   itemCaret(index) {
-    return this._container.querySelectorAll('li.folder-item .row .main-cell-wrapper .main-cell a')[index - 1].querySelector('span svg');
+    return this._container.querySelectorAll('li.folder-item .row .main-cell-wrapper .main-cell button')[index - 1].querySelector('span svg');
   }
 
   /**
@@ -120,7 +120,7 @@ export class FilterResourcesByFoldersItemPageObject {
    * Returns the folder item for the index one
    */
   moreButton(index) {
-    return this._container.querySelectorAll('li.folder-item .row .right-cell.more-ctrl')[index - 1].querySelector('a');
+    return this._container.querySelectorAll('li.folder-item .row .right-cell.more-ctrl')[index - 1].querySelector('button');
   }
 
   /**
