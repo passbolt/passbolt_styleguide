@@ -13,7 +13,7 @@
  */
 
 /** user inputs max length */
-export const    USER_INPUT_MAX_LENGTH = 128;
+export const USER_INPUT_MAX_LENGTH = 128;
 /** Resource group name max length */
 export const RESOURCE_GROUP_NAME_MAX_LENGTH = 50;
 /** Resource name max length */

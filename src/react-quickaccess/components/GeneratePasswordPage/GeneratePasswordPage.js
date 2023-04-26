@@ -239,7 +239,6 @@ class GeneratePasswordPage extends React.Component {
               <button
                 type="submit"
                 className={`button primary big full-width ${this.state.processing ? 'processing' : ''}`}
-                role="button"
                 disabled={this.state.processing || this.isPasswordEmpty()}>
                 <Trans>Apply</Trans>
                 {this.state.processing &&

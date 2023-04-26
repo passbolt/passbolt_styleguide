@@ -233,8 +233,9 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="username" className={`${this.canCopyUsername() ? "" : "disabled"}`}
-                  onClick={this.handleUsernameClickEvent}><span><Trans>Copy username</Trans></span></a>
+                <button type="button" id="username" className="link no-border"
+                  disabled={!this.canCopyUsername()}
+                  onClick={this.handleUsernameClickEvent}><span><Trans>Copy username</Trans></span></button>
               </div>
             </div>
           </div>
@@ -243,7 +244,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="password" onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></a>
+                <button type="button" className="link no-border" id="password" onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></button>
               </div>
             </div>
           </div>
@@ -252,8 +253,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="username" className={`${this.canCopyUri() ? "" : "disabled"}`}
-                  onClick={this.handleUriClickEvent}><span><Trans>Copy URI</Trans></span></a>
+                <button type="button" id="username" className="link no-border" disabled={!this.canCopyUri()}
+                  onClick={this.handleUriClickEvent}><span><Trans>Copy URI</Trans></span></button>
               </div>
             </div>
           </div>
@@ -262,7 +263,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="permalink" onClick={this.handlePermalinkClickEvent}><span><Trans>Copy permalink</Trans></span></a>
+                <button className="link no-border" type="button" id="permalink" onClick={this.handlePermalinkClickEvent}><span><Trans>Copy permalink</Trans></span></button>
               </div>
             </div>
           </div>
@@ -271,9 +272,12 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="permalink"
-                  className={`${this.safeUri ? "" : "disabled"}`}
-                  onClick={this.handleGoToResourceUriClick}><span><Trans>Open URI in a new Tab</Trans></span></a>
+                <button
+                  type="button"
+                  id="permalink"
+                  className="link no-border"
+                  disabled={!this.safeUri}
+                  onClick={this.handleGoToResourceUriClick}><span><Trans>Open URI in a new Tab</Trans></span></button>
               </div>
             </div>
           </div>
@@ -282,8 +286,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a id="edit" className={`${this.canUpdate() ? "" : "disabled"}`}
-                  onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></a>
+                <button type="button" id="edit" className="link no-border" disabled={!this.canUpdate()}
+                  onClick={this.handleEditClickEvent}><span><Trans>Edit</Trans></span></button>
               </div>
             </div>
           </div>
@@ -292,9 +296,11 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
-                  id="share" className={`${this.canShare() ? "" : "disabled"}`}
-                  onClick={this.handleShareClickEvent}><span><Trans>Share</Trans></span></a>
+                <button
+                  type="button"
+                  id="share" className="link no-border"
+                  disabled={!this.canShare()}
+                  onClick={this.handleShareClickEvent}><span><Trans>Share</Trans></span></button>
               </div>
             </div>
           </div>
@@ -303,9 +309,11 @@ class DisplayResourcesListContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a
-                  id="delete" className={`${this.canUpdate() ? "" : "disabled"}`}
-                  onClick={this.handleDeleteClickEvent}><span><Trans>Delete</Trans></span></a>
+                <button
+                  type="button"
+                  id="delete" className="link no-border"
+                  disabled={!this.canUpdate()}
+                  onClick={this.handleDeleteClickEvent}><span><Trans>Delete</Trans></span></button>
               </div>
             </div>
           </div>

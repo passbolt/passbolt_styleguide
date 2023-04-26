@@ -247,6 +247,7 @@ class InFormCallToActionField {
       const identifierToMatch = this.iframeId;
       if (iframe.id === identifierToMatch) {
         iframe.parentNode.removeChild(iframe);
+        port.emit("passbolt.port.disconnect", "InFormCallToAction");
       }
     });
   }

@@ -55,9 +55,9 @@ class DisplayExpiredAccountRecovery extends Component {
           </p>
         </div>
         <div className="submit-wrapper clearfix">
-          <a className="button primary" role="button" onClick={this.handleClose}>
+          <button type="button" className="primary" onClick={this.handleClose}>
             <Trans>Ok</Trans>
-          </a>
+          </button>
         </div>
       </DialogWrapper>
     );

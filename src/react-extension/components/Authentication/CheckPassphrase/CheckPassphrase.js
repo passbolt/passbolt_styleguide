@@ -329,17 +329,16 @@ class CheckPassphrase extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              role="button"
               disabled={this.isProcessing}>
               <Trans>Verify</Trans>
             </button>
             {this.props.onSecondaryActionClick &&
-            <a onClick={this.props.onSecondaryActionClick}>
+            <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
               {{
                 [CheckPassphraseVariations.SETUP]: <Trans>I lost my passphrase, generate a new private key.</Trans>,
                 [CheckPassphraseVariations.RECOVER]: <Trans>Help, I lost my passphrase.</Trans>,
               }[this.props.displayAs]}
-            </a>
+            </button>
             }
           </div>
         </form>

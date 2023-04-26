@@ -199,7 +199,7 @@ class FilterResourcesByTags extends React.Component {
                 <div className="main-cell">
                   <h3>
                     <span className="folders-label" onClick={this.handleTitleClickEvent} onContextMenu={this.handleTitleContextualMenuEvent}>
-                      <a role="button">
+                      <button type="button" className="link no-border">
                         <>
                           {this.state.open &&
                             <Icon name="caret-down"/>
@@ -209,13 +209,13 @@ class FilterResourcesByTags extends React.Component {
                           }
                         </>
                         {this.state.title}
-                      </a>
+                      </button>
                     </span>
                   </h3>
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <a className={`button ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></a>
+                <button type="button" className={`link no-border ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></button>
               </div>
             </div>
           </li>

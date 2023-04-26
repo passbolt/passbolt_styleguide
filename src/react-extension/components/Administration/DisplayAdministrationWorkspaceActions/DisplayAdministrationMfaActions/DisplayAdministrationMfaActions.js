@@ -109,10 +109,10 @@ class DisplayAdministrationMfaActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
-              </a>
+              </button>
             </li>
           </div>
         </div>

@@ -28,6 +28,7 @@ export const AdminUserDirectoryContext = React.createContext({
   getCurrentSettings: () => {}, // Returns settings saved
   getSettings: () => {}, // Returns settings for UI changes
   setSettings: () => {}, // Set the settings object with changes
+  hadDisabledSettings: () => {}, // returns true if the config is present even if disabled
   getUsers: () => {}, // Returns users for UI changes
   hasSettingsChanges: () => {}, // Check if the policy has changes
   findUserDirectorySettings: () => {}, // Find the current user directory settings and store it in the state
@@ -78,6 +79,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
       setSettings: this.setSettings.bind(this),  // Set the settings object with changes
+      hadDisabledSettings: this.hadDisabledSettings.bind(this), // returns true if the config is present even if disabled
       findUserDirectorySettings: this.findUserDirectorySettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
@@ -181,9 +183,18 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    * @params {ReactEvent} The react event
    * @returns {void}
    */
-  async setSettings(key, value) {
+  setSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings, {[key]: value});
-    await this.setState({settings: newSettings});
+    this.setState({settings: newSettings});
+  }
+
+  /**
+   * returns true if the config is present even if disabled
+   * @returns {boolean}
+   */
+  hadDisabledSettings() {
+    const settings = this.getCurrentSettings();
+    return Boolean(settings?.port) && Boolean(settings?.host) && !settings?.userDirectoryToggle;
   }
 
   /**

@@ -128,14 +128,6 @@ class SsoLogin extends Component {
   }
 
   /**
-   * Returns true if SSO is enabled and configured for Azure.
-   * @return {bool}
-   */
-  get isAzureSsoEnabled() {
-    return this.ssoProviderData?.id === "azure";
-  }
-
-  /**
    * Returns the provider information of the current SSO provider configured.
    * @return {object}
    */
@@ -156,17 +148,15 @@ class SsoLogin extends Component {
           <p className="login-user-email">{this.username}</p>
         </div>
         <div className="form-actions sso-login-form">
-          {this.isAzureSsoEnabled &&
-            <a className={`button sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
-              <span className="provider-logo">
-                {ssoProviderData.icon}
-              </span>
-              {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
-            </a>
-          }
-          <a onClick={this.handleSwitchToPassphrase}>
+          <button type="button" className={`sso-login-button ${this.isProcessing ? "disabled" : ""} ${ssoProviderData.id}`} onClick={this.handleSignInWithSso} disabled={this.isProcessing} >
+            <span className="provider-logo">
+              {ssoProviderData.icon}
+            </span>
+            {this.props.t(`Sign in with {{providerName}}`, {providerName: ssoProviderData.name})}
+          </button>
+          <button className="link" type="button" onClick={this.handleSwitchToPassphrase}>
             <Trans>Sign in with my passphrase.</Trans>
-          </a>
+          </button>
         </div>
       </div>
     );

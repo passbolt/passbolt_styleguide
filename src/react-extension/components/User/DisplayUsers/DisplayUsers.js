@@ -412,7 +412,7 @@ class DisplayUsers extends React.Component {
                     </th>
                     {this.hasAttentionRequiredColumn() &&
                     <th className="s-cell attention-required">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "attentionRequired")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Icon name="exclamation" baseline={true}/>
@@ -426,11 +426,11 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     }
                     <th className="cell-name l-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "name")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Name</Trans>
@@ -444,10 +444,10 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-username l-cell username sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "username")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Username</Trans>
@@ -461,10 +461,10 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-role m-cell role sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "role.name")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "role.name")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Role</Trans>
@@ -478,10 +478,10 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-modified m-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Modified</Trans>
@@ -495,10 +495,10 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     <th className="cell-last_logged_in m-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "last_logged_in")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Last logged in</Trans>
@@ -512,12 +512,12 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
 
                     </th>
                     {this.hasMfaColumn() &&
                       <th className="cell-is_mfa_enabled m-cell sortable">
-                        <a onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
+                        <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "is_mfa_enabled")}>
                           <div className="cell-header">
                             <span className="cell-header-text">
                               <Trans>MFA</Trans>
@@ -531,12 +531,12 @@ class DisplayUsers extends React.Component {
                               }
                             </span>
                           </div>
-                        </a>
+                        </button>
                       </th>
                     }
                     {this.hasAccountRecoveryColumn() &&
                     <th className="cell-account_recovery_user_setting_status m-cell sortable">
-                      <a onClick={ev => this.handleSortByColumnClick(ev, "account_recovery_user_setting.status")}>
+                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "account_recovery_user_setting.status")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
                             <Trans>Account recovery</Trans>
@@ -550,7 +550,7 @@ class DisplayUsers extends React.Component {
                             }
                           </span>
                         </div>
-                      </a>
+                      </button>
                     </th>
                     }
                   </tr>

@@ -51,14 +51,14 @@ export default class DisplayAdministrationAccountRecoveryActionsPage {
    * Returns the save button
    */
   get saveButton() {
-    return this._page.container.querySelectorAll('li a')[0];
+    return this._page.container.querySelectorAll('li button')[0];
   }
 
   /**
    * Returns the reset button
    */
   get resetButton() {
-    return this._page.container.querySelectorAll('li a')[1];
+    return this._page.container.querySelectorAll('li button')[1];
   }
 
   /**

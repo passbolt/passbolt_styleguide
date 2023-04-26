@@ -63,9 +63,14 @@ Template.propTypes = {
   context: PropTypes.object,
 };
 
+const defaultParameters = {
+  css: "api_main"
+};
+
 export const Default = Template.bind({});
 Default.args = defaultProps();
 Default.decorators = decorators;
+Default.parameters = defaultParameters;
 
 export const withProfesionnalDomains = Template.bind({});
 withProfesionnalDomains.args = defaultProps();

@@ -49,20 +49,18 @@ class AskForAuthenticationHelpCredentialLost extends Component {
             <button
               onClick={this.props.onPrimaryActionClick.bind(this)}
               className="button primary big full-width"
-              role="button"
               rel="noopener noreferrer">
               <Trans>Request help</Trans>
             </button>
-            <a onClick={this.props.onSecondaryActionClick.bind(this)}>
+            <button type="button" className="link" onClick={this.props.onSecondaryActionClick.bind(this)}>
               <Trans>I want to try again.</Trans>
-            </a>
+            </button>
           </>
           }
           {!this.props.canRequestHelp &&
           <button
             onClick={this.props.onSecondaryActionClick.bind(this)}
             className="button primary big full-width"
-            role="button"
             rel="noopener noreferrer">
             <Trans>I want to try again.</Trans>
           </button>

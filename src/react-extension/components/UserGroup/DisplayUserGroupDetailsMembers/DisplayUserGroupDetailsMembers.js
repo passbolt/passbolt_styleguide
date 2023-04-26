@@ -98,18 +98,18 @@ class DisplayUserGroupDetailsMembers extends React.Component {
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClicked}  role="button">
+            <button type="button" className="link no-border" onClick={this.handleTitleClicked}>
               <Trans>Group members</Trans>
               {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
-            </a>
+            </button>
           </h4>
         </div>
         <div className="accordion-content">
-          <a className="section-action button button-transparent" onClick={this.handleEditGroup}>
+          <button type="button" className="section-action button-transparent" onClick={this.handleEditGroup}>
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>Edit</Trans></span>
-          </a>
+          </button>
           {this.isLoading() &&
           <div className="processing-wrapper">
             <Icon name="spinner"/>

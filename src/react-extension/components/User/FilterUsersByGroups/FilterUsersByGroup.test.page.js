@@ -112,7 +112,7 @@ class TitleHeaderPageObject {
    * Returns the clickable area of the filter
    */
   get filterButton() {
-    return this._container.querySelector('.row.title .dropdown.right-cell.more-ctrl a');
+    return this._container.querySelector('.row.title .dropdown.right-cell.more-ctrl button');
   }
 
   /** Click on the component */
@@ -157,7 +157,7 @@ class DisplayGroupPageObject {
    * Returns the clickable area of the more group
    */
   get moreButton() {
-    return this._container.querySelector('.group-item .dropdown.right-cell.more-ctrl a');
+    return this._container.querySelector('.group-item .dropdown.right-cell.more-ctrl button');
   }
 
   /**
@@ -193,7 +193,7 @@ class DisplayGroupPageObject {
    * @param index
    */
   group(index) {
-    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.row .main-cell-wrapper .main-cell a');
+    return this.list.querySelectorAll('.group-item')[index - 1].querySelector('.row .main-cell-wrapper .main-cell button');
   }
 
   /**

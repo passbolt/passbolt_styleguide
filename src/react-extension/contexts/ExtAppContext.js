@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.2.0
+ */
+
 import React from "react";
 import AppContext from "./AppContext";
 import PropTypes from "prop-types";
@@ -45,7 +59,6 @@ class ExtAppContextProvider extends React.Component {
 
   initEventHandlers() {
     this.props.storage.onChanged.addListener(this.handleStorageChange);
-    this.props.port.on('passbolt.react-app.is-ready', this.handleIsReadyEvent);
   }
 
   getDefaultState(props) {
@@ -64,6 +77,7 @@ class ExtAppContextProvider extends React.Component {
       userSettings: null,
       extensionVersion: null, // The extension version
       locale: null, // The locale
+      isSessionLogoutByUser: false, // Is the session logout by the user
 
       setContext: context => {
         this.setState(context);
@@ -140,7 +154,9 @@ class ExtAppContextProvider extends React.Component {
 
       // Navigation
       onLogoutRequested: () => this.onLogoutRequested(),
-      onCheckIsAuthenticatedRequested: () => this.onCheckIsAuthenticatedRequested(),
+
+      // Expired session
+      onExpiredSession: this.onExpiredSession.bind(this),
 
       // Subscription
       onGetSubscriptionKeyRequested: () => this.onGetSubscriptionKeyRequested(),
@@ -325,14 +341,22 @@ class ExtAppContextProvider extends React.Component {
    * Listen when the user wants to logout.
    */
   onLogoutRequested() {
-    this.props.port.request('passbolt.auth.navigate-to-logout');
+    const requestLogout = () => this.props.port.request('passbolt.auth.navigate-to-logout');
+    // Indicate that the session is logout by the user before requesting a logout
+    this.setState({isSessionLogoutByUser: true}, requestLogout);
   }
 
   /**
-   * Whenever the user authentication status must be checked
+   * Listen when the user session is expired.
+   * @param {function} callback The callback to execute
    */
-  async onCheckIsAuthenticatedRequested() {
-    return await this.props.port.request("passbolt.auth.is-authenticated", {requestApi: false});
+  onExpiredSession(callback) {
+    const displayExpiredSession = () => {
+      if (!this.state.isSessionLogoutByUser) {
+        callback();
+      }
+    };
+    this.props.port.on('passbolt.auth.after-logout', displayExpiredSession);
   }
 
   /**

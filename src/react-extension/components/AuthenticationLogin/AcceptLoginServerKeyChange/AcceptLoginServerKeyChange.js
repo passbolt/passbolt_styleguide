@@ -162,7 +162,6 @@ class AcceptLoginServerKeyChange extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${disabledClassName}`}
-              role="button"
               disabled={this.mustBeDisabled}>
               <Trans>Accept new key</Trans>
             </button>

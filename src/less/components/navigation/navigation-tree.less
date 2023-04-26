@@ -6,8 +6,6 @@
     }
     .row {
         .main-cell-wrapper {
-            width: calc(100% - 4.9rem);
-
             .main-cell {
                 span {
                     .ellipsis();
@@ -41,9 +39,10 @@
                     display: none;
                 }
 
-                a {
+                button {
                     padding: 0;
                     margin: 0 0 0 2.4rem;
+                    width: calc(100% - 3.2rem);
 
                     .tag-name {
                         margin-left: 1rem;
@@ -61,7 +60,7 @@
                     margin:0;
 
                     .folders-label {
-                        a {
+                        button {
                           cursor: pointer;
                           padding: 0;
                           margin-left: 1.6rem;
@@ -87,7 +86,7 @@
                     text-shadow: none;
                     font-weight: normal;
                 }
-                a:before {
+                button:before {
                     color: @text-light-color;
                 }
             }

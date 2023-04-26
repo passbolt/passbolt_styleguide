@@ -53,7 +53,9 @@ class Password extends Component {
    * @params {ReactEvent} The react event.
    */
   handleInputChange(event) {
-    this.props.onChange(event);
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
   }
 
   /**
@@ -116,7 +118,7 @@ class Password extends Component {
    */
   render() {
     return (
-      <div className={`input password ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
+      <div className={`input password ${this.props.disabled ? "disabled" : ""} ${this.state.hasPassphraseFocus ? "" : "no-focus"} ${this.props.securityToken ? "security" : ""}`} style={this.props.securityToken ? this.passphraseInputStyle : undefined}>
         <input id={this.props.id} name={this.props.name}
           maxLength="4096"
           placeholder={this.props.placeholder}
@@ -125,11 +127,11 @@ class Password extends Component {
           onFocus={this.handlePasswordInputFocus} onBlur={this.handlePasswordInputBlur}
           onChange={this.handleInputChange} disabled={this.props.disabled}
           readOnly={this.props.readOnly} autoComplete={this.props.autoComplete}
-          ref={this.props.inputRef}/>
+          aria-required={true} ref={this.props.inputRef}/>
         {this.props.preview &&
           <div className="password-view-wrapper">
-            <a onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
-              className={`password-view infield button button-transparent ${this.props.disabled ? "disabled" : ""}`}>
+            <button type="button" onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
+              className={`password-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}>
               {!this.state.viewPassword &&
                 <Icon name='eye-open'/>
               }
@@ -137,7 +139,7 @@ class Password extends Component {
                 <Icon name='eye-close'/>
               }
               <span className="visually-hidden"><Trans>View</Trans></span>
-            </a>
+            </button>
           </div>
         }
         {this.props.securityToken &&
@@ -162,14 +164,14 @@ Password.propTypes = {
   context: PropTypes.any, // The application context
   id: PropTypes.string, // The id of the the input
   name: PropTypes.string, // The name of the the input
-  value: PropTypes.string.isRequired, // The value of the input
+  value: PropTypes.string, // The value of the input
   placeholder: PropTypes.string, // Placeholder of the input
   autoComplete: PropTypes.string, // The auto complete of the input
   inputRef: PropTypes.object, // The forwarded ref of the input
   disabled: PropTypes.bool, // Disabled input
   readOnly: PropTypes.bool, // Disabled input
   preview: PropTypes.bool, // Display preview button for the password
-  onChange: PropTypes.func.isRequired, // Function onChange of the input
+  onChange: PropTypes.func, // Function onChange of the input
   onKeyUp: PropTypes.func, // Function onKeyUp of the input
   securityToken: PropTypes.shape({
     code: PropTypes.string,

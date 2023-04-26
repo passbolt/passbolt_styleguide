@@ -138,7 +138,7 @@ class DisplayResourceDetailsComment extends React.Component {
       <div className={`comments accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
         <div className="accordion-header">
           <h4>
-            <a onClick={this.handleTitleClickedEvent} role="button">
+            <button className="link no-border" type="button" onClick={this.handleTitleClickedEvent}>
               <Trans>Comments</Trans>
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -146,19 +146,19 @@ class DisplayResourceDetailsComment extends React.Component {
               {!this.state.open &&
               <Icon name="caret-right"/>
               }
-            </a>
+            </button>
           </h4>
         </div>
         { this.state.open &&
           <div className="accordion-content">
             {this.state.canAddByIcon &&
-              <a
-                className="section-action button button-transparent"
-                href="#"
+              <button
+                type="button"
+                className="section-action button-transparent"
                 onClick={this.handleRequestedAddEvent}>
                 <Icon name="plus-circle"/>
                 <span className="visuallyhidden"><Trans>Create</Trans></span>
-              </a>
+              </button>
             }
 
             { this.state.canAdd &&

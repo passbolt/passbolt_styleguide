@@ -159,7 +159,7 @@ export default class DisplayMfaAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
   }
 
   /**
@@ -237,7 +237,7 @@ export default class DisplayMfaAdministrationPage {
    * @returns {boolean}
    */
   isSaveButtonEnabled() {
-    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+    return !this.toolbarActionsSaveButton.hasAttribute("disabled");
   }
 
   /**

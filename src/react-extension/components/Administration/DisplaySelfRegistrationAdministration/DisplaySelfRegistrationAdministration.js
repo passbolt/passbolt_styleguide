@@ -277,7 +277,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
 
   /**
    * we cannot delete a row if we have only one domaine
-   * @returns {void}
+   * @returns {boolean}
    */
   canDelete() {
     return this.allowedDomains.size > 1;
@@ -329,7 +329,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
                   <div className="domain-row">
                     <input type="text" className="full-width" onChange={this.handleInputChange} id={`input-${key}`} name={key} value={this.allowedDomains.get(key)}
                       disabled={!this.hasAllInputDisabled} ref={this.dynamicRefs.setRef(key)} placeholder={this.props.t("domain")} />
-                    <a className={`button button-icon ${this.canDelete() || 'disabled'}`} id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><Icon name="trash"/></a>
+                    <button type="button" disabled={!this.canDelete()} className="button-icon" id={`delete-${key}`} onClick={() => this.handleDeleteRow(key)}><Icon name="trash"/></button>
                   </div>
                   {this.hasWarnings() && this.state.warnings.get(key) &&
                    <div id="domain-name-input-feedback" className="warning-message"><Trans>{this.state.warnings.get(key)}</Trans></div>
@@ -341,10 +341,10 @@ class DisplaySelfRegistrationAdministration extends React.Component {
               ))
             }
             <div className="domain-add">
-              <a className="button" onClick={this.handleAddRowClick}>
+              <button type="button" className="full-length" onClick={this.handleAddRowClick}>
                 <Icon name="add"/>
                 <span><Trans>Add</Trans></span>
-              </a>
+              </button>
             </div>
           </>}
         </div>

@@ -129,17 +129,17 @@ class DisplayUserDetails extends React.Component {
             <h3>
               <div className="title-wrapper">
                 <span className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</span>
-                <a className="title-link" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
+                <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this user")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden"><Trans>Copy the link to this user</Trans></span>
-                </a>
+                </button>
               </div>
               <span className="subtitle">{this.user.username}</span>
             </h3>
-            <a className="dialog-close" onClick={this.handleCloseClick}>
+            <button type="button" className="dialog-close button-transparent" onClick={this.handleCloseClick}>
               <Icon name="close"/>
               <span className="visuallyhidden"><Trans>Close</Trans></span>
-            </a>
+            </button>
           </div>
           <DisplayUserDetailsInformation/>
           {this.user.active && <DisplayUserDetailsGroups/>}

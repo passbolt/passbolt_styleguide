@@ -196,16 +196,16 @@ class GenerateResourcePassword extends Component {
                     value={this.state.password}
                     onChange={this.handleInputChange}
                     disabled={this.state.processing}/>
-                  <a onClick={this.handleGeneratePassword}
-                    className={`password-generate button-icon button ${this.state.processing ? 'disabled' : ''}`}>
+                  <button type="button" onClick={this.handleGeneratePassword}
+                    className={`password-generate button-icon ${this.state.processing ? 'disabled' : ''}`}>
                     <Icon name='dice' big={true}/>
                     <span className="visually-hidden"><Trans>Generate</Trans></span>
-                  </a>
-                  <a onClick={this.handleCopyPassword}
-                    className={`copy-to-clipboard button button-icon ${this.state.processing ? 'disabled' : ''}`}>
+                  </button>
+                  <button type="button" onClick={this.handleCopyPassword}
+                    className={`copy-to-clipboard button-icon ${this.state.processing ? 'disabled' : ''}`}>
                     <Icon name='copy-to-clipboard' big={true}/>
                     <span className="visually-hidden"><Trans>View</Trans></span>
-                  </a>
+                  </button>
                 </div>
                 <PasswordComplexity entropy={passwordEntropy}/>
               </div>

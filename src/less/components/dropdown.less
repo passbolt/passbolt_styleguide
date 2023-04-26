@@ -4,7 +4,7 @@
     position: relative;
     margin-right: .8rem;
 
-    .button {
+    button {
         &.open {
             z-index: 801;
             background: @dropdown-background;
@@ -71,57 +71,46 @@
             border-radius: 0 .4rem .4rem .4rem;
         }
 
+
         // Separator of contextual menu item
         .separator-after {
             border-bottom: 1px solid @default-border;
             margin-bottom: .4rem;
-            a {
+            button {
                 margin-bottom: .4rem;
             }
         }
 
         li {
             // Dropdown menu item
-            a {
+            button.link {
                 display: flex;
                 align-items: center;
                 border: 0;
                 padding: .8rem 1.6rem;
-
-                // Disabled dropdown menu item
-                &.disabled {
-
-                    &:hover {
-                        background: @dropdown-background;
-                    }
-
-                    &:focus {
-                      background: @dropdown-background;
-                    }
-
-                    &:active {
-                        box-shadow: none;
-                    }
-                }
+                float: inherit;
+                margin-right: inherit;
+                width: 100%;
+                box-shadow: none;
 
                 // Dropdown menu item hover
                 &:hover {
-                    color: @default-text-color;
+                    color: @dropdown-item-hover-text-color;
                     background: @dropdown-item-hover-background;
                 }
 
                 // Dropdown menu item focus
                 &:focus {
-                    color: @dropdown-focus-text-color;
-                    background: @dropdown-focus-background;
+                    color: @dropdown-item-focus-text-color;
+                    background: @dropdown-item-focus-background;
                     box-shadow: 0 0 .4rem @shadow-focus-color;
-                    outline: none;
+                    outline: @outline-default-border;
                 }
 
                 // Dropdown menu item pressed
                 &:active {
-                    color: @default-text-color;
-                    background: @dropdown-item-hover-background;
+                    color: @dropdown-item-active-text-color;
+                    background: @dropdown-item-active-background;
                     box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
                 }
             }

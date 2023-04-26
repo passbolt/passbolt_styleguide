@@ -161,11 +161,11 @@ class ChooseAccountRecoveryPreference extends Component {
               <Trans>Next</Trans>
             </button>
             {this.props.canGenerateNewKeyInstead &&
-            <a className={`generate-new-key ${this.isProcessing ? "disabled" : ""}`}
+            <button type="button" className="generate-new-key link"
               onClick={this.props.onGenerateNewKeyInstead}
-              role="button">
+              disabled={this.isProcessing}>
               <Trans>Generate new key instead</Trans>
-            </a>
+            </button>
             }
           </div>
         </form>

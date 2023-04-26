@@ -103,7 +103,7 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></a>
+                <button className="link no-border" type="button" onClick={this.handleCreateFolderItemClickEvent}><span><Trans>Create folder</Trans></span></button>
               </div>
             </div>
           </div>
@@ -112,12 +112,12 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <a className={`${this.canExport() ? "" : "disabled"}`}
+                <button type="button" disabled={!this.canExport()} className="link no-border"
                   onClick={this.handleExportFolderItemClickEvent}>
                   <span>
                     <Trans>Export all</Trans>
                   </span>
-                </a>
+                </button>
               </div>
             </div>
           </div>

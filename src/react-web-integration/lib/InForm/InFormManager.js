@@ -18,6 +18,7 @@ import InFormMenuField from "./InformMenuField";
 import {fireEvent} from "@testing-library/dom/dist/events";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import DomUtils from "../Dom/DomUtils";
+import debounce from "debounce-promise";
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -145,8 +146,10 @@ class InFormManager {
         this.handleInformCallToActionClickEvent();
       }
     };
+    // Debounce the mutation observer to avoid too many requests
+    const updateAuthenticationFieldsDebounce = debounce(updateAuthenticationFields, 1000, {leading: true, accumulate: false});
     // Search again for authentication callToActionFields to attach when the DOM changes
-    this.mutationObserver = new MutationObserver(updateAuthenticationFields);
+    this.mutationObserver = new MutationObserver(updateAuthenticationFieldsDebounce);
     this.mutationObserver.observe(document.body, {attributes: true, childList: true, subtree: true});
   }
 

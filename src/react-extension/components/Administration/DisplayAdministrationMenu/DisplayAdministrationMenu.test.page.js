@@ -51,14 +51,14 @@ export default class DisplayAdministrationMenuPage {
    * Returns the menu
    */
   get menuSelected() {
-    return this._page.container.querySelector('.row.selected .main-cell-wrapper .main-cell a span').textContent;
+    return this._page.container.querySelector('.row.selected .main-cell-wrapper .main-cell button span').textContent;
   }
 
   /**
    * Returns the mfa menu
    */
   get mfa() {
-    return this._page.container.querySelector('#mfa_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#mfa_menu .row .main-cell-wrapper .main-cell button');
   }
 
 
@@ -66,63 +66,63 @@ export default class DisplayAdministrationMenuPage {
    * Returns the mfa policy menu
    */
   get mfaPolicy() {
-    return this._page.container.querySelector('#mfa_policy_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#mfa_policy_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the user directory menu
    */
   get userDirectory() {
-    return this._page.container.querySelector('#user_directory_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#user_directory_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the email notifications menu
    */
   get emailNotifications() {
-    return this._page.container.querySelector('#email_notification_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#email_notification_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the subscription menu
    */
   get subscription() {
-    return this._page.container.querySelector('#subscription_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#subscription_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the internationalization menu
    */
   get internationalization() {
-    return this._page.container.querySelector('#internationalization_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#internationalization_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the account recovery menu
    */
   get accountRecovery() {
-    return this._page.container.querySelector('#account_recovery_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#account_recovery_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the account recovery menu
    */
   get smtpSettings() {
-    return this._page.container.querySelector('#smtp_settings_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#smtp_settings_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the self registration menu
    */
   get selfRegistration() {
-    return this._page.container.querySelector('#self_registration_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#self_registration_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
    * Returns the Single Sign-On menu
    */
   get ssoSettings() {
-    return this._page.container.querySelector('#sso_menu .row .main-cell-wrapper .main-cell a');
+    return this._page.container.querySelector('#sso_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**

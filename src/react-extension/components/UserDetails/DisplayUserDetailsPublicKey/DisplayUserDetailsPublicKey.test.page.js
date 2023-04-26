@@ -84,7 +84,7 @@ export default class DisplayUserDetailsPublicKeyPage {
    * Toggle the collapse / expand component hbehavior
    */
   async toggleCollapse() {
-    const element = this._page.container.querySelector('a');
+    const element = this._page.container.querySelector('button');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -94,7 +94,7 @@ export default class DisplayUserDetailsPublicKeyPage {
    * Copy the user public key
    */
   async copyPublicKey() {
-    const element = this._page.container.querySelector('.button.copy-public-key');
+    const element = this._page.container.querySelector('button.copy-public-key');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

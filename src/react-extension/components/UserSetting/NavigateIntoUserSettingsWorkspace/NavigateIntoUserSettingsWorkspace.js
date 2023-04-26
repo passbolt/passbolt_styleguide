@@ -68,9 +68,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('profile') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsProfileRequested}>
                     <span><Trans>Profile</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -80,9 +80,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('keys') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsKeysRequested}>
                     <span><Trans>Keys inspector</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -92,9 +92,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('passphrase') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsPassphraseRequested}>
                     <span><Trans>Passphrase</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -104,9 +104,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('security-token') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsSecurityTokenRequested}>
                     <span><Trans>Security token</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -117,9 +117,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('theme') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsThemeRequested}>
                     <span><Trans>Theme</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -131,12 +131,12 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 className={`row ${isSelected('mfa') ? 'selected' : ''}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
+                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMfaRequested}>
                       <span><Trans>Multi Factor Authentication</Trans></span>
                       {this.props.hasPendingMfaChoice &&
                       <Icon name="exclamation" baseline={true}/>
                       }
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -148,14 +148,14 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('account-recovery') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsAccountRecoveryRequested}>
                     <span>
                       <Trans>Account Recovery</Trans>
                     </span>
                     {this.props.hasPendingAccountRecoveryChoice &&
                       <Icon name="exclamation" baseline={true}/>
                     }
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -167,9 +167,9 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
               className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
                     <span><Trans>Mobile setup</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

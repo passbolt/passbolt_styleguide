@@ -194,6 +194,22 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
+   * Returns the client_id input HTML element
+   * @returns {HTMLElement}
+   */
+  get google_client_id() {
+    return this.select(".sso-settings #sso-google-client-id-input");
+  }
+
+  /**
+   * Returns the client_secret input HTML element
+   * @returns {HTMLElement}
+   */
+  get google_client_secret() {
+    return this.select(".sso-settings #sso-google-secret-input");
+  }
+
+  /**
    * Returns the client_secret input HTML element
    * @returns {HTMLElement}
    */
@@ -206,7 +222,7 @@ export default class ManageSsoSettingsPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveSettingsButton() {
-    return this.selectAll(".actions-wrapper .actions a")[0];
+    return this.selectAll(".actions-wrapper .actions button")[0];
   }
 
   /**

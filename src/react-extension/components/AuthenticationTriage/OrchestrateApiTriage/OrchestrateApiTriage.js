@@ -66,6 +66,7 @@ class OrchestrateApiTriage extends Component {
         return <IdentifyWithSso
           ssoProvider={this.getSsoProviderData()}
           onSecondaryActionClick={this.props.apiTriageContext.handleSwitchToUsernameState}
+          onUserRegistrationRequired={this.props.apiTriageContext.handleSwitchToEnterNameState}
         />;
       case ApiTriageContextState.CHECK_MAILBOX_STATE:
         return <CheckMailBox/>;

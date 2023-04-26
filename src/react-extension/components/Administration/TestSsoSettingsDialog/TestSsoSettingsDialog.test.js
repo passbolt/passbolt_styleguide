@@ -58,7 +58,7 @@ describe("TestSsoSettingsDialog", () => {
       });
 
       let ssoLoginResolve = null;
-      props.context.port.addRequestListener('passbolt.sso.test.azure', async configurationId => {
+      props.context.port.addRequestListener('passbolt.sso.dry-run', async configurationId => {
         expect(configurationId).toBe(expectedConfigurationId);
         return new Promise(resolve => {
           ssoLoginResolve = resolve;
@@ -113,7 +113,7 @@ describe("TestSsoSettingsDialog", () => {
         provider: SsoProviders.find(provider => provider.id === "azure")
       });
 
-      props.context.port.addRequestListener('passbolt.sso.test.azure', async() => {
+      props.context.port.addRequestListener('passbolt.sso.dry-run', async() => {
         throw expectedError;
       });
 
@@ -137,7 +137,7 @@ describe("TestSsoSettingsDialog", () => {
         provider: SsoProviders.find(provider => provider.id === "azure")
       });
 
-      props.context.port.addRequestListener('passbolt.sso.test.azure', async() => uuid());
+      props.context.port.addRequestListener('passbolt.sso.dry-run', async() => uuid());
       props.context.port.addRequestListener("passbolt.sso.activate-settings", async() => {
         throw expectedError;
       });
@@ -174,7 +174,7 @@ describe("TestSsoSettingsDialog", () => {
         provider: SsoProviders.find(provider => provider.id === "azure")
       });
 
-      props.context.port.addRequestListener('passbolt.sso.test.azure', async() => {
+      props.context.port.addRequestListener('passbolt.sso.dry-run', async() => {
         throw expectedError;
       });
 

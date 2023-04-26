@@ -158,7 +158,7 @@ export default class SelectAccountRecoveryOrganizationKeyPage {
   }
 
   get generateTab() {
-    return this._page.container.querySelectorAll('.organization-recover-key-dialog.dialog-wrapper .tabs .tab a')[GENERATE_TAB_INDEX];
+    return this._page.container.querySelectorAll('.organization-recover-key-dialog.dialog-wrapper .tabs .tab button')[GENERATE_TAB_INDEX];
   }
 
   get algorithmTooltip() {

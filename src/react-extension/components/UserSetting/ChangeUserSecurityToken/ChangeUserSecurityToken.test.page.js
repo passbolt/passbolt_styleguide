@@ -45,7 +45,7 @@ export default class ChangeUserSecurityTokenPage {
    * Returns the randomize link element
    */
   get randomizeLink() {
-    return this._page.container.querySelector('.randomize-button-wrapper a');
+    return this._page.container.querySelector('.randomize-button-wrapper button');
   }
 
 
@@ -53,7 +53,7 @@ export default class ChangeUserSecurityTokenPage {
    * Returns the next button element
    */
   get updateButton() {
-    return this._page.container.querySelector('.submit-wrapper .button');
+    return this._page.container.querySelector('.submit-wrapper button');
   }
 
 

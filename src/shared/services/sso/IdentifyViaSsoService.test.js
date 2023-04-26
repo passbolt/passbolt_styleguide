@@ -17,34 +17,46 @@
  */
 import GetRecoverUrlService from "../api/sso/GetRecoverUrlService";
 import GetUrlForSsoIdentificationService from "../api/sso/GetUrlForSsoIdentificationService";
-import AzurePopupHandlerService from "./AzurePopupHandlerService";
+import SsoPopupHandlerService from "./SsoPopupHandlerService";
 import IdentifyViaSsoService from "./IdentifyViaSsoService";
 import {v4 as uuid} from 'uuid';
 import {defaultAppContext} from "./IdentifyViaSsoService.test.data";
+import each from "jest-each";
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("IdentifyWithSsoService", () => {
-  describe('IdentifyWithSsoService::exec', () => {
-    it('Should run the SSO login process and get back an URL for the user to proceed', () => {
-      expect.assertions(4);
-      const service = new IdentifyViaSsoService(defaultAppContext());
+const scenarios = [
+  {providerId: 'azure', ssoLoginUrl: "https://login.microsoft.com"},
+  {providerId: 'google', ssoLoginUrl: "https://accounts.google.com/o/oauth2/v2/auth"}
+];
 
-      const expectedSsoProvider = "azure";
-      const ssoLoginUrl = "https://login.microsoft.com";
+each(scenarios).describe("IdentifyWithSsoService", scenario => {
+  describe(`IdentifyWithSsoService::exec (with provider '${scenario.providerId}')`, () => {
+    it('Should run the SSO login process and get back an URL for the user to proceed', () => {
+      expect.assertions(5);
+      const expectedSsoProvider = scenario.providerId;
       const thirdPartyToken = uuid();
-      const recoverUrl = "/sso/azure/recover.json";
+      const recoverUrl = `/sso/${scenario.providerId}/recover.json`;
+
+      const successCallback = jest.fn(url => {
+        expect(url).toStrictEqual(recoverUrl);
+      });
+
+      const service = new IdentifyViaSsoService(scenario.providerId, defaultAppContext(), successCallback);
 
       jest.spyOn(GetUrlForSsoIdentificationService.prototype, 'getUrl').mockImplementation(async providerId => {
         expect(providerId).toStrictEqual(expectedSsoProvider);
-        return ssoLoginUrl;
+        return scenario.ssoLoginUrl;
       });
 
-      jest.spyOn(AzurePopupHandlerService.prototype, 'getSsoTokenFromThirdParty').mockImplementation(async url => {
-        expect(url).toStrictEqual(ssoLoginUrl);
-        return thirdPartyToken;
+      jest.spyOn(SsoPopupHandlerService.prototype, 'getSsoTokenFromThirdParty').mockImplementation(async url => {
+        expect(url).toStrictEqual(scenario.ssoLoginUrl);
+        return {
+          token: thirdPartyToken,
+          case: "default"
+        };
       });
 
       jest.spyOn(GetRecoverUrlService.prototype, 'getRecoverUrl').mockImplementation(async token => {
@@ -52,16 +64,43 @@ describe("IdentifyWithSsoService", () => {
         return recoverUrl;
       });
 
-      return expect(service.exec(expectedSsoProvider)).resolves.toStrictEqual(recoverUrl);
+      return expect(service.exec()).resolves.toStrictEqual(undefined);
     });
   });
 
-  describe('IdentifyWithSsoService::stop', () => {
+  it(`Should run the self_registration process if the user can self-register (with provider '${scenario.providerId}')`, () => {
+    expect.assertions(4);
+    const expectedSsoProvider = scenario.providerId;
+    const userEmail = "user@registered-domain.com";
+
+    const registrationRequiredCallback = jest.fn(email => {
+      expect(email).toStrictEqual(userEmail);
+    });
+
+    const service = new IdentifyViaSsoService(scenario.providerId, defaultAppContext(), null, registrationRequiredCallback);
+
+    jest.spyOn(GetUrlForSsoIdentificationService.prototype, 'getUrl').mockImplementation(async providerId => {
+      expect(providerId).toStrictEqual(expectedSsoProvider);
+      return scenario.ssoLoginUrl;
+    });
+
+    jest.spyOn(SsoPopupHandlerService.prototype, 'getSsoTokenFromThirdParty').mockImplementation(async url => {
+      expect(url).toStrictEqual(scenario.ssoLoginUrl);
+      return {
+        email: userEmail,
+        case: "registration_required"
+      };
+    });
+
+    return expect(service.exec()).resolves.toStrictEqual(undefined);
+  });
+
+  describe(`IdentifyWithSsoService::stop (with provider '${scenario.providerId}')`, () => {
     it('should stop the process', async() => {
       expect.assertions(1);
-      const service = new IdentifyViaSsoService(defaultAppContext());
+      const service = new IdentifyViaSsoService(scenario.providerId, defaultAppContext());
 
-      const spy = jest.spyOn(AzurePopupHandlerService.prototype, 'close');
+      const spy = jest.spyOn(SsoPopupHandlerService.prototype, 'close');
 
       service.stopProcess();
       expect(spy).toHaveBeenCalledTimes(1);

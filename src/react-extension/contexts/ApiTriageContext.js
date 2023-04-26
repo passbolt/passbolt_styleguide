@@ -40,6 +40,8 @@ export const ApiTriageContext = React.createContext({
   }, // Whenever the user switches to SSO_SIGN_IN_STATE state
   handleSwitchToUsernameState: () => {
   }, // Whenever the user switches to USERNAME_STATE state
+  handleSwitchToEnterNameState: () => {
+  }, // Whenever the user needs to register after SSO sign in
 });
 
 /**
@@ -71,6 +73,7 @@ export class ApiTriageContextProvider extends React.Component {
       onRegistrationRequested: this.onRegistrationRequested.bind(this),
       handleSwitchToSsoSignInState: this.handleSwitchToSsoSignInState.bind(this),
       handleSwitchToUsernameState: this.handleSwitchToUsernameState.bind(this),
+      handleSwitchToEnterNameState: this.handleSwitchToEnterNameState.bind(this),
     };
   }
 
@@ -224,6 +227,17 @@ export class ApiTriageContextProvider extends React.Component {
    */
   handleSwitchToUsernameState() {
     this.setState({state: ApiTriageContextState.USERNAME_STATE});
+  }
+
+  /**
+   * Handle switch to NAME_STATE state
+   * @param {string} username the username to be used for the user registration
+   */
+  handleSwitchToEnterNameState(username) {
+    this.setState({
+      username,
+      state: ApiTriageContextState.NAME_STATE
+    });
   }
 
   /**

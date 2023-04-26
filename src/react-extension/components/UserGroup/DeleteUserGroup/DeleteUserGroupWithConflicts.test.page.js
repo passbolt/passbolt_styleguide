@@ -109,8 +109,8 @@ class DeleteGroupWithConflictsDialogPageObject {
   /**
    * Returns the cancel button disabled elements
    */
-  get cancelButtonDisabled() {
-    return this._container.querySelector('.submit-wrapper .cancel.disabled');
+  hasCancelButtonDisabled() {
+    return this._container.querySelector('.submit-wrapper .cancel').hasAttribute('disabled');
   }
 
   /**

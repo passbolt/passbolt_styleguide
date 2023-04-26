@@ -9,6 +9,11 @@
   cursor: pointer;
   border-bottom: 0;
 
+  // Tooltip focus
+  &:focus, :focus-visible {
+    outline: @outline-default-border;
+  }
+
   /* Tooltip text */
   .tooltip-text {
     position: absolute;
@@ -81,7 +86,7 @@
   }
 
   /* Ease the tooltip left when you mouse over the tooltip container */
-  &:hover .tooltip-text {
+  &:hover .tooltip-text, &:focus .tooltip-text {
     visibility: visible;
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1;

@@ -1,3 +1,5 @@
+@import "./colors_third_party_providers.less";
+
 /* Customized your own theme */
 /* palette based on the solarized light theme */
 @main-color: hsl(44,87%,98%);
@@ -79,6 +81,10 @@
 @text-secret-hover-color: @alert-1;
 @text-error-api-color: @text-icon-main-color;
 @text-notification-color: @text-icon-main-color;
+
+/* label */
+@label-active-background: @main-color;
+@label-active-text-color: @text-icon-main-color;
 
 /* header */
 @header-main-menu-background: @workspace-bar;
@@ -170,8 +176,13 @@
 @tooltip-text-color: @text-icon-main-color;
 
 /* inputs */
+@input-text-color: @text-icon-main-color;
+@input-focus-text-color: @text-icon-main-color;
+@input-disabled-text-color: @text-icon-main-color;
 @input-background: @main-color;
-@input-disabled-background: @main-color-gradient-26;
+@input-focus-background: @main-color;
+@input-disabled-background: @main-color;
+@input-loading-background: @main-color-gradient-26;
 @input-infield-background: @main-color-gradient-28;
 @input-border: @main-color-gradient-12;
 @input-infield-border: @main-color-gradient-21;
@@ -179,6 +190,7 @@
 
 /* checkbox */
 @input-checkbox-background: @main-color;
+@input-checkbox-control-check-color: @text-icon-main-color;
 @input-checkbox-disabled-background: @main-color-gradient-13;
 @input-checkbox-disabled-image-background: @main-color-gradient-10;
 @input-checkbox-border: @main-color-gradient-9;
@@ -220,7 +232,10 @@
 @select-setup-extension-background: @main-color;
 @select-hover-background: @main-color-gradient-16;
 @select-focus-background: @primary-color-3;
+@select-active-background: @main-color-gradient-16;
+@select-hover-text-color: @text-icon-main-color;
 @select-focus-text-color: @main-color;
+@select-active-text-color: @text-icon-main-color;
 @select-border: @main-color-gradient-21;
 @select-focus-border: @primary-color-3;
 
@@ -249,8 +264,16 @@
 @chips-new-background: @primary-color-3;
 
 /* autocomplete */
+@autocomplete-text-color: @text-icon-main-color;
+@autocomplete-details-text-color: @main-color-gradient-7;
+@autocomplete-hover-text-color: @text-icon-main-color;
+@autocomplete-hover-details-text-color: @text-icon-main-color;
+@autocomplete-active-text-color: @text-icon-main-color;
+@autocomplete-active-details-text-color: @text-icon-main-color;
+@autocomplete-selected-text-color: @text-icon-main-color;
 @autocomplete-background: @main-color;
 @autocomplete-hover-background: @main-color-gradient-17;
+@autocomplete-active-background: @main-color-gradient-17;
 @autocomplete-selected-background: @main-color-gradient-28;
 @autocomplete-border: @main-color-gradient-12;
 
@@ -264,25 +287,51 @@
 @workspace-title-border: @main-color-gradient-21;
 
 /* left workspace menu */
-@workspace-left-menu-hover-background: @main-color-gradient-18;
-@workspace-left-menu-focus-border: @primary-color-3;
-@workspace-left-menu-focus-background: @primary-color-3;
+@workspace-left-menu-hover-text-color: @main-color;
 @workspace-left-menu-focus-text-color: @main-color;
+@workspace-left-menu-selected-text-color: @main-color;
+@workspace-left-menu-hover-background: @main-color-gradient-18;
+@workspace-left-menu-focus-background: @primary-color-3;
+@workspace-left-menu-selected-background: @main-color-gradient-18;
+@workspace-left-menu-focus-border: @primary-color-3;
 
 /* dropdown menus */
+@dropdown-item-text-color: @text-icon-main-color;
+@dropdown-item-hover-text-color: @text-icon-main-color;
+@dropdown-item-focus-text-color: @main-color;
+@dropdown-item-active-text-color: @text-icon-main-color;
 @dropdown-background: @main-color-gradient-28;
-@dropdown-profile-background: @main-color;
-@dropdown-focus-background: @primary-color-3;
-@dropdown-focus-text-color: @main-color;
 @dropdown-item-hover-background: @main-color-gradient-18;
+@dropdown-item-focus-background: @primary-color-3;
+@dropdown-item-active-background: @main-color-gradient-18;
+@dropdown-profile-background: @main-color;
 
-/* grid */
+/* grid header */
+@tableview-header-text-color: @text-icon-main-color;
+@tableview-header-background: @main-color-gradient-23;
+/* grid header checkbox */
+@tableview-header-checkbox-background: @main-color;
+@tableview-header-checkbox-control-check-color: @text-icon-main-color;
+/* grid content */
+@tableview-content-text-color: @text-icon-main-color;
+@tableview-content-even-text-color: @text-icon-main-color;
+@tableview-content-hover-text-color: @text-icon-main-color;
+@tableview-content-selected-text-color: @text-icon-main-color;
 @tableview-background: @main-color;
 @tableview-even-background: @main-color-gradient-29;
 @tableview-hover-background: @main-color-gradient-25;
 @tableview-selected-background: @main-color-gradient-10;
-@tableview-header-background: @main-color-gradient-23;
 @tableview-shadow-color: @main-color;
+/* grid content checkbox */
+@tableview-content-checkbox-background: @main-color;
+@tableview-content-even-checkbox-background: @main-color;
+@tableview-content-hover-checkbox-background: @main-color;
+@tableview-content-selected-checkbox-background: @main-color;
+@tableview-content-checkbox-control-check-color: @text-icon-main-color;
+@tableview-content-even-checkbox-control-check-color: @text-icon-main-color;
+@tableview-content-hover-checkbox-control-check-color: @text-icon-main-color;
+@tableview-content-selected-checkbox-control-check-color: @text-icon-main-color;
+
 @breadcrumb-background: @main-color-gradient-29;
 
 /* info panel */
@@ -382,6 +431,9 @@
 /* success icon fill */
 @icon-success-color: @success-2;
 
+/* logo icon fill */
+@icon-logo-color: @text-icon-main-color;
+
 /* box shadows */
 @shadow-opacity-hover-black: 0.2;
 @shadow-opacity-hover-white: 0.25;
@@ -392,3 +444,7 @@
 @shadow-opacity-info-panel: 0.3;
 @shadow-focus-color: @primary-color-2;
 @shadow-drag-color: @main-color-gradient-3;
+
+/* accessibility */
+@outline-default-border: 0;
+@outline-primary-border: 0;

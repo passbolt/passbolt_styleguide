@@ -62,7 +62,7 @@ class DialogWrapper extends Component {
    * @return {void}
    */
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.addEventListener("keydown", this.handleKeyDown, {capture: false});
   }
 
   /**
@@ -71,7 +71,7 @@ class DialogWrapper extends Component {
    * @return {void}
    */
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown, {capture: true});
+    document.removeEventListener("keydown", this.handleKeyDown, {capture: false});
   }
 
   /**

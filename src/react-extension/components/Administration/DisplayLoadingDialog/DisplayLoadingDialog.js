@@ -109,7 +109,7 @@ class DisplayLoadingDialog extends Component {
           </div>
         </div>
         <div className="submit-wrapper clearfix">
-          <a className="button disabled processing">Submit<Icon name="spinner"/></a>
+          <button type="submit" disabled className="processing">Submit<Icon name="spinner"/></button>
         </div>
       </DialogWrapper>
     );

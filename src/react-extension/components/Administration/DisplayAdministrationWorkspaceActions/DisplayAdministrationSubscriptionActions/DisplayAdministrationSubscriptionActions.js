@@ -61,10 +61,10 @@ class DisplayAdministrationSubscriptionActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className="button" onClick={this.handleEditSubscriptionClick}>
+              <button type="button" onClick={this.handleEditSubscriptionClick}>
                 <Icon name="edit"/>
                 <span><Trans>Update key</Trans></span>
-              </a>
+              </button>
             </li>
           </div>
         </div>

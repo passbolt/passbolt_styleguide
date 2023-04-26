@@ -53,7 +53,7 @@ export default class DisplayEmailNotificationsAdministrationPage {
    * @returns {HTMLElement}
    */
   get toolbarActionsSaveButton() {
-    return this._page.container.querySelectorAll(".actions-wrapper .actions a")[0];
+    return this._page.container.querySelectorAll(".actions-wrapper .actions button")[0];
   }
   /**
    * Returns the password create input element
@@ -222,7 +222,7 @@ export default class DisplayEmailNotificationsAdministrationPage {
    * @returns {boolean}
    */
   isSaveButtonEnabled() {
-    return !this.toolbarActionsSaveButton.className.toString().includes("disabled");
+    return !this.toolbarActionsSaveButton.hasAttribute("disabled");
   }
 
   /**

@@ -10,8 +10,12 @@
     height: 1px;
     border-radius: 5px;
     background: @input-range-background;
-    outline: none;
+    outline: 0;
     flex-grow: 1;
+
+    &:focus-visible {
+      outline: @outline-default-border;
+    }
 
     &::-webkit-slider-thumb {
       -webkit-appearance: none;

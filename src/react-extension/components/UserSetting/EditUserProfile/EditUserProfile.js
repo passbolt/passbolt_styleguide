@@ -351,6 +351,7 @@ class EditUserProfile extends Component {
                 name="username"
                 type="text"
                 disabled={true}
+                aria-required={true}
                 value={this.props.context.loggedInUser.username}/>
             </div>
 

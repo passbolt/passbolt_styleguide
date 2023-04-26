@@ -265,7 +265,7 @@ describe("InputPassphrase", () => {
     expect(formContent.textContent).toBe("Your passphrase is wrong! The operation has been aborted.");
 
     // Close button exists.
-    const closeButton = container.querySelector(".button.primary");
+    const closeButton = container.querySelector("button.primary");
     expect(closeButton).not.toBeNull();
     expect(closeButton.textContent).toBe("Close");
 

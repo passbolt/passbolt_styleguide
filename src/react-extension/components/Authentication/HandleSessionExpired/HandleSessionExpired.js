@@ -16,8 +16,6 @@ import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyExpiredSession from "../../Authentication/NotifyExpiredSession/NotifyExpiredSession";
 
-const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
-
 /**
  * This component takes care of checking when the user session is expired.
  */
@@ -28,7 +26,6 @@ class HandleSessionExpired extends React.Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
-    this.scheduledCheckIsAuthenticatedTimeout = null;
   }
 
   /**
@@ -42,36 +39,7 @@ class HandleSessionExpired extends React.Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.scheduleCheckIsAuthenticated();
-  }
-
-  /**
-   * Whenever the component is unmount.
-   */
-  componentWillUnmount() {
-    clearTimeout(this.scheduledCheckIsAuthenticatedTimeout);
-  }
-
-  /**
-   * Schedule a session check.
-   */
-  scheduleCheckIsAuthenticated() {
-    this.scheduledCheckIsAuthenticatedTimeout = setTimeout(async() => {
-      const isAuthenticated = await this.checkIsAuthenticated();
-      if (!isAuthenticated) {
-        this.handleSessionExpiredEvent();
-      } else {
-        this.scheduleCheckIsAuthenticated();
-      }
-    }, IS_AUTHENTICATED_CHECK_PERIOD);
-  }
-
-  /**
-   * Check if the user is still authenticated
-   * @returns {Promise<boolean>}
-   */
-  async checkIsAuthenticated() {
-    return await this.props.context.onCheckIsAuthenticatedRequested();
+    this.props.context.onExpiredSession(this.handleSessionExpiredEvent);
   }
 
   /**

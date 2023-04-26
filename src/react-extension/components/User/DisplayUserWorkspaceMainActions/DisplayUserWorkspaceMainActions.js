@@ -178,18 +178,18 @@ class DisplayUserWorkspaceMainActions extends React.Component {
       <div className="col1 main-action-wrapper">
         {this.canIUseCreate() &&
         <div className="dropdown" ref={this.createMenuRef}>
-          <a className={`button create primary ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
+          <button type="button" className={`create primary ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
             <Icon name="add"/>
             <span><Trans>Create</Trans></span>
-          </a>
+          </button>
           <ul className={`dropdown-content menu right ${this.state.createMenuOpen ? "visible" : ""}`}>
             <li id="user_action">
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleCreateMenuUserClickEvent}>
+                    <button type="button" className="link no-border" onClick={this.handleCreateMenuUserClickEvent}>
                       <span><Trans>New user</Trans></span>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -198,9 +198,9 @@ class DisplayUserWorkspaceMainActions extends React.Component {
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.handleCreateMenuGroupClickEvent}>
+                    <button type="button" className="link no-border" onClick={this.handleCreateMenuGroupClickEvent}>
                       <span><Trans>New group</Trans></span>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>

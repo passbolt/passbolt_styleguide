@@ -305,9 +305,9 @@ class EnterUsernameForm extends Component {
               value={this.translate("Next")}
             />
             {this.props.isSsoRecoverEnabled &&
-              <a onClick={this.props.onSecondaryActionClick}>
+              <button className="link" type="button" onClick={this.props.onSecondaryActionClick}>
                 <Trans>Continue with SSO.</Trans>
-              </a>
+              </button>
             }
           </div>
         </form>

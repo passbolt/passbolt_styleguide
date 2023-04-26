@@ -21,7 +21,7 @@ class Tooltip extends Component {
    */
   render() {
     return (
-      <div className="tooltip">
+      <div className="tooltip" tabIndex="0">
         {this.props.children}
         <span className={`tooltip-text ${this.props.direction}`}>
           {this.props.message}

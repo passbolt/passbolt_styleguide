@@ -20,6 +20,11 @@ label {
             width: 1.2rem;
         }
     }
+
+    &:active {
+      background: @label-active-background;
+      color: @label-active-text-color;
+    }
 }
 
 /*
@@ -40,7 +45,7 @@ label {
 }
 
 .input.warning label {
-  color: @text-warning-color;
+    color: @text-warning-color;
 }
 
 .input.text, .input-password-wrapper,

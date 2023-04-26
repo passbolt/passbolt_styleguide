@@ -182,11 +182,11 @@ class DisplayTestUserDirectoryAdministration extends Component {
             </p>
             <div className={`accordion directory-list ${this.state.openListGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleListGroupsUsersClicked}>
-                <a role="link">
+                <button type="button" className="link no-border">
                   <Trans>See list</Trans>
                   {this.state.openListGroupsUsers && <Icon name="caret-down" baseline={true}/>}
                   {!this.state.openListGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                </a>
+                </button>
               </div>
               <div className="accordion-content">
                 <table>
@@ -220,11 +220,11 @@ class DisplayTestUserDirectoryAdministration extends Component {
             </div>
             <div className={`accordion accordion-directory-structure ${this.state.openStructureGroupsUsers ? "" : "closed"}`}>
               <div className="accordion-header" onClick={this.handleStructureGroupsUsersClicked}>
-                <a role="link">
+                <button type="button" className="link no-border">
                   <Trans>See structure</Trans>
                   {this.state.openStructureGroupsUsers && <Icon name="caret-down" baseline={true}/>}
                   {!this.state.openStructureGroupsUsers && <Icon name="caret-right" baseline={true}/>}
-                </a>
+                </button>
               </div>
               <div className="accordion-content">
                 <div className="directory-structure">
@@ -245,11 +245,11 @@ class DisplayTestUserDirectoryAdministration extends Component {
               <p className="directory-errors error">{this.translate("{{count}} entry had errors and will be ignored during synchronization.", {count: this.errors.length})}</p>
               <div className={`accordion accordion-directory-errors ${this.state.openErrors ? "" : "closed"}`}>
                 <div className="accordion-header" onClick={this.handleErrorsClicked}>
-                  <a role="link">
+                  <button type="button" className="link no-border">
                     <Trans>See error details</Trans>
                     {this.state.openErrors && <Icon name="caret-down" baseline={true}/>}
                     {!this.state.openErrors && <Icon name="caret-right" baseline={true}/>}
-                  </a>
+                  </button>
                 </div>
                 <div className="accordion-content">
                   <div className="directory-errors">
@@ -262,7 +262,7 @@ class DisplayTestUserDirectoryAdministration extends Component {
           </div>
         </div>
         <div className="submit-wrapper clearfix">
-          <a className={`button primary ${this.hasAllInputDisabled() ? "disabled" : ""}`} role="button" onClick={this.handleClose}><Trans>OK</Trans></a>
+          <button type="button" disabled={this.hasAllInputDisabled()} className="primary" onClick={this.handleClose}><Trans>OK</Trans></button>
         </div>
       </DialogWrapper>
     );

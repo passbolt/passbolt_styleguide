@@ -58,7 +58,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToPasswordsRequested} role="button"><span><Trans>passwords</Trans></span></a>
+                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToPasswordsRequested}><span><Trans>passwords</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -67,7 +67,8 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToUsersRequested} role="button"><span><Trans>users</Trans></span></a>
+                    <button 
+                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}><span><Trans>users</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -77,7 +78,8 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a onClick={this.props.navigationContext.onGoToAdministrationRequested} role="button"><span><Trans>administration</Trans></span></a>
+                    <button 
+                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToAdministrationRequested}><span><Trans>administration</Trans></span></button>
                   </div>
                 </div>
               </div>
@@ -101,10 +103,12 @@ class DisplayMainMenu extends Component {
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a role="button"
+                    <button
+                      className="link no-border"
+                      type="button"
                       onClick={this.props.context.onLogoutRequested}>
                       <span><Trans>sign out</Trans></span>
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>

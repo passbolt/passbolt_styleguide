@@ -154,7 +154,7 @@ class Login extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    await this.validate();
+    this.validate();
 
     if (this.isValid) {
       this.toggleProcessing();
@@ -168,19 +168,19 @@ class Login extends Component {
    * Whenever the user changes the private key
    * @param event An input event
    */
-  async handleChangePassphrase(event) {
+  handleChangePassphrase(event) {
     const passphrase = event.target.value;
-    await this.fillPassphrase(passphrase);
+    this.fillPassphrase(passphrase);
     if (this.state.hasBeenValidated) {
-      await this.validate();
+      this.validate();
     }
   }
 
   /**
    * Whenever the user tosggles the remember me flag
    */
-  async handleToggleRememberMe() {
-    await this.toggleRememberMe();
+  handleToggleRememberMe() {
+    this.toggleRememberMe();
   }
 
   /**
@@ -192,7 +192,7 @@ class Login extends Component {
       await this.props.onCheckPassphrase(this.state.passphrase);
       return true;
     } catch (error) {
-      await this.onCheckPassphraseFailure(error);
+      this.onCheckPassphraseFailure(error);
       return false;
     }
   }
@@ -226,28 +226,28 @@ class Login extends Component {
    * Fill the passphrase
    * @param passphrase A passphrase
    */
-  async fillPassphrase(passphrase) {
-    await this.setState({passphrase});
+  fillPassphrase(passphrase) {
+    this.setState({passphrase});
   }
 
   /**
    * Toggle the remember me flag value
    */
-  async toggleRememberMe() {
-    await this.setState({rememberMe: !this.state.rememberMe});
+  toggleRememberMe() {
+    this.setState({rememberMe: !this.state.rememberMe});
   }
 
   /**
    * Validate the security token data
    */
-  async validate() {
+  validate() {
     const {passphrase} = this.state;
     const emptyPassphrase =  passphrase.trim() === '';
     if (emptyPassphrase) {
-      await this.setState({hasBeenValidated: true, errors: {emptyPassphrase}});
+      this.setState({hasBeenValidated: true, errors: {emptyPassphrase}});
       return;
     }
-    await this.setState({hasBeenValidated: true, errors: {}});
+    this.setState({hasBeenValidated: true, errors: {}});
   }
 
   /**
@@ -321,7 +321,7 @@ class Login extends Component {
               }
               {this.state.errors.invalidPassphrase &&
               <div className="invalid-passphrase error-message">
-                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <a onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></a>}
+                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
               </div>
               }
               {this.state.errors.invalidGpgKey &&
@@ -348,7 +348,6 @@ class Login extends Component {
             <button
               type="submit"
               className={`button primary big full-width ${processingClassName}`}
-              role="button"
               disabled={this.isProcessing}>
               {{
                 [LoginVariations.SIGN_IN]: <Trans>Sign in</Trans>,
@@ -356,14 +355,14 @@ class Login extends Component {
               }[this.props.displayAs]}
             </button>
             {this.props.isSsoAvailable &&
-              <a className="switchToSso" onClick={this.handleSwitchToSso}>
+              <button type="button" className="link switchToSso" onClick={this.handleSwitchToSso}>
                 <Trans>Sign in with Single Sign-On.</Trans>
-              </a>
+              </button>
             }
             {!this.props.isSsoAvailable &&
-              <a onClick={this.props.onSecondaryActionClick}>
+              <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
                 <Trans>Help, I lost my passphrase.</Trans>
-              </a>
+              </button>
             }
           </div>
         </form>

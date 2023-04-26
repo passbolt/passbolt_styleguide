@@ -66,7 +66,7 @@ export default class AutocompletePage {
    * @returns {HTMLElement}
    */
   getAutocompleteItem(index) {
-    return this._page.container.querySelectorAll(".autocomplete-content li a")[index - 1];
+    return this._page.container.querySelectorAll(".autocomplete-content li button")[index - 1];
   }
 
   /**

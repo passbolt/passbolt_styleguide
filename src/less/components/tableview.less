@@ -20,6 +20,20 @@
 
     table {
       width: 100%;
+      color: @tableview-header-text-color;
+
+      .input.checkbox input[type=checkbox] {
+        background: @tableview-header-checkbox-background;
+
+        &:before {
+          background: @tableview-header-checkbox-control-check-color;
+        }
+      }
+
+      button {
+        color: @tableview-header-text-color;
+
+      }
     }
   }
 
@@ -35,12 +49,30 @@
 
     table {
       width: 100%;
+      color: @tableview-content-text-color;
+
+      .input.checkbox input[type=checkbox] {
+        background: @tableview-content-checkbox-background;
+        &:before {
+          background: @tableview-content-checkbox-control-check-color;
+        }
+      }
+
+      button {
+        color: @tableview-content-text-color;
+        max-width: 100%;
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
     }
   }
 
   /* rows */
   table {
-    a {
+    button {
       border: 0;
     }
 
@@ -58,7 +90,7 @@
       font-weight: 500;
       .ellipsis();
 
-      a {
+      button {
         font-weight: 500;
       }
     }
@@ -112,23 +144,64 @@
       }
     }
 
+    thead th {
+      button:hover {
+          color: @text-focus-color;
+      }
+    }
+
     tbody tr {
       height: 3.2rem;
 
       &:nth-child(even) {
         background: @tableview-even-background;
+        color: @tableview-content-even-text-color;
+
+        .input.checkbox input[type=checkbox] {
+          background: @tableview-content-even-checkbox-background;
+          &:before {
+            background: @tableview-content-even-checkbox-control-check-color;
+          }
+        }
+        button {
+          color: @tableview-content-even-text-color;
+        }
       }
 
       &.selected {
         background: @tableview-selected-background;
+        color: @tableview-content-selected-text-color;
+
+        .input.checkbox input[type=checkbox] {
+          background: @tableview-content-selected-checkbox-background;
+          &:before {
+            background: @tableview-content-selected-checkbox-control-check-color;
+          }
+        }
+        button {
+          color: @tableview-content-selected-text-color;
+        }
       }
 
       &:hover {
         background: @tableview-hover-background;
-      }
+        color: @tableview-content-hover-text-color;
 
-      &.selected:hover {
-        background: @tableview-selected-background;
+        .input.checkbox input[type=checkbox] {
+          background: @tableview-content-hover-checkbox-background;
+          &:before {
+            background: @tableview-content-hover-checkbox-control-check-color;
+          }
+        }
+        button {
+          color: @tableview-content-hover-text-color;
+          &:hover {
+            color: @text-focus-color;
+          }
+        }
+        .secret-copy button:hover {
+          color: @text-secret-hover-color;
+        }
       }
     }
 
@@ -147,7 +220,7 @@
     /* multi select and fav fix */
     th.cell-favorite,
     td.cell-favorite {
-      a {
+      button {
         display: flex;
         align-items: center;
       }
