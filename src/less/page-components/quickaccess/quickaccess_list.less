@@ -32,6 +32,7 @@
               }
             }
             .resource-details {
+                flex-direction: column;
                 color:@default-text-color;
                 padding: 1.6rem;
                 box-sizing: border-box;
@@ -55,6 +56,9 @@
                     background: @quickaccess-list-title-active-background;
                     color: @default-text-color;
                     text-decoration: none;
+                }
+                .inline-resource-name {
+                    .ellipsis();
                 }
                 .url {
                     display:block;
