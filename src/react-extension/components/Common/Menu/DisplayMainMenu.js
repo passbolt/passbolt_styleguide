@@ -67,7 +67,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button 
+                    <button
                       className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}><span><Trans>users</Trans></span></button>
                   </div>
                 </div>
@@ -78,7 +78,7 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button 
+                    <button
                       className="link no-border" type="button" onClick={this.props.navigationContext.onGoToAdministrationRequested}><span><Trans>administration</Trans></span></button>
                   </div>
                 </div>
