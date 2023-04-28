@@ -97,11 +97,10 @@ const isRequestInitiatedFromSameOrigin = function(requestedUrl, documentUrl) {
     // Requested document and top/iframe document origin is same
     return requestedOrigin === documentOrigin;
   } catch (error) {
-    console.error(error)
+    console.error(error);
     // Empty url or about:blank should not block all the process of autofill
     return false;
   }
-
 };
 
 /**
