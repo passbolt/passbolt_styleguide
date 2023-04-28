@@ -214,7 +214,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
             {this.isAccountRecoveryPending &&
             <li className="pending-request-status">
               <span className="label"><Trans>Current status</Trans></span>
-              <button className="link no-border" type="button" onClick={this.handleReviewClicked}>Review</button>
+              <button type="button" onClick={this.handleReviewClicked}>Review</button>
             </li>
             }
             <li className="previous-request">

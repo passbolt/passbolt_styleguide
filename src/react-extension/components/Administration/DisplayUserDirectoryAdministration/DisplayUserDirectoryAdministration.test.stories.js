@@ -32,3 +32,6 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps(null, mockUsers[4].id);
+Initial.parameters = {
+  css: "api_main"
+};

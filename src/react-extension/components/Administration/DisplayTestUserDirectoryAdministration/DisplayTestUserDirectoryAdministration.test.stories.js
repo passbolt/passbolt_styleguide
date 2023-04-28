@@ -2727,3 +2727,6 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
+Initial.parameters = {
+  css: "api_main"
+};
