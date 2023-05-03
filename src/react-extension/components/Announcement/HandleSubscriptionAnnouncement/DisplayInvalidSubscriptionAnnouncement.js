@@ -33,7 +33,7 @@ class DisplayInvalidSubscriptionAnnouncement extends React.Component {
         <p>
           <Trans>Warning:</Trans>&nbsp;
           <Trans>your subscription key is not valid. The stability of the application is at risk.</Trans>
-          <button type="button" onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
+          <button className="link" type="button" onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
           </button>
         </p>
