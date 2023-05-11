@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.0.0
+ * @since         4.1.0
  */
 
 import React from "react";
@@ -45,8 +45,6 @@ class DisplayAdministrationRbacActions extends React.Component {
       this.handleSaveSuccess();
     } catch (error) {
       this.handleSaveError(error);
-    } finally {
-      // this.props.adminInternationalizationContext.setProcessing(false);
     }
   }
 
@@ -55,7 +53,7 @@ class DisplayAdministrationRbacActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return !this.props.adminRbacContext.isProcessing();
+    return !this.props.adminRbacContext.isProcessing() && this.props.adminRbacContext.hasSettingsChanges();
   }
 
   /**
@@ -84,10 +82,10 @@ class DisplayAdministrationRbacActions extends React.Component {
         <div className="actions">
           <div>
             <li>
-              <a className={`button ${this.isSaveEnabled() ? "" : "disabled"}`} onClick={this.handleSaveClick}>
+              <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
-              </a>
+              </button>
             </li>
           </div>
         </div>

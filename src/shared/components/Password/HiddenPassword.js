@@ -35,8 +35,7 @@ class HiddenPassword extends Component {
     return (
       <button type="button" className="link no-border" onClick={this.handleClick.bind(this)} disabled={!this.props.canClick}>
         <span>
-          {this.props.preview && this.props.preview}
-          {!this.props.preview && "Copy password to clipboard"}
+          {this.props.preview ? this.props.preview : "Copy password to clipboard"}
         </span>
       </button>
     );

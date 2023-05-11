@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacService from "../../../../shared/services/api/rbac/rbacService";
 import RoleService from "../../../../shared/services/api/role/roleService";
@@ -34,7 +34,8 @@ export const AdminRbacContext = React.createContext({
   updateRbacControlFunction: () => {}, // Update a rbac control function.
   save: () => {}, // Save settings
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
-  // clearContext: () => {}, // put the data to its default state value
+  hasSettingsChanges: () => {}, // returns true if a setting has changed and the UI must be enabled
+  clearContext: () => {}, // put the data to its default state value
 });
 
 export class AdminRbacContextProvider extends React.Component {
@@ -61,7 +62,9 @@ export class AdminRbacContextProvider extends React.Component {
       getCtlFunctionForActionAndRole: this.getCtlFunctionForActionAndRole.bind(this),
       updateRbacControlFunction: this.updateRbacControlFunction.bind(this),
       isProcessing: this.isProcessing.bind(this),
-      save: this.save.bind(this)
+      hasSettingsChanges: this.hasSettingsChanges.bind(this),
+      save: this.save.bind(this),
+      clearContext: this.clearContext.bind(this)
     };
   }
 
@@ -159,32 +162,33 @@ export class AdminRbacContextProvider extends React.Component {
    * Check if there are changes to apply
    * @returns {Boolean}
    */
-  hasLocaleChanges() {
-    return this.state.rbacsUpdated !== this.state.currentLocale;
+  hasSettingsChanges() {
+    return this.state.rbacsUpdated.rbacs.length > 0;
   }
 
-  // /**
-  //  * Puts the state to its default in order to avoid keeping the data users didn't want to save.
-  //  */
-  // clearContext() {
-  //   const {currentLocale, locale, processing} = this.defaultState;
-  //   this.setState({
-  //     currentLocale, locale, processing
-  //   });
-  // }
+  /**
+   * Puts the state to its default in order to avoid keeping the data users didn't want to save.
+   */
+  clearContext() {
+    const {rbacs, rbacsUpdated, processing} = this.defaultState;
+    this.setState({rbacs, rbacsUpdated, processing});
+  }
 
   /**
    * Whenever the save has been requested
    */
   async save() {
     this.setProcessing(true);
-    const rbacsUpdatedDto = this.state.rbacsUpdated.toBulkUpdateDto();
-    const rbacsUpdatedResultDto = await this.rbacService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
-    const rbacs = this.state.rbacs;
-    rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.addOrReplace(new RbacEntity(rbacUpdatedResultDto)));
-    const rbacsUpdated = new RbacsCollection([]);
-    this.setState({rbacs, rbacsUpdated});
-    this.setProcessing(false);
+    try {
+      const rbacsUpdatedDto = this.state.rbacsUpdated.toBulkUpdateDto();
+      const rbacsUpdatedResultDto = await this.rbacService.updateAll(rbacsUpdatedDto, {ui_action: true, action: true});
+      const rbacs = this.state.rbacs;
+      rbacsUpdatedResultDto.forEach(rbacUpdatedResultDto => rbacs.addOrReplace(new RbacEntity(rbacUpdatedResultDto)));
+      const rbacsUpdated = new RbacsCollection([]);
+      this.setState({rbacs, rbacsUpdated});
+    } finally {
+      this.setProcessing(false);
+    }
   }
 
   /**

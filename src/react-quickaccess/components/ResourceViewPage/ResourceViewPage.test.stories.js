@@ -2,8 +2,8 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import ResourceViewPage from "./ResourceViewPage";
-import AppContext from "../../contexts/AppContext";
 import {defaultAppContext} from "./ResourceViewPage.test.data";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
   title: 'Components/QuickAccess/ResourceView',

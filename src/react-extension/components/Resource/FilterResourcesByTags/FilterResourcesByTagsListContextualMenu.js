@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import EditResourceTag from "../../ResourceTag/EditResourceTag/EditResourceTag";
 import DeleteResourceTag from "../../ResourceTag/DeleteResourceTag/DeleteResourceTag";
 import {withDialog} from "../../../contexts/DialogContext";

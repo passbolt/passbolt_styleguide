@@ -16,7 +16,7 @@ import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBad
 import FilterResourcesByFolders from "../FilterResourcesByFolders/FilterResourcesByFolders";
 import DisplayResourceFolderDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails";
 import DisplayResourceDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByTags from "../FilterResourcesByTags/FilterResourcesByTags";
 import PropTypes from "prop-types";

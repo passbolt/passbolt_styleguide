@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
   resourceLinkAuthorizedProtocols,
   ResourceWorkspaceFilterTypes,

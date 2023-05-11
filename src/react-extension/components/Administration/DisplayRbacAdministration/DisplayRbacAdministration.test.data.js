@@ -17,6 +17,10 @@
  * @returns {{resource: {id: string, name: string}}}
  */
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
+import {v4 as uuidv4} from "uuid";
 
 export function defaultProps() {
   return {
@@ -37,32 +41,142 @@ export function defaultProps() {
  * Mock settings result from server
  * @returns {object}
  */
-export const mockRbacSettings = {
-  "providers": [
-    "totp",
-    "yubikey",
-    "duo"
-  ],
-  "yubikey": {
-    "clientId": "80412",
-    "secretKey": "pas6lyijz2AIhX3D9eLIYAxv63lt@"
-  },
-  "duo": {
-    "hostName": "api-123456af.duosecurity.com",
-    "integrationKey": "PAGI605APMFKP8YSME6T",
-    "secretKey": "PACNkhAAlVLH0m8d3efssULkizlEtunMhIsOTCLT"
-  }
-};
-
-/**
- * Mock settings result from server
- * @returns {object}
- */
-export const mockRbacFormConfiguration = [
+export const mockRbacSettings = () => [
   {
-    "name": ""
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.RESOURCES_EXPORT
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.RESOURCES_IMPORT
+    },
+    "control_function": controlFunctions.DENY,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.TAGS_USE
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.FOLDERS_USE
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.RESOURCES_SEE_ACTIVITIES
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.RESOURCES_SEE_COMMENTS
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.SECRETS_PREVIEW
+    },
+    "control_function": controlFunctions.DENY,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.SECRETS_COPY
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.SHARE_VIEW_LIST
+    },
+    "control_function": controlFunctions.ALLOW,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
+  }, {
+    "id": uuidv4(),
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "foreign_id": uuidv4(),
+    "foreign_model": RbacEntity.FOREIGN_MODEL_UI_ACTION,
+    "ui_action": {
+      "id": uuidv4(),
+      "name": uiActions.USERS_VIEW_WORKSPACE
+    },
+    "control_function": controlFunctions.DENY,
+    "created": "2023-07-04T13:39:25+00:00",
+    "modified": "2023-07-04T13:39:25+00:00"
   }
 ];
 
-
-export const defaultLocale = "en-UK";
+export const mockRoles = () => [
+  {
+    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "name": "user",
+    "description": "Logged in user",
+    "created": "2012-07-04T13:39:25+00:00",
+    "modified": "2012-07-04T13:39:25+00:00"
+  }, {
+    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+    "name": "admin",
+    "description": "Logged in admin",
+    "created": "2012-07-04T13:39:25+00:00",
+    "modified": "2012-07-04T13:39:25+00:00"
+  }
+];

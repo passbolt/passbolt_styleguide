@@ -45,7 +45,7 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
     it('As LU I cannot create a folder in a folder I have read only access.', async() => {
       const props = propsWithFolderPermissionRead(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
-      expect(page.filterResourcesByFoldersItemContextualMenu.createItem.className).toContain("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.createItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -61,7 +61,7 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
     it('As LU I cannot rename a folder in a folder I have read only access.', async() => {
       const props = propsWithFolderPermissionRead(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
-      expect(page.filterResourcesByFoldersItemContextualMenu.renameItem.className).toContain("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.renameItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -77,13 +77,13 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
     it('As LU I cannot share a folder I have read only access.', async() => {
       const props = propsWithFolderPermissionRead(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
-      expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.className).toContain("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As LU I cannot share a folder I have update permission on.', async() => {
       const props = propsWithFolderPermissionUpdate(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
-      expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.className).toContain("disabled");
+      expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 

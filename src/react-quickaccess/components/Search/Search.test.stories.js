@@ -1,9 +1,9 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContext";
 import Search from "./Search";
 import {defaultAppContext} from "./Search.test.data";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
   title: 'Components/QuickAccess/Search',

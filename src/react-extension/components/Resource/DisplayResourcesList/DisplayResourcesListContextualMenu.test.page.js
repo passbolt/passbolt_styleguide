@@ -22,7 +22,6 @@ import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextual
 export default class DisplayResourcesListContextualMenuPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {
@@ -46,7 +45,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyUsernameItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell a#username');
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#username');
   }
 
   /**
@@ -54,7 +53,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyPasswordItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell a#password');
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#password');
   }
 
   /**
@@ -62,7 +61,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyUriItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell a#uri');
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#uri');
   }
 
   /**
@@ -70,7 +69,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get copyPermalinkItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell a#permalink');
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#permalink');
   }
 
   /**
@@ -78,7 +77,7 @@ export default class DisplayResourcesListContextualMenuPage {
    * @return {HTMLElement}
    */
   get openUriItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell a#open-uri');
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#open-uri');
   }
 
   /**

@@ -21,7 +21,7 @@ import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGene
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 
 /**

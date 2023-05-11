@@ -90,7 +90,7 @@ describe("DisplayResourceDetailsInformation", () => {
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(2);
       expect(page.displayInformationList.locationLabel).toBe('Location');
-      expect(page.displayInformationList.location.textContent).toBe(" root");
+      expect(page.displayInformationList.location.textContent).toBe("root");
     });
 
     it('I scannot see the folder a resource is contained in if disbaled by RBAC', async() => {
@@ -139,7 +139,7 @@ describe("DisplayResourceDetailsInformation", () => {
       await waitFor(() => {});
 
       expect.assertions(1);
-      expect(page.displayInformationList.passwordLink.className).toContain("disabled");
+      expect(page.displayInformationList.passwordLink.hasAttribute("disabled")).toBeTruthy();
     });
   });
 

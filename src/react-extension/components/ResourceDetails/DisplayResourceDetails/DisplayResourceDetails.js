@@ -20,7 +20,7 @@ import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withTranslation, Trans} from "react-i18next";

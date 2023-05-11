@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withTranslation, Trans} from "react-i18next";
-import {withAppContext} from "../../contexts/AppContext";
 import Icon from "../../../shared/components/Icons/Icon";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class Search extends React.Component {
   constructor(props) {

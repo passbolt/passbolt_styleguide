@@ -7,6 +7,7 @@ import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
 import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../react-extension/test/fixture/Settings/siteSettings";
+import {defaultAdministratorRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
@@ -19,9 +20,22 @@ export function defaultAppContext(appContext) {
       }
     },
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettings(siteSettingsFixture)
+    siteSettings: new SiteSettings(siteSettingsFixture),
   };
   return Object.assign(defaultAppContext, appContext || {});
+}
+
+/**
+ * Default props
+ * @param props
+ * @return {Object}
+ */
+export function defaultProps(props = {}) {
+  const defaultProps = {
+    context: defaultAppContext(),
+    rbacContext: defaultAdministratorRbacContext()
+  };
+  return Object.assign(defaultProps, props);
 }
 
 const mockResults = {

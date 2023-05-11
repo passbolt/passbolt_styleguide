@@ -2,7 +2,7 @@ import DisplayResourcesList from "./DisplayResourcesList";
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockPort from "../../../test/mock/MockPort";
 
 export default {

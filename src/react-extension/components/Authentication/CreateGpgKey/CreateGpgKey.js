@@ -22,7 +22,7 @@ import PasswordComplexity from "../../../../shared/components/PasswordComplexity
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
 /**
  * The component display variations.
