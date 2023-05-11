@@ -31,7 +31,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 
       expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
     });
 
     it('As LU I can use the workspace create button if I have the permission to create in the selected folder', async() => {
@@ -39,7 +39,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 
       expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
     });
 
     it('As LU I cannot use the workspace create button if I do not have the permission to create in the selected folder', async() => {
@@ -47,7 +47,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 
       expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenuDisabled).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeTruthy();
     });
   });
 
@@ -58,7 +58,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
 
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
     });
@@ -69,7 +69,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
 
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
     });
@@ -82,7 +82,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
 
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newFolderMenu).not.toBeNull();
     });
@@ -93,7 +93,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
 
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newFolderMenu).not.toBeNull();
     });
@@ -111,7 +111,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
 
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newFolderMenu).toBeNull();
     });
@@ -122,7 +122,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
 
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.createMenuDisabled).toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newFolderMenu).toBeNull();
     });

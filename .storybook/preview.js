@@ -1,5 +1,5 @@
 import React from 'react';
-import AppContext from '../src/react-extension/contexts/AppContext';
+import AppContext from '../src/shared/context/AppContext/AppContext';
 import MockTranslationProvider from "../src/react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 // Mock jest.fn to be able to use jest test data mock in storybook.

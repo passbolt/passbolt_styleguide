@@ -16,6 +16,7 @@ import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import MockStorage from "../../../react-extension/test/mock/MockStorage";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import resourcesFixture from "../../../react-extension/test/fixture/Resources/resources";
+import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Default component props
@@ -28,7 +29,8 @@ export function defaultProps(props = {}) {
   const defaultContext = {port};
 
   const defaultProps = {
-    context: defaultAppContext(Object.assign(defaultContext, props?.context))
+    context: defaultAppContext(Object.assign(defaultContext, props?.context)),
+    rbacContext: defaultAdministratorRbacContext(),
   };
   delete props.context; // Treated in the default
 
@@ -94,4 +96,14 @@ export function suggestedResourcesProps() {
     storage: mockStorage,
   };
   return defaultProps({context});
+}
+
+/**
+ * Suggested resources props with deny ui action.
+ * @return {Object}
+ */
+export function suggestedResourcesPropsWithDenyUiAction() {
+  const props = suggestedResourcesProps();
+  props.rbacContext = denyRbacContext();
+  return props;
 }

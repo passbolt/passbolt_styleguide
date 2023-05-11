@@ -17,7 +17,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DeleteUserGroupWithConflicts from "./DeleteUserGroupWithConflicts";
 

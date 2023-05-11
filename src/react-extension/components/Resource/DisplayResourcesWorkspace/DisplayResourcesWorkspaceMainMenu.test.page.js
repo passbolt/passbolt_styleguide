@@ -13,7 +13,7 @@
  */
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import PropTypes from "prop-types";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -88,7 +88,7 @@ class DisplayMainMenuPageObject {
    * Returns the import menu elements of password workspace menu
    */
   get importMenu() {
-    return this._container.querySelector('.button.import.button-action-icon');
+    return this._container.querySelector('button.import.button-action-icon');
   }
 
   /**

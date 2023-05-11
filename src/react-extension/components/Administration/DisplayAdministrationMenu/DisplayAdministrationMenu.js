@@ -17,7 +17,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
@@ -432,9 +432,9 @@ class DisplayAdministrationMenu extends React.Component {
             <div className={`row  ${this.isRbacSelected() ? "selected" : ""}`}>
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <a onClick={this.handleRbacsClick}>
+                  <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
                     <span><Trans>Role-Based Access Control</Trans></span>
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

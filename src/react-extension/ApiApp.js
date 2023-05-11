@@ -32,7 +32,7 @@ import HandleSubscriptionAnnouncement
 import ManageAnnouncements from "./components/Announcement/ManageAnnouncements/ManageAnnouncements";
 import ApiAppContextProvider from "./contexts/ApiAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
 import ApiAppAccountRecoveryUserService from "../shared/services/api/accountRecovery/ApiAppAccountRecoveryUserService";
 import AdminSmtpSettingsContextProvider from "./contexts/AdminSmtpSettingsContext";

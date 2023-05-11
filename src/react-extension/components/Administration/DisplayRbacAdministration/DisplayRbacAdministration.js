@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayAdministrationRbacActions
   from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationRbacsActions/DisplayAdministrationRbacActions";
 import {withAdminRbac} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
@@ -56,7 +56,23 @@ class DisplayRbacAdministration extends React.Component {
    */
   componentWillUnmount() {
     this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
-    // this.props.adminInternationalizationContext.clearContext();
+    this.props.adminRbacContext.clearContext();
+  }
+
+  /**
+   * Is the user allowed to use the tags capability
+   * @returns {boolean}
+   */
+  get canIUseTags() {
+    return this.props.context.siteSettings.canIUse("tags");
+  }
+
+  /**
+   * Is the user allowed to use the folders capability
+   * @returns {boolean}
+   */
+  get canIUseFolders() {
+    return this.props.context.siteSettings.canIUse("folders");
   }
 
   /**
@@ -104,10 +120,14 @@ class DisplayRbacAdministration extends React.Component {
                         actionName={uiActions.RESOURCES_SEE_COMMENTS} level={3}/>
                     </DisplayRbacSection>
                     <DisplayRbacSection label={this.props.t('Organization')} level={2}>
+                      {this.canIUseFolders &&
                       <DisplayRbacItem label={this.props.t('Can use folders')}
                         actionName={uiActions.FOLDERS_USE} level={3}/>
+                      }
+                      {this.canIUseTags &&
                       <DisplayRbacItem label={this.props.t('Can use tags')}
                         actionName={uiActions.TAGS_USE} level={3}/>
+                      }
                     </DisplayRbacSection>
                     <DisplayRbacSection label={this.props.t('Sharing')} level={2}>
                       <DisplayRbacItem label={this.props.t('Can see with whom passwords are shared with')}

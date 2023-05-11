@@ -244,7 +244,7 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
-      expect(page.resource(1).copyPasswordLink.className).toContain("disabled");
+      expect(page.resource(1).copyPasswordLink.hasAttribute("disabled")).toBeTruthy();
     });
   });
 

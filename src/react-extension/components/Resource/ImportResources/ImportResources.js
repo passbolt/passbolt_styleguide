@@ -22,7 +22,7 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import ImportResourcesKeyUnlock from "./ImportResourcesKeyUnlock";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import ImportResourcesResult from "./ImportResourcesResult";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";

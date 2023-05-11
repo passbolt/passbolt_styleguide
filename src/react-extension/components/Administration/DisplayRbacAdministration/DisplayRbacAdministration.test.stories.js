@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import DisplayRbacAdministration from "./DisplayRbacAdministration";
 import {AdminInternationalizationContextProvider} from '../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext';
-import {defaultProps} from "./DisplayRbacAdministration.test.data";
+import {defaultProps, mockRbacSettings} from "./DisplayRbacAdministration.test.data";
 
 export default {
   title: 'Components/Administration/DisplayRbacAdministration',
@@ -37,4 +37,4 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
-Initial.args = defaultProps();
+Initial.args = defaultProps({adminRbacContext: mockRbacSettings()});

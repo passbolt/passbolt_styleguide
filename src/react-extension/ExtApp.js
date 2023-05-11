@@ -45,7 +45,7 @@ import ExtAppContextProvider from "./contexts/ExtAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import UserSettingsContextProvider from "./contexts/UserSettingsContext";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import HandlePassphraseEntryEvents
   from "./components/AuthenticationPassphrase/HandlePassphraseEntryEvents/HandlePassphraseEntryEvents";
 import HandleFolderMoveStrategyEvents

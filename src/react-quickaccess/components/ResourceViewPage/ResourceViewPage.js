@@ -2,10 +2,13 @@ import React from "react";
 import Transition from 'react-transition-group/Transition';
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../shared/components/Icons/Icon";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
+import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
+import {withRbac} from "../../../shared/context/Rbac/RbacContext";
+import HiddenPassword from "../../../shared/components/Password/HiddenPassword";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class ResourceViewPage extends React.Component {
   constructor(props) {
@@ -308,12 +311,13 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   get canUsePreviewPassword() {
-    return this.props.context.siteSettings.canIUse('previewPassword');
+    return this.props.context.siteSettings.canIUse('previewPassword') && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
   }
 
   render() {
     const sanitizeResourceUrl = this.sanitizeResourceUrl();
     const isPasswordPreviewed = this.isPasswordPreviewed();
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
 
     return (
       <div className="resource item-browse">
@@ -371,17 +375,13 @@ class ResourceViewPage extends React.Component {
             <div className="information">
               <span className="property-name">Password</span>
               <div className="password-wrapper">
-                <a href="#" role="button"
-                  className={`property-value secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                  title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}
-                  onClick={this.handleCopyPasswordClick}>
-                  {isPasswordPreviewed &&
-                    <span>{this.formatPassword(this.state.previewedPassword)}</span>
-                  }
-                  {!isPasswordPreviewed &&
-                    <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-                  }
-                </a>
+                <div className={`property-value secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                  title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
+                  <HiddenPassword
+                    canClick={canCopySecret}
+                    preview={this.state.previewedPassword}
+                    onClick={this.handleCopyPasswordClick} />
+                </div>
                 {this.canUsePreviewPassword &&
                   <a onClick={this.handleViewPasswordButtonClick}
                     className={`password-view button button-transparent ${this.state.isSecretDecrypting ? "disabled" : ""}`}>
@@ -404,30 +404,32 @@ class ResourceViewPage extends React.Component {
                 }
               </div>
             </div>
-            <a role="button" className="button button-transparent property-action" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
-              <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
-                {status => (
-                  <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>
-                    <Icon name="copy-to-clipboard"/>
-                  </span>
-                )}
-              </Transition>
-              <Transition in={this.state.copySecretState === "processing"} appear={true} timeout={500}>
-                {status => (
-                  <span className={`transition fade-${status} ${this.state.copySecretState !== "processing" ? "visually-hidden" : ""}`}>
-                    <Icon name="spinner"/>
-                  </span>
-                )}
-              </Transition>
-              <Transition in={this.state.copySecretState === "done"} appear={true} timeout={500}>
-                {status => (
-                  <span className={`transition fade-${status} ${this.state.copySecretState !== "done" ? "visually-hidden" : ""}`}>
-                    <Icon name="check"/>
-                  </span>
-                )}
-              </Transition>
-              <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-            </a>
+            {canCopySecret &&
+              <a role="button" className="button button-transparent property-action" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
+                <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
+                  {status => (
+                    <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>
+                      <Icon name="copy-to-clipboard"/>
+                    </span>
+                  )}
+                </Transition>
+                <Transition in={this.state.copySecretState === "processing"} appear={true} timeout={500}>
+                  {status => (
+                    <span className={`transition fade-${status} ${this.state.copySecretState !== "processing" ? "visually-hidden" : ""}`}>
+                      <Icon name="spinner"/>
+                    </span>
+                  )}
+                </Transition>
+                <Transition in={this.state.copySecretState === "done"} appear={true} timeout={500}>
+                  {status => (
+                    <span className={`transition fade-${status} ${this.state.copySecretState !== "done" ? "visually-hidden" : ""}`}>
+                      <Icon name="check"/>
+                    </span>
+                  )}
+                </Transition>
+                <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+              </a>
+            }
           </li>
           <li className="property">
             <div className="information">
@@ -475,6 +477,7 @@ class ResourceViewPage extends React.Component {
 
 ResourceViewPage.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -482,4 +485,4 @@ ResourceViewPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(ResourceViewPage)));
+export default withAppContext(withRbac(withRouter(withTranslation('common')(ResourceViewPage))));

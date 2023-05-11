@@ -52,40 +52,6 @@ class RbacMeService extends AbstractService {
    * @returns {object}
    */
   async findMe(contains) {
-    /*
-     * return [
-     *   defaultRbacData({
-     *     role_id: '0d51c3a8-5e67-5e3d-882f-e1868966d817',
-     *     ui_action: defaultUiActionData({name: 'Resources.export'}),
-     *     control_function: 'Deny',
-     *     foreign_model: RbacEntity.FOREIGN_MODEL_ACTION
-     *   }),
-     *   defaultRbacData({
-     *     role_id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
-     *     ui_action: defaultUiActionData({name: 'Resources.export'}),
-     *     control_function: 'Deny',
-     *     foreign_model: RbacEntity.FOREIGN_MODEL_UI_ACTION
-     *   }),
-     *   defaultRbacData({
-     *     role_id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
-     *     ui_action: defaultUiActionData({name: 'Resources.import'}),
-     *     control_function: 'Deny',
-     *     foreign_model: RbacEntity.FOREIGN_MODEL_UI_ACTION
-     *   }),
-     *   defaultRbacData({
-     *     role_id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
-     *     ui_action: defaultUiActionData({name: 'Secrets.preview'}),
-     *     control_function: 'Deny',
-     *     foreign_model: RbacEntity.FOREIGN_MODEL_UI_ACTION
-     *   }),
-     *   defaultRbacData({
-     *     role_id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
-     *     ui_action: defaultUiActionData({name: 'Users.viewWorkspace'}),
-     *     control_function: 'Deny',
-     *     foreign_model: RbacEntity.FOREIGN_MODEL_UI_ACTION
-     *   }),
-     * ];
-     */
     const options = contains ? this.formatContainOptions(contains, RbacMeService.getSupportedContainOptions()) : null;
     const response = await this.apiClient.findAll(options);
 

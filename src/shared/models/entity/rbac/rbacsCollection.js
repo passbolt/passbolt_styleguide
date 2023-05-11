@@ -15,7 +15,6 @@
 import RbacEntity from "./rbacEntity";
 import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
-// import {assertString, assertUuid} from "../../../utils/assertions";
 
 const ENTITY_NAME = 'Rbacs';
 const RULE_UNIQUE_ID = 'unique_id';
@@ -30,17 +29,6 @@ class RbacsCollection extends EntityCollection {
       collectionDto,
       RbacsCollection.getSchema()
     ));
-
-    // /*
-    //  * Check if resource ids are unique
-    //  * Why not this.push? It is faster than adding items one by one
-    //  */
-    // const ids = this._props.map(resource => resource.id);
-    // ids.sort().sort((a, b) => {
-    //   if (a === b) {
-    //     throw new EntityCollectionError(0, ResourcesCollection.RULE_UNIQUE_ID, `Resource id ${a} already exists.`);
-    //   }
-    // });
 
     // Directly push into the private property _items[]
     this._props.forEach(dto => {
@@ -145,17 +133,12 @@ class RbacsCollection extends EntityCollection {
    * @param {RbacEntity} rbac The rbac entity to add or replace.
    */
   addOrReplace(rbac) {
-    const length = this.items.length;
-    let i = 0;
-    for (; i < length; i++) {
-      const existingRbac = this.items[i];
-      if (existingRbac.id === rbac.id) {
-        this._items[i] = rbac;
-        return;
-      }
+    const index = this.items.findIndex(existingRbac => existingRbac.id === rbac.id);
+    if (index > -1) {
+      this._items[index] = rbac;
+    } else {
+      this.push(rbac);
     }
-
-    this.push(rbac);
   }
 
   /**

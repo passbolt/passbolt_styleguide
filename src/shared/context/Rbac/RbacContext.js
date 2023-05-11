@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../react-extension/contexts/AppContext";
+import {withAppContext} from "../AppContext/AppContext";
 import CanUse from "../../services/rbacs/canUseService";
 import RoleEntity from "../../models/entity/role/roleEntity";
 

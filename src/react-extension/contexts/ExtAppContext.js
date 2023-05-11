@@ -13,7 +13,7 @@
  */
 
 import React from "react";
-import AppContext from "./AppContext";
+import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettings";
@@ -198,8 +198,9 @@ class ExtAppContextProvider extends React.Component {
    * Get the current user info from background page and set it in the state
    */
   async getLoggedInUser() {
+    const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
     const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
-    const rbacsDto = await this.props.port.request("passbolt.rbacs.find-me");
+    const rbacsDto = canIUseRbac ? await this.props.port.request("passbolt.rbacs.find-me") : [];
     const rbacs = new RbacsCollection(rbacsDto);
     this.setState({loggedInUser, rbacs});
   }

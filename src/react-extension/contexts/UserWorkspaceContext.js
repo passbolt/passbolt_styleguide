@@ -16,7 +16,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {withLoading} from "./LoadingContext";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";

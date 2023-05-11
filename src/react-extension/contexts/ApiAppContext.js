@@ -12,7 +12,7 @@
  * @since         3.2.0
  */
 import React from "react";
-import AppContext from "./AppContext";
+import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
@@ -43,8 +43,8 @@ class ApiAppContextProvider extends React.Component {
    */
   async componentDidMount() {
     await this.getLoggedInUser();
-    await this.getRbacs();
     await this.getSiteSettings();
+    await this.getRbacs();
     this.initLocale();
     this.removeSplashScreen();
   }
@@ -145,9 +145,13 @@ class ApiAppContextProvider extends React.Component {
    * @returns {Promise<object>}
    */
   async getRbacs() {
-    const apiClientOptions = this.getApiClientOptions();
-    const rbacService = new RbacMeService(apiClientOptions);
-    const rbacsDto = await rbacService.findMe({ui_action: true});
+    const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
+    let rbacsDto = [];
+    if (canIUseRbac) {
+      const apiClientOptions = this.getApiClientOptions();
+      const rbacService = new RbacMeService(apiClientOptions);
+      rbacsDto = await rbacService.findMe({ui_action: true});
+    }
     const rbacs = new RbacsCollection(rbacsDto);
     this.setState({rbacs});
   }

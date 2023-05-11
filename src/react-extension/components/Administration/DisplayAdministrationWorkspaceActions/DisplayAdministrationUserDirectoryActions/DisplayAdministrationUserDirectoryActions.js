@@ -23,7 +23,7 @@ import {withAdminUserDirectory} from "../../../../contexts/Administration/Admini
 import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../../contexts/DialogContext";
 import DisplayTestUserDirectoryAdministration from "../../DisplayTestUserDirectoryAdministration/DisplayTestUserDirectoryAdministration";
-import {withAppContext} from "../../../../contexts/AppContext";
+import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 
 
 /**

@@ -23,7 +23,7 @@ import Autocomplete from "../Common/Inputs/Autocomplete/Autocomplete";
 import ShareChanges from "./Utility/ShareChanges";
 import SharePermissionItem from "./SharePermissionItem";
 import SharePermissionItemSkeleton from "./SharePermissionItemSkeleton";
-import {withAppContext} from "../../contexts/AppContext";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../contexts/DialogContext";
 import {withActionFeedback} from "../../contexts/ActionFeedbackContext";
 import {withResourceWorkspace} from "../../contexts/ResourceWorkspaceContext";

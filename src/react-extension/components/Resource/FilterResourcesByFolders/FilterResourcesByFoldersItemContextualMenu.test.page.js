@@ -83,7 +83,7 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
    * @return {HTMLElement}
    */
   get createItem() {
-    return this._container.querySelector('a.create');
+    return this._container.querySelector('button.create');
   }
 
   /**
@@ -91,7 +91,7 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
    * @return {HTMLElement}
    */
   get renameItem() {
-    return this._container.querySelector('a.rename');
+    return this._container.querySelector('button.rename');
   }
 
   /**
@@ -99,7 +99,7 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
    * @return {HTMLElement}
    */
   get shareItem() {
-    return this._container.querySelector('a.share');
+    return this._container.querySelector('button.share');
   }
 
   /**
@@ -107,7 +107,7 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
    * @return {HTMLElement}
    */
   get exportItem() {
-    return this._container.querySelector('a.export');
+    return this._container.querySelector('button.export');
   }
 
   /**
@@ -115,7 +115,7 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
    * @return {HTMLElement}
    */
   get deleteItem() {
-    return this._container.querySelector('a.delete');
+    return this._container.querySelector('button.delete');
   }
 
   /**

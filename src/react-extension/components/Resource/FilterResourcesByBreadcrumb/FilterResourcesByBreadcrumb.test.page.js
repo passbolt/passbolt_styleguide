@@ -12,7 +12,7 @@
  * @since         2.11.0
  */
 import {render} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import {BrowserRouter as Router} from 'react-router-dom';
 import {ResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext";

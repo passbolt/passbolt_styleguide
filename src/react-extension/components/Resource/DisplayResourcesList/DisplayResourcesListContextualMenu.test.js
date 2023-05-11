@@ -51,21 +51,21 @@ describe("DisplayResourcesListContextualMenu", () => {
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
-      expect(page.copyUsernameItem.className).not.toContain("disabled");
+      expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
-      expect(page.copyPasswordItem.className).not.toContain("disabled");
+      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyUriItem).not.toBeNull();
-      expect(page.copyUriItem.className).not.toContain("disabled");
+      expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
-      expect(page.copyPermalinkItem.className).not.toContain("disabled");
+      expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.openUriItem).not.toBeNull();
-      expect(page.openUriItem.className).not.toContain("disabled");
+      expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.editItem).not.toBeNull();
-      expect(page.editItem.className).not.toContain("disabled");
+      expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.shareItem).not.toBeNull();
-      expect(page.shareItem.className).not.toContain("disabled");
+      expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.deleteItem).not.toBeNull();
-      expect(page.deleteItem.className).not.toContain("disabled");
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
@@ -136,21 +136,21 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I should not be able to edit/share/delete a password I have read only access', async() => {
       expect(page.copyUsernameItem).not.toBeNull();
-      expect(page.copyUsernameItem.className).not.toContain("disabled");
+      expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
-      expect(page.copyPasswordItem.className).not.toContain("disabled");
+      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyUriItem).not.toBeNull();
-      expect(page.copyUriItem.className).not.toContain("disabled");
+      expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
-      expect(page.copyPermalinkItem.className).not.toContain("disabled");
+      expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.openUriItem).not.toBeNull();
-      expect(page.openUriItem.className).not.toContain("disabled");
+      expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.editItem).not.toBeNull();
-      expect(page.editItem.className).toContain("disabled");
+      expect(page.editItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.shareItem).not.toBeNull();
-      expect(page.shareItem.className).toContain("disabled");
+      expect(page.shareItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.deleteItem).not.toBeNull();
-      expect(page.deleteItem.className).toContain("disabled");
+      expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -161,7 +161,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
     });
 
-    it('As LU I should not be able to edit/share/delete a password I have read only access', async() => {
+    it('As LU I should not be able to share a password I have read only access', async() => {
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -175,7 +175,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.editItem).not.toBeNull();
       expect(page.editItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.shareItem).not.toBeNull();
-      expect(page.shareItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.shareItem.hasAttribute('disabled')).toBeTruthy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
     });

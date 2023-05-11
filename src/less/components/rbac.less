@@ -7,7 +7,6 @@
 
 .inner {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   flex:0 100%;
 
@@ -86,4 +85,10 @@
 
 .flex-item.border-right {
   border-right: 1px solid @default-border;
+}
+
+@media all and (max-width: 768px) {
+  .select-container.medium {
+    width: 100%;
+  }
 }
