@@ -1,0 +1,28 @@
+iframe {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: 0 0;
+
+  &.full-screen {
+    position:absolute;
+    width:100%;
+    height:100%;
+    z-index:999;
+    border:0;
+    top:0;
+    left:0;
+  }
+  &.cachette {
+    position:absolute;
+    width:1px;
+    height:1px;
+    z-index:999;
+    border:0;
+    bottom:0;
+    right:0;
+  }
+}

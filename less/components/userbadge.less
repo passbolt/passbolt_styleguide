@@ -1,0 +1,69 @@
+/*
+ * Profile user card
+ */
+.user.profile {
+  float: right;
+  margin: .8rem 1.6rem 0 0;
+
+  .button {
+    text-align: left;
+
+    /* active */
+    &:active {
+      background: @button-background;
+    }
+
+    &.open {
+      background: @dropdown-profile-background;
+    }
+  }
+
+  .center-cell {
+    width: 14.5rem;
+    margin-right: .5rem;
+  }
+
+  .more a {
+    border: 0;
+  }
+
+  .dropdown-content {
+    top: calc(100% - .3rem);
+    min-width: 100%;
+    width: 100%;
+    background: @dropdown-profile-background;
+    border-radius: 0 0 0.4rem 0.4rem;
+
+    a > span {
+      display: block;
+      .ellipsis();
+    }
+
+    .svg-icon.exclamation {
+      --icon-exclamation-background-color: @icon-exclamation-required-color;
+      margin-left: 0.8rem;
+    }
+
+    .chips {
+      margin-left: 0.8rem;
+      padding-bottom: .1rem;
+    }
+  }
+}
+
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .user.profile {
+    display: block;
+    width: auto;
+    padding: .8rem;
+
+    .center-cell {
+      display: none;
+    }
+
+    .right-cell {
+      display: none;
+    }
+  }
+}

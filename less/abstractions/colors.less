@@ -1,0 +1,445 @@
+@import "./colors_third_party_providers.less";
+
+/* palette */
+@white: #FFFFFF;
+@black: #000000;
+@dark-charcoal: #333333;
+
+@button-blue: #2A9CEB;
+@bleu-de-france: #2894DF;
+@steel-blue: #4271b7;
+
+@honeydew: #EDF7EB;
+@islamic-green: #0EAA00;
+@islamic-green-2: #009900;
+
+@deep-champagne: #FFDBA6;
+@blond: #FEF0BF;
+@bright-yellow: #FFA724;
+
+@spanish-orange: #DD6A00;
+
+@rosso-corsa: #D40101;
+@dark-candy-apple-red: #A40000;
+@light-salmon-pink: #FFA6A6;
+
+@granite-gray: #666666;
+@sonic-silver: #7A7A7A;
+@gray: #808080;
+@gray-2: #7C7C7C;
+@gray-3: #80807E;
+@taupe-gray: #888888;
+@spanish-gray: #989693;
+@spanish-gray-2: #9A9A9A;
+@quick-silver: #A0A0A0;
+@quick-silver-2: #A1A1A1;
+@philippine-silver: #B3B3B3;
+@gray-x11: #BDBDBD;
+@silver-sand: #C4C4C4;
+@chinese-silver: #CCCCCC;
+@chinese-silver-2: #C9C9C9;
+@gainsboro: #DDDDDD;
+@gainsboro-2: #DEDEDE;
+@gainsboro-3: #DCDCDC;
+@azureish-white: #DDEBF8;
+@light-silver: #D7D7D7;
+@chinese-white: #E0E0E0;
+@platinum: #E8E8E8;
+@bright-gray: #EEEEEE;
+@bright-gray-2: #EBEBE9;
+@bright-gray-3: #E9E9E9;
+@anti-flash-white: #F0F0F0;
+@cultured: #F5F5F5;
+@cultured-2: #F8F8F8;
+@lotion: #FAFAFA;
+
+/* default */
+/* background */
+@default-background: @white;
+/* borders */
+@default-border: @chinese-white;
+/* text */
+@default-text-color: @black;
+
+/* text */
+@text-info-color: @granite-gray;
+@text-light-color: @taupe-gray;
+@text-lighter-color: @spanish-gray;
+@text-lightest-color: @chinese-white; // not WCAG on background default, for decoration only
+@text-focus-color: @bleu-de-france;
+@text-warning-color: @spanish-orange;
+@text-error-color: @rosso-corsa;
+@text-secret-hover-color: @rosso-corsa;
+@text-error-api-color: @black;
+@text-notification-color: @black;
+
+/* label */
+@label-active-background: @white;
+@label-active-text-color: @black;
+
+/* header */
+@header-main-menu-background: @dark-charcoal;
+@header-main-menu-text-color: @bright-gray-2;
+@header-main-menu-hover-text-color: @white;
+@header-workspace-background: @bright-gray;
+
+/* footer */
+@footer-background: @bright-gray;
+
+/* authentication */
+/* background behind card setup/recover/login */
+@authentication-background: @anti-flash-white;
+/* text */
+@authentication-title-text-color: @granite-gray;
+
+/* attention required */
+@attention-required-border: @spanish-orange;
+
+/* quickaccess */
+@quickaccess-header-background: @bright-gray;
+@quickaccess-footer-background: @bright-gray;
+@quickaccess-back-link-background: @cultured;
+@quickaccess-list-title-background: @cultured;
+@quickaccess-list-title-hover-background: @bright-gray-3;
+@quickaccess-list-title-active-background: @azureish-white;
+@quickaccess-border: @chinese-white;
+
+/* logos */
+@logourl: url('@{images}/logo/logo.svg');
+@passbolt-icon-without-badge: url('@{images}/logo/icon-without-badge.svg');
+@passbolt-icon-badge-1: url('@{images}/logo/icon-badge-1.svg');
+@passbolt-icon-badge-2: url('@{images}/logo/icon-badge-2.svg');
+@passbolt-icon-badge-3: url('@{images}/logo/icon-badge-3.svg');
+@passbolt-icon-badge-4: url('@{images}/logo/icon-badge-4.svg');
+@passbolt-icon-badge-5: url('@{images}/logo/icon-badge-5.svg');
+@passbolt-icon-badge-5-plus: url('@{images}/logo/icon-badge-5+.svg');
+@passbolt-icon-inactive: url('@{images}/logo/icon-inactive.svg');
+
+/* Inform menu */
+@inform-menu-hover-background: @bright-gray-3;
+@inform-menu-active-background: @azureish-white;
+@inform-menu-border: @chinese-white;
+
+/* dialog */
+@dialog-background: @bright-gray;
+@dialog-overlay-background: rgba(255, 255, 255, 0.9);
+@dialog-border: @light-silver;
+@dialog-box-shadow-color: rgba(0, 0, 0, 0.1);
+@dialog-divider-border: @chinese-white;
+/* share dialog */
+@dialog-permission-updated-background: @deep-champagne;
+@dialog-permission-border: @cultured-2;
+/* folder move dialog */
+@dialog-folder-move-selected-background: @cultured-2;
+@dialog-folder-move-border: @cultured-2;
+@dialog-folder-move-selected-border: @cultured-2;
+/* delete user/group conflict dialog */
+@dialog-delete-conflict-title-background: @anti-flash-white;
+
+/* buttons */
+@button-background: @cultured-2;
+@button-active-background: @gainsboro-2;
+@button-border: @chinese-white;
+@button-focus-border: @bleu-de-france;
+
+@button-icon-background: @bright-gray;
+@button-icon-active-background: @chinese-white;
+@button-icon-border: @gray-x11;
+
+@button-primary-background: @bleu-de-france;
+@button-primary-border: @bleu-de-france;
+@button-primary-color: @white;
+
+@button-warning-background: @rosso-corsa;
+@button-warning-border: @rosso-corsa;
+@button-warning-color: @white;
+
+@button-transparent-background: rgba(@white, .1);
+@button-transparent-border: rgba(@black, .05);
+
+/* link */
+@link-highlight-background: @bleu-de-france;
+@link-border: @chinese-silver;
+@link-hover-border: @bleu-de-france;
+
+/* tooltip */
+@tooltip-background: @philippine-silver;
+@tooltip-text-color: @black;
+
+/* inputs */
+@input-text-color: @black;
+@input-hover-text-color: @black;
+@input-focus-text-color: @black;
+@input-active-text-color: @black;
+@input-disabled-text-color: @black;
+@input-background: @white;
+@input-hover-background: @white;
+@input-focus-background: @white;
+@input-active-background: @white;
+@input-disabled-background: @white;
+@input-loading-background: @anti-flash-white;
+@input-infield-background: @cultured-2;
+@input-border: @gray-x11;
+@input-infield-border: @chinese-white;
+@input-focus-border: @bleu-de-france;
+
+/* checkbox */
+@input-checkbox-background: @white;
+@input-checkbox-control-check-color: @black;
+@input-checkbox-disabled-background: @silver-sand;
+@input-checkbox-disabled-image-background: @quick-silver-2;
+@input-checkbox-border: @quick-silver;
+@input-checkbox-disabled-border: @silver-sand;
+@input-checkbox-focus-border: @bleu-de-france;
+
+/* controls */
+@controls-check:url('@{images}/controls/check_black.svg');
+
+/* radio */
+@input-radio-background: @white;
+@input-radio-dot-background: @button-blue;
+@input-radio-disabled-background: @silver-sand;
+@input-radio-dot-disabled-background: @quick-silver-2;
+@input-radio-border: @quick-silver;
+@input-radio-disabled-border: @silver-sand;
+@input-radio-focus-border: @bleu-de-france;
+
+/* radio list */
+@input-radio-list-background: @cultured-2;
+@input-radio-list-border: @chinese-white;
+@input-radio-list-hover-border: @silver-sand;
+@input-radio-list-focus-border: @bleu-de-france;
+
+/* toggle */
+@input-toggle-background: @gray;
+@input-toggle-focus-background: @bleu-de-france;
+@input-toggle-dot-background: @white;
+@input-toggle-checked-background: @islamic-green-2;
+@input-toggle-focus-border: @bleu-de-france;
+
+/* range */
+@input-range-background: @chinese-silver;
+@input-range-dot-background: @anti-flash-white;
+@input-range-dot-border: @chinese-silver;
+
+/* select */
+@select-background: @cultured-2;
+@select-setup-extension-background: @white;
+@select-hover-background: @gainsboro;
+@select-focus-background: @bleu-de-france;
+@select-active-background: @gainsboro;
+@select-hover-text-color: @black;
+@select-focus-text-color: @white;
+@select-active-text-color: @black;
+@select-border: @chinese-white;
+@select-focus-border: @bleu-de-france;
+
+/* complexity */
+@complexity-text-color: @gray-2;
+@complexity-bar-default-background: @gray-x11;
+@complexity-bar-gradient-background: linear-gradient(to right, @dark-candy-apple-red, @bright-yellow, @islamic-green);
+
+/* hints */
+@hint-success-color: @islamic-green-2;
+@hint-warning-color: @spanish-orange;
+@hint-error-color: @rosso-corsa;
+
+/* drag items */
+@drag-background: @gray;
+@drag-number-background: @rosso-corsa;
+@drag-text-color: @white;
+
+/* announcement */
+@announcement-background: @blond;
+@announcement-text-color: @black;
+
+/* chips */
+@chips-text-color: @white;
+@chips-beta-background: @spanish-orange;
+@chips-new-background: @bleu-de-france;
+
+/* autocomplete */
+@autocomplete-text-color: @black;
+@autocomplete-details-text-color: @spanish-gray;
+@autocomplete-hover-text-color: @black;
+@autocomplete-hover-details-text-color: @spanish-gray;
+@autocomplete-active-text-color: @black;
+@autocomplete-active-details-text-color: @spanish-gray;
+@autocomplete-selected-text-color: @black;
+@autocomplete-background: @white;
+@autocomplete-hover-background: @gainsboro-2;
+@autocomplete-active-background: @gainsboro-2;
+@autocomplete-selected-background: @cultured-2;
+@autocomplete-border: @gray-x11;
+
+/* progress bar */
+@progress-bar-default-background: @gray-x11;
+@progress-bar-background: @rosso-corsa;
+
+/* workspace */
+@workspace-left-background: @lotion;
+@workspace-middle-background: @lotion;
+@workspace-title-border: @chinese-white;
+
+/* left workspace menu */
+@workspace-left-menu-hover-text-color: @black;
+@workspace-left-menu-focus-text-color: @white;
+@workspace-left-menu-selected-text-color: @black;
+@workspace-left-menu-hover-background: @gainsboro-3;
+@workspace-left-menu-focus-background: @bleu-de-france;
+@workspace-left-menu-selected-background: @gainsboro-3;
+@workspace-left-menu-focus-border: @bleu-de-france;
+
+/* dropdown menus */
+@dropdown-item-text-color: @black;
+@dropdown-item-hover-text-color: @black;
+@dropdown-item-focus-text-color: @white;
+@dropdown-item-active-text-color: @black;
+@dropdown-background: @cultured-2;
+@dropdown-item-hover-background: @gainsboro-3;
+@dropdown-item-focus-background: @bleu-de-france;
+@dropdown-item-active-background: @gainsboro-3;
+@dropdown-profile-background: @white;
+
+/* grid header */
+@tableview-header-text-color: @black;
+@tableview-header-background: @bright-gray;
+/* grid header checkbox */
+@tableview-header-checkbox-background: @white;
+@tableview-header-checkbox-control-check-color: @black;
+/* grid content */
+@tableview-content-text-color: @black;
+@tableview-content-even-text-color: @black;
+@tableview-content-hover-text-color: @black;
+@tableview-content-selected-text-color: @black;
+@tableview-background: @white;
+@tableview-even-background: @lotion;
+@tableview-hover-background: @bright-gray-3;
+@tableview-selected-background: @azureish-white;
+@tableview-shadow-color: @white;
+/* grid content checkbox */
+@tableview-content-checkbox-background: @white;
+@tableview-content-even-checkbox-background: @white;
+@tableview-content-hover-checkbox-background: @white;
+@tableview-content-selected-checkbox-background: @white;
+@tableview-content-checkbox-control-check-color: @black;
+@tableview-content-even-checkbox-control-check-color: @black;
+@tableview-content-hover-checkbox-control-check-color: @black;
+@tableview-content-selected-checkbox-control-check-color: @black;
+
+@breadcrumb-background: @lotion;
+
+/* info panel */
+@info-panel-background: @white;
+@info-panel-border: @anti-flash-white;
+@info-panel-header-icon-background: @anti-flash-white;
+@info-panel-header-icon-color: @gray-2;
+@info-panel-header-subtitle-text-color: @gray-3;
+@info-panel-section-header-background: @white;
+@info-panel-section-content-background: @white;
+@info-panel-section-notice-background: @azureish-white;
+@info-panel-section-border: @chinese-white;
+
+/* comment */
+@comment-background: @bright-gray;
+
+/* tags */
+@tag-text-color: @bleu-de-france;
+@tag-border: @bleu-de-france;
+@tag-background: rgba(42,156,235,0.05);
+@tag-hover-text-color: @white;
+@tag-hover-border: @bleu-de-france;
+@tag-hover-background: @bleu-de-france;
+@tag-editor-focus-border: @bleu-de-france;
+
+/* notice */
+@notice-background: @platinum;
+
+/* tables */
+@table-background: @white;
+@table-warning-background: @blond;
+@table-error-background: @light-salmon-pink;
+@table-border: @chinese-white;
+@table-row-even-background: @white;
+
+/* tabs */
+@tab-selected-background: @white;
+@tab-unselected-background: @light-silver;
+@tab-border: @light-silver;
+
+/* mfa */
+@mfa-background: @anti-flash-white;
+@mfa-border: @anti-flash-white;
+@mfa-provider-border: @chinese-white;
+@mfa-hint-trusted-device-color: @islamic-green-2;
+
+/* feedback card */
+@feedback-card-border: @chinese-white;
+
+/* account recovery */
+@account-recovery-card-background: @cultured-2;
+
+/* user card */
+@usercard-created-background: @islamic-green;
+@usercard-updated-background: @bleu-de-france;
+@usercard-removed-background: @rosso-corsa;
+
+/* messages */
+@message-error-text-color: @black;
+@message-error-background: @light-salmon-pink;
+@message-success-text-color: @black;
+@message-success-background: @honeydew;
+@message-notice-text-color: @black;
+@message-notice-background: @azureish-white;
+@message-warning-text-color: @black;
+@message-warning-background: @deep-champagne;
+@message-link-border: @taupe-gray;
+
+/* default icon svg fill */
+@icon-color: @black;
+@icon-background-color: @white;
+@icon-primary-color: @white;
+@icon-primary-background-color: @black;
+@icon-warning-color: @white;
+@icon-warning-background-color: @black;
+
+/* favorite icon fill */
+@icon-favorite-color: @rosso-corsa;
+@icon-unfavorite-color: @chinese-silver-2;
+
+/* exclamation icon fill */
+@icon-exclamation-required-color: @spanish-orange;
+@icon-exclamation-default-color: @spanish-gray-2;
+@icon-exclamation-color: @white;
+
+/* spinner icon fill */
+@icon-spinner-color: @sonic-silver;
+@icon-spinner-background: rgba(@black, 0.25);
+@icon-spinner-primary-color: @white;
+@icon-spinner-primary-background: @white;
+@icon-spinner-warning-color: @white;
+@icon-spinner-warning-background: @white;
+
+/* failed icon fill */
+@icon-failed-color: @rosso-corsa;
+
+/* success icon fill */
+@icon-success-color: @islamic-green-2;
+
+/* logo icon fill */
+@icon-logo-color: @black;
+
+/* box shadows */
+@shadow-opacity-hover-black: 0.2;
+@shadow-opacity-hover-white: 0.25;
+@shadow-opacity-active-white: 0.35;
+@shadow-opacity-active-black: 0.35;
+@shadow-opacity-dropdown: 0.1;
+@shadow-opacity-select: 0.1;
+@shadow-opacity-info-panel: 0.3;
+@shadow-focus-color: @button-blue;
+@shadow-drag-color: @gray;
+
+/* accessibility */
+@outline-default-border: 0;
+@outline-primary-border: 0;

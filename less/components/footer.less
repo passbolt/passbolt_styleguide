@@ -1,0 +1,61 @@
+/*
+ * Footer
+ */
+.footer {
+  margin-top: 0;
+  position: fixed;
+  bottom: 0;
+  text-align: right;
+  width: 100%;
+  background: @footer-background;
+  border-top: 1px solid @default-border;
+  box-sizing: border-box;
+  z-index: 890;
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    column-gap: 2.4rem;
+    padding: .8rem 0;
+    width: 100%;
+    li {
+      display: flex;
+      line-height: 1.6rem;
+
+      &:last-child {
+        margin-right: 3.2rem;
+      }
+
+      &.error-message a {
+        background-color:@footer-background;
+        color: @text-error-color;
+      }
+
+      a {
+        font-size: 1.2rem; /* 12px */
+        line-height: 1.6rem; /* 16px */
+
+        .svg-icon svg {
+          width: 1.4rem;
+          height: 1.2rem;
+        }
+      }
+    }
+  }
+
+  // Github stars
+  .footer-links {
+    li {
+      .github-star {
+        display: inline;
+        position: absolute;
+        margin-left: -8em;
+        margin-top: -1px;
+      }
+    }
+    a:not(.gh-btn):not(.gh-count) {
+      border: 0;
+    }
+  }
+}

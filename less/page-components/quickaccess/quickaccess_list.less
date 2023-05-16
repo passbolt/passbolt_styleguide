@@ -1,0 +1,153 @@
+.quickaccess {
+    .index-list {
+        .list-container {
+            .clearfix();
+            max-height: 30rem;
+            overflow-y: auto;
+        }
+        .list-title {
+            background: @quickaccess-list-title-background;
+        }
+        .processing-text {
+            position: relative;
+            margin-left: .8rem;
+        }
+        .empty-entry {
+            margin: 1.6rem;
+            display: flex;
+            p {
+                position:relative;
+                line-height: 2rem;
+            }
+        }
+        .suggested-resource-entry {
+            display: flex;
+            flex-direction: row;
+            &:last-child {
+              .resource-details {
+                box-shadow: none;
+              }
+              .chevron-right-wrapper {
+                box-shadow: none;
+              }
+            }
+            .resource-details {
+                flex-direction: column;
+                color:@default-text-color;
+                padding: 1.6rem;
+                box-sizing: border-box;
+                border: none;
+                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+                width: 80%;
+                flex: 1 1 auto;
+                font-size: 1.5rem;
+                .ellipsis();
+
+                &:focus {
+                    color: @default-text-color;
+                }
+                &:hover {
+                    background: @quickaccess-list-title-hover-background;
+                    color: @default-text-color;
+                    text-decoration: none;
+                }
+                /* active */
+                &:active {
+                    background: @quickaccess-list-title-active-background;
+                    color: @default-text-color;
+                    text-decoration: none;
+                }
+                .inline-resource-name {
+                    .ellipsis();
+                }
+                .url {
+                    display:block;
+                    font-size:1.3rem;
+                    padding-top:.4rem;
+                    color:@text-info-color;
+                    .ellipsis();
+                }
+            }
+            .chevron-right-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent;
+                box-sizing: border-box;
+                border: none;
+                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+                width: 4rem;
+                flex: 0 1 auto;
+
+                &:focus, &:hover {
+                    background: @quickaccess-list-title-hover-background;
+                }
+
+                /* active */
+                &:active {
+                    background: @quickaccess-list-title-active-background;
+                }
+            }
+        }
+
+        .browse-resource-entry {
+          a {
+            .inline-resource-entry {
+              flex: 1 1 auto;
+              width: 80%;
+              font-size: 1.5rem;
+              .inline-resource-name {
+                .ellipsis();
+              }
+              .url {
+                display:block;
+                font-size:1.3rem;
+                padding-top:.4rem;
+                color:@text-info-color;
+                .ellipsis();
+              }
+            }
+          }
+        }
+
+        .filter-entry, .browse-resource-entry {
+            &:last-child {
+              a {
+                box-shadow: none;
+              }
+            }
+            a {
+                color: @default-text-color;
+                display: flex;
+                align-items: center;
+                border: none;
+                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+                padding: 1.6rem;
+                position:relative;
+                font-size: 1.5rem;
+
+                &:hover {
+                    background: @quickaccess-list-title-hover-background;
+                    color: @default-text-color;
+                    text-decoration: none;
+                }
+
+                /* active */
+                &:active {
+                    background: @quickaccess-list-title-active-background;
+                    color: @default-text-color;
+                    text-decoration: none;
+                }
+            }
+            .svg-icon {
+                &.chevron-right {
+                  margin-right: 0;
+                }
+                margin-right: 1.6rem;
+            }
+            .filter-title {
+                flex: 1;
+            }
+        }
+    }
+}

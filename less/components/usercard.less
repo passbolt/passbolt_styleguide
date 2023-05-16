@@ -1,0 +1,129 @@
+.usercard-col-2(@avatar-size) {
+    .clearfix();
+    margin: 0 0 1.2rem 0;
+
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .content-wrapper {
+        float: left;
+        width: 100%;
+
+        .content {
+            margin: 0 0 0 calc(@avatar-size + 1.6rem);
+
+            .name {
+                .ellipsis();
+
+                &-with-tooltip {
+                    font-weight: bold;
+                    .ellipsis();
+                }
+            }
+
+            .subinfo {
+                color: @default-text-color;
+                font-size: 0.929em; /* 13px */
+            }
+        }
+    }
+
+    .avatar {
+        float: left;
+        width: @avatar-size;
+        margin-left: -100%;
+
+        img {
+            width: @avatar-size;
+            height: @avatar-size;
+        }
+    }
+
+    ul.permissions-list {
+        margin-top: 1em;
+        font-size: 0.8em;
+
+        li {
+            .avatar {
+                margin-left: 0;
+                float: left;
+                width: (@avatar-size / 2);
+
+                img {
+                    width: (@avatar-size / 2);
+                    height: (@avatar-size / 2);
+                }
+            }
+            .name {
+                display: inline-block;
+                padding-left:7%;
+                line-height: (@avatar-size / 2);
+                &.crossed {
+                    text-decoration: line-through;
+                }
+                &-with-tooltip {
+                    font-weight: bold;
+                }
+            }
+            .type{
+                float: right;
+                text-align: right;
+                line-height: (@avatar-size / 2);
+                color: @text-info-color;
+                span {
+                    background-color: white;
+                    font-size: 0.8em;
+                    color: white;
+                    padding: 0.1em 0.5em;
+                    border-radius: 0.5em;
+                    &.created {
+                        background-color: @usercard-created-background;
+                    }
+                    &.updated {
+                        background-color: @usercard-updated-background;
+                    }
+                    &.removed {
+                        background-color: @usercard-removed-background;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.usercard-col-2 {
+    .usercard-col-2(42px);
+}
+
+.usercard-detailed-col-2 {
+    .usercard-col-2(42px);
+
+    // Animation used to show that an activity is new.
+    @keyframes highlight {
+        from { background-color: @tableview-selected-background; }
+        to { background-color: transparent; }
+    }
+
+    // Style to apply when an activity is new.
+    &.highlight {
+        background-color: @tableview-selected-background;
+        animation-delay: 2s;
+        animation-duration: 5s;
+        animation-name: highlight;
+        animation-fill-mode: forwards;
+    }
+
+    .content-wrapper .content {
+        .name, .subinfo {
+            color: @text-info-color;
+        }
+    }
+
+    .content-wrapper .content .name {
+        white-space: normal;
+        .creator {
+            color: @default-text-color;
+        }
+    }
+}

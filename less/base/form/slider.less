@@ -1,0 +1,56 @@
+
+.slider {
+
+  display: flex;
+  align-items: center;
+
+  input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 1px;
+    border-radius: 5px;
+    background: @input-range-background;
+    outline: 0;
+    flex-grow: 1;
+
+    &:focus-visible {
+      outline: @outline-default-border;
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 1.6rem;
+      height: 1.6rem;
+      box-shadow: inset 0 0 0 .1rem @input-range-dot-border;
+      border-radius: 50%;
+      background:  @input-range-dot-background;
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 .1rem @input-range-dot-border;
+      }
+    }
+
+    &::-moz-range-thumb {
+      width: 1.6rem;
+      height: 1.6rem;
+      box-shadow: inset 0 0 0 .1rem @input-range-dot-border;
+      border: none;
+      border-radius: 50%;
+      background: @input-range-dot-background;;
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 .1rem @input-range-dot-border;
+      }
+    }
+  }
+
+  input[type=number] {
+    margin-left: 1.6rem;
+  }
+}
+
+
+

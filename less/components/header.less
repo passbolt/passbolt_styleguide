@@ -1,0 +1,103 @@
+/* headers */
+.header {
+    overflow: visible !important;
+
+    &.first {
+        background: @header-main-menu-background;
+    }
+    &.second, &.third {
+        background: @header-workspace-background;
+    }
+
+    /* top navigation */
+    .navigation.primary {
+        padding: 1rem 1.6rem;
+        .clearfix();
+
+        li {
+            margin-right: 1.6rem;
+            float: left;
+
+            &:last-child {
+              margin-right: 0;
+            }
+            &.right {
+                float: right;
+                margin-right: 0;
+                margin-left: 1.6rem;
+            }
+
+            a, button {
+                color: @header-main-menu-text-color;
+                font-size: 1.7rem;
+                line-height: 2.3rem;
+                text-decoration: none;
+                border: 0;
+                display: inline-block;
+
+                &:hover {
+                    color: @header-main-menu-hover-text-color;
+                }
+                &:active,
+                &:focus {
+                    color: @text-focus-color;
+                }
+                &.highlighted {
+                    background-color: @link-highlight-background;
+                    padding: 0 0.5em 0 0.5em;
+                    -webkit-border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    border-radius: 3px;
+                }
+                &.highlighted:active,
+                &.highlighted:focus{
+                    color: @default-text-color;
+                }
+            }
+
+        }
+
+        li {
+            .row.selected {
+                a, button {
+                    color: @header-main-menu-hover-text-color;
+                    &:focus {
+                        color: @text-focus-color;
+                    }
+                }
+            }
+        }
+
+        .github-star {
+            display: none;
+            position: absolute;
+            right: 1em;
+            top: 4px;
+        }
+
+        @media all and (min-width: 600px) {
+            .github-star {
+                display: block;
+            }
+        }
+    }
+
+    /* logo positioning */
+    .logo, .logo-svg {
+        margin: 2.4rem 0 0 1.6rem;
+        max-width: 80%;
+    }
+}
+
+@media all and (max-width: 1024px) {
+  .header {
+    .navigation.primary {
+      li {
+        a, button {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+}
+

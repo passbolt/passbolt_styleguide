@@ -1,0 +1,151 @@
+.page.settings {
+  .main.panel .middle {
+    overflow-y: auto;
+  }
+
+  .profile-detailed-information {
+    .clearfix();
+
+    .avatar {
+      flex-direction: column;
+      align-items: center;
+
+      img {
+        padding: 0;
+        width: 15rem;
+        height: 15rem;
+        margin-bottom: 1.6rem;
+      }
+    }
+  }
+
+  .profile-key-inspector-information {
+    .key-info .table-info {
+      .fingerprint {
+        line-height: 1.6rem;
+      }
+    }
+  }
+
+  .key-export {
+    .input.textarea.gpgkey textarea.fluid.code {
+      height: 27em;
+      margin-bottom: 0;
+    }
+  }
+
+  .profile-passphrase {
+    .password-management-bg {
+      background: transparent url('@{images}/illustrations/passphrase_intro.svg') center center no-repeat;
+      height: 16rem;
+      max-width: 64rem;
+    }
+
+    .enter-passphrase {
+      .input-password-wrapper {
+        max-width: 45rem;
+      }
+    }
+
+    .password-hints {
+      margin:.8rem 0 1.6rem 0;
+
+      li {
+        font-size: 1.6rem;
+      }
+    }
+
+    .submit-wrapper {
+      display: flex;
+      align-items: center;
+
+      .button.cancel {
+        margin-right: 1.6rem;
+      }
+    }
+  }
+
+  .profile-choose-security-token {
+    .input-security-token {
+      .clearfix();
+
+      label {
+        margin-bottom: 1.2rem;
+      }
+      .input.text {
+        .rounded();
+        font-size: 3.8rem;
+        max-width: 12rem;
+        float: left;
+        text-align: center;
+        margin-right: 2.4rem;
+      }
+      .circle-picker {
+        float:left;
+      }
+      .randomize-button-wrapper {
+        float:left;
+        text-align: center;
+        clear:both;
+        cursor: pointer;
+      }
+    }
+    .submit-wrapper {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .profile-mobile-transfer {
+    .app-store {
+      display: block;
+      background: transparent url('@{images}/third_party/appstore.svg') left center no-repeat;
+      height: 4.4rem;
+      border: 0;
+    }
+    .play-store {
+      display: block;
+      background: transparent url('@{images}/third_party/playstore.svg') left center no-repeat;
+      height: 4.4rem;
+      border: 0;
+    }
+    .transfer-account {
+      display: flex;
+      .submit-wrapper {
+        margin: 0 0 0 1.6rem;
+        .button {
+          margin: 1.6rem 0 0 0;
+        }
+      }
+    }
+    #qr-canvas {
+      margin: 1.6rem auto;
+    }
+    .submit-wrapper {
+      .button.cancel {
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+/* hide icons if there is no space */
+@media all and (max-width: 950px) {
+  .page.settings {
+    .profile-detailed-information {
+      .avatar {
+        float: none;
+      }
+    }
+  }
+}
+
+/* table info is hard to fit because of fingerprint */
+@media (max-width: 1280px) {
+  .key-info .table-info {
+    font-size: 0.875em;
+    .select select {
+      font-size: 0.929em;
+    }
+  }
+}
