@@ -219,7 +219,7 @@ class SendTestMailDialog extends React.Component {
                 <a className="faq-link" href="https://help.passbolt.com/faq/hosting/why-email-not-sent" rel="noopener noreferrer" target="_blank"><Trans>FAQ: Why are my emails not sent?</Trans></a>
               </p>
               <div className="accordion-header">
-                <button type="button" onClick={this.handleDisplayLogsClick}>
+                <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
                   <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
                 </button>
               </div>
@@ -246,7 +246,7 @@ class SendTestMailDialog extends React.Component {
             <div className="dialog-body">
               <p><Trans>The test email has been sent. Check your email box, you should receive it in a minute.</Trans></p>
               <div className="accordion-header">
-                <button type="button" onClick={this.handleDisplayLogsClick}>
+                <button type="button" className="link no-border" onClick={this.handleDisplayLogsClick}>
                   <Icon name={this.state.displayLogs ? "caret-down" : "caret-right"}/> <Trans>Logs</Trans>
                 </button>
               </div>
