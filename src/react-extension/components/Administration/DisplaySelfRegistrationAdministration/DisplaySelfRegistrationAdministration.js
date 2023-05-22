@@ -341,7 +341,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
               ))
             }
             <div className="domain-add">
-              <button type="button" className="full-length" onClick={this.handleAddRowClick}>
+              <button type="button" onClick={this.handleAddRowClick}>
                 <Icon name="add"/>
                 <span><Trans>Add</Trans></span>
               </button>
