@@ -133,7 +133,7 @@ class NotifyError extends Component {
           {this.hasErrorDetails &&
                 <div className="accordion error-details">
                   <div className="accordion-header">
-                    <button type="button" onClick={this.handleErrorDetailsToggle}>
+                    <button type="button" className="link no-border" onClick={this.handleErrorDetailsToggle}>
                       <Trans>Error details</Trans>
                       <Icon baseline={true} name={this.state.showErrorDetails ? "caret-up" : "caret-down"} />
                     </button>

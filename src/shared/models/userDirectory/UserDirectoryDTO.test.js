@@ -23,7 +23,8 @@ describe("UserDirectoryDTO model", () => {
     it("should init dto with model", () => {
       expect.assertions(1);
       const dto = new UserDirectoryDTO(mockModel);
-      expect(dto).toEqual(mockedData);
+      const dtoObject = Object.assign({}, dto);
+      expect(dtoObject).toEqual(mockedData);
     });
     it("should init with default value if directory type is openldap", () => {
       expect.assertions(5);
@@ -45,9 +46,9 @@ describe("UserDirectoryDTO model", () => {
         password: "password",
       });
       const dto = new UserDirectoryDTO(model);
-      expect(dto.domains.org_domain.authentication_type).toEqual("sasl");
-      expect(dto.domains.org_domain.password).toBeUndefined();
-      expect(dto.domains.org_domain.username).toBeUndefined();
+      expect(dto.authentication_type).toEqual("sasl");
+      expect(dto.password).toBeUndefined();
+      expect(dto.username).toBeUndefined();
     });
   });
 });
