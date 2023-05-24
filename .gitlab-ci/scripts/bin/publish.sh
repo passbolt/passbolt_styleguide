@@ -10,7 +10,7 @@ CI_SCRIPTS_DIR=$(dirname "$0")/..
 source "$CI_SCRIPTS_DIR"/lib/version-check.sh
 
 {
-  echo _auth="$NPM_PUBLISH_TOKEN";
+  echo //registry.npmjs.com/:_authToken="$NPM_PUBLISH_TOKEN";
   echo email=diego@passbolt.com;
   echo always-auth=true
 } >> .npmrc
