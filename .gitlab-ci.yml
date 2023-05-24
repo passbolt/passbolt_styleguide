@@ -2,84 +2,16 @@ image: debian:stable-slim
 
 stages:
   - test
+  - build
+  - publish
 
-tester:
-  stage: test
-  image: node:16
-  coverage: /Lines\s* [:] ([\d\.]+)%/
+.rules:
   rules:
-    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+    - if: "$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS"
       when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH
-  script:
-    - npm ci
-    - npm run test:coverage
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - junit.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage/cobertura-coverage.xml
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH || $CI_COMMIT_TAG'
 
-linter:
-  stage: test
-  image: node:16
-  rules:
-    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
-      when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH
-  script:
-    - npm install
-    - npm run eslint
-
-storybook:
-  stage: test
-  image: mcr.microsoft.com/playwright
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == "master"
-    - if: $CI_COMMIT_BRANCH == "release"
-    - if: $CI_COMMIT_BRANCH == "develop"
-  script:
-    - npm install
-    - npm run dev:storybook:install
-    - npm run dev:storybook:build
-    - |
-      npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-        "npx http-server storybook-static --port 6006 --silent" \
-        "npx wait-on tcp:6006 && npm run test:storybook"
-
-build:
-  stage: test
-  image: node:16
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == "master"
-    - if: $CI_COMMIT_BRANCH == "release"
-    - if: $CI_COMMIT_BRANCH == "develop"
-  script:
-    - apt-get update
-    - apt-get install zip
-    - npm ci
-    - npx grunt
-    - npm run build
-
-audit:
-  allow_failure: true
-  stage: test
-  image: node:16
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == "master"
-    - if: $CI_COMMIT_BRANCH == "release"
-    - if: $CI_COMMIT_BRANCH == "develop"
-  script:
-    - npm audit
+include:
+  - local: "/.gitlab-ci/jobs/build.yml"
+  - local: "/.gitlab-ci/jobs/test.yml"
+  - local: "/.gitlab-ci/jobs/publish.yml"

@@ -1,0 +1,9 @@
+publish-to-npmjs:
+  stage: publish
+  image: node:16
+  rules:
+    - if: "$CI_COMMIT_TAG"
+  script:
+    - |
+      bash .gitlab-ci/scripts/bin/publish.sh
+      bash ./.gitlab-ci/scripts/bin/slack-status-messages.sh ":rocket: passbolt-styleguide $CI_COMMIT_TAG has been published in https://www.npmjs.com/package/passbolt-styleguide" "$CI_PROJECT_URL/-/jobs/$CI_JOB_ID"
