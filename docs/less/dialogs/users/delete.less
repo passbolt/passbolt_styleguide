@@ -1,0 +1,24 @@
+.delete-user-dialog, .delete-group-dialog {
+    .intro p + p {
+        margin-bottom:0;
+    }
+
+    .ownership-transfer {
+        max-height:20em; // same than share
+        overflow: auto;
+        background:@default-background;
+
+        h3 {
+            border:0;
+            padding:.5em 1.25em;
+            margin:0;
+            background:@dialog-delete-conflict-title-background;
+        }
+
+        li {
+            border-bottom: 1px solid @default-border;
+            padding:.5em 1.25em;
+            overflow: hidden;
+        }
+    }
+}

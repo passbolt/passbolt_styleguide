@@ -1,0 +1,65 @@
+.contextual-menu {
+    position: absolute;
+    background: @dropdown-background;
+    border: 1px solid @default-border;
+    filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, @shadow-opacity-dropdown));
+    border-radius: .4rem;
+    z-index: 993;
+    display: none;
+    padding: .8rem 0;
+    font-size: 1.5rem;
+    line-height: 2rem;
+
+    &.right {
+      border-radius: 0 .4rem .4rem .4rem;
+    }
+
+    // Separator of contextual menu item
+    .separator-before {
+        border-top: 1px solid @default-border;
+        margin-top: .4rem;
+
+         button {
+            margin-top: .4rem;
+        }
+    }
+
+    // Separator of contextual menu item
+    .separator-after {
+        border-bottom: 1px solid @default-border;
+        margin-bottom: .4rem;
+        button {
+            margin-bottom: .4rem;
+        }
+    }
+
+    // Contextual menu item
+    button {
+        width: 100%;
+        display: block;
+        border: 0;
+        padding: .8rem 1.6rem;
+        color: @dropdown-item-text-color;
+
+        // Contextual menu item hover
+        &:hover {
+            color: @dropdown-item-hover-text-color;
+            background: @dropdown-item-hover-background;
+        }
+
+        // Contextual menu item focus visible
+        &:focus {
+          color: @dropdown-item-focus-text-color;
+          background: @dropdown-item-focus-background;
+          box-shadow: 0 0 .4rem @shadow-focus-color;
+          outline: @outline-default-border;
+        }
+
+        // Contextual menu item pressed
+        &:active {
+          color: @dropdown-item-active-text-color;
+          background: @dropdown-item-active-background;
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+        }
+    }
+}

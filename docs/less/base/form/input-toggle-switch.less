@@ -1,0 +1,121 @@
+.input.toggle-switch {
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+
+  .toggle-switch-checkbox {
+    flex: 0 0 3.2rem;
+    -webkit-appearance: none;
+    appearance: none;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    width: 3.2rem;
+    height: 1.6rem;
+    background: @input-toggle-background;
+    border-radius: 3.2rem;
+    box-sizing: border-box;
+    margin: 0;
+
+    & + label {
+      margin: 0 0 0 1.2rem;
+      display: inline-block;
+      cursor: pointer;
+      padding: 0;
+      line-height: 2rem;
+      .ellipsis();
+
+      &.text {
+        font-weight: 400;
+      }
+    }
+
+    // Toggle hover
+    &:hover {
+      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+    }
+
+    // Toggle dot hover
+    &:hover:before {
+      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+    }
+
+    // Toggle focus
+    &:focus, &:focus-visible {
+      box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @input-toggle-focus-border;
+      outline: @outline-default-border;
+
+      + label {
+        background: @input-focus-background;
+        color: @input-focus-text-color;
+      }
+    }
+
+    // Toggle pressed
+    &:active {
+      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+
+      + label {
+        background: @label-active-background;
+        color: @label-active-text-color;
+      }
+    }
+
+    // Toggle dot pressed
+    &:active:before {
+      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+      margin: 0 0 0 0.7rem;
+      padding: 0 0 0 0.3rem;
+    }
+
+    // Toggle checked
+    &:checked {
+      background: @input-toggle-checked-background;
+      &:focus {
+        background: @input-toggle-focus-background;
+      }
+    }
+
+    // Toggle dot checked
+    &:checked:before {
+      transform: translateX(65%);
+    }
+
+    // Toggle dot checked and pressed
+    &:checked:active:before {
+      margin: 0 0.7rem 0 0;
+      padding: 0 0.3rem 0 0;
+    }
+
+    // Disabled state label.
+    &:disabled + label {
+      opacity: .5;
+      cursor: auto;
+    }
+
+    // Disabled toggle.
+    &:disabled {
+      cursor: auto;
+      opacity: .5;
+      border: none;
+      box-shadow: none;
+      outline: 0;
+
+      &:before{
+        box-shadow: none;
+      }
+    }
+
+    // Toggle dot
+    &:before {
+      content: "";
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 1rem;
+      background: @input-toggle-dot-background;
+      transform: translateX(-65%);
+      // Dot animation
+      transition: all .4s ease, padding .3s ease, margin .3s ease;
+    }
+  }
+}

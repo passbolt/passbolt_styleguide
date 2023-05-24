@@ -1,0 +1,162 @@
+.dialog {
+    .form-content {
+        &.permission-edit {
+            padding: 0;
+            max-height: 26.25rem;
+          // remove all margin bottom for direct child element
+          & > * {
+           margin-bottom: 0;
+          }
+        }
+    }
+
+    .permissions {
+        &.scroll {
+            .scroll-shadow();
+            height: 100%;
+            max-height: 26.25rem;
+            margin: 0;
+        }
+
+        .row {
+            .clearfix();
+            padding: 1.6rem;
+            border-bottom: 1px solid @dialog-divider-border;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+
+            &.permission-updated {
+                background: @dialog-permission-updated-background;
+            }
+
+            /* aro summary */
+            .avatar {
+                float: left;
+            }
+            .aro {
+                flex: 1 1 auto;
+                width: 30%;
+                float: left;
+                padding: 0 1rem 0 1.6rem;
+                .aro-name {
+                  display: flex;
+                  align-items: center;
+                  font-size: 1.5rem;
+                  line-height: 2rem;
+                  font-weight: 700;
+                }
+                .aro-details {
+                    display: flex;
+                    font-size: 1.2rem;
+                    line-height: 1.6rem;
+                    color: @text-lighter-color;
+                }
+                .ellipsis {
+                    display:inline-block;
+                    max-width:90%;
+                }
+                .svg-icon {
+                    svg {
+                        position:relative;
+                    }
+                }
+            }
+
+            .tooltip {
+                display: flex;
+                align-items: center;
+                margin: 0 1rem 0 .6rem;
+                line-height: 1.6rem;
+            }
+
+            .rights {
+                float: left;
+                flex: 0 1 auto;
+            }
+
+
+            .remove-item {
+                margin: 0 .5rem 0 .4rem;
+                padding: 0;
+                border: 0;
+
+                &, &:hover {
+                  display: block;
+                  border: none;
+                }
+
+                .svg-icon {
+                  padding: .65rem;
+                  width: 2.4rem;
+                  height: 2.4rem;
+                  text-align: center;
+                  display: block;
+                  line-height: 1.2rem;
+                  border: none;
+                  box-sizing: border-box;
+                }
+            }
+        }
+
+        /* shimmering skeleton when loading */
+        .row.skeleton {
+            height:42px;
+            position:relative;
+            .avatar {
+                float: left;
+                width: 4.2rem;
+                height: 4.2rem;
+                background:@input-loading-background;
+                border-radius:50%;
+                flex:none
+            }
+            .aro {
+                .aro-name {
+                    margin-top:.25em;
+                    width: 7em;
+                    height: 1em;
+                    background:@input-loading-background;
+                    .rounded();
+                }
+                .aro-details {
+                    .rounded();
+                    margin-top:.5em;
+                    width: 10em;
+                    height: 1em;
+                    background:@input-loading-background;
+                }
+
+            }
+            .actions {
+                border-radius:50%;
+                float:right;
+                width: 1.116rem;
+                height: 1.116rem;
+                margin-top:.7rem;
+                margin-right:1.62rem;
+                background:@input-loading-background;
+                margin-left:0.625rem;
+            }
+            .shimmer {
+                position:absolute;
+                top:0;
+                left:0;
+            }
+        }
+    }
+}
+
+/* hide icons if there is no space */
+@media all and (max-width: 480px) {
+    .dialog .permissions {
+        &.scroll {
+            height: auto;
+            margin: 0;
+        }
+        .row .user,
+        .row .group {
+            width: 45%;
+        }
+    }
+}

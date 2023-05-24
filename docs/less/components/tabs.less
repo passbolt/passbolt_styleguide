@@ -1,0 +1,87 @@
+/* tabs */
+.tabs {
+    width: 100%;
+}
+
+.tabs-nav {
+    border-bottom: 1px solid @tab-border;
+
+    li {
+        display: inline;
+        div {
+            display: inline-block;
+        }
+        button {
+            background: transparent;
+            display: inline-block;
+            padding: .4em 1.75em;
+            margin-left: 1.25em;
+            font-size: 1.5rem;
+            border: 0;
+            box-shadow: none;
+
+            &.selected {
+                margin-bottom: -1px;
+                border: 1px solid @tab-border;
+                border-bottom: 1px solid @tab-selected-background;
+                background: @tab-selected-background;
+                .rounded();
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+        }
+    }
+
+    &--bordered {
+      margin: 0 -1.6rem 1.6rem -1.6rem;
+
+      li {
+        background-color: @tab-unselected-background;
+        margin-right: .5rem;
+        display: inline-block;
+        border-radius: .2rem .2rem 0 0;
+
+        &:first-child {
+          margin-left: 1.6rem;
+        }
+
+        &:hover {
+          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+        }
+
+        button {
+          margin-left: 0;
+          padding: .4rem 1.6rem;
+          font-weight: 400;
+          line-height: 2rem;
+
+          &:hover {
+            color: @default-text-color;
+          }
+        }
+
+        &.active {
+          border: 1px solid @tab-border;
+          border-bottom: 1px solid @tab-selected-background;
+          margin-bottom: -10px;
+          background-color: @tab-selected-background;
+
+          button {
+            font-weight: 700;
+          }
+
+          &:hover {
+            box-shadow: none;
+          }
+        }
+      }
+    }
+}
+
+/* tab content */
+.tab-content {
+    display: none;
+    &.selected {
+        display: block;
+    }
+}

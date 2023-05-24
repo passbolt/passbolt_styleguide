@@ -1,0 +1,77 @@
+.quickaccess {
+    .item-browse {
+        .properties {
+            .property {
+                .clearfix();
+                display: flex;
+                align-items: center;
+                padding: 1.6rem;
+                box-shadow: inset 0 -.1rem 0 @quickaccess-border;
+
+                &:last-child {
+                  box-shadow: none;
+                }
+                a {
+                  border: 0;
+                }
+            }
+            .information {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+
+              .password-wrapper {
+                display: flex;
+                align-items: center;
+
+                .password-view {
+                  width: 2.2rem;
+                  height: 2.1rem;
+                  margin: 0 0 0 .8rem;
+                  padding: 0;
+
+                  .svg-icon svg {
+                    width: 1.4rem;
+                    height: 100%;
+                  }
+                }
+              }
+            }
+            .property-value {
+                max-width: 30rem;
+                .ellipsis();
+                &.empty {
+                  font-style: italic;
+                  color: @text-lightest-color
+                }
+            }
+            .property-name {
+                font-size: 1.3rem;
+                line-height: 1.8rem;
+                color: @text-light-color;
+                margin-bottom: .4rem;
+            }
+            .secret {
+                display: inline-block;
+                max-width: 28rem;
+                &.secret-copy {
+                  &:hover {
+                    color: @text-secret-hover-color;
+                  }
+                  > span {
+                    display: none;
+                  }
+
+                  &:before {
+                    content: 'BBBBBBBBB';
+                    font-family: 'Passbolt', sans-serif;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 1.8rem;
+                    line-height: 100%;
+                  }
+                }
+            }
+        }
+    }
+}

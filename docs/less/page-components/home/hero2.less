@@ -1,0 +1,62 @@
+.home .page-row.hero2 {
+    .logo {
+        margin: 1em 0;
+    }
+    .teaser-text {
+        font-size: 1.5em;
+    }
+    .call-to-action .button {
+        font-size: 1.125em;
+        display: inline-block;
+        margin-top: 1em;
+    }
+    .call-to-action .button + a {
+        margin-left: 1em;
+    }
+    .scroll-prompt {
+        display: none;
+    }
+    .github-star {
+        position: absolute;
+        left: 310px;
+        margin-top: 3px;
+    }
+}
+
+/* large screen */
+@media all and (min-width: 1000px) {
+    .home .page-row.hero2 {
+        max-width: 1150px;
+        min-height: 450px;
+        background: @default-background url('@{images}/background/cloud.jpg') right center no-repeat;
+        margin: auto;
+        position: relative;
+
+        .birds-bg {
+            position: absolute;
+            z-index: 9998;
+            right: 0;
+            width: 727px;
+            height: 557px;
+            margin-top: -2.5em;
+            background: transparent url('@{images}/background/flying_birds1.png') center center no-repeat;
+        }
+
+        .logo {
+            margin: 5% 0 1em 4%;
+        }
+        .teaser-text {
+            width: 18em;
+            font-size: 1.5em;
+            margin: 0 0 1em 4%;
+            text-align: left;
+            line-height: 1.666em;
+        }
+        .call-to-action .button {
+            font-size: 1.125em;
+            margin: .25em 0 3% 4%;
+            display: inline-block;
+        }
+
+    }
+}

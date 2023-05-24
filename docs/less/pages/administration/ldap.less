@@ -1,0 +1,37 @@
+.ldap-settings {
+  input[type=text] {
+    max-width: 100%;
+  }
+  .singleline {
+    max-width: 100%;
+  }
+}
+
+.dialog .ldap-test-settings-report {
+  .directory-list {
+    margin-bottom: 1.6rem;
+    span.error {
+      color: @text-error-color;
+    }
+    td:first-child {
+      padding-right: 3.2rem;
+    }
+  }
+
+  p.directory-errors.error {
+    color: @text-error-color;
+  }
+
+  .accordion-directory-structure {
+    .error {
+      color: @text-error-color;
+    }
+  }
+
+  .accordion-directory-errors textarea {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 11px;
+    overflow: auto;
+    height: 220px
+  }
+}

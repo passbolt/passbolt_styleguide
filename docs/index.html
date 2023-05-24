@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>Webpack App</title><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  * {
+    box-sizing: border-box;
+  }</style><script>/* globals window */
+  /* eslint-disable no-underscore-dangle */
+  try {
+    if (window.top !== window) {
+      window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.top.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+    }
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.warn('unable to connect to top frame for connecting dev tools');
+  }
+
+  window.onerror = function onerror(message, source, line, column, err) {
+    if (window.CONFIG_TYPE !== 'DEVELOPMENT') return;
+    // eslint-disable-next-line no-var, vars-on-top
+    var xhr = new window.XMLHttpRequest();
+    xhr.open('POST', '/runtime-error');
+    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    xhr.send(
+      JSON.stringify({
+        /* eslint-disable object-shorthand */
+        message: message,
+        source: source,
+        line: line,
+        column: column,
+        error: err && { message: err.message, name: err.name, stack: err.stack },
+        origin: 'manager',
+        /* eslint-enable object-shorthand */
+      })
+    );
+  };</script><meta name="title" content="Passbolt user interface kit | The open source password manager for teams"><meta name="description" content="Passbolt is an open source password manager designed for team collaboration. Securely generate, store, manage and monitor your team credentials. Try it now!"><meta property="og:type" content="website"><meta property="og:url" content="https://passbolt.github.io/passbolt_styleguide"><meta property="og:title" content="Passbolt user interface kit"><meta property="og:description" content="Passbolt is an open source password manager designed for team collaboration. Securely generate, store, manage and monitor your team credentials. Try it now!"><meta property="og:image" content="https://passbolt.github.io/passbolt_styleguide/img/og/og_image.png"><meta property="og:site_name" content="Passbolt user interface kit"><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://passbolt.github.io/passbolt_styleguide"><meta property="twitter:title" content="Passbolt user interface kit | The open source password manager for teams"><meta property="twitter:description" content="Passbolt is an open source password manager designed for team collaboration. Securely generate, store, manage and monitor your team credentials. Try it now!"><meta property="twitter:image" content="https://passbolt.github.io/passbolt_styleguide/img/og/og_image.png"><meta property="twitter:creator" content="passbolt"><style>#root[hidden],
+      #docs-root[hidden] {
+        display: none !important;
+      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['CONFIG_TYPE'] = "PRODUCTION";
+          
+      
+          
+            window['LOGLEVEL'] = "info";
+          
+      
+          
+            window['FEATURES'] = {"postcss":true,"emotionAlias":false,"warnOnLegacyHierarchySeparator":true,"buildStoriesJson":false,"storyStoreV7":false,"modernInlineRender":false,"breakingChangesV7":false,"interactionsDebugger":false,"babelModeV7":false,"argTypeTargetsV7":false,"previewMdx2":false};
+          
+      
+          
+      
+          
+      
+          
+            window['DOCS_MODE'] = false;</script><script src="runtime~main.f19abd90127838677c3e.manager.bundle.js"></script><script src="312.bb23567ec9a801a35010.manager.bundle.js"></script><script src="main.db30f0045bf46cc539ea.manager.bundle.js"></script></body></html>

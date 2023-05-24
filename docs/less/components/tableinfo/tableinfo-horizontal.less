@@ -1,0 +1,45 @@
+/* horizontal tableview */
+table.table-info.horizontal {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+    border: 1px solid @default-border;
+    margin-bottom: 1em;
+
+    &.with-borders {
+        td, th {
+            border-right: 1px solid @default-border;
+        }
+
+    }
+
+    td, th {
+        padding: .5em .5em .5em .75em;
+        margin: 0;
+    }
+    th {
+        border-bottom: 1px solid @default-border;
+        a {
+            display:block;
+            border:0;
+            &.sortable .svg-icon svg {
+                top:.15em;
+                position: relative;
+                margin-left:.5em;
+            }
+        }
+    }
+    thead tr {
+        background: @tableview-header-background;
+    }
+    tbody {
+        background:@table-background;
+
+        tr:nth-child(odd) {
+            background: @table-row-even-background;
+        }
+        tr:hover {
+            background: @tableview-hover-background;
+        }
+    }
+}

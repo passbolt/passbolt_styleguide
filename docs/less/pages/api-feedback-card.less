@@ -1,0 +1,76 @@
+.page.api-feedback {
+    width: 100%;
+    margin: auto;
+
+    .content {
+        .api-feedback-card {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            p {
+                font-size: 1.6rem;
+                margin-top: 3.6rem;
+                text-align: center;
+            }
+
+            .icon-feedback .attention {
+                height: 12.6rem;
+                width: 12.6rem;
+            }
+        }
+
+        .accordion-header {
+            width: 100%;
+            margin-top: 2.0rem;
+            margin-bottom: 1.2rem;
+
+            a {
+                font-weight: 700;
+            }
+        }
+
+        .accordion-content {
+            width: 100%;
+
+            textarea {
+                opacity: .5;
+            }
+        }
+    }
+}
+
+
+@media only screen and (min-width: 42rem) {
+    body {
+        background:@authentication-background;
+    }
+
+    .page.api-feedback {
+        display: grid;
+        height: calc(100% - 4rem);
+        grid-template-columns: 1fr 1.5fr 1fr;
+        grid-template-rows: 0 1fr 0.05fr;
+        grid-gap: 1px;
+        grid-template-areas: ". . ." ". api-feedback-card ." "footer footer footer";
+
+        .content {
+            grid-area: api-feedback-card;
+
+            .logo {
+                margin: 1.6em auto;
+                width: 20rem;
+                background-size: 20rem auto;
+            }
+
+            .api-feedback-card {
+                box-shadow: 0 0 1rem @dialog-box-shadow-color;
+                border-radius: 0.3rem;
+                max-width: 37.2rem;
+                margin: auto;
+                padding: 4.8rem 4rem;
+                background: @default-background;
+            } 
+        }
+    }
+}
