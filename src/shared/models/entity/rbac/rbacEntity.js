@@ -1,24 +1,24 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 import ActionEntity from "./actionEntity";
 import UiActionEntity from "./uiActionEntity";
+import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
 
 const ENTITY_NAME = "Rbac";
-const RBAC_CONTROL_FUNCTION_LENGTH = 255;
 const FOREIGN_MODEL_UI_ACTION = "UiAction";
 const FOREIGN_MODEL_ACTION = "Action";
 
@@ -78,10 +78,12 @@ class RbacEntity extends Entity {
           "type": "string",
           "format": "uuid"
         },
-        // @todo improve validation
         "control_function": {
           "type": "string",
-          "maxLength": RBAC_CONTROL_FUNCTION_LENGTH
+          "enum": [
+            controlFunctions.ALLOW,
+            controlFunctions.DENY
+          ]
         },
         // Association
         "action": ActionEntity.getSchema(), // relative action entity
@@ -118,7 +120,7 @@ class RbacEntity extends Entity {
   }
 
   /**
-   * Return a to update DTO ready to send to the API.
+   * Return an update DTO ready to send to the API.
    *
    * @returns {object}
    */
@@ -189,7 +191,7 @@ class RbacEntity extends Entity {
    * ==================================================
    */
   set controlFunction(controlFunction) {
-    // @todo Assert input
+    EntitySchema.validateProp("control_function", controlFunction, RbacEntity.getSchema().properties.control_function);
     this._props.control_function = controlFunction;
   }
 

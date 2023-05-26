@@ -12,7 +12,8 @@
  * @since         4.1.0
  */
 
-import {suggestedResourcesProps, suggestedResourcesPropsWithDenyUiAction} from "./HomePage.test.data";
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import {defaultProps, suggestedResourcesProps, denyUiActionProps} from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
 
 beforeEach(() => {
@@ -21,7 +22,8 @@ beforeEach(() => {
 
 describe("HomePage", () => {
   describe('As LU I can see the quickaccess homepage', () => {
-    it('As LU I can see the quickaccess tag section if I am allowed to', () => {
+    it('As LU I can see the quickaccess tag section if enabled by API flags', () => {
+      expect.assertions(3);
       const props = suggestedResourcesProps(); // The props to pass
       const page = new HomePagePage(props);
 
@@ -30,8 +32,25 @@ describe("HomePage", () => {
       expect(page.tagFilterEntryTitle).toStrictEqual('Tags');
     });
 
+    it('As LU I cannot see the quickaccess tag section if disabled by API flags', () => {
+      expect.assertions(2);
+      const data = {
+        siteSettings: {
+          getServerTimezone: () => '',
+          canIUse: () => false,
+        }
+      };
+      const context = defaultAppContext(data);
+      const props = defaultProps({context}); // The props to pass
+      const page = new HomePagePage(props);
+
+      expect(page.browseListTitle).toStrictEqual("Browse");
+      expect(page.hasTagFilterEntry).toBeFalsy();
+    });
+
     it('As LU I cannot see the quickaccess tag section if I am not allowed to', () => {
-      const props = suggestedResourcesPropsWithDenyUiAction(); // The props to pass
+      expect.assertions(2);
+      const props = denyUiActionProps(); // The props to pass
       const page = new HomePagePage(props);
 
       expect(page.browseListTitle).toStrictEqual("Browse");

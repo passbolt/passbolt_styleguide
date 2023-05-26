@@ -177,7 +177,7 @@ describe("Display Resources", () => {
   });
 
 
-  describe('As LU, I should be able to open manipulate the resource contextual menu', () => {
+  describe('As LU, I should be able to open the resource contextual menu', () => {
     it('As LU, I should be able to open a contextual menu for a resource', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);

@@ -1,15 +1,15 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import EntitySchema from "../abstract/entitySchema";
@@ -17,6 +17,7 @@ import ActionEntity from "./actionEntity";
 import {defaultActionData} from "./actionEntity.test.data";
 import each from "jest-each";
 import EntityValidationError from "../abstract/entityValidationError";
+import {v4 as uuid} from "uuid";
 
 describe("ActionEntity", () => {
   describe("ActionEntity:constructor", () => {
@@ -56,18 +57,19 @@ describe("ActionEntity", () => {
     each([
       {scenario: 'required', rule: 'type'},
       {scenario: 'not null', rule: 'type', value: null},
-      {scenario: 'max length', rule: 'format', value: "a".repeat(256)},
+      {scenario: 'max length', rule: 'maxLength', value: "a".repeat(256)},
     ]).describe("Should validate the name", test => {
       it(`Should not accept: ${test.scenario}`, async() => {
         expect.assertions(2);
         const dto = defaultActionData({
-          id: test.value
+          id: uuid(),
+          name: test.value
         });
         try {
           new ActionEntity(dto);
         } catch (error) {
           expect(error).toBeInstanceOf(EntityValidationError);
-          expect(error.hasError('id', test.rule)).toBeTruthy();
+          expect(error.hasError('name', test.rule)).toBeTruthy();
         }
       });
     });

@@ -14,6 +14,7 @@
 import RoleEntity from "./roleEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import EntitySchema from "../abstract/entitySchema";
+import {TEST_ROLE_USER_ID} from "./role.test.data";
 
 describe("Role entity", () => {
   it("schema must validate", () => {
@@ -22,7 +23,7 @@ describe("Role entity", () => {
 
   it("constructor works if valid minimal DTO is provided", () => {
     const dto = {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",

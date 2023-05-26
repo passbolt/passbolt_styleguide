@@ -47,7 +47,7 @@ beforeEach(() => {
 describe("DisplayResourcesWorkspace", () => {
   let page; // The page to test against
 
-  describe('As LU I can user the workspace primary sidebar.', () => {
+  describe('As LU I can use the workspace primary sidebar.', () => {
     it('As LU I can see the workspace primary sidebar.', () => {
       const props = defaultProps();
       page = new DisplayResourceWorkspacePage(props);

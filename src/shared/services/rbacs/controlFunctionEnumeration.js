@@ -17,8 +17,8 @@ import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import {uiActions} from "./uiActionEnumeration";
 
 /**
- * The
- * @type {{"CTL_FUNCTION_CONSTANT": "CTL_FUNCTION"}}
+ * The supported control functions labels.
+ * @type {object}
  */
 export const controlFunctions = {
   ALLOW: 'Allow',
@@ -26,8 +26,8 @@ export const controlFunctions = {
 };
 
 /**
- * The
- * @type {{"CTL_FUNCTION": Class}}
+ * The control function labels associated to their relative function.
+ * @type {object}
  */
 export const controlFunctionResolutions = {
   [controlFunctions.ALLOW]: AllowControlFunction,
@@ -36,8 +36,8 @@ export const controlFunctionResolutions = {
 
 /**
  * Default UI action controls for administrator.
- * By default the system makes it always ALLOW, but some action are more complex than allow and deny.
- * @type {{"UI_ACTION": function}}
+ * By default, the system makes it always ALLOW, but some action are more complex than allow and deny.
+ * @type {object}
  */
 export const defaultAdminUiActionControlResolution = {
   [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW] // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
@@ -45,8 +45,8 @@ export const defaultAdminUiActionControlResolution = {
 
 /**
  * Default UI action controls for user.
- * By default the system makes it always ALLOW, but some action are restricted by default
- * @type {{"UI_ACTION": function}}
+ * By default, the system makes it always ALLOW, but some action are restricted by default
+ * @type {object}
  */
 export const defaultUserUiActionControlResolution = {
   [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW] // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure

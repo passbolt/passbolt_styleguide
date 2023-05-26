@@ -9,12 +9,13 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import RbacEntity from "./rbacEntity";
 import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
+import RoleEntity from "../role/roleEntity";
 
 const ENTITY_NAME = 'Rbacs';
 const RULE_UNIQUE_ID = 'unique_id';
@@ -76,6 +77,45 @@ class RbacsCollection extends EntityCollection {
 
   /*
    * ==================================================
+   * Finders
+   * ==================================================
+   */
+
+  /**
+   * Find the first rbac matching the given role identifier and ui action name.
+   * @param {RoleEntity} role The role
+   * @param {string} name The ui action name
+   * @returns {RbacEntity}
+   * @throws {Error} If the role parameter is not a role entity
+   * @throws {Error} If the name parameter is not a string
+   */
+  findRbacByRoleAndUiActionName(role, name) {
+    if (!(role instanceof RoleEntity)) {
+      throw new Error('The role parameter should be a role entity.');
+    }
+    if (typeof name !== 'string' && !(name instanceof String)) {
+      throw new Error('The name parameter should be a valid string.');
+    }
+
+    return this.rbacs.find(rbac => rbac.roleId === role.id && rbac.uiAction?.name === name);
+  }
+
+  /**
+   * Find the first rbac matching the given ui action name.
+   * @param {string} name The ui action name
+   * @returns {RbacEntity}
+   * @throws {Error} If the name parameter is not a string
+   */
+  findRbacByActionName(name) {
+    if (typeof name !== 'string' && !(name instanceof String)) {
+      throw new Error('The name parameter should be a valid string.');
+    }
+
+    return this.rbacs.find(rbac => rbac.uiAction?.name === name);
+  }
+
+  /*
+   * ==================================================
    * Setters
    * ==================================================
    */
@@ -93,39 +133,7 @@ class RbacsCollection extends EntityCollection {
     }
     const entity = new RbacEntity(dto); // validate
 
-    /*
-     * Build rules
-     * this.assertUniqueId(entity);
-     */
-
     super.push(entity);
-  }
-
-  /**
-   * Find the first rbac matching the given role identifier and ui action name.
-   * @param {RoleEntity} role The role
-   * @param {string} name The ui action name
-   * @returns {RbacEntity}
-   */
-  findRbacByRoleAndUiActionName(role, name) {
-    /*
-     * assertUuid(roleId, "The role id should be a valid uuid.");
-     * assertString(name, "The name should be a valid string.");
-     */
-    return this.rbacs.find(rbac => rbac.roleId === role.id && rbac.uiAction?.name === name);
-  }
-
-  /**
-   * Find the first rbac matching the given ui action name.
-   * @param {string} name The ui action name
-   * @returns {RbacEntity}
-   */
-  findRbacByActionName(name) {
-    /*
-     * assertUuid(roleId, "The role id should be a valid uuid.");
-     * assertString(name, "The name should be a valid string.");
-     */
-    return this.rbacs.find(rbac => rbac.uiAction?.name === name);
   }
 
   /**
@@ -143,7 +151,7 @@ class RbacsCollection extends EntityCollection {
 
   /**
    * Remove a rbac
-   * @param {RbacEntity} rbac The rbac entity to add or replace.
+   * @param {RbacEntity} rbac The rbac entity to remove.
    */
   remove(rbac) {
     const length = this.items.length;

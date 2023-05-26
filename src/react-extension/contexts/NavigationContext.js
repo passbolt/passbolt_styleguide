@@ -253,7 +253,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationRbacsRequested() {
-    await this.goTo("apu", "/app/administration/rbacs");
+    await this.goTo("api", "/app/administration/rbacs");
   }
 
   /**

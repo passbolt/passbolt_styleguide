@@ -20,7 +20,7 @@ import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
- * The DisplayResourcesWorkspaceMainMenuPage component represented as a page
+ * The HomePage component represented as a page
  */
 export default class HomePagePage {
   /**
@@ -39,6 +39,7 @@ export default class HomePagePage {
 
   /**
    * Returns the list section title
+   * @returns {string}
    */
   get browseListTitle() {
     return this._page.container.querySelectorAll(".list-section .list-title")[1].textContent;
@@ -46,17 +47,23 @@ export default class HomePagePage {
 
   /**
    * Returns the list section filter entries
+   * @returns {NodeListOf<Element>}
    */
   get filterEntries() {
     return this._page.container.querySelectorAll(".list-section .list-items")[1].querySelectorAll(".filter-entry");
   }
 
+  /**
+   * Has tag filter entry?
+   * @returns {boolean}
+   */
   get hasTagFilterEntry() {
     return this.filterEntries.length > 2;
   }
 
   /**
    * Returns the tag filter entry
+   * @returns {string}
    */
   get tagFilterEntryTitle() {
     return this.filterEntries[2].querySelector('.filter-title').textContent;

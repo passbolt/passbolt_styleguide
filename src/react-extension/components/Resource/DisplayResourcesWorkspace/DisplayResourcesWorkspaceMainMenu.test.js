@@ -52,7 +52,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
   });
 
   describe('As LU I can create resource', () => {
-    it('As LU I can add create if I have not selected any folder', async() => {
+    it('As LU I can create a resource if I have not selected any folder', async() => {
       const props = defaultProps(); // The props to pass
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 

@@ -11,15 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-// import i18n from "../sdk/i18n";
+import {adminRoleDto, userRoleDto} from "./role.test.data";
 
-class PassboltServiceUnavailableError extends Error {
-  constructor(message) {
-    // message = message || i18n.t('The service is unavailable');
-    message = message || 'The service is unavailable';
-    super(message);
-    this.name = 'PassboltServiceUnavailableError';
-  }
-}
-
-export default PassboltServiceUnavailableError;
+export const rolesCollectionData = [
+  userRoleDto(),
+  adminRoleDto(),
+];

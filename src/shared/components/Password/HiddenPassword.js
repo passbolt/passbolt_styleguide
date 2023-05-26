@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import React, {Component} from "react";
@@ -35,7 +35,18 @@ class HiddenPassword extends Component {
     return (
       <button type="button" className="link no-border" onClick={this.handleClick.bind(this)} disabled={!this.props.canClick}>
         <span>
-          {this.props.preview ? this.props.preview : "Copy password to clipboard"}
+          {this.props.preview &&
+            Array.from(this.props.preview).map((char, index) => {
+              if (/\p{L}/u.test(char)) {
+                return <span key={index}>{char}</span>;
+              } else if (/\p{N}/u.test(char)) {
+                return <span key={index} className="digit">{char}</span>;
+              } else {
+                return <span key={index} className="special-char">{char}</span>;
+              }
+            })
+          }
+          {!this.props.preview && "Copy password to clipboard"}
         </span>
       </button>
     );

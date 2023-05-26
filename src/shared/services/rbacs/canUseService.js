@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.0.0
+ * @since         4.1.0
  */
 
 import GetControlFunctionService from "./getControlFunctionService";
@@ -23,22 +23,21 @@ export default class CanUse {
    * @returns {boolean}
    */
   static canRoleUseUiAction(role, rbacs, actionName) {
-    let controlFunction;
-
     // Administrator action are not controlled by rbac.
     if (role.isAdmin()) {
-      controlFunction = GetControlFunctionService.getDefaultForAdminAndUiAction(actionName);
-    } else {
-      // If the action is controlled by rbac for the given role.
-      const rbac = rbacs.findRbacByRoleAndUiActionName(role, actionName);
-      if (rbac) {
-        controlFunction = GetControlFunctionService.getByRbac(rbac);
-      }
-      if (!controlFunction) {
-        controlFunction = GetControlFunctionService.getDefaultForUserAndUiAction(actionName);
-      }
+      const adminControlFunction = GetControlFunctionService.getDefaultForAdminAndUiAction(actionName);
+      return adminControlFunction.execute();
     }
 
-    return controlFunction.execute();
+    // If the action is controlled by rbac for the given role.
+    const rbac = rbacs.findRbacByRoleAndUiActionName(role, actionName);
+    if (rbac) {
+      const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
+      return rbacControlFunction.execute();
+    }
+
+    // Fallback on user default.
+    const fallbackControlFunction = GetControlFunctionService.getDefaultForUserAndUiAction(actionName);
+    return fallbackControlFunction.execute();
   }
 }

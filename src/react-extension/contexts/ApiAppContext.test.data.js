@@ -19,6 +19,7 @@ import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
  * Returns the default api app context for the unit test
  * @param {Object} appContext (Optional)Properties to override
  * @returns {Object}
+ * @deprecated Check what was done for ExtAppContext
  */
 export function defaultAppContext(appContext = {}, userId = uuidv4()) {
   const siteSettings = new SiteSettings(siteSettingsFixture);

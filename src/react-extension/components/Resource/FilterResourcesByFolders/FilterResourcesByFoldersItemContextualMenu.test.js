@@ -96,7 +96,7 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I cannot share a folder if disabled by API flag.', async() => {
+    it('As LU I cannot export a folder if disabled by API flag.', async() => {
       const appContext = {
         siteSettings: {
           canIUse: () => false
@@ -108,7 +108,7 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
       expect(page.filterResourcesByFoldersItemContextualMenu.exportItem).toBeNull();
     });
 
-    it('As LU I cannot share a folder if denied by RBAC.', async() => {
+    it('As LU I cannot export a folder if denied by RBAC.', async() => {
       const props = propsWithDenyUiAction();
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       expect(page.filterResourcesByFoldersItemContextualMenu.exportItem).toBeNull();

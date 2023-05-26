@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 /**
@@ -25,7 +25,7 @@ export function defaultAdministratorRbacContext(data = {}) {
 }
 
 /**
- *Returns the default user rbac context for the unit test.
+ * Returns the default user rbac context for the unit test.
  * @param {Object} data Override the default context.
  * @returns {Object)}
  */
@@ -37,7 +37,7 @@ export function defaultUserRbacContext(data = {}) {
 }
 
 /**
- *Returns the full deny rbac context for the unit test.
+ * Returns the full deny rbac context for the unit test.
  * @param {Object} data Override the default context.
  * @returns {Object)}
  */

@@ -9,13 +9,11 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         2.9.0
  */
-// import i18n from "../sdk/i18n";
 
 class PassboltBadResponseError extends Error {
   constructor(error, response) {
-    // super(i18n.t('An internal error occurred. The server response could not be parsed. Please contact your administrator.'));
     super('An internal error occurred. The server response could not be parsed. Please contact your administrator.');
     this.name = 'PassboltBadResponseError';
     this.srcError = error;

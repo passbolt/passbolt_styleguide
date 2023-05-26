@@ -369,13 +369,15 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           <ul>
-            <li id="password_action">
-              <button type="button" disabled={!this.hasOneResourceSelected()}
-                onClick={this.handleCopySecretClickEvent}>
-                <Icon name="copy-to-clipboard"/>
-                <span><Trans>Copy</Trans></span>
-              </button>
-            </li>
+            {canCopySecret &&
+              <li id="password_action">
+                <button type="button" disabled={!this.hasOneResourceSelected()}
+                  onClick={this.handleCopySecretClickEvent}>
+                  <Icon name="copy-to-clipboard"/>
+                  <span><Trans>Copy</Trans></span>
+                </button>
+              </li>
+            }
             <li id="edit_action">
               <button type="button" disabled={!this.hasOneResourceSelected() || !this.canUpdate()}
                 onClick={this.handleEditClickEvent}>

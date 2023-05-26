@@ -13,7 +13,7 @@
  */
 import {SecretGeneratorComplexity} from "./SecretGeneratorComplexity";
 
-describe.only("SecretGeneratorComplexity", () => {
+describe("SecretGeneratorComplexity", () => {
   /**
    * To ensure the test is a bit more relevant, the results to compare with are taken from https://www.omnicalculator.com/other/password-entropy
    */

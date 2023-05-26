@@ -161,7 +161,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
     });
 
-    it('As LU I should not be able to share a password I have read only access', async() => {
+    it('As LU I should not be able to share a password I have update access', async() => {
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -188,7 +188,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
     });
 
-    it('As LU I should see the copy password to clipboard if denied by rbac', async() => {
+    it('As LU I should not see the copy password to clipboard if denied by rbac', async() => {
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.copyPasswordItem).toBeNull();

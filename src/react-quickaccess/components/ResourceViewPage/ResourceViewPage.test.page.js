@@ -30,7 +30,7 @@ export default class ResourceViewPagePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <MemoryRouter initialEntries={[`/${props.context.storage.local.get().resources[0].id}`]}>
+        <MemoryRouter initialEntries={[props.initialEntries]}>
           <Route path="/:id" component={routerProps => <ResourceViewPage {...props} {...routerProps}/>}/>
         </MemoryRouter>
       </MockTranslationProvider>
@@ -38,23 +38,42 @@ export default class ResourceViewPagePage {
   }
 
   /**
-   * Returns the list section title
+   * The password button element.
+   * @returns {Element}
    */
   get password() {
     return this._page.container.querySelector(".password-wrapper .secret button");
   }
 
+  /**
+   * The password text content.
+   * @returns {string}
+   */
   get passwordText() {
     return this._page.container.querySelector(".password-wrapper .secret button span").textContent;
   }
 
   /**
-   * Returns the list section filter entries
+   * The preview button.
+   * @returns {Element}
    */
   get previewButton() {
     return this._page.container.querySelector(".password-wrapper .password-view");
   }
 
+  /**
+   * The copy password button.
+   * @returns {Element}
+   */
+  get copyPasswordButton() {
+    return this._page.container.querySelector(".copy-password");
+  }
+
+  /**
+   * Click on the given element.
+   * @param {Element} element The element to click on.
+   * @returns {Promise<void>}
+   */
   async click(element) {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);

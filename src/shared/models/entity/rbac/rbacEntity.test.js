@@ -148,10 +148,7 @@ describe("RbacEntity", () => {
     each([
       {scenario: 'required', rule: 'type'},
       {scenario: 'not null', rule: 'type', value: null},
-      /*
-       * @todo should ensure only allowed control function
-       * {scenario: 'valid uuid', rule: 'format', value: 'invalid-control-function'},
-       */
+      {scenario: 'enum', rule: 'enum', value: 'invalid-control-function'},
     ]).describe("Should validate the control function", test => {
       it(`Should not accept: ${test.scenario}`, async() => {
         expect.assertions(2);

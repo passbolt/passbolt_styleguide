@@ -11,15 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-// import i18n from "../sdk/i18n";
+import {rolesCollectionData} from "../../../models/entity/role/rolesCollection.test.data";
 
-class PassboltServiceUnavailableError extends Error {
-  constructor(message) {
-    // message = message || i18n.t('The service is unavailable');
-    message = message || 'The service is unavailable';
-    super(message);
-    this.name = 'PassboltServiceUnavailableError';
+export class DefaultRoleService {
+  findAll() {
+    return rolesCollectionData;
   }
 }
-
-export default PassboltServiceUnavailableError;
