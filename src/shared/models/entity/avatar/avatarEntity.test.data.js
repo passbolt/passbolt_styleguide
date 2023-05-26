@@ -13,29 +13,32 @@
  */
 
 import {v4 as uuidv4} from 'uuid';
-import {defaultAvatarDto} from "../avatar/avatarEntity.test.data";
 
 /**
  * Minimal profile dto.
  * @param {object} data The data to override
  * @returns {object}
  */
-export const minimalProfileDto = (data = {}) => ({
-  "first_name": "Ada",
-  "last_name": "Lovelace",
+export const minimalAvatarDto = (data = {}) => ({
+  "url": {
+    "medium": "img\/avatar\/user_medium.png",
+    "small": "img\/avatar\/user.png"
+  },
   ...data
 });
 
 /**
- * Default profile dto.
+ * Default avatar dto.
  * @param {object} data The data to override
  * @returns {object}
  */
-export const defaultProfileDto = (data = {}) => minimalProfileDto({
+export const defaultAvatarDto = (data = {}) => minimalAvatarDto({
   "id": uuidv4(),
-  "user_id": uuidv4(),
-  "created": "2020-04-20T11:32:17+00:00",
-  "modified": "2020-04-20T11:32:17+00:00",
-  "avatar": defaultAvatarDto(),
+  "url": {
+    "medium": "/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/medium.jpg",
+    "small": "/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/small.jpg"
+  },
+  "created": "2023-06-03T12:03:46+00:00",
+  "modified": "2023-06-03T12:03:46+00:00",
   ...data
 });

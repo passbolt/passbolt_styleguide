@@ -67,7 +67,7 @@ class ResourceViewPage extends React.Component {
   }
 
   async loadResource() {
-    const storageData = await this.props.context.storage.local.get("resources");
+    const storageData = await this.props.context.storage.local.get(["resources"]);
     const resource = storageData.resources.find(item => item.id === this.props.match.params.id);
     this.setState({resource});
   }
@@ -378,7 +378,7 @@ class ResourceViewPage extends React.Component {
               </div>
             </div>
             {canCopySecret &&
-              <a role="button" className="button button-transparent property-action" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
+              <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
                 <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
                   {status => (
                     <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>

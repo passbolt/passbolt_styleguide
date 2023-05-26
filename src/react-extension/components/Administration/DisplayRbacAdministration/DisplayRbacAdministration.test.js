@@ -1,24 +1,27 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.8.3
+ * @since         4.1.0
  */
 
 import {enableFetchMocks} from 'jest-fetch-mock';
-import {mockApiResponse, mockApiResponseError} from '../../../../../test/mocks/mockApiResponse';
 import {waitFor} from '@testing-library/react';
-import {defaultProps, mockRbacSettings, mockRoles} from "./DisplayRbacAdministration.test.data";
+import {
+  defaultProps,
+  propsWithDisabledFlag,
+  propsWithPopulatedRbacContext, propsWithUpdatedRbacs
+} from "./DisplayRbacAdministration.test.data";
 import DisplayRbacAdministrationPage from "./DisplayRbacAdministration.test.page";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
-import RbacService from "../../../../shared/services/api/rbac/rbacService";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * Unit tests on DisplayRbacAdministration in regard of specifications
@@ -31,112 +34,145 @@ describe("DisplayRbacAdministration", () => {
     jest.restoreAllMocks();
   });
 
-  let page; // The page to test against
-  const props = defaultProps(); // The props to pass
-
   describe("As a logged in administrator I can see the Rbac administration", () => {
-    it('As a logged in administrator when the Rbac administration is configured, I can access the Rbac administration settings page', async() => {
-      fetch.doMockOnceIf(/rbacs*/, () => mockApiResponse(mockRbacSettings()));
-      fetch.doMockOnceIf(/roles*/, () => mockApiResponse(mockRoles()));
-      page = new DisplayRbacAdministrationPage(props);
-      await waitFor(() => {});
-      expect.assertions(7);
-
+    it('I can access see the Rbac administration settings page', async() => {
+      const page = new DisplayRbacAdministrationPage(defaultProps());
+      expect.assertions(1);
       expect(page.exists()).toBeTruthy();
+    });
+
+    it('As a logged in administrator I can see the help box', async() => {
+      const page = new DisplayRbacAdministrationPage(defaultProps());
+      expect.assertions(4);
       expect(page.helpBox).toBeDefined();
       expect(page.helpBoxButton).toBeDefined();
       expect(page.helpBoxButton.textContent).toEqual("Read RBAC doc");
       expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/rbac');
-      expect(page.saveSettingsButton).toBeDefined();
-      // We expect to have the button disable for the first usage
-      expect(page.saveSettingsButton.hasAttribute("disabled")).toBeTruthy();
     });
 
-    it('As a logged in administrator when the Rbac administration is not configured, I can access the Rbac administration settings page', async() => {
-      fetch.doMockOnceIf(/rbacs*/, () => mockApiResponse(mockRbacSettings()));
-      fetch.doMockOnceIf(/roles*/, () => mockApiResponse(mockRoles()));
-      page = new DisplayRbacAdministrationPage(props);
+    it('As a logged in administrator I can all rbac settings relative to the administrator role', async() => {
+      const props = propsWithPopulatedRbacContext();
+      const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
-      expect.assertions(31);
+      expect.assertions(21);
 
-      // Admin rbac
-      expect(page.select(1).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(1).className).toStrictEqual("selected-value disabled");
-      expect(page.select(3).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(3).className).toStrictEqual("selected-value disabled");
-      expect(page.select(5).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(5).className).toStrictEqual("selected-value disabled");
-      expect(page.select(7).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(7).className).toStrictEqual("selected-value disabled");
-      expect(page.select(9).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(9).className).toStrictEqual("selected-value disabled");
-      expect(page.select(11).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(11).className).toStrictEqual("selected-value disabled");
-      expect(page.select(13).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(13).className).toStrictEqual("selected-value disabled");
-      expect(page.select(15).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(15).className).toStrictEqual("selected-value disabled");
-      expect(page.select(17).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(17).className).toStrictEqual("selected-value disabled");
-      expect(page.select(19).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(19).className).toStrictEqual("selected-value disabled");
-      // User rbac
-      expect(page.select(2).textContent).toStrictEqual(controlFunctions.DENY);
-      expect(page.select(4).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(6).textContent).toStrictEqual(controlFunctions.DENY);
-      expect(page.select(8).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(10).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(12).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(14).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(16).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(18).textContent).toStrictEqual(controlFunctions.ALLOW);
-      expect(page.select(20).textContent).toStrictEqual(controlFunctions.DENY);
-      // We expect to have the button disable for the first usage
-      expect(page.saveSettingsButton.hasAttribute("disabled")).toBeTruthy();
+      expect(page.getAllSelectsByRole('admin').length).toEqual(10);
+      expect(page.select('admin', uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.RESOURCES_IMPORT).className).toContain('disabled');
+      expect(page.select('admin', uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.RESOURCES_EXPORT).className).toContain('disabled');
+      expect(page.select('admin', uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.SECRETS_PREVIEW).className).toContain('disabled');
+      expect(page.select('admin', uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.SECRETS_COPY).className).toContain('disabled');
+      expect(page.select('admin', uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.RESOURCES_SEE_ACTIVITIES).className).toContain('disabled');
+      expect(page.select('admin', uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.RESOURCES_SEE_COMMENTS).className).toContain('disabled');
+      expect(page.select('admin', uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.FOLDERS_USE).className).toContain('disabled');
+      expect(page.select('admin', uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.TAGS_USE).className).toContain('disabled');
+      expect(page.select('admin', uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.SHARE_VIEW_LIST).className).toContain('disabled');
+      expect(page.select('admin', uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('admin', uiActions.USERS_VIEW_WORKSPACE).className).toContain('disabled');
+      expect(page.qu);
+    });
+
+    it('As a logged in administrator I can all rbac settings relative to the user role', async() => {
+      const props = propsWithPopulatedRbacContext();
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(11);
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(10);
+      expect(page.select('user', uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select('user', uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select('user', uiActions.SECRETS_COPY).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.RESOURCES_SEE_ACTIVITIES).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.RESOURCES_SEE_COMMENTS).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.FOLDERS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.DENY);
+    });
+
+    it('As a logged in administrator I should not see the rbac settings relative to import if disabled by feature flag', async() => {
+      const props = propsWithDisabledFlag('import');
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.select('user', uiActions.RESOURCES_IMPORT)).toBeUndefined();
+    });
+
+    it('As a logged in administrator I should not see the rbac settings relative to export if disabled by feature flag', async() => {
+      const props = propsWithDisabledFlag('export');
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.select('user', uiActions.RESOURCES_EXPORT)).toBeUndefined();
+    });
+
+    it('As a logged in administrator I should not see the rbac settings relative to preview password if disabled by feature flag', async() => {
+      const props = propsWithDisabledFlag('previewPassword');
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.select('user', uiActions.SECRETS_PREVIEW)).toBeUndefined();
+    });
+
+    it('As a logged in administrator I should not see the rbac settings relative to tags if disabled by feature flag', async() => {
+      const props = propsWithDisabledFlag('tags');
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.select('user', uiActions.TAGS_USE)).toBeUndefined();
+    });
+
+    it('As a logged in administrator I should not see the rbac settings relative to folders if disabled by feature flag', async() => {
+      const props = propsWithDisabledFlag('folders');
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.select('user', uiActions.FOLDERS_USE)).toBeUndefined();
     });
   });
 
-  it('As a logged in administrator I can modify and save the permission setting', async() => {
-    const rbacSettings = mockRbacSettings();
-    fetch.doMockOnceIf(/rbacs*/, () => mockApiResponse(rbacSettings));
-    fetch.doMockOnceIf(/roles*/, () => mockApiResponse(mockRoles()));
-    page = new DisplayRbacAdministrationPage(props);
-    await waitFor(() => {});
-    jest.spyOn(props.actionFeedbackContext, 'displaySuccess');
-    jest.spyOn(RbacService.prototype, 'updateAll');
+  describe("As a logged in administrator I can update the rbac settings", () => {
+    it('As a logged in administrator I can modify and save the rbacs settings', async() => {
+      const props = propsWithPopulatedRbacContext();
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(1);
 
-    await page.click(page.select(2));
-    await page.click(page.selectFirstItem(2));
+      await page.click(page.select('user', uiActions.RESOURCES_EXPORT));
+      await page.click(page.selectFirstItem('user', uiActions.RESOURCES_EXPORT));
 
-    const rbacDto = rbacSettings[1];
-    rbacDto.control_function = controlFunctions.ALLOW;
-    fetch.doMockOnceIf(/rbacs*/, () => mockApiResponse([rbacDto]));
+      expect(props.adminRbacContext.setRbacsUpdated).toHaveBeenCalled();
+    });
 
-    await page.clickOnSave();
+    it('As a logged in administrator I should see the updated rbacs highlighted', async() => {
+      const props = propsWithUpdatedRbacs();
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
 
-    expect(RbacService.prototype.updateAll).toHaveBeenCalledWith([{"control_function": rbacDto.control_function, "id": rbacDto.id}], {"action": true, "ui_action": true});
-    expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The role-based access control settings were updated.");
-  });
-
-  it('As a logged in administrator I can handle an error on the save permission setting', async() => {
-    const rbacSettings = mockRbacSettings();
-    fetch.doMockOnceIf(/rbacs*/, () => mockApiResponse(rbacSettings));
-    fetch.doMockOnceIf(/roles*/, () => mockApiResponse(mockRoles()));
-    page = new DisplayRbacAdministrationPage(props);
-    await waitFor(() => {});
-    jest.spyOn(props.actionFeedbackContext, 'displaySuccess');
-    jest.spyOn(RbacService.prototype, 'updateAll');
-
-    await page.click(page.select(2));
-    await page.click(page.selectFirstItem(2));
-
-    const rbacDto = rbacSettings[1];
-    rbacDto.control_function = controlFunctions.ALLOW;
-    fetch.doMockOnceIf(/rbacs*/, () => mockApiResponseError(500, "Can't save the settings for some reason."));
-
-    await page.clickOnSave();
-
-    expect(RbacService.prototype.updateAll).toHaveBeenCalledWith([{"control_function": rbacDto.control_function, "id": rbacDto.id}], {"action": true, "ui_action": true});
-    expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("Can't save the settings for some reason.");
+      const updatedRbacUiActionName1 = props.adminRbacContext.rbacsUpdated.items[0].uiAction.name;
+      expect(page.row(updatedRbacUiActionName1).className).toContain('highlighted');
+      const updatedRbacUiActionName2 = props.adminRbacContext.rbacsUpdated.items[0].uiAction.name;
+      expect(page.row(updatedRbacUiActionName2).className).toContain('highlighted');
+    });
   });
 });

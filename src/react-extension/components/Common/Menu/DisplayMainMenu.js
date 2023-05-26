@@ -73,7 +73,7 @@ class DisplayMainMenu extends Component {
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
                       <button
-                      className="users link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}>
+                        className="users link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}>
                         <span><Trans>users</Trans></span>
                       </button>
                     </div>

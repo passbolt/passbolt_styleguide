@@ -9,16 +9,11 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.1.0
  */
+import {rolesCollectionData} from "../../../models/entity/role/rolesCollection.test.data";
 
-import {v4 as uuidv4} from "uuid";
-
-export const defaultActionData = (data = {}) => {
-  const defaultData = {
-    "id": uuidv4(),
-    "name": "Resources.add"
-  };
-
-  return Object.assign(defaultData, data);
-};
+export class DefaultRoleService {
+  findAll() {
+    return rolesCollectionData;
+  }
+}

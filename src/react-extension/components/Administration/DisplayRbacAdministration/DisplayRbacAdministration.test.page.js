@@ -16,11 +16,6 @@ import React from "react";
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayRbacAdministration from "./DisplayRbacAdministration";
-import {
-  AdminRbacContextProvider
-} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
-import DisplayAdministrationRbacActions
-  from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationRbacsActions/DisplayAdministrationRbacActions";
 
 /**
  * The DisplayRbacAdministration component represented as a page
@@ -33,10 +28,7 @@ export default class DisplayRbacAdministrationPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AdminRbacContextProvider  {...props}>
-          <DisplayAdministrationRbacActions {...props}/>
-          <DisplayRbacAdministration {...props}/>
-        </AdminRbacContextProvider>
+        <DisplayRbacAdministration {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -48,25 +40,49 @@ export default class DisplayRbacAdministrationPage {
     return this._page.container.querySelector('.rbac-settings');
   }
 
-  get actions() {
-    return this._page.container.querySelector(".actions");
-  }
   /**
-   * Returns the save settings button
+   * Format action name in class name.
+   * @param {string} actionName the action name to format
+   * @returns {string}
    */
-  get saveSettingsButton() {
-    return this._page.container.querySelector('.actions button');
+  formatActionNameInClassName(actionName) {
+    return actionName.toLowerCase().replaceAll(/[^\w]/g, '-');
+  }
+
+  /**
+   * Get all the select by role
+   */
+  getAllSelectsByRole(roleName) {
+    return this._page.container.querySelectorAll(`.select-container.${roleName}`);
+  }
+
+  /**
+   * Return the row corresponding to the action name
+   * @param actionName
+   * @returns {Element}
+   */
+  row(actionName) {
+    return this._page.container.querySelector(`.rbac-row.${this.formatActionNameInClassName(actionName)}`);
   }
 
   /**
    * Returns the toggle settings
+   * @param roleName
+   * @param actionName
+   * @returns {Element}
    */
-  select(index) {
-    return this._page.container.querySelectorAll('.select')[index - 1].querySelector('.selected-value');
+  select(roleName, actionName) {
+    return this.row(actionName)?.querySelector(`.select-container.${roleName} .selected-value`);
   }
 
-  selectFirstItem(index) {
-    return this._page.container.querySelectorAll('.select')[index - 1].querySelector('.option');
+  /**
+   * Select the forst item of the select
+   * @param roleName
+   * @param actionName
+   * @returns {Element}
+   */
+  selectFirstItem(roleName, actionName) {
+    return this.row(actionName)?.querySelector(`.select-container.${roleName} .option`);
   }
 
   /**
@@ -88,13 +104,6 @@ export default class DisplayRbacAdministrationPage {
    */
   exists() {
     return this.Rbac !== null;
-  }
-
-  /**
-   * click on save settings button
-   */
-  async clickOnSave() {
-    return this.click(this.saveSettingsButton);
   }
 
   /**

@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import React from "react";
@@ -18,7 +18,6 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
 import RbacService from "../../../../shared/services/api/rbac/rbacService";
 import RoleService from "../../../../shared/services/api/role/roleService";
-import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 
 /**
@@ -28,10 +27,9 @@ import RbacEntity from "../../../../shared/models/entity/rbac/rbacEntity";
 export const AdminRbacContext = React.createContext({
   processing: false, // Is it processing.
   rbacs: null, // The rbacs settings.
-  rbacsUpdated: {}, // The rbacs updated settings.
-  loadSettings: () => {}, // Load the settings.
-  getCtlFunctionForActionAndRole: () => {}, // Get the control function defined for a given role and a given action
-  updateRbacControlFunction: () => {}, // Update a rbac control function.
+  rbacsUpdated: {}, // The updated rbacs settings.
+  setRbacs: () => {}, // Set the rbacs.
+  setRbacsUpdated: () => {}, //  Set the updated rbacs.
   save: () => {}, // Save settings
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
   hasSettingsChanges: () => {}, // returns true if a setting has changed and the UI must be enabled
@@ -58,9 +56,8 @@ export class AdminRbacContextProvider extends React.Component {
       processing: false,
       rbacs: null,
       rbacsUpdated: new RbacsCollection([]),
-      loadSettings: this.loadSettings.bind(this),
-      getCtlFunctionForActionAndRole: this.getCtlFunctionForActionAndRole.bind(this),
-      updateRbacControlFunction: this.updateRbacControlFunction.bind(this),
+      setRbacs: this.setRbacs.bind(this),
+      setRbacsUpdated: this.setRbacsUpdated.bind(this),
       isProcessing: this.isProcessing.bind(this),
       hasSettingsChanges: this.hasSettingsChanges.bind(this),
       save: this.save.bind(this),
@@ -69,74 +66,20 @@ export class AdminRbacContextProvider extends React.Component {
   }
 
   /**
-   * Load the rbac settings.
-   * @return {Promise<void>}
+   * Set the rbacs
+   * @param {RbacsCollection} rbacs The rbacs collection to set.
+   * @return {void}
    */
-  async loadSettings() {
-    // @todo handle entry point missing.
-    const rbacs = await this.findRbacs();
-    const roles = await this.findRoles();
-
-    this.setState({rbacs, roles});
+  async setRbacs(rbacs) {
+    this.setState({rbacs});
   }
 
   /**
-   * Fetch the rbacs.
-   * @return {Promise<RbacsCollection>}
+   * Set the updated rbacs
+   * @param {RbacsCollection} rbacsUpdated The updated rbacs collection to set.
+   * @return {void}
    */
-  async findRbacs() {
-    const rbacsDto = await this.rbacService.findAll({ui_action: true});
-    return new RbacsCollection(rbacsDto);
-  }
-
-  /**
-   * Find the roles.
-   * @return {Promise<RolesCollection>}
-   */
-  async findRoles() {
-    const rolesDto = await this.roleService.findAll();
-    return new RolesCollection(rolesDto);
-  }
-
-  /**
-   * Get the control function defined for a given role and a given action
-   * @param {string} roleId The role to get the control for.
-   * @param {string} actionName The action name to get the control function for.
-   * @return {string|null}
-   */
-  getCtlFunctionForActionAndRole(roleId, actionName) {
-    const role = this.state.roles.getFirst('id', roleId);
-    let rbac = this.state.rbacsUpdated.findRbacByRoleAndUiActionName(role, actionName);
-    if (!rbac) {
-      rbac = this.state.rbacs.findRbacByRoleAndUiActionName(role, actionName);
-    }
-    if (!rbac) {
-      return null;
-    }
-
-    return rbac?.controlFunction;
-  }
-
-  /**
-   * Update a rbac setting.
-   * @param {RoleEntity} role The role to update the rbac for.
-   * @param {string} actionName The action to update the rbac for.
-   * @param {string} controlFunction The new control function for the rbac.
-   */
-  updateRbacControlFunction(role, actionName, controlFunction) {
-    const rbacsUpdated = this.state.rbacsUpdated;
-    const rbac = this.state.rbacs.findRbacByRoleAndUiActionName(role, actionName);
-
-    // If the function is has the original one, remove it from the list of changes.
-    if (rbac.controlFunction === controlFunction) {
-      rbacsUpdated.remove(rbac);
-    } else {
-      // If the control function is not the rbac to the list of changes.
-      const clonedRbac = new RbacEntity(rbac.toDto({ui_action: true, action: true}));
-      clonedRbac.controlFunction = controlFunction;
-      rbacsUpdated.addOrReplace(clonedRbac);
-    }
-
+  async setRbacsUpdated(rbacsUpdated) {
     this.setState({rbacsUpdated});
   }
 

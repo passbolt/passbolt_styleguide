@@ -11,14 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
+import {adminRoleDto, userRoleDto} from "./role.test.data";
 
-import {v4 as uuidv4} from "uuid";
-
-export const defaultActionData = (data = {}) => {
-  const defaultData = {
-    "id": uuidv4(),
-    "name": "Resources.add"
-  };
-
-  return Object.assign(defaultData, data);
-};
+export const rolesCollectionData = [
+  userRoleDto(),
+  adminRoleDto(),
+];

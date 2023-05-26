@@ -12,6 +12,8 @@
  * @since         3.0.0
  */
 
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../src/shared/models/entity/role/role.test.data";
+
 export default (userId) => {
   if(userId === "640ebc06-5ec1-5322-a1ae-6120ed2f3a74") {
     return {
@@ -42,7 +44,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -90,7 +92,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "carol@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -138,7 +140,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "dame@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -186,7 +188,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "betty@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -248,7 +250,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -296,7 +298,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -347,7 +349,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -395,7 +397,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -442,7 +444,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -490,7 +492,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -537,7 +539,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -585,7 +587,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -632,7 +634,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -680,7 +682,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -727,7 +729,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -775,7 +777,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -822,7 +824,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -870,7 +872,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -917,7 +919,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -965,7 +967,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1012,7 +1014,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1060,7 +1062,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1107,7 +1109,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1155,7 +1157,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1202,7 +1204,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1250,7 +1252,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1297,7 +1299,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1345,7 +1347,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1392,7 +1394,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1440,7 +1442,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1487,7 +1489,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1535,7 +1537,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1582,7 +1584,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1630,7 +1632,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1677,7 +1679,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1725,7 +1727,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1772,7 +1774,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1820,7 +1822,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1867,7 +1869,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "ada@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1915,7 +1917,7 @@ export default (userId) => {
                   "group": null,
                   "user": {
                     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-                    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+                    "role_id": TEST_ROLE_ADMIN_ID,
                     "username": "admin@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1963,7 +1965,7 @@ export default (userId) => {
                   "created": "2020-08-17T16:37:13+00:00",
                   "user": {
                     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "frances@passbolt.com",
                     "active": true,
                     "deleted": false,
@@ -1988,7 +1990,7 @@ export default (userId) => {
                   "created": "2020-08-17T16:37:13+00:00",
                   "user": {
                     "id": "620de627-8f07-5427-9149-e2c43219c5aa",
-                    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+                    "role_id": TEST_ROLE_USER_ID,
                     "username": "grace@passbolt.com",
                     "active": true,
                     "deleted": false,

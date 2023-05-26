@@ -30,7 +30,7 @@ export default class ResourceViewPagePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <MemoryRouter initialEntries={[`/${props.context.storage.local.get().resources[0].id}`]}>
+        <MemoryRouter initialEntries={[props.initialEntries]}>
           <Route path="/:id" component={routerProps => <ResourceViewPage {...props} {...routerProps}/>}/>
         </MemoryRouter>
       </MockTranslationProvider>
@@ -48,11 +48,12 @@ export default class ResourceViewPagePage {
     return this._page.container.querySelector(".password-wrapper .secret button span").textContent;
   }
 
-  /**
-   * Returns the list section filter entries
-   */
   get previewButton() {
     return this._page.container.querySelector(".password-wrapper .password-view");
+  }
+
+  get copyPasswordButton() {
+    return this._page.container.querySelector(".copy-password");
   }
 
   async click(element) {

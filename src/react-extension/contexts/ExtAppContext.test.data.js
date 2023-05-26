@@ -21,7 +21,7 @@ import resourceTypesFixture from "../test/fixture/ResourceTypes/resourceTypes";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
 import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
-import {adminRoleDto, userRoleDto} from "../../shared/models/entity/role/role.test.data";
+import {adminRoleDto, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -43,13 +43,13 @@ export function defaultAppContext(appContext = {}) {
     loggedInUser: {
       id: userSettings.id,
       role: {
-        id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
+        id: TEST_ROLE_USER_ID,
         name: 'admin'
       }
     },
     users: [],
     roles: [{
-      id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
+      id: TEST_ROLE_USER_ID,
       name: 'admin'
     }],
     setContext: jest.fn()

@@ -9,27 +9,40 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import React from "react";
 import PropTypes from "prop-types";
 import DisplayRbacAdministration from "./DisplayRbacAdministration";
-import {AdminInternationalizationContextProvider} from '../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext';
-import {defaultProps, mockRbacSettings} from "./DisplayRbacAdministration.test.data";
+import {
+  AdminInternationalizationContextProvider
+} from '../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext';
+import {propsWithPopulatedRbacContext} from "./DisplayRbacAdministration.test.data";
+import {AdminRbacContext} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 
 export default {
   title: 'Components/Administration/DisplayRbacAdministration',
   component: DisplayRbacAdministration
 };
 
+const parameters = {
+  css: "api_main"
+};
+
 const Template = args =>
   <AdminInternationalizationContextProvider {...args}>
-    <div className="panel middle">
-      <div className="grid grid-responsive-12">
-        <DisplayRbacAdministration {...args}/>
+    <AdminRbacContext.Provider value={args.adminRbacContext}>
+      <div className="panel main">
+        <div>
+          <div className="panel middle">
+            <div className="grid grid-responsive-12">
+              <DisplayRbacAdministration {...args}/>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </AdminRbacContext.Provider>
   </AdminInternationalizationContextProvider>;
 
 Template.propTypes = {
@@ -37,4 +50,5 @@ Template.propTypes = {
 };
 
 export const Initial = Template.bind({});
-Initial.args = defaultProps({adminRbacContext: mockRbacSettings()});
+Initial.args = propsWithPopulatedRbacContext();
+Initial.parameters = parameters;

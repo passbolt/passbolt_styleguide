@@ -1,6 +1,7 @@
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -55,7 +56,7 @@ export function defaultProps() {
  */
 export const mockUsers = [{
   "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+  "role_id": TEST_ROLE_USER_ID,
   "username": "carol@passbolt.com",
   "active": true,
   "deleted": false,
@@ -92,11 +93,11 @@ export const mockUsers = [{
   "last_logged_in": ""
 }, {
   "id": "f848277c-5398-58f8-a82a-72397af2d450",
-  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+  "role_id": TEST_ROLE_USER_ID,
   "role": {
     "created": "2012-07-04T13:39:25+00:00",
     "description": "Logged in user",
-    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "id": TEST_ROLE_USER_ID,
     "modified": "2012-07-04T13:39:25+00:00",
     "name": "user"
   },

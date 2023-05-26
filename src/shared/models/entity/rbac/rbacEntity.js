@@ -9,16 +9,16 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 import ActionEntity from "./actionEntity";
 import UiActionEntity from "./uiActionEntity";
+import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
 
 const ENTITY_NAME = "Rbac";
-const RBAC_CONTROL_FUNCTION_LENGTH = 255;
 const FOREIGN_MODEL_UI_ACTION = "UiAction";
 const FOREIGN_MODEL_ACTION = "Action";
 
@@ -78,10 +78,12 @@ class RbacEntity extends Entity {
           "type": "string",
           "format": "uuid"
         },
-        // @todo improve validation
         "control_function": {
           "type": "string",
-          "maxLength": RBAC_CONTROL_FUNCTION_LENGTH
+          "enum": [
+            controlFunctions.ALLOW,
+            controlFunctions.DENY
+          ]
         },
         // Association
         "action": ActionEntity.getSchema(), // relative action entity
@@ -189,7 +191,7 @@ class RbacEntity extends Entity {
    * ==================================================
    */
   set controlFunction(controlFunction) {
-    // @todo Assert input
+    EntitySchema.validateProp("control_function", controlFunction, RbacEntity.getSchema().properties.control_function);
     this._props.control_function = controlFunction;
   }
 

@@ -9,14 +9,13 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 
 import React from "react";
 import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
-import {withAdminRbac} from "../../../contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
 
 const TMP_ALLOWED_ACTIONS_CTL_FUNCTIONS = [
@@ -39,7 +38,23 @@ class DisplayRbacItem extends React.Component {
    * @param {RoleEntity} role The role the select change for
    */
   handleInputChange(event, role) {
-    this.props.adminRbacContext.updateRbacControlFunction(role, this.props.actionName, event.target.value);
+    this.props.onChange(role, this.props.actionName, event.target.value);
+  }
+
+  /**
+   * Return the list of allowed control functions.
+   * @returns {[{label: string, value: string},{label: string, value: string}]}
+   */
+  get allowedCtlFunctions() {
+    return TMP_ALLOWED_ACTIONS_CTL_FUNCTIONS;
+  }
+
+  /**
+   * Get the row component class name.
+   * @returns {string}
+   */
+  get rowClassName() {
+    return this.props.actionName.toLowerCase().replaceAll(/[^\w]/ig, '-');
   }
 
   /**
@@ -48,7 +63,15 @@ class DisplayRbacItem extends React.Component {
    * @return {string}
    */
   getCtlFunctionForRole(role) {
-    return this.props.adminRbacContext.getCtlFunctionForActionAndRole(role.id, this.props.actionName);
+    let rbac = this.props.rbacsUpdated?.findRbacByRoleAndUiActionName(role, this.props.actionName);
+    if (!rbac) {
+      rbac = this.props.rbacs?.findRbacByRoleAndUiActionName(role, this.props.actionName);
+    }
+    if (!rbac) {
+      return null;
+    }
+
+    return rbac?.controlFunction;
   }
 
   /**
@@ -56,7 +79,7 @@ class DisplayRbacItem extends React.Component {
    * @return {boolean}
    */
   hasChanged() {
-    if (this.props.adminRbacContext.rbacsUpdated.findRbacByActionName(this.props.actionName)) {
+    if (this.props.rbacsUpdated.findRbacByActionName(this.props.actionName)) {
       return true;
     }
     return false;
@@ -66,33 +89,32 @@ class DisplayRbacItem extends React.Component {
    * @inheritDoc
    */
   render() {
-    const roles = this.props.adminRbacContext.roles;
     let customizableRoles = [];
-    if (roles) {
-      customizableRoles = roles.items.filter(role => role.name === 'user');
+    if (this.props.roles) {
+      customizableRoles = this.props.roles.items.filter(role => role.name === 'user');
     }
 
     return (
       <>
-        <div className={`flex-container inner level-${this.props.level} ${this.hasChanged() ? 'highlighted' : ''}`}>
+        <div className={`rbac-row ${this.rowClassName} flex-container inner level-${this.props.level} ${this.hasChanged() ? 'highlighted' : ''}`}>
           <div className="flex-item first border-right">
             <span>{this.props.label}</span>
           </div>
           <div className="flex-item border-right">
             <Select
-              className="medium"
-              items={TMP_ALLOWED_ACTIONS_CTL_FUNCTIONS}
+              className={`medium admin`}
+              items={this.allowedCtlFunctions}
               value={controlFunctions.ALLOW}
               disabled={true}/>
           </div>
-          {customizableRoles.map(role =>
-            <div key={`${this.props.actionName}-${role.id}`} className="flex-item">
-              <Select
-                className="medium"
-                items={TMP_ALLOWED_ACTIONS_CTL_FUNCTIONS}
-                value={this.getCtlFunctionForRole(role)}
-                onChange={event => this.handleInputChange(event, role)}/>
-            </div>
+          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item">
+            <Select
+              className={`medium ${role.name}`}
+              items={this.allowedCtlFunctions}
+              value={this.getCtlFunctionForRole(role)}
+              disabled={!(this.props.rbacs?.length > 0)}
+              onChange={event => this.handleInputChange(event, role)}/>
+          </div>
           )}
         </div>
       </>
@@ -101,12 +123,14 @@ class DisplayRbacItem extends React.Component {
 }
 
 DisplayRbacItem.propTypes = {
-  label: PropTypes.string, // The action label.
-  level: PropTypes.number, // The action level.
-  actionName: PropTypes.string, // The action name.
-  onChange: PropTypes.func, // The translation function.
-  adminRbacContext: PropTypes.object, // The administration rbac context
+  label: PropTypes.string.isRequired, // The action label.
+  level: PropTypes.number.isRequired, // The action level.
+  actionName: PropTypes.string.isRequired, // The action name.
+  rbacs: PropTypes.object, // The collection of rbacs.
+  rbacsUpdated: PropTypes.object, // The collection of updated rbacs.
+  roles: PropTypes.object.isRequired, // The collection of role.
+  onChange: PropTypes.func.isRequired, // The translation function.
   t: PropTypes.func, // The translation function.
 };
 
-export default withAdminRbac(withTranslation('common')(DisplayRbacItem));
+export default withTranslation('common')(DisplayRbacItem);

@@ -11,14 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
+import {userSettingsRbacsCollectionData} from "../../../models/entity/rbac/rbacsCollection.test.data";
 
-import {v4 as uuidv4} from "uuid";
-
-export const defaultActionData = (data = {}) => {
-  const defaultData = {
-    "id": uuidv4(),
-    "name": "Resources.add"
-  };
-
-  return Object.assign(defaultData, data);
-};
+export const defaultRbacMeService = props => jest.fn().mockImplementation(() => ({
+  findMe: () => userSettingsRbacsCollectionData(),
+  ...props
+}));

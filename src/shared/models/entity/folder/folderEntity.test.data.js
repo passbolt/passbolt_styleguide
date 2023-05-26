@@ -9,16 +9,21 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.O.0
+ * @since         4.1.0
  */
 import {v4 as uuidv4} from "uuid";
 import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../permission/permissionEntity.test.data";
+
+export const minimalFolderDto = (data = {}) => ({
+  name: 'Folder name',
+  ...data
+});
 
 export const defaultFolderDto = (data = {}) => {
   const id = data?.id || uuidv4();
 
   return {
-    id: "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
+    id: id,
     name: "Accounting",
     created: "2020-02-01T00:00:00+00:00",
     modified: "2020-02-01T00:00:00+00:00",
@@ -28,6 +33,10 @@ export const defaultFolderDto = (data = {}) => {
       aco: 'Folder',
       aco_foreign_key: id
     }),
+    permissions: [ownerPermissionDto({
+      aco: 'Folder',
+      aco_foreign_key: id
+    })],
     folder_parent_id: null,
     personal: false,
     ...data
