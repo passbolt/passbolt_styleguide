@@ -15,6 +15,7 @@ import PassboltApiFetchError from "../Error/PassboltApiFetchError";
 import PassboltBadResponseError from "../Error/PassboltBadResponseError";
 import PassboltServiceUnavailableError from "../Error/PassboltServiceUnavailableError";
 
+const SUPPORTED_METHODS = ['GET', 'POST', 'PUT', 'DELETE'];
 export class ApiClient {
   /**
    * Constructor
@@ -192,7 +193,7 @@ export class ApiClient {
    * @throws {TypeError} if id is empty or not a string
    * @param {string} id
    * @return {void}
-   * @public
+   * @private
    */
   assertValidId(id) {
     if (!id) {
@@ -210,11 +211,11 @@ export class ApiClient {
    */
   assertMethod(method) {
     if (typeof method !== 'string') {
-      new TypeError('ApiClient.assertValidMethod method should be a string.');
+      throw new TypeError('ApiClient.assertValidMethod method should be a string.');
     }
-    const supportedMethods = ['GET', 'POST', 'PUT', 'DELETE'];
-    if (supportedMethods.indexOf(method) < 0) {
-      new TypeError(`ApiClient.assertValidMethod error: method ${method} is not supported.`);
+
+    if (SUPPORTED_METHODS.indexOf(method.toUpperCase()) < 0) {
+      throw new TypeError(`ApiClient.assertValidMethod error: method ${method} is not supported.`);
     }
   }
 
@@ -231,6 +232,9 @@ export class ApiClient {
     if (!(url instanceof URL)) {
       throw new TypeError('ApliClient.assertUrl error: url should be a valid URL object.');
     }
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      throw new TypeError('ApliClient.assertUrl error: url protocol should only be https or http.');
+    }
   }
 
   /**
@@ -241,7 +245,7 @@ export class ApiClient {
    */
   assertBody(body) {
     if (typeof body !== 'string') {
-      new TypeError(`ApiClient.assertBody error: body should be a string.`);
+      throw new TypeError(`ApiClient.assertBody error: body should be a string.`);
     }
   }
 
@@ -251,7 +255,7 @@ export class ApiClient {
    * @param {Object} body
    * @throws {TypeError} if body is empty or cannot converted to valid JSON string
    * @return {string} JavaScript Object Notation (JSON) string
-   * @public
+   * @private
    */
   buildBody(body) {
     return JSON.stringify(body);
@@ -261,7 +265,7 @@ export class ApiClient {
    * Return a URL object from string url and this.baseUrl and this.apiVersion
    * Optionally append urlOptions to the URL object
    *
-   * @param {string|URL} url
+   * @param {string} url
    * @param {Object} [urlOptions] Optional url parameters for example {"contain[something]": "1"}
    * @throws {TypeError} if urlOptions key or values are not a string
    * @returns {URL}
