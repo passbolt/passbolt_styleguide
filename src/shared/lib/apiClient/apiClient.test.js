@@ -563,7 +563,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(spy).toHaveBeenCalledWith("POST", new URL(`${url}/${resourceName}.json?api-version=v2`), JSON.stringify(body));
   });
 
-  it("should call PUT (update) with an id", async() => {
+  it("should call PUT (update) with an id for a resource", async() => {
     expect.assertions(5);
     const testClient = new ApiClient(options);
     const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
@@ -584,6 +584,31 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(result).toStrictEqual(expectedResponse);
     expect(spyFetch).toHaveBeenCalledTimes(1);
     expect(spyFetch).toHaveBeenCalledWith("PUT", new URL(`${url}/${resourceName}/${resourceId}.json?api-version=v2`), JSON.stringify(body));
+    expect(spyAssertId).toHaveBeenCalledTimes(1);
+    expect(spyAssertId).toHaveBeenCalledWith(resourceId);
+  });
+
+  it("should call PUT (update dry-run) with an id for a resource", async() => {
+    expect.assertions(5);
+    const testClient = new ApiClient(options);
+    const spyFetch = jest.spyOn(testClient, "fetchAndHandleResponse");
+    const spyAssertId = jest.spyOn(testClient, "assertValidId");
+
+    const resourceId = uuid();
+    const body = {
+      id: resourceId,
+      data: 'fake-data'
+    };
+    const responseData = {id: resourceId, ...body};
+    const expectedResponse = JSON.parse(await mockApiResponse(responseData));
+
+    fetch.mockResponse(() => mockApiResponse(responseData));
+
+    const result = await testClient.update(resourceId, null, {}, true);
+
+    expect(result).toStrictEqual(expectedResponse);
+    expect(spyFetch).toHaveBeenCalledTimes(1);
+    expect(spyFetch).toHaveBeenCalledWith("PUT", new URL(`${url}/${resourceName}/${resourceId}/dry-run.json?api-version=v2`), null);
     expect(spyAssertId).toHaveBeenCalledTimes(1);
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
