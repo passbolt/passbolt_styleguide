@@ -42,13 +42,6 @@ class AuthService {
     const response = await this.apiClient.sendRequest("POST", url, null, {redirect: "manual"});
     const isResponseOk = response.ok || response.status === 0; // status is 0 as there should be a redirection that is handled manually
     if (!isResponseOk) {
-      if (response.status !== 404) {
-        throw new Error('An unexpected error happened during the logout process', {
-          code: response.status
-        });
-      }
-
-      //@todo: remove depreacted function call
       return this._logoutLegacy();
     }
   }
@@ -56,7 +49,7 @@ class AuthService {
   /**
    * Logout the user (the legacy way using GET method)
    * @private
-   * @deprecated
+   * @deprecated the POST method should be used instead to avoid CSRF
    * @return {Promise<void>}
    */
   async _logoutLegacy() {
