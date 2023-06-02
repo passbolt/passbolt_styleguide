@@ -405,7 +405,7 @@ class ManageSsoSettings extends React.Component {
                   <div>
                     <div className={`accordion operation-details ${this.state.advancedSettingsOpened ? "" : "closed"}`}>
                       <div className="accordion-header" onClick={this.handleAdvancedSettingsCLick}>
-                        <button type="button" className="link no-border">
+                        <button type="button" className="link no-border" id="advanced-settings-panel-button">
                           <Trans>Advanced settings</Trans>&nbsp;<Icon name={this.state.advancedSettingsOpened ? "caret-down" : "caret-right"}/>
                         </button>
                       </div>
