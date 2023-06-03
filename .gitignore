@@ -24,3 +24,6 @@ junit.xml
 
 ### storybook
 storybook-static/*
+
+### dev scripts
+/scripts

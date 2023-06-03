@@ -1,8 +1,8 @@
 {
   "name": "passbolt-styleguide",
-  "version": "4.0.3",
+  "version": "4.0.4-rc.2",
   "license": "AGPL-3.0",
-  "copyright": "Copyright 2022 Passbolt SA",
+  "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
   "homepage": "https://www.passbolt.com",
   "repository": "https://github.com/passbolt/passbolt_styleguide",
