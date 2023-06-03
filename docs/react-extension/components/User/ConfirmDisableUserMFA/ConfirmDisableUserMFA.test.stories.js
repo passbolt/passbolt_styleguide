@@ -1,9 +1,10 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import ConfirmDisableUserMFA from "./ConfirmDisableUserMFA";
 import MockPort from "../../../test/mock/MockPort";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 
 export default {
@@ -30,11 +31,11 @@ Initial.args = {
   userWorkspaceContext: {
     selectedUsers:   [{
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "role_id": TEST_ROLE_USER_ID,
       "role": {
         "created": "2012-07-04T13:39:25+00:00",
         "description": "Logged in user",
-        "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        "id": TEST_ROLE_USER_ID,
         "modified": "2012-07-04T13:39:25+00:00",
         "name": "user"
       },

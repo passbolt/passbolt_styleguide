@@ -16,7 +16,7 @@ import React from "react";
 import DisplaySubscriptionKey from "./DisplaySubscriptionKey";
 import DisplaySubscriptionKeyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {AdminSubscriptionContextProvider} from '../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription';
 
 /**

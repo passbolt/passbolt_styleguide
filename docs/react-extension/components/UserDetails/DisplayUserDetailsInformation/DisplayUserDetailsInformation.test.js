@@ -44,7 +44,7 @@ describe("Display User Details Information", () => {
   });
 
   it('As LU I should see the detailed user role', () => {
-    expect(page.role).toBe('Admin');
+    expect(page.role).toBe('admin');
   });
 
   it('As LU I should see the detailed user status', () => {

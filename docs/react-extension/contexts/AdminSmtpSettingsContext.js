@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import SmtpSettingsModel from "../../shared/models/smtpSettings/SmtpSettingsModel";
 import SmtpTestSettingsModel from "../../shared/models/smtpSettings/SmtpTestSettingsModel";
 import SmtpProviders from "../components/Administration/ManageSmtpAdministrationSettings/SmtpProviders.data";

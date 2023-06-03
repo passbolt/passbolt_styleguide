@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class Header extends React.Component {
   constructor(props) {

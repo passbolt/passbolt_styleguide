@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import SsoProviders from "../../../react-extension/components/Administration/ManageSsoSettings/SsoProviders.data";
 import {withSso} from "../../contexts/SsoContext";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class LoginPage extends React.Component {
   constructor(props) {

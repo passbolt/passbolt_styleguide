@@ -123,7 +123,8 @@ class InFormMenuField {
       x = x + leftBody + width - 367; // (-370 width of the iframe + 10 to adjust with the shadow) (-7 adjustment of the call to action menu (18-25))
       y = y + topBody + height; // Calculate the bottom position of the input
     }
-    return {top: y, left: x};
+    // If x is negative force zero
+    return {top: y, left: x < 0 ? 0 : x};
   }
 
   /**

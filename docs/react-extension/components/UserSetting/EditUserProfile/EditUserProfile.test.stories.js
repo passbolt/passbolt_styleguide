@@ -1,8 +1,9 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import EditUserProfile from "./EditUserProfile";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 
 export default {
@@ -30,7 +31,7 @@ const context = {
   },
   loggedInUser:  {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "role": {
       "name": "admin"
     },

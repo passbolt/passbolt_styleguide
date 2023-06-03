@@ -608,9 +608,6 @@ button.link:disabled {
   border-bottom: 1px solid hsl(194, 14%, 39%);
   box-shadow: none;
 }
-button.link.full-length {
-  width: 100%;
-}
 button.link.inline {
   display: inline-block;
 }
@@ -3578,13 +3575,13 @@ body {
   display: inline-block;
   max-width: 28rem;
 }
-.quickaccess .item-browse .properties .secret.secret-copy:hover {
+.quickaccess .item-browse .properties .secret.secret-copy > button:hover {
   color: hsl(1, 71%, 52%);
 }
-.quickaccess .item-browse .properties .secret.secret-copy > span {
+.quickaccess .item-browse .properties .secret.secret-copy > button > span {
   display: none;
 }
-.quickaccess .item-browse .properties .secret.secret-copy:before {
+.quickaccess .item-browse .properties .secret.secret-copy > button:before {
   content: 'BBBBBBBBB';
   font-family: 'Passbolt', sans-serif;
   font-style: normal;

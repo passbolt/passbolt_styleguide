@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import EditResourceDescription from "./EditResourceDescription";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";

@@ -1,6 +1,6 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import DisplayUserGpgInformation from "./DisplayUserGpgInformation";
 

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 import {withDialog} from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";

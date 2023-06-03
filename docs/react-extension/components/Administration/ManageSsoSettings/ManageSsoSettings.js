@@ -21,7 +21,7 @@ import Select from "../../Common/Select/Select";
 import DisplayAdministrationSsoActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoActions/DisplayAdministrationSsoActions";
 import {withAdminSso} from "../../../contexts/AdminSsoContext";
 import SsoProviders from "./SsoProviders.data";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 
 /**

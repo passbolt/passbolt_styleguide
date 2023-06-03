@@ -17,7 +17,7 @@ import ResourceWorkspaceContextProvider, {
   ResourceWorkspaceContext,
   ResourceWorkspaceFilterTypes
 } from "./ResourceWorkspaceContext";
-import AppContext from "./AppContext";
+import AppContext from "../../shared/context/AppContext/AppContext";
 import {Router, NavLink, Route, Switch} from "react-router-dom";
 import {createMemoryHistory} from "history";
 

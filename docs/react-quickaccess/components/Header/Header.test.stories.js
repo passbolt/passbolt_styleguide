@@ -2,8 +2,8 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import Header from "./Header";
-import AppContext from "../../contexts/AppContext";
 import {defaultAppContext} from "./Header.test.data";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 
 
 export default {

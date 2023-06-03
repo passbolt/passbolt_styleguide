@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withApiTriageContext} from "../../../contexts/ApiTriageContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans, withTranslation} from "react-i18next";

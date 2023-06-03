@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Icon from "../../../../shared/components/Icons/Icon";
 import DisplayStructureGroupsUsersTreeItem from "./DisplayStructureGroupsUsersTreeItem";
