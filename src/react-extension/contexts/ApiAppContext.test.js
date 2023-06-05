@@ -12,6 +12,7 @@
  * @since         3.11.0
  */
 
+import {CsrfToken} from "../../shared/lib/apiClient/csrfToken";
 import ApiAppContextProvider from "./ApiAppContext";
 
 beforeEach(() => {
@@ -33,6 +34,7 @@ describe("ApiApp Context", () => {
           }
         }
       }]);
+      jest.spyOn(CsrfToken, "getToken").mockImplementation(() => "my-csrf-token");
       apiAppContext = new ApiAppContextProvider();
       const setStateMock = state => apiAppContext.state = Object.assign(apiAppContext.state, state);
       jest.spyOn(apiAppContext, 'setState').mockImplementation(setStateMock);

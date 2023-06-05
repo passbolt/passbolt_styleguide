@@ -23,7 +23,7 @@ class Header extends React.Component {
   }
 
   async handleLogoutClick() {
-    this.props.context.port.request("passbolt.auth.logout");
+    this.props.context.port.request("passbolt.auth.logout", false);
     this.props.logoutSuccessCallback();
   }
 

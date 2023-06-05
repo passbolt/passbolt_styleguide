@@ -446,18 +446,18 @@ class DisplayResourcesList extends React.Component {
 
     return (
       <>
-      {characters.map((char, index) => {
-        if (/[\p{L}\p{N}]/u.test(char)) {
-          if (/\p{N}/u.test(char)) {
-            return <span key={index} className="digit">{char}</span>;
+        {characters.map((char, index) => {
+          if (/[\p{L}\p{N}]/u.test(char)) {
+            if (/\p{N}/u.test(char)) {
+              return <span key={index} className="digit">{char}</span>;
+            } else {
+              return <span key={index}>{char}</span>;
+            }
           } else {
-            return <span key={index}>{char}</span>;
+            return <span key={index} className="special-char">{char}</span>;
           }
-        } else {
-          return <span key={index} className="special-char">{char}</span>;
-        }
-      })}
-    </>
+        })}
+      </>
     );
   }
 
