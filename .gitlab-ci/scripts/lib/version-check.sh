@@ -13,6 +13,22 @@ function is_release_candidate () {
   return 0
 }
 
+function is_release_alpha () {
+  local version=$1
+  if [[ ! $version =~ [0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+ ]];then
+    return 1
+  fi
+  return 0
+}
+
+function is_release_beta () {
+  local version=$1
+  if [[ ! $version =~ [0-9]+\.[0-9]+\.[0-9]+-beta\.[0-9]+ ]];then
+    return 1
+  fi
+  return 0
+}
+
 function validate_config_version_and_api_tag () {
   local version_file="$1"
   local version
@@ -23,4 +39,3 @@ function validate_config_version_and_api_tag () {
     return 1
   fi
 }
-
