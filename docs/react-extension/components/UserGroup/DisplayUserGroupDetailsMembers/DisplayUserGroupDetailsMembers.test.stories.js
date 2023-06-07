@@ -1,6 +1,6 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import {defaultAppContext} from "./DisplayUserGroupDetailsMembers.test.data";
 import DisplayUserGroupDetailsMembers from "./DisplayUserGroupDetailsMembers";

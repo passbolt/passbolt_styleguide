@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import DefineResourceFolderMoveStrategy from "./DefineResourceFolderMoveStrategy";
 import MockPort from "../../../test/mock/MockPort";

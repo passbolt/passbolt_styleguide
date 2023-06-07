@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";

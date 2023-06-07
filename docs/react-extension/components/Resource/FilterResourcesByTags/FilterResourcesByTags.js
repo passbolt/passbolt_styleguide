@@ -18,7 +18,7 @@ import FilterResourcesByTagsContextualMenu from "./FilterResourcesByTagsContextu
 import FilterResourcesByTagsList from "./FilterResourcesByTagsList";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {withTranslation} from "react-i18next";
 

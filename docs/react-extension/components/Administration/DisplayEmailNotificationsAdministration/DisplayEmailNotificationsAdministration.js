@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayAdministrationEmailNotificationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationEmailNotificationActions/DisplayAdministrationEmailNotificationActions";
 import {withAdminEmailNotification} from "../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
 

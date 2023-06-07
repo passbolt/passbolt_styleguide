@@ -20,7 +20,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import ProvideAccountRecoveryOrganizationKey from "../ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ConfirmSaveAccountRecoverySettings from "../ConfirmSaveAccountRecoverySettings/ConfirmSaveAccountRecoverySettings";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 /**

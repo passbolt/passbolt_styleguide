@@ -21,7 +21,7 @@ import {withDialog} from "../../../contexts/DialogContext";
 import debounce from "debounce-promise";
 import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";

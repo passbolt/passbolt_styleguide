@@ -16,9 +16,9 @@
  * Unit tests on FoldersTreeItemContextualMenuContextualMenu in regard of specifications
  */
 import {
-  defaultAppContext,
-  defaultProps,
-  propsFolderOnlyRead
+  defaultProps, propsWithDenyUiAction,
+  propsWithFolderPermissionRead,
+  propsWithFolderPermissionUpdate
 } from "./FilterResourcesByFoldersItemContextualMenu.test.data";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import RenameResourceFolder from "../../ResourceFolder/RenameResourceFolder/RenameResourceFolder";
@@ -26,88 +26,116 @@ import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import DeleteResourceFolder from "../../ResourceFolder/DeleteResourceFolder/DeleteResourceFolder";
 import FilterResourcesByFoldersItemContextualMenuPage from "./FilterResourcesByFoldersItemContextualMenu.test.page";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("As LU I should see each menu", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-
-  describe('As LU I should see and identify each menu for a folder', () => {
-    const props = defaultProps(); // The props to pass
-    /**
-     * Given an organization with 1 folder
-     * Then I should see the 5 menu
-     */
-
-    beforeEach(() => {
-      page = new FilterResourcesByFoldersItemContextualMenuPage(context, props);
-    });
-
-    it('As LU I should see all menu name', () => {
-      expect(page.filterResourcesByFoldersItemContextualMenu.name(1)).toBe("Create folder");
-      expect(page.filterResourcesByFoldersItemContextualMenu.name(2)).toBe("Rename");
-      expect(page.filterResourcesByFoldersItemContextualMenu.name(3)).toBe("Share");
-      expect(page.filterResourcesByFoldersItemContextualMenu.name(4)).toBe("Export");
-      expect(page.filterResourcesByFoldersItemContextualMenu.name(5)).toBe("Delete");
-    });
-
-    it('As LU I can start to create a folder', async() => {
+describe("FilterResourcesByFoldersItemContextualMenu", () => {
+  describe('As LU I can create a folder in a folder.', () => {
+    it('As LU I can create a folder in a folder I have at least an update permission on.', async() => {
+      const props = defaultProps(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.createFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder);
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I can start to rename a folder', async() => {
+    it('As LU I cannot create a folder in a folder I have read only access.', async() => {
+      const props = propsWithFolderPermissionRead(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.createItem.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
+
+  describe('As LU I can rename a folder.', () => {
+    it('As LU I can rename a folder I have at least an update permission on.', async() => {
+      const props = defaultProps(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.renameFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(RenameResourceFolder);
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I can start to share a folder', async() => {
+    it('As LU I cannot rename a folder in a folder I have read only access.', async() => {
+      const props = propsWithFolderPermissionRead(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.renameItem.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
+
+  describe('As LU I can share a folder.', () => {
+    it('As LU I can share a folder I have owner permission on.', async() => {
+      const props = defaultProps(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.shareFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ShareDialog);
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I can start to export a folder', async() => {
+    it('As LU I cannot share a folder I have read only access.', async() => {
+      const props = propsWithFolderPermissionRead(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.hasAttribute("disabled")).toBeTruthy();
+    });
+
+    it('As LU I cannot share a folder I have update permission on.', async() => {
+      const props = propsWithFolderPermissionUpdate(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.shareItem.hasAttribute("disabled")).toBeTruthy();
+    });
+  });
+
+  describe('As LU I can export a folder.', () => {
+    it('As LU I can export a folder.', async() => {
+      const props = defaultProps(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.exportFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResources);
       expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I can start to delete a folder', async() => {
+    it('As LU I cannot share a folder if disabled by API flag.', async() => {
+      const appContext = {
+        siteSettings: {
+          canIUse: () => false
+        }
+      };
+      const context = defaultUserAppContext(appContext); // The applicative context
+      const props = defaultProps({context});
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.exportItem).toBeNull();
+    });
+
+    it('As LU I cannot share a folder if denied by RBAC.', async() => {
+      const props = propsWithDenyUiAction();
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.exportItem).toBeNull();
+    });
+  });
+
+  describe('As LU I can delete a folder.', () => {
+    it('As LU I can delete a folder I have owner permission on.', async() => {
+      const props = defaultProps(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.deleteFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResourceFolder);
       expect(props.hide).toHaveBeenCalled();
     });
-  });
 
-  describe('As LU I should see and identify each menu disable', () => {
-    const props = propsFolderOnlyRead(); // The props to pass
-    /**
-     * Given an organization with 5 menu
-     * Then I should see 4 menu disabled
-     */
-
-    beforeEach(() => {
-      page = new FilterResourcesByFoldersItemContextualMenuPage(context, props);
+    it('As LU I can delete a folder I have update permission on.', async() => {
+      const props = propsWithFolderPermissionUpdate(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      await page.filterResourcesByFoldersItemContextualMenu.deleteFolder();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResourceFolder);
+      expect(props.hide).toHaveBeenCalled();
     });
 
-    it('As LU I should see all menu disabled', async() => {
-      expect.assertions(10);
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(1).className).toBe("link no-border");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(1).hasAttribute("disabled")).toBeTruthy();
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(2).className).toBe("link no-border");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(2).hasAttribute("disabled")).toBeTruthy();
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(3).className).toBe("link no-border");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(3).hasAttribute("disabled")).toBeTruthy();
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(4).className).toBe("link no-border");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(4).hasAttribute("disabled")).toBeFalsy();
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(5).className).toBe("link no-border");
-      expect(page.filterResourcesByFoldersItemContextualMenu.menuItem(5).hasAttribute("disabled")).toBeTruthy();
+    it('As LU I cannot delete a folder I have read only access.', async() => {
+      const props = propsWithFolderPermissionRead(); // The props to pass
+      const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
+      expect(page.filterResourcesByFoldersItemContextualMenu.deleteItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 });

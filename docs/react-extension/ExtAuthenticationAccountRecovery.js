@@ -14,7 +14,7 @@
 
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";

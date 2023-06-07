@@ -16,13 +16,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../contexts/AppContext";
 import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import debounce from "debounce-promise";
 import PownedService from '../../../shared/services/api/secrets/pownedService';
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class SaveResource extends React.Component {
   constructor(props) {

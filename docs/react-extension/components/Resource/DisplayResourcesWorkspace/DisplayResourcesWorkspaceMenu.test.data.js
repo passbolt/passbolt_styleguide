@@ -1,6 +1,21 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.13.0
+ */
+
 import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
+import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -25,6 +40,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultPropsOneResourceOwned() {
   return {
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: {
       selectedResources: [resourcesMock[0]],
       lockDisplayDetail: true,
@@ -41,6 +57,7 @@ export function defaultPropsOneResourceOwned() {
  */
 export function defaultPropsOneResourceNotOwned() {
   return {
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: {
       selectedResources: [resourcesMock[1]],
       lockDisplayDetail: false,
@@ -57,6 +74,7 @@ export function defaultPropsOneResourceNotOwned() {
  */
 export function defaultPropsNoResource() {
   return {
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: {
       selectedResources: [],
       lockDisplayDetail: true,
@@ -73,6 +91,7 @@ export function defaultPropsNoResource() {
  */
 export function defaultPropsMultipleResource() {
   return {
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: {
       selectedResources: resourcesMock,
       lockDisplayDetail: true,
@@ -90,6 +109,7 @@ export function defaultPropsMultipleResource() {
 export function defaultPropsMultipleResourceUpdateRights() {
   const selectedResources = [resourcesMock[0], resourcesMock[2]];
   return {
+    rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: {
       selectedResources,
       lockDisplayDetail: true,

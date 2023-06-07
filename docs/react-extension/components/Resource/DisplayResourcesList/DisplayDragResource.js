@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 
 class DisplayDragResource extends React.Component {

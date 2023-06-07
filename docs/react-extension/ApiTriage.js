@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import {ApiClientOptions} from "../shared/lib/apiClient/apiClientOptions";
 import ApiTriageContextProvider from "./contexts/ApiTriageContext";
 import OrchestrateApiTriage from "./components/AuthenticationTriage/OrchestrateApiTriage/OrchestrateApiTriage";

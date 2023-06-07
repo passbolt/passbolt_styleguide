@@ -15,7 +15,7 @@
 import React from "react";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -25,6 +25,8 @@ import ShareDialog from "../../Share/ShareDialog";
 import ExportResources from "../ExportResources/ExportResources";
 import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -290,10 +292,12 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Returns true if the user can export
+   * Check if the user can export.
+   * @return {boolean}
    */
   canExport() {
-    return this.hasResourceSelected() && this.props.context.siteSettings.canIUse("export");
+    return this.props.context.siteSettings.canIUse("export")
+      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
   }
 
   /**
@@ -358,17 +362,22 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
+
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           <ul>
-            <li id="password_action">
-              <button type="button" disabled={!this.hasOneResourceSelected()}
-                onClick={this.handleCopySecretClickEvent}>
-                <Icon name="copy-to-clipboard"/>
-                <span><Trans>Copy</Trans></span>
-              </button>
-            </li>
+            {canCopySecret &&
+              <li id="password_action">
+                <button type="button" disabled={!this.hasOneResourceSelected()}
+                  onClick={this.handleCopySecretClickEvent}>
+                  <Icon name="copy-to-clipboard"/>
+                  <span><Trans>Copy</Trans></span>
+                </button>
+              </li>
+            }
             <li id="edit_action">
               <button type="button" disabled={!this.hasOneResourceSelected() || !this.canUpdate()}
                 onClick={this.handleEditClickEvent}>
@@ -376,22 +385,26 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                 <span><Trans>Edit</Trans></span>
               </button>
             </li>
-            <li id="share_action">
-              <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
-                onClick={this.handleShareClickEvent}>
-                <Icon name="share"/>
-                <span><Trans>Share</Trans></span>
-              </button>
-            </li>
-            <li id="export_action">
-              <button
-                type="button"
-                disabled={!this.hasResourceSelected() || !this.canExport()}
-                onClick={this.handleExportClickEvent}>
-                <Icon name="download"/>
-                <span><Trans>Export</Trans></span>
-              </button>
-            </li>
+            {canViewShare &&
+              <li id="share_action">
+                <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
+                  onClick={this.handleShareClickEvent}>
+                  <Icon name="share"/>
+                  <span><Trans>Share</Trans></span>
+                </button>
+              </li>
+            }
+            {this.canExport() &&
+              <li id="export_action">
+                <button
+                  type="button"
+                  disabled={!this.hasResourceSelected()}
+                  onClick={this.handleExportClickEvent}>
+                  <Icon name="download"/>
+                  <span><Trans>Export</Trans></span>
+                </button>
+              </li>
+            }
             <li>
               <div className="dropdown" ref={this.moreMenuRef}>
                 <button type="button" className={`more ${this.state.moreMenuOpen ? "open" : ""}`}
@@ -416,18 +429,20 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                       </div>
                     </div>
                   </li>
-                  <li id="secret_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
-                            onClick={this.handleCopySecretClickEvent}>
-                            <span><Trans>Copy password to clipboard</Trans></span>
-                          </button>
+                  {canCopySecret &&
+                    <li id="secret_action">
+                      <div className="row">
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
+                              onClick={this.handleCopySecretClickEvent}>
+                              <span><Trans>Copy password to clipboard</Trans></span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
+                    </li>
+                  }
                   <li id="delete_action">
                     <div className="row">
                       <div className="main-cell-wrapper">
@@ -475,10 +490,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
 DisplayResourcesWorkspaceMenu.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   dialogContext: PropTypes.any, // the dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))));
+export default withAppContext(withRbac(withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))));

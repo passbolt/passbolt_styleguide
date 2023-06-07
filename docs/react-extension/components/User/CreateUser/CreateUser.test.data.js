@@ -1,4 +1,5 @@
 import MockPort from "../../../test/mock/MockPort";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -14,7 +15,7 @@ export function defaultAppContext(appContext) {
         name: "admin"
       },
       {
-        id: "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        id: TEST_ROLE_USER_ID,
         name: "user"
       }
     ],

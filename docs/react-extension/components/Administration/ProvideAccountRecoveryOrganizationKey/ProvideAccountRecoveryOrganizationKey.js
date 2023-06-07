@@ -18,7 +18,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Password from "../../../../shared/components/Password/Password";
