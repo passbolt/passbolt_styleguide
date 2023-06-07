@@ -4,7 +4,6 @@
  * @returns {any}
  */
 import MockPort from "../test/mock/MockPort";
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../shared/models/entity/role/role.test.data";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
@@ -45,7 +44,7 @@ export function defaultUserWorkspaceContext(data = {}) {
  */
 export const users = [{
   "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "carol@passbolt.com",
   "active": true,
   "deleted": false,
@@ -83,7 +82,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "dame@passbolt.com",
   "active": true,
   "deleted": false,
@@ -121,7 +120,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "edith@passbolt.com",
   "active": true,
   "deleted": false,
@@ -159,7 +158,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "betty@passbolt.com",
   "active": true,
   "deleted": false,
@@ -197,7 +196,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "f848277c-5398-58f8-a82a-72397af2d450",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "ada@passbolt.com",
   "active": true,
   "deleted": false,
@@ -234,7 +233,7 @@ export const users = [{
   "last_logged_in": "2020-08-12T15:56:49+00:00"
 }, {
   "id": "887422c0-bef6-59a7-bbda-84c253ee0848",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "frances@passbolt.com",
   "active": true,
   "deleted": false,
@@ -272,7 +271,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "32d29702-85e2-539d-98ac-6abfa7aadf01",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "kathleen@passbolt.com",
   "active": true,
   "deleted": false,
@@ -310,7 +309,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "ecc26246-0331-5297-ac16-1c1e57d22ebd",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss12@passbolt.com",
   "active": true,
   "deleted": false,
@@ -329,7 +328,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "e7fa0375-61df-5dbc-9e42-e0d363bd0ecf",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "nancy@passbolt.com",
   "active": true,
   "deleted": false,
@@ -349,7 +348,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "4404acbb-8066-5910-a5e1-c3eb0e63dfff",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss8@passbolt.com",
   "active": true,
   "deleted": false,
@@ -368,7 +367,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "1e73e104-d53e-579d-a0c4-e9aeaca76c56",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "lynne@passbolt.com",
   "active": true,
   "deleted": false,
@@ -388,7 +387,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "92946500-2940-54ff-889a-3da69afe5078",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "joan@passbolt.com",
   "active": true,
   "deleted": false,
@@ -408,7 +407,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "bab9c9c5-3b61-5594-9855-b352fbbc348c",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss14@passbolt.com",
   "active": true,
   "deleted": false,
@@ -428,7 +427,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "5b81d798-df23-5d02-9f49-709851a4501f",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss2@passbolt.com",
   "active": true,
   "deleted": false,
@@ -448,7 +447,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "8d04cf98-716b-5f6d-9fe8-c130f8992646",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "hedy@passbolt.com",
   "active": true,
   "deleted": false,
@@ -468,7 +467,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "2eb86906-983b-59dc-ba9f-6e8e7754c416",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss16@passbolt.com",
   "active": true,
   "deleted": false,
@@ -487,7 +486,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "688efba3-0fe6-5bb3-9524-c4088274c178",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss0@passbolt.com",
   "active": true,
   "deleted": false,
@@ -507,7 +506,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "67ed8efc-0ab0-5797-be26-2449f979e82a",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss7@passbolt.com",
   "active": true,
   "deleted": false,
@@ -526,7 +525,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "8d038399-ecac-55b4-8ad3-b7f0650de2a2",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "orna@passbolt.com",
   "active": true,
   "deleted": false,
@@ -546,7 +545,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "f7e9754a-2f64-5cdd-8ba2-178b33383505",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "ping@passbolt.com",
   "active": true,
   "deleted": false,
@@ -566,7 +565,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "742554b6-2940-5b7d-a8e7-b03a19f78b8e",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "margaret@passbolt.com",
   "active": true,
   "deleted": false,
@@ -586,7 +585,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "7afa66ed-53aa-5d65-84c5-506d2b362898",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss6@passbolt.com",
   "active": true,
   "deleted": false,
@@ -605,7 +604,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "9244beb0-db82-5f76-a29b-f537c6b644ef",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss15@passbolt.com",
   "active": true,
   "deleted": false,
@@ -625,7 +624,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "86b3eb2f-2dd0-56b3-8978-920615cf7c17",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss1@passbolt.com",
   "active": true,
   "deleted": false,
@@ -644,7 +643,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "admin@passbolt.com",
   "active": true,
   "deleted": false,
@@ -664,7 +663,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "e428e724-9264-5599-b28f-b7b622fcf1e6",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss3@passbolt.com",
   "active": true,
   "deleted": false,
@@ -684,7 +683,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "98c2bef5-cd5f-59e7-a1a7-0107c9a7cf08",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "wang@passbolt.com",
   "active": true,
   "deleted": false,
@@ -704,7 +703,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "33966163-6457-50a7-968e-836b904d7867",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss5@passbolt.com",
   "active": true,
   "deleted": false,
@@ -723,7 +722,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "92f42805-bc0f-58fd-9de6-aab13ed0c28d",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "ruth@passbolt.com",
   "active": false,
   "deleted": false,
@@ -743,7 +742,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "be030f90-6fd8-57b1-b48a-a693a7684a43",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss4@passbolt.com",
   "active": true,
   "deleted": false,
@@ -762,7 +761,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "e1ebc592-b90d-5e22-9f40-50e52911673b",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "marlyn@passbolt.com",
   "active": true,
   "deleted": false,
@@ -782,7 +781,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "af5e1f70-a0ee-5b76-935b-c846f8a6a190",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "adele@passbolt.com",
   "active": true,
   "deleted": false,
@@ -802,7 +801,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "irene@passbolt.com",
   "active": true,
   "deleted": false,
@@ -821,7 +820,7 @@ export const users = [{
   "last_logged_in": ""
 }, {
   "id": "c92a1885-1644-5bdb-8486-12d751b976ff",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "thelma@passbolt.com",
   "active": true,
   "deleted": false,
@@ -861,7 +860,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "620de627-8f07-5427-9149-e2c43219c5aa",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "grace@passbolt.com",
   "active": true,
   "deleted": false,
@@ -881,7 +880,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "0da907bd-5c57-5acc-ba39-c6ebe091f613",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "jean@passbolt.com",
   "active": true,
   "deleted": false,
@@ -901,7 +900,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "2cff151f-3c67-5ca9-8af9-884fb06d96cf",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss11@passbolt.com",
   "active": true,
   "deleted": false,
@@ -921,7 +920,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "442a3c46-df26-5f93-8c50-2b52f08e7d83",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss10@passbolt.com",
   "active": true,
   "deleted": false,
@@ -941,7 +940,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "928c44c3-fcb5-5d28-b975-a749b288ad0f",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss17@passbolt.com",
   "active": true,
   "deleted": false,
@@ -961,7 +960,7 @@ export const users = [{
   is_mfa_enabled: true
 }, {
   "id": "796ce5c5-964a-5f79-8212-5e88bd33e6bd",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss9@passbolt.com",
   "active": true,
   "deleted": false,
@@ -981,7 +980,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "5302c3cb-5d33-53b1-82cd-57df36e13acc",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "ursula@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1001,7 +1000,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "a0559bb5-050b-50a3-ad39-c6756a46dbb7",
-  "role_id": TEST_ROLE_USER_ID,
+  "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
   "username": "yvonne@passbolt.com",
   "active": true,
   "deleted": false,
@@ -1021,7 +1020,7 @@ export const users = [{
   is_mfa_enabled: false
 }, {
   "id": "81504708-c785-58e7-bd19-c1f2385dd074",
-  "role_id": TEST_ROLE_ADMIN_ID,
+  "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
   "username": "xss13@passbolt.com",
   "active": true,
   "deleted": false,
@@ -2375,13 +2374,13 @@ export const groups = [
 
 const roles = [
   {
-    "id": TEST_ROLE_USER_ID,
+    "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
     "name": "user",
     "description": "Logged in user",
     "created": "2012-07-04T13:39:25+00:00",
     "modified": "2012-07-04T13:39:25+00:00"
   }, {
-    "id": TEST_ROLE_ADMIN_ID,
+    "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
     "name": "admin",
     "description": "Logged in admin",
     "created": "2012-07-04T13:39:25+00:00",

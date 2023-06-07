@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";

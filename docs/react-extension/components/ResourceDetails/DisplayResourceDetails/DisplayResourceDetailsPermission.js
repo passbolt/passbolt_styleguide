@@ -15,7 +15,7 @@ import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDialog} from "../../../contexts/DialogContext";

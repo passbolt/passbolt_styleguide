@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import DialogWrapper from '../Common/Dialog/DialogWrapper/DialogWrapper';
 import FormSubmitButton from "../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import {withNavigationContext} from "../../contexts/NavigationContext";
 import {Trans} from 'react-i18next';
 

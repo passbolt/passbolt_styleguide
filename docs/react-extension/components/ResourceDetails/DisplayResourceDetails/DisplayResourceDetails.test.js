@@ -17,7 +17,9 @@
  */
 
 import React from 'react';
-import {defaultProps} from "./DisplayResourceDetails.test.data";
+import {
+  defaultAppContext, defaultProps
+} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 
@@ -38,71 +40,44 @@ beforeEach(() => {
   global.navigator.clipboard = mockClipboard;
 });
 
-describe("DisplayResourceDetails", () => {
-  describe('As LU I can see the resource sidebar common part', () => {
-    let props, page;
+describe("See Resource Sidebar", () => {
+  let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
+  const props = defaultProps(); // The props to pass
+  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  const copyClipboardMockImpl = jest.fn((message, data) => data);
+
+  describe(' As LU I can see a resource', () => {
+    /**
+     * Given a selected resource
+     * Then I should see the secondary sidebar
+     * And I should be able to identify the name
+     * And I should be able to see the permalink
+     */
 
     beforeEach(() => {
-      props = defaultProps(); // The props to pass
-      page = new DisplayResourceDetailsPage(props);
+      page = new DisplayResourceDetailsPage(context, props);
     });
 
-    it('I should see a resource details sidebar', () => {
+    it('I should see a resource', () => {
       expect(page.exists()).toBeTruthy();
     });
 
-    it('I can see the name of the selected resource', async() => {
-      expect.assertions(2);
-      expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.name);
-      expect(page.subtitle).toBe('Resource');
-    });
-
-    it('I can copy the resource permalink', async() => {
-      const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
-      const copyClipboardMockImpl = jest.fn((message, data) => data);
-      const props = defaultProps(); // The props to pass
-      const page = new DisplayResourceDetailsPage(props);
-
-      expect.assertions(2);
+    it('I should be able to identify the name and the permalink', async() => {
+      expect.assertions(4);
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
+      expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.name);
+      expect(page.subtitle).toBe('Resource');
       await page.selectPermalink();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${props.context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${context.userSettings.getTrustedDomain()}/app/passwords/view/${props.resourceWorkspaceContext.details.resource.id}`);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The permalink has been copied to clipboard");
     });
 
-    it('As LU I should be able to close the resource details', async() => {
+    it('As LU I should be able to close the folder details', async() => {
       await page.closeResourceDetails();
       expect(props.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
     });
-  });
-
-  describe('As LU I can see the details section', () => {
-    it.todo('As LU I can see the details section');
-  });
-
-  describe('As LU I can see the description section', () => {
-    it.todo('As LU I can see the description section');
-  });
-
-  describe('As LU I can see the share section', () => {
-    it.todo('As LU I can see the share section');
-    it.todo('As LU I cannot see the share section if denied by RBAC');
-  });
-
-  describe('As LU I can see the tags section', () => {
-    it.todo('As LU I can see the tags section');
-    it.todo('As LU I cannot see the tags section if denied by RBAC');
-  });
-
-  describe('As LU I can see the comments section', () => {
-    it.todo('As LU I can see the comments section');
-    it.todo('As LU I cannot see the comments section if denied by RBAC');
-  });
-
-  describe('As LU I can see the activity section', () => {
-    it.todo('As LU I can see the activity section');
-    it.todo('As LU I cannot see the activity section if denied by RBAC');
   });
 });

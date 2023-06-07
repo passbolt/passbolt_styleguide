@@ -17,9 +17,6 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-/**
- * @todo refactor using the defaultResourceWorkspaceContext from the context .data.test.js
- */
 export function defaultResourceWorkspaceContext(context) {
   const defaultResourceWorkspaceContext = {
     filter: {

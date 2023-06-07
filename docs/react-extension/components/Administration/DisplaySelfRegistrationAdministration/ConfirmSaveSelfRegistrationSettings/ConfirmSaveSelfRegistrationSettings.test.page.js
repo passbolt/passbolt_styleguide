@@ -16,7 +16,7 @@ import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {render, fireEvent, waitFor} from '@testing-library/react';
 import {AdminSelfRegistrationContextProvider} from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
-import AppContext from "../../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../../contexts/AppContext";
 import ConfirmSaveSelfRegistrationSettings from "./ConfirmSaveSelfRegistrationSettings";
 /**
  * The ConfirmSaveSelfRegistrationSettings component represented as a page

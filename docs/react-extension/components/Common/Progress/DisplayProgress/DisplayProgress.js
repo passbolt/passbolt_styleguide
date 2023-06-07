@@ -12,7 +12,7 @@
  * @since         2.12.0
  */
 import React, {Component} from "react";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";

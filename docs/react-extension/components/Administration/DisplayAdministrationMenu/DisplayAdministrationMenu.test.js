@@ -223,34 +223,4 @@ describe("As AD I can see the administration menu", () => {
       expect(page.mfaPolicy).toBeNull();
     });
   });
-
-  describe("As a logged in administrator in the administrator workspace, I can see the Rbac settings option in the left-side bar", () => {
-    it('If the feature flag is true, the menu should be visible', async() => {
-      expect.assertions(4);
-      const props = defaultProps({
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.RBAC}
-      }); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      await page.gotoRbacs();
-      expect(page.rbacs).toBeTruthy();
-      expect(page.menuSelected).toBe('Role-Based Access Control');
-      expect(props.navigationContext.onGoToAdministrationRbacsRequested).toHaveBeenCalled();
-    });
-
-    it('If the feature flag is false, the menu should not be visible', async() => {
-      expect.assertions(2);
-      const props = defaultProps({
-        context: {
-          siteSettings: {
-            canIUse: feature => feature !== "rbacs"
-          }
-        },
-        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.MFA}
-      }); // The props to pass
-      page = new DisplayAdministrationMenuPage(context, props);
-      expect(page.exists()).toBeTruthy();
-      expect(page.rbacs).toBeNull();
-    });
-  });
 });

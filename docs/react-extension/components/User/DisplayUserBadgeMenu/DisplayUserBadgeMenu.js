@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";

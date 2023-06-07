@@ -16,7 +16,7 @@ import React from "react";
 import AdministrationWorkspaceContextProvider, {
   AdministrationWorkspaceContext
 } from "./AdministrationWorkspaceContext";
-import AppContext from "../../shared/context/AppContext/AppContext";
+import AppContext from "./AppContext";
 import {Router, NavLink, Route, Switch} from "react-router-dom";
 import {createMemoryHistory} from "history";
 

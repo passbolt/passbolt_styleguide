@@ -21,7 +21,7 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
 import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";

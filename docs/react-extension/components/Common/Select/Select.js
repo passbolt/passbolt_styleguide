@@ -441,7 +441,7 @@ const isValueInItems = (props, propName, componentName) => {
   const value = props[propName];
   // value must be in the items
   const items = props.items;
-  if (value !== null && items.length > 0 && items.every(item => item.value !== value)) {
+  if (items.length > 0 && items.every(item => item.value !== value)) {
     return new Error(
       `Invalid prop ${propName} passed to ${componentName}. Expected the value ${value} in items.`
     );
@@ -464,9 +464,9 @@ Select.propTypes = {
   className: PropTypes.string, // The class name
   direction: PropTypes.oneOf(Object.values(DirectionEnum)),
   search: PropTypes.bool, // The search field property
-  items: PropTypes.array, // The item list of the select field
+  items: PropTypes.array.isRequired, // The item list of the select field
   value: CustomPropTypes.allPropTypes(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).isRequired,
     isValueInItems
   ), // The item selected of the select field
   disabled: PropTypes.bool, // The current select field disabled property

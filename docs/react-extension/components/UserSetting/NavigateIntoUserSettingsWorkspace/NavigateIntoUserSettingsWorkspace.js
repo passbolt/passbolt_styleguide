@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";

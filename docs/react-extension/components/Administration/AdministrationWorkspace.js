@@ -12,7 +12,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
@@ -39,7 +39,6 @@ import ManageSmtpAdministrationSettings
 import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration";
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
-import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -122,14 +121,6 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.SSO === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
-  /**
-   * If RBAC menu is selected
-   * @returns {boolean}
-   */
-  isRbacSelected() {
-    return AdministrationWorkspaceMenuTypes.RBAC === this.props.administrationWorkspaceContext.selectedAdministration;
-  }
-
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -185,9 +176,6 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isSsoSelected() &&
                   <ManageSsoSettings/>
-                  }
-                  {this.isRbacSelected() &&
-                  <DisplayRbacAdministration/>
                   }
                 </div>
               </div>

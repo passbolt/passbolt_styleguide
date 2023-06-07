@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../AppContext";
 import MfaPolicyViewModel from '../../../../shared/models/mfaPolicy/MfaPolicyViewModel';
 import MfaPolicyService from "../../../../shared/services/api/mfaPolicy/MfaPolicyService";
 import MfaPolicyDto from '../../../../shared/models/mfaPolicy/MfaPolicyDto';

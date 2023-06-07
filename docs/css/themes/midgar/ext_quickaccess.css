@@ -607,6 +607,9 @@ button.link:disabled {
   border-bottom: 1px solid #515151;
   box-shadow: none;
 }
+button.link.full-length {
+  width: 100%;
+}
 button.link.inline {
   display: inline-block;
 }
@@ -3574,13 +3577,13 @@ body {
   display: inline-block;
   max-width: 28rem;
 }
-.quickaccess .item-browse .properties .secret.secret-copy > button:hover {
+.quickaccess .item-browse .properties .secret.secret-copy:hover {
   color: #D40101;
 }
-.quickaccess .item-browse .properties .secret.secret-copy > button > span {
+.quickaccess .item-browse .properties .secret.secret-copy > span {
   display: none;
 }
-.quickaccess .item-browse .properties .secret.secret-copy > button:before {
+.quickaccess .item-browse .properties .secret.secret-copy:before {
   content: 'BBBBBBBBB';
   font-family: 'Passbolt', sans-serif;
   font-style: normal;

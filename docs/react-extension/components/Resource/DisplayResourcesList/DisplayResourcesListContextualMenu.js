@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import EditResource from "../EditResource/EditResource";
@@ -27,8 +27,6 @@ import {
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -226,9 +224,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-
     return (
       <ContextualMenuWrapper
         hide={this.props.hide}
@@ -245,22 +240,20 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {canCopySecret &&
-          <li key="option-copy-password-resource" className="ready">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button type="button" className="link no-border" id="password" onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></button>
-                </div>
+        <li key="option-copy-password-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <button type="button" className="link no-border" id="password" onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></button>
               </div>
             </div>
-          </li>
-        }
+          </div>
+        </li>
         <li key="option-copy-uri-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
-                <button type="button" id="uri" className="link no-border" disabled={!this.canCopyUri()}
+                <button type="button" id="username" className="link no-border" disabled={!this.canCopyUri()}
                   onClick={this.handleUriClickEvent}><span><Trans>Copy URI</Trans></span></button>
               </div>
             </div>
@@ -281,7 +274,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
               <div className="main-cell">
                 <button
                   type="button"
-                  id="open-uri"
+                  id="permalink"
                   className="link no-border"
                   disabled={!this.safeUri}
                   onClick={this.handleGoToResourceUriClick}><span><Trans>Open URI in a new Tab</Trans></span></button>
@@ -299,21 +292,19 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {canViewShare &&
-          <li key="option-share-resource" className="ready">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button
-                    type="button"
-                    id="share" className="link no-border"
-                    disabled={!this.canShare()}
-                    onClick={this.handleShareClickEvent}><span><Trans>Share</Trans></span></button>
-                </div>
+        <li key="option-share-resource" className="ready">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <button
+                  type="button"
+                  id="share" className="link no-border"
+                  disabled={!this.canShare()}
+                  onClick={this.handleShareClickEvent}><span><Trans>Share</Trans></span></button>
               </div>
             </div>
-          </li>
-        }
+          </div>
+        </li>
         <li key="option-delete-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -334,7 +325,6 @@ class DisplayResourcesListContextualMenu extends React.Component {
 
 DisplayResourcesListContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based access control context
   hide: PropTypes.func, // Hide the contextual menu
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
@@ -345,4 +335,4 @@ DisplayResourcesListContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))));
+export default withAppContext(withResourceWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))));

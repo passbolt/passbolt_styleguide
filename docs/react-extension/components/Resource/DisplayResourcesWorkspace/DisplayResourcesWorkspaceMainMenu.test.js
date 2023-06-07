@@ -12,152 +12,107 @@
  * @since         2.11.0
  */
 
+/**
+ * Unit tests on DisplayComments in regard of specifications
+ */
+
 import {
+  defaultAppContext,
+  defaultAppContextProEdition,
   defaultPropsFolderNotOwned,
   defaultPropsFolderOwned,
-  defaultProps, propsWithDenyUiAction
+  defaultPropsNoFolder
 } from "./DisplayResourcesWorkspaceMainMenu.test.data";
 import DisplayResourcesWorkspaceMainMenuPage from "./DisplayResourcesWorkspaceMainMenu.test.page";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("DisplayResourcesWorkspaceMainMenu", () => {
-  describe('As LU I can use the workspace create button', () => {
-    it('As LU I can use the workspace create button if no folder is selected', async() => {
-      const props = defaultProps(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
+describe("See Workspace Main Menu", () => {
+  let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
 
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+  describe('As LU I can start adding a resource via the workspace main menu', () => {
+    const propsFolderOwned = defaultPropsFolderOwned(); // The props to pass
+
+    /**
+     * Given a selected folder
+     * Then I should see the create resource menu
+     */
+
+    beforeEach(() => {
+      page = new DisplayResourcesWorkspaceMainMenuPage(context, propsFolderOwned);
     });
 
-    it('As LU I can use the workspace create button if I have the permission to create in the selected folder', async() => {
-      const props = defaultPropsFolderOwned(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-    });
-
-    it('As LU I cannot use the workspace create button if I do not have the permission to create in the selected folder', async() => {
-      const props = defaultPropsFolderNotOwned(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeTruthy();
-    });
-  });
-
-  describe('As LU I can create resource', () => {
-    it('As LU I can add create if I have not selected any folder', async() => {
-      const props = defaultProps(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
+    it('As LU I cannot start adding a resource via the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.createMenu).not.toBeNull();
       expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+    });
+  });
+
+  describe('As LU I can see the workspace menu with one folder selected not owned', () => {
+    const propsFolderNotOwned = defaultPropsFolderNotOwned(); // The props to pass
+
+    /**
+     * Given a selected folder not owned
+     * Then I should see the create resource menu disable
+     */
+
+    beforeEach(() => {
+      page = new DisplayResourcesWorkspaceMainMenuPage(context, propsFolderNotOwned);
+    });
+
+    it('As LU I cannot start adding a resource via the workspace main menu if the folder selected have no update rights', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenuDisabled).not.toBeNull();
+    });
+  });
+
+  describe('As LU I can see the workspace menu with no folder selected', () => {
+    const propsNoFolder = defaultPropsNoFolder(); // The props to pass
+
+    /**
+     * Given no selected resource
+     * Then I should see the create resource menu
+     */
+
+    beforeEach(() => {
+      page = new DisplayResourcesWorkspaceMainMenuPage(context, propsNoFolder);
+    });
+
+    it('As LU I can start deleting a resource via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+    });
+  });
+
+  describe('As LU I can start adding a resource via the workspace main menu PRO edition', () => {
+    const contextPro = defaultAppContextProEdition(); // The applicative context
+    const propsFolderOwned = defaultPropsFolderOwned(); // The props to pass
+
+    /**
+     * Given a selected folder
+     * Then I should see the create resource menu
+     * Then I should see the new password resource menu
+     * Then I should see the new folder resource menu
+     */
+
+    beforeEach(() => {
+      page = new DisplayResourcesWorkspaceMainMenuPage(contextPro, propsFolderOwned);
+    });
+
+    it('As LU I cannot start adding a resource or a folder via the workspace main menu', async() => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.createMenu).not.toBeNull();
+      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
+
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
+
       expect(page.displayMenu.newPasswordMenu).not.toBeNull();
-    });
-
-    it('As LU I can create resource if I have selected a folder I am allowed to create in', async() => {
-      const props = defaultPropsFolderOwned(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newPasswordMenu).not.toBeNull();
-    });
-  });
-
-  describe('As LU I can create folder', () => {
-    it('As LU I can create folder if I have not selected any folder', async() => {
-      const props = defaultProps(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newFolderMenu).not.toBeNull();
-    });
-
-    it('As LU I can create folder if I have selected a folder I am allowed to create in', async() => {
-      const props = defaultPropsFolderOwned(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newFolderMenu).not.toBeNull();
-    });
-
-    it('As LU I cannot use the create folder button if disabled by API flag', async() => {
-      const appContext = {
-        siteSettings: {
-          getServerTimezone: () => '',
-          canIUse: () => false,
-        }
-      };
-      const context = defaultUserAppContext(appContext);
-      const props = defaultProps({context}); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newFolderMenu).toBeNull();
-    });
-
-    it('As LU I cannot use the create folder button if denied by RBAC', async() => {
-      const props = propsWithDenyUiAction(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.createMenu).not.toBeNull();
-      expect(page.displayMenu.hasCreateMenuDisabled()).toBeFalsy();
-      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
-      expect(page.displayMenu.newFolderMenu).toBeNull();
-    });
-  });
-
-  describe('As LU I can import resources', () => {
-    it('As LU I can import resources', async() => {
-      const props = defaultProps(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.importMenu).not.toBeNull();
-    });
-
-    it('As LU I cannot use the workspace import button if disabled by API flag', async() => {
-      const appContext = {
-        siteSettings: {
-          getServerTimezone: () => '',
-          canIUse: () => false,
-        }
-      };
-      const context = defaultUserAppContext(appContext);
-      const props = defaultProps({context}); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.importMenu).toBeNull();
-    });
-
-    it('As LU I cannot use the workspace import button if denied by RBAC', async() => {
-      const props = propsWithDenyUiAction(); // The props to pass
-      const page = new DisplayResourcesWorkspaceMainMenuPage(props);
-
-      expect(page.displayMenu.exists()).toBeTruthy();
-      expect(page.displayMenu.importMenu).toBeNull();
     });
   });
 });

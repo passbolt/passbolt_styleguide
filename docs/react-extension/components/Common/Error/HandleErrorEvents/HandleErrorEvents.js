@@ -16,7 +16,7 @@ import React from 'react';
 import {withDialog} from "../../../../contexts/DialogContext";
 import NotifyError from "../NotifyError/NotifyError";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 
 /**
  * This component listens any event related to error dialog actions to perform

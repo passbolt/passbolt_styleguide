@@ -14,7 +14,7 @@
 
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import {withDialog} from "../../contexts/DialogContext";
 import {withAccountRecovery} from "../../contexts/AccountRecoveryUserContext";
 import PropTypes from "prop-types";

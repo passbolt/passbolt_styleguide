@@ -18,7 +18,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import FilterResourcesByFoldersItem from "./FilterResourcesByFoldersItem";
 import {BrowserRouter as Router} from "react-router-dom";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import {DragContext} from "../../../contexts/DragContext";
 
 /**

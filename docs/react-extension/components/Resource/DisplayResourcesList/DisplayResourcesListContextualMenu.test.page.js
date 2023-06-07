@@ -1,3 +1,4 @@
+
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -12,6 +13,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
@@ -22,86 +24,31 @@ import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextual
 export default class DisplayResourcesListContextualMenuPage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <DisplayResourcesListContextualMenu {...props}/>
+        <AppContext.Provider value={appContext}>
+          <DisplayResourcesListContextualMenu {...props}/>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
   }
 
   /**
-   * Returns the menu.
-   * @return {HTMLElement}
+   * Returns the menu item clickable for the index one
    */
-  get menu() {
-    return this._page.container.querySelector('.contextual-menu');
+  menuItem(index) {
+    return this._page.container.querySelectorAll('li .row .main-cell-wrapper .main-cell button')[index - 1];
   }
 
   /**
-   * Returns the item.
-   * @return {HTMLElement}
+   * Returns the name for the index one
    */
-  get copyUsernameItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#username');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get copyPasswordItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#password');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get copyUriItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#uri');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get copyPermalinkItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#permalink');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get openUriItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#open-uri');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get editItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#edit');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get shareItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#share');
-  }
-
-  /**
-   * Returns the item.
-   * @return {HTMLElement}
-   */
-  get deleteItem() {
-    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#delete');
+  menuName(index) {
+    return this._page.container.querySelectorAll('li .row .main-cell-wrapper .main-cell button')[index - 1].textContent;
   }
 
   /** Click on the component */
@@ -115,55 +62,55 @@ export default class DisplayResourcesListContextualMenuPage {
    * Click on the menu copy username folder
    */
   async copyUsername() {
-    await this.click(this.copyUsernameItem);
+    await this.click(this.menuItem(1));
   }
 
   /**
    * Click on the menu copy password folder
    */
   async copyPassword() {
-    await this.click(this.copyPasswordItem);
+    await this.click(this.menuItem(2));
   }
 
   /**
    * Click on the menu copy uri folder
    */
   async copyUri() {
-    await this.click(this.copyUriItem);
+    await this.click(this.menuItem(3));
   }
 
   /**
    * Click on the menu copy permalink folder
    */
   async copyPermalink() {
-    await this.click(this.copyPermalinkItem);
+    await this.click(this.menuItem(4));
   }
 
   /**
    * Click on the menu open uri in a new tab
    */
   async openUri() {
-    await this.click(this.openUriItem);
+    await this.click(this.menuItem(5));
   }
 
   /**
    * Click on the menu edir folder
    */
   async edit() {
-    await this.click(this.editItem);
+    await this.click(this.menuItem(6));
   }
 
   /**
    * Click on the menu edir folder
    */
   async share() {
-    await this.click(this.shareItem);
+    await this.click(this.menuItem(7));
   }
 
   /**
    * Click on the menu edir folder
    */
   async delete() {
-    await this.click(this.deleteItem);
+    await this.click(this.menuItem(8));
   }
 }

@@ -13,7 +13,7 @@
  */
 import React, {Fragment} from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";

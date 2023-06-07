@@ -1,5 +1,5 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import React from "react";

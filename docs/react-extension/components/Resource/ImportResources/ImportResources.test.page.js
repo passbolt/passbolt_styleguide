@@ -12,6 +12,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import ImportResources from "./ImportResources";
@@ -22,12 +23,15 @@ import ImportResources from "./ImportResources";
 export default class ImportResourcesPage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <ImportResources {...props}/>
+        <AppContext.Provider value={appContext}>
+          <ImportResources {...props}/>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
   }

@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withAnnouncement} from "../../../contexts/AnnouncementContext";
 import {DateTime} from "luxon";
 import DisplayGoingToExpireSubscriptionAnnouncement from "./DisplayGoingToExpireSubscriptionAnnouncement";

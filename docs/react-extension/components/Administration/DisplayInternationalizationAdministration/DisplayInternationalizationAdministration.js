@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import Select from "../../Common/Select/Select";
 import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";

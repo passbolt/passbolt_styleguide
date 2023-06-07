@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import {BROWSER_NAMES, detectBrowserName} from "../../../../shared/lib/Browser/detectBrowserName";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 

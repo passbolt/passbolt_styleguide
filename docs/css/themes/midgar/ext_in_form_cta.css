@@ -607,6 +607,9 @@ button.link:disabled {
   border-bottom: 1px solid #515151;
   box-shadow: none;
 }
+button.link.full-length {
+  width: 100%;
+}
 button.link.inline {
   display: inline-block;
 }

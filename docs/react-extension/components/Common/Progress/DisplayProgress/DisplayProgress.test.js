@@ -15,7 +15,7 @@
 import React from "react";
 import {render} from "@testing-library/react";
 import DisplayProgress from "./DisplayProgress";
-import AppContext from "../../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../../contexts/AppContext";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 beforeEach(() => {

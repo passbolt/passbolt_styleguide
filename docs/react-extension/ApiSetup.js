@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import React, {Component} from "react";
-import AppContext from "../shared/context/AppContext/AppContext";
+import AppContext from "./contexts/AppContext";
 import ApiSetupContextProvider from "./contexts/ApiSetupContext";
 import {ApiClientOptions} from "../shared/lib/apiClient/apiClientOptions";
 import OrchestrateApiSetup from "./components/AuthenticationSetup/OrchestrateApiSetup/OrchestrateApiSetup";

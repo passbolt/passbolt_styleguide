@@ -13,7 +13,7 @@
  */
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 
 /**
@@ -66,8 +66,6 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
   onGoToNewTab: () => {
   }, // Whenever the user want to navigate to a new url.
-  onGoToAdministrationRbacsRequested: () => {
-  }, // Whenever the user wants to navigate to the administration workspace rbacs section.
 });
 
 /**
@@ -115,7 +113,6 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
-      onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
     };
   }
 
@@ -246,14 +243,6 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationSsoRequested() {
     await this.goTo("browser-extension", "/app/administration/sso");
-  }
-
-  /**
-   * Whenever the user wants to navigate to the administration workspace rbac.
-   * @returns {Promise<void>}
-   */
-  async onGoToAdministrationRbacsRequested() {
-    await this.goTo("apu", "/app/administration/rbacs");
   }
 
   /**

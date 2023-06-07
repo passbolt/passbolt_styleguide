@@ -14,7 +14,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "./ActionFeedbackContext";
 import {withLoading} from "./LoadingContext";

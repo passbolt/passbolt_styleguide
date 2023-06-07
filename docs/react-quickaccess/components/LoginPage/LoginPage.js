@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
+import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import SsoProviders from "../../../react-extension/components/Administration/ManageSsoSettings/SsoProviders.data";
 import {withSso} from "../../contexts/SsoContext";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -123,6 +123,9 @@ class LoginPage extends React.Component {
   async handleSignInWithSso(event) {
     event.preventDefault();
     this.setState({processing: true, ssoError: ""});
+    //save the current window blur behaviour option
+    const currentWindowBlurState = this.props.context.shouldCloseAtWindowBlur;
+    this.props.context.setWindowBlurBehaviour(false);
     try {
       await this.props.ssoContext.runSignInProcess();
       await this.handleLoginSuccess();
@@ -133,10 +136,13 @@ class LoginPage extends React.Component {
       if (e.name !== "UserAbortsOperationError") {
         this.setState({ssoError: e.message});
       }
+    } finally {
+      this.setState({
+        processing: false
+      });
+      //rollback the current window blur behaviour option
+      this.props.context.setWindowBlurBehaviour(currentWindowBlurState);
     }
-    this.setState({
-      processing: false
-    });
   }
 
   /**

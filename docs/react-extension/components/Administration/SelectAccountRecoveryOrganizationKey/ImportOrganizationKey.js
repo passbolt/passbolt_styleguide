@@ -18,7 +18,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows to display the import organization key for the administration

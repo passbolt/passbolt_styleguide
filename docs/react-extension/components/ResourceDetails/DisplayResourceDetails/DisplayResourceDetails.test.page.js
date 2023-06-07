@@ -12,6 +12,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import {BrowserRouter as Router} from 'react-router-dom';
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -23,13 +24,16 @@ import DisplayResourceDetails from "./DisplayResourceDetails";
 export default class DisplayResourceDetailsPage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
         <Router>
-          <DisplayResourceDetails {...props}/>
+          <AppContext.Provider value={appContext}>
+            <DisplayResourceDetails {...props}/>
+          </AppContext.Provider>
         </Router>
       </MockTranslationProvider>
     );

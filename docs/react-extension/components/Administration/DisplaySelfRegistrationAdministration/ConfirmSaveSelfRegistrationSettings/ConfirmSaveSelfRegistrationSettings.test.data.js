@@ -16,12 +16,12 @@ import {defaultAppContext} from "../../../../contexts/ApiAppContext.test.data";
 
 /**
  * Default props.
+ * @param {Object} props The props to override
  * @returns {object}
- * @param data
  */
-export function defaultProps(data = {}) {
+export function defaultProps(data = {}, userId) {
   const defaultProps = {
-    context: defaultAppContext(data?.context),
+    context: defaultAppContext(data?.context, userId),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn(),

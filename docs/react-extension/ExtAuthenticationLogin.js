@@ -14,7 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {BrowserRouter as Router} from "react-router-dom";
-import AppContext from "../shared/context/AppContext/AppContext";
+import AppContext from "./contexts/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AuthenticationLoginContextProvider from "./contexts/Authentication/AuthenticationLoginContext";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";

@@ -1,5 +1,4 @@
 import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -45,7 +44,7 @@ export function deleteUserDialogProps(user) {
 export function mockUser(user = {}) {
   return Object.assign({
     "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-    "role_id": TEST_ROLE_USER_ID,
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
     "username": "carol@passbolt.com",
     "active": true,
     "deleted": false,

@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import Icon from "../../../../shared/components/Icons/Icon";

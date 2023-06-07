@@ -14,7 +14,7 @@
 
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 
 /**
  * Context related to prepare a resource ( name, url, username, password.)

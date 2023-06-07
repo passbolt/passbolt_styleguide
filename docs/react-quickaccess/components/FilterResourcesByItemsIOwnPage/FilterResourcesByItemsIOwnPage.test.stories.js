@@ -16,8 +16,8 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByItemsIOwnPage from "./FilterResourcesByItemsIOwnPage";
+import AppContext from "../../contexts/AppContext";
 import {defaultProps, noFilteredResourcesProps, withFilteredResourcesProps} from "./FilterResourcesByItemsIOwnPage.test.data";
-import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
   title: 'Components/QuickAccess/FilterResourcesByItemsIOwn',

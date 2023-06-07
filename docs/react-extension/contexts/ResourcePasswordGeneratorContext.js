@@ -13,7 +13,7 @@
  */
 
 import * as React from "react";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 import PropTypes from "prop-types";
 
 /**

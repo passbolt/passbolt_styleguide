@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../AppContext";
 import EmailNotificationService from "../../../../shared/services/api/emailNotification/EmailNotificationService";
 import EmailNotificationModel from "../../../../shared/models/emailNotification/EmailNotificationModel";
 import EmailNotificationDTO from "../../../../shared/models/emailNotification/EmailNotificationDTO";

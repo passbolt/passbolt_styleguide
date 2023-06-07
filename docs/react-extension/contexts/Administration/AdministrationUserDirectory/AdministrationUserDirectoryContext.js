@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../AppContext";
 import UserDirectoryService from '../../../../shared/services/api/userDirectory/UserDirectoryService';
 import UserService from '../../../../shared/services/api/user/UserService';
 import UserDirectoryModel from '../../../../shared/models/userDirectory/UserDirectoryModel';

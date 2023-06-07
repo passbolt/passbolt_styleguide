@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Icon from "../../../shared/components/Icons/Icon";
@@ -10,7 +11,6 @@ import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import debounce from 'debounce-promise';
 import PownedService from "../../../shared/services/api/secrets/pownedService";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {

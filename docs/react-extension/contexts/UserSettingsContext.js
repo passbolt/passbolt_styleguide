@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 
 export const UserSettingsContext = React.createContext({
   state: null, // The state in the user settings process

@@ -13,15 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import ContextualMenuWrapper from "../../Common/ContextualMenu/ContextualMenuWrapper";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import {withDialog} from "../../../contexts/DialogContext";
 import ExportResources from "../ExportResources/ExportResources";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class FilterResourcesByRootFolderContextualMenu extends React.Component {
   /**
@@ -74,12 +72,10 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
   }
 
   /**
-   * Check if the user can export.
-   * @return {boolean}
+   * Returns true if the user can export
    */
   canExport() {
-    return this.props.context.siteSettings.canIUse("export")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_EXPORT);
+    return this.props.context.siteSettings.canIUse("export");
   }
 
   /**
@@ -112,21 +108,20 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {this.canExport() &&
-          <li key="option-export-folder" className="ready closed">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button type="button" className="link no-border" onClick={this.handleExportFolderItemClickEvent}>
-                    <span>
-                      <Trans>Export all</Trans>
-                    </span>
-                  </button>
-                </div>
+        <li key="option-export-folder" className="ready closed">
+          <div className="row">
+            <div className="main-cell-wrapper">
+              <div className="main-cell">
+                <button type="button" disabled={!this.canExport()} className="link no-border"
+                  onClick={this.handleExportFolderItemClickEvent}>
+                  <span>
+                    <Trans>Export all</Trans>
+                  </span>
+                </button>
               </div>
             </div>
-          </li>
-        }
+          </div>
+        </li>
       </ContextualMenuWrapper>
     );
   }
@@ -134,7 +129,6 @@ class FilterResourcesByRootFolderContextualMenu extends React.Component {
 
 FilterResourcesByRootFolderContextualMenu.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based access control context
   hide: PropTypes.func, // Hide the contextual menu
   onBeforeHide: PropTypes.func, // On before hide callBack
   left: PropTypes.number, // left position in px of the page
@@ -144,4 +138,4 @@ FilterResourcesByRootFolderContextualMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withDialog(withTranslation("common")(FilterResourcesByRootFolderContextualMenu)))));
+export default withAppContext(withResourceWorkspace(withDialog(withTranslation("common")(FilterResourcesByRootFolderContextualMenu))));

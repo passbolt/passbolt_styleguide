@@ -1,6 +1,6 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import FilterUsersByBreadcrumb from "./FilterUsersByBreadcrumb";
 import {UserWorkspaceFilterTypes} from "../../../contexts/UserWorkspaceContext";

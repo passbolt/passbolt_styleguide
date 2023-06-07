@@ -12,7 +12,7 @@
  * @since         3.2.0
  */
 
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";

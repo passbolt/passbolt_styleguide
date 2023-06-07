@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -22,8 +22,6 @@ import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/Crea
 import ImportResources from "../ImportResources/ImportResources";
 import {Trans, withTranslation} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows the current user to create a new resource
@@ -200,6 +198,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Returns true if the current user can import a CSV/KDBX file
+   */
+  get canImport() {
+    return this.props.context.siteSettings.canIUse("import");
+  }
+
+  /**
    * can create a resource
    * @returns {boolean}
    */
@@ -212,11 +217,6 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canImport = this.props.context.siteSettings.canIUse("import")
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_IMPORT);
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
-      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
-
     return (
       <>
         <div className="dropdown" ref={this.createMenuRef}>
@@ -236,25 +236,24 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </div>
               </div>
             </li>
-            {canUseFolders &&
-              <li id="folder_action">
-                <div className="row">
-                  <div className="main-cell-wrapper">
-                    <div className="main-cell">
-                      <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
-                        <span><Trans>New folder</Trans></span>
-                      </button>
-                    </div>
+            <li id="folder_action">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button type="button" className="link no-border" onClick={this.handleMenuCreateFolderClickEvent}>
+                      <span><Trans>New folder</Trans></span>
+                    </button>
                   </div>
                 </div>
-              </li>
-            }
+              </div>
+            </li>
           </ul>
         </div>
-        {canImport &&
+        {this.canImport &&
           <button
             type="button"
-            className="import button-action-icon" onClick={this.handleImportClickEvent}>
+            className="button-action-icon"
+            onClick={this.handleImportClickEvent}>
             <Icon name="upload" />
             <span className="visuallyhidden"><Trans>upload</Trans></span>
           </button>
@@ -266,9 +265,8 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
 
 DisplayResourcesWorkspaceMainMenu.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based access control context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
 };
 
-export default withAppContext(withRbac(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)))));
+export default withAppContext(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))));

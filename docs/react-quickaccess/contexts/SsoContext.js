@@ -13,8 +13,8 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
+import {withAppContext} from "./AppContext";
 import {withTranslation} from "react-i18next";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
 
 export const SsoContext = React.createContext({
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state

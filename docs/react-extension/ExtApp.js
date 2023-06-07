@@ -45,7 +45,7 @@ import ExtAppContextProvider from "./contexts/ExtAppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import UserSettingsContextProvider from "./contexts/UserSettingsContext";
 import AdministrationWorkspace from "./components/Administration/AdministrationWorkspace";
-import AppContext from "../shared/context/AppContext/AppContext";
+import AppContext from "./contexts/AppContext";
 import HandlePassphraseEntryEvents
   from "./components/AuthenticationPassphrase/HandlePassphraseEntryEvents/HandlePassphraseEntryEvents";
 import HandleFolderMoveStrategyEvents
@@ -64,7 +64,6 @@ import AdminSubscriptionContextProvider from "./contexts/Administration/Administ
 import HandleStatusCheck from './components/HandleStatusCheck/HandleStatusCheck';
 import MfaContextProvider from "./contexts/MFAContext";
 import AdminSsoContextProvider from "./contexts/AdminSsoContext";
-import RbacContextProvider from "../shared/context/Rbac/RbacContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -86,148 +85,146 @@ class ExtApp extends Component {
         <AppContext.Consumer>
           {appContext =>
             <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-              <RbacContextProvider>
-                <AccountRecoveryUserContextProvider accountRecoveryUserService={accountRecoveryUserService}>
-                  <MfaContextProvider>
-                    <WorkflowContextProvider>
-                      <ActionFeedbackContextProvider>
-                        <DialogContextProvider>
-                          <AnnouncementContextProvider>
-                            <ContextualMenuContextProvider>
-                              <LoadingContextProvider>
+              <AccountRecoveryUserContextProvider accountRecoveryUserService={accountRecoveryUserService}>
+                <MfaContextProvider>
+                  <WorkflowContextProvider>
+                    <ActionFeedbackContextProvider>
+                      <DialogContextProvider>
+                        <AnnouncementContextProvider>
+                          <ContextualMenuContextProvider>
+                            <LoadingContextProvider>
 
-                                { /* Action Feedback Management */}
-                                <DisplayActionFeedbacks/>
+                              { /* Action Feedback Management */}
+                              <DisplayActionFeedbacks/>
 
-                                { /* Dialogs Management */}
-                                <HandlePassphraseEntryEvents/>
-                                <HandleFolderMoveStrategyEvents/>
-                                <HandleProgressEvents/>
-                                <HandleErrorEvents/>
-                                <HandleSessionExpired/>
+                              { /* Dialogs Management */}
+                              <HandlePassphraseEntryEvents/>
+                              <HandleFolderMoveStrategyEvents/>
+                              <HandleProgressEvents/>
+                              <HandleErrorEvents/>
+                              <HandleSessionExpired/>
 
-                                { /* Announcement Management */}
-                                {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
-                                  && appContext.siteSettings.canIUse('ee')
-                                  && <HandleSubscriptionAnnouncement/>}
+                              { /* Announcement Management */}
+                              {appContext.loggedInUser && appContext.loggedInUser.role.name === "admin"
+                              && appContext.siteSettings.canIUse('ee')
+                              && <HandleSubscriptionAnnouncement/>}
 
-                                <Router>
-                                  <NavigationContextProvider>
-                                    { /* Account Recovery Management */}
-                                    {appContext.loggedInUser && (appContext.siteSettings.canIUse('accountRecovery') || appContext.siteSettings.canIUse('mfaPolicies'))
-                                      && <HandleStatusCheck/>}
-                                    <HandleExtAppRouteChanged/>
-                                    <Switch>
-                                      { /* The application first load route points to an html document */ }
-                                      <Route path="/webAccessibleResources/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
-                                      { /* The following routes are not handled by the browser extension application. */}
-                                      <Route exact path={[
-                                        "/app/administration",
-                                        "/app/administration/mfa",
-                                        "/app/administration/users-directory",
-                                        "/app/administration/email-notification",
-                                        "/app/administration/smtp-settings",
-                                        "/app/settings/mfa/:provider",
-                                        "/app/settings/mfa"
-                                      ]}/>
-                                      {/* Passwords workspace */}
-                                      <Route path={[
-                                        "/app/folders/view/:filterByFolderId",
-                                        "/app/passwords/view/:selectedResourceId",
-                                        "/app/passwords",
-                                      ]}>
-                                        <ResourceWorkspaceContextProvider>
-                                          <ResourcePasswordGeneratorContextProvider>
-                                            <ManageDialogs/>
-                                            <ManageContextualMenu/>
-                                            <ManageAnnouncements/>
-                                            <DragContextProvider>
-                                              <div id="container" className="page password">
-                                                <div id="app" className="app ready" tabIndex="1000">
-                                                  <div className="header first">
-                                                    <DisplayMainMenu/>
-                                                  </div>
-                                                  <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                                                </div>
-                                              </div>
-                                            </DragContextProvider>
-                                          </ResourcePasswordGeneratorContextProvider>
-                                        </ResourceWorkspaceContextProvider>
-                                      </Route>
-                                      {/* Users workspace */}
-                                      <Route path={[
-                                        "/app/account-recovery/requests/review/:accountRecoveryRequestId",
-                                        "/app/groups/view/:selectedGroupId",
-                                        "/app/groups/edit/:selectedGroupId",
-                                        "/app/users/view/:selectedUserId",
-                                        "/app/users",
-                                      ]}>
-                                        <UserWorkspaceContextProvider>
+                              <Router>
+                                <NavigationContextProvider>
+                                  { /* Account Recovery Management */}
+                                  {appContext.loggedInUser && (appContext.siteSettings.canIUse('accountRecovery') || appContext.siteSettings.canIUse('mfaPolicies'))
+                                && <HandleStatusCheck/>}
+                                  <HandleExtAppRouteChanged/>
+                                  <Switch>
+                                    { /* The application first load route points to an html document */ }
+                                    <Route path="/webAccessibleResources/passbolt-iframe-app.html" component={HandleApplicationFirstLoadRoute} />
+                                    { /* The following routes are not handled by the browser extension application. */}
+                                    <Route exact path={[
+                                      "/app/administration",
+                                      "/app/administration/mfa",
+                                      "/app/administration/users-directory",
+                                      "/app/administration/email-notification",
+                                      "/app/administration/smtp-settings",
+                                      "/app/settings/mfa/:provider",
+                                      "/app/settings/mfa"
+                                    ]}/>
+                                    {/* Passwords workspace */}
+                                    <Route path={[
+                                      "/app/folders/view/:filterByFolderId",
+                                      "/app/passwords/view/:selectedResourceId",
+                                      "/app/passwords",
+                                    ]}>
+                                      <ResourceWorkspaceContextProvider>
+                                        <ResourcePasswordGeneratorContextProvider>
                                           <ManageDialogs/>
-                                          <ManageWorkflows/>
                                           <ManageContextualMenu/>
                                           <ManageAnnouncements/>
-                                          <div id="container" className="page user">
-                                            <div id="app" className="app ready" tabIndex="1000">
-                                              <div className="header first">
-                                                <DisplayMainMenu/>
+                                          <DragContextProvider>
+                                            <div id="container" className="page password">
+                                              <div id="app" className="app ready" tabIndex="1000">
+                                                <div className="header first">
+                                                  <DisplayMainMenu/>
+                                                </div>
+                                                <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                               </div>
-                                              <DisplayUserWorkspace/>
                                             </div>
-                                          </div>
-                                        </UserWorkspaceContextProvider>
-                                      </Route>
-                                      {/* User settings workspace */}
-                                      <Route path={"/app/settings"}>
-                                        <UserSettingsContextProvider>
-                                          <ManageDialogs/>
-                                          <ManageAnnouncements/>
-                                          <div id="container" className="page settings">
-                                            <div id="app" className="app ready" tabIndex="1000">
-                                              <div className="header first">
-                                                <DisplayMainMenu/>
-                                              </div>
-                                              <DisplayUserSettingsWorkspace/>
+                                          </DragContextProvider>
+                                        </ResourcePasswordGeneratorContextProvider>
+                                      </ResourceWorkspaceContextProvider>
+                                    </Route>
+                                    {/* Users workspace */}
+                                    <Route path={[
+                                      "/app/account-recovery/requests/review/:accountRecoveryRequestId",
+                                      "/app/groups/view/:selectedGroupId",
+                                      "/app/groups/edit/:selectedGroupId",
+                                      "/app/users/view/:selectedUserId",
+                                      "/app/users",
+                                    ]}>
+                                      <UserWorkspaceContextProvider>
+                                        <ManageDialogs/>
+                                        <ManageWorkflows/>
+                                        <ManageContextualMenu/>
+                                        <ManageAnnouncements/>
+                                        <div id="container" className="page user">
+                                          <div id="app" className="app ready" tabIndex="1000">
+                                            <div className="header first">
+                                              <DisplayMainMenu/>
                                             </div>
+                                            <DisplayUserWorkspace/>
                                           </div>
-                                        </UserSettingsContextProvider>
-                                      </Route>
-                                      {/* SSO, Subscription and Account Recovery settings */}
-                                      <Route exact path={[
-                                        "/app/administration/subscription",
-                                        "/app/administration/account-recovery",
-                                        "/app/administration/sso",
-                                      ]}>
-                                        <AdministrationWorkspaceContextProvider>
-                                          <AdminAccountRecoveryContextProvider>
-                                            <AdminSubscriptionContextProvider>
-                                              <AdminSsoContextProvider>
-                                                <ManageDialogs/>
-                                                <ManageWorkflows/>
-                                                <AdministrationWorkspace/>
-                                              </AdminSsoContextProvider>
-                                            </AdminSubscriptionContextProvider>
-                                          </AdminAccountRecoveryContextProvider>
-                                        </AdministrationWorkspaceContextProvider>
-                                      </Route>
-                                      {/* Fallback */}
-                                      <Route path="/">
-                                        <HandleRouteFallback/>
-                                      </Route>
-                                    </Switch>
-                                  </NavigationContextProvider>
-                                </Router>
-                                <ManageLoading/>
-                                <Footer/>
-                              </LoadingContextProvider>
-                            </ContextualMenuContextProvider>
-                          </AnnouncementContextProvider>
-                        </DialogContextProvider>
-                      </ActionFeedbackContextProvider>
-                    </WorkflowContextProvider>
-                  </MfaContextProvider>
-                </AccountRecoveryUserContextProvider>
-              </RbacContextProvider>
+                                        </div>
+                                      </UserWorkspaceContextProvider>
+                                    </Route>
+                                    {/* User settings workspace */}
+                                    <Route path={"/app/settings"}>
+                                      <UserSettingsContextProvider>
+                                        <ManageDialogs/>
+                                        <ManageAnnouncements/>
+                                        <div id="container" className="page settings">
+                                          <div id="app" className="app ready" tabIndex="1000">
+                                            <div className="header first">
+                                              <DisplayMainMenu/>
+                                            </div>
+                                            <DisplayUserSettingsWorkspace/>
+                                          </div>
+                                        </div>
+                                      </UserSettingsContextProvider>
+                                    </Route>
+                                    {/* SSO, Subscription and Account Recovery settings */}
+                                    <Route exact path={[
+                                      "/app/administration/subscription",
+                                      "/app/administration/account-recovery",
+                                      "/app/administration/sso",
+                                    ]}>
+                                      <AdministrationWorkspaceContextProvider>
+                                        <AdminAccountRecoveryContextProvider>
+                                          <AdminSubscriptionContextProvider>
+                                            <AdminSsoContextProvider>
+                                              <ManageDialogs/>
+                                              <ManageWorkflows/>
+                                              <AdministrationWorkspace/>
+                                            </AdminSsoContextProvider>
+                                          </AdminSubscriptionContextProvider>
+                                        </AdminAccountRecoveryContextProvider>
+                                      </AdministrationWorkspaceContextProvider>
+                                    </Route>
+                                    {/* Fallback */}
+                                    <Route path="/">
+                                      <HandleRouteFallback/>
+                                    </Route>
+                                  </Switch>
+                                </NavigationContextProvider>
+                              </Router>
+                              <ManageLoading/>
+                              <Footer/>
+                            </LoadingContextProvider>
+                          </ContextualMenuContextProvider>
+                        </AnnouncementContextProvider>
+                      </DialogContextProvider>
+                    </ActionFeedbackContextProvider>
+                  </WorkflowContextProvider>
+                </MfaContextProvider>
+              </AccountRecoveryUserContextProvider>
             </TranslationProvider>
           }
         </AppContext.Consumer>

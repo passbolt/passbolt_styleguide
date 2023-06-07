@@ -19,7 +19,7 @@ import {DateTime} from "luxon";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAnnouncement} from "../../../contexts/AnnouncementContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows to display the subscription announcement

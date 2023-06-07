@@ -17,7 +17,7 @@ import {
   AdministrationWorkspaceMenuTypes,
   withAdministrationWorkspace
 } from "../../../contexts/AdministrationWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
@@ -113,15 +113,6 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Can if the user can use RBACS
-   * @returns {boolean}
-   */
-  get canIUseRbacs() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('rbacs');
-  }
-
-  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -135,7 +126,6 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSelfRegistrationClick = this.handleSelfRegistrationClick.bind(this);
     this.handleSsoClick = this.handleSsoClick.bind(this);
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
-    this.handleRbacsClick = this.handleRbacsClick.bind(this);
   }
 
   /**
@@ -201,12 +191,6 @@ class DisplayAdministrationMenu extends React.Component {
     this.props.navigationContext.onGoToAdministrationSsoRequested();
   }
 
-  /**
-   * Handle when the user click on the rbac menu
-   */
-  handleRbacsClick() {
-    this.props.navigationContext.onGoToAdministrationRbacsRequested();
-  }
 
   /**
    * Handle when the user click on the Mfa policy settings menu
@@ -277,14 +261,6 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isSsoSelected() {
     return AdministrationWorkspaceMenuTypes.SSO === this.props.administrationWorkspaceContext.selectedAdministration;
-  }
-
-  /**
-   * If RBAC menu is selected
-   * @returns {boolean}
-   */
-  isRbacSelected() {
-    return AdministrationWorkspaceMenuTypes.RBAC === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -421,19 +397,6 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleSsoClick}>
                     <span><Trans>Single Sign-On</Trans></span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </li>
-          }
-          {this.canIUseRbacs &&
-          <li id="rbacs_menu">
-            <div className={`row  ${this.isRbacSelected() ? "selected" : ""}`}>
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
-                    <span><Trans>Role-Based Access Control</Trans></span>
                   </button>
                 </div>
               </div>

@@ -16,7 +16,7 @@ import Login from "../Login/Login";
 import SsoLogin from "../SsoLogin/SsoLogin";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {
   AuthenticationLoginWorkflowStates,
   withAuthenticationLoginContext

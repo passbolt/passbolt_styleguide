@@ -20,13 +20,11 @@ import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import DisplayResourceDetailsPermission from "./DisplayResourceDetailsPermission";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DisplayResourceDetailsActivity from "./DisplayResourceDetailsActivity";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withTranslation, Trans} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -99,13 +97,9 @@ class DisplayResourceDetails extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const canUseTags = this.props.context.siteSettings.canIUse("tags")
-      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
-    const canUseAuditLog = (this.props.context.siteSettings.canIUse("auditLog")
-      || this.props.context.siteSettings.canIUse("audit_log")) // @deprecated remove with v4
-      && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_ACTIVITIES);
-    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_VIEW_LIST);
-    const canSeeComments = this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_SEE_COMMENTS);
+    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseAuditLog = this.props.context.siteSettings.canIUse("auditLog") ||
+      this.props.context.siteSettings.canIUse("audit_log"); // @deprecated remove with v4
 
     return (
       <div className="panel aside ready">
@@ -131,15 +125,11 @@ class DisplayResourceDetails extends React.Component {
           </div>
           <DisplayResourceDetailsInformation/>
           <DisplayResourceDetailsDescription/>
-          {canViewShare &&
-            <DisplayResourceDetailsPermission/>
-          }
+          <DisplayResourceDetailsPermission/>
           {canUseTags &&
           <DisplayResourceDetailsTag/>
           }
-          {canSeeComments &&
           <DisplayResourceDetailsComment/>
-          }
           {canUseAuditLog &&
           <DisplayResourceDetailsActivity/>
           }
@@ -151,10 +141,9 @@ class DisplayResourceDetails extends React.Component {
 
 DisplayResourceDetails.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetails)))));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetails))));

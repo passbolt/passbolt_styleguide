@@ -1,7 +1,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import InputPassphrase from "./InputPassphrase";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 

@@ -16,7 +16,7 @@ import {CirclePicker} from "react-color";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";

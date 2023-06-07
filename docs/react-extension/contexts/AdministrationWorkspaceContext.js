@@ -12,7 +12,7 @@
  */
 import * as React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
 /**
@@ -160,7 +160,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isSmtpSettingsLocation = this.props.location.pathname.includes('smtp-settings');
     const isSelfRegistrationLocation = this.props.location.pathname.includes('self-registration');
     const isSso = this.props.location.pathname.includes('sso');
-    const rbac = this.props.location.pathname.includes('rbac');
     const can = {
       save: false,
       test: false,
@@ -196,8 +195,6 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SELF_REGISTRATION;
     } else if (isSso) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
-    } else if (rbac) {
-      selectedAdministration = AdministrationWorkspaceMenuTypes.RBAC;
     }
     await this.setState({selectedAdministration, can, must});
   }
@@ -285,5 +282,4 @@ export const AdministrationWorkspaceMenuTypes = {
   SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
   SELF_REGISTRATION: 'SELF-REGISTRATION', // Self registration settings administration menu selected
   SSO: "SSO", // SSO administration menu selected
-  RBAC: "RBAC" // RBAC administration menu selected
 };

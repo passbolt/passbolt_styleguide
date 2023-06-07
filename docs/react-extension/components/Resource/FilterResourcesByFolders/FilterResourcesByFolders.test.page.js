@@ -13,7 +13,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import {BrowserRouter as Router} from 'react-router-dom';
 import {FilterResourcesByFoldersItemPageObject} from "./FilterResourcesByFoldersItem.test.page";

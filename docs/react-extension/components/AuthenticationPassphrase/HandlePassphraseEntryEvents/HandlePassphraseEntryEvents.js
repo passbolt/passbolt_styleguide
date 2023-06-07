@@ -13,7 +13,7 @@
  */
 
 import React from 'react';
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import InputPassphrase from "../InputPassphrase/InputPassphrase";
 import {withDialog} from "../../../contexts/DialogContext";
 import PropTypes from "prop-types";

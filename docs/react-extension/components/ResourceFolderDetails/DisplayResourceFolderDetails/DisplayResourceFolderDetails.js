@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
 import DisplayResourceFolderDetailsPermissions from "./DisplayResourceFolderDetailsPermissions";
 import DisplayResourceFolderDetailsActivity from "./DisplayResourceFolderDetailsActivity";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";

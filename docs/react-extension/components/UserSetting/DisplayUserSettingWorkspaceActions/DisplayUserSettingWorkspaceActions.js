@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withRouter, Route} from "react-router-dom";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import EditUserProfile from "../EditUserProfile/EditUserProfile";

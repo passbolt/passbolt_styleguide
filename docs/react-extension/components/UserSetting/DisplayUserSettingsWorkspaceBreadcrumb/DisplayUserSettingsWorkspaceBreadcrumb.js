@@ -14,7 +14,7 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withTranslation} from "react-i18next";

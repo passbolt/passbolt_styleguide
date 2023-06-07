@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DisplayUserGroupDetailsMembersGroupMember from "./DisplayUserGroupDetailsMembersGroupMember";
 import EditUserGroup from "../EditUserGroup/EditUserGroup";
 import {withDialog} from "../../../contexts/DialogContext";

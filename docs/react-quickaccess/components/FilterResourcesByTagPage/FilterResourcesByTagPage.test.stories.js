@@ -16,8 +16,8 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByTagPage from "./FilterResourcesByTagPage";
+import AppContext from "../../contexts/AppContext";
 import {defaultProps, noTagsProps, withFilteredResourcesProps} from "./FilterResourcesByTagPage.test.data";
-import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
   title: 'Components/QuickAccess/FilterResourcesByTag',

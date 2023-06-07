@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import IdentifyViaSsoService from "../../../../shared/services/sso/IdentifyViaSsoService";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 class IdentifyWithSso extends Component {
   /**

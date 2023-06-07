@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAdminMfaPolicy} from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 import DisplayAdministrationMfaPolicyActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationMfaPolicyActions/DisplayAdministrationMfaPolicyActions";

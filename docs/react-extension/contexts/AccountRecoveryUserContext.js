@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 
 export const AccountRecoveryUserContext = React.createContext({
   accountRecoveryOrganizationPolicy: null, // The current organization policy

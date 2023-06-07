@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {v4 as uuidv4} from "uuid";
 import DomainUtil from "../../../lib/Domain/DomainUtil";
 import MapObject from '../../../lib/Map/MapObject';
@@ -341,7 +341,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
               ))
             }
             <div className="domain-add">
-              <button type="button" onClick={this.handleAddRowClick}>
+              <button type="button" className="full-length" onClick={this.handleAddRowClick}>
                 <Icon name="add"/>
                 <span><Trans>Add</Trans></span>
               </button>

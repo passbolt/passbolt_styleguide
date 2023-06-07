@@ -1,12 +1,10 @@
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
+import {withAppContext} from "../../contexts/AppContext";
 import canSuggestUrl from "./canSuggestUrl";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
-import {withRbac} from "../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 500;
@@ -195,7 +193,7 @@ class HomePage extends React.Component {
     const showSuggestedSection = !this.props.context.search.length;
     const showBrowsedResourcesSection = this.props.context.search.length > 0;
     const showFiltersSection = !this.props.context.search.length;
-    const canUseTag = this.props.context.siteSettings.canIUse('tags') && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
+    const canUseTag = this.props.context.siteSettings.canIUse('tags');
     let browsedResources, suggestedResources;
 
     if (isReady) {
@@ -330,8 +328,7 @@ class HomePage extends React.Component {
 
 HomePage.propTypes = {
   context: PropTypes.any, // The application context
-  rbacContext: PropTypes.any, // The role based access control context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withTranslation('common')(HomePage))));
+export default withAppContext(withRouter(withTranslation('common')(HomePage)));

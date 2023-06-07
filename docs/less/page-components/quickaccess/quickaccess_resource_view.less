@@ -55,22 +55,20 @@
                 display: inline-block;
                 max-width: 28rem;
                 &.secret-copy {
-                  > button {
-                    &:hover {
-                      color: @text-secret-hover-color;
-                    }
-                    > span {
-                      display: none;
-                    }
+                  &:hover {
+                    color: @text-secret-hover-color;
+                  }
+                  > span {
+                    display: none;
+                  }
 
-                    &:before {
-                      content: 'BBBBBBBBB';
-                      font-family: 'Passbolt', sans-serif;
-                      font-style: normal;
-                      font-weight: 400;
-                      font-size: 1.8rem;
-                      line-height: 100%;
-                    }
+                  &:before {
+                    content: 'BBBBBBBBB';
+                    font-family: 'Passbolt', sans-serif;
+                    font-style: normal;
+                    font-weight: 400;
+                    font-size: 1.8rem;
+                    line-height: 100%;
                   }
                 }
             }

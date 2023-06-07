@@ -17,7 +17,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormCancelButton from "../../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import FormSubmitButton from "../../../Common/Inputs/FormSubmitButton/FormSubmitButton";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../../contexts/AppContext";
 import {withAdminSelfRegistration} from "../../../../contexts/Administration/AdministrationSelfRegistration/AdministrationSelfRegistrationContext";
 import MapObject from '../../../../lib/Map/MapObject';
 

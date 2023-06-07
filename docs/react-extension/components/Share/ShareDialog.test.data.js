@@ -2,7 +2,6 @@ import UserSettings from "../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../test/fixture/Settings/userSettings";
 import {users, groups} from "../../contexts/UserWorkspaceContext.test.data";
 import MockPort from "../../test/mock/MockPort";
-import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../shared/models/entity/role/role.test.data";
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
@@ -68,7 +67,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "carol@passbolt.com",
       "active": true,
       "deleted": false,
@@ -115,7 +114,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "ada@passbolt.com",
       "active": true,
       "deleted": false,
@@ -162,7 +161,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "dame@passbolt.com",
       "active": true,
       "deleted": false,
@@ -209,7 +208,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "betty@passbolt.com",
       "active": true,
       "deleted": false,
@@ -286,7 +285,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "carol@passbolt.com",
       "active": true,
       "deleted": false,
@@ -333,7 +332,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "ada@passbolt.com",
       "active": true,
       "deleted": false,
@@ -380,7 +379,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "dame@passbolt.com",
       "active": true,
       "deleted": false,
@@ -427,7 +426,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "betty@passbolt.com",
       "active": true,
       "deleted": false,
@@ -474,7 +473,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "8d04cf98-716b-5f6d-9fe8-c130f8992646",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "hedy@passbolt.com",
       "active": true,
       "deleted": false,
@@ -503,7 +502,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "irene@passbolt.com",
       "active": true,
       "deleted": false,
@@ -532,7 +531,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "620de627-8f07-5427-9149-e2c43219c5aa",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "grace@passbolt.com",
       "active": true,
       "deleted": false,
@@ -667,7 +666,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "carol@passbolt.com",
       "active": true,
       "deleted": false,
@@ -714,7 +713,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "ada@passbolt.com",
       "active": true,
       "deleted": false,
@@ -761,7 +760,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "dame@passbolt.com",
       "active": true,
       "deleted": false,
@@ -808,7 +807,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "betty@passbolt.com",
       "active": true,
       "deleted": false,
@@ -855,7 +854,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "8d04cf98-716b-5f6d-9fe8-c130f8992646",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "hedy@passbolt.com",
       "active": true,
       "deleted": false,
@@ -884,7 +883,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "irene@passbolt.com",
       "active": true,
       "deleted": false,
@@ -913,7 +912,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "620de627-8f07-5427-9149-e2c43219c5aa",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "grace@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1048,7 +1047,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "carol@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1095,7 +1094,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "ada@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1142,7 +1141,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "dame@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1189,7 +1188,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "betty@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1236,7 +1235,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "8d04cf98-716b-5f6d-9fe8-c130f8992646",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "hedy@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1265,7 +1264,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "904bcd9f-ff51-5cfd-9de8-d2c876ade498",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "irene@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1294,7 +1293,7 @@ export const resources = [{
     "group": null,
     "user": {
       "id": "620de627-8f07-5427-9149-e2c43219c5aa",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "grace@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1431,7 +1430,7 @@ export const folders = [{
     "group": null,
     "user": {
       "id": "f848277c-5398-58f8-a82a-72397af2d450",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "ada@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1478,7 +1477,7 @@ export const folders = [{
     "group": null,
     "user": {
       "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "betty@passbolt.com",
       "active": true,
       "deleted": false,
@@ -1547,7 +1546,7 @@ export const autocompleteResult = [
     "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856"
   }, {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-    "role_id": TEST_ROLE_USER_ID,
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
     "username": "ada@passbolt.com",
     "active": true,
     "deleted": false,
@@ -1582,7 +1581,7 @@ export const autocompleteResult = [
     },
     "groups_users": [],
     "role": {
-      "id": TEST_ROLE_USER_ID,
+      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -1607,7 +1606,7 @@ export const autocompleteResult = [
     "last_logged_in": ""
   }, {
     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "role_id": TEST_ROLE_ADMIN_ID,
+    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
     "username": "admin@passbolt.com",
     "active": true,
     "deleted": false,
@@ -1684,7 +1683,7 @@ export const autocompleteResult = [
       "created": "2020-02-21T10:39:29+00:00"
     }],
     "role": {
-      "id": TEST_ROLE_ADMIN_ID,
+      "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
       "name": "admin",
       "description": "Organization administrator",
       "created": "2012-07-04T13:39:25+00:00",

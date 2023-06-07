@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withAppContext} from "./AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import SelfRegistrationService from '../../shared/services/api/selfRegistration/selfRegistrationService';
 import {SelfRegistrationProviderTypes} from '../../shared/models/selfRegistration/SelfRegistrationEnumeration';

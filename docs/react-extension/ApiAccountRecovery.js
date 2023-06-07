@@ -13,7 +13,7 @@
  */
 
 import React, {Component} from "react";
-import AppContext from "../shared/context/AppContext/AppContext";
+import AppContext from "./contexts/AppContext";
 import ApiAccountRecoveryContextProvider from "./contexts/ApiAccountRecoveryContext";
 import {ApiClientOptions} from "../shared/lib/apiClient/apiClientOptions";
 import Footer from "./components/Common/Footer/Footer";

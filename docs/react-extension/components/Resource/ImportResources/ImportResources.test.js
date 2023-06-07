@@ -17,29 +17,29 @@
  */
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import {defaultProps, propsWithDenyUiAction} from "./ImportResources.test.data";
+import {defaultAppContext, defaultProps} from "./ImportResources.test.data";
 import ImportResourcesResult from "./ImportResourcesResult";
-import ImportResourcesKeyUnlock from "./ImportResourcesResult";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import ImportResourcesKeyUnlock from "./ImportResourcesResult";
 import ImportResourcesPage from "./ImportResources.test.page";
-import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("ImportResources", () => {
+describe("As LU I should see the password import dialog", () => {
   let page; // The page to test against
+  const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
 
-  const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
+  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
   describe('As LU I can start import a file', () => {
     /**
      * I should see the password import dialog
      */
     beforeEach(() => {
-      page = new ImportResourcesPage(props);
+      page = new ImportResourcesPage(context, props);
     });
 
     it('As LU I see a success dialog after importing a file with success', async() => {
@@ -65,7 +65,7 @@ describe("ImportResources", () => {
       const extension = 'csv';
       const options = {credentials: {password: null, keyFile: null}, folders: false, tags: false};
 
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.import-resources.import-file", extension, base64Content, options);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.import-resources.import-file", extension, base64Content, options);
       expect(props.resourceWorkspaceContext.onResourceFileImportResult).toHaveBeenCalled();
       expect(props.resourceWorkspaceContext.onResourceFileToImport).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ImportResourcesResult);
@@ -106,7 +106,7 @@ describe("ImportResources", () => {
       const error = {name: "FileFormatError", message: "error"};
 
       // Mock the request function to make it return an error.
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
         throw error;
       });
 
@@ -125,7 +125,7 @@ describe("ImportResources", () => {
       const error = {name: "KdbxError", code: "InvalidKey"};
 
       // Mock the request function to make it return an error.
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
         throw error;
       });
 
@@ -170,7 +170,7 @@ describe("ImportResources", () => {
       await page.selectImportFile(file);
       // Mock the request function to make it return an error.
       const error = new PassboltApiFetchError("Jest simulate API error.");
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
         throw error;
       });
 
@@ -179,202 +179,6 @@ describe("ImportResources", () => {
 
       // Throw dialog general error message
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
-    });
-  });
-
-  describe('As LU I can import resources and folders', () => {
-    it('As LU I can import resources and folders', async() => {
-      expect.assertions(3);
-      const props = defaultProps(); // The props to pass
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importFolder).not.toBeNull();
-      expect(page.importFolder.checked).toBeTruthy();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          folders: true
-        })
-      );
-    });
-
-    it('As LU I can import resources without folders', async() => {
-      expect.assertions(3);
-      const props = defaultProps(); // The props to pass
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.checkImportFolder();
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importFolder).not.toBeNull();
-      expect(page.importFolder.checked).toBeFalsy();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          folders: false
-        })
-      );
-    });
-
-    it('As LU I cannot import resources with folders if disabled by API flag', async() => {
-      expect.assertions(2);
-      const appContext = {
-        siteSettings: {
-          canIUse: () => false
-        }
-      };
-      const context = defaultUserAppContext(appContext); // The applicative context
-      const props = defaultProps({context});
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importFolder).toBeNull();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          folders: false
-        })
-      );
-    });
-
-    it('As LU I cannot import resources with folders if denied by RBAC', async() => {
-      const props = propsWithDenyUiAction();
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importFolder).toBeNull();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          folders: false
-        })
-      );
-    });
-  });
-
-  describe('As LU I can import resources and tag them', () => {
-    it('As LU I can import resources and tag them', async() => {
-      expect.assertions(3);
-      const props = defaultProps(); // The props to pass
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importTag).not.toBeNull();
-      expect(page.importTag.checked).toBeTruthy();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          tags: true
-        })
-      );
-    });
-
-    it('As LU I can import resources without tagging them', async() => {
-      expect.assertions(3);
-      const props = defaultProps(); // The props to pass
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.checkImportTag();
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importTag).not.toBeNull();
-      expect(page.importTag.checked).toBeFalsy();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          tags: false
-        })
-      );
-    });
-
-    it('As LU I cannot import resources and tag them if disabled by API flag', async() => {
-      expect.assertions(2);
-      const appContext = {
-        siteSettings: {
-          canIUse: () => false
-        }
-      };
-      const context = defaultUserAppContext(appContext); // The applicative context
-      const props = defaultProps({context});
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importTag).toBeNull();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          tags: false
-        })
-      );
-    });
-
-    it('As LU I cannot import resources and tag them if denied by RBAC', async() => {
-      const props = propsWithDenyUiAction();
-      jest.spyOn(props.context.port, 'request');
-      const page = new ImportResourcesPage(props);
-
-      const file = new File(['test'], 'import.csv', {type: 'csv'});
-      await page.selectImportFile(file);
-      await page.submitImport();
-      await waitFor(() => {});
-
-      expect(page.importTag).toBeNull();
-      expect(props.context.port.request).toHaveBeenCalledWith(
-        "passbolt.import-resources.import-file",
-        expect.any(String),
-        expect.any(String),
-        expect.objectContaining({
-          tags: false
-        })
-      );
     });
   });
 });

@@ -21,7 +21,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";

@@ -33,10 +33,6 @@ const siteSettings = (isProEdition = true) => ({
         "version": "1.0.0",
         "enabled": isProEdition,
       },
-      "rbacs": {
-        "version": "1.0.0",
-        "enabled": isProEdition,
-      },
       "import": {
         "version": "2.0.1",
         "config": {
@@ -111,7 +107,7 @@ const siteSettings = (isProEdition = true) => ({
       },
       "folders": {
         "version": "2.0.0",
-        "enabled": true
+        "enabled": isProEdition
       },
       "previewPassword": {
         "version": "3.0.0"

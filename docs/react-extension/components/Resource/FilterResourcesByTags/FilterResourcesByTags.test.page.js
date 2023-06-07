@@ -17,7 +17,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import ManageContextualMenu from "../../Common/ContextualMenu/ManageContextualMenu";
 import ContextualMenuContextProvider from "../../../contexts/ContextualMenuContext";
 import FilterResourcesByTagsContextualMenuPageObject from "./FilterResourcesByTagsContextualMenu.test.page";

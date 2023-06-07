@@ -13,7 +13,7 @@
  */
 
 import {render, fireEvent, waitFor} from "@testing-library/react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayUserDetailsActivity from "./DisplayUserDetailsActivity";
 import {BrowserRouter as Router} from 'react-router-dom';

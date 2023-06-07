@@ -1,6 +1,6 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import DeleteResource from "./DeleteResource";
 import {defaultAppContext} from "./DeleteResource.test.data";
 

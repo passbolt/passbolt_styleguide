@@ -20,16 +20,14 @@ import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettin
 import resourceTypesFixture from "../test/fixture/ResourceTypes/resourceTypes";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
-import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
-import {adminRoleDto, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
 
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- * @deprecated
  */
-export function defaultAppContext(appContext = {}) {
+
+export function defaultAppContext(appContext) {
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
@@ -43,51 +41,15 @@ export function defaultAppContext(appContext = {}) {
     loggedInUser: {
       id: userSettings.id,
       role: {
-        id: TEST_ROLE_USER_ID,
         name: 'admin'
       }
     },
     users: [],
     roles: [{
-      id: TEST_ROLE_USER_ID,
-      name: 'admin'
+      id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
+      name: 'Admin'
     }],
     setContext: jest.fn()
   };
-  return Object.assign(defaultAppContext, appContext);
+  return Object.assign(defaultAppContext, appContext || {});
 }
-
-/**
- * Default user app context
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export const defaultUserAppContext = (data = {}) => {
-  const siteSettings = new SiteSettings(siteSettingsFixture);
-
-  return {
-    locale: 'en-UK',
-    userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: siteSettings,
-    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesFixture),
-    port: new MockPort(),
-    storage: new MockStorage(),
-    loggedInUser: defaultUserDto(),
-    users: [],
-    roles: [userRoleDto(), adminRoleDto()],
-    resources: [],
-    folders: [],
-    setContext: jest.fn(),
-    ...data
-  };
-};
-
-/**
- * Default administrator app context
- * @param {object} data Override the default props.
- * @returns {object}
- */
-export const defaultAdministratorAppContext = (data = {}) => defaultUserAppContext({
-  loggedInUser: defaultAdminUserDto(),
-  ...data
-});

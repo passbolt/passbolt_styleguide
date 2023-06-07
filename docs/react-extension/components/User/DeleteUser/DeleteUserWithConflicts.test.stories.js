@@ -1,10 +1,9 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import PropTypes from "prop-types";
 import DeleteUserWithConflicts from "./DeleteUserWithConflicts";
 import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 
 export default {
@@ -15,7 +14,7 @@ export default {
 const context = {
   users:  [{
     "id": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-    "role_id": TEST_ROLE_USER_ID,
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
     "username": "carol@passbolt.com",
     "active": true,
     "deleted": false,
@@ -52,11 +51,11 @@ const context = {
     "last_logged_in": ""
   }, {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-    "role_id": TEST_ROLE_USER_ID,
+    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
     "role": {
       "created": "2012-07-04T13:39:25+00:00",
       "description": "Logged in user",
-      "id": TEST_ROLE_USER_ID,
+      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "modified": "2012-07-04T13:39:25+00:00",
       "name": "user"
     },
@@ -130,7 +129,7 @@ const context = {
   deleteUserWithConflictsDialogProps: {
     user: {
       "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      "role_id": TEST_ROLE_USER_ID,
+      "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
       "username": "carol@passbolt.com",
       "active": true,
       "deleted": false,

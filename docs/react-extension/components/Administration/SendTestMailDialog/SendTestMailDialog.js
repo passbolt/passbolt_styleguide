@@ -15,7 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withAdminSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";

@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../../contexts/AppContext";
 
 /**
  * This component allows the user to log in with his account

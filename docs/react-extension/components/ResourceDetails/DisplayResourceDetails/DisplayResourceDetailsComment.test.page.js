@@ -14,7 +14,7 @@
  */
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayResourceDetailsComment from "./DisplayResourceDetailsComment";
 import AddResourceCommentPageObject from "../../ResourceComment/AddResourceComment/AddResourceComment.test.page.object";

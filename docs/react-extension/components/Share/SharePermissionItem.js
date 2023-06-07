@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import ShareVariesDetails from "./ShareVariesDetails";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../contexts/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";

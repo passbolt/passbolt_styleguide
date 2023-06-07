@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withAppContext} from "../../AppContext";
 import SubscriptionModel from '../../../../shared/models/subscription/SubscriptionModel';
 
 /**
