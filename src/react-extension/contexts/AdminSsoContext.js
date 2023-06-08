@@ -105,6 +105,8 @@ export class AdminSsoContextProvider extends React.Component {
         tenant_id: "",
         client_secret: "",
         client_secret_expiry: "",
+        prompt: "login",
+        email_claim: "email",
       }
     };
   }

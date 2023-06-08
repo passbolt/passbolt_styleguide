@@ -46,7 +46,8 @@ class ManageSsoSettings extends React.Component {
   get defaultState() {
     return {
       loading: true,
-      providers: []
+      providers: [],
+      advancedSettingsOpened: false,
     };
   }
 
@@ -82,6 +83,12 @@ class ManageSsoSettings extends React.Component {
       case "client_secret_expiry":
         this.clientSecretExpiryInputRef.current.focus();
         break;
+      case "prompt":
+        this.promptInputRef.current.focus();
+        break;
+      case "email_claim":
+        this.emailClaimInputRef.current.focus();
+        break;
     }
   }
 
@@ -94,6 +101,7 @@ class ManageSsoSettings extends React.Component {
     this.handleSsoSettingToggle = this.handleSsoSettingToggle.bind(this);
     this.handleCopyRedirectUrl = this.handleCopyRedirectUrl.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleAdvancedSettingsCLick = this.handleAdvancedSettingsCLick.bind(this);
   }
 
   createRefs() {
@@ -102,6 +110,8 @@ class ManageSsoSettings extends React.Component {
     this.tenantIdInputRef = React.createRef();
     this.clientSecretInputRef = React.createRef();
     this.clientSecretExpiryInputRef = React.createRef();
+    this.promptInputRef = React.createRef();
+    this.emailClaimInputRef = React.createRef();
   }
 
   /**
@@ -133,6 +143,15 @@ class ManageSsoSettings extends React.Component {
   }
 
   /**
+   * Handle advanced settings panel button click
+   */
+  handleAdvancedSettingsCLick() {
+    this.setState({
+      advancedSettingsOpened: !this.state.advancedSettingsOpened
+    });
+  }
+
+  /**
    * Handle the copy to clipboard button
    */
   async handleCopyRedirectUrl() {
@@ -159,6 +178,7 @@ class ManageSsoSettings extends React.Component {
 
   /**
    * Get the supported SSO providers.
+   * @returns {Array<{value: string, label: string}}
    */
   get supportedSsoProviders() {
     const providerIdList = this.state.providers;
@@ -176,6 +196,29 @@ class ManageSsoSettings extends React.Component {
         };
       }
     });
+  }
+
+  /**
+   * Get the different options for email claim select input.
+   * @returns {Array<{value: string, label: string}}
+   */
+  get emailClaimList() {
+    return [
+      {value: "email", label: this.translate("Email")},
+      {value: "preferred_username", label: this.translate("Preferred username")},
+      {value: "upn", label: this.translate("UPN")},
+    ];
+  }
+
+  /**
+   * Get the different options for prompt select input.
+   * @returns {Array<{value: string, label: string}}
+   */
+  get promptOptionList() {
+    return [
+      {value: "login", label: this.translate("Login")},
+      {value: "none", label: this.translate("None")},
+    ];
   }
 
   /**
@@ -359,6 +402,34 @@ class ManageSsoSettings extends React.Component {
                   <div className="warning message">
                     <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
                   </div>
+                  <div>
+                    <div className={`accordion operation-details ${this.state.advancedSettingsOpened ? "" : "closed"}`}>
+                      <div className="accordion-header" onClick={this.handleAdvancedSettingsCLick}>
+                        <button type="button" className="link no-border" id="advanced-settings-panel-button">
+                          <Trans>Advanced settings</Trans>&nbsp;<Icon name={this.state.advancedSettingsOpened ? "caret-down" : "caret-right"}/>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {this.state.advancedSettingsOpened &&
+                    <>
+                      <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                        <label htmlFor="email-claim-input"><Trans>Email claim</Trans></label>
+                        <Select id="email-claim-input" name="email_claim" items={this.emailClaimList} value={ssoConfig.data?.email_claim} onChange={this.handleInputChange}/>
+                        <p><Trans>Defines which Azure field needs to be used as Passbolt username.</Trans></p>
+                      </div>
+                      {ssoConfig.data?.email_claim === "upn" &&
+                        <div className="warning message">
+                          <Trans><b>Warning</b>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.</Trans>
+                        </div>
+                      }
+                      <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                        <label htmlFor="prompt-input"><Trans>Prompt</Trans></label>
+                        <Select id="prompt-input" name="prompt" items={this.promptOptionList} value={ssoConfig.data?.prompt} onChange={this.handleInputChange}/>
+                        <p><Trans>Defines the Azure login behaviour by prompting the user to fully login each time or not.</Trans></p>
+                      </div>
+                    </>
+                  }
                 </>
               }
               {ssoConfig?.provider === "google" &&
