@@ -56,7 +56,8 @@ export const mockedDefaultData = (data = {}) => {
     deleteGroups: true,
     updateGroups: true,
     userDirectoryToggle: false,
-    authenticationType: "basic"
+    authenticationType: "basic",
+    fieldsMapping: undefined,
   }, data);
 };
 
@@ -94,6 +95,44 @@ export const mockedData = (data = {}) => {
     userDirectoryToggle: true,
     source: "db",
     authenticationType: "basic",
+    fieldsMapping: {
+      ad: {
+        user: {
+          id: "objectGuid",
+          firstname: "givenName",
+          lastname: "sn",
+          username: "mail",
+          created: "whenCreated",
+          modified: "whenChanged",
+          groups: "memberOf",
+          enabled: "userAccountControl"
+        },
+        group: {
+          id: "objectGuid",
+          name: "cn",
+          created: "whenCreated",
+          modified: "whenChanged",
+          users: "member"
+        }
+      },
+      openldap: {
+        user: {
+          id: "entryUuid",
+          firstname: "givenname",
+          lastname: "sn",
+          username: "mail",
+          created: "createtimestamp",
+          modified: "modifytimestamp"
+        },
+        group: {
+          id: "entryUuid",
+          name: "cn",
+          created: "createtimestamp",
+          modified: "modifytimestamp",
+          users: "member"
+        }
+      }
+    },
   }, data);
   return mockedDefaultData(defaultData);
 };
