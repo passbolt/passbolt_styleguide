@@ -95,9 +95,7 @@ class DisplayUserGroupDetails extends React.Component {
         <div className="sidebar user">
           <div className="sidebar-header">
             <div className="teaser-image">
-              <GroupAvatar
-                group={this.group}
-                baseUrl={this.baseUrl}/>
+              <GroupAvatar group={this.group}/>
             </div>
             <h3>
               <div className="title-wrapper">

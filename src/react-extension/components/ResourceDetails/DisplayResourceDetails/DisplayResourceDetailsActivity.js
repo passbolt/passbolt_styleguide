@@ -345,7 +345,7 @@ class DisplayResourceDetailsActivity extends React.Component {
         <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {permission.group &&
-        <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={permission.group}/>
         }
         <div className="name">
           <span className="creator">{permissionAroName}</span>

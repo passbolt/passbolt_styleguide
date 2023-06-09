@@ -126,9 +126,7 @@ class DisplayUserDetailsGroups extends React.Component {
                       <div className="subinfo">{group.role}</div>
                     </div>
                   </div>
-                  <GroupAvatar
-                    group={group}
-                    baseUrl={this.baseUrl}/>
+                  <GroupAvatar group={group}/>
                 </li>
               ))
             }
