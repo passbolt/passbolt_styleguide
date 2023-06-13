@@ -1,0 +1,39 @@
+.home,
+.featured {
+    .page-row {
+        padding: 1em;
+
+        .grid {
+            margin: auto;
+            max-width: 1000px;
+        }
+    }
+    .footer {
+        position: relative;
+        margin: 0;
+    }
+}
+
+.home {
+    h3 {
+        border: 0;
+    }
+}
+
+@media all and (min-width: 940px) {
+    .featured,
+    .home {
+        h2 {
+            margin: 1em auto;
+            text-align: center;
+            font-size: 2em;
+        }
+        h3 {
+            text-align: center;
+        }
+    }
+}
+
+@import "../../page-components/home/hero2.less";
+@import "../../page-components/home/usp.less";
+@import "../../page-components/home/api.less";

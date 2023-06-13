@@ -1,0 +1,92 @@
+/* links */
+a {
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    border-bottom: 1px solid @link-border;
+
+    &:link, &:visited {
+        color: @default-text-color;
+    }
+    &:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: @text-focus-color;
+        border-bottom: 1px solid @link-hover-border;
+    }
+    &:active, &:focus, &:focus-visible {
+        outline: @outline-default-border;
+        color: @text-focus-color;
+        border: none;
+    }
+    &.disabled {
+        outline: 0;
+        text-decoration: none;
+        cursor: default;
+        color: @default-text-color;
+        opacity: .5;
+        pointer-events: none;
+    }
+}
+
+button.link {
+    background: transparent;
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    border-bottom: 1px solid @link-border;
+    border-radius: 0;
+    padding: 0;
+    text-align: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+    vertical-align: inherit;
+    box-shadow: none;
+    min-width: inherit;
+
+    &:focus {
+        border-bottom: 1px solid @link-border;
+        box-shadow: none;
+    }
+    &:focus-visible {
+        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        outline: @outline-default-border;
+    }
+    &:hover {
+        text-decoration: none;
+        cursor: pointer;
+        color: @text-focus-color;
+        border-bottom: 1px solid @link-hover-border;
+        box-shadow: none;
+    }
+    &:active {
+        background: transparent;
+        outline: @outline-default-border;
+        color: @text-focus-color;
+        border: none;
+        box-shadow: none;
+    }
+    &:disabled {
+        background: transparent;
+        outline: 0;
+        text-decoration: none;
+        color: @default-text-color;
+        cursor: default;
+        opacity: .5;
+        pointer-events: none;
+        border-bottom: 1px solid @link-border;
+        box-shadow: none;
+    }
+
+    &.inline {
+        display: inline-block;
+    }
+
+    &.no-border {
+        border: none;
+    }
+}

@@ -1,0 +1,52 @@
+/* Small Progress bar */
+.progress-bar {
+    background: @progress-bar-default-background;
+    width: 100%;
+    height: .3rem;
+    display: block;
+    border-radius: .2rem;
+
+    .progress {
+        background: @progress-bar-background;
+        width: 0;
+        height: .3rem;
+        display: block;
+        border-radius: .2rem;
+        transition: width 500ms linear;
+
+        &.completed {
+            transition: none; // Remove the transition to display the progress bar completed before the dialog being closed
+        }
+    }
+}
+
+.progress-details {
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    margin: 0.5rem 0 .5rem 0;
+    .progress-percent {
+        float: right;
+    }
+}
+
+.progress-bar-wrapper {
+  margin: 3rem 0 2rem 0;
+}
+
+/*
+	Contextual loading bar
+	  it is situated at the bottom of the workspace
+*/
+.update-loading-bar {
+    position: fixed;
+    display: block;
+    width: 100%;
+    bottom: 3.4rem;
+    z-index: 991;
+
+    .progress-bar span {
+      transition: width 2s;
+      transition-timing-function: cubic-bezier(.45,1.27,.76,.9);
+    }
+}
+

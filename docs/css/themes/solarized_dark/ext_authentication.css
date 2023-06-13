@@ -23,6 +23,7 @@
 /* link */
 /* tooltip */
 /* inputs */
+/* passwords */
 /* checkbox */
 /* controls */
 /* radio */
@@ -1436,6 +1437,12 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .password-view.infield {
   border-radius: 0.1rem;
+}
+.digit {
+  color: #cea332;
+}
+.special-char {
+  color: #ef6157;
 }
 .security-token {
   font-size: 1.5rem;
@@ -3617,12 +3624,14 @@ html {
   margin-left: 3rem;
   --icon-exclamation-background-color: hsl(18, 80%, 44%);
 }
-.avatar img {
+.avatar img,
+.avatar svg {
   width: 4.2rem;
   height: 4.2rem;
   border-radius: 50%;
 }
-.avatar.big img {
+.avatar.big img,
+.avatar.big svg {
   width: 8.4rem;
   height: 8.4rem;
 }
@@ -3778,6 +3787,11 @@ body {
 }
 .login.page .login-form .accordion .accordion-header a {
   border-bottom: 0;
+}
+.login.page .login-form .invalid-passphrase.error-message button {
+  font-size: 1.5rem;
+  margin-top: 0;
+  color: hsl(1, 71%, 52%);
 }
 .login.page .email-sent-instructions {
   text-align: center;

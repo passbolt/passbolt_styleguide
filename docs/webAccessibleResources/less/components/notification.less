@@ -1,0 +1,50 @@
+/*
+ * Notification
+ */
+.notification-container {
+    font-size:.85em;
+    top: 0;
+    position: absolute;
+    z-index: 991;
+    height: 2em;
+    padding-top: 1em;
+    width:60%;
+    margin-left:20%;
+
+    .notification {
+        position: relative;
+        left: 50%;
+        float: left;
+        clear: both;
+        margin-bottom: 1em;
+
+        .message {
+            &.warning {
+              color:@message-warning-text-color;
+              background: @message-warning-background;
+            }
+
+            &.success {
+              color:@message-success-text-color;
+              background: @message-success-background;
+            }
+
+            &.error {
+              color:@message-error-text-color;
+              background: @message-error-background;
+            }
+
+            padding: .8rem 1.6rem;
+            position: relative;
+            left: -50%;
+            float: left;
+            box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.1);
+            border-radius: .3rem;
+            color: @text-notification-color;
+            font-size: 1.5rem;
+            font-weight: 400;
+            line-height: 2rem;
+            width:auto;
+        }
+    }
+}

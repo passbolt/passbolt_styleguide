@@ -1,0 +1,44 @@
+.account-recovery-profile {
+
+  .account-recovery-status {
+    background: @account-recovery-card-background;
+    padding: 1.6rem;
+    border-radius: .3rem;
+    max-width: 100rem;
+
+    .account-recovery-review {
+      display: flex;
+      justify-content: space-between;
+
+      .status-wrapper {
+        flex: 1 1 auto;
+        margin: 0;
+
+        .status {
+          text-transform: capitalize;
+          display: inline-block;
+        }
+      }
+    }
+    .account-recovery-hints {
+      &:before {
+        content: "\25CF"; /* unicode character ● */
+        padding: 0 .5rem;
+      }
+      &.approved {
+        color: @hint-success-color;
+      }
+      &.rejected {
+        color: @hint-error-color;
+      }
+      &.pending {
+        color: @hint-warning-color;
+      }
+    }
+
+    .name-with-tooltip {
+      font-weight: bold;
+      .ellipsis();
+    }
+  }
+}

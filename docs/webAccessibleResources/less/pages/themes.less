@@ -1,0 +1,34 @@
+.themes {
+    .theme {
+        float:left;
+        border-radius: 2px;
+
+        button {
+            max-width:275px;
+            display:block;
+            margin: 0 1.6rem 1.6rem 0;
+            border:1px solid @default-border;
+            padding: 1.6rem;
+            box-shadow: 0 0 1rem 0 rgba(0, 0, 0, @shadow-opacity-dropdown);
+            border-radius: 3px;
+
+            &:hover {
+                border:1px solid @button-focus-border;
+            }
+        }
+
+        .theme-desc {
+            padding-top: 1.6rem;
+            text-align: center;
+        }
+
+        &.selected {
+            font-weight: bold;
+            button {
+                background: @button-active-background;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
+                border: 1px solid @button-border;
+            }
+        }
+    }
+}

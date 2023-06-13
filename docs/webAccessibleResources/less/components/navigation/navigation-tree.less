@@ -1,0 +1,105 @@
+.navigation-secondary-tree {
+    li {
+        .row.no-child {
+            padding-left: 1.8rem;
+        }
+    }
+    .row {
+        .main-cell-wrapper {
+            .main-cell {
+                span {
+                    .ellipsis();
+                }
+
+                .toggle-folder {
+                  display: flex;
+                  align-items: center;
+                }
+
+                .svg-icon {
+                    display: flex;
+                    margin-right: .8rem;
+                    // inherit ellipsis
+                    white-space: inherit;
+                    overflow: inherit;
+                    text-overflow: inherit;
+                    -o-text-overflow: inherit;
+                    -ms-text-overflow: inherit;
+
+                    &.folder-shared, &.folder,
+                    &.folders, &.folder-root {
+                      svg {
+                        width: 1.8rem;
+                        height: 100%;
+                      }
+                    }
+                }
+
+                .svg-icon.hidden {
+                    display: none;
+                }
+
+                button {
+                    padding: 0;
+                    margin: 0 0 0 2.4rem;
+                    width: calc(100% - 3.2rem);
+
+                    .tag-name {
+                        margin-left: 1rem;
+                    }
+                }
+            }
+        }
+
+        /* title row */
+        &.title {
+            .main-cell {
+                h3 {
+                    padding:0;
+                    border:0;
+                    margin:0;
+
+                    .folders-label {
+                        button {
+                          cursor: pointer;
+                          padding: 0;
+                          margin-left: 1.6rem;
+                        }
+                    }
+                }
+            }
+            /* selected */
+            &.selected {
+              .main-cell h3 .folders-label a {
+                font-weight: 700;
+              }
+            }
+        }
+
+        /* disabled row */
+        &.disabled {
+            cursor: default;
+            pointer-events: none;
+            .main-cell {
+                span.folder-name{
+                    color: @text-light-color;
+                    text-shadow: none;
+                    font-weight: normal;
+                }
+                button:before {
+                    color: @text-light-color;
+                }
+            }
+            &.is-dragged {
+                pointer-events: auto;
+            }
+        }
+    }
+
+
+
+    /*All other levels*/
+    li > ul {
+        padding-left: 1rem;
+    }
+}

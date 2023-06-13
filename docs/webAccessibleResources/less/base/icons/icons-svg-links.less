@@ -1,0 +1,13 @@
+button {
+    &.disabled {
+        .svg-icon svg {
+            pointer-events: none;
+            cursor: default;
+        }
+    }
+    &.fav {
+      .svg-icon.star svg {
+        --icon-favorites-color: @icon-favorite-color;
+      }
+    }
+}
