@@ -41,7 +41,11 @@ class ManageQuickAccessMode extends Component {
     const mustCloseWindow = this.queryParameters.get("uiMode") === "detached"
       && this.queryParameters.get("feature") !== null;
     if (mustCloseWindow) {
-      const closeWindow = () => window.close();
+      const closeWindow = () => {
+        if (this.props.context.shouldCloseAtWindowBlur) {
+          window.close();
+        }
+      };
       window.addEventListener("blur", closeWindow);
     }
   }

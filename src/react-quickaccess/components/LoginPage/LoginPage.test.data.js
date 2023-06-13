@@ -14,7 +14,9 @@ export function defaultAppContext(appContext) {
     updateSearch: () => {},
     searchHistory: {},
     search: "",
-    userSettings: new UserSettings(userSettingsFixture)
+    userSettings: new UserSettings(userSettingsFixture),
+    setWindowBlurBehaviour: () => {},
+    shouldCloseAtWindowBlur: true
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

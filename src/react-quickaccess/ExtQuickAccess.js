@@ -70,6 +70,7 @@ class ExtQuickAccess extends React.Component {
     this.loginSuccessCallback = this.loginSuccessCallback.bind(this);
     this.logoutSuccessCallback = this.logoutSuccessCallback.bind(this);
     this.mfaRequiredCallback = this.mfaRequiredCallback.bind(this);
+    this.setWindowBlurBehaviour = this.setWindowBlurBehaviour.bind(this);
   }
 
   async componentDidMount() {
@@ -109,6 +110,8 @@ class ExtQuickAccess extends React.Component {
       passphraseRequestId: '',
       // Tab id to refer to the good one if detached mode
       tabId: this.getTabIdFromUrl(),
+      shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
+      setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
     };
   }
 
@@ -129,6 +132,14 @@ class ExtQuickAccess extends React.Component {
     if (this.searchRef.current) {
       this.searchRef.current.focus();
     }
+  }
+
+  /**
+   * When set to true the quickaccess in detached mode should close when losing focus
+   * @param {boolean} shouldCloseAtWindowBlur
+   */
+  setWindowBlurBehaviour(shouldCloseAtWindowBlur) {
+    this.setState({shouldCloseAtWindowBlur});
   }
 
   async checkPluginIsConfigured() {
