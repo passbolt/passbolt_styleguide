@@ -149,6 +149,8 @@ class DisplayUserProfile extends React.Component {
                     baseUrl={this.props.context.userSettings.getTrustedDomain()}
                     className=""/>
                 </div>
+              </div>
+              <div>
                 <button
                   className="button edit-avatar-action"
                   title={this.translate("Upload a new avatar picture")}

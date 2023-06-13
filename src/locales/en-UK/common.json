@@ -139,6 +139,8 @@
   "Authentication method": "Authentication method",
   "Authentication token is missing from server response.": "Authentication token is missing from server response.",
   "Avatar": "Avatar",
+  "Avatar of the {{group_name}} group.": "Avatar of the {{group_name}} group.",
+  "Avatar of user {{first_name}} {{last_name}}.": "Avatar of user {{first_name}} {{last_name}}.",
   "Backup of the private key and passphrase will not be stored. This is the safest option.": "Backup of the private key and passphrase will not be stored. This is the safest option.",
   "Base DN": "Base DN",
   "Basic": "Basic",

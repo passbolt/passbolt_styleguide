@@ -321,7 +321,7 @@ class Login extends Component {
               }
               {this.state.errors.invalidPassphrase &&
               <div className="invalid-passphrase error-message">
-                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
+                <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button className="link" type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
               </div>
               }
               {this.state.errors.invalidGpgKey &&

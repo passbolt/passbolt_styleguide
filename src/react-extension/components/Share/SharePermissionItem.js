@@ -199,7 +199,7 @@ class SharePermissionItem extends Component {
         <UserAvatar user={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {this.isGroup() &&
-        <GroupAvatar group={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={this.props.aro}/>
         }
 
         <div className="aro">

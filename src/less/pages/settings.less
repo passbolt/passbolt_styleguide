@@ -6,15 +6,18 @@
   .profile-detailed-information {
     .clearfix();
 
-    .avatar {
+    .sidebar > div {
+      display: flex;
       flex-direction: column;
       align-items: center;
 
-      img {
-        padding: 0;
-        width: 15rem;
-        height: 15rem;
-        margin-bottom: 1.6rem;
+      &.avatar {
+        img, svg {
+          padding: 0;
+          width: 15rem;
+          height: 15rem;
+          margin-bottom: 1.6rem;
+        }
       }
     }
   }
@@ -133,7 +136,7 @@
 @media all and (max-width: 950px) {
   .page.settings {
     .profile-detailed-information {
-      .avatar {
+      .sidebar > div {
         float: none;
       }
     }
