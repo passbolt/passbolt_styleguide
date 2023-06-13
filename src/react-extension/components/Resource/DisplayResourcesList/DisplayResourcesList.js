@@ -435,6 +435,33 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Format the given password into separate character elements.
+   * Each character is wrapped in a <span> element.
+   * Alphabetic characters are left as they are, numerical characters get the "digit" CSS class, and all others get the "special-char" CSS class.
+   * @param {string} password The password to be formatted
+   * @returns {JSX.Element} A JSX element containing the formatted password
+   */
+  formatPassword(password) {
+    const characters = Array.from(password);
+
+    return (
+      <>
+      {characters.map((char, index) => {
+        if (/[\p{L}\p{N}]/u.test(char)) {
+          if (/\p{N}/u.test(char)) {
+            return <span key={index} className="digit">{char}</span>;
+          } else {
+            return <span key={index}>{char}</span>;
+          }
+        } else {
+          return <span key={index} className="special-char">{char}</span>;
+        }
+      })}
+    </>
+    );
+  }
+
+  /**
    * Display error notification (toaster)
    * @param message
    */
@@ -574,7 +601,7 @@ class DisplayResourcesList extends React.Component {
             title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
             <button type="button" className="link no-border" onClick={async ev => this.handleCopyPasswordClick(ev, resource)}>
               <span>
-                {isPasswordPreviewed && this.state.previewedPassword.password}
+                {isPasswordPreviewed && this.formatPassword(this.state.previewedPassword.password)}
                 {!isPasswordPreviewed && "Copy password to clipboard"}
               </span>
             </button>
