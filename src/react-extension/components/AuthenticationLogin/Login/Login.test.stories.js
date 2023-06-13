@@ -51,5 +51,7 @@ export const LoginWithSsoEnabled = Template.bind({});
 LoginWithSsoEnabled.args = defaultPropsWithAccount({
   displayAs: LoginVariations.SIGN_IN,
   isSsoAvailable: true,
-  onCheckPassphrase: () => { throw passwordError; }});
+  onCheckPassphrase: () => { throw passwordError; },
+  onSignIn: () => { console.log("onSignIn called"); }
+});
 LoginWithSsoEnabled.parameters = defaultParameters;

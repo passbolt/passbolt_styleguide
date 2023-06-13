@@ -15,9 +15,23 @@ import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {withAppContext} from "../../../contexts/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayMainMenu extends Component {
+  constructor() {
+    super();
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
+  }
+
   /**
    * Check if a menu item is selected
    * @param {string} name The menu item name
@@ -43,6 +57,18 @@ class DisplayMainMenu extends Component {
    */
   isLoggedInUserAdmin() {
     return this.props.context.loggedInUser && this.props.context.loggedInUser.role.name === 'admin';
+  }
+
+  /**
+   * Handles the click on Sign out button
+   * @returns {Promise<void>}
+   */
+  async handleSignOutClick() {
+    try {
+      await this.props.context.onLogoutRequested();
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    }
   }
 
   /**
@@ -106,7 +132,7 @@ class DisplayMainMenu extends Component {
                     <button
                       className="link no-border"
                       type="button"
-                      onClick={this.props.context.onLogoutRequested}>
+                      onClick={this.handleSignOutClick}>
                       <span><Trans>sign out</Trans></span>
                     </button>
                   </div>
@@ -125,6 +151,7 @@ DisplayMainMenu.propTypes = {
   navigationContext: PropTypes.any, // The navigation context
   history: PropTypes.object, // The router history
   location: PropTypes.object, // Router location prop
+  dialogContext: PropTypes.object, // the dialog context prop
 };
 
-export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(DisplayMainMenu))));
+export default withAppContext(withRouter(withNavigationContext(withDialog(withTranslation("common")(DisplayMainMenu)))));

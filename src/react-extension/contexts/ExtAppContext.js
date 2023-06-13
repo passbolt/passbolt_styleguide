@@ -341,7 +341,7 @@ class ExtAppContextProvider extends React.Component {
    * Listen when the user wants to logout.
    */
   onLogoutRequested() {
-    const requestLogout = () => this.props.port.request('passbolt.auth.navigate-to-logout');
+    const requestLogout = () => this.props.port.request('passbolt.auth.logout', true);
     // Indicate that the session is logout by the user before requesting a logout
     this.setState({isSessionLogoutByUser: true}, requestLogout);
   }

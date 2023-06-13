@@ -12,20 +12,7 @@
  * @since         3.6.0
  */
 
-/**
- * Mock an API response
- * @param {Object} body The response body
- * @returns {Promise<string>} The response serialized in JSON.
- */
-export const mockApiResponse = (body = {}, header = {}) => Promise.resolve(JSON.stringify({header: header, body: body}));
+import {ApiClientOptions} from "./apiClientOptions";
 
-export const mockApiResponseError = (status, errorMessage, body = {}) => Promise.resolve({
-  status: status,
-  body: JSON.stringify({
-    header: {
-      message: errorMessage,
-      status: status
-    },
-    body: body
-  })
-});
+export const defaultApiClientOptions = () => (new ApiClientOptions())
+  .setBaseUrl("https://localhost");
