@@ -1,9 +1,10 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import MockPort from "../../../test/mock/MockPort";
 import DisplayUserDetailsGroups from "./DisplayUserDetailsGroups";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 
 export default {
@@ -1382,11 +1383,11 @@ Initial.args = {
     details: {
       user: {
         "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-        "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        "role_id": TEST_ROLE_USER_ID,
         "role": {
           "created": "2012-07-04T13:39:25+00:00",
           "description": "Logged in user",
-          "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+          "id": TEST_ROLE_USER_ID,
           "modified": "2012-07-04T13:39:25+00:00",
           "name": "user"
         },

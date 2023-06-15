@@ -14,7 +14,7 @@
 
 import React from 'react';
 import DisplayProgress from "../DisplayProgress/DisplayProgress";
-import {withAppContext} from "../../../../contexts/AppContext";
+import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../../contexts/DialogContext";
 import PropTypes from "prop-types";
 

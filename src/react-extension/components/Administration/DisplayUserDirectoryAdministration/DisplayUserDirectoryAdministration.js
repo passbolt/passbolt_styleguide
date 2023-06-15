@@ -53,7 +53,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * @return {void}
    */
 
-  async componentDidMount() {
+  componentDidMount() {
     this.props.administrationWorkspaceContext.setDisplayAdministrationWorkspaceAction(DisplayAdministrationUserDirectoryActions);
     this.props.adminUserDirectoryContext.findUserDirectorySettings();
   }
@@ -233,7 +233,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   shouldShowSourceWarningMessage() {
     const context = this.props.adminUserDirectoryContext;
-    return context.getCurrentSettings().source !== "db" && context.hasSettingsChanges();
+    return context?.getCurrentSettings()?.source !== "db" && context?.hasSettingsChanges();
   }
 
   /**

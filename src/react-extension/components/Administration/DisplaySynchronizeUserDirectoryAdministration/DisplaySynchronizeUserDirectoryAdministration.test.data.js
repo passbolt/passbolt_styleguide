@@ -1,13 +1,14 @@
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 /**
  * Default props.
- * @param {Object} props The props to override
+ * @param {Object} data The props to override
  * @returns {object}
  */
-export function defaultProps(data = {}, userId) {
+export function defaultProps(data = {}) {
   const defaultProps = {
-    context: defaultAppContext(data?.context, userId),
+    context: defaultAppContext(data?.context),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn()
@@ -133,7 +134,7 @@ export const mockSynchronizeBody = {
             }
           }
         },
-        "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        "role_id": TEST_ROLE_USER_ID,
         "deleted": false,
         "created": "2020-11-11T09:14:12+00:00",
         "modified": "2020-11-11T09:14:12+00:00",
@@ -182,7 +183,7 @@ export const mockSynchronizeBody = {
             }
           }
         },
-        "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+        "role_id": TEST_ROLE_USER_ID,
         "deleted": false,
         "created": "2020-11-11T09:14:12+00:00",
         "modified": "2020-11-11T09:14:12+00:00",

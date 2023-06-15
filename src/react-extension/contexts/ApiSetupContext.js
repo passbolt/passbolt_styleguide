@@ -13,11 +13,12 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
+import AuthService from "../../shared/services/api/auth/AuthService";
 
 /**
  * The Api setup context.
@@ -47,6 +48,7 @@ class ApiSetupContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = Object.assign(this.defaultState, props.value);
+    this.authService = new AuthService(props.context.getApiClientOptions());
   }
 
   /**
@@ -94,12 +96,7 @@ class ApiSetupContextProvider extends React.Component {
    */
   async logoutUserAndRefresh() {
     try {
-      const apiClientOptions = this.props.context.getApiClientOptions();
-      apiClientOptions.setResourceName("auth");
-      const apiClient = new ApiClient(apiClientOptions);
-      const fetchOptions = {...apiClient.buildFetchOptions(), method: 'POST', redirect: "manual"};
-      const url = apiClient.buildUrl(`${apiClient.baseUrl}/logout`);
-      await fetch(url.toString(), fetchOptions);
+      await this.authService.logout();
     } catch (e) {
       const error = new PassboltServiceUnavailableError(e.message);
       return this.setState({unexpectedError: error, state: ApiSetupContextState.UNEXPECTED_ERROR_STATE});

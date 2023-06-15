@@ -1,6 +1,6 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceFolderDetailsInformation from "./DisplayResourceFolderDetailsInformation";
 
 

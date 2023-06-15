@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -233,7 +233,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
                   <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
                   }
                   {permission.group &&
-                  <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+                  <GroupAvatar group={permission.group}/>
                   }
                 </li>
               ))}

@@ -15,7 +15,7 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withLoading} from "../../../contexts/LoadingContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -48,6 +48,7 @@ class DisplayUserTheme extends React.Component {
 
   /**
    * Whenever the component is mounted
+   * @returns {Promise<void>}
    */
   async componentDidMount() {
     await this.populate();
@@ -59,43 +60,47 @@ class DisplayUserTheme extends React.Component {
    */
   bindHandlers() {
     this.handleThemeSelected = this.handleThemeSelected.bind(this);
+    this.onSelectSuccess = this.onSelectSuccess.bind(this);
+    this.onSelectFailure = this.onSelectFailure.bind(this);
   }
 
   /**
    * Whenever the user select a theme
-   * @param event A DOM event
    * @param theme A theme
    */
-  async handleThemeSelected(event, theme) {
-    await this.select(theme);
+  handleThemeSelected(theme) {
+    this.select(theme);
   }
 
   /**
    * Populates the component with data
+   * @returns {Promise<void>}
    */
   async populate() {
     this.props.loadingContext.add();
     const themes = await this.props.context.port.request('passbolt.themes.find-all');
     const selectedTheme = this.props.context.userSettings.getTheme();
-    await this.setState({themes, selectedTheme});
+    this.setState({themes, selectedTheme});
     this.props.loadingContext.remove();
   }
 
   /**
    * Selects a new theme
+   * @param {string} theme the name of the selected theme
    */
-  async select(theme) {
-    const isAlreadySelected = this.state.selectedTheme === theme.name;
-    if (!isAlreadySelected) {
-      await this.setState({selectedTheme: theme.name});
-      this.props.context.port.request("passbolt.themes.change", theme.name)
-        .then(this.onSelectSuccess.bind(this))
-        .catch(this.onSelectFailure.bind(this));
+  select(theme) {
+    if (this.state.selectedTheme === theme.name) {
+      return;
     }
+    this.setState({selectedTheme: theme.name});
+    this.props.context.port.request("passbolt.themes.change", theme.name)
+      .then(this.onSelectSuccess)
+      .catch(this.onSelectFailure);
   }
 
   /**
    * Whenever the a new theme has been selected with success
+   * @returns {Promise<void>}
    */
   async onSelectSuccess() {
     await this.props.loadingContext.remove();
@@ -104,6 +109,7 @@ class DisplayUserTheme extends React.Component {
 
   /**
    * Whenever the a new theme has been selected with failure
+   * @param {object} error the error to display
    */
   async onSelectFailure(error) {
     await this.props.loadingContext.remove();
@@ -111,6 +117,17 @@ class DisplayUserTheme extends React.Component {
       error: error
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
+  }
+
+  /**
+   * Converts the given image theme preview URL to pick it from the browser extension.
+   * @param {string} url
+   * @returns {string}
+   */
+  convertUrlToWebAccessibleResources(url) {
+    const regExp = /\/([a-zA-Z-_]*\.png)$/;
+    const fileName = regExp.exec(url);
+    return `/webAccessibleResources/img/themes/${fileName[1]}`;
   }
 
   /**
@@ -130,8 +147,8 @@ class DisplayUserTheme extends React.Component {
                     this.state.themes.map(theme => (
                       <li key={theme.id}>
                         <div className={`main-cell theme ${selectedClass(theme)}`}>
-                          <button type="button" onClick={event => this.handleThemeSelected(event, theme)}>
-                            <img src={theme.preview}/>
+                          <button type="button" onClick={() => this.handleThemeSelected(theme)}>
+                            <img src={this.convertUrlToWebAccessibleResources(theme.preview)}/>
                             <div className="theme-desc">
                               {theme.name}
                             </div>

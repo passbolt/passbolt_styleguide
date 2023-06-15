@@ -21,28 +21,19 @@ class UserDirectoryDTO {
    * @param {UserDirectoryModel} userDirectoryModel
    */
   constructor(userDirectoryModel) {
+    const directoryType = userDirectoryModel.directoryType;
     const isBasicAuthType = !userDirectoryModel.authenticationType || userDirectoryModel.authenticationType === "basic";
     this.enabled =  userDirectoryModel.userDirectoryToggle;
-    // CREDENTIALS FIELDS
-    this.authentication_type = userDirectoryModel.authenticationType;
-    this.directory_type = userDirectoryModel.directoryType;
-    this.connection_type =  userDirectoryModel.connectionType;
-    this.hosts = [userDirectoryModel.host];
-    this.port = parseInt(userDirectoryModel.port);
-    this.username = isBasicAuthType ? userDirectoryModel.username : undefined;
-    this.password = isBasicAuthType ? userDirectoryModel.password : undefined;
-    this.domain_name =  userDirectoryModel.domain;
-    this.base_dn = userDirectoryModel.baseDn;
     // DIRECTORY CONFIGURATION FIELDS
     this.group_path = userDirectoryModel.groupPath;
     this.user_path = userDirectoryModel.userPath;
     this.group_custom_filters = userDirectoryModel.groupCustomFilters;
     this.user_custom_filters = userDirectoryModel.userCustomFilters;
-    this.group_object_class = this.directory_type === "openldap" ? userDirectoryModel.groupObjectClass : "";
-    this.user_object_class = this.directory_type === "openldap"  ? userDirectoryModel.userObjectClass : "";
-    this.use_email_prefix_suffix = this.directory_type === "openldap" ? userDirectoryModel.useEmailPrefix : false;
-    this.email_prefix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailPrefix : "";
-    this.email_suffix = this.directory_type === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailSuffix : "";
+    this.group_object_class = directoryType === "openldap" ? userDirectoryModel.groupObjectClass : "";
+    this.user_object_class = directoryType === "openldap"  ? userDirectoryModel.userObjectClass : "";
+    this.use_email_prefix_suffix = directoryType === "openldap" ? userDirectoryModel.useEmailPrefix : false;
+    this.email_prefix = directoryType === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailPrefix : "";
+    this.email_suffix = directoryType === "openldap" && this.useEmailPrefix ? userDirectoryModel.emailSuffix : "";
     // SYNCHRONIZATION OPTIONS
     this.default_user = userDirectoryModel.defaultAdmin;
     this.default_group_admin_user = userDirectoryModel.defaultGroupAdmin;
@@ -55,6 +46,23 @@ class UserDirectoryDTO {
     this.sync_groups_create = userDirectoryModel.createGroups;
     this.sync_groups_delete = userDirectoryModel.deleteGroups;
     this.sync_groups_update = userDirectoryModel.updateGroups;
+    this.fields_mapping = userDirectoryModel.fieldsMapping;
+
+    this.domains = {
+      // DEFAULT DOMAIN
+      org_domain: {
+        // CREDENTIALS FIELDS
+        connection_type: userDirectoryModel.connectionType,
+        authentication_type: userDirectoryModel.authenticationType,
+        directory_type: directoryType,
+        domain_name: userDirectoryModel.domain,
+        username: isBasicAuthType ? userDirectoryModel.username : undefined,
+        password: isBasicAuthType ? userDirectoryModel.password : undefined,
+        base_dn: userDirectoryModel.baseDn,
+        hosts: [userDirectoryModel.host],
+        port: parseInt(userDirectoryModel.port, 10),
+      }
+    };
   }
 }
 

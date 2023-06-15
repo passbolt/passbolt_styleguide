@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 
 import SharePermissionDeleteButton from "./SharePermissionDeleteButton";
 import ShareVariesDetails from "./ShareVariesDetails";
-import {withAppContext} from "../../contexts/AppContext";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../Common/Avatar/UserAvatar";
 import GroupAvatar from "../Common/Avatar/GroupAvatar";
 import {withTranslation} from "react-i18next";
@@ -199,7 +199,7 @@ class SharePermissionItem extends Component {
         <UserAvatar user={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {this.isGroup() &&
-        <GroupAvatar group={this.props.aro} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={this.props.aro}/>
         }
 
         <div className="aro">

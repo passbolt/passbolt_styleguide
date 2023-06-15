@@ -30,7 +30,9 @@ export function defaultAdministrationWorkspaceContext(context = {}) {
       editSubscriptionKey: false,
       refreshSubscriptionKey: false
     },
-    onResetActionsSettings: jest.fn()
+    onResetActionsSettings: jest.fn(),
+    setDisplayAdministrationWorkspaceAction: jest.fn(),
+    resetDisplayAdministrationWorkspaceAction: jest.fn()
   };
   return Object.assign(defaultContext, context);
 }

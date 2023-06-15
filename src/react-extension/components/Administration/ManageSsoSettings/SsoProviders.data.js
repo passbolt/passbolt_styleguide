@@ -24,6 +24,8 @@ const SsoProviders = [
       client_secret: "",
       tenant_id: "",
       client_secret_expiry: "",
+      prompt: "login",
+      email_claim: "email",
     }
   },
   {

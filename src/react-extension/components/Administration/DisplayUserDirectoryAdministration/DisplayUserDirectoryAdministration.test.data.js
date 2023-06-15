@@ -1,13 +1,22 @@
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 /**
  * Default props.
- * @param {Object} props The props to override
+ * @param {Object} data The props to override
  * @returns {object}
  */
-export function defaultProps(data = {}, userId) {
+export function defaultProps(data) {
   const defaultProps = {
-    context: defaultAppContext(data?.context, userId),
+    context: defaultAppContext({
+      loggedInUser: {
+        id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+        username: "user@passbolt.com",
+        role: {
+          name: 'admin'
+        }
+      }
+    }),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn()
@@ -28,12 +37,8 @@ export function defaultProps(data = {}, userId) {
  * @returns {object}
  */
 export const mockResult = {
-  "base_dn": "DC=passbolt,DC=local",
-  "connection_type": "plain",
   "default_group_admin_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
   "default_user": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-  "directory_type": "ad",
-  "domain_name": "passbolt.local",
   "email_prefix": "",
   "email_suffix": "",
   "group_object_class": "",
@@ -44,10 +49,7 @@ export const mockResult = {
   "group_path": undefined,
   "groups_parent_group": undefined,
   "group_custom_filters": undefined,
-  "password": "password",
-  "port": 389,
   "source": "db",
-  "hosts": ["127.0.0.1"],
   "sync_groups_create": true,
   "sync_groups_delete": true,
   "sync_groups_update": true,
@@ -56,9 +58,58 @@ export const mockResult = {
   "sync_users_update": true,
   "user_path": undefined,
   "user_custom_filters": undefined,
-  "username": "username",
   "users_parent_group": undefined,
-  "authentication_type": "basic",
+  "domains": {
+    "org_domain": {
+      "directory_type": "ad",
+      "base_dn": "DC=passbolt,DC=local",
+      "connection_type": "plain",
+      "username": "username",
+      "authentication_type": "basic",
+      "password": "password",
+      "port": 389,
+      "hosts": ["127.0.0.1"],
+      "domain_name": "passbolt.local",
+    }
+  },
+  "fields_mapping": {
+    "ad": {
+      "user": {
+        "id": "objectGuid",
+        "firstname": "givenName",
+        "lastname": "sn",
+        "username": "mail",
+        "created": "whenCreated",
+        "modified": "whenChanged",
+        "groups": "memberOf",
+        "enabled": "userAccountControl"
+      },
+      "group": {
+        "id": "objectGuid",
+        "name": "cn",
+        "created": "whenCreated",
+        "modified": "whenChanged",
+        "users": "member"
+      }
+    },
+    "openldap": {
+      "user": {
+        "id": "entryUuid",
+        "firstname": "givenname",
+        "lastname": "sn",
+        "username": "mail",
+        "created": "createtimestamp",
+        "modified": "modifytimestamp"
+      },
+      "group": {
+        "id": "entryUuid",
+        "name": "cn",
+        "created": "createtimestamp",
+        "modified": "modifytimestamp",
+        "users": "member"
+      }
+    }
+  },
 };
 
 /**
@@ -118,7 +169,45 @@ export const mockModel = {
   updateUsers: true,
   createGroups: true,
   deleteGroups: true,
-  updateGroups: true
+  updateGroups: true,
+  fieldsMapping: {
+    ad: {
+      user: {
+        id: "objectGuid",
+        firstname: "givenName",
+        lastname: "sn",
+        username: "mail",
+        created: "whenCreated",
+        modified: "whenChanged",
+        groups: "memberOf",
+        enabled: "userAccountControl"
+      },
+      group: {
+        id: "objectGuid",
+        name: "cn",
+        created: "whenCreated",
+        modified: "whenChanged",
+        users: "member"
+      }
+    },
+    openldap: {
+      user: {
+        id: "entryUuid",
+        firstname: "givenname",
+        lastname: "sn",
+        username: "mail",
+        created: "createtimestamp",
+        modified: "modifytimestamp"
+      },
+      group: {
+        id: "entryUuid",
+        name: "cn",
+        created: "createtimestamp",
+        modified: "modifytimestamp",
+        users: "member"
+      }
+    }
+  },
 };
 
 /**
@@ -135,7 +224,7 @@ export const defaultMockModel = {"source": "db", "baseDn": "", "connectionType":
 export const mockUsers = [
   {
     "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "dame@passbolt.com",
     "active": true,
     "deleted": false,
@@ -170,7 +259,7 @@ export const mockUsers = [
     },
     "groups_users": [],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -196,7 +285,7 @@ export const mockUsers = [
   },
   {
     "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "betty@passbolt.com",
     "active": true,
     "deleted": false,
@@ -231,7 +320,7 @@ export const mockUsers = [
     },
     "groups_users": [],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -257,7 +346,7 @@ export const mockUsers = [
   },
   {
     "id": "887422c0-bef6-59a7-bbda-84c253ee0848",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "frances@passbolt.com",
     "active": true,
     "deleted": false,
@@ -300,7 +389,7 @@ export const mockUsers = [
       }
     ],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -326,7 +415,7 @@ export const mockUsers = [
   },
   {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "ada@passbolt.com",
     "active": true,
     "deleted": false,
@@ -361,7 +450,7 @@ export const mockUsers = [
     },
     "groups_users": [],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -387,7 +476,7 @@ export const mockUsers = [
   },
   {
     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+    "role_id": TEST_ROLE_ADMIN_ID,
     "username": "admin@passbolt.com",
     "active": true,
     "deleted": false,
@@ -480,7 +569,7 @@ export const mockUsers = [
       }
     ],
     "role": {
-      "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+      "id": TEST_ROLE_ADMIN_ID,
       "name": "admin",
       "description": "Organization administrator",
       "created": "2012-07-04T13:39:25+00:00",

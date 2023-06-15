@@ -2,7 +2,7 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import {defaultProps} from "./EditResource.test.data";
 import EditResource from "./EditResource";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 
 /**

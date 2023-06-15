@@ -18,12 +18,13 @@
 
 import React from 'react';
 import {
-  defaultAppContext,
+  defaultProps,
   defaultPropsFolderAndResourceLocked,
   defaultPropsWithFolderAndResource,
-  defaultPropsWithNoResourceAndNoFolder
+  propsWithDenyUiAction
 } from "./DisplayResourcesWorkspace.test.data";
 import DisplayResourceWorkspacePage from "./DisplayResourcesWorkspace.test.page";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 jest.mock("../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails", () => () => <span className="sidebar resource"></span>);
 jest.mock("../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails", () => () => <span className="sidebar folder"></span>);
@@ -43,12 +44,45 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe("As LU I should see the Workspace", () => {
+describe("DisplayResourcesWorkspace", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
 
+  describe('As LU I can use the workspace primary sidebar.', () => {
+    it('As LU I can see the workspace primary sidebar.', () => {
+      const props = defaultProps();
+      page = new DisplayResourceWorkspacePage(props);
+      expect(page.displayResourceWorkspacePageObject.folderTree).toBeTruthy();
+      expect(page.displayResourceWorkspacePageObject.tag).toBeTruthy();
+    });
 
-  describe('As LU I can see the resource sidebar via the workspace', () => {
+    it('As LU I cannot see the folders section if disabled by API flags.', () => {
+      const appContext = {
+        siteSettings: {
+          getServerTimezone: () => '',
+          canIUse: () => false,
+        }
+      };
+      const context = defaultUserAppContext(appContext);
+      const props = defaultProps({context}); // The resourceWorkspaceContext to pass
+      page = new DisplayResourceWorkspacePage(props);
+      expect(page.displayResourceWorkspacePageObject.folderTree).toBeFalsy();
+      expect(page.displayResourceWorkspacePageObject.tag).toBeFalsy();
+    });
+
+    it('As LU I cannot see the folders section if denied by RBAC.', () => {
+      const props = propsWithDenyUiAction();
+      page = new DisplayResourceWorkspacePage(props);
+      expect(page.displayResourceWorkspacePageObject.tag).toBeFalsy();
+    });
+
+    it('As LU I cannot see the tags section if denied by RBAC.', () => {
+      const props = propsWithDenyUiAction();
+      page = new DisplayResourceWorkspacePage(props);
+      expect(page.displayResourceWorkspacePageObject.folderTree).toBeFalsy();
+    });
+  });
+
+  describe('As LU I can use the workspace secondary sidebar.', () => {
     /**
      * Given a selected resource with the details activate
      * Then I should see the resource sidebar
@@ -56,7 +90,7 @@ describe("As LU I should see the Workspace", () => {
 
     it('As LU I can see the resource sidebar via the workspace if I have a resource selected an the details activate', () => {
       const props = defaultPropsWithFolderAndResource(); // The resourceWorkspaceContext to pass
-      page = new DisplayResourceWorkspacePage(context, props);
+      page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeTruthy();
@@ -66,30 +100,18 @@ describe("As LU I should see the Workspace", () => {
 
     it('As LU I cannot see the resource sidebar via the workspace if I deactivate the details', () => {
       const props = defaultPropsFolderAndResourceLocked(); // The resourceWorkspaceContext to pass
-      page = new DisplayResourceWorkspacePage(context, props);
+      page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
     });
 
     it('As LU I cannot see the resource sidebar via the workspace if I have no resource selected', () => {
-      const props = defaultPropsWithNoResourceAndNoFolder(); // The resourceWorkspaceContext to pass
-      page = new DisplayResourceWorkspacePage(context, props);
+      const props = defaultProps(); // The resourceWorkspaceContext to pass
+      page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.exists()).toBeTruthy();
       expect(page.displayResourceWorkspacePageObject.sidebarResource).toBeFalsy();
       expect(page.displayResourceWorkspacePageObject.sidebarFolder).toBeFalsy();
-    });
-
-    it('As LU I cannot see the folder tree and tag if I have no access', () => {
-      const appContext = {
-        siteSettings: {
-          canIUse: () => false,
-        }
-      };
-      const props = defaultPropsWithNoResourceAndNoFolder(); // The resourceWorkspaceContext to pass
-      page = new DisplayResourceWorkspacePage(defaultAppContext(appContext), props);
-      expect(page.displayResourceWorkspacePageObject.folderTree).toBeFalsy();
-      expect(page.displayResourceWorkspacePageObject.tag).toBeFalsy();
     });
   });
 });

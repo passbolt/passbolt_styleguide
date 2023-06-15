@@ -16,7 +16,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
@@ -149,6 +149,8 @@ class DisplayUserProfile extends React.Component {
                     baseUrl={this.props.context.userSettings.getTrustedDomain()}
                     className=""/>
                 </div>
+              </div>
+              <div>
                 <button
                   className="button edit-avatar-action"
                   title={this.translate("Upload a new avatar picture")}

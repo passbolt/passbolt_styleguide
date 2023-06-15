@@ -15,7 +15,7 @@
 import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
@@ -303,14 +303,14 @@ class ImportResourcesResult extends Component {
             {this.canIUseFolders && this.resultReferenceFolder &&
             <p>
               <Trans>
-                You can find these newly imported passwords in the folder <button type="button" className="link no-border" onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</button>.
+                You can find these newly imported passwords in the folder <button type="button" className="link inline no-border" onClick={this.handleReferenceFolderClick}>{{folderName: this.resultReferenceFolder.name}}</button>.
               </Trans>
             </p>
             }
             {this.canIUseTags && !this.resultReferenceFolder && this.resultReferenceTag &&
             <p>
               <Trans>
-                You can find these newly imported passwords under the tag <button type="button" className="link no-border" onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</button>.
+                You can find these newly imported passwords under the tag <button type="button" className="link inline no-border" onClick={this.handleReferenceTagClick}>{{tagName: this.resultReferenceTag.slug}}</button>.
               </Trans>
             </p>
             }

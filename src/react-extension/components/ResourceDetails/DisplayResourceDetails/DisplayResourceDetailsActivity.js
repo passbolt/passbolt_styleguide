@@ -15,7 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
@@ -345,7 +345,7 @@ class DisplayResourceDetailsActivity extends React.Component {
         <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
         }
         {permission.group &&
-        <GroupAvatar group={permission.group} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <GroupAvatar group={permission.group}/>
         }
         <div className="name">
           <span className="creator">{permissionAroName}</span>

@@ -15,6 +15,10 @@ echo always-auth=true >> .npmrc
 
 if is_release_candidate "$CI_COMMIT_TAG"; then
   npm publish --tag next
+elif is_release_alpha "$CI_COMMIT_TAG"; then
+  npm publish --tag alpha
+elif is_release_beta "$CI_COMMIT_TAG"; then
+  npm publish --tag beta
 else
   npm publish
 fi

@@ -13,7 +13,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayAdministrationMenu from "./DisplayAdministrationMenu";
 import {BrowserRouter as Router} from 'react-router-dom';
@@ -67,6 +67,13 @@ export default class DisplayAdministrationMenuPage {
    */
   get mfaPolicy() {
     return this._page.container.querySelector('#mfa_policy_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
+   * Returns the rbac menu
+   */
+  get rbacs() {
+    return this._page.container.querySelector('#rbacs_menu .row .main-cell-wrapper .main-cell button');
   }
 
   /**
@@ -188,5 +195,10 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the Mfa policy settings element */
   async gotoMfaPolicy() {
     await this.click(this.mfaPolicy);
+  }
+
+  /** Click on the rbac settings element */
+  async gotoRbacs() {
+    await this.click(this.rbacs);
   }
 }

@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import AuthenticationSetupContextProvider from "./contexts/Authentication/AuthenticationSetupContext";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";

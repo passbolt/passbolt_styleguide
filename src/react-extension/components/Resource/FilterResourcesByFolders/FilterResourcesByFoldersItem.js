@@ -16,7 +16,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragFolderItem from "./DisplayDragFolderItem";

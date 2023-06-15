@@ -17,7 +17,7 @@ import {Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import Icon from "../../../../shared/components/Icons/Icon";

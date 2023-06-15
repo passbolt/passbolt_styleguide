@@ -1,7 +1,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import ImportResourcesResult from "./ImportResourcesResult";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 
 
 export default {
