@@ -71,7 +71,7 @@ describe("See information", () => {
       expect(page.displayInformationList.modifiedByLabel(2)).toBe('Created by');
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');
-      expect(page.displayInformationList.location.textContent).toBe(" /");
+      expect(page.displayInformationList.location.textContent).toBe("/");
     });
   });
 });
