@@ -40,7 +40,7 @@ const mockApiCalls = (result = mockResult) => {
 describe("As AD I should see the user directory settings", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
-  const props = defaultProps(null, mockUsers[4].id); // The props to pass
+  const props = defaultProps(); // The props to pass
 
   describe('As AD I should see the user directory activation state on the administration settings page', () => {
     /**

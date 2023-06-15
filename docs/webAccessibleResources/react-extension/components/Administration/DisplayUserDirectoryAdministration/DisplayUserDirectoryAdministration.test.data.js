@@ -1,13 +1,22 @@
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 /**
  * Default props.
- * @param {Object} props The props to override
+ * @param {Object} data The props to override
  * @returns {object}
  */
-export function defaultProps(data = {}, userId) {
+export function defaultProps(data) {
   const defaultProps = {
-    context: defaultAppContext(data?.context, userId),
+    context: defaultAppContext({
+      loggedInUser: {
+        id: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+        username: "user@passbolt.com",
+        role: {
+          name: 'admin'
+        }
+      }
+    }),
     administrationWorkspaceContext: {
       setDisplayAdministrationWorkspaceAction: jest.fn(),
       resetDisplayAdministrationWorkspaceAction: jest.fn()
@@ -215,7 +224,7 @@ export const defaultMockModel = {"source": "db", "baseDn": "", "connectionType":
 export const mockUsers = [
   {
     "id": "54c6278e-f824-5fda-91ff-3e946b18d994",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "dame@passbolt.com",
     "active": true,
     "deleted": false,
@@ -250,7 +259,7 @@ export const mockUsers = [
     },
     "groups_users": [],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -276,7 +285,7 @@ export const mockUsers = [
   },
   {
     "id": "e97b14ba-8957-57c9-a357-f78a6e1e1a46",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "betty@passbolt.com",
     "active": true,
     "deleted": false,
@@ -311,7 +320,7 @@ export const mockUsers = [
     },
     "groups_users": [],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -337,7 +346,7 @@ export const mockUsers = [
   },
   {
     "id": "887422c0-bef6-59a7-bbda-84c253ee0848",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "frances@passbolt.com",
     "active": true,
     "deleted": false,
@@ -380,7 +389,7 @@ export const mockUsers = [
       }
     ],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -406,7 +415,7 @@ export const mockUsers = [
   },
   {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "username": "ada@passbolt.com",
     "active": true,
     "deleted": false,
@@ -441,7 +450,7 @@ export const mockUsers = [
     },
     "groups_users": [],
     "role": {
-      "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      "id": TEST_ROLE_USER_ID,
       "name": "user",
       "description": "Logged in user",
       "created": "2012-07-04T13:39:25+00:00",
@@ -467,7 +476,7 @@ export const mockUsers = [
   },
   {
     "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "role_id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+    "role_id": TEST_ROLE_ADMIN_ID,
     "username": "admin@passbolt.com",
     "active": true,
     "deleted": false,
@@ -560,7 +569,7 @@ export const mockUsers = [
       }
     ],
     "role": {
-      "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+      "id": TEST_ROLE_ADMIN_ID,
       "name": "admin",
       "description": "Organization administrator",
       "created": "2012-07-04T13:39:25+00:00",

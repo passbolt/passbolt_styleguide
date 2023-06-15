@@ -1,5 +1,5 @@
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import DisplayUserTheme from "./DisplayUserTheme";
 import MockPort from "../../../test/mock/MockPort";

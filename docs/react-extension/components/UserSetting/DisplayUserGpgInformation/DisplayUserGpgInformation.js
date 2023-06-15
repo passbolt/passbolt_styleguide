@@ -12,7 +12,7 @@
  */
 
 import React from 'react';
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {DateTime} from "luxon";

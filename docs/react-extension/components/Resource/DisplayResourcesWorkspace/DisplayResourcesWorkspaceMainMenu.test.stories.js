@@ -1,8 +1,21 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.11.0
+ */
+
 import React from "react";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
 import {
-  defaultAppContext,
-  defaultAppContextProEdition, defaultPropsFolderNotOwned,
+  defaultPropsFolderNotOwned,
   defaultPropsFolderOwned
 } from "./DisplayResourcesWorkspaceMainMenu.test.data";
 
@@ -22,16 +35,11 @@ const Template = ({...args}) =>
   </div>;
 
 const props = defaultPropsFolderOwned();
-props.context = defaultAppContextProEdition();
 
-export const ProEditionFolderOwned = Template.bind({});
-ProEditionFolderOwned.args = {...props};
+export const FolderOwned = Template.bind({});
+FolderOwned.args = {...props};
 
 const propsFolderNotOwned = defaultPropsFolderNotOwned();
-propsFolderNotOwned.context = defaultAppContextProEdition();
-export const ProEditionFolderNotOwned = Template.bind({});
-ProEditionFolderNotOwned.args = {...propsFolderNotOwned};
+export const FolderNotOwned = Template.bind({});
+FolderNotOwned.args = {...propsFolderNotOwned};
 
-props.context = defaultAppContext({siteSettings: {canIUse: () => false}, setContext: () => {}});
-export const CeEdition = Template.bind({});
-CeEdition.args = {...props};

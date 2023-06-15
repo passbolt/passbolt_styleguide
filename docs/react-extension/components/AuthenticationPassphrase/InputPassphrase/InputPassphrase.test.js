@@ -14,7 +14,7 @@
 
 import React from "react";
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import UserAbortsOperationError from "../../../lib/Error/UserAbortsOperationError";
 import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";

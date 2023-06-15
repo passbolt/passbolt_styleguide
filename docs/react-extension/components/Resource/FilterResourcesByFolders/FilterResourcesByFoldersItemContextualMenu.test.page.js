@@ -12,7 +12,6 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFoldersItemContextualMenu";
@@ -23,15 +22,12 @@ import FilterResourcesByFoldersItemContextualMenu from "./FilterResourcesByFolde
 export default class FilterResourcesByFoldersItemContextualMenuPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <FilterResourcesByFoldersItemContextualMenu {...props}/>
-        </AppContext.Provider>
+        <FilterResourcesByFoldersItemContextualMenu {...props}/>
       </MockTranslationProvider>
     );
     this.setupPageObjects();
@@ -83,37 +79,77 @@ export class FilterResourcesByFoldersItemContextualMenuPageObject {
   }
 
   /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get createItem() {
+    return this._container.querySelector('button.create');
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get renameItem() {
+    return this._container.querySelector('button.rename');
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get shareItem() {
+    return this._container.querySelector('button.share');
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get exportItem() {
+    return this._container.querySelector('button.export');
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get deleteItem() {
+    return this._container.querySelector('button.delete');
+  }
+
+  /**
    * Click on the menu create folder
    */
   async createFolder() {
-    await this.click(this.menuItem(1));
+    await this.click(this.createItem);
   }
 
   /**
    * Click on the menu rename folder
    */
   async renameFolder() {
-    await this.click(this.menuItem(2));
+    await this.click(this.renameItem);
   }
 
   /**
    * Click on the menu share folder
    */
   async shareFolder() {
-    await this.click(this.menuItem(3));
+    await this.click(this.shareItem);
   }
 
   /**
    * Click on the menu export folder
    */
   async exportFolder() {
-    await this.click(this.menuItem(4));
+    await this.click(this.exportItem);
   }
 
   /**
    * Click on the menu delete folder
    */
   async deleteFolder() {
-    await this.click(this.menuItem(5));
+    await this.click(this.deleteItem);
   }
 }

@@ -16,7 +16,7 @@ import {withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import ProvideAccountRecoveryOrganizationKey from "../../Administration/ProvideAccountRecoveryOrganizationKey/ProvideAccountRecoveryOrganizationKey";
 import ReviewAccountRecoveryRequest from "../ReviewAccountRecoveryRequest/ReviewAccountRecoveryRequest";

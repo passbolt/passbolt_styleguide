@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
@@ -173,7 +173,8 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
               <span className="label"><Trans>Location</Trans></span>
               <span className="value">
                 <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
-                  <Icon name="folder"/> {folderParentName}
+                  <Icon name="folder"/>
+                  <span>{folderParentName}</span>
                 </button>
               </span>
             </li>

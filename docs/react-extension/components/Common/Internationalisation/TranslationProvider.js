@@ -16,7 +16,7 @@ import {initReactI18next} from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 
 /**
  * The locales default path.

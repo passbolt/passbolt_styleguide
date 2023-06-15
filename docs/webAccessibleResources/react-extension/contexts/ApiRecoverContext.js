@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";

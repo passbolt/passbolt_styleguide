@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../AppContext";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {BROWSER_NAMES, detectBrowserName} from "../../../shared/lib/Browser/detectBrowserName";
 
 // The authentication setup workflow states.

@@ -1,9 +1,10 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import EditUser from "./EditUser";
 import MockPort from "../../../test/mock/MockPort";
+import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
 
 
 export default {
@@ -18,7 +19,7 @@ const context = {
       name: "admin"
     },
     {
-      id: "a58de6d3-f52c-5080-b79b-a601a647ac85",
+      id: TEST_ROLE_USER_ID,
       name: "user"
     }
   ],
@@ -30,7 +31,7 @@ const context = {
         last_name: "lastname",
       },
       username: "firstname@passbolt.com",
-      role_id: "a58de6d3-f52c-5080-b79b-a601a647ac85"
+      role_id: TEST_ROLE_USER_ID
     }
   ],
   editUserDialogProps: {

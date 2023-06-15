@@ -1,10 +1,10 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
-import AppContext from "../../contexts/AppContext";
 import PassphraseDialog from "./PassphraseDialog";
 import {defaultAppContext} from "./PassphraseDialog.test.data";
 import MockPort from "../../../react-extension/test/mock/MockPort";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
   title: 'Components/QuickAccess/PassphraseDialog',

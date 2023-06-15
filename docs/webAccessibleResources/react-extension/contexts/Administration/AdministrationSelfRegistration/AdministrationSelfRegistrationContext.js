@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import SelfRegistrationService from "../../../../shared/services/api/selfRegistration/selfRegistrationService";
 import SelfRegistrationDomainsViewModel from "../../../../shared/models/selfRegistration/SelfRegistrationDomainsViewModel";
 import MapObject from "../../../lib/Map/MapObject";

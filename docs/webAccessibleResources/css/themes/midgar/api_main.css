@@ -4883,6 +4883,82 @@ iframe.cachette {
   height: 2.1rem;
   margin: 0.6rem;
 }
+.flex-container.outer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 !important;
+}
+.inner {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 100%;
+}
+.inner.highlighted {
+  background: #5C564C !important;
+}
+.inner.header {
+  background: #3B3B3B !important;
+}
+.inner:nth-child(odd) {
+  background: #1C1C1C;
+}
+.inner:hover {
+  background: #101010;
+}
+.inner:nth-child(odd):hover {
+  background: #101010;
+}
+.flex-item {
+  box-sizing: border-box;
+  flex: 0 23%;
+  width: calc(23% - 10px);
+  margin: 0 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.flex-item > span {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.flex-item > label {
+  width: auto;
+  padding: 5px 0;
+}
+.flex-item:not(:first-of-type) > label {
+  text-align: center;
+}
+.flex-item.first {
+  flex: 0 50%;
+  width: calc(50% - 10px);
+}
+.flex-item.full-width {
+  flex: 0 100%;
+}
+.flex-item .select-container {
+  margin: auto;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+.inner.level-2 .flex-item.first {
+  padding-left: 10px;
+  width: calc(33.33% - 30px);
+  /* subtracting margin and border widths */
+}
+.inner.level-3 .flex-item.first {
+  padding-left: 20px;
+  width: calc(33.33% - 40px);
+  /* subtracting margin and border widths */
+}
+.flex-item.border-right {
+  border-right: 1px solid #202020;
+}
+@media all and (max-width: 768px) {
+  .select-container.medium {
+    width: 100%;
+  }
+}
 .ldap-test-settings-report div.directory-structure {
   background: #000000;
   color: #FFFFFF;

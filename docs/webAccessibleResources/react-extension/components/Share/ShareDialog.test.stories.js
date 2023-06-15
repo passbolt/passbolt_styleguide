@@ -1,7 +1,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import ShareDialog from "./ShareDialog";
-import AppContext from "../../contexts/AppContext";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 import {autocompleteResult, resources} from "./ShareDialog.test.data";
 
 

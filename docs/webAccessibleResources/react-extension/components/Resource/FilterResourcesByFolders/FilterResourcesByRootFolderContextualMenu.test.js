@@ -12,70 +12,56 @@
  * @since         2.11.0
  */
 
-/**
- * Unit tests on FoldersTreeRootFolderContextualMenuContextualMenu in regard of specifications
- */
-import {defaultAppContext, defaultProps} from "./FilterResourcesByRootFolderContextualMenu.test.data";
+import {defaultProps, propsWithDenyUiAction} from "./FilterResourcesByRootFolderContextualMenu.test.data";
 import FilterResourcesByRootFolderContextualMenuPage from "./FilterResourcesByRootFolderContextualMenu.test.page";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import ExportResources from "../ExportResources/ExportResources";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("As LU I should see each menu", () => {
-  let page; // The page to test against
-  const props = defaultProps(); // The props to pass
+describe("FilterResourcesByRootFolderContextualMenu", () => {
+  let page, // The page to test against
+    props; // The props to pass to the component
 
-  describe('As LU I should see and identify each menu for a folder', () => {
-    const context = defaultAppContext(); // The applicative context
-    /**
-     * Given an organization with a root folder folder
-     * Then I should see the 2 menu
-     */
+  beforeEach(() => {
+    props = defaultProps();
+    page = new FilterResourcesByRootFolderContextualMenuPage(props);
+  });
 
-    beforeEach(() => {
-      page = new FilterResourcesByRootFolderContextualMenuPage(context, props);
-    });
-
-    it('As LU I should see all menu name', () => {
-      expect(page.foldersTreeRootFolderContextualMenu.name(1)).toBe("Create folder");
-      expect(page.foldersTreeRootFolderContextualMenu.name(2)).toBe("Export all");
-    });
-
-    it('As LU I can start to create a folder', async() => {
+  describe('As LU I can create folder at the root', () => {
+    it('As LU I can create folder at the root', async() => {
       await page.foldersTreeRootFolderContextualMenu.createFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder);
       expect(props.hide).toHaveBeenCalled();
     });
+  });
 
+  describe('As LU I can export folder at the root', () => {
     it('As LU I can start to export a folder', async() => {
       await page.foldersTreeRootFolderContextualMenu.exportFolder();
       expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResources);
       expect(props.hide).toHaveBeenCalled();
     });
-  });
 
-  describe('As LU I should see and identify each menu disable', () => {
-    const appContext = {
-      siteSettings: {
-        canIUse: () => false
-      }
-    };
-    const context = defaultAppContext(appContext); // The applicative context
-    /**
-     * Given an organization with 5 menu
-     * Then I should see 4 menu disabled
-     */
-
-    beforeEach(() => {
-      page = new FilterResourcesByRootFolderContextualMenuPage(context, props);
+    it('As LU I cannot export folder if disabled by API flag', async() => {
+      const appContext = {
+        siteSettings: {
+          canIUse: () => false
+        }
+      };
+      const context = defaultUserAppContext(appContext); // The applicative context
+      props = defaultProps({context});
+      page = new FilterResourcesByRootFolderContextualMenuPage(props);
+      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2)).toBeUndefined();
     });
 
-    it('As LU I should see all menu disabled', async() => {
-      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(1).hasAttribute("disabled")).toBeFalsy();
-      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2).hasAttribute("disabled")).toBeTruthy();
+    it('As LU I cannot export folder if denied by RBAC', async() => {
+      const props = propsWithDenyUiAction(); // The props to pass
+      page = new FilterResourcesByRootFolderContextualMenuPage(props);
+      expect(page.foldersTreeRootFolderContextualMenu.menuRootFolder(2)).toBeUndefined();
     });
   });
 });

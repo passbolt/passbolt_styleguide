@@ -18,7 +18,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
