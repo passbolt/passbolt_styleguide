@@ -12,7 +12,7 @@
  */
 import React from 'react';
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyExpiredSession from "../../Authentication/NotifyExpiredSession/NotifyExpiredSession";
 

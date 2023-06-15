@@ -16,23 +16,19 @@ import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import MockStorage from "../../../react-extension/test/mock/MockStorage";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import resourcesFixture from "../../../react-extension/test/fixture/Resources/resources";
+import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
- * Default component props
- * @param props
- * @return {Object}
+ * Default component props.
+ * @param {object} data Override the default props.
+ * @returns {object}
  */
-export function defaultProps(props = {}) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.active-tab.get-url", () => "http:\/\/www.apache.org\/");
-  const defaultContext = {port};
-
-  const defaultProps = {
-    context: defaultAppContext(Object.assign(defaultContext, props?.context))
+export function defaultProps(data = {}) {
+  return {
+    context: defaultAppContext(),
+    rbacContext: defaultAdministratorRbacContext(),
+    ...data
   };
-  delete props.context; // Treated in the default
-
-  return Object.assign(defaultProps, props);
 }
 
 /**
@@ -40,7 +36,7 @@ export function defaultProps(props = {}) {
  * @return {Object}
  */
 export function loadingProps() {
-  const context = {};
+  const context = new defaultAppContext();
   return defaultProps({context});
 }
 
@@ -48,13 +44,12 @@ export function loadingProps() {
  * No resources props.
  * @return {Object}
  */
-export function noResourcesProps(props) {
+export function noResourcesProps() {
   const mockStorage = new MockStorage();
   mockStorage.local.set({resources: []});
-  const defaultContext = {
+  const context = new defaultAppContext({
     storage: mockStorage
-  };
-  const context = Object.assign(defaultContext, props?.context);
+  });
   return defaultProps({context});
 }
 
@@ -63,10 +58,13 @@ export function noResourcesProps(props) {
  * @return {Object}
  */
 export function searchNoResultProps() {
-  const context = {
+  const mockStorage = new MockStorage();
+  mockStorage.local.set({resources: []});
+  const context = new defaultAppContext({
+    storage: mockStorage,
     search: "apache",
-  };
-  return noResourcesProps({context});
+  });
+  return defaultProps({context});
 }
 
 /**
@@ -76,10 +74,10 @@ export function searchNoResultProps() {
 export function searchWithResultProps() {
   const mockStorage = new MockStorage();
   mockStorage.local.set({resources: resourcesFixture});
-  const context = {
+  const context = new defaultAppContext({
     storage: mockStorage,
     search: "apache",
-  };
+  });
   return defaultProps({context});
 }
 
@@ -88,10 +86,24 @@ export function searchWithResultProps() {
  * @return {Object}
  */
 export function suggestedResourcesProps() {
+  const port = new MockPort();
+  port.addRequestListener("passbolt.active-tab.get-url", () => "http:\/\/www.apache.org\/");
   const mockStorage = new MockStorage();
   mockStorage.local.set({resources: resourcesFixture});
-  const context = {
+  const context = new defaultAppContext({
     storage: mockStorage,
-  };
+    port: port,
+  });
   return defaultProps({context});
+}
+
+/**
+ * Suggested resources props with deny ui action.
+ * @return {Object}
+ */
+export function denyUiActionProps(data = {}) {
+  return defaultProps({
+    rbacContext: denyRbacContext(),
+    ...data,
+  });
 }

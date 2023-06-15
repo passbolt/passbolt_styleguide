@@ -4,7 +4,13 @@
  * @returns {any}
  */
 import MockPort from "../test/mock/MockPort";
+import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
+import {defaultFolderDto, folderWithReadPermissionDto} from "../../shared/models/entity/folder/folderEntity.test.data";
+import {defaultResourceDto} from "../../shared/models/entity/resource/resourceEntity.test.data";
 
+/**
+ * @deprecated should use defaultUserAppContext.
+ */
 export function defaultAppContext(appContext) {
   const defaultAppContext = {
     port: new MockPort(),
@@ -22,6 +28,94 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {};
+}
+
+/**
+ * Returns the default resource workspace context data.
+ * @param {object} data Override the default context.
+ * @returns {object}
+ */
+export function defaultResourceWorkspaceContext(data = {}) {
+  return {
+    details: {
+      folder: null,
+      resource: null,
+    },
+    filteredResources: [],
+    selectedResources: [],
+    filter: {
+      type: ResourceWorkspaceFilterTypes.ALL
+    },
+    scrollTo: {
+    },
+    sorter: {
+      propertyName: 'modified'
+    },
+    onGoToResourceUriRequested: jest.fn(),
+    onResourceCopied: jest.fn(),
+    onResourceSelected: {
+      all: jest.fn(),
+      none: jest.fn(),
+      multiple: jest.fn(),
+      range: jest.fn(),
+      single: jest.fn()
+    },
+    onResourceScrolled: jest.fn(),
+    onSorterChanged: jest.fn(),
+    onResourcesToExport: jest.fn(),
+    onResourceFileImportResult: jest.fn(),
+    onResourceFileToImport: jest.fn(),
+    onLockDetail: jest.fn(),
+    ...data
+  };
+}
+
+/**
+ * Returns the resource workspace context data with a folder I own selected.
+ * @param {object} data Override the default context.
+ * @returns {object}
+ */
+export function resourceWorkspaceContextWithSelectedFolderIOwn(data = {}) {
+  return defaultResourceWorkspaceContext({
+    filter: {
+      type: ResourceWorkspaceFilterTypes.FOLDER,
+      payload: {
+        folder: defaultFolderDto()
+      }
+    },
+    ...data
+  });
+}
+
+/**
+ * Returns the resource workspace context data with a folder I can read only selected.
+ * @param {object} data Override the default context.
+ * @returns {object}
+ */
+export function resourceWorkspaceContextWithSelectedFolderICanRead(data = {}) {
+  return defaultResourceWorkspaceContext({
+    filter: {
+      type: ResourceWorkspaceFilterTypes.FOLDER,
+      payload: {
+        folder: folderWithReadPermissionDto()
+      }
+    },
+    ...data
+  });
+}
+
+/**
+ * Returns the resource workspace context data with a resource I own selected.
+ * @param {object} data Override the default context.
+ * @returns {object}
+ */
+export function resourceWorkspaceContextWithSelectedResourceIOwn(data = {}) {
+  return defaultResourceWorkspaceContext({
+    details: {
+      resource: defaultResourceDto(),
+    },
+    ...data
+  });
 }
 
 /**

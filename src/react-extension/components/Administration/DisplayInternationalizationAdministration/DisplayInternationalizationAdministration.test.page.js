@@ -14,7 +14,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import {AdminInternationalizationContextProvider} from "../../../contexts/Administration/AdministrationInternationalizationContext/AdministrationInternationalizationContext";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationInternationalisationActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationInternationalisationActions/DisplayAdministrationInternationalisationActions";
 import DisplayInternationalizationAdministration from "./DisplayInternationalizationAdministration";

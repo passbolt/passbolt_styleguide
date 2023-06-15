@@ -15,7 +15,7 @@
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import DownloadOrganizationKey from "./DownloadOrganizationKey";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 

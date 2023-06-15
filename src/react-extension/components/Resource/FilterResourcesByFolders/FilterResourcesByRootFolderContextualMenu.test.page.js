@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,6 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -27,12 +25,10 @@ export default class FoldersTreeRootFolderContextualMenuPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <FilterResourcesByRootFolderContextualMenu {...props}/>
-        </AppContext.Provider>
+        <FilterResourcesByRootFolderContextualMenu {...props}/>
       </MockTranslationProvider>
     );
     this.setupPageObjects();

@@ -72,9 +72,7 @@ describe("User Workspace Context", () => {
       expect(page.filteredUsers).toBe(context.users);
     });
 
-    it("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED", async() => {
-      // TODO
-    });
+    it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
 
 
     it("AS LU I should have users matching a text when the filter is TEXT", async() => {

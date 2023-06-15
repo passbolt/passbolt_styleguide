@@ -12,7 +12,7 @@
  * @since         2.14.0
  */
 import React, {Component} from "react";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";

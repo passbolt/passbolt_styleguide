@@ -14,6 +14,7 @@
 
 import MockStorage from "../../../src/react-extension/test/mock/MockStorage";
 import resourceTypes from "../fixture/resourceTypes";
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../src/shared/models/entity/role/role.test.data";
 
 const baseURL = new URL(window.location.href).origin;
 
@@ -36,7 +37,7 @@ const _passbolt_data = {
 };
 
 const roles = [{
-  "id": "0d51c3a8-5e67-5e3d-882f-e1868966d817",
+  "id": TEST_ROLE_ADMIN_ID,
   "name": "admin",
   "description": "Organization administrator",
   "created": "2012-07-04T13:39:25+00:00",
@@ -48,7 +49,7 @@ const roles = [{
   "created": "2012-07-04T13:39:25+00:00",
   "modified": "2012-07-04T13:39:25+00:00"
 }, {
-  "id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+  "id": TEST_ROLE_USER_ID,
   "name": "user",
   "description": "Logged in user",
   "created": "2012-07-04T13:39:25+00:00",

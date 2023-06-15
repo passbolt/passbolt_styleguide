@@ -1,6 +1,8 @@
 /**
  * return LoggedInUser get request fetch
  */
+import {TEST_ROLE_USER_ID} from "../../../../src/shared/models/entity/role/role.test.data";
+
 export default () => {
   return {
     "header": {
@@ -122,7 +124,7 @@ export default () => {
                 }
               }
             },
-            "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+            "role_id": TEST_ROLE_USER_ID,
             "deleted": false,
             "created": "2020-11-11T09:14:12+00:00",
             "modified": "2020-11-11T09:14:12+00:00",
@@ -171,7 +173,7 @@ export default () => {
                 }
               }
             },
-            "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+            "role_id": TEST_ROLE_USER_ID,
             "deleted": false,
             "created": "2020-11-11T09:14:12+00:00",
             "modified": "2020-11-11T09:14:12+00:00",
