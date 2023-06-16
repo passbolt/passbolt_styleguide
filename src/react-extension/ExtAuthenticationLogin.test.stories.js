@@ -15,7 +15,7 @@ import React from "react";
 import ExtAuthenticationLogin from "./ExtAuthenticationLogin";
 import MockPort from "./test/mock/MockPort";
 import siteSettingsFixture from "./test/fixture/Settings/siteSettings";
-import mockStorage from "../../demo/ext-app/mock/mockStorage";
+import mockStorage from "../../test/mocks/mockStorage";
 
 export default {
   title: 'Components/ExtAuthenticationLogin/ExtAuthenticationLogin',

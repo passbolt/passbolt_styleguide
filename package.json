@@ -47,8 +47,7 @@
     "jest-webextension-mock": "^3.7.18",
     "jquery": "^3.5.0",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.7.2"
+    "webpack-cli": "^4.9.1"
   },
   "dependencies": {
     "@testing-library/dom": "^8.11.3",
@@ -82,10 +81,6 @@
   "scripts": {
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
-    "start-app-dev-server": "npm run start-api-app-dev-server & npm run start-ext-app-dev-server & npm run start-in-form-menu-app-dev-server",
-    "start-api-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-api.config.js",
-    "start-ext-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-ext.config.js",
-    "start-in-form-menu-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-in-form-menu.config.js",
     "test": "npm run test:unit",
     "test:unit": "jest --no-cache ./src --maxWorkers=4",
     "test:coverage": "jest --no-cache ./src --maxWorkers=4 --coverage",
