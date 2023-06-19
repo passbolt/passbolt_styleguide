@@ -8,8 +8,6 @@
 Gruntfile.js
 crowdin.yml
 demo
-docker
-docker-compose-dev.yml
 node_modules
 src/css
 src/less
