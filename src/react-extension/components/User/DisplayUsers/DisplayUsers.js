@@ -419,10 +419,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("attentionRequired") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("attentionRequired") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon  name="descending"/>
                             }
                           </span>
                         </div>
@@ -437,10 +437,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("name") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -454,10 +454,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("username") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -471,10 +471,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("role.name") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("role.name") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -488,10 +488,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -505,10 +505,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("last_logged_in") && this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-up"/>
+                            <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("last_logged_in") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>
@@ -524,10 +524,10 @@ class DisplayUsers extends React.Component {
                             </span>
                             <span className="cell-header-icon-sort">
                               {this.isSortedColumn("is_mfa_enabled") && this.isSortedAsc() &&
-                              <Icon baseline={true} name="caret-up"/>
+                              <Icon name="ascending"/>
                               }
                               {this.isSortedColumn("is_mfa_enabled") && !this.isSortedAsc() &&
-                              <Icon baseline={true} name="caret-down"/>
+                              <Icon  name="descending"/>
                               }
                             </span>
                           </div>
@@ -543,10 +543,10 @@ class DisplayUsers extends React.Component {
                           </span>
                           <span className="cell-header-icon-sort">
                             {this.isSortedColumn("account_recovery_user_setting.status") && this.isSortedAsc() &&
-                              <Icon baseline={true} name="caret-up"/>
+                              <Icon name="ascending"/>
                             }
                             {this.isSortedColumn("account_recovery_user_setting.status") && !this.isSortedAsc() &&
-                            <Icon baseline={true} name="caret-down"/>
+                            <Icon name="descending"/>
                             }
                           </span>
                         </div>

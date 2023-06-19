@@ -59,6 +59,18 @@ class DisplayResourcesList extends React.Component {
     return {
       resources: [], // The current list of resources to display
       selectStrategy: "",
+      defaultColumns: [
+        {name: ResourceColumnsName.FAVORITE, width: 20, resizable: false},
+        {name: ResourceColumnsName.RESOURCE, width: 145, resizable: true},
+        {name: ResourceColumnsName.USERNAME, width: 145, resizable: true},
+        {name: ResourceColumnsName.PASSWORD, width: 145, resizable: true},
+        {name: ResourceColumnsName.URI, width: 210, resizable: true},
+        {name: ResourceColumnsName.MODIFIED, width: 145, resizable: true}
+      ],
+      currentColumns: [],
+      mouseXPosition: 0,
+      columnToResize: null,
+      tableWidth: null
     };
   }
 
@@ -76,6 +88,20 @@ class DisplayResourcesList extends React.Component {
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
+    this.handleResizeColumnMouseDown = this.handleResizeColumnMouseDown.bind(this);
+    this.handleDocumentMouseMoveEvent = this.handleDocumentMouseMoveEvent.bind(this);
+    this.handleDocumentMouseUpEvent = this.handleDocumentMouseUpEvent.bind(this);
+    this.handleWindowResizeEvent = this.handleWindowResizeEvent.bind(this);
+  }
+
+  componentDidMount() {
+    // Set the column
+    this.setColumnsWidthFromActualWidth(this.getTableWidth(this.state.defaultColumns), this.state.defaultColumns);
+    window.addEventListener('resize', this.handleWindowResizeEvent);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResizeEvent);
   }
 
   /**
@@ -97,6 +123,7 @@ class DisplayResourcesList extends React.Component {
     const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewPasswordChange = prevState.previewedPassword !== this.state.previewedPassword;
+    const hasResourceTableResize = prevState.tableWidth !== this.state.tableWidth;
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedPassword();
@@ -106,6 +133,7 @@ class DisplayResourcesList extends React.Component {
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
       hasResourceToScrollChange ||
+      hasResourceTableResize ||
       hasResourcePreviewPasswordChange;
   }
 
@@ -113,7 +141,15 @@ class DisplayResourcesList extends React.Component {
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createRefs() {
+    this.tableviewRef = React.createRef();
     this.listRef = React.createRef();
+  }
+
+  /**
+   * Handle window resize event
+   */
+  handleWindowResizeEvent() {
+    this.setColumnsWidthFromActualWidth(this.state.tableviewWidth, this.state.currentColumns);
   }
 
   /**
@@ -447,11 +483,135 @@ class DisplayResourcesList extends React.Component {
     }
   }
 
+  /**
+   * Handle Mouse down event to prepare the resize
+   * @param event
+   * @param columnName
+   */
+  async handleResizeColumnMouseDown(event, columnName) {
+    // Get the current column
+    const columnToResize = this.state.currentColumns.find(column => column.name === columnName);
+    // Get the current mouse position
+    const mouseXPosition = event.clientX;
+    // Get the resizer element
+    const resizer = event.target;
+    // Add class resizing to keep the border color
+    resizer.classList.add('resizing');
+    this.setState({columnToResize, mouseXPosition});
+    // Add listener to handle mouse move event on document
+    document.addEventListener('mousemove', this.handleDocumentMouseMoveEvent, {capture: true});
+    // Add once listener to handle mouse up event on document
+    document.addEventListener('mouseup', () => this.handleDocumentMouseUpEvent(resizer), {capture: true, once: true});
+  }
+
+  /**
+   * Handle Mouse move on document to resize a column
+   * @param event
+   */
+  handleDocumentMouseMoveEvent(event) {
+    // Determine how far the mouse has been moved
+    const dx = event.clientX - this.state.mouseXPosition;
+    // Update the width of column
+    const width = this.state.columnToResize.width + dx > 50 ? this.state.columnToResize.width + dx : 50;
+    const columnToResizeIndex = this.state.currentColumns.findIndex(column => column.name === this.state.columnToResize.name);
+    const currentColumns = [...this.state.currentColumns];
+    // Update the width
+    currentColumns[columnToResizeIndex] = {...currentColumns[columnToResizeIndex], width};
+    // Get table width
+    const tableWidth = this.getTableWidth(currentColumns);
+    this.setState({currentColumns, tableWidth});
+  }
+
+  /**
+   * Handle Mouse up on document to end the resize
+   * @param resizer
+   */
+  handleDocumentMouseUpEvent(resizer) {
+    // Remove class resizing to remove the border color
+    resizer.classList.remove('resizing');
+    // Remove listener on mouse move
+    document.removeEventListener('mousemove', this.handleDocumentMouseMoveEvent, {capture: true});
+    this.setState({columnToResize: null, mouseXPosition: 0});
+  }
+
+  handleResizeDefaultByColumnDoubleClick(event, columnName) {
+    // Get the current column
+    const columnToResize = this.state.defaultColumns.find(column => column.name === columnName);
+    // Get an array with the width of the column to resize updated
+    const currentColumns = this.state.currentColumns.map(column => column.name === columnToResize.name ? {...column, width: columnToResize.width} : column);
+    // Get the table width
+    const tableWidth = this.getTableWidth(currentColumns);
+    this.setState({currentColumns, tableWidth});
+  }
+
+  /**
+   * Get the sum of columns widths no resizable from default
+   * @return {number}
+   */
+  get columnWidthNoResizable() {
+    return this.state.defaultColumns.reduce((sum, col) => sum + (col.resizable ? 0 : parseFloat(col.width)), 20);
+  }
+
+  /**
+   * Get the columns padding widths
+   * @return {number}
+   */
+  get columnsPaddingWidth() {
+    if (this.state.currentColumns.length > 0) {
+      // Get the columns padding widths from the current columns displayed
+      return 6 * (this.state.currentColumns.length + 1);
+    }
+    // Get the columns padding widths from the default columns
+    return 6 * (this.state.defaultColumns.length + 1);
+  }
+
+  /**
+   * Get the column width style by column name
+   * @param columnName
+   * @return {{width: string} | null}
+   */
+  getColumnWidthByName(columnName) {
+    // Get the current column
+    const column = this.state.currentColumns.find(column => column.name === columnName);
+    return column?.width ? {width: `${column.width}px`} : null;
+  }
+
+  /**
+   * Get the total width for the table in order to have only one column resizing
+   * @return {number}
+   */
+  getTableWidth(columns) {
+    // Starting from 20 to have checkbox column width and add padding for each column displayed
+    return columns.reduce((sum, col) => sum + col.width, 20) + 6 * (columns.length + 1);
+  }
+
+  /**
+   * Set the columns width based on actual width of the tableview width to maintain the same proportionality
+   * @param actualWidth
+   * @param columns
+   */
+  setColumnsWidthFromActualWidth(actualWidth, columns) {
+    const tableviewWidth = this.tableviewRef.current.clientWidth;
+    // Subtract all constant widths that do not change with screen width
+    const columnsResizableWidth = actualWidth - this.columnWidthNoResizable - this.columnsPaddingWidth;
+    // Calculate the ratio between two widths
+    const ratio = (tableviewWidth - this.columnWidthNoResizable - this.columnsPaddingWidth) / columnsResizableWidth;
+    // Scale the widths with the ratio
+    const currentColumns = columns.map(column => {
+      const width = column.resizable ? column.width * ratio : column.width;
+      return {...column, width};
+    });
+    // Get the table width from all columns
+    const tableWidth = this.getTableWidth(currentColumns);
+    this.setState({currentColumns, tableWidth, tableviewWidth});
+  }
+
   renderTable(items, ref) {
     const tableStyle = {
       MozUserSelect: "none",
       WebkitUserSelect: "none",
-      msUserSelect: "none"
+      msUserSelect: "none",
+      width: `${this.state.tableWidth}px`
     };
     return (
       <table style={tableStyle}>
@@ -555,17 +715,17 @@ class DisplayResourcesList extends React.Component {
             </button>
           </div>
         </td>
-        <td className="cell-name m-cell uri">
+        <td className="cell-name m-cell uri" style={this.getColumnWidthByName(ResourceColumnsName.RESOURCE)}>
           <div title={resource.name}>
             {resource.name}
           </div>
         </td>
-        <td className="cell-username m-cell username">
+        <td className="cell-username m-cell username" style={this.getColumnWidthByName(ResourceColumnsName.USERNAME)}>
           <div title={resource.username}>
             <button className="link no-border" type="button" onClick={ev => this.handleCopyUsernameClick(ev, resource)}><span>{resource.username}</span></button>
           </div>
         </td>
-        <td className="cell-secret m-cell password">
+        <td className="cell-secret m-cell password" style={this.getColumnWidthByName(ResourceColumnsName.PASSWORD)}>
           <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
             title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
             <HiddenPassword
@@ -580,7 +740,7 @@ class DisplayResourcesList extends React.Component {
             </button>
           }
         </td>
-        <td className="cell-uri l-cell">
+        <td className="cell-uri l-cell" style={this.getColumnWidthByName(ResourceColumnsName.URI)}>
           <div title={resource.uri}>
             {safeUri &&
               <button className="link no-border" type="button" onClick={() => this.handleGoToResourceUriClick(resource)}><span>{resource.uri}</span></button>
@@ -590,7 +750,7 @@ class DisplayResourcesList extends React.Component {
             }
           </div>
         </td>
-        <td className="cell-modified m-cell">
+        <td className="cell-modified m-cell" style={this.getColumnWidthByName(ResourceColumnsName.MODIFIED)}>
           <div title={resource.modified}>
             {modifiedFormatted}
           </div>
@@ -614,7 +774,7 @@ class DisplayResourcesList extends React.Component {
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
-      <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(filterType) ? "all_items" : ""}`}>
+      <div ref={this.tableviewRef} className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(filterType) ? "all_items" : ""}`}>
         <React.Fragment>
           {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
           <div className="empty-content">
@@ -667,7 +827,7 @@ class DisplayResourcesList extends React.Component {
           {!isEmpty &&
           <React.Fragment>
             <div className="tableview-header">
-              <table>
+              <table style={{width: `${this.state.tableWidth}px`}}>
                 <thead>
                   <tr>
                     <th className="cell-multiple-select selections s-cell">
@@ -695,7 +855,7 @@ class DisplayResourcesList extends React.Component {
                         </span>
                       </button>
                     </th>
-                    <th className="cell-name m-cell sortable">
+                    <th className="cell-name m-cell sortable" style={this.getColumnWidthByName(ResourceColumnsName.RESOURCE)}>
                       <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "name")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
@@ -711,8 +871,9 @@ class DisplayResourcesList extends React.Component {
                           </span>
                         </div>
                       </button>
+                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.RESOURCE)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.RESOURCE)}></div>
                     </th>
-                    <th className="cell-username m-cell username sortable">
+                    <th className="cell-username m-cell username sortable" style={this.getColumnWidthByName(ResourceColumnsName.USERNAME)}>
                       <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "username")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
@@ -728,15 +889,17 @@ class DisplayResourcesList extends React.Component {
                           </span>
                         </div>
                       </button>
+                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.USERNAME)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.USERNAME)}></div>
                     </th>
-                    <th className="cell-secret m-cell password">
+                    <th className="cell-secret m-cell password" style={this.getColumnWidthByName(ResourceColumnsName.PASSWORD)}>
                       <div className="cell-header">
                         <span className="cell-header-text">
                           <Trans>Password</Trans>
                         </span>
                       </div>
+                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.PASSWORD)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.PASSWORD)}></div>
                     </th>
-                    <th className="cell-uri l-cell sortable">
+                    <th className="cell-uri l-cell sortable" style={this.getColumnWidthByName(ResourceColumnsName.URI)}>
                       <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
@@ -752,8 +915,9 @@ class DisplayResourcesList extends React.Component {
                           </span>
                         </div>
                       </button>
+                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.URI)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.URI)}></div>
                     </th>
-                    <th className="cell-modified m-cell sortable">
+                    <th className="cell-modified m-cell sortable" style={this.getColumnWidthByName(ResourceColumnsName.MODIFIED)}>
                       <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
                         <div className="cell-header">
                           <span className="cell-header-text">
@@ -769,13 +933,14 @@ class DisplayResourcesList extends React.Component {
                           </span>
                         </div>
                       </button>
+                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.MODIFIED)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.MODIFIED)}></div>
                     </th>
                   </tr>
                 </thead>
               </table>
             </div>
             {isReady &&
-            <div className="tableview-content scroll">
+            <div className="tableview-content">
               <ReactList
                 itemRenderer={(index, key) => this.renderItem(index, key)}
                 itemsRenderer={(items, ref) => this.renderTable(items, ref)}
@@ -807,3 +972,12 @@ DisplayResourcesList.propTypes = {
 };
 
 export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList))))))));
+
+const ResourceColumnsName = {
+  FAVORITE: "Favorite",
+  RESOURCE: "Resource",
+  USERNAME: 'Username',
+  PASSWORD: 'Password',
+  URI: "URI",
+  MODIFIED: "Modified",
+};

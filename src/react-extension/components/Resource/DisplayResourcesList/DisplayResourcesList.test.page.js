@@ -52,6 +52,35 @@ export default class DisplayResourcesListPage {
   }
 
   /**
+   * Returns the index-th columns header with useful accessors
+   * @index The column index
+   */
+  columns(index) {
+    const element = this._page.container.querySelector('table thead tr').querySelectorAll('th')[index - 1];
+    const resizer = element.querySelector('.resizer');
+    return {
+      get width() {
+        return getComputedStyle(element).width;
+      },
+      get name() {
+        return element.textContent;
+      },
+      // Move of the column in px
+      async resize(moveInPx) {
+        fireEvent.mouseDown(resizer);
+        await waitFor(() => {});
+        fireEvent.mouseMove(resizer, {clientX: moveInPx});
+        await waitFor(() => {});
+        fireEvent.mouseUp(resizer);
+      },
+      async resizeDefault() {
+        fireEvent.doubleClick(resizer);
+        await waitFor(() => {});
+      }
+    };
+  }
+
+  /**
    * Returns the index-th resource with useful accessors
    * @index The resource index
    */

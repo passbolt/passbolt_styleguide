@@ -40,6 +40,9 @@ Empty.args = {
     },
     sorter: {
       propertyName: 'asc'
+    },
+    scrollTo: {
+      resource: null // The resource to scroll to
     }
   }
 };
@@ -162,6 +165,9 @@ Populated.args = {
     },
     sorter: {
       propertyName: 'asc'
+    },
+    scrollTo: {
+      resource: null // The resource to scroll to
     },
     onResourceSelected: {
       multiple: () => {},
