@@ -24,8 +24,8 @@ import ContextualMenuContextProvider from "../../../contexts/ContextualMenuConte
 import ExtAppContextProvider from "../../../contexts/ExtAppContext";
 import NavigationContextProvider from "../../../contexts/NavigationContext";
 import DialogContextProvider from "../../../contexts/DialogContext";
-import mockPort from "../../../../../demo/ext-app/mock/mockPort";
-import mockStorage from "../../../../../demo/ext-app/mock/mockStorage";
+import mockPort from "../../../../../test/mocks/mockPort";
+import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
 
