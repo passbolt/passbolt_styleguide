@@ -96,7 +96,7 @@ class AutocompleteItem extends Component {
                 <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl}/>
                 }
                 {this.props.group &&
-                <GroupAvatar group={this.props.group} baseUrl={this.props.baseUrl}/>
+                <GroupAvatar group={this.props.group}/>
                 }
                 <div className="user">
                   <span className="name">{this.getTitle()}</span>

@@ -15,7 +15,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
   AuthenticationAccountRecoveryWorkflowStates,
   withAuthenticationAccountRecoveryContext

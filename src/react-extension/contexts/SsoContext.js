@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {withTranslation} from "react-i18next";
 
 export const SsoContext = React.createContext({

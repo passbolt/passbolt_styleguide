@@ -22,7 +22,7 @@ import DisplayUserDetails from "../../UserDetails/DisplayUserDetails/DisplayUser
 import DisplayUserWorkspaceActions from "../DisplayUserWorkspaceActions/DisplayUserWorkspaceActions";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayUserBadgeMenu from "../DisplayUserBadgeMenu/DisplayUserBadgeMenu";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayGroups from "../FilterUsersByGroups/FilterUsersByGroup";
 import FilterUsersByShortcut from "../FilterUsersByShortcut/FilterUsersByShortcut";
 import FilterUsersByText from "../FilterUsersByText/FilterUsersByText";

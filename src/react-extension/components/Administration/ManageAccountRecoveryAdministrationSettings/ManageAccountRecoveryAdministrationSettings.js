@@ -17,7 +17,7 @@ import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayAdministrationAccountRecoveryActions
   from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationAccountRecoveryAction/DisplayAdministrationAccountRecoveryActions";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";

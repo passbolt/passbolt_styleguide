@@ -1,4 +1,3 @@
-
 /**
  * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
@@ -13,7 +12,6 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../contexts/AppContext";
 import React from "react";
 import DisplayResourceDetailsInformation from "./DisplayResourceDetailsInformation";
 import {BrowserRouter as Router} from 'react-router-dom';
@@ -25,17 +23,14 @@ import MockTranslationProvider from "../../../test/mock/components/International
 export default class PasswordSidebarInformationSectionPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContext.Provider value={appContext}>
-          <Router>
-            <DisplayResourceDetailsInformation {...props}/>
-          </Router>
-        </AppContext.Provider>
+        <Router>
+          <DisplayResourceDetailsInformation {...props}/>
+        </Router>
       </MockTranslationProvider>
     );
     this.setupPageObjects();
@@ -130,10 +125,17 @@ class DisplayInformationPageObject {
   }
 
   /**
+   * Returns the password link element of information
+   */
+  get passwordLink() {
+    return this._container.querySelector('.secret button');
+  }
+
+  /**
    * Returns the password elements of information
    */
   get password() {
-    return this._container.querySelector('.secret button span');
+    return this.passwordLink.querySelector('span');
   }
 
   /**

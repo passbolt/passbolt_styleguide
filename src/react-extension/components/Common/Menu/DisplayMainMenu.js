@@ -13,11 +13,27 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayMainMenu extends Component {
+  constructor() {
+    super();
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
+  }
+
   /**
    * Check if a menu item is selected
    * @param {string} name The menu item name
@@ -46,10 +62,24 @@ class DisplayMainMenu extends Component {
   }
 
   /**
+   * Handles the click on Sign out button
+   * @returns {Promise<void>}
+   */
+  async handleSignOutClick() {
+    try {
+      await this.props.context.onLogoutRequested();
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    }
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
   render() {
+    const canViewUsersWorkspace = this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+
     return (
       <nav>
         <div className="primary navigation top">
@@ -58,28 +88,33 @@ class DisplayMainMenu extends Component {
               <div className={`row ${this.isSelected("passwords") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToPasswordsRequested}><span><Trans>passwords</Trans></span></button>
+                    <button className="passwords link no-border" type="button" onClick={this.props.navigationContext.onGoToPasswordsRequested}><span><Trans>passwords</Trans></span></button>
                   </div>
                 </div>
               </div>
             </li>
-            <li key="users">
-              <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button
-                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}><span><Trans>users</Trans></span></button>
+            {canViewUsersWorkspace &&
+              <li key="users">
+                <div className={`row ${this.isSelected("users") ? "selected" : ""}`}>
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button
+                        className="users link no-border" type="button" onClick={this.props.navigationContext.onGoToUsersRequested}>
+                        <span><Trans>users</Trans></span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            }
             {this.isLoggedInUserAdmin() &&
             <li key="administration">
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button
-                      className="link no-border" type="button" onClick={this.props.navigationContext.onGoToAdministrationRequested}><span><Trans>administration</Trans></span></button>
+                    <button className="administration link no-border" type="button" onClick={this.props.navigationContext.onGoToAdministrationRequested}>
+                      <span><Trans>administration</Trans></span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -89,7 +124,8 @@ class DisplayMainMenu extends Component {
               <div className="row">
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <a href="https://help.passbolt.com"
+                    <a className="help"
+                      href="https://help.passbolt.com"
                       role="button"
                       target="_blank"
                       rel="noopener noreferrer">
@@ -104,9 +140,9 @@ class DisplayMainMenu extends Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button
-                      className="link no-border"
+                      className="sign-out link no-border"
                       type="button"
-                      onClick={this.props.context.onLogoutRequested}>
+                      onClick={this.handleSignOutClick}>
                       <span><Trans>sign out</Trans></span>
                     </button>
                   </div>
@@ -122,9 +158,11 @@ class DisplayMainMenu extends Component {
 
 DisplayMainMenu.propTypes = {
   context: PropTypes.object, // The application context
+  rbacContext: PropTypes.any, // The role based access control context
   navigationContext: PropTypes.any, // The navigation context
   history: PropTypes.object, // The router history
   location: PropTypes.object, // Router location prop
+  dialogContext: PropTypes.object, // the dialog context prop
 };
 
-export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(DisplayMainMenu))));
+export default withAppContext(withRbac(withRouter(withNavigationContext(withDialog(withTranslation("common")(DisplayMainMenu))))));

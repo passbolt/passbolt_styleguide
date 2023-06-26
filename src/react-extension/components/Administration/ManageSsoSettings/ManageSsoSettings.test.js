@@ -54,7 +54,7 @@ describe("ManageSsoSettings", () => {
     });
 
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Azure settings', async() => {
-      expect.assertions(15);
+      expect.assertions(19);
       const settingsData = withAzureSsoSettings();
 
       const props = defaultProps();
@@ -70,6 +70,8 @@ describe("ManageSsoSettings", () => {
         }
       });
 
+      await page.toggleAdvancedSettings();
+
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Single Sign-On");
       expect(page.providerButtons.length).toBe(0);
@@ -79,6 +81,8 @@ describe("ManageSsoSettings", () => {
       expect(page.client_id).toBeTruthy();
       expect(page.client_secret).toBeTruthy();
       expect(page.client_secret_expiry).toBeTruthy();
+      expect(page.prompt).toBeTruthy();
+      expect(page.email_claim).toBeTruthy();
 
       expect(page.url.value).toBe(settingsData.data.url);
       expect(page.redirect_url.value).toBe(exepectedRedirectUrl);
@@ -86,6 +90,8 @@ describe("ManageSsoSettings", () => {
       expect(page.client_id.value).toBe(settingsData.data.client_id);
       expect(page.client_secret.value).toBe(settingsData.data.client_secret);
       expect(page.client_secret_expiry.value).toBe(settingsData.data.client_secret_expiry);
+      expect(page.prompt.value).toBe(settingsData.data.prompt);
+      expect(page.email_claim.value).toBe(settingsData.data.email_claim);
     });
 
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Google settings', async() => {
@@ -208,12 +214,17 @@ describe("ManageSsoSettings", () => {
       const props = defaultProps(mockDialogContext);
 
       const formData = {
+        prompt: "None",
+        email_claim: "UPN",
         url: "https://fakeurl.passbolt.com/",
         client_id: uuid(),
         tenant_id: uuid(),
         client_secret: uuid(),
         client_secret_expiry: "2050-12-31"
       };
+
+      const promptValue = "none";
+      const emailClaimValue = "upn";
 
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
       props.context.port.addRequestListener("passbolt.sso.save-draft", async ssoSettings => {
@@ -225,6 +236,8 @@ describe("ManageSsoSettings", () => {
             client_id: formData.client_id,
             client_secret: formData.client_secret,
             client_secret_expiry: formData.client_secret_expiry,
+            prompt: promptValue,
+            email_claim: emailClaimValue,
           },
         });
         return Object.assign({}, settingsData, ssoSettings);
@@ -238,6 +251,7 @@ describe("ManageSsoSettings", () => {
         }
       });
 
+      await page.toggleAdvancedSettings();
       await page.setFormWith(formData);
 
       await page.saveSettings(() => mockDialogContext.dialogContext.open.mock.calls.length > 0);

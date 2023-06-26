@@ -97,20 +97,66 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
-   * Set the current form with the given data (only work with the inputs (not our Select component for instance))
+   * Set the current form with the given data.
+   * It can set the input from text value.
+   * It can also set value for Select elements, but due to React internal stuff, the label needs to be passed as value.
    * @param {object} formData a key value pairs object that contains the field name as a key (must match a getter method on this page) and the desired value
    * @returns {Promise<void>}
    */
   async setFormWith(formData) {
     let key;
     for (key in formData) {
-      fireEvent.input(this[key], {target: {value: formData[key]}});
+      const element = this[key];
+      const value = formData[key];
+      await (this.isSelectElement(element)
+        ? this.setSelectField(element, value)
+        : this.setInputField(element, value));
     }
+  }
+
+  /**
+   * Set the current select field value with the given data.
+   * It requires the select the element by the label and not the key as `key` is internal to React.
+   * @param {HTMLElement} element the select element on which to set the value
+   * @param {string} value the value to set
+   * @returns {Promise<void>}
+   */
+  async setSelectField(element, value) {
+    const currentValue = element.querySelector('.value').textContent;
+    if (currentValue === value) {
+      return;
+    }
+
+    await this.clickOn(element, () => element.querySelectorAll('.option').length > 0);
+    const availableValues = Array.from(element.querySelectorAll('.option'));
+    const targetOptionElement = availableValues.find(el => el.textContent === value);
+    await this.clickOn(targetOptionElement, () => value === element.querySelector('.value').textContent);
+  }
+
+  /**
+   * Set the current input field value with the given data
+   * @param {HTMLElement} element the input element on which to set the value
+   * @param {string} value the value to set
+   * @returns {Promise<void>}
+   */
+  async setInputField(element, value) {
+    fireEvent.input(element, {target: {value: value}});
     await waitFor(() => {
-      if (this[key].value !== formData[key].toString()) {
-        throw new Error("Form is not udpated yet.");
+      if (element.value !== value) {
+        throw new Error("The value is not set yet");
       }
     });
+  }
+
+  /**
+   * Returns true if the given element is a <Select> component element
+   * @param {HTMLElement} element
+   * @returns {boolean}
+   */
+  isSelectElement(element) {
+    return element?.nodeName === 'DIV'
+      && element?.classList.contains('select')
+      && element.parentElement.classList.contains('select-container');
   }
 
   /**
@@ -123,7 +169,7 @@ export default class ManageSsoSettingsPage {
 
   /**
    * Clicks on SSO Settings feature toggle.
-   * @param {function} readyCheckCallback a callback to tell the caller when the action is considered to be done
+   * @returns {Promise<void>}
    */
   async toggleSsoSettings() {
     const currentState = this.toggleButton.checked;
@@ -131,7 +177,17 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
+   * Clicks on advanced settings toggle.
+   * @returns {Promise<void>}
+   */
+  async toggleAdvancedSettings() {
+    const currentState = Boolean(this.prompt);
+    await this.clickOn(this.advancedSettingsButton, () => Boolean(this.prompt) !== currentState);
+  }
+
+  /**
    * Simulates a click on the "Delete Settings" button from the dialog
+   * @returns {Promise<void>}
    */
   async confirmDelete() {
     await this.clickOn(this.deleteSettingsButton, () => this.deleteConfirmationDialog === null);
@@ -234,6 +290,14 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
+   * Returns the advanced settings toggle button HTML element
+   * @returns {HTMLElement}
+   */
+  get advancedSettingsButton() {
+    return this.select("#advanced-settings-panel-button");
+  }
+
+  /**
    * Returns the delete SSO Settings dialog HTML element
    * @returns {HTMLElement}
    */
@@ -247,5 +311,21 @@ export default class ManageSsoSettingsPage {
    */
   get deleteSettingsButton() {
     return this.select(".delete-sso-settings-dialog button[type='submit']");
+  }
+
+  /**
+   * Returns the delete SSO Settings dialog HTML element
+   * @returns {HTMLElement}
+   */
+  get prompt() {
+    return this.select("#prompt-input");
+  }
+
+  /**
+   * Returns the delete SSO Settings dialog HTML element
+   * @returns {HTMLElement}
+   */
+  get email_claim() {
+    return this.select("#email-claim-input");
   }
 }

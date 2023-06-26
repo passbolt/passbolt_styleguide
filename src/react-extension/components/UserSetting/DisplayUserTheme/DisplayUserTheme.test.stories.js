@@ -1,6 +1,5 @@
-import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import DisplayUserTheme from "./DisplayUserTheme";
 import MockPort from "../../../test/mock/MockPort";
@@ -21,7 +20,17 @@ const themes = [
     id:  'midgar',
     name: 'midgar',
     preview: 'img/themes/midgar.png'
-  }
+  },
+  {
+    id:  'solarized_dark',
+    name: 'solarized_dark',
+    preview: 'img/themes/solarized_dark.png'
+  },
+  {
+    id:  'solarized_light',
+    name: 'solarized_light',
+    preview: 'img/themes/solarized_light.png'
+  },
 ];
 
 const mockedPort = new MockPort();
@@ -29,7 +38,7 @@ mockedPort.addRequestListener("passbolt.themes.find-all", () => themes);
 
 const context = {
   userSettings: {
-    getTheme: () => ({name: 'toto', preview: 'ttoo'})
+    getTheme: () => ({name: 'midgar'})
   },
   port: mockedPort
 };
@@ -37,9 +46,7 @@ const context = {
 
 const Template = args =>
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <DisplayUserTheme {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
+    <DisplayUserTheme {...args}/>
   </AppContext.Provider>;
 
 Template.propTypes = {

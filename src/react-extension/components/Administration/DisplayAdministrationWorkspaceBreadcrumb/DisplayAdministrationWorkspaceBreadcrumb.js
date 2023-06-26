@@ -69,6 +69,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Single Sign-On");
       case AdministrationWorkspaceMenuTypes.MFA_POLICY:
         return this.translate("MFA Policy");
+      case AdministrationWorkspaceMenuTypes.RBAC:
+        return this.translate("Role-Based Access Control");
       default:
         return "";
     }

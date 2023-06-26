@@ -12,10 +12,12 @@
  * @since         3.0.0
  */
 
+import {TEST_ROLE_USER_ID} from "../../../../src/shared/models/entity/role/role.test.data";
+
 export default () => {
   return {
     "id": "f848277c-5398-58f8-a82a-72397af2d450",
-    "role_id": "a58de6d3-f52c-5080-b79b-a601a647ac85",
+    "role_id": TEST_ROLE_USER_ID,
     "role" : {
       "name": "admin"
     },

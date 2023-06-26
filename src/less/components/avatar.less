@@ -50,14 +50,16 @@
       }
     }
 
-    img {
+    img, svg {
       width: @avatar-size;
       height: @avatar-size;
       border-radius: 50%;
     }
 
-    &.big img{
-      width: @avatar-size * 2;
-      height: @avatar-size * 2;
+    &.big {
+      img, svg{
+        width: @avatar-size * 2;
+        height: @avatar-size * 2;
+      }
     }
 }

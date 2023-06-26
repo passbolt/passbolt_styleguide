@@ -26,6 +26,8 @@ class UserDirectoryModel {
       return;
     }
 
+    const defaultDomain = userDirectoryDTO.domains?.org_domain;
+
     //Sections opened
     this.openCredentials = true;
     this.openDirectoryConfiguration = false;
@@ -33,18 +35,18 @@ class UserDirectoryModel {
     // Source
     this.source = userDirectoryDTO.source;
     // CREDENTIALS FIELDS
-    this.authenticationType = userDirectoryDTO.authentication_type || "basic";
-    this.directoryType = userDirectoryDTO.directory_type || "ad";
-    this.connectionType = userDirectoryDTO.connection_type || "plain";
-    this.host = userDirectoryDTO.hosts?.length > 0 ? userDirectoryDTO.hosts[0] : "";
+    this.authenticationType = defaultDomain?.authentication_type || "basic";
+    this.directoryType = defaultDomain?.directory_type || "ad";
+    this.connectionType = defaultDomain?.connection_type || "plain";
+    this.host = defaultDomain?.hosts?.length > 0 ? defaultDomain?.hosts[0] : "";
     this.hostError = null;
-    this.port = userDirectoryDTO.port?.toString() || "389";
+    this.port = defaultDomain?.port?.toString() || "389";
     this.portError = null;
-    this.username =  userDirectoryDTO.username || "";
-    this.password =  userDirectoryDTO.password || "";
-    this.domain = userDirectoryDTO.domain_name || "";
+    this.username =  defaultDomain?.username || "";
+    this.password =  defaultDomain?.password || "";
+    this.domain = defaultDomain?.domain_name || "";
     this.domainError = null;
-    this.baseDn = userDirectoryDTO.base_dn || "";
+    this.baseDn = defaultDomain?.base_dn || "";
     // DIRECTORY CONFIGURATION FIELDS
     this.groupPath = userDirectoryDTO.group_path || "";
     this.userPath = userDirectoryDTO.user_path || "";
@@ -55,6 +57,7 @@ class UserDirectoryModel {
     this.useEmailPrefix = userDirectoryDTO.use_email_prefix_suffix || false;
     this.emailPrefix = userDirectoryDTO.email_prefix || "";
     this.emailSuffix = userDirectoryDTO.email_suffix || "";
+    this.fieldsMapping = userDirectoryDTO.fields_mapping || undefined;
     // SYNCHRONIZATION OPTIONS
     this.defaultAdmin = userDirectoryDTO.default_user || userId;
     this.defaultGroupAdmin = userDirectoryDTO.default_group_admin_user || userId;
@@ -101,6 +104,7 @@ class UserDirectoryModel {
     this.useEmailPrefix = false;
     this.emailPrefix = "";
     this.emailSuffix = "";
+    this.fieldsMapping = undefined;
     // SYNCHRONIZATION OPTIONS
     this.defaultAdmin = userId;
     this.defaultGroupAdmin = userId;

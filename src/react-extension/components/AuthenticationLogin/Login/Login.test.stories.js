@@ -44,3 +44,14 @@ Initial.parameters = defaultParameters;
 export const CompleteRecovery = Template.bind({});
 CompleteRecovery.args = defaultPropsWithAccount({displayAs: LoginVariations.ACCOUNT_RECOVERY});
 CompleteRecovery.parameters = defaultParameters;
+
+const passwordError = new Error("Wrong passphrase");
+passwordError.name = "InvalidMasterPasswordError";
+export const LoginWithSsoEnabled = Template.bind({});
+LoginWithSsoEnabled.args = defaultPropsWithAccount({
+  displayAs: LoginVariations.SIGN_IN,
+  isSsoAvailable: true,
+  onCheckPassphrase: () => { throw passwordError; },
+  onSignIn: () => { console.log("onSignIn called"); }
+});
+LoginWithSsoEnabled.parameters = defaultParameters;

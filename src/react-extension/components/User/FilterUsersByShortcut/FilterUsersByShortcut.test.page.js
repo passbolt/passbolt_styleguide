@@ -16,7 +16,7 @@
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import FilterUsersByShortcut from "./FilterUsersByShortcut";
 import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";

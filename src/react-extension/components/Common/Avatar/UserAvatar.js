@@ -14,6 +14,9 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
+import {withTranslation} from "react-i18next";
+
+const DEFAULT_AVATAR_URL_REGEXP = /img\/avatar\/user(_medium)?\.png$/;
 
 class UserAvatar extends Component {
   /**
@@ -45,15 +48,19 @@ class UserAvatar extends Component {
   }
 
   /**
+   * Returns the current avatar URL from the props
+   * @returns {string}
+   */
+  get avatarUrl() {
+    return this.props?.user?.profile?.avatar?.url?.medium;
+  }
+
+  /**
    * Return true if the user from props contains a valid profile with avatar url properties
    * @returns {boolean}
    */
   propsHasUrl() {
-    return this.props.user &&
-      this.props.user.profile &&
-      this.props.user.profile.avatar &&
-      this.props.user.profile.avatar.url &&
-      this.props.user.profile.avatar.url.medium;
+    return Boolean(this.avatarUrl);
   }
 
   /**
@@ -62,8 +69,8 @@ class UserAvatar extends Component {
    * @returns {boolean}
    */
   propsUrlHasProtocol() {
-    return this.props.user.profile.avatar.url.medium.startsWith('https://')
-      || this.props.user.profile.avatar.url.medium.startsWith('http://');
+    return this.avatarUrl.startsWith('https://')
+      || this.avatarUrl.startsWith('http://');
   }
 
   /**
@@ -76,11 +83,11 @@ class UserAvatar extends Component {
   }
 
   /**
-   * Get the default avatar url
-   * @returns {string}
+   * Returns true if the given URL matches a default avatar from the API
+   * @returns {boolean}
    */
-  getDefaultAvatarUrl() {
-    return `${this.props.baseUrl}/img/avatar/user.png`;
+  isDefaultAvatarUrlFromApi() {
+    return DEFAULT_AVATAR_URL_REGEXP.test(this.avatarUrl);
   }
 
   /**
@@ -88,14 +95,13 @@ class UserAvatar extends Component {
    * @returns {string}
    */
   getAvatarSrc() {
-    if (!this.state.error && this.propsHasUrl()) {
-      if (this.propsUrlHasProtocol()) {
-        return this.props.user.profile.avatar.url.medium;
-      } else {
-        return this.formatUrl(this.props.user.profile.avatar.url.medium);
-      }
+    if (!this.propsHasUrl()) {
+      return null;
     }
-    return this.getDefaultAvatarUrl();
+
+    return this.propsUrlHasProtocol()
+      ? this.avatarUrl
+      : this.formatUrl(this.avatarUrl);
   }
 
   /**
@@ -113,10 +119,11 @@ class UserAvatar extends Component {
    * @returns {string}
    */
   getAltText() {
-    if (!this.props.user || !this.props.user.first_name || !this.props.user.last_name) {
+    const user = this.props?.user;
+    if (!user?.first_name || !user?.last_name) {
       return '...';
     }
-    return `Avatar of user ${this.props.user.first_name} ${this.props.user.last_name}.`;
+    return this.props.t('Avatar of user {{first_name}} {{last_name}}.', {firstname: user.first_name, lastname: user.last_name});
   }
 
   /**
@@ -124,13 +131,20 @@ class UserAvatar extends Component {
    * @return {JSX}
    */
   render() {
+    const srcAvatar = this.getAvatarSrc();
+    const shouldDisplayDefaultAvatar = this.state.error || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
     return (
       <div className={`${this.props.className} ${this.props.attentionRequired ? 'attention-required' : ''}`}>
-        {!this.state.error &&
-        <img src={this.getAvatarSrc()} onError={this.handleError} alt={this.getAltText()}/>
+        {shouldDisplayDefaultAvatar &&
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42" aria-labelledby="svg-title">
+            <title id="svg-title">{this.getAltText()}</title>
+            <circle fill="#939598" cx="21" cy="21" r="21"/>
+            <path fill="#ffffff" d="m21,23.04c-4.14,0-7.51-3.37-7.51-7.51s3.37-7.51,7.51-7.51,7.51,3.37,7.51,7.51-3.37,7.51-7.51,7.51Z"/>
+            <path fill="#ffffff" d="m27.17,26.53h-12.33c-2.01,0-3.89.78-5.31,2.2-1.42,1.42-2.2,3.3-2.2,5.31v1.15c3.55,3.42,8.36,5.53,13.67,5.53s10.13-2.11,13.67-5.53v-1.15c0-2.01-.78-3.89-2.2-5.31-1.42-1.42-3.3-2.2-5.31-2.2Z"/>
+          </svg>
         }
-        {this.state.error &&
-        <img src={this.getDefaultAvatarUrl()} alt={this.getAltText()}/>
+        {!shouldDisplayDefaultAvatar &&
+          <img src={srcAvatar} onError={this.handleError} alt={this.getAltText()}/>
         }
         {this.props.attentionRequired &&
         <Icon name="exclamation"/>
@@ -148,7 +162,8 @@ UserAvatar.propTypes = {
   baseUrl: PropTypes.string,
   user: PropTypes.object,
   attentionRequired: PropTypes.bool,
-  className: PropTypes.string
+  className: PropTypes.string,
+  t: PropTypes.func,
 };
 
-export default UserAvatar;
+export default withTranslation('common')(UserAvatar);
