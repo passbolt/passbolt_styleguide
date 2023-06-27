@@ -16,7 +16,7 @@ import DisplayUserBadgeMenu from "../../User/DisplayUserBadgeMenu/DisplayUserBad
 import FilterResourcesByFolders from "../FilterResourcesByFolders/FilterResourcesByFolders";
 import DisplayResourceFolderDetails from "../../ResourceFolderDetails/DisplayResourceFolderDetails/DisplayResourceFolderDetails";
 import DisplayResourceDetails from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetails";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByTags from "../FilterResourcesByTags/FilterResourcesByTags";
 import PropTypes from "prop-types";
@@ -29,6 +29,8 @@ import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMe
 import {withTranslation} from "react-i18next";
 import FilterResourcesByGroups from "../FilterResourcesByGroups/FilterResourcesByGroups";
 import DisplayResourcesList from "../DisplayResourcesList/DisplayResourcesList";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class Workspace extends Component {
   /**
@@ -44,8 +46,10 @@ class Workspace extends Component {
    * @return {JSX}
    */
   render() {
-    const canUseFolders = this.props.context.siteSettings.canIUse("folders");
-    const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const canUseFolders = this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+    const canUseTags = this.props.context.siteSettings.canIUse("tags")
+      && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
 
     return (
       <div>
@@ -90,8 +94,9 @@ class Workspace extends Component {
 
 Workspace.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.any, // The rbac context
   resourceWorkspaceContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(Workspace)));
+export default withAppContext(withRbac(withResourceWorkspace(withTranslation('common')(Workspace))));

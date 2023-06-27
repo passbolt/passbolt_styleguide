@@ -14,7 +14,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import ReactList from "react-list";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
   resourceLinkAuthorizedProtocols,
   ResourceWorkspaceFilterTypes,
@@ -32,6 +32,9 @@ import {DateTime} from "luxon";
 import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -204,14 +207,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Returns true if the logged in user can use the preview password capability.
-   * @returns {boolean}
-   */
-  get canUsePreviewPassword() {
-    return this.props.context.siteSettings.canIUse('previewPassword');
-  }
-
-  /**
    * Returns true if the given resource is selected
    * @param resource A resource
    */
@@ -228,11 +223,9 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Handle copy password button click.
+   * @param {ResourceEntity} resource The resource to copy the secret
    */
-  async handleCopyPasswordClick(ev, resource) {
-    // Avoid the grid to select the resource while copying a resource secret.
-    ev.stopPropagation();
-
+  async handleCopyPasswordClick(resource) {
     await this.copyPasswordToClipboard(resource.id);
   }
 
@@ -527,6 +520,9 @@ class DisplayResourcesList extends React.Component {
   }
 
   renderItem(index, key) {
+    const canPreviewSecret = this.props.context.siteSettings.canIUse('previewPassword')
+      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
     const resource = this.resources[index];
     const isSelected = this.isResourceSelected(resource);
     const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
@@ -572,14 +568,12 @@ class DisplayResourcesList extends React.Component {
         <td className="cell-secret m-cell password">
           <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
             title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
-            <button type="button" className="link no-border" onClick={async ev => this.handleCopyPasswordClick(ev, resource)}>
-              <span>
-                {isPasswordPreviewed && this.state.previewedPassword.password}
-                {!isPasswordPreviewed && "Copy password to clipboard"}
-              </span>
-            </button>
+            <HiddenPassword
+              canClick={canCopySecret}
+              preview={this.state.previewedPassword?.password}
+              onClick={() => this.handleCopyPasswordClick(resource)} />
           </div>
-          {this.canUsePreviewPassword &&
+          {canPreviewSecret &&
             <button type="button" onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button-transparent">
               <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
               <span className="visually-hidden"><Trans>View</Trans></span>
@@ -801,9 +795,9 @@ class DisplayResourcesList extends React.Component {
   }
 }
 
-
 DisplayResourcesList.propTypes = {
   context: PropTypes.any, // The app context
+  rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.any,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
@@ -812,4 +806,4 @@ DisplayResourcesList.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList)))))));
+export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList))))))));

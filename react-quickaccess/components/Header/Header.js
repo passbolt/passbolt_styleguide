@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../contexts/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
 class Header extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Header extends React.Component {
   }
 
   async handleLogoutClick() {
-    this.props.context.port.request("passbolt.auth.logout");
+    this.props.context.port.request("passbolt.auth.logout", false);
     this.props.logoutSuccessCallback();
   }
 

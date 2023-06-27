@@ -14,7 +14,7 @@
 import React from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUserGroupDetailsInformation
   from "../DisplayUserGroupDetailsInformation/DisplayUserGroupDetailsInformation";
@@ -95,9 +95,7 @@ class DisplayUserGroupDetails extends React.Component {
         <div className="sidebar user">
           <div className="sidebar-header">
             <div className="teaser-image">
-              <GroupAvatar
-                group={this.group}
-                baseUrl={this.baseUrl}/>
+              <GroupAvatar group={this.group}/>
             </div>
             <h3>
               <div className="title-wrapper">

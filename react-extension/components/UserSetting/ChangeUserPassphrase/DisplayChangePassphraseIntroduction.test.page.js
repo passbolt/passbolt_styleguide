@@ -15,7 +15,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import DisplayChangePassphraseIntroduction from "./DisplayChangePassphraseIntroduction";
-import AppContext from "../../../contexts/AppContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**

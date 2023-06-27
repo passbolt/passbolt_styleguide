@@ -4,6 +4,7 @@
 /* borders */
 /* text */
 /* text */
+/* label */
 /* header */
 /* footer */
 /* authentication */
@@ -21,6 +22,7 @@
 /* link */
 /* tooltip */
 /* inputs */
+/* passwords */
 /* checkbox */
 /* controls */
 /* radio */
@@ -38,7 +40,10 @@
 /* workspace */
 /* left workspace menu */
 /* dropdown menus */
-/* grid */
+/* grid header */
+/* grid header checkbox */
+/* grid content */
+/* grid content checkbox */
 /* info panel */
 /* comment */
 /* tags */
@@ -56,7 +61,9 @@
 /* spinner icon fill */
 /* failed icon fill */
 /* success icon fill */
+/* logo icon fill */
 /* box shadows */
+/* accessibility */
 html {
   scroll-behavior: smooth;
 }
@@ -268,38 +275,13 @@ html {
 .scroll {
   overflow-y: scroll;
 }
-.logo.no-img {
-  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
-  background-size: 150px auto;
-  width: 150px;
-  height: 26px;
-}
-.logo h1 {
-  display: none;
-}
-.logo.bigger {
-  background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
-  background-size: 200px auto;
-  width: 200px;
-  height: 45px;
-}
 .header.second .col1 {
   min-width: 200px;
-}
-/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
-@media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-devicepixel-ratio: 1.5), only screen and (min-resolution: 1.5dppx) {
-  .logo.no-img {
-    background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
-    background-size: 150px auto;
-  }
-  .logo.bigger {
-    background: transparent url('../img/logo/logo.svg') 0 0 no-repeat;
-    background-size: 200px auto;
-  }
 }
 .logo-svg.no-img {
   width: 150px;
   height: 26px;
+  --icon-color: #000000;
 }
 .logo-svg h1 {
   display: none;
@@ -433,7 +415,7 @@ html {
 .breadcrumbs ul li:first-child:before {
   content: "";
 }
-.breadcrumbs ul a {
+.breadcrumbs ul button {
   border: 0;
   font-size: 1.4rem;
   line-height: 1.9rem;
@@ -731,6 +713,10 @@ table.table-info.horizontal tbody tr:hover {
   /* Tooltip text */
   /* Ease the tooltip left when you mouse over the tooltip container */
 }
+.tooltip:focus,
+.tooltip :focus-visible {
+  outline: 0;
+}
 .tooltip .tooltip-text {
   position: absolute;
   z-index: 99999;
@@ -796,25 +782,34 @@ table.table-info.horizontal tbody tr:hover {
   left: 100%;
   border-left-color: #B3B3B3;
 }
-.tooltip:hover .tooltip-text {
+.tooltip:hover .tooltip-text,
+.tooltip:focus .tooltip-text {
   visibility: visible;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
 .tooltip:hover .tooltip-text.top,
-.tooltip:hover .tooltip-text.top:after {
+.tooltip:focus .tooltip-text.top,
+.tooltip:hover .tooltip-text.top:after,
+.tooltip:focus .tooltip-text.top:after {
   transform: translate(-50%);
 }
 .tooltip:hover .tooltip-text.right,
-.tooltip:hover .tooltip-text.right:after {
+.tooltip:focus .tooltip-text.right,
+.tooltip:hover .tooltip-text.right:after,
+.tooltip:focus .tooltip-text.right:after {
   transform: translate(0, 50%);
 }
 .tooltip:hover .tooltip-text.bottom,
-.tooltip:hover .tooltip-text.bottom:after {
+.tooltip:focus .tooltip-text.bottom,
+.tooltip:hover .tooltip-text.bottom:after,
+.tooltip:focus .tooltip-text.bottom:after {
   transform: translate(50%);
 }
 .tooltip:hover .tooltip-text.left,
-.tooltip:hover .tooltip-text.left:after {
+.tooltip:focus .tooltip-text.left,
+.tooltip:hover .tooltip-text.left:after,
+.tooltip:focus .tooltip-text.left:after {
   transform: translate(0, -50%);
 }
 /* picture in sidebar */

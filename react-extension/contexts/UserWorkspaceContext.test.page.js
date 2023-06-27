@@ -16,7 +16,7 @@ import {initReactI18next} from 'react-i18next';
 import enTranslations from "../../locales/en-UK/common.json";
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AppContext from "./AppContext";
+import AppContext from "../../shared/context/AppContext/AppContext";
 import {Router, NavLink, Route, Switch} from "react-router-dom";
 import {createMemoryHistory} from "history";
 import UserWorkspaceContextProvider, {UserWorkspaceFilterTypes, UserWorkspaceContext} from "./UserWorkspaceContext";

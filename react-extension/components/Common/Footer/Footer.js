@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
-import {withAppContext} from "../../../contexts/AppContext";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";

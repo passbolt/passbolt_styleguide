@@ -13,7 +13,7 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "./AppContext";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import SelfRegistrationService from '../../shared/services/api/selfRegistration/selfRegistrationService';
 import {SelfRegistrationProviderTypes} from '../../shared/models/selfRegistration/SelfRegistrationEnumeration';
@@ -81,7 +81,7 @@ export class ApiTriageContextProvider extends React.Component {
    * Initialize the triage
    */
   async onInitializeTriageRequested() {
-    const isSsoRecoverFeatureFlagEnabled = this.props.context.siteSettings.canIUse("ssoRecover");
+    const isSsoRecoverFeatureFlagEnabled = this.isSsoAvailable();
     const ssoProviderId = isSsoRecoverFeatureFlagEnabled ? await this.findSsoProviderId() : null;
     const isSsoRecoverEnabled = isSsoRecoverFeatureFlagEnabled && Boolean(ssoProviderId);
 
@@ -92,6 +92,16 @@ export class ApiTriageContextProvider extends React.Component {
         ? ApiTriageContextState.SSO_SIGN_IN_STATE
         : ApiTriageContextState.USERNAME_STATE,
     });
+  }
+
+  /**
+   * Returns true if both SSO and SSO recover are enabled.
+   * Both needs to be enabled to find the current settings.
+   * @returns {boolean}
+   */
+  isSsoAvailable() {
+    return this.props.context.siteSettings.canIUse("ssoRecover")
+      && this.props.context.siteSettings.canIUse("sso");
   }
 
   /**

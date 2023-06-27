@@ -1,6 +1,5 @@
 import browser from "webextension-polyfill";
 import React from "react";
-import AppContext from "./contexts/AppContext";
 import FilterResourcesByFavoritePage from "./components/FilterResourcesByFavoritePage/FilterResourcesByFavoritePage";
 import FilterResourcesByItemsIOwnPage from "./components/FilterResourcesByItemsIOwnPage/FilterResourcesByItemsIOwnPage";
 import FilterResourcesByGroupPage from "./components/FilterResourcesByGroupPage/FilterResourcesByGroupPage";
@@ -31,6 +30,8 @@ import GeneratePasswordPage from "./components/GeneratePasswordPage/GeneratePass
 import PrepareResourceContextProvider from "./contexts/PrepareResourceContext";
 import Icon from "../shared/components/Icons/Icon";
 import SsoContextProvider from "./contexts/SsoContext";
+import RbacsCollection from "../shared/models/entity/rbac/rbacsCollection";
+import AppContext from "../shared/context/AppContext/AppContext";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess.html',
@@ -70,6 +71,7 @@ class ExtQuickAccess extends React.Component {
     this.loginSuccessCallback = this.loginSuccessCallback.bind(this);
     this.logoutSuccessCallback = this.logoutSuccessCallback.bind(this);
     this.mfaRequiredCallback = this.mfaRequiredCallback.bind(this);
+    this.setWindowBlurBehaviour = this.setWindowBlurBehaviour.bind(this);
   }
 
   async componentDidMount() {
@@ -80,6 +82,9 @@ class ExtQuickAccess extends React.Component {
       await this.getUser();
       await this.checkAuthStatus();
       await this.getSiteSettings();
+      if (this.state.isAuthenticated) {
+        await this.getLoggedInUser();
+      }
       this.getLocale();
     } catch (e) {
       this.setState({
@@ -96,6 +101,8 @@ class ExtQuickAccess extends React.Component {
       isAuthenticated: null,
       userSettings: null,
       siteSettings: null,
+      loggedInUser: null,
+      rbacs: null, // The role based access control
       hasError: false,
       errorMessage: "",
       locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
@@ -109,6 +116,8 @@ class ExtQuickAccess extends React.Component {
       passphraseRequestId: '',
       // Tab id to refer to the good one if detached mode
       tabId: this.getTabIdFromUrl(),
+      shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
+      setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
     };
   }
 
@@ -131,6 +140,14 @@ class ExtQuickAccess extends React.Component {
     }
   }
 
+  /**
+   * When set to true the quickaccess in detached mode should close when losing focus
+   * @param {boolean} shouldCloseAtWindowBlur
+   */
+  setWindowBlurBehaviour(shouldCloseAtWindowBlur) {
+    this.setState({shouldCloseAtWindowBlur});
+  }
+
   async checkPluginIsConfigured() {
     const isConfigured = await this.state.port.request('passbolt.addon.is-configured');
     if (!isConfigured) {
@@ -149,6 +166,17 @@ class ExtQuickAccess extends React.Component {
     const siteSettingsDto = await this.state.port.request('passbolt.organization-settings.get');
     const siteSettings = new SiteSettings(siteSettingsDto);
     this.setState({siteSettings});
+  }
+
+  /**
+   * Get the current user info from background page and set it in the state
+   */
+  async getLoggedInUser() {
+    const canIUseRbac = this.state.siteSettings.canIUse('rbacs');
+    const loggedInUser = await this.props.port.request("passbolt.users.find-logged-in-user");
+    const rbacsDto = canIUseRbac ? await this.props.port.request("passbolt.rbacs.find-me") : [];
+    const rbacs = new RbacsCollection(rbacsDto);
+    this.setState({loggedInUser, rbacs});
   }
 
   async getLocale() {
@@ -196,6 +224,7 @@ class ExtQuickAccess extends React.Component {
     } else {
       window.close();
     }
+    this.getLoggedInUser();
   }
 
   logoutSuccessCallback() {
