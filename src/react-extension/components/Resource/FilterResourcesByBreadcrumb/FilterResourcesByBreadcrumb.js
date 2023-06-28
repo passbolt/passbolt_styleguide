@@ -110,7 +110,9 @@ class FilterResourcesByBreadcrumb extends Component {
    */
   render() {
     return (
-      <Breadcrumbs items={this.items}/>
+      <Breadcrumbs items={this.items}>
+        <span className="chips">{this.props.resourceWorkspaceContext.filteredResources.length}</span>
+      </Breadcrumbs>
     );
   }
 }
