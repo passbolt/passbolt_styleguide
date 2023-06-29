@@ -210,8 +210,8 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
-      await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase, rememberMe);
-      await this.setState({
+      await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase);
+      this.setState({
         state: AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN,
         rememberMe: rememberMe
       });
@@ -219,7 +219,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
       } else {
-        await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
       }
     }
   }

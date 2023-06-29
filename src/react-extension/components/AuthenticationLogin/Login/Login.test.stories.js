@@ -38,11 +38,17 @@ const defaultParameters = {
 };
 
 export const Initial = Template.bind({});
-Initial.args = defaultProps({displayAs: LoginVariations.SIGN_IN});
+Initial.args = defaultProps({
+  displayAs: LoginVariations.SIGN_IN,
+  onSignIn: async() => { console.log("onSignIn called"); }
+});
 Initial.parameters = defaultParameters;
 
 export const CompleteRecovery = Template.bind({});
-CompleteRecovery.args = defaultPropsWithAccount({displayAs: LoginVariations.ACCOUNT_RECOVERY});
+CompleteRecovery.args = defaultPropsWithAccount({
+  displayAs: LoginVariations.ACCOUNT_RECOVERY,
+  onSignIn: async() => { console.log("onSignIn called"); }
+});
 CompleteRecovery.parameters = defaultParameters;
 
 const passwordError = new Error("Wrong passphrase");
@@ -52,6 +58,6 @@ LoginWithSsoEnabled.args = defaultPropsWithAccount({
   displayAs: LoginVariations.SIGN_IN,
   isSsoAvailable: true,
   onCheckPassphrase: () => { throw passwordError; },
-  onSignIn: () => { console.log("onSignIn called"); }
+  onSignIn: async() => { console.log("onSignIn called"); }
 });
 LoginWithSsoEnabled.parameters = defaultParameters;
