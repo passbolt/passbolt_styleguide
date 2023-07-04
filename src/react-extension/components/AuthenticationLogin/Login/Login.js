@@ -17,7 +17,6 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /**
  * The component display variations.
@@ -391,7 +390,6 @@ Login.propTypes = {
   context: PropTypes.any, // The application context
   account: PropTypes.object, // The user account
   userSettings: PropTypes.object, // The user settings
-  passwordSettingsContext: PropTypes.object, // The password settings context
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSignIn: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to sign-in
   onCheckPassphrase: PropTypes.func.isRequired, // Callback to trigger whenever the user wants to check the passphrase
@@ -400,4 +398,4 @@ Login.propTypes = {
   ssoProvider: PropTypes.object, // The SSO provider if any
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withPasswordSettings(withTranslation('common')(Login)));
+export default withAppContext(withTranslation('common')(Login));

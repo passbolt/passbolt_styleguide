@@ -113,7 +113,7 @@ describe("As AD I can see a Breadcrumb", () => {
   });
 
   it('As AD I should see a breadcrumb password policy', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.PASSWORD_POLICY);
+    const props = defaultProps(AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES);
     page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
     expect(page.count).toBe(3);
     expect(page.item(1)).toBe("Administration");

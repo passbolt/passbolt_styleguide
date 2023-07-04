@@ -18,39 +18,32 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-const mockTabInfo = {
-  name: "test",
-  uri: "www.test.com",
-  username: "test@passbolt.com",
-  secret_clear: "test@passbolt.com"
-};
-
-export const mockResults = {
-  "passbolt.quickaccess.prepare-autosave": mockTabInfo,
-  "passbolt.resources.create": {}
-};
-
 export function mockExtensionCall(context) {
-  context.port = {
-    request: function(event, value) {
-      return new Promise((resolve, reject) => {
-        if (event === "passbolt.quickaccess.prepare-autosave") {
-          resolve({
-            name: "Passbolt Browser Extension Test",
-            uri: "https://passbolt-browser-extension/test",
-            username: "passbolt.com",
-            secret_clear: "p@ssw0rd00"
-          });
-        } else if (event === "passbolt.secrets.powned-password") {
-          if (value === "hello-world") {
-            resolve(3);
-          } else if (value === "unavailable") {
-            reject();
-          } else {
-            resolve(0);
-          }
-        }
-      });
+  context.port.addRequestListener("passbolt.resources.create", () => {});
+
+  context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", () => ({
+    name: "",
+    uri: "",
+    username: "",
+    secret_clear: ""
+  }));
+
+  context.port.addRequestListener("passbolt.secrets.powned-password", value => {
+    if (value === "hello-world") {
+      return 3;
+    } else if (value === "unavailable") {
+      throw new Error("Service is unavailable");
     }
-  };
+    return 0;
+  });
+}
+
+export function mockExtensionCallWithTabInfo(context) {
+  mockExtensionCall(context);
+  context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", () => ({
+    name: "test",
+    uri: "www.test.com",
+    username: "test@passbolt.com",
+    secret_clear: "test@passbolt.com"
+  }));
 }

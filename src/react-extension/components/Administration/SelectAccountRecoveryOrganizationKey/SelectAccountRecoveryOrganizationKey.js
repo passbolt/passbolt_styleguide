@@ -20,7 +20,6 @@ import Tab from "../../Common/Tab/Tab";
 import Tabs from "../../Common/Tab/Tabs";
 import ImportOrganizationKey from "./ImportOrganizationKey";
 import GenerateOrganizationKey from "./GenerateOrganizationKey";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /**
  * This component allows to display the create recover account for the administration
@@ -44,13 +43,6 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
     return {
       processing: false, // component is processing or not
     };
-  }
-
-  /**
-   * Whenever the component is mounted
-   */
-  async componentDidMount() {
-    await this.props.passwordSettingsContext.findPolicies();
   }
 
   /**
@@ -115,8 +107,7 @@ class SelectAccountRecoveryOrganizationKey extends React.Component {
 SelectAccountRecoveryOrganizationKey.propTypes = {
   handleUpdateOrganizationKey: PropTypes.func,
   onClose: PropTypes.func,
-  t: PropTypes.func, // The translation function,
-  passwordSettingsContext: PropTypes.object, // The password policy context
+  t: PropTypes.func, // The translation function
 };
 
-export default withPasswordSettings(withTranslation('common')(SelectAccountRecoveryOrganizationKey));
+export default withTranslation('common')(SelectAccountRecoveryOrganizationKey);

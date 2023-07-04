@@ -34,7 +34,6 @@ import TransferToMobile from "../TransferToMobile/TransferToMobile";
 import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings';
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {withMfa} from '../../../contexts/MFAContext';
-import {withPasswordSettings} from '../../../contexts/PasswordSettingsContext';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -121,7 +120,6 @@ DisplayUserSettingsWorkspace.propTypes = {
   match: PropTypes.any,
   accountRecoveryContext: PropTypes.object, // The account recovery context
   mfaContext: PropTypes.object,
-  passwordSettingsContext: PropTypes.object
 };
 
-export default withAppContext(withAccountRecovery(withPasswordSettings(withMfa(withRouter(DisplayUserSettingsWorkspace)))));
+export default withAppContext(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace))));

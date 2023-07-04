@@ -211,9 +211,8 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see a complexity as Quality if the passphrase is empty', async() => {
-      expect.assertions(2);
+      expect.assertions(1);
       await page.insertPassphrase("");
-      expect(page.notInDictionaryHint.classList.length).toBe(0);
       expect(page.isEmptyPassphrase).toBeTruthy();
     });
   });

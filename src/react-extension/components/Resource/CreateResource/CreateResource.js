@@ -40,8 +40,7 @@ import {
 } from "../../../../shared/constants/inputs.const";
 import debounce from "debounce-promise";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
-import PasswordConfiguration from "../../../../shared/models/passwordPolicy/PasswordConfiguration";
+import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 class CreateResource extends Component {
   constructor() {
@@ -74,6 +73,7 @@ class CreateResource extends Component {
       isPwnedServiceAvailable: true,
       passwordInDictionary: false,
       passwordEntropy: null,
+      generatorSettings: null,
     };
   }
 
@@ -107,7 +107,8 @@ class CreateResource extends Component {
     if (this.isEncryptedDescriptionEnabled()) {
       this.setState({encryptDescription: true});
     }
-    await this.initPasswordPolicies();
+    await this.props.passwordPoliciesContext.findPolicies();
+    this.initPwnedPasswordService();
     this.initPasswordGeneratorConfiguration();
   }
 
@@ -122,35 +123,25 @@ class CreateResource extends Component {
   }
 
   /**
-   * Initialize the password policies
-   * @returns {Promise<void>}
+   * Initialize the pwned password service
    */
-  async initPasswordPolicies() {
-    let passwordPolicies = null;
+  initPwnedPasswordService() {
+    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
 
-    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
-    if (canIUsePasswordPolicies) {
-      await this.props.passwordSettingsContext.findPolicies();
-      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
-    }
-
-    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
-    if (shouldInitPownedService) {
+    if (isPwnedServiceAvailable) {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
+    this.setState({isPwnedServiceAvailable});
   }
 
   /**
-   * Initialize the passwor dgenerator configuration
+   * Initialize the password generator configuration
    */
   initPasswordGeneratorConfiguration() {
-    const passwordOrganisationPolicy = this.props.passwordSettingsContext.getPolicies() || {};
-    const type = this.props.passwordSettingsContext.getPolicies()?.provider || this.props.resourcePasswordGeneratorContext.settings.default_generator;
-    const initialGenerator = this.props.resourcePasswordGeneratorContext.getGeneratorForType(type);
-    const generator = new PasswordConfiguration(initialGenerator, passwordOrganisationPolicy);
-    this.props.resourcePasswordGeneratorContext.changeGenerator(generator);
+    this.setState({
+      generatorSettings: this.props.resourcePasswordGeneratorContext.getSettings()
+    });
   }
 
   /*
@@ -158,24 +149,30 @@ class CreateResource extends Component {
    *  Resource password generator
    * =============================================================
    */
-  get currentGeneratorConfiguration() {
-    return this.props.resourcePasswordGeneratorContext.getCurrentGenerator();
-  }
 
   /**
    * Whenever a new password has been generated through the generator
    * @param previousLastGeneratedPassword The previous last generated password value
    */
   handleLastGeneratedPasswordChanged(previousLastGeneratedPassword) {
-    const currentLastGeneratedPassword = this.props.resourcePasswordGeneratorContext.lastGeneratedPassword;
-    const hasLastGeneratedPasswordChanged = previousLastGeneratedPassword !== currentLastGeneratedPassword;
-    if (hasLastGeneratedPasswordChanged) {
-      const passwordEntropy = SecretGenerator.entropy(currentLastGeneratedPassword);
-      this.setState({
-        password: currentLastGeneratedPassword,
-        passwordEntropy
-      });
+    const lastGeneratedPassword = this.props.resourcePasswordGeneratorContext.lastGeneratedPassword;
+    if (!lastGeneratedPassword) {
+      return;
     }
+
+    const hasLastGeneratedPasswordChanged = previousLastGeneratedPassword !== this.props.resourcePasswordGeneratorContext.consumeLastGeneratedPassword();
+    if (!hasLastGeneratedPasswordChanged) {
+      return;
+    }
+
+    const passwordEntropy = SecretGenerator.entropy(lastGeneratedPassword);
+    const generatorSettings = this.props.resourcePasswordGeneratorContext.getSettings();
+
+    this.setState({
+      password: lastGeneratedPassword,
+      generatorSettings,
+      passwordEntropy
+    });
   }
 
   /*
@@ -304,17 +301,14 @@ class CreateResource extends Component {
    * Evaluate to check if password is in a dictionary.
    * @return {Promise}
    */
-  async evaluatePasswordIsInDictionaryDebounce() {
-    let passwordEntropy = null;
-    if (this.state.isPwnedServiceAvailable && this.pownedService) {
-      passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
-      const result = await this.pownedService.evaluateSecret(this.state.password);
-      const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
-    } else if (this.pownedService === null) {
-      passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
-    }
+  async evaluatePasswordIsInDictionaryDebounce(password) {
+    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
     this.setState({passwordEntropy});
+    if (this.state.isPwnedServiceAvailable && this.pownedService) {
+      const result = await this.pownedService.evaluateSecret(password);
+      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    }
   }
 
   /*
@@ -406,9 +400,8 @@ class CreateResource extends Component {
     } else {
       this.selectAndScrollToResource(resource.id);
     }
-    this.props.context.setContext({passwordEditDialogProps: null});
     this.props.history.push(`/app/passwords/view/${resource.id}`);
-    this.props.onClose();
+    this.handleClose();
   }
 
   /*
@@ -491,7 +484,7 @@ class CreateResource extends Component {
 
     if (name === "password") {
       if (value.length) {
-        this.evaluatePasswordIsInDictionaryDebounce();
+        this.evaluatePasswordIsInDictionaryDebounce(value);
       } else {
         this.setState({
           passwordInDictionary: false,
@@ -538,8 +531,7 @@ class CreateResource extends Component {
       return;
     }
 
-    const configuration = this.currentGeneratorConfiguration;
-    const password = SecretGenerator.generate(configuration);
+    const password = SecretGenerator.generate(this.state.generatorSettings);
     const passwordEntropy = SecretGenerator.entropy(password);
 
     this.setState({
@@ -548,6 +540,8 @@ class CreateResource extends Component {
       passwordInDictionary: false,
       passwordEntropy
     });
+
+    this.evaluatePasswordIsInDictionaryDebounce(password);
   }
 
   /**
@@ -560,9 +554,11 @@ class CreateResource extends Component {
   /**
    * Handle close
    */
-  handleClose() {
-    this.props.onClose();
+  async handleClose() {
     this.props.context.setContext({resourceCreateDialogProps: null});
+    // ensure the secret generator settings are back to the organisation's default in case a new secret is generated later
+    await this.props.resourcePasswordGeneratorContext.resetSecretGeneratorSettings();
+    this.props.onClose();
   }
 
   /**
@@ -718,10 +714,10 @@ class CreateResource extends Component {
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
               }
               {!this.state.isPwnedServiceAvailable && this.pownedService &&
-                    <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
               }
               {this.state.passwordInDictionary  && this.pownedService &&
-                    <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+                <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
               }
             </div>
             <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>
@@ -779,8 +775,8 @@ CreateResource.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
-  passwordSettingsContext: PropTypes.object, // The password policy context
+  passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default  withResourcePasswordGeneratorContext(withPasswordSettings(withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource)))))));
+export default  withResourcePasswordGeneratorContext(withPasswordPolicies(withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource)))))));
 

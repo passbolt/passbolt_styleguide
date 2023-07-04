@@ -120,9 +120,9 @@ class DisplayAdministrationMenu extends React.Component {
    * Can I use the password policy plugin
    * @returns {boolean}
    */
-  get canIUsePasswordPolicy() {
+  get canIUsePasswordPolicies() {
     const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('passwordPolicies');
+    return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
   }
 
   /**
@@ -149,7 +149,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSsoClick = this.handleSsoClick.bind(this);
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
     this.handleRbacsClick = this.handleRbacsClick.bind(this);
-    this.handlePasswordPolicyClick = this.handlePasswordPolicyClick.bind(this);
+    this.handlePasswordPoliciesClick = this.handlePasswordPoliciesClick.bind(this);
   }
 
   /**
@@ -230,10 +230,10 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Handle when the user click on the Password policy settings menu
+   * Handle when the user click on the Password policies settings menu
    */
-  handlePasswordPolicyClick() {
-    this.props.navigationContext.onGoToAdministrationPasswordPolicyRequested();
+  handlePasswordPoliciesClick() {
+    this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
   }
 
   /**
@@ -256,8 +256,8 @@ class DisplayAdministrationMenu extends React.Component {
    * If Password policiy menu is selected
    * @returns {boolean}
    */
-  isPasswordPolicySelected() {
-    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
+  isPasswordPoliciesSelected() {
+    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -362,12 +362,12 @@ class DisplayAdministrationMenu extends React.Component {
               </div>
             </li>
           }
-          {this.canIUsePasswordPolicy &&
+          {this.canIUsePasswordPolicies &&
             <li id="password_policy_menu">
-              <div className={`row  ${this.isPasswordPolicySelected() ? "selected" : ""}`}>
+              <div className={`row  ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
-                    <button className="link no-border" type="button" onClick={this.handlePasswordPolicyClick}><span><Trans>Password Policy</Trans></span></button>
+                    <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span></button>
                   </div>
                 </div>
               </div>

@@ -20,7 +20,6 @@ import RecoverAuthentication from "./components/AuthenticationRecover/RecoverAut
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
-import PasswordSettingsContext from './contexts/PasswordSettingsContext';
 
 /**
  * The recover application served by the browser extension.
@@ -133,20 +132,18 @@ class ExtAuthenticationRecover extends Component {
         {this.isReady() &&
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
           <AuthenticationRecoverContextProvider>
-            <PasswordSettingsContext>
-              <div id="container" className="container page login">
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <RecoverAuthentication/>
-                  </div>
-                  <ChangeLocale/>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
+                <div className="login-form">
+                  <RecoverAuthentication/>
+                </div>
+                <ChangeLocale/>
               </div>
-              <Footer/>
-            </PasswordSettingsContext>
+            </div>
+            <Footer/>
           </AuthenticationRecoverContextProvider>
         </TranslationProvider>
         }

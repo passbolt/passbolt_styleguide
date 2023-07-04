@@ -50,67 +50,47 @@ const STRENGTH = [
   }
 ];
 
-// @todo the tool should use the masks provided by the background page.
-export const MASKS = [
-  {
-    "name": "upper",
-    "label": "A-Z",
-    "characters": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
-    "active": true
+export const MASKS = {
+  mask_upper: {
+    label: "A-Z",
+    characters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
   },
-  {
-    "name": "lower",
-    "label": "a-z",
-    "characters": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
-    "active": true
+  mask_lower: {
+    label: "a-z",
+    characters: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
   },
-  {
-    "name": "digit",
-    "label": "0-9",
-    "characters": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    "active": true
+  mask_digit: {
+    label: "0-9",
+    characters: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
   },
-  {
-    "name": "special_char1",
-    "label": "# $ % & @ ^ ~",
-    "characters": ["#", "$", "%", "&", "@", "^", "~"],
-    "active": true
+  mask_char1: {
+    label: "# $ % & @ ^ ~",
+    characters: ["#", "$", "%", "&", "@", "^", "~"],
   },
-  {
-    "name": "parenthesis",
-    "label": "{ [ ( | ) ] ] }",
-    "characters": ["{", "(", "[", "|", "]", ")", "}"],
-    "active": true
+  mask_parenthesis: {
+    label: "{ [ ( | ) ] ] }",
+    characters: ["{", "(", "[", "|", "]", ")", "}"],
   },
-  {
-    "name": "special_char2",
-    "label": ". , : ;",
-    "characters": [".", ",", ":", ";"],
-    "active": true
+  mask_char2: {
+    label: ". , : ;",
+    characters: [".", ",", ":", ";"],
   },
-  {
-    "name": "special_char3",
-    "label": "' \" `",
-    "characters": ["'", "\"", "`"],
-    "active": true
+  mask_char3: {
+    label: "' \" `",
+    characters: ["'", "\"", "`"],
   },
-  {
-    "name": "special_char4",
-    "label": "/ \\ _ -",
-    "characters": ["/", "\\", "_", "-"],
-    "active": true
+  mask_char4: {
+    label: "/ \\ _ -",
+    characters: ["/", "\\", "_", "-"],
   },
-  {
-    "name": "special_char5",
-    "label": "< * + ! ? =",
-    "characters": ["<", "*", "+", "!", "?", "="],
-    "active": true
+  mask_char5: {
+    label: "< * + ! ? =",
+    characters: ["<", "*", "+", "!", "?", "="],
   },
-  {
-    "name": "emoji",
-    "label": "😘",
+  mask_emoji: {
+    label: "😘",
     // Based on the initial emoticons block (introduce in unicode v6), not updated since 2015 (unicode v8), see https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)
-    "characters": [
+    characters: [
       "😀", "😁", "😂", "😃", "😄", "😅", "😆", "😇", "😈", "😉",
       "😊", "😋", "😌", "😍", "😎", "😏", "😐", "😑", "😒", "😓",
       "😔", "😕", "😖", "😗", "😘", "😙", "😚", "😛", "😜", "😝",
@@ -121,12 +101,30 @@ export const MASKS = [
       "🙆", "🙇", "🙈", "🙉", "🙊", "🙋", "🙌", "🙍", "🙎", "🙏",
     ],
   }
-];
+};
 
 const NUMBER_OF_ASCII_CHARACTER = 128;
 const NUMBER_OF_WORD_CASE = 3;
+const LOOK_ALIKE_CHARS = ["O", "l", "|", "I", "0", "1"];
 
 export const SecretGeneratorComplexity = {
+  /**
+   * Evaluate the maximum entropy a password can be with the given generator configuration.
+   * @param {PasswordGeneratorSettingsDto} passwordGeneratorSettings the password generator settings
+   * @returns {number}
+   */
+  evaluateMaxPasswordEntropy: passwordGeneratorSettings => {
+    const allCharactersUsed = Object.entries(MASKS)
+      // Filter out not selected masks.
+      .filter(([maskName]) => passwordGeneratorSettings[maskName])
+      // Aggregate characters of all selected masks.
+      .reduce((accuumulator, [maskName]) => [...accuumulator, ...MASKS[maskName].characters], [])
+      // Filter out look alike characters if requested by the configuration.
+      .filter(char => !passwordGeneratorSettings.exclude_look_alike_chars || !LOOK_ALIKE_CHARS.includes(char));
+
+    return calculEntropy(passwordGeneratorSettings.length, allCharactersUsed.length);
+  },
+
   /**
    * Calculate a password entropy.
    * @param {string} password The password
@@ -137,7 +135,8 @@ export const SecretGeneratorComplexity = {
     const passwordCharacters = splitter.splitGraphemes(password);
     let maskSize = 0;
 
-    for (const mask of MASKS) {
+    for (const [maskName] of Object.entries(MASKS)) {
+      const mask = MASKS[maskName];
       const useMask = passwordCharacters.some(character => mask.characters.includes(character));
       if (useMask) {
         maskSize += mask.characters.length;
@@ -151,7 +150,7 @@ export const SecretGeneratorComplexity = {
    * Calculate a passphrase entropy.
    * @param {integer} numberOfWords The number of words
    * @param {string} separator The passphrase separator
-   * @returns {Number}
+   * @returns {number}
    */
   entropyPassphrase: (numberOfWords = 0, separator = '') => {
     const words = PassphraseGeneratorWords['en-UK'];
@@ -179,9 +178,9 @@ export const SecretGeneratorComplexity = {
 
 /**
  * Calculate the entropy regarding the given primitives.
- * @param length {int} The number of characters
- * @param maskSize {int} The number of possibility for each character
- * @return {int}
+ * @param {number} length The number of characters
+ * @param {number} maskSize The number of possibility for each character
+ * @return {number}
  */
 function calculEntropy(length, maskSize) {
   return (length && maskSize) ? length * (Math.log(maskSize) / Math.log(2)) : 0;

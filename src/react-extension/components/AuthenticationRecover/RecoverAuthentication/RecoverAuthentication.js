@@ -30,18 +30,11 @@ import RequestAccountRecovery, {RequestAccountRecoveryVariations} from "../../Au
 import CreateGpgKey, {CreateGpgKeyVariation} from "../../Authentication/CreateGpgKey/CreateGpgKey";
 import CheckAccountRecoveryEmail from "../../Authentication/CheckAccountRecoveryEmail/CheckAccountRecoveryEmail";
 import CheckMailBox from "../../Authentication/CheckMailBox/CheckMailBox";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /**
  * The component orchestrates the recover authentication process
  */
 class RecoverAuthentication extends Component {
-  /**
-   * Whenever the component is mounted
-   */
-  async componentDidMount() {
-    await this.props.passwordSettingsContext.findPolicies();
-  }
   /**
    * Render the component
    */
@@ -126,7 +119,6 @@ class RecoverAuthentication extends Component {
 RecoverAuthentication.propTypes = {
   context: PropTypes.any, // The application context
   authenticationRecoverContext: PropTypes.any.isRequired, // The authentication recover context
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withAuthenticationRecoverContext(withPasswordSettings((withTranslation("common")(RecoverAuthentication)))));
+export default withAppContext(withAuthenticationRecoverContext(withTranslation("common")(RecoverAuthentication)));

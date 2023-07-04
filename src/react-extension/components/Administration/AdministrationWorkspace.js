@@ -40,7 +40,7 @@ import DisplaySelfRegistrationAdministration from "./DisplaySelfRegistrationAdmi
 import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
 import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAdministration";
-import DisplayPasswordPolicyAdministration from "./DisplayPasswordPolicyAdministration/DisplayPasswordPolicyAdministration";
+import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -60,11 +60,11 @@ class AdministrationWorkspace extends Component {
   }
 
   /**
-   * If Password policy menu is selected
+   * If Password policies menu is selected
    * @returns {boolean}
    */
-  isPasswordPolicySelected() {
-    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
+  isPasswordPoliciesSelected() {
+    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -171,8 +171,8 @@ class AdministrationWorkspace extends Component {
                   {this.isMfaPolicySelected() &&
                   <DisplayMfaPolicyAdministration/>
                   }
-                  {this.isPasswordPolicySelected() &&
-                  <DisplayPasswordPolicyAdministration/>
+                  {this.isPasswordPoliciesSelected() &&
+                  <DisplayPasswordPoliciesAdministration/>
                   }
                   {this.isUserDirectorySelected() &&
                   <DisplayUserDirectoryAdministration/>

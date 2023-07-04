@@ -29,7 +29,6 @@ import ExternalServiceUnavailableError from "../../../../shared/lib/Error/Extern
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
-import {withPasswordSettings} from '../../../contexts/PasswordSettingsContext';
 
 /**
  * This component displays the user choose passphrase information
@@ -123,7 +122,7 @@ class EnterNewPassphrase extends React.Component {
    */
   async componentDidMount() {
     this.focusOnPassphrase();
-    await this.initPasswordPolicies();
+    this.initPwnedPasswordService();
   }
 
   /**
@@ -134,24 +133,10 @@ class EnterNewPassphrase extends React.Component {
   }
 
   /**
-   * Initialize the password policies
-   * @returns {Promise<void>}
+   * Initialize the pwned password service
    */
-  async initPasswordPolicies() {
-    let passwordPolicies = null;
-
-    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
-    if (canIUsePasswordPolicies) {
-      await this.props.passwordSettingsContext.findPolicies();
-      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
-    }
-
-    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
-    if (shouldInitPownedService) {
-      this.pownedService = new PownedService(this.props.context.port);
-    }
-
-    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
+  initPwnedPasswordService() {
+    this.pownedService = new PownedService(this.props.context.port);
   }
 
   /**
@@ -343,19 +328,17 @@ class EnterNewPassphrase extends React.Component {
                     <li className={this.state.hintClassNames.specialCharacters}>
                       <Trans>It contains special characters (like / or * or %)</Trans>
                     </li>
-                    {
-                      this.pownedService &&  <li className={this.state.hintClassNames.notInDictionary}>
-                        {this.state.isPwnedServiceAvailable  &&
+                    <li className={this.state.hintClassNames.notInDictionary}>
+                      {this.state.isPwnedServiceAvailable  &&
+                        <Trans>It is not part of an exposed data breach</Trans>
+                      }
+                      {!this.state.isPwnedServiceAvailable &&
+                        <Tooltip message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
+                          direction="bottom">
                           <Trans>It is not part of an exposed data breach</Trans>
-                        }
-                        {!this.state.isPwnedServiceAvailable &&
-                         <Tooltip message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
-                           direction="bottom">
-                           <Trans>It is not part of an exposed data breach</Trans>
-                         </Tooltip>
-                        }
-                      </li>
-                    }
+                        </Tooltip>
+                      }
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -385,7 +368,6 @@ EnterNewPassphrase.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withDialog(withUserSettings(withPasswordSettings(withTranslation('common')(EnterNewPassphrase)))));
+export default withAppContext(withDialog(withUserSettings(withTranslation('common')(EnterNewPassphrase))));

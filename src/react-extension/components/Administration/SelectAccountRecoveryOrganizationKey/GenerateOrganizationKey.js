@@ -29,7 +29,7 @@ import ExternalServiceUnavailableError from "../../../../shared/lib/Error/Extern
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
+import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -77,7 +77,8 @@ class GenerateOrganizationKey extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
-    await this.initPasswordPolicies();
+    await this.props.passwordPoliciesContext.findPolicies();
+    this.initPwnedPasswordService();
   }
   /**
    * Bind callbacks methods
@@ -100,24 +101,16 @@ class GenerateOrganizationKey extends React.Component {
   }
 
   /**
-   * Initialize the password policies
-   * @returns {Promise<void>}
+   * Initialize the pwned password service
    */
-  async initPasswordPolicies() {
-    let passwordPolicies = null;
+  initPwnedPasswordService() {
+    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
 
-    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
-    if (canIUsePasswordPolicies) {
-      await this.props.passwordSettingsContext.findPolicies();
-      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
-    }
-
-    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
-    if (shouldInitPownedService) {
+    if (isPwnedServiceAvailable) {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
+    this.setState({isPwnedServiceAvailable});
   }
 
   /**
@@ -526,7 +519,7 @@ GenerateOrganizationKey.propTypes = {
   onUpdateOrganizationKey: PropTypes.func,
   onClose: PropTypes.func,
   t: PropTypes.func, // The translation function
-  passwordSettingsContext: PropTypes.object, // The password policy context
+  passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withDialog(withPasswordSettings(withTranslation('common')(GenerateOrganizationKey))));
+export default withAppContext(withDialog(withPasswordPolicies(withTranslation('common')(GenerateOrganizationKey))));

@@ -20,7 +20,6 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import SetupAuthentication from "./components/AuthenticationSetup/SetupAuthentication/SetupAuthentication";
 import Footer from "./components/Common/Footer/Footer";
 import ChangeLocale from "./components/Internationalisation/ChangeLocale/ChangeLocale";
-import PasswordSettingsContext from './contexts/PasswordSettingsContext';
 
 /**
  * The setup application served by the browser extension.
@@ -119,22 +118,20 @@ class ExtAuthenticationSetup extends Component {
       <AppContext.Provider value={this.state}>
         {this.isReady() &&
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
-          <PasswordSettingsContext>
-            <AuthenticationSetupContextProvider>
-              <div id="container" className="container page login">
-                <div className="content">
-                  <div className="header">
-                    <div className="logo"><span className="visually-hidden">Passbolt</span></div>
-                  </div>
-                  <div className="login-form">
-                    <SetupAuthentication/>
-                  </div>
-                  <ChangeLocale/>
+          <AuthenticationSetupContextProvider>
+            <div id="container" className="container page login">
+              <div className="content">
+                <div className="header">
+                  <div className="logo"><span className="visually-hidden">Passbolt</span></div>
                 </div>
+                <div className="login-form">
+                  <SetupAuthentication/>
+                </div>
+                <ChangeLocale/>
               </div>
-              <Footer/>
-            </AuthenticationSetupContextProvider>
-          </PasswordSettingsContext>
+            </div>
+            <Footer/>
+          </AuthenticationSetupContextProvider>
         </TranslationProvider>
         }
       </AppContext.Provider>

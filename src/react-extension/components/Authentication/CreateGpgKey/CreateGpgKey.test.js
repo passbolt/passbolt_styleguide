@@ -223,13 +223,7 @@ describe("CreateGpgKey", () => {
 
     it('As AN I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
       expect.assertions(2);
-      const mockedPasswordSettingsContext = {
-        findPolicies: jest.fn().mockImplementation(async() => {}),
-        getPolicies: jest.fn().mockImplementation(() => ({
-          policyPassphraseExternalServices: true
-        }))
-      };
-      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP, passwordSettingsContext: mockedPasswordSettingsContext});
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
       const page = new CreateGpgKeyPage(props);
       await waitFor(() => {});
@@ -240,20 +234,14 @@ describe("CreateGpgKey", () => {
 
     it("As AN I should see a complexity as Quality if the passphrase is empty", async() => {
       expect.assertions(2);
-      const mockedPasswordSettingsContext = {
-        findPolicies: jest.fn().mockImplementation(async() => {}),
-        getPolicies: jest.fn().mockImplementation(() => ({
-          policyPassphraseExternalServices: true
-        }))
-      };
-      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP, passwordSettingsContext: mockedPasswordSettingsContext});
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
       const page = new CreateGpgKeyPage(props);
       await waitFor(() => {});
 
       await page.fill("");
 
       expect(page.isEmptyPassphrase).toBeTruthy();
-      expect(page.notInDictionaryHint.classList.length).toBe(0);
+      await waitFor(() => expect(page.isEmptyPassphrase).toBeTruthy());
     });
   });
 });

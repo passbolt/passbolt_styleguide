@@ -12,32 +12,9 @@
  * @since         3.6.0
  */
 
-/**
- * Unit tests on ConfirmSaveAccountRecoverySettings in regard of specifications
- */
 import {waitFor} from "@testing-library/react";
 import SelectAccountRecoveryOrganizationKeyPage from "./SelectAccountRecoveryOrganizationKey.test.page";
-
-import UserSettings from "../../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
-
-function defaultProps() {
-  return {
-    context: {
-      port: {
-        request: async() => 0
-      },
-      userSettings: new UserSettings(userSettingsFixture),
-      siteSettings: {
-        canIUse: () => true
-      }
-    },
-    dialogContext: {
-      open: jest.fn()
-    },
-    onClose: jest.fn(),
-  };
-}
+import {defaultProps} from "./GenerateOrganizationKey.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,7 +24,6 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllTimers();
 });
-
 
 describe('As AD I can generate an ORK', () => {
   /**

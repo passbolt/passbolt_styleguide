@@ -23,7 +23,6 @@ import AccountRecoveryInviteUserSettingPreferenceDialog from '../AccountRecovery
 import {MfaPolicyEnumerationTypes} from '../../../shared/models/mfaPolicy/MfaPolicyEnumeration';
 import {withMfa} from '../../contexts/MFAContext';
 import MfaInviteUserSettingsPreferenceDialog from '../MFA/MfaInviteUserSettingsPreferenceDialog';
-import {withPasswordSettings} from '../../contexts/PasswordSettingsContext';
 
 /**
  * This component listens any event related to passphrase entry dialog actions to perform
@@ -190,7 +189,6 @@ HandleStatusCheck.propTypes = {
   mfaContext: PropTypes.object, // The mfa context
   context: PropTypes.object, // the application context
   location: PropTypes.object, // the current page location
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withRouter(withAppContext(withAccountRecovery(withMfa(withPasswordSettings(withDialog(HandleStatusCheck))))));
+export default withRouter(withAppContext(withAccountRecovery(withMfa(withDialog(HandleStatusCheck)))));

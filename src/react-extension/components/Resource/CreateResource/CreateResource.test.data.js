@@ -5,7 +5,10 @@ import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
 import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
-import {defaultSecretConfigurationSettings} from "../../../../shared/models/passwordPolicy/PasswordConfiguration.test.data";
+import {
+  defaultPasswordPoliciesContext
+} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
+import {defaultResourcePasswordGeneratorcontext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -35,19 +38,17 @@ export function defaultAppContext(appContext) {
  * Default props
  * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultProps() {
-  const generatorsSettings = defaultSecretConfigurationSettings();
-  const props = {
-    resourcePasswordGeneratorContext: {
-      settings: {...generatorsSettings},
-      getGeneratorForType: type => generatorsSettings.generators.find(g => g.type === type),
-      getCurrentGenerator: () => generatorsSettings.generators.find(g => g.type === "passphrase"),
-      changeGenerator: () => {},
-    },
+export function defaultProps(data = {}) {
+  const defaultData = {
+    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorcontext(),
+    passwordPoliciesContext: defaultPasswordPoliciesContext(),
     onClose: () => {},
     dialogContext: {
       open: () => {},
     }
   };
-  return props;
+
+  delete data.passwordPoliciesContext;
+
+  return Object.assign(defaultData, data);
 }

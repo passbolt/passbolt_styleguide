@@ -65,7 +65,8 @@ import HandleStatusCheck from './components/HandleStatusCheck/HandleStatusCheck'
 import MfaContextProvider from "./contexts/MFAContext";
 import AdminSsoContextProvider from "./contexts/AdminSsoContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
-import PasswordSettingsContextProvider from "./contexts/PasswordSettingsContext";
+import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import AdminPasswordPoliciesContextProvider from "./contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -89,7 +90,7 @@ class ExtApp extends Component {
             <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json">
               <RbacContextProvider>
                 <AccountRecoveryUserContextProvider accountRecoveryUserService={accountRecoveryUserService}>
-                  <PasswordSettingsContextProvider>
+                  <PasswordPoliciesContext>
                     <MfaContextProvider>
                       <WorkflowContextProvider>
                         <ActionFeedbackContextProvider>
@@ -199,14 +200,17 @@ class ExtApp extends Component {
                                           "/app/administration/subscription",
                                           "/app/administration/account-recovery",
                                           "/app/administration/sso",
+                                          "/app/administration/password-policies",
                                         ]}>
                                           <AdministrationWorkspaceContextProvider>
                                             <AdminAccountRecoveryContextProvider>
                                               <AdminSubscriptionContextProvider>
                                                 <AdminSsoContextProvider>
-                                                  <ManageDialogs/>
-                                                  <ManageWorkflows/>
-                                                  <AdministrationWorkspace/>
+                                                  <AdminPasswordPoliciesContextProvider>
+                                                    <ManageDialogs/>
+                                                    <ManageWorkflows/>
+                                                    <AdministrationWorkspace/>
+                                                  </AdminPasswordPoliciesContextProvider>
                                                 </AdminSsoContextProvider>
                                               </AdminSubscriptionContextProvider>
                                             </AdminAccountRecoveryContextProvider>
@@ -228,7 +232,7 @@ class ExtApp extends Component {
                         </ActionFeedbackContextProvider>
                       </WorkflowContextProvider>
                     </MfaContextProvider>
-                  </PasswordSettingsContextProvider>
+                  </PasswordPoliciesContext>
                 </AccountRecoveryUserContextProvider>
               </RbacContextProvider>
             </TranslationProvider>

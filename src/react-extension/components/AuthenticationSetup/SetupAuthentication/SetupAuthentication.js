@@ -29,18 +29,11 @@ import DownloadRecoveryKit from "../../Authentication/DownloadRecoveryKit/Downlo
 import ImportGpgKey, {ImportGpgKeyVariations} from "../../Authentication/ImportGpgKey/ImportGpgKey";
 import IntroduceExtension from "../../Authentication/IntroduceExtension/IntroduceExtension";
 import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /**
  * The component orchestrates the setup authentication process
  */
 class SetupAuthentication extends Component {
-  /**
-   * Whenever the component is mounted
-   */
-  async componentDidMount() {
-    await this.props.passwordSettingsContext.findPolicies();
-  }
   /**
    * Render the component
    */
@@ -116,7 +109,6 @@ class SetupAuthentication extends Component {
 SetupAuthentication.propTypes = {
   context: PropTypes.any, // The application context
   authenticationSetupContext: PropTypes.any.isRequired, // The authentication setup context
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withPasswordSettings(withAuthenticationSetupContext(withTranslation("common")(SetupAuthentication))));
+export default withAppContext(withAuthenticationSetupContext(withTranslation("common")(SetupAuthentication)));

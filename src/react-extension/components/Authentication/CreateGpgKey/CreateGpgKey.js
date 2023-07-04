@@ -24,7 +24,7 @@ import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
+
 /**
  * The component display variations.
  * @type {Object}
@@ -130,28 +130,14 @@ class CreateGpgKey extends Component {
    */
   async componentDidMount() {
     this.focusOnPassphrase();
-    await this.initPasswordPolicies();
+    this.initPwnedPasswordService();
   }
 
   /**
-   * Initialize the password policies
-   * @returns {Promise<void>}
+   * Initialize the pwned password service
    */
-  async initPasswordPolicies() {
-    let passwordPolicies = null;
-
-    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
-    if (canIUsePasswordPolicies) {
-      await this.props.passwordSettingsContext.findPolicies();
-      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
-    }
-
-    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
-    if (shouldInitPownedService) {
-      this.pownedService = new PownedService(this.props.context.port);
-    }
-
-    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
+  initPwnedPasswordService() {
+    this.pownedService = new PownedService(this.props.context.port);
   }
 
   /**
@@ -223,7 +209,7 @@ class CreateGpgKey extends Component {
     }
 
     const hintClassNames = this.state.hintClassNames;
-    hintClassNames.notInDictionary = "success";
+    hintClassNames.notInDictionary = "unavailable";
     if (!this.pownedService) {
       this.setState({hintClassNames});
       return;
@@ -239,7 +225,7 @@ class CreateGpgKey extends Component {
     try {
       const result = await this.pownedService.evaluateSecret(passphrase);
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-      hintClassNames.notInDictionary = isPwnedServiceAvailable ? (result.inDictionary ? "error" : "success") : "unavailable";
+      hintClassNames.notInDictionary = result.isPwnedServiceAvailable ? (result.inDictionary ? "error" : "success") : "unavailable";
     } catch (error) {
       // If the service is unavailable don't block the user journey.
       if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
@@ -383,7 +369,6 @@ CreateGpgKey.propTypes = {
     CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
   ]), // Defines how the form should be displayed and behaves
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withPasswordSettings(withTranslation("common")(CreateGpgKey)));
+export default withAppContext(withTranslation("common")(CreateGpgKey));

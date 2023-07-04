@@ -21,7 +21,6 @@ import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 import ConfirmPassphrase from "./ConfirmPassphrase";
 import DownloadRecoveryKit from "./DownloadRecoveryKit";
 import EnterNewPassphrase from "./EnterNewPassphrase";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /**
  * The component orchestrates the setup authentication process
@@ -30,9 +29,8 @@ class ChangeUserPassphrase extends Component {
   /**
    * Whenever the component is mounted
    */
-  async componentDidMount() {
+  componentDidMount() {
     this.initializePassphrase();
-    await this.props.passwordSettingsContext.findPolicies();
   }
 
   /**
@@ -71,6 +69,5 @@ class ChangeUserPassphrase extends Component {
 
 ChangeUserPassphrase.propTypes = {
   userSettingsContext: PropTypes.object, // The user settings context
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
-export default withUserSettings(withPasswordSettings(ChangeUserPassphrase));
+export default withUserSettings(ChangeUserPassphrase);

@@ -23,7 +23,6 @@ import ExternalServiceUnavailableError from "../../../../shared/lib/Error/Extern
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 /**
  * The component display variations.
@@ -106,7 +105,7 @@ class CheckPassphrase extends Component {
    */
   async componentDidMount() {
     this.focusOnPassphrase();
-    await this.initPasswordPolicies();
+    this.initPwnedPasswordService();
   }
 
   /**
@@ -126,24 +125,10 @@ class CheckPassphrase extends Component {
   }
 
   /**
-   * Initialize the password policies
-   * @returns {Promise<void>}
+   * Initialize the pwned password service
    */
-  async initPasswordPolicies() {
-    let passwordPolicies = null;
-
-    const canIUsePasswordPolicies = this.props.context.siteSettings.canIUse('passwordPolicies');
-    if (canIUsePasswordPolicies) {
-      await this.props.passwordSettingsContext.findPolicies();
-      passwordPolicies = this.props.passwordSettingsContext.getPolicies();
-    }
-
-    const shouldInitPownedService = !passwordPolicies || passwordPolicies.policyPassphraseExternalServices;
-    if (shouldInitPownedService) {
-      this.pownedService = new PownedService(this.props.context.port);
-    }
-
-    this.setState({isPwnedServiceAvailable: shouldInitPownedService});
+  initPwnedPasswordService() {
+    this.pownedService = new PownedService(this.props.context.port);
   }
 
   /**
@@ -206,7 +191,6 @@ class CheckPassphrase extends Component {
   handleChangePassphrase(event) {
     const passphrase = event.target.value;
     let passphraseEntropy = null;
-
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       if (this.pownedService) {
@@ -385,6 +369,5 @@ CheckPassphrase.propTypes = {
   ]), // Defines how the form should be displayed and behaves
   canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   onSecondaryActionClick: PropTypes.func, // Callback to trigger when the user clicks on the secondary action link.
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
-export default withAppContext(withPasswordSettings(withTranslation("common")(CheckPassphrase)));
+export default withAppContext(withTranslation("common")(CheckPassphrase));

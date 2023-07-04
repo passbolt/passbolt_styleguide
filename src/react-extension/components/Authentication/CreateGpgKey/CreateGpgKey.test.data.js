@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
+
 import {CreateGpgKeyVariation} from "./CreateGpgKey";
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 
@@ -23,20 +24,11 @@ export function defaultProps(props) {
     context: defaultAppContext({
       siteSettings: {
         canIUse: () => true,
-      },
-      port: {
-        request: () => Promise.resolve(128)
-      }}
+      }},
     ),
     displayAs: CreateGpgKeyVariation.SETUP,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
-    passwordSettingsContext: {
-      findPolicies: jest.fn(async() => {}),
-      getPolicies: jest.fn(() => ({
-        policyPassphraseExternalServices: false
-      }))
-    }
   };
   return Object.assign(defaultProps, props || {});
 }

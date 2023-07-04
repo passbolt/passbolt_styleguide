@@ -7,7 +7,6 @@ import Icon from "../../../shared/components/Icons/Icon";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {withPasswordSettings} from "../../../react-extension/contexts/PasswordSettingsContext";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 500;
@@ -26,17 +25,6 @@ class HomePage extends React.Component {
     this.props.context.focusSearch();
     this.findResources();
     this.getActiveTabUrl();
-    this.initPasswordPolicies();
-  }
-
-  /**
-   * Initialize the password policies
-   * @returns {Promise<void>}
-   */
-  initPasswordPolicies() {
-    if (this.props.context.siteSettings.canIUse('passwordPolicies')) {
-      this.props.passwordSettingsContext.findPolicies();
-    }
   }
 
   initEventHandlers() {
@@ -344,7 +332,6 @@ HomePage.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   t: PropTypes.func, // The translation function
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withRbac(withRouter(withPasswordSettings(withTranslation('common')(HomePage)))));
+export default withAppContext(withRbac(withRouter(withTranslation('common')(HomePage))));

@@ -18,8 +18,8 @@ import {Trans, withTranslation} from "react-i18next";
 import {Link, withRouter} from "react-router-dom";
 import Tabs from "../../../react-extension/components/Common/Tab/Tabs";
 import Tab from "../../../react-extension/components/Common/Tab/Tab";
-import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
-import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
+import ConfigurePassphraseGenerator from "../../../shared/components/GeneratePassword/ConfigurePassphraseGenerator";
+import ConfigurePasswordGenerator from "../../../shared/components/GeneratePassword/ConfigurePasswordGenerator";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Transition from "react-transition-group/cjs/Transition";
@@ -27,34 +27,66 @@ import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
-import PasswordConfiguration from '../../../shared/models/passwordPolicy/PasswordConfiguration';
-import {withPasswordSettings} from "../../../react-extension/contexts/PasswordSettingsContext";
+import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import PownedService from "../../../shared/services/api/secrets/pownedService";
+import debounce from "debounce-promise";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
     this.initEventHandlers();
+    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   get defaultState() {
     return {
-      password: "", // The password
+      password: "",
+      generatorSettings: null,
       isObfuscated: true, // True if the passphrase should not be visible
-      generator: {}, // The current password generator
       copySecretState: "default",
-      processing: false
+      processing: false,
+      isPwnedServiceAvailable: false,
+      passwordEntropy: null,
+      passwordInDictionary: false,
     };
   }
 
   /**
    * Whenever the component has been mounted
    */
-  async componentDidMount() {
-    await this.props.passwordSettingsContext.findPolicies();
-    const type = this.props.passwordSettingsContext.getPolicies()?.provider || this.props.prepareResourceContext.settings.default_generator;
-    const initialGenerator = this.generators.find(generator => generator.type === type);
-    this.handleGeneratorChanged(initialGenerator);
+  componentDidMount() {
+    this.initPwnedPasswordService();
+    const generatorSettings = this.props.prepareResourceContext.getSettings();
+    const password = this.generatePassword(generatorSettings);
+    this.setState({generatorSettings, password});
+  }
+
+  /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+
+    if (isPwnedServiceAvailable) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPwnedServiceAvailable});
+  }
+
+  /**
+   * Evaluate to check if password is in a dictionary.
+   * @return {Promise}
+   */
+  async evaluatePasswordIsInDictionaryDebounce(password) {
+    const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
+    this.setState({passwordEntropy});
+    if (password && this.state.isPwnedServiceAvailable && this.pownedService) {
+      const result = await this.pownedService.evaluateSecret(password);
+      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    }
   }
 
   /**
@@ -65,34 +97,58 @@ class GeneratePasswordPage extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleViewPasswordToggle = this.handleViewPasswordToggle.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
-    this.handleGeneratorChanged = this.handleGeneratorChanged.bind(this);
+    this.handleGeneratorConfigurationChanged = this.handleGeneratorConfigurationChanged.bind(this);
+    this.handlePasswordGeneratorConfigurationChanged = this.handlePasswordGeneratorConfigurationChanged.bind(this);
+    this.handlePassphraseGeneratorConfigurationChanged = this.handlePassphraseGeneratorConfigurationChanged.bind(this);
     this.handleCopyPassword = this.handleCopyPassword.bind(this);
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
-  }
-
-  /**
-   * Returns the possible generators
-   */
-  get generators() {
-    return this.props.prepareResourceContext.settings.generators;
   }
 
   /**
    * Handle when the generator configuration has changed
    * @param generatorConfiguration The generator configuration
    */
-  handleGeneratorChanged(generatorConfiguration) {
-    const passwordOrganisationPolicy = this.props.passwordSettingsContext.getPolicies() || {};
-    const generator = new PasswordConfiguration(generatorConfiguration, passwordOrganisationPolicy);
-    this.generatePassword(generator);
-    this.setState({generator});
+  handleGeneratorConfigurationChanged(generatorSettings) {
+    const password = this.generatePassword(generatorSettings);
+    this.setState({generatorSettings, password});
+  }
+
+  /**
+   * Handle when the password generator configuration has changed
+   * @param generator The generator configuration
+   */
+  handlePasswordGeneratorConfigurationChanged(generator) {
+    const settings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    settings.password_generator_settings = generator;
+    this.handleGeneratorConfigurationChanged(settings);
+  }
+
+  /**
+   * Handle when the passphrase generator configuration has changed
+   * @param generator The generator configuration
+   */
+  handlePassphraseGeneratorConfigurationChanged(generator) {
+    const settings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    settings.passphrase_generator_settings = generator;
+    this.handleGeneratorConfigurationChanged(settings);
+  }
+
+  /**
+   * Handle when the generator type has changed
+   * @param generatorConfiguration The generator configuration
+   */
+  handleGeneratorTypeChanged(generatorType) {
+    const generatorConfiguration = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    generatorConfiguration.default_generator = generatorType;
+    this.handleGeneratorConfigurationChanged(generatorConfiguration);
   }
 
   /**
    * Handle when one wants to generate password
    */
   handleGeneratePasswordButtonClick() {
-    this.generatePassword(this.state.generator);
+    const password = this.generatePassword(this.state.generatorSettings);
+    this.setState({password});
   }
 
   /**
@@ -125,7 +181,7 @@ class GeneratePasswordPage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.setState({processing: true});
-    this.props.prepareResourceContext.onPasswordGenerated(this.state.password, this.state.generator);
+    this.props.prepareResourceContext.onPasswordGenerated(this.state.password, this.state.generatorSettings);
     this.props.history.goBack();
   }
 
@@ -144,10 +200,12 @@ class GeneratePasswordPage extends React.Component {
   /**
    * Generate the password
    * @param {object} generatorConfiguration
+   * @returns {string} the generated password
    */
   generatePassword(generatorConfiguration) {
     const password = SecretGenerator.generate(generatorConfiguration);
-    this.setState({password});
+    this.evaluatePasswordIsInDictionaryDebounce(password);
+    return password;
   }
 
   handleGoBackClick(ev) {
@@ -155,120 +213,125 @@ class GeneratePasswordPage extends React.Component {
     this.props.history.goBack();
   }
 
-  get translate() {
-    return this.props.t;
-  }
-
   isPasswordEmpty() {
     return this.state.password === "";
   }
 
-  hasGeneratorName() {
-    return this.state.generator.name;
+  hasGeneratorConfiguration() {
+    return Boolean(this.state.generatorSettings);
+  }
+
+  get translate() {
+    return this.props.t;
   }
 
   render() {
-    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
+    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
+    const generatorConfiguration = this.state.generatorSettings;
     return (
-      <>
-        {!this.state.loading &&
-        <div className="generate-password">
-          <div className="back-link">
-            <a href="#" className="primary-action" onClick={this.handleGoBackClick}
-              title={this.translate("Cancel the operation")}>
-              <Icon name="chevron-left"/>
-              <span className="primary-action-title"><Trans>Generate password</Trans></span>
-            </a>
-            <Link to="/webAccessibleResources/quickaccess.html" className="secondary-action button-transparent button"
-              title={this.translate("Cancel")}>
-              <Icon name="close"/>
-              <span className="visually-hidden"><Trans>Cancel</Trans></span>
-            </Link>
-          </div>
-          <form onSubmit={this.handleSubmit} noValidate>
-            <div className="form-container">
-              <div className="input-password-wrapper input">
-                <label htmlFor="generate-resource-password-form-password"><Trans>Password</Trans></label>
-                <div className="password-button-inline">
-                  <Password
-                    id="generate-resource-password-form-password"
-                    name="password"
-                    autoComplete="off"
-                    readOnly={true}
-                    placeholder={this.translate("Password")}
-                    preview={true}
-                    value={this.state.password}
-                    onChange={this.handleInputChange}
-                    disabled={this.state.processing}/>
-                  <a onClick={this.handleGeneratePasswordButtonClick} className="password-generate button button-icon">
-                    <Icon name="dice"/>
-                    <span className="visually-hidden"><Trans>Generate</Trans></span>
-                  </a>
-                  <a onClick={this.handleCopyPassword} className="copy-to-clipboard button button-icon">
-                    <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>
-                          <Icon name="copy-to-clipboard"/>
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition in={this.state.copySecretState === "processing"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copySecretState !== "processing" ? "visually-hidden" : ""}`}>
-                          <Icon name="spinner"/>
-                        </span>
-                      )}
-                    </Transition>
-                    <Transition in={this.state.copySecretState === "done"} appear={true} timeout={500}>
-                      {status => (
-                        <span className={`transition fade-${status} ${this.state.copySecretState !== "done" ? "visually-hidden" : ""}`}>
-                          <Icon name="check"/>
-                        </span>
-                      )}
-                    </Transition>
-                    <span className="visually-hidden"><Trans>Copy</Trans></span>
-                  </a>
-                </div>
-                <PasswordComplexity entropy={passwordEntropy}/>
+      <div className="generate-password">
+        <div className="back-link">
+          <a href="#" className="primary-action" onClick={this.handleGoBackClick}
+            title={this.translate("Cancel the operation")}>
+            <Icon name="chevron-left"/>
+            <span className="primary-action-title"><Trans>Generate password</Trans></span>
+          </a>
+          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button"
+            title={this.translate("Cancel")}>
+            <Icon name="close"/>
+            <span className="visually-hidden"><Trans>Cancel</Trans></span>
+          </Link>
+        </div>
+        <form onSubmit={this.handleSubmit} noValidate>
+          <div className="form-container">
+            <div className="input-password-wrapper input">
+              <label htmlFor="generate-resource-password-form-password"><Trans>Password</Trans></label>
+              <div className="password-button-inline">
+                <Password
+                  id="generate-resource-password-form-password"
+                  name="password"
+                  autoComplete="off"
+                  readOnly={true}
+                  placeholder={this.translate("Password")}
+                  preview={true}
+                  value={this.state.password}
+                  onChange={this.handleInputChange}
+                  disabled={this.state.processing}/>
+                <a onClick={this.handleGeneratePasswordButtonClick} className="password-generate button button-icon">
+                  <Icon name="dice"/>
+                  <span className="visually-hidden"><Trans>Generate</Trans></span>
+                </a>
+                <a onClick={this.handleCopyPassword} className="copy-to-clipboard button button-icon">
+                  <Transition in={this.state.copySecretState === "default"} appear={false} timeout={500}>
+                    {status => (
+                      <span className={`transition fade-${status} ${this.state.copySecretState !== "default" ? "visually-hidden" : ""}`}>
+                        <Icon name="copy-to-clipboard"/>
+                      </span>
+                    )}
+                  </Transition>
+                  <Transition in={this.state.copySecretState === "processing"} appear={true} timeout={500}>
+                    {status => (
+                      <span className={`transition fade-${status} ${this.state.copySecretState !== "processing" ? "visually-hidden" : ""}`}>
+                        <Icon name="spinner"/>
+                      </span>
+                    )}
+                  </Transition>
+                  <Transition in={this.state.copySecretState === "done"} appear={true} timeout={500}>
+                    {status => (
+                      <span className={`transition fade-${status} ${this.state.copySecretState !== "done" ? "visually-hidden" : ""}`}>
+                        <Icon name="check"/>
+                      </span>
+                    )}
+                  </Transition>
+                  <span className="visually-hidden"><Trans>Copy</Trans></span>
+                </a>
               </div>
-              {this.hasGeneratorName() &&
-              <Tabs activeTabName={this.state.generator.name}>
-                {this.generators.map(generator =>
-                  <Tab
-                    key={generator.name}
-                    name={generator.name}
-                    type={generator.type}
-                    onClick={() => this.handleGeneratorChanged(generator)}>
-                    {generator.type === "password" &&
-                    <ConfigurePasswordGenerator
-                      configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}/>
-                    }
-                    {generator.type === "passphrase" &&
-                    <ConfigurePassphraseGenerator
-                      configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}/>
-                    }
-                  </Tab>
-                )}
-              </Tabs>
+              <PasswordComplexity entropy={passwordEntropy}/>
+              {!this.state.isPwnedServiceAvailable && this.pownedService &&
+                <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+              }
+              {this.state.passwordInDictionary  && this.pownedService &&
+                <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
               }
             </div>
-            <div className="submit-wrapper input">
-              <button
-                type="submit"
-                className={`button primary big full-width ${this.state.processing ? 'processing' : ''}`}
-                disabled={this.state.processing || this.isPasswordEmpty()}>
-                <Trans>Apply</Trans>
-                {this.state.processing &&
-                  <Icon name="spinner"/>
+            {this.hasGeneratorConfiguration() &&
+            <Tabs activeTabName={generatorConfiguration.default_generator}>
+              <Tab
+                key={"password"}
+                name={"password"}
+                onClick={() => this.handleGeneratorTypeChanged("password")}>
+                {generatorConfiguration.default_generator === "password" &&
+                <ConfigurePasswordGenerator
+                  configuration={generatorConfiguration.password_generator_settings}
+                  onConfigurationChanged={this.handlePasswordGeneratorConfigurationChanged}/>
                 }
-              </button>
-            </div>
-          </form>
-        </div>
-        }
-      </>
+              </Tab>
+              <Tab
+                key={"passphrase"}
+                name={"passphrase"}
+                onClick={() => this.handleGeneratorTypeChanged("passphrase")}>
+                {generatorConfiguration.default_generator === "passphrase" &&
+                <ConfigurePassphraseGenerator
+                  configuration={generatorConfiguration.passphrase_generator_settings}
+                  onConfigurationChanged={this.handlePassphraseGeneratorConfigurationChanged}/>
+                }
+              </Tab>
+            </Tabs>
+            }
+          </div>
+          <div className="submit-wrapper input">
+            <button
+              type="submit"
+              className={`button primary big full-width ${this.state.processing ? 'processing' : ''}`}
+              disabled={this.state.processing || this.isPasswordEmpty()}>
+              <Trans>Apply</Trans>
+              {this.state.processing &&
+                <Icon name="spinner"/>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
     );
   }
 }
@@ -276,9 +339,9 @@ class GeneratePasswordPage extends React.Component {
 GeneratePasswordPage.propTypes = {
   context: PropTypes.any, // The application context
   prepareResourceContext: PropTypes.any, // The password generator context
+  passwordPoliciesContext: PropTypes.object, // The password policy context
   history: PropTypes.any, // The history router
   t: PropTypes.func, // The translation function
-  passwordSettingsContext: PropTypes.object, // The password policy context
 };
 
-export default withRouter(withPrepareResourceContext(withPasswordSettings(withTranslation('common')(GeneratePasswordPage))));
+export default withRouter(withPrepareResourceContext(withPasswordPolicies(withTranslation('common')(GeneratePasswordPage))));

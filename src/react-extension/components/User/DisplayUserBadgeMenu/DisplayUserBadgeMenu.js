@@ -20,7 +20,6 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
-import {withPasswordSettings} from "../../../contexts/PasswordSettingsContext";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -263,10 +262,9 @@ DisplayUserBadgeMenu.propTypes = {
   context: PropTypes.object, // The application context
   navigationContext: PropTypes.any, // The application navigation context
   mfaContext: PropTypes.object, // The mfa context
-  passwordSettingsContext: PropTypes.object, // The mfa context
   accountRecoveryContext: PropTypes.object, // The account recovery context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
 };
 
-export default withAppContext(withNavigationContext(withAccountRecovery(withMfa(withPasswordSettings(withTranslation("common")(DisplayUserBadgeMenu))))));
+export default withAppContext(withNavigationContext(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu)))));
