@@ -1,0 +1,160 @@
+/*
+	Generic Form Item
+
+	Description	: labels and input are wrapped in a <div.text>
+
+	:hover			- subtle hover highlight
+	:active			- inset box shadow
+	.disabled		- grey out to indicate it cannot be used
+*/
+input[type=number],
+input[type=text],
+input[type=date],
+input[type=email],
+input[type=password],
+input[type=search],
+textarea {
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 2rem;
+    color: @input-text-color;
+    background: @input-background;
+    width: 100%;
+    max-width: 64rem;
+    padding: .8rem .8rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    box-shadow: inset 0 0 0 .1rem @input-border;
+    border: none;
+    border-radius: .4rem;
+    box-sizing: border-box;
+    vertical-align: middle;
+
+    // Fields hover
+    &:hover {
+      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
+      background: @input-hover-background;
+      color: @input-hover-text-color;
+    }
+
+    // Fields focus
+    &:focus {
+      box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
+      outline: @outline-default-border;
+      background: @input-focus-background;
+      color: @input-focus-text-color;
+    }
+
+    // Fields pressed
+    &:active {
+      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
+      background: @input-active-background;
+      color: @input-active-text-color;
+    }
+
+    // Disabled fields.
+    &:disabled {
+      cursor: default;
+      box-shadow: inset 0 0 0 .1rem @input-border;
+      opacity: .5;
+      outline: 0;
+      background: @input-disabled-background;
+      color: @input-disabled-text-color;
+    }
+
+    // Placeholder
+    &:placeholder-shown {
+      text-overflow: ellipsis;
+    }
+
+    // Fields pressed
+    &.full-width {
+      max-width: none;
+    }
+}
+
+.input.text {
+  margin-bottom: 1.6rem;
+}
+
+//Edge specific, not to show hide/show button on password as we handle it ourselves
+::-ms-reveal {
+  display: none;
+}
+
+input[type=number] {
+  width: 4.2rem;
+  padding: .5rem .8rem;
+  border-radius: .1rem;
+  -moz-appearance: textfield; // Remove arrows for Firefox
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none; // Remove arrows for Chrome, Safari, Edge, Opera
+    margin: 0;
+  }
+
+  &.in-field {
+    background: @input-infield-background;
+    box-shadow: inset 0 0 0 .1rem @input-infield-border;
+    height: 3rem; // Fix the height of the input on firefox
+    margin-bottom: 0;
+
+    // Fields hover
+    &:hover {
+      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-infield-border;
+      background: @input-hover-background;
+      color: @input-hover-text-color;
+    }
+
+    // Fields focus
+    &:focus {
+      box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
+      background: @input-focus-background;
+      color: @input-focus-text-color;
+    }
+
+    // Fields pressed
+    &:active {
+      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-infield-border;
+      background: @input-active-background;
+      color: @input-active-text-color;
+    }
+
+    // Disabled fields.
+    &:disabled {
+      box-shadow: inset 0 0 0 .1rem @input-infield-border;
+      background: @input-disabled-background;
+      color: @input-disabled-text-color;
+    }
+  }
+}
+
+/*
+	Always visible arrow for Chrome to be coherent with Firefox
+*/
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+/*
+	Textarea Textfield
+*/
+textarea {
+    min-height: 3.4rem;
+    height: 9rem;
+    max-height: 27rem;
+    padding: .7rem 1.1rem .7rem .8rem;
+    resize: vertical;
+    scrollbar-width: thin; // Only works for firefox
+
+    &.full_report {
+      height: 15rem;
+    }
+}
+
+.textarea.large textarea {
+    width: 30rem;
+    height: 9rem;
+}

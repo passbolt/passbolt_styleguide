@@ -1,0 +1,28 @@
+.sidebar-help {
+  padding: 1.6rem;
+  background-color: @notice-background;
+  border-radius: .3rem;
+
+  & + .sidebar-help {
+    margin-top: 1.6rem;
+  }
+
+  &.transparent {
+    background-color: transparent;
+    border: 1px solid @info-panel-border;
+  }
+
+  h3 {
+    margin: 0 0 1.6rem 0;
+    border-bottom: none;
+  }
+
+  p {
+    margin-bottom: 1.6rem;
+  }
+
+  a.button {
+    display: inline-flex;
+    text-align: left;
+  }
+}

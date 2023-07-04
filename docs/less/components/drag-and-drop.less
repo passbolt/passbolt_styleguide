@@ -1,0 +1,58 @@
+.drag-and-drop-wrapper {
+  position: absolute;
+  padding: 1rem;
+  top: -1000px;
+  z-index: 9999999;
+
+  .drag-and-drop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: @drag-background;
+    color: @drag-text-color;
+    padding: .2rem .2rem .2rem .8rem;
+    font-size: 1.55rem;
+    line-height: 2.1rem;
+    border-radius: .3rem;
+
+    svg {
+      --icon-color: @drag-text-color;
+      margin-right: .8rem;
+      margin-top: .1rem;
+    }
+
+    span.message {
+      padding: 0; // Need to override padding to avoid generic message css
+    }
+
+    &.item-1 span.message {
+      margin-right: .6rem;
+    }
+
+    .count {
+      background: @drag-number-background;
+      color: @drag-text-color;
+      padding: 0 .9rem .2rem;
+      margin-left: 1rem;
+      text-align: center;
+      border-radius: .1rem;
+      font-weight: bold;
+    }
+
+    &.item-2 {
+      box-shadow: .2rem .2rem 0 rgb(@shadow-drag-color, 0.6);
+    }
+
+    &.item-3 {
+      box-shadow: .2rem .2rem 0 rgb(@shadow-drag-color, 0.6), .4rem .4rem 0 rgb(@shadow-drag-color, 0.4);
+    }
+
+    &.item-n {
+      box-shadow: .2rem .2rem 0 rgb(@shadow-drag-color, 0.6), .4rem .4rem 0 rgb(@shadow-drag-color, 0.4), .6rem .6rem 0 rgb(@shadow-drag-color, 0.2);
+    }
+  }
+}
+
+.drop-focus {
+    background-color: @tableview-selected-background;
+}

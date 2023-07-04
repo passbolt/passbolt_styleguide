@@ -1,0 +1,161 @@
+/*
+ * Page layout
+ */
+.page {
+  width: 100%;
+  min-width: 32rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  overflow: auto;
+
+  .panel {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: auto;
+
+    &.main {
+      bottom: 3.4rem;
+      height: auto;
+      padding: 0;
+
+      .panel.left {
+        background: @workspace-left-background;
+      }
+    }
+  }
+
+  /* main workspace panels  position depend on how many headers are there */
+  .header.second + .panel.main {
+    // with search only
+    top: 6.875em;
+  }
+
+  .header.third + .panel.main {
+    // with search and action bar
+    top: 16.5rem;
+    border-top: 1px solid @default-border;
+  }
+
+  .header {
+    width: 100%;
+    overflow: hidden;
+
+    /* headers */
+    &.first {
+      // let the height be automatically set
+      // it breaks the greedy nav on firefox otherwise
+      min-height: 4.3rem;
+    }
+
+    &.second {
+      height: 7rem;
+    }
+
+    &.third {
+      height: 5.2rem;
+    }
+  }
+
+  /* Grid */
+  .col1, .col2, .col3, .col2_3 {
+    position: absolute;
+  }
+
+  .col1,
+  .panel.left {
+    width: 18%;
+    box-sizing: border-box;
+  }
+
+  .panel.middle {
+    width: 82%;
+    left: 18%;
+    overflow: hidden;
+    background: @workspace-middle-background;
+  }
+
+  .panel.middle.scroll {
+    overflow-y: scroll;
+  }
+
+  .col2 {
+    width: calc(82% - 35rem);
+    left: 18%;
+  }
+
+  .col3,
+  .panel.right {
+    width: 24%;
+    left: 76%;
+  }
+
+  .col2_3 {
+    width: calc(82% - 1.6rem);
+    left: 18%;
+  }
+
+  /* if the other grid is used
+   don't center the grid inside main panel */
+  .panel.main .grid-responsive-12 {
+    width: 100%;
+    height: calc(100% - 3.9rem); // 100% - the height of the breadcrumb
+    margin-right: 1.6rem;
+    max-width: none;
+    box-sizing: border-box;
+  }
+}
+
+/* hide left column when there is no space */
+@media all and (max-width: 1024px) {
+  .page {
+    .panel.left {
+      display: none;
+    }
+
+    .header.second {
+      .col2 {
+        display: none;
+      }
+
+      .col2_3 {
+        display: none;
+      }
+    }
+
+    .header.third {
+      height: 5.2rem;
+
+      .col1,
+      .col2,
+      .col2_3 {
+        position: relative;
+        float: left;
+        left: auto;
+        width: auto;
+      }
+
+      .col3 {
+        display: none;
+      }
+    }
+
+    .panel.main {
+      .panel.left {
+        display: none;
+      }
+
+      .panel.middle {
+        width: 100%;
+        left: 0;
+      }
+
+      .panel.aside {
+        min-width: auto;
+      }
+    }
+  }
+}

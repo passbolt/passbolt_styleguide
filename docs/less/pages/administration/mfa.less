@@ -1,0 +1,25 @@
+.page.administration {
+  .mfa-settings {
+    .provider-section {
+      .description.enabled {
+        display: none;
+      }
+
+      &.enabled {
+        .description {
+          &.disabled {
+            display: none;
+          }
+          &.enabled {
+            display: block;
+          }
+        }
+      }
+    }
+    .input.password {
+      margin-bottom: 1.6rem;
+      max-width: 64rem;
+      margin-top: 1.2rem;
+  }
+  }
+}

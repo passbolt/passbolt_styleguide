@@ -1,0 +1,31 @@
+/*
+	Custom rules for the webinstaller pages
+	Mostly extra padding here and there
+*/
+.setup {
+  .panel.main {
+    bottom:0;
+  }
+
+  .panel.middle {
+    overflow: auto;
+  }
+
+  /* last row is for cancel / submit buttons */
+  .row.last {
+    padding-top: 1.6rem;
+  }
+
+  h1 {
+    .button {
+      margin-right: 0;
+      padding: 0 0.7rem;
+      font-size: 2.2rem;
+      line-height: 3.2rem;
+    }
+  }
+
+  .button.primary .svg-icon svg {
+    fill: @button-primary-color;
+  }
+}

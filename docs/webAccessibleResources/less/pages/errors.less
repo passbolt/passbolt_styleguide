@@ -1,0 +1,44 @@
+/* Special error page treatment for larger screen */
+@media all and (min-width: 460px) {
+    .page.error {
+
+        .grid {
+            text-align: center;
+            width: 100%;
+            margin-bottom: 2.5em;
+        }
+        &.error-404,
+        &.error-500,
+        &.error-400 {
+            .row {
+                max-width: 400px;
+                margin: auto;
+            }
+        }
+        &.error-500 .grid,
+        &.error-404 .grid,
+        &.error-400 .grid {
+          &:before {
+            font-size: 15em;
+            font-weight: bold;
+            color: @text-error-api-color;
+          }
+        }
+
+        &.error-404 .grid {
+          &:before {
+            content: "404"
+          }
+        }
+        &.error-400 .grid {
+          &:before {
+            content: "400"
+          }
+        }
+        &.error-500 .grid {
+          &:before {
+            content: "500"
+          }
+        }
+    }
+}

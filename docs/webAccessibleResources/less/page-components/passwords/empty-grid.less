@@ -1,0 +1,50 @@
+/* Define state where there are no passwords, and the filter all items */
+.page.password .tableview.empty {
+    .tableview-header {
+        /* No tableview-header */
+        display: none;
+    }
+    .tableview-content {
+        /* No tableview-header */
+        border: 0;
+        top: 0;
+    }
+    &.all_items .tableview-content {
+        /* Tablet version */
+        @media all and (min-width: 780px) {
+            background-position: center 60%;
+            background-size: 10%;
+        }
+        /* Normal screen version */
+        @media all and (min-width: 1024px) {
+            background-position: center 80%;
+            background-size: 20%;
+        }
+    }
+    .empty-content {
+        text-align: center;
+        margin: auto;
+        width: 50%;
+        padding-top: 2em;
+        color: @tableview-content-text-color;
+        h1 {
+            font-size: 1.5em;
+        }
+        p {
+            font-size: 1em;
+            line-height: 1.5em;
+        }
+
+        @media all and (min-width: 780px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            p {
+                font-size: 1.2em;
+                line-height: 1.8em;
+                max-width: inherit;
+            }
+        }
+    }
+}

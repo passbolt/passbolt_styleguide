@@ -1,0 +1,74 @@
+.recover-account-settings, .save-recovery-account-settings-dialog {
+  .input.radio {
+    display: flex;
+    align-items: center;
+    border: 1px solid @default-border;
+    background-color: @account-recovery-card-background;
+    padding: 1.6rem;
+    margin-right: 0;
+
+    label p {
+      font-weight: normal;
+    }
+
+    .radio-text {
+      padding-left: 1.6rem;
+    }
+  }
+
+  .recovery-key-details {
+    border: 1px solid @default-border;
+    border-radius: .3rem;
+    padding: 1.6rem;
+    display: flex;
+    align-items: baseline;
+    background-color: @account-recovery-card-background;
+
+    .table-info {
+      flex: 1 1 auto;
+      margin: 0;
+
+      .label, .value, .empty-value {
+        vertical-align: top;
+        color: @default-text-color;
+      }
+      .value {
+        color: @default-text-color;
+      }
+      .table-button {
+        float: right;
+
+        button {
+          margin: 0;
+        }
+      }
+
+      .empty-value {
+        color: @text-light-color;
+      }
+    }
+  }
+}
+
+.save-recovery-account-settings-dialog {
+  label {
+    padding-bottom: 0;
+  }
+  .radiolist-alt {
+    .input.radio:hover {
+        border: 1px solid @default-border;
+    }
+
+    label {
+      padding: 0;
+    }
+  }
+  .recovery-key-details {
+    margin-top: 1.6rem;
+  }
+  .submit-wrapper .button {
+    &.button-left {
+      background: @default-background;
+    }
+  }
+}

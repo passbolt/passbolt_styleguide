@@ -1,0 +1,44 @@
+.feedback-card {
+  background: @default-background;
+  color: @default-text-color;
+  display:flex;
+  align-items: center;
+  border:1px solid @feedback-card-border;
+  border-radius:3px;
+
+  .illustration {
+    flex: 0 0 11rem;
+    margin: 1.6rem 0 1.6rem 1.6rem;
+  }
+  .additional-information {
+    flex: 1;
+    margin: 1.6rem;
+
+    & > * {
+      margin-bottom: 1.6rem;
+    }
+
+    button.button {
+      margin: 3.2rem 0 0 0;
+    }
+
+    a.button {
+      margin: 1.6rem 0 0 0;
+      float: left;
+    }
+
+    h4.logs-header {
+      padding: 0;
+      margin: 3.2rem 0 0.8rem 0;
+      border: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .feedback-card,
+  .message.animated {
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,0 +1,136 @@
+.input.search {
+    display: flex;
+    align-items: center;
+    border-radius: .4rem;
+    color: @input-text-color;
+    background: @input-background;
+
+    input[type=search] {
+        flex: 1;
+        height: 3.6rem; // For firefox to avoid line height 21px
+        max-width: initial;
+        background: inherit;
+        color: inherit;
+        box-shadow: inset 0 .1rem 0 @input-border, // border top
+        inset 0 -.1rem 0 @input-border, // border bottom
+        inset .1rem 0 0 @input-border; // border left
+        border-radius: .4rem 0 0 .4rem;
+        padding: .8rem 1.1rem;
+        margin: 0;
+
+        // Fields hover
+        &:hover {
+            box-shadow: .1rem 0 0 @input-hover-background, // border right
+              inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), // border left and top lighter
+              .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), // border bottom darker
+              inset 0 .1rem 0 @input-border,  // border top
+              inset 0 -.1rem 0 @input-border, // border bottom
+              inset .1rem 0 0 @input-border; // border left
+            & ~.search-button-wrapper {
+                box-shadow: inset 0 .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), // border top lighter
+                  .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), // border right and bottom darker
+                  inset 0 .1rem 0 @input-border, // border top
+                  inset 0 -.1rem 0 @input-border, // border bottom
+                  inset -.1rem 0 0 @input-border; // border right
+            }
+        }
+
+        // Fields focus
+        &:focus {
+            box-shadow: inset 0 .1rem 0 @input-focus-border, // border top
+              inset 0 -.1rem 0 @input-focus-border, // border bottom
+              inset .1rem 0 0 @input-focus-border; // border left
+            outline: 0;
+
+            & ~.search-button-wrapper {
+                box-shadow: inset 0 .1rem 0 @input-focus-border, // border top
+                  inset 0 -.1rem 0 @input-focus-border, // border bottom
+                  inset -.1rem 0 0 @input-focus-border; // border right
+            }
+        }
+
+        // Fields pressed
+        &:active {
+              box-shadow: inset 0 -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), // border bottom lighter
+                inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), // border left and top darker
+                inset 0 .1rem 0 @input-border, // border top
+                inset 0 -.1rem 0 @input-border, // border bottom
+                inset .1rem 0 0 @input-border; // border left
+
+            & ~.search-button-wrapper {
+                box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), // border right and bottom lighter
+                  inset 0 .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), // border top darker
+                  inset 0 .1rem 0 @input-border, // border top
+                  inset 0 -.1rem 0 @input-border, // border bottom
+                  inset -.1rem 0 0 @input-border; // border right
+            }
+        }
+
+        &:disabled, .disabled {
+            box-shadow: inset 0 .1rem 0 @input-border, // border top
+              inset 0 -.1rem 0 @input-border, // border bottom
+              inset .1rem 0 0 @input-border; // border left
+            & ~.search-button-wrapper {
+                box-shadow: inset 0 .1rem 0 rgba(@input-border, .5), // border top
+                  inset 0 -.1rem 0 rgba(@input-border, .5), // border bottom
+                  inset -.1rem 0 0 rgba(@input-border, .5); // border right
+            }
+        }
+    }
+
+    // Search button wrapper
+    .search-button-wrapper {
+        display: flex;
+        align-items: center;
+        box-shadow: inset 0 .1rem 0 @input-border, // border top
+          inset 0 -.1rem 0 @input-border, // border bottom
+          inset -.1rem 0 0 @input-border; // border right
+        border-radius: 0 .4rem .4rem 0;
+        padding: .3rem .3rem .3rem 0;
+
+        .button {
+            padding: .8rem;
+            width: 4.2rem;
+            height: 3rem;
+        }
+    }
+
+    // Hover input search
+    &:hover {
+      background: @input-hover-background;
+      color: @input-hover-text-color;
+    }
+
+    // Focus within input search
+    &:focus-within {
+        box-shadow: 0 0 .4rem @shadow-focus-color;
+        outline: @outline-default-border;
+        background: @input-focus-background;
+        color: @input-focus-text-color;
+    }
+
+    // Focus within button search
+    &.no-focus:focus-within {
+      box-shadow: none;
+      outline: 0;
+    }
+
+    // Pressed
+    &:active {
+        box-shadow: none;
+        background: @input-active-background;
+        color: @input-active-text-color;
+    }
+
+    // Disabled
+    &.disabled {
+      background: @input-disabled-background;
+      color: @input-disabled-text-color;
+    }
+}
+
+/* remove webkit search input decoration and cancel button */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}

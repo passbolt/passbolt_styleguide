@@ -1,0 +1,96 @@
+.report-widget {
+    &.widget-dashboard-count {
+        position: relative;
+
+        &.items .illustration {
+            background: #FF6C70;
+
+            svg {
+                margin-top: 1.3em;
+            }
+        }
+
+        &.groups .illustration {
+            background: #00BA93;
+
+            svg {
+                margin-top: 0.9em;
+                width: 2.8em;
+                height: 2.8em;
+            }
+        }
+
+        &.users .illustration {
+            background: #5BBBFF;
+
+            svg {
+                margin-top: 1.2em;
+            }
+        }
+
+        .count {
+            .number {
+                display: block;
+                font-size: 2.5em;
+                line-height: 1em;
+            }
+
+            .label {
+                display: block;
+                font-size: 1.25em;
+                line-height: 1em;
+                margin-top: 0.6em;
+            }
+        }
+
+        .illustration {
+            position: absolute;
+            top: 2.5em;
+            right: 2.75em;
+            width: 4.7em;
+            height: 4.7em;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            background: #5BBBFF;
+            text-align: center;
+
+            svg {
+                margin-top: 1.1em;
+                fill: @white;
+                color: @white;
+                height: 2.2em;
+                width: 2.2em;
+            }
+        }
+
+        .since {
+            font-size: 0.8em;
+            margin-top: 1.8em;
+
+            span {
+                color: @green;
+            }
+        }
+    }
+
+    &.widget-dashboard-plots {
+        margin-top: 2em;
+        padding-bottom: 4em;
+
+        &.items .plots .plot-container .bar-container .bar {
+            background: #FF6C70 !important;
+            border: 1px solid #FF6C70 !important;
+        }
+
+    }
+
+    &.widget-login-history {
+        margin-top: 2em;
+        margin-bottom: 3em;
+
+        .chart {
+            margin-top: 2em;
+        }
+    }
+}

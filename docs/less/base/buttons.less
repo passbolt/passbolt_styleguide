@@ -1,0 +1,305 @@
+/*
+	Generic buttons
+*/
+button,
+.button {
+    font-size: 1.5rem;
+    padding: .8rem 1.6rem;
+    line-height: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    outline: 0;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    box-shadow: inset 0 0 0 1px @button-border;
+    color: @default-text-color;
+    background: @button-background;
+    border-radius: .4rem;
+    box-sizing: border-box;
+    min-width: 7rem;
+
+    /* hover */
+    &:hover {
+        box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
+        color: @default-text-color;
+        text-decoration: none;
+        border: none;
+    }
+
+    /* focus */
+    &:focus, &:focus-visible {
+        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        color: @default-text-color;
+        text-decoration: none;
+        border: none;
+        outline: @outline-default-border;
+    }
+
+    /* active */
+    &:active {
+        box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+        background: @button-active-background;
+        color: @default-text-color;
+        text-decoration: none;
+        border: none;
+    }
+
+    /* disabled */
+    &.disabled, &:disabled {
+        cursor: default;
+        background: @button-background;
+        box-shadow: inset 0 0 0 1px @button-border;
+        opacity: .5;
+        outline: 0;
+    }
+
+    /* button-action-icon */
+    &-action-icon {
+      min-width: inherit;
+      width: 4.8rem;
+      height: 3.6rem;
+    }
+
+    /* button-icon */
+    &-icon {
+        min-width: inherit;
+        width: 4.8rem;
+        height: 3.6rem;
+        padding: 0;
+        background: @button-icon-background;
+        box-shadow: inset 0 0 0 1px @button-icon-border;
+
+        /* hover */
+        &:hover {
+          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-icon-border;
+          color: @default-text-color;
+          text-decoration: none;
+          border: none;
+        }
+
+        /* active */
+        &:active {
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-icon-border;
+          background: @button-icon-active-background;
+        }
+
+      svg {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    &-transparent {
+        min-width: inherit;
+        background: transparent;
+        box-shadow: none;
+        border-radius: .3rem;
+
+        /* focus */
+        &:focus {
+          box-shadow: none;
+        }
+
+        /* hover */
+        &:hover {
+            background: @button-transparent-background;
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-transparent-border;
+        }
+
+        /* focus visible */
+        &:focus-visible {
+            background: @button-transparent-background;
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        }
+
+        /* active */
+        &:active {
+            background: @button-transparent-background;
+            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-transparent-border;
+        }
+
+        /* disabled */
+        &:disabled, &.disabled {
+            background: @button-transparent-background;
+            box-shadow: none;
+        }
+    }
+
+    /* processing state */
+    &.processing {
+        background: @button-background;
+        box-shadow: inset 0 0 0 1px @button-border;
+        color: transparent;
+
+        /* hover */
+        &:hover {
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
+        }
+
+        /* focus */
+        &:focus {
+            box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        }
+
+        /* active */
+        &:active {
+            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+        }
+
+        /* disabled */
+        &.disabled, &:disabled {
+            opacity: 1;
+            background: rgba(@button-icon-background, 0.5);
+            box-shadow: inset 0 0 0 .1rem rgba(@button-border, 0.5);
+        }
+
+        .svg-icon.spinner {
+            position: absolute;
+        }
+    }
+
+    /* primary */
+    &.primary {
+        background: @button-primary-background;
+        box-shadow: inset 0 0 0 .1rem @button-primary-border;
+        color: @button-primary-color;
+
+        svg {
+            --icon-color: @icon-primary-color;
+            --icon-background-color: @icon-primary-background-color;
+        }
+
+        &.processing {
+            color: transparent;
+            background: @button-primary-background;
+            box-shadow: inset 0 0 0 1px @button-primary-border;
+
+            &.disabled, &:disabled {
+              background: rgba(@button-primary-background, 0.5);
+            }
+
+            .svg-icon.spinner {
+                --spinner-color: @icon-spinner-primary-color;
+                --spinner-background: rgba(@icon-spinner-primary-background, 0.25);
+            }
+        }
+
+        &:hover {
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-primary-border;
+        }
+
+        &:focus, &:focus-visible {
+            box-shadow: 0 0 .4rem @shadow-focus-color;
+            outline: @outline-primary-border;
+        }
+
+        &:active {
+            background: @button-primary-background;
+            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-primary-border;
+        }
+
+        /* disabled */
+        &.disabled, &:disabled {
+          box-shadow: none;
+          outline: 0;
+        }
+    }
+
+    /* warning */
+    &.warning {
+        background: @button-warning-background;
+        box-shadow: inset 0 0 0 .1rem @button-warning-border;
+        color: @button-warning-color;
+
+        svg {
+            --icon-color: @icon-warning-color;
+            --icon-background-color: @icon-warning-background-color;
+        }
+
+        &.processing {
+            color: transparent;
+            background: @button-warning-background;
+            box-shadow: inset 0 0 0 1px @button-warning-border;
+
+            &.disabled, &:disabled {
+                background: rgba(@button-warning-background, 0.5);
+            }
+
+            .svg-icon.spinner {
+                --spinner-color: @icon-spinner-warning-color;
+                --spinner-background: rgba(@icon-spinner-warning-background, 0.25);
+            }
+        }
+
+        &:hover {
+            box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-warning-border;
+        }
+
+        &:focus {
+            box-shadow: 0 0 .4rem @shadow-focus-color;
+        }
+
+        &:active {
+            background: @button-warning-background;
+            box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-warning-border;
+        }
+
+        /* disabled */
+        &.disabled, &:disabled {
+          box-shadow: none;
+        }
+    }
+}
+
+/* sizes */
+.button.medium {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  padding: .8rem 2.4rem;
+}
+.button.big {
+  font-size: 1.8rem;
+  line-height: 3.2rem;
+  padding: .8rem 3.2rem;
+}
+.button.full-width {
+    width:100%;
+}
+
+/* toggle selected */
+.button-toggle.selected {
+    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+    background: @button-active-background;
+    color: @default-text-color;
+    text-decoration: none;
+    border: none;
+}
+
+/* group */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: .6rem;
+
+    &--nowrap {
+      & > .button {
+          white-space: nowrap;
+      }
+    }
+
+    & > * {
+      min-width: inherit;
+      max-width: 50%;
+      flex-grow: 1;
+      &:last-child {
+        flex: 0;
+      }
+    }
+}

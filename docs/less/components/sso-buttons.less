@@ -1,0 +1,65 @@
+.sso-login-form {
+    &.form-actions, .form-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .sso-login-button {
+        border-radius: 0;
+        background: none;
+        font-weight: bold;
+        padding: 0.8rem 1.2rem;
+
+        span, svg {
+            width: 2.1rem;
+            height: 2.1rem;
+            margin-right: 1.2rem;
+        }
+
+        &.azure {
+            background-color: @sso-background-azure;
+            color: @sso-text-azure;
+            box-shadow: inset 0 0 0 1px @sso-border-azure;
+            &:hover {
+                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @sso-border-azure;
+            }
+            &:focus, &:focus-visible {
+                box-shadow: 0 0 .4rem @sso-shadow-focus-color-azure, inset 0 0 0 1px @sso-button-focus-border-azure;
+            }
+            &:active {
+                box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @sso-border-azure;
+            }
+        }
+
+        &.google {
+            background-color: @sso-background-google;
+            color: @sso-text-google;
+            box-shadow: inset 0 0 0 1px @sso-border-google;
+            padding: 0.1rem 1.2rem 0.1rem 0.1rem;
+            border-radius: 0.2rem;
+            &:hover {
+                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @sso-border-google;
+            }
+            &:focus, &:focus-visible {
+                box-shadow: 0 0 .4rem @sso-shadow-focus-color-google, inset 0 0 0 1px @sso-button-focus-border-google;
+            }
+            &:active {
+                box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @sso-border-google;
+            }
+            .provider-logo {
+                background-color: @sso-logo-background-google;
+                width: 3.3rem;
+                height: 3.3rem;
+                margin-right: 1.2rem;
+
+                svg {
+                    width: 2.1rem;
+                    height: 2.1rem;
+                    margin: 0.6rem;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,340 @@
+/**
+ * Sidebar
+ */
+.panel.aside {
+    position: absolute;
+    right: 1.6rem;
+    min-width: 35rem;
+    width: 30%;
+    bottom: 0;
+    height: 100%;
+    background: @info-panel-background;
+    box-shadow: 0 0 1rem 0 rgba(0,0,0, @shadow-opacity-info-panel);
+
+    /* Controls */
+    .sidebar-header {
+        padding: 1.6rem;
+        .clearfix();
+        h3 {
+            float: left;
+            width: 70%;
+            margin: 0 0 0 1.6rem;
+            display: table-cell;
+            vertical-align: middle;
+            border: 0;
+            .title-wrapper {
+                width: 100%;
+                line-height: 2.7rem;
+                font-size: 2rem;
+                .name {
+                    max-width: 85%;
+                    float: left;
+                    .ellipsis();
+                }
+                .title-link {
+                  margin-left: .8rem;
+                  display: inline-block;
+                  .svg-icon svg{
+                    width: 1.1rem;
+                    height: 100%;
+                  }
+                  &:hover {
+                    --icon-color: @text-focus-color;
+                  }
+                }
+            }
+            .subtitle {
+                font-size: 1.2rem;
+                line-height: 1.6rem;
+                color: @info-panel-header-subtitle-text-color;
+                font-weight: 400;
+                display: block;
+                .ellipsis();
+            }
+        }
+        .teaser-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            float: left;
+            width: 4.2rem;
+            height: 4.2rem;
+            background: @info-panel-header-icon-background;
+            text-align: center;
+            border-radius: 50%;
+            .svg-icon {
+                --icon-color: @info-panel-header-icon-color;
+                &.exclamation {
+                    svg {
+                        width: 1.2rem;
+                        height: 1.2rem;
+                        margin-top: 2.6rem;
+                        margin-left: 3rem;
+                        --icon-exclamation-background-color: @icon-exclamation-required-color;
+                    }
+                }
+                svg {
+                    width: 2rem;
+                    height: 100%;
+                }
+            }
+        }
+        .dialog-close {
+            position: absolute;
+            right: 1.6rem;
+            top: 1.6rem;
+            padding: 0;
+        }
+    }
+
+    .sidebar-section {
+        border-top:1px solid @info-panel-section-border;
+        font-size: 1.4rem;
+        background: @info-panel-section-header-background;
+
+        .accordion-header {
+          padding: 1.6rem;
+          h4 {
+              margin:0;
+              display:block;
+              button {
+                font-size: 1.6rem;
+                font-weight: 700;
+                line-height: 2.1rem;
+                width: 100%;
+                justify-content: space-between;
+              }
+            }
+        }
+
+
+        .accordion-content {
+            padding: 1.6rem;
+            background: @info-panel-section-content-background;
+
+            // button displayed next to caret that open/close
+            .section-action {
+                display: flex;
+                justify-content: center;
+                font-size: 1.6rem;
+                position:absolute;
+                margin-top: -5.1rem;
+                right: 4.2rem;
+                z-index:401;
+                border:0;
+                padding: 0;
+                width: 2.2rem;
+                height: 2rem;
+
+                .svg-icon.plus-circle svg {
+                    width: 1.6rem;
+                    height: 1.6rem;
+                }
+            }
+
+            .empty-content {
+                font-size: 1.4rem;
+                line-height: 1.9rem;
+                border: 0;
+            }
+        }
+    }
+
+    /** SECTIONS **/
+    .detailed-information {
+      li {
+        .clearfix();
+        font-size: 1.4rem;
+        line-height: 1.9rem;
+        margin-bottom: .8rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        span {
+          .ellipsis();
+        }
+        .label {
+          width: 30%;
+          display: inline-block;
+          margin-right: 10%;
+          float: left;
+        }
+        .value {
+          width: 60%;
+          display: inline-block;
+          float: left;
+          button {
+            font-size: 1.4rem;
+            font-weight: 400;
+            line-height: 1.9rem;
+            max-width: 100%;
+
+            &.folder-link {
+              display: flex;
+              border: 0;
+              .svg-icon {
+                svg {
+                  width: 100%;
+                  height: 1.6rem;
+                }
+              }
+            }
+          }
+        }
+        &.password {
+          .value {
+            .secret {
+              float: left;
+              max-width: calc(100% - 3rem); // password field - password preview button
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+          .password-view {
+            display: flex;
+            align-items: center;
+            width: 2.2rem;
+            height: 2rem;
+            margin: 0 0 0 .8rem;
+            padding: 0;
+            float: left;
+
+            .svg-icon svg {
+              width: 1.4rem;
+              height: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    .detailed-account-recovery {
+      li {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: .8rem;
+        .label {
+          width: 45%;
+          margin-right: 5%;
+        }
+        .value {
+          width: 50%;
+        }
+      }
+    }
+
+    .description-content {
+      word-wrap: break-word;
+      white-space: pre-line;
+    }
+
+    .description-editor {
+        .actions {
+            .description-lock {
+                margin-right: auto;
+
+                button {
+                  border: 0;
+                  &:hover {
+                    --icon-color: @text-focus-color;
+                  }
+                }
+            }
+        }
+    }
+
+    .key-information {
+      .fingerprint .value {
+        height: 4rem;
+      }
+      textarea {
+        min-height: 40rem;
+        line-height: normal;
+        margin-top: 0.8rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      li {
+        .clearfix();
+        span {
+          .ellipsis();
+        }
+        .label {
+          width: 30%;
+          display: inline-block;
+          margin-right: 10%;
+          float: left;
+          height: 1.8em;
+        }
+        .value {
+          width: 60%;
+          display: inline-block;
+          float: left;
+          height: 1.8em;
+        }
+        &.key {
+          button.copy-public-key {
+            height: 2.5rem;
+            svg {
+              width: inherit;
+              height: inherit;
+            }
+          }
+        }
+      }
+    }
+
+    /** Sidebar forms **/
+    .form-content {
+        .clearfix();
+
+        label {
+            display: none;
+        }
+        textarea {
+            font-size: 1.4rem;
+        }
+        p {
+          margin: 0;
+        }
+
+        /* submit / cancel */
+        .actions {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-top: 1.6rem;
+
+          .cancel {
+            margin-left: auto;
+            margin-right: 1.6rem;
+          }
+        }
+
+        .message.notice {
+            padding: 1rem;
+            margin: 1.6rem -1.6rem 0 -1.6rem;
+            font-size: 1.2rem;
+            line-height: 1.6rem;
+            background: @info-panel-section-notice-background;
+
+            span:last-child {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+/* place sidebar on top of everything when there is no space */
+@media all and (max-width: 1024px) {
+    .panel.aside {
+        position: absolute;
+        right: 0;
+        width: 100%;
+        bottom: 0;
+        top: 0;
+        height: 100%;
+    }
+}

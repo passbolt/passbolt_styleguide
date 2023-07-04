@@ -1,0 +1,126 @@
+.home .page-row.usp {
+    padding-bottom: 3em;
+    .tile {
+        border: 0;
+        padding-left: 0;
+        padding-right: 0;
+
+        i {
+            font-size: 1em;
+            float: left;
+            display: block;
+            width: 90px;
+            height: 90px;
+
+            &.docker {
+                background: transparent url('@{images}/third_party/docker_90.png') left center no-repeat;
+                background-size: 60px auto;
+            }
+            &.team {
+                background: transparent url('@{images}/papericon/email_90.png') left center no-repeat;
+                background-size: 60px auto;
+            }
+            &.gnupg {
+                background: transparent url('@{images}/third_party/gnupg_90.png') left center no-repeat;
+                background-size: 60px auto;
+            }
+            &.opensource {
+                background: transparent url('@{images}/third_party/opensource_90.png') left center no-repeat;
+                background-size: 60px auto;
+            }
+            &.json {
+                background: transparent url('@{images}/third_party/json_90.png') left center no-repeat;
+                background-size: 60px auto;
+            }
+            &.jenkins {
+                background: transparent url('@{images}/third_party/jenkins_90.png') left center no-repeat;
+                background-size: 60px auto;
+            }
+        }
+    }
+    .call-to-action {
+        text-align: center;
+        margin-top: 1em;
+        margin-bottom: 2em;
+        font-size: 1.125em;
+    }
+}
+
+/* larger screen */
+@media all and (min-width: 440px) {
+    .page-row.usp {
+        .tile {
+            padding: 1em 0 .5em 0;
+
+            .tile-teaser {
+                i {
+                    font-size: 1em;
+                    display: block;
+                    margin: auto;
+                    height: 90px;
+                    width: 100%;
+
+                    &.docker {
+                        background: transparent url('@{images}/third_party/docker_90.png') center center no-repeat;
+                        background-size: 90px auto;
+                    }
+                    &.team {
+                        background: transparent url('@{images}/papericon/email_90.png') center center no-repeat;
+                        background-size: 60px auto;
+                    }
+                    &.gnupg {
+                        background: transparent url('@{images}/third_party/gnupg_90.png') center center no-repeat;
+                        background-size: 80px auto;
+                    }
+                    &.opensource {
+                        background: transparent url('@{images}/third_party/opensource_90.png') center center no-repeat;
+                        background-size: 70px auto;
+                    }
+                    &.json {
+                        background: transparent url('@{images}/third_party/json_90.png') center center no-repeat;
+                        background-size: 70px auto;
+                    }
+                    &.jenkins {
+                        background: transparent url('@{images}/third_party/jenkins_90.png') center center no-repeat;
+                        background-size: 80px auto;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* CSS for serving the retina image to devices with a high "device-pixel-ratio": */
+@media only screen and (-moz-min-device-pixel-ratio: 1.5) and (min-width: 440px), only screen and (-o-min-device-pixel-ratio: 3/2) and (min-width: 440px), only screen and (-webkit-min-device-pixel-ratio: 1.5) and (min-width: 440px), only screen and (min-devicepixel-ratio: 1.5) and (min-width: 440px), only screen and (min-resolution: 1.5dppx) and (min-width: 440px) {
+
+    .home .page-row.usp {
+        .tile .tile-teaser i {
+            background-size: 90px auto;
+
+            &.docker {
+                background: transparent url('@{images}/third_party/docker_180.png') center center no-repeat;
+                background-size: 80px auto;
+            }
+            &.team {
+                background: transparent url('@{images}/papericon/email_90.png') center center no-repeat;
+                background-size: 70px auto;
+            }
+            &.gnupg {
+                background: transparent url('@{images}/third_party/gnupg_180.png') center center no-repeat;
+                background-size: 80px auto;
+            }
+            &.opensource {
+                background: transparent url('@{images}/third_party/opensource_180.png') center center no-repeat;
+                background-size: 80px auto;
+            }
+            &.json {
+                background: transparent url('@{images}/third_party/json_180.png') center center no-repeat;
+                background-size: 80px auto;
+            }
+            &.jenkins {
+                background: transparent url('@{images}/third_party/jenkins_180.png') center center no-repeat;
+                background-size: 80px auto;
+            }
+        }
+    }
+}

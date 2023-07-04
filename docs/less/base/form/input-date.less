@@ -1,0 +1,25 @@
+.date-wrapper .button-inline {
+    position: relative;
+    .svg-icon {
+        position: absolute;
+        right: 1.2rem;
+        top: 0.9rem;
+        width: 1.6rem;
+        height: 1.6rem;
+        pointer-events: none;
+        background: @input-background;
+    }
+
+    input[type=date] {
+        height: 3.6rem;
+        position: relative;
+
+        &::-webkit-calendar-picker-indicator {
+            opacity: 0;
+        }
+
+        &.empty {
+            color: fade(@default-text-color, 50%);
+        }
+    }
+}

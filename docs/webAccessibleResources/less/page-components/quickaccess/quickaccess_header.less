@@ -1,0 +1,32 @@
+.quickaccess {
+    .quickaccess-header {
+        .clearfix();
+        background: @quickaccess-header-background;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        margin: 0;
+
+        .logo-svg {
+            margin: 1.6rem;
+            flex: 1 1 auto;
+
+            a {
+                display:block;
+
+                border:0;
+                --icon-color: @icon-logo-color;
+                width: 10rem;
+                height: 1.75rem;
+            }
+
+            h1 {
+              display: none;
+            }
+        }
+
+        .option-link {
+            margin-right: 1.6rem;
+        }
+    }
+}

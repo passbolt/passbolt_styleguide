@@ -1,0 +1,53 @@
+.home .page-row.api {
+    color: @default-background;
+    background: transparent url('@{images}/background/blueprint.jpg') center center repeat;
+    text-shadow: 1px 1px @black;
+    padding-bottom: 4em;
+    h2 {
+        text-align: left;
+    }
+}
+
+/* even larger screen */
+@media all and (min-width: 800px) {
+    .home .page-row.api {
+        height: 525px;
+        margin: 0;
+        padding: 0;
+
+        h2 {
+            margin-top: 2em;
+        }
+        .api-wrapper {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            position: absolute;
+            height: 525px;
+            background: transparent url('@{images}/diagrams/sequence_diagram_gpg_authenticate.png') 200% 7em no-repeat;
+            background-size: 75% auto;
+            -moz-box-shadow: inset 0 16px 16px -16px @black, inset 0 -16px 16px -16px @black;
+            -webkit-box-shadow: inset 0 16px 16px -16px @black, inset 0 -16px 16px -16px @black;
+            box-shadow: inset 0 16px 16px -16px @black, inset 0 -16px 16px -16px @black;
+        }
+    }
+}
+
+/* my kind of screen */
+@media all and (min-width: 1280px) {
+    .home .page-row.api {
+        .api-wrapper {
+            background-size: 100% auto;
+            background: transparent url('@{images}/diagrams/sequence_diagram_gpg_authenticate.png') 130% 7em no-repeat;
+        }
+    }
+}
+
+/* hold on a sec kind of screen */
+@media all and (min-width: 1500px) {
+    .home .page-row.api {
+        .api-wrapper {
+            background: transparent url('@{images}/diagrams/sequence_diagram_gpg_authenticate.png') 90% 7em no-repeat;
+        }
+    }
+}

@@ -1,0 +1,94 @@
+.flex-container.outer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 !important;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  flex:0 100%;
+
+  &.highlighted {
+    background: @dialog-permission-updated-background !important;
+  }
+
+  &.header {
+    background: @tableview-header-background !important;
+  }
+
+  &:nth-child(odd) {
+    background: @tableview-even-background;
+  }
+
+  &:hover {
+    background: @tableview-hover-background;
+  }
+
+  &:nth-child(odd):hover {
+    background: @tableview-hover-background;
+  }
+}
+
+.flex-item {
+  box-sizing: border-box;
+  flex:0 23%;
+  width: calc(23% - 10px);
+  margin: 0 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+
+  >span {
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  >label {
+    width: auto;
+    padding: 5px 0;
+  }
+
+  &:not(:first-of-type)>label {
+    text-align: center;
+  }
+
+  &.first {
+    flex:0 50%;
+    width: calc(50% - 10px);
+  }
+  &.full-width{
+    flex:0 100%;
+  }
+
+  .select-container {
+    margin:auto;
+    margin-bottom: 2px;
+    margin-top: 2px;
+  }
+}
+
+.inner.level-2 .flex-item {
+  &.first {
+    padding-left:10px;
+    width: calc(33.33% - 30px); /* subtracting margin and border widths */
+  }
+}
+
+.inner.level-3 .flex-item {
+  &.first {
+    padding-left:20px;
+    width: calc(33.33% - 40px); /* subtracting margin and border widths */
+  }
+}
+
+.flex-item.border-right {
+  border-right: 1px solid @default-border;
+}
+
+@media all and (max-width: 768px) {
+  .select-container.medium {
+    width: 100%;
+  }
+}

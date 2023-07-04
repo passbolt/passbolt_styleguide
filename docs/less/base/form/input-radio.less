@@ -1,0 +1,160 @@
+.radiolist, .radiolist-alt {
+    margin-bottom: 1.2rem;
+
+    & > label {
+      margin-bottom: 1.2rem;
+    }
+
+    .input.radio {
+      display: flex;
+      align-items: center;
+      margin-right: 1.6rem;
+
+      input[type=radio] {
+        -webkit-appearance: none;
+        appearance: none;
+        display: grid;
+        place-content: center;
+        cursor: pointer;
+        width: 1.4rem;
+        height: 1.4rem;
+        background: @input-radio-background;
+        border: 1px solid @input-radio-border;
+        border-radius: 1rem;
+        box-sizing: border-box;
+        margin: 0;
+
+        & + label {
+          flex: 1;
+          font-weight: normal;
+          display: inline-block;
+          cursor: pointer;
+          font-size: 1.5rem;
+          line-height: 2rem;
+          margin: 0 0 0 1.2rem;
+          .ellipsis();
+        }
+
+        // Radio hover
+        &:hover {
+          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-radio-border;
+          border: none;
+          background: @input-hover-background;
+        }
+
+        // Radio dot hover
+        &:hover:before {
+          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black);
+          border: none;
+        }
+
+        // Radio focus-visible
+        &:focus-visible {
+          box-shadow: 0 0 .4rem @shadow-focus-color;
+          border: 1px solid @input-radio-focus-border;
+          outline: @outline-default-border;
+
+          + label {
+            background: @input-focus-background;
+            color: @input-focus-text-color;
+          }
+        }
+
+        // Radio pressed
+        &:active {
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-radio-border;
+          border: none;
+
+          + label {
+            background: @label-active-background;
+            color: @label-active-text-color;
+          }
+        }
+
+        // Radio dot pressed
+        &:active:before {
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
+          border: none;
+        }
+
+        // Disabled state label.
+        &:disabled + label {
+          opacity: .5;
+          cursor: auto;
+        }
+
+        // Disabled radio.
+        &:disabled {
+          cursor: auto;
+          background: @input-radio-disabled-background;
+          border: 1px solid @input-radio-disabled-border;
+          box-shadow: none;
+          outline: 0;
+
+          &:before{
+            box-shadow: none;
+            background: @input-radio-dot-disabled-background;
+          }
+        }
+
+        // Radio dot
+        &:before {
+          content: "";
+          width: .8rem;
+          height: .8rem;
+          border-radius: 1rem;
+          background: @input-radio-dot-background;
+          transform: scale(0);
+          transition: 120ms transform ease-in-out;
+        }
+
+        // Dot animation
+        &:checked:before {
+          transform: scale(1);
+        }
+      }
+    }
+}
+
+.radiolist-alt {
+
+  .input.radio {
+    border: 1px solid @input-radio-list-border;
+    border-radius: 3px;
+    background-color: @input-radio-list-background;
+    padding: 1.6rem;
+    margin-top: 1.6rem;
+
+    &.checked {
+      border: 1px solid @input-radio-list-focus-border;
+      &:hover {
+        border:1px solid @input-radio-list-focus-border;
+      }
+    }
+    &:hover {
+      border:1px solid @input-radio-list-hover-border;
+    }
+
+    label {
+      margin-left: 1.6rem;
+
+      .name {
+        margin: 0;
+        display:block;
+        font-size: 1.6rem;
+      }
+
+      .info {
+        margin: 0;
+        font-weight: normal;
+        font-size: 1.3rem;
+        display:block;
+        white-space: pre-wrap;
+
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}

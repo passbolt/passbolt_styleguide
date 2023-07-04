@@ -1,0 +1,36 @@
+table.table-info,
+table.table-info.vertical {
+    margin-top: 1.2rem;
+    border-collapse: separate;
+
+    td {
+        line-height: 2.9rem;
+        padding-right: clamp(1.6rem, calc(.4rem + 4vw), 20rem);
+
+        &:first-child {
+          color: @text-lighter-color;
+        }
+
+        &.warning {
+            background: @table-warning-background;
+        }
+        &.error {
+            background: @table-error-background;
+        }
+        .alt.side {
+            color: @text-info-color;
+            float: right;
+        }
+        .alt.side:before {
+            content: "\0028"; /* unicode character ( */
+        }
+        .alt.side:after {
+            content: "\0029"; /* unicode character ) */
+        }
+    }
+
+    td + td {
+        padding-right: 0;
+    }
+
+}

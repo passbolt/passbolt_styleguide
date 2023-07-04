@@ -1,0 +1,116 @@
+body {
+  overflow: hidden;
+}
+
+.quickaccess {
+    .clearfix();
+    background:@default-background;
+    box-sizing: border-box;
+    width:38rem;
+
+    h2 {
+        margin:0;
+        font-size:1.5rem;
+        font-weight: normal;
+        padding: .4rem 1.6rem;
+        line-height: 2rem;
+    }
+
+    .digit {
+        color: @input-passwords-numbers-color;
+    }
+
+    .special-char {
+        color: @input-passwords-special-chars-color;
+    }
+
+    .secondary-action, .option-link, .property-action {
+        padding: 0;
+        width: 2.4rem;
+        height: 2.4rem;
+    }
+    .transition {
+      display: flex;
+      align-items: center;
+    }
+    .back-link {
+        .clearfix();
+        display: flex;
+        align-items: center;
+        background: @quickaccess-back-link-background;
+        line-height: 2rem;
+
+        .primary-action  {
+            display:block;
+            border:0;
+            flex: 1;
+            padding: 1.6rem;
+            .ellipsis();
+
+            .svg-icon {
+              margin-right: 1.6rem;
+            }
+            .primary-action-title {
+                font-size: 1.5rem;
+            }
+        }
+        .secondary-action {
+            margin-right: 1.6rem;
+        }
+    }
+
+    .submit-wrapper {
+        .clearfix();
+        background: @quickaccess-footer-background;
+        padding: 1.6rem;
+        display: flex;
+        flex-direction: column;
+
+        .button.primary.big {
+          line-height: 2.3rem;
+
+          & + a {
+            margin: 1.6rem auto 0;
+          }
+        }
+        .cancel {
+            padding-right: 3rem;
+            border: none;
+            color: @default-text-color;
+            &:hover {
+              color: @text-focus-color;
+            }
+        }
+        &.flex-row-end {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .svg-icon.spinner {
+            margin: 0.25rem;
+        }
+
+        .error-message {
+            margin-top: 1.6rem;
+            margin-bottom: 0;
+        }
+    }
+    .processing-wrapper {
+        background-color: @quickaccess-header-background;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding:.8rem 3rem 1.6rem 2.6rem;
+
+        .processing-text {
+            position: relative;
+            margin-left: .8rem;
+        }
+    }
+
+    .error-message {
+        color: @text-error-color;
+    }
+}

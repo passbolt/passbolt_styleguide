@@ -1,0 +1,73 @@
+//
+// FONT FAMILIES
+//
+/* opensans */
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url('@{fonts}/opensans-regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url('@{fonts}/opensans-bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Passbolt';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Passbolt'), local('Passbolt'), url('@{fonts}/passbolt.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Open Sans', Verdana, sans-serif;
+}
+.code {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+//
+// SIZE
+//
+html {
+    font-size: 62.5%; /* =10px */
+}
+body {
+    font-size: 1.4rem; /* =14px */
+    line-height: 1.9rem;
+}
+h1 {
+    font-size: 2.2rem;
+    line-height: 3.2rem;
+}
+h2 {
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+}
+h3 {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  border-bottom: 1px solid @default-border;
+}
+p {
+    font-size: 1.4rem;
+    line-height: 1.9rem;
+    max-width: 64rem;
+    margin: 0;
+}
+code {
+    font-size: 1.1rem;
+}
+
+// force font family to avoid side effect on different browser
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: 'Open Sans', Verdana, sans-serif;
+}

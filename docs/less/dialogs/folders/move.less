@@ -1,0 +1,79 @@
+.move-folder-dialog {
+    .folders-list-wrapper {
+        border-bottom: 1px solid @default-border;
+        border-top: 1px solid @default-border;
+    }
+    .breadcrumbs {
+        height:auto;
+        padding-bottom:.625em;
+        font-size:1.2em;
+        padding-top:.5em;
+        .clearfix();
+
+        button {
+            float:left;
+            width:1.5em;
+            padding:.125em .25em .25em .25em;
+            margin-left:.5em;
+            margin-right:0;
+
+        }
+
+        ul {
+            box-sizing: border-box;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            overflow:hidden;
+            float:left;
+            width: calc(100% - 5em);
+            margin-top:-.125em;
+        }
+    }
+    .folders-list {
+        padding: 0;
+        max-height: 19em;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+        .folders-list-item {
+            user-select: none;
+            padding: 0.75em 1.25em 0.75em 1.5em;
+            border-bottom: 1px solid @dialog-folder-move-border;
+            cursor: pointer;
+
+            &.disabled {
+                opacity: .5;
+                cursor: default;
+            }
+            &.selected {
+                background: @dialog-folder-move-selected-background;
+                .folder-view {
+                    border:1px solid @dialog-folder-move-selected-border;
+                }
+            }
+            .folder-name {
+                margin-left: 0.4em;
+                user-select: none;
+            }
+            .folder-permission {
+                color: @text-info-color;
+                font-size: 0.8em;
+                margin-left: 0.4em;
+                user-select: none;
+            }
+            .folder-view {
+                float:right;
+                margin-top:-.25em;
+                margin-right:-.25em;
+                padding:.25em .5em;
+                border:1px solid @dialog-folder-move-border;
+                .rounded();
+
+                &:hover {
+                    border:1px solid @default-border;
+                }
+            }
+        }
+    }
+}

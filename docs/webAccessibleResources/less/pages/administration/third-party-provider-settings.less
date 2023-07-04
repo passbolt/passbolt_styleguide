@@ -1,0 +1,79 @@
+.third-party-provider-settings {
+  .provider-list {
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+  
+    .provider {
+      width: 11rem;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    
+      .provider-logo {
+        margin: 1.6rem 3.9rem;
+        width: 6.4rem;
+        height: 6.4rem;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+      }
+    
+      p {
+        margin: 0 0 1.2rem;
+      }
+    }
+  
+    .svg-icon.envelope svg{
+      width: 6.4rem;
+      height: 6.4rem;
+    }
+  }
+
+  .input-wrapper {
+    .button-inline {
+      display: flex;
+      .input {
+          flex: 1;
+      }
+      .button.button-icon {
+          margin-left: .8rem;
+      }
+    }
+  }
+}
+
+input[type="text"], input[type="date"] {
+  max-width: 100%;
+}
+
+.accordion-header a {
+  border-bottom: 0;
+
+  .svg-icon {
+    margin-right: 0.8rem;
+  }
+}
+
+.sso-settings.third-party-provider-settings {
+  .provider {
+    width: 13rem;
+    justify-content: flex-start;
+  }
+}
+
+.grid .row .main-column.third-party-provider-settings {
+  .message.warning {
+    margin: 1.2rem 1.6rem;
+    border-radius: 0.4rem;
+  }
+
+  hr {
+    margin-left: 0;
+    margin-right: 0;
+    border-top: 0;
+    border-color: @workspace-title-border;
+  }
+}

@@ -1,0 +1,332 @@
+html, body {
+  height: 100%;
+}
+.login.page {
+
+  h1 {
+    margin-top:0;
+    font-size: 2.4rem;
+    color: @authentication-title-text-color;
+  }
+  p {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .processing-wrapper {
+    display: flex;
+    margin-top: 1.6rem;
+    svg {
+      width: 12rem;
+      height: 12rem;
+      --spinner-stroke-width: .07rem;
+    }
+  }
+
+  .login-form {
+    min-height: 16rem;
+
+    .form-actions {
+      text-align:center;
+      margin-top: 3.2rem;
+    }
+    button + a {
+      font-size:1.6rem;
+      line-height: 2.4rem;
+      text-align:center;
+      display: inline-block;
+      margin-top:1.6rem;
+      cursor: pointer;
+    }
+    .link {
+      font-size:1.6rem;
+      line-height: 2.4rem;
+      text-align:center;
+      display: inline-block;
+      margin-top:1.6rem;
+      cursor: pointer;
+    }
+    .centered-login-provider-icon {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 20%;
+    }
+    .centered-text {
+      text-align: center;
+    }
+    .login-title {
+      margin: 1.6rem 0 3.2rem 0;
+    }
+
+    .accordion {
+      .accordion-header {
+        margin-bottom: 0.5em;
+
+        a {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    .invalid-passphrase.error-message button {
+      font-size: 1.5rem;
+      margin-top: 0;
+      color: @text-error-color;
+    }
+  }
+
+  .email-sent-instructions {
+    text-align: center;
+
+    .email-sent-bg {
+      background: transparent url('@{images}/illustrations/email.png') top center no-repeat;
+      background-size: auto 90%;
+      height: 16rem;
+    }
+    h1 {
+      margin-top: 2.4rem;
+    }
+    p {
+      padding: 0.8rem 0.8rem 0 0.8rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .choose-security-token {
+    .input-security-token {
+      .clearfix();
+      margin: 1em 0 1.5em 0;
+      label {
+        margin-bottom:.8rem;
+      }
+      .input.text {
+        .rounded();
+        font-size: 3rem;
+        max-width: 10rem;
+        float: left;
+        text-align: center;
+        margin-right: 3rem;
+      }
+      .circle-picker {
+        float:left;
+      }
+      .randomize-button-wrapper {
+        float:left;
+        text-align: center;
+        clear:both;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .install-extension {
+    a.browser-webstore {
+      border: 0;
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 26rem;
+      }
+      &.firefox img, &.edge img{
+        padding: 1.6rem 0;
+      }
+    }
+  }
+
+  .introduce-setup-extension {
+    .animated-setup-introduction.chrome {
+      background: transparent url('@{images}/illustrations/pin_passbolt.gif') center center no-repeat;
+      background-size: contain;
+      height: 25rem;
+    }
+    .arrow {
+      background-color: @icon-color;
+      -webkit-mask: url('@{images}/illustrations/wave-pin_my_extension.svg') center top no-repeat;
+      width: 10rem;
+      height: 10rem;
+      position: absolute;
+      top: 0;
+      right: calc(7rem - calc(100vw - 100%)); // positioning the arrow - the width of the scrollbar
+    }
+  }
+
+  .browser-not-supported {
+    a.browser {
+      border: 0;
+      img {
+        max-width: 26rem;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .browser-button-list {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 1.025rem;
+      padding-top: 0.8rem;
+
+      button.browser {
+        width: 5.6rem;
+        height: 5.6rem;
+        min-width: 0;
+        min-height: 0;
+        padding: 0.8rem;
+
+        &.focused {
+          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+          color: @default-text-color;
+          text-decoration: none;
+          border: none;
+        }
+      }
+    }
+  }
+
+  .recovery-account-setup-extension {
+      .input.radio {
+          margin-right: 0;
+      }
+  }
+
+  .login {
+
+    .login-user {
+      width: 100%;
+      margin: auto;
+
+      & > * {
+        text-align: center;
+        justify-content: center;
+        margin-bottom: 1.6rem;
+      }
+
+      .login-user-name {
+        font-weight: bold;
+        font-size: 1.6rem;
+        line-height: 2rem;
+        margin-top: 1.6rem;
+      }
+
+      .login-user-email {
+        font-size: 1.6rem;
+        line-height: 1.9rem;
+      }
+    }
+  }
+
+  .login-processing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .select-wrapper {
+    margin: 1.2rem 0 0 0;
+  }
+
+  // Only for yubikey authentication
+  .totp-setup,.yubikey-setup {
+    .input.password {
+      display: block;
+      background: initial;
+      margin-bottom: 1.6rem;
+      box-shadow: none;
+
+      label {
+        margin-bottom: 1.2rem;
+      }
+
+      input[type=password] {
+        color: @default-text-color;
+        background: @input-background;
+        padding: .8rem .8rem;
+        margin-bottom: 1.2rem;
+        box-shadow: inset 0 0 0 .1rem @input-border;
+        border-radius: .4rem;
+
+        // Fields hover
+        &:hover {
+          box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @input-border;
+        }
+
+        // Fields focus
+        &:focus {
+          box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 .1rem @input-focus-border;
+          outline: 0;
+        }
+
+        // Fields pressed
+        &:active {
+          box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @input-border;
+        }
+
+        // Disabled fields.
+        &:disabled {
+          cursor: default;
+          box-shadow: inset 0 0 0 .1rem @input-border;
+          opacity: .5;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 42rem) {
+  body {
+    background:@authentication-background;
+  }
+  .login.page {
+    display: grid;
+    height: calc(100% - 4rem); // footer space
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 0 1fr 0.05fr;
+    grid-gap: 1px;
+    grid-template-areas: ". . ." ". login-form ." "footer footer footer";
+
+    .content {
+      grid-area: login-form;
+
+      .loading-bar {
+        display:block;
+      }
+      .logo {
+        margin:1.6em auto;
+        width: 20rem;
+        background-size: 20rem auto;
+      }
+
+      .login-form {
+        box-shadow: 0 0 1rem @dialog-box-shadow-color;
+        border-radius: .3rem;
+        max-width:37.2rem;
+        margin:auto;
+        padding:4.8rem 4rem;
+        background:@default-background;
+      }
+
+      .select-wrapper {
+        max-width: 45.2rem;
+        margin: 1.2rem auto auto auto;
+      }
+
+      .login-box-footer {
+        max-width:37.2rem;
+        margin:auto;
+        .login-box-footer-actions {
+          margin:1.6rem auto;
+          button.link {
+            margin: auto;
+          }
+        }
+      }
+    }
+  }
+}
