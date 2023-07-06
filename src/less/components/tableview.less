@@ -85,6 +85,14 @@
       padding: .5rem .3rem .6rem .3rem;
       vertical-align: middle;
       position: relative;
+    }
+
+    th {
+      font-weight: 800;
+
+      &.draggable {
+        cursor: move;
+      }
 
       .resizer {
         /* Displayed at the right side of column */
@@ -102,10 +110,6 @@
           border-right: 2px solid @button-focus-border;
         }
       }
-    }
-
-    th {
-      font-weight: 800;
     }
 
     td div {
@@ -166,9 +170,17 @@
       }
     }
 
-    thead th {
-      button:hover {
+    thead {
+      tr.dragging {
+        th > * {
+          pointer-events: none;
+          user-select: none;
+        }
+      }
+      th {
+        button:hover {
           color: @text-focus-color;
+        }
       }
     }
 
@@ -232,8 +244,12 @@
     }
 
     /* multi select and fav fix */
-    th.cell-multiple-select,
-    td.cell-multiple-select {
+    th.cell-checkbox,
+    td.cell-checkbox {
+      .cell-header {
+        margin: 0;
+        overflow: inherit;
+      }
       .input.checkbox {
         margin: 0 0 0 .5rem; // some space for focus state
       }
@@ -245,23 +261,35 @@
       button {
         display: flex;
         align-items: center;
+        .cell-header {
+          margin: 0;
+          overflow: inherit;
+          .cell-header-icon-sort {
+            display: flex;
+            margin: 0;
+            .svg-icon {
+              margin: 0;
+            }
+          }
+        }
       }
     }
 
     th.attention-required {
-      .svg-icon.exclamation {
-        position: relative;
-        top: -.10rem;
-        svg {
-          margin-left: .25rem;
+      .cell-header {
+        margin: 0;
+        overflow: inherit;
+
+        .svg-icon.exclamation {
+          svg {
+            margin-left: .25rem;
+          }
         }
       }
     }
 
     td.attention-required {
       .svg-icon.exclamation {
-        position: relative;
-        top: -.10rem;
         svg {
           margin-left: .25rem;
           --icon-exclamation-background-color: @icon-exclamation-required-color;
@@ -269,7 +297,7 @@
       }
     }
 
-    td.password {
+    td.cell-password {
       .secret {
         float: left;
         max-width: calc(100% - 3rem); // password field - password preview button

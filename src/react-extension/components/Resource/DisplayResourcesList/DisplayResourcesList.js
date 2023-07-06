@@ -13,20 +13,16 @@
  */
 import PropTypes from "prop-types";
 import React from "react";
-import ReactList from "react-list";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {
-  resourceLinkAuthorizedProtocols,
   ResourceWorkspaceFilterTypes,
   withResourceWorkspace
 } from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import {withDrag} from "../../../contexts/DragContext";
@@ -34,7 +30,14 @@ import DisplayDragResource from "./DisplayDragResource";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
+import GridTable from "../../../../shared/components/Table/GridTable";
+import CellFavorite from "../../../../shared/components/Table/CellFavorite";
+import CellHeaderIcon from "../../../../shared/components/Table/CellHeaderIcon";
+import CellLink from "../../../../shared/components/Table/CellLink";
+import CellPassword from "../../../../shared/components/Table/CellPassword";
+import CellButton from "../../../../shared/components/Table/CellButton";
+import CellHeaderCheckbox from "../../../../shared/components/Table/CellHeaderCheckbox";
+import CellCheckbox from "../../../../shared/components/Table/CellChecbox";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -58,19 +61,6 @@ class DisplayResourcesList extends React.Component {
   getDefaultState() {
     return {
       resources: [], // The current list of resources to display
-      selectStrategy: "",
-      defaultColumns: [
-        {name: ResourceColumnsName.FAVORITE, width: 20, resizable: false},
-        {name: ResourceColumnsName.RESOURCE, width: 145, resizable: true},
-        {name: ResourceColumnsName.USERNAME, width: 145, resizable: true},
-        {name: ResourceColumnsName.PASSWORD, width: 145, resizable: true},
-        {name: ResourceColumnsName.URI, width: 210, resizable: true},
-        {name: ResourceColumnsName.MODIFIED, width: 145, resizable: true}
-      ],
-      currentColumns: [],
-      mouseXPosition: 0,
-      columnToResize: null,
-      tableWidth: null
     };
   }
 
@@ -81,6 +71,8 @@ class DisplayResourcesList extends React.Component {
     this.handleSelectAllChange = this.handleSelectAllChange.bind(this);
     this.handleResourceSelected = this.handleResourceSelected.bind(this);
     this.handleResourceRightClick = this.handleResourceRightClick.bind(this);
+    this.handleResourceDragStartEvent = this.handleResourceDragStartEvent.bind(this);
+    this.handleDragEndEvent = this.handleDragEndEvent.bind(this);
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
     this.handleCopyUsernameClick = this.handleCopyUsernameClick.bind(this);
@@ -88,20 +80,7 @@ class DisplayResourcesList extends React.Component {
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
-    this.handleResizeColumnMouseDown = this.handleResizeColumnMouseDown.bind(this);
-    this.handleDocumentMouseMoveEvent = this.handleDocumentMouseMoveEvent.bind(this);
-    this.handleDocumentMouseUpEvent = this.handleDocumentMouseUpEvent.bind(this);
-    this.handleWindowResizeEvent = this.handleWindowResizeEvent.bind(this);
-  }
-
-  componentDidMount() {
-    // Set the column
-    this.setColumnsWidthFromActualWidth(this.getTableWidth(this.state.defaultColumns), this.state.defaultColumns);
-    window.addEventListener('resize', this.handleWindowResizeEvent);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResizeEvent);
+    this.getPreviewPassword = this.getPreviewPassword.bind(this);
   }
 
   /**
@@ -123,7 +102,6 @@ class DisplayResourcesList extends React.Component {
     const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewPasswordChange = prevState.previewedPassword !== this.state.previewedPassword;
-    const hasResourceTableResize = prevState.tableWidth !== this.state.tableWidth;
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedPassword();
@@ -133,7 +111,6 @@ class DisplayResourcesList extends React.Component {
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
       hasResourceToScrollChange ||
-      hasResourceTableResize ||
       hasResourcePreviewPasswordChange;
   }
 
@@ -143,13 +120,6 @@ class DisplayResourcesList extends React.Component {
   createRefs() {
     this.tableviewRef = React.createRef();
     this.listRef = React.createRef();
-  }
-
-  /**
-   * Handle window resize event
-   */
-  handleWindowResizeEvent() {
-    this.setColumnsWidthFromActualWidth(this.state.tableviewWidth, this.state.currentColumns);
   }
 
   /**
@@ -168,8 +138,6 @@ class DisplayResourcesList extends React.Component {
    * @param resource The selected resource
    */
   async handleResourceSelected(event, resource) {
-    event.preventDefault();
-    event.stopPropagation();
     await this.selectResource(resource, event);
   }
 
@@ -193,8 +161,6 @@ class DisplayResourcesList extends React.Component {
    * @param resource
    */
   handleResourceRightClick(event, resource) {
-    // Prevent the default contextual menu to popup.
-    event.preventDefault();
     this.handleSelectResources([resource]);
     const left = event.pageX;
     const top = event.pageY;
@@ -203,11 +169,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   async handleCheckboxWrapperClick(event, resource) {
-    /*
-     * We want the td to extend the clickable area of the checkbox.
-     * If we propagate the event, the tr will listen to the click and select only the clicked row.
-     */
-    event.stopPropagation();
     const isRangeSelection = event && event.shiftKey;
 
     if (isRangeSelection) {
@@ -243,35 +204,58 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Returns true if the given resource is selected
-   * @param resource A resource
+   * Get selected resource ids
+   * @return {*}
    */
-  isResourceSelected(resource) {
-    return this.selectedResources.some(selectedResource => resource.id === selectedResource.id);
+  get selectedResourcesIds() {
+    const getIds = resource => resource.id;
+    return this.selectedResources.map(getIds);
   }
 
-  async handleCopyUsernameClick(ev, resource) {
-    // Avoid the grid to select the resource while copying a resource username.
-    ev.stopPropagation();
-    await ClipBoard.copy(resource.username, this.props.context.port);
+  get columns() {
+    return [
+      // TODO object validation
+      {id: "checkbox", field: "checkbox", label: "Checkbox", width: 20, defaultWidth: 20, resizable: false, draggable: false, sortable: false, getValue: resource => resource, cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}},
+      {id: "favorite", field: "favorite", label: "Favorite", width: 20, defaultWidth: 20, resizable: false, draggable: false, sortable: true, getValue: resource => ({id: resource.id, favorite: resource.favorite}), cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}},
+      {id: "name", field: "name", label: "Resource", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: true},
+      {id: "username", field: "username", label: "Username", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: true, cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}},
+      {id: "password", field: "password", label: "Password", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: false, getValue: resource => resource.id, cellRenderer: {component: CellPassword, props: {getPreviewPassword: this.getPreviewPassword, canCopySecret: this.canCopySecret, canPreviewSecret: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick}}},
+      {id: "uri", field: "uri", label: "URI", width: 210, defaultWidth: 210, resizable: true, draggable: true, sortable: true, cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}},
+      {id: "modified", field: "modified", label: "Modified", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: true, getValue: resource => this.formatDateTimeAgo(resource.modified)},
+    ];
+  }
+
+  /**
+   * Get preview password
+   * @param resourceId
+   * @return {string|undefined}
+   */
+  getPreviewPassword(resourceId) {
+    return this.isPasswordPreviewed(resourceId) ? this.state.previewedPassword?.password : undefined;
+  }
+
+  /**
+   * Handle copy username click
+   * @param username
+   * @return {Promise<void>}
+   */
+  async handleCopyUsernameClick(username) {
+    await ClipBoard.copy(username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
   }
 
   /**
    * Handle copy password button click.
-   * @param {ResourceEntity} resource The resource to copy the secret
+   * @param {string} resourceId The resource id
    */
-  async handleCopyPasswordClick(resource) {
-    await this.copyPasswordToClipboard(resource.id);
+  async handleCopyPasswordClick(resourceId) {
+    await this.copyPasswordToClipboard(resourceId);
   }
 
   /**
    * Handle preview password button click.
    */
-  async handlePreviewPasswordButtonClick(ev, resourceId) {
-    // Avoid the grid to select the resource while previewing its secret.
-    ev.stopPropagation();
-
+  async handlePreviewPasswordButtonClick(resourceId) {
     await this.togglePreviewPassword(resourceId);
   }
 
@@ -372,8 +356,7 @@ class DisplayResourcesList extends React.Component {
     return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
   }
 
-  async handleFavoriteClick(event, resource) {
-    event.stopPropagation();
+  async handleFavoriteClick(resource) {
     await this.handleFavoriteClickDebounced(resource);
   }
 
@@ -387,10 +370,9 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Handle the resource sorter change
-   * @param event A DOM event
    * @param sortProperty The resource property to sort on
    */
-  async handleSortByColumnClick(event, sortProperty) {
+  async handleSortByColumnClick(sortProperty) {
     this.props.resourceWorkspaceContext.onSorterChanged(sortProperty);
   }
 
@@ -398,11 +380,11 @@ class DisplayResourcesList extends React.Component {
    * Handle the drag start on the selected resource
    * @param event The DOM event
    * @param resource The selected resource
+   * @param isSelected is resource selected
    * @returns {Promise<void>}
    */
-  async handleDragStartEvent(event, resource) {
-    event.persist();
-    if (!this.isResourceSelected(resource)) {
+  async handleResourceDragStartEvent(event, resource, isSelected) {
+    if (!isSelected) {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
     const draggedItems = {resources:  this.props.resourceWorkspaceContext.selectedResources, folders: []};
@@ -420,6 +402,7 @@ class DisplayResourcesList extends React.Component {
    * Select the resource given the selection event.
    * If no event is provided, the selection is considered as multiple
    * @param resource
+   * @param event
    */
   async selectResource(resource, event) {
     const isMultipleSelection = event && event.metaKey;
@@ -434,8 +417,6 @@ class DisplayResourcesList extends React.Component {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
   }
-
-
 
   async favoriteResource(resource) {
     try {
@@ -478,164 +459,10 @@ class DisplayResourcesList extends React.Component {
       const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
 
       if (isInvisible) {
-        this.listRef.current.scrollTo(resourceIndex);
+        // Important to have the -1 to show the selected column behind the header with sticky position
+        this.listRef.current.scrollTo(resourceIndex - 1);
       }
     }
-  }
-
-  /**
-   * Handle Mouse down event to prepare the resize
-   * @param event
-   * @param columnName
-   */
-  async handleResizeColumnMouseDown(event, columnName) {
-    // Get the current column
-    const columnToResize = this.state.currentColumns.find(column => column.name === columnName);
-    // Get the current mouse position
-    const mouseXPosition = event.clientX;
-    // Get the resizer element
-    const resizer = event.target;
-    // Add class resizing to keep the border color
-    resizer.classList.add('resizing');
-    this.setState({columnToResize, mouseXPosition});
-    // Add listener to handle mouse move event on document
-    document.addEventListener('mousemove', this.handleDocumentMouseMoveEvent, {capture: true});
-    // Add once listener to handle mouse up event on document
-    document.addEventListener('mouseup', () => this.handleDocumentMouseUpEvent(resizer), {capture: true, once: true});
-  }
-
-  /**
-   * Handle Mouse move on document to resize a column
-   * @param event
-   */
-  handleDocumentMouseMoveEvent(event) {
-    // Determine how far the mouse has been moved
-    const dx = event.clientX - this.state.mouseXPosition;
-    // Update the width of column
-    const width = this.state.columnToResize.width + dx > 50 ? this.state.columnToResize.width + dx : 50;
-    const columnToResizeIndex = this.state.currentColumns.findIndex(column => column.name === this.state.columnToResize.name);
-    const currentColumns = [...this.state.currentColumns];
-    // Update the width
-    currentColumns[columnToResizeIndex] = {...currentColumns[columnToResizeIndex], width};
-    // Get table width
-    const tableWidth = this.getTableWidth(currentColumns);
-    this.setState({currentColumns, tableWidth});
-  }
-
-  /**
-   * Handle Mouse up on document to end the resize
-   * @param resizer
-   */
-  handleDocumentMouseUpEvent(resizer) {
-    // Remove class resizing to remove the border color
-    resizer.classList.remove('resizing');
-    // Remove listener on mouse move
-    document.removeEventListener('mousemove', this.handleDocumentMouseMoveEvent, {capture: true});
-    this.setState({columnToResize: null, mouseXPosition: 0});
-  }
-
-  handleResizeDefaultByColumnDoubleClick(event, columnName) {
-    // Get the current column
-    const columnToResize = this.state.defaultColumns.find(column => column.name === columnName);
-    // Get an array with the width of the column to resize updated
-    const currentColumns = this.state.currentColumns.map(column => column.name === columnToResize.name ? {...column, width: columnToResize.width} : column);
-    // Get the table width
-    const tableWidth = this.getTableWidth(currentColumns);
-    this.setState({currentColumns, tableWidth});
-  }
-
-  /**
-   * Get the sum of columns widths no resizable from default
-   * @return {number}
-   */
-  get columnWidthNoResizable() {
-    return this.state.defaultColumns.reduce((sum, col) => sum + (col.resizable ? 0 : parseFloat(col.width)), 20);
-  }
-
-  /**
-   * Get the columns padding widths
-   * @return {number}
-   */
-  get columnsPaddingWidth() {
-    if (this.state.currentColumns.length > 0) {
-      // Get the columns padding widths from the current columns displayed
-      return 6 * (this.state.currentColumns.length + 1);
-    }
-    // Get the columns padding widths from the default columns
-    return 6 * (this.state.defaultColumns.length + 1);
-  }
-
-  /**
-   * Get the column width style by column name
-   * @param columnName
-   * @return {{width: string} | null}
-   */
-  getColumnWidthByName(columnName) {
-    // Get the current column
-    const column = this.state.currentColumns.find(column => column.name === columnName);
-    return column?.width ? {width: `${column.width}px`} : null;
-  }
-
-  /**
-   * Get the total width for the table in order to have only one column resizing
-   * @return {number}
-   */
-  getTableWidth(columns) {
-    // Starting from 20 to have checkbox column width and add padding for each column displayed
-    return columns.reduce((sum, col) => sum + col.width, 20) + 6 * (columns.length + 1);
-  }
-
-  /**
-   * Set the columns width based on actual width of the tableview width to maintain the same proportionality
-   * @param actualWidth
-   * @param columns
-   */
-  setColumnsWidthFromActualWidth(actualWidth, columns) {
-    const tableviewWidth = this.tableviewRef.current.clientWidth;
-    // Subtract all constant widths that do not change with screen width
-    const columnsResizableWidth = actualWidth - this.columnWidthNoResizable - this.columnsPaddingWidth;
-    // Calculate the ratio between two widths
-    const ratio = (tableviewWidth - this.columnWidthNoResizable - this.columnsPaddingWidth) / columnsResizableWidth;
-    // Scale the widths with the ratio
-    const currentColumns = columns.map(column => {
-      const width = column.resizable ? column.width * ratio : column.width;
-      return {...column, width};
-    });
-    // Get the table width from all columns
-    const tableWidth = this.getTableWidth(currentColumns);
-    this.setState({currentColumns, tableWidth, tableviewWidth});
-  }
-
-  renderTable(items, ref) {
-    const tableStyle = {
-      MozUserSelect: "none",
-      WebkitUserSelect: "none",
-      msUserSelect: "none",
-      width: `${this.state.tableWidth}px`
-    };
-    return (
-      <table style={tableStyle}>
-        <tbody ref={ref}>
-          {items}
-        </tbody>
-      </table>
-    );
-  }
-
-  /**
-   * Check if the grid is sorted for a given column
-   * @param column The column name
-   */
-  isSortedColumn(column) {
-    return this.props.resourceWorkspaceContext.sorter.propertyName === column;
-  }
-
-  /**
-   * Check if the sort is ascendant.
-   * @returns {boolean}
-   */
-  isSortedAsc() {
-    return this.props.resourceWorkspaceContext.sorter.asc;
   }
 
   /**
@@ -656,19 +483,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Get safe uri of a resource
-   * @param {object} resource The resource to get the safe uri for
-   * @return {string}
-   */
-  safeUri(resource) {
-    return sanitizeUrl(
-      resource.uri, {
-        whiteListedProtocols: resourceLinkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      }) || "";
-  }
-
-  /**
    * Format date in time ago
    * @param {string} date The date to format
    * @return {string}
@@ -679,84 +493,29 @@ class DisplayResourcesList extends React.Component {
     return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
-  renderItem(index, key) {
-    const canPreviewSecret = this.props.context.siteSettings.canIUse('previewPassword')
-      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const resource = this.resources[index];
-    const isSelected = this.isResourceSelected(resource);
-    const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
-    const safeUri = this.safeUri(resource);
-    const modifiedFormatted = this.formatDateTimeAgo(resource.modified);
-    const isPasswordPreviewed = this.isPasswordPreviewed(resource.id);
+  /**
+   * Can preview secret
+   * @return {boolean}
+   */
+  get canPreviewSecret() {
+    return this.props.context.siteSettings.canIUse('previewPassword')
+    && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+  }
 
-    return (
-      <tr id={`resource_${resource.id}`} key={key} draggable="true" className={isSelected ? "selected" : ""}
-        /* eslint-disable react/no-unknown-property */
-        unselectable={this.state.selectStrategy === "range" ? "on" : ""}
-        /* eslint-enable react/no-unknown-property */
-        onClick={ev => this.handleResourceSelected(ev, resource)}
-        onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
-        onDragStart={event => this.handleDragStartEvent(event, resource)}
-        onDragEnd={event => this.handleDragEndEvent(event, resource)}>
-        <td className="cell-multiple-select selections s-cell">
-          <div className="ready">
-            <div className="input checkbox">
-              <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true} onClick={ev => this.handleCheckboxWrapperClick(ev, resource)}/>
-              <span className="visually-hidden"><Trans>Select resource</Trans></span>
-            </div>
-          </div>
-        </td>
-        <td className="cell-favorite selections s-cell">
-          <div className="ready">
-            <button type="button" className={`link no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
-              <Icon name="star"/>
-              <span className="visuallyhidden"><Trans>fav</Trans></span>
-            </button>
-          </div>
-        </td>
-        <td className="cell-name m-cell uri" style={this.getColumnWidthByName(ResourceColumnsName.RESOURCE)}>
-          <div title={resource.name}>
-            {resource.name}
-          </div>
-        </td>
-        <td className="cell-username m-cell username" style={this.getColumnWidthByName(ResourceColumnsName.USERNAME)}>
-          <div title={resource.username}>
-            <button className="link no-border" type="button" onClick={ev => this.handleCopyUsernameClick(ev, resource)}><span>{resource.username}</span></button>
-          </div>
-        </td>
-        <td className="cell-secret m-cell password" style={this.getColumnWidthByName(ResourceColumnsName.PASSWORD)}>
-          <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
-            title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
-            <HiddenPassword
-              canClick={canCopySecret}
-              preview={this.state.previewedPassword?.password}
-              onClick={() => this.handleCopyPasswordClick(resource)} />
-          </div>
-          {canPreviewSecret &&
-            <button type="button" onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button-transparent">
-              <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
-              <span className="visually-hidden"><Trans>View</Trans></span>
-            </button>
-          }
-        </td>
-        <td className="cell-uri l-cell" style={this.getColumnWidthByName(ResourceColumnsName.URI)}>
-          <div title={resource.uri}>
-            {safeUri &&
-              <button className="link no-border" type="button" onClick={() => this.handleGoToResourceUriClick(resource)}><span>{resource.uri}</span></button>
-            }
-            {!safeUri &&
-            <span>{resource.uri}</span>
-            }
-          </div>
-        </td>
-        <td className="cell-modified m-cell" style={this.getColumnWidthByName(ResourceColumnsName.MODIFIED)}>
-          <div title={resource.modified}>
-            {modifiedFormatted}
-          </div>
-        </td>
-      </tr>
-    );
+  /**
+   * Can copy secret
+   * @return {boolean}
+   */
+  get canCopySecret() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+  }
+
+  /**
+   * Is ready
+   * @return {boolean}
+   */
+  get isReady() {
+    return this.resources !== null;
   }
 
   /**
@@ -768,194 +527,75 @@ class DisplayResourcesList extends React.Component {
   }
 
   render() {
-    const isReady = this.resources !== null;
-    const isEmpty = isReady && this.resources.length === 0;
-    const selectAll = isReady && this.resources.length === this.selectedResources.length;
+    const isEmpty = this.isReady && this.resources.length === 0;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
-      <div ref={this.tableviewRef} className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(filterType) ? "all_items" : ""}`}>
-        <React.Fragment>
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
-          <div className="empty-content">
-            <h2><Trans>None of your passwords matched this search.</Trans></h2>
-            <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
-          </div>
-          }
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
-          <div className="empty-content">
-            <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
-            <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
-          </div>
-          }
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.GROUP &&
-          <div className="empty-content">
-            <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
-            <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
-          </div>
-          }
-          {isEmpty && (filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
-          <div className="empty-content">
-            <h2><Trans>No passwords in this folder yet.</Trans></h2>
-            <p><Trans>It does feel a bit empty here.</Trans></p>
-          </div>
-          }
-          {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
-          <div className="empty-content">
-            <h2><Trans>No passwords are shared with you yet.</Trans></h2>
-            <p>
-              <Trans>It does feel a bit empty here.</Trans>&nbsp;
-              <Trans>Wait for a team member to share a password with you.</Trans>
-            </p>
-          </div>
-          }
-          {isEmpty &&
-          (filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
-            filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
-            filterType === ResourceWorkspaceFilterTypes.ALL
-          ) &&
-          <React.Fragment>
-            <div className="empty-content">
-              <h1><Trans>Welcome to passbolt!</Trans></h1>
-              <p>
-                <Trans>It does feel a bit empty here.</Trans>&nbsp;
-                <Trans>Create your first password or wait for a team member to share one with you.</Trans>
-              </p>
-            </div>
-          </React.Fragment>
-          }
-          {!isEmpty &&
-          <React.Fragment>
-            <div className="tableview-header">
-              <table style={{width: `${this.state.tableWidth}px`}}>
-                <thead>
-                  <tr>
-                    <th className="cell-multiple-select selections s-cell">
-                      <div className="input checkbox">
-                        <input
-                          id="passwords-select-all"
-                          type="checkbox"
-                          name="select all"
-                          checked={selectAll}
-                          onChange={this.handleSelectAllChange}/>
-                        <span className="visually-hidden"><Trans>Select all</Trans></span>
-                      </div>
-                    </th>
-                    <th className="cell-favorite selections s-cell sortable">
-                      <button type="button" onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav link no-border">
-                        <Icon name="star"/>
-                        <span className="visuallyhidden"><Trans>fav</Trans></span>
-                        <span className="cell-header-icon-sort">
-                          {this.isSortedColumn("favorite") && this.isSortedAsc() &&
-                          <Icon name="ascending"/>
-                          }
-                          {this.isSortedColumn("favorite") && !this.isSortedAsc() &&
-                          <Icon name="descending"/>
-                          }
-                        </span>
-                      </button>
-                    </th>
-                    <th className="cell-name m-cell sortable" style={this.getColumnWidthByName(ResourceColumnsName.RESOURCE)}>
-                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>Resource</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("name") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.RESOURCE)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.RESOURCE)}></div>
-                    </th>
-                    <th className="cell-username m-cell username sortable" style={this.getColumnWidthByName(ResourceColumnsName.USERNAME)}>
-                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>Username</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("username") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.USERNAME)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.USERNAME)}></div>
-                    </th>
-                    <th className="cell-secret m-cell password" style={this.getColumnWidthByName(ResourceColumnsName.PASSWORD)}>
-                      <div className="cell-header">
-                        <span className="cell-header-text">
-                          <Trans>Password</Trans>
-                        </span>
-                      </div>
-                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.PASSWORD)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.PASSWORD)}></div>
-                    </th>
-                    <th className="cell-uri l-cell sortable" style={this.getColumnWidthByName(ResourceColumnsName.URI)}>
-                      <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>URI</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("uri") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("uri") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.URI)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.URI)}></div>
-                    </th>
-                    <th className="cell-modified m-cell sortable" style={this.getColumnWidthByName(ResourceColumnsName.MODIFIED)}>
-                      <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>Modified</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                      <div className="resizer" onMouseDown={event => this.handleResizeColumnMouseDown(event, ResourceColumnsName.MODIFIED)} onDoubleClick={event => this.handleResizeDefaultByColumnDoubleClick(event, ResourceColumnsName.MODIFIED)}></div>
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            {isReady &&
-            <div className="tableview-content">
-              <ReactList
-                itemRenderer={(index, key) => this.renderItem(index, key)}
-                itemsRenderer={(items, ref) => this.renderTable(items, ref)}
-                length={this.resources.length}
-                pageSize={20}
-                minSize={20}
-                type="uniform"
-                ref={this.listRef}>
-              </ReactList>
-            </div>
+      <>
+        {isEmpty &&
+          <div className="tableview empty">
+            {filterType === ResourceWorkspaceFilterTypes.TEXT &&
+              <div className="empty-content">
+                <h2><Trans>None of your passwords matched this search.</Trans></h2>
+                <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
+              </div>
             }
-          </React.Fragment>
-          }
-        </React.Fragment>
-      </div>
+            {filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
+              <div className="empty-content">
+                <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
+                <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
+              </div>
+            }
+            {filterType === ResourceWorkspaceFilterTypes.GROUP &&
+              <div className="empty-content">
+                <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
+                <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
+              </div>
+            }
+            {(filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
+              <div className="empty-content">
+                <h2><Trans>No passwords in this folder yet.</Trans></h2>
+                <p><Trans>It does feel a bit empty here.</Trans></p>
+              </div>
+            }
+            {filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
+              <div className="empty-content">
+                <h2><Trans>No passwords are shared with you yet.</Trans></h2>
+                <p>
+                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                  <Trans>Wait for a team member to share a password with you.</Trans>
+                </p>
+              </div>
+            }
+            {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
+                filterType === ResourceWorkspaceFilterTypes.ALL) &&
+              <React.Fragment>
+                <div className="empty-content">
+                  <h1><Trans>Welcome to passbolt!</Trans></h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                    <Trans>Create your first password or wait for a team member to share one with you.</Trans>
+                  </p>
+                </div>
+              </React.Fragment>
+            }
+          </div>
+        }
+        {!isEmpty &&
+          <GridTable
+            columns={this.columns}
+            rows={this.resources}
+            sorter={this.props.resourceWorkspaceContext.sorter}
+            onSortChange={this.handleSortByColumnClick}
+            onRowClick={this.handleResourceSelected}
+            onRowContextMenu={this.handleResourceRightClick}
+            onRowDragStart={this.handleResourceDragStartEvent}
+            onRowDragEnd={this.handleDragEndEvent}
+            selectedRowsIds={this.selectedResourcesIds}
+            rowsRef={this.listRef}>
+          </GridTable>
+        }
+      </>
     );
   }
 }
@@ -970,14 +610,4 @@ DisplayResourcesList.propTypes = {
   dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
-
 export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList))))))));
-
-const ResourceColumnsName = {
-  FAVORITE: "Favorite",
-  RESOURCE: "Resource",
-  USERNAME: 'Username',
-  PASSWORD: 'Password',
-  URI: "URI",
-  MODIFIED: "Modified",
-};

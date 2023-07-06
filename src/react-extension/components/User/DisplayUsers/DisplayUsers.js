@@ -307,7 +307,7 @@ class DisplayUsers extends React.Component {
         className={rowClassName}
         onClick={event => this.handleUserSelected(event, user)}
         onContextMenu={event => this.handleUserRightClick(event, user)}>
-        <td className="cell-multiple-select selections s-cell">
+        <td className="cell-checkbox selections s-cell">
           <div className="input checkbox">
             <input type="checkbox" id={`checkbox_multiple_select_checkbox_${user.id}`} checked={isSelected} readOnly={true} onClick={ev => this.handleCheckboxWrapperClick(ev, user)}/>
             <span className="visually-hidden"><Trans>Select user</Trans></span>
@@ -404,7 +404,7 @@ class DisplayUsers extends React.Component {
               <table>
                 <thead>
                   <tr>
-                    <th className="cell-multiple-select selections s-cell">
+                    <th className="cell-checkbox selections s-cell">
                       <div className="input checkbox">
                         <input type="checkbox" name="select all" checked={false} readOnly={true}/>
                         <span className="visually-hidden"><Trans>Select all</Trans></span>

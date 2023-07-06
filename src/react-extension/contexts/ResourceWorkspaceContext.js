@@ -525,10 +525,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
   /**
    * Whenever the users wants to follow a resource uri
-   * @param {object} resource The resource to follow the uri
+   * @param {string} uri The uri to follow
    */
-  onGoToResourceUriRequested(resource) {
-    const safeUri = sanitizeUrl(resource.uri, {
+  onGoToResourceUriRequested(uri) {
+    const safeUri = sanitizeUrl(uri, {
       whiteListedProtocols: resourceLinkAuthorizedProtocols,
       defaultProtocol: urlProtocols.HTTPS
     });
@@ -900,7 +900,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async detailsResourceIfSingleSelection() {
-    const hasSingleSelection = this.state.selectedResources.length == 1;
+    const hasSingleSelection = this.state.selectedResources.length === 1;
     if (hasSingleSelection) {
       await this.detailResource(this.state.selectedResources[0]);
     } else {

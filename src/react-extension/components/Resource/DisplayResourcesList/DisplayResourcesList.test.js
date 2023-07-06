@@ -343,4 +343,27 @@ describe("Display Resources", () => {
       expect(page.columns(7).width).toStrictEqual("145px");
     });
   });
+
+  describe('As LU, I should reorder a column of a resource.', () => {
+    it('As LU, I should be able to reorder a column of a resource with mouse move', async() => {
+      const props = propsWithFilteredResources();
+      const page = new DisplayResourcesListPage(props);
+      // Need to resize before to check due to the actual width is negative
+      Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+        configurable: true, value: 300
+      });
+      // Reorder
+      await page.columns(3).reorder(200);
+      await page.columns(6).reorder(-250);
+      await page.columns(7).reorder(150);
+      await page.columns(3).reorder(-200);
+
+      // Order should be changed
+      expect(page.columns(4).name).toStrictEqual("Resource");
+      expect(page.columns(3).name).toStrictEqual("Username");
+      expect(page.columns(6).name).toStrictEqual("Password");
+      expect(page.columns(5).name).toStrictEqual("URI");
+      expect(page.columns(7).name).toStrictEqual("Modified");
+    });
+  });
 });
