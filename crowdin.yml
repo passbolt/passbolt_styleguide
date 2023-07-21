@@ -3,17 +3,17 @@ files:
     type: i18next_json
     translation: /src/locales/%locale%/%original_file_name%
 export_languages:
-  - 'de'
-  - 'en'
-  - 'es'
-  - 'fr'
-  - 'it'
-  - 'ja'
-  - 'ko'
-  - 'lt'
-  - 'nl'
-  - 'pl'
-  - 'pt'
-  - 'ro'
-  - 'sv'
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - ja
+  - ko
+  - lt
+  - nl
+  - pl
+  - pt
+  - ro
+  - sv
 commit_message: '[skip-ci]'
