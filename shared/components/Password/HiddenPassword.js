@@ -34,7 +34,7 @@ class HiddenPassword extends Component {
   render() {
     return (
       <button type="button" className="link no-border" onClick={this.handleClick.bind(this)} disabled={!this.props.canClick}>
-        <span>
+        <span className="password-typography">
           {this.props.preview &&
             Array.from(this.props.preview).map((char, index) => {
               if (/\p{L}/u.test(char)) {
