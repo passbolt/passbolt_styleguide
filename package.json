@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -47,8 +47,7 @@
     "jest-webextension-mock": "^3.7.18",
     "jquery": "^3.5.0",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.7.2"
+    "webpack-cli": "^4.9.1"
   },
   "dependencies": {
     "@testing-library/dom": "^8.11.3",
@@ -82,15 +81,10 @@
   "scripts": {
     "build": "npm run build-api-app",
     "build-api-app": "webpack --config webpack-api.config.js",
-    "start-app-dev-server": "npm run start-api-app-dev-server & npm run start-ext-app-dev-server & npm run start-in-form-menu-app-dev-server",
-    "start-api-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-api.config.js",
-    "start-ext-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-ext.config.js",
-    "start-in-form-menu-app-dev-server": "webpack serve --env debug=true --env demo=true --config webpack-in-form-menu.config.js",
     "test": "npm run test:unit",
     "test:unit": "jest --no-cache ./src --maxWorkers=4",
     "test:coverage": "jest --no-cache ./src --maxWorkers=4 --coverage",
     "test:storybook": "test-storybook",
-    "i18n:update": "git checkout l10n_release -- src/locales/de-DE src/locales/en-UK src/locales/es-ES src/locales/fr-FR src/locales/it-IT src/locales/ja-JP src/locales/ko-KR src/locales/lt-LT src/locales/nl-NL src/locales/pl-PL src/locales/pt-BR src/locales/ro-RO src/locales/sv-SE",
     "i18n:externalize": "i18next -c ./i18next-parser.config.js",
     "eslint": "eslint -c .eslintrc.json --ext js --ext jsx src/react-extension src/react-quickaccess src/react-web-integration src/shared",
     "eslint-fix": "eslint -c .eslintrc.json --ext js --ext jsx --fix src/react-extension src/react-quickaccess src/react-web-integration src/shared",

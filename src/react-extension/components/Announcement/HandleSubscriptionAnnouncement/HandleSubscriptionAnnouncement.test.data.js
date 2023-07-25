@@ -11,8 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.2.0
  */
-import mockPort from "../../../../../demo/ext-app/mock/mockPort";
 import {DateTime} from "luxon";
+import MockPort from "../../../test/mock/MockPort";
 
 /**
  * Default props
@@ -21,7 +21,7 @@ import {DateTime} from "luxon";
 export function defaultProps() {
   return {
     context: {
-      port: mockPort(),
+      port: new MockPort(),
       onGetSubscriptionKeyRequested: jest.fn()
     },
     announcementContext: {
