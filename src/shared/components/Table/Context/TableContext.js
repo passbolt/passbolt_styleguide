@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 
+const PADDING_SIZE = 6;
 
 export const TableContext = React.createContext({
   columns: [], // The columns to display
@@ -52,7 +53,7 @@ export default class TableContextProvider extends Component {
    */
   get defaultState() {
     return {
-      columns: this.props.columns, // The columns to display
+      columns: [...this.props.columns], // The columns to display
       tableWidth: null, // The table width
       tableviewWidth: null, // The tableview width
       isDraggingColumn: false, // Is the column dragging
@@ -90,8 +91,43 @@ export default class TableContextProvider extends Component {
     window.addEventListener('resize', this.handleWindowResizeEvent);
   }
 
+  /**
+   * Whenever the component has updated in terms of props
+   */
+  async componentDidUpdate(prevProps) {
+    if (prevProps.columns.length > this.props.columns.length) {
+      this.removeColumn();
+    } else if (prevProps.columns.length < this.props.columns.length) {
+      this.addColumn();
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowResizeEvent);
+  }
+
+  /**
+   * Remove a column
+   */
+  removeColumn() {
+    const filterByIdPresent = column => this.props.columns.some(defaultColumn => defaultColumn.id === column.id);
+    const columns = this.state.columns.filter(filterByIdPresent);
+    // Get table width
+    const tableWidth = this.getTableWidth(columns) - PADDING_SIZE; // Remove the padding of the column to removed
+    this.setState({columns, tableWidth});
+  }
+
+  /**
+   * Add a column
+   */
+  addColumn() {
+    const columns = [...this.state.columns];
+    const indexColumnToAdd = this.props.columns.findIndex(column => this.state.columns.every(item => column.id !== item.id));
+    // Add the column to its default position and width
+    columns.splice(indexColumnToAdd, 0, this.props.columns[indexColumnToAdd]);
+    // Get table width
+    const tableWidth = this.getTableWidth(columns) + PADDING_SIZE; // Add the padding of the new column
+    this.setState({columns, tableWidth});
   }
 
   /**
@@ -154,7 +190,7 @@ export default class TableContextProvider extends Component {
    */
   get columnsPaddingWidth() {
     // Get the columns padding widths from the displayed columns
-    return 6 * this.state.columns.length;
+    return PADDING_SIZE * this.state.columns.length;
   }
 
   /**

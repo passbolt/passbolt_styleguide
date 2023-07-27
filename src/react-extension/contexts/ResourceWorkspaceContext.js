@@ -36,6 +36,7 @@ export const ResourceWorkspaceContext = React.createContext({
   },
   filteredResources: [], // The current list of filtered resources
   selectedResources: [], // The current list of selected resources
+  columnsResources: [], // The current list of columns for resources
   details: {
     resource: null, // The resource to focus details on
     folder: null, // The folder to focus details on
@@ -74,6 +75,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onResourceFileImportResult: () => {}, // Whenever the import result has been provided
   onResourcesToExport: () => {}, // Whenever resources and/or folder will be exported
   onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
+  onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
 });
 
 /**
@@ -108,6 +110,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       },
       filteredResources: [], // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
+      columnsResources: [
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: true},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "uri", label: "URI", position: 5, show: true},
+        {id: "modified", label: "Modified", position: 6, show: true}], // The current list of columns for resources
       details: {
         resource: null, // The resource to focus details on
         folder: null, // The folder to focus details on
@@ -144,6 +153,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
       onResourcesToExport: this.handleResourcesToExportChange.bind(this), // Whenever resources and/or folder have to be exported
       onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
+      onChangeColumnView: this.handleChangeColumnView.bind(this) // Whenever the users wants to show or hide a column
     };
   }
 
@@ -1005,6 +1015,19 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async updateResourcesToExport({resourcesIds, foldersIds}) {
     await this.setState({resourcesToExport: {resourcesIds, foldersIds}});
+  }
+
+  /**
+   * Handle change column view
+   * @param id The column id
+   * @param show The boolean to show or hide column
+   */
+  handleChangeColumnView(id, show) {
+    const columnsResources = [...this.state.columnsResources];
+    const index = columnsResources.findIndex(column => column.id === id);
+    // Update the show value
+    columnsResources[index].show = show;
+    this.setState({columnsResources});
   }
 
   /**

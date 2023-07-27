@@ -43,6 +43,13 @@ export function defaultResourceWorkspaceContext(data = {}) {
     },
     filteredResources: [],
     selectedResources: [],
+    columnsResources: [
+      {id: "favorite", label: "Favorite", position: 1, show: true},
+      {id: "name", label: "Name", position: 2, show: true},
+      {id: "username", label: "Username", position: 3, show: true},
+      {id: "password", label: "Password", position: 4, show: true},
+      {id: "uri", label: "URI", position: 5, show: true},
+      {id: "modified", label: "Modified", position: 6, show: true}],
     filter: {
       type: ResourceWorkspaceFilterTypes.ALL
     },
@@ -66,6 +73,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onResourceFileImportResult: jest.fn(),
     onResourceFileToImport: jest.fn(),
     onLockDetail: jest.fn(),
+    onChangeColumnView:  jest.fn(),
     ...data
   };
 }

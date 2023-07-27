@@ -17,7 +17,7 @@ import CellHeaderWrapper from "./CellHeaderWrapper";
 import {withTable} from "./Context/TableContext";
 
 /**
- * This component represents a table header
+ * This component represents a table row header
  */
 class RowHeader extends Component {
   /**

@@ -70,7 +70,7 @@ class CellPassword extends Component {
     return (
       <>
         <div className={`secret ${previewedPassword ? "" : "secret-copy"}`}
-          title={previewedPassword || "secret"}>
+          title={previewedPassword || this.props.title}>
           <HiddenPassword
             canClick={this.props.canCopySecret}
             preview={previewedPassword}
@@ -93,6 +93,7 @@ CellPassword.defaultProps = {
 
 CellPassword.propTypes = {
   value: PropTypes.string.isRequired, // The value
+  title: PropTypes.string, // The title
   canPreviewSecret: PropTypes.bool, // The canPreviewSecret boolean property
   canCopySecret: PropTypes.bool, // The canCopySecret boolean property
   getPreviewPassword: PropTypes.func.isRequired, // The getPreviewPassword function

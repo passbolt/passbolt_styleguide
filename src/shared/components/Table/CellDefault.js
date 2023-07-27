@@ -17,7 +17,11 @@ import PropTypes from "prop-types";
 /**
  * This component represents a table cell default
  */
-class Cell extends Component {
+class CellDefault extends Component {
+  /**
+   * Get the value
+   * @return {string}
+   */
   get value() {
     return this.props.value;
   }
@@ -35,8 +39,8 @@ class Cell extends Component {
   }
 }
 
-Cell.propTypes = {
+CellDefault.propTypes = {
   value: PropTypes.string.isRequired, // The value to display
 };
 
-export default memo(Cell);
+export default memo(CellDefault);

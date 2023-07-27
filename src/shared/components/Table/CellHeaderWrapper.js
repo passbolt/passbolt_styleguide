@@ -18,7 +18,7 @@ import CellHeaderDefault from "./CellHeaderDefault";
 import {withTable} from "./Context/TableContext";
 
 /**
- * This component represents a table header
+ * This component represents a table cell header wrapper
  */
 class CellHeaderWrapper extends Component {
   /**
@@ -88,7 +88,7 @@ class CellHeaderWrapper extends Component {
    * Start dragging
    */
   startDragging() {
-    // Call props to inform of the column is dragging
+    // Call props to inform the column is dragging
     this.props.tableContext.onStartDraggingColumn();
   }
 
@@ -238,11 +238,16 @@ class CellHeaderWrapper extends Component {
 
   /**
    * Get props for custom cell
-   * @return {{checked: boolean|null}}
+   * @return {object}
    */
   get propsCellHeader() {
     const props = this.column.headerCellRenderer?.props || {};
-    this.column.id === "checkbox" ? props.checked = this.props.tableContext.isSelectAllChecked() : props.label = this.column.label;
+    // For column checkbox add a checked props value else add the label
+    if (this.column.id === "checkbox") {
+      props.checked = this.props.tableContext.isSelectAllChecked();
+    } else {
+      props.label = this.column.label;
+    }
     return props;
   }
 
@@ -264,7 +269,7 @@ class CellHeaderWrapper extends Component {
     return (
       <th
         key={this.column.id}
-        className={`cell-${this.column.field} selections ${this.column.draggable ? "draggable" : ""} ${this.column.sortable ? "sortable" : ""}`}
+        className={`cell-${this.column.id} selections ${this.column.draggable ? "draggable" : ""} ${this.column.sortable ? "sortable" : ""}`}
         style={this.columnWidthStyle}
         ref={this.columnRef}
         onMouseDown={event => this.column.draggable ? this.handleReorderColumnMouseDownEvent(event) : undefined}>

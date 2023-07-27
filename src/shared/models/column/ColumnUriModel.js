@@ -1,5 +1,5 @@
 /**
- * Passbolt ~ Open source TableHeader manager for teams
+ * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
@@ -11,28 +11,28 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component, memo} from "react";
-import PropTypes from "prop-types";
+
+import ColumnModel from "./ColumnModel";
 
 /**
- * This component represents a cell header default
+ * Model related to the column uri use only with the UI
  */
-class CellHeaderDefault extends Component {
+class ColumnUriModel extends ColumnModel {
   /**
-   * Render the component
-   * @return {JSX}
+   * Constructor
+   * @param {Object} columnDto
    */
-  render() {
-    return (
-      <span className="cell-header-text">
-        {this.props.label}
-      </span>
-    );
+  constructor(columnDto = {}) {
+    columnDto.id = 'uri';
+    columnDto.field = 'uri';
+    columnDto.width = columnDto.width || 210;
+    columnDto.defaultWidth = 210;
+    columnDto.resizable = true;
+    columnDto.draggable = true;
+    columnDto.sortable = true;
+    super(columnDto);
   }
 }
 
-CellHeaderDefault.propTypes = {
-  label: PropTypes.string.isRequired // The label of the column
-};
+export default ColumnUriModel;
 
-export default memo(CellHeaderDefault);

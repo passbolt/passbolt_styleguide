@@ -15,7 +15,7 @@
 import {
   defaultProps,
   propsWithAllResourcesSelected,
-  propsWithFilteredResources,
+  propsWithFilteredResources, propsWithFilteredResourcesAndColumnsHidden,
   propsWithFilteredResourcesAndDenyUiAction,
   propsWithNoResourcesForFilter,
 } from "./DisplayResourcesList.test.data";
@@ -314,7 +314,7 @@ describe("Display Resources", () => {
       await page.columns(6).resize(200);
       await page.columns(7).resize(-200);
 
-      expect(page.columns(3).name).toStrictEqual("Resource");
+      expect(page.columns(3).name).toStrictEqual("Name");
       expect(page.columns(4).name).toStrictEqual("Username");
       expect(page.columns(5).name).toStrictEqual("Password");
       expect(page.columns(6).name).toStrictEqual("URI");
@@ -359,11 +359,24 @@ describe("Display Resources", () => {
       await page.columns(3).reorder(-200);
 
       // Order should be changed
-      expect(page.columns(4).name).toStrictEqual("Resource");
+      expect(page.columns(4).name).toStrictEqual("Name");
       expect(page.columns(3).name).toStrictEqual("Username");
       expect(page.columns(6).name).toStrictEqual("Password");
       expect(page.columns(5).name).toStrictEqual("URI");
       expect(page.columns(7).name).toStrictEqual("Modified");
+    });
+  });
+
+  describe('As LU, I should hide or show a column of a resource.', () => {
+    it('As LU, I should be able to hide or show a column of a resource', async() => {
+      const props = propsWithFilteredResourcesAndColumnsHidden();
+      const page = new DisplayResourcesListPage(props);
+
+      // 5 columns should be displayed
+      expect(page.columnsCount).toStrictEqual(5);
+      expect(page.columns(3).name).toStrictEqual("Name");
+      expect(page.columns(4).name).toStrictEqual("Password");
+      expect(page.columns(5).name).toStrictEqual("URI");
     });
   });
 });

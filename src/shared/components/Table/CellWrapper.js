@@ -14,14 +14,15 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import CellDefault from "./CellDefault";
+import ColumnModel from "../../models/column/ColumnModel";
 
 /**
- * This component represents a table cell
+ * This component represents a table cell wrapper
  */
 class CellWrapper extends Component {
   /**
    * Get column
-   * @return {Object}
+   * @return {ColumnModel}
    */
   get column() {
     return this.props.column;
@@ -64,7 +65,7 @@ class CellWrapper extends Component {
   render() {
     const Cell = this.column.cellRenderer?.component || CellDefault;
     return (
-      <td className={`cell-${this.column.field}`} style={this.columnWidthStyle}>
+      <td className={`cell-${this.column.id}`} style={this.columnWidthStyle}>
         <Cell {...this.propsCell}/>
       </td>
     );
@@ -73,7 +74,7 @@ class CellWrapper extends Component {
 
 CellWrapper.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired, // The value to display
-  column: PropTypes.object.isRequired, // The columns to display
+  column: PropTypes.instanceOf(ColumnModel).isRequired, // The columns to display
   isSelected: PropTypes.bool // The isSelected boolean property
 };
 

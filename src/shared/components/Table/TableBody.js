@@ -16,7 +16,7 @@ import PropTypes from "prop-types";
 import {withTable} from "./Context/TableContext";
 
 /**
- * This component represents a table head
+ * This component represents a table body
  */
 class TableBody extends Component {
   /**

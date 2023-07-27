@@ -14,10 +14,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {
-  ResourceWorkspaceFilterTypes,
-  withResourceWorkspace
-} from "../../../contexts/ResourceWorkspaceContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
@@ -38,6 +35,13 @@ import CellPassword from "../../../../shared/components/Table/CellPassword";
 import CellButton from "../../../../shared/components/Table/CellButton";
 import CellHeaderCheckbox from "../../../../shared/components/Table/CellHeaderCheckbox";
 import CellCheckbox from "../../../../shared/components/Table/CellChecbox";
+import ColumnCheckboxModel from "../../../../shared/models/column/ColumnCheckboxModel";
+import ColumnFavoriteModel from "../../../../shared/models/column/ColumnFavoriteModel";
+import ColumnNameModel from "../../../../shared/models/column/ColumnNameModel";
+import ColumnUsernameModel from "../../../../shared/models/column/ColumnUsernameModel";
+import ColumnPasswordModel from "../../../../shared/models/column/ColumnPasswordModel";
+import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
+import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -53,6 +57,16 @@ class DisplayResourcesList extends React.Component {
     this.initEventHandlers();
     this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
+    // The columns of resources
+    this.columns = [
+      new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}),
+      new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}),
+      new ColumnNameModel({label: this.translate("Name")}),
+      new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}),
+      new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopySecret: this.canCopySecret, canPreviewSecret: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick}}}),
+      new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}),
+      new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)})
+    ];
   }
 
   /**
@@ -84,6 +98,28 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Component did mount
+   */
+  componentDidMount() {
+    this.mergeAndSortColumns();
+  }
+
+  /**
+   * Merge and sort columns
+   */
+  mergeAndSortColumns() {
+    // Get the column resources with id as a key from the resource workspace context
+    const columnsResources = this.columnsResources.reduce((result, column) => {
+      result[column.id] = column;
+      return result;
+    }, {});
+    // Merge the column values
+    this.columns.forEach(column => Object.assign(column, columnsResources[column.id]));
+    // Sort the position of the column
+    this.columns.sort((columnA, columnB) => columnA.position < columnB.position ? -1 : 1);
+  }
+
+  /**
    * Whenever the component has been updated
    */
   componentDidUpdate() {
@@ -94,7 +130,7 @@ class DisplayResourcesList extends React.Component {
    * Returns true if the component should be re-rendered
    */
   shouldComponentUpdate(prevProps, prevState) {
-    const {filteredResources, selectedResources, sorter, scrollTo} = this.props.resourceWorkspaceContext;
+    const {filteredResources, selectedResources, sorter, scrollTo, columnsResources} = this.props.resourceWorkspaceContext;
     const hasFilteredResourcesChanged = prevProps.resourceWorkspaceContext.filteredResources !== filteredResources;
     const hasBothSingleSelection = selectedResources.length === 1 && prevProps.resourceWorkspaceContext.selectedResources.length === 1;
     const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== prevProps.resourceWorkspaceContext.selectedResources[0].id;
@@ -102,6 +138,7 @@ class DisplayResourcesList extends React.Component {
     const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewPasswordChange = prevState.previewedPassword !== this.state.previewedPassword;
+    const hasResourceColumnsViewChange = prevProps.resourceWorkspaceContext.columnsResources !== columnsResources;
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedPassword();
@@ -111,6 +148,7 @@ class DisplayResourcesList extends React.Component {
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
       hasResourceToScrollChange ||
+      hasResourceColumnsViewChange ||
       hasResourcePreviewPasswordChange;
   }
 
@@ -212,17 +250,21 @@ class DisplayResourcesList extends React.Component {
     return this.selectedResources.map(getIds);
   }
 
-  get columns() {
-    return [
-      // TODO object validation
-      {id: "checkbox", field: "checkbox", label: "Checkbox", width: 20, defaultWidth: 20, resizable: false, draggable: false, sortable: false, getValue: resource => resource, cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}},
-      {id: "favorite", field: "favorite", label: "Favorite", width: 20, defaultWidth: 20, resizable: false, draggable: false, sortable: true, getValue: resource => ({id: resource.id, favorite: resource.favorite}), cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}},
-      {id: "name", field: "name", label: "Resource", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: true},
-      {id: "username", field: "username", label: "Username", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: true, cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}},
-      {id: "password", field: "password", label: "Password", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: false, getValue: resource => resource.id, cellRenderer: {component: CellPassword, props: {getPreviewPassword: this.getPreviewPassword, canCopySecret: this.canCopySecret, canPreviewSecret: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick}}},
-      {id: "uri", field: "uri", label: "URI", width: 210, defaultWidth: 210, resizable: true, draggable: true, sortable: true, cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}},
-      {id: "modified", field: "modified", label: "Modified", width: 145, defaultWidth: 145, resizable: true, draggable: true, sortable: true, getValue: resource => this.formatDateTimeAgo(resource.modified)},
-    ];
+  /**
+   * Get the columns resources
+   * @return {*|[]}
+   */
+  get columnsResources() {
+    return this.props.resourceWorkspaceContext.columnsResources;
+  }
+
+  /**
+   * Get the columns to display
+   * @return {[]}
+   */
+  get columnsFiltered() {
+    const filteredByColumnToDisplay = defaultColumn => defaultColumn.id === 'checkbox' || this.columnsResources.some(column => defaultColumn.id === column.id && column.show);
+    return this.columns.filter(filteredByColumnToDisplay);
   }
 
   /**
@@ -583,7 +625,7 @@ class DisplayResourcesList extends React.Component {
         }
         {!isEmpty &&
           <GridTable
-            columns={this.columns}
+            columns={this.columnsFiltered}
             rows={this.resources}
             sorter={this.props.resourceWorkspaceContext.sorter}
             onSortChange={this.handleSortByColumnClick}

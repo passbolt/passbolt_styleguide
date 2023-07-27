@@ -185,7 +185,7 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
-          <div>
+          <ul>
             <li>
               <button type="button" disabled={!this.isSaveEnabled()} onClick={() => this.handleFormSubmit('save')}>
                 <Icon name="save"/>
@@ -210,7 +210,7 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
                 <span><Trans>Synchronize</Trans></span>
               </button>
             </li>
-          </div>
+          </ul>
         </div>
       </div>
     );

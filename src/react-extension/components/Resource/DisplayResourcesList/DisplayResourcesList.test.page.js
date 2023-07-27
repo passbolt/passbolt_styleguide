@@ -52,6 +52,13 @@ export default class DisplayResourcesListPage {
   }
 
   /**
+   * Returns the number of displayed columns
+   */
+  get columnsCount() {
+    return this._page.container.querySelectorAll('table thead tr th').length;
+  }
+
+  /**
    * Returns the index-th columns header with useful accessors
    * @index The column index
    */
