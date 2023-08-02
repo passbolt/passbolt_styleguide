@@ -56,6 +56,7 @@ class DisplayUserBadgeMenu extends Component {
     this.handleProfileClick = this.handleProfileClick.bind(this);
     this.handleThemeClick = this.handleThemeClick.bind(this);
     this.handleMobileAppsClick = this.handleMobileAppsClick.bind(this);
+    this.handleDesktopAppsClick = this.handleDesktopAppsClick.bind(this);
   }
 
   componentDidMount() {
@@ -94,6 +95,14 @@ class DisplayUserBadgeMenu extends Component {
    */
   get canIUseMobileCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+  }
+
+  /**
+   * Can the user access the desktop capability.
+   * @returns {bool}
+   */
+  get canIUseDesktopCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
 
   /**
@@ -193,6 +202,15 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
+   * Handle desktop apps click
+   * @return {void}
+   */
+  handleDesktopAppsClick() {
+    this.props.navigationContext.onGoToUserSettingsDesktopRequested();
+    this.closeUserBadgeMenu();
+  }
+
+  /**
    * Returns true if the account recovery needs to be configured.
    * @return {bool}
    */
@@ -243,6 +261,16 @@ class DisplayUserBadgeMenu extends Component {
               <div className="row">
                 <button type="button" className="link no-border" onClick={this.handleMobileAppsClick}>
                   <span><Trans>Mobile Apps</Trans></span>
+                  <span className="chips new">new</span>
+                </button>
+              </div>
+            </li>
+            }
+            {this.canIUseDesktopCapability &&
+            <li key="desktop">
+              <div className="row">
+                <button type="button" className="link no-border" onClick={this.handleDesktopAppsClick}>
+                  <span><Trans>Desktop App</Trans></span>
                   <span className="chips new">new</span>
                 </button>
               </div>
