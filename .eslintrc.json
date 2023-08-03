@@ -29,6 +29,11 @@
     "secretComplexity": true,
     "port": true
   },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "strict": [
       "error",

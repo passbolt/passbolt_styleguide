@@ -20,6 +20,12 @@ import UserService from '../../../../shared/services/api/user/UserService';
 import UserDirectoryModel from '../../../../shared/models/userDirectory/UserDirectoryModel';
 import UserDirectoryDTO from '../../../../shared/models/userDirectory/UserDirectoryDTO';
 
+const DIRECTORY_TYPE_FIELD_NAME = "directoryType";
+const DIRECTORY_TYPE_OPENLDAP = "openldap";
+const DIRECTORY_TYPE_ACTIVE_DIRECTORY = "ad";
+const AD_FIELDS_MAPPING_USER_USERNAME_ERROR = "fieldsMappingAdUserUsernameError";
+const OPENLDAP_FIELDS_MAPPING_GROUP_USERS_ERROR = "fieldsMappingOpenLdapGroupUsersError";
+
 /**
  * The Administration user directory Context
  * @type {React.Context<Object>}
@@ -28,6 +34,8 @@ export const AdminUserDirectoryContext = React.createContext({
   getCurrentSettings: () => {}, // Returns settings saved
   getSettings: () => {}, // Returns settings for UI changes
   setSettings: () => {}, // Set the settings object with changes
+  setAdUserFieldsMappingSettings: () => {}, //  Handles active directory's user field mapping settings changes.
+  setOpenLdapGroupFieldsMappingSettings: () => {}, // Handles open ldap's group field mapping settings changes.
   hadDisabledSettings: () => {}, // returns true if the config is present even if disabled
   getUsers: () => {}, // Returns users for UI changes
   hasSettingsChanges: () => {}, // Check if the policy has changes
@@ -79,6 +87,8 @@ export class AdminUserDirectoryContextProvider extends React.Component {
       getCurrentSettings: this.getCurrentSettings.bind(this), // Returns settings saved
       getSettings: this.getSettings.bind(this), // Returns settings for UI changes
       setSettings: this.setSettings.bind(this),  // Set the settings object with changes
+      setAdUserFieldsMappingSettings: this.setAdUserFieldsMappingSettings.bind(this), // Set the field mapping settings object for the active directory part
+      setOpenLdapGroupFieldsMappingSettings: this.setOpenLdapGroupFieldsMappingSettings.bind(this), // Handles open ldap's group field mapping settings changes.
       hadDisabledSettings: this.hadDisabledSettings.bind(this), // returns true if the config is present even if disabled
       findUserDirectorySettings: this.findUserDirectorySettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
@@ -180,11 +190,74 @@ export class AdminUserDirectoryContextProvider extends React.Component {
 
   /**
    * Handle settings changes.
-   * @params {ReactEvent} The react event
+   * @param {string} key the field to change
+   * @param {string} value the value to change the field with
    * @returns {void}
    */
   setSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings, {[key]: value});
+    /*
+     * Applies default values on fields mapping if needed.
+     * It is required when a value is invalid and an admin changes the directoryType.
+     * It avoids a situation where nothing seems to happen when saving
+     * as the expected error message wouldn't be displayed.
+     */
+    if (this.isAdFieldsMappingUserUsernameResetNeeded(key, value)) {
+      newSettings.fieldsMapping.ad.user.username = UserDirectoryModel.DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE;
+      this.setError(AD_FIELDS_MAPPING_USER_USERNAME_ERROR, null);
+    }
+
+    if (this.isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value)) {
+      newSettings.fieldsMapping.openldap.group.users = UserDirectoryModel.DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE;
+      this.setError(OPENLDAP_FIELDS_MAPPING_GROUP_USERS_ERROR, null);
+    }
+
+    this.setState({settings: newSettings});
+  }
+
+  /**
+   * Returns true if the user username under AD's field mapping needs to be resetted.
+   * @param {string} key the field name that changed
+   * @param {string} value the value of the field that changed
+   * @returns {boolean}
+   */
+  isAdFieldsMappingUserUsernameResetNeeded(key, value) {
+    return key === DIRECTORY_TYPE_FIELD_NAME
+      && value === DIRECTORY_TYPE_OPENLDAP;
+  }
+
+  /**
+   * Returns true if the gropu users openldap's field mapping needs to be resetted.
+   * @param {string} key the field name that changed
+   * @param {string} value the value of the field that changed
+   * @returns {boolean}
+   */
+  isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value) {
+    return key === DIRECTORY_TYPE_FIELD_NAME
+      && value === DIRECTORY_TYPE_ACTIVE_DIRECTORY;
+  }
+
+  /**
+   * Handles active directory's user field mapping settings changes.
+   * @param {string} key the field to change
+   * @param {string} value the value to change the field with
+   * @returns {void}
+   */
+  setAdUserFieldsMappingSettings(key, value) {
+    const newSettings = Object.assign({}, this.state.settings);
+    newSettings.fieldsMapping.ad.user[key] = value;
+    this.setState({settings: newSettings});
+  }
+
+  /**
+   * Handles open ldap's group field mapping settings changes.
+   * @param {string} key the field to change
+   * @param {string} value the value to change the field with
+   * @returns {void}
+   */
+  setOpenLdapGroupFieldsMappingSettings(key, value) {
+    const newSettings = Object.assign({}, this.state.settings);
+    newSettings.fieldsMapping.openldap.group[key] = value;
     this.setState({settings: newSettings});
   }
 
