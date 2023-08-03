@@ -211,13 +211,6 @@ export const mockModel = {
 };
 
 /**
- * mock for model object with default value.
- * @param {Object} data The settings to override
- * @returns {object}
- */
-export const defaultMockModel = {"source": "db", "baseDn": "", "connectionType": "plain", "createGroups": true, "createUsers": true, "defaultAdmin": "", "defaultGroupAdmin": "", "deleteGroups": true, "deleteUsers": true, "directoryType": "ad", "domain": "", "domainError": null, "emailPrefix": "", "emailSuffix": "", "enabledUsersOnly": false, "groupObjectClass": "", "groupPath": "", "groupCustomFilters": "", "groupsParentGroup": "", "host": "", "hostError": null, "openCredentials": true, "openDirectoryConfiguration": false, "openSynchronizationOptions": false, "password": "", "port": "389", "portError": null, "updateGroups": true, "updateUsers": true, "useEmailPrefix": false, "userDirectoryToggle": false, "userObjectClass": "", "userPath": "", "userCustomFilters": "", "username": "", "usersParentGroup": ""};
-
-/**
  * mock for users object from API.
  * @returns {object}
  */
