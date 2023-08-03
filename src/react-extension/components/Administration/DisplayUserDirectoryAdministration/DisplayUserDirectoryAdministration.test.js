@@ -102,6 +102,8 @@ describe("As AD I should see the user directory settings", () => {
 
 
     it('As AD I should test the user directory on the administration settings page', async() => {
+      expect.assertions(3);
+
       //button should be enable has we have data
       expect(page.isTestButtonEnabled()).toBeTruthy();
 
@@ -112,14 +114,13 @@ describe("As AD I should see the user directory settings", () => {
       // Click on test button
       await page.testSettings();
 
-      expect.assertions(3);
-
       expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplayTestUserDirectoryAdministration);
       expect(context.setContext).toHaveBeenCalledWith({displayTestUserDirectoryDialogProps: {userDirectoryTestResult: mockResult}});
     });
 
 
     it('As AD I should save the user directory on the administration settings page', async() => {
+      expect.assertions(6);
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
 
@@ -129,8 +130,6 @@ describe("As AD I should see the user directory settings", () => {
       mockApiCalls();
 
       await page.fillPort("404");
-
-      expect.assertions(6);
 
       //button should be enable with the changes
       expect(page.isSaveButtonEnabled()).toBeTruthy();
@@ -147,6 +146,7 @@ describe("As AD I should see the user directory settings", () => {
 
 
     it('As AD I should delete the user directory on the administration settings page', async() => {
+      expect.assertions(12);
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
 
@@ -174,12 +174,15 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.isSimulateButtonEnabled()).toBeFalsy();
     });
 
+    it("As AD I shouldn't be able to submit the form if there is an invalid field", async() => {
+      expect.assertions(5);
+      await page.click(page.directoryConfigurationTitle);
 
-    it('As AD I shouldn’t be able to submit the form if there is an invalid field', async() => {
       // empty fields
       page.fillHost("");
       page.fillPort("");
       page.fillDomain("");
+      page.fillAdFieldsMappingUserUsername("");
 
       await page.saveSettings();
 
@@ -187,6 +190,34 @@ describe("As AD I should see the user directory settings", () => {
       expect(page.serverHostErrorMessage).toBe("A host is required.");
       expect(page.portErrorMessage).toBe("A port is required.");
       expect(page.domainErrorMessage).toBe("A domain name is required.");
+      expect(page.fieldsMappingAdUserUsernameErrorMessage?.textContent).toBe("The user username field mapping cannot be empty");
+
+      await page.switchToOpenLdap();
+      page.fillOpenLdapFieldsMappingGroupUsers("");
+
+      await page.saveSettings();
+      expect(page.fieldsMappingOpenLdapGroupUsersErrorMessage?.textContent).toBe("The group users field mapping cannot be empty");
+    });
+
+    it("As AD if I put an invalid value for field mapping, when switching directory type, the value should be resetted", async() => {
+      expect.assertions(4);
+      await page.click(page.directoryConfigurationTitle);
+
+      // put invalid value on AD's field mapping
+      page.fillAdFieldsMappingUserUsername("");
+      await page.saveSettings();
+      expect(page.fieldsMappingAdUserUsernameErrorMessage?.textContent).toBe("The user username field mapping cannot be empty");
+
+      await page.switchToOpenLdap();
+      page.fillOpenLdapFieldsMappingGroupUsers("");
+      await page.saveSettings();
+      expect(page.fieldsMappingOpenLdapGroupUsersErrorMessage?.textContent).toBe("The group users field mapping cannot be empty");
+
+      await page.switchToAd();
+      expect(page.fieldsMappingAdUserUsernameErrorMessage).toBeNull();
+
+      await page.switchToOpenLdap();
+      expect(page.fieldsMappingOpenLdapGroupUsersErrorMessage).toBeNull();
     });
 
     it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
@@ -211,6 +242,8 @@ describe("As AD I should see the user directory settings", () => {
     });
 
     it('As AD I should be able to simulate the synchronization', async() => {
+      expect.assertions(2);
+
       //button should be enable has we have data
       expect(page.isSimulateButtonEnabled()).toBeTruthy();
 
@@ -222,12 +255,12 @@ describe("As AD I should see the user directory settings", () => {
       // Click on simulate button
       await page.simulateSettings();
 
-      expect.assertions(2);
-
       expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySimulateSynchronizeUserDirectoryAdministration);
     });
 
     it('As AD I should be able to synchronize the users', async() => {
+      expect.assertions(2);
+
       //button should be enable has we have data
       expect(page.isSynchronizeButtonEnabled()).toBeTruthy();
 
@@ -240,12 +273,12 @@ describe("As AD I should see the user directory settings", () => {
       // Click on synchronize button
       await page.synchronizeSettings();
 
-      expect.assertions(2);
-
       expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
     });
 
     it('As AD I should see the synchronize popup when requested by simulate', async() => {
+      expect.assertions(1);
+
       //Call to simulate the settings
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockResult));
       fetch.doMockOnceIf(/users*/, () => mockApiResponse(mockUsers));

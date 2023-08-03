@@ -80,6 +80,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleFieldFocus = this.handleFieldFocus.bind(this);
     this.handleFieldBlur = this.handleFieldBlur.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleAdUserFieldsMappingInputChange = this.handleAdUserFieldsMappingInputChange.bind(this);
+    this.handleOpenLdapGroupFieldsMappingInputChange = this.handleOpenLdapGroupFieldsMappingInputChange.bind(this);
   }
 
   /**
@@ -111,7 +113,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
 
   /**
    * Handle form input changes.
-   * @params {ReactEvent} The react event
+   * @param {ReactEvent} event the react event
    * @returns {void}
    */
   handleInputChange(event) {
@@ -119,27 +121,30 @@ class DisplayUserDirectoryAdministration extends React.Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.props.adminUserDirectoryContext.setSettings(name, value);
-    this.validateInput(name, value);
   }
 
   /**
-   * validate the input
-   * @params {string} The input name
-   * @params {string} The input valude
+   * Handle specific Active Directory fields mapping input changes.
+   * @param {ReactEvent} event the react event
    * @returns {void}
    */
-  validateInput(name, value) {
-    switch (name) {
-      case 'host':
-        this.userDirectoryFormService.validateHostInput(value);
-        break;
-      case 'domain':
-        this.userDirectoryFormService.validateDomainInput(value);
-        break;
-      case 'port':
-        this.userDirectoryFormService.validatePortInput(value);
-        break;
-    }
+  handleAdUserFieldsMappingInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.props.adminUserDirectoryContext.setAdUserFieldsMappingSettings(name, value);
+  }
+
+  /**
+   * Handle specific Openldap fields mapping input changes.
+   * @param {ReactEvent} event the react event
+   * @returns {void}
+   */
+  handleOpenLdapGroupFieldsMappingInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.props.adminUserDirectoryContext.setOpenLdapGroupFieldsMappingSettings(name, value);
   }
 
   /**
@@ -498,7 +503,29 @@ class DisplayUserDirectoryAdministration extends React.Component {
                      </div>
                    </div>
                    }
+                   <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                     <label><Trans>Group users field mapping</Trans></label>
+                     <input id="field-mapping-openldap-group-users-input" type="text" aria-required={true} name="users" value={settings.fieldsMapping.openldap.group.users}
+                       onChange={this.handleOpenLdapGroupFieldsMappingInputChange} className="fluid form-element" placeholder={this.props.t("Group users field mapping")}
+                       disabled={this.hasAllInputDisabled()}/>
+                     <div className="help-message"><Trans>Directory group&apos;s users field to map to Passbolt group&apos;s field.</Trans></div>
+                     {errors.fieldsMappingOpenLdapGroupUsersError && isSubmitted &&
+                       <div id="field-mapping-openldap-group-users-input-feedback" className="error-message">{errors.fieldsMappingOpenLdapGroupUsersError}</div>
+                     }
+                   </div>
                  </div>
+                 }
+                 {this.isActiveDirectoryChecked() &&
+                   <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                     <label><Trans>User username field mapping</Trans></label>
+                     <input id="field-mapping-ad-user-username-input" type="text" aria-required={true} name="username" value={settings.fieldsMapping.ad.user.username}
+                       onChange={this.handleAdUserFieldsMappingInputChange} className="fluid form-element" placeholder={this.props.t("User username field mapping")}
+                       disabled={this.hasAllInputDisabled()}/>
+                     <div className="help-message"><Trans>Directory user&apos;s username field to map to Passbolt user&apos;s username field.</Trans></div>
+                     {errors.fieldsMappingAdUserUsernameError && isSubmitted &&
+                       <div id="field-mapping-ad-user-username-input-feedback" className="error-message">{errors.fieldsMappingAdUserUsernameError}</div>
+                     }
+                   </div>
                  }
                </div>
              </div>
