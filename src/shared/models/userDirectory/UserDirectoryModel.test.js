@@ -38,6 +38,13 @@ describe("UserDirectoryModel model", () => {
       const expectedData = mockedData({
         defaultAdmin: userId,
         defaultGroupAdmin: userId,
+        fieldsMapping: {
+          openldap: {
+            group: {
+              users: mockResult.fields_mapping.openldap.group.users
+            }
+          }
+        }
       });
       expect(model).toEqual(expectedData);
     });
@@ -52,7 +59,14 @@ describe("UserDirectoryModel model", () => {
       const expectedData = mockedData({
         defaultAdmin: userId,
         defaultGroupAdmin: userId,
-        authenticationType: "sasl"
+        authenticationType: "sasl",
+        fieldsMapping: {
+          openldap: {
+            group: {
+              users: mockResult.fields_mapping.openldap.group.users
+            }
+          }
+        }
       });
       expect(model).toEqual(expectedData);
     });
