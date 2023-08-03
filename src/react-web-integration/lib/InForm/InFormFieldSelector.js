@@ -20,17 +20,20 @@ export default {
    * Selectors to detect username inputs (input type text or not type with id or class or name contain user)
    * The selector create-account-input is for ovh.com website
    * The selector benutzerkennung is for german website
+   * The selector benutzername is also for somes german websites
    * The selector utilisateur is for french website
    */
   USERNAME_FIELD_SELECTOR: `input[type='text' i][name*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='login' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='benutzerkennung' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='benutzername' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='email' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='login' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='benutzerkennung' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='benutzername' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='utilisateur' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='user' i]:not([hidden]):not([disabled]),
   input[type='text' i][class*='email' i]:not([hidden]):not([disabled]),
@@ -45,11 +48,13 @@ export default {
   input[name*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='login' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
+  input[name*='benutzername' i]:not([type]):not([hidden]):not([disabled]),
   input[name*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='email' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='login' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='benutzerkennung' i]:not([type]):not([hidden]):not([disabled]),
+  input[id*='benutzername' i]:not([type]):not([hidden]):not([disabled]),
   input[id*='utilisateur' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='user' i]:not([type]):not([hidden]):not([disabled]),
   input[class*='email' i]:not([type]):not([hidden]):not([disabled]),
@@ -63,5 +68,8 @@ export default {
   PASSWORD_FIELD_SELECTOR: `input[type='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][name*='password' i]:not([hidden]):not([disabled]),
   input[type='text' i][id*='password' i]:not([hidden]):not([disabled]),
-  input[type='text' i][class*='password' i]:not([hidden]):not([disabled])`
+  input[type='text' i][class*='password' i]:not([hidden]):not([disabled]),
+  input[type='text' i][name*='passwort' i]:not([hidden]):not([disabled]),
+  input[type='text' i][id*='passwort' i]:not([hidden]):not([disabled]),
+  input[type='text' i][class*='passwort' i]:not([hidden]):not([disabled])`
 };
