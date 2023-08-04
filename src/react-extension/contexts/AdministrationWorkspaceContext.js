@@ -190,6 +190,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const rbac = ADMIN_URL_REGEXP.rbac.test(location);
     const isUserPassphrasePolicies = ADMIN_URL_REGEXP.userPassphrasePolicies.test(location);
     const isPasswordExpirySettings = ADMIN_URL_REGEXP.passwordExpirySettings.test(location);
+    const healthcheck = ADMIN_URL_REGEXP.healthcheck.test(location);
+
 
     let selectedAdministration;
     if (isAdminHomePageLocation) {
@@ -222,6 +224,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES;
     } else if (isPasswordExpirySettings) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY;
+    } else if (healthcheck) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.HEALTHCHECK;
     }
 
     // let's check if the current URL is actually supported
@@ -340,6 +344,7 @@ export const AdministrationWorkspaceMenuTypes = {
   PASSWORD_EXPIRY: "PASSWORD-EXPIRY", // Password Expiry administration menu selected
   HTTP_403_ACCESS_DENIED: "403-ACCESS-DENIED", // The HTTP error 403 access denied page
   HTTP_404_NOT_FOUND: "404-NOT-FOUND", // The HTTP error 404 not found page
+  HEALTHCHECK: "HEALTHCHECK" // Healthcheck administration menu selected
 };
 
 /**
@@ -380,4 +385,5 @@ const ADMIN_URL_REGEXP = {
   rbac: /^\/app\/administration\/rbacs\/?$/,
   userPassphrasePolicies: /^\/app\/administration\/user-passphrase-policies\/?$/,
   passwordExpirySettings: /^\/app\/administration\/password-expiry\/?$/,
+  healthcheck: /^\/app\/administration\/healthcheck\/?$/
 };

@@ -36,6 +36,7 @@ export function defaultProps(data = {}) {
       onGoToAdministrationRbacsRequested: jest.fn(),
       onGoToAdministrationUserPassphrasePoliciesRequested: jest.fn(),
       onGoToAdministrationPasswordExpirySettingsRequested: jest.fn(),
+      onGoToAdministrationHealthcheckRequested: jest.fn()
     }
   }, data);
 }

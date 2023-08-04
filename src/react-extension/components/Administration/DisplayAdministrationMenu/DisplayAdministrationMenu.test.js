@@ -69,6 +69,18 @@ describe("As AD I can see the administration menu", () => {
     expect(props.navigationContext.onGoToAdministrationEmailNotificationsRequested).toHaveBeenCalled();
   });
 
+  it('As AD I should be able to go to the healthcheck', async() => {
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
+    }); // The props to pass
+    page = new DisplayAdministrationMenuPage(context, props);
+    expect(page.exists()).toBeTruthy();
+    await page.goToHealthcheck();
+    expect(page.menuSelected).toBe('Passbolt API Status');
+    expect(props.navigationContext.onGoToAdministrationHealthcheckRequested).toHaveBeenCalled();
+  });
+
   it('As AD I should be able to go to subscription', async() => {
     expect.assertions(3);
     const props = defaultProps({
