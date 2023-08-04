@@ -59,7 +59,7 @@ class ExtQuickAccess extends React.Component {
    */
   get canRememberMe() {
     const options = this.state.siteSettings.getRememberMeOptions();
-    return options !== null && Object.keys(options).length > 0;
+    return options !== null && typeof options[-1] !== "undefined";
   }
 
   bindCallbacks() {
@@ -293,7 +293,7 @@ class ExtQuickAccess extends React.Component {
               <React.Fragment>
                 <ManageQuickAccessMode/>
                 {this.state.passphraseRequired &&
-                <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted}/>
+                <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted} canRememberMe={this.canRememberMe}/>
                 }
                 <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
                   <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
