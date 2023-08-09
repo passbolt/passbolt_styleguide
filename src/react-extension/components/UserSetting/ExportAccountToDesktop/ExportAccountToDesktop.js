@@ -30,16 +30,7 @@ class ExportAccountToDesktop extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindHandlers();
-  }
-
-  /**
-   * Returns the component default state
-   */
-  get defaultState() {
-    return {
-    };
   }
 
   /**
