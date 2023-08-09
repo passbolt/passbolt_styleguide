@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since
+ * @since         4.3.0
  */
 
 import ExportAccountToDesktopPage from "./ExportAccountToDesktop.page";
@@ -40,9 +40,9 @@ describe("ExportAccountToDesktop", () => {
       expect(page.title.textContent).toEqual("Welcome to the desktop app setup");
       expect(page.windowsStoreTitle.textContent).toEqual("Download the desktop app");
       expect(page.windowsStoreButton).toBeDefined();
-      expect(page.windowsStoreDescription.textContent).toEqual("Windows Hello is required to launch the passbolt app, please enable it.");
+      expect(page.windowsStoreDescription.textContent).toEqual("Passbolt is available on the Windows store.");
       expect(page.downloadAccountTitle.textContent).toEqual("Transfer your account kit");
-      expect(page.downloadAccountDescription.textContent).toEqual("An account kit is require to transfer your profile and private key to the desktop app.");
+      expect(page.downloadAccountDescription.textContent).toEqual("An account kit is required to transfer your profile and private key to the desktop app.");
       expect(page.downloadAccountKitButton.textContent).toEqual("Download your account kit");
     });
 

@@ -98,14 +98,6 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
-   * Can the user access the desktop capability.
-   * @returns {bool}
-   */
-  get canIUseDesktopCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
-  }
-
-  /**
    * Handle click events on document. Hide the component if the click occurred outside of the component.
    * @param {ReactEvent} event The event
    */
@@ -261,16 +253,6 @@ class DisplayUserBadgeMenu extends Component {
               <div className="row">
                 <button type="button" className="link no-border" onClick={this.handleMobileAppsClick}>
                   <span><Trans>Mobile Apps</Trans></span>
-                  <span className="chips new">new</span>
-                </button>
-              </div>
-            </li>
-            }
-            {this.canIUseDesktopCapability &&
-            <li key="desktop">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleDesktopAppsClick}>
-                  <span><Trans>Desktop App</Trans></span>
                   <span className="chips new">new</span>
                 </button>
               </div>
