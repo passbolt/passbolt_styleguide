@@ -56,7 +56,6 @@ class DisplayUserBadgeMenu extends Component {
     this.handleProfileClick = this.handleProfileClick.bind(this);
     this.handleThemeClick = this.handleThemeClick.bind(this);
     this.handleMobileAppsClick = this.handleMobileAppsClick.bind(this);
-    this.handleDesktopAppsClick = this.handleDesktopAppsClick.bind(this);
   }
 
   componentDidMount() {
@@ -190,15 +189,6 @@ class DisplayUserBadgeMenu extends Component {
    */
   handleMobileAppsClick() {
     this.props.navigationContext.onGoToUserSettingsMobileRequested();
-    this.closeUserBadgeMenu();
-  }
-
-  /**
-   * Handle desktop apps click
-   * @return {void}
-   */
-  handleDesktopAppsClick() {
-    this.props.navigationContext.onGoToUserSettingsDesktopRequested();
     this.closeUserBadgeMenu();
   }
 
