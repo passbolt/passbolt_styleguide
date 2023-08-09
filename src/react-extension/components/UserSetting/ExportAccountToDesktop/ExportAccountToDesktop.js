@@ -77,7 +77,6 @@ class ExportAccountToDesktop extends React.Component {
    * @returns {JSX.Element}
    */
   render() {
-    //const processingClassName = this.state.processing ? 'processing' : '';
     return (
       <div className="grid grid-responsive-12 profile-desktop-export">
         <div className="row">
