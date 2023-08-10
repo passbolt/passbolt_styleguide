@@ -276,7 +276,7 @@ class UploadUserProfileAvatar extends React.Component {
    * Refresh the user profile
    */
   async refreshUserProfile() {
-    const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user");
+    const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
     this.props.context.setContext({loggedInUser});
   }
 
