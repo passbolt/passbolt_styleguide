@@ -146,16 +146,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   }
 
   /**
-   * Get a folder permalink
-   * @param {object} folder The target folder
-   * @returns {string}
-   */
-  getFolderPermalink(folder) {
-    const baseUrl = this.props.context.userSettings.getTrustedDomain();
-    return `${baseUrl}/app/folders/view/${folder.id}`;
-  }
-
-  /**
    * Get a permission aro name
    * @param {object} permission The permission
    */
@@ -205,7 +195,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    */
   renderFolderCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const folderPermalink = this.getFolderPermalink(this.folder);
     const folderName = this.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -215,7 +204,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> created folder <a target="_blank" rel="noopener noreferrer" href={folderPermalink}>{{folderName}}</a>
+                <span className="creator">{{activityCreatorName}}</span> created folder <span className="item">{{folderName}}</span>
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
@@ -233,7 +222,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    */
   renderFolderUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const folderPermalink = this.getFolderPermalink(this.folder);
     const folderName = this.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -243,7 +231,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> updated folder <a target="_blank" rel="noopener noreferrer" href={folderPermalink}>{{folderName}}</a>
+                <span className="creator">{{activityCreatorName}}</span> updated folder <span className="item">{{folderName}}</span>
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
@@ -289,7 +277,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
    */
   renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const folderPermalink = this.getFolderPermalink(this.folder);
     const folderName = this.folder.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -299,7 +286,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> changed permissions of folder <a target="_blank" rel="noopener noreferrer" href={folderPermalink}>{{folderName}}</a> with
+                <span className="creator">{{activityCreatorName}}</span> changed permissions of folder <span className="item">{{folderName}}</span> with
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>

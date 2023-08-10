@@ -174,6 +174,14 @@ class DisplayUserDetailsActivity extends React.Component {
   }
 
   /**
+   * Get the base url
+   * @return {string}
+   */
+  get baseUrl() {
+    return this.props.context.userSettings.getTrustedDomain();
+  }
+
+  /**
    * Render a requested account recovery activity.
    * @param {object} activity The target activity
    * @returns {JSX}
@@ -194,7 +202,7 @@ class DisplayUserDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -206,7 +214,7 @@ class DisplayUserDetailsActivity extends React.Component {
    */
   renderAccountRecoveryRequestRejected(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const userLink = `/app/users/view/${activity.creator.id}`;
+    const userLink = `${this.baseUrl}/app/users/view/${activity.creator.id}`;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
@@ -215,13 +223,13 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <a target="_blank" rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> rejected the account recovery request
+                <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> rejected the account recovery request
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -233,7 +241,7 @@ class DisplayUserDetailsActivity extends React.Component {
    */
   renderAccountRecoveryRequestAccepted(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const userLink = `/app/users/view/${activity.creator.id}`;
+    const userLink = `${this.baseUrl}/app/users/view/${activity.creator.id}`;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
@@ -242,13 +250,13 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <a target="_blank" rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> accepted the account recovery request
+                <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> accepted the account recovery request
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -274,7 +282,7 @@ class DisplayUserDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -300,7 +308,7 @@ class DisplayUserDetailsActivity extends React.Component {
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -312,7 +320,7 @@ class DisplayUserDetailsActivity extends React.Component {
    */
   renderUserCreated(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const userLink = `/app/users/view/${activity.creator.id}`;
+    const userLink = `${this.baseUrl}/app/users/view/${activity.creator.id}`;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
     return (
@@ -321,13 +329,13 @@ class DisplayUserDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <a target="_blank" rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> created the user account
+                <a rel="noopener noreferrer" href={userLink}><span className="creator">{{activityCreatorName}}</span></a> created the user account
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
