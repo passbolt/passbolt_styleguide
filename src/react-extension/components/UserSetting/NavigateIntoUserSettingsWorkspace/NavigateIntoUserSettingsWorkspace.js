@@ -48,6 +48,13 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the desktop capability.
+   * @returns {bool}
+   */
+  get canIUseDesktopCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+  }
+  /**
    * Can the user access the account recovery feature.
    * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
    */
@@ -169,6 +176,20 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsMobileRequested}>
                     <span><Trans>Mobile setup</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseDesktopCapability &&
+          <li>
+            <div
+              className={`row ${isSelected('desktop') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}>
+                    <span><Trans>Desktop app setup</Trans></span>
                   </button>
                 </div>
               </div>

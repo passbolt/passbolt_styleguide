@@ -62,6 +62,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
+  onGoToUserSettingsDesktopRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace desktop section.
   onGoToUserSettingsAccountRecoveryRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
   onGoToNewTab: () => {
@@ -114,6 +116,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
+      onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
     };
@@ -381,6 +384,15 @@ class NavigationContextProvider extends React.Component {
   async onGoToUserSettingsMobileRequested() {
     await this.goTo("browser-extension", "/app/settings/mobile");
   }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace desktop section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsDesktopRequested() {
+    await this.goTo("browser-extension", "/app/settings/desktop");
+  }
+
 
   /**
    * Whenever the user wants to navigate to the users settings workspace account recovery section.
