@@ -33,7 +33,7 @@ describe("Login", () => {
     it(`As AN I should be able to enter my secret key passphrase, scenario: ${JSON.stringify(_props)}`, async() => {
       expect.assertions(2);
       const props = defaultProps(_props);
-      props.context.port.addRequestListener('passbolt.remember-me.get', async() => false);
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
 
       const page = new LoginPage(props);
 
@@ -49,7 +49,7 @@ describe("Login", () => {
     it(`As AN I should be able to remember my passphrase if the feature is disabled, scenario: ${JSON.stringify(_props)}`, async() => {
       expect.assertions(2);
       const props = defaultProps({..._props, canRememberMe: false});
-      props.context.port.addRequestListener('passbolt.remember-me.get', async() => false);
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
 
       const page = new LoginPage(props);
 
@@ -65,7 +65,7 @@ describe("Login", () => {
     it(`As AN I should be able to remember my passphrase if the feature is enabled, scenario: ${JSON.stringify(_props)}`, async() => {
       expect.assertions(2);
       const props = defaultProps({..._props, canRememberMe: true});
-      props.context.port.addRequestListener('passbolt.remember-me.get', async() => false);
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
 
       const page = new LoginPage(props);
 
@@ -94,7 +94,7 @@ describe("Login", () => {
       let checkResolve = null;
       const onSignIn = jest.fn(() => new Promise(resolve => checkResolve = resolve));
       const props = defaultProps({..._props, onSignIn});
-      props.context.port.addRequestListener('passbolt.remember-me.get', async() => false);
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
       const page = new LoginPage(props);
 
       await waitFor(() => {});
@@ -114,7 +114,7 @@ describe("Login", () => {
       let checkResolve = null;
       const onSignIn = jest.fn(() => new Promise(resolve => checkResolve = resolve));
       const props = defaultProps({..._props, onSignIn});
-      props.context.port.addRequestListener('passbolt.remember-me.get', async() => false);
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
       const page = new LoginPage(props);
 
       await waitFor(() => {});

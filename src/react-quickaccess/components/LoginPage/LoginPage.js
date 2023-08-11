@@ -55,7 +55,7 @@ class LoginPage extends React.Component {
    * @returns {Promise<void>}
    */
   async initDefaultRememberMeChoice() {
-    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get');
+    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get-user-latest-choice');
     if (defaultRememberMeChoice !== this.state.rememberMe) {
       this.setState({rememberMe: defaultRememberMeChoice});
     }
