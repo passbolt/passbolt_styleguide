@@ -59,14 +59,14 @@ class DisplayAdministrationSubscriptionActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
-          <div>
+          <ul>
             <li>
               <button type="button" onClick={this.handleEditSubscriptionClick}>
                 <Icon name="edit"/>
                 <span><Trans>Update key</Trans></span>
               </button>
             </li>
-          </div>
+          </ul>
         </div>
       </div>
     );

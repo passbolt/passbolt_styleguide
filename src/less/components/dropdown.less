@@ -4,9 +4,9 @@
     position: relative;
     margin-right: .8rem;
 
-    button {
+    button, .button {
         &.open {
-            z-index: 801;
+            z-index: 4;
             background: @dropdown-background;
             border-radius: .4rem .4rem 0 0;
             box-shadow: inset .1rem 0 0 0 @default-border, inset -.1rem 0 0 0 @default-border, inset 0 .1rem 0 0 @default-border;
@@ -19,8 +19,7 @@
             }
 
             &.button-action-icon {
-              padding-bottom: 2.2rem;
-              height: 5rem;
+              height: 4.2rem; // Add .6rem to 3.6rem due to the padding bottom (1.4rem -.8rem)
             }
 
             & + .dropdown-content {
@@ -34,6 +33,10 @@
             }
         }
 
+        &.button-action-icon {
+          width: inherit;
+        }
+
         .svg-icon + .svg-icon {
             margin-left: .8rem;
             display: inline-flex;
@@ -44,7 +47,7 @@
     .dropdown-content {
         float: left;
         position: absolute;
-        z-index: 800;
+        z-index: 3;
         display: none;
         border: 1px solid @default-border;
         box-sizing: border-box;
@@ -113,6 +116,17 @@
                     background: @dropdown-item-active-background;
                     box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black);
                 }
+            }
+
+            .checkbox {
+              padding: .8rem 1.6rem;
+              margin: 0;
+
+              // Dropdown menu item hover
+              &:hover {
+                color: @dropdown-item-hover-text-color;
+                background: @dropdown-item-hover-background;
+              }
             }
         }
     }

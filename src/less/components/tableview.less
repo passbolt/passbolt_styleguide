@@ -6,21 +6,26 @@
   position: relative;
   margin-right: 1.6rem;
   font-size: 1.5rem; /* 15px */
-  height: 100%;
+  height: calc(100% - 4rem); // 100% - breadcrumb height - border
   border-radius: 0.3rem 0.3rem 0 0;
   border: 1px solid @default-border;
   border-bottom: none;
   box-shadow: 0 -.1rem 0 @tableview-shadow-color;
+  overflow: auto;
 
   /* header */
   .tableview-header {
-    background: @tableview-header-background;
-    height: 3.2rem;
-    width: 100%;
+    height: 3.2rem;background: @tableview-header-background;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 
     table {
       width: 100%;
+      height: 100%;
+      background: @tableview-header-background;
       color: @tableview-header-text-color;
+      table-layout: fixed;
 
       .input.checkbox input[type=checkbox] {
         background: @tableview-header-checkbox-background;
@@ -32,7 +37,7 @@
 
       button {
         color: @tableview-header-text-color;
-
+        max-width: 100%;
       }
     }
   }
@@ -40,16 +45,15 @@
   /* main content */
   .tableview-content {
     top: 3.1rem;
-    bottom: 3.8rem;
+    bottom: 0;
     padding: 0;
-    width: 100%;
     border-top: 1px solid @default-border;
-    overflow-y: scroll;
     position: absolute;
 
     table {
       width: 100%;
       color: @tableview-content-text-color;
+      table-layout: fixed;
 
       .input.checkbox input[type=checkbox] {
         background: @tableview-content-checkbox-background;
@@ -80,10 +84,32 @@
       text-align: left;
       padding: .5rem .3rem .6rem .3rem;
       vertical-align: middle;
+      position: relative;
     }
 
     th {
       font-weight: 800;
+
+      &.draggable {
+        cursor: move;
+      }
+
+      .resizer {
+        /* Displayed at the right side of column */
+        position: absolute;
+        top: .4rem;
+        right: 0;
+        width: 5px;
+        cursor: col-resize;
+        user-select: none;
+        height: 2.4rem;
+        margin-right: .8rem;
+        border-right: 1px solid @default-border;
+
+        &:hover, &.resizing {
+          border-right: 2px solid @button-focus-border;
+        }
+      }
     }
 
     td div {
@@ -109,22 +135,22 @@
 
     .m-cell {
       width: 14.5rem;
-      max-width: 14.5rem;
-      vertical-align: middle;
     }
 
     .l-cell {
       width: 21rem;
-      max-width: 21rem;
     }
 
     .xl-cell {
       width: 28.5rem;
-      max-width: 28.5rem;
     }
 
     .cell-header {
       display: flex;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: .8rem;
     }
 
     .cell-header-text {
@@ -140,13 +166,21 @@
       align-items: center;
 
       .svg-icon {
-        margin-left: 0.5rem;
+        margin: 0 .5rem;
       }
     }
 
-    thead th {
-      button:hover {
+    thead {
+      tr.dragging {
+        th > * {
+          pointer-events: none;
+          user-select: none;
+        }
+      }
+      th {
+        button:hover {
           color: @text-focus-color;
+        }
       }
     }
 
@@ -210,8 +244,12 @@
     }
 
     /* multi select and fav fix */
-    th.cell-multiple-select,
-    td.cell-multiple-select {
+    th.cell-checkbox,
+    td.cell-checkbox {
+      .cell-header {
+        margin: 0;
+        overflow: inherit;
+      }
       .input.checkbox {
         margin: 0 0 0 .5rem; // some space for focus state
       }
@@ -223,23 +261,35 @@
       button {
         display: flex;
         align-items: center;
+        .cell-header {
+          margin: 0;
+          overflow: inherit;
+          .cell-header-icon-sort {
+            display: flex;
+            margin: 0;
+            .svg-icon {
+              margin: 0;
+            }
+          }
+        }
       }
     }
 
     th.attention-required {
-      .svg-icon.exclamation {
-        position: relative;
-        top: -.10rem;
-        svg {
-          margin-left: .25rem;
+      .cell-header {
+        margin: 0;
+        overflow: inherit;
+
+        .svg-icon.exclamation {
+          svg {
+            margin-left: .25rem;
+          }
         }
       }
     }
 
     td.attention-required {
       .svg-icon.exclamation {
-        position: relative;
-        top: -.10rem;
         svg {
           margin-left: .25rem;
           --icon-exclamation-background-color: @icon-exclamation-required-color;
@@ -247,7 +297,7 @@
       }
     }
 
-    td.password {
+    td.cell-password {
       .secret {
         float: left;
         max-width: calc(100% - 3rem); // password field - password preview button
@@ -271,39 +321,6 @@
           display: flex;
         }
       }
-    }
-  }
-}
-
-/* hide secondary actions if there is no space */
-@media all and (max-width: 600px) {
-  .tableview {
-    table tbody {
-      background: @tableview-selected-background;
-
-      td {
-        display: block;
-
-        &.s-cell, &.s2-cell, &.m-cell, &.l-cell {
-          max-width: 90%;
-          width: 90%;
-          padding: .5em;
-        }
-
-        &.s-cell {
-          display: none;
-        }
-      }
-    }
-
-    thead {
-      display: none;
-    }
-
-    .tableview-content {
-      top: 0;
-      border: 0;
-      bottom: 0;
     }
   }
 }

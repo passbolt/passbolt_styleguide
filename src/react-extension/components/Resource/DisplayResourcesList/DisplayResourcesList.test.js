@@ -15,7 +15,7 @@
 import {
   defaultProps,
   propsWithAllResourcesSelected,
-  propsWithFilteredResources,
+  propsWithFilteredResources, propsWithFilteredResourcesAndColumnsHidden,
   propsWithFilteredResourcesAndDenyUiAction,
   propsWithNoResourcesForFilter,
 } from "./DisplayResourcesList.test.data";
@@ -293,6 +293,90 @@ describe("Display Resources", () => {
       expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
     });
   });
+
+  describe('As LU, I should resize columns of a resource.', () => {
+    it('As LU, I should be able to resize a column of a resource with mouse move', async() => {
+      const props = propsWithFilteredResources();
+      const page = new DisplayResourcesListPage(props);
+      // Need to resize before to check due to the actual width is negative
+      await page.columns(4).resize(300);
+      await page.columns(7).resize(500);
+      // Actual width before resize
+      const resourceWidth = parseFloat(page.columns(3).width.slice(0, -2));
+      const usernameWidth = parseFloat(page.columns(4).width.slice(0, -2));
+      const passwordWidth = parseFloat(page.columns(5).width.slice(0, -2));
+      const uriWidth = parseFloat(page.columns(6).width.slice(0, -2));
+      const modifiedWidth = parseFloat(page.columns(7).width.slice(0, -2));
+      // Resize
+      await page.columns(3).resize(100);
+      await page.columns(4).resize(-100);
+      await page.columns(5).resize(150);
+      await page.columns(6).resize(200);
+      await page.columns(7).resize(-200);
+
+      expect(page.columns(3).name).toStrictEqual("Name");
+      expect(page.columns(4).name).toStrictEqual("Username");
+      expect(page.columns(5).name).toStrictEqual("Password");
+      expect(page.columns(6).name).toStrictEqual("URI");
+      expect(page.columns(7).name).toStrictEqual("Modified");
+      // Compare width
+      expect(resourceWidth).toBeLessThan(parseFloat(page.columns(3).width.slice(0, -2)));
+      expect(usernameWidth).toBeGreaterThan(parseFloat(page.columns(4).width.slice(0, -2)));
+      expect(passwordWidth).toBeLessThan(parseFloat(page.columns(5).width.slice(0, -2)));
+      expect(uriWidth).toBeLessThan(parseFloat(page.columns(6).width.slice(0, -2)));
+      expect(modifiedWidth).toBeGreaterThan(parseFloat(page.columns(7).width.slice(0, -2)));
+    });
+
+    it('As LU, I should be able to resize a column to its default with double click', async() => {
+      const props = propsWithFilteredResources();
+      const page = new DisplayResourcesListPage(props);
+      await page.columns(3).resizeDefault();
+      await page.columns(4).resizeDefault();
+      await page.columns(5).resizeDefault();
+      await page.columns(6).resizeDefault();
+      await page.columns(7).resizeDefault();
+
+      expect(page.columns(3).width).toStrictEqual("145px");
+      expect(page.columns(4).width).toStrictEqual("145px");
+      expect(page.columns(5).width).toStrictEqual("145px");
+      expect(page.columns(6).width).toStrictEqual("210px");
+      expect(page.columns(7).width).toStrictEqual("145px");
+    });
+  });
+
+  describe('As LU, I should reorder a column of a resource.', () => {
+    it('As LU, I should be able to reorder a column of a resource with mouse move', async() => {
+      const props = propsWithFilteredResources();
+      const page = new DisplayResourcesListPage(props);
+      // Need to resize before to check due to the actual width is negative
+      Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+        configurable: true, value: 300
+      });
+      // Reorder
+      await page.columns(3).reorder(200);
+      await page.columns(6).reorder(-250);
+      await page.columns(7).reorder(150);
+      await page.columns(3).reorder(-200);
+
+      // Order should be changed
+      expect(page.columns(4).name).toStrictEqual("Name");
+      expect(page.columns(3).name).toStrictEqual("Username");
+      expect(page.columns(6).name).toStrictEqual("Password");
+      expect(page.columns(5).name).toStrictEqual("URI");
+      expect(page.columns(7).name).toStrictEqual("Modified");
+    });
+  });
+
+  describe('As LU, I should hide or show a column of a resource.', () => {
+    it('As LU, I should be able to hide or show a column of a resource', async() => {
+      const props = propsWithFilteredResourcesAndColumnsHidden();
+      const page = new DisplayResourcesListPage(props);
+
+      // 5 columns should be displayed
+      expect(page.columnsCount).toStrictEqual(5);
+      expect(page.columns(3).name).toStrictEqual("Name");
+      expect(page.columns(4).name).toStrictEqual("Password");
+      expect(page.columns(5).name).toStrictEqual("URI");
+    });
+  });
 });
-
-

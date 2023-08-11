@@ -232,8 +232,8 @@ export default class ResourceWorkspaceContextPage {
    * Go to a resource uri
    * @param resource A specific resource
    */
-  async goToResourceUri(resource) {
-    await this.resourceWorkspaceContext.onGoToResourceUriRequested(resource);
+  async goToResourceUri(uri) {
+    await this.resourceWorkspaceContext.onGoToResourceUriRequested(uri);
   }
 
   /**
