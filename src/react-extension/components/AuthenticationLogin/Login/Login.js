@@ -359,7 +359,7 @@ class Login extends Component {
                 <Trans>Sign in with Single Sign-On.</Trans>
               </button>
             }
-            {!this.props.isSsoAvailable &&
+            {!this.props.isSsoAvailable && !this.props.isDesktop &&
               <button type="button" className="link" onClick={this.props.onSecondaryActionClick}>
                 <Trans>Help, I lost my passphrase.</Trans>
               </button>
@@ -381,6 +381,7 @@ Login.propTypes = {
     LoginVariations.ACCOUNT_RECOVERY,
   ]), // Defines how the form should be displayed and behaves
   isSsoAvailable: PropTypes.bool, // true if SSO is available
+  isDesktop: PropTypes.bool, // true if desktop is available
   context: PropTypes.any, // The application context
   account: PropTypes.object, // The user account
   userSettings: PropTypes.object, // The user settings
