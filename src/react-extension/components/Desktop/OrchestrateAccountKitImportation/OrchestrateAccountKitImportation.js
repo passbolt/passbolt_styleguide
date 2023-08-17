@@ -27,11 +27,11 @@ class OrchestrateAccountKitImportation extends Component {
    * Render the component
    */
   render() {
-    switch (this.props.importAccountKitContext.getState()) {
+    switch (this.props.importAccountKitContext.state) {
       case ImportAccountKitWorkflowStates.GET_STARTED:
         return <GetStartedDesktop />;
       case ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT:
-        return <div>Import account kit</div>;
+        return <div class="import-account-kit">Import account kit</div>;
     }
   }
 }

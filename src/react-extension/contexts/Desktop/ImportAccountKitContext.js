@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import { withAppContext } from "../../../shared/context/AppContext/AppContext";
 
 // The import account kit workflow states.
 export const ImportAccountKitWorkflowStates = {
@@ -28,11 +28,11 @@ export const ImportAccountKitWorkflowStates = {
  * @type {React.Context<{}>}
  */
 export const ImportAccountKitContext = React.createContext({
-  isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
-  setProcessing: () => {}, //Update processing object
-  getState: () => {}, // return the workflow state
-  setState: () => {}, // set the workflow state
-  clearContext: () => {}, // put the data to its default state value
+  state: null, // orchestration state
+  navigate: () => { }, // Change state for orchestration
+  isProcessing: () => { }, // returns true if a process is running and the UI must be disabled
+  setProcessing: () => { }, //Update processing object
+  clearContext: () => { }, // put the data to its default state value
 });
 
 /**
@@ -54,32 +54,13 @@ export class ImportAccountKitContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      // Workflow data.
       state: ImportAccountKitWorkflowStates.GET_STARTED, // The current login workflow state.
       processing: false, // Context is processing data
-
-      // Public workflow mutators.
-      getState: this.getState.bind(this), // return the workflow state
-      setState: this.setState.bind(this), // set the workflow state
+      clearContext: this.clearContext.bind(this), // put the data to its default state value
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
-      setProcessing: this.setProcessing.bind(this)
+      setProcessing: this.setProcessing.bind(this), // set processing 
+      navigate: this.navigate.bind(this) //navigate to step
     };
-  }
-
-  /**
-   * Returns the workflow state.
-   * @returns {String}
-   */
-  getState() {
-    return this.state;
-  }
-
-  /**
-   * setter for the workflow state.
-   * @param {String} state The workflow state
-   */
-  setState(state) {
-    return this.setState({state});
   }
 
   /**
@@ -97,8 +78,29 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
   }
+
+  /**
+    * Handle processing change.
+    * @params {Boolean} processing value
+    * @returns {void}
+    */
+  navigate(state) {
+    this.setState({ state });
+  }
+
+  /**
+   * Puts the state to its default in order to avoid keeping the data users didn't want to save.
+   */
+  clearContext() {
+    const { state, processing } = this.defaultState;
+    this.setState({
+      state,
+      processing,
+    });
+  }
+
 
   /**
    * Render the component

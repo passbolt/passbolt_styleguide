@@ -40,7 +40,7 @@ class GetStartedDesktop extends React.Component {
    * @returns {void}
    */
   handleStart() {
-    this.props.importAccountKitContext.setState(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
+    this.props.importAccountKitContext.navigate(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
   }
 
   /**
@@ -51,7 +51,7 @@ class GetStartedDesktop extends React.Component {
     return (
       <div className="get-started-desktop">
         <h1><Trans>Get started !</Trans></h1>
-        <p>
+        <p class="get-started-description">
           <Trans>You need to upload an account kit to start using the desktop app. </Trans> <br/>
           <Trans>Please follow these instructions:</Trans>
         </p>
