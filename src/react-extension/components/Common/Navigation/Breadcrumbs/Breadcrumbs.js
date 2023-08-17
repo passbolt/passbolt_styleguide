@@ -29,6 +29,7 @@ class Breadcrumbs extends Component {
             return <li className="ellipsis" key={index}>{breadcrumb}</li>;
           }))}
         </ul>
+        {this.props.children}
       </div>
     );
   }
@@ -36,6 +37,7 @@ class Breadcrumbs extends Component {
 
 Breadcrumbs.propTypes = {
   items: PropTypes.array, // Array of breadcrumb [{name, onClick}, ..]
+  children: PropTypes.any, // the children
 };
 
 export default Breadcrumbs;

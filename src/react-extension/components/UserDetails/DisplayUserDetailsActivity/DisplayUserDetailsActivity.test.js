@@ -64,13 +64,16 @@ describe("See user activities", () => {
     const page = new DisplayUserDetailsActivityPage(context, props);
     await page.clickOnTitle();
 
-    expect.assertions(3);
+    expect.assertions(4);
     expect(page.moreButton).not.toBeNull();
     const expectedActivityCount = 5;
     await page.moreButtonClick(expectedActivityCount);
 
     expect(page.displayActivityList.length).toBe(expectedActivityCount);
     expect(page.displayedActivityCreator(4)).toBe('Admin admin');
+    const baseUrl = context.userSettings.getTrustedDomain();
+    const userId = lastActivityMock[0].creator.id;
+    expect(page.link(4).href).toBe(`${baseUrl}/app/users/view/${userId}`);
   });
 
   /**

@@ -62,6 +62,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the users settings workspace keys section.
   onGoToUserSettingsMobileRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
+  onGoToUserSettingsDesktopRequested: () => {
+  }, // Whenever the user wants to navigate to the users settings workspace desktop section.
   onGoToUserSettingsAccountRecoveryRequested: () => {
   }, // Whenever the user wants to navigate to the users settings workspace mobile section.
   onGoToNewTab: () => {
@@ -102,6 +104,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationSelfRegistrationRequested: this.onGoToAdministrationSelfRegistrationRequested.bind(this), //Whenever the users wants to navigate to the administration workspace self registration settings
       onGoToAdministrationSsoRequested: this.onGoToAdministrationSsoRequested.bind(this), // Whenever the user wants to navigate to the administration workspace sso
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
+      onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -114,6 +117,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsMfaRequested: this.onGoToUserSettingsMfaRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mfa section.
       onGoToUserSettingsKeysRequested: this.onGoToUserSettingsKeysRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace keys section.
       onGoToUserSettingsMobileRequested: this.onGoToUserSettingsMobileRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
+      onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
     };
@@ -163,6 +167,8 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/smtp-settings";
     } else if (this.isSelfRegistrationEnable) {
       pathname = "/app/administration/self-registation";
+    } else if (this.isPasswordPoliciesEnable) {
+      pathname = "/app/administration/password-policies";
     }
     await this.goTo("api", pathname);
   }
@@ -181,6 +187,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationMfaPolicyRequested() {
     await this.goTo("api", "/app/administration/mfa-policy");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace password policy.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationPasswordPoliciesRequested() {
+    await this.goTo("browser-extension", "/app/administration/password-policies");
   }
 
   /**
@@ -292,6 +306,15 @@ class NavigationContextProvider extends React.Component {
     return siteSettings && siteSettings.canIUse('selfRegistration');
   }
 
+  /**
+   * Returns true if the user has the self registration enabled
+   * @returns {boolean}
+   */
+  get isPasswordPoliciesEnable() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
+  }
+
   /*
    * =============================================================
    *  Passwords navigation
@@ -381,6 +404,15 @@ class NavigationContextProvider extends React.Component {
   async onGoToUserSettingsMobileRequested() {
     await this.goTo("browser-extension", "/app/settings/mobile");
   }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace desktop section.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsDesktopRequested() {
+    await this.goTo("browser-extension", "/app/settings/desktop");
+  }
+
 
   /**
    * Whenever the user wants to navigate to the users settings workspace account recovery section.

@@ -65,16 +65,11 @@ class DomUtils {
    * @param node A Dom node
    */
   static getScrollParent(node) {
-    const regex = /(auto|scroll)/;
-
     const style = (node, prop) =>
       getComputedStyle(node, null).getPropertyValue(prop);
 
     const isScrollable = node =>
-      regex.test(
-        style(node, "overflow") +
-        style(node, "overflow-y") +
-        style(node, "overflow-x"));
+      style(node, "overflow")?.split(' ').every(overflow => overflow === 'auto' || overflow === 'scroll');
 
     const scrollParent = node => {
       // if node or node = document.body or node type is element node (ex: for iframe node type = document)

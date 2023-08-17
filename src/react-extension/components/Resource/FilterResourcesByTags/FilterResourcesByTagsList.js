@@ -286,7 +286,7 @@ class FilterResourcesByTagsList extends React.Component {
    * @returns {boolean}
    */
   canDropInto() {
-    return this.draggedItems.resources.length > 0;
+    return this.draggedItems.resources && this.draggedItems.resources.length > 0;
   }
 
   /**

@@ -203,7 +203,11 @@ export default class EnterNewPassphrasePage {
   async insertPassphrase(data)  {
     this.fillInput(this.passphraseInput, data);
     jest.runAllTimers();
-    await waitFor(() => {});
+    await waitFor(() => {
+      if (this.passphraseInput.value !== data) {
+        throw new Error("pasword input is not set yet");
+      }
+    });
   }
 
   /** click update */

@@ -24,6 +24,7 @@ import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
+
 /**
  * The component display variations.
  * @type {Object}
@@ -45,8 +46,10 @@ class CreateGpgKey extends Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.pownedService = null;
     this.isPwndProcessingPromise = null;
     this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
+
     this.bindEventHandlers();
     this.createReferences();
   }
@@ -66,7 +69,8 @@ class CreateGpgKey extends Component {
         uppercase: '',
         alphanumeric: '',
         specialCharacters: '',
-        notInDictionary: ''
+        notInDictionary: '',
+        enoughEntropy: ''
       },
       isPwnedServiceAvailable: true // True if the isPwned service can be reached
     };
@@ -84,10 +88,11 @@ class CreateGpgKey extends Component {
    */
   get isValid() {
     const validation = {
-      enoughLength: this.state.hintClassNames.enoughLength === "success",
-      enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy !== 0,
-      notInDictionary: this.state.hintClassNames.notInDictionary !== "error"
+      notInDictionary: this.pownedService === null || this.state.hintClassNames.notInDictionary !== "error"
     };
+    validation.enoughEntropy = this.state.passphraseEntropy && this.state.passphraseEntropy !== 0;
+    validation.enoughLength = this.state.hintClassNames.enoughLength === "success";
+
     return Object.values(validation).every(value => value);
   }
 
@@ -123,9 +128,16 @@ class CreateGpgKey extends Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
+  async componentDidMount() {
     this.focusOnPassphrase();
+    this.initPwnedPasswordService();
+  }
+
+  /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    this.pownedService = new PownedService(this.props.context.port);
   }
 
   /**
@@ -139,22 +151,22 @@ class CreateGpgKey extends Component {
    * Whenever the passphrase change
    * @param {Event} event The input event
    */
-  async handlePassphraseChange(event) {
+  handlePassphraseChange(event) {
     const passphrase = event.target.value;
     let hintClassNames = {};
     let passphraseEntropy = null;
-
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
-      hintClassNames = this.evaluatePassphraseHintClassNames(passphrase);
-      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+      hintClassNames = this.evaluatePassphraseDefaultHintClassNames(passphrase);
+
+      if (this.pownedService) {
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+      }
     } else {
-      this.setState({
-        hintClassNames: {
-          ...this.state.hintClassNames,
-          notInDictionary: "unavailable"
-        }
-      });
+      hintClassNames = {
+        ...this.state.hintClassNames,
+        notInDictionary: "unavailable"
+      };
     }
 
     this.setState({passphrase, passphraseEntropy, hintClassNames});
@@ -170,15 +182,15 @@ class CreateGpgKey extends Component {
   }
 
   /**
-   * Evaluate the passphrase hints classnames
+   * Evaluate the passphrase default hints classnames
    * @param {string} passphrase The passphrase to evaluate
    * @return {object}
    */
-  evaluatePassphraseHintClassNames(passphrase) {
+  evaluatePassphraseDefaultHintClassNames(passphrase) {
     const masks = SecurityComplexity.matchMasks(passphrase);
-    const hintClassName = condition => condition ? "success" : "warning";
+    const hintClassName = condition => condition ? 'success' : 'warning';
     return {
-      enoughLength:  passphrase.length >= 8 ? "success" : "error",
+      enoughLength: passphrase.length >= 8 ? 'success' : 'error',
       uppercase: hintClassName(masks.uppercase),
       alphanumeric: hintClassName(masks.alpha && masks.digit),
       specialCharacters: hintClassName(masks.special),
@@ -196,34 +208,35 @@ class CreateGpgKey extends Component {
       return;
     }
 
-    const passphrase = this.state.passphrase;
-    let notInDictionaryHint = "success";
+    const hintClassNames = this.state.hintClassNames;
+    hintClassNames.notInDictionary = "unavailable";
+    if (!this.pownedService) {
+      this.setState({hintClassNames});
+      return;
+    }
 
+    const passphrase = this.state.passphrase;
     if (passphrase.length < 8) {
-      notInDictionaryHint = passphrase.length > 0 ? "error" : "unavailable";
-    } else {
-      try {
-        const result = await this.pownedService.evaluateSecret(passphrase);
-        isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-        notInDictionaryHint =  isPwnedServiceAvailable ? (result.inDictionary ? "error" : "success") : "unavailable";
-      } catch (error) {
-        // If the service is unavailable don't block the user journey.
-        if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
-          isPwnedServiceAvailable = false;
-          notInDictionaryHint = "unavailable";
-        } else {
-          throw error;
-        }
+      hintClassNames.notInDictionary = passphrase.length > 0 ? "error" : "unavailable";
+      this.setState({hintClassNames});
+      return;
+    }
+
+    try {
+      const result = await this.pownedService.evaluateSecret(passphrase);
+      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
+      hintClassNames.notInDictionary = result.isPwnedServiceAvailable ? (result.inDictionary ? "error" : "success") : "unavailable";
+    } catch (error) {
+      // If the service is unavailable don't block the user journey.
+      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
+        isPwnedServiceAvailable = false;
+        hintClassNames.notInDictionary = "unavailable";
+      } else {
+        throw error;
       }
     }
 
-    this.setState({
-      isPwnedServiceAvailable,
-      hintClassNames: {
-        ...this.state.hintClassNames,
-        notInDictionary: notInDictionaryHint
-      }
-    });
+    this.setState({isPwnedServiceAvailable, hintClassNames});
   }
 
   /**
@@ -239,10 +252,10 @@ class CreateGpgKey extends Component {
    * Generate the Gpg key
    */
   async generateGpgKey() {
-    await this.toggleProcessing();
+    this.toggleProcessing();
     const isPwned = await this.isCurrentPassphrasePwned();
     if (isPwned) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       return;
     }
     this.props.onComplete(this.state.passphrase);
@@ -251,12 +264,12 @@ class CreateGpgKey extends Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     const actions = {
       ...this.state.actions,
       processing: !this.state.actions.processing
     };
-    await this.setState({actions});
+    this.setState({actions});
   }
 
   /**
@@ -270,10 +283,10 @@ class CreateGpgKey extends Component {
       <div className="create-gpg-key">
         <h1>
           {this.props.displayAs === CreateGpgKeyVariation.SETUP &&
-          <Trans>Welcome to Passbolt, please select a passphrase!</Trans>
+            <Trans>Welcome to Passbolt, please select a passphrase!</Trans>
           }
           {this.props.displayAs === CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY &&
-          <Trans>Choose a new passphrase.</Trans>
+            <Trans>Choose a new passphrase.</Trans>
           }
         </h1>
         <form acceptCharset="utf-8" onSubmit={this.handleSubmit} className="enter-passphrase">
@@ -294,29 +307,32 @@ class CreateGpgKey extends Component {
 
           <div className="password-hints">
             <ul>
-              <li className={this.state.hintClassNames.enoughLength}>
+              <li id="enoughLengthHint" className={this.state.hintClassNames.enoughLength}>
                 <Trans>It is at least 8 characters in length</Trans>
               </li>
-              <li className={this.state.hintClassNames.uppercase}>
+              <li id="uppercaseHint" className={this.state.hintClassNames.uppercase}>
                 <Trans>It contains lower and uppercase characters</Trans>
               </li>
-              <li className={this.state.hintClassNames.alphanumeric}>
+              <li id="alphaNumericHint" className={this.state.hintClassNames.alphanumeric}>
                 <Trans>It contains letters and numbers</Trans>
               </li>
-              <li className={this.state.hintClassNames.specialCharacters}>
+              <li id="specialCharactersyHint" className={this.state.hintClassNames.specialCharacters}>
                 <Trans>It contains special characters (like / or * or %)</Trans>
               </li>
-              <li className={this.state.hintClassNames.notInDictionary}>
-                {this.state.isPwnedServiceAvailable &&
-                <Trans>It is not part of an exposed data breach</Trans>
-                }
-                {!this.state.isPwnedServiceAvailable &&
-                <Tooltip message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
-                  direction="bottom">
-                  <Trans>It is not part of an exposed data breach</Trans>
-                </Tooltip>
-                }
-              </li>
+              {this.pownedService &&
+                <li id="notInDictionaryHint" className={this.state.hintClassNames.notInDictionary}>
+                  {this.state.isPwnedServiceAvailable  &&
+                    <Trans>It is not part of an exposed data breach</Trans>
+                  }
+                  {!this.state.isPwnedServiceAvailable &&
+                    <Tooltip
+                      message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
+                      direction="bottom">
+                      <Trans>It is not part of an exposed data breach</Trans>
+                    </Tooltip>
+                  }
+                </li>
+              }
             </ul>
           </div>
 

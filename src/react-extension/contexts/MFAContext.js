@@ -32,6 +32,7 @@ export const MfaContext = React.createContext({
   clearContext: () => {}, // put the data to its default state value
   isMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
   checkMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
+  hasMfaUserSettings: () => {}, // returns if user has already defined its mfa settings
 });
 
 /**
@@ -80,19 +81,21 @@ export class MfaContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async findPolicy() {
-    if (this.getPolicy() === null) {
-      this.setProcessing(true);
-      let policy = null;
-      let result = null;
-      if (this.mfaPolicyService) {
-        result = await this.mfaPolicyService.find();
-      } else {
-        result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
-      }
-      policy = result ? result.policy : null;
-      this.setState({policy});
-      this.setProcessing(false);
+    if (this.getPolicy()) {
+      return;
     }
+
+    this.setProcessing(true);
+    let policy = null;
+    let result = null;
+    if (this.mfaPolicyService) {
+      result = await this.mfaPolicyService.find();
+    } else {
+      result = await this.props.context.port.request("passbolt.mfa-policy.get-policy");
+    }
+    policy = result ? result.policy : null;
+    this.setState({policy});
+    this.setProcessing(false);
   }
 
   /**

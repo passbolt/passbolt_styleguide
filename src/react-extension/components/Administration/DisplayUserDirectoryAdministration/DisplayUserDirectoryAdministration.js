@@ -287,7 +287,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
               {hadDisabledSettings &&
                 <div>
                   <div className="message warning">
-                    <Trans>The configuration has been disabled has it needs to be checked to make it correct before using it.</Trans>
+                    <Trans>The configuration has been disabled as it needs to be checked to make it correct before using it.</Trans>
                   </div>
                 </div>
               }

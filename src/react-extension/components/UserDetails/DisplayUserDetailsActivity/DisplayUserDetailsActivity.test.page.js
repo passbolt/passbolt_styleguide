@@ -69,6 +69,15 @@ export default class DisplayUserDetailsActivityPage {
     return displayedActivity && displayedActivity.querySelector(".subinfo").textContent;
   }
 
+  /**
+   * Returns the displayed activity link for the 'index' one
+   * @param index The display rank of link's resource
+   */
+  link(index) {
+    const displayedActivity = this.displayActivityList[index];
+    return displayedActivity && displayedActivity.querySelector('a');
+  }
+
   get moreButton() {
     return this._page.container.querySelector('.accordion-content button.action-logs-load-more');
   }

@@ -15,13 +15,14 @@
 import React from "react";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import DisplayInFormMenu from "./DisplayInFormMenu";
+import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 
 export default {
   title: 'Components/WebIntegration/InFormMenu',
   component: DisplayInFormMenu
 };
 
-const suggestedResources = [
+const suggestion = [
   {
     name: "Twitter (company account)",
     username: "companyaccount@pasbolt.com",
@@ -39,82 +40,31 @@ const suggestedResources = [
   }
 ];
 
-const passwordGeneratorConfiguration = {
-  "default_generator": "passphrase",
-  "generators": [
-    {
-      "name": "Password",
-      "type": "password",
-      "default_options": {
-        "length": 18,
-        "look_alike": true,
-        "min_length": 8,
-        "max_length": 128,
-      },
-      "masks": [
-        {
-          "name": "upper",
-          "label": "A-Z",
-          "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-        },
-        {
-          "name": "lower",
-          "label": "a-z",
-          "characters": "abcdefghijklmnopqrstuvwxyz",
-        },
-        {
-          "name": "digit",
-          "label": "0-9",
-          "characters": "0123456789",
-          "required": true,
-        },
-        {
-          "name": "parenthesis",
-          "label": "([|])",
-          "characters": "([|])",
-        },
-        {
-          "name": "TBD",
-          "label": "TBD",
-          "characters": ""
-        },
-      ],
-    },
-    {
-      "name": "Passphrase",
-      "type": "passphrase",
-      "default_options": {
-        "word_count": 8,
-        "word_case": "lowercase",
-        "min_word": 4,
-        "max_word": 40,
-        "separator": " "
-      }
-    }
-  ]
+const initMockPort = (mockPort, initResponse = {inputType: "", inputValue: "", suggestedResources: suggestion}, passwordSettings = defaultPasswordPoliciesDto()) => {
+  mockPort.addRequestListener('passbolt.in-form-menu.init', () => initResponse);
+  mockPort.addRequestListener('passbolt.password-policies.get', () => passwordSettings);
 };
 
-const getResponse = (inputType, inputValue = "", suggestion = suggestedResources) => ({
-  inputType,
-  inputValue,
-  suggestedResources: suggestion,
-  secretGeneratorConfiguration: passwordGeneratorConfiguration
-});
-
 const mockPortUsernameEmpty = new MockPort();
-mockPortUsernameEmpty.addRequestListener('passbolt.in-form-menu.init', () => getResponse("username"));
+initMockPort(mockPortUsernameEmpty, {inputType: "username"});
 
 const mockPortUsernameFilled = new MockPort();
-mockPortUsernameFilled.addRequestListener('passbolt.in-form-menu.init', () => getResponse("username", "john@passbolt.com"));
+initMockPort(mockPortUsernameFilled, {inputType: "username", inputValue: "john@passbolt.com"});
 
 const mockPortPasswordNoSuggestion = new MockPort();
-mockPortPasswordNoSuggestion.addRequestListener('passbolt.in-form-menu.init', () => getResponse("password", "", null));
+initMockPort(mockPortPasswordNoSuggestion, {inputType: "password", inputValue: null});
 
 const mockPortPasswordEmpty = new MockPort();
-mockPortPasswordEmpty.addRequestListener('passbolt.in-form-menu.init', () => getResponse("password", ""));
+initMockPort(mockPortPasswordEmpty, {inputType: "password", inputValue: ""});
+
+const customPasswordPoliciesDto = defaultPasswordPoliciesDto({
+  default_generator: "passphrase"
+});
+const mockPortPasswordEmptyWitCustomPasswordPolicies = new MockPort();
+initMockPort(mockPortPasswordEmptyWitCustomPasswordPolicies, {inputType: "password", inputValue: ""}, customPasswordPoliciesDto);
 
 const mockPortPasswordFilled = new MockPort();
-mockPortPasswordFilled.addRequestListener('passbolt.in-form-menu.init', () => getResponse("password", "test",));
+initMockPort(mockPortPasswordFilled, {inputType: "password", inputValue: "test"});
 
 const Template = args =>
   <div className="web-integration">
@@ -125,32 +75,38 @@ export const OnUsernameFieldWithEmptyValue = Template.bind({});
 export const OnUsernameFieldWithValue = Template.bind({});
 export const OnPasswordFieldWithoutSuggestion = Template.bind({});
 export const OnPasswordFieldWithEmptyValue = Template.bind({});
+export const OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies = Template.bind({});
 export const OnPasswordFieldWithValue = Template.bind({});
 
 OnUsernameFieldWithEmptyValue.args = {
   context: {
     port: mockPortUsernameEmpty
-  }
+  },
 };
 OnUsernameFieldWithValue.args = {
   context: {
     port: mockPortUsernameFilled
-  }
+  },
 };
 OnPasswordFieldWithoutSuggestion.args = {
   context: {
     port: mockPortPasswordNoSuggestion
-  }
+  },
 };
 OnPasswordFieldWithEmptyValue.args = {
   context: {
     port: mockPortPasswordEmpty
-  }
+  },
+};
+OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies.args = {
+  context: {
+    port: mockPortPasswordEmptyWitCustomPasswordPolicies
+  },
 };
 OnPasswordFieldWithValue.args = {
   context: {
     port: mockPortPasswordFilled
-  }
+  },
 };
 
 const inFormMenuCss = {css: "ext_in_form_menu"};
@@ -158,4 +114,5 @@ OnUsernameFieldWithEmptyValue.parameters = inFormMenuCss;
 OnUsernameFieldWithValue.parameters = inFormMenuCss;
 OnPasswordFieldWithoutSuggestion.parameters = inFormMenuCss;
 OnPasswordFieldWithEmptyValue.parameters = inFormMenuCss;
+OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies.parameters = inFormMenuCss;
 OnPasswordFieldWithValue.parameters = inFormMenuCss;

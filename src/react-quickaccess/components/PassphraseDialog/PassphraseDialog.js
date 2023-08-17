@@ -149,10 +149,12 @@ class PassphraseDialog extends React.Component {
                   <div className="error-message">{this.state.passphraseError}</div>
                 }
               </div>
-              <div className="input checkbox">
-                <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing}/>
-                <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
-              </div>
+              {this.props.canRememberMe &&
+                <div className="input checkbox">
+                  <input type="checkbox" name="rememberMe" id="remember-me" checked={this.state.rememberMe} onChange={this.handleInputChange} disabled={this.state.processing}/>
+                  <label htmlFor="remember-me"><Trans>Remember until I log out.</Trans></label>
+                </div>
+              }
             </div>
             <div className="submit-wrapper">
               <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button"
@@ -184,6 +186,7 @@ class PassphraseDialog extends React.Component {
 
 PassphraseDialog.propTypes = {
   context: PropTypes.any, // The application context
+  canRememberMe: PropTypes.bool, // True if the remember me flag must be displayed
   className: PropTypes.string,
   requestId: PropTypes.string,
   onComplete: PropTypes.func,

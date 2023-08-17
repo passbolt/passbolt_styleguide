@@ -29,7 +29,7 @@ export const defaultResourceDto = (data = {}) => {
     modified: "2022-03-04T13:59:11+00:00",
     modified_by: uuidv4(),
     deleted: false,
-    description: null,
+    description: "",
     personal: false,
     resource_type_id: uuidv4(),
     permission: ownerPermissionDto({aco_foreign_key: id}),

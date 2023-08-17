@@ -14,11 +14,17 @@ export function defaultAppContext(appContext) {
  * Default ResourceWorkspaceContext
  * @returns {{resource: {id: string, name: string}}}
  */
-export function defaultResourceWorkspaceContext(type, payload) {
+export function defaultResourceWorkspaceContext(type, payload, numberOfResources = 0) {
+  const resources = [];
+  for (let i = 0; i < numberOfResources; i++) {
+    const resource = {};
+    resources.push(resource);
+  }
   return {
     filter: {
       type,
       payload
-    }
+    },
+    filteredResources: resources
   };
 }

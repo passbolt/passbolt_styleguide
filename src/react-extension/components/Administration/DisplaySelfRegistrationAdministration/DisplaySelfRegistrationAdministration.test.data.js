@@ -60,7 +60,6 @@ export const allowedDomains = [
   "passbolt.lu",
 ];
 
-
 export const domains = {
   "0": allowedDomains[0],
   "1": allowedDomains[1],

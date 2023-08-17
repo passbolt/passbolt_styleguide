@@ -15,6 +15,7 @@ import {v4 as uuidv4} from "uuid";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
 import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
+import MockPort from "../test/mock/MockPort";
 /**
  * Returns the default api app context for the unit test
  * @param {Object} appContext (Optional)Properties to override
@@ -35,6 +36,7 @@ export function defaultAppContext(appContext = {}, userId = uuidv4()) {
         name: 'admin'
       }
     },
+    port: new MockPort(),
     setContext: jest.fn(),
     baseUrl: "http://localhost:6006",
     getApiClientOptions: () => new ApiClientOptions()

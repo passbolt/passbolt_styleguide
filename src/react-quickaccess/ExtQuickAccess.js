@@ -15,7 +15,7 @@ import MoreFiltersPage from "./components/MoreFiltersPage/MoreFiltersPage";
 import ResourceCreatePage from "./components/ResourceCreatePage/ResourceCreatePage";
 import ResourceViewPage from "./components/ResourceViewPage/ResourceViewPage";
 import Search from "./components/Search/Search";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import AnimatedSwitch from "./components/AnimatedSwitch/AnimatedSwitch";
 import PassphraseDialog from "./components/PassphraseDialog/PassphraseDialog";
 import PropTypes from "prop-types";
@@ -32,9 +32,10 @@ import Icon from "../shared/components/Icons/Icon";
 import SsoContextProvider from "./contexts/SsoContext";
 import RbacsCollection from "../shared/models/entity/rbac/rbacsCollection";
 import AppContext from "../shared/context/AppContext/AppContext";
+import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 const SEARCH_VISIBLE_ROUTES = [
-  '/webAccessibleResources/quickaccess.html',
+  '/webAccessibleResources/quickaccess/home',
   '/webAccessibleResources/quickaccess/resources/favorite',
   '/webAccessibleResources/quickaccess/resources/group',
   '/webAccessibleResources/quickaccess/resources/owned-by-me',
@@ -59,7 +60,7 @@ class ExtQuickAccess extends React.Component {
    */
   get canRememberMe() {
     const options = this.state.siteSettings.getRememberMeOptions();
-    return options !== null && Object.keys(options).length > 0;
+    return options !== null && typeof options[-1] !== "undefined";
   }
 
   bindCallbacks() {
@@ -269,6 +270,31 @@ class ExtQuickAccess extends React.Component {
       && this.state.locale !== null;
   }
 
+  /**
+   * Get the route to initialize the quickaccess on when the user is opening it
+   * @returns {string}
+   */
+  getInitializationRoute() {
+    if (!this.state.isAuthenticated) {
+      return "/webAccessibleResources/quickaccess/login";
+    }
+
+    const queryParameters = new URLSearchParams(window.location.search);
+    switch (queryParameters.get("feature")) {
+      case "create-new-credentials":
+      case "save-credentials":
+        return "/webAccessibleResources/quickaccess/resources/create";
+      case "autosave-credentials":
+        return "/webAccessibleResources/quickaccess/resources/autosave";
+    }
+
+    return "/webAccessibleResources/quickaccess/home";
+  }
+
+  /**
+   * Renders the component
+   * @returns {JSX.Element}
+   */g;
   render() {
     const isReady = this.isReady();
 
@@ -290,44 +316,56 @@ class ExtQuickAccess extends React.Component {
               </div>
               }
               {isReady &&
-              <React.Fragment>
+              <>
                 <ManageQuickAccessMode/>
-                {this.state.passphraseRequired &&
-                <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted}/>
-                }
-                <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
-                  <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
-                    <Search ref={el => this.searchRef = el}/>
+                <Switch>
+                  {/* The initial route the quickaccess panel is loaded on is a triage url. */}
+                  <Route exact path={"/webAccessibleResources/quickaccess.html"} render={() => (
+                    <Redirect to={this.getInitializationRoute()}/>
                   )}/>
-                  <PrepareResourceContextProvider>
-                    <AnimatedSwitch>
-                      <Route path="/webAccessibleResources/quickaccess/login" render={() => (
-                        <SsoContextProvider>
-                          <LoginPage
-                            loginSuccessCallback={this.loginSuccessCallback}
-                            mfaRequiredCallback={this.mfaRequiredCallback}
-                            canRememberMe={this.canRememberMe}/>
-                        </SsoContextProvider>
+                  {/* The route when the user is not authenticated */}
+                  <Route exact path="/webAccessibleResources/quickaccess/login" render={() => (
+                    <SsoContextProvider>
+                      <LoginPage
+                        loginSuccessCallback={this.loginSuccessCallback}
+                        mfaRequiredCallback={this.mfaRequiredCallback}
+                        canRememberMe={this.canRememberMe}/>
+                    </SsoContextProvider>
+                  )}/>
+                  {/* Any other authenticated routes. */}
+                  <Route path="/">
+                    {this.state.passphraseRequired &&
+                      <PassphraseDialog requestId={this.state.passphraseRequestId} onComplete={this.handlePassphraseDialogCompleted} canRememberMe={this.canRememberMe}/>
+                    }
+                    <div className={`${this.state.passphraseRequired ? "visually-hidden" : ""}`}>
+                      <Route path={SEARCH_VISIBLE_ROUTES} render={() => (
+                        <Search ref={el => this.searchRef = el}/>
                       )}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/create" component={ResourceCreatePage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/autosave" component={SaveResource}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/view/:id" component={ResourceViewPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
-                      <PrivateRoute path="/webAccessibleResources/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
-                      <PrivateRoute exact path="/webAccessibleResources/quickaccess.html" component={HomePage}/>
-                    </AnimatedSwitch>
-                  </PrepareResourceContextProvider>
-                </div>
-              </React.Fragment>
+                      <PasswordPoliciesContext>
+                        <PrepareResourceContextProvider>
+                          <AnimatedSwitch>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/group" component={FilterResourcesByGroupPage}/>
+                            <PrivateRoute path="/webAccessibleResources/quickaccess/resources/group/:id" component={FilterResourcesByGroupPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/tag" component={FilterResourcesByTagPage}/>
+                            <PrivateRoute path="/webAccessibleResources/quickaccess/resources/tag/:id" component={FilterResourcesByTagPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/favorite" component={FilterResourcesByFavoritePage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/owned-by-me" component={FilterResourcesByItemsIOwnPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
+                            <PrivateRoute path="/webAccessibleResources/quickaccess/resources/create" component={ResourceCreatePage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/autosave" component={SaveResource}/>
+                            <PrivateRoute path="/webAccessibleResources/quickaccess/resources/view/:id" component={ResourceViewPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/setup-extension-in-progress" component={SetupExtensionInProgress}/>
+                            <PrivateRoute path="/webAccessibleResources/quickaccess/resources/generate-password" component={GeneratePasswordPage}/>
+                            <PrivateRoute exact path="/webAccessibleResources/quickaccess/home" component={HomePage}/>
+                          </AnimatedSwitch>
+                        </PrepareResourceContextProvider>
+                      </PasswordPoliciesContext>
+                    </div>
+                  </Route>
+                </Switch>
+              </>
               }
             </div>
           </Router>
