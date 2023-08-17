@@ -247,7 +247,7 @@ describe("Resource Workspace Context", () => {
     it("As LU I be able to follow a safe resource uri", () => {
       const resource = context.resources[0];
       jest.spyOn(window, 'open').mockImplementationOnce(() => {});
-      page.goToResourceUri(resource);
+      page.goToResourceUri(resource.uri);
       expect(window.open).toHaveBeenCalledWith("https://passbolt.dev/", "_blank", "noopener,noreferrer");
     });
 
@@ -255,7 +255,7 @@ describe("Resource Workspace Context", () => {
       const resource = context.resources[0];
       resource.uri = "javascript://mars-attack";
       jest.spyOn(window, 'open').mockImplementationOnce(() => {});
-      page.goToResourceUri(resource);
+      page.goToResourceUri(resource.uri);
       expect(window.open).toHaveBeenCalledTimes(0);
     });
   });

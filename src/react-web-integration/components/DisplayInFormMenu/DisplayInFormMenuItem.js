@@ -61,7 +61,7 @@ class DisplayInFormMenuItem extends React.Component {
    */
   render() {
     return (
-      <a className={this.getClassName()} onClick={this.handleClick}>
+      <a className={this.getClassName()} onClick={this.handleClick} disabled={this.props.disabled}>
         <div className="in-form-menu-item-icon">
           <Icon name={this.props.processing ? "spinner" : this.props.icon} big={true} dim={true}/>
         </div>
@@ -82,6 +82,10 @@ class DisplayInFormMenuItem extends React.Component {
     );
   }
 }
+
+DisplayInFormMenuItem.defaultProps = {
+  disabled: false,
+};
 
 DisplayInFormMenuItem.propTypes = {
   title: PropTypes.string,

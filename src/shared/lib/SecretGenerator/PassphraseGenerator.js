@@ -15,8 +15,9 @@ import {default as PassphraseGeneratorWords} from "./PassphraseGeneratorWords";
 
 /**
  * Returns a number between the given min and max
- * @param min The minimum number
- * @param max The maximum number
+ * @param {integer} min The minimum number
+ * @param {integer} max The maximum number
+ * @returns {integer}
  */
 function randomNumberRange(min, max) {
   const arr = new Uint32Array(1);
@@ -27,8 +28,9 @@ function randomNumberRange(min, max) {
 
 /**
  * Returns randomly a word from a given list of word and apply the given word case
- * @param words A list of words
- * @param wordCase A case strategy to apply to the word
+ * @param {Array<string>} words A list of words
+ * @param {string} wordCase A case strategy to apply to the word
+ * @returns {string}
  */
 function extractWordWithCase(words, wordCase) {
   const extractWord = () => words[randomNumberRange(0, words.length - 1)];
@@ -48,7 +50,8 @@ function extractWordWithCase(words, wordCase) {
 /**
  * Detects if the given secret is a Passbolt passphrase.
  * If yes, it returns the number of words, the separator and the flag to tell it's a passphrase
- * @param secret
+ * @param {string} secret
+ * @returns {{isPassphrase: boolean, numberReplacement: integer, remainingSecret: string, numberWords: integer, separator: string}}
  */
 function detectPassphrase(secret) {
   const passwordDetected = {
@@ -72,7 +75,7 @@ function detectPassphrase(secret) {
   const remainingSecret = separatorsSecret.remainingSecret;
 
   /*
-   * For a passphrase we exepect to have a separator count of <n-detected-words> - 1
+   * For a passphrase we expect to have a separator count of <n-detected-words> - 1
    * If 2 words are detected, we expected to have only 1 separator. But, with the modulo
    * computation that happens next, the entropy will be erronous in that case (every interger is a multiple of 1)
    * So we handle that specific case and expect the following format:
@@ -126,18 +129,22 @@ function detectPassphrase(secret) {
  * Passphrase generator using diceware method from a file containing words
  */
 export const PassphraseGenerator = {
+  /**
+   * Genetates a passphrase given the configuration
+   * @param {PassphraseGeneratorSettingsDto} configuration
+   * @returns {string}
+   */
   generate: configuration => {
-    const wordCount = configuration.default_options.word_count;
-    const canGenerate = wordCount >=  configuration.default_options.min_word && wordCount <=  configuration.default_options.max_word;
-    if (canGenerate) {
-      const wordCase = configuration.default_options.word_case;
-      const words = PassphraseGeneratorWords['en-UK'];
-      const extractWordMapper = () => extractWordWithCase(words, wordCase);
-      const wordsGenerated = Array.from({length: wordCount}, extractWordMapper);
-      const secret = wordsGenerated.join(configuration.default_options.separator);
-      return secret;
+    const wordCount = configuration.words;
+    const canGenerate = wordCount >= configuration.min_words && wordCount <= configuration.max_words;
+    if (!canGenerate) {
+      return '';
     }
-    return '';
+    const wordCase = configuration.word_case;
+    const words = PassphraseGeneratorWords['en-UK'];
+    const extractWordMapper = () => extractWordWithCase(words, wordCase);
+    const wordsGenerated = Array.from({length: wordCount}, extractWordMapper);
+    return wordsGenerated.join(configuration.word_separator);
   },
   detectPassphrase
 };

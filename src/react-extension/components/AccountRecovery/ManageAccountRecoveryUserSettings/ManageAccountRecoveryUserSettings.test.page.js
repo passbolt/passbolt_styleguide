@@ -35,34 +35,59 @@ export default class ManageAccountRecoveryUserSettingsPage {
     );
   }
 
+  /**
+   * Runs the the current page's querySelector and return its result;
+   * @param {string} selection
+   * @returns {object}
+   */
   selector(selection) {
     return this._page.container.querySelector(selection);
   }
 
+  /**
+   * Returns true if the page "exists" (the page is initialized and rendered at least once)
+   * @returns {boolean}
+   */
   exists() {
     return this.title !== null;
   }
 
+  /**
+   * Returns the dialog's title HTML element
+   * @returns {HTMLElement}
+   */
   get title() {
     return this.selector('.recovery-account-policy-dialog h2');
   }
 
+  /**
+   * Returns the dialog's "accept" checkbox HTML element
+   * @returns {HTMLElement}
+   */
   get acceptCheckbox() {
     return this.selector('#statusRecoverAccountAccept');
   }
 
+  /**
+   * Returns the dialog's "reject" checkbox HTML element
+   * @returns {HTMLElement}
+   */
   get rejectCheckbox() {
     return this.selector('#statusRecoverAccountReject');
   }
 
+  /**
+   * Returns the dialog's save button HTML element
+   * @returns {HTMLElement}
+   */
   get saveButton() {
     return this.selector('.submit-wrapper button[type="submit"]');
   }
 
-  isProcessing() {
-    return this.saveButton.classList.contains('disabled');
-  }
-
+  /**
+   * Simulates a click on the dialog's ave button
+   * @returns {Promise<void>}
+   */
   async clickOnSave() {
     fireEvent.click(this.saveButton, {button: 0});
     await waitFor(() => {});

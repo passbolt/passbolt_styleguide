@@ -109,33 +109,31 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     return this.props.adminSelfRegistrationContext.getAllowedDomains();
   }
 
-
   /**
    * Bind callbacks methods
    */
   async findSettings() {
     await this.props.adminSelfRegistrationContext.findSettings();
     this.setState({isEnabled: this.allowedDomains.size > 0});
-    await this.checkForWarnings();
-    await this.validateForm();
+    this.checkForWarnings();
+    this.validateForm();
   }
 
   /**
    * We check for warnings and errors into the form
    */
-  async checkForWarnings(callback = () => {}) {
-    this.setState({warnings: new Map()}, async() => {
+  checkForWarnings() {
+    this.setState({warnings: new Map()}, () => {
       this.allowedDomains.forEach((value, key) => this.checkDomainIsProfessional(key, value));
-      callback();
     });
   }
   /**
    * setup settings for the first time
    */
-  async setupSettings() {
+  setupSettings() {
     // When disable we remove domains from UI, so if the use enable again we should populate existing setting to UI again
     this.props.adminSelfRegistrationContext.setDomains(new SelfRegistrationDomainsViewModel(this.props.adminSelfRegistrationContext.getCurrentSettings()));
-    await this.checkForWarnings();
+    this.checkForWarnings();
 
     if (this.allowedDomains.size === 0) {
       const domain = DomainUtil.extractDomainFromEmail(this.currentUser?.username);
@@ -157,15 +155,14 @@ class DisplaySelfRegistrationAdministration extends React.Component {
     }
   }
 
-
   /**
    * in case of saved settings we should check warnings again
    */
-  async shouldCheckWarnings() {
+  shouldCheckWarnings() {
     const isSaved = this.props.adminSelfRegistrationContext.isSaved();
     if (isSaved) {
       this.props.adminSelfRegistrationContext.setSaved(false);
-      await this.checkForWarnings();
+      this.checkForWarnings();
     }
   }
 
@@ -271,8 +268,8 @@ class DisplaySelfRegistrationAdministration extends React.Component {
    * validate the form
    * @returns {void}
    */
-  async validateForm() {
-    await this.props.adminSelfRegistrationContext.validateForm();
+  validateForm() {
+    this.props.adminSelfRegistrationContext.validateForm();
   }
 
   /**

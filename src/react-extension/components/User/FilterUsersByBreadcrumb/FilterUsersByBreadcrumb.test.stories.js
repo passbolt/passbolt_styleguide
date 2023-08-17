@@ -29,21 +29,24 @@ Template.propTypes = {
 export const AllFilter = Template.bind({});
 AllFilter.args = {
   userWorkspaceContext: {
-    filter: {type: UserWorkspaceFilterTypes.ALL}
+    filter: {type: UserWorkspaceFilterTypes.ALL},
+    filteredUsers: [{}, {}, {}]
   }
 };
 
 export const RecentlyModifiedFilter = Template.bind({});
 RecentlyModifiedFilter.args = {
   userWorkspaceContext: {
-    filter: {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED}
+    filter: {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED},
+    filteredUsers: [{}, {}]
   }
 };
 
 export const TextFilter = Template.bind({});
 TextFilter.args = {
   userWorkspaceContext: {
-    filter: {type: UserWorkspaceFilterTypes.TEXT, payload: 'Ada'}
+    filter: {type: UserWorkspaceFilterTypes.TEXT, payload: 'Ada'},
+    filteredUsers: [{}]
   }
 };
 
@@ -51,6 +54,7 @@ TextFilter.args = {
 export const GroupFilter = Template.bind({});
 GroupFilter.args = {
   userWorkspaceContext: {
-    filter: {type: UserWorkspaceFilterTypes.GROUP,  payload: {group: {name: "My super group"}}}
+    filter: {type: UserWorkspaceFilterTypes.GROUP,  payload: {group: {name: "My super group"}}},
+    filteredUsers: []
   }
 };

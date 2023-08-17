@@ -301,10 +301,10 @@ class FilterResourcesByFoldersItem extends React.Component {
    */
   canDragItems(draggedItems) {
     const draggedFolders = draggedItems.folders;
-    let canDragItems = draggedFolders.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
+    let canDragItems = draggedFolders?.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     const draggedResources = draggedItems.resources;
-    canDragItems &= draggedResources.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
+    canDragItems &= draggedResources?.reduce((accumulator, folder) => accumulator && this.canDragItem(folder), true);
 
     return canDragItems;
   }
@@ -315,7 +315,7 @@ class FilterResourcesByFoldersItem extends React.Component {
    * @returns {int}
    */
   getItemsListLowestPermission(items) {
-    return items.reduce((accumulator, draggedItem) => {
+    return items?.reduce((accumulator, draggedItem) => {
       if (draggedItem.permission.type < accumulator) {
         accumulator = draggedItem.permission.type;
       }
@@ -377,7 +377,7 @@ class FilterResourcesByFoldersItem extends React.Component {
    */
   isDragged() {
     if (this.isDragging()) {
-      return this.draggedItems.folders.some(folder => folder.id === this.props.folder.id);
+      return this.draggedItems.folders?.some(folder => folder.id === this.props.folder.id);
     }
     return false;
   }

@@ -2,7 +2,7 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import SaveResource from "./SaveResource";
-import {defaultAppContext, mockResults} from "./SaveResource.test.data";
+import {defaultAppContext, mockExtensionCall, mockExtensionCallWithTabInfo} from "./SaveResource.test.data";
 import Header from "../Header/Header";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
@@ -25,20 +25,18 @@ Template.propTypes = {
 const parameters = {
   css: "ext_quickaccess"
 };
-
+const initialAppContext = defaultAppContext();
+mockExtensionCall(initialAppContext);
 export const Initial = Template.bind({});
 Initial.args = {
-  context: defaultAppContext(),
+  context: initialAppContext,
 };
 Initial.parameters = parameters;
 
-const contextMock = {
-  port: {
-    request: path => mockResults[path]
-  },
-};
+const appContextWithTabInfo = defaultAppContext();
+mockExtensionCallWithTabInfo(appContextWithTabInfo);
 export const SaveResourceFromTab = Template.bind({});
 SaveResourceFromTab.args = {
-  context: defaultAppContext(contextMock)
+  context: appContextWithTabInfo
 };
 SaveResourceFromTab.parameters = parameters;

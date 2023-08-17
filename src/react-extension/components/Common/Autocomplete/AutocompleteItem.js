@@ -46,7 +46,7 @@ class AutocompleteItem extends Component {
           <div className="main-cell-wrapper">
             <div className="main-cell ">
               <button type="button" className="link no-border" onClick={event => this.onClick(event)}>
-                <div className="user">
+                <div className="item">
                   <span className="name ellipsis">{this.props.slug}</span>
                 </div>
               </button>

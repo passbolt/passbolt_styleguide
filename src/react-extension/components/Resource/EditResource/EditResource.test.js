@@ -15,23 +15,17 @@
 /**
  * Unit tests on EditResource in regard of specifications
  */
+import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import {defaultProps, mockResource} from "./EditResource.test.data";
+import {defaultProps} from "./EditResource.test.data";
 import EditResourcePage from "./EditResource.test.page";
-import "../../../test/lib/crypto/cryptoGetRandomvalues";
-
 
 describe("See the Edit Resource", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
-  props.onClose = jest.fn();
-  props.dialogContext.open = jest.fn();
-
-  const passwordEditDialogProps = {
-    id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
-  };
+  const resource = props.context.resources[0];
 
   const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
@@ -43,7 +37,6 @@ describe("See the Edit Resource", () => {
     beforeEach(() => {
       jest.useFakeTimers();
       jest.resetModules();
-      props.context.setContext({passwordEditDialogProps});
       page = new EditResourcePage(props);
     });
 
@@ -55,17 +48,17 @@ describe("See the Edit Resource", () => {
       // Dialog title exists and correct
       expect(page.passwordEdit.exists()).toBeTruthy();
       expect(page.title.header.textContent).toBe("Edit resource");
-      expect(page.title.subtitle.textContent).toBe(mockResource.name);
+      expect(page.title.subtitle.textContent).toBe(resource.name);
 
       // Close button exists
       expect(page.passwordEdit.dialogClose).not.toBeNull();
 
       // Name input field exists.
-      expect(page.passwordEdit.name.value).toBe(mockResource.name);
+      expect(page.passwordEdit.name.value).toBe(resource.name);
       // Uri input field exists.
-      expect(page.passwordEdit.uri.value).toBe(mockResource.uri);
+      expect(page.passwordEdit.uri.value).toBe(resource.uri);
       // Username input field exists.
-      expect(page.passwordEdit.username.value).toBe(mockResource.username);
+      expect(page.passwordEdit.username.value).toBe(resource.username);
       // Password input field exists
       expect(page.passwordEdit.password).not.toBeNull();
       expect(page.passwordEdit.password.value).toBe("");
@@ -86,7 +79,7 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.passwordGenerateButton).not.toBeNull();
 
       // Description textarea field exists
-      expect(page.passwordEdit.description.value).toBe(mockResource.description);
+      expect(page.passwordEdit.description.value).toBe(resource.description);
 
       // Save button exists
       expect(page.passwordEdit.saveButton.textContent).toBe("Save");
@@ -95,14 +88,17 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.cancelButton.textContent).toBe("Cancel");
     });
 
-
     it('generates password when clicking on the generate button.', async() => {
       page.passwordEdit.focusInput(page.passwordEdit.password);
       await waitFor(() => {
         expect(page.passwordEdit.password.disabled).toBeFalsy();
       });
+
       await page.passwordEdit.click(page.passwordEdit.passwordGenerateButton);
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("n/a (entropy: 0.0 bits)");
+      await waitFor(() => {
+        expect(page.passwordEdit.complexityText.textContent).not.toBe("n/a (entropy: 0.0 bits)");
+      });
+
       expect(page.passwordEdit.progressBar.classList.contains("not_available")).toBe(false);
     });
 
@@ -161,7 +157,7 @@ describe("See the Edit Resource", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       const onApiUpdateResourceMeta = {
-        id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+        id: resource.id,
         name: resourceMeta.name,
         uri: resourceMeta.uri,
         username: resourceMeta.username,
@@ -172,7 +168,7 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.click(page.passwordEdit.saveButton);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(props.context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", "8e3874ae-4b40-590b-968a-418f704b9d9a");
+      expect(props.context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", resource.id);
       expect(props.onClose).toBeCalled();
     });
 
@@ -227,7 +223,7 @@ describe("See the Edit Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    xit('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    xit("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
       expect(page.passwordEdit.exists()).toBeTruthy();
       // empty the form
       page.passwordEdit.fillInput(page.passwordEdit.name, "");
@@ -342,16 +338,34 @@ describe("See the Edit Resource", () => {
     it("As a signed-in user editing a password on the application, I should get warn when I enter a pwned password and not be blocked", async() => {
       expect.assertions(2);
 
-      mockContextRequest(() => Promise.resolve(2));
-      await page.passwordEdit.fillInputPassword('hello-world');
-      await waitFor(() => {});
-      // we expect a warning to inform about powned password
-      expect(page.passwordEdit.pwnedWarningMessage.textContent).toEqual("The password is part of an exposed data breach.");
+      const props = defaultProps();
+      props.context.setContext({
+        passwordEditDialogProps: {
+          id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+        }
+      });
 
-      mockContextRequest(() => Promise.reject());
-      await page.passwordEdit.fillInputPassword('another test');
-      await waitFor(() => {});
+      const waitForTrue = async callback => waitFor(() => {
+        if (!callback()) {
+          throw new Error("Page is not ready yet!");
+        }
+      });
+
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", () => Promise.resolve(2));
+
+      const page = new EditResourcePage(props);
+      await waitForTrue(() => page.passwordEdit.password.disabled);
+
+      // we expect a warning to inform about powned password
+      await page.passwordEdit.fillInputPassword('hello-world');
+      await waitForTrue(() => page.passwordEdit.pwnedWarningMessage);
+      const exposedPasswordMessage = "The password is part of an exposed data breach.";
+      expect(page.passwordEdit.pwnedWarningMessage.textContent).toEqual(exposedPasswordMessage);
+
       // we expect a warning to inform about a network issue
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", () => Promise.reject());
+      await page.passwordEdit.fillInputPassword('another test');
+      await waitForTrue(() => page.passwordEdit.pwnedWarningMessage !== exposedPasswordMessage);
       expect(page.passwordEdit.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
     });
 

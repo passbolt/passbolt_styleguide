@@ -48,7 +48,6 @@ export default class DisplayMfaPolicyAdministrationPage {
     return this._page.container.querySelector('.mfa-policy-settings');
   }
 
-
   /**
    * Returns the save settings button
    */
@@ -196,7 +195,6 @@ export default class DisplayMfaPolicyAdministrationPage {
     return this.click(this.saveSettingsButton);
   }
 
-
   /**
    * click on save settings button
    */
@@ -204,14 +202,12 @@ export default class DisplayMfaPolicyAdministrationPage {
     return this.click(this.mandatoryPolicy);
   }
 
-
   /**
    * click on opt-in settings button
    */
   async selectOptin() {
     return this.click(this.optInPolicy);
   }
-
 
   /**
    * Click on the element

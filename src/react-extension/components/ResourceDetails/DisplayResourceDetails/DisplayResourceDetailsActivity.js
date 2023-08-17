@@ -217,13 +217,20 @@ class DisplayResourceDetailsActivity extends React.Component {
   }
 
   /**
+   * Get the base url
+   * @return {string}
+   */
+  get baseUrl() {
+    return this.props.context.userSettings.getTrustedDomain();
+  }
+
+  /**
    * Render a resource created activity.
    * @param {object} activity The target activity
    * @returns {JSX}
    */
   renderResouceCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -233,13 +240,13 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> created item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+                <span className="creator">{{activityCreatorName}}</span> created item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -251,7 +258,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderResourceUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -261,13 +267,13 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> updated item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+                <span className="creator">{{activityCreatorName}}</span> updated item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -279,7 +285,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderSecretReadActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -289,13 +294,13 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> accessed secret of item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+                <span className="creator">{{activityCreatorName}}</span> accessed secret of item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -307,7 +312,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderSecretUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -317,13 +321,13 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> updated secret of item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a>
+                <span className="creator">{{activityCreatorName}}</span> updated secret of item <span className="item">{{resourceName}}</span>
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
@@ -342,7 +346,7 @@ class DisplayResourceDetailsActivity extends React.Component {
     return (
       <li key={permission.id} className="clearfix">
         {permission.user &&
-        <UserAvatar user={permission.user} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={permission.user} baseUrl={this.baseUrl}/>
         }
         {permission.group &&
         <GroupAvatar group={permission.group}/>
@@ -363,7 +367,6 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceLink = `/app/passwords/view/${this.resource.id}`;
     const resourceName = this.resource.name;
     const activityFormattedDate = this.formatDateTimeAgo(activity.created);
 
@@ -373,7 +376,7 @@ class DisplayResourceDetailsActivity extends React.Component {
           <div className="content">
             <div className="name">
               <Trans>
-                <span className="creator">{{activityCreatorName}}</span> changed permissions of item <a target="_blank" rel="noopener noreferrer" href={resourceLink}>{{resourceName}}</a> with
+                <span className="creator">{{activityCreatorName}}</span> changed permissions of item <span className="item">{{resourceName}}</span> with
               </Trans>
             </div>
             <div className="subinfo light">{activityFormattedDate}</div>
@@ -384,7 +387,7 @@ class DisplayResourceDetailsActivity extends React.Component {
             </ul>
           </div>
         </div>
-        <UserAvatar user={activity.creator} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
+        <UserAvatar user={activity.creator} baseUrl={this.baseUrl}/>
       </li>
     );
   }
