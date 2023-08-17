@@ -976,7 +976,7 @@ label .svg-icon svg {
   width: 1.2rem;
 }
 label:active {
-  background: hsl(44, 87%, 98%);
+  background: none;
   color: hsl(194, 81%, 14%);
 }
 /*
@@ -1559,7 +1559,7 @@ input[type=file] {
   border: none;
 }
 .checkbox input[type=checkbox]:active + label {
-  background: hsl(44, 87%, 98%);
+  background: none;
   color: hsl(194, 81%, 14%);
 }
 .checkbox input[type=checkbox]:disabled + label {
@@ -1659,7 +1659,7 @@ input[type=file] {
 }
 .radiolist .input.radio input[type=radio]:active + label,
 .radiolist-alt .input.radio input[type=radio]:active + label {
-  background: hsl(44, 87%, 98%);
+  background: none;
   color: hsl(194, 81%, 14%);
 }
 .radiolist .input.radio input[type=radio]:active:before,
@@ -1787,7 +1787,7 @@ input[type=file] {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
 }
 .input.toggle-switch .toggle-switch-checkbox:active + label {
-  background: hsl(44, 87%, 98%);
+  background: none;
   color: hsl(194, 81%, 14%);
 }
 .input.toggle-switch .toggle-switch-checkbox:active:before {
@@ -2836,7 +2836,7 @@ html {
 }
 .grid-responsive-12 .row .main-column .message,
 .grid .row .main-column .message {
-  margin: 0;
+  margin: 0 0 0.8rem 0;
 }
 .grid-responsive-12 .row .main-column .accordion,
 .grid .row .main-column .accordion {
@@ -3764,6 +3764,12 @@ body {
 }
 .quickaccess .generate-password .input-password-wrapper {
   margin-bottom: 1.2rem;
+}
+.quickaccess .generate-password .password-generator-length.input.text {
+  margin-bottom: 0;
+}
+.quickaccess .generate-password .password-generator-length.input.text label {
+  margin-bottom: 0;
 }
 .quickaccess .generate-password .select-button {
   margin-bottom: 1rem;

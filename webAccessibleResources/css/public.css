@@ -332,7 +332,7 @@ html {
   display: block;
   width: 100%;
   bottom: 3.4rem;
-  z-index: 991;
+  z-index: 3;
 }
 .update-loading-bar .progress-bar span {
   transition: width 2s;
@@ -345,7 +345,7 @@ html {
   font-size: 0.85em;
   top: 0;
   position: absolute;
-  z-index: 991;
+  z-index: 99;
   height: 2em;
   padding-top: 1em;
   width: 60%;
@@ -397,7 +397,7 @@ html {
   margin-left: 1rem;
 }
 .breadcrumbs ul li {
-  display: inline-block;
+  display: flex;
   margin-left: 0.5rem;
   max-width: 25%;
   float: left;
@@ -419,6 +419,13 @@ html {
   border: 0;
   font-size: 1.4rem;
   line-height: 1.9rem;
+  max-width: 100%;
+}
+.breadcrumbs span.chips {
+  margin-left: 0.8rem;
+  vertical-align: 0.1rem;
+  padding: 0.1rem 0.55rem 0.2rem 0.55rem;
+  border-radius: 2rem;
 }
 .breadcrumbs div.main-cell {
   display: inline;
@@ -435,7 +442,7 @@ html {
   background: #EEEEEE;
   border-top: 1px solid #E0E0E0;
   box-sizing: border-box;
-  z-index: 890;
+  z-index: 2;
 }
 .footer .footer-links {
   display: flex;
@@ -719,7 +726,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .tooltip .tooltip-text {
   position: absolute;
-  z-index: 99999;
+  z-index: 99;
   visibility: hidden;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;

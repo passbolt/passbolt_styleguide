@@ -68,7 +68,7 @@ class CheckPassphrase extends Component {
       },
       passphraseInDictionnary: false, // True if the passphrase is part of a data breach
       isPwnedServiceAvailable: true, // True if the isPwned service can be reached
-      passwordEntropy: null
+      passwordEntropy: null,
     };
   }
 
@@ -103,9 +103,9 @@ class CheckPassphrase extends Component {
   /**
    * Whenever the component is mounted
    */
-  componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
+  async componentDidMount() {
     this.focusOnPassphrase();
+    this.initPwnedPasswordService();
   }
 
   /**
@@ -125,13 +125,22 @@ class CheckPassphrase extends Component {
   }
 
   /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    this.pownedService = new PownedService(this.props.context.port);
+  }
+
+  /**
    * Whenever the users submits his passphrase
    * @param event Dom event
    */
   async handleSubmit(event) {
     event.preventDefault();
     this.validate();
-    await this.isPwndProcessingPromise;
+    if (this.pownedService) {
+      await this.isPwndProcessingPromise;
+    }
     if (this.isValid) {
       this.toggleProcessing();
       await this.check();
@@ -182,10 +191,11 @@ class CheckPassphrase extends Component {
   handleChangePassphrase(event) {
     const passphrase = event.target.value;
     let passphraseEntropy = null;
-
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
-      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+      if (this.pownedService) {
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+      }
     } else {
       this.setState({
         passphraseInDictionnary: false,
@@ -216,8 +226,7 @@ class CheckPassphrase extends Component {
 
   /**
    * Whenever the gpg key import failed
-   * @param {Error} error import Icon from '../../../../shared/components/Icons/Icon';
-   *The error
+   * @param {Error} error The error
    * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError.
    */
   onCheckFailure(error) {
@@ -299,7 +308,7 @@ class CheckPassphrase extends Component {
                 }
               </>
               }
-              {!this.state.hasBeenValidated &&
+              {!this.state.hasBeenValidated && this.pownedService &&
                 <>
                   {!this.state.isPwnedServiceAvailable &&
                     <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>

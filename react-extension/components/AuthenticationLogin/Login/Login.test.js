@@ -161,6 +161,18 @@ describe("Login", () => {
       expect(page.signInButton.textContent).toBe("Sign in");
       expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
     });
+    it('As a desktop application I should be able to sign-in', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        displayAs: LoginVariations.SIGN_IN,
+        isDesktop: true
+      });
+
+      const page = new LoginPage(props);
+      await waitFor(() => {});
+
+      expect(page.secondaryActionLink).toBeNull();
+    });
   });
 
   describe('As AN on the Account Recovery workflow', () => {

@@ -192,6 +192,20 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the column view button menu elements of password workspace menu
+   */
+  get menuColumnView() {
+    return this._container.querySelector('.actions.secondary .dropdown button');
+  }
+
+  /**
+   * Returns the column view item checkbox elements of password workspace menu
+   */
+  menuColumnViewItem(index) {
+    return this._container.querySelectorAll('.actions.secondary .dropdown-content li')[index - 1].querySelector('input[type=\"checkbox\"]');
+  }
+
+  /**
    * Returns the detail information button menu elements of password workspace menu
    */
   get menuDetailInformation() {

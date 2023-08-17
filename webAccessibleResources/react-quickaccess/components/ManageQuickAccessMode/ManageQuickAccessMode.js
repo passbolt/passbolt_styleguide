@@ -22,7 +22,6 @@ class ManageQuickAccessMode extends Component {
    */
   componentDidMount() {
     this.handleCloseOutsideWindowEvent();
-    this.redirectFromFeatureParams();
     this.handleResizeWindow();
   }
 
@@ -47,23 +46,6 @@ class ManageQuickAccessMode extends Component {
         }
       };
       window.addEventListener("blur", closeWindow);
-    }
-  }
-
-  /**
-   * Redirect on the right page according to the feature
-   */
-  redirectFromFeatureParams() {
-    switch (this.queryParameters.get("feature")) {
-      case "create-new-credentials":
-      case "save-credentials":
-        this.props.history.push({pathname: "/webAccessibleResources/quickaccess/resources/create"});
-        break;
-      case "autosave-credentials":
-        this.props.history.push({pathname: "/webAccessibleResources/quickaccess/resources/autosave"});
-        break;
-      default:
-        break;
     }
   }
 

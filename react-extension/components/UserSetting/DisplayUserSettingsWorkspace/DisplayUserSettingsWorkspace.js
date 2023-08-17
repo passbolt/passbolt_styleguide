@@ -34,6 +34,7 @@ import TransferToMobile from "../TransferToMobile/TransferToMobile";
 import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/DisplayAccountRecoveryUserSettings';
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {withMfa} from '../../../contexts/MFAContext';
+import ExportAccountToDesktop from '../ExportAccountToDesktop/ExportAccountToDesktop';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -53,6 +54,14 @@ class DisplayUserSettingsWorkspace extends React.Component {
    */
   get canIUseMobileTransferCapability() {
     return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+  }
+
+  /**
+   * Can the user access the desktop export capability.
+   * @returns {bool}
+   */
+  get canIUseDesktopExportCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
 
   /**
@@ -89,7 +98,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
         </div>
         <div className="panel main">
           <div className="panel left">
-            <NavigateIntoUserSettingsWorkspace hasPendingMfaChoice={this.isMfaChoiceRequired} hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
+            <NavigateIntoUserSettingsWorkspace
+              hasPendingMfaChoice={this.isMfaChoiceRequired}
+              hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
           </div>
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
@@ -101,6 +112,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
             }
             {this.canIUseMobileTransferCapability &&
             <Route path={`${path}/mobile`} component={TransferToMobile}></Route>
+            }
+            {this.canIUseDesktopExportCapability &&
+            <Route path={`${path}/desktop`} component={ExportAccountToDesktop}></Route>
             }
             {this.canIUseAccountRecoveryCapability &&
             <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
@@ -117,7 +131,7 @@ DisplayUserSettingsWorkspace.propTypes = {
   context: PropTypes.any, // The application context
   match: PropTypes.any,
   accountRecoveryContext: PropTypes.object, // The account recovery context
-  mfaContext: PropTypes.object
+  mfaContext: PropTypes.object,
 };
 
 export default withAppContext(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace))));

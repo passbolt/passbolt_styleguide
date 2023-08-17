@@ -976,7 +976,7 @@ label .svg-icon svg {
   width: 1.2rem;
 }
 label:active {
-  background: #202020;
+  background: none;
   color: #FFFFFF;
 }
 /*
@@ -1559,7 +1559,7 @@ input[type=file] {
   border: none;
 }
 .checkbox input[type=checkbox]:active + label {
-  background: #202020;
+  background: none;
   color: #FFFFFF;
 }
 .checkbox input[type=checkbox]:disabled + label {
@@ -1659,7 +1659,7 @@ input[type=file] {
 }
 .radiolist .input.radio input[type=radio]:active + label,
 .radiolist-alt .input.radio input[type=radio]:active + label {
-  background: #202020;
+  background: none;
   color: #FFFFFF;
 }
 .radiolist .input.radio input[type=radio]:active:before,
@@ -1787,7 +1787,7 @@ input[type=file] {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5);
 }
 .input.toggle-switch .toggle-switch-checkbox:active + label {
-  background: #202020;
+  background: none;
   color: #FFFFFF;
 }
 .input.toggle-switch .toggle-switch-checkbox:active:before {
@@ -2836,7 +2836,7 @@ html {
 }
 .grid-responsive-12 .row .main-column .message,
 .grid .row .main-column .message {
-  margin: 0;
+  margin: 0 0 0.8rem 0;
 }
 .grid-responsive-12 .row .main-column .accordion,
 .grid .row .main-column .accordion {
@@ -3022,44 +3022,48 @@ html {
   margin-right: 0;
 }
 .header.third .main-action-wrapper button {
-  float: left;
   margin-right: 0.8rem;
 }
 .header.third .actions-wrapper {
+  display: flex;
+  justify-content: space-between;
   margin: 0.4rem 1.6rem 0 0;
 }
-.header.third .actions-wrapper button {
-  float: left;
+.header.third .actions-wrapper .actions {
+  flex: 1;
+}
+.header.third .actions-wrapper .actions.secondary {
+  flex: 0;
+}
+.header.third .actions-wrapper .actions > ul {
+  display: flex;
+}
+.header.third .actions-wrapper .dropdown {
+  margin-right: 0;
+}
+.header.third .actions-wrapper .dropdown .dropdown-content.left {
   margin-right: 1rem;
 }
-.header.third .actions-wrapper li {
-  display: inline;
-}
-.header.third .actions-wrapper .secondary {
-  float: right;
-}
-.header.third .actions-wrapper .secondary button {
-  min-width: inherit;
+.header.third .actions-wrapper button {
+  margin-right: 1rem;
 }
 .header.third .actions-wrapper .secondary button:last-child {
   margin-right: 0;
 }
-/* hide secondary actions if there is no space */
-@media all and (max-width: 1024px) {
-  .header.third .actions-wrapper .dropdown,
-  .header.third .actions-wrapper .actions.secondary {
-    display: none;
-  }
-}
 /* hide icons if there is no space */
 @media all and (max-width: 1024px) {
-  .header.third .main-action-wrapper i,
-  .header.third .actions-wrapper i {
+  .header.third .main-action-wrapper button,
+  .header.third .actions-wrapper button {
+    min-width: 1em;
+    font-size: 1em;
+  }
+  .header.third .main-action-wrapper button span + span,
+  .header.third .actions-wrapper button span + span {
     display: none;
   }
-  .header.third .main-action-wrapper i + span,
-  .header.third .actions-wrapper i + span {
-    margin-left: 0;
+  .header.third .main-action-wrapper button span + span.svg-icon,
+  .header.third .actions-wrapper button span + span.svg-icon {
+    display: inline-flex;
   }
   .header.third .main-action-wrapper .disabled,
   .header.third .actions-wrapper .disabled {
@@ -3068,22 +3072,8 @@ html {
 }
 /* hide text and only show icon if there is even less space */
 @media all and (max-width: 540px) {
-  .header.third .main-action-wrapper a i,
-  .header.third .actions-wrapper a i {
-    display: block;
-  }
-  .header.third .main-action-wrapper a.button,
-  .header.third .actions-wrapper a.button {
-    min-width: 1em;
-    font-size: 1em;
-  }
-  .header.third .main-action-wrapper a i + span,
-  .header.third .actions-wrapper a i + span {
-    margin-left: 0;
-    display: none;
-  }
-  .header.third .main-action-wrapper .disabled,
-  .header.third .actions-wrapper .disabled {
+  .header.third .actions-wrapper .dropdown,
+  .header.third .actions-wrapper .actions.secondary {
     display: none;
   }
 }
@@ -3345,7 +3335,7 @@ html {
   margin-left: 1rem;
 }
 .breadcrumbs ul li {
-  display: inline-block;
+  display: flex;
   margin-left: 0.5rem;
   max-width: 25%;
   float: left;
@@ -3367,6 +3357,13 @@ html {
   border: 0;
   font-size: 1.4rem;
   line-height: 1.9rem;
+  max-width: 100%;
+}
+.breadcrumbs span.chips {
+  margin-left: 0.8rem;
+  vertical-align: 0.1rem;
+  padding: 0.1rem 0.55rem 0.2rem 0.55rem;
+  border-radius: 2rem;
 }
 .breadcrumbs div.main-cell {
   display: inline;
@@ -3376,7 +3373,7 @@ html {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 800;
+  z-index: 100;
   background: rgba(0, 0, 0, 0.8);
   overflow: auto;
 }
@@ -3562,7 +3559,7 @@ html {
   position: absolute;
   padding: 1rem;
   top: -1000px;
-  z-index: 9999999;
+  z-index: 10;
 }
 .drag-and-drop-wrapper .drag-and-drop {
   display: flex;
@@ -3614,36 +3611,45 @@ html {
   margin-right: 0.8rem;
   /* dropdown content */
 }
-.dropdown button.open {
-  z-index: 801;
+.dropdown button.open,
+.dropdown .button.open {
+  z-index: 4;
   background: #353535;
   border-radius: 0.4rem 0.4rem 0 0;
   box-shadow: inset 0.1rem 0 0 0 #202020, inset -0.1rem 0 0 0 #202020, inset 0 0.1rem 0 0 #202020;
   color: #FFFFFF;
   padding-bottom: 1.4rem;
 }
-.dropdown button.open svg {
+.dropdown button.open svg,
+.dropdown .button.open svg {
   --icon-color: #FFFFFF;
   --icon-background-color: #3B3B3B;
 }
-.dropdown button.open.button-action-icon {
-  padding-bottom: 2.2rem;
-  height: 5rem;
+.dropdown button.open.button-action-icon,
+.dropdown .button.open.button-action-icon {
+  height: 4.2rem;
 }
-.dropdown button.open + .dropdown-content {
+.dropdown button.open + .dropdown-content,
+.dropdown .button.open + .dropdown-content {
   top: calc(100% - 0.1rem);
 }
-.dropdown button.more .svg-icon svg {
+.dropdown button.more .svg-icon svg,
+.dropdown .button.more .svg-icon svg {
   margin-left: 1.6rem;
 }
-.dropdown button .svg-icon + .svg-icon {
+.dropdown button.button-action-icon,
+.dropdown .button.button-action-icon {
+  width: inherit;
+}
+.dropdown button .svg-icon + .svg-icon,
+.dropdown .button .svg-icon + .svg-icon {
   margin-left: 0.8rem;
   display: inline-flex;
 }
 .dropdown .dropdown-content {
   float: left;
   position: absolute;
-  z-index: 800;
+  z-index: 3;
   display: none;
   border: 1px solid #202020;
   box-sizing: border-box;
@@ -3699,6 +3705,14 @@ html {
   background: #404040;
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5);
 }
+.dropdown .dropdown-content li .checkbox {
+  padding: 0.8rem 1.6rem;
+  margin: 0;
+}
+.dropdown .dropdown-content li .checkbox:hover {
+  color: #FFFFFF;
+  background: #404040;
+}
 .feedback-card {
   background: #202020;
   color: #FFFFFF;
@@ -3749,7 +3763,7 @@ html {
   background: #2C2C2C;
   border-top: 1px solid #202020;
   box-sizing: border-box;
-  z-index: 890;
+  z-index: 2;
 }
 .footer .footer-links {
   display: flex;
@@ -3957,7 +3971,7 @@ html {
   display: block;
   width: 100%;
   bottom: 3.4rem;
-  z-index: 991;
+  z-index: 3;
 }
 .update-loading-bar .progress-bar span {
   transition: width 2s;
@@ -4059,7 +4073,7 @@ html {
   font-size: 0.85em;
   top: 0;
   position: absolute;
-  z-index: 991;
+  z-index: 99;
   height: 2em;
   padding-top: 1em;
   width: 60%;
@@ -4132,7 +4146,7 @@ form.search label {
 }
 .tooltip .tooltip-text {
   position: absolute;
-  z-index: 99999;
+  z-index: 99;
   visibility: hidden;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
@@ -4465,7 +4479,7 @@ form.search label {
 .navigation-secondary .row .right-cell button.open {
   display: flex;
   align-items: center;
-  z-index: 999;
+  z-index: 10;
   background: #353535;
   --icon-color: #FFFFFF;
   --icon-background-color: #3B3B3B;
@@ -4481,7 +4495,6 @@ form.search label {
   box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #202020;
 }
 .navigation-secondary .row .right-cell button:focus {
-  box-shadow: none;
   --icon-color: #FFFFFF;
   --icon-background-color: #3B3B3B;
 }
@@ -4583,7 +4596,7 @@ form.search label {
   border: 1px solid #202020;
   filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, 0.5));
   border-radius: 0.4rem;
-  z-index: 993;
+  z-index: 10;
   display: none;
   padding: 0.8rem 0;
   font-size: 1.5rem;
@@ -4686,6 +4699,7 @@ iframe.cachette {
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.4rem;
+  background-color: #808080;
 }
 .chips.beta {
   background-color: #DD6A00;
@@ -4961,7 +4975,7 @@ iframe.cachette {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 899;
+  z-index: 99;
   padding: 0;
   margin: 0;
   background: #000000;
@@ -5521,6 +5535,7 @@ iframe.cachette {
   height: 100%;
   background: #353535;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.75);
+  z-index: 2;
   /* Controls */
   /** SECTIONS **/
   /** Sidebar forms **/
@@ -5672,7 +5687,6 @@ iframe.cachette {
   position: absolute;
   margin-top: -5.1rem;
   right: 4.2rem;
-  z-index: 401;
   border: 0;
   padding: 0;
   width: 2.2rem;
@@ -5976,23 +5990,29 @@ iframe.cachette {
   margin-right: 1.6rem;
   font-size: 1.5rem;
   /* 15px */
-  height: 100%;
+  height: calc(100% - 4rem);
   border-radius: 0.3rem 0.3rem 0 0;
   border: 1px solid #202020;
   border-bottom: none;
   box-shadow: 0 -0.1rem 0 #616161;
+  overflow: auto;
   /* header */
   /* main content */
   /* rows */
 }
 .tableview .tableview-header {
-  background: #3B3B3B;
   height: 3.2rem;
-  width: 100%;
+  background: #3B3B3B;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .tableview .tableview-header table {
   width: 100%;
+  height: 100%;
+  background: #3B3B3B;
   color: #FFFFFF;
+  table-layout: fixed;
 }
 .tableview .tableview-header table .input.checkbox input[type=checkbox] {
   background: #202020;
@@ -6002,19 +6022,19 @@ iframe.cachette {
 }
 .tableview .tableview-header table button {
   color: #FFFFFF;
+  max-width: 100%;
 }
 .tableview .tableview-content {
   top: 3.1rem;
-  bottom: 3.8rem;
+  bottom: 0;
   padding: 0;
-  width: 100%;
   border-top: 1px solid #202020;
-  overflow-y: scroll;
   position: absolute;
 }
 .tableview .tableview-content table {
   width: 100%;
   color: #FFFFFF;
+  table-layout: fixed;
 }
 .tableview .tableview-content table .input.checkbox input[type=checkbox] {
   background: #202020;
@@ -6043,9 +6063,29 @@ iframe.cachette {
   text-align: left;
   padding: 0.5rem 0.3rem 0.6rem 0.3rem;
   vertical-align: middle;
+  position: relative;
 }
 .tableview table th {
   font-weight: 800;
+}
+.tableview table th.draggable {
+  cursor: move;
+}
+.tableview table th .resizer {
+  /* Displayed at the right side of column */
+  position: absolute;
+  top: 0.4rem;
+  right: 0;
+  width: 5px;
+  cursor: col-resize;
+  user-select: none;
+  height: 2.4rem;
+  margin-right: 0.8rem;
+  border-right: 1px solid #202020;
+}
+.tableview table th .resizer:hover,
+.tableview table th .resizer.resizing {
+  border-right: 2px solid #2894DF;
 }
 .tableview table td div {
   font-weight: 500;
@@ -6070,19 +6110,19 @@ iframe.cachette {
 }
 .tableview table .m-cell {
   width: 14.5rem;
-  max-width: 14.5rem;
-  vertical-align: middle;
 }
 .tableview table .l-cell {
   width: 21rem;
-  max-width: 21rem;
 }
 .tableview table .xl-cell {
   width: 28.5rem;
-  max-width: 28.5rem;
 }
 .tableview table .cell-header {
   display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 0.8rem;
 }
 .tableview table .cell-header-text {
   flex: 0 1 auto;
@@ -6096,7 +6136,11 @@ iframe.cachette {
   align-items: center;
 }
 .tableview table .cell-header-icon-sort .svg-icon {
-  margin-left: 0.5rem;
+  margin: 0 0.5rem;
+}
+.tableview table thead tr.dragging th > * {
+  pointer-events: none;
+  user-select: none;
 }
 .tableview table thead th button:hover {
   color: #2894DF;
@@ -6152,8 +6196,13 @@ iframe.cachette {
 .tableview table tbody tr.inactive {
   color: #8B8B89;
 }
-.tableview table th.cell-multiple-select .input.checkbox,
-.tableview table td.cell-multiple-select .input.checkbox {
+.tableview table th.cell-checkbox .cell-header,
+.tableview table td.cell-checkbox .cell-header {
+  margin: 0;
+  overflow: inherit;
+}
+.tableview table th.cell-checkbox .input.checkbox,
+.tableview table td.cell-checkbox .input.checkbox {
   margin: 0 0 0 0.5rem;
 }
 .tableview table th.cell-favorite button,
@@ -6161,26 +6210,36 @@ iframe.cachette {
   display: flex;
   align-items: center;
 }
-.tableview table th.attention-required .svg-icon.exclamation {
-  position: relative;
-  top: -0.1rem;
+.tableview table th.cell-favorite button .cell-header,
+.tableview table td.cell-favorite button .cell-header {
+  margin: 0;
+  overflow: inherit;
 }
-.tableview table th.attention-required .svg-icon.exclamation svg {
+.tableview table th.cell-favorite button .cell-header .cell-header-icon-sort,
+.tableview table td.cell-favorite button .cell-header .cell-header-icon-sort {
+  display: flex;
+  margin: 0;
+}
+.tableview table th.cell-favorite button .cell-header .cell-header-icon-sort .svg-icon,
+.tableview table td.cell-favorite button .cell-header .cell-header-icon-sort .svg-icon {
+  margin: 0;
+}
+.tableview table th.attention-required .cell-header {
+  margin: 0;
+  overflow: inherit;
+}
+.tableview table th.attention-required .cell-header .svg-icon.exclamation svg {
   margin-left: 0.25rem;
-}
-.tableview table td.attention-required .svg-icon.exclamation {
-  position: relative;
-  top: -0.1rem;
 }
 .tableview table td.attention-required .svg-icon.exclamation svg {
   margin-left: 0.25rem;
   --icon-exclamation-background-color: #DD6A00;
 }
-.tableview table td.password .secret {
+.tableview table td.cell-password .secret {
   float: left;
   max-width: calc(100% - 3rem);
 }
-.tableview table td.password .password-view {
+.tableview table td.cell-password .password-view {
   display: none;
   align-items: center;
   width: 2.2rem;
@@ -6189,40 +6248,12 @@ iframe.cachette {
   padding: 0;
   float: left;
 }
-.tableview table td.password .password-view .svg-icon svg {
+.tableview table td.cell-password .password-view .svg-icon svg {
   width: 1.4rem;
   height: 100%;
 }
-.tableview table td.password:hover .password-view {
+.tableview table td.cell-password:hover .password-view {
   display: flex;
-}
-/* hide secondary actions if there is no space */
-@media all and (max-width: 600px) {
-  .tableview table tbody {
-    background: #404040;
-  }
-  .tableview table tbody td {
-    display: block;
-  }
-  .tableview table tbody td.s-cell,
-  .tableview table tbody td.s2-cell,
-  .tableview table tbody td.m-cell,
-  .tableview table tbody td.l-cell {
-    max-width: 90%;
-    width: 90%;
-    padding: 0.5em;
-  }
-  .tableview table tbody td.s-cell {
-    display: none;
-  }
-  .tableview thead {
-    display: none;
-  }
-  .tableview .tableview-content {
-    top: 0;
-    border: 0;
-    bottom: 0;
-  }
 }
 table.table-info,
 table.table-info.vertical {
@@ -6562,7 +6593,7 @@ table.table-info.horizontal tbody tr:hover {
   border-radius: 0 0 0.4rem 0.4rem;
   position: absolute;
   display: inline-flex;
-  z-index: 9999;
+  z-index: 99;
   max-height: 10.5rem;
   overflow: hidden;
   overflow-y: auto;
@@ -6592,6 +6623,10 @@ table.table-info.horizontal tbody tr:hover {
   line-height: 1.9rem;
   font-size: 1.4rem;
   font-weight: 400;
+  max-width: 100%;
+}
+.tag-editor .autocomplete-suggestions .autocomplete-suggestion.row button .item {
+  width: 100%;
 }
 .tag-editor .autocomplete-suggestions .autocomplete-suggestion.row.selected {
   background: #404040;
@@ -6870,7 +6905,8 @@ table.table-info.horizontal tbody tr:hover {
 .usercard-detailed-col-2 .content-wrapper .content .name {
   white-space: normal;
 }
-.usercard-detailed-col-2 .content-wrapper .content .name .creator {
+.usercard-detailed-col-2 .content-wrapper .content .name .creator,
+.usercard-detailed-col-2 .content-wrapper .content .name .item {
   color: #FFFFFF;
 }
 .third-party-provider-settings .provider-list {
@@ -7345,7 +7381,10 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.user .tableview.empty .empty-content {
   text-align: center;
-  margin: 3em 0.5em 0.67em 0.5em;
+  margin: auto;
+  width: 50%;
+  padding-top: 2em;
+  color: #FFFFFF;
 }
 .page.user .tableview.empty .empty-content h1 {
   font-size: 1.5em;
@@ -7361,6 +7400,7 @@ table.table-info.horizontal tbody tr:hover {
   .page.user .tableview.empty .empty-content p {
     font-size: 1.2em;
     line-height: 1.8em;
+    max-width: inherit;
   }
 }
 .page.settings .main.panel .middle {
@@ -7538,6 +7578,11 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.settings .profile-mobile-transfer .submit-wrapper .button.cancel {
   margin-left: auto;
+}
+.page.settings .profile-desktop-export .windows-store {
+  display: block;
+  height: 4.4rem;
+  border: 0;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
@@ -7802,4 +7847,68 @@ table.table-info.horizontal tbody tr:hover {
 }
 .mfa-policy-settings .input.radio .radio-text {
   padding-left: 1.6rem;
+}
+.password-policies-settings .title.title--required::after {
+  content: '*';
+  color: #D40101;
+  margin-left: 0.4rem;
+}
+.password-policies-settings .singleline > span {
+  position: relative;
+  top: 0.6rem;
+}
+.password-policies-settings .accordion-header button {
+  border-bottom: 0;
+}
+.password-policies-settings .accordion-header button .svg-icon {
+  margin-right: 0.4rem;
+}
+.password-policies-settings .button-group--nowrap {
+  width: 60%;
+  margin-bottom: 1.2rem;
+}
+.password-policies-settings .default-provider {
+  display: inline-flex;
+}
+.password-policies-settings .default-provider p,
+.password-policies-settings .default-provider .select-container {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.password-policies-settings .default-provider .select-container {
+  margin-left: 1rem;
+}
+.password-policies-settings .estimated-entropy label {
+  margin-bottom: 1.6rem;
+}
+.password-policies-settings .estimated-entropy > .password-complexity:last-child {
+  margin-bottom: 4.8rem;
+}
+.password-policies-settings .estimated-entropy .error-message {
+  margin-bottom: 1.7rem;
+}
+.password-policies-settings .passwords-settings .checkbox {
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+.password-policies-settings #accordion-toggle-password,
+.password-policies-settings #accordion-toggle-passphrase {
+  font-weight: bold;
+}
+.password-policies-settings .warning p {
+  margin: 0;
+}
+.password-policies-settings p {
+  margin-top: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+.password-policies-settings label {
+  margin-bottom: 1.6rem;
+}
+.grid .row .password-policies-settings hr {
+  margin-left: 0;
+  margin-right: 0;
+  height: 0.1rem;
+  background-color: #101010;
+  border: none;
 }

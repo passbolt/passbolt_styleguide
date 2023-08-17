@@ -142,7 +142,6 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
     return this.state.domains.allowedDomains;
   }
 
-
   /**
    * Handle settings changes.
    * @params {ReactEvent} The react event
@@ -271,24 +270,26 @@ export class AdminSelfRegistrationContextProvider extends React.Component {
   /**
    * Whenever the save has been requested
    */
-  async save() {
+  save() {
     this.setSubmitted(true);
-    const isValid = await this.validateForm();
-    if (isValid) {
-      if (this.hasSettingsChanges() && this.getAllowedDomains().size === 0) {
-        this.displayConfirmDeletionDialog();
-      } else {
-        this.displayConfirmSummaryDialog();
-      }
+    const isValid = this.validateForm();
+    if (!isValid) {
+      return;
+    }
+
+    if (this.hasSettingsChanges() && this.getAllowedDomains().size === 0) {
+      this.displayConfirmDeletionDialog();
+    } else {
+      this.displayConfirmSummaryDialog();
     }
   }
 
   /**
    * validate the form
-   * @returns {void}
+   * @returns {boolean}
    */
-  async validateForm() {
-    const errors = await this.selfRegistrationFormService.validate(this.state.getAllowedDomains());
+  validateForm() {
+    const errors = this.selfRegistrationFormService.validate(this.state.getAllowedDomains());
     this.state.setErrors(errors);
     return errors.size === 0;
   }

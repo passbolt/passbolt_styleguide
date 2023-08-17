@@ -15,44 +15,40 @@
 /**
  * Unit tests on CreateResource in regard of specifications
  */
+import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";
-import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
-beforeEach(() => {
-  jest.resetModules();
-});
-
 describe("See the Create Resource", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-  const props = defaultProps(); // The props to pass
-  props.onClose = jest.fn();
-  props.dialogContext.open = jest.fn();
-  const resourceCreateDialogProps = {
-    folderParentId: null
-  };
+  let page, props, context;
+
+  beforeEach(() => {
+    jest.resetModules();
+    jest.clearAllMocks();
+    context = defaultAppContext(); // The applicative context
+    props = defaultProps(); // The props to pass
+    props.onClose = jest.fn();
+    props.dialogContext.open = jest.fn();
+    const resourceCreateDialogProps = {
+      folderParentId: null
+    };
+
+    context.setContext({resourceCreateDialogProps});
+    page = new CreateResourcePage(context, props);
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
+  });
 
   const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
   const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
   describe('As LU I can start adding a password', () => {
-    /**
-     * I should see the create password dialog
-     */
-    beforeEach(() => {
-      context.setContext({resourceCreateDialogProps});
-      page = new CreateResourcePage(context, props);
-      jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-      jest.clearAllTimers();
-    });
-
     it('matches the styleguide', () => {
       expect.assertions(19);
       // Dialog title exists and correct
@@ -166,6 +162,7 @@ describe("See the Create Resource", () => {
       };
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
+      await waitFor(() => {});
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceMeta, resourceMeta.password);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);

@@ -114,22 +114,20 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
-          <div>
+          <ul>
             <li>
               <button type="button" disabled={!this.isSaveEnabled()} onClick={this.handleSaveClick}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
               </button>
             </li>
-          </div>
-          <div>
             <li>
               <button type="button" disabled={!this.isTestEnabled()} onClick={this.handleTestClick}>
                 <Icon name="plug"/>
                 <span><Trans>Send test email</Trans></span>
               </button>
             </li>
-          </div>
+          </ul>
         </div>
       </div>
     );

@@ -48,6 +48,13 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
   }
 
   /**
+   * Can the user access the desktop capability.
+   * @returns {bool}
+   */
+  get canIUseDesktopCapability() {
+    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+  }
+  /**
    * Can the user access the account recovery feature.
    * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
    */
@@ -175,6 +182,20 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
             </div>
           </li>
           }
+          {this.canIUseDesktopCapability &&
+          <li>
+            <div
+              className={`row ${isSelected('desktop') ? 'selected' : ''}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}>
+                    <span><Trans>Desktop app setup</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
         </ul>
       </div>
     );
@@ -187,7 +208,7 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
   hasPendingAccountRecoveryChoice: PropTypes.bool,
-  hasPendingMfaChoice: PropTypes.bool
+  hasPendingMfaChoice: PropTypes.bool,
 };
 
 export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace))));

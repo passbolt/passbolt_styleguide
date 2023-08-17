@@ -40,4 +40,12 @@ export default class FilterUsersByBreadcrumbPage {
       return this._page.container.querySelector('li button').innerHTML;
     }
   }
+
+  /**
+   * Return the number of users displayed
+   * @return {string | any}
+   */
+  get itemNumberDisplayed() {
+    return this._page.container.querySelector('.chips').textContent;
+  }
 }

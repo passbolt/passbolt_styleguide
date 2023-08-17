@@ -107,9 +107,22 @@ class DisplayAdministrationMenu extends React.Component {
     return siteSettings && siteSettings.canIUse('sso');
   }
 
+  /**
+   * Can I use the mfa policy plugin
+   * @returns {boolean}
+   */
   get canIUseMfaPolicy() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('mfaPolicies');
+  }
+
+  /**
+   * Can I use the password policy plugin
+   * @returns {boolean}
+   */
+  get canIUsePasswordPolicies() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
   }
 
   /**
@@ -136,6 +149,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleSsoClick = this.handleSsoClick.bind(this);
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
     this.handleRbacsClick = this.handleRbacsClick.bind(this);
+    this.handlePasswordPoliciesClick = this.handlePasswordPoliciesClick.bind(this);
   }
 
   /**
@@ -216,6 +230,13 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Handle when the user click on the Password policies settings menu
+   */
+  handlePasswordPoliciesClick() {
+    this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
+  }
+
+  /**
    * If MFA menu is selected
    * @returns {boolean}
    */
@@ -229,6 +250,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isMfaPolicySelected() {
     return AdministrationWorkspaceMenuTypes.MFA_POLICY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Password policiy menu is selected
+   * @returns {boolean}
+   */
+  isPasswordPoliciesSelected() {
+    return AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -328,6 +357,17 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button className="link no-border" type="button" onClick={this.handleMfaPolicyClick}><span><Trans>MFA Policy</Trans></span></button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          }
+          {this.canIUsePasswordPolicies &&
+            <li id="password_policy_menu">
+              <div className={`row  ${this.isPasswordPoliciesSelected() ? "selected" : ""}`}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button className="link no-border" type="button" onClick={this.handlePasswordPoliciesClick}><span><Trans>Password Policy</Trans></span></button>
                   </div>
                 </div>
               </div>

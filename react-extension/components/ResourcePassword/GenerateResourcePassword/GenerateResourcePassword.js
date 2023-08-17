@@ -20,15 +20,18 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import Tabs from "../../Common/Tab/Tabs";
 import Tab from "../../Common/Tab/Tab";
-import ConfigurePassphraseGenerator from "./ConfigurePassphraseGenerator";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
+import ConfigurePassphraseGenerator from "../../../../shared/components/GeneratePassword/ConfigurePassphraseGenerator";
+import ConfigurePasswordGenerator from "../../../../shared/components/GeneratePassword/ConfigurePasswordGenerator";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import debounce from "debounce-promise";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
 
 /**
  * This component generate password or passphrase following configuration
@@ -38,15 +41,17 @@ class GenerateResourcePassword extends Component {
     super(props);
     this.state = this.defaultState;
     this.initEventHandlers();
+    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   get defaultState() {
     return {
       password: "", // The password
+      generatorSettings: null,
       isObfuscated: true, // True if the passphrase should not be visible
-      generator: {}, // The current password generator
       loading: true,
-      processing: false
+      processing: false,
+      isPwnedServiceAvailable: false,
     };
   }
 
@@ -54,11 +59,29 @@ class GenerateResourcePassword extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    const type = this.props.resourcePasswordGeneratorContext.settings.default_generator;
-    const initialGenerator = this.generators.find(generator => generator.type === type);
+    await this.props.passwordPoliciesContext.findPolicies();
+    this.initPwnedPasswordService();
 
-    await this.handleGeneratorChanged(initialGenerator);
-    this.setState({loading: false});
+    const generatorSettings = this.props.resourcePasswordGeneratorContext.getSettings();
+    const password = this.generatePassword(generatorSettings);
+    this.setState({
+      loading: false,
+      generatorSettings,
+      password
+    });
+  }
+
+  /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+
+    if (isPwnedServiceAvailable) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+
+    this.setState({isPwnedServiceAvailable});
   }
 
   /**
@@ -67,35 +90,60 @@ class GenerateResourcePassword extends Component {
   initEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleViewPasswordToggle = this.handleViewPasswordToggle.bind(this);
     this.handleGeneratePassword = this.handleGeneratePassword.bind(this);
-    this.handleGeneratorChanged = this.handleGeneratorChanged.bind(this);
+    this.handlePassphraseGeneratorConfigurationChanged = this.handlePassphraseGeneratorConfigurationChanged.bind(this);
+    this.handlePasswordGeneratorConfigurationChanged = this.handlePasswordGeneratorConfigurationChanged.bind(this);
+    this.handleGeneratorConfigurationChanged = this.handleGeneratorConfigurationChanged.bind(this);
     this.handleCopyPassword = this.handleCopyPassword.bind(this);
-  }
-
-  /**
-   * Returns the possible generators
-   */
-  get generators() {
-    return  this.props.resourcePasswordGeneratorContext.settings.generators;
+    this.handleGeneratorTypeChanged = this.handleGeneratorTypeChanged.bind(this);
   }
 
   /**
    * Handle when the generator configuration has changed
-   * @param generatorConfiguration The generator configuration
-   * @returns {Promise<void>}
+   * @param {Object} generatorSettings The generator configuration
    */
-  async handleGeneratorChanged(generatorConfiguration) {
-    await this.setState({generator: generatorConfiguration});
-    this.generatePassword();
+  handleGeneratorConfigurationChanged(generatorSettings) {
+    const password = this.generatePassword(generatorSettings);
+    this.setState({generatorSettings, password});
+  }
+
+  /**
+   * Handle when the password generator configuration has changed
+   * @param generator The generator configuration
+   */
+  handlePasswordGeneratorConfigurationChanged(generator) {
+    const settings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    settings.password_generator_settings = generator;
+    this.handleGeneratorConfigurationChanged(settings);
+  }
+
+  /**
+   * Handle when the passphrase generator configuration has changed
+   * @param generator The generator configuration
+   */
+  handlePassphraseGeneratorConfigurationChanged(generator) {
+    const settings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    settings.passphrase_generator_settings = generator;
+    this.handleGeneratorConfigurationChanged(settings);
+  }
+
+  /**
+   * Handle when the secret generator type is changed.
+   * @param {string} generatorType
+   */
+  handleGeneratorTypeChanged(generatorType) {
+    const generatorSettings = JSON.parse(JSON.stringify(this.state.generatorSettings));
+    generatorSettings.default_generator = generatorType;
+    this.handleGeneratorConfigurationChanged(generatorSettings);
   }
 
   /**
    * Handle when one wants to generate password
    */
   handleGeneratePassword() {
-    this.generatePassword();
+    const password = this.generatePassword(this.state.generatorSettings);
+    this.setState({password});
   }
 
   /**
@@ -103,19 +151,6 @@ class GenerateResourcePassword extends Component {
    */
   handleClose() {
     this.props.onClose();
-  }
-
-  /**
-   * Handle form input change.
-   * @params {ReactEvent} The react event.
-   */
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    this.setState({
-      [name]: value
-    });
   }
 
   /**
@@ -132,10 +167,10 @@ class GenerateResourcePassword extends Component {
    * Handle the submission of the generated password.
    * @params {ReactEvent} The react event
    */
-  async handleSubmit(event) {
+  handleSubmit(event) {
     event.preventDefault();
-    await this.setState({processing: true});
-    await this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generator);
+    this.setState({processing: true});
+    this.props.resourcePasswordGeneratorContext.onPasswordGenerated(this.state.password, this.state.generatorSettings);
     this.props.onClose();
   }
 
@@ -149,10 +184,26 @@ class GenerateResourcePassword extends Component {
 
   /**
    * Generate the password
+   * @param {object} generatorConfiguration the configuration to be sued to generate a new password
    */
-  generatePassword() {
-    const password = SecretGenerator.generate(this.state.generator);
-    this.setState({password});
+  generatePassword(generatorConfiguration) {
+    const password = SecretGenerator.generate(generatorConfiguration);
+    this.evaluatePasswordIsInDictionaryDebounce(password);
+    return password;
+  }
+
+  /**
+   * Evaluate to check if password is in a dictionary.
+   * @return {Promise}
+   */
+  async evaluatePasswordIsInDictionaryDebounce(password) {
+    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
+    this.setState({passwordEntropy});
+    if (this.state.isPwnedServiceAvailable && this.pownedService) {
+      const result = await this.pownedService.evaluateSecret(password);
+      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
+      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    }
   }
 
   /**
@@ -172,7 +223,8 @@ class GenerateResourcePassword extends Component {
    * @returns {JSX}
    */
   render() {
-    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
+    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
+    const generatorConfiguration = this.state.generatorSettings;
     return (
       <>
         {!this.state.loading &&
@@ -194,7 +246,6 @@ class GenerateResourcePassword extends Component {
                     placeholder={this.translate("Password")}
                     preview={true}
                     value={this.state.password}
-                    onChange={this.handleInputChange}
                     disabled={this.state.processing}/>
                   <button type="button" onClick={this.handleGeneratePassword}
                     className={`password-generate button-icon ${this.state.processing ? 'disabled' : ''}`}>
@@ -208,30 +259,37 @@ class GenerateResourcePassword extends Component {
                   </button>
                 </div>
                 <PasswordComplexity entropy={passwordEntropy}/>
+                {!this.state.isPwnedServiceAvailable && this.pownedService &&
+                  <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                }
+                {this.state.passwordInDictionary  && this.pownedService &&
+                  <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+                }
               </div>
-
-              <Tabs activeTabName={this.state.generator.name}>
-                {this.generators.map(generator =>
-                  <Tab
-                    key={generator.name}
-                    name={generator.name}
-                    type={generator.type}
-                    onClick={() => this.handleGeneratorChanged(generator)}>
-                    {generator.type === "password" &&
+              {generatorConfiguration?.default_generator &&
+              <Tabs activeTabName={generatorConfiguration.default_generator}>
+                <Tab
+                  key={"password"}
+                  name={"password"}
+                  onClick={() => this.handleGeneratorTypeChanged("password")}>
+                  {generatorConfiguration.default_generator === "password" &&
                     <ConfigurePasswordGenerator
-                      configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}
-                      disabled={this.state.processing}/>
-                    }
-                    {generator.type === "passphrase" &&
+                      configuration={generatorConfiguration.password_generator_settings}
+                      onConfigurationChanged={this.handlePasswordGeneratorConfigurationChanged}/>
+                  }
+                </Tab>
+                <Tab
+                  key={"passphrase"}
+                  name={"passphrase"}
+                  onClick={() => this.handleGeneratorTypeChanged("passphrase")}>
+                  {generatorConfiguration.default_generator === "passphrase" &&
                     <ConfigurePassphraseGenerator
-                      configuration={this.state.generator}
-                      onChanged={this.handleGeneratorChanged}
-                      disabled={this.state.processing}/>
-                    }
-                  </Tab>
-                )}
+                      configuration={generatorConfiguration.passphrase_generator_settings}
+                      onConfigurationChanged={this.handlePassphraseGeneratorConfigurationChanged}/>
+                  }
+                </Tab>
               </Tabs>
+              }
             </div>
             <div className="submit-wrapper clearfix">
               <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
@@ -251,6 +309,7 @@ GenerateResourcePassword.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func, // Whenever the component must be closed
   t: PropTypes.func, // The translation function
+  passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withActionFeedback(withResourcePasswordGeneratorContext(withTranslation('common')(GenerateResourcePassword))));
+export default withAppContext(withActionFeedback(withPasswordPolicies(withResourcePasswordGeneratorContext(withTranslation('common')(GenerateResourcePassword)))));

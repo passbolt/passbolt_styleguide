@@ -92,7 +92,9 @@ class FilterUsersByBreadcrumb extends Component {
    */
   render() {
     return (
-      <Breadcrumbs items={this.items}/>
+      <Breadcrumbs items={this.items}>
+        <span className="chips">{this.props.userWorkspaceContext.filteredUsers.length}</span>
+      </Breadcrumbs>
     );
   }
 }

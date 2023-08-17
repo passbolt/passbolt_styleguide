@@ -93,6 +93,26 @@ export const domElementLoginWithNameAttributeBenutzerkennung =
   '</div>';
 
 /**
+ * Create a login form with name attribute benutzername in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNameAttributeBenutzername =
+  '<div>' +
+  '  <input type="text" name="form_benutzername"/>' +
+  '  <input type="text" name="password"/>' +
+  '</div>';
+
+/**
+ * Create a login form with name attribute benutzername and password attribute passwort in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNameAttributeBenutzernameAndPasswordAttributePasswort =
+  '<div>' +
+  '  <input type="text" name="form_benutzername"/>' +
+  '  <input type="text" name="passwort"/>' +
+  '</div>';
+
+/**
  * Create a login form with no type and name attribute username in DOM
  * @type {string}
  */
@@ -131,6 +151,17 @@ export const domElementLoginWithNoTypeAndNameAttributeBenutzerkennung =
   '  <input name="Benutzerkennung"/>' +
   '  <input type="password"/>' +
   '</div>';
+
+/**
+ * Create a login form with no type and name attribute benutzername in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndNameAttributeBenutzername =
+  '<div>' +
+  '  <input name="Benutzername"/>' +
+  '  <input type="password"/>' +
+  '</div>';
+
 
 /**
  * Create a login form with class username in DOM
@@ -233,6 +264,16 @@ export const domElementLoginWithIdAttributeBenutzerkennung =
   '</div>';
 
 /**
+ * Create a login form with id attribute benutzername in DOM
+ * @type {string}
+ */
+export const domElementLoginWithIdAttributeBenutzername =
+  '<div>' +
+  '  <input type="text" id="Test_Pbenutzernameutg"/>' +
+  '  <input type="text" id="Password"/>' +
+  '</div>';
+
+/**
  * Create a login form with no type and id attribute username in DOM
  * @type {string}
  */
@@ -269,6 +310,16 @@ export const domElementLoginWithNoTypeAndIdAttributeLogin =
 export const domElementLoginWithNoTypeAndIdAttributeBenutzerkennung =
   '<div>' +
   '  <input id="benutzerkennung-Y"/>' +
+  '  <input type="text" id="password"/>' +
+  '</div>';
+
+/**
+ * Create a login form with no type and id attribute benutzername in DOM
+ * @type {string}
+ */
+export const domElementLoginWithNoTypeAndIdAttributeBenutzername =
+  '<div>' +
+  '  <input id="benutzername-Y"/>' +
   '  <input type="text" id="password"/>' +
   '</div>';
 

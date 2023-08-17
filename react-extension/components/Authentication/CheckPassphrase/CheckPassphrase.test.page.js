@@ -87,6 +87,13 @@ export default class CheckPassphrasePage {
   }
 
   /**
+   * Returns the error message
+   */
+  get errorMessage() {
+    return this._page.container.querySelector('.error-message');
+  }
+
+  /**
    * Returns true if the user can change something like the token code
    */
   get canChange() {
@@ -113,7 +120,7 @@ export default class CheckPassphrasePage {
    * Returns true if the invalid passphrase error is displayed
    */
   hasInvalidPassphraseError() {
-    return Boolean(this._page.container.querySelector('.invalid-passphrase'));
+    return Boolean(this._page.container.querySelector('.invalid-passphrase.error-message'));
   }
 
   /**
@@ -131,7 +138,6 @@ export default class CheckPassphrasePage {
    */
   async fillPassphrase(passphrase) {
     fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
-    jest.runAllTimers();
     await waitFor(() => {});
   }
 

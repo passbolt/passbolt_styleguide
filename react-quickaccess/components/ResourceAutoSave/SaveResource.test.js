@@ -10,12 +10,7 @@
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
- *
  */
-
-beforeEach(() => {
-  jest.resetModules();
-});
 
 import {defaultAppContext, mockExtensionCall} from './SaveResource.test.data';
 import {defaultProps} from '../ResourceCreatePage/ResourceCreatePage.test.data';
@@ -27,14 +22,8 @@ beforeEach(() => {
 });
 
 describe("See the Create Resource - save resource", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-  const props = defaultProps(); // The props to pass
-
   beforeEach(() => {
     jest.useFakeTimers();
-    mockExtensionCall(context);
-    page = new SaveResourcePage(context, props);
   });
 
   afterEach(() => {
@@ -44,7 +33,14 @@ describe("See the Create Resource - save resource", () => {
   it("As a signed-in user creating a password on the quickaccess, I should get warn when I enter a pwned password and not be blocked", async() => {
     expect.assertions(2);
 
+    const context = defaultAppContext(); // The applicative context
+    const props = defaultProps(); // The props to pass
+    mockExtensionCall(context);
+
+    const page = new SaveResourcePage(context, props);
+    await waitFor(() => {});
     await page.fillInputPassword('hello-world');
+    jest.runAllTimers();
     await waitFor(() => {});
     // we expect a warning to inform about powned password
     expect(page.pwnedWarningMessage.textContent).toEqual("The password is part of an exposed data breach.");
@@ -58,6 +54,12 @@ describe("See the Create Resource - save resource", () => {
   it("As a signed-in user creating a password on the quickaccess, I should see a complexity as Quality if the passphrase is empty", async() => {
     expect.assertions(2);
 
+    const context = defaultAppContext(); // The applicative context
+    const props = defaultProps(); // The props to pass
+    mockExtensionCall(context);
+
+    const page = new SaveResourcePage(context, props);
+    await waitFor(() => {});
     await page.fillInputPassword('');
     await waitFor(() => {});
 
@@ -65,6 +67,3 @@ describe("See the Create Resource - save resource", () => {
     expect(page.passwordComplexity.textContent).toBe("Quality");
   });
 });
-
-
-

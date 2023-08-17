@@ -975,7 +975,7 @@ label .svg-icon svg {
   width: 1.2rem;
 }
 label:active {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 /*
@@ -1558,7 +1558,7 @@ input[type=file] {
   border: none;
 }
 .checkbox input[type=checkbox]:active + label {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 .checkbox input[type=checkbox]:disabled + label {
@@ -1658,7 +1658,7 @@ input[type=file] {
 }
 .radiolist .input.radio input[type=radio]:active + label,
 .radiolist-alt .input.radio input[type=radio]:active + label {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 .radiolist .input.radio input[type=radio]:active:before,
@@ -1786,7 +1786,7 @@ input[type=file] {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
 }
 .input.toggle-switch .toggle-switch-checkbox:active + label {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 .input.toggle-switch .toggle-switch-checkbox:active:before {
@@ -2835,7 +2835,7 @@ html {
 }
 .grid-responsive-12 .row .main-column .message,
 .grid .row .main-column .message {
-  margin: 0;
+  margin: 0 0 0.8rem 0;
 }
 .grid-responsive-12 .row .main-column .accordion,
 .grid .row .main-column .accordion {
@@ -3199,7 +3199,7 @@ html {
   display: block;
   width: 100%;
   bottom: 3.4rem;
-  z-index: 991;
+  z-index: 3;
 }
 .update-loading-bar .progress-bar span {
   transition: width 2s;
@@ -3212,7 +3212,7 @@ html {
   font-size: 0.85em;
   top: 0;
   position: absolute;
-  z-index: 991;
+  z-index: 99;
   height: 2em;
   padding-top: 1em;
   width: 60%;
@@ -3264,7 +3264,7 @@ html {
   margin-left: 1rem;
 }
 .breadcrumbs ul li {
-  display: inline-block;
+  display: flex;
   margin-left: 0.5rem;
   max-width: 25%;
   float: left;
@@ -3286,6 +3286,13 @@ html {
   border: 0;
   font-size: 1.4rem;
   line-height: 1.9rem;
+  max-width: 100%;
+}
+.breadcrumbs span.chips {
+  margin-left: 0.8rem;
+  vertical-align: 0.1rem;
+  padding: 0.1rem 0.55rem 0.2rem 0.55rem;
+  border-radius: 2rem;
 }
 .breadcrumbs div.main-cell {
   display: inline;
@@ -3295,7 +3302,7 @@ html {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 800;
+  z-index: 100;
   background: rgba(255, 255, 255, 0.9);
   overflow: auto;
 }
@@ -3489,7 +3496,7 @@ html {
   background: #EEEEEE;
   border-top: 1px solid #E0E0E0;
   box-sizing: border-box;
-  z-index: 890;
+  z-index: 2;
 }
 .footer .footer-links {
   display: flex;
@@ -3735,7 +3742,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .tooltip .tooltip-text {
   position: absolute;
-  z-index: 99999;
+  z-index: 99;
   visibility: hidden;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;

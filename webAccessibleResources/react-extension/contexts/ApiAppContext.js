@@ -217,7 +217,7 @@ class ApiAppContextProvider extends React.Component {
    */
   async onLogoutRequested() {
     await this.authService.logout();
-    window.location.reload();
+    window.location.href = this.state.trustedDomain;
   }
 
   /**

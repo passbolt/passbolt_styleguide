@@ -17,6 +17,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import GenerateResourcePassword from "./GenerateResourcePassword";
 import MockPort from "../../../test/mock/MockPort";
+import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 
 
 export default {
@@ -35,74 +36,7 @@ const Template = args =>
 export const Initial = Template.bind({});
 Initial.args = {
   resourcePasswordGeneratorContext: {
-    settings: {
-      default_generator: "passphrase",
-      generators: [
-        {
-          "name": "Password",
-          "type": "password",
-          "default_options": {
-            "length": 18,
-            "look_alike": true,
-            "min_length": 8,
-            "max_length": 128,
-          },
-          "masks": [
-            {
-              "name": "upper",
-              "label": "A-Z",
-              "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            },
-            {
-              "name": "lower",
-              "label": "a-z",
-              "characters": "abcdefghijklmnopqrstuvwxyz"
-            },
-            {
-              "name": "digit",
-              "label": "0-9",
-              "characters": "0123456789"
-            },
-            {
-              "name": "parenthesis",
-              "label": "{ [ ( | ) ] ] }",
-              "characters": "([|])",
-            },
-            {
-              "name": "special_char1",
-              "label": "# $ % & @ ^ ~",
-              "characters": "#$%&@^~"
-            },
-            {
-              "name": "special_char2",
-              "label": ". , : ;",
-              "characters": ".,:;"
-            },
-            {
-              "name": "special_char5",
-              "label": "< * + ! ? =",
-              "characters": "<*+!?="
-            },
-            {
-              "name": "emoji",
-              "label": "😘",
-              "characters": "😀😃😄😁😆😅😂🤣🥲☺️😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾"
-            }
-          ],
-        },
-        {
-          "name": "Passphrase",
-          "type": "passphrase",
-          "default_options": {
-            "word_count": 8,
-            "word_case": "lowercase",
-            "min_word": 4,
-            "max_word": 40,
-            "separator": " "
-          },
-        }
-      ]
-    }
+    settings: defaultPasswordPoliciesDto()
   },
   onClose: () => {},
   context: {

@@ -23,6 +23,7 @@ import PasswordComplexity from "../../../shared/components/PasswordComplexity/Pa
 import debounce from "debounce-promise";
 import PownedService from '../../../shared/services/api/secrets/pownedService';
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 class SaveResource extends React.Component {
   constructor(props) {
@@ -33,10 +34,10 @@ class SaveResource extends React.Component {
     this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
-  componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
+  async componentDidMount() {
     this.loadPasswordMetaFromTabForm();
-    this.evaluatePasswordIsInDictionaryDebounce();
+    await this.props.passwordPoliciesContext.findPolicies();
+    this.initPwnedPasswordService();
   }
 
   initEventHandlers() {
@@ -65,6 +66,18 @@ class SaveResource extends React.Component {
   }
 
   /**
+   * Initialize the pwned password service
+   */
+  initPwnedPasswordService() {
+    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+
+    if (isPwnedServiceAvailable) {
+      this.pownedService = new PownedService(this.props.context.port);
+    }
+    this.setState({isPwnedServiceAvailable});
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -77,6 +90,7 @@ class SaveResource extends React.Component {
     this.setState({name, uri, username, password: secret_clear});
     this.loadPassword(secret_clear);
     this.setState({loaded: true});
+    this.evaluatePasswordIsInDictionaryDebounce(secret_clear);
   }
 
   handleClose() {
@@ -162,8 +176,8 @@ class SaveResource extends React.Component {
   }
 
   handlePasswordChange(event) {
-    if (event.target.value.length) {
-      this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce();
+    if (event.target.value.length && this.pownedService) {
+      this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce(event.target.value);
     } else {
       this.setState({
         passwordInDictionary: false,
@@ -189,22 +203,21 @@ class SaveResource extends React.Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
-  async evaluatePasswordIsInDictionaryDebounce() {
-    let passwordEntropy = null;
-    if (this.state.isPwnedServiceAvailable) {
-      passwordEntropy = this.state.password.length > 0 ? SecretGenerator.entropy(this.state.password) : null;
-      const result = await this.pownedService.evaluateSecret(this.state.password);
-      const passwordInDictionary = this.state.password.length > 0 ?  result.inDictionary : false;
+  async evaluatePasswordIsInDictionaryDebounce(password) {
+    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
+    this.setState({passwordEntropy});
+    if (this.state.isPwnedServiceAvailable && this.pownedService) {
+      const result = await this.pownedService.evaluateSecret(password);
+      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
       this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
     }
-    this.setState({passwordEntropy});
   }
 
   render() {
     const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
-
     return (
       <div className="resource-auto-save">
         <h1 className="title"><Trans>Would you like to save this credential ?</Trans></h1>
@@ -237,7 +250,7 @@ class SaveResource extends React.Component {
               </div>
               <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
                 <label htmlFor="password"><Trans>Password</Trans>
-                  {(this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
+                  {this.pownedService && (this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
                   <Icon name="exclamation"/>
                   }</label>
                 <div className="password-button-inline">
@@ -248,13 +261,16 @@ class SaveResource extends React.Component {
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }
-                {!this.state.isPwnedServiceAvailable &&
-                    <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                {this.pownedService &&
+                  <>
+                    {!this.state.isPwnedServiceAvailable &&
+                        <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                    }
+                    {this.state.passwordInDictionary &&
+                        <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
+                    }
+                  </>
                 }
-                {this.state.passwordInDictionary &&
-                    <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-                }
-
               </div>
             </div>
           </div>
@@ -281,6 +297,7 @@ SaveResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
+  passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withRouter(withTranslation('common')(SaveResource)));
+export default withAppContext(withRouter(withPasswordPolicies(withTranslation('common')(SaveResource))));

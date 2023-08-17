@@ -31,7 +31,7 @@ export default class SaveResourcePage {
     this._page = render(
       <MockTranslationProvider>
         <StaticRouter context={context}>
-          <SaveResource context={context} prepareResourceContext={props.prepareResourceContext} debug />
+          <SaveResource context={context} {...props} debug />
         </StaticRouter>
       </MockTranslationProvider>
     );

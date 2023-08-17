@@ -30,8 +30,10 @@ export default {
 };
 
 const Template = ({...args}) =>
-  <div className="header third">
-    <div className="col1 main-action-wrapper">
+  <div className="page">
+    <div className="header third">
+      <div className="col1 main-action-wrapper">
+      </div>
       <DisplayResourcesWorkspaceMenu {...args}/>
     </div>
   </div>;

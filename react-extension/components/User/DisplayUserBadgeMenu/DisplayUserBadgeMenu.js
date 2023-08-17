@@ -197,7 +197,9 @@ class DisplayUserBadgeMenu extends Component {
    * @return {bool}
    */
   get attentionRequired() {
-    return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired() || this.props.mfaContext.isMfaChoiceRequired();
+    return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()
+      || this.props.mfaContext.isMfaChoiceRequired()
+    ;
   }
 
   /**

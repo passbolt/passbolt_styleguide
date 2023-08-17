@@ -50,6 +50,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   get defaultState() {
     return {
       moreMenuOpen: false, // more menu open or not
+      viewColumnsMenuOpen: false, // view column menu open or not
     };
   }
 
@@ -58,6 +59,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   createRefs() {
     this.moreMenuRef = React.createRef();
+    this.viewColumnsMenuRef = React.createRef();
   }
 
   /**
@@ -76,6 +78,8 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleCopySecretClickEvent = this.handleCopySecretClickEvent.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
     this.handleExportClickEvent = this.handleExportClickEvent.bind(this);
+    this.handleViewColumnsClickEvent = this.handleViewColumnsClickEvent.bind(this);
+    this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
   }
 
   componentDidMount() {
@@ -97,9 +101,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   handleDocumentClickEvent(event) {
     // Prevent closing when the user click on an element of the menu
     if (this.moreMenuRef.current.contains(event.target)) {
+      this.handleCloseViewColumnsMenu();
+      return;
+    } else if (this.viewColumnsMenuRef.current.contains(event.target)) { // Prevent closing when the user click on an element of the view columns menu
+      this.handleCloseMoreMenu();
       return;
     }
     this.handleCloseMoreMenu();
+    this.handleCloseViewColumnsMenu();
   }
 
   /**
@@ -107,11 +116,16 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @param {ReactEvent} event The event
    */
   handleDocumentContextualMenuEvent(event) {
-    // Prevent closing when the user right click on an element of the menu
+    // Prevent closing when the user click on an element of the menu
     if (this.moreMenuRef.current.contains(event.target)) {
+      this.handleCloseViewColumnsMenu();
+      return;
+    } else if (this.viewColumnsMenuRef.current.contains(event.target)) { // Prevent closing when the user click on an element of the view columns menu
+      this.handleCloseMoreMenu();
       return;
     }
     this.handleCloseMoreMenu();
+    this.handleCloseViewColumnsMenu();
   }
 
   /**
@@ -119,6 +133,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleDocumentDragStartEvent() {
     this.handleCloseMoreMenu();
+    this.handleCloseViewColumnsMenu();
   }
 
   /**
@@ -229,6 +244,19 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * open or close the more menu
+   */
+  handleViewColumnsClickEvent() {
+    const viewColumnsMenuOpen = !this.state.viewColumnsMenuOpen;
+    this.setState({viewColumnsMenuOpen});
+  }
+
+  handleOnChangeColumnView(event) {
+    const target = event.target;
+    this.props.resourceWorkspaceContext.onChangeColumnView(target.id, target.checked);
+  }
+
+  /**
    * display a success notification message
    * @param message
    */
@@ -241,6 +269,21 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleCloseMoreMenu() {
     this.setState({moreMenuOpen: false});
+  }
+
+  /**
+   * Close the more menu
+   */
+  handleCloseViewColumnsMenu() {
+    this.setState({viewColumnsMenuOpen: false});
+  }
+
+  /**
+   * selected resources
+   * @returns {[]|null}
+   */
+  get filteredResources() {
+    return this.props.resourceWorkspaceContext.filteredResources;
   }
 
   /**
@@ -341,12 +384,28 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Is ready
+   * @return {boolean}
+   */
+  get hasResources() {
+    return this.props.resourceWorkspaceContext.filteredResources.length === 0;
+  }
+
+  /**
    * Exports the selected resources
    */
   async export() {
     const resourcesIds = this.selectedResources.map(resource => resource.id);
     await this.props.resourceWorkspaceContext.onResourcesToExport({resourcesIds});
     await this.props.dialogContext.open(ExportResources);
+  }
+
+  /**
+   * Get the columns list of resources
+   * @return {*}
+   */
+  get columnsResources() {
+    return this.props.resourceWorkspaceContext.columnsResources;
   }
 
   /**
@@ -475,7 +534,31 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
         <div className="actions secondary">
           <ul>
             <li>
-              <button type="button" className={`button-toggle info ${this.hasLockDetail() ? "selected" : ""}`}
+              <div className="dropdown" ref={this.viewColumnsMenuRef}>
+                <button type="button" className={`button-action-icon ${this.state.viewColumnsMenuOpen ? "open" : ""}`} onClick={this.handleViewColumnsClickEvent}>
+                  <Icon name="columns"/>
+                  <Icon name="caret-down"/>
+                </button>
+                <ul className={`dropdown-content menu left ${this.state.viewColumnsMenuOpen ? "visible" : ""}`}>
+                  {this.columnsResources.map(column =>
+                    <li key={column.id} className={`${column.id === 'uri' ? "separator-after" : ""}`}>
+                      <div className="row">
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <div className="input checkbox">
+                              <input type="checkbox" defaultChecked={column.show} id={column.id} onChange={this.handleOnChangeColumnView}/>
+                              <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </li>
+            <li>
+              <button type="button" className={`button-toggle button-action-icon info ${this.hasLockDetail() ? "selected" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
                 <Icon name="info-circle" big={true}/>
                 <span className="visuallyhidden"><Trans>View detail</Trans></span>

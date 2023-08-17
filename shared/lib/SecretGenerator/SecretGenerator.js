@@ -18,20 +18,20 @@ import {SecretGeneratorComplexity} from "./SecretGeneratorComplexity";
 export const SecretGenerator = {
   /**
    * Generate a secret given a generator configuration
-   * @param configuration A generator configuration
+   * @param {PasswordPoliciesDto} configuration A generator configuration
    * @return {string} A generated secret
    */
   generate: configuration => {
-    const {type} = configuration;
+    const type = configuration.default_generator;
     if (type === 'password') {
-      return PasswordGenerator.generate(configuration);
+      return PasswordGenerator.generate(configuration.password_generator_settings);
     } else if (type === 'passphrase') {
-      return PassphraseGenerator.generate(configuration);
+      return PassphraseGenerator.generate(configuration.passphrase_generator_settings);
     }
   },
   /**
    * Calculates the secret entropy
-   * @param secret A secret
+   * @param {string} secret A secret
    * @return {Number} The secret entropy
    */
   entropy: secret => {

@@ -37,36 +37,69 @@ export default class AccountRecoveryInviteUserSettingPreferenceDialogPage {
     );
   }
 
+  /**
+   * Runs the the current page's querySelector and return its result;
+   * @param {string} selection
+   * @returns {object}
+   */
   selector(selection) {
     return this._page.container.querySelector(selection);
   }
 
+  /**
+   * Returns the dialog message text content
+   * @returns {string}
+   */
   get message() {
     return this.selector('.recovery-account-policy-dialog p').textContent;
   }
 
+  /**
+   * Returns the dialog's cancel button
+   * @returns {HTMLElement}
+   */
   get cancelButton() {
     return this.selector('.recovery-account-policy-dialog button.cancel');
   }
 
+  /**
+   * Returns the dialog's close (cross icon) button
+   * @returns {HTMLElement}
+   */
   get cancelCross() {
     return this.selector('.recovery-account-policy-dialog .dialog-close');
   }
 
+  /**
+   * Returns the dialog's continue button
+   * @returns {HTMLElement}
+   */
   get continueButton() {
     return this.selector('.recovery-account-policy-dialog .submit-wrapper button[type="submit"]');
   }
 
+  /**
+   * Simulates a click on the continue button
+   * @returns {Promise<void>}
+   */
   async clickOnContinue() {
     fireEvent.click(this.continueButton, {button: 0});
     await waitFor(() => {});
   }
 
+  /**
+   * Simulates a click on the cancel button
+   * @returns {Promise<void>}
+   */
   async clickOnCancel() {
     fireEvent.click(this.cancelButton, {button: 0});
     await waitFor(() => {});
   }
 
+  /**
+   * Simulates a click on the cross icon button
+   * @returns {Promise<void>}
+   */
   async clickOnCross() {
     fireEvent.click(this.cancelCross, {button: 0});
     await waitFor(() => {});

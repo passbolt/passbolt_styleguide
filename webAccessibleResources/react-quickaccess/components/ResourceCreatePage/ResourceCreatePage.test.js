@@ -8,6 +8,7 @@ import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
 import {defaultAppContext, defaultProps} from "./ResourceCreatePage.test.data";
+import PrepareResourceContextProvider from "../../contexts/PrepareResourceContext";
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -25,37 +26,37 @@ afterEach(() => {
 describe("ResourceCreatePage", () => {
   describe("Form initialization", () => {
     it("should intialize the name and uri input fields with the active tab metadata", async() => {
+      expect.assertions(4);
       const context = defaultAppContext();
       // mock the passbolt messaging layer.
+      const expectedSecret = "AAAAAAAAAAAAAAAAAA";
       context.port = {
         request: event => new Promise(resolve => {
           if (event === "passbolt.quickaccess.prepare-resource") {
             resolve({
               name: "Passbolt Browser Extension Test",
-              uri: "https://passbolt-browser-extension/test"
+              uri: "https://passbolt-browser-extension/test",
+              secret_clear: expectedSecret
             });
           }
         })
       };
       const props = defaultProps();
+      delete props.prepareResourceContext;
 
-      const component = render(
+      const pageToRender = (
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
+            <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
+              <ResourceCreatePage context={context} {...props} debug/>
+            </PrepareResourceContextProvider>
           </StaticRouter>
         </MockTranslationProvider>
       );
-
-      // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {
-        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
-          throw new Error("Component didn't finish mounting yet.");
-        }
-      });
+      const component = render(pageToRender);
+      await waitFor(() => {});
 
       // Assert the form.
-      expect.assertions(4);
       const nameInput = component.container.querySelector('[name="name"]');
       expect(nameInput.value).toBe("Passbolt Browser Extension Test");
       const uriInput = component.container.querySelector('[name="uri"]');
@@ -89,13 +90,7 @@ describe("ResourceCreatePage", () => {
           </StaticRouter>
         </MockTranslationProvider>
       );
-
-      // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {
-        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
-          throw new Error("Component didn't finish mounting yet.");
-        }
-      });
+      await waitFor(() => {});
 
       // Assert the form.
       expect.assertions(2);
@@ -128,13 +123,7 @@ describe("ResourceCreatePage", () => {
           </StaticRouter>
         </MockTranslationProvider>
       );
-
-      // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {
-        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
-          throw new Error("Component didn't finish mounting yet.");
-        }
-      });
+      await waitFor(() => {});
 
       // Assert the form.
       expect.assertions(2);
@@ -150,6 +139,7 @@ describe("ResourceCreatePage", () => {
       const createPasswordEventMockCallback = jest.fn();
       const context = defaultAppContext();
       const props = defaultProps();
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
       const inputPasswordChange = async password => {
         const passwordInput = component.container.querySelector('[name="password"]');
         const passwordInputEvent = {target: {value: password}};
@@ -166,7 +156,7 @@ describe("ResourceCreatePage", () => {
             if (event === "passbolt.quickaccess.prepare-resource") {
               resolve({
                 name: "Passbolt Browser Extension Test",
-                uri: "https://passbolt-browser-extension/test"
+                uri: "https://passbolt-browser-extension/test",
               });
             } else if (event === "passbolt.resources.create") {
               createPasswordEventMockCallback(arguments[1], arguments[2]);
@@ -186,22 +176,19 @@ describe("ResourceCreatePage", () => {
         }
       };
 
+      delete props.prepareResourceContext;
       const component = render(
         <MockTranslationProvider>
           <StaticRouter context={context}>
-            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
+            <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
+              <ResourceCreatePage context={context} passwordPoliciesContext={props.passwordPoliciesContext} debug />
+            </PrepareResourceContextProvider>
           </StaticRouter>
         </MockTranslationProvider>
       );
+      await waitFor(() => {});
 
       expect.assertions(6);
-
-      // Wait the passbolt.request executed in the ComponentDidMount is resolved.
-      await waitFor(() => {
-        if (props.prepareResourceContext.getLastGeneratedPassword.mock.calls.length === 0) {
-          throw new Error("Component didn't finish mounting yet.");
-        }
-      });
 
       // Fill the form empty fields
       const usernameInput = component.container.querySelector('[name="username"]');

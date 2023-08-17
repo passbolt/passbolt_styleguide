@@ -24,7 +24,7 @@ beforeEach(() => {
   jest.resetModules();
 });
 
-describe("DisplayAccountRecoveryUserSettings", () => {
+describe("ManageAccountRecoveryUserSettings", () => {
   /**
    * Given that I am a logged in user
    * And   my account was created before the account recovery policy was enabled

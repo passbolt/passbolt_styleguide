@@ -274,7 +274,7 @@ class EditUser extends Component {
   async updateLoggedInUserIfNeeded() {
     const newContext = {editUserDialogProps: null};
     if (this.isLoggedInUserAsEditing) {
-      const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user");
+      const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
       this.props.context.setContext({loggedInUser});
     }
     await this.props.context.setContext(newContext);

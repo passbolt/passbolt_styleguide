@@ -200,7 +200,7 @@ class EditUserProfile extends Component {
    */
   async onSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The user has been updated successfully"));
-    const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user");
+    const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
     this.props.context.setContext({loggedInUser});
     this.props.context.onUpdateLocaleRequested();
     this.props.onClose();

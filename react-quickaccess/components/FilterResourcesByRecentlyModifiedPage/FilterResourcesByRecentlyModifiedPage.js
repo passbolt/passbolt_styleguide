@@ -150,7 +150,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
               <Trans>Recently modified</Trans>
             </span>
           </a>
-          <Link to="/webAccessibleResources/quickaccess.html" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
             <Icon name="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>

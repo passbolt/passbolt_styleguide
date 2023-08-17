@@ -13,20 +13,13 @@
  */
 import PropTypes from "prop-types";
 import React from "react";
-import ReactList from "react-list";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {
-  resourceLinkAuthorizedProtocols,
-  ResourceWorkspaceFilterTypes,
-  withResourceWorkspace
-} from "../../../contexts/ResourceWorkspaceContext";
+import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import debounce from "debounce-promise";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withRouter} from "react-router-dom";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
-import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import {withDrag} from "../../../contexts/DragContext";
@@ -34,7 +27,21 @@ import DisplayDragResource from "./DisplayDragResource";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
+import GridTable from "../../../../shared/components/Table/GridTable";
+import CellFavorite from "../../../../shared/components/Table/CellFavorite";
+import CellHeaderIcon from "../../../../shared/components/Table/CellHeaderIcon";
+import CellLink from "../../../../shared/components/Table/CellLink";
+import CellPassword from "../../../../shared/components/Table/CellPassword";
+import CellButton from "../../../../shared/components/Table/CellButton";
+import CellHeaderCheckbox from "../../../../shared/components/Table/CellHeaderCheckbox";
+import CellCheckbox from "../../../../shared/components/Table/CellChecbox";
+import ColumnCheckboxModel from "../../../../shared/models/column/ColumnCheckboxModel";
+import ColumnFavoriteModel from "../../../../shared/models/column/ColumnFavoriteModel";
+import ColumnNameModel from "../../../../shared/models/column/ColumnNameModel";
+import ColumnUsernameModel from "../../../../shared/models/column/ColumnUsernameModel";
+import ColumnPasswordModel from "../../../../shared/models/column/ColumnPasswordModel";
+import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
+import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -50,6 +57,16 @@ class DisplayResourcesList extends React.Component {
     this.initEventHandlers();
     this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
+    // The columns of resources
+    this.columns = [
+      new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}),
+      new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}),
+      new ColumnNameModel({label: this.translate("Name")}),
+      new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}),
+      new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopySecret: this.canCopySecret, canPreviewSecret: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick}}}),
+      new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}),
+      new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)})
+    ];
   }
 
   /**
@@ -58,7 +75,6 @@ class DisplayResourcesList extends React.Component {
   getDefaultState() {
     return {
       resources: [], // The current list of resources to display
-      selectStrategy: "",
     };
   }
 
@@ -69,6 +85,8 @@ class DisplayResourcesList extends React.Component {
     this.handleSelectAllChange = this.handleSelectAllChange.bind(this);
     this.handleResourceSelected = this.handleResourceSelected.bind(this);
     this.handleResourceRightClick = this.handleResourceRightClick.bind(this);
+    this.handleResourceDragStartEvent = this.handleResourceDragStartEvent.bind(this);
+    this.handleDragEndEvent = this.handleDragEndEvent.bind(this);
     this.handleCheckboxWrapperClick = this.handleCheckboxWrapperClick.bind(this);
     this.handleCopyPasswordClick = this.handleCopyPasswordClick.bind(this);
     this.handleCopyUsernameClick = this.handleCopyUsernameClick.bind(this);
@@ -76,6 +94,29 @@ class DisplayResourcesList extends React.Component {
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
+    this.getPreviewPassword = this.getPreviewPassword.bind(this);
+  }
+
+  /**
+   * Component did mount
+   */
+  componentDidMount() {
+    this.mergeAndSortColumns();
+  }
+
+  /**
+   * Merge and sort columns
+   */
+  mergeAndSortColumns() {
+    // Get the column resources with id as a key from the resource workspace context
+    const columnsResources = this.columnsResources.reduce((result, column) => {
+      result[column.id] = column;
+      return result;
+    }, {});
+    // Merge the column values
+    this.columns.forEach(column => Object.assign(column, columnsResources[column.id]));
+    // Sort the position of the column
+    this.columns.sort((columnA, columnB) => columnA.position < columnB.position ? -1 : 1);
   }
 
   /**
@@ -89,7 +130,7 @@ class DisplayResourcesList extends React.Component {
    * Returns true if the component should be re-rendered
    */
   shouldComponentUpdate(prevProps, prevState) {
-    const {filteredResources, selectedResources, sorter, scrollTo} = this.props.resourceWorkspaceContext;
+    const {filteredResources, selectedResources, sorter, scrollTo, columnsResources} = this.props.resourceWorkspaceContext;
     const hasFilteredResourcesChanged = prevProps.resourceWorkspaceContext.filteredResources !== filteredResources;
     const hasBothSingleSelection = selectedResources.length === 1 && prevProps.resourceWorkspaceContext.selectedResources.length === 1;
     const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== prevProps.resourceWorkspaceContext.selectedResources[0].id;
@@ -97,6 +138,7 @@ class DisplayResourcesList extends React.Component {
     const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewPasswordChange = prevState.previewedPassword !== this.state.previewedPassword;
+    const hasResourceColumnsViewChange = prevProps.resourceWorkspaceContext.columnsResources !== columnsResources;
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedPassword();
@@ -106,6 +148,7 @@ class DisplayResourcesList extends React.Component {
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
       hasResourceToScrollChange ||
+      hasResourceColumnsViewChange ||
       hasResourcePreviewPasswordChange;
   }
 
@@ -113,6 +156,7 @@ class DisplayResourcesList extends React.Component {
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createRefs() {
+    this.tableviewRef = React.createRef();
     this.listRef = React.createRef();
   }
 
@@ -132,8 +176,6 @@ class DisplayResourcesList extends React.Component {
    * @param resource The selected resource
    */
   async handleResourceSelected(event, resource) {
-    event.preventDefault();
-    event.stopPropagation();
     await this.selectResource(resource, event);
   }
 
@@ -157,8 +199,6 @@ class DisplayResourcesList extends React.Component {
    * @param resource
    */
   handleResourceRightClick(event, resource) {
-    // Prevent the default contextual menu to popup.
-    event.preventDefault();
     this.handleSelectResources([resource]);
     const left = event.pageX;
     const top = event.pageY;
@@ -167,11 +207,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   async handleCheckboxWrapperClick(event, resource) {
-    /*
-     * We want the td to extend the clickable area of the checkbox.
-     * If we propagate the event, the tr will listen to the click and select only the clicked row.
-     */
-    event.stopPropagation();
     const isRangeSelection = event && event.shiftKey;
 
     if (isRangeSelection) {
@@ -207,35 +242,62 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Returns true if the given resource is selected
-   * @param resource A resource
+   * Get selected resource ids
+   * @return {*}
    */
-  isResourceSelected(resource) {
-    return this.selectedResources.some(selectedResource => resource.id === selectedResource.id);
+  get selectedResourcesIds() {
+    const getIds = resource => resource.id;
+    return this.selectedResources.map(getIds);
   }
 
-  async handleCopyUsernameClick(ev, resource) {
-    // Avoid the grid to select the resource while copying a resource username.
-    ev.stopPropagation();
-    await ClipBoard.copy(resource.username, this.props.context.port);
+  /**
+   * Get the columns resources
+   * @return {*|[]}
+   */
+  get columnsResources() {
+    return this.props.resourceWorkspaceContext.columnsResources;
+  }
+
+  /**
+   * Get the columns to display
+   * @return {[]}
+   */
+  get columnsFiltered() {
+    const filteredByColumnToDisplay = defaultColumn => defaultColumn.id === 'checkbox' || this.columnsResources.some(column => defaultColumn.id === column.id && column.show);
+    return this.columns.filter(filteredByColumnToDisplay);
+  }
+
+  /**
+   * Get preview password
+   * @param resourceId
+   * @return {string|undefined}
+   */
+  getPreviewPassword(resourceId) {
+    return this.isPasswordPreviewed(resourceId) ? this.state.previewedPassword?.password : undefined;
+  }
+
+  /**
+   * Handle copy username click
+   * @param username
+   * @return {Promise<void>}
+   */
+  async handleCopyUsernameClick(username) {
+    await ClipBoard.copy(username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
   }
 
   /**
    * Handle copy password button click.
-   * @param {ResourceEntity} resource The resource to copy the secret
+   * @param {string} resourceId The resource id
    */
-  async handleCopyPasswordClick(resource) {
-    await this.copyPasswordToClipboard(resource.id);
+  async handleCopyPasswordClick(resourceId) {
+    await this.copyPasswordToClipboard(resourceId);
   }
 
   /**
    * Handle preview password button click.
    */
-  async handlePreviewPasswordButtonClick(ev, resourceId) {
-    // Avoid the grid to select the resource while previewing its secret.
-    ev.stopPropagation();
-
+  async handlePreviewPasswordButtonClick(resourceId) {
     await this.togglePreviewPassword(resourceId);
   }
 
@@ -336,8 +398,7 @@ class DisplayResourcesList extends React.Component {
     return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
   }
 
-  async handleFavoriteClick(event, resource) {
-    event.stopPropagation();
+  async handleFavoriteClick(resource) {
     await this.handleFavoriteClickDebounced(resource);
   }
 
@@ -351,10 +412,9 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Handle the resource sorter change
-   * @param event A DOM event
    * @param sortProperty The resource property to sort on
    */
-  async handleSortByColumnClick(event, sortProperty) {
+  async handleSortByColumnClick(sortProperty) {
     this.props.resourceWorkspaceContext.onSorterChanged(sortProperty);
   }
 
@@ -362,11 +422,11 @@ class DisplayResourcesList extends React.Component {
    * Handle the drag start on the selected resource
    * @param event The DOM event
    * @param resource The selected resource
+   * @param isSelected is resource selected
    * @returns {Promise<void>}
    */
-  async handleDragStartEvent(event, resource) {
-    event.persist();
-    if (!this.isResourceSelected(resource)) {
+  async handleResourceDragStartEvent(event, resource, isSelected) {
+    if (!isSelected) {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
     const draggedItems = {resources:  this.props.resourceWorkspaceContext.selectedResources, folders: []};
@@ -384,6 +444,7 @@ class DisplayResourcesList extends React.Component {
    * Select the resource given the selection event.
    * If no event is provided, the selection is considered as multiple
    * @param resource
+   * @param event
    */
   async selectResource(resource, event) {
     const isMultipleSelection = event && event.metaKey;
@@ -398,8 +459,6 @@ class DisplayResourcesList extends React.Component {
       await this.props.resourceWorkspaceContext.onResourceSelected.single(resource);
     }
   }
-
-
 
   async favoriteResource(resource) {
     try {
@@ -442,40 +501,10 @@ class DisplayResourcesList extends React.Component {
       const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
 
       if (isInvisible) {
-        this.listRef.current.scrollTo(resourceIndex);
+        // Important to have the -1 to show the selected column behind the header with sticky position
+        this.listRef.current.scrollTo(resourceIndex - 1);
       }
     }
-  }
-
-  renderTable(items, ref) {
-    const tableStyle = {
-      MozUserSelect: "none",
-      WebkitUserSelect: "none",
-      msUserSelect: "none"
-    };
-    return (
-      <table style={tableStyle}>
-        <tbody ref={ref}>
-          {items}
-        </tbody>
-      </table>
-    );
-  }
-
-  /**
-   * Check if the grid is sorted for a given column
-   * @param column The column name
-   */
-  isSortedColumn(column) {
-    return this.props.resourceWorkspaceContext.sorter.propertyName === column;
-  }
-
-  /**
-   * Check if the sort is ascendant.
-   * @returns {boolean}
-   */
-  isSortedAsc() {
-    return this.props.resourceWorkspaceContext.sorter.asc;
   }
 
   /**
@@ -496,19 +525,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Get safe uri of a resource
-   * @param {object} resource The resource to get the safe uri for
-   * @return {string}
-   */
-  safeUri(resource) {
-    return sanitizeUrl(
-      resource.uri, {
-        whiteListedProtocols: resourceLinkAuthorizedProtocols,
-        defaultProtocol: urlProtocols.HTTPS
-      }) || "";
-  }
-
-  /**
    * Format date in time ago
    * @param {string} date The date to format
    * @return {string}
@@ -519,84 +535,29 @@ class DisplayResourcesList extends React.Component {
     return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
-  renderItem(index, key) {
-    const canPreviewSecret = this.props.context.siteSettings.canIUse('previewPassword')
-      && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
-    const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
-    const resource = this.resources[index];
-    const isSelected = this.isResourceSelected(resource);
-    const isFavorite = resource.favorite !== null && resource.favorite !== undefined;
-    const safeUri = this.safeUri(resource);
-    const modifiedFormatted = this.formatDateTimeAgo(resource.modified);
-    const isPasswordPreviewed = this.isPasswordPreviewed(resource.id);
+  /**
+   * Can preview secret
+   * @return {boolean}
+   */
+  get canPreviewSecret() {
+    return this.props.context.siteSettings.canIUse('previewPassword')
+    && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+  }
 
-    return (
-      <tr id={`resource_${resource.id}`} key={key} draggable="true" className={isSelected ? "selected" : ""}
-        /* eslint-disable react/no-unknown-property */
-        unselectable={this.state.selectStrategy === "range" ? "on" : ""}
-        /* eslint-enable react/no-unknown-property */
-        onClick={ev => this.handleResourceSelected(ev, resource)}
-        onContextMenu={ev => this.handleResourceRightClick(ev, resource)}
-        onDragStart={event => this.handleDragStartEvent(event, resource)}
-        onDragEnd={event => this.handleDragEndEvent(event, resource)}>
-        <td className="cell-multiple-select selections s-cell">
-          <div className="ready">
-            <div className="input checkbox">
-              <input type="checkbox" id={`checkbox_multiple_select_checkbox_${resource.id}`} checked={isSelected} readOnly={true} onClick={ev => this.handleCheckboxWrapperClick(ev, resource)}/>
-              <span className="visually-hidden"><Trans>Select resource</Trans></span>
-            </div>
-          </div>
-        </td>
-        <td className="cell-favorite selections s-cell">
-          <div className="ready">
-            <button type="button" className={`link no-border no-text ${isFavorite ? "fav" : "unfav"}`} onClick={ev => this.handleFavoriteClick(ev, resource)}>
-              <Icon name="star"/>
-              <span className="visuallyhidden"><Trans>fav</Trans></span>
-            </button>
-          </div>
-        </td>
-        <td className="cell-name m-cell uri">
-          <div title={resource.name}>
-            {resource.name}
-          </div>
-        </td>
-        <td className="cell-username m-cell username">
-          <div title={resource.username}>
-            <button className="link no-border" type="button" onClick={ev => this.handleCopyUsernameClick(ev, resource)}><span>{resource.username}</span></button>
-          </div>
-        </td>
-        <td className="cell-secret m-cell password">
-          <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
-            title={isPasswordPreviewed ? this.state.previewedPassword.password : "secret"}>
-            <HiddenPassword
-              canClick={canCopySecret}
-              preview={this.state.previewedPassword?.password}
-              onClick={() => this.handleCopyPasswordClick(resource)} />
-          </div>
-          {canPreviewSecret &&
-            <button type="button" onClick={async ev => this.handlePreviewPasswordButtonClick(ev, resource.id)} className="password-view button-transparent">
-              <Icon name={this.isPasswordPreviewed(resource.id) ? 'eye-close' : 'eye-open'}/>
-              <span className="visually-hidden"><Trans>View</Trans></span>
-            </button>
-          }
-        </td>
-        <td className="cell-uri l-cell">
-          <div title={resource.uri}>
-            {safeUri &&
-              <button className="link no-border" type="button" onClick={() => this.handleGoToResourceUriClick(resource)}><span>{resource.uri}</span></button>
-            }
-            {!safeUri &&
-            <span>{resource.uri}</span>
-            }
-          </div>
-        </td>
-        <td className="cell-modified m-cell">
-          <div title={resource.modified}>
-            {modifiedFormatted}
-          </div>
-        </td>
-      </tr>
-    );
+  /**
+   * Can copy secret
+   * @return {boolean}
+   */
+  get canCopySecret() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+  }
+
+  /**
+   * Is ready
+   * @return {boolean}
+   */
+  get isReady() {
+    return this.resources !== null;
   }
 
   /**
@@ -608,189 +569,75 @@ class DisplayResourcesList extends React.Component {
   }
 
   render() {
-    const isReady = this.resources !== null;
-    const isEmpty = isReady && this.resources.length === 0;
-    const selectAll = isReady && this.resources.length === this.selectedResources.length;
+    const isEmpty = this.isReady && this.resources.length === 0;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
-      <div className={`tableview ready ${isEmpty ? "empty" : ""} ${["default", "modified"].includes(filterType) ? "all_items" : ""}`}>
-        <React.Fragment>
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.TEXT &&
-          <div className="empty-content">
-            <h2><Trans>None of your passwords matched this search.</Trans></h2>
-            <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
-          </div>
-          }
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
-          <div className="empty-content">
-            <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
-            <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
-          </div>
-          }
-          {isEmpty && filterType === ResourceWorkspaceFilterTypes.GROUP &&
-          <div className="empty-content">
-            <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
-            <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
-          </div>
-          }
-          {isEmpty && (filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
-          <div className="empty-content">
-            <h2><Trans>No passwords in this folder yet.</Trans></h2>
-            <p><Trans>It does feel a bit empty here.</Trans></p>
-          </div>
-          }
-          {isEmpty &&  filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
-          <div className="empty-content">
-            <h2><Trans>No passwords are shared with you yet.</Trans></h2>
-            <p>
-              <Trans>It does feel a bit empty here.</Trans>&nbsp;
-              <Trans>Wait for a team member to share a password with you.</Trans>
-            </p>
-          </div>
-          }
-          {isEmpty &&
-          (filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN ||
-            filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
-            filterType === ResourceWorkspaceFilterTypes.ALL
-          ) &&
-          <React.Fragment>
-            <div className="empty-content">
-              <h1><Trans>Welcome to passbolt!</Trans></h1>
-              <p>
-                <Trans>It does feel a bit empty here.</Trans>&nbsp;
-                <Trans>Create your first password or wait for a team member to share one with you.</Trans>
-              </p>
-            </div>
-          </React.Fragment>
-          }
-          {!isEmpty &&
-          <React.Fragment>
-            <div className="tableview-header">
-              <table>
-                <thead>
-                  <tr>
-                    <th className="cell-multiple-select selections s-cell">
-                      <div className="input checkbox">
-                        <input
-                          id="passwords-select-all"
-                          type="checkbox"
-                          name="select all"
-                          checked={selectAll}
-                          onChange={this.handleSelectAllChange}/>
-                        <span className="visually-hidden"><Trans>Select all</Trans></span>
-                      </div>
-                    </th>
-                    <th className="cell-favorite selections s-cell sortable">
-                      <button type="button" onClick={ev => this.handleSortByColumnClick(ev, "favorite")} className="unfav link no-border">
-                        <Icon name="star"/>
-                        <span className="visuallyhidden"><Trans>fav</Trans></span>
-                        <span className="cell-header-icon-sort">
-                          {this.isSortedColumn("favorite") && this.isSortedAsc() &&
-                          <Icon name="ascending"/>
-                          }
-                          {this.isSortedColumn("favorite") && !this.isSortedAsc() &&
-                          <Icon name="descending"/>
-                          }
-                        </span>
-                      </button>
-                    </th>
-                    <th className="cell-name m-cell sortable">
-                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "name")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>Resource</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("name") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("name") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                    </th>
-                    <th className="cell-username m-cell username sortable">
-                      <button className="link no-border" type="button" onClick={ev => this.handleSortByColumnClick(ev, "username")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>Username</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("username") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("username") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                    </th>
-                    <th className="cell-secret m-cell password">
-                      <div className="cell-header">
-                        <span className="cell-header-text">
-                          <Trans>Password</Trans>
-                        </span>
-                      </div>
-                    </th>
-                    <th className="cell-uri l-cell sortable">
-                      <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "uri")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>URI</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("uri") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("uri") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                    </th>
-                    <th className="cell-modified m-cell sortable">
-                      <button className="link no-border" type="button"  onClick={ev => this.handleSortByColumnClick(ev, "modified")}>
-                        <div className="cell-header">
-                          <span className="cell-header-text">
-                            <Trans>Modified</Trans>
-                          </span>
-                          <span className="cell-header-icon-sort">
-                            {this.isSortedColumn("modified") && this.isSortedAsc() &&
-                            <Icon name="ascending"/>
-                            }
-                            {this.isSortedColumn("modified") && !this.isSortedAsc() &&
-                            <Icon name="descending"/>
-                            }
-                          </span>
-                        </div>
-                      </button>
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            {isReady &&
-            <div className="tableview-content scroll">
-              <ReactList
-                itemRenderer={(index, key) => this.renderItem(index, key)}
-                itemsRenderer={(items, ref) => this.renderTable(items, ref)}
-                length={this.resources.length}
-                pageSize={20}
-                minSize={20}
-                type="uniform"
-                ref={this.listRef}>
-              </ReactList>
-            </div>
+      <>
+        {isEmpty &&
+          <div className="tableview empty">
+            {filterType === ResourceWorkspaceFilterTypes.TEXT &&
+              <div className="empty-content">
+                <h2><Trans>None of your passwords matched this search.</Trans></h2>
+                <p><Trans>Try another search or use the left panel to navigate into your passwords.</Trans></p>
+              </div>
             }
-          </React.Fragment>
-          }
-        </React.Fragment>
-      </div>
+            {filterType === ResourceWorkspaceFilterTypes.FAVORITE &&
+              <div className="empty-content">
+                <h2><Trans>None of your passwords are yet marked as favorite.</Trans></h2>
+                <p><Trans>Add stars to passwords you want to easily find later.</Trans></p>
+              </div>
+            }
+            {filterType === ResourceWorkspaceFilterTypes.GROUP &&
+              <div className="empty-content">
+                <h2><Trans>No passwords are shared with this group yet.</Trans></h2>
+                <p><Trans>Share a password with this group or wait for a team member to share one with this group.</Trans></p>
+              </div>
+            }
+            {(filterType === ResourceWorkspaceFilterTypes.FOLDER || filterType === ResourceWorkspaceFilterTypes.ROOT_FOLDER) &&
+              <div className="empty-content">
+                <h2><Trans>No passwords in this folder yet.</Trans></h2>
+                <p><Trans>It does feel a bit empty here.</Trans></p>
+              </div>
+            }
+            {filterType === ResourceWorkspaceFilterTypes.SHARED_WITH_ME &&
+              <div className="empty-content">
+                <h2><Trans>No passwords are shared with you yet.</Trans></h2>
+                <p>
+                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                  <Trans>Wait for a team member to share a password with you.</Trans>
+                </p>
+              </div>
+            }
+            {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
+                filterType === ResourceWorkspaceFilterTypes.ALL) &&
+              <React.Fragment>
+                <div className="empty-content">
+                  <h1><Trans>Welcome to passbolt!</Trans></h1>
+                  <p>
+                    <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                    <Trans>Create your first password or wait for a team member to share one with you.</Trans>
+                  </p>
+                </div>
+              </React.Fragment>
+            }
+          </div>
+        }
+        {!isEmpty &&
+          <GridTable
+            columns={this.columnsFiltered}
+            rows={this.resources}
+            sorter={this.props.resourceWorkspaceContext.sorter}
+            onSortChange={this.handleSortByColumnClick}
+            onRowClick={this.handleResourceSelected}
+            onRowContextMenu={this.handleResourceRightClick}
+            onRowDragStart={this.handleResourceDragStartEvent}
+            onRowDragEnd={this.handleDragEndEvent}
+            selectedRowsIds={this.selectedResourcesIds}
+            rowsRef={this.listRef}>
+          </GridTable>
+        }
+      </>
     );
   }
 }
@@ -805,5 +652,4 @@ DisplayResourcesList.propTypes = {
   dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
-
 export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList))))))));

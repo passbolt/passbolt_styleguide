@@ -975,7 +975,7 @@ label .svg-icon svg {
   width: 1.2rem;
 }
 label:active {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 /*
@@ -1558,7 +1558,7 @@ input[type=file] {
   border: none;
 }
 .checkbox input[type=checkbox]:active + label {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 .checkbox input[type=checkbox]:disabled + label {
@@ -1658,7 +1658,7 @@ input[type=file] {
 }
 .radiolist .input.radio input[type=radio]:active + label,
 .radiolist-alt .input.radio input[type=radio]:active + label {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 .radiolist .input.radio input[type=radio]:active:before,
@@ -1786,7 +1786,7 @@ input[type=file] {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
 }
 .input.toggle-switch .toggle-switch-checkbox:active + label {
-  background: #FFFFFF;
+  background: none;
   color: #000000;
 }
 .input.toggle-switch .toggle-switch-checkbox:active:before {
@@ -2835,7 +2835,7 @@ html {
 }
 .grid-responsive-12 .row .main-column .message,
 .grid .row .main-column .message {
-  margin: 0;
+  margin: 0 0 0.8rem 0;
 }
 .grid-responsive-12 .row .main-column .accordion,
 .grid .row .main-column .accordion {
@@ -3021,44 +3021,48 @@ html {
   margin-right: 0;
 }
 .header.third .main-action-wrapper button {
-  float: left;
   margin-right: 0.8rem;
 }
 .header.third .actions-wrapper {
+  display: flex;
+  justify-content: space-between;
   margin: 0.4rem 1.6rem 0 0;
 }
-.header.third .actions-wrapper button {
-  float: left;
+.header.third .actions-wrapper .actions {
+  flex: 1;
+}
+.header.third .actions-wrapper .actions.secondary {
+  flex: 0;
+}
+.header.third .actions-wrapper .actions > ul {
+  display: flex;
+}
+.header.third .actions-wrapper .dropdown {
+  margin-right: 0;
+}
+.header.third .actions-wrapper .dropdown .dropdown-content.left {
   margin-right: 1rem;
 }
-.header.third .actions-wrapper li {
-  display: inline;
-}
-.header.third .actions-wrapper .secondary {
-  float: right;
-}
-.header.third .actions-wrapper .secondary button {
-  min-width: inherit;
+.header.third .actions-wrapper button {
+  margin-right: 1rem;
 }
 .header.third .actions-wrapper .secondary button:last-child {
   margin-right: 0;
 }
-/* hide secondary actions if there is no space */
-@media all and (max-width: 1024px) {
-  .header.third .actions-wrapper .dropdown,
-  .header.third .actions-wrapper .actions.secondary {
-    display: none;
-  }
-}
 /* hide icons if there is no space */
 @media all and (max-width: 1024px) {
-  .header.third .main-action-wrapper i,
-  .header.third .actions-wrapper i {
+  .header.third .main-action-wrapper button,
+  .header.third .actions-wrapper button {
+    min-width: 1em;
+    font-size: 1em;
+  }
+  .header.third .main-action-wrapper button span + span,
+  .header.third .actions-wrapper button span + span {
     display: none;
   }
-  .header.third .main-action-wrapper i + span,
-  .header.third .actions-wrapper i + span {
-    margin-left: 0;
+  .header.third .main-action-wrapper button span + span.svg-icon,
+  .header.third .actions-wrapper button span + span.svg-icon {
+    display: inline-flex;
   }
   .header.third .main-action-wrapper .disabled,
   .header.third .actions-wrapper .disabled {
@@ -3067,22 +3071,8 @@ html {
 }
 /* hide text and only show icon if there is even less space */
 @media all and (max-width: 540px) {
-  .header.third .main-action-wrapper a i,
-  .header.third .actions-wrapper a i {
-    display: block;
-  }
-  .header.third .main-action-wrapper a.button,
-  .header.third .actions-wrapper a.button {
-    min-width: 1em;
-    font-size: 1em;
-  }
-  .header.third .main-action-wrapper a i + span,
-  .header.third .actions-wrapper a i + span {
-    margin-left: 0;
-    display: none;
-  }
-  .header.third .main-action-wrapper .disabled,
-  .header.third .actions-wrapper .disabled {
+  .header.third .actions-wrapper .dropdown,
+  .header.third .actions-wrapper .actions.secondary {
     display: none;
   }
 }
@@ -3344,7 +3334,7 @@ html {
   margin-left: 1rem;
 }
 .breadcrumbs ul li {
-  display: inline-block;
+  display: flex;
   margin-left: 0.5rem;
   max-width: 25%;
   float: left;
@@ -3366,6 +3356,13 @@ html {
   border: 0;
   font-size: 1.4rem;
   line-height: 1.9rem;
+  max-width: 100%;
+}
+.breadcrumbs span.chips {
+  margin-left: 0.8rem;
+  vertical-align: 0.1rem;
+  padding: 0.1rem 0.55rem 0.2rem 0.55rem;
+  border-radius: 2rem;
 }
 .breadcrumbs div.main-cell {
   display: inline;
@@ -3375,7 +3372,7 @@ html {
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 800;
+  z-index: 100;
   background: rgba(255, 255, 255, 0.9);
   overflow: auto;
 }
@@ -3561,7 +3558,7 @@ html {
   position: absolute;
   padding: 1rem;
   top: -1000px;
-  z-index: 9999999;
+  z-index: 10;
 }
 .drag-and-drop-wrapper .drag-and-drop {
   display: flex;
@@ -3613,36 +3610,45 @@ html {
   margin-right: 0.8rem;
   /* dropdown content */
 }
-.dropdown button.open {
-  z-index: 801;
+.dropdown button.open,
+.dropdown .button.open {
+  z-index: 4;
   background: #F8F8F8;
   border-radius: 0.4rem 0.4rem 0 0;
   box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 0.1rem 0 0 #E0E0E0;
   color: #000000;
   padding-bottom: 1.4rem;
 }
-.dropdown button.open svg {
+.dropdown button.open svg,
+.dropdown .button.open svg {
   --icon-color: #000000;
   --icon-background-color: #FFFFFF;
 }
-.dropdown button.open.button-action-icon {
-  padding-bottom: 2.2rem;
-  height: 5rem;
+.dropdown button.open.button-action-icon,
+.dropdown .button.open.button-action-icon {
+  height: 4.2rem;
 }
-.dropdown button.open + .dropdown-content {
+.dropdown button.open + .dropdown-content,
+.dropdown .button.open + .dropdown-content {
   top: calc(100% - 0.1rem);
 }
-.dropdown button.more .svg-icon svg {
+.dropdown button.more .svg-icon svg,
+.dropdown .button.more .svg-icon svg {
   margin-left: 1.6rem;
 }
-.dropdown button .svg-icon + .svg-icon {
+.dropdown button.button-action-icon,
+.dropdown .button.button-action-icon {
+  width: inherit;
+}
+.dropdown button .svg-icon + .svg-icon,
+.dropdown .button .svg-icon + .svg-icon {
   margin-left: 0.8rem;
   display: inline-flex;
 }
 .dropdown .dropdown-content {
   float: left;
   position: absolute;
-  z-index: 800;
+  z-index: 3;
   display: none;
   border: 1px solid #E0E0E0;
   box-sizing: border-box;
@@ -3698,6 +3704,14 @@ html {
   background: #DCDCDC;
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
 }
+.dropdown .dropdown-content li .checkbox {
+  padding: 0.8rem 1.6rem;
+  margin: 0;
+}
+.dropdown .dropdown-content li .checkbox:hover {
+  color: #000000;
+  background: #DCDCDC;
+}
 /*
  * Footer
  */
@@ -3710,7 +3724,7 @@ html {
   background: #EEEEEE;
   border-top: 1px solid #E0E0E0;
   box-sizing: border-box;
-  z-index: 890;
+  z-index: 2;
 }
 .footer .footer-links {
   display: flex;
@@ -3918,7 +3932,7 @@ html {
   display: block;
   width: 100%;
   bottom: 3.4rem;
-  z-index: 991;
+  z-index: 3;
 }
 .update-loading-bar .progress-bar span {
   transition: width 2s;
@@ -4058,7 +4072,7 @@ html {
   font-size: 0.85em;
   top: 0;
   position: absolute;
-  z-index: 991;
+  z-index: 99;
   height: 2em;
   padding-top: 1em;
   width: 60%;
@@ -4131,7 +4145,7 @@ form.search label {
 }
 .tooltip .tooltip-text {
   position: absolute;
-  z-index: 99999;
+  z-index: 99;
   visibility: hidden;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
@@ -4291,7 +4305,7 @@ form.search label {
   border: 1px solid #E0E0E0;
   filter: drop-shadow(0 1rem 1rem rgba(0, 0, 0, 0.1));
   border-radius: 0.4rem;
-  z-index: 993;
+  z-index: 10;
   display: none;
   padding: 0.8rem 0;
   font-size: 1.5rem;
@@ -4515,7 +4529,7 @@ form.search label {
 .navigation-secondary .row .right-cell button.open {
   display: flex;
   align-items: center;
-  z-index: 999;
+  z-index: 10;
   background: #F8F8F8;
   --icon-color: #000000;
   --icon-background-color: #FFFFFF;
@@ -4531,7 +4545,6 @@ form.search label {
   box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #E0E0E0;
 }
 .navigation-secondary .row .right-cell button:focus {
-  box-shadow: none;
   --icon-color: #000000;
   --icon-background-color: #FFFFFF;
 }
@@ -4603,6 +4616,7 @@ iframe.cachette {
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.4rem;
+  background-color: #808080;
 }
 .chips.beta {
   background-color: #DD6A00;
@@ -4801,7 +4815,7 @@ iframe.cachette {
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1);
   position: absolute;
   display: none;
-  z-index: 9999;
+  z-index: 99;
   max-height: 120px;
   overflow: hidden;
   overflow-y: auto;
@@ -4966,6 +4980,32 @@ iframe.cachette {
   .select-container.medium {
     width: 100%;
   }
+}
+.password-complexity {
+  margin-bottom: 1.2rem;
+}
+.password-complexity .complexity-text {
+  display: flex;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color: #7C7C7C;
+}
+.password-complexity .progress {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+.password-complexity .progress-bar {
+  --complexity-bar-background-default: #BDBDBD;
+  background: linear-gradient(to right, #A40000, #FFA724, #0EAA00);
+  border-radius: 0.1rem;
+  width: 100%;
+  height: 0.2rem;
+  margin-top: 0.3rem;
+  display: block;
+}
+.password-complexity .progress-bar.error {
+  background: #BDBDBD;
 }
 .ldap-test-settings-report div.directory-structure {
   background: #FFFFFF;
@@ -5195,6 +5235,11 @@ iframe.cachette {
 }
 .page.settings .profile-mobile-transfer .submit-wrapper .button.cancel {
   margin-left: auto;
+}
+.page.settings .profile-desktop-export .windows-store {
+  display: block;
+  height: 4.4rem;
+  border: 0;
 }
 /* hide icons if there is no space */
 @media all and (max-width: 950px) {
