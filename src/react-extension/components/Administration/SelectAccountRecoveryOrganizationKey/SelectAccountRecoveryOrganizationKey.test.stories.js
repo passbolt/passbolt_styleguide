@@ -27,6 +27,12 @@ export default {
 
 const context = {
   userSettings: new UserSettings(userSettingsFixture),
+  port: {
+    request: async() => 0
+  },
+  siteSettings: {
+    canIUse: () => true,
+  },
 };
 
 const Template = args =>

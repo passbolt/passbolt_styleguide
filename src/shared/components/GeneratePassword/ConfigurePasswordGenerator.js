@@ -14,6 +14,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
+import {MASKS} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
 
 class ConfigurePasswordGenerator extends React.Component {
   /**
@@ -22,44 +23,7 @@ class ConfigurePasswordGenerator extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
     this.bindCallbacks();
-  }
-
-  /**
-   * Returns the default state
-   */
-  get defaultState() {
-    return {
-      configuration: JSON.parse(JSON.stringify(this.props.configuration))
-    };
-  }
-
-  /**
-   * Returns the current values of length option
-   * @return {{default: number, min: number, max: number}}
-   */
-  get length() {
-    const {default_options} = this.state.configuration;
-    return {
-      default: default_options.length,
-      min: default_options.min_length,
-      max: default_options.max_length,
-    };
-  }
-
-  /**
-   * Returns the current masks
-   */
-  get masks() {
-    return this.state.configuration.masks;
-  }
-
-  /**
-   * Returns true if the options exclude-look-alike-characters is true
-   */
-  get isExcludeLookAlikeCharacters() {
-    return this.state.configuration.default_options.look_alike;
   }
 
   /**
@@ -76,11 +40,9 @@ class ConfigurePasswordGenerator extends React.Component {
    */
   handleLengthChanged(event) {
     const value = event.target.value;
-    const configuration = {...this.state.configuration};
-    configuration.default_options.length = value;
-
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    const configuration = {...this.props.configuration};
+    configuration.length = value;
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
@@ -91,26 +53,18 @@ class ConfigurePasswordGenerator extends React.Component {
   handleMaskToggled(maskName, event) {
     // Avoid side effect
     event.preventDefault();
-    const configuration = {...this.state.configuration};
-    configuration.masks = configuration.masks.map(mask => {
-      if (mask.name === maskName && !mask.required) {
-        return {...mask, active: !mask.active};
-      } else {
-        return mask;
-      }
-    });
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    const configuration = {...this.props.configuration};
+    configuration[maskName] = !configuration[maskName];
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
    * Whenever the exclude-look-alike-character option has been toggled on/off
    */
   handleExcludeLookAlikeCharactersToggled() {
-    const configuration = {...this.state.configuration};
-    configuration.default_options.look_alike = !configuration.default_options.look_alike;
-    this.setState({configuration});
-    this.props.onChanged(configuration);
+    const configuration = {...this.props.configuration};
+    configuration.exclude_look_alike_chars = !configuration.exclude_look_alike_chars;
+    this.props.onConfigurationChanged(configuration);
   }
 
   /**
@@ -118,72 +72,76 @@ class ConfigurePasswordGenerator extends React.Component {
    * @return {JSX.Element}
    */
   render() {
+    const config = this.props.configuration;
+    const maskNames = Object.entries(MASKS);
     return (
       <>
-        <div>
+        <div className={`password-generator-length input text ${this.props.disabled ? 'disabled' : ''}`}>
           <label htmlFor="configure-password-generator-form-length">
             <Trans>Length</Trans>
           </label>
           <div className="slider">
             <input
               name="length"
-              min={this.length.min}
-              max={this.length.max}
-              value={this.length.default}
+              min={config.min_length}
+              max={config.max_length}
+              value={config.length}
               step="1"
               type="range"
-              onChange={this.handleLengthChanged}/>
+              onChange={this.handleLengthChanged}
+              disabled={this.props.disabled}/>
             <input
               id="configure-password-generator-form-length"
               type="number"
-              min={this.length.min}
-              max={this.length.max}
-              value={this.length.default}
-              onChange={this.handleLengthChanged}/>
+              min={config.min_length}
+              max={config.max_length}
+              value={config.length}
+              onChange={this.handleLengthChanged}
+              disabled={this.props.disabled}/>
           </div>
         </div>
 
-        <div className="select-button">
+        <div className={`input text ${this.props.disabled ? 'disabled' : ''} select-button`}>
           <label htmlFor="configure-password-generator-form-masks">
             <Trans>Character Types</Trans>
           </label>
-          <div className="button-group">
+          <div className="button-group button-group--nowrap">
             {
-              this.masks.map(mask => (
+              maskNames.map(([maskName]) => (
                 <button
-                  key={mask.name}
+                  key={maskName}
                   type="button"
-                  className={`button button-toggle ${(mask.active ? 'selected' : '')}`}
-                  onClick={event => this.handleMaskToggled(mask.name, event)}>
-                  {mask.label}
+                  className={`button button-toggle ${(config[maskName] ? 'selected' : '')}`}
+                  onClick={event => this.handleMaskToggled(maskName, event)} disabled={this.props.disabled}>
+                  {MASKS[maskName].label}
                 </button>
               ))
             }
           </div>
         </div>
-
         <div>
           <div className="input checkbox">
             <input
               id="configure-password-generator-form-exclude-look-alike"
               type="checkbox"
               name="exclude-look-alike"
-              checked={this.isExcludeLookAlikeCharacters}
-              onChange={this.handleExcludeLookAlikeCharactersToggled}/>
+              checked={config.exclude_look_alike_chars}
+              onChange={this.handleExcludeLookAlikeCharactersToggled}
+              disabled={this.props.disabled}/>
             <label htmlFor="configure-password-generator-form-exclude-look-alike">
               <Trans>Exclude look-alike characters</Trans>
             </label>
           </div>
         </div>
-
       </>
     );
   }
 }
 
 ConfigurePasswordGenerator.propTypes = {
-  configuration: PropTypes.object, // The current generator options configuration
-  onChanged: PropTypes.func, // Called whenever the generator configuration changed
+  configuration: PropTypes.object.isRequired, // The current generator options configuration
+  onConfigurationChanged: PropTypes.func.isRequired, // Called whenever the generator configuration changed
+  disabled: PropTypes.bool, // The disabled attribute
 };
 
 export default withTranslation("common")(ConfigurePasswordGenerator);

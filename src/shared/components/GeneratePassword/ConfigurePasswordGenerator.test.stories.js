@@ -12,61 +12,24 @@
  * @since         3.2.0
  */
 
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext from "../../context/AppContext/AppContext";
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import ConfigurePasswordGenerator from "./ConfigurePasswordGenerator";
-
+import {defaultProps} from "./ConfigurePasswordGenerator.test.data";
 
 export default {
   title: 'Components/ResourcePassword/ConfigurePasswordGenerator',
   component: ConfigurePasswordGenerator
 };
 
-
 const Template = args =>
   <AppContext.Provider>
     <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <ConfigurePasswordGenerator {...args} {...routerProps}/>}></Route>
+      <Route component={routerProps => <ConfigurePasswordGenerator {...args} {...routerProps}/>}>
+      </Route>
     </MemoryRouter>
   </AppContext.Provider>;
 
 export const Initial = Template.bind({});
-Initial.args = {
-  configuration:  {
-    default_options: {
-      length: 18,
-      look_alike: true,
-      min_length: 2,
-      max_length: 24,
-    },
-    masks: [
-      {
-        "name": "upper",
-        "label": "A-Z",
-        "characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      },
-      {
-        "name": "lower",
-        "label": "a-z",
-        "characters": "abcdefghijklmnopqrstuvwxyz"
-      },
-      {
-        "name": "digit",
-        "label": "0-9",
-        "characters": "0123456789"
-      },
-      {
-        "name": "parenthesis",
-        "label": "([|])",
-        "characters": "([|])",
-      },
-      {
-        "name": "TBD",
-        "label": "TBD",
-        "characters": ""
-      },
-    ]
-  },
-  onChanged: () => {}
-};
+Initial.args = defaultProps();

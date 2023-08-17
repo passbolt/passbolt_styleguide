@@ -20,7 +20,6 @@ import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration";
 import {defaultProps, settingDto} from "./DisplayMfaPolicyAdministration.test.data";
 import {AdminMfaPolicyContextProvider} from "../../../contexts/Administration/AdministrationMfaPolicy/AdministrationMfaPolicyContext";
 
-
 export default {
   title: 'Components/Administration/DisplayMfaPolicyAdministration',
   component: DisplayMfaPolicyAdministration
@@ -45,7 +44,6 @@ const decorators = [
     </>;
   }
 ];
-
 
 const Template = args =>
   <AdminMfaPolicyContextProvider {...args}>

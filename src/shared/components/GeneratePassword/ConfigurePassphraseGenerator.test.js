@@ -33,35 +33,43 @@ describe("Configure Passphrase Generator", () => {
 
   describe('As LU I should update the passphrase configuration', () => {
     it('As LU I should change the range of word count', async() => {
-      expect(page.rangeWordCount.value).toBe("8");
-      expect(page.numberWordCount.value).toBe("8");
+      expect.assertions(5);
+      expect(page.rangeWordCount.value).toBe("9");
+      expect(page.numberWordCount.value).toBe("9");
       await page.changeRangeWordCount("20");
+      page.rerender(props);
       expect(page.rangeWordCount.value).toBe("20");
       expect(page.numberWordCount.value).toBe("20");
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
     it('As LU I should change the number of word count', async() => {
-      expect(page.rangeWordCount.value).toBe("8");
-      expect(page.numberWordCount.value).toBe("8");
+      expect.assertions(5);
+      expect(page.rangeWordCount.value).toBe("9");
+      expect(page.numberWordCount.value).toBe("9");
       await page.changeNumberWordCount("20");
+      page.rerender(props);
       expect(page.rangeWordCount.value).toBe("20");
       expect(page.numberWordCount.value).toBe("20");
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
     it('As LU I should change the separator', async() => {
+      expect.assertions(3);
       expect(page.separator.value).toBe(' ');
       await page.changeSeparator('{}');
+      page.rerender(props);
       expect(page.separator.value).toBe('{}');
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
     it('As LU I should change the separator', async() => {
+      expect.assertions(3);
       expect(page.wordCase.textContent).toBe('Lower case');
       await page.changeWordCase();
+      page.rerender(props);
       expect(page.wordCase.textContent).toBe('Upper case');
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
   });
 });

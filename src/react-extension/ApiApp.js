@@ -85,6 +85,7 @@ class ApiApp extends Component {
                                   <Route exact path={[
                                     "/app/administration/subscription",
                                     "/app/administration/account-recovery",
+                                    "/app/administration/password-policies",
                                   ]}/>
                                   <Route path="/app/administration">
                                     <AdministrationWorkspaceContextProvider>

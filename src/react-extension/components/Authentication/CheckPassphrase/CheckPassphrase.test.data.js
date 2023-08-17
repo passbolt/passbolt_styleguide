@@ -17,17 +17,26 @@ import {CheckPassphraseVariations} from "./CheckPassphrase";
 
 /**
  * Default props
- * @returns {{}}
+ * @param {object} props the props to override
+ * @returns {object}
  */
-export function defaultProps(props) {
+export const defaultProps = (props = {}) => {
   const defaultProps = {
-    context: defaultAppContext({port: {
-      request: () => Promise.resolve(0)
-    }}),
+    context: defaultAppContext(),
     displayAs: CheckPassphraseVariations.SETUP,
     canRememberMe: false,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
   };
   return Object.assign(defaultProps, props || {});
-}
+};
+
+/**
+ * Default props for component displayed for recover journey.
+ * @param {object} props the props to override
+ * @returns {object}
+ */
+export const defaultPropsForRecover = (props = {}) => defaultProps({
+  displayAs: CheckPassphraseVariations.RECOVER,
+  ...props
+});

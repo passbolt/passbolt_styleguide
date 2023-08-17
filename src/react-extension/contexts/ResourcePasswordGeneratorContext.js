@@ -15,6 +15,7 @@
 import * as React from "react";
 import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
+import {withPasswordPolicies} from "../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -22,8 +23,10 @@ import PropTypes from "prop-types";
 export const ResourcePasswordGeneratorContext = React.createContext({
   settings: null, // The current settings of generators
   lastGeneratedPassword: null, // The last password generated
+  getSettings: () => {}, // returns the current generator settings
   onPasswordGenerated: () => {}, // Whenever the a password has been generated with the generator
-  onLastGeneratedPasswordCleared: () => {} // Whenever the last generated password must be cleared
+  consumeLastGeneratedPassword: () => {}, // consumes and returns the last generated password from the generator
+  resetSecretGeneratorSettings: () => {}, // reset the secret generator settings with the organisation's default
 });
 
 /**
@@ -47,60 +50,60 @@ class ResourcePasswordGeneratorContextProvider extends React.Component {
       settings: null, // The current settings of generators
       lastGeneratedPassword: null, // The last password generated
       onPasswordGenerated: this.onPasswordGenerated.bind(this), // Whenever the a password has been generated with the generator
-      onLastGeneratedPasswordCleared: this.onLastGeneratedPasswordCleared.bind(this) // Whenever the last generated password must be cleared
+      getSettings: this.getSettings.bind(this), // returns the current generator settings
+      consumeLastGeneratedPassword: this.consumeLastGeneratedPassword.bind(this), // consumes and returns the last generated password from the generator
+      resetSecretGeneratorSettings: this.resetSecretGeneratorSettings.bind(this), // reset the secret generator settings with the organisation's default
     };
   }
 
   /**
-   * Whenever the component has been mounted
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
    */
-  async componentDidMount() {
-    await this.initializePasswordGenerator();
+  componentDidMount() {
+    this.resetSecretGeneratorSettings();
   }
 
   /**
-   * Initialize the password generator
+   * Initialize the secret generator settings.
+   * @return {Promise<void>}
    */
-  async initializePasswordGenerator() {
-    const generatorSettings = await this.props.context.port.request('passbolt.password-generator.settings');
-    this.setState({
-      settings: generatorSettings
-    });
+  async resetSecretGeneratorSettings() {
+    await this.props.passwordPoliciesContext.findPolicies();
+    const passwordPolicies = this.props.passwordPoliciesContext.getPolicies();
+    this.setState({settings: passwordPolicies});
+  }
+
+  /**
+   * Returns the current generator settings
+   * @returns {Object}
+   */
+  getSettings() {
+    return this.state.settings;
   }
 
   /**
    * Whenever a password has been generated with the generator
    * @param password The generated password
+   * @param generator The updated generator
    */
-  async onPasswordGenerated(password, generator) {
-    await this.changeGenerator(generator);
-    await this.updateGeneratedPassword(password);
+  onPasswordGenerated(password, generatorSettings) {
+    this.setState({
+      lastGeneratedPassword: password,
+      settings: generatorSettings,
+    });
   }
 
   /**
-   * Whenever the last generated password must be cleared
+   * Consumes the last generated password if any.
+   * @returns {string|null}
    */
-  onLastGeneratedPasswordCleared() {
-    this.setState({lastGeneratedPassword: {}});
-  }
-
-  /**
-   * Change the default password generator
-   * @param generator A generator
-   */
-  changeGenerator(generator) {
-    const settings = {... this.state.settings};
-    settings.default_generator = generator.type;
-    settings.generators = settings.generators.map(defaultGenerator => defaultGenerator.type === generator.type ? generator : defaultGenerator);
-    this.setState({settings});
-  }
-
-  /**
-   * Updates the last generated password
-   * @param lastGeneratedPassword The last generated password
-   */
-  async updateGeneratedPassword(lastGeneratedPassword) {
-    await this.setState({lastGeneratedPassword});
+  consumeLastGeneratedPassword() {
+    const password = this.state.lastGeneratedPassword;
+    this.setState({
+      lastGeneratedPassword: null
+    });
+    return password;
   }
 
   /**
@@ -119,11 +122,12 @@ class ResourcePasswordGeneratorContextProvider extends React.Component {
 ResourcePasswordGeneratorContextProvider.displayName = 'ResourcePasswordGeneratorContextProvider';
 ResourcePasswordGeneratorContextProvider.propTypes = {
   context: PropTypes.any, // The application context
+  passwordPoliciesContext: PropTypes.object, // The password policies context
   children: PropTypes.any,
 };
 
 
-export default withAppContext(ResourcePasswordGeneratorContextProvider);
+export default withAppContext(withPasswordPolicies(ResourcePasswordGeneratorContextProvider));
 
 /**
  * Resource Workspace Context Consumer HOC

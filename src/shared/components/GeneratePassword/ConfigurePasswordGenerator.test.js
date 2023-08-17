@@ -33,35 +33,43 @@ describe("Configure Password Generator", () => {
 
   describe('As LU I should update the password configuration', () => {
     it('As LU I should change the range of word count', async() => {
-      expect(page.rangeLength.value).toBe("10");
-      expect(page.length.value).toBe("10");
+      expect.assertions(5);
+      expect(page.rangeLength.value).toBe("18");
+      expect(page.length.value).toBe("18");
       await page.changeRangeLength("20");
+      page.rerender(props);
       expect(page.rangeLength.value).toBe("20");
       expect(page.length.value).toBe("20");
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
     it('As LU I should change the number of word count', async() => {
-      expect(page.rangeLength.value).toBe("10");
-      expect(page.length.value).toBe("10");
+      expect.assertions(5);
+      expect(page.rangeLength.value).toBe("18");
+      expect(page.length.value).toBe("18");
       await page.changeLength("20");
+      page.rerender(props);
       expect(page.rangeLength.value).toBe("20");
       expect(page.length.value).toBe("20");
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
     it('As LU I should change the masks', async() => {
-      expect(page.numberOfActiveMask).toBe(1);
+      expect.assertions(3);
+      expect(page.numberOfActiveMask).toBe(9);
       await page.selectMask(1);
-      expect(page.numberOfActiveMask).toBe(2);
-      expect(props.onChanged).toHaveBeenCalled();
+      page.rerender(props);
+      expect(page.numberOfActiveMask).toBe(8);
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
 
     it('As LU I should change the look alike', async() => {
+      expect.assertions(3);
       expect(page.isCheckedLookAlike).toBeTruthy();
       await page.changeLookAlike();
+      page.rerender(props);
       expect(page.isCheckedLookAlike).toBeFalsy();
-      expect(props.onChanged).toHaveBeenCalled();
+      expect(props.onConfigurationChanged).toHaveBeenCalled();
     });
   });
 });

@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import AppContext from "./contexts/AppContext";
 import DisplayInFormMenu from "./components/DisplayInFormMenu/DisplayInFormMenu";
 import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
+import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 /**
  * Entry point of the in-form menu
@@ -54,9 +55,11 @@ class ExtInForm extends React.Component {
     return (
       <AppContext.Provider value={this.state}>
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json" locale={this.state.locale}>
-          <div className="web-integration">
-            <DisplayInFormMenu/>
-          </div>
+          <PasswordPoliciesContext>
+            <div className="web-integration">
+              <DisplayInFormMenu/>
+            </div>
+          </PasswordPoliciesContext>
         </TranslationProvider>
       </AppContext.Provider>
     );

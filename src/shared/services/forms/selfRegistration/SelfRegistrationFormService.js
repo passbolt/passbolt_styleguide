@@ -27,15 +27,14 @@ class SelfRegistrationFormService {
    */
   constructor(translate) {
     this.translate = translate;
+    this.fields = new Map();
   }
-
-  fields = new Map();
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {Map<string, string>}
    */
-  async validate(domains) {
+  validate(domains) {
     this.fields = domains;
     // Validate the form inputs.
     const validation = this.validateInputs();
@@ -45,7 +44,7 @@ class SelfRegistrationFormService {
 
   /**
    * Validate inputs.
-   * @returns {Promise<void>}
+   * @returns {Map<string, string>}
    */
   validateInputs() {
     const errors = new Map();
@@ -59,9 +58,8 @@ class SelfRegistrationFormService {
    * Validate inputs.
    * @params {string} The input name
    * @params {string} The input value
-   * @returns {Promise<void>}
    */
-  async validateInput(key, value, errors) {
+  validateInput(key, value, errors) {
     if (!value.length) {
       errors.set(key, this.translate("A domain is required."));
     } else {
@@ -77,7 +75,6 @@ class SelfRegistrationFormService {
 
   /**
    * Check if we have a duplication.
-   * @returns {Promise<void>}
    */
   checkDuplicateValue(inputErrors) {
     this.fields.forEach((value, key) => {

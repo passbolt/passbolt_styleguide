@@ -35,6 +35,14 @@ export default class ConfigurePasswordGeneratorPage {
     );
   }
 
+  rerender(props) {
+    this._page.rerender(
+      <MockTranslationProvider>
+        <ConfigurePasswordGenerator {...props}/>
+      </MockTranslationProvider>
+    );
+  }
+
   /**
    * Get the range length input
    */

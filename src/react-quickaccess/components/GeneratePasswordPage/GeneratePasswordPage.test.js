@@ -15,12 +15,15 @@
 /**
  * Unit tests on GeneratePasswordPage in regard of specifications
  */
-import {defaultProps} from "./GeneratePasswordPage.test.data";
-import GeneratePasswordTestPage from "./GeneratePasswordPage.test.page";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
+import {defaultProps, withLastGeneratedPasswordProps} from "./GeneratePasswordPage.test.data";
+import GeneratePasswordTestPage from "./GeneratePasswordPage.test.page";
+import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 
 beforeEach(() => {
   jest.resetModules();
+  jest.clearAllTimers();
+  jest.useFakeTimers();
 });
 
 describe("Generate password", () => {
@@ -34,14 +37,21 @@ describe("Generate password", () => {
 
   describe('As LU I should generate a password', () => {
     it('As LU I should apply a generated password', async() => {
+      expect.assertions(3);
+      jest.spyOn(SecretGenerator, "generate").mockImplementation(() => props.prepareResourceContext.lastGeneratedPassword);
+
+      const props = withLastGeneratedPasswordProps(); // The props to pass
+      const page = new GeneratePasswordTestPage(props);
+      jest.runAllTimers();
+
       expect(page.title).toBe('Generate password');
-      expect(page.complexityText).toBe('Fair (entropy: 103.6 bits)');
+      expect(page.complexityText).toBe('Fair (entropy: 111.1 bits)');
       await page.applyGeneratePassword();
-      expect(props.prepareResourceContext.onPasswordGenerated).toHaveBeenCalledWith(page.password, props.prepareResourceContext.settings.generators[1]);
-      expect(props.history.goBack).toHaveBeenCalled();
+      expect(props.history.goBack).toHaveBeenCalledTimes(1);
     });
 
     it('As LU I should generate a new password', async() => {
+      expect.assertions(1);
       const password = page.password;
       await page.generatePassword();
       // TODO random value return always the same value
@@ -49,6 +59,9 @@ describe("Generate password", () => {
     });
 
     it('As LU I should copy a password', async() => {
+      expect.assertions(1);
+      const props = withLastGeneratedPasswordProps(); // The props to pass
+      const page = new GeneratePasswordTestPage(props);
       const mockClipboard = {
         writeText: jest.fn()
       };
@@ -60,13 +73,15 @@ describe("Generate password", () => {
 
   describe('As LU I should choose to use password configuration', () => {
     it('AS LU I should be able to use password configuration', async() => {
+      expect.assertions(1);
       await page.usePasswordGenerator();
-      expect(page.activeTab).toBe('Password');
+      expect(page.activeTab).toBe('password');
     });
   });
 
   describe('AS LU I should not perform actions during the apply password', () => {
     it('AS LU I should not re-submit during the apply password', async() => {
+      expect.assertions(1);
       const inProgressFn = () => {
         expect(page.canSubmit).toBeFalsy();
       };

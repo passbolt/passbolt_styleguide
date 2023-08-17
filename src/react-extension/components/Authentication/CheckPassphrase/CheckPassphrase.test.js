@@ -15,7 +15,7 @@
 /**
  * Unit tests on CheckPassphrase in regard of specifications
  */
-import {defaultProps} from "./CheckPassphrase.test.data";
+import {defaultProps, defaultPropsForRecover} from "./CheckPassphrase.test.data";
 import CheckPassphrasePage from "./CheckPassphrase.test.page";
 import each from "jest-each";
 import {CheckPassphraseVariations} from "./CheckPassphrase";
@@ -31,7 +31,6 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllTimers();
 });
-
 
 describe("Check passphrase", () => {
   let page, // The page to test against.
@@ -135,6 +134,11 @@ describe("Check passphrase", () => {
       expect(page.rememberMe).toBe("true");
       await page.fillPassphrase('some passphrase');
       await page.verify();
+      await waitFor(() => {
+        if (!props.onComplete.mock.calls.length) {
+          throw new Error("The page is still processing");
+        }
+      });
       expect(props.onComplete).toHaveBeenCalledWith("some passphrase", true);
     });
 
@@ -156,7 +160,7 @@ describe("Check passphrase", () => {
 
   describe("Check passphrase and secondary action", () => {
     it("As AN completing the setup I should be able to go to the generate key screen from the check passphrase state.", async() => {
-      props = defaultProps({displayAs: CheckPassphraseVariations.SETUP});
+      props = defaultProps();
       page = new CheckPassphrasePage(props);
 
       expect.assertions(2);
@@ -166,7 +170,7 @@ describe("Check passphrase", () => {
     });
 
     it("As AN completing the recover I should be able to request some help if I lost my credentials.", async() => {
-      props = defaultProps({displayAs: CheckPassphraseVariations.RECOVER});
+      props = defaultPropsForRecover();
       page = new CheckPassphrasePage(props);
 
       expect.assertions(2);
@@ -178,27 +182,39 @@ describe("Check passphrase", () => {
 
   describe("Check pwned passphrase", () => {
     it("As AN completing the setup I should be able to use a passphrase that is part of a data breach.", async() => {
-      props = defaultProps({displayAs: CheckPassphraseVariations.SETUP});
+      props = defaultProps();
+      // Mock the request to the externational dictionary check.
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(2));
       page = new CheckPassphrasePage(props);
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(80));
+      await waitFor(() => {});
 
       expect.assertions(1);
       await page.fillPassphrase('test@test.com');
+      await waitFor(() => {
+        if (page.warningMessage === null) {
+          throw new Error("Changes are not ready yet");
+        }
+      });
       await page.verify();
-
       await waitFor(() => {});
 
       expect(props.onComplete).toHaveBeenCalled();
     });
 
     it("As AN completing the recover I should be able to recover my account even if my passphrase is part of a data breach.", async() => {
-      props = defaultProps({displayAs: CheckPassphraseVariations.RECOVER});
+      props = defaultPropsForRecover();
+      // Mock the request to the externational dictionary check.
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(2));
       page = new CheckPassphrasePage(props);
+      await waitFor(() => {});
 
       expect.assertions(2);
       await page.fillPassphrase('test@test.com');
-      await waitFor(() => {});
+      await waitFor(() => {
+        if (page.warningMessage === null) {
+          throw new Error("Changes are not ready yet");
+        }
+      });
 
       expect(page.warningMessage !== null).toBeTruthy();
       expect(page.warningMessage.textContent).toEqual("The passphrase is part of an exposed data breach.");
@@ -207,22 +223,29 @@ describe("Check passphrase", () => {
     it("As a user recovering my account, I should not see that the passphrase I entered has been pwned if it is not the valid pasphrase.", async() => {
       const expectedError = {name: 'InvalidMasterPasswordError'};
       const onComplete = jest.fn(() => Promise.reject(expectedError));
-      props = defaultProps({...{displayAs: CheckPassphraseVariations.RECOVER}, onComplete});
+      props = defaultPropsForRecover({onComplete});
       page = new CheckPassphrasePage(props);
+      await waitFor(() => {});
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.resolve(2));
 
       expect.assertions(5);
       await page.fillPassphrase('test@test.com');
-      expect(page.warningMessage !== null).toBeTruthy();
+      await waitFor(() => {
+        if (page.warningMessage === null) {
+          throw new Error("Changes are not ready yet");
+        }
+      });
+
+      expect(page.warningMessage).toBeTruthy();
       expect(page.warningMessage.textContent).toEqual("The passphrase is part of an exposed data breach.");
 
       await page.verify();
 
       await waitFor(() => {});
       expect(props.onComplete).toHaveBeenCalledWith("test@test.com", false);
-      expect(page.warningMessage !== null).toBeFalsy();
-      expect(page.hasInvalidPassphraseError).toBeTruthy();
+      expect(page.warningMessage).toBeFalsy();
+      expect(page.hasInvalidPassphraseError()).toBeTruthy();
     });
   });
 });

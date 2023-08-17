@@ -35,6 +35,14 @@ export default class ConfigurePassphraseGeneratorPage {
     );
   }
 
+  rerender(props) {
+    this._page.rerender(
+      <MockTranslationProvider>
+        <ConfigurePassphraseGenerator {...props}/>
+      </MockTranslationProvider>
+    );
+  }
+
   /**
    * Get the range word count input
    */

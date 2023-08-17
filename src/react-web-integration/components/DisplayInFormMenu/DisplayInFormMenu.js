@@ -18,6 +18,7 @@ import {withTranslation} from "react-i18next";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
 import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
+import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -92,10 +93,9 @@ class DisplayInFormMenu extends React.Component {
         inputType: null, // Input inputType attached to the menu
         inputValue: null, // Input inputValue attached to the menu
         suggestedResources: null, // Suggested resources to display
-        secretGeneratorConfiguration: null, // A secret generator configuration
       }, // The display configuration of the menu
       generatedPassword: null, // Generated password
-      resourceIdProcessing: null // The resource id processing
+      resourceIdProcessing: null, // The resource id processing
     };
   }
 
@@ -213,13 +213,16 @@ class DisplayInFormMenu extends React.Component {
    * @returns {JSX.Element}
    */
   get generateNewPasswordItem() {
+    const disabled = this.state.generatedPassword === null;
+
     return <DisplayInFormMenuItem
       key="generate-password"
       onClick={this.handleGeneratePasswordRequestedEvent}
       title={this.props.t("Generate a new password securely")}
       subtitle={<span className="in-form-menu-item-content-subheader-password">{this.truncatedGeneratedPassword}</span>}
       description={this.props.t("You will be able to save it after submitting")}
-      icon="dice"/>;
+      icon="dice"
+      disabled={disabled}/>;
   }
 
   /**
@@ -286,8 +289,18 @@ class DisplayInFormMenu extends React.Component {
     this.setState({configuration});
     if (!this.isPasswordFilled) {
       // Pre-generate the password
-      this.setState({generatedPassword: SecretGenerator.generate(configuration.secretGeneratorConfiguration)});
+      this.generateSecret();
     }
+  }
+
+  /**
+   * Generates a new secret and store it in the component state.
+   * @returns {Promise<void>}
+   */
+  async generateSecret() {
+    const passwordPolicies = await this.props.context.port.request('passbolt.password-policies.get', true);
+    const generatedPassword = SecretGenerator.generate(passwordPolicies);
+    this.setState({generatedPassword});
   }
 
   /**
@@ -316,13 +329,13 @@ class DisplayInFormMenu extends React.Component {
    * @param resourceId
    */
   async handleUseSuggestedResourceRequestedEvent(resourceId) {
-    await this.setState({resourceIdProcessing: resourceId});
+    this.setState({resourceIdProcessing: resourceId});
     try {
       await this.props.context.port.request('passbolt.in-form-menu.use-suggested-resource', resourceId);
     } catch (error) {
       console.error(error);
     }
-    await this.setState({resourceIdProcessing: null});
+    this.setState({resourceIdProcessing: null});
   }
 
   /**
@@ -331,7 +344,6 @@ class DisplayInFormMenu extends React.Component {
   handleGeneratePasswordRequestedEvent() {
     this.props.context.port.request('passbolt.in-form-menu.fill-password', this.state.generatedPassword);
   }
-
 
   /**
    * Render the component
@@ -353,6 +365,7 @@ class DisplayInFormMenu extends React.Component {
 DisplayInFormMenu.propTypes = {
   context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
+  passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withTranslation('common')(DisplayInFormMenu));
+export default withAppContext(withPasswordPolicies(withTranslation('common')(DisplayInFormMenu)));

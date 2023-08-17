@@ -68,6 +68,6 @@ class ChangeUserPassphrase extends Component {
 }
 
 ChangeUserPassphrase.propTypes = {
-  userSettingsContext: PropTypes.object // The user settings context
+  userSettingsContext: PropTypes.object, // The user settings context
 };
 export default withUserSettings(ChangeUserPassphrase);

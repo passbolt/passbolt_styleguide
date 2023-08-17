@@ -30,7 +30,8 @@ export function defaultProps(data = {}) {
       findPolicy: jest.fn(),
       getPolicy: jest.fn(),
       findMfaSettings: jest.fn(),
-      hasMfaSettings: jest.fn()
+      hasMfaSettings: jest.fn(),
+      hasMfaUserSettings: jest.fn(),
     },
     context: context
   };

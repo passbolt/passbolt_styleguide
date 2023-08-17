@@ -63,6 +63,14 @@ class Login extends Component {
   }
 
   /**
+   * On the component did mount, set the workspace action component and get the account recovery policy
+   *
+   */
+  async componentDidMount() {
+    this.focusOnPassphrase();
+  }
+
+  /**
    * Returns true if the user can perform actions on the component
    * @returns {boolean}
    */
@@ -135,13 +143,6 @@ class Login extends Component {
   }
 
   /**
-   * Whenever the component is mounted
-   */
-  componentDidMount() {
-    this.focusOnPassphrase();
-  }
-
-  /**
    * Put the focus on the passphrase input
    */
   focusOnPassphrase() {
@@ -154,13 +155,13 @@ class Login extends Component {
    */
   async handleSubmit(event) {
     event.preventDefault();
-    this.validate();
+    if (!this.validate(this.state.passphrase)) {
+      return;
+    }
 
-    if (this.isValid) {
-      this.toggleProcessing();
-      if (await this.checkPassphrase()) {
-        await this.login();
-      }
+    this.toggleProcessing();
+    if (await this.checkPassphrase()) {
+      await this.login();
     }
   }
 
@@ -172,7 +173,7 @@ class Login extends Component {
     const passphrase = event.target.value;
     this.fillPassphrase(passphrase);
     if (this.state.hasBeenValidated) {
-      this.validate();
+      this.validate(passphrase);
     }
   }
 
@@ -239,15 +240,20 @@ class Login extends Component {
 
   /**
    * Validate the security token data
+   * @param {string} passphrase the passphrase to validate
+   * @returns {booleans}
    */
-  validate() {
-    const {passphrase} = this.state;
-    const emptyPassphrase =  passphrase.trim() === '';
-    if (emptyPassphrase) {
-      this.setState({hasBeenValidated: true, errors: {emptyPassphrase}});
-      return;
-    }
-    this.setState({hasBeenValidated: true, errors: {}});
+  validate(passphrase) {
+    const isEmptyPassphrase = passphrase.trim() === '';
+    const isValid = !isEmptyPassphrase;
+    const state = {
+      hasBeenValidated: true,
+      errors: {
+        emptyPassphrase: isEmptyPassphrase
+      }
+    };
+    this.setState(state);
+    return isValid;
   }
 
   /**

@@ -98,7 +98,9 @@ class DisplayUserSettingsWorkspace extends React.Component {
         </div>
         <div className="panel main">
           <div className="panel left">
-            <NavigateIntoUserSettingsWorkspace hasPendingMfaChoice={this.isMfaChoiceRequired} hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
+            <NavigateIntoUserSettingsWorkspace
+              hasPendingMfaChoice={this.isMfaChoiceRequired}
+              hasPendingAccountRecoveryChoice={this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()}/>
           </div>
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
@@ -129,7 +131,7 @@ DisplayUserSettingsWorkspace.propTypes = {
   context: PropTypes.any, // The application context
   match: PropTypes.any,
   accountRecoveryContext: PropTypes.object, // The account recovery context
-  mfaContext: PropTypes.object
+  mfaContext: PropTypes.object,
 };
 
 export default withAppContext(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace))));
