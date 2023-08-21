@@ -44,7 +44,6 @@
     "jest-junit": "^16.0.0",
     "jest-useragent-mock": "^0.1.1",
     "jest-webextension-mock": "^3.8.9",
-    "jquery": "^3.5.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.9.1"
   },
