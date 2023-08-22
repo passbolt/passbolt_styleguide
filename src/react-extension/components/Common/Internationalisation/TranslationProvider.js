@@ -84,10 +84,10 @@ class TranslationProvider extends Component {
    * @returns {string[]}
    */
   get supportedLocales() {
-    if (!this.props.context.siteSettings.supportedLocales) {
+    if (!this.siteSettings?.supportedLocales) {
       return [this.locale];
     }
-    return this.props.context.siteSettings.supportedLocales.map(supportedLocale => supportedLocale.locale);
+    return this.siteSettings?.supportedLocales.map(supportedLocale => supportedLocale.locale);
   }
 
   /**
@@ -96,6 +96,13 @@ class TranslationProvider extends Component {
    */
   get locale() {
     return this.props.context.locale;
+  }
+
+  /**
+   * return the siteSettings from context or props
+   */
+  get siteSettings() {
+    return this.props.context.siteSettings || this.props.siteSettings
   }
 
   /**
@@ -144,6 +151,7 @@ TranslationProvider.propTypes = {
   context: PropTypes.any, // The application context
   loadingPath: PropTypes.any, // The way to load translations files
   children: PropTypes.any, // The children components
+  siteSettings: PropTypes.any, // The site settings which can be optional
 };
 
 export default withAppContext(TranslationProvider);

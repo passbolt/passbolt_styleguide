@@ -29,7 +29,7 @@ class Footer extends Component {
    * Returns the terms link url
    */
   get privacyUrl() {
-    return this.props.context.siteSettings.privacyLink;
+    return this.siteSettings.privacyLink;
   }
 
   /**
@@ -50,7 +50,7 @@ class Footer extends Component {
    * Returns the privacy link url
    */
   get termsUrl() {
-    return this.props.context.siteSettings.termsLink;
+    return this.siteSettings.termsLink;
   }
 
   /**
@@ -59,7 +59,7 @@ class Footer extends Component {
    */
   get versions() {
     const versions = [];
-    const serverVersion = this.props.context.siteSettings.version;
+    const serverVersion = this.siteSettings.version;
     if (serverVersion) {
       versions.push(serverVersion);
     }
@@ -74,10 +74,18 @@ class Footer extends Component {
    * Returns true if the application is in an unsafe mode
    */
   get isUnsafeMode() {
-    if(!this.props.context.siteSettings){ return false; }
-    const debug = this.props.context.siteSettings.debug;
-    const isHttpMode = this.props.context.siteSettings.url.startsWith('http://');
+    if(!this.siteSettings){ return false; }
+    const debug = this.siteSettings.debug;
+    const isHttpMode = this.siteSettings.url.startsWith('http://');
     return debug || isHttpMode;
+  }
+
+
+  /**
+   * return the siteSettings from context or props
+   */
+  get siteSettings() {
+    return this.props.context.siteSettings || this.props.siteSettings
   }
 
   /**
@@ -151,7 +159,8 @@ class Footer extends Component {
 }
 
 Footer.propTypes = {
-  context: PropTypes.any, // The app context‡
+  context: PropTypes.any, // The app context
+  siteSettings: PropTypes.any, // The site settings which can be optional
 };
 
 export default withAppContext(withTranslation("common")(Footer));
