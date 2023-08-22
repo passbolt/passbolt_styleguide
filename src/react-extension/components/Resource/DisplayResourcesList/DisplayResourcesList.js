@@ -115,8 +115,8 @@ class DisplayResourcesList extends React.Component {
     }, {});
     // Merge the column values
     this.columns.forEach(column => Object.assign(column, columnsResources[column.id]));
-    // Sort the position of the column
-    this.columns.sort((columnA, columnB) => columnA.position < columnB.position ? -1 : 1);
+    // Sort the position of the column, the column with no position will be at the beginning
+    this.columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
   }
 
   /**
