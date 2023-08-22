@@ -64,6 +64,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
     this.handlePassphraseSectionToggle = this.handlePassphraseSectionToggle.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSliderInputChange = this.handleSliderInputChange.bind(this);
+    this.handleLengthChange = this.handleLengthChange.bind(this);
   }
 
   /**
@@ -131,6 +132,17 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
   handleInputChange(event) {
     const target = event.target;
     const value = target.value;
+    const name = target.name;
+    this.props.adminPasswordPoliciesContext.setSettings(name, value);
+  }
+
+  /**
+   * Handle change of generic form input.
+   * @param {object} event
+   */
+  handleLengthChange(event) {
+    const target = event.target;
+    const value = parseInt(target.value, 10);
     const name = target.name;
     this.props.adminPasswordPoliciesContext.setSettings(name, value);
   }
@@ -246,7 +258,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   min="8"
                   max="128"
                   value={settings.passwordLength}
-                  onChange={this.handleInputChange}
+                  onChange={this.handleLengthChange}
                   disabled={this.hasAllInputDisabled()}/>
               </div>
               {errors.passwordLength &&
@@ -321,7 +333,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   min="4"
                   max="40"
                   value={settings.wordsCount}
-                  onChange={this.handleInputChange}
+                  onChange={this.handleLengthChange}
                   disabled={this.hasAllInputDisabled()}/>
               </div>
               {errors.wordsCount &&

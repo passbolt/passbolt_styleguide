@@ -3240,6 +3240,7 @@ html {
   padding-bottom: 0;
   line-height: 1.6rem;
   margin-left: 0.8rem;
+  color: #000000;
 }
 .announcement button:hover {
   text-decoration: none;
