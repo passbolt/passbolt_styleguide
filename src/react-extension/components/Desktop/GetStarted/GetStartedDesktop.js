@@ -15,8 +15,34 @@
 import React from "react";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
+import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
 
 class GetStartedDesktop extends React.Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindEventHandlers();
+  }
+
+  /**
+   * Bind event handlers
+   * @returns {void}
+   */
+  bindEventHandlers() {
+    this.handleStart = this.handleStart.bind(this);
+  }
+
+  /**
+   * Handle start button click.
+   * @returns {void}
+   */
+  handleStart() {
+    this.props.importAccountKitContext.navigate(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
+  }
+
   /**
    * Render
    * @returns {JSX.Element}
@@ -25,7 +51,7 @@ class GetStartedDesktop extends React.Component {
     return (
       <div className="get-started-desktop">
         <h1><Trans>Get started !</Trans></h1>
-        <p>
+        <p class="get-started-description">
           <Trans>You need to upload an account kit to start using the desktop app. </Trans> <br/>
           <Trans>Please follow these instructions:</Trans>
         </p>
@@ -35,7 +61,8 @@ class GetStartedDesktop extends React.Component {
         <p><span className="step">4</span>Download the account kit</p>
         <div className="form-actions">
           <button
-            type="submit"
+            type="button"
+            onClick={this.handleStart}
             className="button primary big full-width">
             <Trans>Start</Trans>
           </button>
@@ -47,6 +74,7 @@ class GetStartedDesktop extends React.Component {
 
 GetStartedDesktop.propTypes = {
   t: PropTypes.func, // The translation function
+  importAccountKitContext: PropTypes.any.isRequired, // The import account kit context
 };
 
-export default withTranslation('common')(GetStartedDesktop);
+export default withImportAccountKitContext(withTranslation('common')(GetStartedDesktop));
