@@ -92,14 +92,14 @@ class DisplayAdministrationPasswordPoliciesActions extends React.Component {
     return (
       <div className="col2_3 actions-wrapper">
         <div className="actions">
-          <div>
+          <ul>
             <li>
               <button type="button" disabled={isDisabled} id="save-settings" onClick={this.handleSave}>
                 <Icon name="save"/>
                 <span><Trans>Save settings</Trans></span>
               </button>
             </li>
-          </div>
+          </ul>
         </div>
       </div>
     );

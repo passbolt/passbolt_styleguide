@@ -319,20 +319,18 @@ class CreateGpgKey extends Component {
               <li id="specialCharactersyHint" className={this.state.hintClassNames.specialCharacters}>
                 <Trans>It contains special characters (like / or * or %)</Trans>
               </li>
-              {this.pownedService &&
-                <li id="notInDictionaryHint" className={this.state.hintClassNames.notInDictionary}>
-                  {this.state.isPwnedServiceAvailable  &&
+              <li id="notInDictionaryHint" className={this.state.hintClassNames.notInDictionary}>
+                {this.state.isPwnedServiceAvailable  &&
+                  <Trans>It is not part of an exposed data breach</Trans>
+                }
+                {!this.state.isPwnedServiceAvailable &&
+                  <Tooltip
+                    message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
+                    direction="bottom">
                     <Trans>It is not part of an exposed data breach</Trans>
-                  }
-                  {!this.state.isPwnedServiceAvailable &&
-                    <Tooltip
-                      message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
-                      direction="bottom">
-                      <Trans>It is not part of an exposed data breach</Trans>
-                    </Tooltip>
-                  }
-                </li>
-              }
+                  </Tooltip>
+                }
+              </li>
             </ul>
           </div>
 
