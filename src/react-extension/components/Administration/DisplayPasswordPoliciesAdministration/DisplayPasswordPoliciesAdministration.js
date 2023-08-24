@@ -201,7 +201,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
             <div className="warning message" id="minimal-password-entropy-advised-banner">
               <p>
                 <Trans>The current password configuration generates passwords that are not strong enough.</Trans><br/>
-                <Trans>Passbolt recommends a minimum of {{minimalAdvisedEntropy}}bits to be safe.</Trans>
+                <Trans>Passbolt recommends a minimum of {{minimalAdvisedEntropy}} bits to be safe.</Trans>
               </p>
             </div>
           }
@@ -209,13 +209,13 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
             <div className="warning message" id="minimal-passphrase-entropy-advised-banner">
               <p>
                 <Trans>The current passphrase configuration generates passphrases that are not strong enough.</Trans><br/>
-                <Trans>Passbolt recommends a minimum of {{minimalAdvisedEntropy}}bits to be safe.</Trans>
+                <Trans>Passbolt recommends a minimum of {{minimalAdvisedEntropy}} bits to be safe.</Trans>
               </p>
             </div>
           }
           <h4 className="title title--required no-border"><Trans>Password generator default settings</Trans></h4>
-          <p><Trans>You can modify the default settings of the passwords generator, note that this will not prevent a user from customizing the settings while generating a password.</Trans></p>
-
+          <p><Trans>You can modify the default settings of the passwords generator.</Trans>
+            <Trans>Note that this will not prevent a user from customizing the settings while generating a password.</Trans></p>
           <label>
             <Trans>Default password type</Trans>
           </label>
