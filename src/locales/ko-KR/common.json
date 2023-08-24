@@ -1144,7 +1144,7 @@
   "You will be able to save it after submitting": "제출 후 저장하면 됩니다.",
   "you@organization.com": "you@organization.com",
   "Your browser is not configured to work with this passbolt instance.": "브라우저가 이 패스볼트 인스턴스와 함께 작동하도록 구성되어 있지 않습니다.",
-  "Your language is missing or you discovered an error in the translation, help us to improve passbolt.": "언어가 누락되었거나 번역에서 오류가 발견되었습니다. 패스볼트를 개선할 수 있도록 도와주세요.",
+  "Your language is missing or you discovered an error in the translation, help us to improve passbolt.": "언어가 누락되었거나 번역에 오류가 경우 패스볼트를 개선할 수 있도록 도와주세요.",
   "Your OpenPGP private key block": "OpenPGP 개인키 블록",
   "Your organization recovery key will be used to decrypt and recover the private key and passphrase of the users that are participating in the account recovery program.": "조직 복구 키는 계정 복구 프로그램에 참여하는 사용자의 개인키 및 패스프레이즈를 해독하고 복구하는 데 사용됩니다.",
   "Your passphrase has been changed. Make sure you keep a backup of your secret key encrypted with this new passphrase.": "패스프레이즈가 변경되었습니다. 이 새 패스프레이즈로 암호화된 비밀키의 백업을 보관해야 합니다.",
