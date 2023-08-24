@@ -108,7 +108,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         propertyName: 'modified', // The name of the property to sort on
         asc: false // True if the sort must be descendant
       },
-      filteredResources: [], // The current list of filtered resources
+      filteredResources: null, // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
       columnsResources: [
         {id: "favorite", label: "Favorite", position: 1, show: true},
