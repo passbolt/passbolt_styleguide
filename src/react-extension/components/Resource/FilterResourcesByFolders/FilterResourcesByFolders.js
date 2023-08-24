@@ -349,7 +349,7 @@ class FilterResourcesByFolders extends React.Component {
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`link no-border ${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
+                <button type="button" className={`${this.state.moreMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}>
                   <Icon name="3-dots-h"/>
                 </button>
               </div>
