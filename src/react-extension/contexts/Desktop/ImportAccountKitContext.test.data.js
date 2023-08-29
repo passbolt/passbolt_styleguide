@@ -13,7 +13,6 @@
  */
 
 import {v4 as uuidv4} from "uuid";
-import {defaultAppContext} from "../ApiAppContext.test.data";
 import MockPort from "../../test/mock/MockPort";
 
 export const defaultAccountKit = (data = {}) => {
