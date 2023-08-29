@@ -35,7 +35,7 @@ class OrchestrateAccountKitImportation extends Component {
       case ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT:
         return <ImportAccountKit />;
       case ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE:
-        return <div className="verify-passphrase">Verify passphrase</div>
+        return <div className="verify-passphrase">Verify passphrase</div>;
       case ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE:
         return <DisplayUnexpectedError
           error={this.props.importAccountKitContext.unexpectedError} />;

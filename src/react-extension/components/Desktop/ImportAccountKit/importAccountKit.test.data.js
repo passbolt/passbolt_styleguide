@@ -39,6 +39,6 @@ export function mockFile(data = {}) {
     name: "account-kit.passbolt",
     content: "test content",
     contentType: "application/passbolt"
-  }
+  };
   return Object.assign(defaultFile, data);
-};
+}

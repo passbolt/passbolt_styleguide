@@ -12,39 +12,40 @@
  * @since         4.3.0
  */
 
-import { v4 as uuidv4 } from "uuid";
-import { defaultAppContext } from "../ApiAppContext.test.data";
+import {v4 as uuidv4} from "uuid";
+import {defaultAppContext} from "../ApiAppContext.test.data";
+import MockPort from "../../test/mock/MockPort";
 
 export const defaultAccountKit = (data = {}) => {
-    data = JSON.parse(JSON.stringify(data));
+  data = JSON.parse(JSON.stringify(data));
 
-    const defaultData = {
-        "domain": "https://passbolt.local",
-        "user_id": uuidv4(),
-        "username": "ada@passbolt.dev",
-        "first_name": "Ada",
-        "last_name": "Lovelace",
-        "user_public_armored_key": "",
-        "user_private_armored_key": "",
-        "server_public_armored_key": "",
-    };
+  const defaultData = {
+    "domain": "https://passbolt.local",
+    "user_id": uuidv4(),
+    "username": "ada@passbolt.dev",
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "user_public_armored_key": "",
+    "user_private_armored_key": "",
+    "server_public_armored_key": "",
+  };
 
-    data = Object.assign(defaultData, data);
-    data.security_token = defaultSecurityTokenDto(data?.security_token);
+  data = Object.assign(defaultData, data);
+  data.security_token = defaultSecurityTokenDto(data?.security_token);
 
-    delete data.securityToken;
+  delete data.securityToken;
 
-    return Object.assign(defaultData, data);
+  return Object.assign(defaultData, data);
 };
 
 export const defaultSecurityTokenDto = (data = {}) => {
-    const defaultData = {
-        "code": data?.code || "HGA",
-        "color": data?.color || "#8bc34a",
-        "textcolor": data?.textcolor || "#000000",
-    };
+  const defaultData = {
+    "code": data?.code || "HGA",
+    "color": data?.color || "#8bc34a",
+    "textcolor": data?.textcolor || "#000000",
+  };
 
-    return Object.assign(defaultData, data || {});
+  return Object.assign(defaultData, data || {});
 };
 
 /**
@@ -53,8 +54,10 @@ export const defaultSecurityTokenDto = (data = {}) => {
  * @returns {object}
  */
 export function defaultProps(data = {}) {
-    const defaultProps = {
-        context: defaultAppContext(data?.context)
-    };
-    return Object.assign(defaultProps, data);
+  const defaultProps = {
+    context: {
+      port: new MockPort(),
+    },
+  };
+  return Object.assign(defaultProps, data);
 }

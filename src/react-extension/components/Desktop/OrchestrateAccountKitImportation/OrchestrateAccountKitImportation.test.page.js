@@ -42,7 +42,7 @@ export default class OrchestrateAccountKitImportationPage {
   }
 
   /**
-   * Returns the import account kit page 
+   * Returns the import account kit page
    */
   get importAccountKitPage() {
     return this._page.container.querySelector('.import-account-kit');

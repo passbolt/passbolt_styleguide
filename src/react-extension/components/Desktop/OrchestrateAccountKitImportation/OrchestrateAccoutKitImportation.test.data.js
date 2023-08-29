@@ -16,18 +16,18 @@ import {ImportAccountKitWorkflowStates} from "../../../contexts/Desktop/ImportAc
 
 
 export const defaultProps = (data = {}) => {
-    const defaultData = {
-      context: {
-        port: {
-          request: jest.fn(),
-        },
+  const defaultData = {
+    context: {
+      port: {
+        request: jest.fn(),
       },
-      importAccountKitContext: {
-        navigate: jest.fn(),
-        state: ImportAccountKitWorkflowStates.GET_STARTED
-      }
-    };
-  
-    return Object.assign(defaultData, data);
+    },
+    importAccountKitContext: {
+      navigate: jest.fn(),
+      state: ImportAccountKitWorkflowStates.GET_STARTED
+    }
   };
-  
+
+  return Object.assign(defaultData, data);
+};
+

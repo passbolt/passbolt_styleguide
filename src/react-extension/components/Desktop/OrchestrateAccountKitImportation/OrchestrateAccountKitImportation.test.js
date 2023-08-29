@@ -17,41 +17,41 @@ import {defaultProps} from "../OrchestrateAccountKitImportation/OrchestrateAccou
 import OrchestrateAccountKitImportationPage from "./OrchestrateAccountKitImportation.test.page";
 
 describe("OrchestrateAccountKitImportation", () => {
-    let page;
+  let page;
 
-    describe("As a user I should be able to configure the desktop application by importing an account kit from the browser extension", () => {
-        it('As an unknown user I should be invited to configure the desktop application', () => {
-            expect.assertions(1);
-            page = new OrchestrateAccountKitImportationPage(defaultProps())
+  describe("As a user I should be able to configure the desktop application by importing an account kit from the browser extension", () => {
+    it('As an unknown user I should be invited to configure the desktop application', () => {
+      expect.assertions(1);
+      page = new OrchestrateAccountKitImportationPage(defaultProps());
 
-            expect(page.getStartedPage).not.toBeNull();
-        });
+      expect(page.getStartedPage).not.toBeNull();
+    });
 
-        it('As an unknown user configuring the desktop app I should be able to import an account kit', () => {
-            expect.assertions(1);
-            const props = defaultProps();
-            props.importAccountKitContext.state = ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT;
-            page = new OrchestrateAccountKitImportationPage(props)
+    it('As an unknown user configuring the desktop app I should be able to import an account kit', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      props.importAccountKitContext.state = ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT;
+      page = new OrchestrateAccountKitImportationPage(props);
 
-            expect(page.importAccountKitPage).not.toBeNull();
-        });
-      
-        it('As an unknown user configuring the desktop app I should see the detail of the account kit & verify my passphrase when importing an account', () => {
-            expect.assertions(1);
-            const props = defaultProps();
-            props.importAccountKitContext.state = ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE;
-            page = new OrchestrateAccountKitImportationPage(props)
+      expect(page.importAccountKitPage).not.toBeNull();
+    });
 
-            expect(page.verifyPassphrasePage).not.toBeNull();
-        });
+    it('As an unknown user configuring the desktop app I should see the detail of the account kit & verify my passphrase when importing an account', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      props.importAccountKitContext.state = ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE;
+      page = new OrchestrateAccountKitImportationPage(props);
 
-        it('As an unknown user configuring the desktop app I should informed about an unexpected error', () => {
-            expect.assertions(1);
-            const props = defaultProps();
-            props.importAccountKitContext.state = ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE;
-            page = new OrchestrateAccountKitImportationPage(props)
+      expect(page.verifyPassphrasePage).not.toBeNull();
+    });
 
-            expect(page.displayUnexpectedErrorPage).not.toBeNull();
-        });
-    })
-})
+    it('As an unknown user configuring the desktop app I should informed about an unexpected error', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      props.importAccountKitContext.state = ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE;
+      page = new OrchestrateAccountKitImportationPage(props);
+
+      expect(page.displayUnexpectedErrorPage).not.toBeNull();
+    });
+  });
+});

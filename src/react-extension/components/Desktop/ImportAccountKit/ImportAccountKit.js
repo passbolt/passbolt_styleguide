@@ -72,7 +72,7 @@ class ImportAccountKit extends React.Component {
   async handleAccountKitSelected(event) {
     const [uploadedKit] = event.target.files;
     const filename = uploadedKit?.name;
-    const accountKit = await this.readFileContent(uploadedKit)
+    const accountKit = await this.readFileContent(uploadedKit);
     this.setState({filename, accountKit});
     if (this.state.validation.hasAlreadyBeenValidated) {
       const state = this.validateAccountKitInput();
@@ -112,7 +112,7 @@ class ImportAccountKit extends React.Component {
       return;
     }
 
-    await this.setState({ validation: { hasAlreadyBeenValidated: true } });
+    await this.setState({validation: {hasAlreadyBeenValidated: true}});
 
     await this.toggleProcessing();
     await this.validateAccountKitInput();
@@ -124,7 +124,7 @@ class ImportAccountKit extends React.Component {
     await this.props.importAccountKitContext.verifyAccountKit(this.state.accountKit);
   }
 
-  
+
   /**
    * Read the content of file content
    * @param accountKit the account kit file
@@ -148,7 +148,7 @@ class ImportAccountKit extends React.Component {
    * Toggle the processing mode
    */
   toggleProcessing() {
-    this.setState({ processing: !this.state.processing });
+    this.setState({processing: !this.state.processing});
   }
 
   /**
@@ -159,11 +159,10 @@ class ImportAccountKit extends React.Component {
     let message = null;
     if (!this.state.accountKit) {
       message = this.props.t("A file is required.");
-    }
-    else if (this.state.filename.split('.').pop() !== "passbolt") {
+    } else if (this.state.filename.split('.').pop() !== "passbolt") {
       message = this.props.t("Only passbolt format is allowed.");
     }
-    return this.setState({ errors: { message } });
+    return this.setState({errors: {message}});
   }
 
   /**
@@ -171,7 +170,7 @@ class ImportAccountKit extends React.Component {
    * @returns {Promise<void>}
    */
   openDocumentation() {
-    this.props.context.port.emit("passbolt.rendered.open-to-browser", "https://help.passbolt.com/TBD")
+    this.props.context.port.emit("passbolt.rendered.open-to-browser", "https://help.passbolt.com/TBD");
   }
 
   /**

@@ -33,7 +33,7 @@ export default class GetStartedDesktopPage {
     );
   }
 
- /**
+  /**
    * Returns the get started parent class
    */
   get getStarted() {
@@ -63,8 +63,8 @@ export default class GetStartedDesktopPage {
 
   /**
    * return the step paragraph
-   * @param {number} stepNumber 
-   * @returns 
+   * @param {number} stepNumber
+   * @returns
    */
   step(stepNumber) {
     return this._page.container.querySelectorAll(`.get-started-desktop p`)[stepNumber];
@@ -78,11 +78,11 @@ export default class GetStartedDesktopPage {
   }
 
   /**
- * Click on the element
- *
- */
+   * Click on the element
+   *
+   */
   async click(element) {
-    const leftClick = { button: 0 };
+    const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => { });
   }

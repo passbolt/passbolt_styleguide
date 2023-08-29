@@ -63,7 +63,7 @@ export class ImportAccountKitContextProvider extends React.Component {
       unexpectedError: null, // The unexpected error obejct if any
       clearContext: this.clearContext.bind(this), // put the data to its default state value
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
-      setProcessing: this.setProcessing.bind(this), // set processing 
+      setProcessing: this.setProcessing.bind(this), // set processing
       navigate: this.navigate.bind(this), //navigate to step
       verifyAccountKit: this.verifyAccountKit.bind(this), // verify the account kit with the Background webview
     };
@@ -84,16 +84,16 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({ processing });
+    this.setState({processing});
   }
 
   /**
-    * Handle processing change.
-    * @params {Boolean} processing value
-    * @returns {void}
-    */
+   * Handle processing change.
+   * @params {Boolean} processing value
+   * @returns {void}
+   */
   navigate(state) {
-    this.setState({ state });
+    this.setState({state});
   }
 
   /**
@@ -104,10 +104,10 @@ export class ImportAccountKitContextProvider extends React.Component {
   async verifyAccountKit(accountKit) {
     try {
       await this.props.context.port.request("passbolt.background.verify-account-kit", accountKit);
-      return this.setState({ state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE });
-    } catch (error) { 
-      console.log(error)
-      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
+      return this.setState({state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE});
+    } catch (error) {
+      console.log(error);
+      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
     }
   }
 
@@ -115,7 +115,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    * Puts the state to its default in order to avoid keeping the data users didn't want to save.
    */
   clearContext() {
-    const { state, processing } = this.defaultState;
+    const {state, processing} = this.defaultState;
     this.setState({
       state,
       processing,

@@ -102,7 +102,7 @@ class TranslationProvider extends Component {
    * return the siteSettings from context or props
    */
   get siteSettings() {
-    return this.props.context.siteSettings || this.props.siteSettings
+    return this.props.context.siteSettings || this.props.siteSettings;
   }
 
   /**

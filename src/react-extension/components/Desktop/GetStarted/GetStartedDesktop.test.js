@@ -17,45 +17,45 @@ import {defaultProps} from "../OrchestrateAccountKitImportation/OrchestrateAccou
 import GetStartedDesktopPage from "./GetStartedDesktop.test.page";
 
 describe("GetStartedDesktop", () => {
-    let page;
-    let props;
-    beforeEach(() => {
-        props = defaultProps();
-        page = new GetStartedDesktopPage(props)
+  let page,
+    props;
+  beforeEach(() => {
+    props = defaultProps();
+    page = new GetStartedDesktopPage(props);
+  });
+
+  describe("As an unknown user I should be invited to configure the desktop application", () => {
+    it('As an unknown user I can see the get started page', () => {
+      expect.assertions(1);
+
+      expect(page.exists()).toBeTruthy();
+    });
+    it('As an unknown user I can see the title', () => {
+      expect.assertions(1);
+
+      expect(page.title).toEqual("Get started !");
+    });
+    it('As an unknown user I can see the description', () => {
+      expect.assertions(1);
+
+      expect(page.description).toEqual("You need to upload an account kit to start using the desktop app.  Please follow these instructions:");
     });
 
-    describe("As an unknown user I should be invited to configure the desktop application", () => {
-        it('As an unknown user I can see the get started page', () => {
-            expect.assertions(1);
+    it('As an unknown user I can see the steps explaining how to export the account kit', () => {
+      expect.assertions(4);
 
-            expect(page.exists()).toBeTruthy();
-        });
-        it('As an unknown user I can see the title', () => {
-            expect.assertions(1);
+      expect(page.step(1).innerHTML).toEqual('<span class="step">1</span>Authenticate on your browser extension');
+      expect(page.step(2).innerHTML).toEqual('<span class="step">2</span>Go to your profile');
+      expect(page.step(3).innerHTML).toEqual('<span class="step">3</span>Go to the Desktop app setup section');
+      expect(page.step(4).innerHTML).toEqual('<span class="step">4</span>Download the account kit');
+    });
 
-            expect(page.title).toEqual("Get started !");
-        });
-        it('As an unknown user I can see the description', () => {
-            expect.assertions(1);
+    it('As an unknown user I can click on start to switch to the import page', async() => {
+      expect.assertions(2);
 
-            expect(page.description).toEqual("You need to upload an account kit to start using the desktop app.  Please follow these instructions:");
-        });
-
-        it('As an unknown user I can see the steps explaining how to export the account kit', () => {
-            expect.assertions(4);
-
-            expect(page.step(1).innerHTML).toEqual('<span class="step">1</span>Authenticate on your browser extension');
-            expect(page.step(2).innerHTML).toEqual('<span class="step">2</span>Go to your profile');
-            expect(page.step(3).innerHTML).toEqual('<span class="step">3</span>Go to the Desktop app setup section');
-            expect(page.step(4).innerHTML).toEqual('<span class="step">4</span>Download the account kit');
-        });
-
-        it('As an unknown user I can click on start to switch to the import page', async () => {
-            expect.assertions(2);
-
-            await page.click(page.startButton);
-            expect(page.startButton.textContent).toEqual('Start');
-            expect(props.importAccountKitContext.navigate).toHaveBeenCalledWith(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
-        });
-    })
-})
+      await page.click(page.startButton);
+      expect(page.startButton.textContent).toEqual('Start');
+      expect(props.importAccountKitContext.navigate).toHaveBeenCalledWith(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
+    });
+  });
+});

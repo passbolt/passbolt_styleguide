@@ -74,7 +74,7 @@ class Footer extends Component {
    * Returns true if the application is in an unsafe mode
    */
   get isUnsafeMode() {
-    if(!this.siteSettings){ return false; }
+    if (!this.siteSettings) { return false; }
     const debug = this.siteSettings.debug;
     const isHttpMode = this.siteSettings.url.startsWith('http://');
     return debug || isHttpMode;
@@ -85,7 +85,7 @@ class Footer extends Component {
    * return the siteSettings from context or props
    */
   get siteSettings() {
-    return this.props.context.siteSettings || this.props.siteSettings
+    return this.props.context.siteSettings || this.props.siteSettings;
   }
 
   /**
