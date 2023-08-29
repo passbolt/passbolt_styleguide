@@ -51,7 +51,7 @@ class GetStartedDesktop extends React.Component {
     return (
       <div className="get-started-desktop">
         <h1><Trans>Get started !</Trans></h1>
-        <p class="get-started-description">
+        <p className="get-started-description">
           <Trans>You need to upload an account kit to start using the desktop app. </Trans> <br/>
           <Trans>Please follow these instructions:</Trans>
         </p>

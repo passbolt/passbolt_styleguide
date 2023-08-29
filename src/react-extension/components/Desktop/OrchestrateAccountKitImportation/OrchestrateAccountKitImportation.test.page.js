@@ -14,7 +14,7 @@
  */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import {render} from "@testing-library/react";
 import OrchestrateAccountKitImportation from "./OrchestrateAccountKitImportation";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
@@ -22,29 +22,43 @@ import MockTranslationProvider from "../../../test/mock/components/International
  * The OrchestrateAccountKitImportation component represented as a page
  */
 export default class OrchestrateAccountKitImportationPage {
-    /**
-     * Default constructor
-     * @param props Props to attach
-     */
-    constructor(props) {
-      this._page = render(
-        <MockTranslationProvider>
-          <OrchestrateAccountKitImportation {...props} />
-        </MockTranslationProvider>
-      );
-    }
+  /**
+   * Default constructor
+   * @param props Props to attach
+   */
+  constructor(props) {
+    this._page = render(
+      <MockTranslationProvider>
+        <OrchestrateAccountKitImportation {...props} />
+      </MockTranslationProvider>
+    );
+  }
 
-    /**
-     * Returns the get started page
-     */
-    get getStartedPage() {
-        return this._page.container.querySelector('.get-started-desktop');
-    }
+  /**
+   * Returns the get started page
+   */
+  get getStartedPage() {
+    return this._page.container.querySelector('.get-started-desktop');
+  }
 
-    /**
-     * Returns the import account kit
-     */
-    get importAccountKitPage() {
-        return this._page.container.querySelector('.import-account-kit');
-    }
+  /**
+   * Returns the import account kit page 
+   */
+  get importAccountKitPage() {
+    return this._page.container.querySelector('.import-account-kit');
+  }
+
+  /**
+   * Returns the verify passphrase page
+   */
+  get verifyPassphrasePage() {
+    return this._page.container.querySelector('.verify-passphrase');
+  }
+
+  /**
+   * Returns the display unexpected error page
+   */
+  get displayUnexpectedErrorPage() {
+    return this._page.container.querySelector('.setup-error');
+  }
 }

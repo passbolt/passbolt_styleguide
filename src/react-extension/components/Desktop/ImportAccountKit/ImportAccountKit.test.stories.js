@@ -24,7 +24,8 @@ export default {
 const Template = () =>
   <div id="container" className="container page login">
     <div className="content">
-      <div className="login-form"><ImportAccountKit />
+      <div className="login-form">
+        <ImportAccountKit />
       </div>
     </div>
   </div>;

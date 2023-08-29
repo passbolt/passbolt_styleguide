@@ -27,13 +27,31 @@ describe("OrchestrateAccountKitImportation", () => {
             expect(page.getStartedPage).not.toBeNull();
         });
 
-        it('As an unknown user I should be invited to configure the desktop application', () => {
+        it('As an unknown user configuring the desktop app I should be able to import an account kit', () => {
             expect.assertions(1);
             const props = defaultProps();
             props.importAccountKitContext.state = ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT;
             page = new OrchestrateAccountKitImportationPage(props)
 
             expect(page.importAccountKitPage).not.toBeNull();
+        });
+      
+        it('As an unknown user configuring the desktop app I should see the detail of the account kit & verify my passphrase when importing an account', () => {
+            expect.assertions(1);
+            const props = defaultProps();
+            props.importAccountKitContext.state = ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE;
+            page = new OrchestrateAccountKitImportationPage(props)
+
+            expect(page.verifyPassphrasePage).not.toBeNull();
+        });
+
+        it('As an unknown user configuring the desktop app I should informed about an unexpected error', () => {
+            expect.assertions(1);
+            const props = defaultProps();
+            props.importAccountKitContext.state = ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE;
+            page = new OrchestrateAccountKitImportationPage(props)
+
+            expect(page.displayUnexpectedErrorPage).not.toBeNull();
         });
     })
 })

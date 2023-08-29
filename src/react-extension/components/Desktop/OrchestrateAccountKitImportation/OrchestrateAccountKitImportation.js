@@ -18,6 +18,8 @@ import {withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import GetStartedDesktop from "../GetStarted/GetStartedDesktop";
 import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
+import ImportAccountKit from "../ImportAccountKit/ImportAccountKit";
+import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 
 /**
  * The component orchestrates the ao authentication box main content.
@@ -31,7 +33,12 @@ class OrchestrateAccountKitImportation extends Component {
       case ImportAccountKitWorkflowStates.GET_STARTED:
         return <GetStartedDesktop />;
       case ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT:
-        return <div class="import-account-kit">Import account kit</div>;
+        return <ImportAccountKit />;
+      case ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE:
+        return <div className="verify-passphrase">Verify passphrase</div>
+      case ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE:
+        return <DisplayUnexpectedError
+          error={this.props.importAccountKitContext.unexpectedError} />;
     }
   }
 }
