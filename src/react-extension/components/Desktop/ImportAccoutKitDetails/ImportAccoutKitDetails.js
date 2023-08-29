@@ -13,14 +13,14 @@
  */
 
 import React from "react";
-import {Trans, withTranslation} from "react-i18next";
+import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import {withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
+import { withImportAccountKitContext } from "../../../contexts/Desktop/ImportAccountKitContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import Icon from "../../../../shared/components/Icons/Icon";
 import debounce from "debounce-promise";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
@@ -55,7 +55,8 @@ class ImportAccoutKitDetails extends React.Component {
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyPassphrase: false, // True if the passphrase is empty
-        invalidPassphrase: false, // True if the passphrase is invalid
+        invalidGpgKey: false, // True if the gpg key is invalid
+        invalidPassphrase: false // True if the passphrase is invalid
       },
       passphraseInDictionnary: false, // True if the passphrase is part of a data breach
       isPwnedServiceAvailable: true, // True if the isPwned service can be reached
@@ -71,16 +72,10 @@ class ImportAccoutKitDetails extends React.Component {
   }
 
   /**
-   * Return true if there are errors
-   */
-  get hasErrors() {
-    return this.state.errors.emptyPassphrase || this.state.errors.invalidPassphrase;
-  }
-
-  /**
    * Returns true if the passphrase is valid
    */
   get isValid() {
+    console.log(this.state.errors)
     return Object.values(this.state.errors).every(value => !value);
   }
 
@@ -99,8 +94,12 @@ class ImportAccoutKitDetails extends React.Component {
    */
   async handleConfirmation() {
     try {
-      await this.props.importAccountKitContext.validatePassphrase(this.state.passphrase);
+      this.validate();
+      if (this.isValid) { 
+        await this.props.importAccountKitContext.verifyPassphrase(this.state.passphrase);
+      }
     } catch (error) {
+      console.log(error)
       this.onCheckPassphraseFailure(error);
     }
   }
@@ -130,7 +129,7 @@ class ImportAccoutKitDetails extends React.Component {
       });
     }
 
-    this.setState({passphrase, passphraseEntropy});
+    this.setState({ passphrase, passphraseEntropy });
     if (this.state.hasBeenValidated) {
       this.validate();
     }
@@ -158,12 +157,13 @@ class ImportAccoutKitDetails extends React.Component {
    * Validate the security token data
    */
   validate() {
-    const {passphrase} = this.state;
+    const { passphrase } = this.state;
     const errors = {
       emptyPassphrase: passphrase.trim() === '',
       invalidPassphrase: false,
+      invalidGpgKey: false,
     };
-    this.setState({hasBeenValidated: true, errors});
+    this.setState({ hasBeenValidated: true, errors });
   }
 
   /**
@@ -174,13 +174,50 @@ class ImportAccoutKitDetails extends React.Component {
   onCheckPassphraseFailure(error) {
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({errors: {invalidPassphrase: true}});
+      this.setState({ errors: { invalidPassphrase: true } });
     } else if (error.name === 'GpgKeyError') {
-      this.setState({errors: {invalidGpgKey: true}});
+      this.setState({ errors: { invalidGpgKey: true } });
     } else {
       // Only controlled errors should hit the component.
       throw error;
     }
+  }
+
+  /**
+   * Evaluate if the passphrase is in dictionary
+   * @return {Promise<void>}
+   */
+  async evaluatePassphraseIsInDictionary() {
+    let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
+    if (!isPwnedServiceAvailable) {
+      return;
+    }
+
+    let passphraseInDictionnary = false;
+    let passphraseEntropy = this.state.passphraseEntropy;
+
+    try {
+      const result = await this.pownedService.evaluateSecret(this.state.passphrase);
+      passphraseInDictionnary = result.inDictionary;
+      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
+      if (passphraseInDictionnary) {
+        passphraseEntropy = 0;
+      }
+    } catch (error) {
+      // If the service is unavailable don't block the user journey.
+      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
+        isPwnedServiceAvailable = false;
+        passphraseInDictionnary = false;
+      } else {
+        throw error;
+      }
+    }
+
+    this.setState({
+      isPwnedServiceAvailable,
+      passphraseEntropy,
+      passphraseInDictionnary,
+    });
   }
 
   /**
@@ -210,6 +247,31 @@ class ImportAccoutKitDetails extends React.Component {
             securityToken={this.securityToken}
             onChange={this.handleChangePassphrase}
             disabled={!this.areActionsAllowed} />
+          {this.state.hasBeenValidated &&
+            <>
+              {this.state.errors.emptyPassphrase &&
+                <div className="empty-passphrase error-message"><Trans>The passphrase should not be empty.</Trans></div>
+              }
+              {this.state.errors.invalidPassphrase &&
+                <div className="invalid-passphrase error-message">
+                  <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button className="link" type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
+                </div>
+              }
+              {this.state.errors.invalidGpgKey &&
+                <div className="invalid-gpg-key error-message"><Trans>The private key is invalid.</Trans></div>
+              }
+            </>
+          }
+          {!this.state.hasBeenValidated &&
+            <>
+              {!this.state.isPwnedServiceAvailable &&
+                <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
+              }
+              {this.state.passphraseInDictionnary &&
+                <div className="invalid-passphrase warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+              }
+            </>
+          }
           <PasswordComplexity entropy={passphraseEntropy} />
         </div>
         <div className="form-actions">
