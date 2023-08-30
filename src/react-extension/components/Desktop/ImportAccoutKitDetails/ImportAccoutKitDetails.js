@@ -15,7 +15,7 @@
 import React from "react";
 import { Trans, withTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { withImportAccountKitContext } from "../../../contexts/Desktop/ImportAccountKitContext";
+import { ImportAccountKitWorkflowStates, withImportAccountKitContext } from "../../../contexts/Desktop/ImportAccountKitContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
@@ -78,6 +78,7 @@ class ImportAccoutKitDetails extends React.Component {
   bindEventHandlers() {
     this.handleConfirmation = this.handleConfirmation.bind(this);
     this.handleChangePassphrase = this.handleChangePassphrase.bind(this);
+    this.importAnotherAccount = this.importAnotherAccount.bind(this);
   }
 
   /**
@@ -215,6 +216,16 @@ class ImportAccoutKitDetails extends React.Component {
     });
   }
 
+
+  /**
+   * Redirect to the importation screen
+   * @return {void}
+   */
+  importAnotherAccount() {
+    this.props.importAccountKitContext.flushAccountKit();
+    this.props.importAccountKitContext.navigate(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
+  }
+
   /**
    * Render
    * @returns {JSX.Element}
@@ -275,6 +286,9 @@ class ImportAccoutKitDetails extends React.Component {
             onClick={this.handleConfirmation}
             className="button primary big full-width">
             <Trans>Next</Trans>
+          </button>
+          <button type="button" className="link"  onClick={this.importAnotherAccount}>
+              <Trans>Import another account</Trans>
           </button>
         </div>
       </div>

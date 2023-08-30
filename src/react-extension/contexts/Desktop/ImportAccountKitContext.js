@@ -38,9 +38,9 @@ export const ImportAccountKitContext = React.createContext({
   navigate: () => { }, // Change state for orchestration
   isProcessing: () => { }, // returns true if a process is running and the UI must be disabled
   setProcessing: () => { }, //Update processing object
-  clearContext: () => { }, // put the data to its default state value
   verifyAccountKit: () => { }, // verify the account kit with the Background webview
   importAccountAndConnect: () => { }, // import the account kit and connect the user with the Background webview
+  flushAccountKit: () => { }, // Flush the account kit
 });
 
 /**
@@ -66,12 +66,12 @@ export class ImportAccountKitContextProvider extends React.Component {
       state: ImportAccountKitWorkflowStates.GET_STARTED, // The current login workflow state.
       processing: false, // Context is processing data
       unexpectedError: null, // The unexpected error obejct if any
-      clearContext: this.clearContext.bind(this), // put the data to its default state value
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       setProcessing: this.setProcessing.bind(this), // set processing
       navigate: this.navigate.bind(this), //navigate to step
       verifyAccountKit: this.verifyAccountKit.bind(this), // verify the account kit with the Background webview
       verifyPassphrase: this.verifyPassphrase.bind(this), // verify the passphrase with the Background webview
+      flushAccountKit: this.flushAccountKit.bind(this), // Flush the account kit
     };
   }
 
@@ -90,7 +90,15 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({processing});
+    this.setState({ processing });
+  }
+
+  /**
+   * Flush the account kit
+   * @returns {void}
+  */
+  flushAccountKit() {
+    this.setState({ accountKit: null })
   }
 
   /**
@@ -99,7 +107,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   navigate(state) {
-    this.setState({state});
+    this.setState({ state });
   }
 
   /**
@@ -111,10 +119,10 @@ export class ImportAccountKitContextProvider extends React.Component {
     try {
       this.setProcessing(true);
       const accountKitValidated = await this.props.context.port.request("passbolt.background.verify-account-kit", accountKit);
-      return this.setState({state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE, accountKit: accountKitValidated});
+      return this.setState({ state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE, accountKit: accountKitValidated });
     } catch (error) {
       console.error(error);
-      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
+      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
     } finally {
       this.setProcessing(false);
     }
@@ -133,7 +141,7 @@ export class ImportAccountKitContextProvider extends React.Component {
     } catch (error) {
       console.error(error);
       throw error;
-    }  finally {
+    } finally {
       this.setProcessing(false);
     }
   }
@@ -144,27 +152,15 @@ export class ImportAccountKitContextProvider extends React.Component {
    */
   async importAccountAndConnect() {
     try {
-      this.setState({accountKit: null})
+      this.flushAccountKit();
       await this.props.context.port.request("passbolt.auth-import.import-account");
       this.navigate(ImportAccountKitWorkflowStates.SIGNING_IN);
       await this.props.context.port.request("passbolt.auth-import.sign-in");
     } catch (error) {
       console.error(error);
-      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
+      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
     }
   }
-
-  /**
-   * Puts the state to its default in order to avoid keeping the data users didn't want to save.
-   */
-  clearContext() {
-    const {state, processing} = this.defaultState;
-    this.setState({
-      state,
-      processing,
-    });
-  }
-
 
   /**
    * Render the component
