@@ -21,6 +21,7 @@ import { ImportAccountKitWorkflowStates, withImportAccountKitContext } from "../
 import ImportAccountKit from "../ImportAccountKit/ImportAccountKit";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import ImportAccoutKitDetails from "../ImportAccoutKitDetails/ImportAccoutKitDetails";
+import LoadingSpinner from "../../Common/Loading/LoadingSpinner/LoadingSpinner";
 
 /**
  * The component orchestrates the ao authentication box main content.
@@ -38,9 +39,9 @@ class OrchestrateAccountKitImportation extends Component {
       case ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE:
         return <ImportAccoutKitDetails />;
       case ImportAccountKitWorkflowStates.IMPORTING_ACCOUNT:
-        return <div>importing</div>;
+        return  <LoadingSpinner title={this.props.t("Importing account kit")}/>;
       case ImportAccountKitWorkflowStates.SIGNING_IN:
-        return <div>SIGNING_IN</div>;
+        return <LoadingSpinner title={this.props.t("Sign in")}/>;
       case ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE:
         return <DisplayUnexpectedError
           error={this.props.importAccountKitContext.unexpectedError} />;
@@ -48,6 +49,7 @@ class OrchestrateAccountKitImportation extends Component {
   }
 }
 OrchestrateAccountKitImportation.propTypes = {
+  t: PropTypes.func, // The translation function
   context: PropTypes.any.isRequired, // The application context
   importAccountKitContext: PropTypes.any.isRequired, // The import account kit context
 };

@@ -40,7 +40,7 @@ export const ImportAccountKitContext = React.createContext({
   setProcessing: () => { }, //Update processing object
   clearContext: () => { }, // put the data to its default state value
   verifyAccountKit: () => { }, // verify the account kit with the Background webview
-  verifyPassphrase: () => { }, // verify the passphrase with the Background webview
+  importAccountAndConnect: () => { }, // import the account kit and connect the user with the Background webview
 });
 
 /**
@@ -113,7 +113,7 @@ export class ImportAccountKitContextProvider extends React.Component {
       const accountKitValidated = await this.props.context.port.request("passbolt.background.verify-account-kit", accountKit);
       return this.setState({state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE, accountKit: accountKitValidated});
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
     } finally {
       this.setProcessing(false);
@@ -129,11 +129,28 @@ export class ImportAccountKitContextProvider extends React.Component {
     try {
       await this.props.context.port.request("passbolt.auth-import.verify-passphrase", passphrase);
       this.navigate(ImportAccountKitWorkflowStates.IMPORTING_ACCOUNT);
+      await this.importAccountAndConnect();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw error;
     }  finally {
       this.setProcessing(false);
+    }
+  }
+
+  /**
+   * When the user has validated the passphrase we request to import and sign the user
+   * @returns {Promise<void>}
+   */
+  async importAccountAndConnect() {
+    try {
+      this.setState({accountKit: null})
+      await this.props.context.port.request("passbolt.auth-import.import-account");
+      this.navigate(ImportAccountKitWorkflowStates.SIGNING_IN);
+      await this.props.context.port.request("passbolt.auth-import.sign-in");
+    } catch (error) {
+      console.error(error);
+      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
     }
   }
 

@@ -72,14 +72,6 @@ class ImportAccoutKitDetails extends React.Component {
   }
 
   /**
-   * Returns true if the passphrase is valid
-   */
-  get isValid() {
-    console.log(this.state.errors)
-    return Object.values(this.state.errors).every(value => !value);
-  }
-
-  /**
    * Bind event handlers
    * @returns {void}
    */
@@ -95,11 +87,11 @@ class ImportAccoutKitDetails extends React.Component {
   async handleConfirmation() {
     try {
       this.validate();
-      if (this.isValid) { 
+      if (this.state.passphrase.length > 0) { 
         await this.props.importAccountKitContext.verifyPassphrase(this.state.passphrase);
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       this.onCheckPassphraseFailure(error);
     }
   }
@@ -117,15 +109,16 @@ class ImportAccoutKitDetails extends React.Component {
    */
   handleChangePassphrase(event) {
     const passphrase = event.target.value;
-    let passphraseEntropy = null;
 
+    let passphraseEntropy = null;
     if (passphrase.length) {
+
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
     } else {
       this.setState({
         passphraseInDictionnary: false,
-        passwordEntropy: null,
+        passphraseEntropy,
       });
     }
 
@@ -162,7 +155,7 @@ class ImportAccoutKitDetails extends React.Component {
       emptyPassphrase: passphrase.trim() === '',
       invalidPassphrase: false,
       invalidGpgKey: false,
-    };
+    };  
     this.setState({ hasBeenValidated: true, errors });
   }
 
@@ -198,8 +191,10 @@ class ImportAccoutKitDetails extends React.Component {
 
     try {
       const result = await this.pownedService.evaluateSecret(this.state.passphrase);
+
       passphraseInDictionnary = result.inDictionary;
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
+
       if (passphraseInDictionnary) {
         passphraseEntropy = 0;
       }
