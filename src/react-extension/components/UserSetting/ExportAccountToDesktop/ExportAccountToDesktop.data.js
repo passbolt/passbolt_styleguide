@@ -12,16 +12,15 @@
  * @since         4.3.0
  */
 
+import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+
 /**
  * Default props
  * @returns {object}
  */
-export function defaultProps() {
+export function defaultProps(data = {}) {
   const props = {
-    actionFeedbackContext: {
-      displaySuccess: jest.fn(),
-      displayError: jest.fn(),
-    },
+    actionFeedbackContext: defaultActionFeedbackContextContext(data?.actionFeedbackContext),
   };
 
   return props;
