@@ -70,3 +70,26 @@ export const resourceWithFavoriteDto = (data = {}) => {
     ...data
   });
 };
+
+export const resourceWithTotpDto = (data = {}) => {
+  const id = data?.id || uuidv4();
+
+  return defaultResourceDto({
+    id: id,
+    resource_type_id: resourceTypesFixture[2].id,
+    ...data
+  });
+};
+
+export const resourceStandaloneTotpDto = (data = {}) => {
+  const id = data?.id || uuidv4();
+
+  return defaultResourceDto({
+    id: id,
+    resource_type_id: resourceTypesFixture[3].id,
+    username: "",
+    ...data
+  });
+};
+
+

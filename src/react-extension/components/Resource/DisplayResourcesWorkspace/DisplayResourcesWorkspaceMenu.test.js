@@ -159,7 +159,7 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.menuColumnViewItem(3)).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(3));
       expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('username', false);
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(5));
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(6));
       expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('uri', true);
     });
 

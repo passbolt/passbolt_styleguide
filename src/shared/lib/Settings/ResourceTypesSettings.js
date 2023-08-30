@@ -14,6 +14,8 @@
 const DEFAULT_RESOURCE_TYPES_SLUGS = {
   PASSWORD_STRING: 'password-string',
   PASSWORD_AND_DESCRIPTION: 'password-and-description',
+  PASSWORD_AND_DESCRIPTION_AND_TOTP: 'password-and-description-and-totp',
+  TOTP: 'totp',
 };
 
 export default class ResourceTypesSettings {
@@ -39,7 +41,7 @@ export default class ResourceTypesSettings {
   /**
    * Get list of default resource type slugs
    *
-   * @returns {{PASSWORD_AND_DESCRIPTION: string, PASSWORD_STRING: string}}
+   * @returns {{PASSWORD_AND_DESCRIPTION: string, PASSWORD_STRING: string, PASSWORD_AND_DESCRIPTION_AND_TOTP: string, TOTP: string}}
    * @constructor
    */
   get DEFAULT_RESOURCE_TYPES_SLUGS() {
@@ -192,5 +194,26 @@ export default class ResourceTypesSettings {
       resourceTypeId,
       this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
     );
+  }
+
+  /**
+   * Assert the resource type has a password
+   * @param {string} resourceTypeId The uuid of the resource type
+   * @return {boolean} true if typeId has password slug
+   */
+  assertResourceTypeIdHasPassword(resourceTypeId) {
+    return this.assertResourceTypeIdHasEncryptedDescription(resourceTypeId) ||
+      this.assertResourceTypeIdIsLegacy(resourceTypeId) ||
+      this.assertResourceTypeSlugById(resourceTypeId, this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION_AND_TOTP);
+  }
+
+  /**
+   * Assert the resource type has a totp
+   * @param {string} resourceTypeId The uuid of the resource type
+   * @return {boolean} true if typeId has totp slug
+   */
+  assertResourceTypeIdHasTotp(resourceTypeId) {
+    return this.assertResourceTypeSlugById(resourceTypeId, this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION_AND_TOTP) ||
+      this.assertResourceTypeSlugById(resourceTypeId, this.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP);
   }
 }

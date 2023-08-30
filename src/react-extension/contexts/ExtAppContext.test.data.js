@@ -27,7 +27,6 @@ import {adminRoleDto, TEST_ROLE_ADMIN_ID, userRoleDto} from "../../shared/models
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
- * @deprecated
  */
 export function defaultAppContext(appContext = {}) {
   const userSettings = new UserSettings(userSettingsFixture);

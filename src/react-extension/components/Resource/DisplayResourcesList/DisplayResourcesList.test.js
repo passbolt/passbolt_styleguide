@@ -79,10 +79,12 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      expect(page.resourcesCount).toBe(3);
+      expect(page.resourcesCount).toBe(5);
       expect(page.resource(1).name).toBe('apache');
       expect(page.resource(2).name).toBe('bower');
       expect(page.resource(3).name).toBe('test');
+      expect(page.resource(4).name).toBe('totp');
+      expect(page.resource(5).name).toBe('standalone totp');
     });
   });
 
@@ -306,33 +308,37 @@ describe("Display Resources", () => {
       await waitFor(() => {});
       // Need to resize before to check due to the actual width is negative
       await page.columns(4).resize(300);
-      await page.columns(7).resize(500);
+      await page.columns(8).resize(500);
       // Actual width before resize
       const resourceWidth = parseFloat(page.columns(3).width.slice(0, -2));
       const usernameWidth = parseFloat(page.columns(4).width.slice(0, -2));
       const passwordWidth = parseFloat(page.columns(5).width.slice(0, -2));
-      const uriWidth = parseFloat(page.columns(6).width.slice(0, -2));
-      const modifiedWidth = parseFloat(page.columns(7).width.slice(0, -2));
+      const totpWidth = parseFloat(page.columns(6).width.slice(0, -2));
+      const uriWidth = parseFloat(page.columns(7).width.slice(0, -2));
+      const modifiedWidth = parseFloat(page.columns(8).width.slice(0, -2));
       // Resize
       await page.columns(3).resize(100);
       await page.columns(4).resize(-100);
       await page.columns(5).resize(150);
       await page.columns(6).resize(200);
-      await page.columns(7).resize(-200);
+      await page.columns(7).resize(200);
+      await page.columns(8).resize(-200);
 
       expect(page.columns(3).name).toStrictEqual("Name");
       expect(page.columns(4).name).toStrictEqual("Username");
       expect(page.columns(5).name).toStrictEqual("Password");
-      expect(page.columns(6).name).toStrictEqual("URI");
-      expect(page.columns(7).name).toStrictEqual("Modified");
+      expect(page.columns(6).name).toStrictEqual("TOTP");
+      expect(page.columns(7).name).toStrictEqual("URI");
+      expect(page.columns(8).name).toStrictEqual("Modified");
       // Compare width
       expect(resourceWidth).toBeLessThan(parseFloat(page.columns(3).width.slice(0, -2)));
       expect(usernameWidth).toBeGreaterThan(parseFloat(page.columns(4).width.slice(0, -2)));
       expect(passwordWidth).toBeLessThan(parseFloat(page.columns(5).width.slice(0, -2)));
-      expect(uriWidth).toBeLessThan(parseFloat(page.columns(6).width.slice(0, -2)));
-      expect(modifiedWidth).toBeGreaterThan(parseFloat(page.columns(7).width.slice(0, -2)));
+      expect(totpWidth).toBeLessThan(parseFloat(page.columns(6).width.slice(0, -2)));
+      expect(uriWidth).toBeLessThan(parseFloat(page.columns(7).width.slice(0, -2)));
+      expect(modifiedWidth).toBeGreaterThan(parseFloat(page.columns(8).width.slice(0, -2)));
       // onChangeColumnsSettings called
-      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(7);
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(8);
     });
 
     it('As LU, I should be able to resize a column to its default with double click', async() => {
@@ -344,14 +350,16 @@ describe("Display Resources", () => {
       await page.columns(5).resizeDefault();
       await page.columns(6).resizeDefault();
       await page.columns(7).resizeDefault();
+      await page.columns(8).resizeDefault();
 
       expect(page.columns(3).width).toStrictEqual("145px");
       expect(page.columns(4).width).toStrictEqual("145px");
       expect(page.columns(5).width).toStrictEqual("145px");
-      expect(page.columns(6).width).toStrictEqual("210px");
-      expect(page.columns(7).width).toStrictEqual("145px");
+      expect(page.columns(6).width).toStrictEqual("145px");
+      expect(page.columns(7).width).toStrictEqual("210px");
+      expect(page.columns(8).width).toStrictEqual("145px");
       // onChangeColumnsSettings called
-      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(5);
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(6);
     });
   });
 
@@ -374,8 +382,9 @@ describe("Display Resources", () => {
       expect(page.columns(4).name).toStrictEqual("Name");
       expect(page.columns(3).name).toStrictEqual("Username");
       expect(page.columns(6).name).toStrictEqual("Password");
-      expect(page.columns(5).name).toStrictEqual("URI");
-      expect(page.columns(7).name).toStrictEqual("Modified");
+      expect(page.columns(5).name).toStrictEqual("TOTP");
+      expect(page.columns(7).name).toStrictEqual("URI");
+      expect(page.columns(8).name).toStrictEqual("Modified");
       // onChangeColumnsSettings called
       expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(4);
     });

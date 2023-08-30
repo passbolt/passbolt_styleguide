@@ -44,6 +44,8 @@ import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import {withProgress} from "../../../contexts/ProgressContext";
+import CellTotp from "../../../../shared/components/Table/CellTotp";
+import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -65,7 +67,9 @@ class DisplayResourcesList extends React.Component {
       new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}),
       new ColumnNameModel({label: this.translate("Name")}),
       new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}),
-      new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopySecret: this.canCopySecret, canPreviewSecret: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick}}}),
+      new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopyPassword, canPreview: this.canPreviewPassword, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}),
+      // TODO
+      new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: true, canPreview: true, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}),
       new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}),
       new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)})
     ];
@@ -102,7 +106,12 @@ class DisplayResourcesList extends React.Component {
     this.handleChangeColumnsSettings = this.handleChangeColumnsSettings.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
+    this.handleCopyTotpClick = this.handleCopyTotpClick.bind(this);
+    this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
     this.getPreviewPassword = this.getPreviewPassword.bind(this);
+    this.getPreviewTotp = this.getPreviewTotp.bind(this);
+    this.isPasswordResources = this.isPasswordResources.bind(this);
+    this.isTotpResources = this.isTotpResources.bind(this);
   }
 
   /**
@@ -153,7 +162,7 @@ class DisplayResourcesList extends React.Component {
     const hasSelectedResourcesLengthChanged = nextProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
     const hasSorterChanged = sorter !== nextProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
-    const hasResourcePreviewPasswordChange = nextState.previewedCellule !== this.state.previewedCellule;
+    const hasResourcePreviewSecretChange = nextState.previewedCellule !== this.state.previewedCellule;
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
     const hasColumnsResourceViewChange = nextProps.resourceWorkspaceContext.columnsResourceSetting?.hasDifferentShowValue(columnsResourceSetting);
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
@@ -167,7 +176,7 @@ class DisplayResourcesList extends React.Component {
       hasResourceToScrollChange ||
       hasResourceColumnsChange ||
       hasColumnsResourceViewChange ||
-      hasResourcePreviewPasswordChange;
+      hasResourcePreviewSecretChange;
   }
 
   /**
@@ -287,11 +296,20 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Get the previewed password
-   * @param {string} resourceId The resource id
+   * @param {object} resource The resource
    * @return {string|undefined}
    */
-  getPreviewPassword(resourceId) {
+  getPreviewPassword(resource) {
     return this.isCellulePreviewed('password', resourceId) ? this.state.plaintextSecretDto?.password : undefined;
+  }
+
+  /**
+   * Get preview totp
+   * @param {object} resource The resource
+   * @return {object|undefined}
+   */
+  getPreviewTotp(resource) {
+    return this.isCellulePreviewed('totp', resource.id) ? this.state.plaintextSecretDto?.totp : undefined;
   }
 
   /**
@@ -306,17 +324,57 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Handle copy password button click.
-   * @param {string} resourceId The resource id
+   * @param {object} resource The resource
    */
-  async handleCopyPasswordClick(resourceId) {
-    await this.copyPasswordToClipboard(resourceId);
+  async handleCopyPasswordClick(resource) {
+    await this.copyPasswordToClipboard(resource.id);
   }
 
   /**
    * Handle preview password button click.
    */
-  async handlePreviewPasswordButtonClick(resourceId) {
-    await this.togglePreviewPassword(resourceId);
+  async handlePreviewPasswordButtonClick(resource) {
+    await this.togglePreviewPassword(resource.id);
+  }
+
+  /**
+   * Handle copy totp
+   * @param resource The resource
+   * @return {Promise<void>}
+   */
+  async handleCopyTotpClick(resource) {
+    let totp;
+    const isTotpPreviewed = this.isCellulePreviewed('totp', resource.id) && this.state.plaintextSecretDto?.totp;
+    if (isTotpPreviewed) {
+      totp = this.state.plaintextSecretDto.totp;
+    } else {
+      // TODO request decrypt secret and set totp
+      totp = {
+        digits: 123456
+      };
+    }
+    await ClipBoard.copy(totp.digits, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
+  }
+
+  /**
+   * Handle preview totp button click.
+   */
+  handlePreviewTotpButtonClick(resource) {
+    const isTotpPreviewed = this.isSecretPreviewed(resource.id) && this.state.previewedSecret.totp;
+    if (isTotpPreviewed) {
+      this.hidePreviewedSecret();
+    } else {
+      // TODO port.request
+      const previewedSecret = {
+        resourceId: resource.id,
+        totp: {
+          digits: 123456
+        }
+      };
+      this.setState({previewedSecret});
+    }
   }
 
   /**
@@ -564,6 +622,25 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Is password resource
+   * @param resource
+   * @return {boolean}
+   */
+  isPasswordResources(resource) {
+    // TODO: How to handle if resource type is not enabled or not loaded yet ?
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(resource.resource_type_id);
+  }
+
+  /**
+   * Is TOTP resource
+   * @param resource
+   * @return {boolean}
+   */
+  isTotpResources(resource) {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(resource.resource_type_id);
+  }
+
+  /**
    * Format date in time ago
    * @param {string} date The date to format
    * @return {string}
@@ -578,7 +655,7 @@ class DisplayResourcesList extends React.Component {
    * Can preview secret
    * @return {boolean}
    */
-  get canPreviewSecret() {
+  get canPreviewPassword() {
     return this.props.context.siteSettings.canIUse('previewPassword')
     && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
   }
@@ -587,7 +664,7 @@ class DisplayResourcesList extends React.Component {
    * Can copy secret
    * @return {boolean}
    */
-  get canCopySecret() {
+  get canCopyPassword() {
     return this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
   }
 

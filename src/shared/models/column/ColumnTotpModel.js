@@ -15,16 +15,16 @@
 import ColumnModel from "./ColumnModel";
 
 /**
- * Model related to the column password use only with the UI
+ * Model related to the column totp use only with the UI
  */
-class ColumnPasswordModel extends ColumnModel {
+class ColumnTotpModel extends ColumnModel {
   /**
    * Constructor
    * @param {Object} columnDto
    */
   constructor(columnDto = {}) {
-    columnDto.id = 'password';
-    columnDto.field = 'password';
+    columnDto.id = 'totp';
+    columnDto.field = 'totp';
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
     columnDto.resizable = true;
@@ -35,5 +35,5 @@ class ColumnPasswordModel extends ColumnModel {
   }
 }
 
-export default ColumnPasswordModel;
+export default ColumnTotpModel;
 

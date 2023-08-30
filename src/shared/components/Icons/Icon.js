@@ -1168,6 +1168,12 @@ class Icon extends Component {
           </svg>
         }
 
+        {this.props.name === 'timer' &&
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse rx="8" ry="8" transform="translate(10 10)" fill="none" stroke="var(--timer-background)" strokeWidth="var(--timer-stroke-width)"/>
+            <ellipse id="timer-progress" rx="8" ry="8" transform="matrix(0-1 1 0 10 10)" fill="none" stroke="var(--timer-color)"  strokeLinecap="round" strokeWidth="var(--timer-stroke-width)"/>
+          </svg>
+        }
       </span>
     );
   }
