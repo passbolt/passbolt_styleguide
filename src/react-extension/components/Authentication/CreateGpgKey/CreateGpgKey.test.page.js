@@ -163,7 +163,7 @@ export default class CreateGpgKeyPage {
    * Returns the list item concerning the 'not in dictionnary" hints
    */
   get notInDictionaryHint() {
-    return this._page.container.querySelectorAll(".password-hints li")[4];
+    return this._page.container.querySelector(".password-hints #notInDictionaryHint");
   }
 
   /**
@@ -180,7 +180,11 @@ export default class CreateGpgKeyPage {
   async fill(passphrase) {
     fireEvent.change(this.passphraseInput, {target: {value: passphrase}});
     jest.runAllTimers();
-    await waitFor(() => {});
+    await waitFor(() => {
+      if (this.passphraseInput.value !== passphrase) {
+        throw new Error("Event is not processed yet");
+      }
+    });
   }
 
   /**

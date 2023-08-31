@@ -39,46 +39,91 @@ export default class DisplayAccountRecoveryUserSettingsPage {
     );
   }
 
+  /**
+   * Runs the the current page's querySelector and return its result;
+   * @param {string} selection
+   * @returns {object}
+   */
   selector(selection) {
     return this._page.container.querySelector(selection);
   }
 
+  /**
+   * Returns true if the page "exists" (the page is initialized and rendered at least once)
+   * @returns {boolean}
+   */
   exists() {
     return this.title !== null;
   }
 
+  /**
+   * Returns the title HTML element
+   * @returns {HTMLElement}
+   */
   get title() {
     return this.selector('.account-recovery-profile h3');
   }
 
+  /**
+   * Returns the status HTML element
+   * @returns {HTMLElement}
+   */
   get status() {
     return this.selector('.account-recovery-profile .account-recovery-status .status-wrapper .status');
   }
 
+  /**
+   * Returns the requestor name HTML element
+   * @returns {HTMLElement}
+   */
   get requestorName() {
     return this.selector('.account-recovery-profile .account-recovery-status ul li .name-with-tooltip');
   }
 
+  /**
+   * Returns the requested at date HTML element
+   * @returns {HTMLElement}
+   */
   get requestDate() {
     return this.selector('.account-recovery-profile .account-recovery-status ul li .subinfo');
   }
 
+  /**
+   * Returns the requestor's key fingerprint HTML element
+   * @returns {HTMLElement}
+   */
   get fingerprint() {
     return this.selector('.account-recovery-profile .account-recovery-status ul li .tooltip .tooltip-text').innerHTML;
   }
 
+  /**
+   * Returns the description HTML element
+   * @returns {HTMLElement}
+   */
   get description() {
     return this.selector('.account-recovery-profile p');
   }
 
+  /**
+   * Returns the review button HTML element
+   * @returns {HTMLElement}
+   */
   get reviewButton() {
     return this.selector('.account-recovery-profile .account-recovery-status button');
   }
 
+  /**
+   * Returns true if the popup is present and displayed in the page
+   * @returns {boolean}
+   */
   isPopupPresent() {
     return this.modalTitle !== null;
   }
 
+  /**
+   * Simulate a click on the review button
+   * @returns {Promise<void>}
+   */
   async clickOnReview() {
     fireEvent.click(this.reviewButton, {button: 0});
   }

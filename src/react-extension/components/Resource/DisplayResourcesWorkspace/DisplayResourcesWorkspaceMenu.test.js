@@ -151,6 +151,24 @@ describe("See Workspace Menu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
       expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
     });
+
+    it('As LU I can unselect and select a column resource', async() => {
+      expect.assertions(4);
+      expect(page.displayMenu.menuColumnView).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnView);
+      expect(page.displayMenu.menuColumnViewItem(3)).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(3));
+      expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('username', false);
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(5));
+      expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('uri', true);
+    });
+
+    it('As LU I can unselect a column resource', async() => {
+      expect.assertions(2);
+      expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
+      expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+    });
   });
 
   describe('As LU I can see the workspace menu with one resource selected not owned', () => {

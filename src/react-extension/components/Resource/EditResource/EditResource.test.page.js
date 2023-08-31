@@ -341,7 +341,7 @@ class PasswordEditPageObject {
   }
 
   /** Open the password generator*/
-  async openPasswordGenerator() {
-    await this.clickWithoutWaitFor(this.passwordGeneratorButton);
+  openPasswordGenerator() {
+    this.clickWithoutWaitFor(this.passwordGeneratorButton);
   }
 }

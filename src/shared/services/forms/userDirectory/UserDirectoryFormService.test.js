@@ -123,6 +123,56 @@ describe("UserDirectoryFormService", () => {
       expect(userDirectoryContext.getErrors().domainError).toEqual(null);
     });
   });
+
+  describe("UserDirectoryFormService::validateFieldsMappingAdUserUsernameInput", () => {
+    const errorField = "fieldsMappingAdUserUsernameError";
+
+    it("should return required message", () => {
+      expect.assertions(2);
+      const requiredMessage = {[errorField]: "The user username field mapping cannot be empty"};
+
+      userDirectoryContext.setAdUserFieldsMappingSettings("username", "");
+      const result = userDirectoryFormService.validateFieldsMappingAdUserUsernameInput();
+
+      expect(result).toEqual(requiredMessage);
+      expect(userDirectoryContext.getErrors()[errorField]).toEqual(requiredMessage[errorField]);
+    });
+
+    it("should not return message", () => {
+      expect.assertions(2);
+
+      userDirectoryContext.setAdUserFieldsMappingSettings("username", "uniquePrincipalName");
+      const result = userDirectoryFormService.validateFieldsMappingAdUserUsernameInput();
+
+      expect(result[errorField]).toEqual(null);
+      expect(userDirectoryContext.getErrors()[errorField]).toEqual(null);
+    });
+  });
+
+  describe("UserDirectoryFormService::validateOpenLdapFieldsMappingGroupUsersInput", () => {
+    const errorField = "fieldsMappingOpenLdapGroupUsersError";
+
+    it("should return required message", () => {
+      expect.assertions(2);
+      const requiredMessage = {[errorField]: "The group users field mapping cannot be empty"};
+
+      userDirectoryContext.setOpenLdapGroupFieldsMappingSettings("users", "");
+      const result = userDirectoryFormService.validateOpenLdapFieldsMappingGroupUsersInput();
+
+      expect(result).toEqual(requiredMessage);
+      expect(userDirectoryContext.getErrors()[errorField]).toEqual(requiredMessage[errorField]);
+    });
+
+    it("should not return message", () => {
+      expect.assertions(2);
+
+      userDirectoryContext.setOpenLdapGroupFieldsMappingSettings("users", "member");
+      const result = userDirectoryFormService.validateOpenLdapFieldsMappingGroupUsersInput();
+
+      expect(result[errorField]).toEqual(null);
+      expect(userDirectoryContext.getErrors()[errorField]).toEqual(null);
+    });
+  });
 });
 
 

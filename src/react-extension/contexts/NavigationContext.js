@@ -104,6 +104,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationSelfRegistrationRequested: this.onGoToAdministrationSelfRegistrationRequested.bind(this), //Whenever the users wants to navigate to the administration workspace self registration settings
       onGoToAdministrationSsoRequested: this.onGoToAdministrationSsoRequested.bind(this), // Whenever the user wants to navigate to the administration workspace sso
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
+      onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -166,6 +167,8 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/smtp-settings";
     } else if (this.isSelfRegistrationEnable) {
       pathname = "/app/administration/self-registation";
+    } else if (this.isPasswordPoliciesEnable) {
+      pathname = "/app/administration/password-policies";
     }
     await this.goTo("api", pathname);
   }
@@ -184,6 +187,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationMfaPolicyRequested() {
     await this.goTo("api", "/app/administration/mfa-policy");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration workspace password policy.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationPasswordPoliciesRequested() {
+    await this.goTo("browser-extension", "/app/administration/password-policies");
   }
 
   /**
@@ -293,6 +304,15 @@ class NavigationContextProvider extends React.Component {
   get isSelfRegistrationEnable() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('selfRegistration');
+  }
+
+  /**
+   * Returns true if the user has the self registration enabled
+   * @returns {boolean}
+   */
+  get isPasswordPoliciesEnable() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
   }
 
   /*

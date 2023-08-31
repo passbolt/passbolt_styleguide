@@ -23,7 +23,8 @@ export function propsWithFilter(type) {
     userWorkspaceContext: {
       filter: {
         type
-      }
+      },
+      filteredUsers: [{}, {}, {}]
     }
   };
 }
@@ -37,7 +38,8 @@ export function propsWithTextFilter() {
       filter: {
         type: UserWorkspaceFilterTypes.TEXT,
         payload: "Ada"
-      }
+      },
+      filteredUsers: [{}]
     }
   };
 }
@@ -51,7 +53,8 @@ export function propsWithEmptyTextFilter() {
       filter: {
         type: UserWorkspaceFilterTypes.TEXT,
         payload: ""
-      }
+      },
+      filteredUsers: []
     }
   };
 }
@@ -69,7 +72,8 @@ export function propsWithGroupFilter() {
             name: "My super group"
           }
         }
-      }
+      },
+      filteredUsers: [{}, {}, {}, {}, {}, {}]
     }
   };
 }
@@ -86,7 +90,8 @@ export function propsWithEmptyGroupNameFilter() {
           group: {
           }
         }
-      }
+      },
+      filteredUsers: []
     }
   };
 }

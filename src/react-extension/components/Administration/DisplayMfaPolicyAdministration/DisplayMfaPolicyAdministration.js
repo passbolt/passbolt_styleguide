@@ -55,7 +55,6 @@ class DisplayMfaPolicyAdministration extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-
   /**
    * Bind callbacks methods
    */

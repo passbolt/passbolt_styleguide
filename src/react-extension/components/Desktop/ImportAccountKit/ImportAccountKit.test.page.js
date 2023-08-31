@@ -76,24 +76,10 @@ export default class ImportAccountKitPage {
   }
 
   /**
-   * Returns the upload placeholder
-   */
-  get uploadPlaceholder() {
-    return this.uploadFilename.getAttribute("placeholder");
-  }
-
-  /**
    * Returns the upload button
    */
   get uploadButton() {
     return this._page.container.querySelector(".input-file-inline button");
-  }
-
-  /**
-   * Returns true if the upload input parent has error
-   */
-  get uploadParentHasError() {
-    return Boolean(this.uploadParent.classList.contains(".error"));
   }
 
   /**

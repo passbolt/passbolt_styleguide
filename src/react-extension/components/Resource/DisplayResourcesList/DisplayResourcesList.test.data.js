@@ -21,6 +21,8 @@ import {
   defaultResourceDto,
   resourceWithFavoriteDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import ColumnsResourceSettingCollection
+  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 
 /**
  * Default props as when initializing the list with no content.
@@ -56,7 +58,7 @@ export function propsWithFilteredResources(data = {}) {
   const resources = getResources();
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      filteredResources: resources
+      filteredResources: resources,
     }),
     ...data
   });
@@ -75,6 +77,28 @@ export function propsWithFilteredResourcesAndDenyUiAction(data = {}) {
 }
 
 /**
+ * Props with populated filtered resources.
+ * @param {object} data Override the default props.
+ * @returns {object}
+ */
+export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
+  const resources = getResources();
+  return defaultProps({
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      filteredResources: resources,
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: false},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "uri", label: "URI", position: 5, show: true},
+        {id: "modified", label: "Modified", position: 6, show: false}]),
+    }),
+    ...data
+  });
+}
+
+/**
  * Props with populated filtered resources and all selected
  * @param {object} data Override the default props.
  * @returns {object}
@@ -87,7 +111,7 @@ export function propsWithAllResourcesSelected(data = {}) {
       selectedResources: resources,
       filter: {
         type: ResourceWorkspaceFilterTypes.ALL
-      }
+      },
     }),
     ...data
   });

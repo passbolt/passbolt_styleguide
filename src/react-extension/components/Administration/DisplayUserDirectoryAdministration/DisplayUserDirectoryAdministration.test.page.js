@@ -271,6 +271,20 @@ export default class DisplayUserDirectoryAdministrationPage {
   }
 
   /**
+   * Returns the user username field mapping input element
+   */
+  get fieldsMappingAdUserUsername() {
+    return this._page.container.querySelector('#field-mapping-ad-user-username-input');
+  }
+
+  /**
+   * Returns the group users field mapping input element
+   */
+  get fieldsMappingOpenLdapGroupUsers() {
+    return this._page.container.querySelector('#field-mapping-openldap-group-users-input');
+  }
+
+  /**
    * Returns the enabled users only input element
    */
   get enabledUsersOnly() {
@@ -338,6 +352,17 @@ export default class DisplayUserDirectoryAdministrationPage {
    */
   get domainErrorMessage() {
     return this._page.container.querySelector('#domain-name-input-feedback').textContent;
+  }
+
+  /**
+   * Returns the field mapping AD username error mesage HTML element
+   */
+  get fieldsMappingAdUserUsernameErrorMessage() {
+    return this._page.container.querySelector('#field-mapping-ad-user-username-input-feedback');
+  }
+
+  get fieldsMappingOpenLdapGroupUsersErrorMessage() {
+    return this._page.container.querySelector('#field-mapping-openldap-group-users-input-feedback');
   }
 
   /**
@@ -443,5 +468,25 @@ export default class DisplayUserDirectoryAdministrationPage {
   /** fill the domain element with data */
   fillDomain(data) {
     this.fillInput(this.domainName, data);
+  }
+
+  /** fill the field mapping user username element with data */
+  fillAdFieldsMappingUserUsername(data) {
+    this.fillInput(this.fieldsMappingAdUserUsername, data);
+  }
+
+  /** fill the field mapping group users element with data */
+  fillOpenLdapFieldsMappingGroupUsers(data) {
+    this.fillInput(this.fieldsMappingOpenLdapGroupUsers, data);
+  }
+
+  /** simulates a click on openldap directory type radio button */
+  async switchToOpenLdap() {
+    await this.click(this.openLdap);
+  }
+
+  /** simulates a click on openldap directory type radio button */
+  async switchToAd() {
+    await this.click(this.activeDirectory);
   }
 }

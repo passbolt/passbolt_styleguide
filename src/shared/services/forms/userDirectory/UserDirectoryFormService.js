@@ -59,7 +59,9 @@ class UserDirectoryFormService {
     const validation = {
       ...this.validateHostInput(),
       ...this.validatePortInput(),
-      ...this.validateDomainInput()
+      ...this.validateDomainInput(),
+      ...this.validateFieldsMappingAdUserUsernameInput(),
+      ...this.validateOpenLdapFieldsMappingGroupUsersInput(),
     };
 
     await this.context.setErrors(validation);
@@ -69,7 +71,7 @@ class UserDirectoryFormService {
 
   /**
    * Validate the host input.
-   * @returns {Promise<void>}
+   * @returns {Promise<object>}
    */
   validateHostInput() {
     const settings = this.context.getSettings();
@@ -81,7 +83,7 @@ class UserDirectoryFormService {
 
   /**
    * Validate the port input.
-   * @returns {Promise<void>}
+   * @returns {Promise<object>}
    */
   validatePortInput() {
     const settings = this.context.getSettings();
@@ -94,6 +96,42 @@ class UserDirectoryFormService {
     }
     this.context.setError("portError", portError);
     return {portError};
+  }
+
+  /**
+   * Validate the field mapping's username input for active directory.
+   * @returns {Promise<object>}
+   */
+  validateFieldsMappingAdUserUsernameInput() {
+    const settings = this.context.getSettings();
+    const value = settings.fieldsMapping.ad.user.username;
+    let fieldsMappingAdUserUsernameError = null;
+    if (!value || value.trim() === "") {
+      fieldsMappingAdUserUsernameError = this.translate("The user username field mapping cannot be empty");
+    } else if (value.length > 128) {
+      fieldsMappingAdUserUsernameError = this.translate("The user username field mapping cannot exceed 128 characters.");
+    }
+
+    this.context.setError("fieldsMappingAdUserUsernameError", fieldsMappingAdUserUsernameError);
+    return {fieldsMappingAdUserUsernameError};
+  }
+
+  /**
+   * Validate the field mapping's username input for active directory.
+   * @returns {Promise<object>}
+   */
+  validateOpenLdapFieldsMappingGroupUsersInput() {
+    const settings = this.context.getSettings();
+    const value = settings.fieldsMapping.openldap.group.users;
+    let fieldsMappingOpenLdapGroupUsersError = null;
+    if (!value || value.trim() === "") {
+      fieldsMappingOpenLdapGroupUsersError = this.translate("The group users field mapping cannot be empty");
+    } else if (value.length > 128) {
+      fieldsMappingOpenLdapGroupUsersError = this.translate("The group users field mapping cannot exceed 128 characters.");
+    }
+
+    this.context.setError("fieldsMappingOpenLdapGroupUsersError", fieldsMappingOpenLdapGroupUsersError);
+    return {fieldsMappingOpenLdapGroupUsersError};
   }
 
   /**

@@ -16,6 +16,9 @@ import MockPort from "../../../test/mock/MockPort";
 import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import ColumnsResourceSettingCollection
+  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 
 /**
  * Returns the default app context for the unit test
@@ -41,13 +44,21 @@ export function defaultAppContext(appContext) {
 export function defaultPropsOneResourceOwned() {
   return {
     rbacContext: defaultAdministratorRbacContext(),
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resourcesMock[0]],
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: true},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "uri", label: "URI", position: 5, show: false},
+        {id: "modified", label: "Modified", position: 6, show: true}]),
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
       onResourcesToExport: () => jest.fn(),
-      onResourceCopied: () => jest.fn()
-    }
+      onResourceCopied: () => jest.fn(),
+      onChangeColumnView:  jest.fn()
+    }),
   };
 }
 
@@ -58,13 +69,10 @@ export function defaultPropsOneResourceOwned() {
 export function defaultPropsOneResourceNotOwned() {
   return {
     rbacContext: defaultAdministratorRbacContext(),
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resourcesMock[1]],
-      lockDisplayDetail: false,
-      onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn(),
-      onResourceCopied: () => jest.fn()
-    }
+      lockDisplayDetail: false
+    })
   };
 }
 
@@ -75,13 +83,16 @@ export function defaultPropsOneResourceNotOwned() {
 export function defaultPropsNoResource() {
   return {
     rbacContext: defaultAdministratorRbacContext(),
-    resourceWorkspaceContext: {
-      selectedResources: [],
-      lockDisplayDetail: true,
-      onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn(),
-      onResourceCopied: () => jest.fn()
-    }
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: false},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: false},
+        {id: "password", label: "Password", position: 4, show: false},
+        {id: "uri", label: "URI", position: 5, show: false},
+        {id: "modified", label: "Modified", position: 6, show: true}]),
+      lockDisplayDetail: true
+    })
   };
 }
 
@@ -92,13 +103,10 @@ export function defaultPropsNoResource() {
 export function defaultPropsMultipleResource() {
   return {
     rbacContext: defaultAdministratorRbacContext(),
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: resourcesMock,
-      lockDisplayDetail: true,
-      onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn(),
-      onResourceCopied: () => jest.fn()
-    }
+      lockDisplayDetail: true
+    })
   };
 }
 
@@ -110,13 +118,10 @@ export function defaultPropsMultipleResourceUpdateRights() {
   const selectedResources = [resourcesMock[0], resourcesMock[2]];
   return {
     rbacContext: defaultAdministratorRbacContext(),
-    resourceWorkspaceContext: {
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources,
-      lockDisplayDetail: true,
-      onLockDetail: jest.fn(),
-      onResourcesToExport: () => jest.fn(),
-      onResourceCopied: () => jest.fn()
-    }
+      lockDisplayDetail: true
+    })
   };
 }
 

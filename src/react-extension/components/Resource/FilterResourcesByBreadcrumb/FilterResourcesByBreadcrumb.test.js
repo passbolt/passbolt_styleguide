@@ -33,21 +33,37 @@ describe("As LU I can see a Breadcrumb", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
 
+  it('As LU I should not see a breadcrumb when items are not loaded yet', () => {
+    const resourceWorkspaceContext = {
+      filter: {
+        type: ResourceWorkspaceFilterTypes.NONE,
+        payload: null
+      },
+      filteredResources: null
+    };
+    page = new FilterResourcesByBreadcrumbPage(context, resourceWorkspaceContext);
+    expect(page.displayBreadcrumb.exists()).toBeTruthy();
+    expect(page.displayBreadcrumb.count).toBe(0);
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBeUndefined();
+  });
+
   it('As LU I should see a breadcrumb for all items', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ALL); // The props to pass
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ALL, null, 10); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(1);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("10");
   });
 
   it('As LU I should see a breadcrumb for a tag', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TAG, {tag: {slug: "tag"}}); // The props to pass
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TAG, {tag: {slug: "tag"}}, 5); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("tag (tag)");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("5");
   });
 
   it('As LU I should see a breadcrumb for resources shared with me', () => {
@@ -57,6 +73,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Shared with me");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU I should see a breadcrumb for resources recently modified', () => {
@@ -66,6 +83,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Recently modified");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU I should see a breadcrumb for resources favorite', () => {
@@ -75,6 +93,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Favorite");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU I should see a breadcrumb for resources I own', () => {
@@ -84,24 +103,27 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Items I own");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU I should see a breadcrumb for a folder', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FOLDER, {folder: {name: "folder"}}); // The props to pass
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.FOLDER, {folder: {name: "folder"}}, 1); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("folder (folder)");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("1");
   });
 
   it('As LU I should see a breadcrumb for a group', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.GROUP, {group: {name: "group"}}); // The props to pass
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.GROUP, {group: {name: "group"}}, 100); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("group (group)");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("100");
   });
 
   it('As LU I should see a breadcrumb for none filter', () => {
@@ -109,6 +131,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(0);
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU I should see a breadcrumb for the root folder', () => {
@@ -118,14 +141,16 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("root (folder)");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
   it('As LU I should see a breadcrumb for a search text', () => {
-    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TEXT, "text"); // The props to pass
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.TEXT, "text", 3); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
     expect(page.displayBreadcrumb.item(2)).toBe("Search: text");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("3");
   });
 });

@@ -84,10 +84,10 @@ class TranslationProvider extends Component {
    * @returns {string[]}
    */
   get supportedLocales() {
-    if (!this.siteSettings?.supportedLocales) {
+    if (!this.props.context.siteSettings?.supportedLocales) {
       return [this.locale];
     }
-    return this.siteSettings?.supportedLocales.map(supportedLocale => supportedLocale.locale);
+    return this.props.context.siteSettings?.supportedLocales.map(supportedLocale => supportedLocale.locale);
   }
 
   /**

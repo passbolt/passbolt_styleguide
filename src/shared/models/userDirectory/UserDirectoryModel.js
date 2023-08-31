@@ -11,6 +11,10 @@
  * @link          https=//www.passbolt.com Passbolt(tm)
  * @since         3.8.0
  */
+
+const DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE = "mail";
+const DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE = "uniqueMember";
+
 /**
  * Model related to the user model for UI
  */
@@ -57,7 +61,7 @@ class UserDirectoryModel {
     this.useEmailPrefix = userDirectoryDTO.use_email_prefix_suffix || false;
     this.emailPrefix = userDirectoryDTO.email_prefix || "";
     this.emailSuffix = userDirectoryDTO.email_suffix || "";
-    this.fieldsMapping = userDirectoryDTO.fields_mapping || undefined;
+    this.fieldsMapping = UserDirectoryModel.defaultFieldsMapping(userDirectoryDTO.fields_mapping);
     // SYNCHRONIZATION OPTIONS
     this.defaultAdmin = userDirectoryDTO.default_user || userId;
     this.defaultGroupAdmin = userDirectoryDTO.default_group_admin_user || userId;
@@ -104,7 +108,7 @@ class UserDirectoryModel {
     this.useEmailPrefix = false;
     this.emailPrefix = "";
     this.emailSuffix = "";
-    this.fieldsMapping = undefined;
+    this.fieldsMapping = UserDirectoryModel.defaultFieldsMapping();
     // SYNCHRONIZATION OPTIONS
     this.defaultAdmin = userId;
     this.defaultGroupAdmin = userId;
@@ -119,6 +123,68 @@ class UserDirectoryModel {
     this.updateGroups = true;
     //Form field option
     this.userDirectoryToggle = false;
+  }
+
+  /**
+   * Returns a default empty field mapping object
+   * @returns {object}
+   * @private
+   */
+  static defaultFieldsMapping(data = {}) {
+    return {
+      ad: {
+        user: Object.assign({
+          id: 'objectGuid',
+          firstname: 'givenName',
+          lastname: 'sn',
+          username: DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE,
+          created: 'whenCreated',
+          modified: 'whenChanged',
+          groups: 'memberOf',
+          enabled: 'userAccountControl',
+        }, data?.ad?.user),
+        group: Object.assign({
+          id: 'objectGuid',
+          name: 'cn',
+          created: 'whenCreated',
+          modified: 'whenChanged',
+          users: 'member',
+        }, data?.ad?.group)
+      },
+      openldap: {
+        user: Object.assign({
+          id: 'entryUuid',
+          firstname: 'givenname',
+          lastname: 'sn',
+          username: 'mail',
+          created: 'createtimestamp',
+          modified: 'modifytimestamp',
+        }, data?.openldap?.user),
+        group: Object.assign({
+          id: 'entryUuid',
+          name: 'cn',
+          created: 'createtimestamp',
+          modified: 'modifytimestamp',
+          users: DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE,
+        }, data?.openldap?.group)
+      },
+    };
+  }
+
+  /**
+   * Returns the default value for the Active Directory fields mapping user username
+   * @returns {string}
+   */
+  static get DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE() {
+    return DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE;
+  }
+
+  /**
+   * Returns the default value for the Open Ldap fields mapping group users
+   * @param {string}
+   */
+  static get DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE() {
+    return DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE;
   }
 }
 

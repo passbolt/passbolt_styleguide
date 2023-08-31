@@ -89,6 +89,14 @@ class DisplayBreadcrumbPageObject {
   }
 
   /**
+   * Return the number of resources displayed
+   * @return {string | any}
+   */
+  get itemNumberDisplayed() {
+    return this._container.querySelector('.chips')?.textContent;
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

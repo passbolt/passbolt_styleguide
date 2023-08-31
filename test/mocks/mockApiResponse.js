@@ -20,9 +20,9 @@
 export const mockApiResponse = (body = {}, header = {}) => Promise.resolve(JSON.stringify({header: header, body: body}));
 
 /**
- * Mock an error API response
- * @param {number} status The response status
- * @param {string} errorMessage The error message
+ * Mock an API error response
+ * @param {number} status the HTTP status code of the response
+ * @param {string} errorMessage The error message of the response
  * @param {Object} body The response body
  * @returns {Promise<string>} The response serialized in JSON.
  */

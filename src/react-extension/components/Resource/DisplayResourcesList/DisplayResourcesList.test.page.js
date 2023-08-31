@@ -24,7 +24,6 @@ import DisplayResourcesList from "./DisplayResourcesList";
 export default class DisplayResourcesListPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {
@@ -52,6 +51,50 @@ export default class DisplayResourcesListPage {
   }
 
   /**
+   * Returns the number of displayed columns
+   */
+  get columnsCount() {
+    return this._page.container.querySelectorAll('table thead tr th').length;
+  }
+
+  /**
+   * Returns the index-th columns header with useful accessors
+   * @index The column index
+   */
+  columns(index) {
+    const element = this._page.container.querySelector('table thead tr').querySelectorAll('th')[index - 1];
+    const resizer = element.querySelector('.resizer');
+    return {
+      get width() {
+        return getComputedStyle(element).width;
+      },
+      get name() {
+        return element.textContent;
+      },
+      // Move of the column in px
+      async resize(moveInPx) {
+        fireEvent.mouseDown(resizer);
+        await waitFor(() => {});
+        fireEvent.mouseMove(resizer, {clientX: moveInPx});
+        await waitFor(() => {});
+        fireEvent.mouseUp(resizer);
+      },
+      async resizeDefault() {
+        fireEvent.doubleClick(resizer);
+        await waitFor(() => {});
+      },
+      // Reorder the column with move in px
+      async reorder(moveInPx) {
+        fireEvent.mouseDown(element);
+        await waitFor(() => {});
+        fireEvent.mouseMove(element, {clientX: moveInPx});
+        await waitFor(() => {});
+        fireEvent.mouseUp(element);
+      }
+    };
+  }
+
+  /**
    * Returns the index-th resource with useful accessors
    * @index The resource index
    */
@@ -60,34 +103,34 @@ export default class DisplayResourcesListPage {
     const leftClick = {button: 0};
     return {
       get name() {
-        return element.querySelector('.uri div').textContent;
+        return element.querySelector('.cell-name div').textContent;
       },
       get password() {
-        return element.querySelector('.password .secret button span').textContent;
+        return element.querySelector('.cell-password .secret button span').textContent;
       },
       get isViewPasswordExist() {
-        return Boolean(element.querySelector('.password .password-view'));
+        return Boolean(element.querySelector('.cell-password .password-view'));
       },
       get copyPasswordLink() {
-        return element.querySelector('.password .secret button');
+        return element.querySelector('.cell-password .secret button');
       },
       async selectFavorite() {
-        const favorite = element.querySelector('.cell-favorite div button');
+        const favorite = element.querySelector('.cell-favorite button');
         fireEvent.click(favorite, leftClick);
         await waitFor(() => {});
       },
       async selectUsername() {
-        const username = element.querySelector('.username div button');
+        const username = element.querySelector('.cell-username div button');
         fireEvent.click(username, leftClick);
         await waitFor(() => {});
       },
       async selectPassword() {
-        const password = element.querySelector('.password .secret button');
+        const password = element.querySelector('.cell-password .secret button');
         fireEvent.click(password, leftClick);
         await waitFor(() => {});
       },
       async selectViewPassword() {
-        const viewPassword = element.querySelector('.password .password-view');
+        const viewPassword = element.querySelector('.cell-password .password-view');
         fireEvent.click(viewPassword, leftClick);
         await waitFor(() => {});
       },
@@ -101,12 +144,12 @@ export default class DisplayResourcesListPage {
         await waitFor(() => {});
       },
       async selectWithCheckbox() {
-        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell input');
+        const checkbox = element.querySelector('td.cell-checkbox input');
         fireEvent.click(checkbox, leftClick);
         await waitFor(() => {});
       },
       async selectRangeCheckbox() {
-        const checkbox = element.querySelector('td.cell-multiple-select.selections.s-cell input');
+        const checkbox = element.querySelector('td.cell-checkbox input');
         fireEvent.click(checkbox, {button: 0, shiftKey: true});
         await waitFor(() => {});
       },
@@ -121,7 +164,7 @@ export default class DisplayResourcesListPage {
    * select the all resources
    */
   async selectAll() {
-    const element = this._page.container.querySelector('thead tr th.cell-multiple-select.selections.s-cell div input');
+    const element = this._page.container.querySelector('thead tr th.cell-checkbox div input');
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
