@@ -138,7 +138,7 @@ class ImportAccoutKitDetails extends React.Component {
     return {
       code: this.props.importAccountKitContext.accountKit?.security_token.code,
       backgroundColor: this.props.importAccountKitContext.accountKit?.security_token.color,
-      textColor: this.props.importAccountKitContext.accountKit?.textcolor
+      textColor: this.props.importAccountKitContext.accountKit?.security_token.textcolor
     };
   }
 
@@ -167,7 +167,6 @@ class ImportAccoutKitDetails extends React.Component {
    * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError, GpgKeyError.
    */
   onCheckPassphraseFailure(error) {
-    console.log(error);
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({errors: {invalidPassphrase: true}});
