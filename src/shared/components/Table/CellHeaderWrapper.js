@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
 import CellHeaderDefault from "./CellHeaderDefault";
 import {withTable} from "./Context/TableContext";
+import ColumnModel from "../../models/column/ColumnModel";
 
 /**
  * This component represents a table cell header wrapper
@@ -133,6 +134,14 @@ class CellHeaderWrapper extends Component {
     // Call props to inform of the column is not dragging anymore
     this.props.tableContext.onEndDraggingColumn();
     this.setState({mouseXPosition: 0, move: 0});
+    this.handleChangeColumn();
+  }
+
+  /**
+   * Handle change column
+   */
+  handleChangeColumn() {
+    this.props.tableContext.onChangeColumns();
   }
 
   /**
@@ -203,6 +212,7 @@ class CellHeaderWrapper extends Component {
     // Remove listener on mouse move
     document.removeEventListener('mousemove', this.handleResizeColumnMouseMoveEvent, {capture: true});
     this.setState({resizing: null, mouseXPosition: 0, columnToResizeWidth: 0});
+    this.handleChangeColumn();
   }
 
   /**
@@ -210,6 +220,7 @@ class CellHeaderWrapper extends Component {
    */
   handleResizeDefaultByColumnDoubleClick() {
     this.props.tableContext.onResizeColumn(this.props.index, this.column.defaultWidth);
+    this.handleChangeColumn();
   }
 
   /**
@@ -306,7 +317,7 @@ class CellHeaderWrapper extends Component {
 
 CellHeaderWrapper.propTypes = {
   tableContext: PropTypes.any, // The table context
-  column: PropTypes.object.isRequired, // The columns to display
+  column: PropTypes.instanceOf(ColumnModel).isRequired, // The columns to display
   index: PropTypes.number.isRequired // The index of the column
 };
 

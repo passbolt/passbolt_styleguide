@@ -13,6 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
+import debounce from "debounce-promise";
+
 
 const PADDING_SIZE = 6;
 
@@ -31,6 +33,7 @@ export const TableContext = React.createContext({
   onReorderColumns: () => {}, // Whenever the column is reordered
   onStartDraggingColumn: () => {}, // Whenever a column start to be dragged
   onEndDraggingColumn: () => {}, // Whenever a column end to be dragged
+  onChangeColumns: () => {}, // Whenever columns change
 });
 
 /**
@@ -67,6 +70,7 @@ export default class TableContextProvider extends Component {
       onReorderColumns: this.handleReorderColumns.bind(this), // Whenever the column is reordered
       onStartDraggingColumn: this.handleStartDraggingColumns.bind(this), // Whenever a column start to be dragged
       onEndDraggingColumn: this.handleEndDraggingColumns.bind(this), // Whenever a column end to be dragged
+      onChangeColumns: this.handleChangeColumns.bind(this) // Whenever columns change
     };
   }
 
@@ -76,6 +80,7 @@ export default class TableContextProvider extends Component {
    */
   bindCallbacks() {
     this.handleWindowResizeEvent = this.handleWindowResizeEvent.bind(this);
+    this.handleChangeColumnsDebounced = debounce(this.handleChangeColumns, 2000);
   }
 
   /**
@@ -86,15 +91,29 @@ export default class TableContextProvider extends Component {
   }
 
   componentDidMount() {
-    // Set the column
-    this.setColumnsWidthFromActualWidth(this.getTableWidth(this.state.columns));
+    this.prepareTableColumns();
     window.addEventListener('resize', this.handleWindowResizeEvent);
+  }
+
+  /**
+   * Prepare table columns
+   */
+  prepareTableColumns() {
+    const tableWidth = this.getTableWidth(this.state.columns);
+    const isNotDefaultWidth = column => column.width !== column.defaultWidth;
+    if (this.props.columns.some(isNotDefaultWidth)) {
+      const tableviewWidth = this.tableviewRef.current.clientWidth;
+      this.setState({tableWidth, tableviewWidth});
+    } else {
+      // Set the column
+      this.setColumnsWidthFromActualWidth(tableWidth);
+    }
   }
 
   /**
    * Whenever the component has updated in terms of props
    */
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.columns.length > this.props.columns.length) {
       this.removeColumn();
     } else if (prevProps.columns.length < this.props.columns.length) {
@@ -135,6 +154,8 @@ export default class TableContextProvider extends Component {
    */
   handleWindowResizeEvent() {
     this.setColumnsWidthFromActualWidth(this.state.tableviewWidth);
+    // Debounce the function to store the new columns width
+    this.handleChangeColumnsDebounced();
   }
 
   /**
@@ -145,6 +166,11 @@ export default class TableContextProvider extends Component {
     this.props.onSortChange?.(propertyName);
   }
 
+  /**
+   * Handle reorder columns
+   * @param fromIndex
+   * @param toIndex
+   */
   handleReorderColumns(fromIndex, toIndex) {
     const columns = [...this.state.columns];
     const column = columns.splice(fromIndex, 1)[0];
@@ -153,18 +179,27 @@ export default class TableContextProvider extends Component {
   }
 
   /**
-   * Handle Mouse down event to prepare the resize
+   * Handle resize column
    * @param {number} index The index of the column to resize
    * @param {number} width The width to apply
    * @return {Promise<void>}
    */
-  async handleResizeColumn(index, width) {
+  handleResizeColumn(index, width) {
     const columns = [...this.state.columns];
     // Update the width
-    columns[index] = {...columns[index], width};
+    columns[index].width = width;
     // Get table width
     const tableWidth = this.getTableWidth(columns);
     this.setState({columns, tableWidth});
+  }
+
+  /**
+   * Handle change columns
+   */
+  handleChangeColumns() {
+    // Get the columns settings properties
+    const columns = this.state.columns.map((column, index) => ({id: column.id, label: column.label, width: column.width, position: index}));
+    this.props.onChange(columns);
   }
 
   /**
@@ -203,10 +238,12 @@ export default class TableContextProvider extends Component {
     const columnsResizableWidth = actualWidth - this.columnWidthNoResizable - this.columnsPaddingWidth;
     // Calculate the ratio between two widths
     const ratio = (tableviewWidth - this.columnWidthNoResizable - this.columnsPaddingWidth) / columnsResizableWidth;
+    const columns = [...this.state.columns];
     // Scale the widths with the ratio
-    const columns = this.state.columns.map(column => {
-      const width = column.resizable ? column.width * ratio : column.width;
-      return {...column, width};
+    columns.forEach(column => {
+      if (column.resizable) {
+        column.width = column.width * ratio;
+      }
     });
     // Get the table width from all columns
     const tableWidth = this.getTableWidth(columns);
@@ -287,14 +324,13 @@ export default class TableContextProvider extends Component {
   }
 }
 
-TableContextProvider.displayName = 'TableContextProvider';
-
 TableContextProvider.propTypes = {
   columns: PropTypes.array.isRequired, // The columns to display
   rows: PropTypes.array.isRequired, // The rows to display
   sorter: PropTypes.object, // The sorter object containing the property name and the direction
   selectedRowsIds: PropTypes.array, // The selected row ids
   onSortChange: PropTypes.func, // The on sort property
+  onChange: PropTypes.func, // The on change property
   children: PropTypes.any // The children
 };
 
