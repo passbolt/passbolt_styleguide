@@ -39,7 +39,8 @@ beforeEach(() => {
 describe("Display Resources", () => {
   describe("As LU, I should see the appropriate list of resources", () => {
     it('As LU, I should see initially an empty content when there are no resources', async() => {
-      const page = new DisplayResourcesListPage(defaultProps());
+      const props = defaultProps();
+      const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
@@ -220,6 +221,7 @@ describe("Display Resources", () => {
     it('As LU, I should be able to copy the username of a resource', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectUsername();
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].username);
@@ -231,6 +233,7 @@ describe("Display Resources", () => {
     it('As LU, I should be able to copy the secret of resource', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectPassword();
@@ -242,6 +245,7 @@ describe("Display Resources", () => {
     it('As LU, I should not be able to copy the secret of resource  if denied by RBAC.', async() => {
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       expect(page.resource(1).copyPasswordLink.hasAttribute("disabled")).toBeTruthy();
@@ -288,6 +292,7 @@ describe("Display Resources", () => {
     it('As LU, I should be able to follow the uri of a resource', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       jest.spyOn(props.resourceWorkspaceContext, 'onGoToResourceUriRequested').mockImplementationOnce(() => {});
       await page.resource(1).selectUri();
       expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
@@ -298,6 +303,7 @@ describe("Display Resources", () => {
     it('As LU, I should be able to resize a column of a resource with mouse move', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       // Need to resize before to check due to the actual width is negative
       await page.columns(4).resize(300);
       await page.columns(7).resize(500);
@@ -325,11 +331,14 @@ describe("Display Resources", () => {
       expect(passwordWidth).toBeLessThan(parseFloat(page.columns(5).width.slice(0, -2)));
       expect(uriWidth).toBeLessThan(parseFloat(page.columns(6).width.slice(0, -2)));
       expect(modifiedWidth).toBeGreaterThan(parseFloat(page.columns(7).width.slice(0, -2)));
+      // onChangeColumnsSettings called
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(7);
     });
 
     it('As LU, I should be able to resize a column to its default with double click', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       await page.columns(3).resizeDefault();
       await page.columns(4).resizeDefault();
       await page.columns(5).resizeDefault();
@@ -341,6 +350,8 @@ describe("Display Resources", () => {
       expect(page.columns(5).width).toStrictEqual("145px");
       expect(page.columns(6).width).toStrictEqual("210px");
       expect(page.columns(7).width).toStrictEqual("145px");
+      // onChangeColumnsSettings called
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(5);
     });
   });
 
@@ -348,6 +359,7 @@ describe("Display Resources", () => {
     it('As LU, I should be able to reorder a column of a resource with mouse move', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
       // Need to resize before to check due to the actual width is negative
       Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
         configurable: true, value: 300
@@ -364,6 +376,8 @@ describe("Display Resources", () => {
       expect(page.columns(6).name).toStrictEqual("Password");
       expect(page.columns(5).name).toStrictEqual("URI");
       expect(page.columns(7).name).toStrictEqual("Modified");
+      // onChangeColumnsSettings called
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -371,7 +385,7 @@ describe("Display Resources", () => {
     it('As LU, I should be able to hide or show a column of a resource', async() => {
       const props = propsWithFilteredResourcesAndColumnsHidden();
       const page = new DisplayResourcesListPage(props);
-
+      await waitFor(() => {});
       // 5 columns should be displayed
       expect(page.columnsCount).toStrictEqual(5);
       expect(page.columns(3).name).toStrictEqual("Name");

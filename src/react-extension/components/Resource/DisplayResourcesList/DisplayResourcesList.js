@@ -42,6 +42,7 @@ import ColumnUsernameModel from "../../../../shared/models/column/ColumnUsername
 import ColumnPasswordModel from "../../../../shared/models/column/ColumnPasswordModel";
 import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
+import ColumnModel from "../../../../shared/models/column/ColumnModel";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -58,7 +59,7 @@ class DisplayResourcesList extends React.Component {
     this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
     // The columns of resources
-    this.columns = [
+    this.defaultColumns = [
       new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}),
       new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}),
       new ColumnNameModel({label: this.translate("Name")}),
@@ -74,7 +75,8 @@ class DisplayResourcesList extends React.Component {
    */
   getDefaultState() {
     return {
-      resources: [], // The current list of resources to display
+      columns: [], // The current list of columns to display
+      previewedPassword: null // The previewed password
     };
   }
 
@@ -92,6 +94,7 @@ class DisplayResourcesList extends React.Component {
     this.handleCopyUsernameClick = this.handleCopyUsernameClick.bind(this);
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleSortByColumnClick = this.handleSortByColumnClick.bind(this);
+    this.handleChangeColumnsSettings = this.handleChangeColumnsSettings.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
     this.handlePreviewPasswordButtonClick = this.handlePreviewPasswordButtonClick.bind(this);
     this.getPreviewPassword = this.getPreviewPassword.bind(this);
@@ -101,44 +104,53 @@ class DisplayResourcesList extends React.Component {
    * Component did mount
    */
   componentDidMount() {
-    this.mergeAndSortColumns();
+    // If columns resource settings already loaded merge columns
+    if (this.columnsResourceSetting !== null) {
+      this.mergeAndSortColumns();
+    }
   }
 
   /**
    * Merge and sort columns
    */
   mergeAndSortColumns() {
-    // Get the column resources with id as a key from the resource workspace context
-    const columnsResources = this.columnsResources.reduce((result, column) => {
-      result[column.id] = column;
-      return result;
-    }, {});
+    // Get the column with id as a key from the column to merge
+    const columnsResourceSetting = this.columnsResourceSetting.toHashTable();
     // Merge the column values
-    this.columns.forEach(column => Object.assign(column, columnsResources[column.id]));
+    const columns = this.defaultColumns.map(column => Object.assign(new ColumnModel(column), columnsResourceSetting[column.id]));
     // Sort the position of the column, the column with no position will be at the beginning
-    this.columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
+    columns.sort((columnA, columnB) => (columnA.position || 0) < (columnB.position || 0) ? -1 : 1);
+    this.setState({columns});
   }
 
   /**
    * Whenever the component has been updated
+   *
+   * @param prevProps The previous props
    */
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     this.handleResourceScroll();
+    // Has a column view change with the previous props
+    const hasColumnsResourceViewChange = this.columnsResourceSetting?.hasDifferentShowValue(prevProps.resourceWorkspaceContext.columnsResourceSetting);
+    if (hasColumnsResourceViewChange) {
+      this.mergeAndSortColumns();
+    }
   }
 
   /**
    * Returns true if the component should be re-rendered
    */
-  shouldComponentUpdate(prevProps, prevState) {
-    const {filteredResources, selectedResources, sorter, scrollTo, columnsResources} = this.props.resourceWorkspaceContext;
-    const hasFilteredResourcesChanged = prevProps.resourceWorkspaceContext.filteredResources !== filteredResources;
-    const hasBothSingleSelection = selectedResources.length === 1 && prevProps.resourceWorkspaceContext.selectedResources.length === 1;
-    const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== prevProps.resourceWorkspaceContext.selectedResources[0].id;
-    const hasSelectedResourcesLengthChanged = prevProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
-    const hasSorterChanged = sorter !== prevProps.resourceWorkspaceContext.sorter;
+  shouldComponentUpdate(nextProps, nextState) {
+    const {filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting} = this.props.resourceWorkspaceContext;
+    const hasFilteredResourcesChanged = nextProps.resourceWorkspaceContext.filteredResources !== filteredResources;
+    const hasBothSingleSelection = selectedResources.length === 1 && nextProps.resourceWorkspaceContext.selectedResources.length === 1;
+    const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== nextProps.resourceWorkspaceContext.selectedResources[0].id;
+    const hasSelectedResourcesLengthChanged = nextProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
+    const hasSorterChanged = sorter !== nextProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
-    const hasResourcePreviewPasswordChange = prevState.previewedPassword !== this.state.previewedPassword;
-    const hasResourceColumnsViewChange = prevProps.resourceWorkspaceContext.columnsResources !== columnsResources;
+    const hasResourcePreviewPasswordChange = nextState.previewedPassword !== this.state.previewedPassword;
+    const hasResourceColumnsChange = nextState.columns !== this.state.columns;
+    const hasColumnsResourceViewChange = nextProps.resourceWorkspaceContext.columnsResourceSetting?.hasDifferentShowValue(columnsResourceSetting);
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedPassword();
@@ -148,7 +160,8 @@ class DisplayResourcesList extends React.Component {
       hasSingleSelectedResourceChanged ||
       hasSorterChanged ||
       hasResourceToScrollChange ||
-      hasResourceColumnsViewChange ||
+      hasResourceColumnsChange ||
+      hasColumnsResourceViewChange ||
       hasResourcePreviewPasswordChange;
   }
 
@@ -251,11 +264,11 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Get the columns resources
-   * @return {*|[]}
+   * get columns resource setting
+   * @return {ColumnsResourceSettingCollection}
    */
-  get columnsResources() {
-    return this.props.resourceWorkspaceContext.columnsResources;
+  get columnsResourceSetting() {
+    return this.props.resourceWorkspaceContext.columnsResourceSetting;
   }
 
   /**
@@ -263,8 +276,8 @@ class DisplayResourcesList extends React.Component {
    * @return {[]}
    */
   get columnsFiltered() {
-    const filteredByColumnToDisplay = defaultColumn => defaultColumn.id === 'checkbox' || this.columnsResources.some(column => defaultColumn.id === column.id && column.show);
-    return this.columns.filter(filteredByColumnToDisplay);
+    const filteredByColumnToDisplay = column => column.id === 'checkbox' || column.show;
+    return this.state.columns.filter(filteredByColumnToDisplay);
   }
 
   /**
@@ -419,6 +432,16 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Handle change columns settings
+   * @param columns
+   */
+  handleChangeColumnsSettings(columns) {
+    // remove first column (checkbox is fixed)
+    columns.shift();
+    this.props.resourceWorkspaceContext.onChangeColumnsSettings(columns);
+  }
+
+  /**
    * Handle the drag start on the selected resource
    * @param event The DOM event
    * @param resource The selected resource
@@ -570,6 +593,7 @@ class DisplayResourcesList extends React.Component {
 
   render() {
     const isEmpty = this.isReady && this.resources.length === 0;
+    const isGridReady = this.isReady && this.columnsFiltered.length !== 0;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
@@ -623,12 +647,13 @@ class DisplayResourcesList extends React.Component {
             }
           </div>
         }
-        {!isEmpty &&
+        {isGridReady &&
           <GridTable
             columns={this.columnsFiltered}
             rows={this.resources}
             sorter={this.props.resourceWorkspaceContext.sorter}
             onSortChange={this.handleSortByColumnClick}
+            onChange={this.handleChangeColumnsSettings}
             onRowClick={this.handleResourceSelected}
             onRowContextMenu={this.handleResourceRightClick}
             onRowDragStart={this.handleResourceDragStartEvent}
