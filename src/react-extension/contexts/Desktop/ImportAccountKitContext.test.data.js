@@ -76,6 +76,7 @@ export function defaultImportAccountKitContext(context = {}) {
     clearContext: jest.fn(),
     verifyAccountKit: jest.fn(),
     verifyPassphrase: jest.fn(),
+    flushAccountKit: jest.fn(),
     ...context
   };
 }

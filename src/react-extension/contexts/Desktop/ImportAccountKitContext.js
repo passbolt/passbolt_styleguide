@@ -90,15 +90,15 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   setProcessing(processing) {
-    this.setState({ processing });
+    this.setState({processing});
   }
 
   /**
    * Flush the account kit
    * @returns {void}
-  */
+   */
   flushAccountKit() {
-    this.setState({ accountKit: null })
+    this.setState({accountKit: null});
   }
 
   /**
@@ -107,7 +107,7 @@ export class ImportAccountKitContextProvider extends React.Component {
    * @returns {void}
    */
   navigate(state) {
-    this.setState({ state });
+    this.setState({state});
   }
 
   /**
@@ -119,10 +119,10 @@ export class ImportAccountKitContextProvider extends React.Component {
     try {
       this.setProcessing(true);
       const accountKitValidated = await this.props.context.port.request("passbolt.background.verify-account-kit", accountKit);
-      return this.setState({ state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE, accountKit: accountKitValidated });
+      return this.setState({state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE, accountKit: accountKitValidated});
     } catch (error) {
       console.error(error);
-      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
+      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
     } finally {
       this.setProcessing(false);
     }
@@ -158,7 +158,7 @@ export class ImportAccountKitContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.auth-import.sign-in");
     } catch (error) {
       console.error(error);
-      return this.setState({ unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE });
+      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
     }
   }
 

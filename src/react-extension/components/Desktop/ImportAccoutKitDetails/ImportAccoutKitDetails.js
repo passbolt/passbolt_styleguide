@@ -13,17 +13,19 @@
  */
 
 import React from "react";
-import { Trans, withTranslation } from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import { ImportAccountKitWorkflowStates, withImportAccountKitContext } from "../../../contexts/Desktop/ImportAccountKitContext";
+import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
-import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
-import { SecretGenerator } from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import Icon from "../../../../shared/components/Icons/Icon";
 import debounce from "debounce-promise";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
+import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
+import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 
 class ImportAccoutKitDetails extends React.Component {
   /**
@@ -88,11 +90,12 @@ class ImportAccoutKitDetails extends React.Component {
   async handleConfirmation() {
     try {
       this.validate();
-      if (this.state.passphrase.length > 0) { 
+      console.log("validate")
+      if (this.state.passphrase.length > 0) {
         await this.props.importAccountKitContext.verifyPassphrase(this.state.passphrase);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       this.onCheckPassphraseFailure(error);
     }
   }
@@ -101,7 +104,7 @@ class ImportAccoutKitDetails extends React.Component {
    * Returns the user full name
    */
   get fullname() {
-    return `${this.props.importAccountKitContext.accountKit.first_name} ${this.props.importAccountKitContext.accountKit.last_name}`;
+    return `${this.props.importAccountKitContext.accountKit?.first_name} ${this.props.importAccountKitContext.accountKit?.last_name}`;
   }
 
   /**
@@ -113,7 +116,6 @@ class ImportAccoutKitDetails extends React.Component {
 
     let passphraseEntropy = null;
     if (passphrase.length) {
-
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
     } else {
@@ -122,8 +124,10 @@ class ImportAccoutKitDetails extends React.Component {
         passphraseEntropy,
       });
     }
+    console.log(passphraseEntropy)
+    console.log(this.state.passphraseInDictionnary)
 
-    this.setState({ passphrase, passphraseEntropy });
+    this.setState({passphrase, passphraseEntropy});
     if (this.state.hasBeenValidated) {
       this.validate();
     }
@@ -135,9 +139,9 @@ class ImportAccoutKitDetails extends React.Component {
    */
   get securityToken() {
     return {
-      code: this.props.importAccountKitContext.accountKit.security_token.code,
-      backgroundColor: this.props.importAccountKitContext.accountKit.security_token.color,
-      textColor: this.props.importAccountKitContext.accountKit.textcolor
+      code: this.props.importAccountKitContext.accountKit?.security_token.code,
+      backgroundColor: this.props.importAccountKitContext.accountKit?.security_token.color,
+      textColor: this.props.importAccountKitContext.accountKit?.textcolor
     };
   }
 
@@ -151,13 +155,13 @@ class ImportAccoutKitDetails extends React.Component {
    * Validate the security token data
    */
   validate() {
-    const { passphrase } = this.state;
+    const {passphrase} = this.state;
     const errors = {
       emptyPassphrase: passphrase.trim() === '',
       invalidPassphrase: false,
       invalidGpgKey: false,
-    };  
-    this.setState({ hasBeenValidated: true, errors });
+    };
+    this.setState({hasBeenValidated: true, errors});
   }
 
   /**
@@ -166,11 +170,12 @@ class ImportAccoutKitDetails extends React.Component {
    * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError, GpgKeyError.
    */
   onCheckPassphraseFailure(error) {
+    console.log(error)
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
-      this.setState({ errors: { invalidPassphrase: true } });
+      this.setState({errors: {invalidPassphrase: true}});
     } else if (error.name === 'GpgKeyError') {
-      this.setState({ errors: { invalidGpgKey: true } });
+      this.setState({errors: {invalidGpgKey: true}});
     } else {
       // Only controlled errors should hit the component.
       throw error;
@@ -236,16 +241,17 @@ class ImportAccoutKitDetails extends React.Component {
     return (
       <div className="import-account-kit-details">
         <div className="user">
-          <UserAvatar user={this.props.importAccountKitContext.accountKit} baseUrl={this.props.importAccountKitContext.accountKit.domain} className="big avatar user-avatar" />
+          <UserAvatar user={this.props.importAccountKitContext.accountKit} baseUrl={this.props.importAccountKitContext.accountKit?.domain} className="big avatar user-avatar" />
           <p className="user-name">{this.fullname}</p>
-          <p className="user-email">{this.props.importAccountKitContext.accountKit.username}</p>
-          <p className="user-domain">{this.props.importAccountKitContext.accountKit.domain}</p>
+          <p className="user-email">{this.props.importAccountKitContext.accountKit?.username}</p>
+          <p className="user-domain">{this.props.importAccountKitContext.accountKit?.domain}</p>
         </div>
         <div className="input-password-wrapper input required">
           <label htmlFor="passphrase"><Trans>Passphrase</Trans>
             {!this.state.hasBeenValidated && (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary) &&
               <Icon name="exclamation" />
-            }</label>          <Password
+            }</label>
+          <Password
             id="passphrase-input"
             autoComplete="off"
             value={this.state.passphrase}
@@ -260,7 +266,7 @@ class ImportAccoutKitDetails extends React.Component {
               }
               {this.state.errors.invalidPassphrase &&
                 <div className="invalid-passphrase error-message">
-                  <Trans>The passphrase is invalid.</Trans> {this.props.isSsoAvailable && <button className="link" type="button" onClick={this.props.onSecondaryActionClick}><Trans>Do you need help?</Trans></button>}
+                  <Trans>The passphrase is invalid.</Trans>
                 </div>
               }
               {this.state.errors.invalidGpgKey &&
@@ -288,7 +294,7 @@ class ImportAccoutKitDetails extends React.Component {
             <Trans>Next</Trans>
           </button>
           <button type="button" className="link"  onClick={this.importAnotherAccount}>
-              <Trans>Import another account</Trans>
+            <Trans>Import another account</Trans>
           </button>
         </div>
       </div>
