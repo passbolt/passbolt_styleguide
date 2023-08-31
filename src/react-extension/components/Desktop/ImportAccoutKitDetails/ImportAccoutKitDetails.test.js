@@ -21,7 +21,7 @@ afterEach(() => {
   jest.clearAllTimers();
 });
 
-import { ImportAccountKitWorkflowStates } from "../../../contexts/Desktop/ImportAccountKitContext";
+import {ImportAccountKitWorkflowStates} from "../../../contexts/Desktop/ImportAccountKitContext";
 import MockPort from "../../../test/mock/MockPort";
 import {defaultContextProps} from "./ImportAccoutKitDetails.test.data";
 import ImportAccoutKitDetailsPage from "./ImportAccoutKitDetails.test.page";

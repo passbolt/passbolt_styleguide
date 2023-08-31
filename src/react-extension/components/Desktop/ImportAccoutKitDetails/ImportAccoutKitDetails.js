@@ -90,7 +90,6 @@ class ImportAccoutKitDetails extends React.Component {
   async handleConfirmation() {
     try {
       this.validate();
-      console.log("validate")
       if (this.state.passphrase.length > 0) {
         await this.props.importAccountKitContext.verifyPassphrase(this.state.passphrase);
       }
@@ -124,8 +123,6 @@ class ImportAccoutKitDetails extends React.Component {
         passphraseEntropy,
       });
     }
-    console.log(passphraseEntropy)
-    console.log(this.state.passphraseInDictionnary)
 
     this.setState({passphrase, passphraseEntropy});
     if (this.state.hasBeenValidated) {
@@ -170,7 +167,7 @@ class ImportAccoutKitDetails extends React.Component {
    * @throw {Error} If an unexpected errors hits the component. Errors not of type: InvalidMasterPasswordError, GpgKeyError.
    */
   onCheckPassphraseFailure(error) {
-    console.log(error)
+    console.log(error);
     // It can happen when the user has entered the wrong passphrase.
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({errors: {invalidPassphrase: true}});

@@ -12,12 +12,12 @@
  * @since         4.3.0
  */
 
-import React, { Component } from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
-import { withTranslation } from "react-i18next";
-import { withAppContext } from "../../../../shared/context/AppContext/AppContext";
+import {withTranslation} from "react-i18next";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import GetStartedDesktop from "../GetStarted/GetStartedDesktop";
-import { ImportAccountKitWorkflowStates, withImportAccountKitContext } from "../../../contexts/Desktop/ImportAccountKitContext";
+import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
 import ImportAccountKit from "../ImportAccountKit/ImportAccountKit";
 import DisplayUnexpectedError from "../../Authentication/DisplayUnexpectedError/DisplayUnexpectedError";
 import ImportAccoutKitDetails from "../ImportAccoutKitDetails/ImportAccoutKitDetails";
