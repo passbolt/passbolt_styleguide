@@ -90,6 +90,7 @@ class Password extends Component {
     const fullStyle =  {background: this.props.securityToken.backgroundColor, color: this.props.securityToken.textColor};
     return this.state.hasPassphraseFocus ? inverseStyle : fullStyle;
   }
+  
   /**
    * Get the passphrase input style.
    * @return {Object}
