@@ -19,7 +19,9 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 // The import account kit workflow states.
 export const ImportAccountKitWorkflowStates = {
   GET_STARTED: "Get started",
-  IMPORT_ACCOUNT_KIT: "Import account kit"
+  IMPORT_ACCOUNT_KIT: "Import account kit",
+  VERIFY_PASSPHRASE: "Verify user passphrase",
+  UNEXPECTED_ERROR_STATE: "Unexpected error state"
 };
 
 /**
@@ -29,9 +31,11 @@ export const ImportAccountKitWorkflowStates = {
  */
 export const ImportAccountKitContext = React.createContext({
   state: null, // orchestration state
+  unexpectedError: null, // The unexpected error obejct if any
   navigate: () => { }, // Change state for orchestration
   isProcessing: () => { }, // returns true if a process is running and the UI must be disabled
   setProcessing: () => { }, //Update processing object
+  verifyAccountKit: () => { }, // verify the account kit with the Background webview
 });
 
 /**
@@ -55,9 +59,11 @@ export class ImportAccountKitContextProvider extends React.Component {
     return {
       state: ImportAccountKitWorkflowStates.GET_STARTED, // The current login workflow state.
       processing: false, // Context is processing data
+      unexpectedError: null, // The unexpected error obejct if any
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       setProcessing: this.setProcessing.bind(this), // set processing
-      navigate: this.navigate.bind(this) //navigate to step
+      navigate: this.navigate.bind(this), //navigate to step
+      verifyAccountKit: this.verifyAccountKit.bind(this), // verify the account kit with the Background webview
     };
   }
 
@@ -86,6 +92,21 @@ export class ImportAccountKitContextProvider extends React.Component {
    */
   navigate(state) {
     this.setState({state});
+  }
+
+  /**
+   * When the user upload its account we request to the Background webview to verify it.
+   * @param   {object} the account kit to upload.
+   * @returns {Promise<void>}
+   */
+  async verifyAccountKit(accountKit) {
+    try {
+      await this.props.context.port.request("passbolt.background.verify-account-kit", accountKit);
+      return this.setState({state: ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE});
+    } catch (error) {
+      console.log(error);
+      return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});
+    }
   }
 
   /**

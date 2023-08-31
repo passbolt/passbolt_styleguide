@@ -42,9 +42,23 @@ export default class OrchestrateAccountKitImportationPage {
   }
 
   /**
-   * Returns the import account kit
+   * Returns the import account kit page
    */
   get importAccountKitPage() {
     return this._page.container.querySelector('.import-account-kit');
+  }
+
+  /**
+   * Returns the verify passphrase page
+   */
+  get verifyPassphrasePage() {
+    return this._page.container.querySelector('.verify-passphrase');
+  }
+
+  /**
+   * Returns the display unexpected error page
+   */
+  get displayUnexpectedErrorPage() {
+    return this._page.container.querySelector('.setup-error');
   }
 }
