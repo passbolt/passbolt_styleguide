@@ -16,8 +16,6 @@ import {v4 as uuidv4} from "uuid";
 import MockPort from "../../test/mock/MockPort";
 
 export const defaultAccountKit = (data = {}) => {
-  data = JSON.parse(JSON.stringify(data));
-
   const defaultData = {
     "domain": "https://passbolt.local",
     "user_id": uuidv4(),
@@ -27,24 +25,22 @@ export const defaultAccountKit = (data = {}) => {
     "user_public_armored_key": "",
     "user_private_armored_key": "",
     "server_public_armored_key": "",
+    "security_token": defaultSecurityTokenDto(data?.security_token)
   };
 
-  data = Object.assign(defaultData, data);
-  data.security_token = defaultSecurityTokenDto(data?.security_token);
-
-  delete data.securityToken;
+  delete data?.securityToken;
 
   return Object.assign(defaultData, data);
 };
 
 export const defaultSecurityTokenDto = (data = {}) => {
   const defaultData = {
-    "code": data?.code || "HGA",
-    "color": data?.color || "#8bc34a",
-    "textcolor": data?.textcolor || "#000000",
+    "code": "HGA",
+    "color": "#8bc34a",
+    "textcolor": "#000000",
   };
 
-  return Object.assign(defaultData, data || {});
+  return Object.assign(defaultData, data);
 };
 
 /**
@@ -61,22 +57,3 @@ export function defaultProps(data = {}) {
   return Object.assign(defaultProps, data);
 }
 
-/**
- * Returns the default import account kit context context for the unit test
- * @param context An existing context
- * @returns {object}
- */
-export function defaultImportAccountKitContext(context = {}) {
-  return {
-    state: null,
-    unexpectedError: null,
-    navigate: jest.fn(),
-    isProcessing: jest.fn(),
-    setProcessing: jest.fn(),
-    clearContext: jest.fn(),
-    verifyAccountKit: jest.fn(),
-    verifyPassphrase: jest.fn(),
-    flushAccountKit: jest.fn(),
-    ...context
-  };
-}

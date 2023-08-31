@@ -29,7 +29,7 @@ class Footer extends Component {
    * Returns the terms link url
    */
   get privacyUrl() {
-    return this.siteSettings.privacyLink;
+    return this.props.context.siteSettings.privacyLink;
   }
 
   /**
@@ -50,7 +50,7 @@ class Footer extends Component {
    * Returns the privacy link url
    */
   get termsUrl() {
-    return this.siteSettings.termsLink;
+    return this.props.context.siteSettings.termsLink;
   }
 
   /**
@@ -59,7 +59,7 @@ class Footer extends Component {
    */
   get versions() {
     const versions = [];
-    const serverVersion = this.siteSettings.version;
+    const serverVersion = this.props.context.siteSettings.version;
     if (serverVersion) {
       versions.push(serverVersion);
     }
@@ -78,14 +78,6 @@ class Footer extends Component {
     const debug = this.props.context.siteSettings.debug;
     const isHttpMode = this.props.context.siteSettings.url.startsWith('http://');
     return debug || isHttpMode;
-  }
-
-
-  /**
-   * return the siteSettings from context or props
-   */
-  get siteSettings() {
-    return this.props.context.siteSettings || this.props.siteSettings;
   }
 
   /**

@@ -99,13 +99,6 @@ class TranslationProvider extends Component {
   }
 
   /**
-   * return the siteSettings from context or props
-   */
-  get siteSettings() {
-    return this.props.context.siteSettings || this.props.siteSettings;
-  }
-
-  /**
    * Whenever the component has updated in terms of props
    * @param prevProps
    */
@@ -151,7 +144,6 @@ TranslationProvider.propTypes = {
   context: PropTypes.any, // The application context
   loadingPath: PropTypes.any, // The way to load translations files
   children: PropTypes.any, // The children components
-  siteSettings: PropTypes.any, // The site settings which can be optional
 };
 
 export default withAppContext(TranslationProvider);

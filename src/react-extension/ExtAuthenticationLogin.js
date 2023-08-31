@@ -21,6 +21,7 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import UserSettings from "../shared/lib/Settings/UserSettings";
 import OrchestrateLoginBoxMain from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxMain";
 import Footer from "./components/Common/Footer/Footer";
+import OrchestrateLoginBoxFooter from "./components/AuthenticationLogin/OrchestrateLogin/OrchestrateLoginBoxFooter";
 import SsoContextProvider from "./contexts/SsoContext";
 
 /**
@@ -136,6 +137,9 @@ class ExtAuthenticationLogin extends Component {
                     </div>
                     <div className="login-form">
                       <OrchestrateLoginBoxMain/>
+                    </div>
+                    <div className="login-box-footer">
+                      <OrchestrateLoginBoxFooter/>
                     </div>
                   </div>
                 </div>
