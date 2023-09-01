@@ -104,13 +104,6 @@ export default class ImportAccoutKitDetailsPage {
   }
 
   /**
-   * Returns the passphrase value
-   */
-  get passphrase() {
-    return this.passphraseInput.value;
-  }
-
-  /**
    * Returns true if the invalid passphrase error is displayed
    */
   get hasInvalidPassphraseError() {
