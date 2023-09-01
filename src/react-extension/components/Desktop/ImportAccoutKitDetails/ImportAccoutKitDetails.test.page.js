@@ -97,13 +97,6 @@ export default class ImportAccoutKitDetailsPage {
   }
 
   /**
-   * Returns the empty passphrase message
-   */
-  get emptyPassphrase() {
-    return this.importAccountKitDetails.querySelector('.empty-passphrase');
-  }
-
-  /**
    * Returns true if the invalid passphrase warning is displayed
    */
   get hasInvalidPassphraseWarning() {
