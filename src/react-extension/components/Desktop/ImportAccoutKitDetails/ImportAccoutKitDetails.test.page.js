@@ -118,20 +118,6 @@ export default class ImportAccoutKitDetailsPage {
   }
 
   /**
-   * Returns true if the empty error message is displayed
-   */
-  get hasEmptyPassphraseError() {
-    return Boolean(this.emptyPassphrase);
-  }
-
-  /**
-   * Returns true if the loading page is displayed
-   */
-  get hasLoadingPage() {
-    return  Boolean(this._page.container.querySelector('.login-processing'));
-  }
-
-  /**
    * Fill the passphrase with the given value
    * @param passphrase A passphrase
    */
