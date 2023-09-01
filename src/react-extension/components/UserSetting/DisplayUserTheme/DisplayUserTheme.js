@@ -139,7 +139,7 @@ class DisplayUserTheme extends React.Component {
       <div className="grid grid-responsive-12">
         <div className="row">
           <div className="main-column">
-            <h3><Trans>Theme</Trans>g</h3>
+            <h3><Trans>Theme</Trans></h3>
             <div className="themes">
               <div className="col12">
                 <ul>
