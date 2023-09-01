@@ -57,3 +57,22 @@ export function defaultProps(data = {}) {
   return Object.assign(defaultProps, data);
 }
 
+/**
+ * Returns the default import account kit context context for the unit test
+ * @param context An existing context
+ * @returns {object}
+ */
+export function defaultImportAccountKitContext(context = {}) {
+  return {
+    state: null,
+    unexpectedError: null,
+    navigate: jest.fn(),
+    isProcessing: jest.fn(),
+    setProcessing: jest.fn(),
+    clearContext: jest.fn(),
+    verifyAccountKit: jest.fn(),
+    verifyPassphrase: jest.fn(),
+    flushAccountKit: jest.fn(),
+    ...context
+  };
+}
