@@ -202,6 +202,7 @@ class ExtApp extends Component {
                                             "/app/administration/account-recovery",
                                             "/app/administration/sso",
                                             "/app/administration/password-policies",
+                                            "/app/administration/user-passphrase-policies",
                                           ]}>
                                             <AdministrationWorkspaceContextProvider>
                                               <AdminAccountRecoveryContextProvider>

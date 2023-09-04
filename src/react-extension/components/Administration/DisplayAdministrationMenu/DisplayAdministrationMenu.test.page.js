@@ -133,6 +133,14 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Returns the User Passphrase Policies menu
+   */
+  get userPassphrasePolicies() {
+    return this._page.container.querySelector('#user_passphrase_policies_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -200,5 +208,10 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the rbac settings element */
   async gotoRbacs() {
     await this.click(this.rbacs);
+  }
+
+  /** Click on the User Passphrase Policies settings element */
+  async gotoUserPassphrasePolicies() {
+    await this.click(this.userPassphrasePolicies);
   }
 }
