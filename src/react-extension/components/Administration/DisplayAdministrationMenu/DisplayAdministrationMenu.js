@@ -126,12 +126,21 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
-   * Can if the user can use RBACS
+   * Can I use the RBACS plugin
    * @returns {boolean}
    */
   get canIUseRbacs() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('rbacs');
+  }
+
+  /**
+   * Can I use the User Passphrase Policies plugin
+   * @returns {boolean}
+   */
+  get canIUseUserPassphrasePolicies() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('userPassphrasePolicies');
   }
 
   /**
@@ -150,6 +159,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleMfaPolicyClick = this.handleMfaPolicyClick.bind(this);
     this.handleRbacsClick = this.handleRbacsClick.bind(this);
     this.handlePasswordPoliciesClick = this.handlePasswordPoliciesClick.bind(this);
+    this.handleUserPassphrasePoliciesClick = this.handleUserPassphrasePoliciesClick.bind(this);
   }
 
   /**
@@ -234,6 +244,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handlePasswordPoliciesClick() {
     this.props.navigationContext.onGoToAdministrationPasswordPoliciesRequested();
+  }
+
+  /**
+   * Handle when the user click on the User Passphrase Policies menu
+   */
+  handleUserPassphrasePoliciesClick() {
+    this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
   }
 
   /**
@@ -330,6 +347,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isSelfRegistrationSettingsSelected() {
     return AdministrationWorkspaceMenuTypes.SELF_REGISTRATION === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If User Passphrase Policies menu is selected
+   * @returns {boolean}
+   */
+  isUserPassphrasePoliciesSelected() {
+    return AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -474,6 +499,19 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleRbacsClick}>
                     <span><Trans>Role-Based Access Control</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseUserPassphrasePolicies &&
+          <li id="user_passphrase_policies_menu">
+            <div className={`row  ${this.isUserPassphrasePoliciesSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
+                    <span><Trans>User Passphrase Policies</Trans></span>
                   </button>
                 </div>
               </div>

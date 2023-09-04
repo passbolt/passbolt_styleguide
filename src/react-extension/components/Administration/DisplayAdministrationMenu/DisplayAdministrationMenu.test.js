@@ -194,6 +194,7 @@ describe("As AD I can see the administration menu", () => {
       expect(page.ssoSettings).toBeNull();
     });
   });
+
   describe("As a logged in administrator in the administrator workspace, I can see the Mfa Policy settings option in the left-side bar", () => {
     it('If the feature flag is true, the menu should be visible', async() => {
       expect.assertions(4);
@@ -251,6 +252,36 @@ describe("As AD I can see the administration menu", () => {
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.rbacs).toBeNull();
+    });
+  });
+
+  describe("As a signed-in administrator on the administration workspace, I can see the User Passphrase Policies option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.gotoUserPassphrasePolicies();
+      expect(page.userPassphrasePolicies).toBeTruthy();
+      expect(page.menuSelected).toBe('User Passphrase Policies');
+      expect(props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "userPassphrasePolicies"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.userPassphrasePolicies).toBeNull();
     });
   });
 });
