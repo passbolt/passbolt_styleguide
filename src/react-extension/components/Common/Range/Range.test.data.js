@@ -9,14 +9,14 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         hackaton
+ * @since         v4.3.0
  */
 
 import {v4 as uuid} from 'uuid';
 
 /**
  * Default props
- * @returns {{}}
+ * @returns {Object}
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
@@ -26,20 +26,3 @@ export function defaultProps(props = {}) {
   };
   return Object.assign(defaultProps, props);
 }
-
-export const valuesEntropy = [
-  {label: "Disabled", value: 0},
-  {label: "50 bits", value: 50},
-  {label: "64 bits", value: 64},
-  {label: "80 bits", value: 80},
-  {label: "96 bits", value: 96},
-  {label: "128 bits", value: 128},
-  {label: "160 bits", value: 160},
-  {label: "192 bits", value: 192},
-  {label: "224 bits", value: 224}
-];
-
-export const labels = {
-  start: "Weak",
-  end: "Secure"
-};

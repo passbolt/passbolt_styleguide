@@ -13,20 +13,15 @@
  */
 
 /**
- * Model related to the user passphrase policies use only with the admin UI
+ * The default user passprhase policies DTO
+ * @param {Object} data The data to override
+ * @returns {Object}
  */
-class UserPassphrasePoliciesViewModel {
-  /**
-   * Constructor
-   * @param {UserPassphrasePoliciesDto} settings
-   */
-  constructor(settings) {
-    this.external_dictionary_check = typeof settings?.external_dictionary_check !== "undefined"
-      ? Boolean(settings.external_dictionary_check)
-      : true;
+export const defaultUserPassphrasePoliciesDto = (data = {}) => {
+  const defaultData = {
+    external_dictionary_check: true,
+    entropy_minimum: 50,
+  };
 
-    this.entropy_minimum = parseInt(settings?.entropy_minimum, 10) || 50;
-  }
-}
-
-export default UserPassphrasePoliciesViewModel;
+  return Object.assign(defaultData, data);
+};

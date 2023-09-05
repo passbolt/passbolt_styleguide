@@ -23,10 +23,12 @@ import UserPassphrasePoliciesViewModel from "../../../../shared/models/userPassp
  * @type {React.Context<Object>}
  */
 export const AdministrationUserPassphrasePoliciesContext = React.createContext({
-  isProcessing: false,
+  processing: false,
   settings: {},
   getSettings: () => {}, // Returns settings for UI changes
+  setSettings: () => {}, // set the given value on the current policies
   findSettings: () => {}, // request the settings from the background page
+  isProcessing: () => {}, // returns true if data is under processing
 });
 
 /**
@@ -47,10 +49,12 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    */
   get defaultState() {
     return {
-      isProcessing: false,
-      settings: new UserPassphrasePoliciesViewModel(),
-      findSettings: this.findSettings.bind(this),
-      getSettings: this.getSettings.bind(this),
+      processing: false,
+      settings: new UserPassphrasePoliciesViewModel(), // the current user passphrase policies settings
+      findSettings: this.findSettings.bind(this), // find the User Passphrase Policies
+      getSettings: this.getSettings.bind(this), // returns the settings that have been fetch previously
+      setSettings: this.setSettings.bind(this), // set the given value on the current policies
+      isProcessing: this.isProcessing.bind(this), // returns true if data is under processing
     };
   }
 
@@ -59,7 +63,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    * @return {Promise<void>}
    */
   async findSettings() {
-    this.setState({isProcessing: true});
+    this.setState({processing: true});
 
     const result = await this.props.context.port.request("passbolt.user-passphrase-policies.find");
     const settings = new UserPassphrasePoliciesViewModel(result);
@@ -67,7 +71,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
     //Init saved setting
     this.setState({
       settings,
-      isProcessing: false,
+      processing: false,
     });
   }
 
@@ -77,6 +81,22 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    */
   getSettings() {
     return this.state.settings;
+  }
+
+  /**
+   * Set the givent field with the given value.
+   */
+  setSettings(key, value) {
+    const settings = Object.assign(this.state.settings, {[key]: value});
+    this.setState({settings});
+  }
+
+  /**
+   * Returns true if data is under processing
+   * @returns {boolean}
+   */
+  isProcessing() {
+    return this.state.processing;
   }
 
   /**
