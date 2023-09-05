@@ -15,7 +15,7 @@
 import {v4 as uuidv4} from "uuid";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
 
 /**
@@ -33,7 +33,7 @@ export function defaultProps(props = {}) {
         }
       }
     }),
-    actionFeedbackContext: defaultActionFeedbackContextContext(props?.actionFeedbackContext),
+    actionFeedbackContext: defaultActionFeedbackContext(props?.actionFeedbackContext),
     context: defaultAppContext(props?.context),
     dialogContext: defaultDialogContext(props?.dialogContext),
     onStop: jest.fn(),

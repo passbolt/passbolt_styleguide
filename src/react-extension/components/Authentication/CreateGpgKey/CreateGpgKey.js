@@ -15,15 +15,13 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
-import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
+import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
 
 /**
  * The component display variations.
@@ -64,15 +62,8 @@ class CreateGpgKey extends Component {
       actions: {
         processing: false, // True if one's processing passphrase
       },
-      hintClassNames: { // The class names for passphrase hints
-        enoughLength: '',
-        uppercase: '',
-        alphanumeric: '',
-        specialCharacters: '',
-        notInDictionary: '',
-        enoughEntropy: ''
-      },
-      isPwnedServiceAvailable: true // True if the isPwned service can be reached
+      passphraseInDictionnary: false, // True if the passphrase is part of a data breach
+      isPwnedServiceAvailable: true, // True if the isPwned service can be reached
     };
   }
 
@@ -88,12 +79,18 @@ class CreateGpgKey extends Component {
    */
   get isValid() {
     const validation = {
-      notInDictionary: this.pownedService === null || this.state.hintClassNames.notInDictionary !== "error"
+      notInDictionary: this.pownedService === null || !this.state.passphraseInDictionnary,
+      enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy >= this.minimumEntropyRequired
     };
-    validation.enoughEntropy = this.state.passphraseEntropy && this.state.passphraseEntropy !== 0;
-    validation.enoughLength = this.state.hintClassNames.enoughLength === "success";
 
     return Object.values(validation).every(value => value);
+  }
+
+  /**
+   * Returns the minimum entropy required for the passphrase
+   */
+  get minimumEntropyRequired() {
+    return this.props.userPassphrasePolicies.entropy_minimum;
   }
 
   /**
@@ -130,7 +127,11 @@ class CreateGpgKey extends Component {
    */
   async componentDidMount() {
     this.focusOnPassphrase();
-    this.initPwnedPasswordService();
+    if (this.props.userPassphrasePolicies.external_dictionary_check) {
+      this.initPwnedPasswordService();
+    } else {
+      this.setState({isPwnedServiceAvailable: false});
+    }
   }
 
   /**
@@ -153,23 +154,15 @@ class CreateGpgKey extends Component {
    */
   handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    let hintClassNames = {};
     let passphraseEntropy = null;
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
-      hintClassNames = this.evaluatePassphraseDefaultHintClassNames(passphrase);
-
       if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(passphrase);
       }
-    } else {
-      hintClassNames = {
-        ...this.state.hintClassNames,
-        notInDictionary: "unavailable"
-      };
     }
 
-    this.setState({passphrase, passphraseEntropy, hintClassNames});
+    this.setState({passphrase, passphraseEntropy});
   }
 
   /**
@@ -182,61 +175,36 @@ class CreateGpgKey extends Component {
   }
 
   /**
-   * Evaluate the passphrase default hints classnames
-   * @param {string} passphrase The passphrase to evaluate
-   * @return {object}
-   */
-  evaluatePassphraseDefaultHintClassNames(passphrase) {
-    const masks = SecurityComplexity.matchMasks(passphrase);
-    const hintClassName = condition => condition ? 'success' : 'warning';
-    return {
-      enoughLength: passphrase.length >= 8 ? 'success' : 'error',
-      uppercase: hintClassName(masks.uppercase),
-      alphanumeric: hintClassName(masks.alpha && masks.digit),
-      specialCharacters: hintClassName(masks.special),
-      notInDictionary: this.state.hintClassNames.notInDictionary
-    };
-  }
-
-  /**
    * Evaluate if the passphrase is in dictionary
+   * @param {string} passphrase
    * @return {Promise<void>}
    */
-  async evaluatePassphraseIsInDictionary() {
+  async evaluatePassphraseIsInDictionary(passphrase) {
     let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
     if (!isPwnedServiceAvailable) {
       return;
     }
 
-    const hintClassNames = this.state.hintClassNames;
-    hintClassNames.notInDictionary = "unavailable";
-    if (!this.pownedService) {
-      this.setState({hintClassNames});
-      return;
-    }
-
-    const passphrase = this.state.passphrase;
-    if (passphrase.length < 8) {
-      hintClassNames.notInDictionary = passphrase.length > 0 ? "error" : "unavailable";
-      this.setState({hintClassNames});
-      return;
-    }
+    let passphraseInDictionnary = false;
 
     try {
-      const result = await this.pownedService.evaluateSecret(passphrase);
+      const result =  await this.pownedService.evaluateSecret(passphrase);
+      passphraseInDictionnary = result.inDictionary;
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-      hintClassNames.notInDictionary = result.isPwnedServiceAvailable ? (result.inDictionary ? "error" : "success") : "unavailable";
     } catch (error) {
       // If the service is unavailable don't block the user journey.
       if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
         isPwnedServiceAvailable = false;
-        hintClassNames.notInDictionary = "unavailable";
+        passphraseInDictionnary = false;
       } else {
         throw error;
       }
     }
 
-    this.setState({isPwnedServiceAvailable, hintClassNames});
+    this.setState({
+      isPwnedServiceAvailable,
+      passphraseInDictionnary,
+    });
   }
 
   /**
@@ -245,7 +213,7 @@ class CreateGpgKey extends Component {
    */
   async isCurrentPassphrasePwned() {
     await this.isPwndProcessingPromise;
-    return this.state.hintClassNames.notInDictionary === "error";
+    return this.state.passphraseInDictionnary;
   }
 
   /**
@@ -276,7 +244,7 @@ class CreateGpgKey extends Component {
    * Render the component
    */
   render() {
-    const passphraseEntropy = this.state.hintClassNames.notInDictionary ===  "error" ? 0 : this.state.passphraseEntropy;
+    const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
     const processingClassName = this.isProcessing ? 'processing' : '';
     const disabledClassName = this.mustBeDisabled ? 'disabled' : '';
     return (
@@ -302,36 +270,17 @@ class CreateGpgKey extends Component {
               preview={true}
               onChange={this.handlePassphraseChange}
               disabled={!this.areActionsAllowed}/>
-            <PasswordComplexity entropy={passphraseEntropy}/>
-          </div>
-
-          <div className="password-hints">
-            <ul>
-              <li id="enoughLengthHint" className={this.state.hintClassNames.enoughLength}>
-                <Trans>It is at least 8 characters in length</Trans>
-              </li>
-              <li id="uppercaseHint" className={this.state.hintClassNames.uppercase}>
-                <Trans>It contains lower and uppercase characters</Trans>
-              </li>
-              <li id="alphaNumericHint" className={this.state.hintClassNames.alphanumeric}>
-                <Trans>It contains letters and numbers</Trans>
-              </li>
-              <li id="specialCharactersyHint" className={this.state.hintClassNames.specialCharacters}>
-                <Trans>It contains special characters (like / or * or %)</Trans>
-              </li>
-              <li id="notInDictionaryHint" className={this.state.hintClassNames.notInDictionary}>
-                {this.state.isPwnedServiceAvailable  &&
-                  <Trans>It is not part of an exposed data breach</Trans>
-                }
-                {!this.state.isPwnedServiceAvailable &&
-                  <Tooltip
-                    message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
-                    direction="bottom">
-                    <Trans>It is not part of an exposed data breach</Trans>
-                  </Tooltip>
-                }
-              </li>
-            </ul>
+            <PasswordComplexityWithGoal
+              entropy={passphraseEntropy}
+              targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}/>
+            <>
+              {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
+                <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
+              }
+              {this.state.passphraseInDictionnary &&
+                <div className="invalid-passphrase warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+              }
+            </>
           </div>
 
           <div className="form-actions">
@@ -362,6 +311,7 @@ CreateGpgKey.defaultProps = {
 CreateGpgKey.propTypes = {
   context: PropTypes.any, // The application context
   onComplete: PropTypes.func.isRequired, // The callback function to call when the form is submitted
+  userPassphrasePolicies: PropTypes.object.isRequired, // The User Passphrase Policies set by the organisation
   displayAs: PropTypes.PropTypes.oneOf([
     CreateGpgKeyVariation.SETUP,
     CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY

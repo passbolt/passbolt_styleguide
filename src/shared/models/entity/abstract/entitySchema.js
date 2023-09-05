@@ -192,10 +192,12 @@ class EntitySchema {
          *
          * Note on 'integer' and 'number' - Min / max supported, not needed in passbolt
          */
+      case 'integer':
+      case 'number':
+        EntitySchema.validatePropTypeNumber(propName, prop, propSchema);
+        break;
       case 'array':
       case 'object':
-      case 'number':
-      case 'integer':
       case 'boolean':
       case 'blob':
       case 'null':
@@ -289,6 +291,33 @@ class EntitySchema {
     if (propSchema.custom) {
       if (!propSchema.custom(prop)) {
         validationError.addError(propName, 'custom', `The ${propName} is not valid.`);
+      }
+    }
+    if (validationError.hasErrors()) {
+      throw validationError;
+    }
+  }
+
+  /**
+   * Validate a prop of type number
+   * Throw an error with the validation details if validation fails
+   *
+   * @param {string} propName example: name
+   * @param {*} prop example 42
+   * @param {object} propSchema example {type: number, gte: 64}
+   * @throw {EntityValidationError}
+   * @returns void
+   */
+  static validatePropTypeNumber(propName, prop, propSchema) {
+    const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
+    if (propSchema.gte) {
+      if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.gte)) {
+        validationError.addError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`);
+      }
+    }
+    if (propSchema.lte) {
+      if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.lte)) {
+        validationError.addError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`);
       }
     }
     if (validationError.hasErrors()) {
@@ -445,6 +474,28 @@ class EntitySchema {
       throw new TypeError(`EntitySchema enum schema cannot be empty.`);
     }
     return enumList.includes(prop);
+  }
+
+  /**
+   * Check if the value is greater than the given value
+   *
+   * @param {number} prop
+   * @param {number} gte
+   * @returns {boolean}
+   */
+  static isGreaterThanOrEqual(prop, gte) {
+    return prop >= gte;
+  }
+
+  /**
+   * Check if the value is lesser than the given value
+   *
+   * @param {number} prop
+   * @param {number} lte
+   * @returns {boolean}
+   */
+  static isLesserThanOrEqual(prop, lte) {
+    return prop <= lte;
   }
 }
 

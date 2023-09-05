@@ -23,14 +23,18 @@ import UserPassphrasePoliciesViewModel from "../../../../shared/models/userPassp
  * @type {React.Context<Object>}
  */
 export const AdministrationUserPassphrasePoliciesContext = React.createContext({
-  isProcessing: false,
-  settings: {},
   getSettings: () => {}, // Returns settings for UI changes
+  setSettings: () => {}, // set the given value on the current policies
   findSettings: () => {}, // request the settings from the background page
+  isProcessing: () => {}, // returns true if data is under processing
+  validateData: () => {}, // runs the current data validation
+  save: () => {}, // saves the data on the API
+  getErrors: () => {}, // returns the latest validation errors available
+  hasSettingsChanges: () => {}, // returns true if the data has changed
 });
 
 /**
- * The Administration password policies context provider
+ * The Administration User passphrase Policies context provider
  */
 export class AdministrationUserPassphrasePoliciesContextProvider extends React.Component {
   /**
@@ -47,10 +51,19 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    */
   get defaultState() {
     return {
-      isProcessing: false,
-      settings: new UserPassphrasePoliciesViewModel(),
-      findSettings: this.findSettings.bind(this),
-      getSettings: this.getSettings.bind(this),
+      processing: false,
+      errors: null,
+      hasBeenValidated: false,
+      isDataModified: false,
+      settings: new UserPassphrasePoliciesViewModel(), // the current user passphrase policies settings
+      findSettings: this.findSettings.bind(this), // find the User Passphrase Policies
+      getSettings: this.getSettings.bind(this), // returns the settings that have been fetch previously
+      setSettings: this.setSettings.bind(this), // set the given value on the current policies
+      isProcessing: this.isProcessing.bind(this), // returns true if data is under processing
+      validateData: this.validateData.bind(this), // runs the current data validation
+      save: this.save.bind(this), // saves the data on the API
+      getErrors: this.getErrors.bind(this), // returns the latest validation errors available
+      hasSettingsChanges: this.hasSettingsChanges.bind(this), // returns true if the data has changed
     };
   }
 
@@ -59,15 +72,16 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    * @return {Promise<void>}
    */
   async findSettings() {
-    this.setState({isProcessing: true});
+    this.setState({processing: true});
 
     const result = await this.props.context.port.request("passbolt.user-passphrase-policies.find");
-    const settings = new UserPassphrasePoliciesViewModel(result);
+    const settings = UserPassphrasePoliciesViewModel.fromEntityDto(result);
 
     //Init saved setting
     this.setState({
       settings,
-      isProcessing: false,
+      currentSettings: settings,
+      processing: false,
     });
   }
 
@@ -77,6 +91,78 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    */
   getSettings() {
     return this.state.settings;
+  }
+
+  /**
+   * Set the givent field with the given value.
+   */
+  setSettings(key, value) {
+    const settings = this.state.settings.cloneWithMutation(key, value);
+    const isDataModified = UserPassphrasePoliciesViewModel.isDataDifferent(settings, this.state.currentSettings);
+    if (!this.state.hasBeenValidated) {
+      this.setState({settings, isDataModified});
+      return;
+    }
+
+    const errors = settings.validate();
+    this.setState({errors, settings, isDataModified});
+  }
+
+  /**
+   * Returns true if data is under processing
+   * @returns {boolean}
+   */
+  isProcessing() {
+    return this.state.processing;
+  }
+
+  /**
+   * runs the current data validation
+   * @returns {boolean}
+   */
+  validateData() {
+    const validattionError = this.state.settings.validate();
+    const hasErrors = validattionError.hasErrors();
+    const errors = hasErrors ? validattionError : null;
+    this.setState({errors, hasBeenValidated: true});
+    return !hasErrors;
+  }
+
+  /**
+   * Saves the data on the API
+   */
+  async save() {
+    this.setState({processing: true});
+
+    try {
+      const settingsDto = this.state.settings.toEntityDto();
+      const result = await this.props.context.port.request("passbolt.user-passphrase-policies.save", settingsDto);
+      const settings = UserPassphrasePoliciesViewModel.fromEntityDto(result);
+      this.setState({
+        settings,
+        currentSettings: settings,
+        processing: false,
+        isDataModified: false
+      });
+    } finally {
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * Returns the latest validation errors available
+   * @returns {EntityValidationError|null}
+   */
+  getErrors() {
+    return this.state.errors;
+  }
+
+  /**
+   * Returns true if the data has changed
+   * @returns {boolean}
+   */
+  hasSettingsChanges() {
+    return this.state.isDataModified;
   }
 
   /**
@@ -96,13 +182,12 @@ AdministrationUserPassphrasePoliciesContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any, // The children components
   t: PropTypes.any, // The translate context
-  actionFeedbackContext: PropTypes.object, // The action feedback context
 };
 
 export default withAppContext(withTranslation('common')(AdministrationUserPassphrasePoliciesContextProvider));
 
 /**
- * Resource Workspace Context Consumer HOC
+ * Administration User Passphrase Policies Context Consumer HOC
  * @param WrappedComponent
  */
 export function withAdminUserPassphrasePolicies(WrappedComponent) {

@@ -12,19 +12,10 @@
  * @since         v4.3.0
  */
 
-import React from "react";
-import Range from "./Range";
-import {defaultProps} from "./Range.test.data";
+import {waitFor} from "@testing-library/dom";
 
-export default {
-  title: 'Foundations/Range',
-  component: Range
-};
-
-const Template = args =>
-  <div>
-    <Range {...args} />
-  </div>;
-
-export const Default = Template.bind({});
-Default.args = defaultProps();
+export const waitForTrue = callback => waitFor(() => {
+  if (!callback()) {
+    throw new Error("The changes are not ready yet");
+  }
+});

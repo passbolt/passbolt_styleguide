@@ -9,28 +9,26 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.2.0
+ * @since         4.3.0
  */
 
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props.
- * @param {Object} props The props to override
+ * @param {Object} data The props to override
  * @returns {object}
  */
-export function defaultProps(props = {}) {
-  return {
-    resourcePasswordGeneratorContext: {
-      settings: defaultPasswordPoliciesDto(),
-    },
+export function defaultProps(data = {}) {
+  const defaultData = {
     context: defaultAdministratorAppContext(),
+    dialogContext: defaultDialogContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     t: text => text,
-    ...props
   };
+  return Object.assign(defaultData, data);
 }

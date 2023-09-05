@@ -18,7 +18,7 @@
  * @returns {object}
  */
 
-export function defaultActionFeedbackContextContext(data = {}) {
+export function defaultActionFeedbackContext(data = {}) {
   const defaultContext = {
     displaySuccess: jest.fn(),
     displayError: jest.fn(),

@@ -16,13 +16,13 @@ import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Icon from "../../../../shared/components/Icons/Icon";
+import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
 
 /**
  * The component display variations.
@@ -128,7 +128,11 @@ class CheckPassphrase extends Component {
    * Initialize the pwned password service
    */
   initPwnedPasswordService() {
-    this.pownedService = new PownedService(this.props.context.port);
+    if (this.props.userPassphrasePolicies.external_dictionary_check) {
+      this.pownedService = new PownedService(this.props.context.port);
+    } else {
+      this.setState({isPwnedServiceAvailable: false});
+    }
   }
 
   /**
@@ -149,24 +153,21 @@ class CheckPassphrase extends Component {
 
   /**
    * Evaluate if the passphrase is in dictionary
+   * @param {string} passphrase
    * @return {Promise<void>}
    */
-  async evaluatePassphraseIsInDictionary() {
+  async evaluatePassphraseIsInDictionary(passphrase) {
     let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
     if (!isPwnedServiceAvailable) {
       return;
     }
 
     let passphraseInDictionnary = false;
-    let passphraseEntropy = this.state.passphraseEntropy;
 
     try {
-      const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
+      const result =  await this.pownedService.evaluateSecret(passphrase);
       passphraseInDictionnary = result.inDictionary;
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-      if (passphraseInDictionnary) {
-        passphraseEntropy = 0;
-      }
     } catch (error) {
       // If the service is unavailable don't block the user journey.
       if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
@@ -179,7 +180,6 @@ class CheckPassphrase extends Component {
 
     this.setState({
       isPwnedServiceAvailable,
-      passphraseEntropy,
       passphraseInDictionnary,
     });
   }
@@ -194,7 +194,7 @@ class CheckPassphrase extends Component {
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(passphrase);
       }
     } else {
       this.setState({
@@ -297,7 +297,10 @@ class CheckPassphrase extends Component {
                 preview={true}
                 onChange={this.handleChangePassphrase}
                 disabled={!this.areActionsAllowed}/>
-              <PasswordComplexity entropy={passphraseEntropy}/>
+              <PasswordComplexityWithGoal
+                entropy={passphraseEntropy}
+                targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}
+                isMinimumEntropyRequired={false}/>
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPassphrase &&
@@ -308,9 +311,9 @@ class CheckPassphrase extends Component {
                 }
               </>
               }
-              {!this.state.hasBeenValidated && this.pownedService &&
+              {!this.state.hasBeenValidated &&
                 <>
-                  {!this.state.isPwnedServiceAvailable &&
+                  {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
                     <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
                   }
                   {this.state.passphraseInDictionnary &&
@@ -362,6 +365,7 @@ CheckPassphrase.defaultProps = {
 
 CheckPassphrase.propTypes = {
   context: PropTypes.any, // The application context
+  userPassphrasePolicies: PropTypes.object.isRequired, // the user passphrase policies
   onComplete: PropTypes.func.isRequired, // The callback to trigger when the user wants to verify its passphrase
   displayAs: PropTypes.PropTypes.oneOf([
     CheckPassphraseVariations.SETUP,

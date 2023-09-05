@@ -11,18 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.3.0
  */
+import {defaultUserPassphrasePoliciesEntityDto} from '../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data';
 
-import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
-
-/**
- * Default props
- * @returns {object}
- */
-export function defaultProps(data = {}) {
-  const props = {
-    actionFeedbackContext: defaultActionFeedbackContext(data?.actionFeedbackContext),
+export const defaultUserPassphrasePoliciesContext = (data = {}) => {
+  const defaultData = {
+    findSettings: jest.fn(),
+    getSettings: jest.fn(() => defaultUserPassphrasePoliciesEntityDto()),
   };
-
-  return props;
-}
-
+  return Object.assign(defaultData, data);
+};
