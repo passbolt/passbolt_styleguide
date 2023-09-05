@@ -18,6 +18,7 @@ import {defaultAccountKit, defaultProps} from "./ImportAccountKitContext.test.da
 describe("ImportAccountKitContext", () => {
   let importAccountKitContext; // The ImportAccountKitContextProvider to test
   const props = defaultProps();
+  const passphrase = "ada@passbolt.com";
 
   beforeEach(() => {
     importAccountKitContext = new ImportAccountKitContextProvider(props);
@@ -33,7 +34,6 @@ describe("ImportAccountKitContext", () => {
       expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.IMPORT_ACCOUNT_KIT);
     });
   });
-
 
   describe("ImportAccountKitContext::navigate", () => {
     it("should navigate to next step", () => {
@@ -65,6 +65,66 @@ describe("ImportAccountKitContext", () => {
 
       const accountKit = defaultAccountKit();
       await importAccountKitContext.verifyAccountKit(accountKit);
+
+      expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE);
+    });
+  });
+
+  describe("ImportAccountKitContext::verifyPassphrase", () => {
+    it("should navigate to IMPORTING_ACCOUNT", async() => {
+      expect.assertions(3);
+
+      jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
+      //Avoid navigation to sign in for testing
+      jest.spyOn(importAccountKitContext, "importAccountAndConnect").mockImplementation(() => jest.fn());
+
+      await importAccountKitContext.verifyPassphrase(passphrase);
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth-import.verify-passphrase", passphrase);
+      expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.IMPORTING_ACCOUNT);
+      expect(importAccountKitContext.importAccountAndConnect).toHaveBeenCalled();
+    });
+  });
+
+  describe("ImportAccountKitContext::importAccountAndConnect", () => {
+    it("should flush the account kit", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(importAccountKitContext, "flushAccountKit");
+      jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
+
+      await importAccountKitContext.importAccountAndConnect();
+
+      expect(importAccountKitContext.flushAccountKit).toHaveBeenCalled();
+    });
+
+    it("should navigate to SIGNING_IN", async() => {
+      expect.assertions(2);
+
+      jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
+
+      await importAccountKitContext.importAccountAndConnect();
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth-import.import-account");
+      expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.SIGNING_IN);
+    });
+
+    it("should request background to sign in", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
+
+      await importAccountKitContext.importAccountAndConnect();
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth-import.sign-in");
+    });
+
+    it("should navigate to UNEXPECTED_ERROR_STATE in case of error", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(props.context.port, "request").mockImplementation(() => { throw new Error(); });
+
+      await importAccountKitContext.importAccountAndConnect();
 
       expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE);
     });

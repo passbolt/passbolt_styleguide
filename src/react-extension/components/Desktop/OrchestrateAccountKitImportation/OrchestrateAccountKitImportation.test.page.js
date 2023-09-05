@@ -49,10 +49,10 @@ export default class OrchestrateAccountKitImportationPage {
   }
 
   /**
-   * Returns the verify passphrase page
+   * Returns the account kit details page
    */
-  get verifyPassphrasePage() {
-    return this._page.container.querySelector('.verify-passphrase');
+  get importAccountKitDetailsPage() {
+    return this._page.container.querySelector('.import-account-kit-details');
   }
 
   /**
@@ -60,5 +60,12 @@ export default class OrchestrateAccountKitImportationPage {
    */
   get displayUnexpectedErrorPage() {
     return this._page.container.querySelector('.setup-error');
+  }
+
+  /**
+   * Returns the loading processing title
+   */
+  get loadingTitle() {
+    return this._page.container.querySelector('.login-processing h1').textContent;
   }
 }

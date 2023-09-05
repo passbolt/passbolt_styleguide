@@ -42,7 +42,25 @@ describe("OrchestrateAccountKitImportation", () => {
       props.importAccountKitContext.state = ImportAccountKitWorkflowStates.VERIFY_PASSPHRASE;
       page = new OrchestrateAccountKitImportationPage(props);
 
-      expect(page.verifyPassphrasePage).not.toBeNull();
+      expect(page.importAccountKitDetailsPage).not.toBeNull();
+    });
+
+    it('As an unknown user configuring the desktop app I be informed about the importation of my account kit', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      props.importAccountKitContext.state = ImportAccountKitWorkflowStates.IMPORTING_ACCOUNT;
+      page = new OrchestrateAccountKitImportationPage(props);
+
+      expect(page.loadingTitle).toEqual("Importing account kit");
+    });
+
+    it('As an unknown user configuring the desktop app I be informed when sign in step is in progress', () => {
+      expect.assertions(1);
+      const props = defaultProps();
+      props.importAccountKitContext.state = ImportAccountKitWorkflowStates.SIGNING_IN;
+      page = new OrchestrateAccountKitImportationPage(props);
+
+      expect(page.loadingTitle).toEqual("Sign in");
     });
 
     it('As an unknown user configuring the desktop app I should informed about an unexpected error', () => {
