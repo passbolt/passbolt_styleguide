@@ -69,6 +69,7 @@ import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/P
 import AdminPasswordPoliciesContextProvider
   from "./contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 import ProgressContextProvider from "./contexts/ProgressContext";
+import AdministrationUserPassphrasePoliciesContextProvider from "./contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -209,9 +210,11 @@ class ExtApp extends Component {
                                                 <AdminSubscriptionContextProvider>
                                                   <AdminSsoContextProvider>
                                                     <AdminPasswordPoliciesContextProvider>
-                                                      <ManageDialogs/>
-                                                      <ManageWorkflows/>
-                                                      <AdministrationWorkspace/>
+                                                      <AdministrationUserPassphrasePoliciesContextProvider>
+                                                        <ManageDialogs/>
+                                                        <ManageWorkflows/>
+                                                        <AdministrationWorkspace/>
+                                                      </AdministrationUserPassphrasePoliciesContextProvider>
                                                     </AdminPasswordPoliciesContextProvider>
                                                   </AdminSsoContextProvider>
                                                 </AdminSubscriptionContextProvider>

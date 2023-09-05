@@ -41,6 +41,7 @@ import ManageSsoSettings from "./ManageSsoSettings/ManageSsoSettings";
 import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/DisplayMfaPolicyAdministration";
 import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAdministration";
 import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration";
+import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -139,6 +140,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.RBAC === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If User Passphrase Policies menu is selected
+   * @returns {boolean}
+   */
+  isUserPassphrasePoliciesSelected() {
+    return AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -200,6 +209,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isRbacSelected() &&
                   <DisplayRbacAdministration/>
+                  }
+                  {this.isUserPassphrasePoliciesSelected() &&
+                  <DisplayAdministrationUserPassphrasePolicies/>
                   }
                 </div>
               </div>

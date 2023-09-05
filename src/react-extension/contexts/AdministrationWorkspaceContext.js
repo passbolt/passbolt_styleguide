@@ -179,7 +179,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     let selectedAdministration;
 
     if (isMfaPolicyLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.MFA_POLICY;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.MFA_POLICY;
     } else if (isPasswordPoliciesLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES;
     } else if (isMfaLocation) {
