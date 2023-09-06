@@ -83,13 +83,13 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.addEventListener('click', this.handleDocumentClickEvent);
     document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
     document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent, {capture: true});
+    document.removeEventListener('click', this.handleDocumentClickEvent);
     document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
     document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
   }
@@ -384,14 +384,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Is ready
-   * @return {boolean}
-   */
-  get hasResources() {
-    return this.props.resourceWorkspaceContext.filteredResources.length === 0;
-  }
-
-  /**
    * Exports the selected resources
    */
   async export() {
@@ -401,11 +393,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Get the columns list of resources
-   * @return {*}
+   * Get the columns list of resource
+   * @return {[Object]}
    */
-  get columnsResources() {
-    return this.props.resourceWorkspaceContext.columnsResources;
+  get columnsResourceSetting() {
+    return this.props.resourceWorkspaceContext.columnsResourceSetting?.items;
   }
 
   /**
@@ -540,13 +532,13 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                   <Icon name="caret-down"/>
                 </button>
                 <ul className={`dropdown-content menu left ${this.state.viewColumnsMenuOpen ? "visible" : ""}`}>
-                  {this.columnsResources.map(column =>
+                  {this.columnsResourceSetting?.map(column =>
                     <li key={column.id} className={`${column.id === 'uri' ? "separator-after" : ""}`}>
                       <div className="row">
                         <div className="main-cell-wrapper">
                           <div className="main-cell">
                             <div className="input checkbox">
-                              <input type="checkbox" defaultChecked={column.show} id={column.id} onChange={this.handleOnChangeColumnView}/>
+                              <input type="checkbox" checked={column.show} id={column.id}  name={column.id} onChange={this.handleOnChangeColumnView}/>
                               <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
                             </div>
                           </div>

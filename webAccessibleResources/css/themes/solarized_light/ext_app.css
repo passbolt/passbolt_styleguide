@@ -495,6 +495,7 @@ body {
 }
 .password-typography {
   font-family: 'Inconsolata', 'Open Sans', Verdana, sans-serif;
+  font-size: 1.6rem;
 }
 html {
   font-size: 62.5%;
@@ -6149,17 +6150,17 @@ iframe.cachette {
 .tableview table tbody tr {
   height: 3.2rem;
 }
-.tableview table tbody tr:nth-child(even) {
+.tableview table tbody tr.even {
   background: hsl(44, 50%, 93%);
   color: hsl(194, 81%, 14%);
 }
-.tableview table tbody tr:nth-child(even) .input.checkbox input[type=checkbox] {
+.tableview table tbody tr.even .input.checkbox input[type=checkbox] {
   background: hsl(44, 87%, 98%);
 }
-.tableview table tbody tr:nth-child(even) .input.checkbox input[type=checkbox]:before {
+.tableview table tbody tr.even .input.checkbox input[type=checkbox]:before {
   background: hsl(194, 81%, 14%);
 }
-.tableview table tbody tr:nth-child(even) button {
+.tableview table tbody tr.even button {
   color: hsl(194, 81%, 14%);
 }
 .tableview table tbody tr.selected {
@@ -7582,7 +7583,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .page.settings .profile-desktop-export .windows-store {
   display: block;
-  height: 4.4rem;
+  height: 5.4rem;
   border: 0;
 }
 /* hide icons if there is no space */

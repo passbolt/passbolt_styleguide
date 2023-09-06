@@ -24,7 +24,6 @@ import DisplayResourcesList from "./DisplayResourcesList";
 export default class DisplayResourcesListPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {

@@ -495,6 +495,7 @@ body {
 }
 .password-typography {
   font-family: 'Inconsolata', 'Open Sans', Verdana, sans-serif;
+  font-size: 1.6rem;
 }
 html {
   font-size: 62.5%;
@@ -5240,7 +5241,7 @@ iframe.cachette {
 }
 .page.settings .profile-desktop-export .windows-store {
   display: block;
-  height: 4.4rem;
+  height: 5.4rem;
   border: 0;
 }
 /* hide icons if there is no space */

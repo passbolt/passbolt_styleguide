@@ -20,7 +20,7 @@ import {withLoading} from "../../../contexts/LoadingContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 
 /**
@@ -139,7 +139,7 @@ class DisplayUserTheme extends React.Component {
       <div className="grid grid-responsive-12">
         <div className="row">
           <div className="main-column">
-            <h3>Theme</h3>
+            <h3><Trans>Theme</Trans></h3>
             <div className="themes">
               <div className="col12">
                 <ul>

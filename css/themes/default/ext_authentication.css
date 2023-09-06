@@ -494,6 +494,7 @@ body {
 }
 .password-typography {
   font-family: 'Inconsolata', 'Open Sans', Verdana, sans-serif;
+  font-size: 1.6rem;
 }
 html {
   font-size: 62.5%;
@@ -3731,6 +3732,49 @@ iframe.cachette {
   width: 2.1rem;
   height: 2.1rem;
   margin: 0.6rem;
+}
+.get-started-desktop .step {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  box-sizing: border-box;
+  border: 2px solid #000000;
+  border-radius: 1000px;
+  line-height: 20px;
+  font-size: 15px;
+  flex-direction: column;
+  align-items: center;
+  color: #000000;
+  margin-right: 15px;
+}
+.import-account-kit .big.avatar {
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+.import-account-kit-details .user {
+  width: 100%;
+  margin: auto;
+}
+.import-account-kit-details .user > * {
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+.import-account-kit-details .user .user-name {
+  font-weight: bold;
+  font-size: 1.6rem;
+  line-height: 2rem;
+  margin-top: 1.6rem;
+  margin-bottom: 1rem;
+}
+.import-account-kit-details .user .user-email {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.import-account-kit-details .user .user-domain {
+  font-size: 1.5rem;
+  line-height: 1.9rem;
 }
 html,
 body {

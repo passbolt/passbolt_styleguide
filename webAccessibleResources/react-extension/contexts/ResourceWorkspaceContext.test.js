@@ -16,23 +16,23 @@
  * Unit tests on ResourceWorkspaceContext in regard of specifications
  */
 
-import {defaultAppContext, defaultProps} from "./ResourceWorkspaceContext.test.data";
+import {defaultAppContext} from "./ResourceWorkspaceContext.test.data";
 import ResourceWorkspaceContextPage from "./ResourceWorkspaceContext.test.page";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
 
 beforeEach(() => {
+  jest.resetAllMocks();
   jest.resetModules();
 });
 
 describe("Resource Workspace Context", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
-  const props = defaultProps(); // The props to pass
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
   beforeEach(() => {
-    page = new ResourceWorkspaceContextPage(context, props);
+    page = new ResourceWorkspaceContextPage(context);
   });
 
   describe("As LU I should have the appropriate search filter at any time", () => {
@@ -72,7 +72,6 @@ describe("Resource Workspace Context", () => {
     });
 
     it("AS LU I should have an GROUP filter when I went to /app/passwords with such a filter", async() => {
-      mockContextRequest(context, () => []);
       await page.goToGroup({group: {id: 'some group id'}});
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.GROUP);
     });
@@ -139,6 +138,7 @@ describe("Resource Workspace Context", () => {
         const isGroupResourcesRequest = path === "passbolt.resources.find-all" && args.filters;
         return isGroupResourcesRequest ? mockGroupResources : context.port.request;
       });
+      await page.goToAllItems();
       await page.goToGroup(leadershipTeamGroup);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
@@ -257,6 +257,94 @@ describe("Resource Workspace Context", () => {
       jest.spyOn(window, 'open').mockImplementationOnce(() => {});
       page.goToResourceUri(resource.uri);
       expect(window.open).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe("As LU I should be able to load resource columns setting", () => {
+    it("As LU I should be able to load resource columns setting empty", async() => {
+      expect.assertions(2);
+      await page.goToAllItems();
+      const defaultColumnsSetting = [
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: true},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "uri", label: "URI", position: 5, show: true},
+        {id: "modified", label: "Modified", position: 6, show: true}
+      ];
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(6);
+      expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
+    });
+
+    it("As LU I should be able to load resource columns setting", async() => {
+      expect.assertions(3);
+      const columnsSetting = [
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", width: 200, position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: false},
+        {id: "password", label: "Password", width: 300, position: 4, show: true},
+        {id: "uri", label: "URI", position: 5, show: false},
+        {id: "modified", label: "Modified", width: 250, position: 6, show: true}
+      ];
+      const sorter = {
+        propertyName: 'name',
+        asc: true
+      };
+      const gridSetting = {
+        columns_setting: columnsSetting,
+        sorter: sorter
+      };
+      mockContextRequest(context, path => {
+        const isGridSettingRequest = path === "passbolt.resources.get-grid-setting";
+        return isGridSettingRequest ? gridSetting : context.port.request;
+      });
+      await page.goToAllItems();
+      await page.goToRootFolder();
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(6);
+      expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
+      expect(page.sorter.toDto()).toStrictEqual(sorter);
+    });
+  });
+
+  describe("As LU I should be able to show/hide a resource column", () => {
+    it("As LU I should be able to show a resource column", async() => {
+      expect.assertions(1);
+      await page.goToAllItems();
+      await page.onChangeColumnView("name", true);
+      expect(page.columnsResourceSetting.items[1].show).toBeTruthy();
+    });
+
+    it("As LU I should be able to hide a resource column", async() => {
+      expect.assertions(1);
+      await page.goToAllItems();
+      await page.onChangeColumnView("name", false);
+      expect(page.columnsResourceSetting.items[1].show).toBeFalsy();
+    });
+  });
+
+  describe("As LU I should be able to update the resource columns setting", () => {
+    it("As LU I should be able to show a resource column", async() => {
+      expect.assertions(1);
+      const columnsSetting = [
+        {id: "favorite", label: "Favorite", position: 1, width: 20},
+        {id: "username", label: "Username", position: 2, width: 200},
+        {id: "password", label: "Password", width: 100, position: 3},
+        {id: "uri", label: "URI", position: 4, width: 300},
+        {id: "modified", label: "Modified", width: 250, position: 5}
+      ];
+      const mergedColumnsSetting = [
+        {id: "favorite", label: "Favorite", position: 1, width: 20, show: true},
+        {id: "name", label: "Name", position: 2, show: false},
+        {id: "username", label: "Username", position: 2, width: 200, show: true},
+        {id: "password", label: "Password", width: 100, position: 3, show: true},
+        {id: "uri", label: "URI", position: 4, width: 300, show: true},
+        {id: "modified", label: "Modified", width: 250, position: 5, show: true}
+      ];
+      await page.goToAllItems();
+      await page.onChangeColumnView("name", false);
+      await page.onChangeColumnsSettings(columnsSetting);
+      //expect(page.columnsResourceSetting.length).toStrictEqual(6);
+      expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });
 });

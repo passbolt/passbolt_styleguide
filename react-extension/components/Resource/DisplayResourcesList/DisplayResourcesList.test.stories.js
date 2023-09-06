@@ -25,7 +25,9 @@ const Template = args =>
     <MemoryRouter initialEntries={['/']}>
       <div className="page">
         <div className="panel">
-          <Route component={routerProps => <DisplayResourcesList {...args} {...routerProps}/>}></Route>
+          <Route component={routerProps =>
+            <DisplayResourcesList {...args} {...routerProps}/>}>
+          </Route>
         </div>
       </div>
     </MemoryRouter>

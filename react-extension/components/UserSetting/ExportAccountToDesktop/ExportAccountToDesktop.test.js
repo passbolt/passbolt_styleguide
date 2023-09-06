@@ -33,7 +33,7 @@ describe("ExportAccountToDesktop", () => {
   });
 
   describe('As a user I can setup the desktop application from the browser extension', () => {
-    it('As a LU on the web application I be able to see the “desktop app setup” in the user setting', () => {
+    it('As a LU on the web application I should be able to see the “desktop app setup” in the user setting', () => {
       expect.assertions(8);
 
       expect(page.exists()).toBeTruthy();

@@ -346,7 +346,7 @@ class ResourceViewPage extends React.Component {
           </li>
           <li className="property">
             <div className="information">
-              <span className="property-name">Password</span>
+              <span className="property-name"><Trans>Password</Trans></span>
               <div className="password-wrapper">
                 <div className={`property-value secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
                   title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>

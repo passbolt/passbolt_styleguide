@@ -33,6 +33,20 @@ describe("As LU I can see a Breadcrumb", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
 
+  it('As LU I should not see a breadcrumb when items are not loaded yet', () => {
+    const resourceWorkspaceContext = {
+      filter: {
+        type: ResourceWorkspaceFilterTypes.NONE,
+        payload: null
+      },
+      filteredResources: null
+    };
+    page = new FilterResourcesByBreadcrumbPage(context, resourceWorkspaceContext);
+    expect(page.displayBreadcrumb.exists()).toBeTruthy();
+    expect(page.displayBreadcrumb.count).toBe(0);
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBeUndefined();
+  });
+
   it('As LU I should see a breadcrumb for all items', () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ALL, null, 10); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);

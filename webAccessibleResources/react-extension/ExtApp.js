@@ -51,7 +51,6 @@ import HandlePassphraseEntryEvents
 import HandleFolderMoveStrategyEvents
   from "./components/ResourceFolder/HandleFolderMoveStrategyEvents/HandleFolderMoveStrategyEvents";
 import HandleProgressEvents from "./components/Common/Progress/HandleProgressEvents/HandleProgressEvents";
-import HandleErrorEvents from "./components/Common/Error/HandleErrorEvents/HandleErrorEvents";
 import DisplayResourcesWorkspace from "./components/Resource/DisplayResourcesWorkspace/DisplayResourcesWorkspace";
 import DragContextProvider from "./contexts/DragContext";
 import AccountRecoveryUserContextProvider from "./contexts/AccountRecoveryUserContext";
@@ -60,13 +59,15 @@ import WorkflowContextProvider from "./contexts/WorkflowContext";
 import ManageWorkflows from "./components/Common/Workflow/ManageWorkflows/ManageWorkflows";
 import AdminAccountRecoveryContextProvider from "./contexts/AdminAccountRecoveryContext";
 import HandleApplicationFirstLoadRoute from "./components/Common/Route/HandleApplicationFirstLoadRoute";
-import AdminSubscriptionContextProvider from "./contexts/Administration/AdministrationSubscription/AdministrationSubscription";
+import AdminSubscriptionContextProvider
+  from "./contexts/Administration/AdministrationSubscription/AdministrationSubscription";
 import HandleStatusCheck from './components/HandleStatusCheck/HandleStatusCheck';
 import MfaContextProvider from "./contexts/MFAContext";
 import AdminSsoContextProvider from "./contexts/AdminSsoContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
 import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import AdminPasswordPoliciesContextProvider from "./contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
+import AdminPasswordPoliciesContextProvider
+  from "./contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -106,7 +107,6 @@ class ExtApp extends Component {
                                   <HandlePassphraseEntryEvents/>
                                   <HandleFolderMoveStrategyEvents/>
                                   <HandleProgressEvents/>
-                                  <HandleErrorEvents/>
                                   <HandleSessionExpired/>
 
                                   { /* Announcement Management */}

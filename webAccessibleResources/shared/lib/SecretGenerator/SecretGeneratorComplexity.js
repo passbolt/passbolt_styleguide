@@ -68,7 +68,7 @@ export const MASKS = {
     characters: ["#", "$", "%", "&", "@", "^", "~"],
   },
   mask_parenthesis: {
-    label: "{ [ ( | ) ] ] }",
+    label: "{ [ ( | ) ] }",
     characters: ["{", "(", "[", "|", "]", ")", "}"],
   },
   mask_char2: {

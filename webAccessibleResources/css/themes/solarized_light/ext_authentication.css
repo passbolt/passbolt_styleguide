@@ -456,8 +456,8 @@ html {
   line-height: normal;
 }
 body {
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 87%, 98%);
+  color: #000000;
+  background: #FFFFFF;
 }
 body.iframe {
   background: transparent;
@@ -495,6 +495,7 @@ body {
 }
 .password-typography {
   font-family: 'Inconsolata', 'Open Sans', Verdana, sans-serif;
+  font-size: 1.6rem;
 }
 html {
   font-size: 62.5%;
@@ -516,7 +517,7 @@ h2 {
 h3 {
   font-size: 1.6rem;
   line-height: 2.4rem;
-  border-bottom: 1px solid hsl(44, 50%, 93%);
+  border-bottom: 1px solid #E0E0E0;
 }
 p {
   font-size: 1.4rem;
@@ -541,30 +542,30 @@ a {
   cursor: pointer;
   font-size: 1.5rem;
   line-height: 2rem;
-  border-bottom: 1px solid hsl(44, 50%, 83%);
+  border-bottom: 1px solid #CCCCCC;
 }
 a:link,
 a:visited {
-  color: hsl(194, 81%, 14%);
+  color: #000000;
 }
 a:hover {
   text-decoration: none;
   cursor: pointer;
-  color: hsl(194, 100%, 15%);
-  border-bottom: 1px solid hsl(194, 100%, 15%);
+  color: #2894DF;
+  border-bottom: 1px solid #2894DF;
 }
 a:active,
 a:focus,
 a:focus-visible {
   outline: 0;
-  color: hsl(194, 100%, 15%);
+  color: #2894DF;
   border: none;
 }
 a.disabled {
   outline: 0;
   text-decoration: none;
   cursor: default;
-  color: hsl(194, 81%, 14%);
+  color: #000000;
   opacity: 0.5;
   pointer-events: none;
 }
@@ -575,7 +576,7 @@ button.link {
   cursor: pointer;
   font-size: 1.5rem;
   line-height: 2rem;
-  border-bottom: 1px solid hsl(44, 50%, 83%);
+  border-bottom: 1px solid #CCCCCC;
   border-radius: 0;
   padding: 0;
   text-align: inherit;
@@ -586,24 +587,24 @@ button.link {
   min-width: inherit;
 }
 button.link:focus {
-  border-bottom: 1px solid hsl(44, 50%, 83%);
+  border-bottom: 1px solid #CCCCCC;
   box-shadow: none;
 }
 button.link:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 1px #2894DF;
   outline: 0;
 }
 button.link:hover {
   text-decoration: none;
   cursor: pointer;
-  color: hsl(194, 100%, 15%);
-  border-bottom: 1px solid hsl(194, 100%, 15%);
+  color: #2894DF;
+  border-bottom: 1px solid #2894DF;
   box-shadow: none;
 }
 button.link:active {
   background: transparent;
   outline: 0;
-  color: hsl(194, 100%, 15%);
+  color: #2894DF;
   border: none;
   box-shadow: none;
 }
@@ -611,11 +612,11 @@ button.link:disabled {
   background: transparent;
   outline: 0;
   text-decoration: none;
-  color: hsl(194, 81%, 14%);
+  color: #000000;
   cursor: default;
   opacity: 0.5;
   pointer-events: none;
-  border-bottom: 1px solid hsl(44, 50%, 83%);
+  border-bottom: 1px solid #CCCCCC;
   box-shadow: none;
 }
 button.link.inline {
@@ -653,9 +654,9 @@ button,
   text-align: center;
   text-decoration: none;
   border: none;
-  box-shadow: inset 0 0 0 1px hsl(44, 50%, 76%);
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 50%, 92%);
+  box-shadow: inset 0 0 0 1px #E0E0E0;
+  color: #000000;
+  background: #F8F8F8;
   border-radius: 0.4rem;
   box-sizing: border-box;
   min-width: 7rem;
@@ -671,8 +672,8 @@ button,
 }
 button:hover,
 .button:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 76%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #E0E0E0;
+  color: #000000;
   text-decoration: none;
   border: none;
 }
@@ -680,17 +681,17 @@ button:focus,
 .button:focus,
 button:focus-visible,
 .button:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 1px #2894DF;
+  color: #000000;
   text-decoration: none;
   border: none;
   outline: 0;
 }
 button:active,
 .button:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 76%);
-  background: hsl(44, 50%, 85%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #E0E0E0;
+  background: #DEDEDE;
+  color: #000000;
   text-decoration: none;
   border: none;
 }
@@ -699,8 +700,8 @@ button.disabled,
 button:disabled,
 .button:disabled {
   cursor: default;
-  background: hsl(44, 50%, 92%);
-  box-shadow: inset 0 0 0 1px hsl(44, 50%, 76%);
+  background: #F8F8F8;
+  box-shadow: inset 0 0 0 1px #E0E0E0;
   opacity: 0.5;
   outline: 0;
 }
@@ -716,22 +717,22 @@ button-icon,
   width: 4.8rem;
   height: 3.6rem;
   padding: 0;
-  background: hsl(44, 50%, 89%);
-  box-shadow: inset 0 0 0 1px hsl(44, 50%, 76%);
+  background: #EEEEEE;
+  box-shadow: inset 0 0 0 1px #BDBDBD;
   /* hover */
   /* active */
 }
 button-icon:hover,
 .button-icon:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 76%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #BDBDBD;
+  color: #000000;
   text-decoration: none;
   border: none;
 }
 button-icon:active,
 .button-icon:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 76%);
-  background: hsl(44, 50%, 88%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #BDBDBD;
+  background: #E0E0E0;
 }
 button-icon svg,
 .button-icon svg {
@@ -756,30 +757,30 @@ button-transparent:focus,
 }
 button-transparent:hover,
 .button-transparent:hover {
-  background: hsla(46, 48%, 92%, 0.1);
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsla(194, 14%, 5%, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 button-transparent:focus-visible,
 .button-transparent:focus-visible {
-  background: hsla(46, 48%, 92%, 0.1);
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 1px #2894DF;
 }
 button-transparent:active,
 .button-transparent:active {
-  background: hsla(46, 48%, 92%, 0.1);
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsla(194, 14%, 5%, 0.05);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 button-transparent:disabled,
 .button-transparent:disabled,
 button-transparent.disabled,
 .button-transparent.disabled {
-  background: hsla(46, 48%, 92%, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   box-shadow: none;
 }
 button.processing,
 .button.processing {
-  background: hsl(44, 50%, 92%);
-  box-shadow: inset 0 0 0 1px hsl(44, 50%, 76%);
+  background: #F8F8F8;
+  box-shadow: inset 0 0 0 1px #E0E0E0;
   color: transparent;
   /* hover */
   /* focus */
@@ -788,23 +789,23 @@ button.processing,
 }
 button.processing:hover,
 .button.processing:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 76%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #E0E0E0;
 }
 button.processing:focus,
 .button.processing:focus {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 1px #2894DF;
 }
 button.processing:active,
 .button.processing:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 76%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #E0E0E0;
 }
 button.processing.disabled,
 .button.processing.disabled,
 button.processing:disabled,
 .button.processing:disabled {
   opacity: 1;
-  background: rgba(241, 233, 213, 0.5);
-  box-shadow: inset 0 0 0 0.1rem rgba(224, 208, 163, 0.5);
+  background: rgba(238, 238, 238, 0.5);
+  box-shadow: inset 0 0 0 0.1rem rgba(224, 224, 224, 0.5);
 }
 button.processing .svg-icon.spinner,
 .button.processing .svg-icon.spinner {
@@ -812,48 +813,48 @@ button.processing .svg-icon.spinner,
 }
 button.primary,
 .button.primary {
-  background: hsl(194, 100%, 15%);
-  box-shadow: inset 0 0 0 0.1rem hsl(194, 100%, 15%);
-  color: hsl(44, 87%, 98%);
+  background: #2894DF;
+  box-shadow: inset 0 0 0 0.1rem #2894DF;
+  color: #FFFFFF;
   /* disabled */
 }
 button.primary svg,
 .button.primary svg {
-  --icon-color: hsl(44, 87%, 98%);
-  --icon-background-color: hsl(194, 81%, 14%);
+  --icon-color: #FFFFFF;
+  --icon-background-color: #000000;
 }
 button.primary.processing,
 .button.primary.processing {
   color: transparent;
-  background: hsl(194, 100%, 15%);
-  box-shadow: inset 0 0 0 1px hsl(194, 100%, 15%);
+  background: #2894DF;
+  box-shadow: inset 0 0 0 1px #2894DF;
 }
 button.primary.processing.disabled,
 .button.primary.processing.disabled,
 button.primary.processing:disabled,
 .button.primary.processing:disabled {
-  background: rgba(0, 59, 77, 0.5);
+  background: rgba(40, 148, 223, 0.5);
 }
 button.primary.processing .svg-icon.spinner,
 .button.primary.processing .svg-icon.spinner {
-  --spinner-color: hsl(44, 87%, 98%);
-  --spinner-background: rgba(254, 252, 245, 0.25);
+  --spinner-color: #FFFFFF;
+  --spinner-background: rgba(255, 255, 255, 0.25);
 }
 button.primary:hover,
 .button.primary:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(194, 100%, 15%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #2894DF;
 }
 button.primary:focus,
 .button.primary:focus,
 button.primary:focus-visible,
 .button.primary:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
+  box-shadow: 0 0 0.4rem #2A9CEB;
   outline: 0;
 }
 button.primary:active,
 .button.primary:active {
-  background: hsl(194, 100%, 15%);
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(194, 100%, 15%);
+  background: #2894DF;
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #2894DF;
 }
 button.primary.disabled,
 .button.primary.disabled,
@@ -864,45 +865,45 @@ button.primary:disabled,
 }
 button.warning,
 .button.warning {
-  background: hsl(1, 71%, 52%);
-  box-shadow: inset 0 0 0 0.1rem hsl(1, 71%, 52%);
-  color: hsl(44, 87%, 98%);
+  background: #D40101;
+  box-shadow: inset 0 0 0 0.1rem #D40101;
+  color: #FFFFFF;
   /* disabled */
 }
 button.warning svg,
 .button.warning svg {
-  --icon-color: hsl(44, 87%, 98%);
-  --icon-background-color: hsl(194, 81%, 14%);
+  --icon-color: #FFFFFF;
+  --icon-background-color: #000000;
 }
 button.warning.processing,
 .button.warning.processing {
   color: transparent;
-  background: hsl(1, 71%, 52%);
-  box-shadow: inset 0 0 0 1px hsl(1, 71%, 52%);
+  background: #D40101;
+  box-shadow: inset 0 0 0 1px #D40101;
 }
 button.warning.processing.disabled,
 .button.warning.processing.disabled,
 button.warning.processing:disabled,
 .button.warning.processing:disabled {
-  background: rgba(220, 49, 46, 0.5);
+  background: rgba(212, 1, 1, 0.5);
 }
 button.warning.processing .svg-icon.spinner,
 .button.warning.processing .svg-icon.spinner {
-  --spinner-color: hsl(44, 87%, 98%);
-  --spinner-background: rgba(254, 252, 245, 0.25);
+  --spinner-color: #FFFFFF;
+  --spinner-background: rgba(255, 255, 255, 0.25);
 }
 button.warning:hover,
 .button.warning:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(1, 71%, 52%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #D40101;
 }
 button.warning:focus,
 .button.warning:focus {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
+  box-shadow: 0 0 0.4rem #2A9CEB;
 }
 button.warning:active,
 .button.warning:active {
-  background: hsl(1, 71%, 52%);
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(1, 71%, 52%);
+  background: #D40101;
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #D40101;
 }
 button.warning.disabled,
 .button.warning.disabled,
@@ -926,9 +927,9 @@ button.warning:disabled,
 }
 /* toggle selected */
 .button-toggle.selected {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 76%);
-  background: hsl(44, 50%, 85%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #E0E0E0;
+  background: #DEDEDE;
+  color: #000000;
   text-decoration: none;
   border: none;
 }
@@ -969,7 +970,7 @@ label > * {
   margin-left: 0.4rem;
 }
 label .svg-icon.exclamation {
-  --icon-exclamation-background-color: hsl(18, 80%, 44%);
+  --icon-exclamation-background-color: #DD6A00;
 }
 label .svg-icon svg {
   height: 1.2rem;
@@ -977,7 +978,7 @@ label .svg-icon svg {
 }
 label:active {
   background: none;
-  color: hsl(194, 81%, 14%);
+  color: #000000;
 }
 /*
 	Required Label
@@ -988,15 +989,15 @@ label:active {
 .required > label:after {
   content: "\002A";
   /* unicode character * */
-  color: hsl(1, 71%, 52%);
+  color: #D40101;
   font-weight: bold;
   margin-left: 0.4rem;
 }
 .input.error label {
-  color: hsl(1, 71%, 52%);
+  color: #D40101;
 }
 .input.warning label {
-  color: hsl(18, 80%, 44%);
+  color: #DD6A00;
 }
 .input.text.disabled label,
 .input-password-wrapper.disabled label,
@@ -1033,14 +1034,14 @@ textarea {
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 2rem;
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 87%, 98%);
+  color: #000000;
+  background: #FFFFFF;
   width: 100%;
   max-width: 64rem;
   padding: 0.8rem 0.8rem;
   margin-bottom: 1.2rem;
   display: block;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   border: none;
   border-radius: 0.4rem;
   box-sizing: border-box;
@@ -1053,9 +1054,9 @@ input[type=email]:hover,
 input[type=password]:hover,
 input[type=search]:hover,
 textarea:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 82%);
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #BDBDBD;
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number]:focus,
 input[type=text]:focus,
@@ -1064,10 +1065,10 @@ input[type=email]:focus,
 input[type=password]:focus,
 input[type=search]:focus,
 textarea:focus {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 0.1rem hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 0.1rem #2894DF;
   outline: 0;
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number]:active,
 input[type=text]:active,
@@ -1076,9 +1077,9 @@ input[type=email]:active,
 input[type=password]:active,
 input[type=search]:active,
 textarea:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 82%);
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #BDBDBD;
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number]:disabled,
 input[type=text]:disabled,
@@ -1088,11 +1089,11 @@ input[type=password]:disabled,
 input[type=search]:disabled,
 textarea:disabled {
   cursor: default;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   opacity: 0.5;
   outline: 0;
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number]:placeholder-shown,
 input[type=text]:placeholder-shown,
@@ -1130,30 +1131,30 @@ input[type=number]::-webkit-inner-spin-button {
   margin: 0;
 }
 input[type=number].in-field {
-  background: hsl(44, 50%, 92%);
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 88%);
+  background: #F8F8F8;
+  box-shadow: inset 0 0 0 0.1rem #E0E0E0;
   height: 3rem;
   margin-bottom: 0;
 }
 input[type=number].in-field:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 88%);
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #E0E0E0;
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number].in-field:focus {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 0.1rem hsl(194, 100%, 15%);
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 0.1rem #2894DF;
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number].in-field:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 88%);
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #E0E0E0;
+  background: #FFFFFF;
+  color: #000000;
 }
 input[type=number].in-field:disabled {
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 88%);
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: inset 0 0 0 0.1rem #E0E0E0;
+  background: #FFFFFF;
+  color: #000000;
 }
 /*
 	Always visible arrow for Chrome to be coherent with Firefox
@@ -1188,9 +1189,9 @@ textarea.full_report {
   align-items: center;
   margin-bottom: 1.2rem;
   border-radius: 0.4rem;
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 87%, 98%);
-  --passphrase-placeholder-color: hsl(194, 81%, 14%);
+  color: #000000;
+  background: #FFFFFF;
+  --passphrase-placeholder-color: #000000;
 }
 .input.password input[type=text],
 .input.password input[type=password] {
@@ -1199,65 +1200,65 @@ textarea.full_report {
   max-width: initial;
   background: inherit;
   color: inherit;
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
   border-radius: 0.4rem 0 0 0.4rem;
   padding: 0.8rem;
   margin: 0;
 }
 .input.password input[type=text]:hover,
 .input.password input[type=password]:hover {
-  box-shadow: 0.1rem 0 0 hsl(44, 87%, 98%), inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: 0.1rem 0 0 #FFFFFF, inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
 }
 .input.password input[type=text]:hover ~ .password-view-wrapper,
 .input.password input[type=password]:hover ~ .password-view-wrapper {
-  box-shadow: 0.1rem 0 0 hsl(44, 87%, 98%), inset 0 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%);
+  box-shadow: 0.1rem 0 0 #FFFFFF, inset 0 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD;
 }
 .input.password input[type=text]:hover ~ .security-token-wrapper,
 .input.password input[type=password]:hover ~ .security-token-wrapper,
 .input.password input[type=text]:hover ~ :last-child,
 .input.password input[type=password]:hover ~ :last-child {
-  box-shadow: inset 0 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset -0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset -0.1rem 0 0 #BDBDBD;
 }
 .input.password input[type=text]:focus,
 .input.password input[type=password]:focus {
-  box-shadow: inset 0 0.1rem 0 hsl(194, 100%, 15%), inset 0 -0.1rem 0 hsl(194, 100%, 15%), inset 0.1rem 0 0 hsl(194, 100%, 15%);
+  box-shadow: inset 0 0.1rem 0 #2894DF, inset 0 -0.1rem 0 #2894DF, inset 0.1rem 0 0 #2894DF;
   outline: 0;
 }
 .input.password input[type=text]:focus ~ .password-view-wrapper,
 .input.password input[type=password]:focus ~ .password-view-wrapper {
-  box-shadow: inset 0 0.1rem 0 hsl(194, 100%, 15%), inset 0 -0.1rem 0 hsl(194, 100%, 15%);
+  box-shadow: inset 0 0.1rem 0 #2894DF, inset 0 -0.1rem 0 #2894DF;
 }
 .input.password input[type=text]:focus ~ .security-token-wrapper,
 .input.password input[type=password]:focus ~ .security-token-wrapper,
 .input.password input[type=text]:focus ~ :last-child,
 .input.password input[type=password]:focus ~ :last-child {
-  box-shadow: inset 0 0.1rem 0 hsl(194, 100%, 15%), inset 0 -0.1rem 0 hsl(194, 100%, 15%), inset -0.1rem 0 0 hsl(194, 100%, 15%);
+  box-shadow: inset 0 0.1rem 0 #2894DF, inset 0 -0.1rem 0 #2894DF, inset -0.1rem 0 0 #2894DF;
 }
 .input.password input[type=text]:active,
 .input.password input[type=password]:active {
-  box-shadow: inset 0 -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
 }
 .input.password input[type=text]:active ~ .password-view-wrapper,
 .input.password input[type=password]:active ~ .password-view-wrapper {
-  box-shadow: inset 0 -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD;
 }
 .input.password input[type=text]:active ~ .security-token-wrapper,
 .input.password input[type=password]:active ~ .security-token-wrapper,
 .input.password input[type=text]:active ~ :last-child,
 .input.password input[type=password]:active ~ :last-child {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset -0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset -0.1rem 0 0 #BDBDBD;
 }
 .input.password input[type=text]:disabled,
 .input.password input[type=password]:disabled,
 .input.password input[type=text] .disabled,
 .input.password input[type=password] .disabled {
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
 }
 .input.password input[type=text]:disabled ~ .password-view-wrapper,
 .input.password input[type=password]:disabled ~ .password-view-wrapper,
 .input.password input[type=text] .disabled ~ .password-view-wrapper,
 .input.password input[type=password] .disabled ~ .password-view-wrapper {
-  box-shadow: inset 0 0.1rem 0 rgba(232, 220, 186, 0.5), inset 0 -0.1rem 0 rgba(232, 220, 186, 0.5);
+  box-shadow: inset 0 0.1rem 0 rgba(189, 189, 189, 0.5), inset 0 -0.1rem 0 rgba(189, 189, 189, 0.5);
 }
 .input.password input[type=text]:disabled ~ .security-token-wrapper,
 .input.password input[type=password]:disabled ~ .security-token-wrapper,
@@ -1267,7 +1268,7 @@ textarea.full_report {
 .input.password input[type=password]:disabled ~ :last-child,
 .input.password input[type=text] .disabled ~ :last-child,
 .input.password input[type=password] .disabled ~ :last-child {
-  box-shadow: inset 0 0.1rem 0 rgba(232, 220, 186, 0.5), inset 0 -0.1rem 0 rgba(232, 220, 186, 0.5), inset -0.1rem 0 0 rgba(232, 220, 186, 0.5);
+  box-shadow: inset 0 0.1rem 0 rgba(189, 189, 189, 0.5), inset 0 -0.1rem 0 rgba(189, 189, 189, 0.5), inset -0.1rem 0 0 rgba(189, 189, 189, 0.5);
 }
 .input.password input[type=text]:disabled ~ .security-token-wrapper .security-token,
 .input.password input[type=password]:disabled ~ .security-token-wrapper .security-token,
@@ -1316,26 +1317,26 @@ textarea.full_report {
 .input.password .password-view-wrapper {
   display: flex;
   align-items: center;
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD;
   padding: 0.3rem 0.2rem 0.3rem 0;
 }
 .input.password .security-token-wrapper,
 .input.password > :last-child {
   display: flex;
   align-items: center;
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset -0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset -0.1rem 0 0 #BDBDBD;
   border-radius: 0 0.4rem 0.4rem 0;
   padding: 0.3rem 0.3rem 0.3rem 0;
 }
 .input.password:hover {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.password:focus-within {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
+  box-shadow: 0 0 0.4rem #2A9CEB;
   outline: 0;
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.password.no-focus:focus-within {
   box-shadow: none;
@@ -1347,19 +1348,19 @@ textarea.full_report {
 }
 .input.password:active {
   box-shadow: none;
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.password.disabled {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.search {
   display: flex;
   align-items: center;
   border-radius: 0.4rem;
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 87%, 98%);
+  color: #000000;
+  background: #FFFFFF;
 }
 .input.search input[type=search] {
   flex: 1;
@@ -1367,42 +1368,42 @@ textarea.full_report {
   max-width: initial;
   background: inherit;
   color: inherit;
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
   border-radius: 0.4rem 0 0 0.4rem;
   padding: 0.8rem 1.1rem;
   margin: 0;
 }
 .input.search input[type=search]:hover {
-  box-shadow: 0.1rem 0 0 hsl(44, 87%, 98%), inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: 0.1rem 0 0 #FFFFFF, inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
 }
 .input.search input[type=search]:hover ~ .search-button-wrapper {
-  box-shadow: inset 0 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset -0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset -0.1rem 0 0 #BDBDBD;
 }
 .input.search input[type=search]:focus {
-  box-shadow: inset 0 0.1rem 0 hsl(194, 100%, 15%), inset 0 -0.1rem 0 hsl(194, 100%, 15%), inset 0.1rem 0 0 hsl(194, 100%, 15%);
+  box-shadow: inset 0 0.1rem 0 #2894DF, inset 0 -0.1rem 0 #2894DF, inset 0.1rem 0 0 #2894DF;
   outline: 0;
 }
 .input.search input[type=search]:focus ~ .search-button-wrapper {
-  box-shadow: inset 0 0.1rem 0 hsl(194, 100%, 15%), inset 0 -0.1rem 0 hsl(194, 100%, 15%), inset -0.1rem 0 0 hsl(194, 100%, 15%);
+  box-shadow: inset 0 0.1rem 0 #2894DF, inset 0 -0.1rem 0 #2894DF, inset -0.1rem 0 0 #2894DF;
 }
 .input.search input[type=search]:active {
-  box-shadow: inset 0 -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
 }
 .input.search input[type=search]:active ~ .search-button-wrapper {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset -0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset -0.1rem 0 0 #BDBDBD;
 }
 .input.search input[type=search]:disabled,
 .input.search input[type=search] .disabled {
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset 0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset 0.1rem 0 0 #BDBDBD;
 }
 .input.search input[type=search]:disabled ~ .search-button-wrapper,
 .input.search input[type=search] .disabled ~ .search-button-wrapper {
-  box-shadow: inset 0 0.1rem 0 rgba(232, 220, 186, 0.5), inset 0 -0.1rem 0 rgba(232, 220, 186, 0.5), inset -0.1rem 0 0 rgba(232, 220, 186, 0.5);
+  box-shadow: inset 0 0.1rem 0 rgba(189, 189, 189, 0.5), inset 0 -0.1rem 0 rgba(189, 189, 189, 0.5), inset -0.1rem 0 0 rgba(189, 189, 189, 0.5);
 }
 .input.search .search-button-wrapper {
   display: flex;
   align-items: center;
-  box-shadow: inset 0 0.1rem 0 hsl(44, 50%, 82%), inset 0 -0.1rem 0 hsl(44, 50%, 82%), inset -0.1rem 0 0 hsl(44, 50%, 82%);
+  box-shadow: inset 0 0.1rem 0 #BDBDBD, inset 0 -0.1rem 0 #BDBDBD, inset -0.1rem 0 0 #BDBDBD;
   border-radius: 0 0.4rem 0.4rem 0;
   padding: 0.3rem 0.3rem 0.3rem 0;
 }
@@ -1412,14 +1413,14 @@ textarea.full_report {
   height: 3rem;
 }
 .input.search:hover {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.search:focus-within {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
+  box-shadow: 0 0 0.4rem #2A9CEB;
   outline: 0;
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.search.no-focus:focus-within {
   box-shadow: none;
@@ -1427,12 +1428,12 @@ textarea.full_report {
 }
 .input.search:active {
   box-shadow: none;
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.search.disabled {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 /* remove webkit search input decoration and cancel button */
 input[type="search"]::-webkit-search-decoration,
@@ -1448,7 +1449,7 @@ input[type="search"]::-webkit-search-cancel-button {
   border-radius: 0.1rem;
 }
 .digit {
-  color: #396e98;
+  color: #2c62f9;
 }
 .special-char {
   color: #bf2812;
@@ -1474,8 +1475,8 @@ input[type=file] {
   align-items: center;
   padding: 0.3rem;
   margin-bottom: 1.2rem;
-  background: hsl(44, 87%, 98%);
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  background: #FFFFFF;
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   border: none;
   border-radius: 0.4rem;
   box-sizing: border-box;
@@ -1501,8 +1502,8 @@ input[type=file] {
   height: 1.4rem;
 }
 .input.file.disabled .input-file-inline {
-  background: rgba(254, 252, 245, 0.5);
-  box-shadow: inset 0 0 0 0.1rem rgba(232, 220, 186, 0.5);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 0 0.1rem rgba(189, 189, 189, 0.5);
 }
 .input.file.disabled .input-file-inline input[type=text]:disabled {
   opacity: 0.5;
@@ -1522,8 +1523,8 @@ input[type=file] {
   content: '';
   width: 1.4rem;
   height: 1.4rem;
-  background: hsl(44, 87%, 98%);
-  border: 1px solid hsl(44, 50%, 80%);
+  background: #FFFFFF;
+  border: 1px solid #A0A0A0;
   border-radius: 0.2rem;
   box-sizing: border-box;
 }
@@ -1542,25 +1543,25 @@ input[type=file] {
   -ms-text-overflow: ellipsis;
 }
 .checkbox input[type=checkbox]:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 80%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #A0A0A0;
   border: none;
 }
 .checkbox input[type=checkbox]:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
-  border: 1px solid hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB;
+  border: 1px solid #2894DF;
   outline: 0;
 }
 .checkbox input[type=checkbox]:focus-visible + label {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .checkbox input[type=checkbox]:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 80%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #A0A0A0;
   border: none;
 }
 .checkbox input[type=checkbox]:active + label {
   background: none;
-  color: hsl(194, 81%, 14%);
+  color: #000000;
 }
 .checkbox input[type=checkbox]:disabled + label {
   opacity: 0.5;
@@ -1569,8 +1570,8 @@ input[type=file] {
 .checkbox input[type=checkbox]:disabled {
   cursor: default;
   box-shadow: none;
-  background: hsl(44, 50%, 83%);
-  border: 1px solid hsl(44, 50%, 83%);
+  background: #C4C4C4;
+  border: 1px solid #C4C4C4;
   outline: 0;
 }
 .checkbox input[type=checkbox]:checked:before {
@@ -1578,13 +1579,13 @@ input[type=file] {
   width: 1rem;
   height: 1rem;
   background-size: 1rem 1rem;
-  background-color: hsl(194, 81%, 14%);
+  background-color: #000000;
   mask: url('../../../img/controls/check_black.svg');
   -webkit-mask-image: url('../../../img/controls/check_black.svg');
   mask-image: url('../../../img/controls/check_black.svg');
 }
 .checkbox input[type=checkbox]:disabled:before {
-  background: hsl(44, 50%, 81%);
+  background: #A1A1A1;
 }
 .radiolist,
 .radiolist-alt {
@@ -1609,8 +1610,8 @@ input[type=file] {
   cursor: pointer;
   width: 1.4rem;
   height: 1.4rem;
-  background: hsl(44, 87%, 98%);
-  border: 1px solid hsl(44, 50%, 80%);
+  background: #FFFFFF;
+  border: 1px solid #A0A0A0;
   border-radius: 1rem;
   box-sizing: border-box;
   margin: 0;
@@ -1632,9 +1633,9 @@ input[type=file] {
 }
 .radiolist .input.radio input[type=radio]:hover,
 .radiolist-alt .input.radio input[type=radio]:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 80%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #A0A0A0;
   border: none;
-  background: hsl(44, 87%, 98%);
+  background: #FFFFFF;
 }
 .radiolist .input.radio input[type=radio]:hover:before,
 .radiolist-alt .input.radio input[type=radio]:hover:before {
@@ -1643,24 +1644,24 @@ input[type=file] {
 }
 .radiolist .input.radio input[type=radio]:focus-visible,
 .radiolist-alt .input.radio input[type=radio]:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
-  border: 1px solid hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB;
+  border: 1px solid #2894DF;
   outline: 0;
 }
 .radiolist .input.radio input[type=radio]:focus-visible + label,
 .radiolist-alt .input.radio input[type=radio]:focus-visible + label {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .radiolist .input.radio input[type=radio]:active,
 .radiolist-alt .input.radio input[type=radio]:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 80%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #A0A0A0;
   border: none;
 }
 .radiolist .input.radio input[type=radio]:active + label,
 .radiolist-alt .input.radio input[type=radio]:active + label {
   background: none;
-  color: hsl(194, 81%, 14%);
+  color: #000000;
 }
 .radiolist .input.radio input[type=radio]:active:before,
 .radiolist-alt .input.radio input[type=radio]:active:before {
@@ -1675,15 +1676,15 @@ input[type=file] {
 .radiolist .input.radio input[type=radio]:disabled,
 .radiolist-alt .input.radio input[type=radio]:disabled {
   cursor: auto;
-  background: hsl(44, 50%, 83%);
-  border: 1px solid hsl(44, 50%, 83%);
+  background: #C4C4C4;
+  border: 1px solid #C4C4C4;
   box-shadow: none;
   outline: 0;
 }
 .radiolist .input.radio input[type=radio]:disabled:before,
 .radiolist-alt .input.radio input[type=radio]:disabled:before {
   box-shadow: none;
-  background: hsl(44, 50%, 81%);
+  background: #A1A1A1;
 }
 .radiolist .input.radio input[type=radio]:before,
 .radiolist-alt .input.radio input[type=radio]:before {
@@ -1691,7 +1692,7 @@ input[type=file] {
   width: 0.8rem;
   height: 0.8rem;
   border-radius: 1rem;
-  background: hsl(194, 100%, 20%);
+  background: #2A9CEB;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
 }
@@ -1700,20 +1701,20 @@ input[type=file] {
   transform: scale(1);
 }
 .radiolist-alt .input.radio {
-  border: 1px solid hsl(44, 50%, 88%);
+  border: 1px solid #E0E0E0;
   border-radius: 3px;
-  background-color: hsl(44, 50%, 92%);
+  background-color: #F8F8F8;
   padding: 1.6rem;
   margin-top: 1.6rem;
 }
 .radiolist-alt .input.radio.checked {
-  border: 1px solid hsl(194, 100%, 15%);
+  border: 1px solid #2894DF;
 }
 .radiolist-alt .input.radio.checked:hover {
-  border: 1px solid hsl(194, 100%, 15%);
+  border: 1px solid #2894DF;
 }
 .radiolist-alt .input.radio:hover {
-  border: 1px solid hsl(44, 50%, 83%);
+  border: 1px solid #C4C4C4;
 }
 .radiolist-alt .input.radio label {
   margin-left: 1.6rem;
@@ -1747,7 +1748,7 @@ input[type=file] {
   cursor: pointer;
   width: 3.2rem;
   height: 1.6rem;
-  background: hsl(44, 50%, 76%);
+  background: #808080;
   border-radius: 3.2rem;
   box-sizing: border-box;
   margin: 0;
@@ -1775,20 +1776,20 @@ input[type=file] {
 }
 .input.toggle-switch .toggle-switch-checkbox:focus,
 .input.toggle-switch .toggle-switch-checkbox:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 1px #2894DF;
   outline: 0;
 }
 .input.toggle-switch .toggle-switch-checkbox:focus + label,
 .input.toggle-switch .toggle-switch-checkbox:focus-visible + label {
-  background: hsl(44, 87%, 98%);
-  color: hsl(194, 81%, 14%);
+  background: #FFFFFF;
+  color: #000000;
 }
 .input.toggle-switch .toggle-switch-checkbox:active {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
 }
 .input.toggle-switch .toggle-switch-checkbox:active + label {
   background: none;
-  color: hsl(194, 81%, 14%);
+  color: #000000;
 }
 .input.toggle-switch .toggle-switch-checkbox:active:before {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
@@ -1796,10 +1797,10 @@ input[type=file] {
   padding: 0 0 0 0.3rem;
 }
 .input.toggle-switch .toggle-switch-checkbox:checked {
-  background: hsl(45, 100%, 35%);
+  background: #009900;
 }
 .input.toggle-switch .toggle-switch-checkbox:checked:focus {
-  background: hsl(194, 100%, 15%);
+  background: #2894DF;
 }
 .input.toggle-switch .toggle-switch-checkbox:checked:before {
   transform: translateX(65%);
@@ -1827,7 +1828,7 @@ input[type=file] {
   width: 1.2rem;
   height: 1.2rem;
   border-radius: 1rem;
-  background: hsl(44, 87%, 98%);
+  background: #FFFFFF;
   transform: translateX(-65%);
   transition: all 0.4s ease, padding 0.3s ease, margin 0.3s ease;
 }
@@ -1851,29 +1852,29 @@ input[type=file] {
   display: flex;
   flex: 1;
   align-items: center;
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 87%, 98%);
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  color: #000000;
+  background: #FFFFFF;
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   border-radius: 0.4rem;
   box-sizing: border-box;
   padding: 0.8rem 1.6rem 0.8rem 0.8rem;
 }
 .select-container .select .selected-value:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 82%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #BDBDBD;
   border: none;
 }
 .select-container .select .selected-value:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 0.1rem hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 0.1rem #2894DF;
   outline: 0;
 }
 .select-container .select .selected-value:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 82%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #BDBDBD;
   border: none;
 }
 .select-container .select .selected-value.disabled {
   opacity: 0.5;
   cursor: default;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   outline: 0;
 }
 .select-container .select .selected-value .value {
@@ -1889,9 +1890,9 @@ input[type=file] {
 .select-container .select .select-items {
   display: flex;
   flex-direction: column;
-  background: hsl(44, 50%, 92%);
+  background: #F8F8F8;
   box-sizing: border-box;
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%), inset 0 -0.1rem 0 0 hsl(44, 50%, 88%);
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 -0.1rem 0 0 #E0E0E0;
   width: 100%;
   transition: opacity 0.5s;
   opacity: 0;
@@ -1928,31 +1929,31 @@ input[type=file] {
   -ms-text-overflow: ellipsis;
 }
 .select-container .select .select-items .items .option:hover {
-  background: hsl(44, 50%, 85%);
-  color: hsl(194, 81%, 14%);
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%);
+  background: #DDDDDD;
+  color: #000000;
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0;
 }
 .select-container .select .select-items .items .option:focus-visible {
-  background: hsl(194, 100%, 15%);
-  color: hsl(44, 87%, 98%);
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
+  background: #2894DF;
+  color: #FFFFFF;
+  box-shadow: 0 0 0.4rem #2A9CEB;
   outline: 0;
 }
 .select-container .select .select-items .items .option:active {
-  background: hsl(44, 50%, 85%);
-  color: hsl(194, 81%, 14%);
+  background: #DDDDDD;
+  color: #000000;
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
 }
 .select-container .select .select-items .items .option.no-results {
   cursor: default;
-  background: hsl(44, 50%, 92%);
+  background: #F8F8F8;
   box-shadow: none;
 }
 .select-container .select.open .selected-value {
   z-index: 2;
-  background: hsl(44, 50%, 92%);
+  background: #F8F8F8;
   border-radius: 0.4rem 0.4rem 0 0;
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%), inset 0 0.1rem 0 0 hsl(44, 50%, 88%);
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 0.1rem 0 0 #E0E0E0;
 }
 .select-container .select.open .select-items {
   opacity: 1;
@@ -1967,21 +1968,21 @@ input[type=file] {
   height: 3rem;
 }
 .select-container.inline .select .selected-value {
-  background: hsl(44, 50%, 92%);
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 88%);
+  background: #F8F8F8;
+  box-shadow: inset 0 0 0 0.1rem #E0E0E0;
   padding: 0.5rem 1.6rem;
 }
 .select-container.inline .select .selected-value:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 88%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #E0E0E0;
 }
 .select-container.inline .select .selected-value:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 0.1rem hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 0.1rem #2894DF;
 }
 .select-container.inline .select .selected-value:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 88%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #E0E0E0;
 }
 .select-container.inline .select .selected-value.disabled {
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 88%);
+  box-shadow: inset 0 0 0 0.1rem #E0E0E0;
 }
 .select-container.inline .select .selected-value .value {
   margin-right: 0.8rem;
@@ -1994,16 +1995,16 @@ input[type=file] {
   padding: 0.8rem 3.4rem 0.8rem 1.6rem;
 }
 .select-container.inline .select.open .selected-value {
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%), inset 0 0.1rem 0 0 hsl(44, 50%, 88%);
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 0.1rem 0 0 #E0E0E0;
 }
 .select-container.inline .select.top.open .selected-value {
   border-radius: 0 0 0.2rem 0.2rem;
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%), inset 0 -0.1rem 0 0 hsl(44, 50%, 88%);
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 -0.1rem 0 0 #E0E0E0;
 }
 .select-container.inline .select.top .select-items {
   transform: translate(0, calc(-100% - 3rem));
   border-radius: 0.2rem 0.2rem 0 0;
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%), inset 0 0.1rem 0 0 hsl(44, 50%, 88%);
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 0.1rem 0 0 #E0E0E0;
   filter: drop-shadow(0 -1rem 1rem rgba(0, 0, 0, 0.1));
   padding: 0.8rem 0 0.3rem 0;
 }
@@ -2020,7 +2021,7 @@ input[type=file] {
   box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2);
 }
 .select-container.setup-extension .select .selected-value:focus-visible {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 0.1rem hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 0.1rem #2894DF;
 }
 .select-container.setup-extension .select .selected-value:active {
   box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35);
@@ -2029,11 +2030,11 @@ input[type=file] {
   box-shadow: none;
 }
 .select-container.setup-extension .select .select-items {
-  background: hsl(44, 87%, 98%);
+  background: #FFFFFF;
 }
 .select-container.setup-extension .select.open .selected-value {
-  background: hsl(44, 87%, 98%);
-  box-shadow: inset 0.1rem 0 0 0 hsl(44, 50%, 88%), inset -0.1rem 0 0 0 hsl(44, 50%, 88%), inset 0 0.1rem 0 0 hsl(44, 50%, 88%);
+  background: #FFFFFF;
+  box-shadow: inset 0.1rem 0 0 0 #E0E0E0, inset -0.1rem 0 0 0 #E0E0E0, inset 0 0.1rem 0 0 #E0E0E0;
 }
 .date-wrapper .button-inline {
   position: relative;
@@ -2045,7 +2046,7 @@ input[type=file] {
   width: 1.6rem;
   height: 1.6rem;
   pointer-events: none;
-  background: hsl(44, 87%, 98%);
+  background: #FFFFFF;
 }
 .date-wrapper .button-inline input[type=date] {
   height: 3.6rem;
@@ -2055,7 +2056,7 @@ input[type=file] {
   opacity: 0;
 }
 .date-wrapper .button-inline input[type=date].empty {
-  color: hsla(194, 81%, 14%, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 /*
 	Messages for validation error and example
@@ -2069,7 +2070,7 @@ input[type=file] {
   margin-bottom: 1.6rem;
   border: 0;
   font-weight: normal;
-  color: hsl(1, 71%, 52%);
+  color: #D40101;
   clear: both;
 }
 .input .help-message {
@@ -2086,7 +2087,7 @@ input[type=file] {
   margin-bottom: 1.6rem;
   border: 0;
   font-weight: normal;
-  color: hsl(18, 80%, 44%);
+  color: #DD6A00;
   clear: both;
 }
 .input.disabled .help-message {
@@ -2150,7 +2151,7 @@ input[type=file] {
   width: 100%;
   height: 1px;
   border-radius: 5px;
-  background: hsl(44, 50%, 83%);
+  background: #CCCCCC;
   outline: 0;
   flex-grow: 1;
 }
@@ -2162,40 +2163,40 @@ input[type=file] {
   appearance: none;
   width: 1.6rem;
   height: 1.6rem;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 83%);
+  box-shadow: inset 0 0 0 0.1rem #CCCCCC;
   border-radius: 50%;
-  background: hsl(44, 50%, 91%);
+  background: #F0F0F0;
   cursor: pointer;
 }
 .slider input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 0.1rem hsl(44, 50%, 83%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 0.1rem #CCCCCC;
 }
 .slider input[type=range]::-moz-range-thumb {
   width: 1.6rem;
   height: 1.6rem;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 83%);
+  box-shadow: inset 0 0 0 0.1rem #CCCCCC;
   border: none;
   border-radius: 50%;
-  background: hsl(44, 50%, 91%);
+  background: #F0F0F0;
   cursor: pointer;
 }
 .slider input[type=range]::-moz-range-thumb:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 0.1rem hsl(44, 50%, 83%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 0.1rem #CCCCCC;
 }
 .slider input[type=number] {
   margin-left: 1.6rem;
 }
 :root {
-  --icon-color: hsl(194, 81%, 14%);
-  --icon-background-color: hsl(44, 87%, 98%);
+  --icon-color: #000000;
+  --icon-background-color: #FFFFFF;
   --icon-stroke-width: 0.15rem;
-  --icon-exclamation-color: hsl(44, 87%, 98%);
-  --icon-exclamation-background-color: hsl(44, 50%, 80%);
-  --icon-favorites-color: hsl(44, 50%, 84%);
-  --icon-failed-color: hsl(1, 71%, 52%);
-  --icon-success-color: hsl(45, 100%, 35%);
-  --spinner-color: hsl(194, 81%, 14%);
-  --spinner-background: hsl(44, 50%, 76%);
+  --icon-exclamation-color: #FFFFFF;
+  --icon-exclamation-background-color: #9A9A9A;
+  --icon-favorites-color: #C9C9C9;
+  --icon-failed-color: #D40101;
+  --icon-success-color: #009900;
+  --spinner-color: #7A7A7A;
+  --spinner-background: rgba(0, 0, 0, 0.25);
   --spinner-stroke-width: 0.15rem;
 }
 .svg-icon {
@@ -2232,7 +2233,7 @@ button.disabled .svg-icon svg {
   cursor: default;
 }
 button.fav .svg-icon.star svg {
-  --icon-favorites-color: hsl(1, 71%, 52%);
+  --icon-favorites-color: #D40101;
 }
 button .svg-icon + span:not(.visuallyhidden),
 a .svg-icon + span:not(.visuallyhidden) {
@@ -2286,9 +2287,9 @@ table td {
 /* credit: http://lea.verou.me/2012/04/background-attachment-local/ */
 .scroll-shadow {
   overflow: auto;
-  background: linear-gradient(hsl(44, 87%, 98%) 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), hsl(44, 87%, 98%) 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
+  background: linear-gradient(#FFFFFF 30%, rgba(255, 255, 255, 0)), linear-gradient(rgba(255, 255, 255, 0), #FFFFFF 70%) 0 100%, /* Shadows */ radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) 0 100%;
   background-repeat: no-repeat;
-  background-color: hsl(44, 87%, 98%);
+  background-color: #FFFFFF;
   background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
   /* Opera doesn't support this in the shorthand */
   background-attachment: local, local, scroll, scroll;
@@ -2300,7 +2301,7 @@ table td {
   height: 100%;
   content: '';
   animation: shimmer 2s infinite;
-  background: linear-gradient(45deg, rgba(254, 252, 245, 0) 0, rgba(254, 252, 245, 0.1) 30%, rgba(254, 252, 245, 0.5) 50%, rgba(254, 252, 245, 0));
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.1) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0));
 }
 @keyframes shimmer {
   0% {
@@ -2416,14 +2417,14 @@ html {
   padding: 0;
 }
 .page .panel.main .panel.left {
-  background: hsl(44, 50%, 93%);
+  background: #FAFAFA;
 }
 .page .header.second + .panel.main {
   top: 6.875em;
 }
 .page .header.third + .panel.main {
   top: 16.5rem;
-  border-top: 1px solid hsl(44, 50%, 93%);
+  border-top: 1px solid #E0E0E0;
 }
 .page .header {
   width: 100%;
@@ -2454,7 +2455,7 @@ html {
   width: 82%;
   left: 18%;
   overflow: hidden;
-  background: hsl(44, 50%, 93%);
+  background: #FAFAFA;
 }
 .page .panel.middle.scroll {
   overflow-y: scroll;
@@ -2816,10 +2817,10 @@ html {
 .grid-responsive-12 .row .main-column,
 .grid .row .main-column {
   min-height: fit-content;
-  background: hsl(44, 87%, 98%);
+  background: #FFFFFF;
   flex: 1;
   border-radius: 0.3rem 0.3rem 0 0;
-  border: 1px solid hsl(44, 50%, 93%);
+  border: 1px solid #E0E0E0;
   border-bottom: none;
 }
 .grid-responsive-12 .row .main-column > *,
@@ -2864,7 +2865,7 @@ html {
 .grid .row .main-column h3 {
   padding: 0.8rem 1.6rem 1.1rem 1.6rem;
   margin: 0;
-  border-bottom: 0.1rem solid hsl(44, 50%, 88%);
+  border-bottom: 0.1rem solid #E0E0E0;
   font-size: 2rem;
   line-height: 2.7rem;
 }
@@ -2881,7 +2882,7 @@ html {
 .grid .row .main-column h4 {
   padding: 1.1rem 1.6rem 0 1.6rem;
   margin: 0.8rem 0 0 0;
-  border-top: 0.1rem solid hsl(44, 50%, 88%);
+  border-top: 0.1rem solid #E0E0E0;
   font-size: 1.8rem;
   line-height: 2.5rem;
 }
@@ -2907,7 +2908,7 @@ html {
 }
 .grid-responsive-12 .row .last .sidebar,
 .grid .row .last .sidebar {
-  background-color: hsl(44, 50%, 89%);
+  background-color: #E8E8E8;
   border-radius: 0.3rem;
 }
 .grid-responsive-12 .row .last .sidebar > *,
@@ -2923,7 +2924,7 @@ html {
 .grid .row .last .sidebar h3 {
   padding: 0.8rem 1.6rem 1.1rem 1.6rem;
   margin: 0;
-  border-bottom: 0.1rem solid hsl(44, 50%, 88%);
+  border-bottom: 0.1rem solid #E0E0E0;
   font-size: 2rem;
   line-height: 2.7rem;
 }
@@ -3042,8 +3043,8 @@ html {
   max-width: 24rem;
   width: max-content;
   padding: 0.4rem 0.8rem;
-  background: hsl(44, 50%, 81%);
-  color: hsl(194, 81%, 14%);
+  background: #B3B3B3;
+  color: #000000;
   border-radius: 0.3rem;
   font-size: 1.2rem;
   line-height: 1.6rem;
@@ -3064,7 +3065,7 @@ html {
 .tooltip .tooltip-text.top::after {
   left: 50%;
   top: 100%;
-  border-top-color: hsl(44, 50%, 81%);
+  border-top-color: #B3B3B3;
 }
 .tooltip .tooltip-text.right {
   bottom: 50%;
@@ -3074,7 +3075,7 @@ html {
 .tooltip .tooltip-text.right::after {
   bottom: 50%;
   right: 100%;
-  border-right-color: hsl(44, 50%, 81%);
+  border-right-color: #B3B3B3;
 }
 .tooltip .tooltip-text.bottom {
   top: 100%;
@@ -3084,7 +3085,7 @@ html {
 .tooltip .tooltip-text.bottom::after {
   right: 50%;
   bottom: 100%;
-  border-bottom-color: hsl(44, 50%, 81%);
+  border-bottom-color: #B3B3B3;
 }
 .tooltip .tooltip-text.left {
   top: 50%;
@@ -3094,7 +3095,7 @@ html {
 .tooltip .tooltip-text.left::after {
   top: 50%;
   left: 100%;
-  border-left-color: hsl(44, 50%, 81%);
+  border-left-color: #B3B3B3;
 }
 .tooltip:hover .tooltip-text,
 .tooltip:focus .tooltip-text {
@@ -3149,7 +3150,7 @@ html {
   display: flex;
   font-size: 1rem;
   line-height: 1.4rem;
-  color: hsl(194, 81%, 14%);
+  color: #7C7C7C;
 }
 .password-complexity .progress {
   width: 100%;
@@ -3157,7 +3158,7 @@ html {
   display: block;
 }
 .password-complexity .progress-bar {
-  --complexity-bar-background-default: hsl(44, 50%, 82%);
+  --complexity-bar-background-default: #BDBDBD;
   background: linear-gradient(to right, #A40000, #FFA724, #0EAA00);
   border-radius: 0.1rem;
   width: 100%;
@@ -3166,7 +3167,7 @@ html {
   display: block;
 }
 .password-complexity .progress-bar.error {
-  background: hsl(44, 50%, 82%);
+  background: #BDBDBD;
 }
 .password-hints {
   margin: 0.5em 0 1em 0;
@@ -3178,17 +3179,17 @@ html {
 .password-hints li:before {
   content: "\25CF";
   /* unicode character ● */
-  color: hsl(44, 50%, 88%);
+  color: #E0E0E0;
   padding-right: 0.5em;
 }
 .password-hints li.success:before {
-  color: hsl(45, 100%, 35%);
+  color: #009900;
 }
 .password-hints li.error:before {
-  color: hsl(1, 71%, 52%);
+  color: #D40101;
 }
 .password-hints li.warning:before {
-  color: hsl(18, 80%, 44%);
+  color: #DD6A00;
 }
 /* Dialog */
 .dialog-wrapper {
@@ -3196,7 +3197,7 @@ html {
   width: 100%;
   height: 100%;
   z-index: 100;
-  background: hsla(194, 81%, 14%, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   overflow: auto;
 }
 .dialog {
@@ -3206,11 +3207,11 @@ html {
   margin-top: 1%;
   /* some space for the footer / notification area in case it is really tall */
   margin-bottom: 4.8rem;
-  background: hsl(44, 50%, 92%);
-  border: 1px solid hsl(44, 50%, 87%);
+  background: #EEEEEE;
+  border: 1px solid #D7D7D7;
   border-radius: 0.3rem;
   box-sizing: border-box;
-  box-shadow: 0 1rem 1rem hsla(44, 50%, 15%, 0.2);
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.1);
   /* header */
   /* inputs */
   /* Error display */
@@ -3252,7 +3253,7 @@ html {
 }
 .dialog .form-content,
 .dialog .dialog-body {
-  background: hsl(44, 87%, 98%);
+  background: #FFFFFF;
   padding: 1.6rem;
 }
 .dialog .form-content > *,
@@ -3320,7 +3321,7 @@ html {
   width: 100%;
 }
 .dialog .inline-error {
-  color: hsl(1, 71%, 52%);
+  color: #D40101;
   font-weight: bold;
 }
 .dialog .accordion-header a {
@@ -3422,12 +3423,12 @@ html {
 }
 .accordion .accordion-header a:hover,
 .accordion .accordion-header button:hover {
-  color: hsl(194, 100%, 15%);
+  color: #2894DF;
 }
 .accordion h3.accordion-header a,
 .accordion h3.accordion-header button {
   line-height: 3.2rem;
-  border-bottom: 1px solid hsl(44, 50%, 93%);
+  border-bottom: 1px solid #E0E0E0;
 }
 .accordion h3.accordion-header a .svg-icon,
 .accordion h3.accordion-header button .svg-icon {
@@ -3510,7 +3511,7 @@ html {
   right: inherit;
   margin-left: 0.8rem;
   padding-right: 0.3rem;
-  --icon-exclamation-background-color: hsl(18, 80%, 44%);
+  --icon-exclamation-background-color: #DD6A00;
 }
 .accordion.navigation-secondary .accordion-content > .empty-content {
   padding: 0 0 0 3.2rem;
@@ -3544,8 +3545,8 @@ html {
   bottom: 0;
   text-align: right;
   width: 100%;
-  background: hsl(44, 50%, 89%);
-  border-top: 1px solid hsl(44, 50%, 93%);
+  background: #EEEEEE;
+  border-top: 1px solid #E0E0E0;
   box-sizing: border-box;
   z-index: 2;
 }
@@ -3565,8 +3566,8 @@ html {
   margin-right: 3.2rem;
 }
 .footer .footer-links li.error-message a {
-  background-color: hsl(44, 50%, 89%);
-  color: hsl(1, 71%, 52%);
+  background-color: #EEEEEE;
+  color: #D40101;
 }
 .footer .footer-links li a {
   font-size: 1.2rem;
@@ -3620,7 +3621,7 @@ html {
   line-height: 1.6rem;
 }
 .avatar.attention-required img {
-  border: 1px solid hsl(18, 80%, 44%);
+  border: 1px solid #DD6A00;
   box-sizing: border-box;
 }
 .avatar.attention-required .svg-icon.exclamation {
@@ -3631,7 +3632,7 @@ html {
   height: 1.2rem;
   margin-top: 2.6rem;
   margin-left: 3rem;
-  --icon-exclamation-background-color: hsl(18, 80%, 44%);
+  --icon-exclamation-background-color: #DD6A00;
 }
 .avatar img,
 .avatar svg {
@@ -3733,6 +3734,115 @@ iframe.cachette {
   height: 2.1rem;
   margin: 0.6rem;
 }
+/* palette */
+/* default */
+/* background */
+/* borders */
+/* text */
+/* text */
+/* label */
+/* header */
+/* footer */
+/* authentication */
+/* background behind card setup/recover/login */
+/* text */
+/* attention required */
+/* quickaccess */
+/* logos */
+/* Inform menu */
+/* dialog */
+/* share dialog */
+/* folder move dialog */
+/* delete user/group conflict dialog */
+/* buttons */
+/* link */
+/* tooltip */
+/* inputs */
+/* passwords */
+/* checkbox */
+/* controls */
+/* radio */
+/* radio list */
+/* toggle */
+/* range */
+/* select */
+/* complexity */
+/* hints */
+/* drag items */
+/* announcement */
+/* chips */
+/* autocomplete */
+/* progress bar */
+/* workspace */
+/* left workspace menu */
+/* dropdown menus */
+/* grid header */
+/* grid header checkbox */
+/* grid content */
+/* grid content checkbox */
+/* info panel */
+/* comment */
+/* tags */
+/* notice */
+/* tables */
+/* tabs */
+/* mfa */
+/* feedback card */
+/* account recovery */
+/* user card */
+/* messages */
+/* default icon svg fill */
+/* favorite icon fill */
+/* exclamation icon fill */
+/* spinner icon fill */
+/* failed icon fill */
+/* success icon fill */
+/* logo icon fill */
+/* box shadows */
+/* accessibility */
+.get-started-desktop .step {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  box-sizing: border-box;
+  border: 2px solid #000000;
+  border-radius: 1000px;
+  line-height: 20px;
+  font-size: 15px;
+  flex-direction: column;
+  align-items: center;
+  color: #000000;
+  margin-right: 15px;
+}
+.import-account-kit .big.avatar {
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+.import-account-kit-details .user {
+  width: 100%;
+  margin: auto;
+}
+.import-account-kit-details .user > * {
+  text-align: center;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+.import-account-kit-details .user .user-name {
+  font-weight: bold;
+  font-size: 1.6rem;
+  line-height: 2rem;
+  margin-top: 1.6rem;
+  margin-bottom: 1rem;
+}
+.import-account-kit-details .user .user-email {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.import-account-kit-details .user .user-domain {
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+}
 html,
 body {
   height: 100%;
@@ -3740,7 +3850,7 @@ body {
 .login.page h1 {
   margin-top: 0;
   font-size: 2.4rem;
-  color: hsl(194, 81%, 14%);
+  color: #666666;
 }
 .login.page p {
   font-size: 1.6rem;
@@ -3800,7 +3910,7 @@ body {
 .login.page .login-form .invalid-passphrase.error-message button {
   font-size: 1.5rem;
   margin-top: 0;
-  color: hsl(1, 71%, 52%);
+  color: #D40101;
 }
 .login.page .email-sent-instructions {
   text-align: center;
@@ -3899,7 +4009,7 @@ body {
   height: 25rem;
 }
 .login.page .introduce-setup-extension .arrow {
-  background-color: hsl(194, 81%, 14%);
+  background-color: #000000;
   -webkit-mask: url('../../../img/illustrations/wave-pin_my_extension.svg') center top no-repeat;
   width: 10rem;
   height: 10rem;
@@ -3931,8 +4041,8 @@ body {
   padding: 0.8rem;
 }
 .login.page .browser-not-supported .browser-button-list button.browser.focused {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
-  color: hsl(194, 81%, 14%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 1px #2894DF;
+  color: #000000;
   text-decoration: none;
   border: none;
 }
@@ -3981,35 +4091,35 @@ body {
 }
 .login.page .totp-setup .input.password input[type=password],
 .login.page .yubikey-setup .input.password input[type=password] {
-  color: hsl(194, 81%, 14%);
-  background: hsl(44, 87%, 98%);
+  color: #000000;
+  background: #FFFFFF;
   padding: 0.8rem 0.8rem;
   margin-bottom: 1.2rem;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   border-radius: 0.4rem;
 }
 .login.page .totp-setup .input.password input[type=password]:hover,
 .login.page .yubikey-setup .input.password input[type=password]:hover {
-  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(44, 50%, 82%);
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #BDBDBD;
 }
 .login.page .totp-setup .input.password input[type=password]:focus,
 .login.page .yubikey-setup .input.password input[type=password]:focus {
-  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 0.1rem hsl(194, 100%, 15%);
+  box-shadow: 0 0 0.4rem #2A9CEB, inset 0 0 0 0.1rem #2894DF;
   outline: 0;
 }
 .login.page .totp-setup .input.password input[type=password]:active,
 .login.page .yubikey-setup .input.password input[type=password]:active {
-  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(44, 50%, 82%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #BDBDBD;
 }
 .login.page .totp-setup .input.password input[type=password]:disabled,
 .login.page .yubikey-setup .input.password input[type=password]:disabled {
   cursor: default;
-  box-shadow: inset 0 0 0 0.1rem hsl(44, 50%, 82%);
+  box-shadow: inset 0 0 0 0.1rem #BDBDBD;
   opacity: 0.5;
 }
 @media only screen and (min-width: 42rem) {
   body {
-    background: hsl(44, 50%, 91%);
+    background: #F0F0F0;
   }
   .login.page {
     display: grid;
@@ -4031,12 +4141,12 @@ body {
     background-size: 20rem auto;
   }
   .login.page .content .login-form {
-    box-shadow: 0 0 1rem hsla(44, 50%, 15%, 0.2);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     border-radius: 0.3rem;
     max-width: 37.2rem;
     margin: auto;
     padding: 4.8rem 4rem;
-    background: hsl(44, 87%, 98%);
+    background: #FFFFFF;
   }
   .login.page .content .select-wrapper {
     max-width: 45.2rem;
