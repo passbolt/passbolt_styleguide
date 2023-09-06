@@ -34,7 +34,7 @@ export const AdministrationUserPassphrasePoliciesContext = React.createContext({
 });
 
 /**
- * The Administration password policies context provider
+ * The Administration User passphrase Policies context provider
  */
 export class AdministrationUserPassphrasePoliciesContextProvider extends React.Component {
   /**
@@ -182,13 +182,12 @@ AdministrationUserPassphrasePoliciesContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any, // The children components
   t: PropTypes.any, // The translate context
-  actionFeedbackContext: PropTypes.object, // The action feedback context
 };
 
 export default withAppContext(withTranslation('common')(AdministrationUserPassphrasePoliciesContextProvider));
 
 /**
- * Resource Workspace Context Consumer HOC
+ * Administration User Passphrase Policies Context Consumer HOC
  * @param WrappedComponent
  */
 export function withAdminUserPassphrasePolicies(WrappedComponent) {

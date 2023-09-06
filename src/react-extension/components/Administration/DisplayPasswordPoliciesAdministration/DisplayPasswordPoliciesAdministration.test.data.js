@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
@@ -29,7 +29,7 @@ export function defaultProps(props = {}) {
     },
     context: defaultAdministratorAppContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
-    actionFeedbackContext: defaultActionFeedbackContextContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     t: text => text,
     ...props
   };

@@ -41,7 +41,7 @@ export const defaultUserPassphrasePoliciesEntityDto = (data = {}) => {
   };
 
   return Object.assign(defaultData, data);
-}
+};
 
 /**
  * A user passprhase policies Entity DTO as registered on the API
