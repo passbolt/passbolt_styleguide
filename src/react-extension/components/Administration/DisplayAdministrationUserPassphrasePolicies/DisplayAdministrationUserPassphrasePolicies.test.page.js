@@ -13,12 +13,13 @@
  */
 
 import React from "react";
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayAdministrationUserPassphrasePoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserPassphrasePoliciesActions/DisplayAdministrationUserPassphrasePoliciesActions";
 import AdministrationUserPassphrasePoliciesContextProvider from "../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 /**
  * The DisplayPasswordPoliciesAdministration component represented as a page
@@ -49,6 +50,15 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    */
   select(cssSelector) {
     return this._page.container.querySelector(cssSelector);
+  }
+
+  /**
+   * Shortcut for selecting all matching element in the current page container.
+   * @param {string} cssSelector
+   * @returns {HTMLElement}
+   */
+  selectAll(cssSelector) {
+    return this._page.container.querySelectorAll(cssSelector);
   }
 
   /**
@@ -84,6 +94,15 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
   }
 
   /**
+   * Returns an entropy label element given its index
+   * @returns {HTMLElement}
+   */
+  entropyLabel(index) {
+    const elements = this.selectAll("#entropy_minimum + .range-options .range-option");
+    return elements[index];
+  }
+
+  /**
    * Returns the external dictionary check checkbox element
    * @returns {HTMLElement}
    */
@@ -92,11 +111,67 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
   }
 
   /**
+   * Returns the save warning banner element
+   * @returns {HTMLElement}
+   */
+  get saveWarningBanner() {
+    return this.select("#user-passphrase-policies-save-banner");
+  }
+
+  /**
+   * Returns the weak settings warning banner element
+   * @returns {HTMLElement}
+   */
+  get weakSettingsWarningBanner() {
+    return this.select("#user-passphrase-policies-weak-settings-banner");
+  }
+
+  /**
    * Returns the select entropy minimum label option
    * @returns {string}
    */
   getSelectedEntropyMinimumValue() {
-    const element = this.select("datalist#values option.range-option--active");
+    const element = this.select("datalist#values .range-option--active");
     return element?.getAttribute('label');
+  }
+
+  /**
+   * Simulates a click on the "external dictionary check" checkbox
+   * @returns {Promise<void>}
+   */
+  async clickOnExternalDictionaryCheck() {
+    const isChecked = this.externalDictionaryCheck.checked;
+    this.clickOn(this.externalDictionaryCheck);
+    await waitForTrue(() => isChecked !== this.externalDictionaryCheck.checked);
+  }
+
+  /**
+   * Simulates a click on an entropy_minimum label matching the given index
+   * @param {number} elementIndex
+   * @returns {Promise<void>}
+   */
+  async clickOnEntropyLabel(elementIndex) {
+    const entropyLabel = this.entropyLabel(elementIndex);
+    this.clickOn(entropyLabel);
+    await waitForTrue(() => entropyLabel.classList.contains('range-option--active'));
+  }
+
+  /**
+   * Simulates a click on the save settings button
+   * @returns {Promise<void>}
+   */
+  async clickOnSave() {
+    this.clickOn(this.saveSettingsButton);
+    await waitForTrue(() => !this.saveSettingsButton.getAttribute('disabled'));
+  }
+
+  /**
+   * Simulates a click on the given HTML element.
+   * @param {HTMLElement} element The HTML element onto simulate the click
+   * @returns {Promise<void>}
+   */
+  clickOn(element) {
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
   }
 }

@@ -22,6 +22,8 @@ import {withAdminUserPassphrasePolicies} from "../../../contexts/Administration/
 import DisplayAdministrationUserPassphrasePoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationUserPassphrasePoliciesActions/DisplayAdministrationUserPassphrasePoliciesActions";
 import Range from "../../Common/Range/Range";
 
+const MINIMAL_ADVISED_ENTROPY = 80;
+
 class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
   /**
    * Default constructor
@@ -96,6 +98,14 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
   }
 
   /**
+   * Returns true if the settings are considered too weak to be safe
+   * @returns {boolean}
+   */
+  isWeakSettings(settings) {
+    return settings.entropy_minimum < MINIMAL_ADVISED_ENTROPY;
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -104,11 +114,26 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
       return null;
     }
     const allInputDisabled = this.hasAllInputDisabled();
-    const settings = this.props.adminUserPassphrasePoliciesContext.getSettings();
+    const adminContext = this.props.adminUserPassphrasePoliciesContext;
+    const settings = adminContext.getSettings();
     return (
       <div className="row">
         <div className="password-policies-settings col8 main-column">
           <h3 id="user-passphrase-policies-title"><Trans>User Passphrase Policies</Trans></h3>
+          {adminContext.hasSettingsChanges() &&
+            <div className="warning message" id="user-passphrase-policies-save-banner">
+              <p>
+                <Trans>Don&apos;t forget to save your settings to apply your modification.</Trans>
+              </p>
+            </div>
+          }
+          {this.isWeakSettings(settings) &&
+            <div className="warning message" id="user-passphrase-policies-weak-settings-banner">
+              <p>
+                <Trans>Passbolt recommends passphrase strength to be at minimum of {{MINIMAL_ADVISED_ENTROPY}} bits to be safe.</Trans>
+              </p>
+            </div>
+          }
           <h4 id="user-passphrase-policies-entropy-minimum" className="title title--required no-border"><Trans>User passphrase minimal entropy</Trans></h4>
           <div className="input range">
             <Range

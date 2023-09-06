@@ -23,12 +23,14 @@ import UserPassphrasePoliciesViewModel from "../../../../shared/models/userPassp
  * @type {React.Context<Object>}
  */
 export const AdministrationUserPassphrasePoliciesContext = React.createContext({
-  processing: false,
-  settings: {},
   getSettings: () => {}, // Returns settings for UI changes
   setSettings: () => {}, // set the given value on the current policies
   findSettings: () => {}, // request the settings from the background page
   isProcessing: () => {}, // returns true if data is under processing
+  validateData: () => {}, // runs the current data validation
+  save: () => {}, // saves the data on the API
+  getErrors: () => {}, // returns the latest validation errors available
+  hasSettingsChanges: () => {}, // returns true if the data has changed
 });
 
 /**
@@ -50,11 +52,18 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
   get defaultState() {
     return {
       processing: false,
+      errors: null,
+      hasBeenValidated: false,
+      isDataModified: false,
       settings: new UserPassphrasePoliciesViewModel(), // the current user passphrase policies settings
       findSettings: this.findSettings.bind(this), // find the User Passphrase Policies
       getSettings: this.getSettings.bind(this), // returns the settings that have been fetch previously
       setSettings: this.setSettings.bind(this), // set the given value on the current policies
       isProcessing: this.isProcessing.bind(this), // returns true if data is under processing
+      validateData: this.validateData.bind(this), // runs the current data validation
+      save: this.save.bind(this), // saves the data on the API
+      getErrors: this.getErrors.bind(this), // returns the latest validation errors available
+      hasSettingsChanges: this.hasSettingsChanges.bind(this), // returns true if the data has changed
     };
   }
 
@@ -66,11 +75,12 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
     this.setState({processing: true});
 
     const result = await this.props.context.port.request("passbolt.user-passphrase-policies.find");
-    const settings = new UserPassphrasePoliciesViewModel(result);
+    const settings = UserPassphrasePoliciesViewModel.fromEntityDto(result);
 
     //Init saved setting
     this.setState({
       settings,
+      currentSettings: settings,
       processing: false,
     });
   }
@@ -87,8 +97,15 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    * Set the givent field with the given value.
    */
   setSettings(key, value) {
-    const settings = Object.assign(this.state.settings, {[key]: value});
-    this.setState({settings});
+    const settings = this.state.settings.cloneWithMutation(key, value);
+    const isDataModified = UserPassphrasePoliciesViewModel.isDataDifferent(settings, this.state.currentSettings);
+    if (!this.state.hasBeenValidated) {
+      this.setState({settings, isDataModified});
+      return;
+    }
+
+    const errors = settings.validate(this.props.t);
+    this.setState({errors, settings, isDataModified});
   }
 
   /**
@@ -97,6 +114,55 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    */
   isProcessing() {
     return this.state.processing;
+  }
+
+  /**
+   * runs the current data validation
+   * @returns {boolean}
+   */
+  validateData() {
+    const validattionError = this.state.settings.validate(this.props.t);
+    const hasErrors = validattionError.hasErrors();
+    const errors = hasErrors ? validattionError : null;
+    this.setState({errors, hasBeenValidated: true});
+    return !hasErrors;
+  }
+
+  /**
+   * Saves the data on the API
+   */
+  async save() {
+    this.setState({processing: true});
+
+    try {
+      const settingsDto = this.state.settings.toEntityDto();
+      const result = await this.props.context.port.request("passbolt.user-passphrase-policies.save", settingsDto);
+      const settings = UserPassphrasePoliciesViewModel.fromEntityDto(result);
+      this.setState({
+        settings,
+        currentSettings: settings,
+        processing: false,
+        isDataModified: false
+      });
+    } finally {
+      this.setState({processing: false});
+    }
+  }
+
+  /**
+   * Returns the latest validation errors available
+   * @returns {ViewModelValidationError|null}
+   */
+  getErrors() {
+    return this.state.errors;
+  }
+
+  /**
+   * Returns true if the data has changed
+   * @returns {boolean}
+   */
+  hasSettingsChanges() {
+    return this.state.isDataModified;
   }
 
   /**

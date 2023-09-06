@@ -37,14 +37,50 @@ class DisplayAdministrationUserPassphrasePoliciesActions extends React.Component
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleSave = this.handleSave.bind(this);
   }
 
   /**
-   * Is save button enable
+   * Is save button enabled
    * @returns {boolean}
    */
   get isActionEnabled() {
-    return true;
+    return !this.props.adminUserPassphrasePoliciesContext.isProcessing();
+  }
+
+  /**
+   * Handles the save action.
+   * @return {Promise<void>}
+   */
+  async handleSave() {
+    if (!this.isActionEnabled || !this.props.adminUserPassphrasePoliciesContext.validateData()) {
+      return;
+    }
+
+    try {
+      await this.props.adminUserPassphrasePoliciesContext.save();
+      await this.handleSaveSuccess();
+    } catch (error) {
+      await this.handleSaveError(error);
+    }
+  }
+
+  /**
+   * Handle save operation success.
+   * @returns {Promise<void>}
+   */
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The user passphrase policies were updated."));
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   * @returns {Promise<void>}
+   */
+  async handleSaveError(error) {
+    console.error(error);
+    await this.props.actionFeedbackContext.displayError(error.message);
   }
 
   /**
