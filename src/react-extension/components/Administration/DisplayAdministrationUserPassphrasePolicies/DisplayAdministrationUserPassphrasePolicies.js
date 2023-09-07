@@ -143,7 +143,7 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
               disabled={allInputDisabled}
             />
           </div>
-          <p><Trans>You can set the minimal entropy for the users&apos; private key passphrase.</Trans> <Trans>This is the passphrase that is asked during sign in or recover.</Trans></p>
+          <div><Trans>You can set the minimal entropy for the users&apos; private key passphrase.</Trans> <Trans>This is the passphrase that is asked during sign in or recover.</Trans></div>
 
           <h4 id="user-passphrase-policies-external-services-subtitle">
             <span className="input toggle-switch form-element ready">

@@ -117,25 +117,21 @@ class Range extends React.PureComponent {
             min={0}
             max={values.length - 1}
             value={this.getValueIndex(value)}
-            list="values"
+            list={`${this.props.id}-values`}
             onChange={this.handleRangeChange}
             required={true}
             disabled={this.props.disabled}
           />
-
-          <datalist id="values" className="range-options">
+          <ul className="range-options">
             {values.map((v, index) => (
-              <option
-                key={`option-${index}`}
-                value={index}
-                label={v.label}
+              <li
+                key={`li-${index}`}
                 onClick={() => this.handleRangeOptionClick(v.value)}
                 style={this.getComputedStyleForEntropyStep(index, valueCount)}
                 className={`range-option ${value === (v.value) ? 'range-option--active' : ''}`}
-                disabled={this.props.disabled}
-              />
+              >{v.label}</li>
             ))}
-          </datalist>
+          </ul>
         </div>
       </div>
     );
@@ -144,8 +140,8 @@ class Range extends React.PureComponent {
 
 Range.propTypes = {
   value: PropTypes.number.isRequired, // the current value of the component
+  id: PropTypes.string.isRequired, // The Range field id
   onChange: PropTypes.func, // the onChange value callback
-  id: PropTypes.string, // The Range field id
   disabled: PropTypes.bool, // is the component disabled
 };
 

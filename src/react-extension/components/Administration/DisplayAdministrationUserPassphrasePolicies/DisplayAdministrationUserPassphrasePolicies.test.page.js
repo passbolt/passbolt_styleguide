@@ -131,8 +131,8 @@ export default class DisplayAdministrationUserPassphrasePoliciesPage {
    * @returns {string}
    */
   getSelectedEntropyMinimumValue() {
-    const element = this.select("datalist#values .range-option--active");
-    return element?.getAttribute('label');
+    const element = this.select(".range-options .range-option--active");
+    return element.textContent;
   }
 
   /**
