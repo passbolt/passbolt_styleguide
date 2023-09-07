@@ -134,8 +134,8 @@ describe("UserPassphrasePoliciesViewModel", () => {
         delete viewModel[requiredField];
 
         const validationErrors = viewModel.validate();
-        expect(validationErrors.hasFieldErrors(requiredField)).toStrictEqual(true);
-        expect(validationErrors.getFieldErrors(requiredField)["required"]).toBeTruthy();
+        expect(validationErrors.hasErrors(requiredField)).toStrictEqual(true);
+        expect(validationErrors.getError(requiredField, "required")).toBeTruthy();
       });
     });
 
@@ -146,8 +146,8 @@ describe("UserPassphrasePoliciesViewModel", () => {
           external_dictionary_check: "string"
         },
         expectedErrors: {
-          entropy_minimum: {type: "The `entropy_minium` must be a number"},
-          external_dictionary_check: {type: "The `external_dictionary_check` must be a boolean"}
+          entropy_minimum: {type: "The entropy_minimum is not a valid integer."},
+          external_dictionary_check: {type: "The external_dictionary_check is not a valid boolean."}
         }
       },
       {
@@ -155,7 +155,15 @@ describe("UserPassphrasePoliciesViewModel", () => {
           entropy_minimum: 30,
         },
         expectedErrors: {
-          entropy_minimum: {min: "The `entropy_minium` must be at a minimum of 50 bits"},
+          entropy_minimum: {gte: "The entropy_minimum should be greater or equal to 50."},
+        }
+      },
+      {
+        dto: {
+          entropy_minimum: 250,
+        },
+        expectedErrors: {
+          entropy_minimum: {lte: "The entropy_minimum should be lesser or equal to 224."},
         }
       }
     ]).describe("should validate the current data set", scenario => {
@@ -169,7 +177,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
 
         for (let i = 0; i < expectedErroneousFieldCount; i++) {
           const erroneousField = expectedErroneousField[i];
-          const errors = validationErrors.getFieldErrors(erroneousField);
+          const errors = validationErrors.getError(erroneousField);
           expect(errors).toStrictEqual(scenario.expectedErrors[erroneousField]);
         }
       });

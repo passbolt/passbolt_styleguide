@@ -151,7 +151,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
 
   /**
    * Returns the latest validation errors available
-   * @returns {ViewModelValidationError|null}
+   * @returns {EntityValidationError|null}
    */
   getErrors() {
     return this.state.errors;

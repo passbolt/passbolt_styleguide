@@ -12,7 +12,9 @@
  * @since         4.3.0
  */
 
-import ViewModelValidationError from "../viewModelValidationError/ViewModelValidationError";
+import EntityValidationError from "../entity/abstract/entityValidationError";
+import EntitySchema from "../entity/abstract/entitySchema";
+import UserPassphrasePoliciesEntity from "../entity/userPassphrasePolicies/userPassphrasePoliciesEntity";
 
 /**
  * Model related to the user passphrase policies use only with the admin UI
@@ -25,6 +27,25 @@ class UserPassphrasePoliciesViewModel {
   constructor(settings = {}) {
     this.external_dictionary_check = settings?.external_dictionary_check;
     this.entropy_minimum = settings?.entropy_minimum;
+  }
+
+  /**
+   * Get current view model schema
+   * @returns {Object} schema
+   */
+  static getSchema() {
+    const baseEntitySchema = UserPassphrasePoliciesEntity.getSchema();
+    return {
+      type: "object",
+      required: [
+        "entropy_minimum",
+        "external_dictionary_check",
+      ],
+      properties: {
+        entropy_minimum: baseEntitySchema.properties.entropy_minimum,
+        external_dictionary_check: baseEntitySchema.properties.external_dictionary_check,
+      }
+    };
   }
 
   /**
@@ -81,27 +102,18 @@ class UserPassphrasePoliciesViewModel {
 
   /**
    * Validates the current object state
-   * @returns {ViewModelValidationError}
+   * @returns {EntityValidationError}
    */
   validate() {
-    const dataValidationError = new ViewModelValidationError();
-    if (typeof(this.entropy_minimum) === "undefined") {
-      dataValidationError.addError("entropy_minimum", "required", "The entropy minimum is required.");
-    } else if (typeof(this.entropy_minimum) !== 'number') {
-      dataValidationError.addError("entropy_minimum", "type", "The entropy minimum should be an integer.");
-    } else if (this.entropy_minimum < 50) {
-      dataValidationError.addError("entropy_minimum", "gte", "The entropy minimum should be between {0} and {1}.");
-    } else if (this.entropy_minimum > 224) {
-      dataValidationError.addError("entropy_minimum", "lte", "The entropy minimum should be between {0} and {1}.");
+    const schema = UserPassphrasePoliciesViewModel.getSchema();
+
+    try {
+      EntitySchema.validate(this.constructor.name, this, schema);
+    } catch (e) {
+      return e;
     }
 
-    if (typeof(this.external_dictionary_check) === "undefined") {
-      dataValidationError.addError("external_dictionary_check", "required", "The external dictionary check is required.");
-    } else if (typeof(this.external_dictionary_check) !== 'boolean') {
-      dataValidationError.addError("external_dictionary_check", "type", "The external dictionary check should be a boolean type.");
-    }
-
-    return dataValidationError;
+    return new EntityValidationError();
   }
 }
 
