@@ -15,6 +15,7 @@
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
 import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
  * Default props.
@@ -24,6 +25,7 @@ import {defaultAdministratorAppContext} from "../../../contexts/ExtAppContext.te
 export function defaultProps(data = {}) {
   const defaultData = {
     context: defaultAdministratorAppContext(),
+    dialogContext: defaultDialogContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     t: text => text,

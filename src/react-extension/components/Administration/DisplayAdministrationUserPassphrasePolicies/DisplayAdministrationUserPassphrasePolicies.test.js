@@ -18,6 +18,7 @@ import {defaultProps} from './DisplayAdministrationUserPassphrasePolicies.test.d
 import {defaultUserPassphrasePoliciesEntityDto, userPassphrasePoliciesEntityDtoFromApi} from '../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data';
 import DisplayAdministrationUserPassphrasePoliciesPage from './DisplayAdministrationUserPassphrasePolicies.test.page';
 import {waitForTrue} from '../../../../../test/utils/waitFor';
+import NotifyError from '../../Common/Error/NotifyError/NotifyError';
 
 /**
  * Unit tests on DisplayAdministrationUserPassphrasePolicies in regard of specifications
@@ -226,17 +227,20 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
     });
 
     it('As an administrator when an unexpected error happened while saving the policy, I should see the error dialog', async() => {
-      expect.assertions(1);
+      expect.assertions(3);
       const context = defaultAppContext();
       const props = defaultProps();
       const entityDto = defaultUserPassphrasePoliciesEntityDto();
+      const expectedError = new Error("Something went wrong!");
       props.context.port.addRequestListener("passbolt.user-passphrase-policies.find", () => entityDto);
-      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", () => { throw new Error("Something went wrong!"); });
+      props.context.port.addRequestListener("passbolt.user-passphrase-policies.save", () => { throw expectedError; });
 
       const page = new DisplayAdministrationUserPassphrasePoliciesPage(context, props);
       await waitForTrue(() => page.exists());
       await page.clickOnSave();
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
     });
   });
 });

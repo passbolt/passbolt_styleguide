@@ -104,7 +104,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
       return;
     }
 
-    const errors = settings.validate(this.props.t);
+    const errors = settings.validate();
     this.setState({errors, settings, isDataModified});
   }
 
@@ -121,7 +121,7 @@ export class AdministrationUserPassphrasePoliciesContextProvider extends React.C
    * @returns {boolean}
    */
   validateData() {
-    const validattionError = this.state.settings.validate(this.props.t);
+    const validattionError = this.state.settings.validate();
     const hasErrors = validattionError.hasErrors();
     const errors = hasErrors ? validattionError : null;
     this.setState({errors, hasBeenValidated: true});

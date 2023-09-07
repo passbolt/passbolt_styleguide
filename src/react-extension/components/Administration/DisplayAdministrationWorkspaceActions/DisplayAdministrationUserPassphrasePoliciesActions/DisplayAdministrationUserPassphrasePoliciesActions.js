@@ -9,15 +9,17 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.2.0
+ * @since         4.3.0
  */
 
 import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../../shared/components/Icons/Icon";
+import {withDialog} from "../../../../contexts/DialogContext";
 import {withActionFeedback} from '../../../../contexts/ActionFeedbackContext';
 import {withAdminUserPassphrasePolicies} from "../../../../contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
+import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 
 /**
  * This component is a container of multiple actions applicable on setting
@@ -81,6 +83,7 @@ class DisplayAdministrationUserPassphrasePoliciesActions extends React.Component
   async handleSaveError(error) {
     console.error(error);
     await this.props.actionFeedbackContext.displayError(error.message);
+    this.props.dialogContext.open(NotifyError, {error});
   }
 
   /**
@@ -109,7 +112,8 @@ class DisplayAdministrationUserPassphrasePoliciesActions extends React.Component
 DisplayAdministrationUserPassphrasePoliciesActions.propTypes = {
   adminUserPassphrasePoliciesContext: PropTypes.object, // The password policy context
   actionFeedbackContext: PropTypes.object, // The action feedback context
+  dialogContext: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
 };
 
-export default withAdminUserPassphrasePolicies(withActionFeedback(withTranslation("common")(DisplayAdministrationUserPassphrasePoliciesActions)));
+export default withAdminUserPassphrasePolicies(withActionFeedback(withDialog(withTranslation("common")(DisplayAdministrationUserPassphrasePoliciesActions))));

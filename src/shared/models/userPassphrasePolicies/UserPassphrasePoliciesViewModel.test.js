@@ -124,8 +124,6 @@ describe("UserPassphrasePoliciesViewModel", () => {
   });
 
   describe("::validate", () => {
-    const translation = s => s;
-
     each([
       "entropy_minimum",
       "external_dictionary_check"
@@ -135,7 +133,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
         const viewModel = new UserPassphrasePoliciesViewModel();
         delete viewModel[requiredField];
 
-        const validationErrors = viewModel.validate(translation);
+        const validationErrors = viewModel.validate();
         expect(validationErrors.hasFieldErrors(requiredField)).toStrictEqual(true);
         expect(validationErrors.getFieldErrors(requiredField)["required"]).toBeTruthy();
       });
@@ -167,7 +165,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
         expect.assertions(expectedErroneousFieldCount);
 
         const viewModel = new UserPassphrasePoliciesViewModel(scenario.dto);
-        const validationErrors = viewModel.validate(translation);
+        const validationErrors = viewModel.validate();
 
         for (let i = 0; i < expectedErroneousFieldCount; i++) {
           const erroneousField = expectedErroneousField[i];

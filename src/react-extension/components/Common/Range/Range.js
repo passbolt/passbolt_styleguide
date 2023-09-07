@@ -42,7 +42,9 @@ class Range extends React.PureComponent {
    * @param {number} value
    */
   handleRangeOptionClick(value) {
-    this.props.onChange(this.props.id, value);
+    if (!this.props.disabled) {
+      this.props.onChange(this.props.id, value);
+    }
   }
 
   /**
@@ -129,6 +131,7 @@ class Range extends React.PureComponent {
                 onClick={() => this.handleRangeOptionClick(v.value)}
                 style={this.getComputedStyleForEntropyStep(index, valueCount)}
                 className={`range-option ${value === (v.value) ? 'range-option--active' : ''}`}
+                disabled={this.props.disabled}
               >{v.label}</li>
             ))}
           </ul>

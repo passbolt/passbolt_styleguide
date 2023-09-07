@@ -81,23 +81,24 @@ class UserPassphrasePoliciesViewModel {
 
   /**
    * Validates the current object state
-   * @param {function} translate the translation function
    * @returns {ViewModelValidationError}
    */
-  validate(translate) {
+  validate() {
     const dataValidationError = new ViewModelValidationError();
     if (typeof(this.entropy_minimum) === "undefined") {
-      dataValidationError.addError("entropy_minimum", "required", translate("The `entropy_minium` field is required"));
+      dataValidationError.addError("entropy_minimum", "required", "The entropy minimum is required.");
     } else if (typeof(this.entropy_minimum) !== 'number') {
-      dataValidationError.addError("entropy_minimum", "type", translate("The `entropy_minium` must be a number"));
+      dataValidationError.addError("entropy_minimum", "type", "The entropy minimum should be an integer.");
     } else if (this.entropy_minimum < 50) {
-      dataValidationError.addError("entropy_minimum", "min", translate("The `entropy_minium` must be at a minimum of 50 bits"));
+      dataValidationError.addError("entropy_minimum", "gte", "The entropy minimum should be between {0} and {1}.");
+    } else if (this.entropy_minimum > 224) {
+      dataValidationError.addError("entropy_minimum", "lte", "The entropy minimum should be between {0} and {1}.");
     }
 
     if (typeof(this.external_dictionary_check) === "undefined") {
-      dataValidationError.addError("external_dictionary_check", "required", translate("The `external_dictionary_check` field is required"));
+      dataValidationError.addError("external_dictionary_check", "required", "The external dictionary check is required.");
     } else if (typeof(this.external_dictionary_check) !== 'boolean') {
-      dataValidationError.addError("external_dictionary_check", "type", translate("The `external_dictionary_check` must be a boolean"));
+      dataValidationError.addError("external_dictionary_check", "type", "The external dictionary check should be a boolean type.");
     }
 
     return dataValidationError;
