@@ -222,14 +222,13 @@ describe("CreateGpgKey", () => {
     });
 
     it('As AN I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
-      expect.assertions(2);
+      expect.assertions(1);
       const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
       const page = new CreateGpgKeyPage(props);
       await waitFor(() => {});
       await page.fill("Service is unavailable");
-      expect(page.notInDictionaryHint.classList.contains("unavailable")).toBeTruthy();
-      expect(page.tootltip.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
+      expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
 
     it("As AN I should see a complexity as Quality if the passphrase is empty", async() => {

@@ -153,24 +153,21 @@ class CheckPassphrase extends Component {
 
   /**
    * Evaluate if the passphrase is in dictionary
+   * @param {string} passphrase
    * @return {Promise<void>}
    */
-  async evaluatePassphraseIsInDictionary() {
+  async evaluatePassphraseIsInDictionary(passphrase) {
     let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
     if (!isPwnedServiceAvailable) {
       return;
     }
 
     let passphraseInDictionnary = false;
-    let passphraseEntropy = this.state.passphraseEntropy;
 
     try {
-      const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
+      const result =  await this.pownedService.evaluateSecret(passphrase);
       passphraseInDictionnary = result.inDictionary;
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-      if (passphraseInDictionnary) {
-        passphraseEntropy = 0;
-      }
     } catch (error) {
       // If the service is unavailable don't block the user journey.
       if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
@@ -183,7 +180,6 @@ class CheckPassphrase extends Component {
 
     this.setState({
       isPwnedServiceAvailable,
-      passphraseEntropy,
       passphraseInDictionnary,
     });
   }
@@ -198,7 +194,7 @@ class CheckPassphrase extends Component {
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
       if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(passphrase);
       }
     } else {
       this.setState({
@@ -301,7 +297,10 @@ class CheckPassphrase extends Component {
                 preview={true}
                 onChange={this.handleChangePassphrase}
                 disabled={!this.areActionsAllowed}/>
-              <PasswordComplexityWithGoal entropy={passphraseEntropy} targettedEntropy={this.props.userPassphrasePolicies.entropy_minimum} isMinimumEntropyRequired={false}/>
+              <PasswordComplexityWithGoal
+                entropy={passphraseEntropy}
+                targettedEntropy={this.props.userPassphrasePolicies.entropy_minimum}
+                isMinimumEntropyRequired={false}/>
               {this.state.hasBeenValidated &&
               <>
                 {this.state.errors.emptyPassphrase &&

@@ -25,7 +25,7 @@ const commonStyle = {
 };
 
 const componentConfigurations = [
-  {targettedEntropy: 128},
+  {targettedEntropy: 50},
   {targettedEntropy: 76, error: true},
   {targettedEntropy: 90, entropy: 50},
   {targettedEntropy: 80, entropy: 75.9, error: true},

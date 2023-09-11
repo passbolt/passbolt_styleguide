@@ -92,6 +92,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       gpgKeyGenerated: null, // Did the user generate a key?
       error: null, // The current error
       rememberMe: false, // The user remember me choice
+      userPassphrasePolicies: null, // the current user passphrase policies to use
 
       // Public workflow mutators.
       goToGenerateGpgKey: this.goToGenerateGpgKey.bind(this), // Whenever the user wants to go to the generate key step.

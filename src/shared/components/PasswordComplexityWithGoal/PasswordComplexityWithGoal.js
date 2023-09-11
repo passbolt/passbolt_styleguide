@@ -15,15 +15,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {SecretGeneratorComplexity} from "../../lib/SecretGenerator/SecretGeneratorComplexity";
-
-const Colors = {
-  RED: "hsl(0, 100%, 32%)",
-  ORANGE: "hsl(36, 100%, 57%)",
-  GREEN: "hsl(115, 100%, 33.5%)",
-  LIGHT_RED: "hsl(0, 100%, 85%)",
-  LIGHT_ORANGE: "hsl(36, 100%, 85%)",
-  LIGHT_GREEN: "hsl(115, 100%, 85%)",
-};
+import Tooltip from "../../../react-extension/components/Common/Tooltip/Tooltip";
 
 /**
  * This component represents a password complexity with the strength and a goal, an entropy and a bar
@@ -36,15 +28,16 @@ class PasswordComplexityWithGoal extends React.PureComponent {
    */
   static getRelativeEntropyPosition(entropyValue) {
     // Power curve with an asymptote at 100%. It will never reach 100% but will get infinitely closer.
-    return 100 - (99 / (1 + Math.pow(entropyValue / 90, 10)));
+    return 100 - (99 / (1 + Math.pow(entropyValue / 90, 3)));
   }
 
   /**
-   * Get the entropy value to display.
-   * @returns {Number}
+   * Get a formatted entropy value to display.
+   * @param {number} entropy
+   * @returns {number}
    */
-  get entropy() {
-    const entropy = this.props.entropy || 0.0;
+  formatEntropy(entropy) {
+    entropy = entropy || 0.0;
     return entropy.toFixed(1);
   }
 
@@ -65,42 +58,16 @@ class PasswordComplexityWithGoal extends React.PureComponent {
   }
 
   /**
-   * Get the background style of the complexity bar.
-   * The background is a gradient color that varies based on the targetted entropy and the current entropy.
-   * The gradient is done in a way that there is a background with light colors and a foreground with "solid" colors.
-   *
-   * Color of the filled bar is:
-   *  - red when entropy < halfTargettedEntropy
-   *  - oragnge when entropy >= halfTargettedEntropy && entropy < targettedEntropy
-   *  - green when entropy >= targettedEntropy
-   *
-   * Color of the background color is:
-   *  - light red from 0% to targettedEntropy
-   *  - light green from targettedEntropy to 100%
-   *
-   * @return {{background: string}}
+   * Get the CSS style of the size of the progress-bar
+   * @param {number} entropy
+   * @return {{width: string}}
    */
-  get complexityBarStyle() {
-    let colorKeyPoints;
-    const isEntropyReached = this.props.entropy >= this.props.targettedEntropy;
+  getComplexityBarSize(entropy) {
+    const width = entropy
+      ? `${this.relativeCurrentEntropyRatio}%`
+      : '0';
 
-    if (isEntropyReached) {
-      colorKeyPoints = [
-        `${Colors.GREEN} ${this.relativeCurrentEntropyRatio}%`,
-        `${Colors.LIGHT_GREEN} ${this.relativeCurrentEntropyRatio}%`,
-      ];
-    } else {
-      const isHalfEntropyReached = this.relativeCurrentEntropyRatio >= (this.relativeTargettedEntropyRatio / 2);
-      const barColor = isHalfEntropyReached ? Colors.ORANGE : Colors.RED;
-
-      colorKeyPoints = [
-        `${barColor} ${this.relativeCurrentEntropyRatio}%`,
-        `${Colors.LIGHT_RED} ${this.relativeCurrentEntropyRatio}%`,
-        `${Colors.LIGHT_RED} ${this.relativeTargettedEntropyRatio}%`,
-        `${Colors.LIGHT_GREEN} ${this.relativeTargettedEntropyRatio}%`,
-      ];
-    }
-    return {background: `linear-gradient(to right, ${colorKeyPoints.join(', ')})`};
+    return {width};
   }
 
   /**
@@ -109,14 +76,15 @@ class PasswordComplexityWithGoal extends React.PureComponent {
    */
   get targetEntropyPositionStyle() {
     const leftPosition = this.relativeTargettedEntropyRatio;
-    return {left: `${leftPosition}%`};
+    const halfArrowCssSize = "0.6rem";
+    return {left: `calc(${leftPosition}% - ${halfArrowCssSize}`};
   }
 
   /**
-   * Get the class to set on the target entropy marker.
+   * Get the class to set on the different markers.
    * @returns {'reached' | 'required' | ''}
    */
-  get targetEntropyClass() {
+  get colorClassName() {
     const isEntropyReached = this.props.entropy >= this.props.targettedEntropy;
     if (isEntropyReached) {
       return "reached";
@@ -125,6 +93,17 @@ class PasswordComplexityWithGoal extends React.PureComponent {
     return this.props.isMinimumEntropyRequired
       ? "required"
       : "";
+  }
+
+  get tooltipMessage() {
+    return this.props.isMinimumEntropyRequired
+      ? this.props.t("Minimal requirement")
+      : this.props.t("Minimal recommendation");
+  }
+
+  getProgresseBarStyle(entropy) {
+    const relativePositionForEntropy = PasswordComplexityWithGoal.getRelativeEntropyPosition(entropy);
+    return  {width: `${relativePositionForEntropy}%`};
   }
 
   /**
@@ -151,18 +130,22 @@ class PasswordComplexityWithGoal extends React.PureComponent {
     const shouldDisplayEntropyLabel = this.hasEntropy() || this.hasError();
     const strength = SecretGeneratorComplexity.strength(this.props.entropy);
     return (
-      <div className="password-complexity">
+      <div className="password-complexity with-goal">
         <span className="complexity-text">
           {shouldDisplayEntropyLabel &&
-            <>{strength.label} (<Trans>entropy:</Trans> {this.entropy} bits)</>
+            <>{strength.label} (<Trans>entropy: {this.formatEntropy(this.props.entropy)} / {this.formatEntropy(this.props.targettedEntropy)} bits</Trans>)</>
           }
           {!shouldDisplayEntropyLabel &&
             <Trans>Quality</Trans>
           }
         </span>
         <span className="progress">
-          <span className={`progress-bar ${this.hasError() ? "error" : ""}`} style={this.hasEntropy() ? this.complexityBarStyle : undefined}/>
-          <span className={`target-entropy ${this.targetEntropyClass}`} style={this.targetEntropyPositionStyle}/>
+          <span className="progress-bar background"/>
+          <span className={`progress-bar target ${this.props.isMinimumEntropyRequired ? "required" : ""}`} style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.targettedEntropy) : null}/>
+          <span className={`progress-bar foreground ${this.colorClassName}`} style={this.hasEntropy() ? this.getProgresseBarStyle(this.props.entropy) : null}/>
+          <span className={`target-entropy ${this.colorClassName}`} style={this.targetEntropyPositionStyle}>
+            <Tooltip message={this.tooltipMessage}><span className="tooltip-anchor"></span></Tooltip>
+          </span>
         </span>
       </div>
     );
@@ -178,6 +161,7 @@ PasswordComplexityWithGoal.propTypes = {
   isMinimumEntropyRequired: PropTypes.bool.isRequired, // is the minimum entropy to reach required
   entropy: PropTypes.number, // The entropy
   error: PropTypes.bool, // The error
+  t: PropTypes.func, // the translation function
 };
 
 export default withTranslation("common")(PasswordComplexityWithGoal);
