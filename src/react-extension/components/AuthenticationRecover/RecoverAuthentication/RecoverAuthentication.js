@@ -88,6 +88,7 @@ class RecoverAuthentication extends Component {
         return <CreateGpgKey
           displayAs={CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY}
           onComplete={this.props.authenticationRecoverContext.generateAccountRecoveryGpgKey.bind(this)}
+          userPassphrasePolicies={{entropy_minimum: 50}}
         />;
       case AuthenticationRecoverWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_SECURITY_TOKEN:
         return <ChooseSecurityToken

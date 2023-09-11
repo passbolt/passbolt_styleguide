@@ -48,6 +48,7 @@ class SetupAuthentication extends Component {
           displayAs={CreateGpgKeyVariation.SETUP}
           onComplete={this.props.authenticationSetupContext.generateGpgKey}
           onSecondaryActionClick={this.props.authenticationSetupContext.goToImportGpgKey}
+          userPassphrasePolicies={this.props.authenticationSetupContext.userPassphrasePolicies}
         />;
       case AuthenticationSetupWorkflowStates.DOWNLOAD_RECOVERY_KIT:
         return <DownloadRecoveryKit

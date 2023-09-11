@@ -15,15 +15,14 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
-import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
+import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
 
 /**
  * The component display variations.
@@ -65,10 +64,6 @@ class CreateGpgKey extends Component {
         processing: false, // True if one's processing passphrase
       },
       hintClassNames: { // The class names for passphrase hints
-        enoughLength: '',
-        uppercase: '',
-        alphanumeric: '',
-        specialCharacters: '',
         notInDictionary: '',
         enoughEntropy: ''
       },
@@ -90,10 +85,16 @@ class CreateGpgKey extends Component {
     const validation = {
       notInDictionary: this.pownedService === null || this.state.hintClassNames.notInDictionary !== "error"
     };
-    validation.enoughEntropy = this.state.passphraseEntropy && this.state.passphraseEntropy !== 0;
-    validation.enoughLength = this.state.hintClassNames.enoughLength === "success";
+    validation.enoughEntropy = this.state.passphraseEntropy && this.state.passphraseEntropy >= this.minimumEntropyRequired;
 
     return Object.values(validation).every(value => value);
+  }
+
+  /**
+   * Returns the minimum entropy required for the passphrase
+   */
+  get minimumEntropyRequired() {
+    return this.props.userPassphrasePolicies.entropy_minimum;
   }
 
   /**
@@ -130,7 +131,9 @@ class CreateGpgKey extends Component {
    */
   async componentDidMount() {
     this.focusOnPassphrase();
-    this.initPwnedPasswordService();
+    if (this.props.userPassphrasePolicies.external_dictionary_check) {
+      this.initPwnedPasswordService();
+    }
   }
 
   /**
@@ -153,23 +156,15 @@ class CreateGpgKey extends Component {
    */
   handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    let hintClassNames = {};
     let passphraseEntropy = null;
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
-      hintClassNames = this.evaluatePassphraseDefaultHintClassNames(passphrase);
-
       if (this.pownedService) {
         this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
       }
-    } else {
-      hintClassNames = {
-        ...this.state.hintClassNames,
-        notInDictionary: "unavailable"
-      };
     }
 
-    this.setState({passphrase, passphraseEntropy, hintClassNames});
+    this.setState({passphrase, passphraseEntropy});
   }
 
   /**
@@ -179,23 +174,6 @@ class CreateGpgKey extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.generateGpgKey();
-  }
-
-  /**
-   * Evaluate the passphrase default hints classnames
-   * @param {string} passphrase The passphrase to evaluate
-   * @return {object}
-   */
-  evaluatePassphraseDefaultHintClassNames(passphrase) {
-    const masks = SecurityComplexity.matchMasks(passphrase);
-    const hintClassName = condition => condition ? 'success' : 'warning';
-    return {
-      enoughLength: passphrase.length >= 8 ? 'success' : 'error',
-      uppercase: hintClassName(masks.uppercase),
-      alphanumeric: hintClassName(masks.alpha && masks.digit),
-      specialCharacters: hintClassName(masks.special),
-      notInDictionary: this.state.hintClassNames.notInDictionary
-    };
   }
 
   /**
@@ -302,23 +280,12 @@ class CreateGpgKey extends Component {
               preview={true}
               onChange={this.handlePassphraseChange}
               disabled={!this.areActionsAllowed}/>
-            <PasswordComplexity entropy={passphraseEntropy}/>
+            <PasswordComplexityWithGoal
+              entropy={passphraseEntropy} targettedEntropy={this.props.userPassphrasePolicies.entropy_minimum}/>
           </div>
 
           <div className="password-hints">
             <ul>
-              <li id="enoughLengthHint" className={this.state.hintClassNames.enoughLength}>
-                <Trans>It is at least 8 characters in length</Trans>
-              </li>
-              <li id="uppercaseHint" className={this.state.hintClassNames.uppercase}>
-                <Trans>It contains lower and uppercase characters</Trans>
-              </li>
-              <li id="alphaNumericHint" className={this.state.hintClassNames.alphanumeric}>
-                <Trans>It contains letters and numbers</Trans>
-              </li>
-              <li id="specialCharactersyHint" className={this.state.hintClassNames.specialCharacters}>
-                <Trans>It contains special characters (like / or * or %)</Trans>
-              </li>
               <li id="notInDictionaryHint" className={this.state.hintClassNames.notInDictionary}>
                 {this.state.isPwnedServiceAvailable  &&
                   <Trans>It is not part of an exposed data breach</Trans>
@@ -362,6 +329,7 @@ CreateGpgKey.defaultProps = {
 CreateGpgKey.propTypes = {
   context: PropTypes.any, // The application context
   onComplete: PropTypes.func.isRequired, // The callback function to call when the form is submitted
+  userPassphrasePolicies: PropTypes.object.isRequired, // The User Passphrase Policies set by the organisation
   displayAs: PropTypes.PropTypes.oneOf([
     CreateGpgKeyVariation.SETUP,
     CreateGpgKeyVariation.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
