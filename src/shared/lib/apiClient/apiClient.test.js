@@ -612,4 +612,41 @@ describe("Unit testing apiClient with mocked fetch", () => {
     expect(spyAssertId).toHaveBeenCalledTimes(1);
     expect(spyAssertId).toHaveBeenCalledWith(resourceId);
   });
+
+  each([
+    {baseUrl: "http://local.passbolt.dev", resourceName: "/resource", expected: "http://local.passbolt.dev/resource"},
+    {baseUrl: "http://local.passbolt.dev/", resourceName: "/resource", expected: "http://local.passbolt.dev/resource"},
+    {baseUrl: "http://local.passbolt.dev", resourceName: "resource", expected: "http://local.passbolt.dev/resource"},
+    {baseUrl: "http://local.passbolt.dev/", resourceName: "resource", expected: "http://local.passbolt.dev/resource"},
+    {baseUrl: "http://local.passbolt.dev", resourceName: "/resource/other", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/", resourceName: "/resource/other", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev", resourceName: "resource/other", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/", resourceName: "resource/other", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev", resourceName: "resource/other/", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/", resourceName: "resource/other/", expected: "http://local.passbolt.dev/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "/resource", expected: "http://local.passbolt.dev/subfolder/resource"},
+    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "/resource", expected: "http://local.passbolt.dev/subfolder/resource"},
+    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "resource", expected: "http://local.passbolt.dev/subfolder/resource"},
+    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "resource", expected: "http://local.passbolt.dev/subfolder/resource"},
+    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "/resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "/resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "resource/other", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "/resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder", resourceName: "resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+    {baseUrl: "http://local.passbolt.dev/subfolder/", resourceName: "resource/other/", expected: "http://local.passbolt.dev/subfolder/resource/other"},
+  ]).describe("Should set a proper baseUrl with ending slashes in baseUrl and starting slash in resource name", scenario => {
+    it(`with the URL: ${scenario.baseUrl}/${scenario.resourceName}`, async() => {
+      expect.assertions(1);
+      const options = (new ApiClientOptions())
+        .setBaseUrl(scenario.baseUrl)
+        .setResourceName(scenario.resourceName);
+      const apiClient = new ApiClient(options);
+
+      expect(apiClient.baseUrl.toString()).toStrictEqual(scenario.expected);
+    });
+  });
 });
