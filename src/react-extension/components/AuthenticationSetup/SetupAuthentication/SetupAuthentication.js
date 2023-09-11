@@ -68,6 +68,7 @@ class SetupAuthentication extends Component {
           canRememberMe={this.props.context.siteSettings.hasRememberMeUntilILogoutOption}
           onComplete={this.props.authenticationSetupContext.checkPassphrase}
           onSecondaryActionClick={this.props.authenticationSetupContext.goToGenerateGpgKey}
+          userPassphrasePolicies={this.props.authenticationSetupContext.userPassphrasePolicies}
         />;
       case AuthenticationSetupWorkflowStates.CHOOSE_ACCOUNT_RECOVERY_PREFERENCE:
         return <ChooseAccountRecoveryPreference

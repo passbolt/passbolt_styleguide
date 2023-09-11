@@ -133,6 +133,8 @@ class CreateGpgKey extends Component {
     this.focusOnPassphrase();
     if (this.props.userPassphrasePolicies.external_dictionary_check) {
       this.initPwnedPasswordService();
+    } else {
+      this.setState({isPwnedServiceAvailable: false});
     }
   }
 
@@ -287,7 +289,7 @@ class CreateGpgKey extends Component {
           <div className="password-hints">
             <ul>
               <li id="notInDictionaryHint" className={this.state.hintClassNames.notInDictionary}>
-                {this.state.isPwnedServiceAvailable  &&
+                {this.state.isPwnedServiceAvailable &&
                   <Trans>It is not part of an exposed data breach</Trans>
                 }
                 {!this.state.isPwnedServiceAvailable &&

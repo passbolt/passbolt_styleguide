@@ -58,6 +58,7 @@ class RecoverAuthentication extends Component {
           canRememberMe={this.props.context.siteSettings.hasRememberMeUntilILogoutOption}
           onComplete={this.props.authenticationRecoverContext.checkPassphrase.bind(this)}
           onSecondaryActionClick={this.props.authenticationRecoverContext.needHelpCredentialsLost.bind(this)}
+          userPassphrasePolicies={this.props.authenticationRecoverContext.userPassphrasePolicies}
         />;
       case AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN:
         return <ChooseSecurityToken

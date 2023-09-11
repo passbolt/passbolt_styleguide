@@ -132,7 +132,7 @@ class PasswordComplexityWithGoal extends React.PureComponent {
    * @returns {boolean}
    */
   hasEntropy() {
-    return Boolean(this.props.entropy);
+    return this.props.entropy !== null && typeof this.props.entropy !== "undefined";
   }
 
   /**
