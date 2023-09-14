@@ -148,9 +148,6 @@ class ExtAppContextProvider extends React.Component {
         errors: {}, // The dry run errors
       },
 
-      // progress dialog
-      progressDialogProps: {},
-
       // Resource comment dialog
       resourceCommentId: null, // Selected resource comment id
       mustRefreshComments: false, // Flag telling whether the current list of comments should be refreshed
