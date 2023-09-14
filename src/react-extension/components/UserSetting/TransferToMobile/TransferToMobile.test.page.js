@@ -79,6 +79,8 @@ export default class TransferToMobileTestPage {
         return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-cancel') !== null;
       case 'complete':
         return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-complete') !== null;
+      case 'https required':
+        return this._page.container.querySelector('.profile-mobile-transfer .mobile-transfer-step-https-required') !== null;
       default:
         throw new Error('Unknown step in TransferToMobile test page.');
     }
