@@ -36,6 +36,7 @@ const getAppContext = function(appContext) {
     setContext: () => {}
   };
 
+  defaultAppContext.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
   return Object.assign(defaultAppContext, appContext || {});
 };
 

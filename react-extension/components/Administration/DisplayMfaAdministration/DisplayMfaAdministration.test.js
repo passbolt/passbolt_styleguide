@@ -157,4 +157,16 @@ describe("See the MFA settings", () => {
       expect(page.duo.getAttribute("disabled")).not.toBeNull();
     });
   });
+
+  describe("Should not display the form if the site is not running under https", () => {
+    it("Should display a message to the admin explaining the reason why the form is not displayed", () => {
+      expect.assertions(1);
+      const context = defaultAppContext({
+        trustedDomain: "http://localhost"
+      }); // The applicative context
+      const props = defaultProps({context}); // The props to pass
+      const page = new DisplayMfaAdministrationPage(context, props);
+      expect(page.formNotDisplayedMessage.textContent).toStrictEqual("Sorry the multi factor authentication feature is only available in a secure context (HTTPS).");
+    });
+  });
 });

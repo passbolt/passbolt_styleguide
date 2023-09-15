@@ -3168,6 +3168,81 @@ html {
 .password-complexity .progress-bar.error {
   background: #BDBDBD;
 }
+.password-complexity.with-goal {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+.password-complexity.with-goal .complexity-text {
+  display: flex;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color: #7C7C7C;
+}
+.password-complexity.with-goal .progress {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  height: 1rem;
+  width: 100%;
+}
+.password-complexity.with-goal .progress-bar {
+  position: absolute;
+  border-radius: 0.1rem;
+  height: 0.2rem;
+  margin-top: 0.3rem;
+  display: block;
+  top: 0;
+}
+.password-complexity.with-goal .progress-bar.background {
+  width: 100%;
+  background: #BDBDBD;
+  z-index: 0;
+}
+.password-complexity.with-goal .progress-bar.foreground {
+  width: 0;
+  background: #DD6A00;
+  z-index: 10;
+}
+.password-complexity.with-goal .progress-bar.foreground.required {
+  background: #D40101;
+}
+.password-complexity.with-goal .progress-bar.foreground.reached {
+  background: #009900;
+}
+.password-complexity.with-goal .progress-bar.target {
+  width: 0;
+  background: #FEF0BF;
+  z-index: 5;
+}
+.password-complexity.with-goal .progress-bar.target.required {
+  background: #FFA6A6;
+}
+.password-complexity.with-goal .target-entropy {
+  position: absolute;
+  top: 0.7rem;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top: 0;
+  border-bottom-color: #BDBDBD;
+}
+.password-complexity.with-goal .target-entropy.recommended {
+  border-bottom-color: #DD6A00;
+}
+.password-complexity.with-goal .target-entropy.required {
+  border-bottom-color: #D40101;
+}
+.password-complexity.with-goal .target-entropy.reached {
+  border-bottom-color: #009900;
+}
+.password-complexity.with-goal .target-entropy .tooltip {
+  position: absolute;
+  top: -0.3rem;
+  left: -1rem;
+  width: 2rem;
+  height: 1.2rem;
+  z-index: 20;
+}
 .password-hints {
   margin: 0.5em 0 1em 0;
 }

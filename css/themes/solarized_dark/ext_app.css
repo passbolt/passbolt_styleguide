@@ -4709,6 +4709,123 @@ iframe.cachette {
 .chips.new {
   background-color: hsl(45, 100%, 45%);
 }
+.range-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-bottom: 2rem;
+}
+.range-wrapper .range-labels {
+  display: flex;
+  width: 100%;
+}
+.range-wrapper .range-labels label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  flex: 1 1 0;
+}
+.range-wrapper .range-labels label:first-child {
+  color: #a40000;
+  text-align: left;
+}
+.range-wrapper .range-labels label:last-child {
+  color: #0eaa00;
+  text-align: right;
+}
+.range-wrapper .range-input-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.range-wrapper .range-input-wrapper .range-input {
+  height: 1rem;
+  width: 100%;
+  background: linear-gradient(to right, #A40000, #FFA724, #0EAA00);
+  border-radius: 0.5rem;
+  appearance: none;
+  outline: none;
+}
+.range-wrapper .range-input-wrapper .range-input::-webkit-slider-container {
+  min-block-size: 1rem;
+}
+.range-wrapper .range-input-wrapper .range-input::-webkit-slider-runnable-track {
+  height: 1rem;
+}
+.range-wrapper .range-input-wrapper .range-input::-webkit-slider-thumb {
+  appearance: none;
+  position: relative;
+  z-index: 1;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 0.8rem;
+  background: #F8F8F8;
+  border: 0.1rem solid #E0E0E0;
+  transform: translate(-0.2rem, -0.3rem);
+  cursor: pointer;
+}
+.range-wrapper .range-input-wrapper .range-options {
+  display: flex;
+  justify-content: space-around;
+  writing-mode: horizontal-tb;
+  width: inherit;
+  text-align: center;
+}
+.range-wrapper .range-input-wrapper .range-options .range-option {
+  position: absolute;
+  padding: 0;
+  transform: translateX(-50%);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.range-wrapper .range-input-wrapper .range-options .range-option:hover {
+  font-weight: 700;
+}
+.range-wrapper .range-input-wrapper .range-options .range-option::before {
+  content: '';
+  position: absolute;
+  display: block;
+  top: -2.5rem;
+  left: 50%;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 0.4rem;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 0;
+  transform: translateX(-50%);
+}
+.range-wrapper .range-input-wrapper .range-options .range-option.range-option--active {
+  font-weight: 700;
+  color: #000000;
+  padding: 0.3rem 0.6rem;
+  background: #F8F8F8;
+  border: 0.1rem solid #E0E0E0;
+  margin-top: -0.4rem;
+  border-radius: 0.3rem;
+}
+.range-wrapper .range-input-wrapper .range-options .range-option.range-option--active::before {
+  display: none;
+}
+.range-wrapper .range-input-wrapper .range-options .range-option:first-child {
+  text-align: left;
+  transform: translateX(0%);
+}
+.range-wrapper .range-input-wrapper .range-options .range-option:first-child::before {
+  content: '';
+  left: 0.1rem;
+  transform: translateX(0);
+}
+.range-wrapper .range-input-wrapper .range-options .range-option:last-child {
+  text-align: right;
+  transform: translateX(-100%);
+}
+.range-wrapper .range-input-wrapper .range-options .range-option:last-child::before {
+  content: '';
+  left: unset;
+  right: 0.1rem;
+  transform: translateX(0);
+}
 .panel.aside .activity div.actions {
   margin-top: 1.6rem;
   text-align: center;
@@ -5246,6 +5363,81 @@ iframe.cachette {
 }
 .password-complexity .progress-bar.error {
   background: hsl(194, 14%, 35%);
+}
+.password-complexity.with-goal {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+.password-complexity.with-goal .complexity-text {
+  display: flex;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  color: hsl(46, 42%, 88%);
+}
+.password-complexity.with-goal .progress {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  height: 1rem;
+  width: 100%;
+}
+.password-complexity.with-goal .progress-bar {
+  position: absolute;
+  border-radius: 0.1rem;
+  height: 0.2rem;
+  margin-top: 0.3rem;
+  display: block;
+  top: 0;
+}
+.password-complexity.with-goal .progress-bar.background {
+  width: 100%;
+  background: hsl(194, 14%, 35%);
+  z-index: 0;
+}
+.password-complexity.with-goal .progress-bar.foreground {
+  width: 0;
+  background: hsl(18, 80%, 44%);
+  z-index: 10;
+}
+.password-complexity.with-goal .progress-bar.foreground.required {
+  background: hsl(1, 71%, 52%);
+}
+.password-complexity.with-goal .progress-bar.foreground.reached {
+  background: hsl(68, 100%, 35%);
+}
+.password-complexity.with-goal .progress-bar.target {
+  width: 0;
+  background: hsl(18, 80%, 74%);
+  z-index: 5;
+}
+.password-complexity.with-goal .progress-bar.target.required {
+  background: hsl(1, 71%, 72%);
+}
+.password-complexity.with-goal .target-entropy {
+  position: absolute;
+  top: 0.7rem;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top: 0;
+  border-bottom-color: hsl(194, 14%, 35%);
+}
+.password-complexity.with-goal .target-entropy.recommended {
+  border-bottom-color: hsl(18, 80%, 44%);
+}
+.password-complexity.with-goal .target-entropy.required {
+  border-bottom-color: hsl(1, 71%, 52%);
+}
+.password-complexity.with-goal .target-entropy.reached {
+  border-bottom-color: hsl(68, 100%, 35%);
+}
+.password-complexity.with-goal .target-entropy .tooltip {
+  position: absolute;
+  top: -0.3rem;
+  left: -1rem;
+  width: 2rem;
+  height: 1.2rem;
+  z-index: 20;
 }
 .password-hints {
   margin: 0.5em 0 1em 0;

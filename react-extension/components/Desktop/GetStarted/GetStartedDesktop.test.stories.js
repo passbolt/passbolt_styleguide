@@ -34,6 +34,3 @@ const defaultParameters = {
 };
 export const Default = Template.bind({});
 Default.parameters = defaultParameters;
-
-
-

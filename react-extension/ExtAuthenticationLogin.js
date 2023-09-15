@@ -82,7 +82,7 @@ class ExtAuthenticationLogin extends Component {
   async initializeUserSettings() {
     const storageData = await this.props.storage.local.get(["_passbolt_data"]);
     const userSettings = new UserSettings(storageData._passbolt_data.config);
-    await this.setState({userSettings});
+    this.setState({userSettings});
   }
 
   /**

@@ -49,8 +49,8 @@ export function defaultProps(props = {}) {
  * @params {Object} [props] Props to override
  * @returns {Object}
  */
-export function defaultPropsWithAccount(props = {}) {
-  const defaultProps = {
+export function defaultPropsWithAccount(data = {}) {
+  const defaultData = defaultProps({
     userSettings: null,
     account: {
       "domain": (new URL(window.location.href)).origin,
@@ -65,6 +65,6 @@ export function defaultPropsWithAccount(props = {}) {
         "textcolor": "#000000",
       },
     }
-  };
-  return Object.assign(defaultProps, props);
+  });
+  return Object.assign(defaultData, data);
 }

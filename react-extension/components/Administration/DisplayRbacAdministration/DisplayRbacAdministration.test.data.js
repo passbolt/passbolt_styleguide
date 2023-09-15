@@ -18,7 +18,7 @@
  */
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import {defaultAdministrationWorkspaceContext} from "../../../contexts/AdministrationWorkspaceContext.test.data";
-import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {
   administrationRbacContextWithUpdatedRbac,
   defaultAdministrationRbacContext,
@@ -32,7 +32,7 @@ export function defaultProps(props = {}) {
     context: defaultAppContext(),
     adminRbacContext: defaultAdministrationRbacContext(),
     administrationWorkspaceContext: defaultAdministrationWorkspaceContext(),
-    actionFeedbackContext: defaultActionFeedbackContextContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     RoleService: DefaultRoleService,
     RbacService: DefaultRbacService,
     ...props

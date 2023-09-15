@@ -12,7 +12,7 @@
  * @since         4.3.0
  */
 
-import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props
@@ -20,7 +20,7 @@ import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedb
  */
 export function defaultProps(data = {}) {
   const props = {
-    actionFeedbackContext: defaultActionFeedbackContextContext(data?.actionFeedbackContext),
+    actionFeedbackContext: defaultActionFeedbackContext(data?.actionFeedbackContext),
   };
 
   return props;

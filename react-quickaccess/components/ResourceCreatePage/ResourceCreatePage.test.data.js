@@ -17,7 +17,10 @@ export function defaultAppContext(appContext) {
     siteSettings: {
       canIUse: () => true
     },
-    isAuthenticated: true
+    isAuthenticated: true,
+    getOpenerTabId: () => null,
+    getBootstrapFeature: () => null,
+    getDetached: () => false,
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

@@ -14,6 +14,7 @@
 
 import {CreateGpgKeyVariation} from "./CreateGpgKey";
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {defaultUserPassphrasePoliciesEntityDto} from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
 
 /**
  * Default props
@@ -26,6 +27,7 @@ export function defaultProps(props) {
         canIUse: () => true,
       }},
     ),
+    userPassphrasePolicies: defaultUserPassphrasePoliciesEntityDto(),
     displayAs: CreateGpgKeyVariation.SETUP,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),

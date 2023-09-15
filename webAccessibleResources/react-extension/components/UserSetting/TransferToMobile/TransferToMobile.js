@@ -14,7 +14,7 @@
 
 import React from 'react';
 import PropTypes from "prop-types";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import AppContext, {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import QRCode from 'qrcode';
 import {sha512} from "../../../lib/Crypto/sha512";
@@ -36,6 +36,15 @@ const QRCODE_WIDTH = 325;
 const FETCH_INTERVAL = 333; //in ms
 const MAX_UINT8 = 255;
 
+const TransferToMobileSteps = {
+  HTTPS_REQUIRED: 'https required',
+  START: 'start',
+  IN_PROGRESS: 'in progress',
+  COMPLETE: 'complere',
+  CANCEL: 'cancel',
+  ERROR: 'error',
+};
+
 /**
  * This component displays the user profile information
  */
@@ -56,8 +65,12 @@ class TransferToMobile extends React.Component {
    * Returns the component default state
    */
   get defaultState() {
+    const step = this.isRunningUnderHttps
+      ? TransferToMobileSteps.START
+      : TransferToMobileSteps.HTTPS_REQUIRED;
+
     return {
-      step: 'start',
+      step: step,
       page: 0,
       processing: false,
       qrCodes: undefined, // QR code cache
@@ -389,21 +402,21 @@ class TransferToMobile extends React.Component {
 
     if (transferDto) {
       switch (transferDto.status) {
-        case 'start':
+        case TransferToMobileSteps.START:
           // update QR code only if the page changed
           break;
-        case 'in progress':
+        case TransferToMobileSteps.IN_PROGRESS:
           if (transferDto.current_page !== this.state.page) {
             await this.handleTransferUpdated(transferDto);
           }
           break;
-        case 'complete':
+        case TransferToMobileSteps.COMPLETE:
           await this.handleTransferComplete();
           break;
-        case 'error':
+        case TransferToMobileSteps.ERROR:
           await this.handleTransferError();
           break;
-        case 'cancel':
+        case TransferToMobileSteps.CANCEL:
           await this.handleTransferCancelled();
           break;
         default:
@@ -421,7 +434,7 @@ class TransferToMobile extends React.Component {
    * @returns {Promise<void>}
    */
   async handleTransferUpdated(transferDto) {
-    this.setState({transferDto, step: 'in progress', page: transferDto.current_page});
+    this.setState({transferDto, step: TransferToMobileSteps.IN_PROGRESS, page: transferDto.current_page});
   }
 
   /**
@@ -435,8 +448,8 @@ class TransferToMobile extends React.Component {
     this.clearInterval();
     try {
       // cancel server side if we had the time to create a transfer entity there
-      if (this.state.transferDto && this.state.transferDto !== 'cancel') {
-        const transferDto = {id: this.state.transferDto.id, status: 'cancel'};
+      if (this.state.transferDto && this.state.transferDto !== TransferToMobileSteps.CANCEL) {
+        const transferDto = {id: this.state.transferDto.id, status: TransferToMobileSteps.CANCEL};
         await this.context.port.request('passbolt.mobile.transfer.update', transferDto);
       }
     } catch (error) {
@@ -454,7 +467,7 @@ class TransferToMobile extends React.Component {
   async handleTransferCancelled() {
     this.clearInterval();
     const cancelState = this.defaultState;
-    cancelState.step = 'cancel';
+    cancelState.step = TransferToMobileSteps.CANCEL;
     this.setState(cancelState);
   }
 
@@ -465,7 +478,7 @@ class TransferToMobile extends React.Component {
   async handleTransferComplete() {
     this.clearInterval();
     const completeState = this.defaultState;
-    completeState.step = 'complete';
+    completeState.step = TransferToMobileSteps.COMPLETE;
     this.setState(completeState);
   }
 
@@ -563,7 +576,7 @@ class TransferToMobile extends React.Component {
    */
   handleError(error) {
     console.error(error);
-    this.setState({step: 'error', error});
+    this.setState({step: TransferToMobileSteps.ERROR, error});
   }
 
   /**
@@ -579,6 +592,16 @@ class TransferToMobile extends React.Component {
   }
 
   /**
+   * Returns true if the current URL is using the protocol HTTPS
+   * @returns {boolean}
+   */
+  get isRunningUnderHttps() {
+    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
+    const url = new URL(trustedDomain);
+    return url.protocol === "https:";
+  }
+
+  /**
    * Render
    * @returns {JSX.Element}
    */
@@ -587,7 +610,7 @@ class TransferToMobile extends React.Component {
     return (
       <div className="grid grid-responsive-12 profile-mobile-transfer">
         <div className="row">
-          {this.state.step === 'start' &&
+          {this.state.step === TransferToMobileSteps.START &&
           <>
             <div className="profile col6 main-column mobile-transfer-step-start">
               <h3><Trans>Welcome to the mobile app setup</Trans></h3>
@@ -624,7 +647,7 @@ class TransferToMobile extends React.Component {
             </div>
           </>
           }
-          {this.state.step === 'in progress' &&
+          {this.state.step === TransferToMobileSteps.IN_PROGRESS &&
             <>
               <div className="profile col6 main-column mobile-transfer-step-in-progress">
                 <h3><Trans>Transfer in progress...</Trans></h3>
@@ -651,7 +674,7 @@ class TransferToMobile extends React.Component {
               </div>
             </>
           }
-          {this.state.step === 'complete' &&
+          {this.state.step === TransferToMobileSteps.COMPLETE  &&
             <>
               <div className="profile main-column col6 mobile-transfer-step-complete">
                 <h3><Trans>Transfer complete!</Trans></h3>
@@ -686,7 +709,7 @@ class TransferToMobile extends React.Component {
               </div>
             </>
           }
-          {this.state.step === 'cancel' &&
+          {this.state.step === TransferToMobileSteps.CANCEL &&
           <>
             <div className="profile main-column col6 mobile-transfer-step-error">
               <h3><Trans>The operation was cancelled.</Trans></h3>
@@ -719,7 +742,7 @@ class TransferToMobile extends React.Component {
             </div>
           </>
           }
-          {this.state.step === 'error' &&
+          {this.state.step === TransferToMobileSteps.ERROR &&
           <>
             <div className="profile col6 main-column mobile-transfer-step-error">
               <h3><Trans>Oops, something went wrong</Trans></h3>
@@ -751,6 +774,28 @@ class TransferToMobile extends React.Component {
             </div>
           </>
           }
+          {this.state.step === TransferToMobileSteps.HTTPS_REQUIRED &&
+          <>
+            <div className="profile col6 main-column mobile-transfer-step-https-required">
+              <h3><Trans>Mobile Apps</Trans></h3>
+              <h4 className="no-border"><Trans>Sorry the Mobile app setup feature is only available in a secure context (HTTPS).</Trans></h4>
+              <p>
+                <Trans>Please contact your administrator to fix this issue.</Trans>
+              </p>
+            </div>
+            <div className="col4 last">
+              <div className="sidebar-help">
+                <h3><Trans>Need some help?</Trans></h3>
+                <p><Trans>Contact your administrator with the error details.</Trans></p>
+                <p><Trans>Alternatively you can also get in touch with support on community forum or via the paid support channels.</Trans></p>
+                <a className="button" href="https://help.passbolt.com/" target="_blank" rel="noopener noreferrer">
+                  <Icon name="document"/>
+                  <span><Trans>Help site</Trans></span>
+                </a>
+              </div>
+            </div>
+          </>
+          }
         </div>
       </div>
     );
@@ -759,10 +804,11 @@ class TransferToMobile extends React.Component {
 
 TransferToMobile.contextType = AppContext;
 TransferToMobile.propTypes = {
+  context: PropTypes.object, // the app context
   dialogContext: PropTypes.object, // The dialog context
   userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withDialog(withUserSettings(withTranslation('common')(TransferToMobile)));
+export default withAppContext(withDialog(withUserSettings(withTranslation('common')(TransferToMobile))));
