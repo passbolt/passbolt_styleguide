@@ -25,13 +25,13 @@ const commonStyle = {
 };
 
 const componentConfigurations = [
-  {targettedEntropy: 50},
-  {targettedEntropy: 76, error: true},
-  {targettedEntropy: 90, entropy: 50},
-  {targettedEntropy: 80, entropy: 75.9, error: true},
-  {targettedEntropy: 112, entropy: 87.5, error: true},
-  {targettedEntropy: 95, entropy: 117.98},
-  {targettedEntropy: 100, entropy: 158.7},
+  {targetEntropy: 50},
+  {targetEntropy: 76, error: true},
+  {targetEntropy: 90, entropy: 50},
+  {targetEntropy: 80, entropy: 75.9, error: true},
+  {targetEntropy: 112, entropy: 87.5, error: true},
+  {targetEntropy: 95, entropy: 117.98},
+  {targetEntropy: 100, entropy: 158.7},
 ];
 
 const Template = () =>

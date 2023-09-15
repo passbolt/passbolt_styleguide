@@ -224,7 +224,7 @@ class EnterNewPassphrase extends React.Component {
     }
 
     try {
-      this.props.userSettingsContext.onUpdatePassphraseRequested(this.state.passphrase);
+      await this.props.userSettingsContext.onUpdatePassphraseRequested(this.state.passphrase);
     } catch (e) {
       this.onGpgKeyGeneratedFailure(e);
     }
@@ -288,7 +288,7 @@ class EnterNewPassphrase extends React.Component {
                     securityToken={this.props.context.userSettings.getSecurityToken()}
                     onChange={this.handlePassphraseChange}
                     disabled={!this.areActionsAllowed}/>
-                  <PasswordComplexityWithGoal entropy={passphraseEntropy} targettedEntropy={userPassphrasePolicies.entropy_minimum}/>
+                  <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={userPassphrasePolicies.entropy_minimum}/>
                   <>
                     {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
                       <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>

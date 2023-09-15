@@ -299,7 +299,7 @@ class CheckPassphrase extends Component {
                 disabled={!this.areActionsAllowed}/>
               <PasswordComplexityWithGoal
                 entropy={passphraseEntropy}
-                targettedEntropy={this.props.userPassphrasePolicies.entropy_minimum}
+                targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}
                 isMinimumEntropyRequired={false}/>
               {this.state.hasBeenValidated &&
               <>

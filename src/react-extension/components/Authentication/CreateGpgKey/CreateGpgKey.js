@@ -272,7 +272,7 @@ class CreateGpgKey extends Component {
               disabled={!this.areActionsAllowed}/>
             <PasswordComplexityWithGoal
               entropy={passphraseEntropy}
-              targettedEntropy={this.props.userPassphrasePolicies.entropy_minimum}/>
+              targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}/>
             <>
               {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
                 <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
