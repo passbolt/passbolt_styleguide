@@ -17,7 +17,7 @@
  */
 import TransferToMobilePage from "./TransferToMobile.test.page";
 import {defaultProps} from "./TransferToMobile.test.data";
-import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
