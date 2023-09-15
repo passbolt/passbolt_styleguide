@@ -49,6 +49,13 @@ export default class DisplayMfaAdministrationPage {
   }
 
   /**
+   * Returns the first <p> tag that should match the "not displayed form" warning message
+   */
+  get formNotDisplayedMessage() {
+    return this._page.container.querySelector("h3 + p");
+  }
+
+  /**
    * Returns the totp input element
    */
   get totp() {

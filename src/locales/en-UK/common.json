@@ -520,6 +520,7 @@
   "More informations": "More informations",
   "Move": "Move",
   "Multi Factor Authentication": "Multi Factor Authentication",
+  "Multi factor authentication requires your Passbolt instance to run under HTTPS.": "Multi factor authentication requires your Passbolt instance to run under HTTPS.",
   "Multi resource and folder share is not implemented.": "Multi resource and folder share is not implemented.",
   "Multi-factor authentication has been disabled successfully": "Multi-factor authentication has been disabled successfully",
   "My tags": "My tags",
