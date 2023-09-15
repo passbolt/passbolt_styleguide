@@ -37,8 +37,8 @@ class ManageQuickAccessMode extends Component {
    * Handle close outside window event
    */
   handleCloseOutsideWindowEvent() {
-    const mustCloseWindow = this.queryParameters.get("uiMode") === "detached"
-      && this.queryParameters.get("feature") !== null;
+    const mustCloseWindow = this.props.context.getDetached()
+      && this.props.context.getBootstrapFeature() !== null;
     if (mustCloseWindow) {
       const closeWindow = () => {
         if (this.props.context.shouldCloseAtWindowBlur) {
@@ -55,7 +55,7 @@ class ManageQuickAccessMode extends Component {
    * native behaviour of the quickaccess opened from the toolbar.
    */
   handleResizeWindow() {
-    const detachedMode = this.queryParameters.get("uiMode") === "detached";
+    const detachedMode = this.props.context.getDetached();
     if (detachedMode) {
       const handleWindowResized = entries => this.props.context.port.emit("passbolt.quickaccess.update-window-height", entries[0].target.clientHeight);
       const resizeObserver = new ResizeObserver(handleWindowResized);
