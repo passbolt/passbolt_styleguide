@@ -46,12 +46,28 @@ const SEARCH_VISIBLE_ROUTES = [
 
 const PASSBOLT_GETTING_STARTED_URL = "https://www.passbolt.com/start";
 
+// Supported bootstrap features.
+export const BOOTSTRAP_FEATURE = {
+  LOGIN: 'login',
+  CREATE_NEW_CREDENTIALS: 'create-new-credentials',
+  SAVE_CREDENTIALS: 'save-credentials',
+  AUTOSAVE_CREDENTIALS: 'autosave-credentials',
+  REQUEST_PASSPHRASE: 'request-passphrase',
+};
+
 class ExtQuickAccess extends React.Component {
   constructor(props) {
     super(props);
-    this.searchRef = React.createRef();
+    this.createRefs();
     this.bindCallbacks();
-    this.state = this.initState(props);
+    this.state = this.getDefaultState(props);
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createRefs() {
+    this.searchRef = React.createRef();
   }
 
   /**
@@ -63,6 +79,10 @@ class ExtQuickAccess extends React.Component {
     return options !== null && typeof options[-1] !== "undefined";
   }
 
+  /**
+   * Bind callbacks methods.
+   * @return {void}
+   */
   bindCallbacks() {
     this.focusSearch = this.focusSearch.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
@@ -73,8 +93,16 @@ class ExtQuickAccess extends React.Component {
     this.logoutSuccessCallback = this.logoutSuccessCallback.bind(this);
     this.mfaRequiredCallback = this.mfaRequiredCallback.bind(this);
     this.setWindowBlurBehaviour = this.setWindowBlurBehaviour.bind(this);
+    this.getOpenerTabId = this.getOpenerTabId.bind(this);
+    this.getBootstrapFeature = this.getBootstrapFeature.bind(this);
+    this.getDetached = this.getDetached.bind(this);
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   async componentDidMount() {
     try {
       this.state.port.on('passbolt.passphrase.request', this.handleBackgroundPageRequiresPassphraseEvent);
@@ -95,7 +123,12 @@ class ExtQuickAccess extends React.Component {
     }
   }
 
-  initState(props) {
+  /**
+   * Get the default state value.
+   * @param {object} props The component props.
+   * @returns {object}
+   */
+  getDefaultState(props) {
     return {
       storage: props.storage,
       port: props.port,
@@ -115,20 +148,38 @@ class ExtQuickAccess extends React.Component {
       // Passphrase
       passphraseRequired: false,
       passphraseRequestId: '',
-      // Tab id to refer to the good one if detached mode
-      tabId: this.getTabIdFromUrl(),
+      // Manage popup blur
       shouldCloseAtWindowBlur: true, // when true the quickaccess in detached mode should close when losing focus
       setWindowBlurBehaviour: this.setWindowBlurBehaviour, // set the detached mode blur behaviour
+      // Quickaccess properties getters.
+      getOpenerTabId: this.getOpenerTabId, // Get the opener tab id, useful when used in detached mode to get info of the opener tab.
+      getBootstrapFeature: this.getBootstrapFeature, // The bootstrap feature.
+      getDetached: this.getDetached, // The detached mode
     };
   }
 
   /**
-   * Get the tabId from URL
+   * Get the opener tab identifier.
    * @returns {string}
    */
-  getTabIdFromUrl() {
-    const queryParameters = new URLSearchParams(window.location.search);
-    return queryParameters.get('tabId');
+  getOpenerTabId() {
+    return this.props.openerTabId;
+  }
+
+  /**
+   * Get the bootstrap feature.
+   * @returns {string}
+   */
+  getBootstrapFeature() {
+    return this.props.bootstrapFeature;
+  }
+
+  /**
+   * Get the detached mode
+   * @return {boolean}
+   */
+  getDetached() {
+    return this.props.detached;
   }
 
   updateSearch(search) {
@@ -186,16 +237,6 @@ class ExtQuickAccess extends React.Component {
   }
 
   /**
-   * Is feature is present
-   * @param feature {string}
-   * @returns {boolean}
-   */
-  isInFeature(feature) {
-    const queryParameters = new URLSearchParams(window.location.search);
-    return queryParameters.get("feature") === feature;
-  }
-
-  /**
    * Retrieve the authentication status.
    *
    * If the user is authenticated but the MFA challenge is required, close the quickaccess and redirect the user to
@@ -213,18 +254,22 @@ class ExtQuickAccess extends React.Component {
     this.setState({isAuthenticated});
   }
 
+  /**
+   * Redirect to MFA authentication.
+   */
   redirectToMfaAuthentication() {
     browser.tabs.create({url: this.state.userSettings.getTrustedDomain()});
     window.close();
   }
 
   loginSuccessCallback() {
-    if (!this.isInFeature('login')) {
-      this.getSiteSettings();
-      this.setState({isAuthenticated: true});
-    } else {
+    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.LOGIN) {
       window.close();
+      return;
     }
+
+    this.getSiteSettings();
+    this.setState({isAuthenticated: true});
     this.getLoggedInUser();
   }
 
@@ -249,7 +294,7 @@ class ExtQuickAccess extends React.Component {
   }
 
   handlePassphraseDialogCompleted() {
-    if (this.isInFeature("request-passphrase")) {
+    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
       window.close();
     } else {
       this.setState({passphraseRequired: false, passphraseRequestId: null});
@@ -257,9 +302,8 @@ class ExtQuickAccess extends React.Component {
   }
 
   handlePassphraseRequest() {
-    if (this.isInFeature("request-passphrase")) {
-      const queryParameters = new URLSearchParams(window.location.search);
-      this.handleBackgroundPageRequiresPassphraseEvent(queryParameters.get("requestId"));
+    if (this.props.bootstrapFeature === BOOTSTRAP_FEATURE.REQUEST_PASSPHRASE) {
+      this.handleBackgroundPageRequiresPassphraseEvent(this.props.bootstrapRequestId);
     }
   }
 
@@ -271,20 +315,19 @@ class ExtQuickAccess extends React.Component {
   }
 
   /**
-   * Get the route to initialize the quickaccess on when the user is opening it
+   * Get the route to quickaccess should bootstrap on.
    * @returns {string}
    */
-  getInitializationRoute() {
+  getBootstrapRoute() {
     if (!this.state.isAuthenticated) {
       return "/webAccessibleResources/quickaccess/login";
     }
 
-    const queryParameters = new URLSearchParams(window.location.search);
-    switch (queryParameters.get("feature")) {
-      case "create-new-credentials":
-      case "save-credentials":
+    switch (this.props.bootstrapFeature) {
+      case BOOTSTRAP_FEATURE.CREATE_NEW_CREDENTIALS:
+      case BOOTSTRAP_FEATURE.SAVE_CREDENTIALS:
         return "/webAccessibleResources/quickaccess/resources/create";
-      case "autosave-credentials":
+      case BOOTSTRAP_FEATURE.AUTOSAVE_CREDENTIALS:
         return "/webAccessibleResources/quickaccess/resources/autosave";
     }
 
@@ -294,7 +337,7 @@ class ExtQuickAccess extends React.Component {
   /**
    * Renders the component
    * @returns {JSX.Element}
-   */g;
+   */
   render() {
     const isReady = this.isReady();
 
@@ -321,7 +364,7 @@ class ExtQuickAccess extends React.Component {
                 <Switch>
                   {/* The initial route the quickaccess panel is loaded on is a triage url. */}
                   <Route exact path={"/webAccessibleResources/quickaccess.html"} render={() => (
-                    <Redirect to={this.getInitializationRoute()}/>
+                    <Redirect to={this.getBootstrapRoute()}/>
                   )}/>
                   {/* The route when the user is not authenticated */}
                   <Route exact path="/webAccessibleResources/quickaccess/login" render={() => (
@@ -378,6 +421,10 @@ class ExtQuickAccess extends React.Component {
 ExtQuickAccess.propTypes = {
   port: PropTypes.object,
   storage: PropTypes.object,
+  bootstrapFeature: PropTypes.string,
+  bootstrapRequestId: PropTypes.string,
+  openerTabId: PropTypes.string,
+  detached: PropTypes.bool
 };
 
 export default ExtQuickAccess;
