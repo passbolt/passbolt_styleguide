@@ -63,11 +63,11 @@ class Login extends Component {
   }
 
   /**
-   * On the component did mount, set the workspace action component and get the account recovery policy
-   *
+   * Whenever the component is mounted
    */
-  async componentDidMount() {
+  componentDidMount() {
     this.focusOnPassphrase();
+    this.initDefaultRememberMeChoice();
   }
 
   /**
@@ -272,6 +272,17 @@ class Login extends Component {
   }
 
   /**
+   * Initialise the rememberMe choice with the latest choice made by the user or false if none
+   * @returns {Promise<void>}
+   */
+  async initDefaultRememberMeChoice() {
+    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get-user-latest-choice');
+    if (defaultRememberMeChoice !== this.state.rememberMe) {
+      this.setState({rememberMe: defaultRememberMeChoice});
+    }
+  }
+
+  /**
    * Get the security token
    * @returns {{backgroundColor, code, textColor}}
    */
@@ -342,7 +353,7 @@ class Login extends Component {
                 id="remember-me"
                 type="checkbox"
                 name="remember-me"
-                value={this.state.rememberMe}
+                checked={this.state.rememberMe}
                 onChange={this.handleToggleRememberMe}
                 disabled={!this.areActionsAllowed}/>
               <label htmlFor="remember-me">

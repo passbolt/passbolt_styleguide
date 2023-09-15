@@ -40,12 +40,24 @@ class LoginPage extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
+    this.initDefaultRememberMeChoice();
     await this.props.ssoContext.loadSsoConfiguration();
     if (this.props.ssoContext.hasUserAnSsoKit()) {
       this.setState({isSsoAvailable: true, displaySso: true, isReady: true});
     } else {
       this.setState({isReady: true});
       this.focusOnPassphrase();
+    }
+  }
+
+  /**
+   * Initialise the rememberMe choice with the latest choice made by the user or false if none
+   * @returns {Promise<void>}
+   */
+  async initDefaultRememberMeChoice() {
+    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get-user-latest-choice');
+    if (defaultRememberMeChoice !== this.state.rememberMe) {
+      this.setState({rememberMe: defaultRememberMeChoice});
     }
   }
 
