@@ -69,6 +69,8 @@ import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/P
 import AdminPasswordPoliciesContextProvider
   from "./contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 import ProgressContextProvider from "./contexts/ProgressContext";
+import AdministrationUserPassphrasePoliciesContextProvider from "./contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
+import UserPassphrasePoliciesContextProvider from "./contexts/UserPassphrasePoliciesContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -184,16 +186,18 @@ class ExtApp extends Component {
                                           {/* User settings workspace */}
                                           <Route path={"/app/settings"}>
                                             <UserSettingsContextProvider>
-                                              <ManageDialogs/>
-                                              <ManageAnnouncements/>
-                                              <div id="container" className="page settings">
-                                                <div id="app" className="app ready" tabIndex="1000">
-                                                  <div className="header first">
-                                                    <DisplayMainMenu/>
+                                              <UserPassphrasePoliciesContextProvider>
+                                                <ManageDialogs/>
+                                                <ManageAnnouncements/>
+                                                <div id="container" className="page settings">
+                                                  <div id="app" className="app ready" tabIndex="1000">
+                                                    <div className="header first">
+                                                      <DisplayMainMenu/>
+                                                    </div>
+                                                    <DisplayUserSettingsWorkspace/>
                                                   </div>
-                                                  <DisplayUserSettingsWorkspace/>
                                                 </div>
-                                              </div>
+                                              </UserPassphrasePoliciesContextProvider>
                                             </UserSettingsContextProvider>
                                           </Route>
                                           {/* SSO, Subscription and Account Recovery settings */}
@@ -202,15 +206,18 @@ class ExtApp extends Component {
                                             "/app/administration/account-recovery",
                                             "/app/administration/sso",
                                             "/app/administration/password-policies",
+                                            "/app/administration/user-passphrase-policies",
                                           ]}>
                                             <AdministrationWorkspaceContextProvider>
                                               <AdminAccountRecoveryContextProvider>
                                                 <AdminSubscriptionContextProvider>
                                                   <AdminSsoContextProvider>
                                                     <AdminPasswordPoliciesContextProvider>
-                                                      <ManageDialogs/>
-                                                      <ManageWorkflows/>
-                                                      <AdministrationWorkspace/>
+                                                      <AdministrationUserPassphrasePoliciesContextProvider>
+                                                        <ManageDialogs/>
+                                                        <ManageWorkflows/>
+                                                        <AdministrationWorkspace/>
+                                                      </AdministrationUserPassphrasePoliciesContextProvider>
                                                     </AdminPasswordPoliciesContextProvider>
                                                   </AdminSsoContextProvider>
                                                 </AdminSubscriptionContextProvider>

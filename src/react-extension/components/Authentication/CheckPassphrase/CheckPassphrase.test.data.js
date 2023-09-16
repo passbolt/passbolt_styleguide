@@ -13,6 +13,7 @@
  */
 
 import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
+import {defaultUserPassphrasePoliciesEntityDto} from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
 import {CheckPassphraseVariations} from "./CheckPassphrase";
 
 /**
@@ -27,6 +28,7 @@ export const defaultProps = (props = {}) => {
     canRememberMe: false,
     onComplete: jest.fn(() => Promise.resolve()),
     onSecondaryActionClick: jest.fn(() => Promise.resolve()),
+    userPassphrasePolicies: defaultUserPassphrasePoliciesEntityDto(),
   };
   return Object.assign(defaultProps, props || {});
 };

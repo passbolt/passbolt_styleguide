@@ -158,20 +158,13 @@ export default class CreateGpgKeyPage {
     return Boolean(this._page.container.querySelector('#import-key-link'));
   }
 
-
   /**
-   * Returns the list item concerning the 'not in dictionnary" hints
+   * Returns the passphrase's warning message for powned password
    */
-  get notInDictionaryHint() {
-    return this._page.container.querySelector(".password-hints #notInDictionaryHint");
+  get passphraseWarningMessage() {
+    return this._page.container.querySelector(".invalid-passphrase.warning-message");
   }
 
-  /**
-   * Returns the tooltip for service unavailable for powned password
-   */
-  get tootltip() {
-    return this._page.container.querySelector(".password-hints .unavailable .tooltip .tooltip-text");
-  }
 
   /**
    * Change the passphrase input value

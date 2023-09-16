@@ -73,6 +73,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Role-Based Access Control");
       case AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES:
         return this.translate("Password Policy");
+      case AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES:
+        return this.translate("User Passphrase Policies");
       default:
         return "";
     }

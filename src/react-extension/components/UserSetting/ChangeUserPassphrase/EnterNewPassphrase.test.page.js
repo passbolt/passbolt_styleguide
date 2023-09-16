@@ -16,6 +16,7 @@ import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import EnterNewPassphrase from "./EnterNewPassphrase";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 /**
  * The EnterNewPassphrase component represented as a page
@@ -160,17 +161,10 @@ export default class EnterNewPassphrasePage {
   }
 
   /**
-   * Returns the list item concerning the 'not in dictionnary" hints
+   * Returns the passphrase's warning message for powned password
    */
-  get notInDictionaryHint() {
-    return this._page.container.querySelectorAll(".password-hints li")[4];
-  }
-
-  /**
-   * Returns the tooltip for service unavailable for powned password
-   */
-  get tootltip() {
-    return this._page.container.querySelector(".password-hints .unavailable .tooltip .tooltip-text");
+  get passphraseWarningMessage() {
+    return this._page.container.querySelector(".invalid-passphrase.warning-message");
   }
 
   /**
@@ -202,19 +196,15 @@ export default class EnterNewPassphrasePage {
   /** fill the passphrase input element with data */
   async insertPassphrase(data)  {
     this.fillInput(this.passphraseInput, data);
+    await waitForTrue(() => this.passphraseInput.value === data);
     jest.runAllTimers();
-    await waitFor(() => {
-      if (this.passphraseInput.value !== data) {
-        throw new Error("pasword input is not set yet");
-      }
-    });
   }
 
   /** click update */
   async update(inProgressFn = () => {}) {
     const leftClick = {button: 0};
     fireEvent.click(this.updateButton, leftClick);
-    await waitFor(inProgressFn);
+    await waitForTrue(inProgressFn);
   }
 
   /** click cancel */
@@ -229,8 +219,3 @@ export default class EnterNewPassphrasePage {
     await this.click(this.obfuscateButton);
   }
 }
-
-
-
-
-
