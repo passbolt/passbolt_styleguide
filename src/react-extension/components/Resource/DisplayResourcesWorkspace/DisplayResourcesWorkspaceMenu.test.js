@@ -117,7 +117,7 @@ describe("See Workspace Menu", () => {
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
 
       await page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
 
@@ -136,7 +136,7 @@ describe("See Workspace Menu", () => {
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
 
       await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
 

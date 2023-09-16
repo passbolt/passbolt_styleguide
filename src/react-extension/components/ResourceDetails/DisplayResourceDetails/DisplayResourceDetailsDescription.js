@@ -18,6 +18,7 @@ import EditResourceDescription from "../../ResourceDescription/EditResourceDescr
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
+import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 
 /**
  * This component display the description section of a resource
@@ -35,7 +36,7 @@ class DisplayResourceDetailsDescription extends React.Component {
 
   /**
    * Get default state
-   * @returns {*}
+   * @returns {object}
    */
   getDefaultState() {
     return {
@@ -43,8 +44,8 @@ class DisplayResourceDetailsDescription extends React.Component {
       error: false,
       isSecretDecrypting: false,
       showDescriptionEditor: false,
-      description: undefined,
-      plaintextDto: undefined,
+      description: null,
+      plaintextSecretDto: null,
     };
   }
 
@@ -55,13 +56,14 @@ class DisplayResourceDetailsDescription extends React.Component {
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
     this.toggleInputDescriptionEditor = this.toggleInputDescriptionEditor.bind(this);
     this.onCloseDescriptionEditor = this.onCloseDescriptionEditor.bind(this);
+    this.onUpdateDescription = this.onUpdateDescription.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleRetryDecryptClickEvent = this.handleRetryDecryptClickEvent.bind(this);
   }
 
   componentDidMount() {
     if (this.state.open) {
-      this.setDescription();
+      this.loadDescription();
     }
   }
 
@@ -71,19 +73,27 @@ class DisplayResourceDetailsDescription extends React.Component {
       && !this.state.showDescriptionEditor) {
       // Avoid an update when the user do it with the description editor to not asking his passphrase again
       if (this.state.open) {
-        this.setDescription();
+        this.loadDescription();
       } else {
-        this.setState({description: undefined});
+        this.setState({description: null});
       }
     }
   }
 
-  setDescription() {
+  /**
+   * Load the description.
+   * Trigger the secret decrypting if the description is part of the resource secret.
+   * @returns {Promise<void>}
+   */
+  async loadDescription() {
     if (this.isResourceDescriptionEncrypted()) {
-      this.decryptSecret();
-    } else {
-      this.setState({description: this.resource.description, error: false});
+      return this.decryptAndLoadEncryptedDescription();
     }
+
+    const description = this.resource.description;
+    const plaintextSecretDto = null; // Reset the plaintext secret description.
+    const error = false; // Reset any errors.
+    this.setState({description, plaintextSecretDto, error});
   }
 
   /*
@@ -101,33 +111,17 @@ class DisplayResourceDetailsDescription extends React.Component {
   }
 
   /**
-   * Return the description from a given plaintextDto
-   * @param {object|string} plaintextDto
+   * Decrypt the resource secret and load its description in the component.
+   * @return {Promise<void>}
    */
-  getSecretDescription(plaintextDto) {
-    let description = undefined;
-    if (typeof plaintextDto === 'string') {
-      description = plaintextDto;
-    } else if (plaintextDto.description) {
-      description = plaintextDto.description;
-    }
-
-    return description;
-  }
-
-  /**
-   * Decrypt the password plaintextDto
-   * @return {Promise<boolean>}
-   */
-  async decryptSecret() {
+  async decryptAndLoadEncryptedDescription() {
     this.setState({isSecretDecrypting: true});
 
     try {
-      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: false});
-      const description = this.getSecretDescription(plaintextDto);
+      const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id);
       this.setState({
-        plaintextDto: plaintextDto,
-        description: description,
+        description: plaintextSecretDto.description,
+        plaintextSecretDto: plaintextSecretDto,
         isSecretDecrypting: false,
         error: false
       });
@@ -135,16 +129,14 @@ class DisplayResourceDetailsDescription extends React.Component {
     } catch (error) {
       console.error(error);
       this.setState({
-        description: undefined,
+        description: null,
+        plaintextSecretDto: null,
         isSecretDecrypting: false,
         error: true,
-        errorMsg: this.props.t("Decryption failed, click here to retry") + (error.message || '')
+        errorMsg: this.props.t("Decryption failed, click here to retry")
       });
-
-      return false;
+      await this.props.actionFeedbackContext.displayError(error.message);
     }
-
-    return true;
   }
 
   /*
@@ -158,14 +150,6 @@ class DisplayResourceDetailsDescription extends React.Component {
    */
   get resource() {
     return this.props.resourceWorkspaceContext.details.resource;
-  }
-
-  /**
-   * Get the current plaintextDto
-   * @returns {object|string|undefined} plaintextDto dto
-   */
-  get plaintextDto() {
-    return this.state.plaintextDto;
   }
 
   /**
@@ -194,8 +178,8 @@ class DisplayResourceDetailsDescription extends React.Component {
    */
   handleTitleClickEvent() {
     const open = !this.state.open;
-    if (open && this.state.description === undefined) {
-      this.setDescription();
+    if (open && this.state.description === null) {
+      this.loadDescription();
     }
     this.setState({open});
   }
@@ -215,7 +199,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    * Check if description must be decrypted before editing
    */
   handleEditClickEvent() {
-    if (this.state.description === undefined) {
+    if (this.state.description === null) {
       this.handleRetryDecryptClickEvent();
     }
     this.toggleInputDescriptionEditor();
@@ -225,11 +209,23 @@ class DisplayResourceDetailsDescription extends React.Component {
    * Retry to decrypted description
    */
   handleRetryDecryptClickEvent() {
-    this.setDescription();
+    this.loadDescription();
   }
 
-  onCloseDescriptionEditor(description, plaintextDto) {
-    this.setState({description, plaintextDto, showDescriptionEditor: false});
+  /**
+   * Handle the description editor closing.
+   */
+  onCloseDescriptionEditor() {
+    this.setState({showDescriptionEditor: false});
+  }
+
+  /**
+   * Handle the description updated.
+   * @param {string} description The updated description
+   * @param {object} plaintextSecretDto The plaintext secret DTO updated if any.
+   */
+  onUpdateDescription(description, plaintextSecretDto) {
+    this.setState({description, plaintextSecretDto, showDescriptionEditor: false});
   }
 
   /*
@@ -241,7 +237,8 @@ class DisplayResourceDetailsDescription extends React.Component {
    * @returns {boolean}
    */
   hasNoDescription() {
-    return !this.description;
+    return this.state.description === null
+      || this.state.description?.length === 0;
   }
 
   /**
@@ -307,7 +304,7 @@ class DisplayResourceDetailsDescription extends React.Component {
             </span>
           </p>
           }
-          {this.state.error &&
+          {this.state.error && !this.state.isSecretDecrypting &&
           <p className="description-content error-message">
             <button type="button" className="link no-border empty-content" onClick={this.handleRetryDecryptClickEvent}>
               {this.state.errorMsg}
@@ -328,15 +325,16 @@ class DisplayResourceDetailsDescription extends React.Component {
           }
           {this.mustShowDescription() &&
           <p className="description-content" onClick={this.toggleInputDescriptionEditor}>
-            {this.description}
+            {this.state.description}
           </p>
           }
           {this.mustShowDescriptionEditor() &&
           <EditResourceDescription
-            description={this.description}
+            plaintextSecretDto={this.state.plaintextSecretDto}
             resource={this.resource}
-            plaintextDto={this.state.plaintextDto}
-            onClose={this.onCloseDescriptionEditor}/>
+            onClose={this.onCloseDescriptionEditor}
+            onUpdate={this.onUpdateDescription}
+            onUpdateDescription={this.onUpdateDescription}/>
           }
         </div>
       </div>
@@ -347,7 +345,8 @@ class DisplayResourceDetailsDescription extends React.Component {
 DisplayResourceDetailsDescription.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any, // The resource
+  actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsDescription)));
+export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetailsDescription))));

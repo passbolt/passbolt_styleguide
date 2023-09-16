@@ -10,6 +10,12 @@ import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import HiddenPassword from "../../../shared/components/Password/HiddenPassword";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 
+/**
+ * Default display time of error message in ms.
+ * @type {number}
+ */
+const DEFAULT_ERROR_DISPLAY_TIME_IN_MS = 5000;
+
 class ResourceViewPage extends React.Component {
   constructor(props) {
     super(props);
@@ -34,8 +40,9 @@ class ResourceViewPage extends React.Component {
       usingOnThisTab: false,
       copySecretState: "default",
       copyLoginState: "default",
-      useOnThisTabError: "",
-      previewedPassword: null,
+      error: "",
+      errorTimeout: null,
+      plaintextSecretDto: null,
       isSecretDecrypting: false // if the secret is decrypting
     };
   }
@@ -73,7 +80,7 @@ class ResourceViewPage extends React.Component {
   }
 
   resetError() {
-    this.setState({useOnThisTabError: ""});
+    this.setState({error: ""});
   }
 
   async handleCopyLoginClick(event) {
@@ -115,17 +122,16 @@ class ResourceViewPage extends React.Component {
    */
   async copyPasswordToClipboard() {
     const isPasswordPreviewed = this.isPasswordPreviewed();
-    let password;
+    let plaintextSecretDto;
 
     this.resetError();
     this.setState({copySecretState: 'processing'});
 
     if (isPasswordPreviewed) {
-      password = this.state.previewedPassword;
+      plaintextSecretDto = this.state.plaintextSecretDto;
     } else {
       try {
-        const plaintext = await this.decryptResourceSecret(this.state.resource.id);
-        password = this.extractPlaintextPassword(plaintext);
+        plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.setState({copySecretState: 'default'});
@@ -134,7 +140,13 @@ class ResourceViewPage extends React.Component {
       }
     }
 
-    await ClipBoard.copy(password, this.props.context.port);
+    if (!plaintextSecretDto.password) {
+      this.displayTemporarilyError(this.translate("The password is empty and cannot be copied to clipboard."));
+      this.setState({copySecretState: 'default'});
+      return;
+    }
+
+    await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
     this.setState({copySecretState: 'done'});
     setTimeout(() => {
       this.setState({copySecretState: 'default'});
@@ -158,7 +170,7 @@ class ResourceViewPage extends React.Component {
    * Hide the previewed resource password.
    */
   hidePreviewedPassword() {
-    this.setState({previewedPassword: null});
+    this.setState({plaintextSecretDto: null});
   }
 
   /**
@@ -166,42 +178,36 @@ class ResourceViewPage extends React.Component {
    * @returns {Promise<void>}
    */
   async previewPassword() {
-    const resourceId = this.state.resource.id;
-    let previewedPassword;
-
-    await this.setState({isSecretDecrypting: true});
+    let plaintextSecretDto;
+    await this.setState({error: "", isSecretDecrypting: true});
 
     try {
-      const plaintext = await this.decryptResourceSecret(resourceId);
-      previewedPassword = this.extractPlaintextPassword(plaintext);
-      this.setState({previewedPassword, isSecretDecrypting: false});
+      plaintextSecretDto = await this.decryptResourceSecret(this.state.resource.id);
     } catch (error) {
-      await this.setState({isSecretDecrypting: false});
       if (error.name !== "UserAbortsOperationError") {
         throw error;
       }
     }
+
+    await this.setState({isSecretDecrypting: false});
+
+    if (!plaintextSecretDto.password) {
+      this.displayTemporarilyError(this.translate("The password is empty and cannot be previewed."));
+      return;
+    }
+
+    await this.setState({plaintextSecretDto});
   }
 
   /**
-   * Get the password property from a secret plaintext object.
-   * @param {string|object} plaintextDto The secret plaintext
-   * @returns {string}
+   * Display error temporarily.
+   * @param {string} error The error message
+   * @param {number} time The time to persist the error.
    */
-  extractPlaintextPassword(plaintextDto) {
-    if (!plaintextDto) {
-      throw new TypeError('The secret plaintext is empty.');
-    }
-    if (typeof plaintextDto === 'string') {
-      return plaintextDto;
-    }
-    if (typeof plaintextDto !== 'object') {
-      throw new TypeError('The secret plaintext must be a string or an object.');
-    }
-    if (!Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-      throw new TypeError('The secret plaintext must have a password property.');
-    }
-    return plaintextDto.password;
+  displayTemporarilyError(error, time = DEFAULT_ERROR_DISPLAY_TIME_IN_MS) {
+    clearTimeout(this.state.errorTimeout);
+    const errorTimeout = setTimeout(() => this.setState({error: ""}), time);
+    this.setState({errorTimeout, error});
   }
 
   /**
@@ -211,7 +217,7 @@ class ResourceViewPage extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret(resourceId) {
-    return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
+    return this.props.context.port.request("passbolt.secret.decrypt", resourceId);
   }
 
   handleGoToUrlClick(event) {
@@ -234,7 +240,7 @@ class ResourceViewPage extends React.Component {
         console.error('An error occured', error);
         this.setState({
           usingOnThisTab: false,
-          useOnThisTabError: this.props.t("Unable to use the password on this page. Copy and paste the information instead.")
+          error: this.props.t("Unable to use the password on this page. Copy and paste the information instead.")
         });
       }
     }
@@ -276,7 +282,7 @@ class ResourceViewPage extends React.Component {
    * @returns {boolean}
    */
   isPasswordPreviewed() {
-    return this.state.previewedPassword !== null;
+    return this.state.plaintextSecretDto !== null;
   }
 
   /**
@@ -349,10 +355,10 @@ class ResourceViewPage extends React.Component {
               <span className="property-name"><Trans>Password</Trans></span>
               <div className="password-wrapper">
                 <div className={`property-value secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                  title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
+                  title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
                   <HiddenPassword
                     canClick={canCopySecret}
-                    preview={this.state.previewedPassword}
+                    preview={this.state.plaintextSecretDto?.password}
                     onClick={this.handleCopyPasswordClick} />
                 </div>
                 {this.canUsePreviewPassword &&
@@ -439,8 +445,8 @@ class ResourceViewPage extends React.Component {
               <Trans>use on this page</Trans>
             }
           </a>
-          {this.state.useOnThisTabError &&
-          <div className="error-message">{this.state.useOnThisTabError}</div>
+          {this.state.error &&
+            <div className="error-message">{this.state.error}</div>
           }
         </div>
       </div>

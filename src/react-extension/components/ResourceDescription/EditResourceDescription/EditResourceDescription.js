@@ -38,14 +38,12 @@ class EditResourceDescription extends React.Component {
 
   /**
    * Get default state
-   * @returns {*}
+   * @returns {object}
    */
   getDefaultState() {
     return {
-      encryptDescription: false,
-      description: undefined, // description of the resource
-      plaintextDto: undefined, // description of the resource
-      loading: true, // component loading
+      encryptDescription: this.mustEncryptDescription(),
+      description: this.props.plaintextSecretDto?.description || this.props.resource.description, // description of the resource
       processing: false, // component processing
       error: "" // error to display
     };
@@ -71,17 +69,20 @@ class EditResourceDescription extends React.Component {
     this.textareaRef = React.createRef();
   }
 
+  /**
+   * ComponentDidMount
+   * Invoked immediately after component is inserted into the tree
+   * @return {void}
+   */
   componentDidMount() {
     this.handleOutsideEditorClickEvent();
-    const state = {
-      loading: false,
-      plaintextDto: this.props.plaintextDto,
-      description: this.props.description,
-      encryptDescription: this.mustEncryptDescription()
-    };
-    this.setState(state, this.setFocusOnDescriptionEditor.bind(this));
+    this.setFocusOnDescriptionEditor();
   }
 
+  /**
+   * componentWillUnmount
+   * Use to clear the data from the form in case the user put something that needs to be cleared.
+   */
   componentWillUnmount() {
     this.removeOutsideEditorClickEvent();
   }
@@ -96,7 +97,7 @@ class EditResourceDescription extends React.Component {
    * @returns {boolean}
    */
   mustEncryptDescription() {
-    return this.props.context.resourceTypesSettings.mustEncryptDescription(this.props.resource.resource_type_id);
+    return this.resourceTypesSettings.mustEncryptDescription(this.props.resource.resource_type_id);
   }
 
   /*
@@ -116,26 +117,20 @@ class EditResourceDescription extends React.Component {
    *  Resource type helpers
    * =============================================================
    */
+  /**
+   * Is the encrypted description content type enabled.
+   * @returns {boolean}
+   */
   isEncryptedDescriptionEnabled() {
     return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
   }
 
+  /**
+   * Are resources types enabled.
+   * @returns {boolean}
+   */
   areResourceTypesEnabled() {
     return this.resourceTypesSettings.areResourceTypesEnabled();
-  }
-
-  /**
-   * @returns {string}
-   */
-  get description() {
-    return this.state.description;
-  }
-
-  /**
-   * @returns {}
-   */
-  get plaintextDto() {
-    return this.state.plaintextDto;
   }
 
   /*
@@ -150,10 +145,11 @@ class EditResourceDescription extends React.Component {
     this.setState({processing: true});
 
     try {
-      await this.updateResource();
+      const updateDescriptionResult = await this.updateResource();
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The description has been updated successfully"));
       await this.props.resourceWorkspaceContext.onResourceDescriptionEdited();
-      this.close(this.state.description);
+      this.props.onUpdate(updateDescriptionResult.description, updateDescriptionResult.plaintextSecretDto);
+      this.close(updateDescriptionResult);
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
@@ -183,40 +179,45 @@ class EditResourceDescription extends React.Component {
   }
 
   /**
-   * Update the resource (LEGACY)
+   * Update the resource with clear description.
    * @returns {Promise<Object>} updated resource
-   * @deprecated will be removed when v2 support is dropped
    */
   async updateCleartextDescription() {
-    const resourceDto = {...this.props.resource};
-    resourceDto.description = this.description;
+    const resourceDto = {
+      ...this.props.resource,
+      description: this.state.description
+    };
 
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, null);
+    await this.props.context.port.request("passbolt.resources.update", resourceDto, null);
+
+    return {description: this.state.description};
   }
 
   /**
    * Update the resource with encrypted description content type
-   * @returns {Promise<Object>} updated resource
+   * @returns {Promise<Object>}
    */
   async updateWithEncryptedDescription() {
+    const description = this.state.description;
     const resourceDto = {...this.props.resource};
     resourceDto.description = '';
     resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
       this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
     );
 
-    let plaintextDto = {};
-    if (this.plaintextDto === undefined) {
-      const password = await this.props.context.port.request("passbolt.secret.decrypt", resourceDto.id, {showProgress: false});
-      plaintextDto.password = password;
-    } else {
-      plaintextDto = {...this.plaintextDto};
+    let plaintextSecretDto = this.props.plaintextSecretDto;
+    // It happens if the description was previously not encrypted and the user decided to encrypt it.
+    if (!plaintextSecretDto) {
+      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", resourceDto.id);
     }
+    const plaintextSecretToUpdateDto = {
+      ...plaintextSecretDto,
+      description
+    };
 
-    plaintextDto.description = this.description;
-    await this.setState({plaintextDto});
+    await this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextSecretToUpdateDto);
 
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+    return {description, plaintextSecretDto: plaintextSecretToUpdateDto};
   }
 
   /*
@@ -226,11 +227,9 @@ class EditResourceDescription extends React.Component {
    */
   /**
    * Toggle the editor back to display mode
-   * @param description The description to display
-   * @returns {string} Send back the updated description and plaintextDto to avoid potential unnecessary decrypt round
    */
-  close(description) {
-    return this.props.onClose(description, this.plaintextDto);
+  close() {
+    return this.props.onClose();
   }
 
   /**
@@ -256,7 +255,7 @@ class EditResourceDescription extends React.Component {
    * set the focus at the end of the description editor
    */
   setFocusOnDescriptionEditor() {
-    const descriptionLength = this.description ? this.description.length : 0;
+    const descriptionLength = this.state.description ? this.state.description.length : 0;
     this.textareaRef.current.selectionStart = descriptionLength;
     this.textareaRef.current.selectionEnd = descriptionLength;
     this.textareaRef.current.focus();
@@ -271,7 +270,7 @@ class EditResourceDescription extends React.Component {
     if (this.elementRef.current.contains(event.target) || this.state.processing) {
       return;
     }
-    this.close(this.props.description);
+    this.close();
   }
 
   /**
@@ -291,7 +290,7 @@ class EditResourceDescription extends React.Component {
     if (event.keyCode === 27) {
       // Stop the event propagation in order to avoid a parent component to react to this ESC event.
       event.stopPropagation();
-      this.close(this.props.description);
+      this.close();
     }
   }
 
@@ -299,7 +298,7 @@ class EditResourceDescription extends React.Component {
    * On cancel button click
    */
   handleCancel() {
-    this.close(this.props.description);
+    this.close();
   }
 
   /**
@@ -376,7 +375,7 @@ class EditResourceDescription extends React.Component {
         <div className="form-content" ref={this.elementRef}>
           <div className="input textarea required">
             <textarea name="description" className="fluid" aria-required={true} ref={this.textareaRef}
-              maxLength="10000" placeholder={this.translate("Enter a description")} value={this.description}
+              maxLength="10000" placeholder={this.translate("Enter a description")} value={this.state.description}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
           </div>
@@ -421,10 +420,10 @@ class EditResourceDescription extends React.Component {
 
 EditResourceDescription.propTypes = {
   context: PropTypes.any, // The application context
-  description: PropTypes.string, // the description
+  plaintextSecretDto: PropTypes.object, // The plaintext secret DTO
   resource: PropTypes.any, // the resource to update the description for
-  plaintextDto: PropTypes.any, // the plaintext secret to update if description is encrypted
   onClose: PropTypes.func, // toggle to display or not the editor
+  onUpdate: PropTypes.func, // Whenever the description is updated
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   loadingContext: PropTypes.any, // The loading context

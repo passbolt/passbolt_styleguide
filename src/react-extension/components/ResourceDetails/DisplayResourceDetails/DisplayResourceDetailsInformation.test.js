@@ -125,11 +125,13 @@ describe("DisplayResourceDetailsInformation", () => {
       await waitFor(() => {});
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
 
       await page.displayInformationList.click(page.displayInformationList.password);
 
-      expect.assertions(2);
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.decrypt", props.resourceWorkspaceContext.details.resource.id, {"showProgress": true});
+      expect.assertions(3);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.decrypt", props.resourceWorkspaceContext.details.resource.id);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
     });
 
@@ -147,13 +149,13 @@ describe("DisplayResourceDetailsInformation", () => {
     it('AS LU, I should be able to preview secret of a resource', async() => {
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
-      mockContextRequest(() => 'secret-copy');
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
 
       expect.assertions(3);
       await page.displayInformationList.click(page.displayInformationList.viewPassword);
       expect(page.displayInformationList.password.textContent).toBe('secret-copy');
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.details.resource.id, {showProgress: true});
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.details.resource.id);
       await page.displayInformationList.click(page.displayInformationList.viewPassword);
       expect(page.displayInformationList.password.textContent).toBe('Copy password to clipboard');
     });
