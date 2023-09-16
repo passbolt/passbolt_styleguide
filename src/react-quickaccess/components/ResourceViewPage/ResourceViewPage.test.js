@@ -65,14 +65,14 @@ describe("ResourceViewPage", () => {
       const props = defaultProps(); // The props to pass
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
 
       expect(page.passwordText).toStrictEqual("Copy password to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeFalsy();
 
       await page.click(page.password);
 
-      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id, {"showProgress": true}));
+      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id));
       await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy'));
     });
 
@@ -80,11 +80,11 @@ describe("ResourceViewPage", () => {
       const props = defaultProps(); // The props to pass
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
 
       await page.click(page.copyPasswordButton);
 
-      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id, {"showProgress": true}));
+      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id));
       await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy'));
     });
 

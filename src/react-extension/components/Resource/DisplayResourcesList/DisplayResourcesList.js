@@ -43,6 +43,7 @@ import ColumnPasswordModel from "../../../../shared/models/column/ColumnPassword
 import ColumnUriModel from "../../../../shared/models/column/ColumnUriModel";
 import ColumnModifiedModel from "../../../../shared/models/column/ColumnModifiedModel";
 import ColumnModel from "../../../../shared/models/column/ColumnModel";
+import {withProgress} from "../../../contexts/ProgressContext";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -75,8 +76,12 @@ class DisplayResourcesList extends React.Component {
    */
   getDefaultState() {
     return {
-      columns: [], // The current list of columns to display
-      previewedPassword: null // The previewed password
+      columns: [], // The current list of columns to display.
+      previewedCellule: {
+        columnId: null, // The previewed cellule column id
+        resourceId: null, // The previewed cellule resource id
+      },
+      plaintextSecretDto: null // The plain text secret dto.
     };
   }
 
@@ -148,12 +153,12 @@ class DisplayResourcesList extends React.Component {
     const hasSelectedResourcesLengthChanged = nextProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
     const hasSorterChanged = sorter !== nextProps.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
-    const hasResourcePreviewPasswordChange = nextState.previewedPassword !== this.state.previewedPassword;
+    const hasResourcePreviewPasswordChange = nextState.previewedCellule !== this.state.previewedCellule;
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
     const hasColumnsResourceViewChange = nextProps.resourceWorkspaceContext.columnsResourceSetting?.hasDifferentShowValue(columnsResourceSetting);
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
-      this.hidePreviewedPassword();
+      this.hidePreviewedCellule();
     }
     return hasFilteredResourcesChanged ||
       hasSelectedResourcesLengthChanged ||
@@ -281,12 +286,12 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Get preview password
-   * @param resourceId
+   * Get the previewed password
+   * @param {string} resourceId The resource id
    * @return {string|undefined}
    */
   getPreviewPassword(resourceId) {
-    return this.isPasswordPreviewed(resourceId) ? this.state.previewedPassword?.password : undefined;
+    return this.isCellulePreviewed('password', resourceId) ? this.state.plaintextSecretDto?.password : undefined;
   }
 
   /**
@@ -315,50 +320,42 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Get the password property from a secret plaintext object.
-   * @param {string|object} plaintextDto The secret plaintext
-   * @returns {string}
-   */
-  extractPlaintextPassword(plaintextDto) {
-    if (!plaintextDto) {
-      throw new TypeError(this.translate("The secret plaintext is empty."));
-    }
-    if (typeof plaintextDto === 'string') {
-      return plaintextDto;
-    }
-    if (typeof plaintextDto !== 'object') {
-      throw new TypeError('The secret plaintext must be a string or an object.');
-    }
-    if (!Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-      throw new TypeError('The secret plaintext must have a password property.');
-    }
-    return plaintextDto.password;
-  }
-
-  /**
    * Copy a resource secret to clipboard.
    * @param {string} resourceId The target resource id
    * @returns {Promise<void>}
    */
   async copyPasswordToClipboard(resourceId) {
-    let password;
+    let plaintextSecretDto;
 
-    if (this.isPasswordPreviewed(resourceId)) {
-      password = this.state.previewedPassword.password;
+    if (this.isCellulePreviewed('password', resourceId)) {
+      plaintextSecretDto = this.state.plaintextSecretDto;
     } else {
+
+      this.props.progressContext.open(this.props.t('Decrypting secret'));
+
       try {
-        const plaintext = await this.decryptResourceSecret(resourceId);
-        password = this.extractPlaintextPassword(plaintext);
+        plaintextSecretDto = await this.decryptResourceSecret(resourceId);
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
         }
-        return;
       }
     }
-    await ClipBoard.copy(password, this.props.context.port);
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been copied to clipboard"));
   }
 
   /**
@@ -367,19 +364,21 @@ class DisplayResourcesList extends React.Component {
    * @returns {Promise<void>}
    */
   async togglePreviewPassword(resourceId) {
-    const isPasswordPreviewedPreviewed = this.isPasswordPreviewed(resourceId);
+    const isPasswordPreviewedPreviewed = this.isCellulePreviewed('password', resourceId);
     if (isPasswordPreviewedPreviewed) {
-      this.hidePreviewedPassword();
+      this.hidePreviewedCellule();
     } else {
       await this.previewPassword(resourceId);
     }
   }
 
   /**
-   * Hide the previewed resource password.
+   * Hide the previewed cellule.
    */
-  hidePreviewedPassword() {
-    this.setState({previewedPassword: null});
+  hidePreviewedCellule() {
+    const previewedCellule = null;
+    const plaintextSecretDto = null;
+    this.setState({previewedCellule, plaintextSecretDto});
   }
 
   /**
@@ -388,17 +387,32 @@ class DisplayResourcesList extends React.Component {
    * @returns {Promise<void>}
    */
   async previewPassword(resourceId) {
-    let password;
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
+
     try {
-      const plaintext = await this.decryptResourceSecret(resourceId);
-      password = this.extractPlaintextPassword(plaintext);
-      const previewedPassword = {resourceId, password};
-      this.setState({previewedPassword});
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
       }
     }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be previewed."));
+      return;
+    }
+
+    const columnId = "password";
+    const previewedCellule = {resourceId, columnId};
+    this.setState({previewedCellule, plaintextSecretDto});
   }
 
   /**
@@ -408,7 +422,7 @@ class DisplayResourcesList extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret(resourceId) {
-    return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
+    return this.props.context.port.request("passbolt.secret.decrypt", resourceId);
   }
 
   async handleFavoriteClick(resource) {
@@ -540,11 +554,13 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Check if the password of the given resource is previewed.
-   * @param {string} resourceId The resource id
+   * @param {string} columnId The column id.
+   * @param {string} resourceId The resource id.
    * @returns {boolean}
    */
-  isPasswordPreviewed(resourceId) {
-    return this.state.previewedPassword && this.state.previewedPassword.resourceId === resourceId;
+  isCellulePreviewed(columnId, resourceId) {
+    return this.state.previewedCellule?.columnId === columnId
+      && this.state.previewedCellule?.resourceId === resourceId;
   }
 
   /**
@@ -673,8 +689,9 @@ DisplayResourcesList.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  progressContext: PropTypes.any, // The progress context
   history: PropTypes.any,
   dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withTranslation('common')(DisplayResourcesList))))))));
+export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withProgress(withTranslation('common')(DisplayResourcesList)))))))));
