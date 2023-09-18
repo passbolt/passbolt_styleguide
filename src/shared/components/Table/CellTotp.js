@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
+import Totp from "../Totp/Totp";
 
 /**
  * This component represents a table cell totp
@@ -68,41 +69,29 @@ class CellTotp extends Component {
     return this.props.getPreviewTotp(this.value);
   }
 
-  get formatTotp() {
-    const digitsString = this.previewedTotp.digits?.toString() || "";
-    const halfLength = Math.round(digitsString.length / 2);
-    const firstHalf = digitsString.substring(0, halfLength);
-    const secondHalf = digitsString.substring(halfLength);
-    return <>
-      <span>{firstHalf}</span>
-      &nbsp;
-      <span>{secondHalf}</span>
-    </>;
-  }
-
   /**
    * Render the component
    * @return {JSX}
    */
   render() {
     const hasTotp = this.props.hasTotp(this.value);
+
     return (
       <>
         {hasTotp &&
           <>
-            <div className={`secret secret-totp ${this.previewedTotp ? "" : "secret-copy"}`}
-              title={this.previewedTotp?.digits || this.props.title} style={{"--timer-duration": "30s", "--timer-delay": "-15s"}}>
-              <button type="button" className="link no-border" onClick={this.handleTotpClick} disabled={!this.props.canCopy}>
-                {this.previewedTotp &&
-                  <>
-                    {this.formatTotp}
-                    <Icon name="timer"/>
-                  </>
-                }
-                {!this.previewedTotp &&
+            <div className={`secret secret-totp ${this.previewedTotp ? "" : "secret-copy"}`}>
+              {this.previewedTotp &&
+                <Totp
+                  totp={this.previewedTotp}
+                  canClick={this.props.canCopy}
+                  onClick={this.handleTotpClick}/>
+              }
+              {!this.previewedTotp &&
+                <button type="button" className="link no-border" onClick={this.handleTotpClick} disabled={!this.props.canCopy}>
                   <span>Copy TOTP to clipboard</span>
-                }
-              </button>
+                </button>
+              }
             </div>
             {this.props.canPreview &&
               <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view button-transparent">

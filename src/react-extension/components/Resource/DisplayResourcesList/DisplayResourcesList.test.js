@@ -236,11 +236,11 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectPassword();
       await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id));
-      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy'));
+      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password'));
       await waitFor(() => expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled());
     });
 
@@ -248,7 +248,7 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       expect(page.resource(1).copyPasswordLink.hasAttribute("disabled")).toBeTruthy();
     });
@@ -259,10 +259,10 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectViewPassword();
-      expect(page.resource(1).password).toBe('secret-copy');
+      expect(page.resource(1).password).toBe('secret-password');
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id);
       await page.resource(1).selectViewPassword();
       expect(page.resource(1).password).toBe('Copy password to clipboard');

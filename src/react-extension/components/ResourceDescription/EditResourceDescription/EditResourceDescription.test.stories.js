@@ -5,8 +5,10 @@ import EditResourceDescription from "./EditResourceDescription";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
-import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 import MockPort from "../../../test/mock/MockPort";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 
 export default {
@@ -15,7 +17,7 @@ export default {
 };
 
 const siteSettings = new SiteSettings(siteSettingsFixture);
-const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
+const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto());
 
 const context = {
   siteSettings: {

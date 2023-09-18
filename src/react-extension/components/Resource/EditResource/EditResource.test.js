@@ -21,6 +21,9 @@ import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetch
 import {waitFor} from "@testing-library/react";
 import {defaultProps} from "./EditResource.test.data";
 import EditResourcePage from "./EditResource.test.page";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 describe("See the Edit Resource", () => {
   let page; // The page to test against
@@ -161,12 +164,16 @@ describe("See the Edit Resource", () => {
         name: resourceMeta.name,
         uri: resourceMeta.uri,
         username: resourceMeta.username,
-        description: resourceMeta.description,
-        resource_type_id: "669f8c64-242a-59fb-92fc-81f660975fd3"
+        description: "",
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+      };
+      const onApiUpdateSecretDto = {
+        password: resourceMeta.password,
+        description: resourceMeta.description
       };
 
       await page.passwordEdit.click(page.passwordEdit.saveButton);
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, resourceMeta.password);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, onApiUpdateSecretDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", resource.id);
       expect(props.onClose).toBeCalled();

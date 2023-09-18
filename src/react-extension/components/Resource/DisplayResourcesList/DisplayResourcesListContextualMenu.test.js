@@ -78,10 +78,10 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to copy the password of a resource', async() => {
       expect.assertions(4);
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       await page.copyPassword();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id, {showProgress: true});
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });

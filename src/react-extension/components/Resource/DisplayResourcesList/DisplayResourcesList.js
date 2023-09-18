@@ -46,6 +46,7 @@ import ColumnModel from "../../../../shared/models/column/ColumnModel";
 import {withProgress} from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -68,7 +69,6 @@ class DisplayResourcesList extends React.Component {
       new ColumnNameModel({label: this.translate("Name")}),
       new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}),
       new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopyPassword, canPreview: this.canPreviewPassword, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}),
-      // TODO
       new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: true, canPreview: true, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}),
       new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}),
       new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)})
@@ -300,7 +300,7 @@ class DisplayResourcesList extends React.Component {
    * @return {string|undefined}
    */
   getPreviewPassword(resource) {
-    return this.isCellulePreviewed('password', resourceId) ? this.state.plaintextSecretDto?.password : undefined;
+    return this.isCellulePreviewed('password', resource.id) ? this.state.plaintextSecretDto?.password : undefined;
   }
 
   /**
@@ -332,9 +332,26 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Handle preview password button click.
+   * @param {object} resource The resource to preview the password for
    */
   async handlePreviewPasswordButtonClick(resource) {
     await this.togglePreviewPassword(resource.id);
+  }
+
+  /**
+   * Handle copy totp button click.
+   * @param {object} resource The resource
+   */
+  async handleCopyTotpClick(resource) {
+    await this.copyTotpToClipboard(resource.id);
+  }
+
+  /**
+   * Handle preview totp button click.
+   * @param {object} resource The resource to preview the totp for
+   */
+  async handlePreviewTotpButtonClick(resource) {
+    await this.togglePreviewTotp(resource.id);
   }
 
   /**
@@ -342,39 +359,40 @@ class DisplayResourcesList extends React.Component {
    * @param resource The resource
    * @return {Promise<void>}
    */
-  async handleCopyTotpClick(resource) {
-    let totp;
-    const isTotpPreviewed = this.isCellulePreviewed('totp', resource.id) && this.state.plaintextSecretDto?.totp;
+  async copyTotpToClipboard(resourceId) {
+    let plaintextSecretDto;
+    const isTotpPreviewed = this.isCellulePreviewed('totp', resourceId);
+    console.log(isTotpPreviewed);
     if (isTotpPreviewed) {
-      totp = this.state.plaintextSecretDto.totp;
+      plaintextSecretDto = this.state.plaintextSecretDto;
+      console.log(plaintextSecretDto);
     } else {
-      // TODO request decrypt secret and set totp
-      totp = {
-        digits: 123456
-      };
-    }
-    await ClipBoard.copy(totp.digits, this.props.context.port);
-    await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
-  }
+      this.props.progressContext.open(this.props.t('Decrypting secret'));
 
-  /**
-   * Handle preview totp button click.
-   */
-  handlePreviewTotpButtonClick(resource) {
-    const isTotpPreviewed = this.isSecretPreviewed(resource.id) && this.state.previewedSecret.totp;
-    if (isTotpPreviewed) {
-      this.hidePreviewedSecret();
-    } else {
-      // TODO port.request
-      const previewedSecret = {
-        resourceId: resource.id,
-        totp: {
-          digits: 123456
+      try {
+        plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
         }
-      };
-      this.setState({previewedSecret});
+      }
+
+      this.props.progressContext.close();
     }
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
   }
 
   /**
@@ -388,7 +406,6 @@ class DisplayResourcesList extends React.Component {
     if (this.isCellulePreviewed('password', resourceId)) {
       plaintextSecretDto = this.state.plaintextSecretDto;
     } else {
-
       this.props.progressContext.open(this.props.t('Decrypting secret'));
 
       try {
@@ -398,9 +415,9 @@ class DisplayResourcesList extends React.Component {
           this.props.actionFeedbackContext.displayError(error.message);
         }
       }
-    }
 
-    this.props.progressContext.close();
+      this.props.progressContext.close();
+    }
 
     if (!plaintextSecretDto) {
       return;
@@ -423,9 +440,8 @@ class DisplayResourcesList extends React.Component {
    */
   async togglePreviewPassword(resourceId) {
     const isPasswordPreviewedPreviewed = this.isCellulePreviewed('password', resourceId);
-    if (isPasswordPreviewedPreviewed) {
-      this.hidePreviewedCellule();
-    } else {
+    this.hidePreviewedCellule();
+    if (!isPasswordPreviewedPreviewed) {
       await this.previewPassword(resourceId);
     }
   }
@@ -469,6 +485,52 @@ class DisplayResourcesList extends React.Component {
     }
 
     const columnId = "password";
+    const previewedCellule = {resourceId, columnId};
+    this.setState({previewedCellule, plaintextSecretDto});
+  }
+
+  /**
+   * Toggle preview totp for a given resource
+   * @param {string} resourceId The resource id to preview the password for
+   * @returns {Promise<void>}
+   */
+  async togglePreviewTotp(resourceId) {
+    const isTotpPreviewedPreviewed = this.isCellulePreviewed('totp', resourceId);
+    this.hidePreviewedCellule();
+    if (!isTotpPreviewedPreviewed) {
+      await this.previewTotp(resourceId);
+    }
+  }
+
+  /**
+   * Preview totp
+   * @param {string} resourceId The resource id to preview
+   */
+  async previewTotp(resourceId) {
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
+
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be previewed."));
+      return;
+    }
+
+    const columnId = "totp";
     const previewedCellule = {resourceId, columnId};
     this.setState({previewedCellule, plaintextSecretDto});
   }

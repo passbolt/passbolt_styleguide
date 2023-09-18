@@ -14,7 +14,11 @@
 import {v4 as uuidv4} from "uuid";
 import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../permission/permissionEntity.test.data";
 import {defaultFavoriteDto} from "../favorite/favoriteEntity.test.data";
-import {TEST_RESOURCE_TYPE_RESOURCE_WITH_STRING_PASSWORD} from "../resourceType/resourceTypeEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  TEST_RESOURCE_TYPE_TOTP
+} from "../resourceType/resourceTypeEntity.test.data";
 
 export const defaultResourceDto = (data = {}) => {
   const id = data?.id || uuidv4();
@@ -32,7 +36,7 @@ export const defaultResourceDto = (data = {}) => {
     deleted: false,
     description: "",
     personal: false,
-    resource_type_id: TEST_RESOURCE_TYPE_RESOURCE_WITH_STRING_PASSWORD,
+    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     permission: ownerPermissionDto({aco_foreign_key: id}),
     // permissions: [],
     favorite: null,
@@ -71,25 +75,15 @@ export const resourceWithFavoriteDto = (data = {}) => {
   });
 };
 
-export const resourceWithTotpDto = (data = {}) => {
-  const id = data?.id || uuidv4();
+export const resourceWithTotpDto = (data = {}) => defaultResourceDto({
+  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  ...data
+});
 
-  return defaultResourceDto({
-    id: id,
-    resource_type_id: resourceTypesFixture[2].id,
-    ...data
-  });
-};
-
-export const resourceStandaloneTotpDto = (data = {}) => {
-  const id = data?.id || uuidv4();
-
-  return defaultResourceDto({
-    id: id,
-    resource_type_id: resourceTypesFixture[3].id,
-    username: "",
-    ...data
-  });
-};
+export const resourceStandaloneTotpDto = (data = {}) => defaultResourceDto({
+  resource_type_id: TEST_RESOURCE_TYPE_TOTP,
+  username: null,
+  ...data
+});
 
 

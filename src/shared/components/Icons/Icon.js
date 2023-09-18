@@ -50,7 +50,7 @@ class Icon extends Component {
    */
   render() {
     return (
-      <span className={this.getClassName()} onClick={this.props.onClick}>
+      <span className={this.getClassName()} onClick={this.props.onClick} style={this.props.style}>
         {/*
           * @copyright     Copyright (c) 2013-2017 Cole Bemis (https://github.com/feathericons/feather)
           * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
@@ -1192,7 +1192,8 @@ Icon.propTypes = {
   big: PropTypes.bool,
   dim: PropTypes.bool,
   baseline: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  style: PropTypes.object
 };
 
 export default Icon;
