@@ -112,7 +112,7 @@ export default class DisplayResourcesListPage {
         return Boolean(element.querySelector('.cell-password .password-view'));
       },
       get copyPasswordLink() {
-        return element.querySelector('.cell-password .secret button');
+        return element.querySelector('.cell-password .secret-copy button');
       },
       async selectFavorite() {
         const favorite = element.querySelector('.cell-favorite button');

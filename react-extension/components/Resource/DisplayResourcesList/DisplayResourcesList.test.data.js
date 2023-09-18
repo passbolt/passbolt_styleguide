@@ -18,8 +18,8 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 import {defaultResourceWorkspaceContext,} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultContextualMenuContext} from "../../../contexts/ContextualMenuContext.test.data";
 import {
-  defaultResourceDto,
-  resourceWithFavoriteDto
+  defaultResourceDto, resourceStandaloneTotpDto,
+  resourceWithFavoriteDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
@@ -47,6 +47,8 @@ const getResources = () => [
   resourceWithFavoriteDto({name: 'apache'}),
   defaultResourceDto({name: 'bower'}),
   defaultResourceDto({name: 'test'}),
+  resourceWithTotpDto({name: 'totp'}),
+  resourceStandaloneTotpDto({name: 'standalone totp'}),
 ];
 
 /**
@@ -91,8 +93,9 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
         {id: "name", label: "Name", position: 2, show: true},
         {id: "username", label: "Username", position: 3, show: false},
         {id: "password", label: "Password", position: 4, show: true},
-        {id: "uri", label: "URI", position: 5, show: true},
-        {id: "modified", label: "Modified", position: 6, show: false}]),
+        {id: "totp", label: "TOTP", position: 5, show: false},
+        {id: "uri", label: "URI", position: 6, show: true},
+        {id: "modified", label: "Modified", position: 7, show: false}]),
     }),
     ...data
   });

@@ -611,13 +611,13 @@ class EditResource extends Component {
     });
 
     try {
-      const secretDto = await this.getDecryptedSecret();
+      const plaintextSecretDto = await this.getDecryptedSecret();
       this.setState({
-        password: secretDto.password,
-        description: secretDto.description,
+        password: plaintextSecretDto.password,
+        description: plaintextSecretDto.description || this.state.description,
         isSecretDecrypting: false
       });
-      this.evaluatePasswordIsInDictionaryDebounce(secretDto.password);
+      this.evaluatePasswordIsInDictionaryDebounce(plaintextSecretDto.password);
       return true;
     } catch (error) {
       this.handleClose();
@@ -630,17 +630,8 @@ class EditResource extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    const plaintext = await this.props.context.port.request("passbolt.secret.decrypt", this.props.context.passwordEditDialogProps.id, {showProgress: false});
-    if (typeof plaintext === 'string') {
-      return {
-        password: plaintext,
-        description: this.state.description
-      };
-    }
-    return plaintext;
+    return this.props.context.port.request("passbolt.secret.decrypt", this.props.context.passwordEditDialogProps.id);
   }
-
-
 
   /*
    * =============================================================

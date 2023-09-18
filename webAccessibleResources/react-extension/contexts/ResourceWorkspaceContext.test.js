@@ -269,10 +269,11 @@ describe("Resource Workspace Context", () => {
         {id: "name", label: "Name", position: 2, show: true},
         {id: "username", label: "Username", position: 3, show: true},
         {id: "password", label: "Password", position: 4, show: true},
-        {id: "uri", label: "URI", position: 5, show: true},
-        {id: "modified", label: "Modified", position: 6, show: true}
+        {id: "totp", label: "TOTP", position: 5, show: true},
+        {id: "uri", label: "URI", position: 6, show: true},
+        {id: "modified", label: "Modified", position: 7, show: true}
       ];
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(6);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(7);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
     });
 
@@ -283,8 +284,9 @@ describe("Resource Workspace Context", () => {
         {id: "name", label: "Name", width: 200, position: 2, show: true},
         {id: "username", label: "Username", position: 3, show: false},
         {id: "password", label: "Password", width: 300, position: 4, show: true},
-        {id: "uri", label: "URI", position: 5, show: false},
-        {id: "modified", label: "Modified", width: 250, position: 6, show: true}
+        {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
+        {id: "uri", label: "URI", position: 6, show: false},
+        {id: "modified", label: "Modified", width: 250, position: 7, show: true}
       ];
       const sorter = {
         propertyName: 'name',
@@ -300,7 +302,7 @@ describe("Resource Workspace Context", () => {
       });
       await page.goToAllItems();
       await page.goToRootFolder();
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(6);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(7);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
       expect(page.sorter.toDto()).toStrictEqual(sorter);
     });
@@ -324,26 +326,28 @@ describe("Resource Workspace Context", () => {
 
   describe("As LU I should be able to update the resource columns setting", () => {
     it("As LU I should be able to show a resource column", async() => {
-      expect.assertions(1);
+      expect.assertions(2);
       const columnsSetting = [
         {id: "favorite", label: "Favorite", position: 1, width: 20},
         {id: "username", label: "Username", position: 2, width: 200},
-        {id: "password", label: "Password", width: 100, position: 3},
+        {id: "password", label: "Password", position: 3, width: 100},
+        {id: "totp", label: "TOTP", position: 5, width: 190},
         {id: "uri", label: "URI", position: 4, width: 300},
-        {id: "modified", label: "Modified", width: 250, position: 5}
+        {id: "modified", label: "Modified", position: 5, width: 250}
       ];
       const mergedColumnsSetting = [
         {id: "favorite", label: "Favorite", position: 1, width: 20, show: true},
         {id: "name", label: "Name", position: 2, show: false},
         {id: "username", label: "Username", position: 2, width: 200, show: true},
-        {id: "password", label: "Password", width: 100, position: 3, show: true},
+        {id: "password", label: "Password", position: 3, width: 100, show: true},
+        {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
         {id: "uri", label: "URI", position: 4, width: 300, show: true},
-        {id: "modified", label: "Modified", width: 250, position: 5, show: true}
+        {id: "modified", label: "Modified", position: 5, width: 250, show: true}
       ];
       await page.goToAllItems();
       await page.onChangeColumnView("name", false);
       await page.onChangeColumnsSettings(columnsSetting);
-      //expect(page.columnsResourceSetting.length).toStrictEqual(6);
+      expect(page.columnsResourceSetting.length).toStrictEqual(7);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });

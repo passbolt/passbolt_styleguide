@@ -14,7 +14,7 @@ import {defaultResourcePasswordGeneratorcontext} from "../../../contexts/Resourc
  */
 export const defaultProps = (props = {}) => {
   const port = new MockPort();
-  port.addRequestListener("passbolt.secret.decrypt", () => "secret-decrypted");
+  port.addRequestListener("passbolt.secret.decrypt", () => ({password: "secret-decrypted"}));
   const resource = defaultResourceDto();
 
   return {

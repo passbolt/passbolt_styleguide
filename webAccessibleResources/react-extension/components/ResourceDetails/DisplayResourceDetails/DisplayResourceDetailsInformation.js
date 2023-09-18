@@ -29,6 +29,7 @@ import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
+import {withProgress} from "../../../contexts/ProgressContext";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -48,7 +49,7 @@ class DisplayResourceDetailsInformation extends React.Component {
   getDefaultState() {
     return {
       open: true,
-      previewedPassword: null // The current resource password decrypted
+      plaintextSecretDto: null // The current resource password decrypted
     };
   }
 
@@ -80,7 +81,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     const hasResourceChanged = this.resource.id !== previousResource.id;
     const hasResourceUpdated = this.resource.modified !== previousResource.modified;
     if ((hasResourceChanged || hasResourceUpdated) && this.state.open) {
-      this.setState({previewedPassword: null});
+      this.setState({plaintextSecretDto: null});
     }
   }
 
@@ -200,14 +201,15 @@ class DisplayResourceDetailsInformation extends React.Component {
   async copyPasswordToClipboard() {
     const resourceId = this.resource.id;
     const isPasswordPreviewed = this.isPasswordPreviewed();
-    let password;
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
 
     if (isPasswordPreviewed) {
-      password = this.state.previewedPassword;
+      plaintextSecretDto = this.state.plaintextSecretDto;
     } else {
       try {
-        const plaintext = await this.decryptResourceSecret(resourceId);
-        password = this.extractPlaintextPassword(plaintext);
+        plaintextSecretDto = await this.decryptResourceSecret(resourceId);
       } catch (error) {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
@@ -215,7 +217,15 @@ class DisplayResourceDetailsInformation extends React.Component {
         return;
       }
     }
-    await ClipBoard.copy(password, this.props.context.port);
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    await ClipBoard.copy(plaintextSecretDto.password, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
@@ -237,7 +247,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Hide the previewed resource password.
    */
   hidePreviewedPassword() {
-    this.setState({previewedPassword: null});
+    this.setState({plaintextSecretDto: null});
   }
 
   /**
@@ -246,48 +256,40 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   async previewPassword() {
     const resourceId = this.resource.id;
-    let previewedPassword;
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
 
     try {
-      const plaintext = await this.decryptResourceSecret(resourceId);
-      previewedPassword = this.extractPlaintextPassword(plaintext);
-      this.setState({previewedPassword});
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
       }
     }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be previewed."));
+      return;
+    }
+
+    this.setState({plaintextSecretDto});
   }
 
   /**
    * Decrypt the resource secret
    * @param {string} resourceId The target resource id
-   * @returns {Promise<object>} The secret in plaintext format
+   * @returns {Promise<object>} The plaintext secret DTO
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret(resourceId) {
-    return this.props.context.port.request("passbolt.secret.decrypt", resourceId, {showProgress: true});
-  }
-
-  /**
-   * Get the password property from a secret plaintext object.
-   * @param {string|object} plaintextDto The secret plaintext
-   * @returns {string}
-   */
-  extractPlaintextPassword(plaintextDto) {
-    if (!plaintextDto) {
-      throw new TypeError('The secret plaintext is empty.');
-    }
-    if (typeof plaintextDto === 'string') {
-      return plaintextDto;
-    }
-    if (typeof plaintextDto !== 'object') {
-      throw new TypeError('The secret plaintext must be a string or an object.');
-    }
-    if (!Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-      throw new TypeError('The secret plaintext must have a password property.');
-    }
-    return plaintextDto.password;
+    return this.props.context.port.request("passbolt.secret.decrypt", resourceId);
   }
 
   /**
@@ -295,7 +297,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   isPasswordPreviewed() {
-    return this.state.previewedPassword !== null;
+    return this.state.plaintextSecretDto !== null;
   }
 
   /**
@@ -360,11 +362,11 @@ class DisplayResourceDetailsInformation extends React.Component {
           <li className="password">
             <span className="label"><Trans>Password</Trans></span>
             <div className="value">
-              <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                title={isPasswordPreviewed ? this.state.previewedPassword : "secret"}>
+              <div className={`secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
                 <HiddenPassword
                   canClick={canCopySecret}
-                  preview={this.state.previewedPassword}
+                  preview={this.state.plaintextSecretDto?.password}
                   onClick={this.handlePasswordClickEvent} />
               </div>
               {canPreviewSecret &&
@@ -424,7 +426,8 @@ DisplayResourceDetailsInformation.propTypes = {
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  progressContext: PropTypes.any, // The progress context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withTranslation('common')(DisplayResourceDetailsInformation))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsInformation)))))));

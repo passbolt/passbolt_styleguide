@@ -60,6 +60,7 @@
 /* favorite icon fill */
 /* exclamation icon fill */
 /* spinner icon fill */
+/* timer icon fill */
 /* failed icon fill */
 /* success icon fill */
 /* logo icon fill */
@@ -2198,27 +2199,53 @@ input[type=file] {
   --spinner-color: hsl(194, 81%, 14%);
   --spinner-background: hsl(44, 50%, 76%);
   --spinner-stroke-width: 0.15rem;
+  --timer-color: hsl(194, 81%, 14%);
+  --timer-background: hsl(44, 50%, 76%);
+  --timer-stroke-width: 0.3rem;
+  --timer-duration: 30s;
+  --timer-delay: 0s;
 }
 .svg-icon {
   display: inline-flex;
   align-self: center;
 }
 .svg-icon.spinner #loading {
-  animation: spin 2s forwards infinite;
+  animation: spin 2s cubic-bezier(0.77, 0, 0.175, 1) forwards infinite;
   stroke-dashoffset: 50.25;
   stroke-dasharray: 50.27;
 }
 @keyframes spin {
   0% {
     stroke-dashoffset: 50.25;
-    animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
   }
   50% {
     stroke-dashoffset: 0;
-    animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
   }
   100% {
     stroke-dashoffset: -50.25;
+  }
+}
+.svg-icon.timer #timer-progress {
+  animation: timer-progress linear forwards infinite;
+  animation-duration: var(--timer-duration);
+  animation-delay: var(--timer-delay);
+  stroke-dashoffset: -100.54;
+  stroke-dasharray: 50.27;
+}
+@keyframes timer-progress {
+  0% {
+    stroke-dashoffset: -100.54;
+    stroke: hsl(194, 81%, 14%);
+  }
+  65% {
+    stroke: hsl(194, 81%, 14%);
+  }
+  75% {
+    stroke: hsl(1, 71%, 52%);
+  }
+  100% {
+    stroke-dashoffset: -50.27;
+    stroke: hsl(1, 71%, 52%);
   }
 }
 .svg-icon.baseline svg {

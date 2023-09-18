@@ -30,7 +30,7 @@ class ColumnPasswordModel extends ColumnModel {
     columnDto.resizable = true;
     columnDto.draggable = true;
     columnDto.sortable = false;
-    columnDto.getValue = value => value.id;
+    columnDto.getValue = value => value;
     super(columnDto);
   }
 }

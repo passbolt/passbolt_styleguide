@@ -22,6 +22,9 @@ import {waitFor} from "@testing-library/react";
 import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_STRING
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 describe("See the Create Resource", () => {
   let page, props, context;
@@ -158,7 +161,7 @@ describe("See the Create Resource", () => {
         uri: resourceMeta.uri,
         username: resourceMeta.username,
         description: resourceMeta.description,
-        resource_type_id: "669f8c64-242a-59fb-92fc-81f660975fd3"
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
       };
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
@@ -200,7 +203,7 @@ describe("See the Create Resource", () => {
         name: resourceMeta.name,
         uri: resourceMeta.uri,
         username: resourceMeta.username,
-        resource_type_id: "a28a04cd-6f53-518a-967c-9963bf9cec51"
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
       };
       const onApiUpdateSecretDto = {
         description: resourceMeta.description,

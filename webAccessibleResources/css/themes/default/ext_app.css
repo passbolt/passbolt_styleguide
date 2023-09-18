@@ -59,6 +59,7 @@
 /* favorite icon fill */
 /* exclamation icon fill */
 /* spinner icon fill */
+/* timer icon fill */
 /* failed icon fill */
 /* success icon fill */
 /* logo icon fill */
@@ -2197,27 +2198,53 @@ input[type=file] {
   --spinner-color: #7A7A7A;
   --spinner-background: rgba(0, 0, 0, 0.25);
   --spinner-stroke-width: 0.15rem;
+  --timer-color: #070707;
+  --timer-background: #A1A1A1;
+  --timer-stroke-width: 0.3rem;
+  --timer-duration: 30s;
+  --timer-delay: 0s;
 }
 .svg-icon {
   display: inline-flex;
   align-self: center;
 }
 .svg-icon.spinner #loading {
-  animation: spin 2s forwards infinite;
+  animation: spin 2s cubic-bezier(0.77, 0, 0.175, 1) forwards infinite;
   stroke-dashoffset: 50.25;
   stroke-dasharray: 50.27;
 }
 @keyframes spin {
   0% {
     stroke-dashoffset: 50.25;
-    animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
   }
   50% {
     stroke-dashoffset: 0;
-    animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
   }
   100% {
     stroke-dashoffset: -50.25;
+  }
+}
+.svg-icon.timer #timer-progress {
+  animation: timer-progress linear forwards infinite;
+  animation-duration: var(--timer-duration);
+  animation-delay: var(--timer-delay);
+  stroke-dashoffset: -100.54;
+  stroke-dasharray: 50.27;
+}
+@keyframes timer-progress {
+  0% {
+    stroke-dashoffset: -100.54;
+    stroke: #070707;
+  }
+  65% {
+    stroke: #070707;
+  }
+  75% {
+    stroke: #D40101;
+  }
+  100% {
+    stroke-dashoffset: -50.27;
+    stroke: #D40101;
   }
 }
 .svg-icon.baseline svg {
@@ -5651,52 +5678,8 @@ iframe.cachette {
   	Copy secret component
   		This is what is used to copy a secret in the clipboard
 */
-.secret-copy {
-  overflow: visible;
-  display: table-cell;
-  vertical-align: middle;
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-  /*
-     * Clearfix: contain floats
-     *
-     * For modern browsers
-     * 1. The space content is one way to avoid an Opera bug when the
-     *	`contenteditable` attribute is included anywhere else in the document.
-     *	Otherwise it causes space to appear at the top and bottom of elements
-     *	that receive the `clearfix` class.
-     * 2. The use of `table` rather than `block` is only necessary if using
-     *	`:before` to contain the top-margins of child elements.
-     */
-}
-.secret-copy:before,
-.secret-copy:after {
-  content: "";
-  display: table;
-}
-.secret-copy:after {
-  clear: both;
-}
-.secret-copy:before,
-.secret-copy:after {
-  content: "";
-  display: table;
-}
-.secret-copy:after {
-  clear: both;
-}
 .secret-copy > button {
-  display: inline-block;
-  float: left;
+  display: block;
   border: 0;
 }
 .secret-copy > button:hover {
@@ -5705,8 +5688,8 @@ iframe.cachette {
 .secret-copy > button > span {
   display: none;
 }
-.secret-copy > button:before {
-  content: 'BBBBBBBBB';
+.secret-copy > button:before,
+.secret-copy > button:after {
   font-family: 'Passbolt', sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -5715,6 +5698,16 @@ iframe.cachette {
 }
 .secret-copy > pre {
   display: none;
+}
+.secret-copy.secret-password > button:before {
+  content: 'BBBBBBBBB';
+}
+.secret-copy.secret-totp > button:before {
+  content: 'BBB';
+}
+.secret-copy.secret-totp > button:after {
+  margin-left: 0.5rem;
+  content: 'BBB';
 }
 /**
  * Sidebar
@@ -6428,11 +6421,19 @@ iframe.cachette {
   margin-left: 0.25rem;
   --icon-exclamation-background-color: #DD6A00;
 }
-.tableview table td.cell-password .secret {
+.tableview table td.cell-password .secret,
+.tableview table td.cell-totp .secret {
   float: left;
   max-width: calc(100% - 3rem);
 }
-.tableview table td.cell-password .password-view {
+.tableview table td.cell-password .secret .svg-icon.timer,
+.tableview table td.cell-totp .secret .svg-icon.timer {
+  margin-left: 0.5rem;
+}
+.tableview table td.cell-password .password-view,
+.tableview table td.cell-totp .password-view,
+.tableview table td.cell-password .totp-view,
+.tableview table td.cell-totp .totp-view {
   display: none;
   align-items: center;
   width: 2.2rem;
@@ -6441,11 +6442,17 @@ iframe.cachette {
   padding: 0;
   float: left;
 }
-.tableview table td.cell-password .password-view .svg-icon svg {
+.tableview table td.cell-password .password-view .svg-icon svg,
+.tableview table td.cell-totp .password-view .svg-icon svg,
+.tableview table td.cell-password .totp-view .svg-icon svg,
+.tableview table td.cell-totp .totp-view .svg-icon svg {
   width: 1.4rem;
   height: 100%;
 }
-.tableview table td.cell-password:hover .password-view {
+.tableview table td.cell-password:hover .password-view,
+.tableview table td.cell-totp:hover .password-view,
+.tableview table td.cell-password:hover .totp-view,
+.tableview table td.cell-totp:hover .totp-view {
   display: flex;
 }
 table.table-info,

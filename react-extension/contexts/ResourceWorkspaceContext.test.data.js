@@ -49,8 +49,9 @@ export function defaultResourceWorkspaceContext(data = {}) {
       {id: "name", label: "Name", position: 2, show: true},
       {id: "username", label: "Username", position: 3, show: true},
       {id: "password", label: "Password", position: 4, show: true},
-      {id: "uri", label: "URI", position: 5, show: true},
-      {id: "modified", label: "Modified", position: 6, show: true}]),
+      {id: "totp", label: "TOTP", position: 5, show: true},
+      {id: "uri", label: "URI", position: 6, show: true},
+      {id: "modified", label: "Modified", position: 7, show: true}]),
     filter: {
       type: ResourceWorkspaceFilterTypes.ALL
     },

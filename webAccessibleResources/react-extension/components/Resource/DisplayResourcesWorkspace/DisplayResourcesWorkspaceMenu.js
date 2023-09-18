@@ -27,6 +27,7 @@ import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withProgress} from "../../../contexts/ProgressContext";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -200,40 +201,42 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Copy password from dto to clipboard
    * Support original password (a simple string) and composed objects)
    *
-   * @param {string|object} plaintextDto
+   * @param {object} plaintextSecretDto The plaintext secret DTO.
    * @returns {Promise<void>}
    */
-  async copyPasswordToClipboard(plaintextDto) {
-    if (!plaintextDto) {
+  async copyPasswordToClipboard(plaintextSecretDto) {
+    const password = plaintextSecretDto.password;
+    if (!password) {
       throw new TypeError(this.translate("The password is empty."));
     }
-    if (typeof plaintextDto === 'string') {
-      await ClipBoard.copy(plaintextDto, this.props.context.port);
-    } else {
-      if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await ClipBoard.copy(plaintextDto.password, this.props.context.port);
-      } else {
-        throw new TypeError(this.translate("The password field is not defined."));
-      }
-    }
+    await ClipBoard.copy(password, this.props.context.port);
   }
 
   /**
    * handle copy to clipboard the secret of the selected resource
    */
   async handleCopySecretClickEvent() {
+    let plaintextSecretDto;
     this.handleCloseMoreMenu();
 
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
     try {
-      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
-      await this.copyPasswordToClipboard(plaintextDto);
-      this.props.resourceWorkspaceContext.onResourceCopied();
-      this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
+      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
       }
     }
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    await this.copyPasswordToClipboard(plaintextSecretDto);
+    this.props.resourceWorkspaceContext.onResourceCopied();
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
 
   /**
@@ -569,7 +572,8 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   dialogContext: PropTypes.any, // the dialog context
+  progressContext: PropTypes.any, // The progress context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))));
+export default withAppContext(withRbac(withDialog(withProgress(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))));
