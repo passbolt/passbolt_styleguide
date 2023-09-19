@@ -53,6 +53,12 @@ import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCode
  */
 class DisplayResourcesList extends React.Component {
   /**
+   * The grid columns
+   * @type {array}
+   */
+  defaultColumns = [];
+
+  /**
    * Default constructor
    * @param props Component props
    */
@@ -62,17 +68,7 @@ class DisplayResourcesList extends React.Component {
     this.initEventHandlers();
     this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
-    // The columns of resources
-    this.defaultColumns = [
-      new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}),
-      new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}),
-      new ColumnNameModel({label: this.translate("Name")}),
-      new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}),
-      new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopyPassword, canPreview: this.canPreviewPassword, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}),
-      new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: true, canPreview: true, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}),
-      new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}),
-      new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)})
-    ];
+    this.initColumns(props);
   }
 
   /**
@@ -112,6 +108,22 @@ class DisplayResourcesList extends React.Component {
     this.getPreviewTotp = this.getPreviewTotp.bind(this);
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
+  }
+
+  /**
+   * Init the grid columns.
+   */
+  initColumns() {
+    this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
+    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
+    this.defaultColumns.push(new ColumnNameModel({label: this.translate("Name")}));
+    this.defaultColumns.push(new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}));
+    this.defaultColumns.push(new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopyPassword, canPreview: this.canPreviewPassword, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}));
+    if (this.props.context.siteSettings.canIUse('totpResourceTypes')) {
+      this.defaultColumns.push(new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: true, canPreview: true, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}));
+    }
+    this.defaultColumns.push(new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}));
+    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)}));
   }
 
   /**

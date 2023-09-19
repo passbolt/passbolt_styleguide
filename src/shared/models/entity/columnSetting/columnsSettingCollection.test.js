@@ -46,4 +46,15 @@ describe("ColumnsSetting Collection", () => {
       expect(error.rule).toEqual('unique_id');
     }
   });
+
+  describe("ColumnsSetting:removeById", () => {
+    it("should remove a column by its identifier", () => {
+      expect.assertions(2);
+      const collectionDto = [defaultColumnSettingData(), defaultColumnSettingData({id: "idB"})];
+      const collection = new ColumnsSettingCollection(collectionDto);
+      collection.removeById("id");
+      expect(collection.length).toEqual(1);
+      expect(collection.items[0].id).toEqual("idB");
+    });
+  });
 });
