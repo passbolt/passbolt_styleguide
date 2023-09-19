@@ -14,6 +14,8 @@
 const DEFAULT_RESOURCE_TYPES_SLUGS = {
   PASSWORD_STRING: 'password-string',
   PASSWORD_AND_DESCRIPTION: 'password-and-description',
+  PASSWORD_DESCRIPTION_TOTP: 'password-description-totp',
+  TOTP: 'totp',
 };
 
 export default class ResourceTypesSettings {
@@ -39,7 +41,7 @@ export default class ResourceTypesSettings {
   /**
    * Get list of default resource type slugs
    *
-   * @returns {{PASSWORD_AND_DESCRIPTION: string, PASSWORD_STRING: string}}
+   * @returns {object}
    * @constructor
    */
   get DEFAULT_RESOURCE_TYPES_SLUGS() {
@@ -173,14 +175,13 @@ export default class ResourceTypesSettings {
    * @returns {boolean} true if typeId matches PASSWORD_AND_DESCRIPTION slug
    */
   assertResourceTypeIdHasEncryptedDescription(resourceTypeId) {
-    /*
-     * TODO add other content types with encrypted description
-     * Check using the json provided with the resource types
-     */
-    return this.assertResourceTypeSlugById(
-      resourceTypeId,
-      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-    );
+    const resourceTypesSlugs = [
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION,
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_DESCRIPTION_TOTP,
+    ];
+    return this.resourceTypes
+      .filter(resourceType => resourceTypesSlugs.includes(resourceType.slug))
+      .some(resourceType => resourceType.id === resourceTypeId);
   }
 
   /**
@@ -192,5 +193,36 @@ export default class ResourceTypesSettings {
       resourceTypeId,
       this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
     );
+  }
+
+  /**
+   * Assert the resource type has a password
+   * @param {string} resourceTypeId The uuid of the resource type
+   * @return {boolean}
+   */
+  assertResourceTypeIdHasPassword(resourceTypeId) {
+    const resourceTypesSlugs = [
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING,
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION,
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_DESCRIPTION_TOTP,
+    ];
+    return this.resourceTypes
+      .filter(resourceType => resourceTypesSlugs.includes(resourceType.slug))
+      .some(resourceType => resourceType.id === resourceTypeId);
+  }
+
+  /**
+   * Assert the resource type has a totp
+   * @param {string} resourceTypeId The uuid of the resource type
+   * @return {boolean}
+   */
+  assertResourceTypeIdHasTotp(resourceTypeId) {
+    const resourceTypesSlugs = [
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP,
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_DESCRIPTION_TOTP,
+    ];
+    return this.resourceTypes
+      .filter(resourceType => resourceTypesSlugs.includes(resourceType.slug))
+      .some(resourceType => resourceType.id === resourceTypeId);
   }
 }

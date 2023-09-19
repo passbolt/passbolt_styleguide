@@ -4,11 +4,13 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
-import resourceTypesFixture from "../../../test/fixture/ResourceTypes/resourceTypes";
 import {
   defaultPasswordPoliciesContext
 } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultResourcePasswordGeneratorcontext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -19,7 +21,7 @@ export function defaultAppContext(appContext) {
   const port = new MockPort();
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
-  const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
+  const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto());
 
   const defaultAppContext = {
     userSettings,

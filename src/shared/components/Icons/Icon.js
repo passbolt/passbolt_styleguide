@@ -50,7 +50,7 @@ class Icon extends Component {
    */
   render() {
     return (
-      <span className={this.getClassName()} onClick={this.props.onClick}>
+      <span className={this.getClassName()} onClick={this.props.onClick} style={this.props.style}>
         {/*
           * @copyright     Copyright (c) 2013-2017 Cole Bemis (https://github.com/feathericons/feather)
           * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
@@ -1168,6 +1168,12 @@ class Icon extends Component {
           </svg>
         }
 
+        {this.props.name === 'timer' &&
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse rx="8" ry="8" transform="translate(10 10)" fill="none" stroke="var(--timer-background)" strokeWidth="var(--timer-stroke-width)"/>
+            <ellipse id="timer-progress" rx="8" ry="8" transform="matrix(0-1 1 0 10 10)" fill="none" stroke="var(--timer-color)"  strokeLinecap="round" strokeWidth="var(--timer-stroke-width)"/>
+          </svg>
+        }
       </span>
     );
   }
@@ -1186,7 +1192,8 @@ Icon.propTypes = {
   big: PropTypes.bool,
   dim: PropTypes.bool,
   baseline: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  style: PropTypes.object
 };
 
 export default Icon;

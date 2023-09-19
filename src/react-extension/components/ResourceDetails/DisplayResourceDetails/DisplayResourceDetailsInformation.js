@@ -362,7 +362,7 @@ class DisplayResourceDetailsInformation extends React.Component {
           <li className="password">
             <span className="label"><Trans>Password</Trans></span>
             <div className="value">
-              <div className={`secret ${isPasswordPreviewed ? "" : "secret-copy"}`}
+              <div className={`secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
                 title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
                 <HiddenPassword
                   canClick={canCopySecret}

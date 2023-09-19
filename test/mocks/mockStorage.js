@@ -13,8 +13,10 @@
  */
 
 import MockStorage from "../../src/react-extension/test/mock/MockStorage";
-import resourceTypes from "../fixture/resourceTypes";
 import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../src/shared/models/entity/role/role.test.data";
+import {
+  resourceTypesCollectionDto
+} from "../../src/shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 const baseURL = new URL(window.location.href).origin;
 
@@ -64,6 +66,7 @@ const roles = [{
 
 export default () => {
   const storage = new MockStorage();
+  const resourceTypes = resourceTypesCollectionDto();
   storage.local.set({_passbolt_data});
   storage.local.set({resourceTypes});
   storage.local.set({roles});

@@ -297,12 +297,16 @@
       }
     }
 
-    td.cell-password {
+    td.cell-password, td.cell-totp {
       .secret {
         float: left;
-        max-width: calc(100% - 3rem); // password field - password preview button
+        max-width: calc(100% - 3rem); // secret field - secret preview button
+
+        .svg-icon.timer {
+          margin-left: .5rem;
+        }
       }
-      .password-view {
+      .password-view, .totp-view {
         display: none;
         align-items: center;
         width: 2.2rem;
@@ -317,7 +321,7 @@
         }
       }
       &:hover {
-        .password-view {
+        .password-view, .totp-view {
           display: flex;
         }
       }

@@ -13,15 +13,18 @@
  */
 
 import {
-  resourceWithEncryptedDescriptionResourceTypeDto,
-  resourceWithStringPasswordResourceTypeDto
+  resourceTypePasswordDescriptionTotpDto,
+  resourceTypePasswordAndDescriptionDto,
+  resourceTypePasswordStringDto, resourceTypeTotpDto
 } from "./resourceTypeEntity.test.data";
 
 /**
- * Resource with string password resource type DTO.
+ * Resource types collection dto.
  * @returns {object}
  */
 export const resourceTypesCollectionDto = () => [
-  resourceWithStringPasswordResourceTypeDto(),
-  resourceWithEncryptedDescriptionResourceTypeDto()
+  resourceTypePasswordStringDto(),
+  resourceTypePasswordAndDescriptionDto(),
+  resourceTypePasswordDescriptionTotpDto(),
+  resourceTypeTotpDto()
 ];

@@ -17,6 +17,12 @@
   --spinner-color: @icon-spinner-color;
   --spinner-background: @icon-spinner-background;
   --spinner-stroke-width: .15rem;
+  // default icon timer color, background color and stroke width
+  --timer-color: @icon-timer-color;
+  --timer-background: @icon-timer-background;
+  --timer-stroke-width: .3rem;
+  --timer-duration: 30s;
+  --timer-delay: 0s;
 }
 
 .svg-baseline() {
@@ -30,22 +36,46 @@
 
     &.spinner {
       #loading {
-        animation: spin 2s forwards infinite;
+        animation: spin 2s cubic-bezier(0.77, 0, 0.175, 1) forwards infinite;
         stroke-dashoffset: 50.25;
         stroke-dasharray: 50.27;
 
         @keyframes spin {
           0% {
             stroke-dashoffset: 50.25;
-            animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
           }
           50% {
             stroke-dashoffset: 0;
-            animation-timing-function: cubicBezier(0.77, 0, 0.175, 1);
           }
           100% {
             stroke-dashoffset: -50.25;
           }
+        }
+      }
+    }
+
+    &.timer {
+      #timer-progress {
+        animation: timer-progress linear forwards infinite;
+        animation-duration: var(--timer-duration);
+        animation-delay: var(--timer-delay);
+        stroke-dashoffset: -100.54;
+        stroke-dasharray: 50.27;
+      }
+      @keyframes timer-progress {
+        0% {
+          stroke-dashoffset: -100.54;
+          stroke: @icon-timer-color;
+        }
+        65% {
+          stroke: @icon-timer-color;
+        }
+        75% {
+          stroke: @icon-timer-alert-color;
+        }
+        100% {
+          stroke-dashoffset: -50.27;
+          stroke: @icon-timer-alert-color;
         }
       }
     }

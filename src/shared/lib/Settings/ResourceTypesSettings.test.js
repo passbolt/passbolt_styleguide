@@ -12,9 +12,13 @@
  * @since         3.0.0
  */
 import ResourceTypesSettings from "./ResourceTypesSettings";
-import resourceTypesFixture from "../../../react-extension/test/fixture/ResourceTypes/resourceTypes";
 import SiteSettings from "./SiteSettings";
 import siteSettingsFixture from "../../../react-extension/test/fixture/Settings/siteSettings";
+import {resourceTypesCollectionDto} from "../../models/entity/resourceType/resourceTypesCollection.test.data";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  TEST_RESOURCE_TYPE_PASSWORD_STRING
+} from "../../models/entity/resourceType/resourceTypeEntity.test.data";
 
 describe("ResourceTypeSettings", () => {
   it("areResourceTypesEnabled is false if site settings is undefined", () => {
@@ -28,13 +32,13 @@ describe("ResourceTypeSettings", () => {
     expect(sut.isLegacyResourceTypeEnabled()).toBe(false);
     expect(sut.isEncryptedDescriptionEnabled()).toBe(false);
 
-    expect(sut.mustEncryptDescription('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(false);
-    expect(sut.mustEncryptDescription('a28a04cd-6f53-518a-967c-9963bf9cec51')).toBe(false);
+    expect(sut.mustEncryptDescription(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(false);
+    expect(sut.mustEncryptDescription(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBe(false);
   });
 
   it("resource type settings works if site settings and fixtures are set", () => {
     const siteSettings = new SiteSettings(siteSettingsFixture);
-    const sut = new ResourceTypesSettings(siteSettings, resourceTypesFixture);
+    const sut = new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto());
 
     expect(sut.areResourceTypesEnabled()).toBe(true);
     expect(sut.isResourceTypeEnabled('password-string')).toBe(true);
@@ -44,25 +48,25 @@ describe("ResourceTypeSettings", () => {
     expect(sut.isLegacyResourceTypeEnabled()).toBe(true);
     expect(sut.isEncryptedDescriptionEnabled()).toBe(true);
 
-    expect(sut.mustEncryptDescription('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(false);
-    expect(sut.mustEncryptDescription('a28a04cd-6f53-518a-967c-9963bf9cec51')).toBe(true);
+    expect(sut.mustEncryptDescription(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(false);
+    expect(sut.mustEncryptDescription(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBe(true);
 
-    expect(sut.findResourceTypeSlugById('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe('password-string');
+    expect(sut.findResourceTypeSlugById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe('password-string');
     expect(sut.findResourceTypeSlugById('nope')).toBe(undefined);
 
-    expect(sut.findResourceTypeIdBySlug('password-string')).toBe('669f8c64-242a-59fb-92fc-81f660975fd3');
+    expect(sut.findResourceTypeIdBySlug('password-string')).toBe(TEST_RESOURCE_TYPE_PASSWORD_STRING);
     expect(sut.findResourceTypeIdBySlug('nope')).toBe(undefined);
 
-    expect(sut.assertResourceTypeIdIsLegacy('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(true);
+    expect(sut.assertResourceTypeIdIsLegacy(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(true);
     expect(sut.assertResourceTypeIdIsLegacy(undefined)).toBe(false);
 
-    expect(sut.assertResourceTypeIdHasEncryptedDescription('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(false);
+    expect(sut.assertResourceTypeIdHasEncryptedDescription(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(false);
     expect(sut.assertResourceTypeIdHasEncryptedDescription(undefined)).toBe(false);
   });
 
   it("resource type settings works if site settings and some fixtures are set", () => {
     const siteSettings = new SiteSettings(siteSettingsFixture);
-    const lessFixtures = [resourceTypesFixture[1]];
+    const lessFixtures = [resourceTypesCollectionDto()[1]];
     const sut = new ResourceTypesSettings(siteSettings, lessFixtures);
 
     expect(sut.areResourceTypesEnabled()).toBe(true);
@@ -74,15 +78,15 @@ describe("ResourceTypeSettings", () => {
     expect(sut.isLegacyResourceTypeEnabled()).toBe(false);
     expect(sut.isEncryptedDescriptionEnabled()).toBe(true);
 
-    expect(sut.mustEncryptDescription('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(true);
+    expect(sut.mustEncryptDescription(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(true);
 
-    expect(sut.findResourceTypeSlugById('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(undefined);
-    expect(sut.findResourceTypeSlugById('a28a04cd-6f53-518a-967c-9963bf9cec51')).toBe('password-and-description');
+    expect(sut.findResourceTypeSlugById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(undefined);
+    expect(sut.findResourceTypeSlugById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBe('password-and-description');
 
-    expect(sut.findResourceTypeIdBySlug('password-and-description')).toBe('a28a04cd-6f53-518a-967c-9963bf9cec51');
+    expect(sut.findResourceTypeIdBySlug('password-and-description')).toBe(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION);
     expect(sut.findResourceTypeIdBySlug('password-string')).toBe(undefined);
 
-    expect(sut.assertResourceTypeIdIsLegacy('669f8c64-242a-59fb-92fc-81f660975fd3')).toBe(false);
-    expect(sut.assertResourceTypeIdHasEncryptedDescription('a28a04cd-6f53-518a-967c-9963bf9cec51')).toBe(true);
+    expect(sut.assertResourceTypeIdIsLegacy(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBe(false);
+    expect(sut.assertResourceTypeIdHasEncryptedDescription(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBe(true);
   });
 });
