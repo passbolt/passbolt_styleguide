@@ -54,7 +54,7 @@ describe("DisplayResourceDetails", () => {
     it('I can see the name of the selected resource', async() => {
       expect.assertions(2);
       expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.name);
-      expect(page.subtitle).toBe('Resource');
+      expect(page.subtitle).toBe('Resource with encrypted description');
     });
 
     it('I can copy the resource permalink', async() => {
