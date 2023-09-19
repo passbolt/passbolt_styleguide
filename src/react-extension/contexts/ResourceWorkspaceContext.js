@@ -1019,6 +1019,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const gridUserSettingEntity = await this.gridResourceUserSetting.getSetting();
     // Merge the columns setting collection by ID
     const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting);
+    if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
+      columnsResourceSetting.removeById("totp");
+    }
     const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
     // process the search after the grid setting is loaded
     this.setState({columnsResourceSetting, sorter}, () => this.search(this.state.filter));

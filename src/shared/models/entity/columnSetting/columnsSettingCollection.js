@@ -79,6 +79,14 @@ class ColumnsSettingCollection extends EntityCollection {
   }
 
   /**
+   * Remove a column by id.
+   * @param {string} columnId The column id
+   */
+  removeById(columnId) {
+    this._items = this.items.filter(columnSetting => columnSetting.id !== columnId);
+  }
+
+  /**
    * Create object from id property
    * @return {Object} The object with id keys
    */
