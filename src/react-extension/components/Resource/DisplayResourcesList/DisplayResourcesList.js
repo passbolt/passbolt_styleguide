@@ -362,10 +362,8 @@ class DisplayResourcesList extends React.Component {
   async copyTotpToClipboard(resourceId) {
     let plaintextSecretDto;
     const isTotpPreviewed = this.isCellulePreviewed('totp', resourceId);
-    console.log(isTotpPreviewed);
     if (isTotpPreviewed) {
       plaintextSecretDto = this.state.plaintextSecretDto;
-      console.log(plaintextSecretDto);
     } else {
       this.props.progressContext.open(this.props.t('Decrypting secret'));
 
