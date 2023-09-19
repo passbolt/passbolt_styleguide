@@ -19,6 +19,12 @@ import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/R
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
+import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -26,13 +32,13 @@ import ColumnsResourceSettingCollection
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
+  const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: {
-      canIUse: () => true
-    },
-    setContext: () => jest.fn()
+    siteSettings: siteSettings,
+    setContext: () => jest.fn(),
+    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto())
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

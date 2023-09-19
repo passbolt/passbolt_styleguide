@@ -326,7 +326,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   canUpdate() {
-    return this.hasResourceSelected() && this.selectedResources.every(resource => resource.permission.type >= 7);
+    return this.hasResourceSelected()
+      && this.selectedResources.every(resource => resource.permission.type >= 7)
+      && this.selectedResources.every(resource => !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(resource.resource_type_id));
   }
 
   /**
