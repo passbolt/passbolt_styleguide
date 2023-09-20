@@ -67,19 +67,24 @@ class CellPassword extends Component {
    */
   render() {
     const previewedPassword = this.props.getPreviewPassword(this.value);
+    const hasPassword = this.props.hasPassword(this.value);
     return (
       <>
-        <div className={`secret ${previewedPassword ? "" : "secret-copy"}`}
-          title={previewedPassword || this.props.title}>
-          <HiddenPassword
-            canClick={this.props.canCopySecret}
-            preview={previewedPassword}
-            onClick={this.handlePasswordClick} />
-        </div>
-        {this.props.canPreviewSecret &&
-          <button type="button" onClick={this.handlePreviewPasswordButtonClick} className="password-view button-transparent">
-            <Icon name={previewedPassword ? 'eye-close' : 'eye-open'}/>
-          </button>
+        {hasPassword &&
+         <>
+           <div className={`secret secret-password ${previewedPassword ? "" : "secret-copy"}`}
+             title={previewedPassword || this.props.title}>
+             <HiddenPassword
+               canClick={this.props.canCopy}
+               preview={previewedPassword}
+               onClick={this.handlePasswordClick} />
+           </div>
+           {this.props.canPreview &&
+             <button type="button" onClick={this.handlePreviewPasswordButtonClick} className="password-view button-transparent">
+               <Icon name={previewedPassword ? 'eye-close' : 'eye-open'}/>
+             </button>
+           }
+         </>
         }
       </>
     );
@@ -92,13 +97,14 @@ CellPassword.defaultProps = {
 };
 
 CellPassword.propTypes = {
-  value: PropTypes.string.isRequired, // The value
+  value: PropTypes.object.isRequired, // The value
   title: PropTypes.string, // The title
-  canPreviewSecret: PropTypes.bool, // The canPreviewSecret boolean property
-  canCopySecret: PropTypes.bool, // The canCopySecret boolean property
+  canPreview: PropTypes.bool, // The canPreviewSecret boolean property
+  canCopy: PropTypes.bool, // The canCopySecret boolean property
   getPreviewPassword: PropTypes.func.isRequired, // The getPreviewPassword function
   onPasswordClick: PropTypes.func, // The onPasswordClick property
   onPreviewPasswordClick: PropTypes.func, // The onPreviewPasswordClick property
+  hasPassword: PropTypes.func, // The hasPassword property
 };
 
 export default CellPassword;

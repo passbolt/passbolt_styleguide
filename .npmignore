@@ -7,7 +7,6 @@
 .storybook
 Gruntfile.js
 crowdin.yml
-demo
 node_modules
 src/css
 src/less
@@ -18,8 +17,6 @@ src/img/screenshots
 scripts
 storybook-static
 webpack-api.config.js
-webpack-ext.config.js
-webpack-in-form-menu.config.js
 
 #jest test coverage
 ######################

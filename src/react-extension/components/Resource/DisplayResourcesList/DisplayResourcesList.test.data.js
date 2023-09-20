@@ -18,9 +18,11 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 import {defaultResourceWorkspaceContext,} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultContextualMenuContext} from "../../../contexts/ContextualMenuContext.test.data";
 import {
-  defaultResourceDto,
-  resourceWithFavoriteDto
+  defaultResourceDto, resourceStandaloneTotpDto,
+  resourceWithFavoriteDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import ColumnsResourceSettingCollection
+  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 
 /**
  * Default props as when initializing the list with no content.
@@ -45,6 +47,8 @@ const getResources = () => [
   resourceWithFavoriteDto({name: 'apache'}),
   defaultResourceDto({name: 'bower'}),
   defaultResourceDto({name: 'test'}),
+  resourceWithTotpDto({name: 'totp'}),
+  resourceStandaloneTotpDto({name: 'standalone totp'}),
 ];
 
 /**
@@ -56,7 +60,7 @@ export function propsWithFilteredResources(data = {}) {
   const resources = getResources();
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      filteredResources: resources
+      filteredResources: resources,
     }),
     ...data
   });
@@ -84,13 +88,14 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
   return defaultProps({
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       filteredResources: resources,
-      columnsResources: [
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
         {id: "favorite", label: "Favorite", position: 1, show: true},
         {id: "name", label: "Name", position: 2, show: true},
         {id: "username", label: "Username", position: 3, show: false},
         {id: "password", label: "Password", position: 4, show: true},
-        {id: "uri", label: "URI", position: 5, show: true},
-        {id: "modified", label: "Modified", position: 6, show: false}],
+        {id: "totp", label: "TOTP", position: 5, show: false},
+        {id: "uri", label: "URI", position: 6, show: true},
+        {id: "modified", label: "Modified", position: 7, show: false}]),
     }),
     ...data
   });
@@ -109,7 +114,7 @@ export function propsWithAllResourcesSelected(data = {}) {
       selectedResources: resources,
       filter: {
         type: ResourceWorkspaceFilterTypes.ALL
-      }
+      },
     }),
     ...data
   });

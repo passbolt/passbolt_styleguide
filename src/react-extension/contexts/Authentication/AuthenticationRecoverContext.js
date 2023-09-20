@@ -95,6 +95,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       state: AuthenticationRecoverWorkflowStates.LOADING, // The recover workflow current state
       error: null, // The current error
       rememberMe: null, // The user remember me choice
+      userPassphrasePolicies: null, // the current user passphrase policies to use
 
       // Public workflow mutators.
       goToImportGpgKey: this.goToImportGpgKey.bind(this), // Whenever the user wants to go to the import key step.
@@ -140,6 +141,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async initialize() {
     await this.props.context.port.request('passbolt.recover.start');
+    const userPassphrasePolicies = await this.props.context.port.request('passbolt.recover.get-user-passphrase-policies');
     // The user locale is retrieved by the recover start, update the application locale
     await this.props.context.initLocale();
 
@@ -149,7 +151,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       const state = hasUserEnrolledToAccountRecovery
         ? AuthenticationRecoverWorkflowStates.GENERATE_ACCOUNT_RECOVERY_GPG_KEY
         : AuthenticationRecoverWorkflowStates.HELP_CREDENTIALS_LOST;
-      this.setState({state});
+      this.setState({state, userPassphrasePolicies});
       return;
     }
 
@@ -160,7 +162,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       ? AuthenticationRecoverWorkflowStates.INTRODUCE_EXTENSION
       : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
 
-    this.setState({state});
+    this.setState({state, userPassphrasePolicies});
   }
 
   /**
@@ -210,8 +212,8 @@ export class AuthenticationRecoverContextProvider extends React.Component {
    */
   async checkPassphrase(passphrase, rememberMe = false) {
     try {
-      await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase, rememberMe);
-      await this.setState({
+      await this.props.context.port.request("passbolt.recover.verify-passphrase", passphrase);
+      this.setState({
         state: AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN,
         rememberMe: rememberMe
       });
@@ -219,7 +221,7 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       if (error.name === "InvalidMasterPasswordError") {
         throw error;
       } else {
-        await this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
+        this.setState({state: AuthenticationRecoverWorkflowStates.UNEXPECTED_ERROR, error: error});
       }
     }
   }

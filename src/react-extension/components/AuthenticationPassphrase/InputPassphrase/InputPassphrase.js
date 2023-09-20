@@ -30,13 +30,7 @@ class InputPassphrase extends Component {
 
   componentDidMount() {
     this.focusOnPassphrase();
-    // Init the default remember me duration based on the remember me options given in options.
-    if (this.hasRememberMeOptions()) {
-      const rememberMeOptions = this.props.context.siteSettings.getRememberMeOptions();
-      const rememberMeDurations = Object.keys(rememberMeOptions);
-      const rememberMeDuration = parseInt(rememberMeDurations[0]);
-      this.setState({rememberMeDuration: rememberMeDuration});
-    }
+    this.initDefaultRememberMeChoice();
   }
 
   getDefaultState() {
@@ -55,6 +49,18 @@ class InputPassphrase extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleRememberMeDurationSelectChange = this.handleRememberMeDurationSelectChange.bind(this);
     this.handleCloseClick = this.handleCloseClick.bind(this);
+  }
+
+  /**
+   * Initialise the rememberMe choice with the latest choice made by the user or false if none
+   * @returns {Promise<void>}
+   */
+  async initDefaultRememberMeChoice() {
+    const defaultRememberMeChoice = await this.props.context.port.request('passbolt.remember-me.get-user-latest-choice');
+    this.setState({
+      rememberMe: defaultRememberMeChoice,
+      rememberMeDuration: this.getUntilILogOutDurationOrDefault(defaultRememberMeChoice)
+    });
   }
 
   /**
@@ -106,7 +112,7 @@ class InputPassphrase extends Component {
 
   /**
    * Check the passphrase.
-   * @return {boolean}
+   * @return {Promise<boolean>}
    */
   async isValidPassphrase() {
     try {
@@ -206,6 +212,24 @@ class InputPassphrase extends Component {
     }
 
     return selectOptions;
+  }
+
+  /**
+   * Return the rememeberMe duration based on the last rememberMe choice.
+   * - 1. It returns -1 if the rememberMe was checked
+   * - 2. It returns the first option available that is different than -1 if rememberMe wasn't checked
+   * @returns {integer} duration value
+   */
+  getUntilILogOutDurationOrDefault(rememberMe) {
+    const allOptions = this.props.context.siteSettings.getRememberMeOptions();
+    const limitedTimeOptions = Object.keys(allOptions).filter(option => parseInt(option, 10) !== -1);
+    const firstOption = parseInt(limitedTimeOptions.at(0), 10);
+
+    if (!rememberMe) {
+      return firstOption;
+    }
+    const untilILogoutOrFirstOption = -1 in allOptions ? -1 : firstOption;
+    return untilILogoutOrFirstOption;
   }
 
   /**

@@ -17,6 +17,14 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import ColumnsResourceSettingCollection
+  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
+import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -24,13 +32,13 @@ import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspa
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
 export function defaultAppContext(appContext) {
+  const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: {
-      canIUse: () => true
-    },
-    setContext: () => jest.fn()
+    siteSettings: siteSettings,
+    setContext: () => jest.fn(),
+    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto())
   };
   return Object.assign(defaultAppContext, appContext || {});
 }
@@ -44,13 +52,14 @@ export function defaultPropsOneResourceOwned() {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resourcesMock[0]],
-      columnsResources: [
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
         {id: "favorite", label: "Favorite", position: 1, show: true},
         {id: "name", label: "Name", position: 2, show: true},
         {id: "username", label: "Username", position: 3, show: true},
         {id: "password", label: "Password", position: 4, show: true},
-        {id: "uri", label: "URI", position: 5, show: true},
-        {id: "modified", label: "Modified", position: 6, show: true}],
+        {id: "totp", label: "TOTP", position: 5, show: true},
+        {id: "uri", label: "URI", position: 6, show: false},
+        {id: "modified", label: "Modified", position: 7, show: true}]),
       lockDisplayDetail: true,
       onLockDetail: jest.fn(),
       onResourcesToExport: () => jest.fn(),
@@ -82,6 +91,13 @@ export function defaultPropsNoResource() {
   return {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: false},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: false},
+        {id: "password", label: "Password", position: 4, show: false},
+        {id: "uri", label: "URI", position: 5, show: false},
+        {id: "modified", label: "Modified", position: 6, show: true}]),
       lockDisplayDetail: true
     })
   };

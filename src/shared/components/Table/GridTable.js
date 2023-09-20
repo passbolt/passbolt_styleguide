@@ -35,6 +35,7 @@ class GridTable extends Component {
     return <Row
       key={key}
       item={item}
+      className={index % 2 === 0 ? "even" : "odd"}
       onClick={this.props.onRowClick}
       onContextMenu={this.props.onRowContextMenu}
       onDragStart={this.props.onRowDragStart}
@@ -63,7 +64,8 @@ class GridTable extends Component {
         rows={this.props.rows}
         selectedRowsIds={this.props.selectedRowsIds}
         sorter={this.props.sorter}
-        onSortChange={this.props.onSortChange}>
+        onSortChange={this.props.onSortChange}
+        onChange={this.props.onChange}>
         <TableHead/>
         {hasRows &&
           <div className="tableview-content">
@@ -93,6 +95,7 @@ GridTable.propTypes = {
   onRowContextMenu: PropTypes.func, // The onRowContextMenu property
   onRowDragStart: PropTypes.func, // The onRowDragStart property
   onRowDragEnd: PropTypes.func, // The onRowDragEnd property
+  onChange: PropTypes.func, // The onChange property
   rowsRef: PropTypes.any // The ref of the rows
 };
 

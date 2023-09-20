@@ -37,10 +37,6 @@ This is the official styleguide for Passbolt the open source password manager fo
 This styleguide is used to extend, minify and test the stylesheets used by the different
 passbolt components such as the website, the firefox addon, etc.
 
-In /demo you can find a copy of each of the page HTML (or main states in case of the one page client)
-so that you can test them out. You will need a simple php webserver, since we use it to factorise
-some of the includes. Apart from this the HTML is static.
-
 In /src and /build you can find the assets that are used by other projects, like the images
 the less files, the minified css files, fonts, etc.
 
@@ -69,21 +65,6 @@ grunt watch
 ```
 
 Edit one LESS file to see if it works!
-
-
-Quick how-to for developers
-==========================
-
-## Starting the demo
-After running this commands, the demo will be accessible from
-[http://localhost:3000](http://localhost:3000)
-
-```
-npm run start-app-dev-server
-```
-
-Each change made on the js applications source code will trigger a build and refresh the browser tab where the demo has
-been started.
 
 
 How to publish the styleguide?

@@ -19,16 +19,15 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import debounce from "debounce-promise";
-import SecurityComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
+import PasswordComplexityWithGoal from '../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal';
+import {withUserPassphrasePolicies} from '../../../contexts/UserPassphrasePoliciesContext';
 
 /**
  * This component displays the user choose passphrase information
@@ -57,13 +56,6 @@ class EnterNewPassphrase extends React.Component {
       actions: {
         processing: false, // True if one's processing passphrase
       },
-      hintClassNames: { // The class names for passphrase hints
-        enoughLength: '',
-        uppercase: '',
-        alphanumeric: '',
-        specialCharacters: '',
-        notInDictionary: '',
-      },
       isPwnedServiceAvailable: true // True if the isPwned service can be reached
     };
   }
@@ -78,11 +70,11 @@ class EnterNewPassphrase extends React.Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
+    const userPassphrasePolicies = this.props.userPassphrasePoliciesContext.getSettings();
     const validation = {
-      notInDictionary: this.pownedService === null || this.state.hintClassNames.notInDictionary !== "error"
+      notInDictionary: !this.state.isPwnedServiceAvailable || !this.state.passphraseInDictionnary,
+      enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy >= userPassphrasePolicies.entropy_minimum
     };
-
-    validation.enoughLength = this.state.hintClassNames.enoughLength === "success";
 
     return Object.values(validation).every(value => value);
   }
@@ -119,8 +111,10 @@ class EnterNewPassphrase extends React.Component {
 
   /**
    * Whenever the component is mounted
+   * @returns {Promise<void>}
    */
   async componentDidMount() {
+    await this.props.userPassphrasePoliciesContext.findSettings();
     this.focusOnPassphrase();
     this.initPwnedPasswordService();
   }
@@ -136,33 +130,34 @@ class EnterNewPassphrase extends React.Component {
    * Initialize the pwned password service
    */
   initPwnedPasswordService() {
-    this.pownedService = new PownedService(this.props.context.port);
+    const userPasphrasePolicies = this.props.userPassphrasePoliciesContext.getSettings();
+    if (userPasphrasePolicies.external_dictionary_check) {
+      this.pownedService = new PownedService(this.props.context.port);
+    } else {
+      this.setState({isPwnedServiceAvailable: false});
+    }
   }
 
   /**
    * Whenever the passphrase change
    * @param event The input event
    */
-  async handlePassphraseChange(event) {
+  handlePassphraseChange(event) {
     const passphrase = event.target.value;
-    let hintClassNames = {};
     let passphraseEntropy = null;
     if (passphrase.length) {
       passphraseEntropy = SecretGenerator.entropy(passphrase);
-      hintClassNames = this.evaluatePassphraseDefaultHintClassNames(passphrase);
       if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(passphrase);
       }
     } else {
       this.setState({
-        hintClassNames: {
-          ...this.state.hintClassNames,
-          notInDictionary: "unavailable"
-        }
+        passphraseInDictionnary: false,
+        passwordEntropy: null,
       });
     }
 
-    this.setState({passphrase, passphraseEntropy, hintClassNames});
+    this.setState({passphrase, passphraseEntropy});
   }
 
   /**
@@ -175,61 +170,35 @@ class EnterNewPassphrase extends React.Component {
   }
 
   /**
-   * Evaluate the passphrase default hints classnames
-   * @param passphrase The passphrase to evaluate
-   */
-  evaluatePassphraseDefaultHintClassNames(passphrase) {
-    const masks = SecurityComplexity.matchMasks(passphrase);
-    const hintClassName = condition => condition ? 'success' : 'warning';
-    return {
-      enoughLength: passphrase.length >= 8 ? 'success' : 'error',
-      uppercase: hintClassName(masks.uppercase),
-      alphanumeric: hintClassName(masks.alpha && masks.digit),
-      specialCharacters: hintClassName(masks.special),
-      notInDictionary: this.state.hintClassNames.notInDictionary
-    };
-  }
-
-  /**
    * Evaluate if the passphrase is in dictionary
+   * @param {string} passphrase
    * @return {Promise<void>}
    */
-  async evaluatePassphraseIsInDictionary() {
+  async evaluatePassphraseIsInDictionary(passphrase) {
     let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
     if (!isPwnedServiceAvailable) {
       return;
     }
 
-    const passphrase = this.state.passphrase;
-    let notInDictionaryHint = "success";
+    let passphraseInDictionnary = false;
 
-    if (this.pownedService) {
-      if (passphrase.length < 8) {
-        notInDictionaryHint = passphrase.length > 0 ? "error" : "unavailable";
+    try {
+      const result =  await this.pownedService.evaluateSecret(passphrase);
+      passphraseInDictionnary = result.inDictionary;
+      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
+    } catch (error) {
+      // If the service is unavailable don't block the user journey.
+      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
+        isPwnedServiceAvailable = false;
+        passphraseInDictionnary = false;
       } else {
-        try {
-          const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
-          const isPwned = result.inDictionary;
-          isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-          notInDictionaryHint =  isPwnedServiceAvailable ? (isPwned ? "error" : "success") : "unavailable";
-        } catch (error) {
-          // If the service is unavailable don't block the user journey.
-          if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
-            isPwnedServiceAvailable = false;
-            notInDictionaryHint = "unavailable";
-          } else {
-            throw error;
-          }
-        }
+        throw error;
       }
     }
 
     this.setState({
       isPwnedServiceAvailable,
-      hintClassNames: {
-        ...this.state.hintClassNames,
-        notInDictionary: notInDictionaryHint
-      }
+      passphraseInDictionnary,
     });
   }
 
@@ -239,7 +208,7 @@ class EnterNewPassphrase extends React.Component {
    */
   async isCurrentPassphrasePwned() {
     await this.isPwndProcessingPromise;
-    return this.state.hintClassNames.notInDictionary === "error";
+    return this.state.passphraseInDictionnary;
   }
 
   /**
@@ -247,25 +216,27 @@ class EnterNewPassphrase extends React.Component {
    * @return {Promise<void>}
    */
   async generateGpgKey() {
-    await this.toggleProcessing();
+    this.toggleProcessing();
     const isPwned = await this.isCurrentPassphrasePwned();
     if (isPwned) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       return;
     }
 
-    this.props.userSettingsContext.onUpdatePassphraseRequested(this.state.passphrase)
-      .catch(this.onGpgKeyGeneratedFailure.bind(this));
+    try {
+      await this.props.userSettingsContext.onUpdatePassphraseRequested(this.state.passphrase);
+    } catch (e) {
+      this.onGpgKeyGeneratedFailure(e);
+    }
   }
 
   /**
    * Whenever the gpg key generation failed
    * @param error The error
    */
-  async onGpgKeyGeneratedFailure(error) {
-    await this.toggleProcessing();
-    const ErrorDialogProps = {error: error};
-    this.props.dialogContext.open(NotifyError, ErrorDialogProps);
+  onGpgKeyGeneratedFailure(error) {
+    this.toggleProcessing();
+    this.props.dialogContext.open(NotifyError, {error});
   }
 
   /**
@@ -278,12 +249,12 @@ class EnterNewPassphrase extends React.Component {
   /**
    * Toggle the processing mode
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     const actions = {
       ...this.state.actions,
       processing: !this.state.actions.processing
     };
-    await this.setState({actions});
+    this.setState({actions});
   }
 
   /**
@@ -294,7 +265,12 @@ class EnterNewPassphrase extends React.Component {
   }
 
   render() {
-    const passphraseEntropy = this.state.hintClassNames.notInDictionary === "error" ? 0 : this.state.passphraseEntropy;
+    const userPassphrasePolicies = this.props.userPassphrasePoliciesContext.getSettings();
+    if (!userPassphrasePolicies) {
+      return null;
+    }
+
+    const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
     return (
       <div className="grid grid-responsive-12 profile-passphrase">
         <div className="row">
@@ -312,34 +288,15 @@ class EnterNewPassphrase extends React.Component {
                     securityToken={this.props.context.userSettings.getSecurityToken()}
                     onChange={this.handlePassphraseChange}
                     disabled={!this.areActionsAllowed}/>
-                  <PasswordComplexity entropy={passphraseEntropy}/>
-                </div>
-                <div className="password-hints">
-                  <ul>
-                    <li className={this.state.hintClassNames.enoughLength}>
-                      <Trans>It is at least 8 characters in length</Trans>
-                    </li>
-                    <li className={this.state.hintClassNames.uppercase}>
-                      <Trans>It contains lower and uppercase characters</Trans>
-                    </li>
-                    <li className={this.state.hintClassNames.alphanumeric}>
-                      <Trans>It contains letters and numbers</Trans>
-                    </li>
-                    <li className={this.state.hintClassNames.specialCharacters}>
-                      <Trans>It contains special characters (like / or * or %)</Trans>
-                    </li>
-                    <li className={this.state.hintClassNames.notInDictionary}>
-                      {this.state.isPwnedServiceAvailable  &&
-                        <Trans>It is not part of an exposed data breach</Trans>
-                      }
-                      {!this.state.isPwnedServiceAvailable &&
-                        <Tooltip message={<Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans>}
-                          direction="bottom">
-                          <Trans>It is not part of an exposed data breach</Trans>
-                        </Tooltip>
-                      }
-                    </li>
-                  </ul>
+                  <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={userPassphrasePolicies.entropy_minimum}/>
+                  <>
+                    {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
+                      <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
+                    }
+                    {this.state.passphraseInDictionnary &&
+                      <div className="invalid-passphrase warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+                    }
+                  </>
                 </div>
               </div>
               <div className="submit-wrapper">
@@ -366,8 +323,9 @@ class EnterNewPassphrase extends React.Component {
 EnterNewPassphrase.propTypes = {
   context: PropTypes.any, // The application context
   userSettingsContext: PropTypes.object, // The user settings context
+  userPassphrasePoliciesContext: PropTypes.object.isRequired, // the user passphrase policies context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withDialog(withUserSettings(withTranslation('common')(EnterNewPassphrase))));
+export default withAppContext(withDialog(withUserSettings(withUserPassphrasePolicies(withTranslation('common')(EnterNewPassphrase)))));

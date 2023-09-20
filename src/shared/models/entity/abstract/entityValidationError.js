@@ -17,8 +17,7 @@ class EntityValidationError extends Error {
    *
    * @param {string} message
    */
-  constructor(message) {
-    message = message || 'Entity validation error.';
+  constructor(message = 'Entity validation error.') {
     super(message);
     this.name = 'EntityValidationError';
     this.details = {};
@@ -45,6 +44,23 @@ class EntityValidationError extends Error {
       this.details[property] = {};
     }
     this.details[property][rule] = message;
+  }
+
+  /**
+   * Get the errors associated to the given field if any
+   * @param {string} property the field name to get the error from
+   * @param {string} [rule] optional example: required
+   * @returns {object|null}
+   */
+  getError(property, rule) {
+    if (!this.hasError(property, rule)) {
+      return null;
+    }
+
+    const errors = this.details[property];
+    return rule
+      ? errors[rule]
+      : errors;
   }
 
   /**

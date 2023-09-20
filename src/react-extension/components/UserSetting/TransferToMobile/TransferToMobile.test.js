@@ -16,7 +16,8 @@
  * Unit tests on TransferToMobile in regard of specifications
  */
 import TransferToMobilePage from "./TransferToMobile.test.page";
-import {defaultAppContext, defaultProps} from "./TransferToMobile.test.data";
+import {defaultProps} from "./TransferToMobile.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -24,7 +25,11 @@ beforeEach(() => {
 
 describe("As LU I should be able to configure my account on my mobile phone", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
+  const context = defaultAppContext({
+    userSettings: {
+      getTrustedDomain: () => "https://localhost:6006"
+    }
+  }); // The applicative context
   const props = defaultProps(); // The props to pass
 
   describe('As LU I can start the mobile phone account transfer', () => {
@@ -38,6 +43,7 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
     });
 
     it('As LU I should be able to start the transfer to mobile', async() => {
+      expect.assertions(3);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toContain('mobile');
       expect(page.isStep('start')).toBe(true);
@@ -55,6 +61,21 @@ describe("As LU I should be able to configure my account on my mobile phone", ()
        * expectedParameters =  ['passbolt.mobile.transfer.create', expectedData];
        * expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
        */
+    });
+  });
+
+  describe('Ensure the feature is running only under HTTPS', () => {
+    it('As LU I should see a message telling me the feature needs Passbolt to run under HTTPS', async() => {
+      expect.assertions(2);
+      const context = defaultAppContext({
+        userSettings: {
+          getTrustedDomain: () => "http://localhost"
+        }
+      }); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new TransferToMobilePage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.isStep('https required')).toBe(true);
     });
   });
 });

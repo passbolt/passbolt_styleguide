@@ -183,7 +183,7 @@ describe("AuthenticationRecoverContextProvider", () => {
       await contextProvider.initialize();
       await contextProvider.importGpgKey();
       await contextProvider.checkPassphrase("passphrase");
-      expect(props.context.port.requestListeners["passbolt.recover.verify-passphrase"]).toHaveBeenCalledWith("passphrase", false, undefined);
+      expect(props.context.port.requestListeners["passbolt.recover.verify-passphrase"]).toHaveBeenCalledWith("passphrase", undefined);
       expect(contextProvider.state.state).toEqual(AuthenticationRecoverWorkflowStates.CHOOSE_SECURITY_TOKEN);
     });
 

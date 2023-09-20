@@ -29,6 +29,7 @@ import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {withProgress} from "../../../contexts/ProgressContext";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -109,41 +110,42 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * Copy password from dto to clipboard
    * Support original password (a simple string) and composed objects)
    *
-   * @param {string|object} plaintextDto
+   * @param {object} plaintextSecretDto The plain text secret DTO.
    * @returns {Promise<void>}
    */
-  async copyPasswordToClipboard(plaintextDto) {
-    if (!plaintextDto) {
+  async copyPasswordToClipboard(plaintextSecretDto) {
+    const password = plaintextSecretDto.password;
+    if (!password) {
       throw new TypeError(this.translate("The password is empty."));
     }
-    if (typeof plaintextDto === 'string') {
-      await ClipBoard.copy(plaintextDto, this.props.context.port);
-      this.props.resourceWorkspaceContext.onResourceCopied();
-    } else {
-      if (Object.prototype.hasOwnProperty.call(plaintextDto, 'password')) {
-        await ClipBoard.copy(plaintextDto.password, this.props.context.port);
-        this.props.resourceWorkspaceContext.onResourceCopied();
-      } else {
-        throw new TypeError(this.translate("The password field is not defined."));
-      }
-    }
+    await ClipBoard.copy(password, this.props.context.port);
   }
 
   /**
    * handle password resource
    */
   async handlePasswordClickEvent() {
+    let plaintextSecretDto;
     this.props.hide();
 
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
     try {
-      const plaintextDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
-      await this.copyPasswordToClipboard(plaintextDto);
-      this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
+      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
       }
     }
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto?.password?.length) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    await this.copyPasswordToClipboard(plaintextSecretDto);
+    this.props.resourceWorkspaceContext.onResourceCopied();
+    this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
   }
 
   /**
@@ -187,7 +189,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * Can update the resource
    */
   canUpdate() {
-    return this.resource.permission.type >= 7;
+    return this.resource.permission.type >= 7
+      && !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
   }
 
   /**
@@ -340,9 +343,10 @@ DisplayResourcesListContextualMenu.propTypes = {
   top: PropTypes.number, // top position in px of the page
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
   dialogContext: PropTypes.any, // the dialog context
+  progressContext: PropTypes.any, // The progress context
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withDialog(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))));
+export default withAppContext(withRbac(withResourceWorkspace(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))));

@@ -148,7 +148,7 @@ class ResourceCreatePage extends React.Component {
     const ignoreUris = ["chrome://newtab/", "about:newtab"];
 
     try {
-      const tabInfo = await this.props.context.port.request("passbolt.quickaccess.prepare-resource", this.props.context.tabId);
+      const tabInfo = await this.props.context.port.request("passbolt.quickaccess.prepare-resource", this.props.context.getOpenerTabId());
       if (!ignoreNames.includes(tabInfo["name"])) {
         name = tabInfo["name"].substring(0, 255);
       }

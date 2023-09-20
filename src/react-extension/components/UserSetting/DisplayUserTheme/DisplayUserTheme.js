@@ -20,7 +20,7 @@ import {withLoading} from "../../../contexts/LoadingContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 
 /**
@@ -34,6 +34,7 @@ class DisplayUserTheme extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.bindHandlers();
   }
 
   /**
@@ -59,9 +60,9 @@ class DisplayUserTheme extends React.Component {
    * Binds the component handlers
    */
   bindHandlers() {
-    this.handleThemeSelected = this.handleThemeSelected.bind(this);
     this.onSelectSuccess = this.onSelectSuccess.bind(this);
     this.onSelectFailure = this.onSelectFailure.bind(this);
+    this.onSelectFinally = this.onSelectFinally.bind(this);
   }
 
   /**
@@ -86,24 +87,25 @@ class DisplayUserTheme extends React.Component {
 
   /**
    * Selects a new theme
-   * @param {string} theme the name of the selected theme
+   * @param {{name: string}} theme the name of the selected theme
    */
   select(theme) {
     if (this.state.selectedTheme === theme.name) {
       return;
     }
+    this.props.loadingContext.add();
     this.setState({selectedTheme: theme.name});
     this.props.context.port.request("passbolt.themes.change", theme.name)
       .then(this.onSelectSuccess)
-      .catch(this.onSelectFailure);
+      .catch(this.onSelectFailure)
+      .finally(this.onSelectFinally);
   }
 
   /**
-   * Whenever the a new theme has been selected with success
+   * Whenever the new theme has been selected with success
    * @returns {Promise<void>}
    */
   async onSelectSuccess() {
-    await this.props.loadingContext.remove();
     await this.props.actionFeedbackContext.displaySuccess(this.props.t("The theme has been updated successfully"));
   }
 
@@ -112,11 +114,17 @@ class DisplayUserTheme extends React.Component {
    * @param {object} error the error to display
    */
   async onSelectFailure(error) {
-    await this.props.loadingContext.remove();
     const errorDialogProps = {
       error: error
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
+  }
+
+  /**
+   * Whenever the new theme has been selected finally
+   */
+  async onSelectFinally() {
+    await this.props.loadingContext.remove();
   }
 
   /**
@@ -139,7 +147,7 @@ class DisplayUserTheme extends React.Component {
       <div className="grid grid-responsive-12">
         <div className="row">
           <div className="main-column">
-            <h3>Theme</h3>
+            <h3><Trans>Theme</Trans></h3>
             <div className="themes">
               <div className="col12">
                 <ul>

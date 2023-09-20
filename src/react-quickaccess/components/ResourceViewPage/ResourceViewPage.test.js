@@ -65,27 +65,27 @@ describe("ResourceViewPage", () => {
       const props = defaultProps(); // The props to pass
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
 
       expect(page.passwordText).toStrictEqual("Copy password to clipboard");
       expect(page.password.hasAttribute("disabled")).toBeFalsy();
 
       await page.click(page.password);
 
-      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id, {"showProgress": true}));
-      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy'));
+      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id));
+      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password'));
     });
 
     it('As LU, I should be able to copy the secret of resource by clicking on the copy icon', async() => {
       const props = defaultProps(); // The props to pass
       const page = new ResourceViewPagePage(props);
       await waitFor(() => {});
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
 
       await page.click(page.copyPasswordButton);
 
-      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id, {"showProgress": true}));
-      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy'));
+      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', resourcesFixture[0].id));
+      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password'));
     });
 
     it('As LU, I should not be able to copy the secret of resource  if denied by RBAC.', async() => {

@@ -16,10 +16,10 @@
  * Unit tests on EnterNewPassphrase in regard of specifications
  */
 import EnterNewPassphrasePage from "./EnterNewPassphrase.test.page";
-import {defaultProps} from "./EnterNewPassphrase.test.data";
-import {waitFor} from "@testing-library/react";
+import {defaultProps, propsWithExternalDictionaryCheckDisabled} from "./EnterNewPassphrase.test.data";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
 
@@ -52,7 +52,8 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should be able to enter my new passphrase', async() => {
-      expect.assertions(1);
+      expect.assertions(2);
+      expect(page.exists()).toStrictEqual(true);
       const expectedPassphrase = 'La belle vie';
       await page.insertPassphrase(expectedPassphrase);
       expect(page.passphrase).toBe(expectedPassphrase);
@@ -136,40 +137,31 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(page.canUpdate).toBeTruthy();
 
       let generateResolve = null;
-      const requestMockImpl = jest.fn(() => new Promise(resolve => generateResolve = resolve));
-      jest.spyOn(props.userSettingsContext, 'onUpdatePassphraseRequested').mockImplementationOnce(requestMockImpl);
-      const inProgressFn = () => {
-        if (page.canChange) {
-          throw new Error("page is not updated yet");
-        }
-        generateResolve();
-      };
-      await page.update(inProgressFn);
-      expect(props.userSettingsContext.onUpdatePassphraseRequested).toHaveBeenCalledWith(veryStrongPassphrase);
+      props.userSettingsContext.onUpdatePassphraseRequested.mockImplementation(passphrase => {
+        expect(passphrase).toStrictEqual(veryStrongPassphrase);
+        return new Promise(resolve => {
+          generateResolve = resolve;
+        });
+      });
+
+      await page.update(() => !page.canChange);
+      await waitForTrue(() => Boolean(generateResolve));
+      await generateResolve();
     });
 
     it('As LU I should see a processing feedback while submitting the form', async() => {
       expect.assertions(1);
+
+      let generateResolve = null;
+      props.userSettingsContext.onUpdatePassphraseRequested.mockImplementation(() => new Promise(resolve => {
+        generateResolve = resolve;
+      }));
+
       const veryStrongPassphrase = 'abcdefgh1234=5ABCD===';
       await page.insertPassphrase(veryStrongPassphrase);
-
-      await waitFor(() => {
-        if (!page.canUpdate) {
-          throw new Error("page is not updated yet");
-        }
-      });
-
-      let generateResolve;
-      const requestMockImpl = () => new Promise(resolve => generateResolve = resolve);
-      props.userSettingsContext.onUpdatePassphraseRequested.mockImplementationOnce(requestMockImpl);
-      const inProgressFn = () => {
-        if (!page.isProcessing) {
-          throw new Error("page is not updated yet");
-        }
-      };
-      await page.update(inProgressFn);
+      await page.update(() => page.isProcessing);
       expect(page.isProcessing).toBeTruthy();
-      generateResolve();
+      await generateResolve();
     });
 
     it('As LU I should be able to cancel the confirmation of my passphrase', async() => {
@@ -179,41 +171,42 @@ describe("As LU I should see the user confirm passphrase page", () => {
     });
 
     it('As LU I should see an error dialog if there is an api error', async() => {
-      expect.assertions(3);
-      expect(page.updateButton.getAttribute("disabled")).not.toBeNull();
-      expect(page.updateButton.className).toBe('button primary disabled');
+      expect.assertions(2);
+      props.userSettingsContext.onUpdatePassphraseRequested.mockImplementation(() => { throw new PassboltApiFetchError("Jest simulate API error."); });
 
       // Fill the form
-      await page.insertPassphrase("passphrase");
-      await waitFor(() => {
-        if (!page.canUpdate) {
-          throw new Error("page is not updated yet");
-        }
-      });
+      await page.insertPassphrase('abcdefgh1234=5ABCD===');
+      await page.update(() => props.dialogContext.open.mock.calls.length > 0);
 
-      const mockReject = error => jest.fn(() => new Promise((resolve, reject) => reject(error)));
-      jest.spyOn(props.userSettingsContext, 'onUpdatePassphraseRequested').mockImplementationOnce(mockReject(new PassboltApiFetchError("Jest simulate API error.")));
-      await page.update(() => {
-        if (!page.notInDictionaryHint.classList.contains("success")) {
-          throw new Error("The page state didn't change yet.");
-        }
-      });
       const ErrorDialogProps = {error: new Error("Jest simulate API error.")};
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
     });
 
     it('As LU I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
-      expect.assertions(2);
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
+      expect.assertions(1);
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", () => Promise.reject());
       await page.insertPassphrase("Service is unavailable");
-      expect(page.notInDictionaryHint.classList.contains("unavailable")).toBeTruthy();
-      expect(page.tootltip.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
+      await waitForTrue(() => Boolean(page.passphraseWarningMessage));
+      expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
 
     it('As LU I should see a complexity as Quality if the passphrase is empty', async() => {
       expect.assertions(1);
       await page.insertPassphrase("");
       expect(page.isEmptyPassphrase).toBeTruthy();
+    });
+  });
+
+  describe("With user passphrase policies external dictionary check disabled", () => {
+    it("As LU I should be inform that my passphrae might be part of a data breach if external dictionary check is disabled", async() => {
+      expect.assertions(1);
+      const props = propsWithExternalDictionaryCheckDisabled();
+
+      const page = new EnterNewPassphrasePage(props);
+      await page.insertPassphrase("Service is unavailable");
+
+      expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
   });
 });

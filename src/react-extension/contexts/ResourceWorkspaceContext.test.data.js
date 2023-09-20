@@ -7,6 +7,7 @@ import MockPort from "../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
 import {defaultFolderDto, folderWithReadPermissionDto} from "../../shared/models/entity/folder/folderEntity.test.data";
 import {defaultResourceDto} from "../../shared/models/entity/resource/resourceEntity.test.data";
+import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 
 /**
  * @deprecated should use defaultUserAppContext.
@@ -43,13 +44,14 @@ export function defaultResourceWorkspaceContext(data = {}) {
     },
     filteredResources: [],
     selectedResources: [],
-    columnsResources: [
+    columnsResourceSetting: new ColumnsResourceSettingCollection([
       {id: "favorite", label: "Favorite", position: 1, show: true},
       {id: "name", label: "Name", position: 2, show: true},
       {id: "username", label: "Username", position: 3, show: true},
       {id: "password", label: "Password", position: 4, show: true},
-      {id: "uri", label: "URI", position: 5, show: true},
-      {id: "modified", label: "Modified", position: 6, show: true}],
+      {id: "totp", label: "TOTP", position: 5, show: true},
+      {id: "uri", label: "URI", position: 6, show: true},
+      {id: "modified", label: "Modified", position: 7, show: true}]),
     filter: {
       type: ResourceWorkspaceFilterTypes.ALL
     },
@@ -74,6 +76,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onResourceFileToImport: jest.fn(),
     onLockDetail: jest.fn(),
     onChangeColumnView:  jest.fn(),
+    onChangeColumnsSettings:  jest.fn(),
     ...data
   };
 }
