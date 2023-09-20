@@ -32,9 +32,26 @@ export default class TotpTestPage {
 
   /**
    * Returns the button element
+   * @return {HTMLElement}
    */
   get button() {
     return this._page.container.querySelector('button');
+  }
+
+  /**
+   * Returns the code span element
+   * @return {HTMLElement}
+   */
+  get codeElement() {
+    return this._page.container.querySelector('.totp-code');
+  }
+
+  /**
+   * Return the totp code
+   * @retutn {string}
+   */
+  get code() {
+    return this.codeElement.textContent.match(/\d/g).join('');
   }
 
   /** Click on the element */

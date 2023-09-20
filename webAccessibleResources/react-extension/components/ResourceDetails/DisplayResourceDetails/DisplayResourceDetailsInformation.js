@@ -30,6 +30,8 @@ import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import HiddenPassword from "../../../../shared/components/Password/HiddenPassword";
 import {withProgress} from "../../../contexts/ProgressContext";
+import Totp from "../../../../shared/components/Totp/Totp";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -49,6 +51,7 @@ class DisplayResourceDetailsInformation extends React.Component {
   getDefaultState() {
     return {
       open: true,
+      previewedSecret: null, // The type of previewed secret
       plaintextSecretDto: null // The current resource password decrypted
     };
   }
@@ -62,6 +65,8 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.handleUsernameClickEvent = this.handleUsernameClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
     this.handleViewPasswordButtonClick = this.handleViewPasswordButtonClick.bind(this);
+    this.handleTotpClick = this.handleTotpClick.bind(this);
+    this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
   }
 
@@ -81,7 +86,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     const hasResourceChanged = this.resource.id !== previousResource.id;
     const hasResourceUpdated = this.resource.modified !== previousResource.modified;
     if ((hasResourceChanged || hasResourceUpdated) && this.state.open) {
-      this.setState({plaintextSecretDto: null});
+      this.setState({plaintextSecretDto: null, previewedSecret: null});
     }
   }
 
@@ -236,18 +241,17 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   async togglePreviewPassword() {
     const isPasswordPreviewed = this.isPasswordPreviewed();
-    if (isPasswordPreviewed) {
-      this.hidePreviewedPassword();
-    } else {
+    this.hidePreviewedSecret();
+    if (!isPasswordPreviewed) {
       await this.previewPassword();
     }
   }
 
   /**
-   * Hide the previewed resource password.
+   * Hide the previewed resource secret.
    */
-  hidePreviewedPassword() {
-    this.setState({plaintextSecretDto: null});
+  hidePreviewedSecret() {
+    this.setState({plaintextSecretDto: null, previewedSecret: null});
   }
 
   /**
@@ -256,6 +260,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   async previewPassword() {
     const resourceId = this.resource.id;
+    const previewedSecret = "password";
     let plaintextSecretDto;
 
     this.props.progressContext.open(this.props.t('Decrypting secret'));
@@ -279,7 +284,7 @@ class DisplayResourceDetailsInformation extends React.Component {
       return;
     }
 
-    this.setState({plaintextSecretDto});
+    this.setState({plaintextSecretDto, previewedSecret});
   }
 
   /**
@@ -293,11 +298,102 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 
   /**
+   * Handle copy totp
+   * @return {Promise<void>}
+   */
+  async handleTotpClick() {
+    let plaintextSecretDto;
+    const isTotpPreviewed = this.isTotpPreviewed();
+
+    if (isTotpPreviewed) {
+      plaintextSecretDto = this.state.plaintextSecretDto;
+    } else {
+      this.props.progressContext.open(this.props.t('Decrypting secret'));
+
+      try {
+        plaintextSecretDto = await this.decryptResourceSecret(this.resource.id);
+      } catch (error) {
+        if (error.name !== "UserAbortsOperationError") {
+          this.props.actionFeedbackContext.displayError(error.message);
+        }
+      }
+
+      this.props.progressContext.close();
+    }
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
+  }
+
+  /**
+   * Handle preview totp button click.
+   */
+  handlePreviewTotpButtonClick() {
+    const isTotpPreviewed = this.isTotpPreviewed();
+    this.hidePreviewedSecret();
+    if (!isTotpPreviewed) {
+      this.previewTotp();
+    }
+  }
+
+  /**
+   * Preview totp
+   * @returns {Promise<void>}
+   */
+  async previewTotp() {
+    const resourceId = this.resource.id;
+    const previewedSecret = "totp";
+    let plaintextSecretDto;
+
+    this.props.progressContext.open(this.props.t("Decrypting secret"));
+
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret(resourceId);
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be previewed."));
+      return;
+    }
+
+    this.setState({plaintextSecretDto, previewedSecret});
+  }
+
+  /**
    * Check if the password is previewed
    * @returns {boolean}
    */
   isPasswordPreviewed() {
-    return this.state.plaintextSecretDto !== null;
+    return this.state.previewedSecret === 'password';
+  }
+
+  /**
+   * Check if the totp is previewed
+   * @returns {boolean}
+   */
+  isTotpPreviewed() {
+    return this.state.previewedSecret === 'totp';
   }
 
   /**
@@ -313,6 +409,23 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   displaySuccessNotification(message) {
     this.props.actionFeedbackContext.displaySuccess(message);
+  }
+
+  /**
+   * Is password resource
+   * @return {boolean}
+   */
+  isPasswordResources() {
+    // TODO: How to handle if resource type is not enabled or not loaded yet ?
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(this.resource.resource_type_id);
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  isTotpResources() {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
   }
 
   /**
@@ -338,6 +451,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
     const modifiedDateTimeAgo = this.formatDateTimeAgo(this.resource.modified);
     const isPasswordPreviewed = this.isPasswordPreviewed();
+    const isTotpPreviewed = this.isTotpPreviewed();
 
     return (
       <div className={`detailed-information accordion sidebar-section ${this.state.open ? "" : "closed"}`}>
@@ -355,29 +469,58 @@ class DisplayResourceDetailsInformation extends React.Component {
           </h4>
         </div>
         <ul className="accordion-content">
-          <li className="username">
-            <span className="label"><Trans>Username</Trans></span>
-            <span className="value"><button type="button" className="link no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.username}</span></button></span>
-          </li>
-          <li className="password">
-            <span className="label"><Trans>Password</Trans></span>
-            <div className="value">
-              <div className={`secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
-                <HiddenPassword
-                  canClick={canCopySecret}
-                  preview={this.state.plaintextSecretDto?.password}
-                  onClick={this.handlePasswordClickEvent} />
+          {this.isPasswordResources() &&
+            <>
+              <li className="username">
+                <span className="label"><Trans>Username</Trans></span>
+                <span className="value"><button type="button" className="link no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.username}</span></button></span>
+              </li>
+              <li className="password">
+                <span className="label"><Trans>Password</Trans></span>
+                <div className="value">
+                  <div className={`secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                    title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
+                    <HiddenPassword
+                      canClick={canCopySecret}
+                      preview={this.state.plaintextSecretDto?.password}
+                      onClick={this.handlePasswordClickEvent} />
+                  </div>
+                  {canPreviewSecret &&
+                    <button type="button" onClick={this.handleViewPasswordButtonClick}
+                      className="password-view button-transparent">
+                      <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
+                      <span className="visually-hidden"><Trans>View</Trans></span>
+                    </button>
+                  }
+                </div>
+              </li>
+            </>
+          }
+          {this.isTotpResources() &&
+            <li className="totp">
+              <span className="label"><Trans>TOTP</Trans></span>
+              <div className="value">
+                <div className={`secret secret-totp ${isTotpPreviewed ? "" : "secret-copy"}`}>
+                  {isTotpPreviewed &&
+                    <Totp
+                      totp={this.state.plaintextSecretDto?.totp}
+                      canClick={canCopySecret}
+                      onClick={this.handleTotpClick}/>
+                  }
+                  {!isTotpPreviewed &&
+                    <button type="button" className="link no-border" onClick={this.handleTotpClick} disabled={!canCopySecret}>
+                      <span>Copy TOTP to clipboard</span>
+                    </button>
+                  }
+                </div>
+                {canPreviewSecret &&
+                  <button type="button" onClick={this.handlePreviewTotpButtonClick} className="totp-view button-transparent">
+                    <Icon name={isTotpPreviewed ? 'eye-close' : 'eye-open'}/>
+                  </button>
+                }
               </div>
-              {canPreviewSecret &&
-                <button type="button" onClick={this.handleViewPasswordButtonClick}
-                  className="password-view button-transparent">
-                  <Icon name={isPasswordPreviewed ? 'eye-close' : 'eye-open'}/>
-                  <span className="visually-hidden"><Trans>View</Trans></span>
-                </button>
-              }
-            </div>
-          </li>
+            </li>
+          }
           <li className="uri">
             <span className="label"><Trans>URI</Trans></span>
             <span className="value">

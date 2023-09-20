@@ -146,7 +146,7 @@ class Totp extends Component {
 
     return (
       <button type="button" className="link no-border" onClick={this.onClick} disabled={!this.props.canClick}>
-        <span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span>
+        <span className="totp-code"><span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span></span>
         <Icon name="timer" style={{
           "--timer-duration": `${this.period}s`,
           "--timer-delay": `-${this.delay}s`

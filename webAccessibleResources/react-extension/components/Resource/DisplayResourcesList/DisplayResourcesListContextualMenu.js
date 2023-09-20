@@ -189,7 +189,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * Can update the resource
    */
   canUpdate() {
-    return this.resource.permission.type >= 7;
+    return this.resource.permission.type >= 7
+      && !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
   }
 
   /**

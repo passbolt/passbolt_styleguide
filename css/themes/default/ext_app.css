@@ -5965,13 +5965,21 @@ iframe.cachette {
   width: 100%;
   height: 1.6rem;
 }
-.panel.aside .detailed-information li.password .value .secret {
+.panel.aside .detailed-information li.password .value .secret,
+.panel.aside .detailed-information li.totp .value .secret {
   float: left;
   max-width: calc(100% - 3rem);
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.panel.aside .detailed-information li.password .password-view {
+.panel.aside .detailed-information li.password .value .secret .svg-icon.timer,
+.panel.aside .detailed-information li.totp .value .secret .svg-icon.timer {
+  margin-left: 0.5rem;
+}
+.panel.aside .detailed-information li.password .password-view,
+.panel.aside .detailed-information li.totp .password-view,
+.panel.aside .detailed-information li.password .totp-view,
+.panel.aside .detailed-information li.totp .totp-view {
   display: flex;
   align-items: center;
   width: 2.2rem;
@@ -5980,7 +5988,10 @@ iframe.cachette {
   padding: 0;
   float: left;
 }
-.panel.aside .detailed-information li.password .password-view .svg-icon svg {
+.panel.aside .detailed-information li.password .password-view .svg-icon svg,
+.panel.aside .detailed-information li.totp .password-view .svg-icon svg,
+.panel.aside .detailed-information li.password .totp-view .svg-icon svg,
+.panel.aside .detailed-information li.totp .totp-view .svg-icon svg {
   width: 1.4rem;
   height: 100%;
 }

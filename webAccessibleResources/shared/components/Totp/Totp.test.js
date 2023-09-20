@@ -26,36 +26,50 @@ afterEach(() => {
 });
 
 describe("Totp", () => {
-  describe('As a signed-in user I can see the TOTP code', () => {
-    it('Matches the styleguide', () => {
+  describe('As a user I can see the TOTP code', () => {
+    it('should display the TOTP code.', () => {
       const props = defaultProps();
       const page = new TotpTestPage(props);
       const code = TotpCodeGeneratorService.generate(props.totp);
 
-      expect.assertions(2);
-
-      expect(page._page.container.textContent).toContain(code.substring(0, 3));
-      expect(page._page.container.textContent).toContain(code.substring(3));
+      expect.assertions(1);
+      expect(page.code).toEqual(code);
     });
-  });
 
-  describe('As a signed-in user I can see the TOTP changing with the next TOTP period', () => {
-    it('Matches the styleguide', () => {
+    it('should refresh the TOTP code at the end of the TOTP period', () => {
       const props = defaultProps();
       const page = new TotpTestPage(props);
 
-      expect.assertions(5);
+      expect.assertions(3);
 
       const code = TotpCodeGeneratorService.generate(props.totp);
-      expect(page._page.container.textContent).toContain(code.substring(0, 3));
-      expect(page._page.container.textContent).toContain(code.substring(3));
+      expect(page.code).toEqual(code);
 
       jest.advanceTimersByTime(31000);
 
       const code2 = TotpCodeGeneratorService.generate(props.totp);
       expect(code2).not.toEqual(code);
-      expect(page._page.container.textContent).toContain(code2.substring(0, 3));
-      expect(page._page.container.textContent).toContain(code2.substring(3));
+      expect(page.code).toEqual(code2);
+    });
+  });
+
+  describe('As a user I can click on the TOTP code', () => {
+    it('it should call onClick props when clicked', async() => {
+      const props = defaultProps();
+      const page = new TotpTestPage(props);
+
+      expect.assertions(1);
+      await page.click(page.button);
+      expect(props.onClick).toHaveBeenCalled();
+    });
+
+    it('it should not call onClick props when clicked if props canClick is false', async() => {
+      const props = defaultProps({canClick: false});
+      const page = new TotpTestPage(props);
+
+      expect.assertions(1);
+      await page.click(page.button);
+      expect(props.onClick).not.toHaveBeenCalled();
     });
   });
 });

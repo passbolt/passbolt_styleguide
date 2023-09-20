@@ -7,5 +7,6 @@ export default {
   "user.settings.securityToken.color": "#000000",
   "user.settings.securityToken.textColor": "#FFFFFF",
   "user.username": "ada@passbolt.com",
-  "user.settings.locale": "en-UK"
+  "user.settings.locale": "en-UK",
+  "user.settings.theme": "default"
 };

@@ -15,7 +15,7 @@
 export const defaultColumnSettingData = (data = {}) => {
   const defaultData = {
     "id": "id",
-    "label": "Label"
+    "label": "Label",
   };
 
   return Object.assign(defaultData, data);

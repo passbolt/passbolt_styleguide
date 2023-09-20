@@ -22,7 +22,7 @@ import {plaintextSecretPasswordDescriptionTotpDto} from "../../models/entity/pla
 export function defaultProps(props = {}) {
   return {
     totp: plaintextSecretPasswordDescriptionTotpDto().totp,
-    canClick: jest.fn(),
+    canClick: true,
     onClick: jest.fn(),
     ...props
   };

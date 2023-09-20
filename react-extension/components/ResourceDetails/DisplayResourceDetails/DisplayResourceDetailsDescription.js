@@ -245,7 +245,9 @@ class DisplayResourceDetailsDescription extends React.Component {
    * @returns {boolean}
    */
   canEdit() {
-    return this.resource.permission && this.resource.permission.type >= 7;
+    return this.resource.permission
+      && this.resource.permission.type >= 7
+      && !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
   }
 
   /**
