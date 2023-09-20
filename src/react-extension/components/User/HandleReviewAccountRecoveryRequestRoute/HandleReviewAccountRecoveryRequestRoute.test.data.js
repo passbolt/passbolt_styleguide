@@ -14,7 +14,7 @@
 
 import {v4 as uuidv4} from "uuid";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
-import {defaultActionFeedbackContextContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
 
 /**
@@ -25,7 +25,7 @@ import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContex
 export function defaultProps(props = {}) {
   const users = [{id: uuidv4()}];
   const defaultProps = {
-    actionFeedbackContext: defaultActionFeedbackContextContext(props?.actionFeedbackContext),
+    actionFeedbackContext: defaultActionFeedbackContext(props?.actionFeedbackContext),
     context: defaultAppContext({users, ...props?.context}),
     match: {
       params: {

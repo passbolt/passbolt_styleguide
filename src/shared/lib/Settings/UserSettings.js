@@ -50,7 +50,7 @@ export default class UserSettings {
   }
 
   /**
-   * retunr the security token
+   * return the security token
    * @returns {{backgroundColor, code, textColor}}
    */
   getSecurityToken() {

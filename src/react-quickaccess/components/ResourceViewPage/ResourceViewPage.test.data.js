@@ -18,7 +18,7 @@ export function defaultProps(props = {}) {
   const storage = new MockStorage();
   storage.local.set({resources: resourcesFixture});
   const port = new MockPort();
-  port.addRequestListener("passbolt.secret.decrypt", () => "secret_password");
+  port.addRequestListener("passbolt.secret.decrypt", () => ({password: "secret_password"}));
   port.addRequestListener("passbolt.quickaccess.use-resource-on-current-tab", () => {});
 
   return {

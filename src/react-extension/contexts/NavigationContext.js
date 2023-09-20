@@ -41,6 +41,10 @@ export const NavigationContext = React.createContext({
   }, // Whenever the users wants to navigate to the administration workspace SMTP settings
   onGoToAdministrationSsoRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace sso
+  onGoToAdministrationPasswordPoliciesRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace password policies settings
+  onGoToAdministrationUserPassphrasePoliciesRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace user passphrase policies
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -105,6 +109,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationSsoRequested: this.onGoToAdministrationSsoRequested.bind(this), // Whenever the user wants to navigate to the administration workspace sso
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
+      onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -169,6 +174,8 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/self-registation";
     } else if (this.isPasswordPoliciesEnable) {
       pathname = "/app/administration/password-policies";
+    } else if (this.isUserPassphrasePoliciesEnable) {
+      pathname = "/app/administration/user-passphrase-policies";
     }
     await this.goTo("api", pathname);
   }
@@ -271,6 +278,14 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to navigate to the administration workspace user passphrase policies.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationUserPassphrasePoliciesRequested() {
+    await this.goTo("browser-extension", "/app/administration/user-passphrase-policies");
+  }
+
+  /**
    * Returns true if the user has the MFA capability
    * @returns {boolean}
    */
@@ -313,6 +328,15 @@ class NavigationContextProvider extends React.Component {
   get isPasswordPoliciesEnable() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
+  }
+
+  /**
+   * Returns true if the user has the self registration enabled
+   * @returns {boolean}
+   */
+  get isUserPassphrasePoliciesEnable() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('userPassphrasePolicies');
   }
 
   /*

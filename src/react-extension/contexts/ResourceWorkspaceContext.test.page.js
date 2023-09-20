@@ -73,6 +73,22 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * Get the columns setting
+   * @return {[]}
+   */
+  get columnsResourceSetting() {
+    return this.resourceWorkspaceContext.columnsResourceSetting;
+  }
+
+  /**
+   * Get the sorter
+   * @return {{asc: boolean, propertyName: string}}
+   */
+  get sorter() {
+    return this.resourceWorkspaceContext.sorter;
+  }
+
+  /**
    * Go to the given link identified by CSS selector and click on it
    * @returns {Promise<void>}
    * @ linkCssSelector The CSS link selector
@@ -158,7 +174,7 @@ export default class ResourceWorkspaceContextPage {
 
   /**
    * Go to the Folder search filter route
-   * @param tag A specific folder search filter
+   * @param folder A specific folder search filter
    */
   async goToFolder(folder) {
     this.setup(this.context, {folder});
@@ -230,17 +246,33 @@ export default class ResourceWorkspaceContextPage {
 
   /**
    * Go to a resource uri
-   * @param resource A specific resource
+   * @param uri A specific resource
    */
   async goToResourceUri(uri) {
     await this.resourceWorkspaceContext.onGoToResourceUriRequested(uri);
   }
 
   /**
+   * On change column view
+   * @param {string} id The id of the column
+   * @param {boolean} checked The checked value
+   */
+  async onChangeColumnView(id, checked) {
+    await this.resourceWorkspaceContext.onChangeColumnView(id, checked);
+  }
+
+  /**
+   * On change columns setting
+   * @param {Array} columnsSetting The columns setting
+   */
+  async onChangeColumnsSettings(columnsSetting) {
+    await this.resourceWorkspaceContext.onChangeColumnsSettings(columnsSetting);
+  }
+
+  /**
    * Returns the rendering of  the page
    * @param appContext a app context
-   * @param text a specific text search filter
-   * @param tag a specific tag search filter
+   * @param args the args
    */
   setup(appContext, args = {}) {
     this._page = render(

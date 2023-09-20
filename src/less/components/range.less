@@ -1,0 +1,136 @@
+.range-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding-bottom: 2rem;
+
+  .range-labels {
+    display: flex;
+    width: 100%;
+  }
+
+  .range-labels label {
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex: 1 1 0;
+  }
+
+  .range-labels label:first-child {
+    color: @complexity-bar-low-color;
+    text-align: left;
+  }
+
+  .range-labels label:last-child {
+    color: @complexity-bar-high-color;
+    text-align: right;
+  }
+
+  .range-input-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    .range-input {
+      height: 1rem;
+      width: 100%;
+      background: @complexity-bar-gradient-background;
+      border-radius: 0.5rem;
+      appearance: none;
+      outline: none;
+    }
+
+    .range-input::-webkit-slider-container {
+      min-block-size: 1rem;
+    }
+
+    .range-input::-webkit-slider-runnable-track {
+      height: 1rem;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      appearance: none;
+      position: relative;
+      z-index: 1;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: .8rem;
+      background: @cultured-2;
+      border: .1rem solid @chinese-white;
+      transform: translate(-0.2rem, -0.3rem);
+      cursor: pointer;
+    }
+
+    .range-options {
+      display: flex;
+      justify-content: space-around;
+      writing-mode: horizontal-tb;
+      width: inherit;
+      text-align: center;
+
+      .range-option {
+        position: absolute;
+        padding: 0;
+        transform: translateX(-50%);
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+          font-weight: 700;
+        }
+
+        &::before {
+          content: '';
+          position: absolute;
+          display: block;
+          top: -2.5rem;
+          left: 50%;
+          width: .8rem;
+          height: .8rem;
+          border-radius: .4rem;
+          background: rgba(255,255,255,.5);
+          z-index: 0;
+          transform: translateX(-50%);
+        }
+
+        &.range-option--active {
+          font-weight: 700;
+          color: @black;
+          padding: .3rem .6rem;
+          background: @cultured-2;
+          border: .1rem solid @chinese-white;
+          margin-top: -.4rem;
+          border-radius: .3rem;
+        }
+
+        &.range-option--active::before {
+          display: none;
+        }
+      }
+
+      .range-option:first-child {
+        text-align: left;
+        transform: translateX(0%);
+
+        &::before {
+          content: '';
+          left: .1rem;
+          transform: translateX(0);
+        }
+      }
+
+      .range-option:last-child {
+        text-align: right;
+        transform: translateX(-100%);
+
+        &::before {
+          content: '';
+          left: unset;
+          right: .1rem;
+          transform: translateX(0);
+        }
+      }
+    }
+  }
+}

@@ -21,6 +21,11 @@ import {withLoading} from "./LoadingContext";
 import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
 import {DateTime} from "luxon";
 import debounce from "debounce-promise";
+import SorterEntity from "../../shared/models/entity/sorter/sorterEntity";
+import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gridUserSettingEntity";
+import GridResourceUserSettingService
+  from "../../shared/services/gridResourceUserSetting/GridResourceUserSettingService";
+import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -36,7 +41,7 @@ export const ResourceWorkspaceContext = React.createContext({
   },
   filteredResources: [], // The current list of filtered resources
   selectedResources: [], // The current list of selected resources
-  columnsResources: [], // The current list of columns for resources
+  columnsResourceSetting: [], // The settings of columns for resources
   details: {
     resource: null, // The resource to focus details on
     folder: null, // The folder to focus details on
@@ -76,6 +81,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onResourcesToExport: () => {}, // Whenever resources and/or folder will be exported
   onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
   onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
+  onChangeColumnsSettings: () => {}, // Whenever the user change the columns configuration
 });
 
 /**
@@ -90,6 +96,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.initializeProperties();
+    this.gridResourceUserSetting = new GridResourceUserSettingService(props.context.port);
 
     /*
      * Execute first request to refresh users, groups, etc. then wait 10sec to trigger next one
@@ -104,19 +111,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   get defaultState() {
     return {
       filter: {type: ResourceWorkspaceFilterTypes.NONE}, // The current resource search filter
-      sorter: {
+      sorter: new SorterEntity({
         propertyName: 'modified', // The name of the property to sort on
         asc: false // True if the sort must be descendant
-      },
-      filteredResources: [], // The current list of filtered resources
+      }),
+      filteredResources: null, // The current list of filtered resources
       selectedResources: [], // The current list of selected resources
-      columnsResources: [
-        {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "name", label: "Name", position: 2, show: true},
-        {id: "username", label: "Username", position: 3, show: true},
-        {id: "password", label: "Password", position: 4, show: true},
-        {id: "uri", label: "URI", position: 5, show: true},
-        {id: "modified", label: "Modified", position: 6, show: true}], // The current list of columns for resources
+      columnsResourceSetting: null, // The settings of columns for resources
       details: {
         resource: null, // The resource to focus details on
         folder: null, // The folder to focus details on
@@ -153,7 +154,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceFileImportResult: this.handleResourceFileImportResult.bind(this), // Whenever the import result has been provided
       onResourcesToExport: this.handleResourcesToExportChange.bind(this), // Whenever resources and/or folder have to be exported
       onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
-      onChangeColumnView: this.handleChangeColumnView.bind(this) // Whenever the users wants to show or hide a column
+      onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
+      onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this) // Whenever the user change the columns configuration
     };
   }
 
@@ -169,6 +171,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
+    this.loadGridResourceSetting();
     this.populateDebounced();
     this.handleResourcesWaitedFor();
   }
@@ -176,6 +179,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Whenever the component has updated in terms of props or state
    * @param prevProps
+   * @param prevState
    */
   async componentDidUpdate(prevProps, prevState) {
     await this.handleResourcesLoaded();
@@ -226,15 +230,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         await this.populateDebounced();
       }
     }
-  }
-
-  /**
-   * Handles the resource search text filter change
-   * @param text The filter text
-   */
-  async handleTextFilterChange(text) {
-    await this.search({type: ResourceWorkspaceFilterTypes.TEXT, payload: text});
-    await this.detailNothing();
   }
 
   /**
@@ -484,14 +479,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
-   * Handle the toggle sidebar to display it or not
-   */
-  handleToggleSidebar() {
-    const mustDisplaySidebar = !this.state.mustDisplaySidebar;
-    this.setState({mustDisplaySidebar});
-  }
-
-  /**
    * Handle the wait for the initial resources to be loaded
    */
   handleResourcesWaitedFor() {
@@ -518,7 +505,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
   /**
    * Handle the resource file import result
-   * @param The import result
+   * @param result The import result
    */
   async handleResourceFileImportResult(result) {
     await this.updateImportResult(result);
@@ -568,6 +555,12 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter
    */
   async search(filter) {
+    // To prevent the filtered resources to be loaded before the columns
+    if (this.state.columnsResourceSetting === null) {
+      this.setState({filter});
+      return;
+    }
+
     const isRecentlyModifiedFilter = filter.type === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
     const searchOperations = {
       [ResourceWorkspaceFilterTypes.ROOT_FOLDER]: this.searchByRootFolder.bind(this),
@@ -843,22 +836,22 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /** Resource Sorter **/
 
   /**
-   * Update the resourcces sorter given a property name
+   * Update the resources sorter given a property name
    * @param propertyName
    */
   async updateSorter(propertyName) {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
     const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
-    const sorter = {propertyName, asc};
-    await this.setState({sorter});
+    const sorter = new SorterEntity({propertyName, asc});
+    this.setState({sorter}, () => this.updateGridSetting());
   }
 
   /**
    * Reset the user sorter
    */
   async resetSorter() {
-    const sorter = {propertyName: 'modified', asc: false};
-    this.setState({sorter});
+    const sorter = new SorterEntity({propertyName: 'modified', asc: false});
+    this.setState({sorter}, () => this.updateGridSetting());
   }
 
   /**
@@ -1000,7 +993,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
   /**
    * Update the resource file import result
-   * @param The import result
+   * @param result The import result
    */
   async updateImportResult(result) {
     await this.setState({resourceFileImportResult: result});
@@ -1018,16 +1011,50 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Handle the columns resources configuration
+   *
+   * @return {Promise<void>}
+   */
+  async loadGridResourceSetting() {
+    const gridUserSettingEntity = await this.gridResourceUserSetting.getSetting();
+    // Merge the columns setting collection by ID
+    const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting);
+    if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
+      columnsResourceSetting.removeById("totp");
+    }
+    const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
+    // process the search after the grid setting is loaded
+    this.setState({columnsResourceSetting, sorter}, () => this.search(this.state.filter));
+  }
+
+  /**
    * Handle change column view
    * @param id The column id
    * @param show The boolean to show or hide column
    */
-  handleChangeColumnView(id, show) {
-    const columnsResources = [...this.state.columnsResources];
-    const index = columnsResources.findIndex(column => column.id === id);
-    // Update the show value
-    columnsResources[index].show = show;
-    this.setState({columnsResources});
+  async handleChangeColumnView(id, show) {
+    const columnsResourceSetting = new ColumnsResourceSettingCollection(this.state.columnsResourceSetting.toDto());
+    columnsResourceSetting.updateColumnShowValueFromDefault(id, show);
+    this.setState({columnsResourceSetting}, () => this.updateGridSetting());
+  }
+
+  /**
+   * Handle change columns setting
+   * @param columns
+   */
+  async handleChangeColumnsSettings(columns) {
+    // Merge the columns setting
+    const columnsResourceSetting = this.state.columnsResourceSetting.deepMerge(new ColumnsResourceSettingCollection(columns));
+    this.setState({columnsResourceSetting}, () => this.updateGridSetting());
+  }
+
+  /**
+   * Update the columns setting
+   * @return {Promise<void>}
+   */
+  async updateGridSetting() {
+    const gridUserSettingEntity = new GridUserSettingEntity({columns_setting: this.state.columnsResourceSetting.toDto(), sorter: this.state.sorter.toDto()});
+    await this.gridResourceUserSetting.setSetting(gridUserSettingEntity);
   }
 
   /**

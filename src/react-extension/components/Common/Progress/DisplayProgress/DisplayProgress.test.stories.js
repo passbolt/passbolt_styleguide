@@ -2,7 +2,6 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import DisplayProgress from "./DisplayProgress";
 
-
 export default {
   title: 'Components/Common/DisplayProgress',
   component: DisplayProgress
@@ -16,14 +15,14 @@ const Template = args =>
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: {
+  progressContext: {
     progressDialogProps: {}
   }
 };
 
 export const ProgressMessage = Template.bind({});
 ProgressMessage.args = {
-  context: {
+  progressContext: {
     progressDialogProps: {
       title: "Title",
       goals: 100,

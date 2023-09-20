@@ -35,7 +35,7 @@ each(scenarios).describe("GetUrlForSsoIdentificationService", scenario => {
   describe(`GetUrlForSsoIdentificationService::getUrl (with provider '${scenario.providerId}')`, () => {
     it('Should return an URL for SSO identification given the provider id', async() => {
       expect.assertions(3);
-      const baseUrl = "http://localhost:6006/";
+      const baseUrl = "http://localhost:6006";
       const apiClientOptions = new ApiClientOptions()
         .setBaseUrl(baseUrl);
 

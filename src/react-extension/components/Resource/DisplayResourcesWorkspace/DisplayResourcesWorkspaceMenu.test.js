@@ -117,12 +117,12 @@ describe("See Workspace Menu", () => {
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
 
       await page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
 
       expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id, {showProgress: true});
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -136,12 +136,12 @@ describe("See Workspace Menu", () => {
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => 'secret-copy');
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
 
       await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
 
       expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id, {showProgress: true});
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
@@ -159,8 +159,8 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.menuColumnViewItem(3)).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(3));
       expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('username', false);
-      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(3));
-      expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('username', true);
+      await page.displayMenu.clickOnMenu(page.displayMenu.menuColumnViewItem(6));
+      expect(propsOneResourceOwned.resourceWorkspaceContext.onChangeColumnView).toHaveBeenCalledWith('uri', true);
     });
 
     it('As LU I can unselect a column resource', async() => {

@@ -183,16 +183,20 @@
             }
           }
         }
-        &.password {
+        &.password, &.totp {
           .value {
             .secret {
               float: left;
               max-width: calc(100% - 3rem); // password field - password preview button
               overflow: hidden;
               text-overflow: ellipsis;
+
+              .svg-icon.timer {
+                margin-left: .5rem;
+              }
             }
           }
-          .password-view {
+          .password-view, .totp-view {
             display: flex;
             align-items: center;
             width: 2.2rem;

@@ -89,42 +89,42 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * Whenever the component has updated in terms of props or state
    * @param prevProps
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleRouteChange(prevProps.location);
+  componentDidUpdate(prevProps) {
+    this.handleRouteChange(prevProps.location);
   }
 
   /**
    * Handle save enabled
    */
-  async handleSaveEnabled() {
-    await this.setState({can: {...this.state.can, save: true}});
+  handleSaveEnabled() {
+    this.setState({can: {...this.state.can, save: true}});
   }
 
   /**
    * Handle must save settings
    */
-  async handleMustSaveSettings() {
-    await this.setState({must: {...this.state.must, save: true}});
+  handleMustSaveSettings() {
+    this.setState({must: {...this.state.must, save: true}});
   }
 
   /**
    * Handle must edit subscription key
    */
-  async handleMustEditSubscriptionKey() {
-    await this.setState({must: {...this.state.must, editSubscriptionKey: true}});
+  handleMustEditSubscriptionKey() {
+    this.setState({must: {...this.state.must, editSubscriptionKey: true}});
   }
 
   /**
    * Handle must refresh subscription key
    */
-  async handleMustRefreshSubscriptionKey() {
-    await this.setState({must: {...this.state.must, refreshSubscriptionKey: true}});
+  handleMustRefreshSubscriptionKey() {
+    this.setState({must: {...this.state.must, refreshSubscriptionKey: true}});
   }
 
   /**
    * Handle reset state settings
    */
-  async handleResetActionsSettings() {
+  handleResetActionsSettings() {
     const must = {
       save: false,
       test: false,
@@ -132,24 +132,24 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       editSubscriptionKey: false,
       refreshSubscriptionKey: false
     };
-    await this.setState({must});
+    this.setState({must});
   }
 
   /**
    * Handle the route location change
    * @param previousLocation Previous router location
    */
-  async handleRouteChange(previousLocation) {
+  handleRouteChange(previousLocation) {
     const hasLocationChanged = this.props.location.key !== previousLocation.key;
     if (hasLocationChanged) {
-      await this.handleAdministrationMenuRouteChange();
+      this.handleAdministrationMenuRouteChange();
     }
   }
 
   /**
    * Handle the administration menu route change
    */
-  async handleAdministrationMenuRouteChange() {
+  handleAdministrationMenuRouteChange() {
     const isMfaLocation = this.props.location.pathname.includes('mfa');
     const isMfaPolicyLocation = this.props.location.pathname.includes('mfa-policy');
     const isPasswordPoliciesLocation = this.props.location.pathname.includes('password-policies');
@@ -162,6 +162,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isSelfRegistrationLocation = this.props.location.pathname.includes('self-registration');
     const isSso = this.props.location.pathname.includes('sso');
     const rbac = this.props.location.pathname.includes('rbac');
+    const isUserPassphrasePolicies = this.props.location.pathname.includes('user-passphrase-policies');
     const can = {
       save: false,
       test: false,
@@ -178,7 +179,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     let selectedAdministration;
 
     if (isMfaPolicyLocation) {
-      selectedAdministration =  AdministrationWorkspaceMenuTypes.MFA_POLICY;
+      selectedAdministration = AdministrationWorkspaceMenuTypes.MFA_POLICY;
     } else if (isPasswordPoliciesLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES;
     } else if (isMfaLocation) {
@@ -201,8 +202,10 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.SSO;
     } else if (rbac) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.RBAC;
+    } else if (isUserPassphrasePolicies) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES;
     }
-    await this.setState({selectedAdministration, can, must});
+    this.setState({selectedAdministration, can, must});
   }
 
   /**
@@ -225,7 +228,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * @param keyDto The new subscription key
    * @return {Promise<object>}
    */
-  async onUpdateSubscriptionKeyRequested(keyDto) {
+  onUpdateSubscriptionKeyRequested(keyDto) {
     return this.props.context.port.request("passbolt.subscription.update", keyDto);
   }
 
@@ -289,5 +292,6 @@ export const AdministrationWorkspaceMenuTypes = {
   SMTP_SETTINGS: 'SMTP-SETTINGS', // Smtp settings administration menu selected
   SELF_REGISTRATION: 'SELF-REGISTRATION', // Self registration settings administration menu selected
   SSO: "SSO", // SSO administration menu selected
-  RBAC: "RBAC" // RBAC administration menu selected
+  RBAC: "RBAC", // RBAC administration menu selected
+  USER_PASSPHRASE_POLICIES: "USER-PASSPHRASE-POLICIES", // User Passphrase Policies administration menu selected
 };

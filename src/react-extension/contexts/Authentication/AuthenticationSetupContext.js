@@ -92,6 +92,7 @@ export class AuthenticationSetupContextProvider extends React.Component {
       gpgKeyGenerated: null, // Did the user generate a key?
       error: null, // The current error
       rememberMe: false, // The user remember me choice
+      userPassphrasePolicies: null, // the current user passphrase policies to use
 
       // Public workflow mutators.
       goToGenerateGpgKey: this.goToGenerateGpgKey.bind(this), // Whenever the user wants to go to the generate key step.
@@ -138,12 +139,13 @@ export class AuthenticationSetupContextProvider extends React.Component {
     const isFirstInstall = await this.props.context.port.request('passbolt.setup.is-first-install');
     const isChromeBrowser = detectBrowserName() === BROWSER_NAMES.CHROME;
     await this.props.context.port.request('passbolt.setup.start');
+    const userPassphrasePolicies = await this.props.context.port.request('passbolt.setup.get-user-passphrase-policies');
     // In case of error the background page should just disconnect the extension setup application.
     let state = AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY;
     if (isFirstInstall && isChromeBrowser) {
       state = AuthenticationSetupWorkflowStates.INTRODUCE_EXTENSION;
     }
-    await this.setState({state});
+    this.setState({state, userPassphrasePolicies});
   }
 
   /**
@@ -155,10 +157,9 @@ export class AuthenticationSetupContextProvider extends React.Component {
 
   /**
    * Whenever the user wants to go to the generate gpg key step.
-   * @returns {Promise<void>}
    */
-  async goToGenerateGpgKey() {
-    await this.setState({
+  goToGenerateGpgKey() {
+    this.setState({
       state: AuthenticationSetupWorkflowStates.GENERATE_GPG_KEY
     });
   }

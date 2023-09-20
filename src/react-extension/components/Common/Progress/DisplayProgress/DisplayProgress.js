@@ -12,7 +12,7 @@
  * @since         2.12.0
  */
 import React, {Component} from "react";
-import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import {withProgress} from "../../../../contexts/ProgressContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import Icon from "../../../../../shared/components/Icons/Icon";
@@ -82,7 +82,7 @@ class DisplayProgress extends Component {
    * @returns {boolean}
    */
   isInfiniteProgressMode() {
-    return !this.props.context.progressDialogProps.goals;
+    return !this.props.progressContext.progressDialogProps.goals;
   }
 
   /**
@@ -100,7 +100,7 @@ class DisplayProgress extends Component {
    * @return {number}
    */
   calculateProgress() {
-    if (this.props.context.progressDialogProps?.goals > 0) {
+    if (this.props.progressContext.progressDialogProps?.goals > 0) {
       return this.calculateGoalsProgress();
     } else {
       return this.calculateInfiniteProgress();
@@ -120,8 +120,8 @@ class DisplayProgress extends Component {
    * @return {number}
    */
   calculateGoalsProgress() {
-    const completed = this.props.context.progressDialogProps.completed || 0;
-    let progress = Math.round((100 * completed) / this.props.context.progressDialogProps.goals);
+    const completed = this.props.progressContext.progressDialogProps.completed || 0;
+    let progress = Math.round((100 * completed) / this.props.progressContext.progressDialogProps.goals);
     if (progress > 100) {
       progress = 100;
     }
@@ -141,7 +141,7 @@ class DisplayProgress extends Component {
         <div className="dialog">
           <div className="dialog-header">
             <span className="dialog-title-wrapper">
-              <h2>{this.props.context.progressDialogProps.title || <Trans>Please wait...</Trans>}</h2>
+              <h2>{this.props.progressContext.progressDialogProps.title || <Trans>Please wait...</Trans>}</h2>
             </span>
           </div>
           <div className="dialog-content">
@@ -153,7 +153,7 @@ class DisplayProgress extends Component {
                 </span>
                 {!this.isInfiniteProgressMode() &&
                   <div className="progress-details">
-                    <span className="progress-step-label">{this.props.context.progressDialogProps.message || <Trans>Please wait...</Trans>}</span>
+                    <span className="progress-step-label">{this.props.progressContext.progressDialogProps.message || <Trans>Please wait...</Trans>}</span>
                     <span className="progress-percent">{progress}%</span>
                   </div>
                 }
@@ -170,7 +170,7 @@ class DisplayProgress extends Component {
 }
 
 DisplayProgress.propTypes = {
-  context: PropTypes.any, // The application context
+  progressContext: PropTypes.any, // The progress context
 };
 
-export default withAppContext(withTranslation("common")(DisplayProgress));
+export default withProgress(withTranslation("common")(DisplayProgress));

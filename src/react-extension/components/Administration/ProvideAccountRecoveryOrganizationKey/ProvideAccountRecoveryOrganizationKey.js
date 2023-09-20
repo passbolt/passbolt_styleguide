@@ -163,30 +163,13 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
    */
   handlePasswordInputKeyUp() {
     if (this.state.hasAlreadyBeenValidated) {
-      const state = this.validatePasswordInput();
-      this.setState(state);
+      this.setState({passwordError: ""});
     } else {
       const hasResourcePasswordMaxLength = this.state.password.length >= RESOURCE_PASSWORD_MAX_LENGTH;
       const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
       const passwordWarning = hasResourcePasswordMaxLength ? warningMessage : '';
       this.setState({passwordWarning});
     }
-  }
-
-  /**
-   * Validate the password input.
-   * @return {Promise}
-   */
-  validatePasswordInput() {
-    const password = this.state.password;
-    let passwordError = "";
-    if (!password.length) {
-      passwordError = this.translate("A password is required.");
-    }
-
-    return new Promise(resolve => {
-      this.setState({passwordError: passwordError}, resolve);
-    });
   }
 
   /**
@@ -304,11 +287,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
       expectedFingerprintError: ""
     });
 
-    // Validate the form inputs.
-    await Promise.all([
-      this.validateKeyInput(),
-      this.validatePasswordInput()
-    ]);
+    await this.validateKeyInput();
 
     return this.state.keyError === "" && this.state.passwordError === "";
   }
@@ -421,7 +400,7 @@ class ProvideAccountRecoveryOrganizationKey extends React.Component {
                 </div>
               }
             </div>
-            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
+            <div className={`input-password-wrapper input ${this.state.passwordError ? "error" : ""}`}>
               <label htmlFor="generate-organization-key-form-password">
                 <Trans>Organization key passphrase</Trans>
                 {this.state.passwordWarning &&

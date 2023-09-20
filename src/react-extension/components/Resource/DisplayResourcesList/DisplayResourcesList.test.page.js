@@ -24,7 +24,6 @@ import DisplayResourcesList from "./DisplayResourcesList";
 export default class DisplayResourcesListPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {
@@ -113,7 +112,7 @@ export default class DisplayResourcesListPage {
         return Boolean(element.querySelector('.cell-password .password-view'));
       },
       get copyPasswordLink() {
-        return element.querySelector('.cell-password .secret button');
+        return element.querySelector('.cell-password .secret-copy button');
       },
       async selectFavorite() {
         const favorite = element.querySelector('.cell-favorite button');

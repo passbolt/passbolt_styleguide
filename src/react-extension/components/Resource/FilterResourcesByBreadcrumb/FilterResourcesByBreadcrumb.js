@@ -97,6 +97,14 @@ class FilterResourcesByBreadcrumb extends Component {
   }
 
   /**
+   * Is resources not null
+   * @return {boolean}
+   */
+  get isResourceNotNull() {
+    return this.props.resourceWorkspaceContext.filteredResources !== null;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -111,7 +119,9 @@ class FilterResourcesByBreadcrumb extends Component {
   render() {
     return (
       <Breadcrumbs items={this.items}>
-        <span className="chips">{this.props.resourceWorkspaceContext.filteredResources.length}</span>
+        {this.isResourceNotNull &&
+          <span className="chips">{this.props.resourceWorkspaceContext.filteredResources.length}</span>
+        }
       </Breadcrumbs>
     );
   }

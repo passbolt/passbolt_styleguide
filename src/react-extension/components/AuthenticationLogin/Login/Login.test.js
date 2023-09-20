@@ -31,12 +31,14 @@ describe("Login", () => {
     {displayAs: LoginVariations.RECOVER}, // Account recovery check passphrase
   ]).describe("Common behavior to all context", _props => {
     it(`As AN I should be able to enter my secret key passphrase, scenario: ${JSON.stringify(_props)}`, async() => {
+      expect.assertions(2);
       const props = defaultProps(_props);
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
+
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(2);
       const expectedPassphrase = "some passphrase";
       await page.fillPassphrase(expectedPassphrase);
       expect(page.passphrase).toBe(expectedPassphrase);
@@ -45,12 +47,14 @@ describe("Login", () => {
     });
 
     it(`As AN I should be able to remember my passphrase if the feature is disabled, scenario: ${JSON.stringify(_props)}`, async() => {
+      expect.assertions(2);
       const props = defaultProps({..._props, canRememberMe: false});
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
+
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(2);
       expect(page.canRememberMe).toBeFalsy();
       const expectedPassphrase = "some passphrase";
       await page.fillPassphrase(expectedPassphrase);
@@ -59,12 +63,14 @@ describe("Login", () => {
     });
 
     it(`As AN I should be able to remember my passphrase if the feature is enabled, scenario: ${JSON.stringify(_props)}`, async() => {
+      expect.assertions(2);
       const props = defaultProps({..._props, canRememberMe: true});
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
+
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(2);
       expect(page.canRememberMe).toBeTruthy();
       const expectedPassphrase = "some passphrase";
       await page.fillPassphrase(expectedPassphrase);
@@ -74,12 +80,12 @@ describe("Login", () => {
     });
 
     it(`As AN I should be able to click on the secondary action, scenario: ${JSON.stringify(_props)}`, async() => {
+      expect.assertions(1);
       const props = defaultProps({..._props});
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(1);
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
@@ -88,6 +94,7 @@ describe("Login", () => {
       let checkResolve = null;
       const onSignIn = jest.fn(() => new Promise(resolve => checkResolve = resolve));
       const props = defaultProps({..._props, onSignIn});
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
       const page = new LoginPage(props);
 
       await waitFor(() => {});
@@ -107,6 +114,7 @@ describe("Login", () => {
       let checkResolve = null;
       const onSignIn = jest.fn(() => new Promise(resolve => checkResolve = resolve));
       const props = defaultProps({..._props, onSignIn});
+      props.context.port.addRequestListener('passbolt.remember-me.get-user-latest-choice', async() => false);
       const page = new LoginPage(props);
 
       await waitFor(() => {});
@@ -123,12 +131,12 @@ describe("Login", () => {
     });
 
     it(`As AN I should see an error if the passphrase is empty after submitting the form (first validation), scenario: ${JSON.stringify(_props)}`, async() => {
+      expect.assertions(1);
       const props = defaultProps(_props);
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(1);
       const emptyPassphrase = ' ';
       await page.fillPassphrase(emptyPassphrase);
       await page.signIn();
@@ -136,6 +144,7 @@ describe("Login", () => {
     });
 
     it(`As AN I should see an error if the passphrase cannot decrypt the secret key, scenario: ${JSON.stringify(_props)}`, async() => {
+      expect.assertions(1);
       const expectedError = {name: 'InvalidMasterPasswordError'};
       const onCheckPassphrase = jest.fn(() => Promise.reject(expectedError));
       const props = defaultProps({..._props, onCheckPassphrase});
@@ -143,7 +152,6 @@ describe("Login", () => {
 
       await waitFor(() => {});
 
-      expect.assertions(1);
       await page.fillPassphrase('some passphrase');
       await page.signIn();
       expect(page.hasInvalidPassphraseError).toBeTruthy();
@@ -152,12 +160,12 @@ describe("Login", () => {
 
   describe('As AN on the Login workflow', () => {
     it('As AN on the Login workflow I should be able to be prompted to enter a passphrase and sign in', async() => {
+      expect.assertions(2);
       const props = defaultProps({displayAs: LoginVariations.SIGN_IN});
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Sign in");
       expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
     });
@@ -177,12 +185,12 @@ describe("Login", () => {
 
   describe('As AN on the Account Recovery workflow', () => {
     it('As AN on the account recovery workflow I should be able to be prompted to enter a passphrase and complete the account recovery', async() => {
+      expect.assertions(2);
       const props = defaultProps({displayAs: LoginVariations.ACCOUNT_RECOVERY});
       const page = new LoginPage(props);
 
       await waitFor(() => {});
 
-      expect.assertions(2);
       expect(page.signInButton.textContent).toBe("Complete recovery");
       expect(page.secondaryActionLink.textContent).toBe("Help, I lost my passphrase.");
     });

@@ -326,7 +326,7 @@ class FilterUsersByGroup extends React.Component {
                 </div>
               </div>
               <div className="dropdown right-cell more-ctrl">
-                <button type="button" className={`link no-border ${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></button>
+                <button type="button" className={`${this.state.moreTitleMenuOpen ? "open" : ""}`} onClick={this.handleTitleMoreClickEvent}><Icon name="3-dots-h"/></button>
               </div>
             </div>
           </li>
@@ -365,7 +365,7 @@ class FilterUsersByGroup extends React.Component {
                       <button
                         type="button"
                         onClick={event => this.handleMoreClickEvent(event, group)}
-                        className={`link no-border ${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
+                        className={`${this.state.moreMenuOpenGroupId === group.id ? "open" : ""}`}>
                         <Icon name="3-dots-h"/>
                       </button>
                     </div>

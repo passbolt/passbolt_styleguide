@@ -50,7 +50,7 @@ class Icon extends Component {
    */
   render() {
     return (
-      <span className={this.getClassName()} onClick={this.props.onClick}>
+      <span className={this.getClassName()} onClick={this.props.onClick} style={this.props.style}>
         {/*
           * @copyright     Copyright (c) 2013-2017 Cole Bemis (https://github.com/feathericons/feather)
           * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
@@ -889,15 +889,13 @@ class Icon extends Component {
             <path d="M13.3461 5.735L15.2061 3.875" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         }
-        {/*
-          * @copyright     Copyright (c) 2013-2017 Cole Bemis (https://github.com/feathericons/feather)
-          * @copyright     Copyright (c) 2021 Passbolt SA (https://www.passbolt.com)
-          * @license       https://opensource.org/licenses/MIT MIT License
-        */}
         {this.props.name === 'lock-open' &&
-          <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10.3155 7.4H1.73545C1.31019 7.4 0.965454 7.74475 0.965454 8.17001V14.23C0.965454 14.6553 1.31019 15 1.73545 15H10.3155C10.7407 15 11.0854 14.6553 11.0854 14.23V8.17001C11.0854 7.74475 10.7407 7.4 10.3155 7.4Z" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinejoin="round"/>
-            <path d="M2.57545 7.4V4.4C2.57413 3.94657 2.66246 3.49735 2.83537 3.07818C3.00828 2.65901 3.26237 2.27817 3.58299 1.95754C3.90362 1.63692 4.28446 1.38283 4.70363 1.20992C5.1228 1.03701 5.57202 0.948684 6.02545 0.950004C6.84173 0.948607 7.6319 1.23752 8.25476 1.76511C8.87762 2.29271 9.29256 3.02462 9.42545 3.83001" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none">
+              <rect height="7.37" rx=".75" stroke="var(--icon-color)" strokeLinejoin="round" strokeWidth="var(--icon-stroke-width)" width="9.81" x="3.09" y="7.43"/>
+              <path d="m14.39 6.15v-1.61c0-1.85-.68-3.35-1.52-3.35-.84 0-1.52 1.5-1.52 3.35v2.89" stroke="var(--icon-color)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="var(--icon-stroke-width)"/>
+              <path d="m0 0h16v16h-16z"/>
+            </g>
           </svg>
         }
         {/*
@@ -906,7 +904,7 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'lock' &&
-          <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.2155 7.41H1.90546C1.49124 7.41 1.15546 7.74579 1.15546 8.16V14.03C1.15546 14.4442 1.49124 14.78 1.90546 14.78H10.2155C10.6297 14.78 10.9655 14.4442 10.9655 14.03V8.16C10.9655 7.74579 10.6297 7.41 10.2155 7.41Z" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinejoin="round"/>
             <path d="M2.72546 7.39999V4.52C2.72546 3.63153 3.07841 2.77945 3.70666 2.1512C4.3349 1.52295 5.18699 1.17 6.07546 1.17V1.17C6.96394 1.17 7.81603 1.52295 8.44427 2.1512C9.07252 2.77945 9.42546 3.63153 9.42546 4.52V7.39999" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -1170,6 +1168,12 @@ class Icon extends Component {
           </svg>
         }
 
+        {this.props.name === 'timer' &&
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse rx="8" ry="8" transform="translate(10 10)" fill="none" stroke="var(--timer-background)" strokeWidth="var(--timer-stroke-width)"/>
+            <ellipse id="timer-progress" rx="8" ry="8" transform="matrix(0-1 1 0 10 10)" fill="none" stroke="var(--timer-color)"  strokeLinecap="round" strokeWidth="var(--timer-stroke-width)"/>
+          </svg>
+        }
       </span>
     );
   }
@@ -1188,7 +1192,8 @@ Icon.propTypes = {
   big: PropTypes.bool,
   dim: PropTypes.bool,
   baseline: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  style: PropTypes.object
 };
 
 export default Icon;

@@ -106,7 +106,7 @@ class Row extends Component {
   render() {
     const isSelected = this.isItemSelected;
     return (
-      <tr id={this.item.id} draggable="true" className={isSelected ? "selected" : ""}
+      <tr id={this.item.id} draggable="true" className={`${this.props.className} ${isSelected ? "selected" : ""}`}
         onClick={this.handleClick}
         onContextMenu={this.handleContextMenu}
         onDragStart={this.handleDragStart}
@@ -122,6 +122,7 @@ class Row extends Component {
 Row.propTypes = {
   tableContext: PropTypes.any, // The table context
   item: PropTypes.object.isRequired, // The index of the column
+  className: PropTypes.string, // The class name
   onClick: PropTypes.func, // The onClick event
   onContextMenu: PropTypes.func, // The onContextMenu event
   onDragStart: PropTypes.func, // The onDragStart event
