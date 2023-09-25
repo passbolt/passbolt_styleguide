@@ -28,6 +28,7 @@ import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withProgress} from "../../../contexts/ProgressContext";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -77,6 +78,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleCopyUsernameClickEvent = this.handleCopyUsernameClickEvent.bind(this);
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleCopySecretClickEvent = this.handleCopySecretClickEvent.bind(this);
+    this.handleCopyTotpClickEvent = this.handleCopyTotpClickEvent.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
     this.handleExportClickEvent = this.handleExportClickEvent.bind(this);
     this.handleViewColumnsClickEvent = this.handleViewColumnsClickEvent.bind(this);
@@ -198,6 +200,15 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Decrypt the resource secret
+   * @returns {Promise<object>} The secret in plaintext format
+   * @throw UserAbortsOperationError If the user cancel the operation
+   */
+  decryptResourceSecret() {
+    return this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
+  }
+
+  /**
    * Copy password from dto to clipboard
    * Support original password (a simple string) and composed objects)
    *
@@ -221,7 +232,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
     this.props.progressContext.open(this.props.t('Decrypting secret'));
     try {
-      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id, {showProgress: true});
+      plaintextSecretDto = await this.decryptResourceSecret();
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
@@ -237,6 +248,38 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     await this.copyPasswordToClipboard(plaintextSecretDto);
     this.props.resourceWorkspaceContext.onResourceCopied();
     this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
+  }
+
+  /**
+   * handle copy to clipboard the totp of the selected resource
+   */
+  async handleCopyTotpClickEvent() {
+    let plaintextSecretDto;
+    this.handleCloseMoreMenu();
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret();
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
   }
 
   /**
@@ -357,6 +400,38 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Can copy password
+   * @returns {boolean}
+   */
+  canCopyPassword() {
+    return this.hasOneResourceSelected() && this.isPasswordResources;
+  }
+
+  /**
+   * Is password resource
+   * @return {boolean}
+   */
+  get isPasswordResources() {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(this.selectedResources[0].resource_type_id);
+  }
+
+  /**
+   * Can copy totp
+   * @returns {boolean}
+   */
+  canCopyTotp() {
+    return this.hasOneResourceSelected() && this.isTotpResources;
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isTotpResources() {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.selectedResources[0].resource_type_id);
+  }
+
+  /**
    * Has at least one action of the more menu allowed.
    * @return {boolean}
    */
@@ -403,6 +478,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   get columnsResourceSetting() {
     return this.props.resourceWorkspaceContext.columnsResourceSetting?.items;
+  }
+
+  /**
+   * Can use Totp
+   * @return {*}
+   */
+  get canUseTotp() {
+    return this.props.context.siteSettings.canIUse('totpResourceTypes');
   }
 
   /**
@@ -490,7 +573,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                       <div className="row">
                         <div className="main-cell-wrapper">
                           <div className="main-cell">
-                            <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
+                            <button type="button" disabled={!this.canCopyPassword()} className="link no-border"
                               onClick={this.handleCopySecretClickEvent}>
                               <span><Trans>Copy password to clipboard</Trans></span>
                             </button>
@@ -499,6 +582,32 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                       </div>
                     </li>
                   }
+                  {this.canUseTotp &&
+                    <li id="totp_action">
+                      <div className="row">
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button type="button" disabled={!this.canCopyTotp()} className="link no-border"
+                              onClick={this.handleCopyTotpClickEvent}>
+                              <span><Trans>Copy TOTP to clipboard</Trans></span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  }
+                  <li id="permalink_action" className="separator-after">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
+                            onClick={this.handleCopyPermalinkClickEvent}>
+                            <span><Trans>Copy permalink to clipboard</Trans></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
                   <li id="delete_action">
                     <div className="row">
                       <div className="main-cell-wrapper">
@@ -506,18 +615,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                           <button type="button" disabled={!this.canUpdate()} className="link no-border"
                             onClick={this.handleDeleteClickEvent}>
                             <span><Trans>Delete</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li id="permalink_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
-                            onClick={this.handleCopyPermalinkClickEvent}>
-                            <span><Trans>Copy permalink to clipboard</Trans></span>
                           </button>
                         </div>
                       </div>

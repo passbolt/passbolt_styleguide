@@ -84,6 +84,14 @@ export default class DisplayResourcesListContextualMenuPage {
    * Returns the item.
    * @return {HTMLElement}
    */
+  get copyTotpItem() {
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#totp');
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
   get editItem() {
     return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#edit');
   }
@@ -112,28 +120,35 @@ export default class DisplayResourcesListContextualMenuPage {
   }
 
   /**
-   * Click on the menu copy username folder
+   * Click on the menu copy username
    */
   async copyUsername() {
     await this.click(this.copyUsernameItem);
   }
 
   /**
-   * Click on the menu copy password folder
+   * Click on the menu copy password
    */
   async copyPassword() {
     await this.click(this.copyPasswordItem);
   }
 
   /**
-   * Click on the menu copy uri folder
+   * Click on the menu copy Totp
+   */
+  async copyTotp() {
+    await this.click(this.copyTotpItem);
+  }
+
+  /**
+   * Click on the menu copy uri
    */
   async copyUri() {
     await this.click(this.copyUriItem);
   }
 
   /**
-   * Click on the menu copy permalink folder
+   * Click on the menu copy permalink
    */
   async copyPermalink() {
     await this.click(this.copyPermalinkItem);
