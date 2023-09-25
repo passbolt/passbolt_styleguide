@@ -15,7 +15,7 @@
 /**
  * Unit tests on FolderCreateDialog in regard of specifications
  */
-import {defaultAppContext, defaultProps} from "./CreateResourceFolder.test.data";
+import {defaultProps} from "./CreateResourceFolder.test.data";
 import CreateResourceFolderPage from "./CreateResourceFolder.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
@@ -27,27 +27,25 @@ const truncatedWarningMessage = "Warning: this is the maximum size for this fiel
 describe("Create Folder", () => {
   let page; // The page to test against
   let props = null; // The page props
-  let context = null; // The page context
 
   beforeEach(() => {
-    context = defaultAppContext(); // The applicative context
     props = defaultProps(); // The props to pass
-    page = new CreateResourceFolderPage(context, props);
+    page = new CreateResourceFolderPage(props);
   });
 
   describe('As LU I should create a folder', () => {
     it('As System I should send a create request', async() => {
       expect.assertions(1);
-      const expectedParameters =  ["passbolt.folders.create", {folder_parent_id: "some folder parent id", name: "My super folder"}];
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      const expectedParameters =  ["passbolt.folders.create", {folder_parent_id: props.folderParentId, name: "My super folder"}];
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       await page.create({name: 'My super folder'});
-      expect(context.port.request).toHaveBeenCalledWith(...expectedParameters);
+      expect(props.context.port.request).toHaveBeenCalledWith(...expectedParameters);
     });
 
     it('As LU I should see a success message when I successfully created a folder', async() => {
       expect.assertions(1);
       const expectedMessage = "The folder has been added successfully";
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(jest.fn());
       await page.create({name: 'My super folder'});
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith(expectedMessage);
@@ -56,16 +54,14 @@ describe("Create Folder", () => {
     it('As LU I should see the newly created folder as selected and scrolled', async() => {
       expect.assertions(1);
       const folderId = 'some folder id';
-      const expectedParameters = ["passbolt.folders.select-and-scroll-to", folderId];
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: folderId}));
-      jest.spyOn(context.port, 'emit').mockImplementationOnce(jest.fn());
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: folderId}));
       await page.create({name: 'My super folder'});
-      expect(context.port.emit).toHaveBeenCalledWith(...expectedParameters);
+      expect(props.history.push).toHaveBeenCalledWith(`/app/passwords/view/${folderId}`);
     });
 
     it('As LU I should see the close of the dialog', async() => {
       expect.assertions(1);
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       jest.spyOn(props, 'onClose').mockImplementationOnce(jest.fn());
       await page.create({name: 'My super folder'});
       expect(props.onClose).toHaveBeenCalled();
@@ -90,7 +86,7 @@ describe("Create Folder", () => {
     it('AS LU I should stays on the dialog if the user have not input the passphrase', async() => {
       expect.assertions(1);
       const error = {name: "UserAbortsOperationError"};
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
       jest.spyOn(props.actionFeedbackContext, 'displaySuccess').mockImplementationOnce(jest.fn());
       await page.create({name: 'My super folder'});
       expect(props.actionFeedbackContext.displaySuccess).not.toHaveBeenCalled();
@@ -99,7 +95,7 @@ describe("Create Folder", () => {
     it('AS LU I should see the error message when the folder creation failed', async() => {
       expect.assertions(1);
       const error = new Error("Some error message");
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => Promise.reject(error));
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn());
       await page.create({name: 'My super folder'});
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: error});
@@ -125,7 +121,7 @@ describe("Create Folder", () => {
   describe('AS LU I should not perform actions during the folder creation', () => {
     it('AS LU I should not cancel during the folder creation', async() => {
       expect.assertions(1);
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canCancel).toBeFalsy();
       };
@@ -134,7 +130,7 @@ describe("Create Folder", () => {
 
     it('AS LU I should not close during the folder creation', async() => {
       expect.assertions(1);
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canClose).toBeFalsy();
       };
@@ -143,7 +139,7 @@ describe("Create Folder", () => {
 
     it('AS LU I should not change data during the folder creation', async() => {
       expect.assertions(1);
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canChangeData).toBeFalsy();
       };
@@ -152,7 +148,7 @@ describe("Create Folder", () => {
 
     it('AS LU I should not re-submit during the folder creation', async() => {
       expect.assertions(1);
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: 'some folder id'}));
       const inProgressFn = () => {
         expect(page.canSubmit).toBeFalsy();
       };

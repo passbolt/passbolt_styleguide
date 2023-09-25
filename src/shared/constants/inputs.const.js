@@ -28,3 +28,5 @@ export const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
 export const RESOURCE_DESCRIPTION_MAX_LENGTH = 10000;
 /** Resource uri max length */
 export const RESOURCE_URI_MAX_LENGTH = 1024;
+/** Resource totp key max length */
+export const RESOURCE_TOTP_KEY_MAX_LENGTH = 1024;

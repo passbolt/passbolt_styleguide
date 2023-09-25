@@ -42,6 +42,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps(data = {}) {
   const defaultData = {
+    folderParentId: null,
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     onClose: () => {},

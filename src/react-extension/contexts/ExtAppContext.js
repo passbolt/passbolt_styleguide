@@ -89,10 +89,7 @@ class ExtAppContextProvider extends React.Component {
       // passphrase dialog
       passphraseRequestId: '',
 
-      // Resource create / edit / delete dialogs
-      resourceCreateDialogProps: {
-        folderParentId: null
-      },
+      // Resource edit / delete dialogs
 
       passwordEditDialogProps: {
         id: null
@@ -103,9 +100,6 @@ class ExtAppContextProvider extends React.Component {
 
       // folder dialogs
       folder: {},
-      folderCreateDialogProps: {
-        folderParentId: null
-      },
       folderMoveStrategyProps: {
         requestId: null,
         folderId: null,
