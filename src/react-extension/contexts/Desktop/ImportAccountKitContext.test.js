@@ -93,7 +93,7 @@ describe("ImportAccountKitContext", () => {
       jest.spyOn(importAccountKitContext, "flushAccountKit");
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
 
-      await importAccountKitContext.importAccountAndConnect();
+      await importAccountKitContext.importAccountAndConnect(passphrase);
 
       expect(importAccountKitContext.flushAccountKit).toHaveBeenCalled();
     });
@@ -103,7 +103,7 @@ describe("ImportAccountKitContext", () => {
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
 
-      await importAccountKitContext.importAccountAndConnect();
+      await importAccountKitContext.importAccountAndConnect(passphrase);
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth-import.import-account");
       expect(importAccountKitContext.state.state).toEqual(ImportAccountKitWorkflowStates.SIGNING_IN);
@@ -114,9 +114,9 @@ describe("ImportAccountKitContext", () => {
 
       jest.spyOn(props.context.port, "request").mockImplementation(() => jest.fn());
 
-      await importAccountKitContext.importAccountAndConnect();
+      await importAccountKitContext.importAccountAndConnect(passphrase);
 
-      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth-import.sign-in");
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.auth.login", passphrase);
     });
 
     it("should navigate to UNEXPECTED_ERROR_STATE in case of error", async() => {
