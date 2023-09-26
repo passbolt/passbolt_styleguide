@@ -89,6 +89,9 @@ class ManageAccountRecoveryUserSettings extends Component {
     try {
       await this.props.context.port.request("passbolt.account-recovery.save-user-settings", accountRecoveryUserSettingDto);
       this.props.accountRecoveryContext.setUserAccountRecoveryStatus(this.state.status);
+      // The logged-in user has to be refreshed to keep the local storage up to date and prevent to display again the enrollment
+      const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
+      this.props.context.setContext({loggedInUser});
       this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
       this.close();
     } catch (error) {
