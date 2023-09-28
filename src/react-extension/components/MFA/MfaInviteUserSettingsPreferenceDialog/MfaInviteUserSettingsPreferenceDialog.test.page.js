@@ -13,7 +13,7 @@
  */
 import {render, fireEvent, waitFor} from "@testing-library/react";
 import React from "react";
-import MockTranslationProvider from "../../test/mock/components/Internationalisation/MockTranslationProvider";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import MfaInviteUserSettingsPreferenceDialog from "./MfaInviteUserSettingsPreferenceDialog";
 
 /**
