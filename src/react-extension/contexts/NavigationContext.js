@@ -437,7 +437,6 @@ class NavigationContextProvider extends React.Component {
     await this.goTo("browser-extension", "/app/settings/desktop");
   }
 
-
   /**
    * Whenever the user wants to navigate to the users settings workspace account recovery section.
    * @returns {Promise<void>}

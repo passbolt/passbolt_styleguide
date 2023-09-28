@@ -19,15 +19,38 @@ export class TotpCodeGeneratorService {
    * @param {object} totpDto The totp DTO
    * @returns {string}
    */
-  static generate(totpDto) {
+  static createTotpObject(totpDto) {
     const totp = new OTPAuth.TOTP({
       algorithm:  totpDto.algorithm,
       digits: totpDto.digits,
       period: totpDto.period,
       secret: totpDto.secret_key,
+      issuer: totpDto.issuer,
+      label: totpDto.label,
       timestamp: Date.now()
     });
 
+    return totp;
+  }
+
+  /**
+   * Generate a TOTP code based on a TOTP DTO
+   * @param {object} totpDto The totp DTO
+   * @returns {string}
+   */
+  static generate(totpDto) {
+    const totp = this.createTotpObject(totpDto);
     return totp.generate();
+  }
+
+  /**
+   * Generate a TOTP code based on a TOTP DTO
+   * @param {object} totpDto The totp DTO
+   * @returns {string}
+   */
+  static generateUri(totpDto) {
+    const totp = this.createTotpObject(totpDto);
+    // Convert to Google Authenticator key URI
+    return totp.toString();
   }
 }

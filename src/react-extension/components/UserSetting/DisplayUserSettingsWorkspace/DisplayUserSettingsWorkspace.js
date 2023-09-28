@@ -35,6 +35,7 @@ import DisplayAccountRecoveryUserSettings from '../DisplayUserAccountRecovery/Di
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {withMfa} from '../../../contexts/MFAContext';
 import ExportAccountToDesktop from '../ExportAccountToDesktop/ExportAccountToDesktop';
+import OrchestrateMfaSettings from '../../MFA/OrchestrateMfaSettings/OrchestrateMfaSettings';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -119,6 +120,7 @@ class DisplayUserSettingsWorkspace extends React.Component {
             {this.canIUseAccountRecoveryCapability &&
             <Route path={`${path}/account-recovery`} component={DisplayAccountRecoveryUserSettings}></Route>
             }
+            <Route path={`${path}/mfa`} component={OrchestrateMfaSettings}></Route>
             <Route path={`${path}/keys`} component={DisplayUserGpgInformation}></Route>
           </div>
         </div>
