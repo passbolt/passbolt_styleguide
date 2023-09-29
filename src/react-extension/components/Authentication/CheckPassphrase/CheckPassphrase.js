@@ -153,7 +153,7 @@ class CheckPassphrase extends Component {
 
   /**
    * Evaluate if the passphrase is in dictionary
-   * @param {string} passphrase
+   * @param {string} passphrase the passphrase to evaluate
    * @return {Promise<void>}
    */
   async evaluatePassphraseIsInDictionary(passphrase) {
@@ -166,7 +166,8 @@ class CheckPassphrase extends Component {
 
     try {
       const result =  await this.pownedService.evaluateSecret(passphrase);
-      passphraseInDictionnary = result.inDictionary;
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passphraseInDictionnary = this.state.passphrase && result.inDictionary;
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
     } catch (error) {
       // If the service is unavailable don't block the user journey.
@@ -189,21 +190,21 @@ class CheckPassphrase extends Component {
    * @param event An input event
    */
   handleChangePassphrase(event) {
-    const passphrase = event.target.value;
-    let passphraseEntropy = null;
-    if (passphrase.length) {
-      passphraseEntropy = SecretGenerator.entropy(passphrase);
+    const newState = {
+      passphrase: event.target.value,
+      passphraseEntropy: null,
+    };
+
+    if (newState.passphrase.length) {
+      newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
       if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(passphrase);
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
       }
     } else {
-      this.setState({
-        passphraseInDictionnary: false,
-        passwordEntropy: null,
-      });
+      newState.passphraseInDictionnary = false;
     }
 
-    this.setState({passphrase, passphraseEntropy});
+    this.setState(newState);
     if (this.state.hasBeenValidated) {
       this.validate();
     }

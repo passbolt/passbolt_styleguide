@@ -16,6 +16,7 @@ import {defaultAppContext, mockExtensionCall} from './SaveResource.test.data';
 import {defaultProps} from '../ResourceCreatePage/ResourceCreatePage.test.data';
 import SaveResourcePage from './SaveResource.test.page';
 import {waitFor} from '@testing-library/react';
+import {waitForTrue} from '../../../../test/utils/waitFor';
 
 beforeEach(() => {
   jest.resetModules();
@@ -37,11 +38,28 @@ describe("See the Create Resource - save resource", () => {
     const props = defaultProps(); // The props to pass
     mockExtensionCall(context);
 
+    context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", async() => ({
+      name: "",
+      uri: "",
+      username: "",
+      secret_clear: "password test"
+    }));
+
+    let isPageReady = false;
+    context.port.addRequestListener("passbolt.secrets.powned-password", async value => {
+      isPageReady = true;
+      if (value === "hello-world") {
+        return 3;
+      } else if (value === "unavailable") {
+        throw new Error("Service is unavailable");
+      }
+      return 0;
+    });
+
     const page = new SaveResourcePage(context, props);
-    await waitFor(() => {});
+    await waitForTrue(() => isPageReady);
     await page.fillInputPassword('hello-world');
-    jest.runAllTimers();
-    await waitFor(() => {});
+    await waitForTrue(() => Boolean(page.pwnedWarningMessage));
     // we expect a warning to inform about powned password
     expect(page.pwnedWarningMessage.textContent).toEqual("The password is part of an exposed data breach.");
 

@@ -299,16 +299,20 @@ class CreateResource extends Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    if (this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //if after the debounced promised resolution the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
   /*
@@ -482,19 +486,20 @@ class CreateResource extends Component {
     const value = target.value;
     const name = target.name;
 
+    const newState = {
+      [name]: value
+    };
+
     if (name === "password") {
       if (value.length) {
         this.evaluatePasswordIsInDictionaryDebounce(value);
+        newState.passwordEntropy = SecretGenerator.entropy(value);
       } else {
-        this.setState({
-          passwordInDictionary: false,
-          passwordEntropy: null,
-        });
+        newState.passwordInDictionary = false;
+        newState.passwordEntropy = null;
       }
     }
-    this.setState({
-      [name]: value,
-    });
+    this.setState(newState);
   }
 
   /**
