@@ -317,16 +317,20 @@ class ResourceCreatePage extends React.Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
-    if (password && this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
-    this.setState({passwordEntropy});
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
   /**

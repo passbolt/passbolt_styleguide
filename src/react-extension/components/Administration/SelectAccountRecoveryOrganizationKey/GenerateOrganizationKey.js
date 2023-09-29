@@ -180,7 +180,7 @@ class GenerateOrganizationKey extends React.Component {
     if (this.state.passphrase.length > 0) {
       passphraseEntropy = SecretGenerator.entropy(this.state.passphrase);
       if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
+        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(this.state.passphrase);
       }
     } else {
       this.setState({
@@ -229,35 +229,36 @@ class GenerateOrganizationKey extends React.Component {
 
   /**
    * Evaluate if the passphrase is in dictionary
-   * @return {Promise<boolean>} Returns true if the passphrase is part of a dictionary, false otherwise
+   * @param {string} passphrase the passphrase to evaluate
+   * @return {Promise<void>}
    */
-  async evaluatePassphraseIsInDictionary() {
-    if (!this.state.isPwnedServiceAvailable) {
-      return false;
+  async evaluatePassphraseIsInDictionary(passphrase) {
+    let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
+    if (!isPwnedServiceAvailable) {
+      return;
     }
 
-    let isPwned;
+    let passphraseInDictionnary = false;
+
     try {
-      const result =  await this.pownedService.evaluateSecret(this.state.passphrase);
-      isPwned = result.inDictionary;
-      this.setState({
-        isPwnedServiceAvailable: result.isPwnedServiceAvailable
-      });
-      this.setState({passphraseInDictionnary: isPwned && !this.isEmptyPassword()});
+      const result =  await this.pownedService.evaluateSecret(passphrase);
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passphraseInDictionnary = this.state.passphrase && result.inDictionary;
+      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
     } catch (error) {
       // If the service is unavailable don't block the user journey.
       if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
-        this.setState({
-          isPwnedServiceAvailable: false
-        });
-        this.setState({passphraseInDictionnary: false});
-        return false;
+        isPwnedServiceAvailable = false;
+        passphraseInDictionnary = false;
       } else {
         throw error;
       }
     }
 
-    return isPwned;
+    this.setState({
+      isPwnedServiceAvailable,
+      passphraseInDictionnary,
+    });
   }
 
   /**

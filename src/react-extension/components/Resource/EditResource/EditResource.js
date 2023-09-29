@@ -308,16 +308,20 @@ class EditResource extends Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    if (password && this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password, this.state.isPwnedServiceAvailable);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
 
@@ -473,20 +477,20 @@ class EditResource extends Component {
     const value = target.value;
     const name = target.name;
 
+    const newState = {
+      [name]: value
+    };
+
     if (name === "password") {
       if (value.length) {
         this.evaluatePasswordIsInDictionaryDebounce(value);
+        newState.passwordEntropy = SecretGenerator.entropy(value);
       } else {
-        this.setState({
-          passwordInDictionary: false,
-          passwordEntropy: null,
-        });
+        newState.passwordInDictionary = false;
+        newState.passwordEntropy = null;
       }
     }
-
-    this.setState({
-      [name]: value
-    });
+    this.setState(newState);
   }
 
   /**
@@ -612,12 +616,14 @@ class EditResource extends Component {
 
     try {
       const plaintextSecretDto = await this.getDecryptedSecret();
+      const password = plaintextSecretDto.password;
+      this.evaluatePasswordIsInDictionaryDebounce(password);
       this.setState({
-        password: plaintextSecretDto.password,
+        password: password,
         description: plaintextSecretDto.description || this.state.description,
+        passwordEntropy: SecretGenerator.entropy(password),
         isSecretDecrypting: false
       });
-      this.evaluatePasswordIsInDictionaryDebounce(plaintextSecretDto.password);
       return true;
     } catch (error) {
       this.handleClose();

@@ -24,6 +24,7 @@ import EditResourcePage from "./EditResource.test.page";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 describe("See the Edit Resource", () => {
   let page; // The page to test against
@@ -93,9 +94,7 @@ describe("See the Edit Resource", () => {
 
     it('generates password when clicking on the generate button.', async() => {
       page.passwordEdit.focusInput(page.passwordEdit.password);
-      await waitFor(() => {
-        expect(page.passwordEdit.password.disabled).toBeFalsy();
-      });
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
 
       await page.passwordEdit.click(page.passwordEdit.passwordGenerateButton);
       await waitFor(() => {
@@ -352,16 +351,10 @@ describe("See the Edit Resource", () => {
         }
       });
 
-      const waitForTrue = async callback => waitFor(() => {
-        if (!callback()) {
-          throw new Error("Page is not ready yet!");
-        }
-      });
-
       props.context.port.addRequestListener("passbolt.secrets.powned-password", () => Promise.resolve(2));
 
       const page = new EditResourcePage(props);
-      await waitForTrue(() => page.passwordEdit.password.disabled);
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
 
       // we expect a warning to inform about powned password
       await page.passwordEdit.fillInputPassword('hello-world');
