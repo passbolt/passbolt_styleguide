@@ -25,6 +25,10 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import {
+  defaultResourceDto, resourceStandaloneTotpDto,
+  resourceWithFavoriteDto, resourceWithReadPermissionDto, resourceWithTotpDto
+} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -70,6 +74,32 @@ export function defaultPropsOneResourceOwned() {
 }
 
 /**
+ * Default props one selected totp resource owned
+ * @returns {{resourceWorkspaceContext}}
+ */
+export function defaultPropsOneTotpResourceOwned() {
+  return {
+    rbacContext: defaultAdministratorRbacContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({
+      selectedResources: [resourcesMock[3]],
+      columnsResourceSetting: new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "name", label: "Name", position: 2, show: true},
+        {id: "username", label: "Username", position: 3, show: true},
+        {id: "password", label: "Password", position: 4, show: true},
+        {id: "totp", label: "TOTP", position: 5, show: true},
+        {id: "uri", label: "URI", position: 6, show: false},
+        {id: "modified", label: "Modified", position: 7, show: true}]),
+      lockDisplayDetail: true,
+      onLockDetail: jest.fn(),
+      onResourcesToExport: () => jest.fn(),
+      onResourceCopied: () => jest.fn(),
+      onChangeColumnView:  jest.fn()
+    }),
+  };
+}
+
+/**
  * Default props one selected resource owned
  * @returns {{resourceWorkspaceContext}}
  */
@@ -77,7 +107,7 @@ export function defaultPropsOneResourceNotOwned() {
   return {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
-      selectedResources: [resourcesMock[1]],
+      selectedResources: [resourcesMock[2]],
       lockDisplayDetail: false
     })
   };
@@ -122,7 +152,7 @@ export function defaultPropsMultipleResource() {
  * @returns {{resourceWorkspaceContext}}
  */
 export function defaultPropsMultipleResourceUpdateRights() {
-  const selectedResources = [resourcesMock[0], resourcesMock[2]];
+  const selectedResources = [resourcesMock[0], resourcesMock[1]];
   return {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
@@ -136,101 +166,9 @@ export function defaultPropsMultipleResourceUpdateRights() {
  * Mocked list of resources
  */
 export const resourcesMock = [
-  {
-    "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-    "name": "apache",
-    "username": "www-data",
-    "uri": "http:\/\/www.apache.org\/",
-    "description": "Apache is the world\u0027s most used web server software.",
-    "deleted": false,
-    "created": "2020-08-25T08:35:19+00:00",
-    "modified": "2020-08-26T08:35:19+00:00",
-    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
-    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
-    "permission": {
-      "id": "8dfd59a7-852d-5c57-bd45-75c28bbb3f6c",
-      "aco": "Resource",
-      "aco_foreign_key": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 15,
-      "created": "2020-08-27T08:35:19+00:00",
-      "modified": "2020-08-27T08:35:19+00:00"
-    },
-    "tags": [
-      {
-        "id": "1c8afebc-7e23-51bd-a0b6-2e695afeb32f",
-        "slug": "#charlie",
-        "is_shared": true
-      },
-      {
-        "id": "ecd059e8-4cb3-574b-a063-6083e272ef27",
-        "slug": "#golf",
-        "is_shared": true
-      }
-    ],
-    "folder_parent_id": null,
-    "personal": false
-  }, {
-    "id": "09c790c0-c003-53c8-a640-25d33cfebc22",
-    "name": "bower",
-    "username": "bower",
-    "uri": "bower.io",
-    "description": "A package manager for the web!",
-    "deleted": false,
-    "created": "2018-08-27T08:35:19+00:00",
-    "modified": "2019-08-27T08:35:19+00:00",
-    "created_by": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-    "modified_by": "640ebc06-5ec1-5322-a1ae-6120ed2f3a74",
-    "favorite": null,
-    "permission": {
-      "id": "672728ac-c3f2-52a5-a21c-07dfe84b7ad9",
-      "aco": "Resource",
-      "aco_foreign_key": "09c790c0-c003-53c8-a640-25d33cfebc22",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 1,
-      "created": "2020-08-27T08:35:19+00:00",
-      "modified": "2020-08-27T08:35:19+00:00"
-    },
-    "tags": [],
-    "folder_parent_id": null,
-    "personal": false
-  }, {
-    "id": "daaf057e-7fc3-5537-a8a9-e8c151890878",
-    "name": "cakephp",
-    "username": "cake",
-    "uri": "cakephp.org",
-    "description": "The rapid and tasty php development framework",
-    "deleted": false,
-    "created": "2020-08-27T06:35:19+00:00",
-    "modified": "2020-08-27T07:35:19+00:00",
-    "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
-    "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
-    "favorite": null,
-    "permission": {
-      "id": "972bf3fc-0d5b-579c-9097-56d86394c255",
-      "aco": "Resource",
-      "aco_foreign_key": "daaf057e-7fc3-5537-a8a9-e8c151890878",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 7,
-      "created": "2020-08-27T08:35:19+00:00",
-      "modified": "2020-08-27T08:35:19+00:00"
-    },
-    "tags": [
-      {
-        "id": "094e27f0-637c-5397-b16c-f3eee5f7dd6c",
-        "slug": "hotel",
-        "is_shared": false
-      },
-      {
-        "id": "0507cbbb-eb14-5121-9105-05380dbe64ff",
-        "slug": "\u092a\u0930\u0926\u0947\u0936\u0940-\u092a\u0930\u0926\u0947\u0936\u0940",
-        "is_shared": false
-      }
-    ],
-    "folder_parent_id": null,
-    "personal": false
-  }
+  resourceWithFavoriteDto({name: 'apache'}),
+  defaultResourceDto({name: 'bower'}),
+  resourceWithReadPermissionDto({name: 'test'}),
+  resourceWithTotpDto({name: 'totp'}),
+  resourceStandaloneTotpDto({name: 'standalone totp'}),
 ];

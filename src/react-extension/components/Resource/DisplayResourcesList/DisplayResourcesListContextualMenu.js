@@ -30,6 +30,7 @@ import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {withProgress} from "../../../contexts/ProgressContext";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -51,6 +52,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handleUriClickEvent = this.handleUriClickEvent.bind(this);
     this.handlePermalinkClickEvent = this.handlePermalinkClickEvent.bind(this);
     this.handlePasswordClickEvent = this.handlePasswordClickEvent.bind(this);
+    this.handleTotpClickEvent = this.handleTotpClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
   }
@@ -107,6 +109,15 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Decrypt the resource secret
+   * @returns {Promise<object>} The secret in plaintext format
+   * @throw UserAbortsOperationError If the user cancel the operation
+   */
+  decryptResourceSecret() {
+    return this.props.context.port.request("passbolt.secret.decrypt", this.resource.id);
+  }
+
+  /**
    * Copy password from dto to clipboard
    * Support original password (a simple string) and composed objects)
    *
@@ -130,7 +141,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
 
     this.props.progressContext.open(this.props.t('Decrypting secret'));
     try {
-      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id, {showProgress: true});
+      plaintextSecretDto = await this.decryptResourceSecret();
     } catch (error) {
       if (error.name !== "UserAbortsOperationError") {
         this.props.actionFeedbackContext.displayError(error.message);
@@ -146,6 +157,38 @@ class DisplayResourcesListContextualMenu extends React.Component {
     await this.copyPasswordToClipboard(plaintextSecretDto);
     this.props.resourceWorkspaceContext.onResourceCopied();
     this.props.actionFeedbackContext.displaySuccess(this.translate("The secret has been copied to clipboard"));
+  }
+
+  /**
+   * handle copy to clipboard the totp of the selected resource
+   */
+  async handleTotpClickEvent() {
+    let plaintextSecretDto;
+    this.props.hide();
+
+    this.props.progressContext.open(this.props.t('Decrypting secret'));
+    try {
+      plaintextSecretDto = await this.decryptResourceSecret();
+    } catch (error) {
+      if (error.name !== "UserAbortsOperationError") {
+        this.props.actionFeedbackContext.displayError(error.message);
+      }
+    }
+    this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
+
+    if (!plaintextSecretDto.totp) {
+      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      return;
+    }
+
+    const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    await ClipBoard.copy(code, this.props.context.port);
+    await this.props.resourceWorkspaceContext.onResourceCopied();
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
   }
 
   /**
@@ -209,11 +252,51 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Can copy password
+   * @returns {boolean}
+   */
+  canCopyPassword() {
+    return this.isPasswordResources;
+  }
+
+  /**
+   * Is password resource
+   * @return {boolean}
+   */
+  get isPasswordResources() {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(this.resource.resource_type_id);
+  }
+
+  /**
+   * Can copy totp
+   * @returns {boolean}
+   */
+  canCopyTotp() {
+    return this.isTotpResources;
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isTotpResources() {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+  }
+
+  /**
    * Can copy uri
    * @returns {boolean}
    */
   canCopyUri() {
     return this.resource.uri !== "";
+  }
+
+  /**
+   * Can use Totp
+   * @return {*}
+   */
+  get canUseTotp() {
+    return this.props.context.siteSettings.canIUse('totpResourceTypes');
   }
 
   /**
@@ -253,7 +336,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
             <div className="row">
               <div className="main-cell-wrapper">
                 <div className="main-cell">
-                  <button type="button" className="link no-border" id="password" onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></button>
+                  <button type="button" className="link no-border" id="password" disabled={!this.canCopyPassword()} onClick={this.handlePasswordClickEvent}><span><Trans>Copy password</Trans></span></button>
                 </div>
               </div>
             </div>
@@ -278,6 +361,18 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        {this.canUseTotp &&
+          <li key="option-copy-totp-resource" className="ready">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button type="button" className="link no-border" id="totp" disabled={!this.canCopyTotp()}
+                    onClick={this.handleTotpClickEvent}><span><Trans>Copy TOTP</Trans></span></button>
+                </div>
+              </div>
+            </div>
+          </li>
+        }
         <li key="option-open-uri-resource" className="ready separator-after">
           <div className="row">
             <div className="main-cell-wrapper">
