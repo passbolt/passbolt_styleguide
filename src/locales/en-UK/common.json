@@ -1211,11 +1211,11 @@
   "Your passphrase is wrong!": "Your passphrase is wrong!",
   "Your passphrase is wrong! The operation has been aborted.": "Your passphrase is wrong! The operation has been aborted.",
   "Your session has expired, you need to sign in.": "Your session has expired, you need to sign in.",
-  "your subscription key has expired. The stability of the application is at risk.": "your subscription key has expired. The stability of the application is at risk.",
   "Your subscription key is either missing or not valid.": "Your subscription key is either missing or not valid.",
   "Your subscription key is going to expire.": "Your subscription key is going to expire.",
   "Your subscription key is not valid.": "Your subscription key is not valid.",
   "your subscription key is not valid. The stability of the application is at risk.": "your subscription key is not valid. The stability of the application is at risk.",
   "Your subscription key is valid and up to date!": "Your subscription key is valid and up to date!",
-  "your subscription key will expire": "your subscription key will expire"
+  "your subscription key will expire": "your subscription key will expire",
+  "your subscription requires your attention. The stability of the application is at risk.": "your subscription requires your attention. The stability of the application is at risk."
 }

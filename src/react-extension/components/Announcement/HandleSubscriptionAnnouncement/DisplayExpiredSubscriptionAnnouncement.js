@@ -32,7 +32,7 @@ class DisplayExpiredSubscriptionAnnouncement extends React.Component {
       <AnnouncementWrapper className="subscription" onClose={this.props.onClose} canClose={false}>
         <p>
           <Trans>Warning:</Trans>&nbsp;
-          <Trans>your subscription key has expired. The stability of the application is at risk.</Trans>
+          <Trans>your subscription requires your attention. The stability of the application is at risk.</Trans>
           <button className="link" type="button" onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
           </button>
