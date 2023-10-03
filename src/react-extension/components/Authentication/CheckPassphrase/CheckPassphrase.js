@@ -45,7 +45,7 @@ class CheckPassphrase extends Component {
     super(props);
     this.state = this.defaultState;
     this.isPwndProcessingPromise = null;
-    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
+    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 500);
     this.bindEventHandlers();
     this.createReferences();
   }
@@ -142,7 +142,7 @@ class CheckPassphrase extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     this.validate();
-    if (this.pownedService) {
+    if (this.state.isPwnedServiceAvailable) {
       await this.isPwndProcessingPromise;
     }
     if (this.isValid) {
@@ -195,19 +195,19 @@ class CheckPassphrase extends Component {
       passphraseEntropy: null,
     };
 
-    if (newState.passphrase.length) {
-      newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
-      if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
-      }
+    if (!newState.passphrase.length) {
+      newState.passphraseInDictionnary = false;
+      this.setState(newState);
+      return;
+    }
+
+    newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
+    if (this.state.isPwnedServiceAvailable) {
+      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
     } else {
       newState.passphraseInDictionnary = false;
     }
-
     this.setState(newState);
-    if (this.state.hasBeenValidated) {
-      this.validate();
-    }
   }
 
   /**

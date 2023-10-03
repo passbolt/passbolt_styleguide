@@ -186,7 +186,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     it('As LU I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
       expect.assertions(1);
       props.context.port.addRequestListener("passbolt.secrets.powned-password", () => Promise.reject());
-      await page.insertPassphrase("Service is unavailable");
+      await page.insertPassphrase("ispowned service unavailable");
       await waitForTrue(() => Boolean(page.passphraseWarningMessage));
       expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
@@ -204,7 +204,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       const props = propsWithExternalDictionaryCheckDisabled();
 
       const page = new EnterNewPassphrasePage(props);
-      await page.insertPassphrase("Service is unavailable");
+      await page.insertPassphrase("ispowned service unavailable");
 
       expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
