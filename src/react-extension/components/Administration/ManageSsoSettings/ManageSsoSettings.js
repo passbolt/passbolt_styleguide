@@ -66,10 +66,17 @@ class ManageSsoSettings extends React.Component {
     }
 
     const errors = this.props.adminSsoContext.getErrors();
-    const fieldToFocus = this.getFirstFieldInError(errors, ["url", "client_id", "tenant_id", "client_secret", "client_secret_expiry"]);
+    const fieldToFocus = this.getFirstFieldInError(errors, ["url", "openid_configuration_path", "scope", "client_id", "tenant_id", "client_secret", "client_secret_expiry", "prompt", "email_claim"]);
+
     switch (fieldToFocus) {
       case "url":
         this.urlInputRef.current.focus();
+        break;
+      case "openid_configuration_path":
+        this.openIdConfigurationPathInputRef.current.focus();
+        break;
+      case "scope":
+        this.scopeInputRef.current.focus();
         break;
       case "client_id":
         this.clientIdInputRef.current.focus();
@@ -112,6 +119,8 @@ class ManageSsoSettings extends React.Component {
     this.clientSecretExpiryInputRef = React.createRef();
     this.promptInputRef = React.createRef();
     this.emailClaimInputRef = React.createRef();
+    this.openIdConfigurationPathInputRef = React.createRef();
+    this.scopeInputRef = React.createRef();
   }
 
   /**
@@ -174,6 +183,20 @@ class ManageSsoSettings extends React.Component {
    */
   hasAllInputDisabled() {
     return this.props.adminSsoContext.isProcessing() || this.state.loading;
+  }
+
+  /**
+   * Get all the SSO providers the browser extension knows.
+   * Also, sets the `disabled` flag to the provider that are not known/activated on the API.
+   * @returns {Array<object>}
+   */
+  get allSsoProviders() {
+    const apiSupportedProvider = this.state.providers;
+    return SsoProviders.map(bextKnownProvider => {
+      const newProvider = {...bextKnownProvider};
+      newProvider.disabled = Boolean(newProvider.disabled) || !apiSupportedProvider.includes(newProvider.id);
+      return newProvider;
+    });
   }
 
   /**
@@ -294,7 +317,7 @@ class ManageSsoSettings extends React.Component {
             <>
               <h4 className="no-border"><Trans>Select a provider</Trans></h4>
               <div className="provider-list">
-                {SsoProviders.map(provider =>
+                {this.allSsoProviders.map(provider =>
                   <div key={provider.id} className={`provider button ${provider.disabled ? "disabled" : ""}`} id={provider.id} onClick={() => this.props.adminSsoContext.changeProvider(provider)}>
                     <div className="provider-logo">
                       {provider.icon}
@@ -479,6 +502,95 @@ class ManageSsoSettings extends React.Component {
                     }
                     <p>
                       <Trans>Allows Google and Passbolt API to securely share information.</Trans> <a href="https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
+                    </p>
+                  </div>
+                </>
+              }
+              {ssoConfig?.provider === "oauth2" &&
+                <>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Login URL</Trans></label>
+                    <input id="sso-oauth2-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
+                      value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    {errors.url &&
+                      <div className="error-message">{errors.url}</div>
+                    }
+                    <p>
+                      <Trans>The OAuth2 authentication endpoint.</Trans>
+                    </p>
+                  </div>
+                  <hr/>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Redirect URL</Trans></label>
+                    <div className="button-inline">
+                      <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
+                        value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
+                      <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
+                        <Icon name="copy-to-clipboard"/>
+                      </a>
+                    </div>
+                    <p>
+                      <Trans>The URL to provide to the OAuth2 platform when registering the application.</Trans>
+                    </p>
+                  </div>
+                  <hr/>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>OpenId Configuration Path</Trans></label>
+                    <input id="sso-oauth2-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
+                      value={ssoConfig?.data?.openid_configuration_path} onChange={this.handleInputChange} placeholder={this.translate("OpenId Configuration Path")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    {errors.openid_configuration_path &&
+                      <div className="error-message">{errors.openid_configuration_path}</div>
+                    }
+                    <p>
+                      <Trans>The OpenId configuration relative path from the given login url.</Trans>
+                    </p>
+                  </div>
+                  <hr/>
+                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Scope</Trans></label>
+                    <input id="sso-oauth2-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
+                      value={ssoConfig?.data?.scope} onChange={this.handleInputChange} placeholder={this.translate("Scope")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    {errors.scope &&
+                      <div className="error-message">{errors.scope}</div>
+                    }
+                    <p>
+                      <Trans>The OpenId scope.</Trans>
+                    </p>
+                  </div>
+                  <hr/>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Application (client) ID</Trans></label>
+                    <input id="sso-google-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
+                      value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    {errors.client_id &&
+                      <div className="error-message">{errors.client_id}</div>
+                    }
+                    <p>
+                      <Trans>The public identifier for the OpenId app.</Trans>
+                    </p>
+                  </div>
+                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>Secret</Trans></label>
+                    <Password
+                      id="sso-google-secret-input"
+                      className="fluid form-element"
+                      onChange={this.handleInputChange}
+                      autoComplete="off"
+                      name="client_secret"
+                      placeholder={this.translate("Secret")}
+                      disabled={this.hasAllInputDisabled()}
+                      value={ssoConfig?.data?.client_secret}
+                      preview={true}
+                      inputRef={this.clientSecretInputRef}/>
+                    {errors.client_secret &&
+                      <div className="error-message">{errors.client_secret}</div>
+                    }
+                    <p>
+                      <Trans>Allows your OAuth2 provider and Passbolt API to securely share information.</Trans>
                     </p>
                   </div>
                 </>
