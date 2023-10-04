@@ -7,7 +7,7 @@ import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypes
 import {
   defaultPasswordPoliciesContext
 } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
-import {defaultResourcePasswordGeneratorcontext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
+import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
@@ -42,7 +42,7 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorcontext(),
+    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     onClose: () => {},
     dialogContext: {

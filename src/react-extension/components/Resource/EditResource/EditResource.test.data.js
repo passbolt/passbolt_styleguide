@@ -5,7 +5,7 @@ import {
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
-import {defaultResourcePasswordGeneratorcontext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
+import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
 
 /**
  * Default props
@@ -27,7 +27,7 @@ export const defaultProps = (props = {}) => {
     }),
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),
-    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorcontext(),
+    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(props?.passwordPoliciesContext),
     ...props
   };

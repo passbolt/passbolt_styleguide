@@ -7,7 +7,7 @@ import {defaultPassphraseGeneratorSettingsDto} from "../../shared/models/passwor
 import {defaultPasswordGeneratorSettingsDto} from "../../shared/models/passwordPolicies/PasswordGeneratorSettingsDto.test.data";
 import {defaultPasswordPoliciesDto} from "../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 
-export const defaultResourcePasswordGeneratorcontext = (data = {}) => ({
+export const defaultResourcePasswordGeneratorContext = (data = {}) => ({
   lastGeneratedPassword: "This is the last generated password",
   getSettings: jest.fn(() => defaultPasswordPoliciesDto({
     password_generator_settings: defaultPasswordGeneratorSettingsDto({

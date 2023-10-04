@@ -19,6 +19,7 @@ import MockTranslationProvider from "../../../test/mock/components/International
 import {AdminPasswordPoliciesContextProvider} from "../../../contexts/Administration/AdministrationPasswordPoliciesContext/AdministrationPasswordPoliciesContext";
 import DisplayAdministrationPasswordPoliciesActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationPasswordPoliciesActions/DisplayAdministrationPasswordPoliciesActions";
 import DisplayPasswordPoliciesAdministration from './DisplayPasswordPoliciesAdministration';
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 /**
  * The DisplayPasswordPoliciesAdministration component represented as a page
@@ -59,35 +60,11 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   }
 
   /**
-   * Returns the reset settings button
-   * @returns {HTMLElement}
-   */
-  get resetSettingsButton() {
-    return this._page.container.querySelector('#reset-settings');
-  }
-
-  /**
    * Returns the Passphrase Policy Title
    * @returns {HTMLElement}
    */
   get passphrasePolicyTitle() {
     return this._page.container.querySelector('.password-policies-settings > h4.title');
-  }
-
-  /**
-   * Returns the Passphrase Policy Input
-   * @returns {HTMLElement}
-   */
-  get passphrasePolicyInput() {
-    return this._page.container.querySelector('#password-policies-passphrase-policy-range input');
-  }
-
-  /**
-   * Returns the Passphrase Policy description
-   * @returns {HTMLElement}
-   */
-  get passphrasePolicyDescription() {
-    return this._page.container.querySelector('#password-policies-passphrase-policy-description');
   }
 
   /**
@@ -210,6 +187,38 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   }
 
   /**
+   * Returns the input for the external dictionary check
+   * @returns {HTMLElement}
+   */
+  get externalDictionaryCheck() {
+    return this._page.container.querySelector("#passphrase-policy-external-services-toggle-button");
+  }
+
+  /**
+   * Returns all the password masks available on the UI
+   * @returns {NodeList}
+   */
+  get maskButtons() {
+    return this._page.container.querySelectorAll("label[for='configure-password-generator-form-masks'] + .button-group button");
+  }
+
+  /**
+   * Returns all the password masks available on the UI
+   * @returns {NodeList}
+   */
+  get activeMaskButtons() {
+    return this._page.container.querySelectorAll("label[for='configure-password-generator-form-masks'] + .button-group button.selected");
+  }
+
+  /**
+   * Returns a single mask button by its index
+   * @returns {HTMLElement}
+   */
+  getMaskButton(index) {
+    return this.maskButtons[index];
+  }
+
+  /**
    * Returns the computed entropy for current configuration of the default generator
    * @returns {string}
    */
@@ -242,6 +251,14 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   }
 
   /**
+   * Returns the shown option of the default generator Select component
+   * @returns {string}
+   */
+  get defaultGeneratorSelectedValue() {
+    return this._page.container.querySelector('#configure-passphrase-default-generator .selected-value').textContent;
+  }
+
+  /**
    * Returns the minimal Passbolt's entropy requirement error message from the passphrase panel settings
    * @returns {HTMLElement}
    */
@@ -266,6 +283,22 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   }
 
   /**
+   * Returns the password input length error message
+   * @returns {HTMLElement}
+   */
+  get passwordLengthError() {
+    return this._page.container.querySelector('#passwordLength-error');
+  }
+
+  /**
+   * Returns the words separator error message
+   * @returns {HTMLElement}
+   */
+  get passphraseLengthError() {
+    return this._page.container.querySelector('#wordsCount-error');
+  }
+
+  /**
    * Returns the 'is source changing' banner
    * @returns {HTMLElement}
    */
@@ -274,10 +307,11 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   }
 
   /**
-   * Returns true if the page is processing
+   * Returns the password mask error message
+   * @returns {HTMLElement}
    */
-  get isProcessing() {
-    return this.saveSettingsButton.disabled;
+  get maskError() {
+    return this._page.container.querySelector('#password-mask-error');
   }
 
   /**
@@ -297,22 +331,13 @@ export default class DisplayPasswordPoliciesAdministrationPage {
   }
 
   /**
-   * click on reset settings button
-   * @returns {Promise<void>}
-   */
-  async clickOnReset() {
-    return this.click(this.resetSettingsButton);
-  }
-
-  /**
    * Click on the element
    *
    */
   async click(element) {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-    });
+    await waitFor(() => {});
   }
 
   /**
@@ -325,11 +350,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
     for (key in formData) {
       fireEvent.input(this[key], {target: {value: formData[key]}});
     }
-    await waitFor(() => {
-      if (this[key].value !== formData[key].toString()) {
-        throw new Error("Form is not udpated yet.");
-      }
-    });
+    await waitForTrue(() => this[key].value === formData[key].toString());
   }
 
   /**
@@ -340,11 +361,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
     const leftClick = {button: 0};
     const isOpened = Boolean(this.passwordPanel);
     fireEvent.click(this.passwordPanelButton, leftClick);
-    await waitFor(() => {
-      if (isOpened === Boolean(this.passwordPanel)) {
-        throw new Error("Changes are not ready yet");
-      }
-    });
+    await waitForTrue(() => isOpened !== Boolean(this.passwordPanel));
   }
 
   /**
@@ -355,11 +372,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
     const leftClick = {button: 0};
     const isOpened = Boolean(this.passphrasePanel);
     fireEvent.click(this.passphrasePanelButton, leftClick);
-    await waitFor(() => {
-      if (isOpened === Boolean(this.passphrasePanel)) {
-        throw new Error("Changes are not ready yet");
-      }
-    });
+    await waitForTrue(() => isOpened !== Boolean(this.passphrasePanel));
   }
 
   /**
@@ -368,6 +381,27 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    */
   async choosePassphraseAsDefaultGenerator() {
     await this.click(this.defaultGeneratorSelect);
+    await waitForTrue(() => Boolean(this.defaultGeneratorSelectOptionPassphrase));
     await this.click(this.defaultGeneratorSelectOptionPassphrase);
+  }
+
+  /**
+   * Toggles the "external dictionary check" by simulating a click on the HTMLElement.
+   * @returns {Promise<void>}
+   */
+  async clickOnExternalDictionaryCheck() {
+    const isChecked = this.externalDictionaryCheck.checked;
+    await this.click(this.externalDictionaryCheck);
+    await waitForTrue(() => this.externalDictionaryCheck.checked !== isChecked);
+  }
+
+  /**
+   * Simulates a click on a button that toggles mask selection.
+   * @returns {Promise<void>}
+   */
+  async clickOnMaskButton(maskButton) {
+    const isChecked = maskButton.classList.contains('selected');
+    await this.click(maskButton);
+    await waitForTrue(() => maskButton.classList.contains('selected') !== isChecked);
   }
 }

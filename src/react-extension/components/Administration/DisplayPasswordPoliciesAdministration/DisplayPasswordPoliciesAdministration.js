@@ -262,7 +262,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   disabled={this.hasAllInputDisabled()}/>
               </div>
               {errors.passwordLength &&
-                <div className="error-message">{errors.passwordLength}</div>
+                <div id="passwordLength-error" className="error-message">{errors.passwordLength}</div>
               }
             </div>
             <p><Trans>You can set the default length for the passwords that are generated randomly by passbolt in the password generator.</Trans></p>
@@ -283,7 +283,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                 }
               </div>
               {errors.masks &&
-                <div className="error-message">{errors.masks}</div>
+                <div id="password-mask-error" className="error-message">{errors.masks}</div>
               }
 
               <div className="input checkbox">
@@ -337,7 +337,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
                   disabled={this.hasAllInputDisabled()}/>
               </div>
               {errors.wordsCount &&
-                <div className="error-message">{errors.wordsCount}</div>
+                <div id="wordsCount-error"  className="error-message">{errors.wordsCount}</div>
               }
             </div>
             <p><Trans>You can set the default length for the passphrases that are generated randomly by passbolt in the password generator.</Trans></p>
