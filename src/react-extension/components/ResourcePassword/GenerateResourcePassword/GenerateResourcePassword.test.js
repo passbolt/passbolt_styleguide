@@ -1,27 +1,27 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.3.0
+ * @since         4.4.0
  */
 
 /**
- * Unit tests on GeneratePasswordPage in regard of specifications
+ * Unit tests on GenerateResourcePasswordPage in regard of specifications
  */
-import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
-import {defaultProps, withLastGeneratedPasswordProps} from "./GeneratePasswordPage.test.data";
-import GeneratePasswordTestPage from "./GeneratePasswordPage.test.page";
-import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
-import {waitForTrue} from "../../../../test/utils/waitFor";
-import {configuredPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
+import {defaultProps} from "./GenerateResourcePassword.test.data";
+import GenerateResourcePasswordPage from "./GenerateResourcePassword.test.page";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
+import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
+import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -35,36 +35,25 @@ describe("Generate password", () => {
 
   beforeEach(() => {
     props = defaultProps(); // The props to pass
-    page = new GeneratePasswordTestPage(props);
+    page = new GenerateResourcePasswordPage(props);
   });
 
   describe('As LU I should generate a password', () => {
-    it('As LU I should apply a generated password', async() => {
-      expect.assertions(3);
-      jest.spyOn(SecretGenerator, "generate").mockImplementation(() => props.prepareResourceContext.lastGeneratedPassword);
-
-      const props = withLastGeneratedPasswordProps(); // The props to pass
-      const page = new GeneratePasswordTestPage(props);
-      jest.runAllTimers();
-
-      expect(page.title).toBe('Generate password');
-      expect(page.complexityText).toBe('Fair (entropy: 111.1 bits)');
-      await page.applyGeneratePassword();
-      expect(props.history.goBack).toHaveBeenCalledTimes(1);
-    });
-
     it('As LU I should generate a new password', async() => {
       expect.assertions(1);
-      const password = page.password;
+
+      const expectedPassword = "generated password";
+      jest.spyOn(SecretGenerator, "generate").mockImplementation(() => expectedPassword);
+
       await page.generatePassword();
       // TODO random value return always the same value
-      expect(password === page.password).toBeTruthy();
+      const password = page.password;
+
+      expect(password).toStrictEqual(expectedPassword);
     });
 
     it('As LU I should copy a password', async() => {
       expect.assertions(1);
-      const props = withLastGeneratedPasswordProps(); // The props to pass
-      const page = new GeneratePasswordTestPage(props);
       const mockClipboard = {
         writeText: jest.fn()
       };
@@ -102,14 +91,15 @@ describe("Generate password", () => {
       expect.assertions(3);
 
       const props = defaultProps({
-        prepareResourceContext: defaultPrepareResourceContext({
-          getSettings: () => configuredPasswordPoliciesDto({
+        resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext({
+          getSettings: jest.fn(() => defaultPasswordPoliciesDto({
             default_generator: "passphrase",
-          }),
+          })),
         })
       });
 
-      const page = new GeneratePasswordTestPage(props);
+      const page = new GenerateResourcePasswordPage(props);
+      await waitFor(() => {});
 
       const expectedPassphraseGeneratorSettings = {
         words_count: 12,

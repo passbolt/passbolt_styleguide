@@ -1,24 +1,23 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.3.0
+ * @since         4.4.0
  */
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
-import GeneratePasswordPage from "./GeneratePasswordPage";
-import {waitForTrue} from "../../../../test/utils/waitFor";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import GenerateResourcePassword from "./GenerateResourcePassword";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 /**
  * The GeneratePasswordPage component represented as a page
@@ -32,17 +31,10 @@ export default class GeneratePasswordTestPage {
     this._page = render(
       <Router>
         <MockTranslationProvider>
-          <GeneratePasswordPage.WrappedComponent {...props}/>
+          <GenerateResourcePassword {...props}/>
         </MockTranslationProvider>
       </Router>
     );
-  }
-
-  /**
-   * Get the title
-   */
-  get title() {
-    return this._page.container.querySelector('.primary-action-title').textContent;
   }
 
   /**
@@ -56,21 +48,14 @@ export default class GeneratePasswordTestPage {
    * Returns the generate password button
    */
   get generatePasswordButton() {
-    return this._page.container.querySelector('a.password-generate');
+    return this._page.container.querySelector('.password-generate');
   }
 
   /**
    * Returns the copy password button
    */
   get copyPasswordButton() {
-    return this._page.container.querySelector('a.copy-to-clipboard');
-  }
-
-  /**
-   * Returns the complexity of a password
-   */
-  get complexityText() {
-    return this._page.container.querySelector('.complexity-text').textContent;
+    return this._page.container.querySelector('.copy-to-clipboard');
   }
 
   /**

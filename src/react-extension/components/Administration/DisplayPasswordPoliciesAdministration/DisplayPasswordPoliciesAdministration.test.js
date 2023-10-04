@@ -62,12 +62,6 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
       expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/password-policies');
     });
-
-    it.todo('As logged in user I should see the default password policies.');
-
-    it.todo('As logged in user I should see the customized password policies.');
-
-    it.todo('ANY ERROR???');
   });
 
   describe("As an administrator I can update the password policies settings of my organization", () => {
@@ -248,6 +242,73 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       await page.clickOnSave();
 
       expect(page.wordsSeparatorErrorMessage).not.toBeNull();
+    });
+
+    it("As a logged in administrator I can toggle the external dictionary check", async() => {
+      expect.assertions(1);
+
+      const currentToggleState = page.externalDictionaryCheck.checked;
+      await page.clickOnExternalDictionaryCheck();
+
+      expect(page.externalDictionaryCheck.checked).not.toBe(currentToggleState);
+    });
+
+    it("As a logged in administrator I can change the password mask to use by default", async() => {
+      const maskButtonsLength = 10;
+      expect.assertions(maskButtonsLength + 1);
+
+      await page.togglePasswordPanel();
+      const maskButtons = page.maskButtons;
+      expect(maskButtons.length).toStrictEqual(maskButtonsLength);
+
+      for (let i = 0; i < maskButtonsLength; i++) {
+        const isChecked = maskButtons[i].classList.contains('selected');
+        await page.clickOnMaskButton(maskButtons[i]);
+        expect(page.getMaskButton(i).classList.contains('selected')).not.toBe(isChecked);
+      }
+    });
+
+    it("As a logged in administrator I should see an error if I unselect all the password mask", async() => {
+      expect.assertions(1);
+
+      await page.togglePasswordPanel();
+      await waitFor(() => {});
+
+      const maskButtons = page.activeMaskButtons;
+
+      for (let i = 0; i < maskButtons.length; i++) {
+        await page.clickOnMaskButton(maskButtons[i]);
+      }
+
+      await page.clickOnSave();
+
+      expect(page.maskError).not.toBeNull();
+    });
+
+    it("As a logged in administrator I can see the error messages associated to the secret length", async() => {
+      expect.assertions(2);
+
+      await page.togglePasswordPanel();
+      await page.togglePassphrasePanel();
+
+      await page.setFormWith({
+        passwordLengthInput: 1,
+        passphraseWordCountInput: 1,
+      });
+
+      await page.clickOnSave();
+      await waitFor(() => {});
+
+      expect(page.passwordLengthError).not.toBeNull();
+      expect(page.passphraseLengthError).not.toBeNull();
+    });
+
+    it("As a logged in administrator I can choose passphrase as default generator", async() => {
+      expect.assertions(1);
+
+      await page.choosePassphraseAsDefaultGenerator();
+
+      expect(page.defaultGeneratorSelectedValue).toBe("Passphrase");
     });
   });
 

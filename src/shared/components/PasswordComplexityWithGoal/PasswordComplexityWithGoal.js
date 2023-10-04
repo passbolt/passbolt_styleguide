@@ -42,32 +42,11 @@ class PasswordComplexityWithGoal extends React.PureComponent {
   }
 
   /**
-   * Get the representative percentage of the current entropy compared to the full available entropy
-   * @returns {number}
-   */
-  get relativeCurrentEntropyRatio() {
-    return PasswordComplexityWithGoal.getRelativeEntropyPosition(this.props.entropy);
-  }
-
-  /**
    * Get the representative percentage of the targetted entropy compared to the full available entropy
    * @returns {number}
    */
   get relativeTargetEntropyRatio() {
     return PasswordComplexityWithGoal.getRelativeEntropyPosition(this.props.targetEntropy);
-  }
-
-  /**
-   * Get the CSS style of the size of the progress-bar
-   * @param {number} entropy
-   * @return {{width: string}}
-   */
-  getComplexityBarSize(entropy) {
-    const width = entropy
-      ? `${this.relativeCurrentEntropyRatio}%`
-      : '0';
-
-    return {width};
   }
 
   /**
