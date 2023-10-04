@@ -242,6 +242,19 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * Returns the source of the current configuration
+   * @returns {string}
+   */
+  get configurationSource() {
+    const source = this.props.adminUserDirectoryContext?.getCurrentSettings()?.source;
+    return {
+      'env': this.props.t('environement variables'),
+      'file': this.props.t('file'),
+      'db': this.props.t('database'),
+    }[source] || this.props.t('unknown');
+  }
+
+  /**
    * get the connection type
    */
   get connectionType() {
@@ -643,6 +656,10 @@ class DisplayUserDirectoryAdministration extends React.Component {
           }
         </div>
         <div className="col4 last">
+          <div className="sidebar-help" id="user-directory-settings-source">
+            <h3><Trans>Configuration source</Trans></h3>
+            <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+          </div>
           <div className="sidebar-help">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out our ldap configuration guide.</Trans></p>
