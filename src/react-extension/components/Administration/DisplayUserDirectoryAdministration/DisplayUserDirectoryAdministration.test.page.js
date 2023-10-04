@@ -361,8 +361,18 @@ export default class DisplayUserDirectoryAdministrationPage {
     return this._page.container.querySelector('#field-mapping-ad-user-username-input-feedback');
   }
 
+  /**
+   * Returns the field mapping AD Group Users error mesage HTML element
+   */
   get fieldsMappingOpenLdapGroupUsersErrorMessage() {
     return this._page.container.querySelector('#field-mapping-openldap-group-users-input-feedback');
+  }
+
+  /**
+   * Returns the settings source HTML element
+   */
+  get settingsSource() {
+    return this._page.container.querySelector('#user-directory-settings-source p');
   }
 
   /**

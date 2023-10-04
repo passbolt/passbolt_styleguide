@@ -297,5 +297,68 @@ describe("As AD I should see the user directory settings", () => {
       expect(DialogContext._currentValue.open).toHaveBeenCalledWith(DisplaySynchronizeUserDirectoryAdministration);
     });
   });
+
+  describe('As AD I can see the source of the current user directory settings', () => {
+    beforeEach(() => {
+      fetch.resetMocks();
+      enableFetchMocks();
+    });
+
+    it('::when the source is database', async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      mockResult.source = "db";
+      mockApiCalls(mockResult);
+
+      const page = new DisplayUserDirectoryAdministrationPage(context, props);
+      await waitFor(() => {});
+
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: database.");
+    });
+
+    it('::when the source is file', async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      mockResult.source = "file";
+      mockApiCalls(mockResult);
+
+      const page = new DisplayUserDirectoryAdministrationPage(context, props);
+      await waitFor(() => {});
+
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: file.");
+    });
+
+    it('::when the source is env', async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      mockResult.source = "env";
+      mockApiCalls(mockResult);
+
+      const page = new DisplayUserDirectoryAdministrationPage(context, props);
+      await waitFor(() => {});
+
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: environement variables.");
+    });
+
+    it('::when the source is env', async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      mockResult.source = "something-unsupported";
+      mockApiCalls(mockResult);
+
+      const page = new DisplayUserDirectoryAdministrationPage(context, props);
+      await waitFor(() => {});
+
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: unknown.");
+    });
+  });
 });
 
