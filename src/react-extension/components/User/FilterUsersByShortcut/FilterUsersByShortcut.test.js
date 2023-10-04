@@ -33,6 +33,7 @@ describe("Filter User By Shortcut", () => {
   });
 
   it('As LU, I should be redirected to /app/users when I filter by "All Users"', async() => {
+    expect.assertions(1);
     jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
     const expectedCallParameters =  {pathname: "/app/users", state: {filter: {type: "ALL"}}};
     await page.filterByAllUsers();
@@ -40,9 +41,18 @@ describe("Filter User By Shortcut", () => {
   });
 
   it('As LU, I should be redirected to /app/users when I filter by "Recently Modified"', async() => {
+    expect.assertions(1);
     jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
     const expectedCallParameters =  {pathname: "/app/users", state: {filter: {type: "FILTER-BY-RECENTLY-MODIFIED"}}};
     await page.filterByRecentlyModified();
+    expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
+  });
+
+  it('As LU, I should be redirected to /app/users when I filter by "Suspended users"', async() => {
+    expect.assertions(1);
+    jest.spyOn(props.history, 'push').mockImplementationOnce(() => {});
+    const expectedCallParameters =  {pathname: "/app/users", state: {filter: {type: "FILTER-BY-SUSPENDED-USER"}}};
+    await page.filterBySuspendedUsers();
     expect(props.history.push).toHaveBeenCalledWith(expectedCallParameters);
   });
 });

@@ -20,6 +20,7 @@ import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import Icon from "../../../../shared/components/Icons/Icon";
+import {isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -63,17 +64,17 @@ class DisplayResourceCommentList extends React.Component {
    * Fetch the comments of the resource
    */
   async fetch() {
-    await this.setState({actions: {loading: true}});
+    this.setState({actions: {loading: true}});
 
     const resourceId = this.props.resource.id;
     const comments = await this.props.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
 
     const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
-    await this.setState({comments: comments.sort(commentsSorter)});
+    this.setState({comments: comments.sort(commentsSorter)});
 
     this.props.onFetch(comments);
 
-    await this.setState({actions: {loading: false}});
+    this.setState({actions: {loading: false}});
   }
 
   /**
@@ -121,6 +122,15 @@ class DisplayResourceCommentList extends React.Component {
   }
 
   /**
+   * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
+   * @returns {boolean}
+   */
+  isUserSuspended(user) {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -133,7 +143,7 @@ class DisplayResourceCommentList extends React.Component {
             this.state.comments.map((comment, index) => (
               <li
                 key={index}
-                className="comment">
+                className={`comment ${this.isUserSuspended(comment.creator) ? "from-suspended-user" : ""}`}>
 
                 <div className="wrap-right-column">
                   <div className="right-column">
@@ -145,9 +155,7 @@ class DisplayResourceCommentList extends React.Component {
                       </span>
                       }
                       {!this.isOwner(comment) &&
-                      <span className="author username">
-                        {comment.creator.profile.first_name} {comment.creator.profile.last_name}
-                      </span>
+                        <span className="author username">{comment.creator.profile.first_name} {comment.creator.profile.last_name}{this.isUserSuspended(comment.creator) && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
                       }
                       <span
                         className="modified">{this.formatDateTimeAgo(comment.created)}
