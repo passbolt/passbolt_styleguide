@@ -17,7 +17,8 @@ import PropTypes from "prop-types";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
+import {isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays a group member for the group details members
@@ -50,13 +51,14 @@ class DisplayUserGroupDetailsMembersGroupMember extends React.Component {
    * Render the component
    */
   render() {
+    const isSuspended = this.props.context.siteSettings.canIUse('siteSettings') && isUserSuspended(this.user);
     return (
       <li
         key={this.user.id}
-        className="permission usercard-col-2">
+        className={`permission usercard-col-2 ${isSuspended ? "suspended" : ""}`}>
         <div className="content-wrapper">
           <div className="content">
-            <div className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}</div>
+            <div className="name">{`${this.user.profile.first_name} ${this.user.profile.last_name}`}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
             <div className="subinfo">{this.props.t(this.roleName)}</div>
           </div>
         </div>

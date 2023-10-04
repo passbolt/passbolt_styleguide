@@ -23,6 +23,7 @@ import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
 import {withDialog} from "./DialogContext";
 import {DateTime} from "luxon";
 import {withTranslation} from "react-i18next";
+import {isUserSuspended} from "../../shared/utils/dateUtils";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -53,7 +54,8 @@ export const UserWorkspaceContext = React.createContext({
   onUserSelected: {
     single: () => {}// Whenever a single user has been selected
   },
-  onGroupToEdit: () => {} // Whenever a group will be edited
+  onGroupToEdit: () => {}, // Whenever a group will be edited
+  shouldDisplayUserSuspendedFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
 });
 
 /**
@@ -100,6 +102,7 @@ class UserWorkspaceContextProvider extends React.Component {
       },
       onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
       isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
+      shouldDisplayUserSuspendedFilter: this.shouldDisplayUserSuspendedFilter.bind(this), // returns true if the 'Suspended user' filter should be displayed in the UI
     };
   }
 
@@ -376,6 +379,7 @@ class UserWorkspaceContextProvider extends React.Component {
       [UserWorkspaceFilterTypes.GROUP]: this.searchByGroup.bind(this),
       [UserWorkspaceFilterTypes.TEXT]: this.searchByText.bind(this),
       [UserWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
+      [UserWorkspaceFilterTypes.SUSPENDED_USER]: this.searchBySuspendedUsers.bind(this),
       [UserWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [UserWorkspaceFilterTypes.NONE]: () => { /* No search */ }
     };
@@ -392,7 +396,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param filter The All filter
    */
   async searchAll(filter) {
-    await this.setState({filter, filteredUsers: this.users});
+    this.setState({filter, filteredUsers: this.users});
   }
 
   /**
@@ -403,7 +407,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const group = filter.payload.group;
     const usersGroupIds = group.groups_users.map(groupUser => groupUser.user_id);
     const filteredUsers = this.users.filter(user => usersGroupIds.some(userId => userId === user.id));
-    await this.setState({filter, filteredUsers});
+    this.setState({filter, filteredUsers});
   }
 
   /**
@@ -425,7 +429,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const matchText = user => words.every(word => matchUser(word, user));
 
     const filteredUsers = this.users.filter(matchText);
-    await this.setState({filter, filteredUsers});
+    this.setState({filter, filteredUsers});
   }
 
   /**
@@ -435,7 +439,16 @@ class UserWorkspaceContextProvider extends React.Component {
   async searchByRecentlyModified(filter) {
     const recentlyModifiedSorter = (user1, user2) => DateTime.fromISO(user2.modified) < DateTime.fromISO(user1.modified) ? -1 : 1;
     const filteredUsers = this.users.sort(recentlyModifiedSorter);
-    await this.setState({filter, filteredUsers});
+    this.setState({filter, filteredUsers});
+  }
+
+  /**
+   * Keep only the currently suspended users
+   * @param filter A suspended users filter
+   */
+  async searchBySuspendedUsers(filter) {
+    const filteredUsers = this.users.filter(u => isUserSuspended(u));
+    this.setState({filter, filteredUsers});
   }
 
   /**
@@ -464,7 +477,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async select(user) {
     const mustUnselect = this.state.selectedUsers.length === 1 && this.state.selectedUsers[0].id === user.id;
-    await this.setState({selectedUsers: mustUnselect ? [] : [user]});
+    this.setState({selectedUsers: mustUnselect ? [] : [user]});
   }
 
   /**
@@ -473,7 +486,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async selectFromRoute(user) {
     const selectedUsers = [user];
-    await this.setState({selectedUsers});
+    this.setState({selectedUsers});
   }
 
   /**
@@ -482,7 +495,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async unselectAll() {
     const hasSelectedUsers = this.state.selectedUsers.length !== 0;
     if (hasSelectedUsers) {
-      await this.setState({selectedUsers: []});
+      this.setState({selectedUsers: []});
     }
   }
 
@@ -493,7 +506,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const matchId = selectedUser => user => user.id === selectedUser.id;
     const matchSelectedUser = selectedUser => this.users.some(matchId(selectedUser));
     const selectedUsers = this.state.selectedUsers.filter(matchSelectedUser);
-    await this.setState({selectedUsers});
+    this.setState({selectedUsers});
   }
 
   /**
@@ -534,7 +547,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasSortPropertyChanged = this.state.sorter.propertyName !== propertyName;
     const asc = hasSortPropertyChanged  || !this.state.sorter.asc;
     const sorter = {propertyName, asc};
-    await this.setState({sorter});
+    this.setState({sorter});
   }
 
   /**
@@ -561,12 +574,14 @@ class UserWorkspaceContextProvider extends React.Component {
     const getUserFullName = user => `${user.profile.first_name} ${user.profile.last_name}`;
     const nameSorter = (u1, u2) => getUserFullName(u1).localeCompare(getUserFullName(u2));
     const roleNameSorter = (roleIdU1, roleIdU2) => this.getTranslatedRoleName(roleIdU1).localeCompare(this.getTranslatedRoleName(roleIdU2));
+    const suspendedSorter = (u1, u2) => (isUserSuspended(u1) === isUserSuspended(u2)) ? 0 : isUserSuspended(u2) ? -1 : 1;
     const dateOrStringSorter = ['modified', 'last_logged_in'].includes(this.state.sorter.propertyName) ? dateSorter : stringSorter;
     const attentionRequireSorter = (u1, u2) => (this.isAttentionRequired(u2) === this.isAttentionRequired(u1)) ? 0 : this.isAttentionRequired(u2) ? 1 : -1;
 
     const isNameProperty = this.state.sorter.propertyName === 'name';
     const isMfaProperty = this.state.sorter.propertyName === 'is_mfa_enabled';
     const isRoleNameProperty = this.state.sorter.propertyName === 'role.name';
+    const isSuspendedProperty = this.state.sorter.propertyName === 'disabled';
     const isAttentionRequiredProperty = this.state.sorter.propertyName === 'attentionRequired';
     const isAccountRecoveryUserSettingStatusProperty = this.state.sorter.propertyName === 'account_recovery_user_setting.status';
 
@@ -581,11 +596,13 @@ class UserWorkspaceContextProvider extends React.Component {
       propertySorter = keySorter("role_id", roleNameSorter);
     } else if (isAccountRecoveryUserSettingStatusProperty) {
       propertySorter = plainObjectSorter(accountRecoveryUserSettingStatusSorter);
+    } else if (isSuspendedProperty) {
+      propertySorter = plainObjectSorter(suspendedSorter);
     } else {
       propertySorter = keySorter(this.state.sorter.propertyName, dateOrStringSorter);
     }
 
-    await this.setState({filteredUsers: this.state.filteredUsers.sort(propertySorter)});
+    this.setState({filteredUsers: this.state.filteredUsers.sort(propertySorter)});
   }
 
   /** USER DETAILS  **/
@@ -596,7 +613,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async detailGroup(group) {
     const locked = this.state.details.locked;
-    await this.setState({details: {group, user: null, locked}});
+    this.setState({details: {group, user: null, locked}});
   }
 
   /**
@@ -605,7 +622,7 @@ class UserWorkspaceContextProvider extends React.Component {
    */
   async detailUser(user) {
     const locked = this.state.details.locked;
-    await this.setState({details: {group: null, user, locked}});
+    this.setState({details: {group: null, user, locked}});
   }
 
   /**
@@ -615,7 +632,7 @@ class UserWorkspaceContextProvider extends React.Component {
     const hasDetails = this.state.details.user || this.state.details.group;
     if (hasDetails) {
       const locked = this.state.details.locked;
-      await this.setState({details: {group: null, user: null, locked}});
+      this.setState({details: {group: null, user: null, locked}});
     }
   }
 
@@ -626,7 +643,7 @@ class UserWorkspaceContextProvider extends React.Component {
   async lockDetails() {
     const details = this.state.details;
     const locked = this.state.details.locked;
-    await this.setState({details: Object.assign({}, details, {locked: !locked})});
+    this.setState({details: Object.assign({}, details, {locked: !locked})});
   }
 
   /**
@@ -639,10 +656,10 @@ class UserWorkspaceContextProvider extends React.Component {
       const locked = this.state.details.locked;
       if (hasUserDetails) { // Case of user details
         const updatedUserDetails = this.users.find(user => user.id === this.state.details.user.id);
-        await this.setState({details: {user: updatedUserDetails, group: null, locked}});
+        this.setState({details: {user: updatedUserDetails, group: null, locked}});
       } else { // Case of group details
         const updatedGroupDetails = this.groups.find(group => group.id === this.state.details.group.id);
-        await this.setState({details: {group: updatedGroupDetails, user: null, locked}});
+        this.setState({details: {group: updatedGroupDetails, user: null, locked}});
       }
     }
   }
@@ -654,14 +671,14 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param user A user
    */
   async scrollTo(user) {
-    await this.setState({scrollTo: {user}});
+    this.setState({scrollTo: {user}});
   }
 
   /**
    * Unset the user to scroll to
    */
   async scrollNothing() {
-    await this.setState({scrollTo: {}});
+    this.setState({scrollTo: {}});
   }
 
   /** GROUP EDIT **/
@@ -671,7 +688,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * @param groupToEdit The group to edit
    */
   async updateGroupToEdit(groupToEdit) {
-    await this.setState({groupToEdit});
+    this.setState({groupToEdit});
   }
 
   /** Common roles getters **/
@@ -692,6 +709,14 @@ class UserWorkspaceContextProvider extends React.Component {
       return this.props.t(this.props.context.roles.find(role => role.id === id).name);
     }
     return "";
+  }
+
+  /**
+   * Returns true if the 'Suspended user' filter should be displayed in the UI
+   * @returns {boolean}
+   */
+  shouldDisplayUserSuspendedFilter() {
+    return this.props.context.siteSettings.canIUse('disableUser') && this.props.context.loggedInUser.role.name === "admin";
   }
 
   /**
@@ -749,4 +774,5 @@ export const UserWorkspaceFilterTypes = {
   GROUP: 'FILTER-BY-GROUP', // Users for a given group
   TEXT: 'FILTER-BY-TEXT-SEARCH', // Users matching some text words
   RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Keep recently modified users
+  SUSPENDED_USER: 'FILTER-BY-SUSPENDED-USER', // Keep only suspended users
 };

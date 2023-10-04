@@ -148,7 +148,7 @@ class CreateGroupPageObject {
    * @returns {Element}
    */
   get userAutocomplete() {
-    return this._container.querySelector('#autocomplete-item .row.selected .main-cell-wrapper .main-cell button');
+    return this._container.querySelector('.autocomplete-item .row.selected .main-cell-wrapper .main-cell button');
   }
 
   /**

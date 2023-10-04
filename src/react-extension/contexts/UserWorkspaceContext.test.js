@@ -50,6 +50,11 @@ describe("User Workspace Context", () => {
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.RECENTLY_MODIFIED);
     });
 
+    it("AS LU I should have an SUSPENDED-USER filter when I went to /app/users with such a filter", async() => {
+      await page.goToSuspendedUsers();
+      expect(page.filter.type).toBe(UserWorkspaceFilterTypes.SUSPENDED_USER);
+    });
+
     it("AS LU I should have an TEXT filter when I went to /app/users with such a filter", async() => {
       await page.goToText("some text");
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.TEXT);
@@ -72,8 +77,13 @@ describe("User Workspace Context", () => {
       expect(page.filteredUsers).toBe(context.users);
     });
 
-    it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
+    it("AS LU I should have all suspended users when the filter is SUSPENDED-USERS", async() => {
+      await page.goToSuspendedUsers();
+      const expectedUsers = context.users.filter(user => Boolean(user.disabled));
+      expect(page.filteredUsers).toStrictEqual(expectedUsers);
+    });
 
+    it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
 
     it("AS LU I should have users matching a text when the filter is TEXT", async() => {
       const expectedResourcesCount = 1;

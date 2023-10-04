@@ -217,6 +217,14 @@
         }
       }
 
+      &.suspended td {
+        opacity: 0.5;
+
+        &.cell-checkbox {
+          opacity: 1;
+        }
+      }
+
       &:hover {
         background: @tableview-hover-background;
         color: @tableview-content-hover-text-color;

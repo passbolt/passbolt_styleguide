@@ -20,6 +20,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import {isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays the user details about information
@@ -113,6 +114,14 @@ class DisplayUserDetailsInformation extends React.Component {
   }
 
   /**
+   * Returns true if the disablUser feature is enabled.
+   * @returns {boolean}
+   */
+  hasDisableUserSection() {
+    return this.props.context.siteSettings.canIUse('disableUser');
+  }
+
+  /**
    * Returns true if the accountRecovery feature is enabled and if the logged in user is an admin.
    * @returns {boolean}
    */
@@ -187,6 +196,17 @@ class DisplayUserDetailsInformation extends React.Component {
                 }[this.user?.is_mfa_enabled]}
               </span>
             </li>
+            }
+            {this.hasDisableUserSection() &&
+              <li className="suspended">
+                <span className="label"><Trans>Suspended</Trans></span>
+                <span className="value">
+                  {{
+                    [false]: <Trans>No</Trans>,
+                    [true]: <Trans>Yes</Trans>,
+                  }[isUserSuspended(this.user)]}
+                </span>
+              </li>
             }
           </ul>
         </div>

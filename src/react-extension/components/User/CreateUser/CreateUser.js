@@ -25,6 +25,7 @@ import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {USER_INPUT_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
+import Tooltip from "../../Common/Tooltip/Tooltip";
 
 class CreateUser extends Component {
   /**
@@ -437,15 +438,22 @@ class CreateUser extends Component {
               )}
             </div>
             <div className={`input checkbox-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="is_admin_checkbox"><Trans>Role</Trans></label>
-              <div className="input checkbox">
-                <input id="is_admin_checkbox" name="is_admin" onChange={this.handleCheckboxClick}
-                  checked={this.state.is_admin} disabled={this.hasAllInputDisabled()} type="checkbox"/>
-                <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
-              </div>
-              <div className="help-message">
-                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; By default they can not see all passwords.</Trans>
-              </div>
+              <label><Trans>Role</Trans></label>
+              <span className="input toggle-switch form-element ready">
+                <input
+                  id="is_admin_checkbox"
+                  name="is_admin"
+                  disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
+                  onChange={this.handleCheckboxClick}
+                  className="toggle-switch-checkbox checkbox"
+                  checked={this.state.is_admin}
+                  type="checkbox"
+                />
+                <label htmlFor="is_admin_checkbox"><Trans>This user is an administrator</Trans></label>
+                <Tooltip message={this.translate("Administrators can add and delete users. They can also create groups and assign group managers. By default they can not see all passwords.")}>
+                  <Icon name="info-circle"/>
+                </Tooltip>
+              </span>
             </div>
           </div>
           <div className="submit-wrapper clearfix">
