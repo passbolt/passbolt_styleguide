@@ -55,7 +55,7 @@ export const UserWorkspaceContext = React.createContext({
     single: () => {}// Whenever a single user has been selected
   },
   onGroupToEdit: () => {}, // Whenever a group will be edited
-  shouldDisplayUserSuspendedFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
+  shouldDisplaySuspendedUsersFilter: () => {}, // returns true if the 'Suspended user' filter should be displayed in the UI
 });
 
 /**
@@ -102,7 +102,7 @@ class UserWorkspaceContextProvider extends React.Component {
       },
       onGroupToEdit: this.handleGroupToEdit.bind(this), // Whenever a group will be edited
       isAttentionRequired: this.isAttentionRequired.bind(this), // Whenever a user needs attention
-      shouldDisplayUserSuspendedFilter: this.shouldDisplayUserSuspendedFilter.bind(this), // returns true if the 'Suspended user' filter should be displayed in the UI
+      shouldDisplaySuspendedUsersFilter: this.shouldDisplaySuspendedUsersFilter.bind(this), // returns true if the 'Suspended user' filter should be displayed in the UI
     };
   }
 
@@ -715,7 +715,7 @@ class UserWorkspaceContextProvider extends React.Component {
    * Returns true if the 'Suspended user' filter should be displayed in the UI
    * @returns {boolean}
    */
-  shouldDisplayUserSuspendedFilter() {
+  shouldDisplaySuspendedUsersFilter() {
     return this.props.context.siteSettings.canIUse('disableUser') && this.props.context.loggedInUser.role.name === "admin";
   }
 
