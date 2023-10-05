@@ -18,6 +18,7 @@ import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import MockFetch from "../../../test/mock/MockFetch";
 import {defaultEmailNotificationSettings, defaultProps, defaultPropsCE, withFileSourceSettings, withoutDatabaseSourceSettings} from "./DisplayEmailNotificationsAdministration.test.data";
 import {AdminEmailNotificationContextProvider} from "../../../contexts/Administration/AdministrationEmailNotification/AdministrationEmailNotificationContext";
+import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 
 export default {
   title: 'Components/Administration/DisplayEmailNotificationsAdministration',
@@ -53,11 +54,13 @@ const decorators = [
 
 const Template = args =>
   <AdminEmailNotificationContextProvider {...args}>
-    <div className="panel middle">
-      <div className="grid grid-responsive-12">
-        <DisplayEmailNotificationsAdministration {...args}/>
+    <RbacContextProvider>
+      <div className="panel middle">
+        <div className="grid grid-responsive-12">
+          <DisplayEmailNotificationsAdministration {...args}/>
+        </div>
       </div>
-    </div>
+    </RbacContextProvider>
   </AdminEmailNotificationContextProvider>;
 
 

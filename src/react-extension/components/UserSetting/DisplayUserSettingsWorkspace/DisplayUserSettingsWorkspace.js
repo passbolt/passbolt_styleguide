@@ -36,6 +36,8 @@ import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext"
 import {withMfa} from '../../../contexts/MFAContext';
 import ExportAccountToDesktop from '../ExportAccountToDesktop/ExportAccountToDesktop';
 import OrchestrateMfaSettings from '../../MFA/OrchestrateMfaSettings/OrchestrateMfaSettings';
+import {withRbac} from '../../../../shared/context/Rbac/RbacContext';
+import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
 
 /**
  * This component is a container for all the user settings workspace features
@@ -54,7 +56,8 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileTransferCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
+    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -134,6 +137,7 @@ DisplayUserSettingsWorkspace.propTypes = {
   match: PropTypes.any,
   accountRecoveryContext: PropTypes.object, // The account recovery context
   mfaContext: PropTypes.object,
+  rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace))));
+export default withAppContext(withRbac(withAccountRecovery(withMfa(withRouter(DisplayUserSettingsWorkspace)))));

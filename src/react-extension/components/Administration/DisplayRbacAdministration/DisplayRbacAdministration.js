@@ -287,6 +287,14 @@ class DisplayRbacAdministration extends React.Component {
                       roles={this.state.roles}
                       onChange={this.updateRbacControlFunction}/>
                   </DisplayRbacSection>
+                  <DisplayRbacSection label={this.props.t('User settings')} level={1}>
+                    <DisplayRbacItem label={this.props.t('Can see mobile setup')}
+                      actionName={uiActions.MOBILE_TRANSFER} level={3}
+                      rbacs={this.props.adminRbacContext.rbacs}
+                      rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                      roles={this.state.roles}
+                      onChange={this.updateRbacControlFunction}/>
+                  </DisplayRbacSection>
                 </>
               }
             </div>
