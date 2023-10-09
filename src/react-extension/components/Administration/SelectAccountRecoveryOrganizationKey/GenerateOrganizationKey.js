@@ -24,12 +24,12 @@ import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGene
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import Password from "../../../../shared/components/Password/Password";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
 import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import AppEmailValidatorService from "../../../../shared/services/validator/AppEmailValidatorService";
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
 
 /** Resource password max length */
 const RESOURCE_PASSWORD_MAX_LENGTH = 4096;
@@ -65,6 +65,7 @@ class GenerateOrganizationKey extends React.Component {
       algorithm: "RSA",
       keySize: 4096,
       passphrase: "",
+      passphraseConfirmation: "",
       passphraseWarning: "",
       passphraseEntropy: null,
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
@@ -98,6 +99,7 @@ class GenerateOrganizationKey extends React.Component {
     this.nameInputRef = React.createRef();
     this.emailInputRef = React.createRef();
     this.passphraseInputRef = React.createRef();
+    this.passphraseConfirmationInputRef = React.createRef();
   }
 
   /**
@@ -189,7 +191,7 @@ class GenerateOrganizationKey extends React.Component {
       });
     }
     if (this.state.hasAlreadyBeenValidated) {
-      await this.validatePassphraseInput();
+      this.validatePassphraseInput();
     } else {
       const hasResourcePassphraseMaxLength = this.state.passphrase.length >= RESOURCE_PASSWORD_MAX_LENGTH;
       const warningMessage = this.translate("this is the maximum size for this field, make sure your data was not truncated");
@@ -203,10 +205,18 @@ class GenerateOrganizationKey extends React.Component {
    * Validate the passphrase.
    * @param {string} passphrase the passphrase to validate
    * @param {integer|null} passphraseEntropy the entropy of the given passphrase
-   * @return {Promise<boolean>}
+   * @return {boolean}
    */
-  async validatePassphraseInput() {
+  validatePassphraseInput() {
     return !this.hasAnyErrors();
+  }
+
+  /**
+   * Validates the passphrase confirmation input.
+   * @returns {boolean}
+   */
+  validatePassphraseConfirmationInput() {
+    return !this.isEmptyPasswordConfirmation() && !this.isPassphraseAndConfirmationDifferent();
   }
 
   /**
@@ -219,12 +229,33 @@ class GenerateOrganizationKey extends React.Component {
   }
 
   /**
+   * Returns true if the passphrase confirmation is empty
+   * @returns {boolean}
+   */
+  isEmptyPasswordConfirmation() {
+    return !this.state.passphraseConfirmation.length;
+  }
+
+  /**
    * Checks if the current passphrase is empty.
    *
    * @returns {boolean} True if the passphrase is empty, false otherwise.
    */
   isEmptyPassword() {
     return !this.state.passphrase.length;
+  }
+
+  /**
+   * Returns true if the passphrase is different than the passphraseConfirmation and is not empty.
+   * False is returned when passphraseConfirmation is empty to avoid conflict with the `isEmptyPasswordConfirmation` validation rule
+   * @returns {boolean}
+   */
+  isPassphraseAndConfirmationDifferent() {
+    if (this.isEmptyPasswordConfirmation()) {
+      return false;
+    }
+
+    return this.state.passphrase !== this.state.passphraseConfirmation;
   }
 
   /**
@@ -289,6 +320,8 @@ class GenerateOrganizationKey extends React.Component {
       this.emailInputRef.current.focus();
     } else if (this.hasAnyErrors()) {
       this.passphraseInputRef.current.focus();
+    } else if (!this.validatePassphraseConfirmationInput()) {
+      this.passphraseConfirmationInputRef.current.focus();
     }
   }
 
@@ -355,9 +388,10 @@ class GenerateOrganizationKey extends React.Component {
     // Validate the form inputs.
     const isNameValid = this.validateNameInput();
     const isEmailValid = this.validateEmailInput();
-    const isPassphraseValid = await this.validatePassphraseInput();
+    const isPassphraseValid = this.validatePassphraseInput();
+    const isPassphraseConfirmationValid = this.validatePassphraseConfirmationInput();
 
-    return isNameValid && isEmailValid && isPassphraseValid;
+    return isNameValid && isEmailValid && isPassphraseValid && isPassphraseConfirmationValid;
   }
 
   /**
@@ -481,7 +515,7 @@ class GenerateOrganizationKey extends React.Component {
               value={this.state.passphrase}
               onChange={this.handlePassphraseChange} disabled={this.hasAllInputDisabled()}
               inputRef={this.passphraseInputRef}/>
-            <PasswordComplexity entropy={passphraseEntropy}/>
+            <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={FAIR_STRENGTH_ENTROPY}/>
             {this.state.hasAlreadyBeenValidated &&
               <div className="password error-message">
                 {this.isEmptyPassword() &&
@@ -508,6 +542,27 @@ class GenerateOrganizationKey extends React.Component {
             {!this.state.isPwnedServiceAvailable && this.pownedService !== null &&
               <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
             }
+            <div className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}>
+              <label htmlFor="generate-organization-key-form-password">
+                <Trans>Organization key passphrase confirmation</Trans>
+              </label>
+              <Password id="generate-organization-key-form-password-confirmation" name="passphraseConfirmation"
+                placeholder={this.translate("Passphrase confirmation")} autoComplete="new-password" preview={true}
+                securityToken={this.props.context.userSettings.getSecurityToken()}
+                value={this.state.passphraseConfirmation}
+                onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
+                inputRef={this.passphraseConfirmationInputRef}/>
+              {this.state.hasAlreadyBeenValidated &&
+                <div className="password-confirmation error-message">
+                  {this.isEmptyPasswordConfirmation() &&
+                    <div className="empty-passphrase-confirmation error-message"><Trans>The passphrase confirmation is required.</Trans></div>
+                  }
+                  {this.isPassphraseAndConfirmationDifferent() &&
+                    <div className="invalid-passphrase-confirmation error-message"><Trans>The passphrase confirmation should match the passphrase</Trans></div>
+                  }
+                </div>
+              }
+            </div>
           </div>
         </div>
         <div className="warning message" id="generate-organization-key-setting-overridden-banner">
