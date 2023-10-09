@@ -254,7 +254,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle copy to clipboard the totp of the selected resource
    */
   async handleCopyTotpClickEvent() {
-    let plaintextSecretDto;
+    let plaintextSecretDto, code;
     this.handleCloseMoreMenu();
 
     this.props.progressContext.open(this.props.t('Decrypting secret'));
@@ -276,7 +276,13 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       return;
     }
 
-    const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    try {
+      code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    } catch (error) {
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
+      return;
+    }
+
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
