@@ -11,6 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
+
+import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+
 /**
  * Default props
  * @returns {any}
@@ -38,7 +41,8 @@ export function defaultProps(props) {
       siteSettings: {
         canIUse: () => true
       }
-    }
+    },
+    rbacContext: defaultUserRbacContext()
   };
   return Object.assign(defaultProps, props || {});
 }

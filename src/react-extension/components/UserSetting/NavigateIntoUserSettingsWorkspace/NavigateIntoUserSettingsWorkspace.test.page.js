@@ -42,12 +42,18 @@ export default class NavigateIntoUserSettingsWorkspacePage {
     );
   }
 
-
   /**
    * Returns true if the badge for attention required is display for account recovery
    */
   get attentionRequired() {
     return this._page.container.querySelectorAll('.exclamation');
+  }
+
+  /**
+   * Returns the navigation item element for the mobile setup
+   */
+  get mobileTransferMenuItem() {
+    return this._page.container.querySelector('#navigation-item-mobile-setup');
   }
 }
 

@@ -20,6 +20,8 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -93,7 +95,8 @@ class DisplayUserBadgeMenu extends Component {
    * @returns {bool}
    */
   get canIUseMobileCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
+    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -241,7 +244,7 @@ class DisplayUserBadgeMenu extends Component {
             </li>
             }
             {this.canIUseMobileCapability &&
-            <li key="mobile">
+            <li id="user-badge-menu-mobile" key="mobile">
               <div className="row">
                 <button type="button" className="link no-border" onClick={this.handleMobileAppsClick}>
                   <span><Trans>Mobile Apps</Trans></span>
@@ -265,6 +268,7 @@ DisplayUserBadgeMenu.propTypes = {
   accountRecoveryContext: PropTypes.object, // The account recovery context
   baseUrl: PropTypes.string,
   user: PropTypes.object,
+  rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withNavigationContext(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu)))));
+export default withAppContext(withRbac(withNavigationContext(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu))))));
