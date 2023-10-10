@@ -241,7 +241,7 @@ describe('As AD I can generate an ORK', () => {
         throw new Error("Changes are not available yet");
       }
     });
-    await page.type("Testtestest", page.passphraseField);
+    await page.type("azertyazertyazerty", page.passphraseField);
     await waitFor(() => {});
 
     expect(page.passwordWarningMessage.textContent).toBe("The passphrase is part of an exposed data breach.");

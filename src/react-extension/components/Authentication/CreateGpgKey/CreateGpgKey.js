@@ -158,15 +158,18 @@ class CreateGpgKey extends Component {
       passphraseEntropy: null,
     };
 
-    if (newState.passphrase.length) {
-      newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
-      if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
-      }
+    if (!newState.passphrase.length) {
+      newState.passphraseInDictionnary = false;
+      this.setState(newState);
+      return;
+    }
+
+    newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
+    if (this.state.isPwnedServiceAvailable && this.isMinimumRequiredEntropyReached(newState.passphraseEntropy)) {
+      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
     } else {
       newState.passphraseInDictionnary = false;
     }
-
     this.setState(newState);
   }
 
@@ -194,8 +197,8 @@ class CreateGpgKey extends Component {
 
     try {
       const result =  await this.pownedService.evaluateSecret(passphrase);
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passphraseInDictionnary = this.state.passphrase && result.inDictionary;
+      //we ensure after the resolution of the deobunced promise that the passphrase is not empty and the minimum entropy is still reached so we do not display the 'in dictionary' warning message when not relevant
+      passphraseInDictionnary = this.state.passphrase && result.inDictionary && this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
     } catch (error) {
       // If the service is unavailable don't block the user journey.
@@ -244,6 +247,15 @@ class CreateGpgKey extends Component {
       processing: !this.state.actions.processing
     };
     this.setState({actions});
+  }
+
+  /**
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @param {number} passphraseEntropy
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached(passphraseEntropy) {
+    return passphraseEntropy >= this.props.userPassphrasePolicies.entropy_minimum;
   }
 
   /**

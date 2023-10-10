@@ -179,7 +179,7 @@ class GenerateOrganizationKey extends React.Component {
 
     if (this.state.passphrase.length > 0) {
       passphraseEntropy = SecretGenerator.entropy(this.state.passphrase);
-      if (this.pownedService) {
+      if (this.state.isPwnedServiceAvailable) {
         this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(this.state.passphrase);
       }
     } else {
@@ -215,7 +215,7 @@ class GenerateOrganizationKey extends React.Component {
    * @returns {boolean} True if the passphrase has strong enough entropy, false otherwise.
    */
   hasWeakPassword() {
-    return this.state.passphraseEntropy < FAIR_STRENGTH_ENTROPY;
+    return !this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
   }
 
   /**
@@ -242,8 +242,8 @@ class GenerateOrganizationKey extends React.Component {
 
     try {
       const result =  await this.pownedService.evaluateSecret(passphrase);
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passphraseInDictionnary = this.state.passphrase && result.inDictionary;
+      //we ensure after the resolution of the deobunced promise that the passphrase is not empty and the minimum entropy is still reached so we do not display the 'in dictionary' warning message when not relevant
+      passphraseInDictionnary = this.state.passphrase && result.inDictionary && this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
     } catch (error) {
       // If the service is unavailable don't block the user journey.
@@ -305,7 +305,7 @@ class GenerateOrganizationKey extends React.Component {
     }
     this.setState({hasAlreadyBeenValidated: true});
 
-    if (this.pownedService) {
+    if (this.state.isPwnedServiceAvailable) {
       await this.isPwndProcessingPromise;
     }
 
@@ -389,6 +389,15 @@ class GenerateOrganizationKey extends React.Component {
    */
   hasAllInputDisabled() {
     return this.state.processing;
+  }
+
+  /**
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @param {number} passphraseEntropy
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached(passphraseEntropy) {
+    return passphraseEntropy >= FAIR_STRENGTH_ENTROPY;
   }
 
   /**
