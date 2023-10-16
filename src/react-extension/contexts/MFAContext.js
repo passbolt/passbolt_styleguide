@@ -25,6 +25,7 @@ export const MfaSettingsWorkflowStates = {
   TOTPOVERVIEW: "Totp Overview",
   SCANTOTPCODE: "Scan totp code",
   VIEWCONFIGURATION: "View a totp configuration",
+  SETUPYUBIKEY: "Setup Yubikey"
 };
 
 export const Providers = {
@@ -56,6 +57,7 @@ export const MfaContext = React.createContext({
   goToProviderList: () => {}, //Cancel a setup process or/and go to mfa providers
   validateTotpCode: () => {}, //Validate the totp code
   removeProvider: () => {}, //Remove an existing provider
+  validateYubikeyCode: () => {}, //Validate the yubikey code
 });
 
 /**
@@ -106,6 +108,7 @@ export class MfaContextProvider extends React.Component {
       goToProviderList: this.goToProviderList.bind(this), //Cancel a setup process or/and go to mfa providers
       validateTotpCode: this.validateTotpCode.bind(this), //Validate the totp code
       removeProvider: this.removeProvider.bind(this), //Remove an existing provider
+      validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
     };
   }
 
@@ -288,6 +291,25 @@ export class MfaContextProvider extends React.Component {
       await this.props.context.port.request("passbolt.mfa-setup.verify-totp-code", {
         otpProvisioningUri,
         totp
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  /**
+   * Validate the totp provider with code and uri provided during setup
+   * @param {string} hotp
+   * @returns {Promise<void>}
+   */
+  async validateYubikeyCode(hotp) {
+    try {
+      this.setProcessing(true);
+      await this.props.context.port.request("passbolt.mfa-setup.verify-yubikey-code", {
+        hotp
       });
     } catch (error) {
       console.error(error);

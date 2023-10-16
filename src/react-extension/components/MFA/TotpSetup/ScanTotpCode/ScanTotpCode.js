@@ -35,6 +35,7 @@ class ScanTotpCode extends Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
+    this.createInputRef();
   }
 
   /**
@@ -63,7 +64,22 @@ class ScanTotpCode extends Component {
   }
 
   async componentDidMount() {
+    this.focusOnOtpInput();
     await this.getQrCode();
+  }
+
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
+  createInputRef() {
+    this.otpInputRef = React.createRef();
+  }
+
+  /**
+   * Put the focus on the otp input
+   */
+  focusOnOtpInput() {
+    this.otpInputRef.current.focus();
   }
 
   /**
@@ -194,7 +210,14 @@ class ScanTotpCode extends Component {
               <form onSubmit={this.handleSubmit}>
                 <div className="input text required">
                   <label htmlFor="totp"><Trans>One Time Password (OTP)</Trans></label>
-                  <input type="text" name="totp" placeholder="123456" autoComplete="off" onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()} />
+                  <input
+                    type="text"
+                    name="totp"
+                    placeholder="123456"
+                    autoComplete="off"
+                    onChange={this.handleInputChange}
+                    disabled={this.hasAllInputDisabled()}
+                    ref={this.otpInputRef}/>
                   {(this.state.error.isRequired && this.state.isSubmitted) &&
                 <div className="code-required error-message"><Trans>A OTP code is required.</Trans></div>
                   }

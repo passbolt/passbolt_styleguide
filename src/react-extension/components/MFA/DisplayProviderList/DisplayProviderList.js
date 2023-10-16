@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.4.0
+ * @since         4.3.0
  */
 
 import React, {Component} from "react";
@@ -59,7 +59,7 @@ class DisplayProviderList extends Component {
    * @returns {boolean}
    */
   get isRunningUnderHttps() {
-    const trustedDomain = this.props.context.userSettings?.getTrustedDomain();
+    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
     const url = new URL(trustedDomain);
     return url.protocol === "https:";
   }
@@ -87,6 +87,13 @@ class DisplayProviderList extends Component {
   }
 
   /**
+   * Returns true if the component must be in a processing mode
+   */
+  get isProcessing() {
+    return this.props.mfaContext.isProcessing();
+  }
+
+  /**
    * handle provider click
    * @param {string} provider
    */
@@ -104,7 +111,7 @@ class DisplayProviderList extends Component {
           //Todo
           break;
         case Providers.YUBIKEY:
-          //Todo
+          this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPYUBIKEY);
           break;
       }
     }
@@ -120,37 +127,41 @@ class DisplayProviderList extends Component {
         <div className="row mfa-provider-list">
           <div className="mfa-setup col8 main-column">
             <h3><Trans>Multi factor authentication</Trans></h3>
-            {!this.isRunningUnderHttps &&
+            {
+              !this.isProcessing && <>
+                {!this.isRunningUnderHttps &&
              <p className="description"><Trans>Sorry the multi factor authentication feature is only available in a secure context (HTTPS).</Trans></p>
+                }
+                {
+                  this.isRunningUnderHttps && !this.props.mfaContext.hasMfaOrganisationSettings() && <>
+                    <h4 className="no-border"><Trans>Sorry no multi factor authentication is enabled for this organization.</Trans></h4>
+                    <p className="description"><Trans>Please contact your administrator to enable multi-factor authentication.</Trans></p>
+                  </>
+                }
+                {
+                  this.isRunningUnderHttps && this.props.mfaContext.hasMfaOrganisationSettings() && <>
+                    <h4 className="no-border"><Trans>Please select a provider</Trans></h4>
+                    <ul className="mfa-providers">
+                      {
+                        Object.entries(this.organisationMfaProviders).map(([key, value]) => (
+                          value && <li key={key} id={key}>
+                            <a href="#" onClick={() => this.handleProviderClick(key)}>
+                              <div className="provider-img">
+                                {this.getProvider(key).icon}
+                              </div>
+                              <span className="provider-name">{this.getProvider(key).name}</span>
+                            </a>
+                            <div className={`mfa-provider-status ${this.userMfaSettings[key]}`}>
+                              {this.userMfaSettings[key] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                            </div>
+                          </li>
+                        ))
+                      }
+                    </ul>
+                  </>
+                }</>
             }
-            {
-              this.isRunningUnderHttps && !this.props.mfaContext.hasMfaOrganisationSettings() && <>
-                <h4 className="no-border"><Trans>Sorry no multi factor authentication is enabled for this organization.</Trans></h4>
-                <p className="description"><Trans>Please contact your administrator to enable multi-factor authentication.</Trans></p>
-              </>
-            }
-            {
-              this.isRunningUnderHttps && this.props.mfaContext.hasMfaOrganisationSettings() && <>
-                <h4 className="no-border"><Trans>Please select a provider</Trans></h4>
-                <ul className="mfa-providers">
-                  {
-                    Object.entries(this.organisationMfaProviders).map(([key, value]) => (
-                      value && <li key={key} id={key}>
-                        <a href="#" onClick={() => this.handleProviderClick(key)}>
-                          <div className="provider-img">
-                            {this.getProvider(key).icon}
-                          </div>
-                          <span className="provider-name">{this.getProvider(key).name}</span>
-                        </a>
-                        <div className={`mfa-provider-status ${this.userMfaSettings[key]}`}>
-                          {this.userMfaSettings[key] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
-                        </div>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </>
-            }
+
           </div>
           <div className="col4 last">
             <div className="sidebar-help">

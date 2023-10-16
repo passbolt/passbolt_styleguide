@@ -30,6 +30,9 @@ export function mockMfaContext(props = {}) {
     hasMfaSettings: jest.fn(),
     isProcessing: jest.fn(),
     hasMfaOrganisationSettings: jest.fn(),
+    validateYubikeyCode: jest.fn(),
+    goToProviderList: jest.fn(),
+    navigate: jest.fn(),
     ...props
   };
 }
