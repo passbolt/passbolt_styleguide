@@ -21,6 +21,7 @@ import DisplayProviderList from "../DisplayProviderList/DisplayProviderList";
 import ScanTotpCode from "../TotpSetup/ScanTotpCode/ScanTotpCode";
 import TotpGetStarted from "../TotpSetup/TotpGetStarted/TotpGetStarted";
 import DisplayMfaProviderConfiguration from "../DisplayMfaProviderConfiguration/DisplayMfaProviderConfiguration";
+import YubikeySetup from "../YubikeySetup/YubikeySetup";
 
 /**
  * The component orchestrates the mfa settings flow.
@@ -44,6 +45,8 @@ class OrchestrateMfaSettings extends Component {
         return <TotpGetStarted />;
       case MfaSettingsWorkflowStates.SCANTOTPCODE:
         return <ScanTotpCode />;
+      case MfaSettingsWorkflowStates.SETUPYUBIKEY:
+        return <YubikeySetup />;
       case MfaSettingsWorkflowStates.VIEWCONFIGURATION:
         return <DisplayMfaProviderConfiguration />;
     }
