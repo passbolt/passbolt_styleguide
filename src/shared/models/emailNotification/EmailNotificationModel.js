@@ -54,12 +54,12 @@ class EmailNotificationModel {
     this.userRecoverCompleteAdmin = "send_admin_user_recover_complete" in emailNotificationDTO ? emailNotificationDTO.send_admin_user_recover_complete : true;
     this.userSetupCompleteAdmin = "send_admin_user_setup_completed" in emailNotificationDTO ? emailNotificationDTO.send_admin_user_setup_completed : true;
     // Passwords
-    this. showDescription = "show_description" in emailNotificationDTO ? emailNotificationDTO.show_description : true;
-    this. showSecret = "show_secret" in emailNotificationDTO ? emailNotificationDTO.show_secret : true;
-    this. showUri = "show_uri" in emailNotificationDTO ? emailNotificationDTO.show_uri : true;
-    this. showUsername = "show_username" in emailNotificationDTO ? emailNotificationDTO.show_username : true;
+    this.showDescription = "show_description" in emailNotificationDTO ? emailNotificationDTO.show_description : true;
+    this.showSecret = "show_secret" in emailNotificationDTO ? emailNotificationDTO.show_secret : true;
+    this.showUri = "show_uri" in emailNotificationDTO ? emailNotificationDTO.show_uri : true;
+    this.showUsername = "show_username" in emailNotificationDTO ? emailNotificationDTO.show_username : true;
     // Comments
-    this. showComment = "show_comment" in emailNotificationDTO ? emailNotificationDTO.show_comment : true;
+    this.showComment = "show_comment" in emailNotificationDTO ? emailNotificationDTO.show_comment : true;
     // Account recovery
     this.accountRecoveryRequestUser = "send_accountRecovery_request_user" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_request_user : true;
     this.accountRecoveryRequestAdmin = "send_accountRecovery_request_admin" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_request_admin : true;
@@ -69,6 +69,8 @@ class EmailNotificationModel {
     this.accountRecoveryRequestCreatedAmin = "send_accountRecovery_response_created_admin" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_response_created_admin : true;
     this.accountRecoveryRequestCreatedAllAdmins = "send_accountRecovery_response_created_allAdmins" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_response_created_allAdmins : true;
     this.accountRecoveryRequestPolicyUpdate = "send_accountRecovery_policy_update" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_policy_update : true;
+    // Password expiry
+    this.passwordExpiryExpiredUser = "send_password_expire" in emailNotificationDTO ? emailNotificationDTO.send_password_expire : true;
   }
 }
 

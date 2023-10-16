@@ -154,6 +154,27 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
+   * Returns the "user completed the setup" notification for all admins input element
+   */
+  get userSetupCompletedAdmins() {
+    return this._page.container.querySelector('#user-setup-complete-admin-toggle-button');
+  }
+
+  /**
+   * Returns the "user completed the recover" notification for all admins input element
+   */
+  get userRecoverCompletedAdmins() {
+    return this._page.container.querySelector('#user-recover-complete-admin-toggle-button');
+  }
+
+  /**
+   * Returns the "user aborted the recover" notification for all admins input element
+   */
+  get userRecoverAbortedAdmins() {
+    return this._page.container.querySelector('#user-recover-abort-admin-toggle-button');
+  }
+
+  /**
    * Returns the userCreate input element
    */
   get userCreate() {
@@ -161,10 +182,73 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
-   * Returns the userCreate input element
+   * Returns the userRecover input element
    */
   get userRecover() {
     return this._page.container.querySelector('#send-user-recover-toggle-button');
+  }
+
+  /**
+   * Returns the "user completed the recover" notification for the user input element
+   */
+  get userRecoverCompleted() {
+    return this._page.container.querySelector('#user-recover-complete-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery requested" notification for all admins input element
+   */
+  get accountRecoveryRequestedAllAdmins() {
+    return this._page.container.querySelector('#account-recovery-request-admin-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery settings updated" notification for all other admins input element
+   */
+  get accountRecoverySettingsUpdate() {
+    return this._page.container.querySelector('#account-recovery-policy-update-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery responded" notification for the admin at the origin of the action input element
+   */
+  get accountRecoveryRespondedAdmin() {
+    return this._page.container.querySelector('#account-recovery-response-created-admin-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery responded" notification for all admins input element
+   */
+  get accountRecoveryRespondedAllAdmins() {
+    return this._page.container.querySelector('#account-recovery-response-created-all-admin-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery requested" notification for the user input element
+   */
+  get accountRecoveryRequestedUser() {
+    return this._page.container.querySelector('#account-recovery-request-user-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery request approved" notification for the user input element
+   */
+  get accountRecoveryRespondedApproved() {
+    return this._page.container.querySelector('#account-recovery-response-user-approved-toggle-button');
+  }
+
+  /**
+   * Returns the "account recovery request rejected" notification for the user input element
+   */
+  get accountRecoveryRespondedRejected() {
+    return this._page.container.querySelector('#account-recovery-response-user-rejected-toggle-button');
+  }
+
+  /**
+   * Returns the "password has expired" notification for the resource owner input element
+   */
+  get passwordExpiryExpired() {
+    return this._page.container.querySelector('#password-expiry-expired-user-toggle-button');
   }
 
   /**

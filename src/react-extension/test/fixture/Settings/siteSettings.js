@@ -180,6 +180,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "disableUser": {
         "enabled": true,
+      },
+      "passwordExpiry": {
+        "enabled": true,
       }
     }
   }
