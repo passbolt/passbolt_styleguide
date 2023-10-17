@@ -70,6 +70,7 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
 
   each([
     {uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem'},
+    {uiAction: uiActions.DESKTOP_TRANSFER, pageProperty: 'desktopTransferMenuItem'},
   ]).describe("rbac controls", scenario => {
     it(`should allow access: ${scenario.uiAction}`, async() => {
       expect.assertions(1);
@@ -98,3 +99,4 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     });
   });
 });
+

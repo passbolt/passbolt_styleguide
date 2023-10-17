@@ -55,5 +55,12 @@ export default class NavigateIntoUserSettingsWorkspacePage {
   get mobileTransferMenuItem() {
     return this._page.container.querySelector('#navigation-item-mobile-setup');
   }
+
+  /**
+   * Returns the navigation item element for the desktop app setup
+   */
+  get desktopTransferMenuItem() {
+    return this._page.container.querySelector('#navigation-item-desktop-setup');
+  }
 }
 
