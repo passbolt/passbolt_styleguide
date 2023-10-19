@@ -400,7 +400,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Whenever the user wants to follow a resource uri.
    */
   handleGoToResourceUriClick() {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource);
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.uri);
   }
 
   /**
