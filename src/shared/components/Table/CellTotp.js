@@ -49,7 +49,9 @@ class CellTotp extends Component {
   /**
    * Handle totp button click.
    */
-  async handleTotpClick() {
+  async handleTotpClick(event) {
+    // Avoid the grid to select the resource while copying a resource secret.
+    event?.stopPropagation();
     this.props.onTotpClick(this.value);
   }
 
