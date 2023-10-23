@@ -129,7 +129,7 @@ class ConfirmDeleteDialog extends Component {
             noValidate>
             <div className="form-content">
               <p><Trans>Are you sure you want to delete the comment?</Trans></p>
-              <p><Trans>Once the comment is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
+              <p><Trans>Once the comment is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
             </div>
             <div className="submit-wrapper clearfix">
               <FormCancelButton

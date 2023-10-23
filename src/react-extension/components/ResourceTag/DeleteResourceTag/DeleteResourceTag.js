@@ -129,7 +129,7 @@ class DeleteResourceTag extends Component {
                 Are you sure you want to delete the tag <strong className="dialog-variable">{{tagName: this.props.context.tagToDelete.slug}}</strong>?
               </Trans>
             </p>
-            <p><Trans>Once the tag is deleted, it’ll be removed permanently and will not be recoverable.</Trans></p>
+            <p><Trans>Once the tag is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleCloseClick}/>
