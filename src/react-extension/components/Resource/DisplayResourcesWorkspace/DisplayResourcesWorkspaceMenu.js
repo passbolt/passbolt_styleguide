@@ -29,6 +29,9 @@ import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withProgress} from "../../../contexts/ProgressContext";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -164,7 +167,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleEditClickEvent() {
     if (this.isStandaloneTotpResource) {
-      // TODO
+      this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
     } else {
       this.props.dialogContext.open(EditResource, {resourceId: this.selectedResources[0].id});
     }
@@ -687,7 +690,8 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
+  workflowContext: PropTypes.any, // The workflow context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withProgress(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))));
+export default withAppContext(withRbac(withDialog(withWorkflow(withProgress(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))));

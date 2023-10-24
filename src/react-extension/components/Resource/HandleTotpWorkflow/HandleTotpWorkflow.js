@@ -24,6 +24,8 @@ import UploadQrCode from "../UploadQrCode/UploadQrCode";
 import {TotpWorkflowMode} from "./HandleTotpWorkflowMode";
 import AddTotp from "../AddTotp/AddTotp";
 import EditTotp from "../EditTotp/EditTotp";
+import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
+import EditStandaloneTotp from "../EditStandaloneTotp/EditStandaloneTotp";
 
 /**
  * This component handle the TOTP workflow.
@@ -63,6 +65,7 @@ export class HandleTotpWorkflow extends React.Component {
     this.handleCancelDialog = this.handleCancelDialog.bind(this);
     this.handleApply = this.handleApply.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.handleError = this.handleError.bind(this);
   }
 
@@ -85,6 +88,7 @@ export class HandleTotpWorkflow extends React.Component {
         break;
       }
       case TotpWorkflowMode.EDIT_STANDALONE_TOTP: {
+        this.displayEditStandaloneTotpDialog();
         break;
       }
     }
@@ -146,6 +150,25 @@ export class HandleTotpWorkflow extends React.Component {
   }
 
   /**
+   * Display edit standalone totp dialog
+   */
+  displayEditStandaloneTotpDialog() {
+    const propsUploadQrCode = {
+      title: this.props.t("Edit standalone TOTP"),
+      action: this.props.t("Save"),
+      onSubmit: this.handleUpdate
+    };
+
+    const dialogId = this.props.dialogContext.open(EditStandaloneTotp, {
+      resource: this.selectedResources[0],
+      onCancel: this.handleCancelDialog,
+      onOpenUploadQrCode: () => this.displayUploadQrCodeDialog(propsUploadQrCode),
+      onSubmit: this.handleUpdate
+    });
+    this.setState({mainOpenedDialogId: dialogId});
+  }
+
+  /**
    * Display upload QR code dialog
    * @param props
    */
@@ -158,6 +181,14 @@ export class HandleTotpWorkflow extends React.Component {
    */
   handleCancelDialog() {
     this.props.onStop();
+  }
+
+  /**
+   * Get selected resources
+   * @return {*}
+   */
+  get selectedResources() {
+    return this.props.resourceWorkspaceContext.selectedResources;
   }
 
   /**
@@ -176,9 +207,7 @@ export class HandleTotpWorkflow extends React.Component {
       }
       this.handleError(error);
     } finally {
-      // Close the main dialog in case the user save a standalone totp from an uploaded image
-      this.props.dialogContext.close(this.state.mainOpenedDialogId);
-      this.props.onStop();
+      this.handleStop();
     }
   }
 
@@ -192,14 +221,28 @@ export class HandleTotpWorkflow extends React.Component {
     } catch (error) {
       this.handleError(error);
     } finally {
-      // Close the main dialog in case the user save a standalone totp from an uploaded image
-      this.props.dialogContext.close(this.state.mainOpenedDialogId);
-      this.props.onStop();
+      this.handleStop();
+    }
+  }
+
+  async handleUpdate(standaloneTotp) {
+    try {
+      // Resource type with encrypted totp
+      await this.updateStandaloneOtp(standaloneTotp.toResourceDto(), standaloneTotp.toSecretDto());
+      await this.handleUpdateSuccess();
+    } catch (error) {
+      if (error.name === "UserAbortsOperationError") {
+        // It can happen when the user has closed the passphrase entry dialog by instance.
+        return;
+      }
+      this.handleError(error);
+    } finally {
+      this.handleStop();
     }
   }
 
   /**
-   * Create with encrypted description type
+   * Create with encrypted TOTP type
    *
    * @param {object} resourceDto
    * @param {object} secretDto
@@ -215,11 +258,35 @@ export class HandleTotpWorkflow extends React.Component {
   }
 
   /**
+   * Update with encrypted TOTP type
+   *
+   * @param {object} resourceDto
+   * @param {object} secretDto
+   * @returns {Promise<*>}
+   */
+  async updateStandaloneOtp(resourceDto, secretDto) {
+    resourceDto.id = this.selectedResources[0].id;
+    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP
+    );
+
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
+  }
+
+  /**
    * Handle save operation success.
    */
   async handleSaveSuccess(resource) {
     await this.props.actionFeedbackContext.displaySuccess(this.props.t("The TOTP has been added successfully"));
     this.props.history.push(`/app/passwords/view/${resource.id}`);
+  }
+
+  /**
+   * Handle save operation success.
+   */
+  async handleUpdateSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The TOTP has been updated successfully"));
+    this.props.resourceWorkspaceContext.onResourceEdited();
   }
 
   /**
@@ -231,6 +298,15 @@ export class HandleTotpWorkflow extends React.Component {
       error: error
     };
     this.props.dialogContext.open(NotifyError, errorDialogProps);
+  }
+
+  /**
+   * Handle stop workflow
+   */
+  handleStop() {
+    // Close the main dialog in case the user save a standalone totp from an uploaded image
+    this.props.dialogContext.close(this.state.mainOpenedDialogId);
+    this.props.onStop();
   }
 
   /**
@@ -249,6 +325,7 @@ HandleTotpWorkflow.propTypes = {
   context: PropTypes.object, // The app context
   history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
+  resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   mode: PropTypes.oneOf([
     TotpWorkflowMode.ADD_TOTP,
     TotpWorkflowMode.EDIT_TOTP,
@@ -260,4 +337,4 @@ HandleTotpWorkflow.propTypes = {
   t: PropTypes.func // the translation function
 };
 
-export default withRouter(withAppContext(withDialog(withActionFeedback(withTranslation("common")(HandleTotpWorkflow)))));
+export default withRouter(withAppContext(withDialog(withActionFeedback(withResourceWorkspace(withTranslation("common")(HandleTotpWorkflow))))));

@@ -70,6 +70,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
       single: jest.fn()
     },
     onResourceScrolled: jest.fn(),
+    onResourceEdited: jest.fn(),
     onSorterChanged: jest.fn(),
     onResourcesToExport: jest.fn(),
     onResourceFileImportResult: jest.fn(),
