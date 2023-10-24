@@ -2,19 +2,57 @@
 	Totp fields in passbolt have a custom layout to accommodate buttons on the left end
 */
 
-.input .input-wrapper-inline {
-    display: flex;
-    align-items: center;
-    input {
-        margin: 0;
+.input {
+    .input-wrapper-inline {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.6rem;
+
+        input {
+            margin: 0;
+        }
+
+        input[type="text"] {
+            flex: 1;
+        }
+
+        input + span {
+            margin-left: .5rem;
+        }
+
+        button.button-icon {
+            margin-left: .8rem;
+        }
     }
-    input[type="text"] {
-        flex: 1;
+
+    &.input-totp-wrapper {
+        .totp button:disabled {
+            flex: 1;
+            opacity: 1;
+
+            .totp-code {
+                font-size: 1.8rem;
+
+                & + .svg-icon.timer {
+                    margin-left: 1rem;
+
+                    svg {
+                        width: 2rem;
+                        height: 2rem;
+                        --timer-stroke-width: .24rem;
+                    }
+                }
+            }
+        }
+
+        &.disabled {
+            .totp button:disabled {
+                opacity: .5;
+            }
+        }
     }
-    input + span {
-        margin-left: .5rem;
-    }
-    button.button-icon {
-        margin-left: .8rem;
-    }
+}
+
+.totp-code + .svg-icon.timer {
+    margin-left: .5rem;
 }

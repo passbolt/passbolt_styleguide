@@ -19,6 +19,7 @@ import {waitFor} from "@testing-library/react";
 import {defaultProps, qrCode} from "./UploadQrCode.test.data";
 import UploadQrCodePage from "./UploadQrCode.test.page";
 import {Html5Qrcode} from "html5-qrcode";
+import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
 
 beforeEach(() => {
   jest.resetModules();
@@ -52,21 +53,16 @@ describe("UploadQrCode", () => {
       await page.save();
       const url = new URL(decodeURIComponent(qrCodeResult.decodedText));
 
-      const resourceDto = {
+      const standaloneTotp = {
         name: url.pathname.substring(7).split(":").join(": "),
-        uri: url.searchParams.get('issuer')
+        uri: url.searchParams.get('issuer'),
+        secret_key: url.searchParams.get('secret'),
+        algorithm: "SHA1",
+        digits: 6,
+        period: 30
       };
 
-      const secretDto = {
-        totp: {
-          secret_key: url.searchParams.get('secret'),
-          algorithm: "SHA1",
-          digits: 6,
-          period: 30
-        }
-      };
-
-      expect(props.onSave).toHaveBeenCalledWith({resourceDto, secretDto});
+      expect(props.onSubmit).toHaveBeenCalledWith(new StandaloneTotpViewModel(standaloneTotp));
       expect(props.onClose).toBeCalled();
     });
 
@@ -132,7 +128,7 @@ describe("UploadQrCode", () => {
       await waitFor(() => {});
 
       // Throw error message
-      expect(page.errorMessage).toBe(error.message);
+      expect(page.errorMessage).toBe("The QR code is incomplete.");
     });
 
     it('As LU I can stop importing QR code by clicking on the cancel button', async() => {

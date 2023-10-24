@@ -13,16 +13,16 @@
  */
 
 import React from "react";
-import CreateStandaloneTotp from "./CreateStandaloneTotp";
-import {defaultProps} from "./CreateStandaloneTotp.test.data";
+import EditTotp from "./EditTotp";
+import {defaultProps} from "./EditTotp.test.data";
 
 export default {
-  title: 'Components/Resource/CreateStandaloneTotp',
-  component: CreateStandaloneTotp,
+  title: 'Components/Resource/EditTotp',
+  component: EditTotp,
 };
 
 const Template = args  =>
-  <CreateStandaloneTotp {...args}/>;
+  <EditTotp {...args}/>;
 
 export const Initial = Template.bind({});
 Initial.args = defaultProps();

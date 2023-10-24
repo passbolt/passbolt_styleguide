@@ -12,17 +12,21 @@
  * @since         4.4.0
  */
 
-import React from "react";
-import CreateStandaloneTotp from "./CreateStandaloneTotp";
-import {defaultProps} from "./CreateStandaloneTotp.test.data";
 
-export default {
-  title: 'Components/Resource/CreateStandaloneTotp',
-  component: CreateStandaloneTotp,
+import TotpViewModel from "./TotpViewModel";
+
+/**
+ * The default TOTP ViewModel DTO
+ * @param {Object} data The data to override
+ * @returns {Object}
+ */
+export const defaultTotpViewModelDto = (data = {}) => {
+  const defaultData = {
+    secret_key: "DAV3DS4ERAAF5QGH",
+    period: 30,
+    digits: 6,
+    algorithm: TotpViewModel.SUPPORTED_ALGORITHMS[0]
+  };
+
+  return Object.assign(defaultData, data);
 };
-
-const Template = args  =>
-  <CreateStandaloneTotp {...args}/>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();

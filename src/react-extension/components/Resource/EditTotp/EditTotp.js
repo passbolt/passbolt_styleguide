@@ -21,9 +21,9 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
-import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 
-class CreateStandaloneTotp extends Component {
+class EditTotp extends Component {
   /**
    * Constructor
    * @param {Object} props
@@ -41,7 +41,7 @@ class CreateStandaloneTotp extends Component {
    */
   get defaultState() {
     return {
-      standaloneTotp: new StandaloneTotpViewModel(),
+      totp: new TotpViewModel(this.props.totp),
       errors: null, // The errors
       warnings: {}, // The warnings
       processing: false, //The processing flag
@@ -63,7 +63,6 @@ class CreateStandaloneTotp extends Component {
    * Create DOM nodes or React elements references in order to be able to access them programmatically.
    */
   createInputRef() {
-    this.nameInputRef = React.createRef();
     this.keyInputRef = React.createRef();
     this.periodInputRef = React.createRef();
     this.digitsInputRef = React.createRef();
@@ -95,7 +94,7 @@ class CreateStandaloneTotp extends Component {
     }
 
     // Resource type with encrypted totp
-    this.props.onSubmit(this.state.standaloneTotp);
+    this.props.onSubmit(this.state.totp);
     this.handleClose();
   }
 
@@ -120,7 +119,7 @@ class CreateStandaloneTotp extends Component {
    * @return {boolean}
    */
   validate() {
-    const errors = this.state.standaloneTotp.validate();
+    const errors = this.state.totp.validate();
     this.setState({errors});
     return !errors.hasErrors();
   }
@@ -129,9 +128,7 @@ class CreateStandaloneTotp extends Component {
    * Focus the first field of the form which is in error state.
    */
   focusFirstFieldError() {
-    if (this.isFieldError("name")) {
-      this.nameInputRef.current.focus();
-    } else if (this.isFieldError("secret_key")) {
+    if (this.isFieldError("secret_key")) {
       this.keyInputRef.current.focus();
     } else if (this.isFieldError("period")) {
       this.setState({openAdvancedSettings: true});
@@ -160,8 +157,8 @@ class CreateStandaloneTotp extends Component {
       value = target.value;
     }
     const name = target.name;
-    const standaloneTotp = this.state.standaloneTotp.cloneWithMutation(name, value);
-    this.setState({standaloneTotp});
+    const totp = this.state.totp.cloneWithMutation(name, value);
+    this.setState({totp});
   }
 
   /**
@@ -171,7 +168,7 @@ class CreateStandaloneTotp extends Component {
     const target = event.target;
     const name = target.name;
     if (this.state.hasAlreadyBeenValidated) {
-      const errors = this.state.standaloneTotp.validateField(name);
+      const errors = this.state.totp.validateField(name);
       this.updateErrorsField(errors, name);
     } else {
       this.updateWarningsField(name);
@@ -200,7 +197,7 @@ class CreateStandaloneTotp extends Component {
     const warnings = {...this.state.warnings};
     // Reset warning for the field
     delete warnings[fieldName];
-    if (this.state.standaloneTotp.isWarningSizeField(fieldName)) {
+    if (this.state.totp.isWarningSizeField(fieldName)) {
       warnings[fieldName] = this.translate("this is the maximum size for this field, make sure your data was not truncated");
     }
     this.setState({warnings});
@@ -229,18 +226,6 @@ class CreateStandaloneTotp extends Component {
    */
   handleUploadImageButtonClick() {
     this.props.onOpenUploadQrCode();
-  }
-
-  /**
-   * Get the name error message
-   * @return {*|null}
-   */
-  get nameErrorMessage() {
-    const error = this.state.errors?.getError('name');
-    if (error?.notEmpty) {
-      return this.translate("The name is required.");
-    }
-    return null;
   }
 
   /**
@@ -309,7 +294,7 @@ class CreateStandaloneTotp extends Component {
    * @returns {array}
    */
   get supportedAlgorithms() {
-    return StandaloneTotpViewModel.SUPPORTED_ALGORITHMS.map(algorithm => ({value: algorithm, label: algorithm}));
+    return TotpViewModel.SUPPORTED_ALGORITHMS.map(algorithm => ({value: algorithm, label: algorithm}));
   }
 
   /**
@@ -327,43 +312,17 @@ class CreateStandaloneTotp extends Component {
    */
   render() {
     return (
-      <DialogWrapper title={this.translate("Create standalone TOTP")} className="create-standalone-totp-dialog"
+      <DialogWrapper title={this.translate("Edit TOTP")} className="edit-totp-dialog"
         disabled={this.state.processing} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.isFieldError("name") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-standalone-totp-form-name"><Trans>Name</Trans> (<Trans>Label</Trans>){this.isFieldWarning("name") && <Icon name="exclamation" />}</label>
-              <input id="create-standalone-totp-form-name" name="name" type="text" value={this.state.standaloneTotp.name}
-                onKeyUp={this.handleInputKeyUp} onChange={this.handleInputChange}
-                disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
-                required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-              {this.isFieldError("name") &&
-              <div className="name error-message">{this.nameErrorMessage}</div>
-              }
-              {this.isFieldWarning("name") && (
-                <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.warnings.name}
-                </div>
-              )}
-            </div>
-            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-standalone-totp-form-uri"><Trans>URI</Trans> (<Trans>Issuer</Trans>){this.isFieldWarning("uri") && <Icon name="exclamation" />}</label>
-              <input id="create-standalone-totp-form-uri" name="uri" className="fluid" maxLength="1024" type="text" onKeyUp={this.handleInputKeyUp}
-                autoComplete="off" value={this.state.standaloneTotp.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
-                disabled={this.state.processing}/>
-              {this.isFieldWarning("uri") && (
-                <div className="uri warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.warnings.uri}
-                </div>
-              )}
-            </div>
             <div className={`input text required ${this.isFieldError("secret_key") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-              <label htmlFor="create-standalone-totp-form-key">
+              <label htmlFor="edit-totp-form-key">
                 <Trans>Key</Trans> (<Trans>secret</Trans>){this.isFieldWarning("secret_key") && <Icon name="exclamation"/>}
               </label>
               <div className="input-wrapper-inline">
-                <input id="create-standalone-totp-form-key" name="secret_key" maxLength="1024" type="text" onKeyUp={this.handleInputKeyUp}
-                  autoComplete="off" value={this.state.standaloneTotp.secret_key} onChange={this.handleInputChange} placeholder={this.translate("Key")}
+                <input id="edit-totp-form-key" name="secret_key" maxLength="1024" type="text" onKeyUp={this.handleInputKeyUp}
+                  autoComplete="off" value={this.state.totp.secret_key} onChange={this.handleInputChange} placeholder={this.translate("Key")}
                   disabled={this.state.processing} ref={this.keyInputRef}/>
                 <button type="button" onClick={this.handleUploadImageButtonClick} disabled={this.state.processing}
                   className={`button-icon ${this.state.processing ? "disabled" : ""}`}>
@@ -395,9 +354,9 @@ class CreateStandaloneTotp extends Component {
               </div>
               <div className="accordion-content">
                 <div className={`input text required ${this.isFieldError("period") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-standalone-totp-form-period"><Trans>TOTP expiry</Trans></label>
+                  <label htmlFor="edit-totp-form-period"><Trans>TOTP expiry</Trans></label>
                   <div className="input-wrapper-inline">
-                    <input id="create-standalone-totp-form-period" name="period" type="number" value={this.state.standaloneTotp.period} onChange={this.handleInputChange}
+                    <input id="edit-totp-form-period" name="period" type="number" value={this.state.totp.period} onChange={this.handleInputChange}
                       disabled={this.state.processing} ref={this.periodInputRef} onKeyUp={this.handleInputKeyUp} className="required" min="1" max="120"/>
                     <span><Trans>seconds until the TOTP expires</Trans></span>
                   </div>
@@ -406,9 +365,9 @@ class CreateStandaloneTotp extends Component {
                   }
                 </div>
                 <div className={`input text required ${this.isFieldError("digits") ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-standalone-totp-form-digits"><Trans>TOTP length</Trans></label>
+                  <label htmlFor="edit-totp-form-digits"><Trans>TOTP length</Trans></label>
                   <div className="input-wrapper-inline">
-                    <input id="create-standalone-totp-form-digits" name="digits" type="number" value={this.state.standaloneTotp.digits} onChange={this.handleInputChange}
+                    <input id="edit-totp-form-digits" name="digits" type="number" value={this.state.totp.digits} onChange={this.handleInputChange}
                       disabled={this.state.processing} className="required" min="6" max="8" onKeyUp={this.handleInputKeyUp} ref={this.digitsInputRef}/>
                     <span><Trans>digits</Trans></span>
                   </div>
@@ -417,8 +376,8 @@ class CreateStandaloneTotp extends Component {
                   }
                 </div>
                 <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                  <label htmlFor="create-standalone-totp-form-algorithm"><Trans>Algorithm</Trans></label>
-                  <Select id="create-standalone-totp-form-algorithm" name="algorithm" value={this.state.standaloneTotp.algorithm}
+                  <label htmlFor="edit-totp-form-algorithm"><Trans>Algorithm</Trans></label>
+                  <Select id="edit-totp-form-algorithm" name="algorithm" value={this.state.totp.algorithm}
                     items={this.supportedAlgorithms} disabled={this.state.processing} onChange={this.handleInputChange}/>
                 </div>
               </div>
@@ -426,7 +385,7 @@ class CreateStandaloneTotp extends Component {
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
-            <FormSubmitButton value={this.translate("Create")} disabled={this.state.processing} processing={this.state.processing}/>
+            <FormSubmitButton value={this.translate("Apply")} disabled={this.state.processing} processing={this.state.processing}/>
           </div>
         </form>
       </DialogWrapper>
@@ -434,7 +393,8 @@ class CreateStandaloneTotp extends Component {
   }
 }
 
-CreateStandaloneTotp.propTypes = {
+EditTotp.propTypes = {
+  totp: PropTypes.object.isRequired, // The totp to edit
   onClose: PropTypes.func, // Whenever the component must be closed
   onCancel: PropTypes.func, // Whenever the component must be canceled
   onSubmit: PropTypes.func, // Whenever the component must be submitted
@@ -442,5 +402,5 @@ CreateStandaloneTotp.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default  withTranslation('common')(CreateStandaloneTotp);
+export default  withTranslation('common')(EditTotp);
 

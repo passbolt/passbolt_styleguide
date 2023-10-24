@@ -163,11 +163,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle edit one resource
    */
   handleEditClickEvent() {
-    const passwordEditDialogProps = {
-      id: this.selectedResources[0].id
-    };
-    this.props.context.setContext({passwordEditDialogProps});
-    this.props.dialogContext.open(EditResource);
+    if (this.isStandaloneTotpResource) {
+      // TODO
+    } else {
+      this.props.dialogContext.open(EditResource, {resourceId: this.selectedResources[0].id});
+    }
   }
 
   /**
@@ -370,8 +370,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   canUpdate() {
     return this.hasResourceSelected()
-      && this.selectedResources.every(resource => resource.permission.type >= 7)
-      && this.selectedResources.every(resource => !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(resource.resource_type_id));
+      && this.selectedResources.every(resource => resource.permission.type >= 7);
   }
 
   /**
@@ -408,11 +407,19 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Get resources type settings
+   * @return {ResourceTypesSettings|*}
+   */
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
+  }
+
+  /**
    * Is password resource
    * @return {boolean}
    */
   get isPasswordResources() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(this.selectedResources[0].resource_type_id);
+    return this.resourceTypesSettings.assertResourceTypeIdHasPassword(this.selectedResources[0].resource_type_id);
   }
 
   /**
@@ -428,7 +435,15 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   get isTotpResources() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.selectedResources[0].resource_type_id);
+    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.selectedResources[0].resource_type_id);
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isStandaloneTotpResource() {
+    return this.resourceTypesSettings.assertResourceTypeIdIsStandaloneTotp(this.selectedResources[0].resource_type_id);
   }
 
   /**

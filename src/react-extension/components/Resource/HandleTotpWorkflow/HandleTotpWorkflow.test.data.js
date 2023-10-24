@@ -11,22 +11,33 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.4.0
  */
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {TotpWorkflowMode} from "./HandleTotpWorkflowMode";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Default props
+ * @param {Object} data The override
  * @returns {object}
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    title: "Create Standalone TOTP",
-    action: "Create",
-    onClose: jest.fn(),
-    onSubmit: jest.fn(),
+    folderParentId: uuidv4(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    context: defaultUserAppContext(),
+    dialogContext: defaultDialogContext(),
+    onStop: jest.fn(),
+    history: {
+      push: jest.fn()
+    },
+    mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP,
+    totp: null,
+    onApply: jest.fn(),
+    t: text => text
   };
 
   return Object.assign(defaultData, data);
 }
 
-export function qrCode() {
-  return {decodedText: 'otpauth://totp/pro.passbolt.local%3Aadmin%40passbolt.com?issuer=pro.passbolt.local&secret=OFL3VF3OU4BZP45D4ZME6KTF654JRSSO4Q2EO6FJFGPKHRHYSVJA'};
-}

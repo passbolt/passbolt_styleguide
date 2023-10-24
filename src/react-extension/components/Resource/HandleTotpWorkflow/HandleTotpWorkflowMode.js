@@ -12,17 +12,13 @@
  * @since         4.4.0
  */
 
-import React from "react";
-import CreateStandaloneTotp from "./CreateStandaloneTotp";
-import {defaultProps} from "./CreateStandaloneTotp.test.data";
-
-export default {
-  title: 'Components/Resource/CreateStandaloneTotp',
-  component: CreateStandaloneTotp,
+/**
+ * Modes available for the TOTP workflow
+ * @type {{ADD_TOTP: string, EDIT_STANDALONE_TOTP: string, EDIT_TOTP: string, CREATE_STANDALONE_TOTP: string}}
+ */
+export const TotpWorkflowMode = {
+  ADD_TOTP: "AddTotp",
+  EDIT_TOTP: "EditTotp",
+  CREATE_STANDALONE_TOTP: "CreateStandaloneTotp",
+  EDIT_STANDALONE_TOTP: "EditStandaloneTotp",
 };
-
-const Template = args  =>
-  <CreateStandaloneTotp {...args}/>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();

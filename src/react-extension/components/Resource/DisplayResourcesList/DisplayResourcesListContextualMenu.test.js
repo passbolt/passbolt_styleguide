@@ -120,7 +120,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to edit a resource', async() => {
       await page.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resourceId: props.resource.id});
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -163,11 +163,11 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.editItem).not.toBeNull();
-      expect(page.editItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.shareItem).not.toBeNull();
       expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.deleteItem).not.toBeNull();
-      expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the totp of a resource', async() => {
