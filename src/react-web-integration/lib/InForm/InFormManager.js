@@ -267,9 +267,10 @@ class InFormManager {
    */
   handleFillPassword() {
     port.on('passbolt.web-integration.fill-password', password => {
-      this.callToActionFields
-        .filter(callToActionField => callToActionField.fieldType === 'password')
-        .forEach(callToActionField => fireEvent.input(callToActionField.field, {target: {value: password}}));
+      const passwordFields = this.callToActionFields
+        .filter(callToActionField => callToActionField.fieldType === 'password');
+      // Autofill only empty passwords field
+      passwordFields.forEach(callToActionField => !callToActionField.field.value && fireEvent.input(callToActionField.field, {target: {value: password}}));
       this.menuField.removeMenuIframe();
       // Listen the auto-save on the appropriate form field
       const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));
