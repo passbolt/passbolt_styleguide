@@ -40,9 +40,6 @@ const context = {
     },
     isLegacyResourceTypeEnabled: () => true
   },
-  resourceCreateDialogProps: {
-    folderParentId: "folder parent id test",
-  },
   siteSettings: {
     canIUse: () => true,
   },

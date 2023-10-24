@@ -73,7 +73,7 @@ class CellWrapper extends Component {
 }
 
 CellWrapper.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired, // The value to display
+  value: PropTypes.any, // The value to display
   column: PropTypes.instanceOf(ColumnModel).isRequired, // The columns to display
   isSelected: PropTypes.bool // The isSelected boolean property
 };

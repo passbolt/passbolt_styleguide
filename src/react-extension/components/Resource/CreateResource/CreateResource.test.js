@@ -36,11 +36,7 @@ describe("See the Create Resource", () => {
     props = defaultProps(); // The props to pass
     props.onClose = jest.fn();
     props.dialogContext.open = jest.fn();
-    const resourceCreateDialogProps = {
-      folderParentId: null
-    };
 
-    context.setContext({resourceCreateDialogProps});
     page = new CreateResourcePage(context, props);
     jest.useFakeTimers();
   });
@@ -128,7 +124,7 @@ describe("See the Create Resource", () => {
     });
 
     it('requests the addon to create a resource with encrypted description when clicking on the submit button.', async() => {
-      expect.assertions(7);
+      expect.assertions(6);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
@@ -168,12 +164,11 @@ describe("See the Create Resource", () => {
       await waitFor(() => {});
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceMeta, resourceMeta.password);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
       expect(props.onClose).toBeCalled();
     });
 
     it('requests the addon to create a resource with non encrypted description when clicking on the submit button.', async() => {
-      expect.assertions(7);
+      expect.assertions(6);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
@@ -214,7 +209,6 @@ describe("See the Create Resource", () => {
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceDto, onApiUpdateSecretDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
-      expect(context.port.emit).toHaveBeenNthCalledWith(1, "passbolt.resources.select-and-scroll-to", createdResourceId);
       expect(props.onClose).toBeCalled();
     });
 

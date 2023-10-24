@@ -1,20 +1,4 @@
-import MockPort from "../../../test/mock/MockPort";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    folderCreateDialogProps: {
-      folderParentId: "some folder parent id"
-    },
-    setContext: jest.fn()
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
  * Default props
@@ -22,11 +6,16 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps() {
   return {
+    context: defaultUserAppContext(),
+    folderParentId: "some folder parent id",
     actionFeedbackContext: {
       displaySuccess: jest.fn()
     },
     dialogContext: {
       open: jest.fn()
+    },
+    history: {
+      push: jest.fn()
     },
     onClose: jest.fn()
   };

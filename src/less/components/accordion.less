@@ -41,8 +41,24 @@
     }
 }
 .dialog .accordion, .login .accordion {
+    &.accordion-section {
+      border-top:1px solid @dialog-divider-border;
+      padding: 1.6rem;
+      margin: 0;
+    }
     .accordion-header {
         margin-bottom: 1.2rem;
+        h4 {
+          margin:0;
+          display:block;
+          button {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 2.1rem;
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
         button {
             display: flex;
             align-items: center;

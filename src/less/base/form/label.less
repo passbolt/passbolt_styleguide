@@ -33,11 +33,19 @@ label {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required > label:after {
+.required {
+  > label:after, .label-required-inline > label:after {
     content: "\002A"; /* unicode character * */
     color: @text-error-color;
     font-weight: bold;
     margin-left: .4rem;
+  }
+  .label-required-inline {
+    display: flex;
+    label + .tooltip {
+      margin-left: .5rem;
+    }
+  }
 }
 
 .input.error label {

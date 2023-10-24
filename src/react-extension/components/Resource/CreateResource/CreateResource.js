@@ -60,13 +60,11 @@ class CreateResource extends Component {
       usernameError: "",
       usernameWarning: "",
       uri: "",
-      uriError: "",
       uriWarning: "",
       password: "",
       passwordError: "",
       passwordWarning: "",
       description: "",
-      descriptionError: "",
       descriptionWarning: "",
       encryptDescription: false,
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
@@ -250,10 +248,7 @@ class CreateResource extends Component {
     // Reset the form errors.
     this.setState({
       nameError: "",
-      uriError: "",
-      usernameError: "",
       passwordError: "",
-      descriptionError: "",
     });
 
     // Validate the form inputs.
@@ -329,7 +324,7 @@ class CreateResource extends Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      folder_parent_id: this.props.context.resourceCreateDialogProps.folderParentId,
+      folder_parent_id: this.props.folderParentId,
     };
 
     // No resource types, legacy case
@@ -398,12 +393,6 @@ class CreateResource extends Component {
    */
   async handleSaveSuccess(resource) {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been added successfully"));
-    if (resource.folder_parent_id) {
-      // TODO and select resource inside that folder
-      this.selectAndScrollToFolder(resource.folder_parent_id);
-    } else {
-      this.selectAndScrollToResource(resource.id);
-    }
     this.props.history.push(`/app/passwords/view/${resource.id}`);
     this.handleClose();
   }
@@ -448,28 +437,6 @@ class CreateResource extends Component {
     } else if (this.state.passwordError) {
       this.passwordInputRef.current.focus();
     }
-  }
-
-  /*
-   * =============================================================
-   *  Out of dialog actions
-   * =============================================================
-   */
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   */
-  selectAndScrollToResource(id) {
-    this.props.context.port.emit("passbolt.resources.select-and-scroll-to", id);
-  }
-
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   * @returns {void}
-   */
-  selectAndScrollToFolder(id) {
-    this.props.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /*
@@ -560,7 +527,6 @@ class CreateResource extends Component {
    * Handle close
    */
   async handleClose() {
-    this.props.context.setContext({resourceCreateDialogProps: null});
     // ensure the secret generator settings are back to the organisation's default in case a new secret is generated later
     await this.props.resourcePasswordGeneratorContext.resetSecretGeneratorSettings();
     this.props.onClose();
@@ -652,14 +618,11 @@ class CreateResource extends Component {
                 </div>
               )}
             </div>
-            <div className={`input text ${this.state.uriError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{this.state.uriWarning && <Icon name="exclamation" />}</label>
               <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text" onKeyUp={this.handleUriInputKeyUp}
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
-              {this.state.uriError &&
-              <div className="error-message">{this.state.uriError}</div>
-              }
               {this.state.uriWarning && (
                 <div className="uri warning-message">
                   <strong><Trans>Warning:</Trans></strong> {this.state.uriWarning}
@@ -754,9 +717,6 @@ class CreateResource extends Component {
                 className="required" placeholder={this.translate("Add a description")} value={this.state.description}
                 disabled={this.state.processing}  onKeyUp={this.handleDescriptionInputKeyUp} onChange={this.handleInputChange}>
               </textarea>
-              {this.state.descriptionError &&
-              <div className="error-message">{this.state.descriptionError}</div>
-              }
               {this.state.descriptionWarning &&
               <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
               }
@@ -775,6 +735,7 @@ class CreateResource extends Component {
 CreateResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object, // Router history
+  folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   actionFeedbackContext: PropTypes.any, // The action feedback context

@@ -34,7 +34,7 @@ describe("FilterResourcesByRootFolderContextualMenu", () => {
   describe('As LU I can create folder at the root', () => {
     it('As LU I can create folder at the root', async() => {
       await page.foldersTreeRootFolderContextualMenu.createFolder();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, {folderParentId: null});
       expect(props.hide).toHaveBeenCalled();
     });
   });

@@ -52,13 +52,23 @@ class CellButton extends Component {
   }
 
   /**
+   * Has value
+   * @return {boolean}
+   */
+  hasValue() {
+    return Boolean(this.value);
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
       <div title={this.value}>
-        <button className="link no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+        {this.hasValue() &&
+          <button className="link no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+        }
       </div>
     );
   }
