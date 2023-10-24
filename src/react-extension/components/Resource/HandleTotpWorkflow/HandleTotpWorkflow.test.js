@@ -26,6 +26,7 @@ import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import EditTotp from "../EditTotp/EditTotp";
+import EditStandaloneTotp from "../EditStandaloneTotp/EditStandaloneTotp";
 
 beforeEach(() => {
   jest.resetModules();
@@ -68,6 +69,8 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, totp.toSecretDto());
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been added successfully");
       expect(props.history.push).toHaveBeenCalledWith(`/app/passwords/view/${resourceId}`);
+      expect(props.dialogContext.close).toHaveBeenCalled();
+      expect(props.onStop).toHaveBeenCalled();
     });
 
     it('As a signed-in user I can not save a standalone totp if there is an error', async() => {
@@ -170,6 +173,85 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       };
 
       expect(props.dialogContext.open).toHaveBeenCalledWith(EditTotp, editTotpProps);
+    });
+  });
+
+  describe('As a signed-in user I should edit a standalone totp', () => {
+    it('As a signed-in user I should start to edit a standalone totp', async() => {
+      expect.assertions(1);
+      const props = defaultProps({mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const standaloneTotpProps = {
+        resource: props.resourceWorkspaceContext.selectedResources[0],
+        onCancel: page._instance.handleCancelDialog,
+        onOpenUploadQrCode: expect.any(Function),
+        onSubmit: page._instance.handleUpdate
+      };
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditStandaloneTotp, standaloneTotpProps);
+    });
+
+    it('As a signed-in user I can update a standalone totp', async() => {
+      const props = defaultProps();
+      jest.spyOn(props.context.port, 'request');
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
+      await page._instance.handleUpdate(totp);
+
+      const resourceDto = {
+        id: props.resourceWorkspaceContext.selectedResources[0].id,
+        resource_type_id: props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp"),
+        ...totp.toResourceDto()
+      };
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been updated successfully");
+      expect(props.resourceWorkspaceContext.onResourceEdited).toHaveBeenCalled();
+      expect(props.dialogContext.close).toHaveBeenCalled();
+      expect(props.onStop).toHaveBeenCalled();
+    });
+
+    it('As a signed-in user I can not save a standalone totp if there is an error', async() => {
+      const props = defaultProps();
+      const error = new Error("error");
+      jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
+      await page._instance.handleUpdate(totp);
+
+      const resourceDto = {
+        id: props.resourceWorkspaceContext.selectedResources[0].id,
+        resource_type_id: props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp"),
+        ...totp.toResourceDto()
+      };
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+      expect(props.dialogContext.close).toHaveBeenCalled();
+      expect(props.onStop).toHaveBeenCalled();
+    });
+
+    it('As a signed-in user I should start to upload a QR code', async() => {
+      expect.assertions(1);
+      const props = defaultProps();
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const uploadQrCodeProps = {
+        title: "Edit standalone TOTP",
+        action: "Save",
+        onSubmit: page._instance.handleUpdate
+      };
+
+      await page._instance.displayUploadQrCodeDialog(uploadQrCodeProps);
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(UploadQrCode, uploadQrCodeProps);
     });
   });
 

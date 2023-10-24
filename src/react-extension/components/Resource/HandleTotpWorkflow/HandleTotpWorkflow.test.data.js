@@ -16,6 +16,10 @@ import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 import {TotpWorkflowMode} from "./HandleTotpWorkflowMode";
 import {v4 as uuidv4} from "uuid";
+import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import {
+  resourceStandaloneTotpDto
+} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Default props
@@ -27,6 +31,7 @@ export function defaultProps(data = {}) {
     folderParentId: uuidv4(),
     actionFeedbackContext: defaultActionFeedbackContext(),
     context: defaultUserAppContext(),
+    resourceWorkspaceContext: defaultResourceWorkspaceContext({selectedResources: [resourceStandaloneTotpDto()]}),
     dialogContext: defaultDialogContext(),
     onStop: jest.fn(),
     history: {

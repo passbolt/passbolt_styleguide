@@ -44,7 +44,6 @@ describe("Totp", () => {
 
       const code = TotpCodeGeneratorService.generate(props.totp);
       expect(page.code).toEqual(code);
-
       jest.advanceTimersByTime(31000);
 
       const code2 = TotpCodeGeneratorService.generate(props.totp);
