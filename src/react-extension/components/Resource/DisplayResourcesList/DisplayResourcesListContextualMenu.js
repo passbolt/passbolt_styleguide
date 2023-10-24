@@ -205,7 +205,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle open the uri in a new tab
    */
   handleGoToResourceUriClick() {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource);
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.uri);
   }
 
   /**

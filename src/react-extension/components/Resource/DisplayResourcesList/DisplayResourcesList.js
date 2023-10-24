@@ -676,10 +676,10 @@ class DisplayResourcesList extends React.Component {
 
   /**
    * Whenever the user wants to follow a resource uri.
-   * @param {object} resource The resource
+   * @param {string} uri The uri
    */
-  handleGoToResourceUriClick(resource) {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(resource);
+  handleGoToResourceUriClick(uri) {
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(uri);
   }
 
   /**
