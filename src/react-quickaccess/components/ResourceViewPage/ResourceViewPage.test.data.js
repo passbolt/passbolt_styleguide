@@ -6,8 +6,7 @@
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 import MockStorage from "../../../react-extension/test/mock/MockStorage";
-import resourcesFixture from "../../../react-extension/test/fixture/Resources/resources";
-import MockPort from "../../../react-extension/test/mock/MockPort";
+import {defaultResourceDto, resourceWithTotpDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Default component props.
@@ -16,15 +15,13 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
  */
 export function defaultProps(props = {}) {
   const storage = new MockStorage();
-  storage.local.set({resources: resourcesFixture});
-  const port = new MockPort();
-  port.addRequestListener("passbolt.secret.decrypt", () => ({password: "secret_password"}));
-  port.addRequestListener("passbolt.quickaccess.use-resource-on-current-tab", () => {});
+  const resources = [defaultResourceDto(), resourceWithTotpDto()];
+  storage.local.set({resources});
 
   return {
-    context: defaultAppContext({storage, port}),
+    context: defaultAppContext({storage}),
     rbacContext: defaultAdministratorRbacContext(),
-    initialEntries: `/${resourcesFixture[0].id}`,
+    initialEntries: `/${resources[0].id}`,
     ...props
   };
 }
@@ -35,15 +32,18 @@ export function defaultProps(props = {}) {
  * @returns {object}
  */
 export function disabledApiFlagsProps(props = {}) {
+  const storage = new MockStorage();
+  const resources = [defaultResourceDto(), resourceWithTotpDto()];
+  storage.local.set({resources});
+
   const siteSettings = {
     getServerTimezone: () => '',
     canIUse: () => false,
   };
-  const storage = new MockStorage();
-  storage.local.set({resources: resourcesFixture});
 
   return defaultProps({
     context: defaultAppContext({siteSettings, storage}),
+    initialEntries: `/${resources[0].id}`,
     ...props
   });
 }
@@ -56,6 +56,23 @@ export function disabledApiFlagsProps(props = {}) {
 export function deniedRbacProps(props = {}) {
   return defaultProps({
     rbacContext: denyRbacContext(),
+    ...props
+  });
+}
+
+/**
+ * TOTP resource props.
+ * @param {object} props Override the default props.
+ * @returns {object}
+ */
+export function totpResourceProps(props = {}) {
+  const storage = new MockStorage();
+  const resources = [resourceWithTotpDto(), defaultResourceDto()];
+  storage.local.set({resources});
+
+  return defaultProps({
+    context: defaultAppContext({storage}),
+    initialEntries: `/${resources[0].id}`,
     ...props
   });
 }

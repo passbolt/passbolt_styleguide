@@ -42,7 +42,7 @@ export default class ResourceViewPagePage {
    * @returns {Element}
    */
   get password() {
-    return this._page.container.querySelector(".password-wrapper .secret button");
+    return this._page.container.querySelector(".password-wrapper .secret.secret-password button");
   }
 
   /**
@@ -50,14 +50,14 @@ export default class ResourceViewPagePage {
    * @returns {string}
    */
   get passwordText() {
-    return this._page.container.querySelector(".password-wrapper .secret button span").textContent;
+    return this._page.container.querySelector(".password-wrapper .secret.secret-password button span").textContent;
   }
 
   /**
-   * The preview button.
+   * The preview password button.
    * @returns {Element}
    */
-  get previewButton() {
+  get previewPasswordButton() {
     return this._page.container.querySelector(".password-wrapper .password-view");
   }
 
@@ -67,6 +67,38 @@ export default class ResourceViewPagePage {
    */
   get copyPasswordButton() {
     return this._page.container.querySelector(".copy-password");
+  }
+
+  /**
+   * The totp button element.
+   * @returns {Element}
+   */
+  get totp() {
+    return this._page.container.querySelector(".totp-wrapper .secret.secret-totp button");
+  }
+
+  /**
+   * The password text content.
+   * @returns {string}
+   */
+  get totpText() {
+    return this._page.container.querySelector(".totp-wrapper .secret.secret-totp button span").textContent;
+  }
+
+  /**
+   * The preview totp button.
+   * @returns {Element}
+   */
+  get previewTotpButton() {
+    return this._page.container.querySelector(".totp-wrapper .totp-view");
+  }
+
+  /**
+   * The copy password button.
+   * @returns {Element}
+   */
+  get copyTotpButton() {
+    return this._page.container.querySelector(".copy-totp");
   }
 
   /**
