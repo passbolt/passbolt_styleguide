@@ -188,18 +188,18 @@ describe("See Workspace Menu", () => {
       page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
     });
 
-    it('As LU I cannot start deleting a resource via the workspace main menu', () => {
+    it('As LU I can start deleting a resource via the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.moreMenu).not.toBeNull();
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
-      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeTruthy();
+      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
     });
 
-    it('As LU I cannot start editing a resource via the workspace main menu', () => {
+    it('As LU I can start editing a resource via the workspace main menu', () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenu).not.toBeNull();
-      expect(page.displayMenu.hasEditMenuDisabled()).toBeTruthy();
+      expect(page.displayMenu.hasEditMenuDisabled()).toBeFalsy();
     });
 
     it('As LU I should be able to copy a resource secret from the more menu', async() => {

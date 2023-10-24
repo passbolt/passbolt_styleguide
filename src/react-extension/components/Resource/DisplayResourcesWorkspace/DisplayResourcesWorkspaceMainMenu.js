@@ -24,7 +24,9 @@ import {Trans, withTranslation} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
-import CreateStandaloneTotp from "../CreateStandaloneTotp/CreateStandaloneTotp";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 
 /**
  * This component allows the current user to create a new resource
@@ -162,7 +164,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openStandaloneTotpCreateDialog() {
-    this.props.dialogContext.open(CreateStandaloneTotp, {folderParentId: this.folderIdSelected});
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected});
   }
 
   /**
@@ -292,6 +294,7 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
+  workflowContext: PropTypes.any, // The workflow context
 };
 
-export default withAppContext(withRbac(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)))));
+export default withAppContext(withRbac(withDialog(withWorkflow(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))));

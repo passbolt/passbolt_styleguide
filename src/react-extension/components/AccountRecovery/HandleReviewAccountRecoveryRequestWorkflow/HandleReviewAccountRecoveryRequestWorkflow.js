@@ -141,7 +141,6 @@ export class HandleReviewAccountRecoveryRequestWorkflow extends React.Component 
         // It can happen when the user has closed the passphrase entry dialog by instance.
         return;
       }
-      console.log(e);
       this.handleError(e);
     }
   }

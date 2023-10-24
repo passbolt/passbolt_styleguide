@@ -14,11 +14,11 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-import CreateStandaloneTotp from "./CreateStandaloneTotp";
+import AddTotp from "./AddTotp";
 /**
- * The CreateStandaloneTotp component represented as a page
+ * The AddTotp component represented as a page
  */
-export default class CreateStandaloneTotpPage {
+export default class AddTotpPage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -26,7 +26,7 @@ export default class CreateStandaloneTotpPage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <CreateStandaloneTotp {...props}/>
+        <AddTotp {...props}/>
       </MockTranslationProvider>
     );
   }
@@ -42,7 +42,7 @@ export default class CreateStandaloneTotpPage {
    * Returns the dialog element
    */
   get dialog() {
-    return this._page.container.querySelector('.create-standalone-totp-dialog');
+    return this._page.container.querySelector('.add-totp-dialog');
   }
   /**
    * Returns the dialog close element
@@ -52,45 +52,10 @@ export default class CreateStandaloneTotpPage {
   }
 
   /**
-   * Returns the name input element
-   */
-  get name() {
-    return this._page.container.querySelector('#create-standalone-totp-form-name');
-  }
-
-  /**
-   * Returns the name error message input element
-   */
-  get nameErrorMessage() {
-    return this._page.container.querySelector('.name.error-message');
-  }
-
-  /**
-   * Returns the name warning message input element
-   */
-  get nameWarningMessage() {
-    return this._page.container.querySelector('.name.warning-message');
-  }
-
-  /**
-   * Returns the uri input element
-   */
-  get uri() {
-    return this._page.container.querySelector('#create-standalone-totp-form-uri');
-  }
-
-  /**
-   * Returns the uri warning message input element
-   */
-  get uriWarningMessage() {
-    return this._page.container.querySelector('.uri.warning-message');
-  }
-
-  /**
    * Returns the key input element
    */
   get secretKey() {
-    return this._page.container.querySelector('#create-standalone-totp-form-key');
+    return this._page.container.querySelector('#add-totp-form-key');
   }
 
   /**
@@ -120,7 +85,7 @@ export default class CreateStandaloneTotpPage {
    * @return {Element}
    */
   get period() {
-    return this._page.container.querySelector('#create-standalone-totp-form-period');
+    return this._page.container.querySelector('#add-totp-form-period');
   }
 
   /**
@@ -135,7 +100,7 @@ export default class CreateStandaloneTotpPage {
    * @return {Element}
    */
   get digits() {
-    return this._page.container.querySelector('#create-standalone-totp-form-digits');
+    return this._page.container.querySelector('#add-totp-form-digits');
   }
 
   /**
@@ -150,7 +115,7 @@ export default class CreateStandaloneTotpPage {
    * @return {Element}
    */
   get algorithm() {
-    return this._page.container.querySelector('#create-standalone-totp-form-algorithm .selected-value .value');
+    return this._page.container.querySelector('#add-totp-form-algorithm .selected-value .value');
   }
 
   /**
@@ -158,7 +123,7 @@ export default class CreateStandaloneTotpPage {
    * @return {Element}
    */
   get firstItemOption() {
-    return this._page.container.querySelector('#create-standalone-totp-form-algorithm .select-items .option');
+    return this._page.container.querySelector('#add-totp-form-algorithm .select-items .option');
   }
 
   /**

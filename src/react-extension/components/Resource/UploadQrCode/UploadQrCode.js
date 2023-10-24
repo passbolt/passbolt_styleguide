@@ -20,8 +20,8 @@ import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelBut
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {isValidBase32} from "../../../../shared/utils/assertions";
 import {Html5Qrcode, Html5QrcodeSupportedFormats} from "html5-qrcode";
+import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
 
 class UploadQrCode extends Component {
   /**
@@ -111,13 +111,33 @@ class UploadQrCode extends Component {
    * Handle the import submit event
    * @param event A dom event
    */
-  handleSubmit(event) {
+  async handleSubmit(event) {
     // Prevent the form to be submitted.
     event.preventDefault();
-
-    if (!this.state.processing) {
-      this.save();
+    if (this.state.processing) {
+      return;
     }
+
+    this.toggleProcessing();
+
+    if (!await this.validate()) {
+      await this.toggleProcessing();
+      return;
+    }
+
+    let standaloneTotp;
+    try {
+      // Save the selected file with its qr code read
+      const url = await this.getDataFromQrCode();
+      standaloneTotp = StandaloneTotpViewModel.createStandaloneTotpFromUrl(url);
+    } catch (error) {
+      this.handleImportError(error);
+      return;
+    }
+
+    // Submit the standalone totp created from QR code
+    this.props.onSubmit(standaloneTotp);
+    this.handleImportSuccess();
   }
 
   /**
@@ -135,27 +155,6 @@ class UploadQrCode extends Component {
     this.props.onClose();
   }
 
-  /**
-   * Save the selected file with its qr code read
-   * @returns {Promise<void>}
-   */
-  async save() {
-    this.toggleProcessing();
-
-    if (!await this.validate()) {
-      await this.toggleProcessing();
-      return;
-    }
-
-    try {
-      const url = await this.getDataFromQrCode();
-      const standaloneTotp = this.createTotpFromUrl(url);
-      this.props.onSave(standaloneTotp);
-      this.handleImportSuccess();
-    } catch (error) {
-      this.handleImportError(error);
-    }
-  }
 
   /**
    * Get data from QR code
@@ -166,35 +165,6 @@ class UploadQrCode extends Component {
     const result = await html5QrCode.scanFileV2(this.state.fileToImport, false);
     // Decode uri for special characters
     return new URL(decodeURIComponent(result.decodedText));
-  }
-
-  /**
-   * Create TOTP
-   * @param url {URL}
-   * @return {{resourceDto: {name: string, uri: (string|string)}, secretDto: {totp: {secret_key: string, period: (number|number), digits: (number|number), algorithm: (string|string)}}}}
-   */
-  createTotpFromUrl(url) {
-    const secret_key = url.searchParams.get('secret').toUpperCase();
-    if (isValidBase32(secret_key)) {
-      // RESOURCE DTO
-      const resourceDto = {
-        // First seven characters are for type (example: /totp// or /hotp//) and add space after ':'
-        name: url.pathname.substring(7).split(":").join(": "),
-        uri: url.searchParams.get('issuer') || ""
-      };
-      // SECRET DTO
-      const secretDto = {
-        totp: {
-          secret_key: secret_key,
-          algorithm: url.searchParams.get('algorithm') || "SHA1",
-          digits: parseInt(url.searchParams.get('digits'), 10) || 6,
-          period: parseInt(url.searchParams.get('period'), 10) || 30
-        }
-      };
-      return {resourceDto, secretDto};
-    } else {
-      throw new Error(this.translate("The QR code is incomplete."));
-    }
   }
 
   /**
@@ -220,7 +190,8 @@ class UploadQrCode extends Component {
     } else if (isNoQrCodeFound) {
       fileError = this.translate("No QR code found.");
     } else {
-      fileError = error.message;
+      console.error(error);
+      fileError = this.translate("The QR code is incomplete.");
     }
     this.setState({fileError});
   }
@@ -331,7 +302,7 @@ class UploadQrCode extends Component {
               disabled={this.hasAllInputDisabled()}
               onClick={this.handleCancel}/>
             <FormSubmitButton
-              value={this.translate("Save")}
+              value={this.props.action}
               disabled={this.hasAllInputDisabled()}
               processing={this.state.processing}/>
           </div>
@@ -343,8 +314,9 @@ class UploadQrCode extends Component {
 
 UploadQrCode.propTypes = {
   title: PropTypes.string, // The title of the dialog
+  action: PropTypes.string, // The action of the dialog
   onClose: PropTypes.func, // The onClose function
-  onSave: PropTypes.func, // The onSave function
+  onSubmit: PropTypes.func, // The onSubmit function
   t: PropTypes.func, // The translation function
 };
 

@@ -11,6 +11,7 @@ import {defaultResourcePasswordGeneratorContext} from "../../../contexts/Resourc
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -48,7 +49,8 @@ export function defaultProps(data = {}) {
     onClose: () => {},
     dialogContext: {
       open: () => {},
-    }
+    },
+    workflowContext: defaultWorkflowContext()
   };
 
   delete data.passwordPoliciesContext;

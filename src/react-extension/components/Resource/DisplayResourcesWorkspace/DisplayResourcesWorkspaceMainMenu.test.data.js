@@ -19,6 +19,7 @@ import {
   resourceWorkspaceContextWithSelectedFolderIOwn
 } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 
 /**
  * Default component props.
@@ -31,6 +32,7 @@ export function defaultProps(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     ...data
   };
 }
@@ -46,6 +48,7 @@ export function defaultPropsFolderOwned(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderIOwn(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     ...data
   };
 }
@@ -61,6 +64,7 @@ export function defaultPropsFolderNotOwned(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderICanRead(),
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     ...data
   };
 }

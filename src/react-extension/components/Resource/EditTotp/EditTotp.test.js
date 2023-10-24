@@ -13,42 +13,37 @@
  */
 
 /**
- * Unit tests on CreateStandaloneTotp in regard of specifications
+ * Unit tests on EditTotp in regard of specifications
  */
 import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import {waitFor} from "@testing-library/react";
-import {defaultProps} from "./CreateStandaloneTotp.test.data";
-import CreateStandaloneTotpPage from "./CreateStandaloneTotp.test.page";
-import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
+import {defaultProps} from "./EditTotp.test.data";
+import EditTotpPage from "./EditTotp.test.page";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 
-describe("See the Create Standalone TOTP", () => {
+describe("See the Edit TOTP", () => {
   let page, props;
 
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
     props = defaultProps(); // The props to pass
-
-    page = new CreateStandaloneTotpPage(props);
+    page = new EditTotpPage(props);
   });
 
   const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
-  describe('As LU I can start adding a standalone totp', () => {
+  describe('As LU I can start adding a totp', () => {
     it('matches the styleguide', async() => {
-      expect.assertions(12);
+      expect.assertions(10);
       // Dialog title exists and correct
       expect(page.exists()).toBeTruthy();
-      expect(page.header.textContent).toBe("Create standalone TOTP");
+      expect(page.header.textContent).toBe("Edit TOTP");
 
       // Close button exists
       expect(page.dialogClose).not.toBeNull();
 
-      // Name input field exists.
-      expect(page.name.value).toBe("");
-      // Uri input field exists.
-      expect(page.uri.value).toBe("");
       // Username input field exists.
-      expect(page.secretKey.value).toBe("");
+      expect(page.secretKey.value).toBe(props.totp.secret_key);
 
       // Upload QR code button exists.
       expect(page.uploadQrCodeButton).not.toBeNull();
@@ -57,61 +52,53 @@ describe("See the Create Standalone TOTP", () => {
       await page.click(page.advancedSettings);
 
       // Period input field exists
-      expect(page.period.value).toBe("30");
+      expect(page.period.value).toBe(props.totp.period.toString());
 
       // Digits input field exists
-      expect(page.digits.value).toBe("6");
+      expect(page.digits.value).toBe(props.totp.digits.toString());
 
       // Algorithm input field exists
-      expect(page.algorithm.textContent).toBe("SHA1");
+      expect(page.algorithm.textContent).toBe(props.totp.algorithm);
 
       // Save button exists
-      expect(page.saveButton.textContent).toBe("Create");
+      expect(page.saveButton.textContent).toBe("Apply");
 
       // Cancel button exists
       expect(page.cancelButton.textContent).toBe("Cancel");
     });
 
-    it('Create a standalone totp when clicking on the submit button.', async() => {
+    it('Edit a totp when clicking on the submit button.', async() => {
       expect.assertions(4);
       expect(page.exists()).toBeTruthy();
       // create standalone totp
       const resourceMeta = {
-        name: "TOTP name",
-        uri: "https://uri.dev",
         secret_key: "JBSWY3DPEHPK3PXP",
-        period: 30,
-        digits: 6,
-        algorithm: "SHA1",
+        period: props.totp.period,
+        digits: props.totp.digits,
+        algorithm: props.totp.algorithm,
       };
       // Fill the form
-      page.fillInput(page.name, resourceMeta.name);
-      page.fillInput(page.uri, resourceMeta.uri);
       page.fillInput(page.secretKey, resourceMeta.secret_key);
 
       await page.click(page.saveButton);
       await waitFor(() => {});
 
-      expect(props.onSubmit).toHaveBeenCalledWith(new StandaloneTotpViewModel(resourceMeta));
+      expect(props.onSubmit).toHaveBeenCalledWith(new TotpViewModel(resourceMeta));
       expect(props.onClose).toBeCalled();
       expect(props.onCancel).toBeCalled();
     });
 
-    it('Create a standalone totp with advanced settings when clicking on the submit button.', async() => {
+    it('Edit a totp with advanced settings when clicking on the submit button.', async() => {
       expect.assertions(4);
       expect(page.exists()).toBeTruthy();
       // create standalone totp
       const resourceMeta = {
-        name: "TOTP name",
-        uri: "https://uri.dev",
         secret_key: "JBSWY3DPEHPK3PXP",
         period: 60,
         digits: 7,
-        algorithm: "SHA256",
+        algorithm: "SHA1",
       };
       // Fill the form
-      page.fillInput(page.name, resourceMeta.name);
-      page.fillInput(page.uri, resourceMeta.uri);
       page.fillInput(page.secretKey, resourceMeta.secret_key);
 
       // Click to open advanced settings
@@ -123,41 +110,42 @@ describe("See the Create Standalone TOTP", () => {
 
       await page.click(page.saveButton);
 
-      expect(props.onSubmit).toHaveBeenCalledWith(new StandaloneTotpViewModel(resourceMeta));
+      expect(props.onSubmit).toHaveBeenCalledWith(new TotpViewModel(resourceMeta));
       expect(props.onClose).toBeCalled();
       expect(props.onCancel).toBeCalled();
     });
 
     it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
-      expect.assertions(8);
+      expect.assertions(7);
       expect(page.exists()).toBeTruthy();
       // Click to open advanced settings
       await page.click(page.advancedSettings);
       // Fill the advanced settings form
-      page.fillInput(page.period, "");
-      page.fillInput(page.digits, 9);
+      page.fillInput(page.secretKey, "");
+      page.fillInput(page.period, 0);
+      page.fillInput(page.digits, "");
       await page.click(page.saveButton);
 
       // Throw error message
-      expect(page.nameErrorMessage.textContent).toBe("The name is required.");
       expect(page.secretKeyErrorMessage.textContent).toBe("The key is required.");
-      expect(page.digitsErrorMessage.textContent).toBe("TOTP length must be between 6 and 8.");
-      expect(page.periodErrorMessage.textContent).toBe("TOTP expiry is required.");
+      expect(page.digitsErrorMessage.textContent).toBe("TOTP length is required.");
+      expect(page.periodErrorMessage.textContent).toBe("TOTP expiry must be greater than 0.");
 
-      page.fillInput(page.secretKey, "????????");
-      page.fillInput(page.period, 0);
-      page.fillInput(page.digits, "");
+
+      page.fillInput(page.secretKey, "????");
+      page.fillInput(page.period, "");
+      page.fillInput(page.digits, 9);
 
       page.keyUpInput(page.secretKey);
       page.keyUpInput(page.period);
       page.keyUpInput(page.digits);
 
       expect(page.secretKeyErrorMessage.textContent).toBe("The key is not valid.");
-      expect(page.digitsErrorMessage.textContent).toBe("TOTP length is required.");
-      expect(page.periodErrorMessage.textContent).toBe("TOTP expiry must be greater than 0.");
+      expect(page.digitsErrorMessage.textContent).toBe("TOTP length must be between 6 and 8.");
+      expect(page.periodErrorMessage.textContent).toBe("TOTP expiry is required.");
     });
 
-    it('As LU I can stop creating a standalone totp by clicking on the cancel button', async() => {
+    it('As LU I can stop editing a totp by clicking on the cancel button', async() => {
       expect.assertions(3);
       expect(page.exists()).toBeTruthy();
       await page.click(page.cancelButton);
@@ -172,7 +160,6 @@ describe("See the Create Standalone TOTP", () => {
         updateResolve = resolve;
       }));
 
-      page.fillInput(page.name, "name");
       page.fillInput(page.secretKey, "JBSWY3DPEHPK3PXP");
 
       // Mock the request function to make it the expected result
@@ -180,8 +167,6 @@ describe("See the Create Standalone TOTP", () => {
       page.clickWithoutWaitFor(page.saveButton);
       // API calls are made on submit, wait they are resolved.
       await waitFor(() => {
-        expect(page.name.getAttribute("disabled")).not.toBeNull();
-        expect(page.uri.getAttribute("disabled")).not.toBeNull();
         expect(page.secretKey.getAttribute("disabled")).not.toBeNull();
         expect(page.saveButton.getAttribute("disabled")).not.toBeNull();
         expect(page.saveButton.className).toBe("button primary disabled processing");
@@ -190,7 +175,7 @@ describe("See the Create Standalone TOTP", () => {
       });
     });
 
-    it('As LU I can stop creating a standalone totp by closing the dialog', async() => {
+    it('As LU I can stop editing a totp by closing the dialog', async() => {
       expect.assertions(3);
       expect(page.exists()).toBeTruthy();
       await page.click(page.dialogClose);
@@ -198,7 +183,7 @@ describe("See the Create Standalone TOTP", () => {
       expect(props.onCancel).toBeCalled();
     });
 
-    it('As LU I can stop adding a standalone totp with the keyboard (escape)', async() => {
+    it('As LU I can stop editing a totp with the keyboard (escape)', async() => {
       expect.assertions(3);
       expect(page.exists()).toBeTruthy();
       await page.escapeKey(page.dialogClose);
@@ -213,18 +198,12 @@ describe("See the Create Standalone TOTP", () => {
     });
 
     it("As a user I should see a feedback when the key, name or uri fields content is truncated by a field limit", async() => {
-      expect.assertions(3);
+      expect.assertions(1);
       page.fillInput(page.secretKey, 'a'.repeat(1025));
-      page.fillInput(page.name, 'a'.repeat(256));
-      page.fillInput(page.uri, 'a'.repeat(1025));
 
-      page.keyUpInput(page.secretKey);
-      page.keyUpInput(page.name);
-      page.keyUpInput(page.uri);
+      await page.keyUpInput(page.secretKey);
 
       expect(page.secretKeyWarningMessage.textContent).toEqual(truncatedWarningMessage);
-      expect(page.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
-      expect(page.uriWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
   });
 });

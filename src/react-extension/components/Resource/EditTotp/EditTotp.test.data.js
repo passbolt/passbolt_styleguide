@@ -12,17 +12,23 @@
  * @since         4.4.0
  */
 
-import React from "react";
-import CreateStandaloneTotp from "./CreateStandaloneTotp";
-import {defaultProps} from "./CreateStandaloneTotp.test.data";
+/**
+ * Default props
+ * @returns {{resource: {id: string, name: string}}}
+ */
+export function defaultProps(data = {}) {
+  const defaultData = {
+    totp: {
+      secret_key: "2F2SA73OFJERVNBL",
+      period: 60,
+      digits: 7,
+      algorithm: "SHA256"
+    },
+    onClose: jest.fn(),
+    onSubmit: jest.fn(),
+    onCancel: jest.fn(),
+    onOpenUploadQrCode: jest.fn()
+  };
 
-export default {
-  title: 'Components/Resource/CreateStandaloneTotp',
-  component: CreateStandaloneTotp,
-};
-
-const Template = args  =>
-  <CreateStandaloneTotp {...args}/>;
-
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
+  return Object.assign(defaultData, data);
+}

@@ -61,11 +61,11 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle edit resource
    */
   handleEditClickEvent() {
-    const passwordEditDialogProps = {
-      id: this.resource.id
-    };
-    this.props.context.setContext({passwordEditDialogProps});
-    this.props.dialogContext.open(EditResource);
+    if (this.isStandaloneTotpResource) {
+      // TODO
+    } else {
+      this.props.dialogContext.open(EditResource, {resourceId: this.resource.id});
+    }
     this.props.hide();
   }
 
@@ -232,8 +232,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * Can update the resource
    */
   canUpdate() {
-    return this.resource.permission.type >= 7
-      && !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+    return this.resource.permission.type >= 7;
   }
 
   /**
@@ -276,11 +275,27 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Get resources type settings
+   * @return {ResourceTypesSettings|*}
+   */
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
+  }
+
+  /**
    * Is TOTP resource
    * @return {boolean}
    */
   get isTotpResources() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isStandaloneTotpResource() {
+    return this.resourceTypesSettings.assertResourceTypeIdIsStandaloneTotp(this.resource.resource_type_id);
   }
 
   /**

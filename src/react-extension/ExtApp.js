@@ -145,6 +145,7 @@ class ExtApp extends Component {
                                             <ResourceWorkspaceContextProvider>
                                               <ResourcePasswordGeneratorContextProvider>
                                                 <ManageDialogs/>
+                                                <ManageWorkflows/>
                                                 <ManageContextualMenu/>
                                                 <ManageAnnouncements/>
                                                 <DragContextProvider>

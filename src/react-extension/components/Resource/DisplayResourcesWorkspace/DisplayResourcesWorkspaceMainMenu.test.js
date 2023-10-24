@@ -19,9 +19,10 @@ import {
 } from "./DisplayResourcesWorkspaceMainMenu.test.data";
 import DisplayResourcesWorkspaceMainMenuPage from "./DisplayResourcesWorkspaceMainMenu.test.page";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
-import CreateStandaloneTotp from "../CreateStandaloneTotp/CreateStandaloneTotp";
 import CreateResourceFolder from "../../ResourceFolder/CreateResourceFolder/CreateResourceFolder";
 import CreateResource from "../CreateResource/CreateResource";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 
 beforeEach(() => {
   jest.resetModules();
@@ -160,7 +161,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateStandaloneTotp, {folderParentId: null});
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: null});
     });
 
     it('As LU I can create standalone totp if I have selected a folder I am allowed to create in', async() => {
@@ -174,7 +175,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.newTotpMenu).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.newTotpMenu);
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateStandaloneTotp, {folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id});
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: props.resourceWorkspaceContext.filter.payload.folder.id});
     });
   });
 
