@@ -33,6 +33,7 @@ import SsoContextProvider from "./contexts/SsoContext";
 import RbacsCollection from "../shared/models/entity/rbac/rbacsCollection";
 import AppContext from "../shared/context/AppContext/AppContext";
 import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import ResourceTypesSettings from "../shared/lib/Settings/ResourceTypesSettings";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess/home',
@@ -113,6 +114,7 @@ class ExtQuickAccess extends React.Component {
       await this.getSiteSettings();
       if (this.state.isAuthenticated) {
         await this.getLoggedInUser();
+        this.getResourceTypes();
       }
       this.getLocale();
     } catch (e) {
@@ -137,6 +139,7 @@ class ExtQuickAccess extends React.Component {
       siteSettings: null,
       loggedInUser: null,
       rbacs: null, // The role based access control
+      resourceTypesSettings: null, // The resource types settings
       hasError: false,
       errorMessage: "",
       locale: "en-UK", // To avoid any weird blink, launch the quickaccess with a default english locale
@@ -231,6 +234,16 @@ class ExtQuickAccess extends React.Component {
     this.setState({loggedInUser, rbacs});
   }
 
+  /**
+   * Get the list of resource types from local storage and set it in the state
+   * Using ResourceTypesSettings
+   */
+  async getResourceTypes() {
+    const resourceTypes = await this.props.port.request("passbolt.resource-type.get-all");
+    const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
+    this.setState({resourceTypesSettings});
+  }
+
   async getLocale() {
     const {locale} = await this.state.port.request("passbolt.locale.get");
     this.setState({locale});
@@ -271,6 +284,7 @@ class ExtQuickAccess extends React.Component {
     this.getSiteSettings();
     this.setState({isAuthenticated: true});
     this.getLoggedInUser();
+    this.getResourceTypes();
   }
 
   logoutSuccessCallback() {
