@@ -25,6 +25,8 @@ import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceC
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 
 beforeEach(() => {
   jest.resetModules();
@@ -233,32 +235,47 @@ describe("Display Resources", () => {
 
   describe('As LU, I should copy the secret.', () => {
     it('As LU, I should be able to copy the secret of resource', async() => {
+      expect.assertions(6);
       const props = propsWithFilteredResources();
+      const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
+
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       await page.resource(1).selectPassword();
-      await waitFor(() => expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id));
-      await waitFor(() => expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password'));
-      await waitFor(() => expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled());
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      await page.resource(4).selectTotp();
+      const code = TotpCodeGeneratorService.generate(totp);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[3].id);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
     it('As LU, I should not be able to copy the secret of resource  if denied by RBAC.', async() => {
+      expect.assertions(2);
       const props = propsWithFilteredResourcesAndDenyUiAction();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       expect(page.resource(1).copyPasswordLink.hasAttribute("disabled")).toBeTruthy();
+      expect(page.resource(4).copyTotpLink.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
   describe('As LU, I should preview the secret.', () => {
     it('AS LU, I should preview the secret of a resource ', async() => {
+      expect.assertions(6);
       const props = propsWithFilteredResources();
+      const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
+
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectViewPassword();
@@ -266,6 +283,14 @@ describe("Display Resources", () => {
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id);
       await page.resource(1).selectViewPassword();
       expect(page.resource(1).password).toBe('Copy password to clipboard');
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      await page.resource(4).selectViewTotp();
+      const code = TotpCodeGeneratorService.generate(totp);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[3].id);
+      expect(page.resource(4).totp.replaceAll(/\s+/g, "")).toBe(code);
+      await page.resource(4).selectViewTotp();
+      expect(page.resource(4).totp).toBe('Copy TOTP to clipboard');
     });
 
     it('AS LU, I shouldn\'t be able to preview secret of a resource if disabled by API flag', async() => {
@@ -287,6 +312,7 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await expect(page.resource(1).isViewPasswordExist).toBeFalsy();
+      await expect(page.resource(4).isViewTotpExist).toBeFalsy();
     });
   });
 

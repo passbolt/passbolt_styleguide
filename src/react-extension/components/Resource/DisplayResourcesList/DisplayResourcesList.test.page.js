@@ -114,6 +114,15 @@ export default class DisplayResourcesListPage {
       get copyPasswordLink() {
         return element.querySelector('.cell-password .secret-copy button');
       },
+      get totp() {
+        return element.querySelector('.cell-totp .secret button span').textContent;
+      },
+      get isViewTotpExist() {
+        return Boolean(element.querySelector('.cell-totp .totp-view'));
+      },
+      get copyTotpLink() {
+        return element.querySelector('.cell-totp .secret-copy button');
+      },
       async selectFavorite() {
         const favorite = element.querySelector('.cell-favorite button');
         fireEvent.click(favorite, leftClick);
@@ -131,6 +140,16 @@ export default class DisplayResourcesListPage {
       },
       async selectViewPassword() {
         const viewPassword = element.querySelector('.cell-password .password-view');
+        fireEvent.click(viewPassword, leftClick);
+        await waitFor(() => {});
+      },
+      async selectTotp() {
+        const password = element.querySelector('.cell-totp .secret button');
+        fireEvent.click(password, leftClick);
+        await waitFor(() => {});
+      },
+      async selectViewTotp() {
+        const viewPassword = element.querySelector('.cell-totp .totp-view');
         fireEvent.click(viewPassword, leftClick);
         await waitFor(() => {});
       },
