@@ -6,7 +6,11 @@
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 import MockStorage from "../../../react-extension/test/mock/MockStorage";
-import {defaultResourceDto, resourceWithTotpDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {
+  defaultResourceDto,
+  resourceStandaloneTotpDto,
+  resourceWithTotpDto
+} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Default component props.
@@ -68,6 +72,23 @@ export function deniedRbacProps(props = {}) {
 export function totpResourceProps(props = {}) {
   const storage = new MockStorage();
   const resources = [resourceWithTotpDto(), defaultResourceDto()];
+  storage.local.set({resources});
+
+  return defaultProps({
+    context: defaultAppContext({storage}),
+    initialEntries: `/${resources[0].id}`,
+    ...props
+  });
+}
+
+/**
+ * Standalone TOTP resource props.
+ * @param {object} props Override the default props.
+ * @returns {object}
+ */
+export function standaloneTotpResourceProps(props = {}) {
+  const storage = new MockStorage();
+  const resources = [resourceStandaloneTotpDto(), defaultResourceDto()];
   storage.local.set({resources});
 
   return defaultProps({
