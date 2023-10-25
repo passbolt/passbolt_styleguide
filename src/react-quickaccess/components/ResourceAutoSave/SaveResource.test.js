@@ -32,16 +32,24 @@ describe("See the Create Resource - save resource", () => {
   });
 
   it("As a signed-in user creating a password on the quickaccess, I should get warn when I enter a pwned password and not be blocked", async() => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     const context = defaultAppContext(); // The applicative context
     const props = defaultProps(); // The props to pass
+    jest.spyOn(context.port, 'request');
     mockExtensionCall(context);
 
+    const resourceMeta = {
+      name: "Passbolt Browser Extension Test",
+      uri: "https://passbolt-browser-extension/test",
+      username: "test@passbolt.com",
+      resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
+    };
+
     context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", async() => ({
-      name: "",
-      uri: "",
-      username: "",
+      name: resourceMeta.name,
+      uri: resourceMeta.uri,
+      username: resourceMeta.username,
       secret_clear: "password test"
     }));
 
@@ -67,6 +75,14 @@ describe("See the Create Resource - save resource", () => {
     await waitFor(() => {});
     // we expect a warning to inform about a network issue
     expect(page.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
+
+    await page.click(page.saveButton);
+
+    const secretDto = {
+      password: "unavailable",
+      description: ""
+    };
+    expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceMeta, secretDto);
   });
 
   it("As a signed-in user creating a password on the quickaccess, I should see a complexity as Quality if the passphrase is empty", async() => {

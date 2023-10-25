@@ -136,9 +136,14 @@ class SaveResource extends React.Component {
     const resourceDto = {
       name: this.state.name,
       username: this.state.username,
-      uri: this.state.uri
+      uri: this.state.uri,
+      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
     };
-    const secretDto = this.state.password;
+
+    const secretDto = {
+      password: this.state.password,
+      description: ""
+    };
 
     try {
       await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
@@ -199,6 +204,14 @@ class SaveResource extends React.Component {
   loadPassword(password) {
     const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
     this.setState({password, passwordEntropy});
+  }
+
+  /**
+   * Get resource types settings
+   * @return {*}
+   */
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
   }
 
   /**

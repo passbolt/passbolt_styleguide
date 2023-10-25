@@ -38,6 +38,14 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * The username button element.
+   * @returns {Element}
+   */
+  get username() {
+    return this._page.container.querySelector(".property-name a.property-value");
+  }
+
+  /**
    * The password button element.
    * @returns {Element}
    */

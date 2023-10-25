@@ -13,7 +13,13 @@
  */
 
 import ResourceViewPagePage from "./ResourceViewPage.test.page";
-import {defaultProps, deniedRbacProps, disabledApiFlagsProps, totpResourceProps} from "./ResourceViewPage.test.data";
+import {
+  defaultProps,
+  deniedRbacProps,
+  disabledApiFlagsProps,
+  standaloneTotpResourceProps,
+  totpResourceProps
+} from "./ResourceViewPage.test.data";
 import {waitFor} from "@testing-library/react";
 import {defaultTotpViewModelDto} from "../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
@@ -78,6 +84,19 @@ describe("ResourceViewPage", () => {
       await page.click(page.previewTotpButton);
       const code = TotpCodeGeneratorService.generate(totp);
       expect(page.totpText.replace(/\s/, "")).toStrictEqual(code);
+    });
+
+    it('As LU, I should not see username and password of a resource from a standalone totp', async() => {
+      expect.assertions(3);
+      const props = standaloneTotpResourceProps(); // The props to pass
+      const totp = defaultTotpViewModelDto();
+      mockContextRequest(props.context, () => ({totp: totp}));
+      const page = new ResourceViewPagePage(props);
+      await waitFor(() => {});
+
+      expect(page.username).toBeNull();
+      expect(page.password).toBeNull();
+      expect(page.totp).not.toBeNull();
     });
 
     it('As LU, I shouldn\'t be able to preview secret totp of a resource if disabled by API flag', async() => {

@@ -413,6 +413,14 @@ class ResourceViewPage extends React.Component {
     return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.state.resource.resource_type_id);
   }
 
+  /**
+   * Is standalone TOTP resource
+   * @return {boolean}
+   */
+  get isStandaloneTotpResource() {
+    return this.props.context.resourceTypesSettings?.assertResourceTypeIdIsStandaloneTotp(this.state.resource.resource_type_id);
+  }
+
   render() {
     const sanitizeResourceUrl = this.sanitizeResourceUrl();
     const isPasswordPreviewed = this.isPasswordPreviewed();
@@ -432,105 +440,109 @@ class ResourceViewPage extends React.Component {
           </a>
         </div>
         <ul className="properties">
-          <li className="property">
-            <div className="information">
-              <span className="property-name"><Trans>Username</Trans></span>
-              {this.state.resource.username &&
-                <a href="#" role="button" className="property-value" onClick={this.handleCopyLoginClick}>
-                  {this.state.resource.username}
-                </a>
-              }
-              {!this.state.resource.username &&
-                <span className="property-value empty">
-                  <Trans>no username provided</Trans>
-                </span>
-              }
-            </div>
-            <a role="button" className={`button button-transparent property-action ${!this.state.resource.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("Copy to clipboard")}>
-              <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
-                {status => (
-                  <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
-                    <Icon name="copy-to-clipboard"/>
-                  </span>
-                )}
-              </Transition>
-              <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
-                {status => (
-                  <span className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}>
-                    <Icon name="spinner"/>
-                  </span>
-                )}
-              </Transition>
-              <Transition in={this.state.copyLoginState === "done"} appear={true} timeout={500}>
-                {status => (
-                  <span className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}>
-                    <Icon name="check"/>
-                  </span>
-                )}
-              </Transition>
-              <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-            </a>
-          </li>
-          <li className="property">
-            <div className="information">
-              <span className="property-name"><Trans>Password</Trans></span>
-              <div className="password-wrapper">
-                <div className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
-                  title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
-                  <HiddenPassword
-                    canClick={canCopySecret}
-                    preview={this.state.plaintextSecretDto?.password}
-                    onClick={this.handleCopyPasswordClick} />
+          {!this.isStandaloneTotpResource &&
+            <>
+              <li className="property">
+                <div className="information">
+                  <span className="property-name"><Trans>Username</Trans></span>
+                  {this.state.resource.username &&
+                    <a href="#" role="button" className="property-value" onClick={this.handleCopyLoginClick}>
+                      {this.state.resource.username}
+                    </a>
+                  }
+                  {!this.state.resource.username &&
+                    <span className="property-value empty">
+                      <Trans>no username provided</Trans>
+                    </span>
+                  }
                 </div>
-                {this.canPreviewSecret &&
-                  <a onClick={this.handleViewPasswordButtonClick}
-                    className={`password-view button button-transparent ${this.state.isPasswordDecrypting ? "disabled" : ""}`}>
-                    <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
+                <a role="button" className={`button button-transparent property-action ${!this.state.resource.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("Copy to clipboard")}>
+                  <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
+                    {status => (
+                      <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
+                        <Icon name="copy-to-clipboard"/>
+                      </span>
+                    )}
+                  </Transition>
+                  <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
+                    {status => (
+                      <span className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}>
+                        <Icon name="spinner"/>
+                      </span>
+                    )}
+                  </Transition>
+                  <Transition in={this.state.copyLoginState === "done"} appear={true} timeout={500}>
+                    {status => (
+                      <span className={`transition fade-${status} ${this.state.copyLoginState !== "done" ? "visually-hidden" : ""}`}>
+                        <Icon name="check"/>
+                      </span>
+                    )}
+                  </Transition>
+                  <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
+                </a>
+              </li>
+              <li className="property">
+                <div className="information">
+                  <span className="property-name"><Trans>Password</Trans></span>
+                  <div className="password-wrapper">
+                    <div className={`property-value secret secret-password ${isPasswordPreviewed ? "" : "secret-copy"}`}
+                      title={isPasswordPreviewed ? this.state.plaintextSecretDto?.password : "secret"}>
+                      <HiddenPassword
+                        canClick={canCopySecret}
+                        preview={this.state.plaintextSecretDto?.password}
+                        onClick={this.handleCopyPasswordClick} />
+                    </div>
+                    {this.canPreviewSecret &&
+                      <a onClick={this.handleViewPasswordButtonClick}
+                        className={`password-view button button-transparent ${this.state.isPasswordDecrypting ? "disabled" : ""}`}>
+                        <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
+                          {status => (
+                            <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
+                              <Icon name={isPasswordPreviewed ? "eye-close" : "eye-open"}/>
+                            </span>
+                          )}
+                        </Transition>
+                        <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
+                          {status => (
+                            <span className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
+                              <Icon name="spinner"/>
+                            </span>
+                          )}
+                        </Transition>
+                        <span className="visually-hidden"><Trans>View</Trans></span>
+                      </a>
+                    }
+                  </div>
+                </div>
+                {canCopySecret &&
+                  <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
+                    <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
                       {status => (
-                        <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                          <Icon name={isPasswordPreviewed ? "eye-close" : "eye-open"}/>
+                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
+                          <Icon name="copy-to-clipboard"/>
                         </span>
                       )}
                     </Transition>
-                    <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
+                    <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
                       {status => (
-                        <span className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
+                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
                           <Icon name="spinner"/>
                         </span>
                       )}
                     </Transition>
-                    <span className="visually-hidden"><Trans>View</Trans></span>
+                    <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
+                      {status => (
+                        <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
+                          <Icon name="check"/>
+                        </span>
+                      )}
+                    </Transition>
+                    <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
                   </a>
                 }
-              </div>
-            </div>
-            {canCopySecret &&
-              <a role="button" className="button button-transparent property-action copy-password" onClick={this.handleCopyPasswordClick} title={this.translate("Copy to clipboard")}>
-                <Transition in={this.state.copyPasswordState === "default"} appear={false} timeout={500}>
-                  {status => (
-                    <span className={`transition fade-${status} ${this.state.copyPasswordState !== "default" ? "visually-hidden" : ""}`}>
-                      <Icon name="copy-to-clipboard"/>
-                    </span>
-                  )}
-                </Transition>
-                <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
-                  {status => (
-                    <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
-                      <Icon name="spinner"/>
-                    </span>
-                  )}
-                </Transition>
-                <Transition in={this.state.copyPasswordState === "done"} appear={true} timeout={500}>
-                  {status => (
-                    <span className={`transition fade-${status} ${this.state.copyPasswordState !== "done" ? "visually-hidden" : ""}`}>
-                      <Icon name="check"/>
-                    </span>
-                  )}
-                </Transition>
-                <span className="visually-hidden"><Trans>Copy to clipboard</Trans></span>
-              </a>
-            }
-          </li>
+              </li>
+            </>
+          }
           {this.isTotpResources &&
             <li className="property">
               <div className="information">
