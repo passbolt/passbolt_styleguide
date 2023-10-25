@@ -104,11 +104,18 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   }
 
   /**
-   * Can use folders
-   * @returns {*}
+   * Can use account recovery
+   * @returns {boolean}
    */
   canUseAccountRecovery() {
     return this.props.context.siteSettings.canIUse("accountRecovery");
+  }
+  /**
+   * Can use password expiry
+   * @returns {boolean}
+   */
+  canUsePasswordExpiry() {
+    return this.props.context.siteSettings.canIUse("passwordExpiry");
   }
 
   /**
@@ -369,6 +376,20 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     </label>
                   </span>
                 </div>
+              </div>
+            </>
+          }
+          {this.canUsePasswordExpiry() &&
+            <>
+              <h3><Trans>Password expiry</Trans></h3>
+              <div className="section">
+                <span className="input toggle-switch form-element">
+                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryExpiredUser" disabled={this.hasAllInputDisabled()}
+                    onChange={this.handleInputChange} checked={settings.passwordExpiryExpiredUser} id="password-expiry-expired-user-toggle-button"/>
+                  <label className="text" htmlFor="password-expiry-expired-user-toggle-button">
+                    <Trans>When the password is expired, notify the owners to change it.</Trans>
+                  </label>
+                </span>
               </div>
             </>
           }
