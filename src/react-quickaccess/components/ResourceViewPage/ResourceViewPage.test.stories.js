@@ -2,7 +2,13 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import ResourceViewPage from "./ResourceViewPage";
-import {defaultProps, deniedRbacProps, disabledApiFlagsProps, totpResourceProps} from "./ResourceViewPage.test.data";
+import {
+  defaultProps,
+  deniedRbacProps,
+  disabledApiFlagsProps,
+  standaloneTotpResourceProps,
+  totpResourceProps
+} from "./ResourceViewPage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
 
 export default {
@@ -41,3 +47,7 @@ AllRbacsDenied.parameters = parameters;
 export const TotpResourceView = Template.bind({});
 TotpResourceView.args = totpResourceProps();
 TotpResourceView.parameters = parameters;
+
+export const StandaloneTotpResourceView = Template.bind({});
+StandaloneTotpResourceView.args = standaloneTotpResourceProps();
+StandaloneTotpResourceView.parameters = parameters;
