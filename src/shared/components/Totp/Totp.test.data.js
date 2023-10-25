@@ -13,6 +13,7 @@
  */
 
 import {plaintextSecretPasswordDescriptionTotpDto} from "../../models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import {defaultActionFeedbackContext} from "../../../react-extension/contexts/ActionFeedbackContext.test.data";
 
 /**
  * Returns the default component props
@@ -24,6 +25,27 @@ export function defaultProps(props = {}) {
     totp: plaintextSecretPasswordDescriptionTotpDto().totp,
     canClick: true,
     onClick: jest.fn(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    ...props
+  };
+}
+
+/**
+ * Returns the error component props
+ * @param {object} props Props to override
+ * @returns {any}
+ */
+export function secretKeyInvalidProps(props = {}) {
+  return {
+    totp: {
+      algorithm: "SHA1",
+      digits: 6,
+      period: 30,
+      secret_key: "This is a secret_!!!",
+    },
+    canClick: true,
+    onClick: jest.fn(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
     ...props
   };
 }

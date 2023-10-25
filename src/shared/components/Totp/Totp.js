@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
 import {TotpCodeGeneratorService} from "../../services/otp/TotpCodeGeneratorService";
 import {withTranslation} from "react-i18next";
+import {withActionFeedback} from "../../../react-extension/contexts/ActionFeedbackContext";
 
 const DEFAULT_TOTP_PERIOD = 30;
 
@@ -92,7 +93,12 @@ class Totp extends Component {
    * @returns {string}
    */
   generateCode() {
-    return TotpCodeGeneratorService.generate(this.props.totp);
+    try {
+      return TotpCodeGeneratorService.generate(this.props.totp);
+    } catch (error) {
+      this.props.actionFeedbackContext.displayError(this.props.t("Unable to preview the TOTP"));
+      return "";
+    }
   }
 
   /**
@@ -197,9 +203,10 @@ Totp.defaultProps = {
 
 Totp.propTypes = {
   totp: PropTypes.object.isRequired, // The totp dto
+  actionFeedbackContext: PropTypes.any, // The action feedback context
   canClick: PropTypes.bool, // The can click on the totp
   onClick: PropTypes.func, // The on click handler
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation("common")(Totp);
+export default withActionFeedback(withTranslation("common")(Totp));

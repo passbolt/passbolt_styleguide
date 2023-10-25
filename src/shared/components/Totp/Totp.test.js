@@ -13,7 +13,7 @@
  */
 
 import TotpTestPage from "./Totp.test.page";
-import {defaultProps} from "./Totp.test.data";
+import {defaultProps, secretKeyInvalidProps} from "./Totp.test.data";
 import {TotpCodeGeneratorService} from "../../services/otp/TotpCodeGeneratorService";
 
 beforeEach(() => {
@@ -69,6 +69,27 @@ describe("Totp", () => {
       expect.assertions(1);
       await page.click(page.button);
       expect(props.onClick).not.toHaveBeenCalled();
+    });
+
+    it('It should display an TOTP code even if the secret key contain special characters and spaces', async() => {
+      const props = secretKeyInvalidProps();
+      const page = new TotpTestPage(props);
+      expect.assertions(1);
+
+      const code = TotpCodeGeneratorService.generate(props.totp);
+      expect(page.code).toEqual(code);
+    });
+  });
+
+  describe('As a user I should not see TOTP code if there is an error', () => {
+    it('It should display an error message', async() => {
+      const props = defaultProps();
+      jest.spyOn(TotpCodeGeneratorService, "generate").mockImplementationOnce(() => { throw new Error("Error"); });
+      const page = new TotpTestPage(props);
+
+      expect.assertions(1);
+      await page.click(page.button);
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledWith("Unable to preview the TOTP");
     });
   });
 });

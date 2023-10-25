@@ -17,20 +17,19 @@ export class TotpCodeGeneratorService {
   /**
    * Generate a TOTP code based on a TOTP DTO
    * @param {object} totpDto The totp DTO
-   * @returns {string}
+   * @returns {TOTP}
    */
   static createTotpObject(totpDto) {
-    const totp = new OTPAuth.TOTP({
-      algorithm:  totpDto.algorithm,
+    return new OTPAuth.TOTP({
+      algorithm: totpDto.algorithm,
       digits: totpDto.digits,
       period: totpDto.period,
-      secret: totpDto.secret_key,
+      // Remove all special characters and whitespace from secret_key (including spaces, tabs and newline characters)
+      secret: totpDto.secret_key.replace(/(\W|_|\s)/g, ''),
       issuer: totpDto.issuer,
       label: totpDto.label,
       timestamp: Date.now()
     });
-
-    return totp;
   }
 
   /**
