@@ -65,7 +65,8 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseDesktopExportCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+    const canViewDesktopTransfer = this.props.rbacContext.canIUseUiAction(uiActions.DESKTOP_TRANSFER);
+    return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
 
   /**

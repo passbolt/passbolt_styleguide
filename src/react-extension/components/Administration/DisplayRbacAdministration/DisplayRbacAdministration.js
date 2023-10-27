@@ -294,6 +294,12 @@ class DisplayRbacAdministration extends React.Component {
                       rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                       roles={this.state.roles}
                       onChange={this.updateRbacControlFunction}/>
+                    <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
+                      actionName={uiActions.DESKTOP_TRANSFER} level={3}
+                      rbacs={this.props.adminRbacContext.rbacs}
+                      rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                      roles={this.state.roles}
+                      onChange={this.updateRbacControlFunction}/>
                   </DisplayRbacSection>
                 </>
               }

@@ -24,4 +24,5 @@ export const uiActions = {
   TAGS_USE: "Tags.use",
   USERS_VIEW_WORKSPACE: "Users.viewWorkspace",
   MOBILE_TRANSFER: "Mobile.transfer",
+  DESKTOP_TRANSFER: "Desktop.transfer",
 };

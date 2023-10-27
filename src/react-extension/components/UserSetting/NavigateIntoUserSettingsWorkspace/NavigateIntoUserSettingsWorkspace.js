@@ -55,8 +55,10 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseDesktopCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+    const canViewDesktopTransfer = this.props.rbacContext.canIUseUiAction(uiActions.DESKTOP_TRANSFER);
+    return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
+
   /**
    * Can the user access the account recovery feature.
    * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
@@ -186,7 +188,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
           </li>
           }
           {this.canIUseDesktopCapability &&
-          <li>
+          <li id="navigation-item-desktop-setup">
             <div
               className={`row ${isSelected('desktop') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
