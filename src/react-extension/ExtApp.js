@@ -71,6 +71,8 @@ import AdminPasswordPoliciesContextProvider
 import ProgressContextProvider from "./contexts/ProgressContext";
 import AdministrationUserPassphrasePoliciesContextProvider from "./contexts/Administration/AdministrationUserPassphrasePoliciesContext/AdministrationUserPassphrasePoliciesContext";
 import UserPassphrasePoliciesContextProvider from "./contexts/UserPassphrasePoliciesContext";
+import AdministrationPasswordExpiryContextProvider from "./contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
+import PasswordExpirySettingsContextProvider from "./contexts/PasswordExpirySettingsContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -140,26 +142,29 @@ class ExtApp extends Component {
                                           <Route path={[
                                             "/app/folders/view/:filterByFolderId",
                                             "/app/passwords/view/:selectedResourceId",
+                                            "/app/passwords/filter/:filterType",
                                             "/app/passwords",
                                           ]}>
-                                            <ResourceWorkspaceContextProvider>
-                                              <ResourcePasswordGeneratorContextProvider>
-                                                <ManageDialogs/>
-                                                <ManageWorkflows/>
-                                                <ManageContextualMenu/>
-                                                <ManageAnnouncements/>
-                                                <DragContextProvider>
-                                                  <div id="container" className="page password">
-                                                    <div id="app" className="app ready" tabIndex="1000">
-                                                      <div className="header first">
-                                                        <DisplayMainMenu/>
+                                            <PasswordExpirySettingsContextProvider>
+                                              <ResourceWorkspaceContextProvider>
+                                                <ResourcePasswordGeneratorContextProvider>
+                                                  <ManageDialogs/>
+                                                  <ManageWorkflows/>
+                                                  <ManageContextualMenu/>
+                                                  <ManageAnnouncements/>
+                                                  <DragContextProvider>
+                                                    <div id="container" className="page password">
+                                                      <div id="app" className="app ready" tabIndex="1000">
+                                                        <div className="header first">
+                                                          <DisplayMainMenu/>
+                                                        </div>
+                                                        <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                                       </div>
-                                                      <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
                                                     </div>
-                                                  </div>
-                                                </DragContextProvider>
-                                              </ResourcePasswordGeneratorContextProvider>
-                                            </ResourceWorkspaceContextProvider>
+                                                  </DragContextProvider>
+                                                </ResourcePasswordGeneratorContextProvider>
+                                              </ResourceWorkspaceContextProvider>
+                                            </PasswordExpirySettingsContextProvider>
                                           </Route>
                                           {/* Users workspace */}
                                           <Route path={[
@@ -208,6 +213,7 @@ class ExtApp extends Component {
                                             "/app/administration/sso",
                                             "/app/administration/password-policies",
                                             "/app/administration/user-passphrase-policies",
+                                            "/app/administration/password-expiry",
                                           ]}>
                                             <AdministrationWorkspaceContextProvider>
                                               <AdminAccountRecoveryContextProvider>
@@ -215,9 +221,11 @@ class ExtApp extends Component {
                                                   <AdminSsoContextProvider>
                                                     <AdminPasswordPoliciesContextProvider>
                                                       <AdministrationUserPassphrasePoliciesContextProvider>
-                                                        <ManageDialogs/>
-                                                        <ManageWorkflows/>
-                                                        <AdministrationWorkspace/>
+                                                        <AdministrationPasswordExpiryContextProvider>
+                                                          <ManageDialogs/>
+                                                          <ManageWorkflows/>
+                                                          <AdministrationWorkspace/>
+                                                        </AdministrationPasswordExpiryContextProvider>
                                                       </AdministrationUserPassphrasePoliciesContextProvider>
                                                     </AdminPasswordPoliciesContextProvider>
                                                   </AdminSsoContextProvider>

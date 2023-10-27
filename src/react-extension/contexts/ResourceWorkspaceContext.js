@@ -26,6 +26,7 @@ import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gr
 import GridResourceUserSettingService
   from "../../shared/services/gridResourceUserSetting/GridResourceUserSettingService";
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
+import {withPasswordExpiry} from "./PasswordExpirySettingsContext";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -171,6 +172,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   async componentDidMount() {
+    await this.props.passwordExpiryContext.findSettings();
     this.loadGridResourceSetting();
     this.populateDebounced();
     this.handleResourcesWaitedFor();
@@ -276,18 +278,25 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * E.g. /folder/view.:filterByFolderId
    */
   async handleFolderRouteChange() {
-    if (this.props.context.folders !== null) {
-      const folderId = this.props.match.params.filterByFolderId;
-      if (folderId) {
-        const folder = this.props.context.folders.find(folder => folder.id === folderId);
-        if (folder) { // Known folder
-          await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
-          await this.detailFolder(folder);
-        } else { // Unknown folder
-          this.handleUnknownFolder();
-        }
-      }
+    if (this.props.context.folders === null) {
+      return;
     }
+
+    const folderId = this.props.match.params.filterByFolderId;
+    if (!folderId) {
+      return;
+    }
+
+    const folder = this.props.context.folders.find(folder => folder.id === folderId);
+    // Unknown folder
+    if (!folder) {
+      this.handleUnknownFolder();
+      return;
+    }
+
+    // Known folder
+    await this.search({type: ResourceWorkspaceFilterTypes.FOLDER, payload: {folder}});
+    await this.detailFolder(folder);
   }
 
   /**
@@ -295,14 +304,24 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleResourceRouteChange() {
     const isResourceLocation = this.props.location.pathname.includes('passwords');
-    const resourceId = this.props.match.params.selectedResourceId;
-    if (isResourceLocation) {
-      if (resourceId) { // Case of password view
-        this.handleSingleResourceRouteChange(resourceId);
-      } else { // Case of all and applied filters
-        this.handleAllResourceRouteChange();
-      }
+    if (!isResourceLocation) {
+      return;
     }
+
+    const isExpiredResourceLocation = this.props.match.params?.filterType === "expired";
+    if (isExpiredResourceLocation) {
+      this.handleExpiredResourceRouteChange();
+      return;
+    }
+
+    const resourceId = this.props.match.params.selectedResourceId;
+    if (resourceId) { // Case of password view
+      this.handleSingleResourceRouteChange(resourceId);
+      return;
+    }
+
+    // Case of all and applied filters
+    this.handleAllResourceRouteChange();
   }
 
   /**
@@ -335,13 +354,32 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    */
   async handleAllResourceRouteChange() {
     const hasResources = this.resources !== null;
-    if (hasResources) {
-      const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
-      const isSameFilter = this.state.filter === filter;
-      await this.detailNothing();
-      if (!isSameFilter) {
-        await this.search(filter);
-      }
+    if (!hasResources) {
+      return;
+    }
+
+    const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
+    const isSameFilter = this.state.filter === filter;
+    await this.detailNothing();
+    if (!isSameFilter) {
+      await this.search(filter);
+    }
+  }
+
+  /**
+   * Handle the resource view route change for expired resources in the path
+   * E.g. /password/expired
+   */
+  async handleExpiredResourceRouteChange() {
+    const hasResources = this.resources !== null;
+    if (!hasResources) {
+      return;
+    }
+    const filter = {type: ResourceWorkspaceFilterTypes.EXPIRED};
+    const isSameFilter = this.state.filter === filter;
+    await this.detailNothing();
+    if (!isSameFilter) {
+      await this.search(filter);
     }
   }
 
@@ -572,6 +610,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       [ResourceWorkspaceFilterTypes.FAVORITE]: this.searchByFavorite.bind(this),
       [ResourceWorkspaceFilterTypes.SHARED_WITH_ME]: this.seachBySharedWithMe.bind(this),
       [ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED]: this.searchByRecentlyModified.bind(this),
+      [ResourceWorkspaceFilterTypes.EXPIRED]: this.seachByExpired.bind(this),
       [ResourceWorkspaceFilterTypes.ALL]: this.searchAll.bind(this),
       [ResourceWorkspaceFilterTypes.NONE]: () => { /* No search */ }
     };
@@ -682,6 +721,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const filteredResources = this.resources.filter(resource => resource.permission.type < 15);
     await this.setState({filter, filteredResources});
   }
+
   /**
    * Keep the most recently modified resources ( current state: just sort everything with the most recent modified resource )
    * @param filter A recently modified filter
@@ -708,6 +748,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
         this.props.history.push({pathname: '/app/passwords', state: {filter}});
       }
     }
+  }
+
+  /**
+   * Keep the expired resources
+   * @param filter A "expired" filter
+   */
+  async seachByExpired(filter) {
+    const now = new Date();
+    const filteredResources = this.resources.filter(resource => resource.expired && new Date(resource.expired) <= now);
+    this.setState({filter, filteredResources});
   }
 
   /** RESOURCE SELECTION */
@@ -808,28 +858,45 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   redirectAfterSelection() {
     const canUseFolders = this.props.context.siteSettings.canIUse('folders');
     const contentLoaded = this.resources !== null && (!canUseFolders || this.folders !== null);
-    if (contentLoaded) {
-      const hasSingleSelectionNow = this.state.selectedResources.length === 1;
-      if (hasSingleSelectionNow) { // Case of single selected resource
-        const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
-        if (mustRedirect) {
-          this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
-        }
-      } else { // Case of multiple selected resources
-        const {filter} = this.state;
-        const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
-        if (isFolderFilter) { // Case of folder
-          const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
-          if (mustRedirect) {
-            this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
-          }
-        } else { // Case of resources
-          const mustRedirect = this.props.location.pathname !== '/app/passwords';
-          if (mustRedirect) {
-            this.props.history.push({pathname: `/app/passwords`, state: {filter}});
-          }
-        }
+    if (!contentLoaded) {
+      return;
+    }
+
+    // Case of single selected resource
+    const hasSingleSelectionNow = this.state.selectedResources.length === 1;
+    if (hasSingleSelectionNow) {
+      const mustRedirect = this.props.location.pathname !== `/app/passwords/view/${this.state.selectedResources[0].id}`;
+      if (mustRedirect) {
+        this.props.history.push(`/app/passwords/view/${this.state.selectedResources[0].id}`);
       }
+      return;
+    }
+
+    // Case of multiple selected resources
+    const {filter} = this.state;
+    const isFolderFilter = filter.type === ResourceWorkspaceFilterTypes.FOLDER;
+    if (isFolderFilter) { // Case of folder
+      const mustRedirect = this.props.location.pathname !== `/app/folders/view/${this.state.filter.payload.folder.id}`;
+      if (mustRedirect) {
+        this.props.history.push({pathname: `/app/folders/view/${this.state.filter.payload.folder.id}`});
+      }
+      return;
+    }
+
+    // Case of resources filtered by expired
+    const isExpiredFilter = filter.type === ResourceWorkspaceFilterTypes.EXPIRED;
+    if (isExpiredFilter) {
+      const mustRedirect = this.props.location.pathname !== `/app/passwords/filter/expired`;
+      if (mustRedirect) {
+        this.props.history.push({pathname: `/app/passwords/filter/expired`});
+      }
+      return;
+    }
+
+    // Case of resources
+    const mustRedirect = this.props.location.pathname !== '/app/passwords';
+    if (mustRedirect) {
+      this.props.history.push({pathname: `/app/passwords`, state: {filter}});
     }
   }
 
@@ -1022,9 +1089,23 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
       columnsResourceSetting.removeById("totp");
     }
+    if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
+      columnsResourceSetting.removeById("expired");
+    }
+    if (!this.hasAttentionRequiredColumn()) {
+      columnsResourceSetting.removeById("attentionRequired");
+    }
     const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
     // process the search after the grid setting is loaded
     this.setState({columnsResourceSetting, sorter}, () => this.search(this.state.filter));
+  }
+
+  /**
+   * Returns true if the "attention required" column is available
+   * @returns {boolean}
+   */
+  hasAttentionRequiredColumn() {
+    return this.props.passwordExpiryContext.isFeatureEnabled();
   }
 
   /**
@@ -1077,10 +1158,11 @@ ResourceWorkspaceContextProvider.propTypes = {
   match: PropTypes.object,
   history: PropTypes.object,
   actionFeedbackContext: PropTypes.object,
+  passwordExpiryContext: PropTypes.object, // the password expiry contexts
   loadingContext: PropTypes.object // The loading context
 };
 
-export default withAppContext(withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider))));
+export default withAppContext(withPasswordExpiry(withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider)))));
 
 /**
  * Resource Workspace Context Consumer HOC
@@ -1115,6 +1197,7 @@ export const ResourceWorkspaceFilterTypes = {
   FAVORITE: 'FILTER-BY-FAVORITE', // Favorite resources
   SHARED_WITH_ME: 'FILTER-BY-SHARED-WITH-ME', // Resources shared with the current user (who is not the owner)
   RECENTLY_MODIFIED: 'FILTER-BY-RECENTLY-MODIFIED', // Resources recently modified
+  EXPIRED: 'FILTER-BY-EXPIRED', // Resources recently modified
 };
 
 /**

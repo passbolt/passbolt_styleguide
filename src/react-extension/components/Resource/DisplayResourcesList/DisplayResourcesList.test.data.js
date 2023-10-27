@@ -23,6 +23,7 @@ import {
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Default props as when initializing the list with no content.
@@ -34,6 +35,7 @@ export function defaultProps(data = {}) {
     context: defaultUserAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     contextualMenuContext: defaultContextualMenuContext(),
     ...data
   };
@@ -90,12 +92,14 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
       filteredResources: resources,
       columnsResourceSetting: new ColumnsResourceSettingCollection([
         {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "name", label: "Name", position: 2, show: true},
-        {id: "username", label: "Username", position: 3, show: false},
-        {id: "password", label: "Password", position: 4, show: true},
-        {id: "totp", label: "TOTP", position: 5, show: false},
-        {id: "uri", label: "URI", position: 6, show: true},
-        {id: "modified", label: "Modified", position: 7, show: false}]),
+        {id: "attentionRequired", label: "Attention", position: 2, show: true},
+        {id: "name", label: "Name", position: 3, show: true},
+        {id: "expires", label: "Expires", position: 4, show: true},
+        {id: "username", label: "Username", position: 5, show: false},
+        {id: "password", label: "Password", position: 6, show: true},
+        {id: "totp", label: "TOTP", position: 7, show: false},
+        {id: "uri", label: "URI", position: 8, show: true},
+        {id: "modified", label: "Modified", position: 9, show: false}]),
     }),
     ...data
   });

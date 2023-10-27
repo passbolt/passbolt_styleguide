@@ -6,7 +6,7 @@
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright s    Copyright (c) Passbolt SARL (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SARL (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.11.0
@@ -47,6 +47,11 @@ import {withProgress} from "../../../contexts/ProgressContext";
 import CellTotp from "../../../../shared/components/Table/CellTotp";
 import ColumnTotpModel from "../../../../shared/models/column/ColumnTotpModel";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import ColumnAttentionRequiredModel from "../../../../shared/models/column/ColumnAttentionRequiredModel";
+import CellAttentionRequired from "../../../../shared/components/Table/CellAttentionRequired";
+import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
+import {formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -68,7 +73,6 @@ class DisplayResourcesList extends React.Component {
     this.initEventHandlers();
     this.handleFavoriteClickDebounced = debounce(this.handleFavoriteUpdate, 200);
     this.createRefs();
-    this.initColumns(props);
   }
 
   /**
@@ -116,7 +120,13 @@ class DisplayResourcesList extends React.Component {
   initColumns() {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
     this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
+    if (this.hasAttentionRequiredFeature) {
+      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
+    }
     this.defaultColumns.push(new ColumnNameModel({label: this.translate("Name")}));
+    if (this.props.passwordExpiryContext.isFeatureEnabled()) {
+      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), getValue: value => formatExpirationDateTimeAgo(value.expired, this.props.t, this.props.context.locale)}));
+    }
     this.defaultColumns.push(new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}));
     this.defaultColumns.push(new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}));
     if (this.props.context.siteSettings.canIUse('totpResourceTypes')) {
@@ -129,7 +139,9 @@ class DisplayResourcesList extends React.Component {
   /**
    * Component did mount
    */
-  componentDidMount() {
+  async componentDidMount() {
+    await this.props.passwordExpiryContext.findSettings();
+    this.initColumns();
     // If columns resource settings already loaded merge columns
     if (this.columnsResourceSetting !== null) {
       this.mergeAndSortColumns();
@@ -730,6 +742,14 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Returns true if the "attention required" column feature is available.
+   * @returns {boolean}
+   */
+  get hasAttentionRequiredFeature() {
+    return this.props.passwordExpiryContext.isFeatureEnabled();
+  }
+
+  /**
    * Can preview secret
    * @return {boolean}
    */
@@ -804,6 +824,15 @@ class DisplayResourcesList extends React.Component {
                 </p>
               </div>
             }
+            {filterType === ResourceWorkspaceFilterTypes.EXPIRED &&
+              <div className="empty-content">
+                <h2><Trans>No passwords have expired yet.</Trans></h2>
+                <p>
+                  <Trans>It does feel a bit empty here.</Trans>&nbsp;
+                  <Trans>Wait for a password to expire.</Trans>
+                </p>
+              </div>
+            }
             {(filterType === ResourceWorkspaceFilterTypes.ITEMS_I_OWN || filterType === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED ||
                 filterType === ResourceWorkspaceFilterTypes.ALL) &&
               <React.Fragment>
@@ -844,9 +873,10 @@ DisplayResourcesList.propTypes = {
   resourceWorkspaceContext: PropTypes.any,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
+  passwordExpiryContext: PropTypes.object, // the password expiry context
   progressContext: PropTypes.any, // The progress context
   history: PropTypes.any,
   dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withDrag(withProgress(withTranslation('common')(DisplayResourcesList)))))))));
+export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withPasswordExpiry(withDrag(withProgress(withTranslation('common')(DisplayResourcesList))))))))));

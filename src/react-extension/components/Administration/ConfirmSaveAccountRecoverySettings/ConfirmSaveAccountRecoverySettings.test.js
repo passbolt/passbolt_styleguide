@@ -18,11 +18,11 @@
 import {waitFor} from "@testing-library/react";
 import {
   defaultProps,
-  formatDateTimeAgo,
   formatDate,
   hasChangedPolicyProps
 } from "./ConfirmSaveAccountRecoverySettings.test.data";
 import ConfirmSaveAccountRecoverySettingsPage from "./ConfirmSaveAccountRecoverySettings.test.page";
+import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
 
 beforeEach(() => {
   jest.resetModules();

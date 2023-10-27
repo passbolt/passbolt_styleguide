@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel from "./ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column username use only with the UI
@@ -23,8 +23,8 @@ class ColumnUsernameModel extends ColumnModel {
    * @param {Object} columnDto
    */
   constructor(columnDto = {}) {
-    columnDto.id = 'username';
-    columnDto.field = 'username';
+    columnDto.id = ColumnModelTypes.USERNAME;
+    columnDto.field = ColumnModelTypes.USERNAME;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
     columnDto.resizable = true;

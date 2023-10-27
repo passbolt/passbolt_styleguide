@@ -18,9 +18,8 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays the user details about information
@@ -87,17 +86,6 @@ class DisplayUserDetailsInformation extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string} The formatted date
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Check if the logged in user is admin
    * @return {boolean}
    */
@@ -145,7 +133,7 @@ class DisplayUserDetailsInformation extends React.Component {
    */
   render() {
     const role = this.getRoleName();
-    const modified = this.formatDateTimeAgo(this.user.modified);
+    const modified = formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale);
     const status = this.user.active ? this.translate("Activated") : this.translate("Activation pending");
 
     return (

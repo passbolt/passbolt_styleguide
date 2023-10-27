@@ -37,3 +37,15 @@ class ColumnModel {
 
 export default ColumnModel;
 
+export const ColumnModelTypes = {
+  ATTENTION_REQUIRED: 'attentionRequired',
+  CHECKBOX: 'checkbox',
+  EXPIRED: 'expired',
+  FAVORITE: 'favorite',
+  MODIFIED: 'modified',
+  NAME: 'name',
+  PASSWORD: 'password',
+  TOTP: 'totp',
+  URI: 'uri',
+  USERNAME: 'username',
+};

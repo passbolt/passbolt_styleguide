@@ -22,9 +22,8 @@ import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 
 /**
@@ -289,23 +288,12 @@ class DisplayUsers extends React.Component {
       && this.props.accountRecoveryContext.isPolicyEnabled();
   }
 
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string} The formatted date
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
   renderItem(index, key) {
     const user = this.users[index];
     const isSelected = this.isUserSelected(user);
     const isSuspended = this.hasSuspendedColumn() && isUserSuspended(user);
-    const modifiedFormatted = this.formatDateTimeAgo(user.modified);
-    const lastLoggedInFormatted = user.last_logged_in ? this.formatDateTimeAgo(user.last_logged_in) : "";
+    const modifiedFormatted = formatDateTimeAgo(user.modified, this.props.t, this.props.context.locale);
+    const lastLoggedInFormatted = user.last_logged_in ? formatDateTimeAgo(user.last_logged_in, this.props.t, this.props.context.locale) : "";
     const roleName = this.props.userWorkspaceContext.getTranslatedRoleName(user.role_id);
     const mfa = user.is_mfa_enabled ? this.translate("Enabled") : this.translate("Disabled");
     const rowClassName = `${isSelected ? "selected" : ""} ${user.active ? "" : "inactive"} ${isSuspended ? "suspended" : ""}`;

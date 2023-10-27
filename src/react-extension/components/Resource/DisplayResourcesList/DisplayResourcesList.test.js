@@ -27,6 +27,7 @@ import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextual
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 
 beforeEach(() => {
   jest.resetModules();
@@ -76,6 +77,13 @@ describe("Display Resources", () => {
       await waitFor(() => {});
       expect(page.hasEmptyContent).toBeTruthy();
     });
+
+    it('As LU, I should see an empty content when there are no resources matching the expired search', async() => {
+      const page = new DisplayResourcesListPage(propsWithNoResourcesForFilter(ResourceWorkspaceFilterTypes.EXPIRED));
+      await waitFor(() => {});
+      expect(page.hasEmptyContent).toBeTruthy();
+    });
+
 
     it('AS LU, I should see the appropriate filtered list of resources', async() => {
       const props = propsWithFilteredResources();
@@ -156,31 +164,40 @@ describe("Display Resources", () => {
 
     it('As LU, I should sort the resources by favorite', async() => {
       await page.sortByResourceFavorite();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('favorite');
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.FAVORITE);
     });
 
     it('As LU, I should sort the resources by name', async() => {
       await page.sortByResourceName();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('name');
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.NAME);
     });
 
     it('As LU, I should sort the resources by username', async() => {
       jest.spyOn(props.resourceWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
       await page.sortByUsername();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('username');
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.USERNAME);
     });
 
     it('As LU, I should sort the resources by modified', async() => {
       await page.sortByModified();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('modified');
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.MODIFIED);
     });
 
     it('As LU, I should sort the resources by uri', async() => {
       await page.sortByUri();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith('uri');
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.URI);
+    });
+
+    it('As LU, I should sort the resources by attention required', async() => {
+      await page.sortByAttentionRequired();
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.EXPIRED);
+    });
+
+    it('As LU, I should sort the resources by expiration date', async() => {
+      await page.sortByExpiry();
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.EXPIRED);
     });
   });
-
 
   describe('As LU, I should be able to open the resource contextual menu', () => {
     it('As LU, I should be able to open a contextual menu for a resource', async() => {
@@ -332,65 +349,84 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      // Need to resize before to check due to the actual width is negative
-      await page.columns(4).resize(300);
-      await page.columns(8).resize(500);
-      // Actual width before resize
-      const resourceWidth = parseFloat(page.columns(3).width.slice(0, -2));
-      const usernameWidth = parseFloat(page.columns(4).width.slice(0, -2));
-      const passwordWidth = parseFloat(page.columns(5).width.slice(0, -2));
-      const totpWidth = parseFloat(page.columns(6).width.slice(0, -2));
-      const uriWidth = parseFloat(page.columns(7).width.slice(0, -2));
-      const modifiedWidth = parseFloat(page.columns(8).width.slice(0, -2));
-      // Resize
-      await page.columns(3).resize(100);
-      await page.columns(4).resize(-100);
-      await page.columns(5).resize(150);
-      await page.columns(6).resize(200);
-      await page.columns(7).resize(200);
-      await page.columns(8).resize(-200);
 
-      expect(page.columns(3).name).toStrictEqual("Name");
-      expect(page.columns(4).name).toStrictEqual("Username");
-      expect(page.columns(5).name).toStrictEqual("Password");
-      expect(page.columns(6).name).toStrictEqual("TOTP");
-      expect(page.columns(7).name).toStrictEqual("URI");
-      expect(page.columns(8).name).toStrictEqual("Modified");
-      // Compare width
-      expect(resourceWidth).toBeLessThan(parseFloat(page.columns(3).width.slice(0, -2)));
-      expect(usernameWidth).toBeGreaterThan(parseFloat(page.columns(4).width.slice(0, -2)));
-      expect(passwordWidth).toBeLessThan(parseFloat(page.columns(5).width.slice(0, -2)));
-      expect(totpWidth).toBeLessThan(parseFloat(page.columns(6).width.slice(0, -2)));
-      expect(uriWidth).toBeLessThan(parseFloat(page.columns(7).width.slice(0, -2)));
-      expect(modifiedWidth).toBeGreaterThan(parseFloat(page.columns(8).width.slice(0, -2)));
+      const totalColumnCount = page.columnsCount;
+      const fixedSizeColumns = 3;
+      const resizableColumnCount = totalColumnCount - fixedSizeColumns;
+
+      const columnNameCheckAssertionsCount = 8;
+      const resizeAssertionsCount = 1;
+
+      const assertionsCallCount = columnNameCheckAssertionsCount + resizeAssertionsCount + 2 * resizableColumnCount;
+      expect.assertions(assertionsCallCount);
+
+      // Need to resize before to check due to the actual width is negative
+      const columnCount = page.columnsCount;
+      for (let i = fixedSizeColumns; i < columnCount; i++) {
+        await page.columns(i + 1).resize(300);
+      }
+
+      expect(page.columns(3).name).toStrictEqual("");
+      expect(page.columns(4).name).toStrictEqual("Name");
+      expect(page.columns(5).name).toStrictEqual("Expiry");
+      expect(page.columns(6).name).toStrictEqual("Username");
+      expect(page.columns(7).name).toStrictEqual("Password");
+      expect(page.columns(8).name).toStrictEqual("TOTP");
+      expect(page.columns(9).name).toStrictEqual("URI");
+      expect(page.columns(10).name).toStrictEqual("Modified");
+
+      // Resize by increasing the width
+      for (let j = fixedSizeColumns; j < columnCount; j += 1) {
+        const column = page.columns(j + 1);
+        const columnStartingwith = parseFloat(column.width.slice(0, -2));
+        await column.resize(100);
+
+        expect(columnStartingwith).toBeLessThan(parseFloat(column.width.slice(0, -2)));
+      }
+
+      // Resize by reducing the width
+      for (let j = fixedSizeColumns; j < columnCount; j += 1) {
+        const column = page.columns(j + 1);
+        const columnStartingwith = parseFloat(column.width.slice(0, -2));
+        await column.resize(-100);
+
+        expect(columnStartingwith).toBeGreaterThan(parseFloat(column.width.slice(0, -2)));
+      }
+
       // onChangeColumnsSettings called
-      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(8);
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(3 * resizableColumnCount);
     });
 
     it('As LU, I should be able to resize a column to its default with double click', async() => {
+      expect.assertions(8);
+
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      await page.columns(3).resizeDefault();
       await page.columns(4).resizeDefault();
       await page.columns(5).resizeDefault();
       await page.columns(6).resizeDefault();
       await page.columns(7).resizeDefault();
       await page.columns(8).resizeDefault();
+      await page.columns(9).resizeDefault();
+      await page.columns(10).resizeDefault();
 
-      expect(page.columns(3).width).toStrictEqual("145px");
       expect(page.columns(4).width).toStrictEqual("145px");
       expect(page.columns(5).width).toStrictEqual("145px");
       expect(page.columns(6).width).toStrictEqual("145px");
-      expect(page.columns(7).width).toStrictEqual("210px");
+      expect(page.columns(7).width).toStrictEqual("145px");
       expect(page.columns(8).width).toStrictEqual("145px");
+      expect(page.columns(9).width).toStrictEqual("210px");
+      expect(page.columns(10).width).toStrictEqual("145px");
       // onChangeColumnsSettings called
-      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(6);
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(7);
     });
   });
 
   describe('As LU, I should reorder a column of a resource.', () => {
     it('As LU, I should be able to reorder a column of a resource with mouse move', async() => {
+      expect.assertions(8);
+
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
@@ -399,18 +435,19 @@ describe("Display Resources", () => {
         configurable: true, value: 300
       });
       // Reorder
-      await page.columns(3).reorder(200);
-      await page.columns(6).reorder(-250);
-      await page.columns(7).reorder(150);
-      await page.columns(3).reorder(-200);
+      await page.columns(4).reorder(-250);
+      await page.columns(5).reorder(-200);
+      await page.columns(7).reorder(-250);
+      await page.columns(8).reorder(150);
 
       // Order should be changed
-      expect(page.columns(4).name).toStrictEqual("Name");
-      expect(page.columns(3).name).toStrictEqual("Username");
+      expect(page.columns(4).name).toStrictEqual("Expiry");
+      expect(page.columns(5).name).toStrictEqual("Name");
       expect(page.columns(6).name).toStrictEqual("Password");
-      expect(page.columns(5).name).toStrictEqual("TOTP");
-      expect(page.columns(7).name).toStrictEqual("URI");
-      expect(page.columns(8).name).toStrictEqual("Modified");
+      expect(page.columns(7).name).toStrictEqual("Username");
+      expect(page.columns(8).name).toStrictEqual("TOTP");
+      expect(page.columns(9).name).toStrictEqual("URI");
+      expect(page.columns(10).name).toStrictEqual("Modified");
       // onChangeColumnsSettings called
       expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(4);
     });
@@ -418,14 +455,18 @@ describe("Display Resources", () => {
 
   describe('As LU, I should hide or show a column of a resource.', () => {
     it('As LU, I should be able to hide or show a column of a resource', async() => {
+      expect.assertions(5);
+
       const props = propsWithFilteredResourcesAndColumnsHidden();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      // 5 columns should be displayed
-      expect(page.columnsCount).toStrictEqual(5);
-      expect(page.columns(3).name).toStrictEqual("Name");
-      expect(page.columns(4).name).toStrictEqual("Password");
-      expect(page.columns(5).name).toStrictEqual("URI");
+
+      // 6 columns should be displayed
+      expect(page.columnsCount).toStrictEqual(6);
+      expect(page.columns(3).name).toStrictEqual("");
+      expect(page.columns(4).name).toStrictEqual("Name");
+      expect(page.columns(5).name).toStrictEqual("Password");
+      expect(page.columns(6).name).toStrictEqual("URI");
     });
   });
 });
