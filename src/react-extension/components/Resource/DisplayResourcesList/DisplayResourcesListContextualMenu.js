@@ -382,7 +382,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        {this.canUseTotp &&
+        {canCopySecret && this.canUseTotp &&
           <li key="option-copy-totp-resource" className="ready">
             <div className="row">
               <div className="main-cell-wrapper">
