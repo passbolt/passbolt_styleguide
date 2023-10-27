@@ -23,4 +23,6 @@ export const uiActions = {
   SHARE_VIEW_LIST: "Share.viewList",
   TAGS_USE: "Tags.use",
   USERS_VIEW_WORKSPACE: "Users.viewWorkspace",
+  MOBILE_TRANSFER: "Mobile.transfer",
+  DESKTOP_TRANSFER: "Desktop.transfer",
 };

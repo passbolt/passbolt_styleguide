@@ -134,7 +134,7 @@ export default class EditUserGroupTestPage {
    * @returns {HTMLElement}
    */
   getAutocompleteItem(index) {
-    const autocompleteItems = this._page.container.querySelectorAll('#autocomplete-item .row.selected .main-cell-wrapper .main-cell button');
+    const autocompleteItems = this._page.container.querySelectorAll('.autocomplete-item .row.selected .main-cell-wrapper .main-cell button');
     return autocompleteItems[index];
   }
 

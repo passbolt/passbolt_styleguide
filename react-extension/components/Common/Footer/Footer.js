@@ -61,10 +61,10 @@ class Footer extends Component {
     const versions = [];
     const serverVersion = this.props.context.siteSettings.version;
     if (serverVersion) {
-      versions.push(serverVersion);
+      versions.push(`${this.props.t('Server')} ${serverVersion}`);
     }
     if (this.props.context.extensionVersion) {
-      versions.push(this.props.context.extensionVersion);
+      versions.push(`${this.props.t('Client')} ${this.props.context.extensionVersion}`);
     }
 
     return versions.join(' / ');
@@ -152,6 +152,7 @@ class Footer extends Component {
 
 Footer.propTypes = {
   context: PropTypes.any, // The app context
+  t: PropTypes.func, // The translation function
 };
 
 export default withAppContext(withTranslation("common")(Footer));

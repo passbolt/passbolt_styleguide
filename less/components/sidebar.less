@@ -86,6 +86,12 @@
             top: 1.6rem;
             padding: 0;
         }
+
+        &.suspended {
+          .teaser-image, .title-wrapper .name, .subtitle {
+            opacity: 0.5;
+          }
+        }
     }
 
     .sidebar-section {
@@ -105,7 +111,7 @@
                 width: 100%;
                 justify-content: space-between;
               }
-            }
+          }
         }
 
 
@@ -190,10 +196,6 @@
               max-width: calc(100% - 3rem); // password field - password preview button
               overflow: hidden;
               text-overflow: ellipsis;
-
-              .svg-icon.timer {
-                margin-left: .5rem;
-              }
             }
           }
           .password-view, .totp-view {

@@ -24,7 +24,6 @@ import {withRouter} from "react-router-dom";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import sanitizeUrl, {urlProtocols} from "../../../lib/Sanitize/sanitizeUrl";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
@@ -32,6 +31,8 @@ import HiddenPassword from "../../../../shared/components/Password/HiddenPasswor
 import {withProgress} from "../../../contexts/ProgressContext";
 import Totp from "../../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -70,12 +71,16 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
   }
 
+  componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
+  }
+
   /**
    * Whenever the component has updated in terms of props
    * @param prevProps
    */
-  async componentDidUpdate(prevProps) {
-    await this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
+  componentDidUpdate(prevProps) {
+    this.handleResourceChange(prevProps.resourceWorkspaceContext.details.resource);
   }
 
   /**
@@ -137,17 +142,6 @@ class DisplayResourceDetailsInformation extends React.Component {
   async handleUsernameClickEvent() {
     await ClipBoard.copy(this.resource.username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
-  }
-
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -302,7 +296,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @return {Promise<void>}
    */
   async handleTotpClick() {
-    let plaintextSecretDto;
+    let plaintextSecretDto, code;
     const isTotpPreviewed = this.isTotpPreviewed();
 
     if (isTotpPreviewed) {
@@ -330,7 +324,13 @@ class DisplayResourceDetailsInformation extends React.Component {
       return;
     }
 
-    const code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    try {
+      code = TotpCodeGeneratorService.generate(plaintextSecretDto.totp);
+    } catch (error) {
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to copy the TOTP"));
+      return;
+    }
+
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
@@ -400,7 +400,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Whenever the user wants to follow a resource uri.
    */
   handleGoToResourceUriClick() {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource);
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.uri);
   }
 
   /**
@@ -429,6 +429,35 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 
   /**
+   * Returns true if the resource requires some attention.
+   * @returns {boolean}
+   */
+  get isAttentionRequired() {
+    return this.isResourceExpired;
+  }
+
+  /**
+   * Returns the expiration status of the current resource.
+   * @returns {string}
+   */
+  get resourceExpirationStatus() {
+    return formatExpirationDateTimeAgo(this.resource?.expired, this.props.t, this.props.context.locale);
+  }
+
+  /**
+   * Returns true if the current resource is expired.
+   * @returns {boolean}
+   */
+  get isResourceExpired() {
+    if (!this.resource?.expired) {
+      return false;
+    }
+
+    const now = new Date();
+    return new Date(this.resource.expired) <= now;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -445,11 +474,13 @@ class DisplayResourceDetailsInformation extends React.Component {
       && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
     const canPreviewSecret = this.props.context.siteSettings.canIUse("previewPassword")
       && this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_PREVIEW);
+    const canUsePasswordExpiry = this.props.passwordExpiryContext.isFeatureEnabled();
     const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
+
     const creatorUsername = this.getUserUsername(this.resource.created_by);
     const modifierUsername = this.getUserUsername(this.resource.modified_by);
-    const createdDateTimeAgo = this.formatDateTimeAgo(this.resource.created);
-    const modifiedDateTimeAgo = this.formatDateTimeAgo(this.resource.modified);
+    const createdDateTimeAgo = formatDateTimeAgo(this.resource.created, this.props.t, this.props.context.locale);
+    const modifiedDateTimeAgo = formatDateTimeAgo(this.resource.modified, this.props.t, this.props.context.locale);
     const isPasswordPreviewed = this.isPasswordPreviewed();
     const isTotpPreviewed = this.isTotpPreviewed();
 
@@ -458,7 +489,10 @@ class DisplayResourceDetailsInformation extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
-              <Trans>Information</Trans>
+              <span>
+                <Trans>Information</Trans>
+                {this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
+              </span>
               {this.state.open &&
               <Icon name="caret-down"/>
               }
@@ -555,6 +589,13 @@ class DisplayResourceDetailsInformation extends React.Component {
             </span>
           </li>
           }
+          {canUsePasswordExpiry &&
+            <li className="expiry">
+              <span className="label"><Trans>Expiry</Trans> {this.isResourceExpired && <Icon name="exclamation" baseline={true}/>}
+              </span>
+              <span className="value">{this.resourceExpirationStatus}</span>
+            </li>
+          }
         </ul>
       </div>
     );
@@ -570,7 +611,8 @@ DisplayResourceDetailsInformation.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   progressContext: PropTypes.any, // The progress context
+  passwordExpiryContext: PropTypes.object, // the passowrd expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withProgress(withTranslation('common')(DisplayResourceDetailsInformation)))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withPasswordExpiry(withProgress(withTranslation('common')(DisplayResourceDetailsInformation))))))));

@@ -22,119 +22,62 @@ import {
 import AdministrationWorkspacePage from "./AdministrationWorkspace.test.page";
 import {waitFor} from "@testing-library/dom";
 import {AdministrationWorkspaceMenuTypes} from "../../contexts/AdministrationWorkspaceContext";
+import each from "jest-each";
 
 jest.mock("./DisplayAdministrationMenu/DisplayAdministrationMenu", () => () => <></>);
 jest.mock("./DisplayAdministrationWorkspaceBreadcrumb/DisplayAdministrationWorkspaceBreadcrumb", () => () => <></>);
+
 jest.mock("./DisplayMfaAdministration/DisplayMfaAdministration", () => () => <span className="mfa-details"></span>);
+jest.mock("./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration", () => () => <span className="password-policies-details"></span>);
 jest.mock("./DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration", () => () => <span className="user-directory-details"></span>);
 jest.mock("./DisplayEmailNotificationsAdministration/DisplayEmailNotificationsAdministration", () => () => <span className="email-notifications-details"></span>);
 jest.mock("./DisplaySubscriptionKey/DisplaySubscriptionKey", () => () => <span className="subscription-key-details"></span>);
 jest.mock("./DisplayInternationalizationAdministration/DisplayInternationalizationAdministration", () => () => <span className="internationalization-details"></span>);
 jest.mock("./ManageAccountRecoveryAdministrationSettings/ManageAccountRecoveryAdministrationSettings", () => () => <span className="account-recovery-details"></span>);
+jest.mock("./ManageSmtpAdministrationSettings/ManageSmtpAdministrationSettings", () => () => <span className="smtp-settings-details"></span>);
 jest.mock("./DisplaySelfRegistrationAdministration/DisplaySelfRegistrationAdministration", () => () => <span className="self-registration-details"></span>);
+jest.mock("./ManageSsoSettings/ManageSsoSettings", () => () => <span className="sso-settings-details"></span>);
+jest.mock("./DisplayRbacAdministration/DisplayRbacAdministration", () => () => <span className="rbacs-settings-details"></span>);
+jest.mock("./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies", () => () => <span className="user-passphrase-policies-details"></span>);
+jest.mock("./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry", () => () => <span className="password-expiry-details"></span>);
 
 beforeEach(() => {
   jest.resetModules();
 });
 
-describe("Display Administration Workspace", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
+const scenarios = [
+  {selectedMenu: AdministrationWorkspaceMenuTypes.MFA, field: 'isMfaSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.MFA_POLICY, field: 'isMfaPolicySelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES, field: 'isPasswordPoliciesSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.USER_DIRECTORY, field: 'isUserDirectorySelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION, field: 'isEmailNotificationsSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SUBSCRIPTION, field: 'isSubscriptionKeySelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION, field: 'isInternationalizationSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY, field: 'isAccountRecoverySelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS, field: 'isSmtpSettingsSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION, field: 'isSelfRegistrationSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.SSO, field: 'isSsoSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.RBAC, field: 'isRbacSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES, field: 'isUserPasphrasePoliciesSelected'},
+  {selectedMenu: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY, field: 'isPasswordExpirySelected'},
+];
 
-  it('As AD, I should see the mfa details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.MFA));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeTruthy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-    expect(page.isMfaPolicySelected).toBeFalsy();
-  });
+each(
+  scenarios
+).describe("Display Administration Workspace", currentScenario => {
+  it(`As AD, I should see: ${currentScenario.selectedMenu}`, async() => {
+    expect.assertions(scenarios.length);
 
-  it('As AD, I should see the user directory details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.USER_DIRECTORY));
+    const page = new AdministrationWorkspacePage(defaultAppContext(), defaultProps(currentScenario.selectedMenu));
     await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeTruthy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-    expect(page.isMfaPolicySelected).toBeFalsy();
-  });
 
-  it('As AD, I should see the email notifications details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeTruthy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-    expect(page.isMfaPolicySelected).toBeFalsy();
-  });
+    expect(page[currentScenario.field]).toBeTruthy();
 
-  it('As AD, I should see the subscription key details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.SUBSCRIPTION));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeTruthy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-    expect(page.isMfaPolicySelected).toBeFalsy();
-  });
-
-  it('As AD, I should see the internationalization details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeTruthy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-  });
-
-  it('As AD, I should see the account recovery details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeTruthy();
-    expect(page.isMfaPolicySelected).toBeFalsy();
-  });
-
-  it('As AD, I should see the self registration details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.SELF_REGISTRATION));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-    expect(page.isSelfRegistrationSelected).toBeTruthy();
-    expect(page.isMfaPolicySelected).toBeFalsy();
-  });
-
-  it('As AD, I should see the mfa policies details area', async() => {
-    page = new AdministrationWorkspacePage(context, defaultProps(AdministrationWorkspaceMenuTypes.MFA_POLICY));
-    await waitFor(() => {});
-    expect(page.isMfaSelected).toBeFalsy();
-    expect(page.isUserDirectorySelected).toBeFalsy();
-    expect(page.isEmailNotificationsSelected).toBeFalsy();
-    expect(page.isSubscriptionKeySelected).toBeFalsy();
-    expect(page.isInternationalizationSelected).toBeFalsy();
-    expect(page.isAccountRecoverySelected).toBeFalsy();
-    expect(page.isMfaPolicySelected).toBeTruthy();
+    const unselectedMenuItem = scenarios.filter(scenario => scenario !== currentScenario);
+    for (let i = 0; i < unselectedMenuItem.length; i++) {
+      const fieldName = unselectedMenuItem[i];
+      expect(page[fieldName]).toBeFalsy();
+    }
   });
 });
 

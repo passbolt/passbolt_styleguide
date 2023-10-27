@@ -90,7 +90,7 @@ export default class ShareDialogPage {
    * @returns {Element}
    */
   userOrGroupAutocomplete(index) {
-    return this._page.container.querySelectorAll('#autocomplete-item .row .main-cell-wrapper .main-cell button')[index - 1];
+    return this._page.container.querySelectorAll('.autocomplete-item .row .main-cell-wrapper .main-cell button')[index - 1];
   }
 
   /**

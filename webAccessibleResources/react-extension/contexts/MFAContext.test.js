@@ -13,9 +13,9 @@
  */
 
 import {defaultProps} from '../components/HandleStatusCheck/HandleStatusCheck.test.data';
-import {MfaContextProvider} from './MFAContext';
+import {MfaContextProvider, MfaSettingsWorkflowStates} from './MFAContext';
 import {MfaPolicyEnumerationTypes} from '../../shared/models/mfaPolicy/MfaPolicyEnumeration';
-import {MfaMandatoryPolicy, mockMfaSettings, noMfaUserDefinedWithoutTotp, noMfaUserDefinedWithTotp} from './MFAContext.test.data';
+import {MfaMandatoryPolicy, mockMfaSettings, noMfaUserDefinedWithoutTotp, noMfaUserDefinedWithTotp, setupTotpData} from './MFAContext.test.data';
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {defaultAppContext} from './ApiAppContext.test.data';
 import {mockApiResponse} from '../../../test/mocks/mockApiResponse';
@@ -170,6 +170,42 @@ describe("MFAContext", () => {
 
       expect(mfaContextProvider.hasMfaSettings()).toBeTruthy();
       expect(mfaContextProvider.isProcessing()).toBeFalsy();
+    });
+  });
+  describe("AdministrationMfaPolicyContext::validateTotpCode", () => {
+    it("Should validate the totp code, using browser extension", async() => {
+      expect.assertions(1);
+      const data = setupTotpData();
+      jest.spyOn(props.context.port, "request").mockImplementation(() => {});
+
+      await mfaContextProvider.validateTotpCode(data.otpProvisioningUri, data.totp);
+
+      expect(mfaContextProvider.isProcessing()).toBeFalsy();
+    });
+  });
+
+  describe("AdministrationMfaPolicyContext::removeProvider", () => {
+    it("Should remove the selected provider from state", async() => {
+      expect.assertions(2);
+      jest.spyOn(props.context.port, "request").mockImplementation(() => {});
+
+      mfaContextProvider.setProvider("totp");
+      await mfaContextProvider.removeProvider();
+
+      expect(mfaContextProvider.isProcessing()).toBeFalsy();
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.mfa-setup.remove-provider", {"provider": "totp"});
+    });
+  });
+
+  describe("AdministrationMfaPolicyContext::goToProviderList", () => {
+    it("Should navigate tot provider list", async() => {
+      expect.assertions(1);
+
+      mfaContextProvider.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
+
+      await mfaContextProvider.goToProviderList();
+
+      expect(mfaContextProvider.state.state).toEqual(MfaSettingsWorkflowStates.OVERVIEW);
     });
   });
 });

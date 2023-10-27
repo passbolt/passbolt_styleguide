@@ -64,6 +64,10 @@
   .dialog-body {
     background: @default-background;
     padding: 1.6rem;
+    // Remove padding
+    &.no-padding {
+      padding: 0;
+    }
 
     // all direct child element
     & > * {

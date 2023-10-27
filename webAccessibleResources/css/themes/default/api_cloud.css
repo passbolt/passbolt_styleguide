@@ -279,7 +279,7 @@ textarea {
     stroke: #D40101;
   }
 }
-.svg-icon.baseline svg {
+.svg-icon.baseline {
   top: 0.125em;
   position: relative;
 }
@@ -296,7 +296,6 @@ button.fav .svg-icon.star svg {
 button .svg-icon + span:not(.visuallyhidden),
 a .svg-icon + span:not(.visuallyhidden) {
   margin-left: 0.8rem;
-  display: inline-block;
 }
 .icon-feedback .success {
   background: url('../../../img/controls/success.svg') no-repeat;
@@ -353,12 +352,19 @@ label:active {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required > label:after {
+.required > label:after,
+.required .label-required-inline > label:after {
   content: "\002A";
   /* unicode character * */
   color: #D40101;
   font-weight: bold;
   margin-left: 0.4rem;
+}
+.required .label-required-inline {
+  display: flex;
+}
+.required .label-required-inline label + .tooltip {
+  margin-left: 0.5rem;
 }
 .input.error label {
   color: #D40101;
@@ -371,7 +377,8 @@ label:active {
 .input.file.disabled label,
 .input.textarea.disabled label,
 .input.select-wrapper.disabled label,
-.input.checkbox-wrapper.disabled label {
+.input.checkbox-wrapper.disabled label,
+.input-totp-wrapper.disabled label {
   opacity: 0.5;
 }
 .input.text label,
@@ -379,7 +386,8 @@ label:active {
 .input.file label,
 .input.textarea label,
 .input.select-wrapper label,
-.input.checkbox-wrapper label {
+.input.checkbox-wrapper label,
+.input-totp-wrapper label {
   margin-bottom: 1.2rem;
 }
 /*

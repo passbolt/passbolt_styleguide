@@ -18,24 +18,32 @@ import MockPort from "../../react-extension/test/mock/MockPort";
 import MockStorage from "../../react-extension/test/mock/MockStorage";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../react-extension/test/fixture/Settings/userSettings";
+import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettings";
+import {resourceTypesCollectionDto} from "../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
- * @param appContext An existing app context
+ * @param data An existing app context
  * @returns {Object}
  */
-export function defaultAppContext(appContext = {}) {
+export function defaultAppContext(data = {}) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
-  const userSettings = new UserSettings(userSettingsFixture);
-  const defaultAppContext = {
+
+  return {
+    locale: 'en-UK',
+    userSettings: new UserSettings(userSettingsFixture),
+    siteSettings: siteSettings,
+    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto()),
     port: new MockPort(),
     storage: new MockStorage(),
-    siteSettings: siteSettings,
-    userSettings: userSettings,
-    focusSearch: () => {},
-    updateSearch: () => {},
+    loggedInUser: defaultUserDto(),
+    users: [],
+    resources: [],
+    focusSearch: jest.fn(),
+    updateSearch: jest.fn(),
     search: "",
     searchHistory: {},
+    ...data
   };
-  return Object.assign(defaultAppContext, appContext);
 }

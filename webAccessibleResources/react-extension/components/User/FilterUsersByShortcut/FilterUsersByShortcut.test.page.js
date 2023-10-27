@@ -61,4 +61,14 @@ export default class FilterUsersByShortcutPage {
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
   }
+
+  /**
+   * Select the Recently Modified filter
+   */
+  async filterBySuspendedUsers() {
+    const element = this._page.container.querySelector('#suspended-users');
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
 }

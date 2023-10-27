@@ -84,13 +84,6 @@ export default class PasswordPage {
   }
 
   /**
-   * Returns true if fields are disabled
-   */
-  get isDisabled() {
-    return this.passphraseInput.hasAttribute('disabled');
-  }
-
-  /**
    * Returns true if the page object exists in the container
    */
   exists() {

@@ -163,6 +163,7 @@ class AdministrationWorkspaceContextProvider extends React.Component {
     const isSso = this.props.location.pathname.includes('sso');
     const rbac = this.props.location.pathname.includes('rbac');
     const isUserPassphrasePolicies = this.props.location.pathname.includes('user-passphrase-policies');
+    const isPasswordExpirySettings = this.props.location.pathname.includes('password-expiry');
     const can = {
       save: false,
       test: false,
@@ -204,6 +205,8 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.RBAC;
     } else if (isUserPassphrasePolicies) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES;
+    } else if (isPasswordExpirySettings) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY;
     }
     this.setState({selectedAdministration, can, must});
   }
@@ -294,4 +297,5 @@ export const AdministrationWorkspaceMenuTypes = {
   SSO: "SSO", // SSO administration menu selected
   RBAC: "RBAC", // RBAC administration menu selected
   USER_PASSPHRASE_POLICIES: "USER-PASSPHRASE-POLICIES", // User Passphrase Policies administration menu selected
+  PASSWORD_EXPIRY: "PASSWORD-EXPIRY", // Password Expiry administration menu selected
 };

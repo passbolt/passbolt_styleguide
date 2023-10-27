@@ -46,6 +46,8 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case ResourceWorkspaceFilterTypes.SHARED_WITH_ME:
         return [...items, this.getLastBreadcrumb(this.translate("Shared with me"))];
+      case ResourceWorkspaceFilterTypes.EXPIRED:
+        return [...items, this.getLastBreadcrumb(this.translate("Expired"))];
       case ResourceWorkspaceFilterTypes.ITEMS_I_OWN:
         return [...items, this.getLastBreadcrumb(this.translate("Items I own"))];
       case ResourceWorkspaceFilterTypes.TAG: {

@@ -18,8 +18,8 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
+import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays the user details about information
@@ -86,17 +86,6 @@ class DisplayUserDetailsInformation extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string} The formatted date
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Check if the logged in user is admin
    * @return {boolean}
    */
@@ -110,6 +99,14 @@ class DisplayUserDetailsInformation extends React.Component {
    */
   hasMfaSection() {
     return this.props.context.siteSettings.canIUse("multiFactorAuthentication") && this.isLoggedInUserAdmin() && this.user.active;
+  }
+
+  /**
+   * Returns true if the disablUser feature is enabled.
+   * @returns {boolean}
+   */
+  hasDisableUserSection() {
+    return this.props.context.siteSettings.canIUse('disableUser');
   }
 
   /**
@@ -136,7 +133,7 @@ class DisplayUserDetailsInformation extends React.Component {
    */
   render() {
     const role = this.getRoleName();
-    const modified = this.formatDateTimeAgo(this.user.modified);
+    const modified = formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale);
     const status = this.user.active ? this.translate("Activated") : this.translate("Activation pending");
 
     return (
@@ -187,6 +184,17 @@ class DisplayUserDetailsInformation extends React.Component {
                 }[this.user?.is_mfa_enabled]}
               </span>
             </li>
+            }
+            {this.hasDisableUserSection() &&
+              <li className="suspended">
+                <span className="label"><Trans>Suspended</Trans></span>
+                <span className="value">
+                  {{
+                    [false]: <Trans>No</Trans>,
+                    [true]: <Trans>Yes</Trans>,
+                  }[isUserSuspended(this.user)]}
+                </span>
+              </li>
             }
           </ul>
         </div>

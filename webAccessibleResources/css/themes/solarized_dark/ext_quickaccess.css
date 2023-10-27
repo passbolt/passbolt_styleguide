@@ -626,6 +626,77 @@ button.link.inline {
 button.link.no-border {
   border: none;
 }
+button.link-icon {
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: 0;
+  padding: 0;
+  text-align: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  vertical-align: inherit;
+  box-shadow: none;
+  min-width: inherit;
+}
+button.link-icon .svg-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+button.link-icon .link-label {
+  border-bottom: 1px solid hsl(194, 14%, 39%);
+}
+button.link-icon:focus {
+  box-shadow: none;
+}
+button.link-icon:focus .link-label {
+  border-bottom: 1px solid hsl(194, 14%, 39%);
+}
+button.link-icon:focus-visible {
+  box-shadow: 0 0 0.4rem hsl(45, 100%, 50%), inset 0 0 0 1px hsl(45, 100%, 45%);
+  outline: 0;
+}
+button.link-icon:focus-visible .link-label {
+  border: none;
+}
+button.link-icon:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: hsl(45, 100%, 45%);
+  --icon-color: hsl(45, 100%, 45%);
+}
+button.link-icon:hover .link-label {
+  border-bottom: 1px solid hsl(45, 100%, 45%);
+  box-shadow: none;
+}
+button.link-icon:active {
+  --icon-color: hsl(45, 100%, 45%);
+}
+button.link-icon:active .link-label {
+  background: transparent;
+  outline: 0;
+  color: hsl(45, 100%, 45%);
+  margin-bottom: 0.1rem;
+  border: none;
+  box-shadow: none;
+}
+button.link-icon:disabled {
+  cursor: default;
+  pointer-events: none;
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  box-shadow: none;
+  color: hsl(46, 42%, 88%);
+  --icon-color: hsl(46, 42%, 88%);
+  opacity: 0.5;
+}
+button.link-icon:disabled .link-label {
+  border-bottom: 1px solid hsl(194, 14%, 39%);
+}
 /* lists */
 ul {
   padding: 0;
@@ -987,12 +1058,19 @@ label:active {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required > label:after {
+.required > label:after,
+.required .label-required-inline > label:after {
   content: "\002A";
   /* unicode character * */
   color: hsl(1, 71%, 52%);
   font-weight: bold;
   margin-left: 0.4rem;
+}
+.required .label-required-inline {
+  display: flex;
+}
+.required .label-required-inline label + .tooltip {
+  margin-left: 0.5rem;
 }
 .input.error label {
   color: hsl(1, 71%, 52%);
@@ -1005,7 +1083,8 @@ label:active {
 .input.file.disabled label,
 .input.textarea.disabled label,
 .input.select-wrapper.disabled label,
-.input.checkbox-wrapper.disabled label {
+.input.checkbox-wrapper.disabled label,
+.input-totp-wrapper.disabled label {
   opacity: 0.5;
 }
 .input.text label,
@@ -1013,7 +1092,8 @@ label:active {
 .input.file label,
 .input.textarea label,
 .input.select-wrapper label,
-.input.checkbox-wrapper label {
+.input.checkbox-wrapper label,
+.input-totp-wrapper label {
   margin-bottom: 1.2rem;
 }
 /*
@@ -2248,7 +2328,7 @@ input[type=file] {
     stroke: hsl(1, 71%, 52%);
   }
 }
-.svg-icon.baseline svg {
+.svg-icon.baseline {
   top: 0.125em;
   position: relative;
 }
@@ -2265,7 +2345,6 @@ button.fav .svg-icon.star svg {
 button .svg-icon + span:not(.visuallyhidden),
 a .svg-icon + span:not(.visuallyhidden) {
   margin-left: 0.8rem;
-  display: inline-block;
 }
 .icon-feedback .success {
   background: url('../../../img/controls/success.svg') no-repeat;
@@ -3589,19 +3668,30 @@ body {
   display: flex;
   flex-direction: column;
 }
-.quickaccess .item-browse .properties .information .password-wrapper {
+.quickaccess .item-browse .properties .information .password-wrapper,
+.quickaccess .item-browse .properties .information .totp-wrapper {
   display: flex;
   align-items: center;
 }
-.quickaccess .item-browse .properties .information .password-wrapper .password-view {
+.quickaccess .item-browse .properties .information .password-wrapper .password-view,
+.quickaccess .item-browse .properties .information .totp-wrapper .password-view,
+.quickaccess .item-browse .properties .information .password-wrapper .totp-view,
+.quickaccess .item-browse .properties .information .totp-wrapper .totp-view {
   width: 2.2rem;
   height: 2.1rem;
   margin: 0 0 0 0.8rem;
   padding: 0;
 }
-.quickaccess .item-browse .properties .information .password-wrapper .password-view .svg-icon svg {
+.quickaccess .item-browse .properties .information .password-wrapper .password-view .svg-icon svg,
+.quickaccess .item-browse .properties .information .totp-wrapper .password-view .svg-icon svg,
+.quickaccess .item-browse .properties .information .password-wrapper .totp-view .svg-icon svg,
+.quickaccess .item-browse .properties .information .totp-wrapper .totp-view .svg-icon svg {
   width: 1.4rem;
   height: 100%;
+}
+.quickaccess .item-browse .properties .information .password-wrapper .totp-code + .svg-icon.timer,
+.quickaccess .item-browse .properties .information .totp-wrapper .totp-code + .svg-icon.timer {
+  margin-left: 0.5rem;
 }
 .quickaccess .item-browse .properties .property-value {
   max-width: 30rem;
@@ -3631,13 +3721,23 @@ body {
 .quickaccess .item-browse .properties .secret.secret-copy > button > span {
   display: none;
 }
-.quickaccess .item-browse .properties .secret.secret-copy > button:before {
-  content: 'BBBBBBBBB';
+.quickaccess .item-browse .properties .secret.secret-copy > button:before,
+.quickaccess .item-browse .properties .secret.secret-copy > button:after {
   font-family: 'Passbolt', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 1.8rem;
   line-height: 100%;
+}
+.quickaccess .item-browse .properties .secret.secret-copy.secret-password > button:before {
+  content: 'BBBBBBBBB';
+}
+.quickaccess .item-browse .properties .secret.secret-copy.secret-totp > button:before {
+  content: 'BBB';
+}
+.quickaccess .item-browse .properties .secret.secret-copy.secret-totp > button:after {
+  margin-left: 0.5rem;
+  content: 'BBB';
 }
 .quickaccess .resource-create .form-container {
   margin: 1.6rem;
@@ -3989,4 +4089,31 @@ body {
   width: 2.1rem;
   height: 2.1rem;
   margin: 0.6rem;
+}
+.sso-login-form .sso-login-button.oauth2 {
+  box-shadow: inset 0 0 0 1px hsl(194, 14%, 30%);
+  /* hover */
+  /* focus */
+  /* active */
+}
+.sso-login-form .sso-login-button.oauth2:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px hsl(194, 14%, 23%);
+  color: hsl(46, 42%, 88%);
+  text-decoration: none;
+  border: none;
+}
+.sso-login-form .sso-login-button.oauth2:focus,
+.sso-login-form .sso-login-button.oauth2:focus-visible {
+  box-shadow: 0 0 0.4rem hsl(45, 100%, 50%), inset 0 0 0 1px hsl(45, 100%, 45%);
+  color: hsl(46, 42%, 88%);
+  text-decoration: none;
+  border: none;
+  outline: 0;
+}
+.sso-login-form .sso-login-button.oauth2:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px hsl(194, 14%, 23%);
+  background: hsl(194, 14%, 10%);
+  color: hsl(46, 42%, 88%);
+  text-decoration: none;
+  border: none;
 }

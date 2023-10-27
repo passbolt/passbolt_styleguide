@@ -40,7 +40,7 @@ const TransferToMobileSteps = {
   HTTPS_REQUIRED: 'https required',
   START: 'start',
   IN_PROGRESS: 'in progress',
-  COMPLETE: 'complere',
+  COMPLETE: 'complete',
   CANCEL: 'cancel',
   ERROR: 'error',
 };

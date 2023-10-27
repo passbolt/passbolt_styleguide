@@ -353,14 +353,6 @@ class ImportResources extends Component {
   }
 
   /**
-   * Invalidate the selected file as possible file to import
-   * @param {Object} error The error returned by the backround page
-   */
-  async invalidate(error) {
-    await this.setState({errors: {invalidCsvFile: error.message}});
-  }
-
-  /**
    * Reset the validation process
    */
   async resetValidation() {

@@ -40,6 +40,8 @@ class FilterUsersByBreadcrumb extends Component {
         const currentSearchText = this.props.userWorkspaceContext.filter.payload;
         return isEmptySearchText ? items : [...items, this.getLastBreadcrumb(`${this.translate("Search:")} ${currentSearchText}`)];
       }
+      case UserWorkspaceFilterTypes.SUSPENDED_USER:
+        return [...items, this.getLastBreadcrumb(this.translate("Suspended users"))];
       case UserWorkspaceFilterTypes.RECENTLY_MODIFIED:
         return [...items, this.getLastBreadcrumb(this.translate("Recently modified"))];
       case UserWorkspaceFilterTypes.GROUP: {

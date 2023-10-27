@@ -15,8 +15,8 @@
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import MockStorage from "../../../react-extension/test/mock/MockStorage";
 import MockPort from "../../../react-extension/test/mock/MockPort";
-import resourcesFixture from "../../../react-extension/test/fixture/Resources/resources";
 import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
+import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Default component props.
@@ -73,7 +73,7 @@ export function searchNoResultProps() {
  */
 export function searchWithResultProps() {
   const mockStorage = new MockStorage();
-  mockStorage.local.set({resources: resourcesFixture});
+  mockStorage.local.set({resources: [defaultResourceDto({name: "apache", uri: "http://www.apache.org"}), defaultResourceDto()]});
   const context = new defaultAppContext({
     storage: mockStorage,
     search: "apache",
@@ -89,7 +89,7 @@ export function suggestedResourcesProps() {
   const port = new MockPort();
   port.addRequestListener("passbolt.active-tab.get-url", () => "http:\/\/www.apache.org\/");
   const mockStorage = new MockStorage();
-  mockStorage.local.set({resources: resourcesFixture});
+  mockStorage.local.set({resources: [defaultResourceDto({name: "apache", uri: "http://www.apache.org"}), defaultResourceDto()]});
   const context = new defaultAppContext({
     storage: mockStorage,
     port: port,

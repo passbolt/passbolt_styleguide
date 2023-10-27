@@ -35,6 +35,12 @@ import {RESOURCE_NAME_MAX_LENGTH, RESOURCE_DESCRIPTION_MAX_LENGTH, RESOURCE_URI_
 import debounce  from 'debounce-promise';
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import Totp from "../../../../shared/components/Totp/Totp";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 
 class EditResource extends Component {
   constructor(props) {
@@ -46,7 +52,7 @@ class EditResource extends Component {
   }
 
   get defaultState() {
-    const resource = this.props.context.resources.find(item => item.id === this.props.context.passwordEditDialogProps.id) || {};
+    const resource = this.props.context.resources.find(item => item.id === this.props.resourceId) || {};
 
     return {
       nameOriginal: resource.name || "",
@@ -59,19 +65,22 @@ class EditResource extends Component {
       uri: resource.uri || "",
       uriError: "",
       uriWarning: "",
+      passwordOriginal: null,
       password: "",
       passwordError: "",
       passwordWarning: "",
       description: resource.description || "",
       descriptionError: "",
       descriptionWarning: "",
+      totp: null, // The totp
       isSecretDecrypting: true,
-      encryptDescription: null,
+      resourceTypeIdOriginal: resource.resource_type_id || "",
       resourceTypeId: resource.resource_type_id || "",
       isPwnedServiceAvailable: true,
       passwordInDictionary: false,
       passwordEntropy: null,
       processing: false,
+      originalDecryptedSecret: null,
     };
   }
 
@@ -89,6 +98,10 @@ class EditResource extends Component {
     this.handleUriInputKeyUp = this.handleUriInputKeyUp.bind(this);
     this.handleUsernameInputKeyUp = this.handleUsernameInputKeyUp.bind(this);
     this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
+    this.handleAddTotpClick = this.handleAddTotpClick.bind(this);
+    this.handleEditTotpClick = this.handleEditTotpClick.bind(this);
+    this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
+    this.applyTotp = this.applyTotp.bind(this);
   }
 
   /**
@@ -104,6 +117,7 @@ class EditResource extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
     await this.initialize();
     await this.props.passwordPoliciesContext.findPolicies();
     this.initPwnedPasswordService();
@@ -116,6 +130,23 @@ class EditResource extends Component {
    */
   componentDidUpdate(prevProps) {
     this.handleLastGeneratedPasswordChanged(prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword);
+  }
+
+  /**
+   * Initialize the resource type associate to the resource
+   */
+  initResourceType() {
+    if (this.isEncryptedDescriptionEnabled()) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+      );
+      this.setState({resourceTypeId});
+    } else if (this.areResourceTypesEnabled()) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+      );
+      this.setState({resourceTypeId});
+    }
   }
 
   /**
@@ -146,11 +177,7 @@ class EditResource extends Component {
    * @returns {Promise<void>}
    */
   async initialize() {
-    const isDecrypted = await this.decryptSecret();
-    if (isDecrypted) {
-      const encrypt = this.mustEncryptDescription();
-      this.setState({encryptDescription: encrypt});
-    }
+    await this.decryptSecret();
   }
 
   /**
@@ -184,20 +211,51 @@ class EditResource extends Component {
    * =============================================================
    */
   isEncryptedDescriptionEnabled() {
-    return this.props.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
+    return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
   }
 
   areResourceTypesEnabled() {
-    return this.props.context.resourceTypesSettings.areResourceTypesEnabled();
+    return this.resourceTypesSettings.areResourceTypesEnabled();
   }
 
   /**
-   * Must the description be kept encrypted?
-   * E.g. prevent downgrading from an encrypted description to a cleartext one
-   * @returns {boolean}
+   * Get resources type settings
+   * @return {ResourceTypesSettings|*}
    */
-  mustEncryptDescription() {
-    return this.props.context.resourceTypesSettings.mustEncryptDescription(this.state.resourceTypeId);
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
+  }
+
+  /**
+   * Must encrypt the description
+   * @return {boolean}
+   */
+  get mustEncryptDescription() {
+    return this.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(this.state.resourceTypeId);
+  }
+
+  /**
+   * Has encrypted description
+   * @return {boolean}
+   */
+  get hasEncryptedDescription() {
+    return this.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(this.state.resourceTypeIdOriginal);
+  }
+
+  /**
+   * Is legacy resource
+   * @return {boolean}
+   */
+  get isLegacyResource() {
+    return this.resourceTypesSettings.assertResourceTypeIdIsLegacy(this.state.resourceTypeId);
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isTotpResources() {
+    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.state.resourceTypeId);
   }
 
   /*
@@ -308,16 +366,20 @@ class EditResource extends Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    if (password && this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password, this.state.isPwnedServiceAvailable);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
 
@@ -332,22 +394,42 @@ class EditResource extends Component {
    */
   async updateResource() {
     const resourceDto = {
-      id: this.props.context.passwordEditDialogProps.id,
+      id: this.props.resourceId,
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
     };
+
+    const isPasswordExpiryEnabled = this.props.passwordExpiryContext.isFeatureEnabled();
+    const hasPasswordChanged = this.state.password !== this.state.passwordOriginal;
+    if (isPasswordExpiryEnabled && hasPasswordChanged) {
+      resourceDto.expired = this.computeNewExpirationDate();
+    }
 
     if (!this.areResourceTypesEnabled()) {
       return this.updateResourceLegacy(resourceDto);
     }
 
     // Resource types enabled but legacy type requested
-    if (!this.state.encryptDescription) {
+    if (this.isLegacyResource) {
       return this.updateWithoutEncryptedDescription(resourceDto);
     }
 
+    // Resource types with totp encrypted
+    if (this.isTotpResources) {
+      return this.updateWithEncryptedDescriptionAndTotp(resourceDto);
+    }
+
     return this.updateWithEncryptedDescription(resourceDto);
+  }
+
+  /**
+   * Returns the new expiration date for the given resource according the the password expiry settings.
+   * @todo: implement the computation with the full settings
+   * @returns {Date|null}
+   */
+  computeNewExpirationDate() {
+    return null;
   }
 
   /**
@@ -357,7 +439,7 @@ class EditResource extends Component {
    */
   async updateResourceLegacy(resourceDto) {
     resourceDto.description = this.state.description;
-    const plaintextDto = this.state.password;
+    const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -368,10 +450,8 @@ class EditResource extends Component {
    */
   async updateWithoutEncryptedDescription(resourceDto) {
     resourceDto.description = this.state.description;
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
-    );
-    const plaintextDto = this.state.password;
+    resourceDto.resource_type_id = this.state.resourceTypeId;
+    const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -381,14 +461,33 @@ class EditResource extends Component {
    * @param resourceDto
    */
   async updateWithEncryptedDescription(resourceDto) {
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-    );
+    resourceDto.resource_type_id = this.state.resourceTypeId;
     resourceDto.description = '';
-    const plaintextDto = {
-      description: this.state.description,
-      password: this.state.password
-    };
+    let plaintextDto = null;
+    if (this.hasSecretChanged()) {
+      plaintextDto = {
+        description: this.state.description,
+        password: this.state.password
+      };
+    }
+
+    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+  }
+
+  /**
+   * Update the resource with encrypted description and totp content type
+   * @param resourceDto
+   */
+  async updateWithEncryptedDescriptionAndTotp(resourceDto) {
+    resourceDto.resource_type_id = this.state.resourceTypeId;
+    resourceDto.description = '';
+
+    let plaintextDto = null;
+    if (this.hasSecretChanged()) {
+      plaintextDto = this.state.totp.toSecretDto();
+      plaintextDto.password = this.state.password;
+      plaintextDto.description = this.state.description;
+    }
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -398,7 +497,6 @@ class EditResource extends Component {
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been updated successfully"));
-    this.selectAndScrollToResource(this.props.context.passwordEditDialogProps.id);
     this.props.resourceWorkspaceContext.onResourceEdited();
     this.handleClose();
   }
@@ -448,19 +546,6 @@ class EditResource extends Component {
 
   /*
    * =============================================================
-   *  Out of dialog actions
-   * =============================================================
-   */
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   */
-  selectAndScrollToResource(id) {
-    this.props.context.port.emit("passbolt.resources.select-and-scroll-to", id);
-  }
-
-  /*
-   * =============================================================
    *  Dialog actions event handlers
    * =============================================================
    */
@@ -473,20 +558,20 @@ class EditResource extends Component {
     const value = target.value;
     const name = target.name;
 
+    const newState = {
+      [name]: value
+    };
+
     if (name === "password") {
       if (value.length) {
         this.evaluatePasswordIsInDictionaryDebounce(value);
+        newState.passwordEntropy = SecretGenerator.entropy(value);
       } else {
-        this.setState({
-          passwordInDictionary: false,
-          passwordEntropy: null,
-        });
+        newState.passwordInDictionary = false;
+        newState.passwordEntropy = null;
       }
     }
-
-    this.setState({
-      [name]: value
-    });
+    this.setState(newState);
   }
 
   /**
@@ -544,11 +629,43 @@ class EditResource extends Component {
   }
 
   /**
+   * Handle add totp
+   */
+  handleAddTotpClick() {
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.ADD_TOTP, onApply: this.applyTotp});
+  }
+
+  /**
+   * Handle edit totp
+   */
+  handleEditTotpClick() {
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_TOTP, totp: this.state.totp, onApply: this.applyTotp});
+  }
+
+  /**
+   * Handle delete totp
+   */
+  handleDeleteTotpClick() {
+    this.setState({totp: null});
+    this.initResourceType();
+  }
+
+  /**
+   * Apply the totp
+   * @param {object} totp
+   */
+  applyTotp(totp) {
+    const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_DESCRIPTION_TOTP
+    );
+    this.setState({totp, resourceTypeId});
+  }
+
+  /**
    * Handle close button click.
    * @returns {Promise<void>}
    */
   async handleClose() {
-    this.props.context.setContext({passwordEditDialogProps: null});
     // ensure the secret generator settings are back to the organisation's default in case a new secret is generated later
     await this.props.resourcePasswordGeneratorContext.resetSecretGeneratorSettings();
     this.props.onClose();
@@ -559,14 +676,21 @@ class EditResource extends Component {
    */
   async handleDescriptionToggle() {
     // Description is not encrypted and encrypted description type is not supported => leave it alone
-    if (!this.isEncryptedDescriptionEnabled() && !this.state.encryptDescription) {
+    if (!this.isEncryptedDescriptionEnabled()) {
       return;
     }
 
     // No obligation to keep description encrypted, allow toggle
-    if (!this.mustEncryptDescription()) {
-      const encrypt = !this.state.encryptDescription;
-      this.setState({encryptDescription: encrypt});
+    if (!this.mustEncryptDescription) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+      );
+      this.setState({resourceTypeId});
+    } else if (!this.isTotpResources && !this.hasEncryptedDescription) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+      );
+      this.setState({resourceTypeId});
     }
   }
 
@@ -603,7 +727,6 @@ class EditResource extends Component {
    */
   /**
    * Decrypt the password secret
-   * @return {Promise<boolean>}
    */
   async decryptSecret() {
     this.setState({
@@ -612,16 +735,27 @@ class EditResource extends Component {
 
     try {
       const plaintextSecretDto = await this.getDecryptedSecret();
-      this.setState({
-        password: plaintextSecretDto.password,
+      const password = plaintextSecretDto.password;
+      this.evaluatePasswordIsInDictionaryDebounce(password);
+      const newState = {
+        password: password,
+        passwordOriginal: password,
         description: plaintextSecretDto.description || this.state.description,
-        isSecretDecrypting: false
+        totp: plaintextSecretDto.totp ? new TotpViewModel(plaintextSecretDto.totp) : null,
+        passwordEntropy: SecretGenerator.entropy(password),
+        isSecretDecrypting: false,
+      };
+      const originalDecryptedSecret = {
+        password: newState.password,
+        description: newState.description,
+        totp: newState.totp
+      };
+      this.setState({
+        ...newState,
+        originalDecryptedSecret
       });
-      this.evaluatePasswordIsInDictionaryDebounce(plaintextSecretDto.password);
-      return true;
     } catch (error) {
       this.handleClose();
-      return false;
     }
   }
 
@@ -630,7 +764,7 @@ class EditResource extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    return this.props.context.port.request("passbolt.secret.decrypt", this.props.context.passwordEditDialogProps.id);
+    return this.props.context.port.request("passbolt.secret.decrypt", this.props.resourceId);
   }
 
   /*
@@ -657,7 +791,7 @@ class EditResource extends Component {
    * @returns {string}
    */
   getDescriptionPlaceholder() {
-    if (this.state.isSecretDecrypting && this.mustEncryptDescription()) {
+    if (this.state.isSecretDecrypting && this.mustEncryptDescription) {
       return this.translate("Decrypting");
     }
     return this.translate("Description");
@@ -682,7 +816,47 @@ class EditResource extends Component {
    * @returns {boolean}
    */
   isDescriptionDisabled() {
-    return (this.state.isSecretDecrypting && this.mustEncryptDescription());
+    return (this.state.isSecretDecrypting && this.mustEncryptDescription);
+  }
+
+  /**
+   * Returns true if the secret has changed
+   * The checks take into account the resource type as well to ensure that there is no false positive.
+   * E.g: resource type is password with description in clear, a change in the description shouldn't
+   * be considered as a "secret changed".
+   * @returns {boolean}
+   */
+  hasSecretChanged() {
+    const hasPasswordChanged = this.state.password !== this.state.originalDecryptedSecret.password;
+    // if there is no resource types, secret contains password and it's already checked.
+    if (!this.areResourceTypesEnabled()) {
+      return hasPasswordChanged;
+    }
+
+    // if the resource type has changed, the secret is changed as well
+    if (this.state.resourceTypeIdOriginal !== this.state.resourceTypeId) {
+      return true;
+    }
+
+    if (this.isTotpResources) {
+      // the resource type didn't changed then the original secret contains also a totp.
+      const originalTotp = this.state.originalDecryptedSecret.totp.toSecretDto().totp;
+      const newTotp = this.state.totp.toSecretDto().totp;
+
+      const hasTotpChanged = TotpViewModel.areSecretsDifferent(originalTotp, newTotp);
+
+      if (hasTotpChanged) {
+        return true;
+      }
+    }
+
+    if (!this.hasEncryptedDescription) {
+      // the secret contains only the password.
+      return hasPasswordChanged;
+    }
+
+    const hasDescriptionChanged = this.state.description !== this.state.originalDecryptedSecret.description;
+    return hasPasswordChanged || hasDescriptionChanged;
   }
 
   /**
@@ -692,6 +866,23 @@ class EditResource extends Component {
   get canUsePasswordGenerator() {
     return this.props.context.siteSettings.canIUse('passwordGenerator');
   }
+
+  /**
+   * Returns true if the logged in user can use the totp capability.
+   * @returns {boolean}
+   */
+  get canUseTotp() {
+    return this.areResourceTypesEnabled() && this.props.context.siteSettings.canIUse('totpResourceTypes');
+  }
+
+  /**
+   * Has a totp
+   * @return {boolean}
+   */
+  get hasTotp() {
+    return Boolean(this.state.totp);
+  }
+
 
   /**
    * Get the translate function
@@ -821,14 +1012,14 @@ class EditResource extends Component {
                   <Icon name="info-circle"/>
                 </Tooltip>
                 }
-                {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
+                {this.areResourceTypesEnabled() && !this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
                   </Tooltip>
                 </button>
                 }
-                {this.areResourceTypesEnabled() && this.state.encryptDescription &&
+                {this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")}>
                     <Icon name="lock"/>
@@ -849,6 +1040,28 @@ class EditResource extends Component {
                 <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
               }
             </div>
+            {this.canUseTotp && !this.hasTotp &&
+              <div className="input input-totp-wrapper">
+                <button type="button" className="add-totp link no-border link-icon" onClick={this.handleAddTotpClick} disabled={this.state.processing}>
+                  <Icon name="plus-circle"/>
+                  <span className="link-label"><Trans>Add TOTP</Trans></span>
+                </button>
+              </div>
+            }
+            {this.canUseTotp && this.hasTotp &&
+              <div className={`input input-totp-wrapper ${this.state.processing ? 'disabled' : ''}`}>
+                <label htmlFor="create-password-form-totp"><Trans>TOTP</Trans></label>
+                <div className="input-wrapper-inline totp">
+                  <Totp totp={this.state.totp}/>
+                  <button type="button" className="edit-totp button-icon" onClick={this.handleEditTotpClick} disabled={this.state.processing}>
+                    <Icon name='edit' big={true}/>
+                  </button>
+                  <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
+                    <Icon name='trash' big={true}/>
+                  </button>
+                </div>
+              </div>
+            }
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled() || this.isPasswordDisabled() || this.isDescriptionDisabled()} onClick={this.handleClose}/>
@@ -861,6 +1074,7 @@ class EditResource extends Component {
 }
 
 EditResource.propTypes = {
+  resourceId: PropTypes.string, // The id of the resource
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
@@ -869,6 +1083,8 @@ EditResource.propTypes = {
   dialogContext: PropTypes.any, // The dialog context,
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
+  workflowContext: PropTypes.any, // The workflow context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
 export default withAppContext(
@@ -877,4 +1093,6 @@ export default withAppContext(
       withActionFeedback(
         withPasswordPolicies(
           withDialog(
-            withTranslation('common')(EditResource)))))));
+            withWorkflow(
+              withPasswordExpiry(
+                withTranslation('common')(EditResource)))))))));

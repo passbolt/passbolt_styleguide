@@ -17,6 +17,7 @@ import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Default component props with folder having owner permission
@@ -26,11 +27,16 @@ import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.t
 export function defaultProps(data = {}) {
   const resourceOwner = defaultUserDto();
 
+  const passwordExpiryContext = defaultPasswordExpirySettingsContext(data?.passwordExpiryContext);
+
+  delete data?.passwordExpiryContext;
+
   return {
     context: defaultUserAppContext({
       users: [resourceOwner]
     }),
     rbacContext: defaultAdministratorRbacContext(),
+    passwordExpiryContext: passwordExpiryContext,
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
         resource: defaultResourceDto({

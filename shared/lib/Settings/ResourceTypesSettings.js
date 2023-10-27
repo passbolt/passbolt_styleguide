@@ -225,4 +225,16 @@ export default class ResourceTypesSettings {
       .filter(resourceType => resourceTypesSlugs.includes(resourceType.slug))
       .some(resourceType => resourceType.id === resourceTypeId);
   }
+
+  /**
+   * Assert the resource type is a standalone totp
+   * @param {string} resourceTypeId The uuid of the resource type
+   * @return {boolean}
+   */
+  assertResourceTypeIdIsStandaloneTotp(resourceTypeId) {
+    return this.assertResourceTypeSlugById(
+      resourceTypeId,
+      this.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP
+    );
+  }
 }

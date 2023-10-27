@@ -63,8 +63,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
    */
   handleCreateFolderItemClickEvent() {
     if (this.canUpdate()) {
-      this.props.context.setContext({folderCreateDialogProps: {folderParentId: this.props.folder.id}});
-      this.props.dialogContext.open(CreateResourceFolder);
+      this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.props.folder.id});
       this.handleHide();
     }
   }

@@ -1,3 +1,4 @@
+import {defaultUserWorkspaceContext} from "../../../contexts/UserWorkspaceContext.test.data";
 import MockPort from "../../../test/mock/MockPort";
 
 /**
@@ -21,6 +22,7 @@ export function defaultProps() {
   return {
     history: {
       push: jest.fn(),
-    }
+    },
+    userWorkspaceContext: defaultUserWorkspaceContext()
   };
 }

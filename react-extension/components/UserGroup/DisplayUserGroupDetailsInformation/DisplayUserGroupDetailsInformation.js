@@ -18,7 +18,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays the group details about information
@@ -65,17 +65,6 @@ class DisplayUserGroupDetailsInformation extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string} The formatted date
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -87,8 +76,8 @@ class DisplayUserGroupDetailsInformation extends React.Component {
    * Render the component
    */
   render() {
-    const created = this.formatDateTimeAgo(this.group.created);
-    const modified = this.formatDateTimeAgo(this.group.modified);
+    const created = formatDateTimeAgo(this.group.created, this.props.t, this.props.context.locale);
+    const modified = formatDateTimeAgo(this.group.modified, this.props.t, this.props.context.locale);
     const modifiedByUser = this.props.context.users.find(user => user.id === this.group.modified_by);
     const modifiedByUserName = modifiedByUser ? `${modifiedByUser.profile.first_name} ${modifiedByUser.profile.last_name}` : this.translate("Unknown user");
     const membersCount = this.group.groups_users.length;

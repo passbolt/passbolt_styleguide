@@ -33,6 +33,7 @@ export const defaultResourceDto = (data = {}) => {
     created_by: uuidv4(),
     modified: "2022-03-04T13:59:11+00:00",
     modified_by: uuidv4(),
+    expired: null,
     deleted: false,
     description: "",
     personal: false,
@@ -86,4 +87,7 @@ export const resourceStandaloneTotpDto = (data = {}) => defaultResourceDto({
   ...data
 });
 
-
+export const resourceExpiredDto = (data = {}) => defaultResourceDto({
+  expired: "2022-03-04T13:59:11+00:00",
+  ...data
+});

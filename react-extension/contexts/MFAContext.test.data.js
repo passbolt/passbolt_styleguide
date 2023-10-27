@@ -45,6 +45,12 @@ export const mfaDefined = {
   yubikey: false
 };
 
+export const allProviders = {
+  totp: true,
+  duo: true,
+  yubikey: true
+};
+
 export const noMfaUserDefinedWithTotp = {
   settings: {
     "MfaOrganizationSettings": mfaDefined,
@@ -68,3 +74,13 @@ export const MfaMandatoryPolicy = {
 export const MfaOptInPolicy = {
   policy: MfaPolicyEnumerationTypes.OPTIN
 };
+
+export const setupTotpData = (props = {}) => {
+  const data = {
+    otpProvisioningUri: "otpauth://totp/www.passbolt.local:admin%40passbolt.com?issuer=www.passbolt.local&secret=TVWEGQFS3WPCID6GYAPHHCC54VXHFUL7EC5FVHEMVH7CKQI2XEQQ&algorithm=SHA1&digits=6&period=30",
+    totp: "663516"
+  };
+  return Object.assign(data, props);
+};
+
+

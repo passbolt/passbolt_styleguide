@@ -65,7 +65,7 @@ describe("DisplayResourceDetailsInformation", () => {
       const modificationDate = DateTime.fromISO(absoluteModificationDate).toRelative();
       const absoluteCreationDate = props.resourceWorkspaceContext.details.resource.created;
       const creationDate = DateTime.fromISO(absoluteCreationDate).toRelative();
-      expect.assertions(18);
+      expect.assertions(20);
       expect(page.displayInformationList.usernameLabel).toBe('Username');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
       expect(page.displayInformationList.passwordLabel).toBe('Password');
@@ -84,6 +84,8 @@ describe("DisplayResourceDetailsInformation", () => {
       expect(page.displayInformationList.modifiedBy(2).textContent).toBe('ada@passbolt.com');
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe("root");
+      expect(page.displayInformationList.expiryLabel).toBe('Expiry ');
+      expect(page.displayInformationList.expiry.textContent).toBe("Never");
     });
 
     it('I can see the folder a resource is contained in', async() => {
@@ -93,11 +95,23 @@ describe("DisplayResourceDetailsInformation", () => {
       expect(page.displayInformationList.location.textContent).toBe("root");
     });
 
-    it('I scannot see the folder a resource is contained in if disbaled by RBAC', async() => {
+    it('I cannot see the folder a resource is contained in if disbaled by RBAC', async() => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(1);
       expect(page.displayInformationList.location).toBeNull();
+    });
+
+    it('I cannot see the expiry information if the feature is disbaled', async() => {
+      const props = defaultProps({
+        passwordExpiryContext: {
+          isFeatureEnabled: () => false
+        }
+      });
+
+      page = new DisplayResourceDetailsInformationPage(props);
+      expect.assertions(1);
+      expect(page.displayInformationList.expiry).toBeNull();
     });
   });
 

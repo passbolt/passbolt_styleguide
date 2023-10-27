@@ -19,10 +19,10 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withDialog} from "../../../contexts/DialogContext";
-import {DateTime} from "luxon";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -128,17 +128,6 @@ class ReviewAccountRecoveryRequest extends Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate("Just now") : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get the user who initiated the account recovery request.
    * @returns {object}
    */
@@ -203,7 +192,7 @@ class ReviewAccountRecoveryRequest extends Component {
                       &nbsp;
                       <span className="name"><Trans>requested an account recovery</Trans></span>
                     </div>
-                    <div className="subinfo light">{this.formatDateTimeAgo(this.date)}</div>
+                    <div className="subinfo light">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</div>
                   </div>
                 </div>
                 <UserAvatar

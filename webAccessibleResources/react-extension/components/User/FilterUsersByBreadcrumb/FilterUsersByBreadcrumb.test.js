@@ -35,6 +35,7 @@ describe("Display User Workspace Breadcrumb", () => {
   const context = defaultAppContext(); // The applicative context
 
   it('As LU, I should see "All Users" if the filter is set to All Users', async() => {
+    expect.assertions(2);
     page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.ALL));
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
@@ -42,6 +43,7 @@ describe("Display User Workspace Breadcrumb", () => {
   });
 
   it('As LU, I should see "Recently Modified" if the filter is set to Recently Modified', async() => {
+    expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.RECENTLY_MODIFIED));
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
@@ -49,7 +51,16 @@ describe("Display User Workspace Breadcrumb", () => {
     expect(page.itemNumberDisplayed).toBe("3");
   });
 
+  it('As LU, I should see "Suspended user" if the filter is set to Suspended user', async() => {
+    expect.assertions(2);
+    page = new FilterUsersByBreadcrumbPage(context, propsWithFilter(UserWorkspaceFilterTypes.SUSPENDED_USER));
+    await waitFor(() => {});
+    expect(page.breadcrumbLabels(1)).toBe('All users');
+    expect(page.breadcrumbLabels(2)).toBe('Suspended users');
+  });
+
   it('As LU, I should see the search text if the filter is set to an non-empty Text', async() => {
+    expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithTextFilter());
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
@@ -58,6 +69,7 @@ describe("Display User Workspace Breadcrumb", () => {
   });
 
   it('As LU, I should see All Users if the filter is set to an non-empty Text', async() => {
+    expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithEmptyTextFilter());
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
@@ -66,6 +78,7 @@ describe("Display User Workspace Breadcrumb", () => {
   });
 
   it('As LU, I should see the group name if the filter is set to Group', async() => {
+    expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithGroupFilter());
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');
@@ -74,6 +87,7 @@ describe("Display User Workspace Breadcrumb", () => {
   });
 
   it('As LU, I should see the N/A if the filter is set to Group and the group name is empty', async() => {
+    expect.assertions(3);
     page = new FilterUsersByBreadcrumbPage(context, propsWithEmptyGroupNameFilter());
     await waitFor(() => {});
     expect(page.breadcrumbLabels(1)).toBe('All users');

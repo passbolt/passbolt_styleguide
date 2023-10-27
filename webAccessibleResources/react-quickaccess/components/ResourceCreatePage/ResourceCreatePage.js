@@ -268,9 +268,14 @@ class ResourceCreatePage extends React.Component {
     const resourceDto = {
       name: this.state.name,
       username: this.state.username,
-      uri: this.state.uri
+      uri: this.state.uri,
+      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
     };
-    const secretDto = this.state.password;
+
+    const secretDto = {
+      password: this.state.password,
+      description: ""
+    };
 
     try {
       const resource = await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
@@ -317,16 +322,20 @@ class ResourceCreatePage extends React.Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
-    if (password && this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
-    this.setState({passwordEntropy});
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
   /**
@@ -417,6 +426,14 @@ class ResourceCreatePage extends React.Component {
     const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
     this.setState({passwordEntropy, password});
     this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce(password);
+  }
+
+  /**
+   * Get resource types settings
+   * @return {*}
+   */
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
   }
 
   /**

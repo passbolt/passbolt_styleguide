@@ -20,11 +20,11 @@
               display: flex;
               flex-direction: column;
 
-              .password-wrapper {
+              .password-wrapper, .totp-wrapper {
                 display: flex;
                 align-items: center;
 
-                .password-view {
+                .password-view, .totp-view {
                   width: 2.2rem;
                   height: 2.1rem;
                   margin: 0 0 0 .8rem;
@@ -34,6 +34,10 @@
                     width: 1.4rem;
                     height: 100%;
                   }
+                }
+
+                .totp-code + .svg-icon.timer {
+                  margin-left: .5rem;
                 }
               }
             }
@@ -56,20 +60,39 @@
                 max-width: 28rem;
                 &.secret-copy {
                   > button {
+
                     &:hover {
                       color: @text-secret-hover-color;
                     }
+
                     > span {
                       display: none;
                     }
 
-                    &:before {
-                      content: 'BBBBBBBBB';
+                    &:before, &:after {
                       font-family: 'Passbolt', sans-serif;
                       font-style: normal;
                       font-weight: 400;
                       font-size: 1.8rem;
                       line-height: 100%;
+                    }
+                  }
+
+                  &.secret-password {
+                    > button:before {
+                      content: 'BBBBBBBBB';
+                    }
+                  }
+
+                  &.secret-totp {
+                    > button {
+                      &:before {
+                        content: 'BBB';
+                      }
+                      &:after {
+                        margin-left: .5rem;
+                        content: 'BBB';
+                      }
                     }
                   }
                 }

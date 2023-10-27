@@ -24,6 +24,9 @@ import {Trans, withTranslation} from "react-i18next";
 import CreateResource from "../CreateResource/CreateResource";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 
 /**
  * This component allows the current user to create a new resource
@@ -66,6 +69,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleCreateClickEvent = this.handleCreateClickEvent.bind(this);
     this.handleCreateMenuPasswordClickEvent = this.handleCreateMenuPasswordClickEvent.bind(this);
+    this.handleMenuCreateTotpClickEvent = this.handleMenuCreateTotpClickEvent.bind(this);
     this.handleMenuCreateFolderClickEvent = this.handleMenuCreateFolderClickEvent.bind(this);
     this.handleImportClickEvent = this.handleImportClickEvent.bind(this);
   }
@@ -145,11 +149,22 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openPasswordCreateDialog() {
-    const resourceCreateDialogProps = {
-      folderParentId: this.folderIdSelected
-    };
-    this.props.context.setContext({resourceCreateDialogProps});
-    this.props.dialogContext.open(CreateResource);
+    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected});
+  }
+
+  /**
+   * Handle folder click event
+   */
+  handleMenuCreateTotpClickEvent() {
+    this.openStandaloneTotpCreateDialog();
+    this.handleCloseCreateMenu();
+  }
+
+  /**
+   * Open create password dialog
+   */
+  openStandaloneTotpCreateDialog() {
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected});
   }
 
   /**
@@ -164,11 +179,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openFolderCreateDialog() {
-    const folderCreateDialogProps = {
-      folderParentId: this.folderIdSelected
-    };
-    this.props.context.setContext({folderCreateDialogProps});
-    this.props.dialogContext.open(CreateResourceFolder);
+    this.props.dialogContext.open(CreateResourceFolder, {folderParentId: this.folderIdSelected});
   }
 
   /**
@@ -216,6 +227,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
       && this.props.rbacContext.canIUseUiAction(uiActions.RESOURCES_IMPORT);
     const canUseFolders = this.props.context.siteSettings.canIUse("folders")
       && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+    const canUseTotp = this.props.context.siteSettings.canIUse('totpResourceTypes');
 
     return (
       <>
@@ -236,6 +248,19 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                 </div>
               </div>
             </li>
+            {canUseTotp &&
+              <li id="totp_action">
+                <div className="row">
+                  <div className="main-cell-wrapper">
+                    <div className="main-cell">
+                      <button type="button" className="link no-border" onClick={this.handleMenuCreateTotpClickEvent}>
+                        <span><Trans>New Totp</Trans></span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            }
             {canUseFolders &&
               <li id="folder_action">
                 <div className="row">
@@ -269,6 +294,7 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
+  workflowContext: PropTypes.any, // The workflow context
 };
 
-export default withAppContext(withRbac(withDialog(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu)))));
+export default withAppContext(withRbac(withDialog(withWorkflow(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))));

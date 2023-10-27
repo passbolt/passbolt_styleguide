@@ -178,6 +178,12 @@ const siteSettings = (isProEdition = true) => ({
         "version": "1.0.0",
         "enabled": true,
       },
+      "disableUser": {
+        "enabled": true,
+      },
+      "passwordExpiry": {
+        "enabled": true,
+      }
     }
   }
 });

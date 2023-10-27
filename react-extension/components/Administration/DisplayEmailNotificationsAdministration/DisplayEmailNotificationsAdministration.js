@@ -104,11 +104,44 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   }
 
   /**
-   * Can use folders
-   * @returns {*}
+   * Can use account recovery
+   * @returns {boolean}
    */
   canUseAccountRecovery() {
     return this.props.context.siteSettings.canIUse("accountRecovery");
+  }
+  /**
+   * Can use password expiry
+   * @returns {boolean}
+   */
+  canUsePasswordExpiry() {
+    return this.props.context.siteSettings.canIUse("passwordExpiry");
+  }
+
+  /**
+   * Returns the source of the current settings
+   * @returns {string}
+   */
+  get settingsSource() {
+    if (this.hasDatabaseSetting()) {
+      return "db";
+    }
+    if (this.hasFileConfigSetting()) {
+      return 'file';
+    }
+    return 'env';
+  }
+
+  /**
+   * Returns the source of the current configuration
+   * @returns {string}
+   */
+  get configurationSource() {
+    return {
+      'env': this.props.t('environment variables'),
+      'file': this.props.t('file'),
+      'db': this.props.t('database'),
+    }[this.settingsSource] || this.props.t('unknown');
   }
 
   /**
@@ -372,6 +405,20 @@ class DisplayEmailNotificationsAdministration extends React.Component {
               </div>
             </>
           }
+          {this.canUsePasswordExpiry() &&
+            <>
+              <h3><Trans>Password expiry</Trans></h3>
+              <div className="section">
+                <span className="input toggle-switch form-element">
+                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryExpiredUser" disabled={this.hasAllInputDisabled()}
+                    onChange={this.handleInputChange} checked={settings.passwordExpiryExpiredUser} id="password-expiry-expired-user-toggle-button"/>
+                  <label className="text" htmlFor="password-expiry-expired-user-toggle-button">
+                    <Trans>When the password is expired, notify the owners to change it.</Trans>
+                  </label>
+                </span>
+              </div>
+            </>
+          }
           <h3><Trans>Email content visibility</Trans></h3>
           <p><Trans>In this section you can adjust the composition of the emails, e.g. which information will be included in the notification.</Trans></p>
           <div className="section">
@@ -419,6 +466,10 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           </div>
         </div>
         <div className="col4 last">
+          <div className="sidebar-help" id="email-notifications-source">
+            <h3><Trans>Configuration source</Trans></h3>
+            <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+          </div>
           <div className="sidebar-help">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about email notification, checkout the dedicated page on the help website.</Trans></p>
@@ -437,6 +488,7 @@ DisplayEmailNotificationsAdministration.propTypes = {
   context: PropTypes.any, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   adminEmailNotificationContext: PropTypes.object, // The administration email notification context
+  t: PropTypes.func, // the translation function
 };
 
 export default withAppContext(withAdminEmailNotification(withAdministrationWorkspace(withTranslation('common')(DisplayEmailNotificationsAdministration))));

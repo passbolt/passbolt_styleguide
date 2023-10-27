@@ -89,3 +89,11 @@ RecentlyModifiedFilter.args = {
     filteredResources: [{}, {}, {}]
   }
 };
+
+export const ExpiredFilter = Template.bind({});
+ExpiredFilter.args = {
+  resourceWorkspaceContext: {
+    filter: {type: ResourceWorkspaceFilterTypes.EXPIRED},
+    filteredResources: [{}, {}, {}, {}, {}, {}]
+  }
+};

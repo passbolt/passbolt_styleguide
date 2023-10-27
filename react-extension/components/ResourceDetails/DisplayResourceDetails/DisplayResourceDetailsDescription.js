@@ -246,8 +246,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    */
   canEdit() {
     return this.resource.permission
-      && this.resource.permission.type >= 7
-      && !this.props.context.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+      && this.resource.permission.type >= 7;
   }
 
   /**
@@ -293,7 +292,7 @@ class DisplayResourceDetailsDescription extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canEdit() &&
-          <button type="button" className="link no-border section-action button-transparent" onClick={this.handleEditClickEvent}>
+          <button type="button" className="section-action button-transparent" onClick={this.handleEditClickEvent}>
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>Edit</Trans></span>
           </button>

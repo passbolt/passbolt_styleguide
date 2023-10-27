@@ -42,6 +42,7 @@ import DisplayMfaPolicyAdministration from "./DisplayMfaPolicyAdministration/Dis
 import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAdministration";
 import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies";
+import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -148,6 +149,14 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If Password Expiry menu is selected
+   * @returns {boolean}
+   */
+  isPasswordExpirySelected() {
+    return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -212,6 +221,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isUserPassphrasePoliciesSelected() &&
                   <DisplayAdministrationUserPassphrasePolicies/>
+                  }
+                  {this.isPasswordExpirySelected() &&
+                  <DisplayAdministrationPasswordExpiry/>
                   }
                 </div>
               </div>

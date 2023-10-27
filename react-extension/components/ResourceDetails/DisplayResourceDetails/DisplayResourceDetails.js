@@ -87,6 +87,14 @@ class DisplayResourceDetails extends React.Component {
   }
 
   /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isStandaloneTotpResource() {
+    return this.props.context.resourceTypesSettings.assertResourceTypeIdIsStandaloneTotp(this.props.resourceWorkspaceContext.details.resource.resource_type_id);
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -130,7 +138,9 @@ class DisplayResourceDetails extends React.Component {
             </button>
           </div>
           <DisplayResourceDetailsInformation/>
-          <DisplayResourceDetailsDescription/>
+          {!this.isStandaloneTotpResource &&
+            <DisplayResourceDetailsDescription/>
+          }
           {canViewShare &&
             <DisplayResourceDetailsPermission/>
           }

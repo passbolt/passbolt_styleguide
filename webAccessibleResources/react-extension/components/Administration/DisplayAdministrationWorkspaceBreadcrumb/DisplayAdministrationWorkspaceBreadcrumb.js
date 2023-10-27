@@ -75,6 +75,8 @@ class DisplayAdministrationWorkspaceBreadcrumb extends Component {
         return this.translate("Password Policy");
       case AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES:
         return this.translate("User Passphrase Policies");
+      case AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY:
+        return this.translate("Password Expiry");
       default:
         return "";
     }

@@ -19,13 +19,13 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -89,6 +89,9 @@ class ManageAccountRecoveryUserSettings extends Component {
     try {
       await this.props.context.port.request("passbolt.account-recovery.save-user-settings", accountRecoveryUserSettingDto);
       this.props.accountRecoveryContext.setUserAccountRecoveryStatus(this.state.status);
+      // The logged-in user has to be refreshed to keep the local storage up to date and prevent to display again the enrollment
+      const loggedInUser = await this.props.context.port.request("passbolt.users.find-logged-in-user", true);
+      this.props.context.setContext({loggedInUser});
       this.props.actionFeedbackContext.displaySuccess(this.translate("The account recovery subscription setting has been updated."));
       this.close();
     } catch (error) {
@@ -150,17 +153,6 @@ class ManageAccountRecoveryUserSettings extends Component {
     fingerprint = fingerprint || "";
     const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
     return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
-  }
-
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate("Just now") : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -235,7 +227,7 @@ class ManageAccountRecoveryUserSettings extends Component {
                     </Tooltip>
                     &nbsp;
                     <span className="name"><Trans>requested this operation</Trans></span>
-                    <div className="subinfo light">{this.formatDateTimeAgo(this.date)}</div>
+                    <div className="subinfo light">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</div>
                   </div>
                 </div>
                 <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>

@@ -1,5 +1,5 @@
 /**
- * Passbolt ~ Open source TableHeader manager for teams
+ * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
@@ -16,6 +16,7 @@ import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
 import {TotpCodeGeneratorService} from "../../services/otp/TotpCodeGeneratorService";
 import {withTranslation} from "react-i18next";
+import {withActionFeedback} from "../../../react-extension/contexts/ActionFeedbackContext";
 
 const DEFAULT_TOTP_PERIOD = 30;
 
@@ -30,10 +31,10 @@ class Totp extends Component {
   updateCodeOnPeriodTimeout = null;
 
   /**
-   * The initial delay on the OTP period.
+   * The initial date when the component is created.
    * @param {number}
    */
-  delay = null;
+  dateOnCreation = null;
 
   /**
    * @inheritDoc
@@ -41,8 +42,8 @@ class Totp extends Component {
   constructor(props) {
     super(props);
     this.bindCallbacks();
-    this.delay = this.calculateDelay();
-    this.state = this.getDefaultState();
+    this.dateOnCreation = new Date(Date.now());
+    this.state = this.defaultState;
   }
 
   /**
@@ -54,15 +55,25 @@ class Totp extends Component {
   }
 
   /**
+   * Return the delay with the previous period start from the mounted component.
+   * @return {number}
+   */
+  calculateDelayFromMounted() {
+    const todaySecond = this.dateOnCreation.getUTCHours() * 3600
+      + this.dateOnCreation.getUTCMinutes() * 60
+      + this.dateOnCreation.getUTCSeconds();
+    return todaySecond % (this.period);
+  }
+
+  /**
    * Return the delay with the previous period start.
    * @return {number}
    */
-  calculateDelay() {
+  calculateDelayFromNow() {
     const now = new Date(Date.now());
     const todaySeconds = now.getUTCHours() * 3600
       + now.getUTCMinutes() * 60
       + now.getUTCSeconds();
-
     return todaySeconds % (this.period);
   }
 
@@ -70,9 +81,10 @@ class Totp extends Component {
    * Get the default state
    * @return {object}
    */
-  getDefaultState() {
+  get defaultState() {
     return {
-      code: this.generateCode()
+      code: this.generateCode(),
+      delay: this.calculateDelayFromMounted()
     };
   }
 
@@ -81,7 +93,12 @@ class Totp extends Component {
    * @returns {string}
    */
   generateCode() {
-    return TotpCodeGeneratorService.generate(this.props.totp);
+    try {
+      return TotpCodeGeneratorService.generate(this.props.totp);
+    } catch (error) {
+      this.props.actionFeedbackContext.displayError(this.props.t("Unable to preview the TOTP"));
+      return "";
+    }
   }
 
   /**
@@ -90,7 +107,19 @@ class Totp extends Component {
    * @return {void}
    */
   componentDidMount() {
-    this.updateCodeOnPeriodTimeout = this.updateCodeOnPeriod(this.period - this.delay);
+    this.updateCodeOnPeriodTimeout = this.updateCodeOnPeriod(this.period - this.state.delay);
+  }
+
+  /**
+   * ComponentDidUpdate
+   * @param prevProps
+   */
+  componentDidUpdate(prevProps) {
+    const isTotpHasChanged = prevProps.totp !== this.props.totp;
+    if (isTotpHasChanged) {
+      clearTimeout(this.updateCodeOnPeriodTimeout);
+      this.updateCode();
+    }
   }
 
   /**
@@ -100,6 +129,17 @@ class Totp extends Component {
    */
   componentWillUnmount() {
     clearTimeout(this.updateCodeOnPeriodTimeout);
+  }
+
+  /**
+   * Update the code, the delay and the period timeout
+   */
+  updateCode() {
+    const delay = this.calculateDelayFromMounted();
+    const delayTotp = this.calculateDelayFromNow();
+    const code = this.generateCode();
+    this.updateCodeOnPeriodTimeout = this.updateCodeOnPeriod(this.period - delayTotp);
+    this.setState({code, delay});
   }
 
   /**
@@ -149,7 +189,7 @@ class Totp extends Component {
         <span className="totp-code"><span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span></span>
         <Icon name="timer" style={{
           "--timer-duration": `${this.period}s`,
-          "--timer-delay": `-${this.delay}s`
+          "--timer-delay": `-${this.state.delay}s`
         }}/>
       </button>
     );
@@ -163,9 +203,10 @@ Totp.defaultProps = {
 
 Totp.propTypes = {
   totp: PropTypes.object.isRequired, // The totp dto
+  actionFeedbackContext: PropTypes.any, // The action feedback context
   canClick: PropTypes.bool, // The can click on the totp
   onClick: PropTypes.func, // The on click handler
   t: PropTypes.func, // The translation function
 };
 
-export default withTranslation("common")(Totp);
+export default withActionFeedback(withTranslation("common")(Totp));

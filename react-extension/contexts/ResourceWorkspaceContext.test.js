@@ -16,14 +16,9 @@
  * Unit tests on ResourceWorkspaceContext in regard of specifications
  */
 
-import {defaultAppContext} from "./ResourceWorkspaceContext.test.data";
+import {defaultProps, defaultAppContext} from "./ResourceWorkspaceContext.test.data";
 import ResourceWorkspaceContextPage from "./ResourceWorkspaceContext.test.page";
 import {ResourceWorkspaceFilterTypes} from "./ResourceWorkspaceContext";
-
-beforeEach(() => {
-  jest.resetAllMocks();
-  jest.resetModules();
-});
 
 describe("Resource Workspace Context", () => {
   let page; // The page to test against
@@ -32,11 +27,16 @@ describe("Resource Workspace Context", () => {
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
 
   beforeEach(() => {
-    page = new ResourceWorkspaceContextPage(context);
+    jest.resetAllMocks();
+    jest.resetModules();
+    const props = defaultProps(); // The applicative context
+    page = new ResourceWorkspaceContextPage(context, props);
   });
 
   describe("As LU I should have the appropriate search filter at any time", () => {
     it("AS LU I should have an initial filter set to NONE", () => {
+      const props = defaultProps();
+      const page = new ResourceWorkspaceContextPage(context, props);
       expect(page.filter).toBeDefined();
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.NONE);
     });
@@ -54,6 +54,11 @@ describe("Resource Workspace Context", () => {
     it("AS LU I should have an SHARED-WITH-ME filter when I went to /app/passwords with such a filter", async() => {
       await page.goToShareWithMe();
       expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.SHARED_WITH_ME);
+    });
+
+    it("AS LU I should have an EXPIRED filter when I went to /app/passwords/filter/expried with such a filter", async() => {
+      await page.goToExpired();
+      expect(page.filter.type).toBe(ResourceWorkspaceFilterTypes.EXPIRED);
     });
 
     it("AS LU I should have an ITEMS-I-OWN filter when I went to /app/passwords with such a filter", async() => {
@@ -266,14 +271,16 @@ describe("Resource Workspace Context", () => {
       await page.goToAllItems();
       const defaultColumnsSetting = [
         {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "name", label: "Name", position: 2, show: true},
-        {id: "username", label: "Username", position: 3, show: true},
-        {id: "password", label: "Password", position: 4, show: true},
-        {id: "totp", label: "TOTP", position: 5, show: true},
-        {id: "uri", label: "URI", position: 6, show: true},
-        {id: "modified", label: "Modified", position: 7, show: true}
+        {id: "attentionRequired", label: "Attention", position: 2, show: true},
+        {id: "name", label: "Name", position: 3, show: true},
+        {id: "expired", label: "Expiry", position: 4, show: true},
+        {id: "username", label: "Username", position: 5, show: true},
+        {id: "password", label: "Password", position: 6, show: true},
+        {id: "totp", label: "TOTP", position: 7, show: true},
+        {id: "uri", label: "URI", position: 8, show: true},
+        {id: "modified", label: "Modified", position: 9, show: true}
       ];
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(7);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(9);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
     });
 
@@ -281,12 +288,14 @@ describe("Resource Workspace Context", () => {
       expect.assertions(3);
       const columnsSetting = [
         {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "name", label: "Name", width: 200, position: 2, show: true},
-        {id: "username", label: "Username", position: 3, show: false},
-        {id: "password", label: "Password", width: 300, position: 4, show: true},
-        {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
-        {id: "uri", label: "URI", position: 6, show: false},
-        {id: "modified", label: "Modified", width: 250, position: 7, show: true}
+        {id: "attentionRequired", label: "Attention", position: 2, show: true},
+        {id: "name", label: "Name", width: 200, position: 3, show: true},
+        {id: "expired", label: "Expiry", width: 200, position: 4, show: true},
+        {id: "username", label: "Username", position: 5, show: false},
+        {id: "password", label: "Password", width: 300, position: 6, show: true},
+        {id: "totp", label: "TOTP", position: 7, width: 190, show: true},
+        {id: "uri", label: "URI", position: 8, show: false},
+        {id: "modified", label: "Modified", width: 250, position: 9, show: true}
       ];
       const sorter = {
         propertyName: 'name',
@@ -302,7 +311,7 @@ describe("Resource Workspace Context", () => {
       });
       await page.goToAllItems();
       await page.goToRootFolder();
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(7);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(9);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
       expect(page.sorter.toDto()).toStrictEqual(sorter);
     });
@@ -313,14 +322,14 @@ describe("Resource Workspace Context", () => {
       expect.assertions(1);
       await page.goToAllItems();
       await page.onChangeColumnView("name", true);
-      expect(page.columnsResourceSetting.items[1].show).toBeTruthy();
+      expect(page.columnsResourceSetting.items[2].show).toBeTruthy();
     });
 
     it("As LU I should be able to hide a resource column", async() => {
       expect.assertions(1);
       await page.goToAllItems();
       await page.onChangeColumnView("name", false);
-      expect(page.columnsResourceSetting.items[1].show).toBeFalsy();
+      expect(page.columnsResourceSetting.items[2].show).toBeFalsy();
     });
   });
 
@@ -337,7 +346,9 @@ describe("Resource Workspace Context", () => {
       ];
       const mergedColumnsSetting = [
         {id: "favorite", label: "Favorite", position: 1, width: 20, show: true},
-        {id: "name", label: "Name", position: 2, show: false},
+        {id: "attentionRequired", label: "Attention", position: 2, show: true},
+        {id: "name", label: "Name", position: 3, show: false},
+        {id: "expired", label: "Expiry", position: 4, show: true},
         {id: "username", label: "Username", position: 2, width: 200, show: true},
         {id: "password", label: "Password", position: 3, width: 100, show: true},
         {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
@@ -347,7 +358,7 @@ describe("Resource Workspace Context", () => {
       await page.goToAllItems();
       await page.onChangeColumnView("name", false);
       await page.onChangeColumnsSettings(columnsSetting);
-      expect(page.columnsResourceSetting.length).toStrictEqual(7);
+      expect(page.columnsResourceSetting.length).toStrictEqual(9);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });

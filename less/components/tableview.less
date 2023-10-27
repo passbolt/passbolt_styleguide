@@ -217,6 +217,14 @@
         }
       }
 
+      &.suspended td {
+        opacity: 0.5;
+
+        &.cell-checkbox {
+          opacity: 1;
+        }
+      }
+
       &:hover {
         background: @tableview-hover-background;
         color: @tableview-content-hover-text-color;
@@ -292,6 +300,13 @@
       .svg-icon.exclamation {
         svg {
           margin-left: .25rem;
+        }
+      }
+    }
+
+    td {
+      .svg-icon.exclamation {
+        svg {
           --icon-exclamation-background-color: @icon-exclamation-required-color;
         }
       }
@@ -301,10 +316,6 @@
       .secret {
         float: left;
         max-width: calc(100% - 3rem); // secret field - secret preview button
-
-        .svg-icon.timer {
-          margin-left: .5rem;
-        }
       }
       .password-view, .totp-view {
         display: none;

@@ -136,9 +136,14 @@ class SaveResource extends React.Component {
     const resourceDto = {
       name: this.state.name,
       username: this.state.username,
-      uri: this.state.uri
+      uri: this.state.uri,
+      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
     };
-    const secretDto = this.state.password;
+
+    const secretDto = {
+      password: this.state.password,
+      description: ""
+    };
 
     try {
       await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
@@ -176,7 +181,7 @@ class SaveResource extends React.Component {
   }
 
   handlePasswordChange(event) {
-    if (event.target.value.length && this.pownedService) {
+    if (event.target.value.length && this.state.isPwnedServiceAvailable) {
       this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce(event.target.value);
     } else {
       this.setState({
@@ -197,8 +202,16 @@ class SaveResource extends React.Component {
   }
 
   loadPassword(password) {
-    const passwordEntropy = this.state.password ? SecretGenerator.entropy(this.state.password) : null;
+    const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
     this.setState({password, passwordEntropy});
+  }
+
+  /**
+   * Get resource types settings
+   * @return {*}
+   */
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
   }
 
   /**
@@ -207,13 +220,16 @@ class SaveResource extends React.Component {
    * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    if (this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
   render() {
@@ -261,15 +277,11 @@ class SaveResource extends React.Component {
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }
-                {this.pownedService &&
-                  <>
-                    {!this.state.isPwnedServiceAvailable &&
-                        <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-                    }
-                    {this.state.passwordInDictionary &&
-                        <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-                    }
-                  </>
+                {!this.state.isPwnedServiceAvailable &&
+                  <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
+                }
+                {this.state.passwordInDictionary &&
+                  <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
                 }
               </div>
             </div>

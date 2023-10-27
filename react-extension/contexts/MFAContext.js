@@ -19,13 +19,32 @@ import {MfaPolicyEnumerationTypes} from "../../shared/models/mfaPolicy/MfaPolicy
 import MFAService from "../../shared/services/api/Mfa/MfaService";
 import MfaPolicyService from "../../shared/services/api/mfaPolicy/MfaPolicyService";
 
+// The mfa settings workflow states.
+export const MfaSettingsWorkflowStates = {
+  OVERVIEW: "Overview",
+  TOTPOVERVIEW: "Totp Overview",
+  SCANTOTPCODE: "Scan totp code",
+  VIEWCONFIGURATION: "View a totp configuration",
+  SETUPYUBIKEY: "Setup Yubikey"
+};
+
+export const Providers = {
+  TOTP: "totp",
+  YUBIKEY: "yubikey",
+  DUO: "duo",
+};
 
 /**
  * The Mfa Context
  * @type {React.Context<Object>}
  */
 export const MfaContext = React.createContext({
+  state: null, // Orchestration state
+  setup: null, // Orchestration the setup flow
+  provider: null, //The actual provider selected
   getPolicy: () => {}, // Returns settings for UI changes
+  getMfaOrganisationSettings: () => {}, // Returns the organization mfa setting
+  getMfaUserSettings: () => {}, // Returns the user mfa settings
   findPolicy: () => {}, // Find the current self registraiton settings and store it in the state
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
@@ -33,6 +52,12 @@ export const MfaContext = React.createContext({
   isMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
   checkMfaChoiceRequired: () => {}, //return is an user has to perform a mfa or not
   hasMfaUserSettings: () => {}, // returns if user has already defined its mfa settings
+  navigate: () => { }, // Change state for orchestration
+  setProvider: () => { }, //Init the provider and the state to follow
+  goToProviderList: () => {}, //Cancel a setup process or/and go to mfa providers
+  validateTotpCode: () => {}, //Validate the totp code
+  removeProvider: () => {}, //Remove an existing provider
+  validateYubikeyCode: () => {}, //Validate the yubikey code
 });
 
 /**
@@ -57,12 +82,17 @@ export class MfaContextProvider extends React.Component {
    */
   get defaultState() {
     return {
+      state: MfaSettingsWorkflowStates.OVERVIEW, // The current mfa settings workflow state.
+      setup: null, // The current mfa settings workflow state.
       policy: null,
+      provider: null, //Current selected provider
       processing: true, // Context is processing data
       mfaUserSettings: null, // Check if settings are defined
       mfaOrganisationSettings: null, // Check if settings are defined
       mfaChoiceRequired: false, // Check if user has to perform mfa
       getPolicy: this.getPolicy.bind(this), // Returns policy for MFA Policy
+      getMfaOrganisationSettings: this.getMfaOrganisationSettings.bind(this), // Returns the organization mfa setting
+      getMfaUserSettings: this.getMfaUserSettings.bind(this), // Returns the user mfa settings
       findPolicy: this.findPolicy.bind(this), // Find the current MFA Policy
       findMfaSettings: this.findMfaSettings.bind(this), // Find the current MFA settings
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
@@ -72,7 +102,13 @@ export class MfaContextProvider extends React.Component {
       hasMfaUserSettings: this.hasMfaUserSettings.bind(this), // returns if user has already defined his mfa settings
       clearContext: this.clearContext.bind(this), // put the data to its default state value
       checkMfaChoiceRequired: this.checkMfaChoiceRequired.bind(this), //return is an user has to perform a mfa or not
-      isMfaChoiceRequired: this.isMfaChoiceRequired.bind(this) //return is an user has to perform a mfa or not
+      isMfaChoiceRequired: this.isMfaChoiceRequired.bind(this), //return is an user has to perform a mfa or not
+      navigate: this.navigate.bind(this), //navigate to step
+      setProvider: this.setProvider.bind(this), //Init the provider and the state to follow
+      goToProviderList: this.goToProviderList.bind(this), //Cancel a setup process or/and go to mfa providers
+      validateTotpCode: this.validateTotpCode.bind(this), //Validate the totp code
+      removeProvider: this.removeProvider.bind(this), //Remove an existing provider
+      validateYubikeyCode: this.validateYubikeyCode.bind(this), //Validate the yubikey code
     };
   }
 
@@ -125,6 +161,22 @@ export class MfaContextProvider extends React.Component {
    */
   getPolicy() {
     return this.state.policy;
+  }
+
+  /**
+   * Returns the mfa organisations settings.
+   * @returns {object}
+   */
+  getMfaOrganisationSettings() {
+    return this.state.mfaOrganisationSettings;
+  }
+
+  /**
+   * Returns the mfa user settings.
+   * @returns {object}
+   */
+  getMfaUserSettings() {
+    return this.state.mfaUserSettings;
   }
 
   /**
@@ -181,7 +233,6 @@ export class MfaContextProvider extends React.Component {
     });
   }
 
-
   /**
    * checkMfaChoiceRequired if mfa settings is required
    * @returns {bool}
@@ -195,13 +246,93 @@ export class MfaContextProvider extends React.Component {
     this.setState({mfaChoiceRequired: !this.hasMfaSettings()});
   }
 
-
   /**
    * Returns true if the current user has to choose for a mfa setting.
    * @returns {bool}
    */
   isMfaChoiceRequired() {
     return this.state.mfaChoiceRequired;
+  }
+
+  /**
+   * Change mfa settings state
+   * @params {string} next state step
+   * @returns {void}
+   */
+  navigate(state) {
+    this.setState({state});
+  }
+
+  /**
+   * Cancel a setup process or go back to mfa settings providers
+   */
+  goToProviderList() {
+    this.setState({state: MfaSettingsWorkflowStates.OVERVIEW, provider: null});
+  }
+
+  /**
+   * Set the selected provider and the next step
+   * @params {string} next setup state
+   * @returns {void}
+   */
+  setProvider(provider) {
+    this.setState({provider});
+  }
+
+  /**
+   * Validate the totp provider with code and uri provided during setup
+   * @param {string} otpProvisioningUri
+   * @param {string} totp
+   * @returns {Promise<void>}
+   */
+  async validateTotpCode(otpProvisioningUri, totp) {
+    try {
+      this.setProcessing(true);
+      await this.props.context.port.request("passbolt.mfa-setup.verify-totp-code", {
+        otpProvisioningUri,
+        totp
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  /**
+   * Validate the totp provider with code and uri provided during setup
+   * @param {string} hotp
+   * @returns {Promise<void>}
+   */
+  async validateYubikeyCode(hotp) {
+    try {
+      this.setProcessing(true);
+      await this.props.context.port.request("passbolt.mfa-setup.verify-yubikey-code", {
+        hotp
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      this.setProcessing(false);
+    }
+  }
+
+  /**
+   * Delete the totp provider from configuration
+   * @returns {Promise<void>}
+   */
+  async removeProvider() {
+    try {
+      this.setProcessing(true);
+      await this.props.context.port.request("passbolt.mfa-setup.remove-provider", {provider: this.state.provider});
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      this.setProcessing(false);
+    }
   }
 
   /**

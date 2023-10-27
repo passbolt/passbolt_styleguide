@@ -88,6 +88,7 @@ class InFormManager {
     const newPasswordFields = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
     const newFields = newUsernameFields.concat(newPasswordFields);
     if (newFields.length > 0) {
+      this.removeCallToActionFieldsNotMatches(newFields);
       this.callToActionFields = newFields.map(newField => {
         const matchField = fieldToMatch => callToActionField => callToActionField.field === fieldToMatch;
         const existingField = this.callToActionFields.find(matchField(newField));
@@ -98,6 +99,16 @@ class InFormManager {
       this.clean();
       this.callToActionFields = [];
     }
+  }
+
+  /**
+   * Remove call to action fields that is not match new fields
+   * @param newFields The new fields
+   */
+  removeCallToActionFieldsNotMatches(newFields) {
+    const matchField = callToActionField => fieldToMatch => callToActionField.field === fieldToMatch;
+    const callToActionFieldsToRemove = this.callToActionFields.filter(field => !newFields.some(matchField(field)));
+    callToActionFieldsToRemove.forEach(field => field.removeCallToActionIframe());
   }
 
   /**
@@ -267,9 +278,10 @@ class InFormManager {
    */
   handleFillPassword() {
     port.on('passbolt.web-integration.fill-password', password => {
-      this.callToActionFields
-        .filter(callToActionField => callToActionField.fieldType === 'password')
-        .forEach(callToActionField => fireEvent.input(callToActionField.field, {target: {value: password}}));
+      const passwordFields = this.callToActionFields
+        .filter(callToActionField => callToActionField.fieldType === 'password');
+      // Autofill only empty passwords field
+      passwordFields.forEach(callToActionField => !callToActionField.field.value && fireEvent.input(callToActionField.field, {target: {value: password}}));
       this.menuField.removeMenuIframe();
       // Listen the auto-save on the appropriate form field
       const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));

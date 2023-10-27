@@ -104,7 +104,7 @@ class HomePage extends React.Component {
         continue;
       }
 
-      if (canSuggestUrl(activeTabUrl, resources[i].uri)) {
+      if (canSuggestUrl(activeTabUrl, resources[i].uri) && this.isPasswordResource(resources[i].resource_type_id)) {
         suggestedResources.push(resources[i]);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
@@ -190,8 +190,24 @@ class HomePage extends React.Component {
     }
   }
 
+  /**
+   * Is password resource
+   * @return {boolean}
+   */
+  isPasswordResource(resourceId) {
+    return !this.areResourceTypesEnabled || this.props.context.resourceTypesSettings.assertResourceTypeIdHasPassword(resourceId);
+  }
+
+  /**
+   * Are resource types enabled resource
+   * @return {boolean}
+   */
+  get areResourceTypesEnabled() {
+    return this.props.context.resourceTypesSettings.areResourceTypesEnabled();
+  }
+
   render() {
-    const isReady = this.state.resources !== null;
+    const isReady = this.state.resources !== null && this.props.context.resourceTypesSettings != null;
     const showSuggestedSection = !this.props.context.search.length;
     const showBrowsedResourcesSection = this.props.context.search.length > 0;
     const showFiltersSection = !this.props.context.search.length;

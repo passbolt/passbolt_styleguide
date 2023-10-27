@@ -65,23 +65,6 @@ export function hasChangedPolicyProps(props = {}) {
   return defaultProps(Object.assign(_props, props));
 }
 
-/**
- * Format date in time ago
- * @param {string} date The date to format
- * @return {string}
- */
-export function formatDateTimeAgo(date) {
-  if (date === null) {
-    return "n/a";
-  }
-  if (date === 'Infinity') {
-    return "Never";
-  }
-  const dateTime = DateTime.fromISO(date);
-  const duration = dateTime.diffNow().toMillis();
-  return duration > -1000 && duration < 0 ? 'Just now' : dateTime.toRelative();
-}
-
 export function formatDate(date) {
   return DateTime.fromJSDate(new Date(date)).setLocale("en-UK").toLocaleString(DateTime.DATETIME_FULL);
 }

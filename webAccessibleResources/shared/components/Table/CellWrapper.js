@@ -1,5 +1,5 @@
 /**
- * Passbolt ~ Open source TableHeader manager for teams
+ * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
@@ -73,7 +73,7 @@ class CellWrapper extends Component {
 }
 
 CellWrapper.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired, // The value to display
+  value: PropTypes.any, // The value to display
   column: PropTypes.instanceOf(ColumnModel).isRequired, // The columns to display
   isSelected: PropTypes.bool // The isSelected boolean property
 };

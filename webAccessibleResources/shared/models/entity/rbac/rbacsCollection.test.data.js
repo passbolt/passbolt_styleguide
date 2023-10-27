@@ -27,6 +27,8 @@ export const defaultSettingsRbacsCollectionData = [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SECRETS_COPY})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SHARE_VIEW_LIST})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})}),
+  defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
+  defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
 ];
 
 export const userSettingsRbacsCollectionData = () => defaultSettingsRbacsCollectionData.filter(rbac => rbac.role_id === TEST_ROLE_USER_ID);
@@ -42,4 +44,6 @@ export const settingsRbacsCollectionData = () => [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SECRETS_COPY})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.SHARE_VIEW_LIST})}),
   denyRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.USERS_VIEW_WORKSPACE})}),
+  defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
+  defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
 ];

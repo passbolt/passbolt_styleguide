@@ -18,14 +18,12 @@
 import DisplayAccountRecoveryUserSettingsPage from "./DisplayAccountRecoveryUserSettings.test.page";
 import {defaultProps, mockedData, getAccountRecoveryUserService} from "./DisplayAccountRecoveryUserSettings.test.data";
 import {waitFor} from "@testing-library/react";
-import {DateTime} from "luxon";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
+import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
 
 beforeEach(() => {
   jest.resetModules();
 });
-
-const formatDateTimeAgo = (date, locale) => DateTime.fromISO(date).toRelative({locale});
 
 describe("DisplayAccountRecoveryUserSettings", () => {
   /**

@@ -626,6 +626,77 @@ button.link.inline {
 button.link.no-border {
   border: none;
 }
+button.link-icon {
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: 0;
+  padding: 0;
+  text-align: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  vertical-align: inherit;
+  box-shadow: none;
+  min-width: inherit;
+}
+button.link-icon .svg-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+button.link-icon .link-label {
+  border-bottom: 1px solid #515151;
+}
+button.link-icon:focus {
+  box-shadow: none;
+}
+button.link-icon:focus .link-label {
+  border-bottom: 1px solid #515151;
+}
+button.link-icon:focus-visible {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 1px #2894DF;
+  outline: 0;
+}
+button.link-icon:focus-visible .link-label {
+  border: none;
+}
+button.link-icon:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: #2894DF;
+  --icon-color: #2894DF;
+}
+button.link-icon:hover .link-label {
+  border-bottom: 1px solid #2894DF;
+  box-shadow: none;
+}
+button.link-icon:active {
+  --icon-color: #2894DF;
+}
+button.link-icon:active .link-label {
+  background: transparent;
+  outline: 0;
+  color: #2894DF;
+  margin-bottom: 0.1rem;
+  border: none;
+  box-shadow: none;
+}
+button.link-icon:disabled {
+  cursor: default;
+  pointer-events: none;
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  box-shadow: none;
+  color: #FFFFFF;
+  --icon-color: #FFFFFF;
+  opacity: 0.5;
+}
+button.link-icon:disabled .link-label {
+  border-bottom: 1px solid #515151;
+}
 /* lists */
 ul {
   padding: 0;
@@ -987,12 +1058,19 @@ label:active {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required > label:after {
+.required > label:after,
+.required .label-required-inline > label:after {
   content: "\002A";
   /* unicode character * */
   color: #D40101;
   font-weight: bold;
   margin-left: 0.4rem;
+}
+.required .label-required-inline {
+  display: flex;
+}
+.required .label-required-inline label + .tooltip {
+  margin-left: 0.5rem;
 }
 .input.error label {
   color: #D40101;
@@ -1005,7 +1083,8 @@ label:active {
 .input.file.disabled label,
 .input.textarea.disabled label,
 .input.select-wrapper.disabled label,
-.input.checkbox-wrapper.disabled label {
+.input.checkbox-wrapper.disabled label,
+.input-totp-wrapper.disabled label {
   opacity: 0.5;
 }
 .input.text label,
@@ -1013,7 +1092,8 @@ label:active {
 .input.file label,
 .input.textarea label,
 .input.select-wrapper label,
-.input.checkbox-wrapper label {
+.input.checkbox-wrapper label,
+.input-totp-wrapper label {
   margin-bottom: 1.2rem;
 }
 /*
@@ -2248,7 +2328,7 @@ input[type=file] {
     stroke: #D40101;
   }
 }
-.svg-icon.baseline svg {
+.svg-icon.baseline {
   top: 0.125em;
   position: relative;
 }
@@ -2265,7 +2345,6 @@ button.fav .svg-icon.star svg {
 button .svg-icon + span:not(.visuallyhidden),
 a .svg-icon + span:not(.visuallyhidden) {
   margin-left: 0.8rem;
-  display: inline-block;
 }
 .icon-feedback .success {
   background: url('../../../img/controls/success.svg') no-repeat;
@@ -3213,9 +3292,28 @@ html {
 .accordion.closed .accordion-content {
   display: none;
 }
+.dialog .accordion.accordion-section,
+.login .accordion.accordion-section {
+  border-top: 1px solid #101010;
+  padding: 1.6rem;
+  margin: 0;
+}
 .dialog .accordion .accordion-header,
 .login .accordion .accordion-header {
   margin-bottom: 1.2rem;
+}
+.dialog .accordion .accordion-header h4,
+.login .accordion .accordion-header h4 {
+  margin: 0;
+  display: block;
+}
+.dialog .accordion .accordion-header h4 button,
+.login .accordion .accordion-header h4 button {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 2.1rem;
+  width: 100%;
+  justify-content: space-between;
 }
 .dialog .accordion .accordion-header button,
 .login .accordion .accordion-header button {
@@ -3226,6 +3324,9 @@ html {
 .dialog .accordion .accordion-header button .svg-icon,
 .login .accordion .accordion-header button .svg-icon {
   margin-left: 0.5rem;
+}
+.accordion.sidebar-section .svg-icon.exclamation {
+  --icon-exclamation-background-color: #DD6A00;
 }
 .accordion.sidebar-section .accordion-header button {
   border: 0;
@@ -3238,7 +3339,6 @@ html {
   right: inherit;
   margin-left: 0.8rem;
   padding-right: 0.3rem;
-  --icon-exclamation-background-color: #DD6A00;
 }
 .accordion.navigation-secondary .accordion-content > .empty-content {
   padding: 0 0 0 3.2rem;
@@ -3461,6 +3561,10 @@ html {
 .dialog .dialog-body {
   background: #202020;
   padding: 1.6rem;
+}
+.dialog .form-content.no-padding,
+.dialog .dialog-body.no-padding {
+  padding: 0;
 }
 .dialog .form-content > *,
 .dialog .dialog-body > * {
@@ -4102,7 +4206,7 @@ html {
   font-size: 0.85em;
   top: 0;
   position: absolute;
-  z-index: 99;
+  z-index: 200;
   height: 2em;
   padding-top: 1em;
   width: 60%;
@@ -4935,6 +5039,33 @@ iframe.cachette {
   height: 2.1rem;
   margin: 0.6rem;
 }
+.sso-login-form .sso-login-button.oauth2 {
+  box-shadow: inset 0 0 0 1px #353535;
+  /* hover */
+  /* focus */
+  /* active */
+}
+.sso-login-form .sso-login-button.oauth2:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #202020;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: none;
+}
+.sso-login-form .sso-login-button.oauth2:focus,
+.sso-login-form .sso-login-button.oauth2:focus-visible {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 1px #2894DF;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: none;
+  outline: 0;
+}
+.sso-login-form .sso-login-button.oauth2:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #202020;
+  background: #101010;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: none;
+}
 .flex-container.outer {
   display: flex;
   flex-wrap: wrap;
@@ -5713,6 +5844,201 @@ html.launching .launching-screen p {
     margin: 0 0 1.6rem 1.6rem;
     width: calc(100% - 32px);
   }
+}
+.mfa-setup .mfa-providers {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.mfa-setup .mfa-providers:before,
+.mfa-setup .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa-setup .mfa-providers:after {
+  clear: both;
+}
+.mfa-setup .mfa-providers:before,
+.mfa-setup .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa-setup .mfa-providers:after {
+  clear: both;
+}
+.mfa-setup .mfa-providers li {
+  float: left;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+  width: 12.5em;
+  margin-bottom: 2em;
+  margin-right: 2em;
+  border: 1px solid #000000;
+}
+.mfa-setup .mfa-providers li:hover {
+  border: 1px solid #202020;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+}
+.mfa-setup .mfa-providers a {
+  border-bottom: 1px solid #000000;
+  display: block;
+  text-align: center;
+}
+.mfa-setup .mfa-providers a span {
+  padding: 1em 0 2em 0;
+  display: block;
+}
+.mfa-setup .mfa-providers a .provider-img {
+  display: block;
+  padding: 2em 0 0.5em 0;
+}
+.mfa-setup .mfa-providers a .provider-img svg {
+  height: 5em;
+}
+.mfa-setup .mfa-providers .mfa-provider-status {
+  padding: 1em;
+  background: #444442;
+  text-align: center;
+}
+.mfa-setup .how-it-works .instruction {
+  display: flex;
+  width: calc(100% - 3.2rem);
+  max-width: 100.8rem;
+  gap: 1.6rem;
+  justify-content: center;
+  align-items: baseline;
+}
+.mfa-setup .how-it-works .instruction.no-margin-top {
+  margin-top: 0;
+}
+.mfa-setup .how-it-works .instruction .step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mfa-setup .how-it-works .instruction .step svg {
+  flex: 1;
+  width: 100%;
+  height: auto;
+}
+.mfa-setup .how-it-works .instruction .step p {
+  margin: 0 1.6rem;
+}
+.mfa-setup .actions-wrapper {
+  display: flex;
+  margin-top: 3.6rem;
+  clear: both;
+}
+.mfa-setup .actions-wrapper button + button {
+  margin-left: 1.6rem;
+}
+.mfa-setup .yubikey-setup .input {
+  display: block;
+  background: initial;
+  margin-bottom: 1.6rem;
+  box-shadow: none;
+}
+.mfa-setup .yubikey-setup .input label {
+  margin-bottom: 1.2rem;
+}
+.mfa-setup .yubikey-setup .input input[type=password] {
+  color: #FFFFFF;
+  background: #000000;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  border-radius: 0.4rem;
+  max-width: 64rem;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:focus {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 0.1rem #2894DF;
+  outline: 0;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:disabled {
+  cursor: default;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  opacity: 0.5;
+}
+.mfa-setup .totp-setup .input-verify {
+  float: left;
+  background: #444442;
+  padding: 2.5em;
+  width: calc(100% - 294px);
+  height: 250px;
+  box-sizing: border-box;
+  border: 3px solid #444442;
+  border-left: 0;
+  margin: 1.6rem 0;
+}
+.mfa-setup .totp-setup .input-verify .helptext {
+  max-width: 18em;
+}
+.mfa-setup .totp-setup .qrcode {
+  float: left;
+  height: 250px;
+  max-width: 262px;
+  box-sizing: border-box;
+  border: 3px solid #444442;
+  margin: 1.6rem 0 1.6rem 1.6rem;
+}
+.mfa-setup .totp-setup .input.password {
+  display: block;
+  background: initial;
+  margin-bottom: 1.6rem;
+  box-shadow: none;
+}
+.mfa-setup .totp-setup .input.password label {
+  margin-bottom: 1.2rem;
+}
+.mfa-setup .totp-setup .input.password input[type=password] {
+  color: #FFFFFF;
+  background: #000000;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  border-radius: 0.4rem;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:focus {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 0.1rem #2894DF;
+  outline: 0;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:disabled {
+  cursor: default;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  opacity: 0.5;
 }
 .page.administration .grid {
   overflow-y: scroll;

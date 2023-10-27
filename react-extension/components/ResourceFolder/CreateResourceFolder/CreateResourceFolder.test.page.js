@@ -15,7 +15,7 @@
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
+import {BrowserRouter as Router} from 'react-router-dom';
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import CreateResourceFolder from "./CreateResourceFolder";
 
@@ -25,16 +25,15 @@ import CreateResourceFolder from "./CreateResourceFolder";
 export default class CreateResourceFolderPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
-      <AppContext.Provider  value={appContext}>
-        <MockTranslationProvider>
-          <CreateResourceFolder {...props}></CreateResourceFolder>
-        </MockTranslationProvider>
-      </AppContext.Provider>
+      <MockTranslationProvider>
+        <Router>
+          <CreateResourceFolder.WrappedComponent {...props}></CreateResourceFolder.WrappedComponent>
+        </Router>
+      </MockTranslationProvider>
     );
   }
 

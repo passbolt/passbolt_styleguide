@@ -14,6 +14,7 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
 import Autocomplete from "./Autocomplete";
+import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
  * The Autocomplete component represented as a page
@@ -25,7 +26,9 @@ export default class AutocompletePage {
    */
   constructor(props) {
     this._page = render(
-      <Autocomplete {...props}/>
+      <MockTranslationProvider>
+        <Autocomplete {...props}/>
+      </MockTranslationProvider>
     );
   }
 

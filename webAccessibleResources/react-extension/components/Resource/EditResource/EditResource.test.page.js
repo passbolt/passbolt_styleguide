@@ -262,6 +262,27 @@ class PasswordEditPageObject {
   }
 
   /**
+   * Returns the add totp button element
+   */
+  get addTotpButton() {
+    return this._container.querySelector('.input.input-totp-wrapper button.add-totp');
+  }
+
+  /**
+   * Returns the edit totp button element
+   */
+  get editTotpButton() {
+    return this._container.querySelector('.input-wrapper-inline.totp .edit-totp');
+  }
+
+  /**
+   * Returns the delete totp button element
+   */
+  get deleteTotpButton() {
+    return this._container.querySelector('.input-wrapper-inline.totp .delete-totp');
+  }
+
+  /**
    * Returns the save button element
    */
   get saveButton() {
@@ -273,14 +294,6 @@ class PasswordEditPageObject {
    */
   get cancelButton() {
     return this._container.querySelector('.submit-wrapper .cancel');
-  }
-
-  get errorDialog() {
-    return this._container.querySelector('.error-dialog');
-  }
-
-  get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
   }
 
   /**

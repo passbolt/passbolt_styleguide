@@ -268,6 +268,11 @@ class EntitySchema {
         validationError.addError(propName, 'format', `The ${propName} is not a valid ${propSchema.format}.`);
       }
     }
+    if (propSchema.notEmpty) {
+      if (!EntitySchema.isValidStringNotEmpty(prop)) {
+        validationError.addError(propName, 'notEmpty', `The ${propName} should be not empty`);
+      }
+    }
     if (propSchema.length) {
       if (!EntitySchema.isValidStringLength(prop, propSchema.length, propSchema.length)) {
         validationError.addError(propName, 'length', `The ${propName} should be ${propSchema.length} character in length.`);
@@ -310,12 +315,12 @@ class EntitySchema {
    */
   static validatePropTypeNumber(propName, prop, propSchema) {
     const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
-    if (propSchema.gte) {
+    if (typeof(propSchema.gte) === 'number') {
       if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.gte)) {
         validationError.addError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`);
       }
     }
-    if (propSchema.lte) {
+    if (typeof(propSchema.lte) === 'number') {
       if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.lte)) {
         validationError.addError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`);
       }
@@ -447,6 +452,15 @@ class EntitySchema {
       default:
         throw new TypeError(`EntitySchema string validation format ${format} is not supported.`);
     }
+  }
+
+  /**
+   * Validate if a string is not empty
+   * @param {string} str
+   * @return {*}
+   */
+  static isValidStringNotEmpty(str) {
+    return !Validator.isEmpty(str, {ignore_whitespace: true});
   }
 
   /**

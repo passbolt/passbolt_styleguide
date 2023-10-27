@@ -13,11 +13,12 @@
  */
 
 import {
-  defaultProps, formatDateTimeAgo, oneUserAccountRequestsApproved, oneUserAccountRequestsPending,
+  defaultProps, oneUserAccountRequestsApproved, oneUserAccountRequestsPending,
   userAccountRequestsApproved, userAccountRequestsRejectedWithPending
 } from "./DisplayUserDetailsAccountRecovery.test.data";
 import DisplayUserDetailsAccountRecoveryPage from "./DisplayUserDetailsAccountRecovery.test.page";
 import HandleReviewAccountRecoveryRequestWorkflow from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
+import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
 
 /**
  * Unit tests on DisplayUserDetailsAccountRecovery in regard of specifications

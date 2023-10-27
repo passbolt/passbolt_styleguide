@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel from "./ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column totp use only with the UI
@@ -23,8 +23,8 @@ class ColumnTotpModel extends ColumnModel {
    * @param {Object} columnDto
    */
   constructor(columnDto = {}) {
-    columnDto.id = 'totp';
-    columnDto.field = 'totp';
+    columnDto.id = ColumnModelTypes.TOTP;
+    columnDto.field = ColumnModelTypes.TOTP;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
     columnDto.resizable = true;

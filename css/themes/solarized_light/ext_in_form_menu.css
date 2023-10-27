@@ -626,6 +626,77 @@ button.link.inline {
 button.link.no-border {
   border: none;
 }
+button.link-icon {
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: 0;
+  padding: 0;
+  text-align: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  vertical-align: inherit;
+  box-shadow: none;
+  min-width: inherit;
+}
+button.link-icon .svg-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+button.link-icon .link-label {
+  border-bottom: 1px solid hsl(44, 50%, 83%);
+}
+button.link-icon:focus {
+  box-shadow: none;
+}
+button.link-icon:focus .link-label {
+  border-bottom: 1px solid hsl(44, 50%, 83%);
+}
+button.link-icon:focus-visible {
+  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%), inset 0 0 0 1px hsl(194, 100%, 15%);
+  outline: 0;
+}
+button.link-icon:focus-visible .link-label {
+  border: none;
+}
+button.link-icon:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: hsl(194, 100%, 15%);
+  --icon-color: hsl(194, 100%, 15%);
+}
+button.link-icon:hover .link-label {
+  border-bottom: 1px solid hsl(194, 100%, 15%);
+  box-shadow: none;
+}
+button.link-icon:active {
+  --icon-color: hsl(194, 100%, 15%);
+}
+button.link-icon:active .link-label {
+  background: transparent;
+  outline: 0;
+  color: hsl(194, 100%, 15%);
+  margin-bottom: 0.1rem;
+  border: none;
+  box-shadow: none;
+}
+button.link-icon:disabled {
+  cursor: default;
+  pointer-events: none;
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  box-shadow: none;
+  color: hsl(194, 81%, 14%);
+  --icon-color: hsl(194, 81%, 14%);
+  opacity: 0.5;
+}
+button.link-icon:disabled .link-label {
+  border-bottom: 1px solid hsl(44, 50%, 83%);
+}
 /* lists */
 ul {
   padding: 0;
@@ -987,12 +1058,19 @@ label:active {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required > label:after {
+.required > label:after,
+.required .label-required-inline > label:after {
   content: "\002A";
   /* unicode character * */
   color: hsl(1, 71%, 52%);
   font-weight: bold;
   margin-left: 0.4rem;
+}
+.required .label-required-inline {
+  display: flex;
+}
+.required .label-required-inline label + .tooltip {
+  margin-left: 0.5rem;
 }
 .input.error label {
   color: hsl(1, 71%, 52%);
@@ -1005,7 +1083,8 @@ label:active {
 .input.file.disabled label,
 .input.textarea.disabled label,
 .input.select-wrapper.disabled label,
-.input.checkbox-wrapper.disabled label {
+.input.checkbox-wrapper.disabled label,
+.input-totp-wrapper.disabled label {
   opacity: 0.5;
 }
 .input.text label,
@@ -1013,7 +1092,8 @@ label:active {
 .input.file label,
 .input.textarea label,
 .input.select-wrapper label,
-.input.checkbox-wrapper label {
+.input.checkbox-wrapper label,
+.input-totp-wrapper label {
   margin-bottom: 1.2rem;
 }
 /*
@@ -2248,7 +2328,7 @@ input[type=file] {
     stroke: hsl(1, 71%, 52%);
   }
 }
-.svg-icon.baseline svg {
+.svg-icon.baseline {
   top: 0.125em;
   position: relative;
 }
@@ -2265,7 +2345,6 @@ button.fav .svg-icon.star svg {
 button .svg-icon + span:not(.visuallyhidden),
 a .svg-icon + span:not(.visuallyhidden) {
   margin-left: 0.8rem;
-  display: inline-block;
 }
 .icon-feedback .success {
   background: url('../../../img/controls/success.svg') no-repeat;

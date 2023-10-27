@@ -626,6 +626,77 @@ button.link.inline {
 button.link.no-border {
   border: none;
 }
+button.link-icon {
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border-radius: 0;
+  padding: 0;
+  text-align: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  vertical-align: inherit;
+  box-shadow: none;
+  min-width: inherit;
+}
+button.link-icon .svg-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+button.link-icon .link-label {
+  border-bottom: 1px solid #515151;
+}
+button.link-icon:focus {
+  box-shadow: none;
+}
+button.link-icon:focus .link-label {
+  border-bottom: 1px solid #515151;
+}
+button.link-icon:focus-visible {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 1px #2894DF;
+  outline: 0;
+}
+button.link-icon:focus-visible .link-label {
+  border: none;
+}
+button.link-icon:hover {
+  text-decoration: none;
+  cursor: pointer;
+  color: #2894DF;
+  --icon-color: #2894DF;
+}
+button.link-icon:hover .link-label {
+  border-bottom: 1px solid #2894DF;
+  box-shadow: none;
+}
+button.link-icon:active {
+  --icon-color: #2894DF;
+}
+button.link-icon:active .link-label {
+  background: transparent;
+  outline: 0;
+  color: #2894DF;
+  margin-bottom: 0.1rem;
+  border: none;
+  box-shadow: none;
+}
+button.link-icon:disabled {
+  cursor: default;
+  pointer-events: none;
+  background: transparent;
+  outline: 0;
+  text-decoration: none;
+  box-shadow: none;
+  color: #FFFFFF;
+  --icon-color: #FFFFFF;
+  opacity: 0.5;
+}
+button.link-icon:disabled .link-label {
+  border-bottom: 1px solid #515151;
+}
 /* lists */
 ul {
   padding: 0;
@@ -987,12 +1058,19 @@ label:active {
 	Description	: Label and input are wrapped in <div.text.required>. Additional <span> with a star is included. Input also get the required class.
 	.required		- additional red star
 */
-.required > label:after {
+.required > label:after,
+.required .label-required-inline > label:after {
   content: "\002A";
   /* unicode character * */
   color: #D40101;
   font-weight: bold;
   margin-left: 0.4rem;
+}
+.required .label-required-inline {
+  display: flex;
+}
+.required .label-required-inline label + .tooltip {
+  margin-left: 0.5rem;
 }
 .input.error label {
   color: #D40101;
@@ -1005,7 +1083,8 @@ label:active {
 .input.file.disabled label,
 .input.textarea.disabled label,
 .input.select-wrapper.disabled label,
-.input.checkbox-wrapper.disabled label {
+.input.checkbox-wrapper.disabled label,
+.input-totp-wrapper.disabled label {
   opacity: 0.5;
 }
 .input.text label,
@@ -1013,7 +1092,8 @@ label:active {
 .input.file label,
 .input.textarea label,
 .input.select-wrapper label,
-.input.checkbox-wrapper label {
+.input.checkbox-wrapper label,
+.input-totp-wrapper label {
   margin-bottom: 1.2rem;
 }
 /*
@@ -2248,7 +2328,7 @@ input[type=file] {
     stroke: #D40101;
   }
 }
-.svg-icon.baseline svg {
+.svg-icon.baseline {
   top: 0.125em;
   position: relative;
 }
@@ -2265,7 +2345,6 @@ button.fav .svg-icon.star svg {
 button .svg-icon + span:not(.visuallyhidden),
 a .svg-icon + span:not(.visuallyhidden) {
   margin-left: 0.8rem;
-  display: inline-block;
 }
 .icon-feedback .success {
   background: url('../../../img/controls/success.svg') no-repeat;
@@ -3213,9 +3292,28 @@ html {
 .accordion.closed .accordion-content {
   display: none;
 }
+.dialog .accordion.accordion-section,
+.login .accordion.accordion-section {
+  border-top: 1px solid #101010;
+  padding: 1.6rem;
+  margin: 0;
+}
 .dialog .accordion .accordion-header,
 .login .accordion .accordion-header {
   margin-bottom: 1.2rem;
+}
+.dialog .accordion .accordion-header h4,
+.login .accordion .accordion-header h4 {
+  margin: 0;
+  display: block;
+}
+.dialog .accordion .accordion-header h4 button,
+.login .accordion .accordion-header h4 button {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 2.1rem;
+  width: 100%;
+  justify-content: space-between;
 }
 .dialog .accordion .accordion-header button,
 .login .accordion .accordion-header button {
@@ -3226,6 +3324,9 @@ html {
 .dialog .accordion .accordion-header button .svg-icon,
 .login .accordion .accordion-header button .svg-icon {
   margin-left: 0.5rem;
+}
+.accordion.sidebar-section .svg-icon.exclamation {
+  --icon-exclamation-background-color: #DD6A00;
 }
 .accordion.sidebar-section .accordion-header button {
   border: 0;
@@ -3238,7 +3339,6 @@ html {
   right: inherit;
   margin-left: 0.8rem;
   padding-right: 0.3rem;
-  --icon-exclamation-background-color: #DD6A00;
 }
 .accordion.navigation-secondary .accordion-content > .empty-content {
   padding: 0 0 0 3.2rem;
@@ -3461,6 +3561,10 @@ html {
 .dialog .dialog-body {
   background: #202020;
   padding: 1.6rem;
+}
+.dialog .form-content.no-padding,
+.dialog .dialog-body.no-padding {
+  padding: 0;
 }
 .dialog .form-content > *,
 .dialog .dialog-body > * {
@@ -4102,7 +4206,7 @@ html {
   font-size: 0.85em;
   top: 0;
   position: absolute;
-  z-index: 99;
+  z-index: 200;
   height: 2em;
   padding-top: 1em;
   width: 60%;
@@ -5001,6 +5105,9 @@ iframe.cachette {
   width: 2.2rem;
   height: 2rem;
 }
+.panel.aside .comments .comment.from-suspended-user {
+  opacity: 0.5;
+}
 .error-details .accordion-header a {
   border: 0;
 }
@@ -5239,6 +5346,9 @@ iframe.cachette {
 .autocomplete-wrapper .autocomplete-content .row.loading .info {
   margin-left: 1.6rem;
 }
+.autocomplete-wrapper .autocomplete-content .autocomplete-item.suspended {
+  opacity: 0.5;
+}
 @media all and (max-width: 440px) {
   .autocomplete-wrapper .autocomplete-content {
     height: auto;
@@ -5257,6 +5367,47 @@ iframe.cachette {
 }
 .input-password-wrapper .password-button-inline button.button-icon {
   margin-left: 0.8rem;
+}
+/*
+	Totp fields in passbolt have a custom layout to accommodate buttons on the left end
+*/
+.input .input-wrapper-inline {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.6rem;
+}
+.input .input-wrapper-inline input {
+  margin: 0;
+}
+.input .input-wrapper-inline input[type="text"] {
+  flex: 1;
+}
+.input .input-wrapper-inline input + span {
+  margin-left: 0.5rem;
+}
+.input .input-wrapper-inline button.button-icon {
+  margin-left: 0.8rem;
+}
+.input.input-totp-wrapper .totp button:disabled {
+  flex: 1;
+  opacity: 1;
+}
+.input.input-totp-wrapper .totp button:disabled .totp-code {
+  font-size: 1.8rem;
+}
+.input.input-totp-wrapper .totp button:disabled .totp-code + .svg-icon.timer {
+  margin-left: 1rem;
+}
+.input.input-totp-wrapper .totp button:disabled .totp-code + .svg-icon.timer svg {
+  width: 2rem;
+  height: 2rem;
+  --timer-stroke-width: 0.24rem;
+}
+.input.input-totp-wrapper.disabled .totp button:disabled {
+  opacity: 0.5;
+}
+.totp-code + .svg-icon.timer {
+  margin-left: 0.5rem;
 }
 /** Specific layout for connection info field
  This layout contains 3 fields on a single line:
@@ -5664,6 +5815,12 @@ iframe.cachette {
   top: 0;
   left: 0;
 }
+.dialog .permissions li.suspended .avatar,
+.dialog .permissions li.suspended .aro .aro-name .ellipsis,
+.dialog .permissions li.suspended .aro-details,
+.dialog .permissions li.suspended .permission_changes {
+  opacity: 0.5;
+}
 /* hide icons if there is no space */
 @media all and (max-width: 480px) {
   .dialog .permissions.scroll {
@@ -5844,6 +6001,11 @@ iframe.cachette {
   top: 1.6rem;
   padding: 0;
 }
+.panel.aside .sidebar-header.suspended .teaser-image,
+.panel.aside .sidebar-header.suspended .title-wrapper .name,
+.panel.aside .sidebar-header.suspended .subtitle {
+  opacity: 0.5;
+}
 .panel.aside .sidebar-section {
   border-top: 1px solid #202020;
   font-size: 1.4rem;
@@ -5972,10 +6134,6 @@ iframe.cachette {
   max-width: calc(100% - 3rem);
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.panel.aside .detailed-information li.password .value .secret .svg-icon.timer,
-.panel.aside .detailed-information li.totp .value .secret .svg-icon.timer {
-  margin-left: 0.5rem;
 }
 .panel.aside .detailed-information li.password .password-view,
 .panel.aside .detailed-information li.totp .password-view,
@@ -6372,6 +6530,12 @@ iframe.cachette {
 .tableview table tbody tr.selected button {
   color: #FFFFFF;
 }
+.tableview table tbody tr.suspended td {
+  opacity: 0.5;
+}
+.tableview table tbody tr.suspended td.cell-checkbox {
+  opacity: 1;
+}
 .tableview table tbody tr:hover {
   background: #101010;
   color: #FFFFFF;
@@ -6431,16 +6595,14 @@ iframe.cachette {
 }
 .tableview table td.attention-required .svg-icon.exclamation svg {
   margin-left: 0.25rem;
+}
+.tableview table td .svg-icon.exclamation svg {
   --icon-exclamation-background-color: #DD6A00;
 }
 .tableview table td.cell-password .secret,
 .tableview table td.cell-totp .secret {
   float: left;
   max-width: calc(100% - 3rem);
-}
-.tableview table td.cell-password .secret .svg-icon.timer,
-.tableview table td.cell-totp .secret .svg-icon.timer {
-  margin-left: 0.5rem;
 }
 .tableview table td.cell-password .password-view,
 .tableview table td.cell-totp .password-view,
@@ -6969,6 +7131,11 @@ table.table-info.horizontal tbody tr:hover {
 .usercard-col-2 ul.permissions-list li .type span.removed {
   background-color: #D40101;
 }
+.usercard-col-2.suspended .avatar,
+.usercard-col-2.suspended .name,
+.usercard-col-2.suspended .subinfo {
+  opacity: 0.5;
+}
 .usercard-detailed-col-2 {
   /*
      * Clearfix: contain floats
@@ -7094,6 +7261,11 @@ table.table-info.horizontal tbody tr:hover {
 }
 .usercard-detailed-col-2 ul.permissions-list li .type span.removed {
   background-color: #D40101;
+}
+.usercard-detailed-col-2.suspended .avatar,
+.usercard-detailed-col-2.suspended .name,
+.usercard-detailed-col-2.suspended .subinfo {
+  opacity: 0.5;
 }
 @keyframes highlight {
   from {
@@ -7239,6 +7411,33 @@ table.table-info.horizontal tbody tr:hover {
   width: 2.1rem;
   height: 2.1rem;
   margin: 0.6rem;
+}
+.sso-login-form .sso-login-button.oauth2 {
+  box-shadow: inset 0 0 0 1px #353535;
+  /* hover */
+  /* focus */
+  /* active */
+}
+.sso-login-form .sso-login-button.oauth2:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #202020;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: none;
+}
+.sso-login-form .sso-login-button.oauth2:focus,
+.sso-login-form .sso-login-button.oauth2:focus-visible {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 1px #2894DF;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: none;
+  outline: 0;
+}
+.sso-login-form .sso-login-button.oauth2:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #202020;
+  background: #101010;
+  color: #FFFFFF;
+  text-decoration: none;
+  border: none;
 }
 .sso-settings.third-party-provider-settings .provider {
   width: 13rem;
@@ -7406,6 +7605,13 @@ table.table-info.horizontal tbody tr:hover {
   border-bottom: 1px solid #202020;
   padding: 0.5em 1.25em;
   overflow: hidden;
+}
+.checkbox-wrapper span label {
+  font-weight: normal;
+}
+.checkbox-wrapper .tooltip {
+  margin-left: 0.8rem;
+  line-height: 1rem;
 }
 .organization-recover-key-dialog .tabs-nav--bordered {
   margin: 0;
@@ -8123,4 +8329,460 @@ table.table-info.horizontal tbody tr:hover {
   height: 0.1rem;
   background-color: #101010;
   border: none;
+}
+#setup-mfa {
+  width: 100%;
+  height: calc(100% - 3.9rem);
+  display: block;
+}
+.mfa.iframe {
+  background: #353535;
+}
+.mfa.iframe .grid-responsive-12,
+.mfa.iframe .grid {
+  height: 100%;
+  margin-right: 1.6rem;
+  max-width: none;
+}
+.mfa.iframe .grid-responsive-12 .row,
+.mfa.iframe .grid .row {
+  margin: 0;
+}
+.mfa.iframe .grid-responsive-12 .row form .actions-wrapper,
+.mfa.iframe .grid .row form .actions-wrapper {
+  margin-top: 3.6rem;
+}
+.mfa.iframe .grid-responsive-12 form.yubikey-setup,
+.mfa.iframe .grid form.yubikey-setup {
+  height: 100%;
+}
+.mfa.iframe .actions-wrapper {
+  display: flex;
+  margin-top: 3.6rem;
+  clear: both;
+}
+.mfa.iframe .actions-wrapper a + a,
+.mfa.iframe .actions-wrapper a + button {
+  margin-left: 1.6rem;
+}
+.mfa.iframe .totp-setup .input-verify {
+  float: left;
+  background: #444442;
+  padding: 2.5em;
+  width: calc(100% - 294px);
+  height: 262px;
+  box-sizing: border-box;
+  border: 3px solid #444442;
+  border-left: 0;
+  margin: 1.6rem 0;
+}
+.mfa.iframe .totp-setup .input-verify .helptext {
+  max-width: 18em;
+}
+.mfa.iframe .totp-setup .qrcode {
+  float: left;
+  max-width: 262px;
+  box-sizing: border-box;
+  max-height: 262px;
+  border: 3px solid #444442;
+  margin: 1.6rem 0 1.6rem 1.6rem;
+}
+.mfa.iframe .totp-setup .input.password {
+  display: block;
+  background: initial;
+  margin-bottom: 1.6rem;
+  box-shadow: none;
+}
+.mfa.iframe .totp-setup .input.password label {
+  margin-bottom: 1.2rem;
+}
+.mfa.iframe .totp-setup .input.password input[type=password] {
+  color: #FFFFFF;
+  background: #000000;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  border-radius: 0.4rem;
+}
+.mfa.iframe .totp-setup .input.password input[type=password]:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa.iframe .totp-setup .input.password input[type=password]:focus {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 0.1rem #2894DF;
+  outline: 0;
+}
+.mfa.iframe .totp-setup .input.password input[type=password]:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa.iframe .totp-setup .input.password input[type=password]:disabled {
+  cursor: default;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  opacity: 0.5;
+}
+.mfa.iframe .yubikey-setup .input.password {
+  display: block;
+  background: initial;
+  margin-bottom: 1.6rem;
+  box-shadow: none;
+}
+.mfa.iframe .yubikey-setup .input.password label {
+  margin-bottom: 1.2rem;
+}
+.mfa.iframe .yubikey-setup .input.password input[type=password] {
+  color: #FFFFFF;
+  background: #000000;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  border-radius: 0.4rem;
+  max-width: 64rem;
+}
+.mfa.iframe .yubikey-setup .input.password input[type=password]:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa.iframe .yubikey-setup .input.password input[type=password]:focus {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 0.1rem #2894DF;
+  outline: 0;
+}
+.mfa.iframe .yubikey-setup .input.password input[type=password]:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa.iframe .yubikey-setup .input.password input[type=password]:disabled {
+  cursor: default;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  opacity: 0.5;
+}
+.mfa.iframe .how-it-works .instruction {
+  display: flex;
+  width: calc(100% - 3.2rem);
+  max-width: 100.8rem;
+  gap: 1.6rem;
+  justify-content: center;
+  align-items: baseline;
+}
+.mfa.iframe .how-it-works .instruction.no-margin-top {
+  margin-top: 0;
+}
+.mfa.iframe .how-it-works .instruction .step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mfa.iframe .how-it-works .instruction .step svg {
+  flex: 1;
+  width: 100%;
+  height: auto;
+}
+.mfa.iframe .how-it-works .instruction .step p {
+  margin: 0 1.6rem;
+}
+.mfa.iframe .mfa-providers {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.mfa.iframe .mfa-providers:before,
+.mfa.iframe .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa.iframe .mfa-providers:after {
+  clear: both;
+}
+.mfa.iframe .mfa-providers:before,
+.mfa.iframe .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa.iframe .mfa-providers:after {
+  clear: both;
+}
+.mfa.iframe .mfa-providers li {
+  float: left;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+  width: 12.5em;
+  margin-bottom: 2em;
+  margin-right: 2em;
+  border: 1px solid #000000;
+}
+.mfa.iframe .mfa-providers li:hover {
+  border: 1px solid #202020;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+}
+.mfa.iframe .mfa-providers a {
+  border-bottom: 1px solid #000000;
+  display: block;
+  text-align: center;
+}
+.mfa.iframe .mfa-providers a span {
+  padding: 1em 0 2em 0;
+  display: block;
+}
+.mfa.iframe .mfa-providers a img {
+  display: block;
+  padding: 2em 0 0.5em 0;
+  height: 5em;
+}
+.mfa.iframe .mfa-providers .mfa-provider-status {
+  padding: 1em;
+  background: #444442;
+  text-align: center;
+}
+.mfa.iframe .mfa-trusted-device {
+  padding: 1em;
+  display: flex;
+}
+.mfa.iframe .mfa-trusted-device:nth-child(even) {
+  background: #444442;
+}
+.mfa.iframe .mfa-trusted-device .device {
+  flex: 1;
+  font-size: 2.5em;
+  text-align: center;
+  color: #CACACA;
+}
+.mfa.iframe .mfa-trusted-device .device.current:before {
+  content: '\2022';
+  /* unicode character • */
+  color: #009900;
+  font-size: 0.75em;
+  position: absolute;
+  margin-left: -0.5em;
+}
+.mfa.iframe .mfa-trusted-device .session {
+  flex: 2 0 10em;
+}
+.mfa.iframe .mfa-trusted-device .action {
+  flex: 1;
+  padding-top: 0.5em;
+}
+.mfa.iframe .mfa-trusted-device table td,
+.mfa.iframe .mfa-trusted-device table th {
+  padding: 0.125em 1em;
+}
+.mfa.iframe .mfa-trusted-device table th {
+  font-weight: bold;
+}
+@media all and (max-width: 780px) {
+  .totp-setup .input-verify {
+    margin: 0 0 1.6rem 1.6rem;
+    width: calc(100% - 32px);
+  }
+}
+.mfa-setup .mfa-providers {
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+  /*
+     * Clearfix: contain floats
+     *
+     * For modern browsers
+     * 1. The space content is one way to avoid an Opera bug when the
+     *	`contenteditable` attribute is included anywhere else in the document.
+     *	Otherwise it causes space to appear at the top and bottom of elements
+     *	that receive the `clearfix` class.
+     * 2. The use of `table` rather than `block` is only necessary if using
+     *	`:before` to contain the top-margins of child elements.
+     */
+}
+.mfa-setup .mfa-providers:before,
+.mfa-setup .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa-setup .mfa-providers:after {
+  clear: both;
+}
+.mfa-setup .mfa-providers:before,
+.mfa-setup .mfa-providers:after {
+  content: "";
+  display: table;
+}
+.mfa-setup .mfa-providers:after {
+  clear: both;
+}
+.mfa-setup .mfa-providers li {
+  float: left;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+  width: 12.5em;
+  margin-bottom: 2em;
+  margin-right: 2em;
+  border: 1px solid #000000;
+}
+.mfa-setup .mfa-providers li:hover {
+  border: 1px solid #202020;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+}
+.mfa-setup .mfa-providers a {
+  border-bottom: 1px solid #000000;
+  display: block;
+  text-align: center;
+}
+.mfa-setup .mfa-providers a span {
+  padding: 1em 0 2em 0;
+  display: block;
+}
+.mfa-setup .mfa-providers a .provider-img {
+  display: block;
+  padding: 2em 0 0.5em 0;
+}
+.mfa-setup .mfa-providers a .provider-img svg {
+  height: 5em;
+}
+.mfa-setup .mfa-providers .mfa-provider-status {
+  padding: 1em;
+  background: #444442;
+  text-align: center;
+}
+.mfa-setup .how-it-works .instruction {
+  display: flex;
+  width: calc(100% - 3.2rem);
+  max-width: 100.8rem;
+  gap: 1.6rem;
+  justify-content: center;
+  align-items: baseline;
+}
+.mfa-setup .how-it-works .instruction.no-margin-top {
+  margin-top: 0;
+}
+.mfa-setup .how-it-works .instruction .step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mfa-setup .how-it-works .instruction .step svg {
+  flex: 1;
+  width: 100%;
+  height: auto;
+}
+.mfa-setup .how-it-works .instruction .step p {
+  margin: 0 1.6rem;
+}
+.mfa-setup .actions-wrapper {
+  display: flex;
+  margin-top: 3.6rem;
+  clear: both;
+}
+.mfa-setup .actions-wrapper button + button {
+  margin-left: 1.6rem;
+}
+.mfa-setup .yubikey-setup .input {
+  display: block;
+  background: initial;
+  margin-bottom: 1.6rem;
+  box-shadow: none;
+}
+.mfa-setup .yubikey-setup .input label {
+  margin-bottom: 1.2rem;
+}
+.mfa-setup .yubikey-setup .input input[type=password] {
+  color: #FFFFFF;
+  background: #000000;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  border-radius: 0.4rem;
+  max-width: 64rem;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:focus {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 0.1rem #2894DF;
+  outline: 0;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .yubikey-setup .input input[type=password]:disabled {
+  cursor: default;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  opacity: 0.5;
+}
+.mfa-setup .totp-setup .input-verify {
+  float: left;
+  background: #444442;
+  padding: 2.5em;
+  width: calc(100% - 294px);
+  height: 250px;
+  box-sizing: border-box;
+  border: 3px solid #444442;
+  border-left: 0;
+  margin: 1.6rem 0;
+}
+.mfa-setup .totp-setup .input-verify .helptext {
+  max-width: 18em;
+}
+.mfa-setup .totp-setup .qrcode {
+  float: left;
+  height: 250px;
+  max-width: 262px;
+  box-sizing: border-box;
+  border: 3px solid #444442;
+  margin: 1.6rem 0 1.6rem 1.6rem;
+}
+.mfa-setup .totp-setup .input.password {
+  display: block;
+  background: initial;
+  margin-bottom: 1.6rem;
+  box-shadow: none;
+}
+.mfa-setup .totp-setup .input.password label {
+  margin-bottom: 1.2rem;
+}
+.mfa-setup .totp-setup .input.password input[type=password] {
+  color: #FFFFFF;
+  background: #000000;
+  padding: 0.8rem 0.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  border-radius: 0.4rem;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:focus {
+  box-shadow: 0 0 0.4rem #2a9ceb, inset 0 0 0 0.1rem #2894DF;
+  outline: 0;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:active {
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px #000000;
+}
+.mfa-setup .totp-setup .input.password input[type=password]:disabled {
+  cursor: default;
+  box-shadow: inset 0 0 0 0.1rem #000000;
+  opacity: 0.5;
 }

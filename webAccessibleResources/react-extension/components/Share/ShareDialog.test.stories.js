@@ -2,15 +2,14 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../../shared/context/AppContext/AppContext";
-import {autocompleteResult, resources} from "./ShareDialog.test.data";
-
+import {autocompleteResult, defaultAppContext, resources} from "./ShareDialog.test.data";
 
 export default {
   title: 'Components/Share/ShareDialog',
   component: ShareDialog
 };
 
-const context = {
+const context = defaultAppContext({
   userSettings: {
     getTrustedDomain: () => (new URL(window.location.href)).origin
   },
@@ -27,9 +26,7 @@ const context = {
       }
     }
   },
-  setContext: () => {}
-};
-
+});
 
 const Template = args =>
   <AppContext.Provider value={args.context}>

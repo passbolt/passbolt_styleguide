@@ -3,25 +3,18 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import MockPort from "../../../react-extension/test/mock/MockPort";
-import UserSettings from "../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
 import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
 import {defaultPasswordPoliciesContext} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 
 export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: {
-      canIUse: () => true
-    },
+  const defaultAppContext = defaultUserAppContext({
     isAuthenticated: true,
     getOpenerTabId: () => null,
     getBootstrapFeature: () => null,
     getDetached: () => false,
-  };
+  });
   return Object.assign(defaultAppContext, appContext || {});
 }
 

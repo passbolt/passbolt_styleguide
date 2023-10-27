@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel from "./ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column modified use only with the UI
@@ -23,8 +23,8 @@ class ColumnModifiedModel extends ColumnModel {
    * @param {Object} columnDto
    */
   constructor(columnDto = {}) {
-    columnDto.id = 'modified';
-    columnDto.field = 'modified';
+    columnDto.id = ColumnModelTypes.MODIFIED;
+    columnDto.field = ColumnModelTypes.MODIFIED;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
     columnDto.resizable = true;

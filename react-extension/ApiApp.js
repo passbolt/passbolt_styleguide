@@ -87,6 +87,7 @@ class ApiApp extends Component {
                                     "/app/administration/account-recovery",
                                     "/app/administration/password-policies",
                                     "/app/administration/user-passphrase-policies",
+                                    "/app/administration/password-expiry",
                                   ]}/>
                                   <Route path="/app/administration">
                                     <AdministrationWorkspaceContextProvider>

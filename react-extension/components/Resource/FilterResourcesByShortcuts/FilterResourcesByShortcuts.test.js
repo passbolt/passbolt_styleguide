@@ -16,21 +16,17 @@
  * Unit tests on FilterResourcesByShortcuts in regard of specifications
  */
 
-
-import {
-  defaultAppContext, defaultProps
-} from "./FilterResourcesByShortcuts.test.data";
+import {defaultProps} from "./FilterResourcesByShortcuts.test.data";
 import FilterResourcesByShortcutsPage from "./FilterResourcesByShortcuts.test.page";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import each from "jest-each";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("See Resource FilterResourcesByShortcuts", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-
   describe(' As LU I can see the filter type selected', () => {
     /**
      * Given a selected filter type
@@ -38,76 +34,37 @@ describe("See Resource FilterResourcesByShortcuts", () => {
      */
 
     it('As LU I should see the filter by shortcuts', () => {
-      const props = defaultProps(ResourceWorkspaceFilterTypes.ALL); // The props
-      page = new FilterResourcesByShortcutsPage(context, props);
+      const props = defaultProps(); // The prop
+      const page = new FilterResourcesByShortcutsPage(props);
       expect(page.exists()).toBeTruthy();
     });
+  });
 
-    it('I should be able to identify the filter all items', async() => {
-      const props = defaultProps(ResourceWorkspaceFilterTypes.ALL); // The props
-      page = new FilterResourcesByShortcutsPage(context, props);
-      await page.selectItem(1);
-      expect(page.itemSelected).toBe("All items");
-      const pathname = '/app/passwords';
-      const state = {
-        filter: {
-          type: ResourceWorkspaceFilterTypes.ALL
+  each([
+    {filter: ResourceWorkspaceFilterTypes.ALL, itemSelected: "All items", itemIndex: 1},
+    {filter: ResourceWorkspaceFilterTypes.FAVORITE, itemSelected: "Favorites", itemIndex: 2},
+    {filter: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED, itemSelected: "Recently modified", itemIndex: 3},
+    {filter: ResourceWorkspaceFilterTypes.SHARED_WITH_ME, itemSelected: "Shared with me", itemIndex: 4},
+    {filter: ResourceWorkspaceFilterTypes.ITEMS_I_OWN, itemSelected: "Owned by me", itemIndex: 5},
+    {filter: ResourceWorkspaceFilterTypes.EXPIRED, itemSelected: "Expired", pathname: "/app/passwords/filter/expired", itemIndex: 6},
+  ]).describe("I should be able to identify the filters", scenario => {
+    it(`for: ${scenario.filter}`, async() => {
+      const props = defaultProps({
+        resourceWorkspaceContext: {
+          filter: {
+            type: scenario.filter
+          }
         }
-      };
-      expect(props.history.push).toBeCalledWith({pathname, state});
-    });
+      }); // The props
+      const page = new FilterResourcesByShortcutsPage(props);
+      await waitForTrue(() => page.exists());
 
-    it('As LU I should be able to identify the filter owned by me', async() => {
-      const props = defaultProps(ResourceWorkspaceFilterTypes.ITEMS_I_OWN); // The props
-      page = new FilterResourcesByShortcutsPage(context, props);
-      await page.selectItem(5);
-      expect(page.itemSelected).toBe("Owned by me");
-      const pathname = '/app/passwords';
+      await page.selectItem(scenario.itemIndex);
+      expect(page.itemSelected).toBe(scenario.itemSelected);
+      const pathname = scenario.pathname || '/app/passwords';
       const state = {
         filter: {
-          type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN
-        }
-      };
-      expect(props.history.push).toBeCalledWith({pathname, state});
-    });
-
-    it('I should be able to identify the filter favorite', async() => {
-      const props = defaultProps(ResourceWorkspaceFilterTypes.FAVORITE); // The props
-      page = new FilterResourcesByShortcutsPage(context, props);
-      await page.selectItem(2);
-      expect(page.itemSelected).toBe("Favorites");
-      const pathname = '/app/passwords';
-      const state = {
-        filter: {
-          type: ResourceWorkspaceFilterTypes.FAVORITE
-        }
-      };
-      expect(props.history.push).toBeCalledWith({pathname, state});
-    });
-
-    it('I should be able to identify the filter recently modified', async() => {
-      const props = defaultProps(ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED); // The props
-      page = new FilterResourcesByShortcutsPage(context, props);
-      await page.selectItem(3);
-      expect(page.itemSelected).toBe("Recently modified");
-      const pathname = '/app/passwords';
-      const state = {
-        filter: {
-          type: ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED
-        }
-      };
-      expect(props.history.push).toBeCalledWith({pathname, state});
-    });
-
-    it('I should be able to identify the filter shared with me', async() => {
-      const props = defaultProps(ResourceWorkspaceFilterTypes.SHARED_WITH_ME); // The props
-      page = new FilterResourcesByShortcutsPage(context, props);
-      await page.selectItem(4);
-      expect(page.itemSelected).toBe("Shared with me");
-      const pathname = '/app/passwords';
-      const state = {
-        filter: {
-          type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME
+          type: scenario.filter
         }
       };
       expect(props.history.push).toBeCalledWith({pathname, state});

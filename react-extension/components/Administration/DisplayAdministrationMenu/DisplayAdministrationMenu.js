@@ -36,12 +36,20 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Returns true if the given feature flag exists and is enabled
+   * @param {string} featureFlag
+   * @returns {boolean}
+   */
+  canIUse(featureFlag) {
+    return Boolean(this.props.context.siteSettings?.canIUse(featureFlag));
+  }
+
+  /**
    * Returns true if the user has the MFA capability
    * @returns {boolean}
    */
   get isMfaEnabled() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('multiFactorAuthentication');
+    return this.canIUse('multiFactorAuthentication');
   }
 
   /**
@@ -49,8 +57,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get isUserDirectoryEnabled() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('directorySync');
+    return this.canIUse('directorySync');
   }
 
   /**
@@ -58,8 +65,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseEE() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('ee');
+    return this.canIUse('ee');
   }
 
   /**
@@ -67,8 +73,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @type {boolean}
    */
   get canIUseLocale() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && this.props.context.siteSettings.canIUse('locale');
+    return this.canIUse('locale');
   }
 
   /**
@@ -76,8 +81,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseAccountRecovery() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('accountRecovery');
+    return this.canIUse('accountRecovery');
   }
 
   /**
@@ -85,8 +89,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSmtpSettings() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('smtpSettings');
+    return this.canIUse('smtpSettings');
   }
 
   /**
@@ -94,8 +97,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSelfRegistrationSettings() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('selfRegistration');
+    return this.canIUse('selfRegistration');
   }
 
   /**
@@ -103,8 +105,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseSso() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('sso');
+    return this.canIUse('sso');
   }
 
   /**
@@ -112,8 +113,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseMfaPolicy() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('mfaPolicies');
+    return this.canIUse('mfaPolicies');
   }
 
   /**
@@ -121,8 +121,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUsePasswordPolicies() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('passwordPoliciesUpdate');
+    return this.canIUse('passwordPoliciesUpdate');
   }
 
   /**
@@ -130,8 +129,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseRbacs() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('rbacs');
+    return this.canIUse('rbacs');
   }
 
   /**
@@ -139,8 +137,15 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseUserPassphrasePolicies() {
-    const siteSettings = this.props.context.siteSettings;
-    return siteSettings && siteSettings.canIUse('userPassphrasePolicies');
+    return this.canIUse('userPassphrasePolicies');
+  }
+
+  /**
+   * Can I use the User Passphrase Policies plugin
+   * @returns {boolean}
+   */
+  get canIUsePasswordExpiry() {
+    return this.canIUse('passwordExpiry');
   }
 
   /**
@@ -160,6 +165,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handleRbacsClick = this.handleRbacsClick.bind(this);
     this.handlePasswordPoliciesClick = this.handlePasswordPoliciesClick.bind(this);
     this.handleUserPassphrasePoliciesClick = this.handleUserPassphrasePoliciesClick.bind(this);
+    this.handlePasswordExpirySettingsClick = this.handlePasswordExpirySettingsClick.bind(this);
   }
 
   /**
@@ -251,6 +257,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handleUserPassphrasePoliciesClick() {
     this.props.navigationContext.onGoToAdministrationUserPassphrasePoliciesRequested();
+  }
+
+  /**
+   * Handle when the user click on the User Passphrase Policies menu
+   */
+  handlePasswordExpirySettingsClick() {
+    this.props.navigationContext.onGoToAdministrationPasswordExpirySettingsRequested();
   }
 
   /**
@@ -355,6 +368,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isUserPassphrasePoliciesSelected() {
     return AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Password Expiry menu is selected
+   * @returns {boolean}
+   */
+  isPasswordExpirySettingsSelected() {
+    return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -512,6 +533,19 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handleUserPassphrasePoliciesClick}>
                     <span><Trans>User Passphrase Policies</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUsePasswordExpiry &&
+          <li id="password_expiry_menu">
+            <div className={`row  ${this.isPasswordExpirySettingsSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" onClick={this.handlePasswordExpirySettingsClick}>
+                    <span><Trans>Password Expiry</Trans></span>
                   </button>
                 </div>
               </div>

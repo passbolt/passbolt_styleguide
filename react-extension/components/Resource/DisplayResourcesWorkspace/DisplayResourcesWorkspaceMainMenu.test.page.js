@@ -13,9 +13,7 @@
  */
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
-import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
-import PropTypes from "prop-types";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
 
@@ -95,14 +93,21 @@ class DisplayMainMenuPageObject {
    * Returns the new password menu elements of password workspace menu
    */
   get newPasswordMenu() {
-    return this._container.querySelector('#password_action');
+    return this._container.querySelector('#password_action button');
   }
 
   /**
    * Returns the new folder menu elements of password workspace menu
    */
   get newFolderMenu() {
-    return this._container.querySelector('#folder_action');
+    return this._container.querySelector('#folder_action button');
+  }
+
+  /**
+   * Returns the new totp menu elements of password workspace menu
+   */
+  get newTotpMenu() {
+    return this._container.querySelector('#totp_action button');
   }
 
   /**
@@ -119,37 +124,3 @@ class DisplayMainMenuPageObject {
     await waitFor(() => {});
   }
 }
-
-/**
- * Custom application provider (used to force the re-rendering when context changes )
- */
-class AppContextProvider extends React.Component {
-  /**
-   * Default constructor
-   * @param props Props component
-   */
-  constructor(props) {
-    super(props);
-    this.state = props.context;
-  }
-
-  componentDidMount() {
-    this.setState({setContext: this.setState.bind(this)});
-  }
-
-  /**
-   * Render the component
-   */
-  render() {
-    return (
-      <AppContext.Provider value={this.state}>
-        {this.props.children}
-      </AppContext.Provider>
-    );
-  }
-}
-
-AppContextProvider.propTypes = {
-  context: PropTypes.object,
-  children: PropTypes.any
-};

@@ -43,23 +43,20 @@ describe('As AD I can generate an ORK', () => {
    * And    I see an “Generate & Apply” button
    */
   it("As a logged in administrator on the account recovery settings in the administration workspace, I can open a dialog to generate an Organization Recovery Key", async() => {
-    expect.assertions(12);
+    expect.assertions(13);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => { });
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     expect(page.isFieldRequired(page.nameField)).toBe(true);
     expect(page.isFieldRequired(page.emailField)).toBe(true);
     expect(page.algorithmField.value).toBe("RSA");
     expect(page.keySizeField.value).toBe("4096");
     expect(page.passphraseField).not.toBeNull();
+    expect(page.passphraseConfirmationField).not.toBeNull();
     expect(page.showPassphraseButton).not.toBeNull();
     expect(page.securityToken).not.toBeNull();
     expect(page.passphraseStrength).not.toBeNull();
@@ -90,11 +87,7 @@ describe('As AD I can generate an ORK', () => {
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     const tooltipText = "Algorithm and key size cannot be changed at the moment. These are secure default";
     expect(page.algorithmTooltip).not.toBeNull();
@@ -122,28 +115,35 @@ describe('As AD I can generate an ORK', () => {
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
 
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     page.passphraseField.value = "dummy-passphrase";
     expect(page.passphraseField.getAttribute("type")).toBe("password");
 
-    await page.toggleShowPassword(() => {
-      if (page.passphraseField.getAttribute("type") !== "text") {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.toggleShowPassword();
     expect(page.passphraseField.getAttribute("type")).toBe("text");
 
-    await page.toggleShowPassword(() => {
-      if (page.passphraseField.getAttribute("type") !== "password") {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.toggleShowPassword();
     expect(page.passphraseField.getAttribute("type")).toBe("password");
+  });
+
+  it("As a logged in administrator in the administration workspace, I can show or hide the content of the “Organization key passphrase confirmation” text field in the Organization Recovery Key dialog", async() => {
+    expect.assertions(4);
+    const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
+    await waitFor(() => {});
+    // Dialog title exists and correct
+    expect(page.exists()).toBeTruthy();
+
+    await page.clickOnGenerateTab();
+
+    page.passphraseConfirmationField.value = "dummy-passphrase";
+    expect(page.passphraseConfirmationField.getAttribute("type")).toBe("password");
+
+    await page.toggleShowPasswordConfirmation();
+    expect(page.passphraseConfirmationField.getAttribute("type")).toBe("text");
+
+    await page.toggleShowPasswordConfirmation();
+    expect(page.passphraseConfirmationField.getAttribute("type")).toBe("password");
   });
 
   /**
@@ -160,11 +160,7 @@ describe('As AD I can generate an ORK', () => {
     await waitFor(() => { });
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     await page.clickOnGenerateButton(() => {
       if (page.nameError === null) {
@@ -186,16 +182,12 @@ describe('As AD I can generate an ORK', () => {
    * Then   I see an error message below the passphrase telling me to use a strong passphrase instead
    */
   it("As a logged in administrator in the administration workspace, I cannot generate OpenPGP Public key in the Organization Recovery Key settings without a strong passphrase", async() => {
-    expect.assertions(3);
+    expect.assertions(5);
     const page = new SelectAccountRecoveryOrganizationKeyPage(defaultProps());
     await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     await page.type("test", page.nameField);
     await page.type("test@passbolt.com", page.emailField);
@@ -209,6 +201,44 @@ describe('As AD I can generate an ORK', () => {
 
     expect(page.passphraseFieldError).not.toBeNull();
     expect(page.passphraseFieldError.textContent).toBe(`A strong passphrase is required. The minimum complexity must be 'fair'.`);
+    expect(page.passphraseConfirmationFieldError).not.toBeNull();
+    expect(page.passphraseConfirmationFieldError.textContent).toBe(`The passphrase confirmation is required.`);
+  });
+
+  it("As a logged in administrator in the administration workspace, I can generate OpenPGP Public key when the form validates", async() => {
+    expect.assertions(6);
+    const props = defaultProps();
+
+    const expectedDto = {
+      name: "test",
+      email: "test@test.com",
+      algorithm: "RSA",
+      keySize: 4096,
+      passphrase: "Kinda fair passphrase",
+    };
+
+    props.context.port.addRequestListener('passbolt.account-recovery.generate-organization-key', generateKeyDto => {
+      expect(generateKeyDto).toStrictEqual(expectedDto);
+      return "FAKE ARMORED KEY";
+    });
+
+    const page = new SelectAccountRecoveryOrganizationKeyPage(props);
+    await waitFor(() => {});
+    // Dialog title exists and correct
+    expect(page.exists()).toBeTruthy();
+    await page.clickOnGenerateTab();
+
+    await page.type(expectedDto.name, page.nameField);
+    await page.type(expectedDto.email, page.emailField);
+    await page.type(expectedDto.passphrase, page.passphraseField);
+    await page.type(expectedDto.passphrase, page.passphraseConfirmationField);
+
+    await page.clickOnGenerateButton(() => {});
+
+    expect(page.nameFieldError).toBeNull();
+    expect(page.emailFieldError).toBeNull();
+    expect(page.passphraseFieldError.textContent).toStrictEqual("");
+    expect(page.passphraseConfirmationFieldError.textContent).toStrictEqual("");
   });
 
   it('As AD I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
@@ -218,11 +248,8 @@ describe('As AD I can generate an ORK', () => {
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
+
     await page.type("This a strong passphrase to test a service not working", page.passphraseField);
     await waitFor(() => {});
 
@@ -236,12 +263,9 @@ describe('As AD I can generate an ORK', () => {
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
-    await page.type("Testtestest", page.passphraseField);
+    await page.clickOnGenerateTab();
+
+    await page.type("azertyazertyazerty", page.passphraseField);
     await waitFor(() => {});
 
     expect(page.passwordWarningMessage.textContent).toBe("The passphrase is part of an exposed data breach.");
@@ -261,11 +285,7 @@ describe('As AD I can generate an ORK', () => {
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     expect(page.warningImportInstead.textContent).toBe("Warning, we encourage you to generate your OpenPGP Organization Recovery Key separately. Make sure you keep a backup in a safe place.");
   });
@@ -276,11 +296,7 @@ describe('As AD I can generate an ORK', () => {
     await waitFor(() => {});
     // Dialog title exists and correct
     expect(page.exists()).toBeTruthy();
-    await page.clickOnGenerateTab(() => {
-      if (!page.isGenerateTabSeletect()) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    await page.clickOnGenerateTab();
 
     await page.type("", page.passphraseField);
 

@@ -1,63 +1,50 @@
-import {MemoryRouter, Route} from "react-router-dom";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.11.0
+ */
+
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import EditUser from "./EditUser";
-import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
-
+import {defaultAppContext} from "./EditUser.test.data";
 
 export default {
   title: 'Components/User/EditUser',
   component: EditUser
 };
 
-const context = {
-  roles: [
-    {
-      id: "c4870358-e32f-41ce-999b-8f80c9b0d17f",
-      name: "admin"
-    },
-    {
-      id: TEST_ROLE_USER_ID,
-      name: "user"
-    }
-  ],
-  users: [
-    {
-      id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
-      profile: {
-        first_name: "firstname",
-        last_name: "lastname",
-      },
-      username: "firstname@passbolt.com",
-      role_id: TEST_ROLE_USER_ID
-    }
-  ],
-  editUserDialogProps: {
-    id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
-  },
-  setContext: () => {},
-  port: new MockPort()
-};
-
-
-const Template = args =>
+const Template = ({context, ...args}) =>
   <AppContext.Provider value={context}>
-    <MemoryRouter initialEntries={['/']}>
-      <Route component={routerProps => <EditUser {...args} {...routerProps}/>}></Route>
-    </MemoryRouter>
+    <EditUser {...args}/>
   </AppContext.Provider>;
 
 Template.propTypes = {
   context: PropTypes.object,
 };
 
+const context = defaultAppContext();
+context.editUserDialogProps = {id: context.users[0].id};
 export const Initial = Template.bind({});
 Initial.args = {
   context: context,
   onClose: () => {}
 };
-Initial.parameters = {
-  css: "api_main"
+
+const contextWithScheduledSuspension = defaultAppContext();
+contextWithScheduledSuspension.users[0].disabled = new Date(Date.now() + 3600000);
+contextWithScheduledSuspension.editUserDialogProps = {id: contextWithScheduledSuspension.users[0].id};
+export const WithScheduledSuspension = Template.bind({});
+WithScheduledSuspension.args = {
+  context: contextWithScheduledSuspension,
+  onClose: () => {}
 };

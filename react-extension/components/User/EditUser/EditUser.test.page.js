@@ -151,6 +151,13 @@ class EditUserPageObject {
   }
 
   /**
+   * Returns the is suspended checkbox element
+   */
+  get isSuspended() {
+    return this._container.querySelector('#is_suspended_checkbox');
+  }
+
+  /**
    * Returns the save button element
    */
   get saveButton() {

@@ -178,10 +178,17 @@ class DisplayMenuPageObject {
   }
 
   /**
-   * Returns the username menu elements of password workspace menu
+   * Returns the password menu elements of password workspace menu
    */
   get dropdownMenuSecret() {
     return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
+   * Returns the totp menu elements of password workspace menu
+   */
+  get dropdownMenuTotp() {
+    return this._container.querySelector('#totp_action .row .main-cell-wrapper .main-cell button');
   }
 
   /**
