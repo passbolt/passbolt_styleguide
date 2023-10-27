@@ -29,8 +29,11 @@ describe("Download Recovery Kit", () => {
   });
 
   it('As AN I should be able to go to the next step “choose a security token', async() => {
-    expect.assertions(1);
+    expect.assertions(3);
+    expect(page.nextButton.hasAttribute('disabled')).toBeTruthy();
+    await page.checkStoredRecoveryKit();
     await page.next();
+    expect(page.nextButton.hasAttribute('disabled')).toBeFalsy();
     expect(props.onComplete).toHaveBeenCalled();
   });
 });
