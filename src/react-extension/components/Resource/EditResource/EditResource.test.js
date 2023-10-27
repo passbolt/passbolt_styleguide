@@ -22,7 +22,7 @@ import {waitFor} from "@testing-library/react";
 import {defaultProps, defaultPropsLegacyResource} from "./EditResource.test.data";
 import EditResourcePage from "./EditResource.test.page";
 import {
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP, TEST_RESOURCE_TYPE_PASSWORD_STRING
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
@@ -255,6 +255,116 @@ describe("See the Edit Resource", () => {
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, onApiUpdateSecretDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.onClose).toBeCalled();
+    });
+
+    it('should requests the addon without the secret if it hasn"t changed (with resource type PASSWORD_AND_DECRYPTION).', async() => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      const resource = props.context.resources[0];
+      mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+      //Avoid to block with the beforeMount when checking current password
+      jest.runAllTimers();
+      // edit password
+      const resourceMeta = {
+        name: "Password name",
+      };
+      // Fill the form
+      page.passwordEdit.fillInput(page.passwordEdit.name, resourceMeta.name);
+
+      jest.spyOn(props.context.port, 'request').mockImplementation(jest.fn());
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+
+      const onApiUpdateResourceMeta = {
+        id: resource.id,
+        name: resourceMeta.name,
+        uri: resource.uri,
+        username: resource.username,
+        description: "",
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+      };
+
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, null);
+    });
+
+    it('should requests the addon without the secret if it hasn"t changed (with resource type PASSWORD_STRING).', async() => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      const resource = props.context.resources[0];
+      resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_STRING;
+      mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+      //Avoid to block with the beforeMount when checking current password
+      jest.runAllTimers();
+      // edit password
+      const resourceMeta = {
+        name: "Password name",
+        description: "Password description"
+      };
+      // Fill the form
+      page.passwordEdit.fillInput(page.passwordEdit.name, resourceMeta.name);
+      page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
+
+      jest.spyOn(props.context.port, 'request').mockImplementation(jest.fn());
+
+      const onApiUpdateResourceMeta = {
+        id: resource.id,
+        name: resourceMeta.name,
+        uri: resource.uri,
+        username: resource.username,
+        description: resourceMeta.description,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
+      };
+
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, null);
+    });
+
+    it('should requests the addon without the secret if it hasn"t changed (with resource type PASSWORD_DESCRIPTION_TOTP).', async() => {
+      expect.assertions(1);
+      const props = defaultProps(); // The props to pass
+      props.context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
+      jest.spyOn(props.context.port, 'request');
+      const resource = props.context.resources[0];
+      resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
+
+      const defaultTotp = {
+        secret_key: "2F2SA73OFJERVNBL",
+        period: 60,
+        digits: 7,
+        algorithm: "SHA256"
+      };
+      props.context.port.addRequestListener('passbolt.secret.decrypt', () => ({
+        password: "secret-decrypted",
+        description: "",
+        totp: defaultTotp
+      }));
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+      // edit password
+      const resourceMeta = {
+        name: "Password name",
+      };
+      // Fill the form
+      page.passwordEdit.fillInput(page.passwordEdit.name, resourceMeta.name);
+
+      jest.spyOn(props.context.port, 'request').mockImplementation(jest.fn());
+
+      const onApiUpdateResourceMeta = {
+        id: resource.id,
+        name: resourceMeta.name,
+        uri: resource.uri,
+        username: resource.username,
+        description: "",
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP
+      };
+
+      await waitForTrue(() => !page.passwordEdit.saveButton.disabled);
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, null);
     });
 
     it('requests the addon to edit a resource with non encrypted description when clicking on the submit button.', async() => {

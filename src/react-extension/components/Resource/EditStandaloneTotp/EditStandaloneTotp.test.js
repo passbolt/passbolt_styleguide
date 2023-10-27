@@ -95,7 +95,8 @@ describe("See the Edit Standalone TOTP", () => {
       await page.click(page.saveButton);
       await waitFor(() => {});
 
-      expect(props.onSubmit).toHaveBeenCalledWith(new StandaloneTotpViewModel(resourceMeta));
+      const standaloneTotpViewModel = new StandaloneTotpViewModel(resourceMeta).toResourceDto();
+      expect(props.onSubmit).toHaveBeenCalledWith(standaloneTotpViewModel, null);
       expect(props.onClose).toBeCalled();
       expect(props.onCancel).toBeCalled();
     });
@@ -127,12 +128,13 @@ describe("See the Edit Standalone TOTP", () => {
 
       await page.click(page.saveButton);
 
-      expect(props.onSubmit).toHaveBeenCalledWith(new StandaloneTotpViewModel(resourceMeta));
+      const standaloneTotpViewModel = new StandaloneTotpViewModel(resourceMeta);
+      expect(props.onSubmit).toHaveBeenCalledWith(standaloneTotpViewModel.toResourceDto(), standaloneTotpViewModel.toSecretDto());
       expect(props.onClose).toBeCalled();
       expect(props.onCancel).toBeCalled();
     });
 
-    it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
       expect.assertions(8);
 
       expect(page.exists()).toBeTruthy();

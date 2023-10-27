@@ -76,6 +76,22 @@ class StandaloneTotpViewModel extends TotpViewModel {
   }
 
   /**
+   * Returns true if both the data to be encrypted are different
+   * @param {StandaloneTotpViewModel} a
+   * @param {StandaloneTotpViewModel} b
+   * @returns {boolean}
+   */
+  static areSecretsDifferent(a, b) {
+    const keys = [
+      "secret_key",
+      "period",
+      "digits",
+      "algorithm",
+    ];
+    return keys.some(key => a[key] !== b[key]);
+  }
+
+  /**
    * Create standalone TOTP from URL
    * @param url {URL}
    * @return {StandaloneTotpViewModel}

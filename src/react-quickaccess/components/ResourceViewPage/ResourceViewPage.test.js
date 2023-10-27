@@ -36,7 +36,6 @@ beforeEach(() => {
 });
 
 describe("ResourceViewPage", () => {
-
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
 
   describe('As LU, I should preview the secret.', () => {
