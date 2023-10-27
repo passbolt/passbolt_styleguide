@@ -48,6 +48,10 @@ describe("See the Create Dialog User", () => {
 
     it('As AD I see a success toaster message after editing a user with success', async() => {
       expect.assertions(9);
+      //ensure the date returned is always the same to make sure the unit test doesn't randomly failed due to execution durationjest
+      jest.useFakeTimers()
+        .setSystemTime(new Date());
+
       expect(page.editUser.exists()).toBeTruthy();
       // edit user
       const userMeta = {
@@ -59,9 +63,6 @@ describe("See the Create Dialog User", () => {
         is_admin: true,
       };
 
-      //ensure the date returned is always the same to make sure the unit test doesn't randomly failed due to execution duration
-      const currentDate = new Date().toISOString();
-      jest.spyOn(Date.prototype, 'toISOString').mockImplementation(() => currentDate);
       // check fields in the form
       expect(page.editUser.firstName.value).toBe(context.users[0].profile.first_name);
       expect(page.editUser.lastName.value).toBe(context.users[0].profile.last_name);
@@ -86,7 +87,7 @@ describe("See the Create Dialog User", () => {
           last_name: "admin",
         },
         role_id: context.roles[0].id,
-        disabled: currentDate.split('.')[0],
+        disabled: new Date().toISOString().split('.')[0],
       };
 
       await page.editUser.click(page.editUser.saveButton);

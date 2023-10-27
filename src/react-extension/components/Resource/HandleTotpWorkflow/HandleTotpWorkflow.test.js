@@ -200,7 +200,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       await waitFor(() => {});
 
       const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
-      await page._instance.handleUpdate(totp);
+      await page._instance.handleUpdate(totp.toResourceDto(), totp.toSecretDto());
 
       const resourceDto = {
         id: props.resourceWorkspaceContext.selectedResources[0].id,
@@ -223,7 +223,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       await waitFor(() => {});
 
       const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
-      await page._instance.handleUpdate(totp);
+      await page._instance.handleUpdate(totp.toResourceDto(), totp.toSecretDto());
 
       const resourceDto = {
         id: props.resourceWorkspaceContext.selectedResources[0].id,

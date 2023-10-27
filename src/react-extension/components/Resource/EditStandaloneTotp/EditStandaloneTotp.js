@@ -23,6 +23,7 @@ import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 
 class EditStandaloneTotp extends Component {
   /**
@@ -47,6 +48,7 @@ class EditStandaloneTotp extends Component {
 
     return {
       nameOriginal: name,
+      originalTotp: null,
       standaloneTotp: new StandaloneTotpViewModel({name, uri}),
       errors: null, // The errors
       warnings: {}, // The warnings
@@ -100,7 +102,8 @@ class EditStandaloneTotp extends Component {
       totp.name = this.state.standaloneTotp.name;
       totp.uri = this.state.standaloneTotp.uri;
       const standaloneTotp = new StandaloneTotpViewModel(totp);
-      this.setState({standaloneTotp, isSecretDecrypting: false});
+      const originalTotp = new StandaloneTotpViewModel(totp);
+      this.setState({standaloneTotp, originalTotp, isSecretDecrypting: false});
     } catch (error) {
       this.handleClose();
     }
@@ -140,7 +143,12 @@ class EditStandaloneTotp extends Component {
     }
 
     // Resource type with encrypted totp
-    this.props.onSubmit(this.state.standaloneTotp);
+    const resourceDto = this.state.standaloneTotp.toResourceDto();
+    const secretDto = TotpViewModel.areSecretsDifferent(this.state.standaloneTotp, this.state.originalTotp)
+      ? this.state.standaloneTotp.toSecretDto()
+      : null;
+
+    this.props.onSubmit(resourceDto, secretDto);
     this.handleClose();
   }
 

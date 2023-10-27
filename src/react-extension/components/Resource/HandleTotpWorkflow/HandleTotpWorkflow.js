@@ -225,10 +225,10 @@ export class HandleTotpWorkflow extends React.Component {
     }
   }
 
-  async handleUpdate(standaloneTotp) {
+  async handleUpdate(resourceDto, secretDto) {
     try {
       // Resource type with encrypted totp
-      await this.updateStandaloneOtp(standaloneTotp.toResourceDto(), standaloneTotp.toSecretDto());
+      await this.updateStandaloneOtp(resourceDto, secretDto);
       await this.handleUpdateSuccess();
     } catch (error) {
       if (error.name === "UserAbortsOperationError") {

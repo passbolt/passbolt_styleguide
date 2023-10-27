@@ -78,6 +78,7 @@ class EditResource extends Component {
       passwordInDictionary: false,
       passwordEntropy: null,
       processing: false,
+      originalDecryptedSecret: null,
     };
   }
 
@@ -420,7 +421,7 @@ class EditResource extends Component {
    */
   async updateResourceLegacy(resourceDto) {
     resourceDto.description = this.state.description;
-    const plaintextDto = this.state.password;
+    const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -432,7 +433,7 @@ class EditResource extends Component {
   async updateWithoutEncryptedDescription(resourceDto) {
     resourceDto.description = this.state.description;
     resourceDto.resource_type_id = this.state.resourceTypeId;
-    const plaintextDto = this.state.password;
+    const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -444,10 +445,13 @@ class EditResource extends Component {
   async updateWithEncryptedDescription(resourceDto) {
     resourceDto.resource_type_id = this.state.resourceTypeId;
     resourceDto.description = '';
-    const plaintextDto = {
-      description: this.state.description,
-      password: this.state.password
-    };
+    let plaintextDto = null;
+    if (this.hasSecretChanged()) {
+      plaintextDto = {
+        description: this.state.description,
+        password: this.state.password
+      };
+    }
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -459,9 +463,13 @@ class EditResource extends Component {
   async updateWithEncryptedDescriptionAndTotp(resourceDto) {
     resourceDto.resource_type_id = this.state.resourceTypeId;
     resourceDto.description = '';
-    const plaintextDto = this.state.totp.toSecretDto();
-    plaintextDto.password = this.state.password;
-    plaintextDto.description = this.state.description;
+
+    let plaintextDto = null;
+    if (this.hasSecretChanged()) {
+      plaintextDto = this.state.totp.toSecretDto();
+      plaintextDto.password = this.state.password;
+      plaintextDto.description = this.state.description;
+    }
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
   }
@@ -711,12 +719,21 @@ class EditResource extends Component {
       const plaintextSecretDto = await this.getDecryptedSecret();
       const password = plaintextSecretDto.password;
       this.evaluatePasswordIsInDictionaryDebounce(password);
-      this.setState({
+      const newState = {
         password: password,
         description: plaintextSecretDto.description || this.state.description,
         totp: plaintextSecretDto.totp ? new TotpViewModel(plaintextSecretDto.totp) : null,
         passwordEntropy: SecretGenerator.entropy(password),
         isSecretDecrypting: false,
+      };
+      const originalDecryptedSecret = {
+        password: newState.password,
+        description: newState.description,
+        totp: newState.totp
+      };
+      this.setState({
+        ...newState,
+        originalDecryptedSecret
       });
     } catch (error) {
       this.handleClose();
@@ -781,6 +798,46 @@ class EditResource extends Component {
    */
   isDescriptionDisabled() {
     return (this.state.isSecretDecrypting && this.mustEncryptDescription);
+  }
+
+  /**
+   * Returns true if the secret has changed
+   * The checks take into account the resource type as well to ensure that there is no false positive.
+   * E.g: resource type is password with description in clear, a change in the description shouldn't
+   * be considered as a "secret changed".
+   * @returns {boolean}
+   */
+  hasSecretChanged() {
+    const hasPasswordChanged = this.state.password !== this.state.originalDecryptedSecret.password;
+    // if there is no resource types, secret contains password and it's already checked.
+    if (!this.areResourceTypesEnabled()) {
+      return hasPasswordChanged;
+    }
+
+    // if the resource type has changed, the secret is changed as well
+    if (this.state.resourceTypeIdOriginal !== this.state.resourceTypeId) {
+      return true;
+    }
+
+    if (this.isTotpResources) {
+      // the resource type didn't changed then the original secret contains also a totp.
+      const originalTotp = this.state.originalDecryptedSecret.totp.toSecretDto().totp;
+      const newTotp = this.state.totp.toSecretDto().totp;
+
+      const hasTotpChanged = TotpViewModel.areSecretsDifferent(originalTotp, newTotp);
+
+      if (hasTotpChanged) {
+        return true;
+      }
+    }
+
+    if (!this.hasEncryptedDescription) {
+      // the secret contains only the password.
+      return hasPasswordChanged;
+    }
+
+    const hasDescriptionChanged = this.state.description !== this.state.originalDecryptedSecret.description;
+    return hasPasswordChanged || hasDescriptionChanged;
   }
 
   /**
