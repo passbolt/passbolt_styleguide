@@ -352,4 +352,51 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.sourceChangingBanner).toBeNull();
     });
   });
+
+  describe("As AD I should not be able to see the source of the configuration", () => {
+    it("when it's coming from the default configuration", async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext();
+      const settingsDto = defaultPasswordPoliciesDto({
+        source: null
+      });
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => settingsDto);
+      page = new DisplayPasswordPoliciesAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: default configuration.');
+    });
+
+    it("when it's coming from the database", async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext();
+      const settingsDto = defaultPasswordPoliciesDto({
+        source: 'db'
+      });
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => settingsDto);
+      page = new DisplayPasswordPoliciesAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource?.textContent?.includes('database')));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
+    });
+
+    it("when it's coming from a environment variables", async() => {
+      expect.assertions(1);
+
+      const context = defaultAppContext();
+      const settingsDto = defaultPasswordPoliciesDto({
+        source: 'env'
+      });
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.password-policies.get-admin-settings", () => settingsDto);
+      page = new DisplayPasswordPoliciesAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource?.textContent?.includes('environment variables')));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');
+    });
+  });
 });

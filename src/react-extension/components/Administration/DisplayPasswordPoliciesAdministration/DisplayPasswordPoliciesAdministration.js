@@ -165,6 +165,25 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
   }
 
   /**
+   * Returns the source of the current settings
+   * @returns {string}
+   */
+  get settingsSource() {
+    return this.props.adminPasswordPoliciesContext?.getSettings()?.source;
+  }
+
+  /**
+   * Returns the source of the current configuration
+   * @returns {string}
+   */
+  get configurationSource() {
+    return {
+      'db': this.props.t('database'),
+      'env': this.props.t('environment variables'),
+    }[this.settingsSource] || this.props.t('default configuration');
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -368,6 +387,10 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
           </span>
         </div>
         <div className="col4 last">
+          <div className="sidebar-help" id="password-policies-source">
+            <h3><Trans>Configuration source</Trans></h3>
+            <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+          </div>
           <div className="sidebar-help">
             <h3><Trans>What is password policy?</Trans></h3>
             <p><Trans>For more information about the password policy settings, checkout the dedicated page on the help website.</Trans></p>

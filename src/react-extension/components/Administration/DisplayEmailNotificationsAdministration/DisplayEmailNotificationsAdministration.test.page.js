@@ -287,6 +287,13 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
+   * Returns the html element that contains the sentence about the source of information
+   */
+  get settingsSource() {
+    return this._page.container.querySelector('#email-notifications-source p');
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

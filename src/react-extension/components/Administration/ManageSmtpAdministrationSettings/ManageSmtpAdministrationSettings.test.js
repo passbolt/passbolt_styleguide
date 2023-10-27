@@ -33,6 +33,7 @@ import {
 } from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import {enableFetchMocks} from "jest-fetch-mock";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -789,6 +790,44 @@ describe("ManageSmtpAdministrationSettings", () => {
       await page.showLogs();
 
       expect(page.logDetails.value).toBe(JSON.stringify(debugLog.debug, null, 4));
+    });
+  });
+
+  describe("As AD I should not be able to see the source of the configuration", () => {
+    it("when it's coming from the database", async() => {
+      expect.assertions(1);
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withExistingSmtpSettings({
+        source: 'db'
+      })));
+
+      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
+    });
+
+    it("when it's coming from a file", async() => {
+      expect.assertions(1);
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withExistingSmtpSettings({
+        source: 'file'
+      })));
+
+      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: file.');
+    });
+
+    it("when it's coming from a environment variables", async() => {
+      expect.assertions(1);
+      fetch.doMockOnceIf(/smtp\/settings.json/, () => mockApiResponse(withExistingSmtpSettings({
+        source: 'env'
+      })));
+
+      const page = new ManageSmtpAdministrationSettingsPage(defaultProps());
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');
     });
   });
 });

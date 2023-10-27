@@ -72,7 +72,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBox() {
-    return this._page.container.querySelector('.sidebar-help');
+    return this._page.container.querySelectorAll('.sidebar-help')[1];
   }
 
   /**
@@ -80,7 +80,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBoxTitle() {
-    return this._page.container.querySelector('.sidebar-help h3');
+    return this.helpBox.querySelector('h3');
   }
 
   /**
@@ -88,7 +88,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBoxDescription() {
-    return this._page.container.querySelector('.sidebar-help p');
+    return this.helpBox.querySelector('p');
   }
 
   /**
@@ -96,7 +96,7 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    * @returns {HTMLElement}
    */
   get helpBoxButton() {
-    return this._page.container.querySelector('.sidebar-help .button');
+    return this.helpBox.querySelector('.button');
   }
 
   /**
@@ -312,6 +312,13 @@ export default class DisplayPasswordPoliciesAdministrationPage {
    */
   get maskError() {
     return this._page.container.querySelector('#password-mask-error');
+  }
+
+  /**
+   * Returns the html element that contains the sentence about the source of information
+   */
+  get settingsSource() {
+    return this._page.container.querySelector('#password-policies-source p');
   }
 
   /**

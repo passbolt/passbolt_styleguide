@@ -119,6 +119,32 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   }
 
   /**
+   * Returns the source of the current settings
+   * @returns {string}
+   */
+  get settingsSource() {
+    if (this.hasDatabaseSetting()) {
+      return "db";
+    }
+    if (this.hasFileConfigSetting()) {
+      return 'file';
+    }
+    return 'env';
+  }
+
+  /**
+   * Returns the source of the current configuration
+   * @returns {string}
+   */
+  get configurationSource() {
+    return {
+      'env': this.props.t('environment variables'),
+      'file': this.props.t('file'),
+      'db': this.props.t('database'),
+    }[this.settingsSource] || this.props.t('unknown');
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -440,6 +466,10 @@ class DisplayEmailNotificationsAdministration extends React.Component {
           </div>
         </div>
         <div className="col4 last">
+          <div className="sidebar-help" id="email-notifications-source">
+            <h3><Trans>Configuration source</Trans></h3>
+            <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+          </div>
           <div className="sidebar-help">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about email notification, checkout the dedicated page on the help website.</Trans></p>
@@ -458,6 +488,7 @@ DisplayEmailNotificationsAdministration.propTypes = {
   context: PropTypes.any, // The application context
   administrationWorkspaceContext: PropTypes.object, // The administration workspace context
   adminEmailNotificationContext: PropTypes.object, // The administration email notification context
+  t: PropTypes.func, // the translation function
 };
 
 export default withAppContext(withAdminEmailNotification(withAdministrationWorkspace(withTranslation('common')(DisplayEmailNotificationsAdministration))));

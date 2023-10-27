@@ -288,6 +288,22 @@ export class ManageSmtpAdministrationSettings extends React.Component {
     return this.props.adminSmtpSettingsContext.isDataReady();
   }
 
+  get settingsSource() {
+    return this.props.adminSmtpSettingsContext?.getCurrentSmtpSettings()?.source;
+  }
+
+  /**
+   * Returns the source of the current configuration
+   * @returns {string}
+   */
+  get configurationSource() {
+    return {
+      'env': this.props.t('environment variables'),
+      'file': this.props.t('file'),
+      'db': this.props.t('database'),
+    }[this.settingsSource] || this.props.t('unknown');
+  }
+
   /**
    * Get the translate function
    * @returns {function(...[*]=)}
@@ -443,6 +459,10 @@ export class ManageSmtpAdministrationSettings extends React.Component {
             }
           </div>
           <div className="col4 last">
+            <div className="sidebar-help" id="smtp-settings-source">
+              <h3><Trans>Configuration source</Trans></h3>
+              <p><Trans>This current configuration source is: </Trans>{this.configurationSource}.</p>
+            </div>
             <div className="sidebar-help">
               <h3><Trans>Why do I need an SMTP server?</Trans></h3>
               <p><Trans>Passbolt needs an smtp server in order to send invitation emails after an account creation and to send email notifications.</Trans></p>
