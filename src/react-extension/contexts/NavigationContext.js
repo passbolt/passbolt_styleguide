@@ -410,7 +410,12 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMfaRequested() {
-    await this.goTo("api", "/app/settings/mfa");
+    //Application to point
+    let app = "api";
+    if (window.chrome?.webview) {
+      app = "browser-extension";
+    }
+    await this.goTo(app, "/app/settings/mfa");
   }
 
   /**
