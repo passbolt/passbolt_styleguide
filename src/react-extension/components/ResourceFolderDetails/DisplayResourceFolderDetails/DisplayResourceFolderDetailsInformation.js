@@ -18,7 +18,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class DisplayResourceFolderDetailsInformation extends React.Component {
   /**
@@ -78,17 +78,6 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get a user username
    * @param {string} userId The user id
    */
@@ -128,8 +117,8 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   render() {
     const creatorUsername = this.getUserUsername(this.folder.created_by);
     const modifierUsername = this.getUserUsername(this.folder.modified_by);
-    const createdDateTimeAgo = this.formatDateTimeAgo(this.folder.created);
-    const modifiedDateTimeAgo = this.formatDateTimeAgo(this.folder.modified);
+    const createdDateTimeAgo = formatDateTimeAgo(this.folder.created, this.props.t, this.props.context.locale);
+    const modifiedDateTimeAgo = formatDateTimeAgo(this.folder.modified, this.props.t, this.props.context.locale);
     const folderParentName = this.getFolderName(this.folder.folder_parent_id);
 
     return (

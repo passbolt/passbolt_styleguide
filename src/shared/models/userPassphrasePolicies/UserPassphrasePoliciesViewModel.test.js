@@ -20,7 +20,7 @@ import {
 import UserPassphrasePoliciesViewModel from "./UserPassphrasePoliciesViewModel";
 
 describe("UserPassphrasePoliciesViewModel", () => {
-  describe("::ctor", () => {
+  describe("::constructor", () => {
     it("should construct a ViewModel", () => {
       expect.assertions(2);
 

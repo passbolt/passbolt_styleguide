@@ -18,13 +18,13 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -66,17 +66,6 @@ class DisplayAccountRecoveryUserSettings extends Component {
       return "";
     }
     return fingerprint.toUpperCase().replace(/.{4}(?=.)/g, "$& ");
-  }
-
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -202,7 +191,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
                               &nbsp;
                               <span className="name"><Trans>requested this operation</Trans></span>
                             </div>
-                            <div className="subinfo light">{this.formatDateTimeAgo(this.requestedDate)}</div>
+                            <div className="subinfo light">{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</div>
                           </div>
                         </div>
                         <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>

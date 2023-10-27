@@ -664,7 +664,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                         <div className="main-cell-wrapper">
                           <div className="main-cell">
                             <div className="input checkbox">
-                              <input type="checkbox" checked={column.show} id={column.id}  name={column.id} onChange={this.handleOnChangeColumnView}/>
+                              <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
                               <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
                             </div>
                           </div>

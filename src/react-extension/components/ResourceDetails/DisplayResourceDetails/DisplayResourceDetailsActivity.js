@@ -19,7 +19,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -154,17 +154,6 @@ class DisplayResourceDetailsActivity extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get an activity creator full name
    * @param {object} user The creator
    * @return string
@@ -232,7 +221,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   renderResouceCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceName = this.resource.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.id} className="usercard-detailed-col-2">
@@ -259,7 +248,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   renderResourceUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceName = this.resource.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.id} className="usercard-detailed-col-2">
@@ -286,7 +275,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   renderSecretReadActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceName = this.resource.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.id} className="usercard-detailed-col-2">
@@ -313,7 +302,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   renderSecretUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceName = this.resource.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.id} className="usercard-detailed-col-2">
@@ -368,7 +357,7 @@ class DisplayResourceDetailsActivity extends React.Component {
   renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const resourceName = this.resource.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.id} className="usercard-detailed-col-2">

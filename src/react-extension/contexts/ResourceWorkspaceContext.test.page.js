@@ -20,6 +20,7 @@ import ResourceWorkspaceContextProvider, {
 import AppContext from "../../shared/context/AppContext/AppContext";
 import {Router, NavLink, Route, Switch} from "react-router-dom";
 import {createMemoryHistory} from "history";
+import {waitForTrue} from "../../../test/utils/waitFor";
 
 
 /**
@@ -31,9 +32,10 @@ export default class ResourceWorkspaceContextPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext) {
-    this.context = appContext;
-    this.setup(appContext);
+  constructor(context, props) {
+    this.context = context;
+    this.props = props;
+    this.setup(context, props);
   }
 
 
@@ -102,18 +104,14 @@ export default class ResourceWorkspaceContextPage {
      * We ensure that the filter is applied properly before ending the promise.
      * Without that, some unit tests may fail because they don't have the right context to run.
      */
-    await waitFor(() => {
-      if (oldFilter === this.filter) {
-        throw new Error("Context didn't change yet.");
-      }
-    });
+    await waitForTrue(() => oldFilter !== this.filter);
   }
 
   /**
    * Go to the All Items search filter route
    */
   async goToAllItems() {
-    this.setup(this.context);
+    this.setup(this.context, this.props);
     await this.goToLink('.all');
   }
 
@@ -150,7 +148,7 @@ export default class ResourceWorkspaceContextPage {
    * @param text A specific text search filter
    */
   async goToText(text) {
-    this.setup(this.context, {text});
+    this.setup(this.context, this.props, {text});
     await this.goToLink('.text');
   }
 
@@ -159,7 +157,7 @@ export default class ResourceWorkspaceContextPage {
    * @param group A specific group search filter
    */
   async goToGroup(group) {
-    this.setup(this.context, {group});
+    this.setup(this.context, this.props, {group});
     await this.goToLink('.group');
   }
 
@@ -168,7 +166,7 @@ export default class ResourceWorkspaceContextPage {
    * @param tag A specific tag search filter
    */
   async goToTag(tag) {
-    this.setup(this.context, {tag});
+    this.setup(this.context, this.props, {tag});
     await this.goToLink('.tag');
   }
 
@@ -177,7 +175,7 @@ export default class ResourceWorkspaceContextPage {
    * @param folder A specific folder search filter
    */
   async goToFolder(folder) {
-    this.setup(this.context, {folder});
+    this.setup(this.context, this.props, {folder});
     await this.goToLink('.folder');
   }
 
@@ -185,8 +183,16 @@ export default class ResourceWorkspaceContextPage {
    * Go to the Root Folder search filter route
    */
   async goToRootFolder() {
-    this.setup(this.context);
+    this.setup(this.context, this.props);
     await this.goToLink('.root-folder');
+  }
+
+  /**
+   * Go to the Expired search filter route
+   */
+  async goToExpired() {
+    this.setup(this.context, this.props);
+    await this.goToLink('.expired');
   }
 
   /**
@@ -274,21 +280,23 @@ export default class ResourceWorkspaceContextPage {
    * @param appContext a app context
    * @param args the args
    */
-  setup(appContext, args = {}) {
+  setup(context, props, args = {}) {
     this._page = render(
-      <AppContext.Provider value={appContext}>
+      <AppContext.Provider value={context}>
         <Router history={createMemoryHistory({initialEntries: [
           "/app/folders/view/:filterByFolderId",
           "/app/passwords/view/:selectedResourceId",
+          "/app/passwords/filter/:filterType",
           "/app/passwords",
         ]})}>
           <Switch>
             <Route path={[
               "/app/folders/view/:filterByFolderId",
               "/app/passwords/view/:selectedResourceId",
+              "/app/passwords/filter/:filterType",
               "/app/passwords",
             ]}>
-              <ResourceWorkspaceContextProvider>
+              <ResourceWorkspaceContextProvider {...props}>
                 <ResourceWorkspaceContext.Consumer>
                   {
                     ResourceWorkspaceContext => {
@@ -311,6 +319,10 @@ export default class ResourceWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME}}}}>
             <a className="shared-with-me"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/passwords/filter/expired", state: {filter: {type: ResourceWorkspaceFilterTypes.EXPIRED}}}}>
+            <a className="expired"></a>
           </NavLink>
           <NavLink
             to={{pathname: "/app/passwords", state: {filter: {type: ResourceWorkspaceFilterTypes.ITEMS_I_OWN}}}}>

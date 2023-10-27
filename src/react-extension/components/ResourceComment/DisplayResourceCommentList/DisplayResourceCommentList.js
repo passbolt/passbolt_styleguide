@@ -20,7 +20,7 @@ import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -111,17 +111,6 @@ class DisplayResourceCommentList extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Returns true if the feature flag disableUser is enabled and the given user is suspended.
    * @param {object} user
    * @returns {boolean}
@@ -158,7 +147,7 @@ class DisplayResourceCommentList extends React.Component {
                         <span className="author username">{comment.creator.profile.first_name} {comment.creator.profile.last_name}{this.isUserSuspended(comment.creator) && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
                       }
                       <span
-                        className="modified">{this.formatDateTimeAgo(comment.created)}
+                        className="modified">{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
                       </span>
                     </div>
                     <div className="actions">

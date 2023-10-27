@@ -15,27 +15,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import AnnouncementWrapper
   from "../AnnouncementWrapper/AnnouncementWrapper";
-import {DateTime} from "luxon";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAnnouncement} from "../../../contexts/AnnouncementContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component allows to display the subscription announcement
  */
 class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -45,7 +34,7 @@ class DisplayGoingToExpireSubscriptionAnnouncement extends React.Component {
       <AnnouncementWrapper className="subscription" onClose={this.props.onClose} canClose={true}>
         <p>
           <Trans>Warning:</Trans>&nbsp;
-          <Trans>your subscription key will expire</Trans> {this.formatDateTimeAgo(this.props.expiry)}.
+          <Trans>your subscription key will expire</Trans> {formatDateTimeAgo(this.props.expiry, this.props.t, this.props.context.locale)}.
           <button className="link" type="button" onClick={this.props.navigationContext.onGoToAdministrationSubscriptionRequested}>
             <Trans>Manage Subscription</Trans>
           </button>

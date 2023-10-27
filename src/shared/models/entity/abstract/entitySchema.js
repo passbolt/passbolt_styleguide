@@ -315,12 +315,12 @@ class EntitySchema {
    */
   static validatePropTypeNumber(propName, prop, propSchema) {
     const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
-    if (propSchema.gte) {
+    if (typeof(propSchema.gte) === 'number') {
       if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.gte)) {
         validationError.addError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`);
       }
     }
-    if (propSchema.lte) {
+    if (typeof(propSchema.lte) === 'number') {
       if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.lte)) {
         validationError.addError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`);
       }

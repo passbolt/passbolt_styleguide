@@ -17,6 +17,8 @@ import PropTypes from "prop-types";
 import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 
 /**
  * This component allows to select shortcut filters applied on resources
@@ -40,6 +42,11 @@ class FilterResourcesByShortcuts extends React.Component {
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleSharedWithMeClick = this.handleSharedWithMeClick.bind(this);
     this.handleRecentlyModifiedClick = this.handleRecentlyModifiedClick.bind(this);
+    this.handleResourcesExpiredClick = this.handleResourcesExpiredClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
   }
 
   /**
@@ -75,6 +82,13 @@ class FilterResourcesByShortcuts extends React.Component {
    */
   get isRecentlyModifiedSelected() {
     return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED;
+  }
+
+  /**
+   * Returns true if the Expired shortcut is currently selected
+   */
+  get isResourcesExpiredSelected() {
+    return this.props.resourceWorkspaceContext.filter.type === ResourceWorkspaceFilterTypes.EXPIRED;
   }
 
   /**
@@ -115,6 +129,14 @@ class FilterResourcesByShortcuts extends React.Component {
   handleSharedWithMeClick() {
     const filter = {type: ResourceWorkspaceFilterTypes.SHARED_WITH_ME};
     this.props.history.push({pathname: '/app/passwords', state: {filter}});
+  }
+
+  /**
+   * Whenever the shortcut "Expired" has been selected
+   */
+  handleResourcesExpiredClick() {
+    const filter = {type: ResourceWorkspaceFilterTypes.EXPIRED};
+    this.props.history.push({pathname: '/app/passwords/filter/expired', state: {filter}});
   }
 
   render() {
@@ -176,6 +198,19 @@ class FilterResourcesByShortcuts extends React.Component {
               </div>
             </div>
           </li>
+          {this.props.passwordExpiryContext.isFeatureEnabled() &&
+            <li>
+              <div className={`row ${this.isResourcesExpiredSelected ? "selected" : ""}`} onClick={this.handleResourcesExpiredClick}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button type="button" className="link no-border">
+                      <span><Trans>Expired</Trans></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          }
         </ul>
       </div>
     );
@@ -183,8 +218,10 @@ class FilterResourcesByShortcuts extends React.Component {
 }
 
 FilterResourcesByShortcuts.propTypes = {
+  context: PropTypes.object, // the application context
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
+  passwordExpiryContext: PropTypes.object, // the password expiry context
 };
 
-export default withRouter(withResourceWorkspace(withTranslation("common")(FilterResourcesByShortcuts)));
+export default withRouter(withAppContext(withResourceWorkspace(withPasswordExpiry(withTranslation("common")(FilterResourcesByShortcuts)))));

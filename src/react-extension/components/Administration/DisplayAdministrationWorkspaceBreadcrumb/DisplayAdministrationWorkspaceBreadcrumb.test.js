@@ -16,10 +16,10 @@
  * Unit tests on DisplayAdministrationWorkspaceBreadcrumb in regard of specifications
  */
 
-
 import DisplayAdministrationWorkspaceBreadcrumbPage from "./DisplayAdministrationWorkspaceBreadcrumb.test.page";
 import {AdministrationWorkspaceMenuTypes} from "../../../contexts/AdministrationWorkspaceContext";
 import {defaultAppContext, defaultProps} from "./DisplayAdministrationWorkspaceBreadcrumb.test.data";
+import each from "jest-each";
 
 beforeEach(() => {
   jest.resetModules();
@@ -40,84 +40,29 @@ describe("As AD I can see a Breadcrumb", () => {
     expect(page.count).toBe(0);
   });
 
-  it('As AD I should see a breadcrumb mfa', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.MFA); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Multi Factor Authentication");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for user directory', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.USER_DIRECTORY); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Users Directory");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for email notifications', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Email Notification");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for subscription', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.SUBSCRIPTION); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Subscription");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for internationalization', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Internationalisation");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for account recovery', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Account Recovery");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for self registration', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.SELF_REGISTRATION); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Self Registration");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb for MFA policy', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.MFA_POLICY); // The props to pass
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("MFA Policy");
-    expect(page.item(3)).toBe("Settings");
-  });
-
-  it('As AD I should see a breadcrumb password policy', () => {
-    const props = defaultProps(AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES);
-    page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
-    expect(page.count).toBe(3);
-    expect(page.item(1)).toBe("Administration");
-    expect(page.item(2)).toBe("Password Policy");
-    expect(page.item(3)).toBe("Settings");
+  each([
+    {menuType: AdministrationWorkspaceMenuTypes.MFA, expectedBreadcrumb: "Multi Factor Authentication"},
+    {menuType: AdministrationWorkspaceMenuTypes.USER_DIRECTORY, expectedBreadcrumb: "Users Directory"},
+    {menuType: AdministrationWorkspaceMenuTypes.EMAIL_NOTIFICATION, expectedBreadcrumb: "Email Notification"},
+    {menuType: AdministrationWorkspaceMenuTypes.SUBSCRIPTION, expectedBreadcrumb: "Subscription"},
+    {menuType: AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION, expectedBreadcrumb: "Internationalisation"},
+    {menuType: AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY, expectedBreadcrumb: "Account Recovery"},
+    {menuType: AdministrationWorkspaceMenuTypes.SMTP_SETTINGS, expectedBreadcrumb: "Email server"},
+    {menuType: AdministrationWorkspaceMenuTypes.SELF_REGISTRATION, expectedBreadcrumb: "Self Registration"},
+    {menuType: AdministrationWorkspaceMenuTypes.SSO, expectedBreadcrumb: "Single Sign-On"},
+    {menuType: AdministrationWorkspaceMenuTypes.MFA_POLICY, expectedBreadcrumb: "MFA Policy"},
+    {menuType: AdministrationWorkspaceMenuTypes.RBAC, expectedBreadcrumb: "Role-Based Access Control"},
+    {menuType: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES, expectedBreadcrumb: "Password Policy"},
+    {menuType: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES, expectedBreadcrumb: "User Passphrase Policies"},
+    {menuType: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY, expectedBreadcrumb: "Password Expiry"},
+  ]).describe("As AD I should see a breadcrumb for each menu", scenario => {
+    it(`for: ${scenario.menuType}`, () => {
+      const props = defaultProps(scenario.menuType); // The props to pass
+      page = new DisplayAdministrationWorkspaceBreadcrumbPage(context, props);
+      expect(page.count).toBe(3);
+      expect(page.item(1)).toBe("Administration");
+      expect(page.item(2)).toBe(scenario.expectedBreadcrumb);
+      expect(page.item(3)).toBe("Settings");
+    });
   });
 });

@@ -40,6 +40,7 @@ import {withWorkflow} from "../../../contexts/WorkflowContext";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 
 class EditResource extends Component {
   constructor(props) {
@@ -64,6 +65,7 @@ class EditResource extends Component {
       uri: resource.uri || "",
       uriError: "",
       uriWarning: "",
+      passwordOriginal: null,
       password: "",
       passwordError: "",
       passwordWarning: "",
@@ -115,6 +117,7 @@ class EditResource extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
     await this.initialize();
     await this.props.passwordPoliciesContext.findPolicies();
     this.initPwnedPasswordService();
@@ -397,6 +400,12 @@ class EditResource extends Component {
       uri: this.state.uri,
     };
 
+    const isPasswordExpiryEnabled = this.props.passwordExpiryContext.isFeatureEnabled();
+    const hasPasswordChanged = this.state.password !== this.state.passwordOriginal;
+    if (isPasswordExpiryEnabled && hasPasswordChanged) {
+      resourceDto.expired = this.computeNewExpirationDate();
+    }
+
     if (!this.areResourceTypesEnabled()) {
       return this.updateResourceLegacy(resourceDto);
     }
@@ -412,6 +421,15 @@ class EditResource extends Component {
     }
 
     return this.updateWithEncryptedDescription(resourceDto);
+  }
+
+  /**
+   * Returns the new expiration date for the given resource according the the password expiry settings.
+   * @todo: implement the computation with the full settings
+   * @returns {Date|null}
+   */
+  computeNewExpirationDate() {
+    return null;
   }
 
   /**
@@ -721,6 +739,7 @@ class EditResource extends Component {
       this.evaluatePasswordIsInDictionaryDebounce(password);
       const newState = {
         password: password,
+        passwordOriginal: password,
         description: plaintextSecretDto.description || this.state.description,
         totp: plaintextSecretDto.totp ? new TotpViewModel(plaintextSecretDto.totp) : null,
         passwordEntropy: SecretGenerator.entropy(password),
@@ -1065,6 +1084,7 @@ EditResource.propTypes = {
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
   workflowContext: PropTypes.any, // The workflow context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
 export default withAppContext(
@@ -1074,4 +1094,5 @@ export default withAppContext(
         withPasswordPolicies(
           withDialog(
             withWorkflow(
-              withTranslation('common')(EditResource))))))));
+              withPasswordExpiry(
+                withTranslation('common')(EditResource)))))))));

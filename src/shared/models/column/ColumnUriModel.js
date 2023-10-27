@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel from "./ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column uri use only with the UI
@@ -23,8 +23,8 @@ class ColumnUriModel extends ColumnModel {
    * @param {Object} columnDto
    */
   constructor(columnDto = {}) {
-    columnDto.id = 'uri';
-    columnDto.field = 'uri';
+    columnDto.id = ColumnModelTypes.URI;
+    columnDto.field = ColumnModelTypes.URI;
     columnDto.width = columnDto.width || 210;
     columnDto.defaultWidth = 210;
     columnDto.resizable = true;

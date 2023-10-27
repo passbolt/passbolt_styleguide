@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel from "./ColumnModel";
+import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column checkbox use only with the UI
@@ -23,8 +23,8 @@ class ColumnCheckboxModel extends ColumnModel {
    * @param {Object} columnDto
    */
   constructor(columnDto = {}) {
-    columnDto.id = 'checkbox';
-    columnDto.field = 'checkbox';
+    columnDto.id = ColumnModelTypes.CHECKBOX;
+    columnDto.field = ColumnModelTypes.CHECKBOX;
     columnDto.width = columnDto.width || 20;
     columnDto.defaultWidth = 20;
     columnDto.resizable = false;

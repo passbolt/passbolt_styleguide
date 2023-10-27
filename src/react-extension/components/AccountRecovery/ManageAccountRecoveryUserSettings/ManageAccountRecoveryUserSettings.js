@@ -19,13 +19,13 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {DateTime} from "luxon";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {withDialog} from "../../../contexts/DialogContext";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -156,17 +156,6 @@ class ManageAccountRecoveryUserSettings extends Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate("Just now") : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get the user requesting the current user to subscribe to the account recovery program.
    * @returns {*}
    */
@@ -238,7 +227,7 @@ class ManageAccountRecoveryUserSettings extends Component {
                     </Tooltip>
                     &nbsp;
                     <span className="name"><Trans>requested this operation</Trans></span>
-                    <div className="subinfo light">{this.formatDateTimeAgo(this.date)}</div>
+                    <div className="subinfo light">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</div>
                   </div>
                 </div>
                 <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>
