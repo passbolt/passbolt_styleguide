@@ -25,6 +25,7 @@ import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import {enableFetchMocks} from "jest-fetch-mock";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -217,6 +218,57 @@ describe("See the Email Notifications Settings", () => {
       expectDisabled(page.showSecret);
       expectDisabled(page.showDescription);
       expectDisabled(page.showComment);
+    });
+  });
+
+  describe("As AD I should not be able to see the source of the configuration", () => {
+    it("when it's coming from the database", async() => {
+      expect.assertions(1);
+
+      const settings = defaultEmailNotificationSettings();
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
+    });
+
+    it("when it's coming from a file", async() => {
+      expect.assertions(1);
+
+      const settings = defaultEmailNotificationSettings({
+        sources_database: false,
+        sources_file: true,
+      });
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: file.');
+    });
+
+    it("when it's coming from a environment variables", async() => {
+      expect.assertions(1);
+
+      const settings = defaultEmailNotificationSettings({
+        sources_database: false,
+        sources_file: false,
+      });
+
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');
     });
   });
 });

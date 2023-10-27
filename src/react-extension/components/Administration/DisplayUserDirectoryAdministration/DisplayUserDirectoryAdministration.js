@@ -242,16 +242,23 @@ class DisplayUserDirectoryAdministration extends React.Component {
   }
 
   /**
+   * Returns the source of the current settings
+   * @returns {string}
+   */
+  get settingsSource() {
+    return this.props.adminUserDirectoryContext?.getCurrentSettings()?.source;
+  }
+
+  /**
    * Returns the source of the current configuration
    * @returns {string}
    */
   get configurationSource() {
-    const source = this.props.adminUserDirectoryContext?.getCurrentSettings()?.source;
     return {
-      'env': this.props.t('environement variables'),
+      'env': this.props.t('environment variables'),
       'file': this.props.t('file'),
       'db': this.props.t('database'),
-    }[source] || this.props.t('unknown');
+    }[this.settingsSource] || this.props.t('unknown');
   }
 
   /**

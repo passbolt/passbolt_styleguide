@@ -343,7 +343,7 @@ describe("As AD I should see the user directory settings", () => {
       const page = new DisplayUserDirectoryAdministrationPage(context, props);
       await waitFor(() => {});
 
-      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: environement variables.");
+      expect(page.settingsSource.textContent).toStrictEqual("This current configuration source is: environment variables.");
     });
 
     it('::when the source is env', async() => {
