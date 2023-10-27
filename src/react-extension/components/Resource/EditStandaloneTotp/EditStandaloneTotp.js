@@ -23,6 +23,7 @@ import {Trans, withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import StandaloneTotpViewModel from "../../../../shared/models/standaloneTotp/StandaloneTotpViewModel";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 
 class EditStandaloneTotp extends Component {
   /**
@@ -143,7 +144,7 @@ class EditStandaloneTotp extends Component {
 
     // Resource type with encrypted totp
     const resourceDto = this.state.standaloneTotp.toResourceDto();
-    const secretDto = StandaloneTotpViewModel.areSecretsDifferent(this.state.standaloneTotp, this.state.originalTotp)
+    const secretDto = TotpViewModel.areSecretsDifferent(this.state.standaloneTotp, this.state.originalTotp)
       ? this.state.standaloneTotp.toSecretDto()
       : null;
 

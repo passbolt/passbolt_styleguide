@@ -99,6 +99,22 @@ class TotpViewModel {
   }
 
   /**
+   * Returns true if both the data to be encrypted are different
+   * @param {TotpViewModel} a
+   * @param {TotpViewModel} b
+   * @returns {boolean}
+   */
+  static areSecretsDifferent(a, b) {
+    const keys = [
+      "secret_key",
+      "period",
+      "digits",
+      "algorithm",
+    ];
+    return keys.some(key => a[key] !== b[key]);
+  }
+
+  /**
    * Validates the current object state
    * @returns {EntityValidationError}
    */

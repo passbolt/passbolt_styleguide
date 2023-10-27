@@ -824,10 +824,7 @@ class EditResource extends Component {
       const originalTotp = this.state.originalDecryptedSecret.totp.toSecretDto().totp;
       const newTotp = this.state.totp.toSecretDto().totp;
 
-      const hasTotpChanged = newTotp.algorithm !== originalTotp.algorithm
-        || newTotp.digits !== originalTotp.digits
-        || newTotp.period !== originalTotp.period
-        || newTotp.secret_key !== originalTotp.secret_key;
+      const hasTotpChanged = TotpViewModel.areSecretsDifferent(originalTotp, newTotp);
 
       if (hasTotpChanged) {
         return true;
