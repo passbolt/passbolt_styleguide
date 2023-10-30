@@ -25,6 +25,7 @@ import {defaultAppContext} from "../../../contexts/ApiAppContext.test.data";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
 import {enableFetchMocks} from "jest-fetch-mock";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   enableFetchMocks();
@@ -46,25 +47,59 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
+      expect.assertions(34);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
-      // check fields in the form
+      //passwords
       expect(page.passwordCreate.checked).toBeTruthy();
       expect(page.passwordUpdate.checked).toBeTruthy();
       expect(page.passwordDelete.checked).toBeTruthy();
       expect(page.passwordShare.checked).toBeTruthy();
+
+      //folders
       expect(page.folderCreate.checked).toBeTruthy();
       expect(page.folderUpdate.checked).toBeTruthy();
       expect(page.folderDelete.checked).toBeTruthy();
       expect(page.folderShare.checked).toBeTruthy();
+
+      //comments
       expect(page.commentAdd.checked).toBeTruthy();
+
+      //group membership
       expect(page.groupDelete.checked).toBeTruthy();
       expect(page.groupUserAdd.checked).toBeTruthy();
       expect(page.groupUserDelete.checked).toBeTruthy();
       expect(page.groupUserUpdate.checked).toBeTruthy();
+
+      //group manager
       expect(page.groupManagerUpdate.checked).toBeTruthy();
+
+      //Registration and recovery: Admin
+      expect(page.userSetupCompletedAdmins.checked).toBeTruthy();
+      expect(page.userRecoverCompletedAdmins.checked).toBeTruthy();
+      expect(page.userRecoverAbortedAdmins.checked).toBeTruthy();
+
+      //Registration and recovery: User
       expect(page.userCreate.checked).toBeTruthy();
       expect(page.userRecover.checked).toBeTruthy();
+      expect(page.userRecoverCompleted.checked).toBeTruthy();
+      //when users completed the recover of theri account..
+
+      //Account Recovery: Admin
+      expect(page.accountRecoveryRequestedAllAdmins.checked).toBeTruthy();
+      expect(page.accountRecoverySettingsUpdate.checked).toBeTruthy();
+      expect(page.accountRecoveryRespondedAdmin.checked).toBeTruthy();
+      expect(page.accountRecoveryRespondedAllAdmins.checked).toBeTruthy();
+
+      //Account Recovery: User
+      expect(page.accountRecoveryRequestedUser.checked).toBeTruthy();
+      expect(page.accountRecoveryRespondedApproved.checked).toBeTruthy();
+      expect(page.accountRecoveryRespondedRejected.checked).toBeTruthy();
+
+      //Password expiry
+      expect(page.passwordExpiryExpired.checked).toBeTruthy();
+
+      //Email Content Visibility
       expect(page.showUsername.checked).toBeTruthy();
       expect(page.showUri.checked).toBeTruthy();
       expect(page.showSecret.checked).toBeTruthy();
@@ -120,29 +155,120 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('I should see all fields disabled”', () => {
+      expect.assertions(33);
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
-      expect(page.passwordCreate.getAttribute("disabled")).not.toBeNull();
-      expect(page.passwordUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.passwordDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.passwordShare.getAttribute("disabled")).not.toBeNull();
-      expect(page.folderCreate.getAttribute("disabled")).not.toBeNull();
-      expect(page.folderUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.folderDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.folderShare.getAttribute("disabled")).not.toBeNull();
-      expect(page.commentAdd.getAttribute("disabled")).not.toBeNull();
-      expect(page.groupDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.groupUserAdd.getAttribute("disabled")).not.toBeNull();
-      expect(page.groupUserDelete.getAttribute("disabled")).not.toBeNull();
-      expect(page.groupUserUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.groupManagerUpdate.getAttribute("disabled")).not.toBeNull();
-      expect(page.userCreate.getAttribute("disabled")).not.toBeNull();
-      expect(page.userRecover.getAttribute("disabled")).not.toBeNull();
-      expect(page.showUsername.getAttribute("disabled")).not.toBeNull();
-      expect(page.showUri.getAttribute("disabled")).not.toBeNull();
-      expect(page.showSecret.getAttribute("disabled")).not.toBeNull();
-      expect(page.showDescription.getAttribute("disabled")).not.toBeNull();
-      expect(page.showComment.getAttribute("disabled")).not.toBeNull();
+
+      function expectDisabled(field) {
+        expect(field.getAttribute("disabled")).not.toBeNull();
+      }
+
+      //passwords
+      expectDisabled(page.passwordCreate);
+      expectDisabled(page.passwordUpdate);
+      expectDisabled(page.passwordDelete);
+      expectDisabled(page.passwordShare);
+
+      //folders
+      expectDisabled(page.folderCreate);
+      expectDisabled(page.folderUpdate);
+      expectDisabled(page.folderDelete);
+      expectDisabled(page.folderShare);
+
+      //comments
+      expectDisabled(page.commentAdd);
+
+      //group membership
+      expectDisabled(page.groupDelete);
+      expectDisabled(page.groupUserAdd);
+      expectDisabled(page.groupUserDelete);
+      expectDisabled(page.groupUserUpdate);
+
+      //group manager
+      expectDisabled(page.groupManagerUpdate);
+
+      //Registration and recovery: Admin
+      expectDisabled(page.userSetupCompletedAdmins);
+      expectDisabled(page.userRecoverCompletedAdmins);
+      expectDisabled(page.userRecoverAbortedAdmins);
+
+      //Registration and recovery: User
+      expectDisabled(page.userCreate);
+      expectDisabled(page.userRecover);
+      expectDisabled(page.userRecoverCompleted);
+      //when users completed the recover of theri account..
+
+      //Account Recovery: Admin
+      expectDisabled(page.accountRecoveryRequestedAllAdmins);
+      expectDisabled(page.accountRecoverySettingsUpdate);
+      expectDisabled(page.accountRecoveryRespondedAdmin);
+      expectDisabled(page.accountRecoveryRespondedAllAdmins);
+
+      //Account Recovery: User
+      expectDisabled(page.accountRecoveryRequestedUser);
+      expectDisabled(page.accountRecoveryRespondedApproved);
+      expectDisabled(page.accountRecoveryRespondedRejected);
+
+      //Password expiry
+      expectDisabled(page.passwordExpiryExpired);
+
+      //Email Content Visibility
+      expectDisabled(page.showUsername);
+      expectDisabled(page.showUri);
+      expectDisabled(page.showSecret);
+      expectDisabled(page.showDescription);
+      expectDisabled(page.showComment);
+    });
+  });
+
+  describe("As AD I should not be able to see the source of the configuration", () => {
+    it("when it's coming from the database", async() => {
+      expect.assertions(1);
+
+      const settings = defaultEmailNotificationSettings();
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: database.');
+    });
+
+    it("when it's coming from a file", async() => {
+      expect.assertions(1);
+
+      const settings = defaultEmailNotificationSettings({
+        sources_database: false,
+        sources_file: true,
+      });
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: file.');
+    });
+
+    it("when it's coming from a environment variables", async() => {
+      expect.assertions(1);
+
+      const settings = defaultEmailNotificationSettings({
+        sources_database: false,
+        sources_file: false,
+      });
+
+      fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
+
+      const context = defaultAppContext(); // The applicative context
+      const props = defaultProps(); // The props to pass
+      const page = new DisplayEmailNotificationsAdministrationPage(context, props);
+      await waitForTrue(() => Boolean(page.settingsSource));
+
+      expect(page.settingsSource.textContent).toStrictEqual('This current configuration source is: environment variables.');
     });
   });
 });

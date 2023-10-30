@@ -28,6 +28,7 @@ import mockPort from "../../../../../test/mocks/mockPort";
 import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
+import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 
 /**
  * DisplayUserWorkspace stories
@@ -40,26 +41,28 @@ export default {
 const Template = ({...args}) =>
   <MemoryRouter initialEntries={['/app/users']}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
-      <DialogContextProvider>
-        <NavigationContextProvider>
-          <ContextualMenuContextProvider>
-            <UserWorkspaceContextProvider>
-              <ManageDialogs/>
-              <ManageWorkflows/>
-              <ManageContextualMenu/>
-              <ManageAnnouncements/>
-              <div id="container" className="page user">
-                <div id="app" className="app ready" tabIndex="1000">
-                  <div className="header first">
-                    <DisplayMainMenu/>
+      <RbacContextProvider>
+        <DialogContextProvider>
+          <NavigationContextProvider>
+            <ContextualMenuContextProvider>
+              <UserWorkspaceContextProvider>
+                <ManageDialogs/>
+                <ManageWorkflows/>
+                <ManageContextualMenu/>
+                <ManageAnnouncements/>
+                <div id="container" className="page user">
+                  <div id="app" className="app ready" tabIndex="1000">
+                    <div className="header first">
+                      <DisplayMainMenu/>
+                    </div>
+                    <DisplayUserWorkspace/>
                   </div>
-                  <DisplayUserWorkspace/>
                 </div>
-              </div>
-            </UserWorkspaceContextProvider>
-          </ContextualMenuContextProvider>
-        </NavigationContextProvider>
-      </DialogContextProvider>
+              </UserWorkspaceContextProvider>
+            </ContextualMenuContextProvider>
+          </NavigationContextProvider>
+        </DialogContextProvider>
+      </RbacContextProvider>
     </ExtAppContextProvider>
   </MemoryRouter>;
 

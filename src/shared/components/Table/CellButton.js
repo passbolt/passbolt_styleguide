@@ -1,5 +1,5 @@
 /**
- * Passbolt ~ Open source TableHeader manager for teams
+ * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
@@ -52,20 +52,30 @@ class CellButton extends Component {
   }
 
   /**
+   * Has value
+   * @return {boolean}
+   */
+  hasValue() {
+    return Boolean(this.value);
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
       <div title={this.value}>
-        <button className="link no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+        {this.hasValue() &&
+          <button className="link no-border" type="button" onClick={this.handleClick}><span>{this.value}</span></button>
+        }
       </div>
     );
   }
 }
 
 CellButton.propTypes = {
-  value: PropTypes.string.isRequired, // The value to display
+  value: PropTypes.string, // The value to display
   onClick: PropTypes.func, // The onClick event function
 };
 

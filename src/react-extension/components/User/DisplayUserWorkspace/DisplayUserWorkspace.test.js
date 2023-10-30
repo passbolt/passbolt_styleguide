@@ -63,4 +63,3 @@ describe("Display User Workspace", () => {
     expect(page.hasUserGroupDetails).toBeFalsy();
   });
 });
-

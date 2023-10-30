@@ -60,6 +60,7 @@ class EmailNotificationDTO {
     this.show_uri = "showUri" in emailNotificationModel ? emailNotificationModel.showUri : true;
     this.show_username = "showUsername" in emailNotificationModel ? emailNotificationModel.showUsername : true;
     this.show_comment = "showComment" in emailNotificationModel ? emailNotificationModel.showComment : true;
+    this.send_password_expire = "passwordExpiryExpiredUser" in emailNotificationModel ? emailNotificationModel.passwordExpiryExpiredUser : true;
   }
 }
 

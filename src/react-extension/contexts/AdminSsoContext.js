@@ -333,7 +333,7 @@ export class AdminSsoContextProvider extends React.Component {
   }
 
   /**
-   * Validates the current data in the state assuming the SSO provider is Azure
+   * Validates the current data in the state assuming the SSO provider is Google
    * @param {string} data the data to validate
    * @param {object} errors a ref object to put the validation onto
    * @returns {boolean}
@@ -341,6 +341,49 @@ export class AdminSsoContextProvider extends React.Component {
   validateDataFromProvider_google(data, errors) {
     const {client_id, client_secret} = data;
     let isDataValid = true;
+    if (!client_id?.length) { // Validation of client_id
+      errors.client_id = this.props.t("The Application (client) ID is required");
+      isDataValid = false;
+    }
+
+    // Validation of client_secret
+    if (!client_secret?.length) {
+      errors.client_secret = this.props.t("The Secret is required");
+      isDataValid = false;
+    }
+
+    this.hasError = true;
+    return isDataValid;
+  }
+
+  /**
+   * Validates the current data in the state assuming the SSO provider is OAuth2
+   * @param {string} data the data to validate
+   * @param {object} errors a ref object to put the validation onto
+   * @returns {boolean}
+   */
+  validateDataFromProvider_oauth2(data, errors) {
+    const {url, client_id, client_secret, scope, openid_configuration_path} = data;
+    let isDataValid = true;
+
+    if (!url?.length) { // Validation of url
+      errors.url = this.props.t("The Login URL is required");
+      isDataValid = false;
+    } else if (!this.isValidHttpsUrl(url)) {
+      errors.url = this.props.t("The Login URL must be a valid HTTPS URL");
+      isDataValid = false;
+    }
+
+    if (!openid_configuration_path?.length) { // Validation of client_id
+      errors.openid_configuration_path = this.props.t("The OpenId Configuration Path is required");
+      isDataValid = false;
+    }
+
+    if (!scope?.length) { // Validation of client_id
+      errors.scope = this.props.t("The Scope is required");
+      isDataValid = false;
+    }
+
     if (!client_id?.length) { // Validation of client_id
       errors.client_id = this.props.t("The Application (client) ID is required");
       isDataValid = false;
@@ -374,6 +417,19 @@ export class AdminSsoContextProvider extends React.Component {
     try {
       const url = new URL(stringUrl);
       return url.protocol === "http:" || url.protocol === "https:";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns true if the url is valid;
+   * @param {string} stringUrl
+   */
+  isValidHttpsUrl(stringUrl) {
+    try {
+      const url = new URL(stringUrl);
+      return url.protocol === "https:";
     } catch (_) {
       return false;
     }

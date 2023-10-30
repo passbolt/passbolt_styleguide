@@ -21,6 +21,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {Trans, withTranslation} from "react-i18next";
+import {isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',
@@ -185,6 +186,15 @@ class DisplayResourceDetailsPermission extends React.Component {
   }
 
   /**
+   * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
+   * @returns {boolean}
+   */
+  isUserSuspended(user) {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -220,10 +230,10 @@ class DisplayResourceDetailsPermission extends React.Component {
           {!this.isLoading() &&
           <ul className="shared-with ready">
             {this.state.permissions && this.state.permissions.map(permission =>
-              <li key={permission.id} className="usercard-col-2">
+              <li key={permission.id} className={`usercard-col-2 ${this.isUserSuspended(permission.user) ? "suspended" : ""}`}>
                 <div className="content-wrapper">
                   <div className="content">
-                    <div className="name">{this.getPermissionAroName(permission)}</div>
+                    <div className="name">{this.getPermissionAroName(permission)}{this.isUserSuspended(permission.user) && <span className="suspended"> <Trans>(suspended)</Trans></span>}</div>
                     <div className="subinfo">{this.props.t(PERMISSIONS_LABEL[permission.type])}</div>
                   </div>
                 </div>

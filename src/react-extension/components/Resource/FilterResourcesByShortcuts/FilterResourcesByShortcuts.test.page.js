@@ -28,10 +28,10 @@ export default class FilterResourcesByShortcutsPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <Router>
-        <AppContext.Provider value={appContext}>
+        <AppContext.Provider value={props.context}>
           <MockTranslationProvider>
             <FilterResourcesByShortcuts.WrappedComponent {...props}/>
           </MockTranslationProvider>

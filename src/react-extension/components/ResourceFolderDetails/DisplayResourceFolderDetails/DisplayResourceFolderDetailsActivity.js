@@ -13,13 +13,13 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {DateTime} from "luxon";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 const LIMIT_ACTIVITIES_PER_PAGE = 5;
 
@@ -126,17 +126,6 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get an activity creator full name
    * @param {object} user The creator
    * @return string
@@ -196,7 +185,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   renderFolderCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const folderName = this.folder.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.action_log_id} className="usercard-detailed-col-2">
@@ -223,7 +212,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   renderFolderUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const folderName = this.folder.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.action_log_id} className="usercard-detailed-col-2">
@@ -278,7 +267,7 @@ class DisplayResourceFolderDetailsActivity extends React.Component {
   renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
     const folderName = this.folder.name;
-    const activityFormattedDate = this.formatDateTimeAgo(activity.created);
+    const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
       <li key={activity.action_log_id} className="usercard-detailed-col-2">

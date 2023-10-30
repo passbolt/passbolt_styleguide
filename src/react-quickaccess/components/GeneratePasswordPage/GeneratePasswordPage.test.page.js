@@ -18,6 +18,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import GeneratePasswordPage from "./GeneratePasswordPage";
+import {waitForTrue} from "../../../../test/utils/waitFor";
 
 /**
  * The GeneratePasswordPage component represented as a page
@@ -56,13 +57,6 @@ export default class GeneratePasswordTestPage {
    */
   get generatePasswordButton() {
     return this._page.container.querySelector('a.password-generate');
-  }
-
-  /**
-   * Returns the toggle password button
-   */
-  get toggleViewPasswordButton() {
-    return this._page.container.querySelector('.password-view button');
   }
 
   /**
@@ -110,39 +104,110 @@ export default class GeneratePasswordTestPage {
   }
 
   /**
-   * Generate a new password
+   * Returns all the mask buttons.
    */
-  async generatePassword() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.generatePasswordButton, leftClick);
-    await waitFor(() => {});
+  get maskButtons() {
+    return this._page.container.querySelectorAll('label[for="configure-password-generator-form-masks"] + div .button-toggle');
   }
 
   /**
-   * Toggle to show or hide password
+   * Returns the button corresponding the upper mask.
    */
-  async toggleViewPassword() {
+  get maskUpper() {
+    return this.maskButtons[0];
+  }
+
+  /**
+   * Returns the button corresponding the emoji mask.
+   */
+  get maskEmoji() {
+    return this.maskButtons[9];
+  }
+
+  /**
+   * Returns the password length input HTMLElement
+   * @returns {HTMLElement}
+   */
+  get passwordLengthInput() {
+    return this._page.container.querySelector('#configure-password-generator-form-length');
+  }
+
+  /**
+   * Returns the passphrase words count input HTMLElement
+   * @returns {HTMLElement}
+   */
+  get passphraseLengthInput() {
+    return this._page.container.querySelector('#configure-passphrase-generator-form-word-count');
+  }
+
+  /**
+   * Returns the exclude look alike checkbox HTMLElement
+   * @returns {HTMLElement}
+   */
+  get excludeLookAlikeChars() {
+    return this._page.container.querySelector("#configure-password-generator-form-exclude-look-alike");
+  }
+
+  /**
+   * Returns the passphrase words separator input HTMLElement
+   * @returns {HTMLElement}
+   */
+  get passphraseWordsSeparatorInput() {
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-separator");
+  }
+
+  /**
+   * Returns the Select input HTLMElement
+   * @returns {HTMLElement}
+   */
+  get wordCaseSelectInput() {
+    return this._page.container.querySelector("#configure-passphrase-generator-form-words-case .value");
+  }
+
+  /**
+   * Returns the options from the word case input
+   * @returns {NodeList}
+   */
+  get wordCaseOptions() {
+    return this._page.container.querySelectorAll("#configure-passphrase-generator-form-words-case .select-items .items li");
+  }
+
+  /**
+   * Simulates a click on the given element.
+   * @param {HTMLElement} element
+   */
+  async clickOn(element, inProgressFn = () => {}) {
     const leftClick = {button: 0};
-    fireEvent.click(this.toggleViewPasswordButton, leftClick);
-    await waitFor(() => {});
+    fireEvent.click(element, leftClick);
+    return waitFor(inProgressFn);
+  }
+
+  /**
+   * Generate a new password
+   */
+  async generatePassword() {
+    await this.clickOn(this.generatePasswordButton);
   }
 
   /**
    * Copy password
    */
   async copyPassword() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.copyPasswordButton, leftClick);
-    await waitFor(() => {});
+    await this.clickOn(this.copyPasswordButton);
   }
 
   /**
    * use password generator
    */
   async usePasswordGenerator() {
-    const leftClick = {button: 0};
-    fireEvent.click(this.tab(1), leftClick);
-    await waitFor(() => {});
+    await this.clickOn(this.tab(1));
+  }
+
+  /**
+   * use password generator
+   */
+  async usePassphraseGenerator() {
+    await this.clickOn(this.tab(2));
   }
 
   /**
@@ -150,8 +215,82 @@ export default class GeneratePasswordTestPage {
    * @param inProgressFn Function called while we wait for React stability
    */
   async applyGeneratePassword(inProgressFn = () => {}) {
-    const leftClick = {button: 0};
-    fireEvent.click(this.applyButton, leftClick);
-    await waitFor(inProgressFn);
+    await this.clickOn(this.applyButton, inProgressFn);
+  }
+
+  /**
+   * Set password length input with the given value
+   * @param {number} passwordLength
+   * @returns {Promise<void>}
+   */
+  async setPasswordLength(passwordLength) {
+    const element = this.passwordLengthInput;
+    fireEvent.input(element, {target: {value: passwordLength}});
+    await waitForTrue(() => element.value.toString() === passwordLength.toString());
+  }
+
+  /**
+   * Set the masks buttons options
+   * @param {object} masksOptions a key value pair (similar to a Map<string, boolean)
+   * @returns {Promise<void>}
+   */
+  async setMasks(masksOptions) {
+    const fieldNames = Object.keys(masksOptions);
+    for (let i = 0; i < fieldNames.length; i++) {
+      const field = this[fieldNames[i]];
+      const targetState = masksOptions[fieldNames[i]];
+      if (targetState !== field.classList.contains('selected')) {
+        fireEvent.click(field, {button: 0});
+        await waitForTrue(() => targetState === field.classList.contains('selected'));
+      }
+    }
+  }
+
+  /**
+   * Clicks on the exclude look alike chars checkbox
+   * @returns {Promise<void>}
+   */
+  async clickOnExcludeLookAlikeChars() {
+    await this.clickOn(this.excludeLookAlikeChars);
+  }
+
+  /**
+   * Set passphrase words count input with the given value
+   * @param {number} wordsCounts
+   * @returns {Promise<void>}
+   */
+  async setPassphraseLength(wordsCounts) {
+    const element = this.passphraseLengthInput;
+    fireEvent.input(element, {target: {value: wordsCounts}});
+    await waitForTrue(() => element.value.toString() === wordsCounts.toString());
+  }
+
+  /**
+   * Set passphrase words separator input with the given value
+   * @param {number} wordsCounts
+   * @returns {Promise<void>}
+   */
+  async setWordSeparator(wordsSeparator) {
+    const element = this.passphraseWordsSeparatorInput;
+    fireEvent.input(element, {target: {value: wordsSeparator}});
+    await waitForTrue(() => element.value === wordsSeparator);
+  }
+
+  /**
+   * Sets the word case in the form with the given option
+   * @param {string} wordCaseOption the text content that match the desired option
+   */
+  async setWordCase(wordCaseOption) {
+    this.clickOn(this.wordCaseSelectInput);
+    await waitForTrue(() => this.wordCaseOptions.length > 0);
+
+    const options = this.wordCaseOptions;
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].textContent !== wordCaseOption) {
+        continue;
+      }
+      await this.clickOn(options[i]);
+      return waitForTrue(() => this.wordCaseSelectInput.textContent === wordCaseOption);
+    }
   }
 }

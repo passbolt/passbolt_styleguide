@@ -227,7 +227,7 @@ describe("CreateGpgKey", () => {
       jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
       const page = new CreateGpgKeyPage(props);
       await waitFor(() => {});
-      await page.fill("Service is unavailable");
+      await page.fill("ispowned service unavailable");
       expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
 

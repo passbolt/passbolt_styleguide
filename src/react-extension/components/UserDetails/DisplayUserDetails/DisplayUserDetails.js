@@ -25,6 +25,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation, Trans} from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 class DisplayUserDetails extends React.Component {
   /**
@@ -112,6 +113,15 @@ class DisplayUserDetails extends React.Component {
   }
 
   /**
+   * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
+   * @returns {boolean}
+   */
+  isUserSuspended(user) {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -119,7 +129,7 @@ class DisplayUserDetails extends React.Component {
     return (
       <div className="panel aside ready">
         <div className="sidebar user">
-          <div className="sidebar-header">
+          <div className={`sidebar-header ${this.isUserSuspended(this.user) ? "suspended" : ""}`}>
             <div className={`teaser-image  ${this.hasAttentionRequired ? "attention-required" : ""}`}>
               <UserAvatar
                 user={this.user}

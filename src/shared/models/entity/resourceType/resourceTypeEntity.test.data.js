@@ -231,8 +231,8 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
  */
 export const resourceTypeTotpDto = (data = {}) => ({
   id: TEST_RESOURCE_TYPE_TOTP,
-  name: "Password, Description and TOTP",
-  slug: "password-description-totp",
+  name: "Standalone TOTP",
+  slug: "totp",
   definition: {
     "resource": {
       "type": "object",

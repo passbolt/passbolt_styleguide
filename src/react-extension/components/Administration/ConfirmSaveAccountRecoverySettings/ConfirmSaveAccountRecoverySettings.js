@@ -19,6 +19,7 @@ import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitBut
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {DateTime} from "luxon";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class ConfirmSaveAccountRecoverySettings extends Component {
   /**
@@ -113,23 +114,6 @@ class ConfirmSaveAccountRecoverySettings extends Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    if (date === null) {
-      return "n/a";
-    }
-    if (date === 'Infinity') {
-      return this.translate("Never");
-    }
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Format date
    * @param {string} date The date to format
    * @return {string}
@@ -214,7 +198,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        <td className="value">{this.formatDateTimeAgo(this.props.keyInfo.expires)}</td>
+                        <td className="value">{formatDateTimeAgo(this.props.keyInfo.expires, this.props.t, this.props.context.locale)}</td>
                       </tr>
                     </tbody>
                   </table>

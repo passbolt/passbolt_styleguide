@@ -1,5 +1,5 @@
 /**
- * Passbolt ~ Open source TableHeader manager for teams
+ * Passbolt ~ Open source password manager for teams
  * Copyright (c) 2023 Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.

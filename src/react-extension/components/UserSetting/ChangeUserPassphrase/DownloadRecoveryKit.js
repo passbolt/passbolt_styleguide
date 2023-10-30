@@ -59,6 +59,18 @@ class DownloadRecoveryKit extends React.Component {
         <div className="row">
           <div className="col7 main-column last">
             <h3><Trans>The passphrase was updated!</Trans></h3>
+            <div className="message warning">
+              <p>
+                <strong>
+                  <Trans>Warning: This recovery kit replace the old one.</Trans>
+                </strong>
+              </p>
+              <p>
+                <strong>
+                  <Trans>You will need this recovery kit later to access your account (for example on a new device).</Trans>
+                </strong>
+              </p>
+            </div>
             <div className="feedback-card">
               <AnimatedFeedback name='success' />
               <div className="additional-information">

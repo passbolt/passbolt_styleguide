@@ -13,7 +13,7 @@
  *
  */
 import React from "react";
-import {render} from "@testing-library/react";
+import {render, waitFor} from "@testing-library/react";
 import {StaticRouter} from 'react-router-dom';
 import MockTranslationProvider from '../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider';
 import {fireEvent} from '@testing-library/react';
@@ -58,10 +58,24 @@ export default class SaveResourcePage {
     return this._page.container.querySelector('.complexity-text');
   }
 
+  /**
+   * Returns the save button element
+   */
+  get saveButton() {
+    return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
+  }
+
   /** fill the input password with data */
   async fillInputPassword(data)  {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(this.password, dataInputEvent);
     jest.runAllTimers();
+  }
+
+  /** Click on the element */
+  async click(element)  {
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
   }
 }

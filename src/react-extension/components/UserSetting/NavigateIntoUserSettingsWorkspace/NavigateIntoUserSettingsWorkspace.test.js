@@ -17,6 +17,9 @@ import {defaultAppContext} from '../../../contexts/ExtAppContext.test.data';
 import {waitFor} from '@testing-library/react';
 import NavigateIntoUserSettingsWorkspacePage from './NavigateIntoUserSettingsWorkspace.test.page';
 import {defaultProps} from './NavigateIntoUserSettingsWorkspace.test.data';
+import {defaultUserRbacContext, denyRbacContext} from '../../../../shared/context/Rbac/RbacContext.test.data';
+import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
+import each from 'jest-each';
 
 describe("NavigateIntoUserSettingsWorkspace", () => {
   let page; // The page to test against
@@ -64,4 +67,36 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
 
     expect(page.attentionRequired.length === 2).toBeTruthy();
   });
+
+  each([
+    {uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem'},
+    {uiAction: uiActions.DESKTOP_TRANSFER, pageProperty: 'desktopTransferMenuItem'},
+  ]).describe("rbac controls", scenario => {
+    it(`should allow access: ${scenario.uiAction}`, async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({
+        rbacContext: defaultUserRbacContext()
+      });
+
+      page = new NavigateIntoUserSettingsWorkspacePage(context, props);
+      await waitFor(() => {});
+
+      expect(page[scenario.pageProperty]).not.toBeNull();
+    });
+
+    it(`should deny access: ${scenario.uiAction}`, async() => {
+      expect.assertions(1);
+
+      const props = defaultProps({
+        rbacContext: denyRbacContext()
+      });
+
+      page = new NavigateIntoUserSettingsWorkspacePage(context, props);
+      await waitFor(() => {});
+
+      expect(page[scenario.pageProperty]).toBeNull();
+    });
+  });
 });
+

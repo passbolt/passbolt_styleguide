@@ -220,9 +220,15 @@ describe("ResourceCreatePage", () => {
       const resourceMeta = {
         name: "Passbolt Browser Extension Test",
         uri: "https://passbolt-browser-extension/test",
-        username: "test@passbolt.com"
+        username: "test@passbolt.com",
+        resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
       };
-      expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, "unavailable");
+
+      const secretDto = {
+        password: "unavailable",
+        description: ""
+      };
+      expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, secretDto);
     });
   });
 });

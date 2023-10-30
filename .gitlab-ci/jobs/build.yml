@@ -1,6 +1,6 @@
 build:
   stage: build
-  image: node:16
+  image: node:18
   extends: .rules
   artifacts:
     when: always

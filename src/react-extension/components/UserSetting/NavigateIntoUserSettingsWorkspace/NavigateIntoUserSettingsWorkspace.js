@@ -19,6 +19,8 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * This component allows to navigate throught the differents sections of the user settings workspace
@@ -44,7 +46,8 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseMobileCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
+    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
+    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -52,8 +55,10 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseDesktopCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
+    const canViewDesktopTransfer = this.props.rbacContext.canIUseUiAction(uiActions.DESKTOP_TRANSFER);
+    return canViewDesktopTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('desktop');
   }
+
   /**
    * Can the user access the account recovery feature.
    * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
@@ -169,7 +174,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
           </li>
           }
           {this.canIUseMobileCapability &&
-          <li>
+          <li id="navigation-item-mobile-setup">
             <div
               className={`row ${isSelected('mobile') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
@@ -183,7 +188,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
           </li>
           }
           {this.canIUseDesktopCapability &&
-          <li>
+          <li id="navigation-item-desktop-setup">
             <div
               className={`row ${isSelected('desktop') ? 'selected' : ''}`}>
               <div className="main-cell-wrapper">
@@ -209,6 +214,7 @@ NavigateIntoUserSettingsWorkspace.propTypes = {
   location: PropTypes.object,
   hasPendingAccountRecoveryChoice: PropTypes.bool,
   hasPendingMfaChoice: PropTypes.bool,
+  rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace))));
+export default withAppContext(withRbac(withRouter(withNavigationContext(withTranslation("common")(NavigateIntoUserSettingsWorkspace)))));

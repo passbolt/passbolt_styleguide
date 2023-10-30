@@ -45,6 +45,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the administration workspace password policies settings
   onGoToAdministrationUserPassphrasePoliciesRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace user passphrase policies
+  onGoToAdministrationPasswordExpirySettingsRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace password expiry settings
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -110,6 +112,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationMfaPolicyRequested: this.onGoToAdministrationMfaPolicyRequested.bind(this), // Whenever the user wants to navigate to the administration workspace internationalization
       onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
       onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
+      onGoToAdministrationPasswordExpirySettingsRequested: this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -176,6 +179,8 @@ class NavigationContextProvider extends React.Component {
       pathname = "/app/administration/password-policies";
     } else if (this.isUserPassphrasePoliciesEnable) {
       pathname = "/app/administration/user-passphrase-policies";
+    } else if (this.isPasswordExpiryEnable) {
+      pathname = "/app/administration/password-expiry";
     }
     await this.goTo("api", pathname);
   }
@@ -286,6 +291,14 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to navigate to the users settings workspace account recovery section.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationPasswordExpirySettingsRequested() {
+    await this.goTo("browser-extension", "/app/administration/password-expiry");
+  }
+
+  /**
    * Returns true if the user has the MFA capability
    * @returns {boolean}
    */
@@ -322,7 +335,7 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
-   * Returns true if the user has the self registration enabled
+   * Returns true if the user has the password policies update enabled
    * @returns {boolean}
    */
   get isPasswordPoliciesEnable() {
@@ -331,12 +344,21 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
-   * Returns true if the user has the self registration enabled
+   * Returns true if the user has the user passphrase policies enabled
    * @returns {boolean}
    */
   get isUserPassphrasePoliciesEnable() {
     const siteSettings = this.props.context.siteSettings;
     return siteSettings && siteSettings.canIUse('userPassphrasePolicies');
+  }
+
+  /**
+   * Returns true if the user has the password expiry enabled
+   * @returns {boolean}
+   */
+  get isPasswordExpiryEnable() {
+    const siteSettings = this.props.context.siteSettings;
+    return siteSettings && siteSettings.canIUse('passwordExpiry');
   }
 
   /*
@@ -410,7 +432,12 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMfaRequested() {
-    await this.goTo("api", "/app/settings/mfa");
+    //Application to point
+    let app = "api";
+    if (window.chrome?.webview) {
+      app = "browser-extension";
+    }
+    await this.goTo(app, "/app/settings/mfa");
   }
 
   /**
@@ -436,7 +463,6 @@ class NavigationContextProvider extends React.Component {
   async onGoToUserSettingsDesktopRequested() {
     await this.goTo("browser-extension", "/app/settings/desktop");
   }
-
 
   /**
    * Whenever the user wants to navigate to the users settings workspace account recovery section.

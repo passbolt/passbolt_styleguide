@@ -22,7 +22,7 @@ import {AccountRecoveryUserContextProvider} from "../../contexts/AccountRecovery
 import AccountRecoveryInviteUserSettingPreferenceDialog from '../AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog/AccountRecoveryInviteUserSettingPreferenceDialog';
 import {MfaPolicyEnumerationTypes} from '../../../shared/models/mfaPolicy/MfaPolicyEnumeration';
 import {withMfa} from '../../contexts/MFAContext';
-import MfaInviteUserSettingsPreferenceDialog from '../MFA/MfaInviteUserSettingsPreferenceDialog';
+import MfaInviteUserSettingsPreferenceDialog from '../MFA/MfaInviteUserSettingsPreferenceDialog/MfaInviteUserSettingsPreferenceDialog';
 
 /**
  * This component listens any event related to passphrase entry dialog actions to perform

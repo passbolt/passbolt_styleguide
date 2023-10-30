@@ -556,4 +556,11 @@ export default class ManageSmtpAdministrationSettingsPage {
   get logDetails() {
     return this.select(".send-test-email-dialog textarea");
   }
+
+  /**
+   * Returns the html element that contains the sentence about the source of information
+   */
+  get settingsSource() {
+    return this._page.container.querySelector('#smtp-settings-source p');
+  }
 }

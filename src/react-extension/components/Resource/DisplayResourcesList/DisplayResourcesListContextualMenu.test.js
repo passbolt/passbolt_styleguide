@@ -16,13 +16,21 @@
  * Unit tests on DisplayGridContextualMenuContextualMenu in regard of specifications
  */
 import {
-  defaultProps, propsDenyUIActions, propsResourceWithReadOnlyPermission, propsResourceWithUpdatePermission,
+  defaultProps,
+  propsDenyUIActions,
+  propsResourceTotp,
+  propsResourceWithReadOnlyPermission,
+  propsResourceWithUpdatePermission,
 } from "./DisplayResourcesListContextualMenu.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import DeleteResource from "../DeleteResource/DeleteResource";
 import EditResource from "../EditResource/EditResource";
 import ShareDialog from "../../Share/ShareDialog";
 import DisplayResourcesListContextualMenuPage from "./DisplayResourcesListContextualMenu.test.page";
+import {
+  plaintextSecretPasswordDescriptionTotpDto,
+  plaintextSecretPasswordStringDto
+} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,7 +55,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 7 menu
+     * Then I should see the 9 menu
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
@@ -58,6 +66,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
       expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyTotpItem).not.toBeNull();
+      expect(page.copyTotpItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.openUriItem).not.toBeNull();
       expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.editItem).not.toBeNull();
@@ -78,9 +88,9 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to copy the password of a resource', async() => {
       expect.assertions(4);
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
       await page.copyPassword();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id, {showProgress: true});
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
@@ -110,7 +120,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to edit a resource', async() => {
       await page.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resourceId: props.resource.id});
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -123,6 +133,50 @@ describe("DisplayResourcesListContextualMenu", () => {
     it('As LU I can start to delete a resource', async() => {
       await page.delete();
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource);
+      expect(props.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
+    const props = propsResourceTotp(); // The props to pass
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+
+    beforeEach(() => {
+      page = new DisplayResourcesListContextualMenuPage(props);
+    });
+
+    /**
+     * Given an organization with 1 resource
+     * Then I should see the 9 menu
+     */
+    it('As LU I should see all menu name', () => {
+      expect(page.copyUsernameItem).not.toBeNull();
+      expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyPasswordItem).not.toBeNull();
+      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyUriItem).not.toBeNull();
+      expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyPermalinkItem).not.toBeNull();
+      expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyTotpItem).not.toBeNull();
+      expect(page.copyTotpItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.openUriItem).not.toBeNull();
+      expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.editItem).not.toBeNull();
+      expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.shareItem).not.toBeNull();
+      expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
+    });
+
+    it('As LU I can start to copy the totp of a resource', async() => {
+      expect.assertions(4);
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
+      await page.copyTotp();
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
   });

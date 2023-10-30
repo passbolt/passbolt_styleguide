@@ -139,6 +139,12 @@ export default class DisplayAdministrationMenuPage {
     return this._page.container.querySelector('#user_passphrase_policies_menu .row .main-cell-wrapper .main-cell button');
   }
 
+  /**
+   * Returns the Password Expiry menu
+   */
+  get passwordExpirySettings() {
+    return this._page.container.querySelector('#password_expiry_menu .row .main-cell-wrapper .main-cell button');
+  }
 
   /**
    * Returns true if the page object exists in the container
@@ -213,5 +219,10 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the User Passphrase Policies settings element */
   async gotoUserPassphrasePolicies() {
     await this.click(this.userPassphrasePolicies);
+  }
+
+  /** Click on the Password Expiry settings element */
+  async gotoPasswordExpirySettings() {
+    await this.click(this.passwordExpirySettings);
   }
 }

@@ -36,6 +36,13 @@ export default class DownloadRecoveryKitPage {
   /**
    * Returns the next button element
    */
+  get checkboxStoredRecoveryKit() {
+    return this._page.container.querySelector('#checkbox-recovery-kit');
+  }
+
+  /**
+   * Returns the next button element
+   */
   get nextButton() {
     return this._page.container.querySelector('.button.primary');
   }
@@ -53,6 +60,15 @@ export default class DownloadRecoveryKitPage {
   async download() {
     const leftClick = {button: 0};
     fireEvent.click(this.downloadLink, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Continue the process
+   */
+  async checkStoredRecoveryKit() {
+    const leftClick = {button: 0};
+    fireEvent.click(this.checkboxStoredRecoveryKit, leftClick);
     await waitFor(() => {});
   }
 

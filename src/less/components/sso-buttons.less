@@ -61,5 +61,36 @@
                 }
             }
         }
+
+        &.oauth2 {
+            box-shadow: inset 0 0 0 1px @dialog-background;
+
+            /* hover */
+            &:hover {
+                box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
+                color: @default-text-color;
+                text-decoration: none;
+                border: none;
+            }
+
+            /* focus */
+            &:focus, &:focus-visible {
+                box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+                color: @default-text-color;
+                text-decoration: none;
+                border: none;
+                outline: @outline-default-border;
+            }
+
+            /* active */
+            &:active {
+                box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
+                background: @button-active-background;
+                color: @default-text-color;
+                text-decoration: none;
+                border: none;
+            }
+
+        }
     }
 }

@@ -502,6 +502,7 @@ class ShareDialog extends Component {
         onUpdate={this.handlePermissionUpdate}
         onDelete={this.handlePermissionDelete}
         isLastItemDisplayed={key >= 2}
+        canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
       />
     );
   }
@@ -518,6 +519,14 @@ class ShareDialog extends Component {
         {items}
       </ul>
     );
+  }
+
+  /**
+   * Returns true if the feature flag disableUser is enabled.
+   * @returns {boolean}
+   */
+  get isSuspendedUserFeatureEnabled() {
+    return this.props.context.siteSettings.canIUse('disableUser');
   }
 
   /**
@@ -583,6 +592,7 @@ class ShareDialog extends Component {
               onClose={this.handleAutocompleteClose}
               disabled={this.hasAllInputDisabled()}
               baseUrl={this.props.context.userSettings.getTrustedDomain()}
+              canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
             />
           </div>
           <div className="submit-wrapper clearfix">

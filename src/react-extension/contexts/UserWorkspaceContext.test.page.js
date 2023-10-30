@@ -135,6 +135,12 @@ export default class UserWorkspaceContextPage {
     await this.goToLink('.recently-modified');
   }
 
+  /**
+   * Go to the Recently Modified search filter route
+   */
+  async goToSuspendedUsers() {
+    await this.goToLink('.suspended-users');
+  }
 
   /**
    * Go to the Text search filter route
@@ -212,6 +218,10 @@ export default class UserWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED}}}}>
             <a className="recently-modified"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.SUSPENDED_USER}}}}>
+            <a className="suspended-users"></a>
           </NavLink>
           <NavLink
             to={{pathname: "/app/users", state: {filter: {type: UserWorkspaceFilterTypes.TEXT, payload: args.text}}}}>

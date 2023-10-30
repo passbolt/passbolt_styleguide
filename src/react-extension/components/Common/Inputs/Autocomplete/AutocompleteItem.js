@@ -15,6 +15,8 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Avatar/UserAvatar";
 import GroupAvatar from "../../Avatar/GroupAvatar";
+import {isUserSuspended} from "../../../../../shared/utils/dateUtils";
+import {Trans} from "react-i18next";
 
 class AutocompleteItem extends Component {
   /**
@@ -82,12 +84,19 @@ class AutocompleteItem extends Component {
   }
 
   /**
+   * Returns true if the disableUser feature is enabled and the user is suspended
+   */
+  get isCurrentUserSuspended() {
+    return this.props.canShowUserAsSuspended && isUserSuspended(this.props.user);
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
   render() {
     return (
-      <li id="autocomplete-item">
+      <li className={`autocomplete-item ${this.isCurrentUserSuspended  ? "suspended" : ""}`}>
         <div className={this.getClassName()}>
           <div className="main-cell-wrapper">
             <div className="main-cell ">
@@ -99,7 +108,7 @@ class AutocompleteItem extends Component {
                 <GroupAvatar group={this.props.group}/>
                 }
                 <div className="user">
-                  <span className="name">{this.getTitle()}</span>
+                  <span className="name">{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
                   <span className="details">{this.getSubtitle()}</span>
                 </div>
               </button>
@@ -111,13 +120,18 @@ class AutocompleteItem extends Component {
   }
 }
 
+AutocompleteItem.defaultProps = {
+  canShowUserAsSuspended: false
+};
+
 AutocompleteItem.propTypes = {
   baseUrl: PropTypes.string,
   id: PropTypes.number,
   user: PropTypes.object,
   group: PropTypes.object,
   selected: PropTypes.bool,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  canShowUserAsSuspended: PropTypes.bool.isRequired, // is the feature disableUser enabled?
 };
 
 export default AutocompleteItem;

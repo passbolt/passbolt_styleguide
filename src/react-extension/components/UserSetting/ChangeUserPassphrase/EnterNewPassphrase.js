@@ -143,21 +143,24 @@ class EnterNewPassphrase extends React.Component {
    * @param event The input event
    */
   handlePassphraseChange(event) {
-    const passphrase = event.target.value;
-    let passphraseEntropy = null;
-    if (passphrase.length) {
-      passphraseEntropy = SecretGenerator.entropy(passphrase);
-      if (this.pownedService) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(passphrase);
-      }
-    } else {
-      this.setState({
-        passphraseInDictionnary: false,
-        passwordEntropy: null,
-      });
+    const newState = {
+      passphrase: event.target.value,
+      passphraseEntropy: null,
+    };
+
+    if (!newState.passphrase.length) {
+      newState.passphraseInDictionnary = false;
+      this.setState(newState);
+      return;
     }
 
-    this.setState({passphrase, passphraseEntropy});
+    newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
+    if (this.state.isPwnedServiceAvailable && this.isMinimumRequiredEntropyReached(newState.passphraseEntropy)) {
+      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
+    } else {
+      newState.passphraseInDictionnary = false;
+    }
+    this.setState(newState);
   }
 
   /**
@@ -171,7 +174,7 @@ class EnterNewPassphrase extends React.Component {
 
   /**
    * Evaluate if the passphrase is in dictionary
-   * @param {string} passphrase
+   * @param {string} passphrase the passphrase to evaluate
    * @return {Promise<void>}
    */
   async evaluatePassphraseIsInDictionary(passphrase) {
@@ -184,7 +187,8 @@ class EnterNewPassphrase extends React.Component {
 
     try {
       const result =  await this.pownedService.evaluateSecret(passphrase);
-      passphraseInDictionnary = result.inDictionary;
+      //we ensure after the resolution of the deobunced promise that the passphrase is not empty and the minimum entropy is still reached so we do not display the 'in dictionary' warning message when not relevant
+      passphraseInDictionnary = this.state.passphrase && result.inDictionary && this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
       isPwnedServiceAvailable = result.isPwnedServiceAvailable;
     } catch (error) {
       // If the service is unavailable don't block the user journey.
@@ -262,6 +266,15 @@ class EnterNewPassphrase extends React.Component {
    */
   toggleObfuscate() {
     this.setState({isObfuscated: !this.state.isObfuscated});
+  }
+
+  /**
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @param {number} passphraseEntropy
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached(passphraseEntropy) {
+    return passphraseEntropy >= this.props.userPassphrasePoliciesContext.getSettings().entropy_minimum;
   }
 
   render() {

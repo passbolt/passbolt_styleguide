@@ -484,6 +484,15 @@ class CreateUserGroup extends Component {
   }
 
   /**
+   * Returns true if the feature flag disableUser is enabled.
+   * @param {object} user
+   * @returns {boolean}
+   */
+  get isSuspendedUserFeatureEnabled() {
+    return this.props.context.siteSettings.canIUse('disableUser');
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -571,6 +580,7 @@ class CreateUserGroup extends Component {
                 onClose={this.handleAutocompleteClose}
                 disabled={this.hasAllInputDisabled()}
                 baseUrl={this.props.context.userSettings.getTrustedDomain()}
+                canShowUserAsSuspended={this.isSuspendedUserFeatureEnabled}
               />
             </div>
           </div>

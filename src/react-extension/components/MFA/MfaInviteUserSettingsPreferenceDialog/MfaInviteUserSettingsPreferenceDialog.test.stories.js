@@ -14,9 +14,9 @@
 
 import React from "react";
 import {MemoryRouter} from "react-router-dom";
-import MockTranslationProvider from '../../test/mock/components/Internationalisation/MockTranslationProvider';
-import MockPort from '../../test/mock/MockPort';
+import MockTranslationProvider from '../../../test/mock/components/Internationalisation/MockTranslationProvider';
 import MfaInviteUserSettingsPreferenceDialog from "./MfaInviteUserSettingsPreferenceDialog";
+import MockPort from "../../../test/mock/MockPort";
 
 export default {
   title: 'Components/MFA/MfaInviteUserSettingsPreferenceDialog',

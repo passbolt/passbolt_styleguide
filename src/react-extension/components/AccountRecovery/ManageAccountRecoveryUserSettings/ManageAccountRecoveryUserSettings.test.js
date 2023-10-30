@@ -104,13 +104,14 @@ describe("ManageAccountRecoveryUserSettings", () => {
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 
-    expect.assertions(6);
+    expect.assertions(7);
     expect(page.exists()).toBeTruthy();
     expect(page.rejectCheckbox.checked).toBeTruthy();
 
     await page.clickOnSave();
     expect(props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-user-settings", {status: 'rejected'});
     expect(props.accountRecoveryContext.setUserAccountRecoveryStatus).toHaveBeenCalledWith('rejected');
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.users.find-logged-in-user", true);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery subscription setting has been updated.');
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
