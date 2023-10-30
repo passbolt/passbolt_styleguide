@@ -12,13 +12,12 @@
  * @since         3.0.0
  */
 
-export default (filter, storage) => {
-  return new Promise(async (resolve) => {
-    const {resources} = await storage.local.get(["resources"]);
+export default (filter, storage) => new Promise(resolve => {
+  storage.local.get(["resources"]).then(({resources}) => {
     const resourcesFiltered = [...resources];
-    if(filter && filter['is-shared-with-group'] !== null) {
-      resourcesFiltered.splice(3,4);
+    if (filter?.['is-shared-with-group']) {
+      resourcesFiltered.splice(3, 4);
     }
     resolve(resourcesFiltered);
   });
-};
+});

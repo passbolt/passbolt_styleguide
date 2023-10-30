@@ -188,22 +188,28 @@ class GenerateResourcePassword extends Component {
    */
   generatePassword(generatorConfiguration) {
     const password = SecretGenerator.generate(generatorConfiguration);
+    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
+    this.setState({passwordEntropy});
     this.evaluatePasswordIsInDictionaryDebounce(password);
     return password;
   }
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    if (this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
   /**

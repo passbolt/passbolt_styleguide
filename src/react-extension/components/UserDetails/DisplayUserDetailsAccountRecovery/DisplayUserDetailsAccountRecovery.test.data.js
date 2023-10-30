@@ -13,7 +13,6 @@
  */
 
 import MockPort from "../../../test/mock/MockPort";
-import {DateTime} from "luxon";
 
 /**
  * Default props
@@ -37,17 +36,6 @@ export function defaultProps(props = {}) {
     }
   };
   return Object.assign(defaultProps, props);
-}
-
-/**
- * Format date in time ago
- * @param {string} date The date to format
- * @return {string}
- */
-export function formatDateTimeAgo(date) {
-  const dateTime = DateTime.fromISO(date);
-  const duration = dateTime.diffNow().toMillis();
-  return duration > -1000 && duration < 0 ? 'Just now' : dateTime.toRelative();
 }
 
 export const oneUserAccountRequestsPending = [{

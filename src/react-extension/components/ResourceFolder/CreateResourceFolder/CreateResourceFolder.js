@@ -24,6 +24,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {RESOURCE_NAME_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import {withRouter} from "react-router-dom";
 
 class CreateResourceFolder extends Component {
   /**
@@ -150,7 +151,7 @@ class CreateResourceFolder extends Component {
    */
   async handleSaveSuccess(folderId) {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The folder has been added successfully"));
-    this.selectAndScrollToFolder(folderId);
+    this.props.history.push(`/app/passwords/view/${folderId}`);
     this.props.onClose();
   }
 
@@ -207,18 +208,9 @@ class CreateResourceFolder extends Component {
   async createFolder() {
     const folderDto = {
       name: this.state.name,
-      folder_parent_id: this.props.context.folderCreateDialogProps.folderParentId
+      folder_parent_id: this.props.folderParentId
     };
     return await this.props.context.port.request("passbolt.folders.create", folderDto);
-  }
-
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   * @returns {void}
-   */
-  selectAndScrollToFolder(id) {
-    this.props.context.port.emit("passbolt.folders.select-and-scroll-to", id);
   }
 
   /**
@@ -337,9 +329,11 @@ class CreateResourceFolder extends Component {
 CreateResourceFolder.propTypes = {
   context: PropTypes.any, // The application context
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  folderParentId: PropTypes.string,
   onClose: PropTypes.func,
   dialogContext: PropTypes.any, // The dialog context
+  history: PropTypes.any, // The router history
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateResourceFolder))));
+export default withRouter(withAppContext(withActionFeedback(withDialog(withTranslation('common')(CreateResourceFolder)))));

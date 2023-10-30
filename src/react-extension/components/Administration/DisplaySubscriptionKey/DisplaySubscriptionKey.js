@@ -24,6 +24,7 @@ import AnimatedFeedback from "../../../../shared/components/Icons/AnimatedFeedba
 import SubscriptionActionService from '../../../../shared/services/actions/subscription/SubscriptionActionService';
 import DisplayAdministrationSubscriptionActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSubscriptionActions/DisplayAdministrationSubscriptionActions";
 import {withAdminSubscription} from "../../../contexts/Administration/AdministrationSubscription/AdministrationSubscription";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component allows to display the subscription key for the administration
@@ -187,17 +188,6 @@ class DisplaySubscriptionKey extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -273,7 +263,7 @@ class DisplaySubscriptionKey extends React.Component {
                   <span
                     className={`label ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}><Trans>Expires on:</Trans></span>
                   <span
-                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${this.formatDateTimeAgo(subscription.expiry)}`})</span>
+                    className={`value ${this.hasSubscriptionKeyExpired() ? "error" : ""} ${this.hasSubscriptionKeyGoingToExpire() ? "warning" : ""}`}>{this.formatDate(subscription.expiry)} ({`${this.hasSubscriptionKeyExpired() ? this.translate("expired ") : ""}${formatDateTimeAgo(subscription.expiry, this.props.t, this.props.context.locale)}`})</span>
                 </li>
               </ul>
               }

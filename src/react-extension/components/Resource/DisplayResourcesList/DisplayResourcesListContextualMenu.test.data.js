@@ -17,7 +17,7 @@ import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {
-  defaultResourceDto, resourceWithReadPermissionDto,
+  defaultResourceDto, resourceWithReadPermissionDto, resourceWithTotpDto,
   resourceWithUpdatePermissionDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
@@ -37,6 +37,17 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     ...data
+  };
+}
+
+/**
+ * Props with a selected resource with totp where the user has a read only permission on
+ * @returns {object}
+ */
+export function propsResourceTotp() {
+  return {
+    ...defaultProps(),
+    resource: resourceWithTotpDto(),
   };
 }
 

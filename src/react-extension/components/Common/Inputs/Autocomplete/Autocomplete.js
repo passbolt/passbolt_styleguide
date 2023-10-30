@@ -371,8 +371,14 @@ class Autocomplete extends Component {
                 }
                 {!this.state.processing && this.state.autocompleteItems && (this.state.autocompleteItems).map((item, key) => {
                   if (item.username) {
-                    return <AutocompleteItem key={key} id={key} user={item} selected={this.isItemSelected(key)}
-                      onClick={this.handleSelect} baseUrl={this.props.baseUrl}/>;
+                    return <AutocompleteItem
+                      key={key} id={key}
+                      onClick={this.handleSelect}
+                      baseUrl={this.props.baseUrl}
+                      canShowUserAsSuspended={this.props.canShowUserAsSuspended}
+                      user={item}
+                      selected={this.isItemSelected(key)}
+                    />;
                   } else {
                     return <AutocompleteItem key={key} id={key} group={item} selected={this.isItemSelected(key)}
                       onClick={this.handleSelect} baseUrl={this.props.baseUrl}/>;
@@ -388,6 +394,10 @@ class Autocomplete extends Component {
   }
 }
 
+Autocomplete.defaultProps = {
+  canShowUserAsSuspended: false
+};
+
 Autocomplete.propTypes = {
   baseUrl: PropTypes.string,
   id: PropTypes.string,
@@ -399,6 +409,7 @@ Autocomplete.propTypes = {
   disabled: PropTypes.bool,
   name: PropTypes.string,
   placeholder: PropTypes.string,
+  canShowUserAsSuspended: PropTypes.bool.isRequired, // is the disableUser flag enabled?
 };
 
 export default Autocomplete;

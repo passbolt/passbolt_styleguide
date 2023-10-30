@@ -41,6 +41,10 @@ import {
 import debounce from "debounce-promise";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
+import Totp from "../../../../shared/components/Totp/Totp";
 
 class CreateResource extends Component {
   constructor() {
@@ -60,15 +64,15 @@ class CreateResource extends Component {
       usernameError: "",
       usernameWarning: "",
       uri: "",
-      uriError: "",
       uriWarning: "",
       password: "",
       passwordError: "",
       passwordWarning: "",
       description: "",
-      descriptionError: "",
       descriptionWarning: "",
+      totp: null, // The totp
       encryptDescription: false,
+      resourceTypeId: null, // The resource type id
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
       isPwnedServiceAvailable: true,
       passwordInDictionary: false,
@@ -90,6 +94,10 @@ class CreateResource extends Component {
     this.handleUsernameInputKeyUp = this.handleUsernameInputKeyUp.bind(this);
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleLastGeneratedPasswordChanged = this.handleLastGeneratedPasswordChanged.bind(this);
+    this.handleAddTotpClick = this.handleAddTotpClick.bind(this);
+    this.applyTotp = this.applyTotp.bind(this);
+    this.handleEditTotpClick = this.handleEditTotpClick.bind(this);
+    this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
   }
 
   /**
@@ -104,9 +112,7 @@ class CreateResource extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    if (this.isEncryptedDescriptionEnabled()) {
-      this.setState({encryptDescription: true});
-    }
+    this.initResourceType();
     await this.props.passwordPoliciesContext.findPolicies();
     this.initPwnedPasswordService();
     this.initPasswordGeneratorConfiguration();
@@ -120,6 +126,23 @@ class CreateResource extends Component {
     this.handleLastGeneratedPasswordChanged(
       prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword
     );
+  }
+
+  /**
+   * Initialize the resource type associate to the resource
+   */
+  initResourceType() {
+    if (this.isEncryptedDescriptionEnabled()) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+      );
+      this.setState({resourceTypeId});
+    } else if (this.areResourceTypesEnabled()) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+      );
+      this.setState({resourceTypeId});
+    }
   }
 
   /**
@@ -181,15 +204,47 @@ class CreateResource extends Component {
    * =============================================================
    */
   isEncryptedDescriptionEnabled() {
-    return this.props.context.resourceTypesSettings.isEncryptedDescriptionEnabled();
+    return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
   }
 
   isLegacyResourceTypeEnabled() {
-    return this.props.context.resourceTypesSettings.isLegacyResourceTypeEnabled();
+    return this.resourceTypesSettings.isLegacyResourceTypeEnabled();
   }
 
   areResourceTypesEnabled() {
-    return this.props.context.resourceTypesSettings.areResourceTypesEnabled();
+    return this.resourceTypesSettings.areResourceTypesEnabled();
+  }
+
+  /**
+   * Get resources type settings
+   * @return {ResourceTypesSettings|*}
+   */
+  get resourceTypesSettings() {
+    return this.props.context.resourceTypesSettings;
+  }
+
+  /**
+   * Must encrypt the description
+   * @return {boolean}
+   */
+  get mustEncryptDescription() {
+    return this.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(this.state.resourceTypeId);
+  }
+
+  /**
+   * Is legacy resource
+   * @return {boolean}
+   */
+  get isLegacyResource() {
+    return this.resourceTypesSettings.assertResourceTypeIdIsLegacy(this.state.resourceTypeId);
+  }
+
+  /**
+   * Is TOTP resource
+   * @return {boolean}
+   */
+  get isTotpResource() {
+    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.state.resourceTypeId);
   }
 
   /*
@@ -250,10 +305,7 @@ class CreateResource extends Component {
     // Reset the form errors.
     this.setState({
       nameError: "",
-      uriError: "",
-      usernameError: "",
       passwordError: "",
-      descriptionError: "",
     });
 
     // Validate the form inputs.
@@ -299,16 +351,20 @@ class CreateResource extends Component {
 
   /**
    * Evaluate to check if password is in a dictionary.
-   * @return {Promise}
+   * @param {string} password the password to evaluate
+   * @return {Promise<void>}
    */
   async evaluatePasswordIsInDictionaryDebounce(password) {
-    const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy});
-    if (this.state.isPwnedServiceAvailable && this.pownedService) {
-      const result = await this.pownedService.evaluateSecret(password);
-      const passwordInDictionary = password.length > 0 ?  result.inDictionary : false;
-      this.setState({isPwnedServiceAvailable: result.isPwnedServiceAvailable, passwordInDictionary});
+    if (!this.state.isPwnedServiceAvailable || !password) {
+      return;
     }
+
+    const result = await this.pownedService.evaluateSecret(password);
+    this.setState({
+      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
+      //if after the debounced promised resolution the passphrase is empty we do not display the 'in dictionary' warning message
+      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
+    });
   }
 
   /*
@@ -325,17 +381,25 @@ class CreateResource extends Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      folder_parent_id: this.props.context.resourceCreateDialogProps.folderParentId,
+      folder_parent_id: this.props.folderParentId,
     };
 
     // No resource types, legacy case
-    if (!this.areResourceTypesEnabled()) {
+    if (!this.state.resourceTypeId) {
       return this.createResourceLegacy(resourceDto, this.state.password);
     }
 
     // Resource types enabled but legacy type requested
-    if (!this.state.encryptDescription) {
+    if (this.isLegacyResource) {
       return this.createWithoutEncryptedDescription(resourceDto, this.state.password);
+    }
+
+    // Resource types with totp encrypted
+    if (this.isTotpResource) {
+      const secretDto = this.state.totp.toSecretDto();
+      secretDto.password = this.state.password;
+      secretDto.description = this.state.description;
+      return this.createWithEncryptedDescriptionAndTotp(resourceDto, secretDto);
     }
 
     // Resource type with encrypted description
@@ -366,10 +430,19 @@ class CreateResource extends Component {
    * @returns {Promise<*>}
    */
   async createWithEncryptedDescription(resourceDto, secretDto) {
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-    );
+    resourceDto.resource_type_id = this.state.resourceTypeId;
+    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+  }
 
+  /**
+   * Create with encrypted description and totp type
+   *
+   * @param {object} resourceDto
+   * @param {object} secretDto
+   * @returns {Promise<*>}
+   */
+  async createWithEncryptedDescriptionAndTotp(resourceDto, secretDto) {
+    resourceDto.resource_type_id = this.state.resourceTypeId;
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
   }
 
@@ -381,8 +454,8 @@ class CreateResource extends Component {
    * @returns {Promise<*>}
    */
   async createWithoutEncryptedDescription(resourceDto, secretString) {
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+    resourceDto.resource_type_id = this.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
     );
     resourceDto.description = this.state.description;
 
@@ -394,12 +467,6 @@ class CreateResource extends Component {
    */
   async handleSaveSuccess(resource) {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been added successfully"));
-    if (resource.folder_parent_id) {
-      // TODO and select resource inside that folder
-      this.selectAndScrollToFolder(resource.folder_parent_id);
-    } else {
-      this.selectAndScrollToResource(resource.id);
-    }
     this.props.history.push(`/app/passwords/view/${resource.id}`);
     this.handleClose();
   }
@@ -448,28 +515,6 @@ class CreateResource extends Component {
 
   /*
    * =============================================================
-   *  Out of dialog actions
-   * =============================================================
-   */
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   */
-  selectAndScrollToResource(id) {
-    this.props.context.port.emit("passbolt.resources.select-and-scroll-to", id);
-  }
-
-  /**
-   * Select and scroll to a given resource.
-   * @param {string} id The resource id.
-   * @returns {void}
-   */
-  selectAndScrollToFolder(id) {
-    this.props.context.port.emit("passbolt.folders.select-and-scroll-to", id);
-  }
-
-  /*
-   * =============================================================
    *  Dialog actions event handlers
    * =============================================================
    */
@@ -482,19 +527,20 @@ class CreateResource extends Component {
     const value = target.value;
     const name = target.name;
 
+    const newState = {
+      [name]: value
+    };
+
     if (name === "password") {
       if (value.length) {
         this.evaluatePasswordIsInDictionaryDebounce(value);
+        newState.passwordEntropy = SecretGenerator.entropy(value);
       } else {
-        this.setState({
-          passwordInDictionary: false,
-          passwordEntropy: null,
-        });
+        newState.passwordInDictionary = false;
+        newState.passwordEntropy = null;
       }
     }
-    this.setState({
-      [name]: value,
-    });
+    this.setState(newState);
   }
 
   /**
@@ -552,10 +598,42 @@ class CreateResource extends Component {
   }
 
   /**
+   * Handle add totp
+   */
+  handleAddTotpClick() {
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.ADD_TOTP, onApply: this.applyTotp});
+  }
+
+  /**
+   * Handle edit totp
+   */
+  handleEditTotpClick() {
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_TOTP, totp: this.state.totp, onApply: this.applyTotp});
+  }
+
+  /**
+   * Handle delete totp
+   */
+  handleDeleteTotpClick() {
+    this.setState({totp: null});
+    this.initResourceType();
+  }
+
+  /**
+   * Apply the totp
+   * @param {object} totp
+   */
+  applyTotp(totp) {
+    const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_DESCRIPTION_TOTP
+    );
+    this.setState({totp, resourceTypeId});
+  }
+
+  /**
    * Handle close
    */
   async handleClose() {
-    this.props.context.setContext({resourceCreateDialogProps: null});
     // ensure the secret generator settings are back to the organisation's default in case a new secret is generated later
     await this.props.resourcePasswordGeneratorContext.resetSecretGeneratorSettings();
     this.props.onClose();
@@ -565,12 +643,18 @@ class CreateResource extends Component {
    * Switch to toggle description field encryption
    */
   handleDescriptionToggle() {
-    const isCurrentlyEncrypted = this.state.encryptDescription;
-    if (isCurrentlyEncrypted && this.isLegacyResourceTypeEnabled()) {
-      return this.setState({encryptDescription: false});
-    }
-    if (!isCurrentlyEncrypted && this.isEncryptedDescriptionEnabled()) {
-      return this.setState({encryptDescription: true});
+    const isCurrentlyEncrypted = this.mustEncryptDescription;
+    // Description must be encrypted if totp has been added
+    if (isCurrentlyEncrypted && this.isLegacyResourceTypeEnabled() && !this.hasTotp) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
+      );
+      this.setState({resourceTypeId});
+    } else if (!isCurrentlyEncrypted && this.isEncryptedDescriptionEnabled()) {
+      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+      );
+      this.setState({resourceTypeId});
     }
   }
 
@@ -613,6 +697,22 @@ class CreateResource extends Component {
   }
 
   /**
+   * Returns true if the logged in user can use the totp capability.
+   * @returns {boolean}
+   */
+  get canUseTotp() {
+    return this.areResourceTypesEnabled() && this.props.context.siteSettings.canIUse('totpResourceTypes');
+  }
+
+  /**
+   * Has a totp
+   * @return {boolean}
+   */
+  get hasTotp() {
+    return Boolean(this.state.totp);
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -647,14 +747,11 @@ class CreateResource extends Component {
                 </div>
               )}
             </div>
-            <div className={`input text ${this.state.uriError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+            <div className={`input text ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-uri"><Trans>URI</Trans>{this.state.uriWarning && <Icon name="exclamation" />}</label>
               <input id="create-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text" onKeyUp={this.handleUriInputKeyUp}
                 autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.state.processing}/>
-              {this.state.uriError &&
-              <div className="error-message">{this.state.uriError}</div>
-              }
               {this.state.uriWarning && (
                 <div className="uri warning-message">
                   <strong><Trans>Warning:</Trans></strong> {this.state.uriWarning}
@@ -730,14 +827,14 @@ class CreateResource extends Component {
                   <Icon name="info-circle"/>
                 </Tooltip>
                 }
-                {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
+                {this.areResourceTypesEnabled() && !this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
                   </Tooltip>
                 </button>
                 }
-                {this.areResourceTypesEnabled() && this.state.encryptDescription &&
+                {this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")}>
                     <Icon name="lock"/>
@@ -745,17 +842,36 @@ class CreateResource extends Component {
                 </button>
                 }
               </label>
-              <textarea id="create-password-form-description" aria-required={true} name="description" maxLength="10000"
-                className="required" placeholder={this.translate("Add a description")} value={this.state.description}
+              <textarea id="create-password-form-description" name="description" maxLength="10000"
+                placeholder={this.translate("Add a description")} value={this.state.description}
                 disabled={this.state.processing}  onKeyUp={this.handleDescriptionInputKeyUp} onChange={this.handleInputChange}>
               </textarea>
-              {this.state.descriptionError &&
-              <div className="error-message">{this.state.descriptionError}</div>
-              }
               {this.state.descriptionWarning &&
               <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
               }
             </div>
+            {this.canUseTotp && !this.hasTotp &&
+              <div className="input input-totp-wrapper">
+                <button type="button" className="add-totp link no-border link-icon" onClick={this.handleAddTotpClick} disabled={this.state.processing}>
+                  <Icon name="plus-circle"/>
+                  <span className="link-label"><Trans>Add TOTP</Trans></span>
+                </button>
+              </div>
+            }
+            {this.canUseTotp && this.hasTotp &&
+              <div className={`input input-totp-wrapper ${this.state.processing ? 'disabled' : ''}`}>
+                <label htmlFor="create-password-form-totp"><Trans>TOTP</Trans></label>
+                <div className="input-wrapper-inline totp">
+                  <Totp totp={this.state.totp}/>
+                  <button type="button" className="edit-totp button-icon" onClick={this.handleEditTotpClick} disabled={this.state.processing}>
+                    <Icon name='edit' big={true}/>
+                  </button>
+                  <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
+                    <Icon name='trash' big={true}/>
+                  </button>
+                </div>
+              </div>
+            }
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.state.processing} onClick={this.handleClose}/>
@@ -770,13 +886,15 @@ class CreateResource extends Component {
 CreateResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object, // Router history
+  folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
+  workflowContext: PropTypes.any, // The workflow context
 };
 
-export default  withResourcePasswordGeneratorContext(withPasswordPolicies(withAppContext(withActionFeedback(withRouter(withDialog(withTranslation('common')(CreateResource)))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))));
 

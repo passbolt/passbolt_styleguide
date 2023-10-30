@@ -90,3 +90,83 @@ button.link {
         border: none;
     }
 }
+
+button.link-icon {
+    background: transparent;
+    outline: 0;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    border-radius: 0;
+    padding: 0;
+    text-align: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+    vertical-align: inherit;
+    box-shadow: none;
+    min-width: inherit;
+
+    .svg-icon svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+    .link-label {
+        border-bottom: 1px solid @link-border;
+    }
+
+    &:focus {
+        box-shadow: none;
+        .link-label {
+            border-bottom: 1px solid @link-border;
+        }
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
+        outline: @outline-default-border;
+        .link-label {
+            border: none;
+        }
+    }
+
+    &:hover  {
+        text-decoration: none;
+        cursor: pointer;
+        color: @text-focus-color;
+        --icon-color: @text-focus-color;
+        .link-label {
+            border-bottom: 1px solid @link-hover-border;
+            box-shadow: none;
+        }
+    }
+
+    &:active {
+        --icon-color: @text-focus-color;
+        .link-label {
+            background: transparent;
+            outline: @outline-default-border;
+            color: @text-focus-color;
+            margin-bottom: .1rem; // Prevent a difference of 1px due to the border none
+            border: none;
+            box-shadow: none;
+        }
+
+    }
+
+    &:disabled {
+        cursor: default;
+        pointer-events: none;
+        background: transparent;
+        outline: 0;
+        text-decoration: none;
+        box-shadow: none;
+        color: @default-text-color;
+        --icon-color: @icon-color;
+        opacity: .5;
+
+        .link-label {
+            border-bottom: 1px solid @link-border;
+        }
+    }
+}

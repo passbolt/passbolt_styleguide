@@ -56,6 +56,13 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
+   * Returns true if the password policies area is visible
+   */
+  get isPasswordPoliciesSelected() {
+    return Boolean(this._page.container.querySelector('.password-policies-details'));
+  }
+
+  /**
    * Returns true if the user directory area is visible
    */
   get isUserDirectorySelected() {
@@ -91,10 +98,45 @@ export default class AdministrationWorkspacePage {
   }
 
   /**
+   * Returns true if the smtp settings area is visible
+   */
+  get isSmtpSettingsSelected() {
+    return Boolean(this._page.container.querySelector('.smtp-settings-details'));
+  }
+
+  /**
    * Returns true if the account recovery area is visible
    */
   get isSelfRegistrationSelected() {
     return Boolean(this._page.container.querySelector('.self-registration-details'));
+  }
+
+  /**
+   * Returns true if the sso settings area is visible
+   */
+  get isSsoSelected() {
+    return Boolean(this._page.container.querySelector('.sso-settings-details'));
+  }
+
+  /**
+   * Returns true if the rbacs settings area is visible
+   */
+  get isRbacSelected() {
+    return Boolean(this._page.container.querySelector('.rbacs-settings-details'));
+  }
+
+  /**
+   * Returns true if the user passphrase policies area is visible
+   */
+  get isUserPasphrasePoliciesSelected() {
+    return Boolean(this._page.container.querySelector('.user-passphrase-policies-details'));
+  }
+
+  /**
+   * Returns true if the password expiry area is visible
+   */
+  get isPasswordExpirySelected() {
+    return Boolean(this._page.container.querySelector('.password-expiry-details'));
   }
 }
 

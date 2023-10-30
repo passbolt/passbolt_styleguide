@@ -23,6 +23,7 @@ import {withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import Tooltip from "../Common/Tooltip/Tooltip";
 import Select from "../Common/Select/Select";
+import {isUserSuspended} from "../../../shared/utils/dateUtils";
 
 class SharePermissionItem extends Component {
   /**
@@ -100,7 +101,7 @@ class SharePermissionItem extends Component {
   getAroName() {
     if (this.props.aro.profile) {
       const profile = this.props.aro.profile;
-      return `${profile.first_name} ${profile.last_name}`;
+      return `${profile.first_name} ${profile.last_name}${this.isUserSuspended ? ` ${this.translate('(suspended)')}` : ''}`;
     } else {
       return this.props.aro.name;
     }
@@ -156,6 +157,9 @@ class SharePermissionItem extends Component {
     if (this.props.updated) {
       className += ' permission-updated';
     }
+    if (this.isUserSuspended) {
+      className += ' suspended';
+    }
     return className;
   }
 
@@ -182,6 +186,15 @@ class SharePermissionItem extends Component {
       permissions.push({value: "-1", label: this.translate("varies")});
     }
     return permissions;
+  }
+
+  /**
+   * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
+   * @returns {boolean}
+   */
+  get isUserSuspended() {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(this.props.aro);
   }
 
   /**

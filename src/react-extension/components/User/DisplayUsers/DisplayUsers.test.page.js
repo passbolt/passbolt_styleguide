@@ -130,8 +130,18 @@ export default class DisplayUsersPage {
   /**
    * Sort the users by their last date of modification
    */
-  async sortByModified() {
+  async sortBySuspended() {
     const element = this._page.container.querySelectorAll('thead th button')[4];
+    const leftClick = {button: 0};
+    fireEvent.click(element, leftClick);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Sort the users by their last date of modification
+   */
+  async sortByModified() {
+    const element = this._page.container.querySelectorAll('thead th button')[5];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -141,7 +151,7 @@ export default class DisplayUsersPage {
    * Sort the users by their last date of login
    */
   async sortByLastLoggedIn() {
-    const element = this._page.container.querySelectorAll('thead th button')[5];
+    const element = this._page.container.querySelectorAll('thead th button')[6];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -151,7 +161,7 @@ export default class DisplayUsersPage {
    * Sort the users by their mfa enable status
    */
   async sortByMFAEnabled() {
-    const element = this._page.container.querySelectorAll('thead th button')[6];
+    const element = this._page.container.querySelectorAll('thead th button')[7];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
@@ -161,7 +171,7 @@ export default class DisplayUsersPage {
    * Sort the users by their account recovery status
    */
   async sortByAccountRecoveryStatus() {
-    const element = this._page.container.querySelectorAll('thead th button')[7];
+    const element = this._page.container.querySelectorAll('thead th button')[8];
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});

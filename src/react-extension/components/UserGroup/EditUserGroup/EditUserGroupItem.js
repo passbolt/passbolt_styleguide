@@ -19,6 +19,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
+import {isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component allows to edit an user group
@@ -109,6 +110,15 @@ class EditUserGroupItem extends Component {
   }
 
   /**
+   * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
+   * @returns {boolean}
+   */
+  isUserSuspended(user) {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
+  }
+
+  /**
    * Get options for permission selection
    * @returns {[{label: *, value: boolean}]}
    */
@@ -124,9 +134,10 @@ class EditUserGroupItem extends Component {
    */
   render() {
     const isReady = this.isReady;
+    const isSuspended = this.isUserSuspended(this.state.user);
     return (
       <li
-        className={`row ${this.props.isMemberChanged ? 'permission-updated' : ''} ${!isReady ? "skeleton" : ""}`}
+        className={`row ${this.props.isMemberChanged ? 'permission-updated' : ''} ${!isReady ? "skeleton" : ""} ${isSuspended ? "suspended" : ""}`}
       >
         {isReady &&
           <>
@@ -135,7 +146,7 @@ class EditUserGroupItem extends Component {
               user={this.state.user}/>
             <div className="aro">
               <div className="aro-name">
-                <span className="ellipsis">{this.getUserFullname()}</span>
+                <span className="ellipsis">{this.getUserFullname()}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
                 <Tooltip message={this.getTooltipMessage()}>
                   <Icon name="info-circle"/>
                 </Tooltip>

@@ -1,7 +1,7 @@
 styleguide-tests:
   extends: .rules
   stage: test
-  image: node:16
+  image: node:18
   coverage: /Lines\s* [:] ([\d\.]+)%/
   script:
     - npm ci
@@ -17,7 +17,7 @@ styleguide-tests:
 
 linter:
   stage: test
-  image: node:16
+  image: node:18
   extends: .rules
   script:
     - npm install
@@ -40,6 +40,6 @@ audit:
   allow_failure: true
   extends: .rules
   stage: test
-  image: node:16
+  image: node:18
   script:
     - npm audit

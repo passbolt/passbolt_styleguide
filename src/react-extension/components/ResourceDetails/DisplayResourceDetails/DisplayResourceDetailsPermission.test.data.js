@@ -2,6 +2,8 @@ import UserSettings from "../../../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -15,7 +17,8 @@ export function defaultAppContext(appContext) {
     setContext: function(newContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
-    }
+    },
+    siteSettings: new SiteSettings(siteSettingsFixture)
   };
   return Object.assign(defaultAppContext, appContext || {});
 }

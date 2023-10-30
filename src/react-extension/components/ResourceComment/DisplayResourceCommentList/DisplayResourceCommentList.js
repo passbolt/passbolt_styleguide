@@ -20,6 +20,7 @@ import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import Icon from "../../../../shared/components/Icons/Icon";
+import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
 
 class DisplayResourceCommentList extends React.Component {
   /**
@@ -63,17 +64,17 @@ class DisplayResourceCommentList extends React.Component {
    * Fetch the comments of the resource
    */
   async fetch() {
-    await this.setState({actions: {loading: true}});
+    this.setState({actions: {loading: true}});
 
     const resourceId = this.props.resource.id;
     const comments = await this.props.context.port.request('passbolt.comments.find-all-by-resource', resourceId);
 
     const commentsSorter = (comment1, comment2) => DateTime.fromISO(comment2.created) < DateTime.fromISO(comment1.created) ? -1 : 1;
-    await this.setState({comments: comments.sort(commentsSorter)});
+    this.setState({comments: comments.sort(commentsSorter)});
 
     this.props.onFetch(comments);
 
-    await this.setState({actions: {loading: false}});
+    this.setState({actions: {loading: false}});
   }
 
   /**
@@ -110,14 +111,12 @@ class DisplayResourceCommentList extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
+   * Returns true if the feature flag disableUser is enabled and the given user is suspended.
+   * @param {object} user
+   * @returns {boolean}
    */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+  isUserSuspended(user) {
+    return this.props.context.siteSettings.canIUse('disableUser') && isUserSuspended(user);
   }
 
   /**
@@ -133,7 +132,7 @@ class DisplayResourceCommentList extends React.Component {
             this.state.comments.map((comment, index) => (
               <li
                 key={index}
-                className="comment">
+                className={`comment ${this.isUserSuspended(comment.creator) ? "from-suspended-user" : ""}`}>
 
                 <div className="wrap-right-column">
                   <div className="right-column">
@@ -145,12 +144,10 @@ class DisplayResourceCommentList extends React.Component {
                       </span>
                       }
                       {!this.isOwner(comment) &&
-                      <span className="author username">
-                        {comment.creator.profile.first_name} {comment.creator.profile.last_name}
-                      </span>
+                        <span className="author username">{comment.creator.profile.first_name} {comment.creator.profile.last_name}{this.isUserSuspended(comment.creator) && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
                       }
                       <span
-                        className="modified">{this.formatDateTimeAgo(comment.created)}
+                        className="modified">{formatDateTimeAgo(comment.created, this.props.t, this.props.context.locale)}
                       </span>
                     </div>
                     <div className="actions">

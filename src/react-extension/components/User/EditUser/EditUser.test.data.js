@@ -1,5 +1,20 @@
-import MockPort from "../../../test/mock/MockPort";
-import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) 2020 Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.11.0
+ */
+
+import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import {defaultAppContext as defaultExtAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Returns the default app context for the unit test
@@ -7,11 +22,10 @@ import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test
  * @returns {any}
  */
 export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
+  const defaultAppContext = defaultExtAppContext({
     roles: [
       {
-        id: "c4870358-e32f-41ce-999b-8f80c9b0d17f",
+        id: TEST_ROLE_ADMIN_ID,
         name: "admin"
       },
       {
@@ -21,7 +35,7 @@ export function defaultAppContext(appContext) {
     ],
     users: [
       {
-        id: "8e3874ae-4b40-590b-968a-418f704b9d9a",
+        id: uuidv4(),
         profile: {
           first_name: "firstname",
           last_name: "lastname",
@@ -34,7 +48,7 @@ export function defaultAppContext(appContext) {
       // In this scope this reference the object context.
       Object.assign(this, newContext);
     },
-  };
+  });
   return Object.assign(defaultAppContext, appContext || {});
 }
 

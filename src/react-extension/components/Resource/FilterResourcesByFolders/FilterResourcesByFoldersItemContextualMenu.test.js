@@ -38,7 +38,7 @@ describe("FilterResourcesByFoldersItemContextualMenu", () => {
       const props = defaultProps(); // The props to pass
       const page = new FilterResourcesByFoldersItemContextualMenuPage(props);
       await page.filterResourcesByFoldersItemContextualMenu.createFolder();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(CreateResourceFolder, {folderParentId: props.folder.id});
       expect(props.hide).toHaveBeenCalled();
     });
 

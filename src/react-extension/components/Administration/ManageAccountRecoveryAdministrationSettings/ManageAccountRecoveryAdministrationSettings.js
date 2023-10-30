@@ -16,7 +16,6 @@ import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import DisplayAdministrationAccountRecoveryActions
   from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationAccountRecoveryAction/DisplayAdministrationAccountRecoveryActions";
@@ -26,6 +25,7 @@ import SelectAccountRecoveryOrganizationKey
   from "../SelectAccountRecoveryOrganizationKey/SelectAccountRecoveryOrganizationKey";
 import DownloadOrganizationKey from "../SelectAccountRecoveryOrganizationKey/DownloadOrganizationKey";
 import {withAdminAccountRecovery} from "../../../contexts/AdminAccountRecoveryContext";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 class ManageAccountRecoveryAdministrationSettings extends React.Component {
   /**
@@ -219,23 +219,6 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    if (date === null) {
-      return "n/a";
-    }
-    if (date === 'Infinity') {
-      return this.translate("Never");
-    }
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * get fingerprint
    * @param fingerprint
    * @returns {JSX.Element}
@@ -402,12 +385,12 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                       </tr>
                       <tr className="created">
                         <td className="label"><Trans>Created</Trans></td>
-                        {this.organizationKeyInfo?.created && <td className="value">{this.formatDateTimeAgo(this.organizationKeyInfo.created)}</td>}
+                        {this.organizationKeyInfo?.created && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.created, this.props.t, this.props.context.locale)}</td>}
                         {!this.organizationKeyInfo?.created && <td className="empty-value"><Trans>not available</Trans></td>}
                       </tr>
                       <tr className="expires">
                         <td className="label"><Trans>Expires</Trans></td>
-                        {this.organizationKeyInfo?.expires && <td className="value">{this.formatDateTimeAgo(this.organizationKeyInfo.expires)}</td>}
+                        {this.organizationKeyInfo?.expires && <td className="value">{formatDateTimeAgo(this.organizationKeyInfo.expires, this.props.t, this.props.context.locale)}</td>}
                         {!this.organizationKeyInfo?.expires && <td className="empty-value"><Trans>not available</Trans></td>}
                       </tr>
                     </tbody>

@@ -76,6 +76,16 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 
+  it('As LU I should see a breadcrumb for resources expired', () => {
+    const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.EXPIRED); // The props to pass
+    page = new FilterResourcesByBreadcrumbPage(context, props);
+    expect(page.displayBreadcrumb.exists()).toBeTruthy();
+    expect(page.displayBreadcrumb.count).toBe(2);
+    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(2)).toBe("Expired");
+    expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
+  });
+
   it('As LU I should see a breadcrumb for resources recently modified', () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.RECENTLY_MODIFIED); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);

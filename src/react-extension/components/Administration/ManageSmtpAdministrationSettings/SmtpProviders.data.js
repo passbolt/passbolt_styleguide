@@ -164,7 +164,7 @@ const Sendgrid = {
   name: "Sendgrid",
   icon: "sendgrid.svg",
   help_page: "https://docs.sendgrid.com/for-developers/sending-email/integrating-with-the-smtp-api",
-  availableConfigurations: generateConfiguration(["smtp.sendgrid.com"], [25, 2525, 587])
+  availableConfigurations: generateConfiguration(["smtp.sendgrid.net"], [25, 2525, 587])
 };
 Sendgrid.defaultConfiguration = getConfiguration(Sendgrid, 587);
 

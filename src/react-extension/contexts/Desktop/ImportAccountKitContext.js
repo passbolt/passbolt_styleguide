@@ -130,14 +130,14 @@ export class ImportAccountKitContextProvider extends React.Component {
 
   /**
    * When the user request to verify passphrase to the Background webview to verify it.
-   * @param   {object} the account kit to upload.
+   * @param   {string} passphrase the passphrase to verify.
    * @returns {Promise<void>}
    */
   async verifyPassphrase(passphrase) {
     try {
       await this.props.context.port.request("passbolt.auth-import.verify-passphrase", passphrase);
       this.navigate(ImportAccountKitWorkflowStates.IMPORTING_ACCOUNT);
-      await this.importAccountAndConnect();
+      await this.importAccountAndConnect(passphrase);
     } catch (error) {
       console.error(error);
       throw error;
@@ -148,14 +148,15 @@ export class ImportAccountKitContextProvider extends React.Component {
 
   /**
    * When the user has validated the passphrase we request to import and sign the user
+   * @param   {string} passphrase the user's private key passphrase.
    * @returns {Promise<void>}
    */
-  async importAccountAndConnect() {
+  async importAccountAndConnect(passphrase) {
     try {
       this.flushAccountKit();
       await this.props.context.port.request("passbolt.auth-import.import-account");
       this.navigate(ImportAccountKitWorkflowStates.SIGNING_IN);
-      await this.props.context.port.request("passbolt.auth-import.sign-in");
+      await this.props.context.port.request("passbolt.auth.login", passphrase);
     } catch (error) {
       console.error(error);
       return this.setState({unexpectedError: error, state: ImportAccountKitWorkflowStates.UNEXPECTED_ERROR_STATE});

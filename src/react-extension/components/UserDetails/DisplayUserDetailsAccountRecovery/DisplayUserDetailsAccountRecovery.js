@@ -16,12 +16,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import HandleReviewAccountRecoveryRequestWorkflow
   from "../../AccountRecovery/HandleReviewAccountRecoveryRequestWorkflow/HandleReviewAccountRecoveryRequestWorkflow";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
 /**
  * This component displays the user details about information
@@ -129,17 +129,6 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
   }
 
   /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string} The formatted date
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.props.t('Just now') : dateTime.toRelative({locale: this.props.context.locale});
-  }
-
-  /**
    * Get the selected user
    * @returns {*}
    */
@@ -220,7 +209,7 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
             <li className="previous-request">
               <span className="label"><Trans>Previous recovery</Trans></span>
               <span
-                className="value">{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${this.formatDateTimeAgo(this.previousAccountRecoveryRequest.created)}` : "Never"}</span>
+                className="value">{this.previousAccountRecoveryRequest ? `${this.capitalizeFirstLetter(this.previousAccountRecoveryRequest.status)} ${formatDateTimeAgo(this.previousAccountRecoveryRequest.created, this.props.t, this.props.context.locale)}` : "Never"}</span>
             </li>
             <li className="requests-count">
               <span className="label"><Trans>Number of recovery</Trans></span>

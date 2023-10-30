@@ -14,6 +14,6 @@
 
 import resourcesFixtures from "../../fixture/resources";
 
-export default (storage) => {
+export default storage => {
   storage.local.set({resources: resourcesFixtures});
 };

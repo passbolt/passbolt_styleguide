@@ -147,6 +147,25 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
   }
 
   /**
+   * Get users success
+   * @returns {*}
+   */
+  get usersWarning() {
+    const warningStatus = user => user.status === "warning";
+    return this.users.filter(warningStatus);
+  }
+
+  /**
+   * Get groups error
+   * @returns {*}
+   */
+  get groupsWarning() {
+    const warningStatus = group => group.status === "warning";
+    return this.groups.filter(warningStatus);
+  }
+
+
+  /**
    * Get users error
    * @returns {*}
    */
@@ -211,7 +230,12 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {boolean}
    */
   hasErrorOrIgnoreResource() {
-    return this.usersError.length > 0 || this.groupsError.length > 0 || this.usersIgnored.length > 0 || this.groupsIgnored.length > 0;
+    return this.usersError.length > 0
+      || this.groupsError.length > 0
+      || this.usersWarning.length > 0
+      || this.groupsWarning.length > 0
+      || this.usersIgnored.length > 0
+      || this.groupsIgnored.length > 0;
   }
 
   /**
@@ -230,23 +254,34 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {string}
    */
   getUsersFullReport() {
+    const hasReport = this.usersSuccess.length > 0
+      || this.usersWarning.length > 0
+      || this.usersError.length > 0
+      || this.usersIgnored.length > 0;
+
+    if (!hasReport) {
+      return '';
+    }
+
     let userFullReport = '';
-    if (this.usersSuccess.length > 0 || this.usersError.length > 0 || this.usersIgnored.length > 0) {
-      const usersHeader = `-----------------------------------------------\n${this.props.t("Users")}\n-----------------------------------------------\n`;
-      userFullReport = userFullReport.concat(usersHeader);
-      const addMessage = user => userFullReport = userFullReport.concat(`- ${user.message}\n`);
-      if (this.usersSuccess.length > 0) {
-        userFullReport = userFullReport.concat(`\n${this.props.t("Success:")}\n`);
-        this.usersSuccess.map(addMessage);
-      }
-      if (this.usersError.length > 0) {
-        userFullReport = userFullReport.concat(`\n${this.props.t("Errors:")}\n`);
-        this.usersError.map(addMessage);
-      }
-      if (this.usersIgnored.length > 0) {
-        userFullReport = userFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
-        this.usersIgnored.map(addMessage);
-      }
+    const usersHeader = `-----------------------------------------------\n${this.props.t("Users")}\n-----------------------------------------------\n`;
+    userFullReport = userFullReport.concat(usersHeader);
+    const addMessage = user => userFullReport = userFullReport.concat(`- ${user.message}\n`);
+    if (this.usersSuccess.length > 0) {
+      userFullReport = userFullReport.concat(`\n${this.props.t("Success:")}\n`);
+      this.usersSuccess.map(addMessage);
+    }
+    if (this.usersWarning.length > 0) {
+      userFullReport = userFullReport.concat(`\n${this.props.t("Warning:")}\n`);
+      this.usersWarning.map(addMessage);
+    }
+    if (this.usersError.length > 0) {
+      userFullReport = userFullReport.concat(`\n${this.props.t("Errors:")}\n`);
+      this.usersError.map(addMessage);
+    }
+    if (this.usersIgnored.length > 0) {
+      userFullReport = userFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
+      this.usersIgnored.map(addMessage);
     }
     return userFullReport.concat('\n');
   }
@@ -256,23 +291,34 @@ class DisplaySimulateSynchronizeUserDirectoryAdministration extends Component {
    * @returns {string}
    */
   getGroupsFullReport() {
+    const hasReport = this.groupsSuccess.length > 0
+      || this.groupsWarning.length > 0
+      || this.groupsError.length > 0
+      || this.groupsIgnored.length > 0;
+
+    if (!hasReport) {
+      return '';
+    }
+
     let groupFullReport = '';
-    if (this.groupsSuccess.length > 0 || this.groupsError.length > 0 || this.groupsIgnored.length > 0) {
-      const groupsHeader = `-----------------------------------------------\n${this.props.t("Groups")}\n-----------------------------------------------\n`;
-      groupFullReport = groupFullReport.concat(groupsHeader);
-      const addMessage = group => groupFullReport = groupFullReport.concat(`- ${group.message}\n`);
-      if (this.groupsSuccess.length > 0) {
-        groupFullReport = groupFullReport.concat(`\n${this.props.t("Success:")}\n`);
-        this.groupsSuccess.map(addMessage);
-      }
-      if (this.groupsError.length > 0) {
-        groupFullReport = groupFullReport.concat(`\n${this.props.t("Errors:")}\n`);
-        this.groupsError.map(addMessage);
-      }
-      if (this.groupsIgnored.length > 0) {
-        groupFullReport = groupFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
-        this.groupsIgnored.map(addMessage);
-      }
+    const groupsHeader = `-----------------------------------------------\n${this.props.t("Groups")}\n-----------------------------------------------\n`;
+    groupFullReport = groupFullReport.concat(groupsHeader);
+    const addMessage = group => groupFullReport = groupFullReport.concat(`- ${group.message}\n`);
+    if (this.groupsSuccess.length > 0) {
+      groupFullReport = groupFullReport.concat(`\n${this.props.t("Success:")}\n`);
+      this.groupsSuccess.map(addMessage);
+    }
+    if (this.groupsWarning.length > 0) {
+      groupFullReport = groupFullReport.concat(`\n${this.props.t("Warning:")}\n`);
+      this.groupsWarning.map(addMessage);
+    }
+    if (this.groupsError.length > 0) {
+      groupFullReport = groupFullReport.concat(`\n${this.props.t("Errors:")}\n`);
+      this.groupsError.map(addMessage);
+    }
+    if (this.groupsIgnored.length > 0) {
+      groupFullReport = groupFullReport.concat(`\n${this.props.t("Ignored:")}\n`);
+      this.groupsIgnored.map(addMessage);
     }
     return groupFullReport;
   }

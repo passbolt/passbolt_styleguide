@@ -7,10 +7,11 @@ import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypes
 import {
   defaultPasswordPoliciesContext
 } from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
-import {defaultResourcePasswordGeneratorcontext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
+import {defaultResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext.test.data";
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -42,12 +43,14 @@ export function defaultAppContext(appContext) {
  */
 export function defaultProps(data = {}) {
   const defaultData = {
-    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorcontext(),
+    folderParentId: null,
+    resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     onClose: () => {},
     dialogContext: {
       open: () => {},
-    }
+    },
+    workflowContext: defaultWorkflowContext()
   };
 
   delete data.passwordPoliciesContext;

@@ -21,8 +21,8 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {withDialog} from "../../../contexts/DialogContext";
 import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfileAvatar";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
+import {formatDateTimeAgo} from '../../../../shared/utils/dateUtils';
 
 /**
  * This component displays the user profile information
@@ -56,17 +56,6 @@ class DisplayUserProfile extends React.Component {
    */
   handleUploadPicture() {
     this.props.dialogContext.open(UploadUserProfileAvatar);
-  }
-
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
   }
 
   /**
@@ -117,11 +106,11 @@ class DisplayUserProfile extends React.Component {
                 </tr>
                 <tr className="modified">
                   <td className="label"><Trans>Modified</Trans></td>
-                  <td className="value">{this.formatDateTimeAgo(this.user.modified)}</td>
+                  <td className="value">{formatDateTimeAgo(this.user.modified, this.props.t, this.props.context.locale)}</td>
                 </tr>
                 <tr className="created">
                   <td className="label"><Trans>Created</Trans></td>
-                  <td className="value">{this.formatDateTimeAgo(this.user.created)}</td>
+                  <td className="value">{formatDateTimeAgo(this.user.created, this.props.t, this.props.context.locale)}</td>
                 </tr>
               </tbody>
             </table>

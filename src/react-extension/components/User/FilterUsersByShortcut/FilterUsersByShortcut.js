@@ -37,6 +37,7 @@ class FilterUsersByShortcut extends React.Component {
   bindHandlers() {
     this.handleAllItemsClick = this.handleAllItemsClick.bind(this);
     this.handleRecentlyModifiedClick = this.handleRecentlyModifiedClick.bind(this);
+    this.handleSuspendedUsersClick = this.handleSuspendedUsersClick.bind(this);
   }
 
   /**
@@ -54,6 +55,13 @@ class FilterUsersByShortcut extends React.Component {
   }
 
   /**
+   * Returns true if the Suspended users shortcut is currently selected
+   */
+  get isSuspendedUsersSelected() {
+    return this.props.userWorkspaceContext.filter.type === UserWorkspaceFilterTypes.SUSPENDED_USER;
+  }
+
+  /**
    * Whenever the shortcut "All items" has been selected
    */
   handleAllItemsClick() {
@@ -67,6 +75,22 @@ class FilterUsersByShortcut extends React.Component {
   handleRecentlyModifiedClick() {
     const filter = {type: UserWorkspaceFilterTypes.RECENTLY_MODIFIED};
     this.props.history.push({pathname: '/app/users', state: {filter}});
+  }
+
+  /**
+   * Whenever the shortcut "Suspended users" has been selected
+   */
+  handleSuspendedUsersClick() {
+    const filter = {type: UserWorkspaceFilterTypes.SUSPENDED_USER};
+    this.props.history.push({pathname: '/app/users', state: {filter}});
+  }
+
+  /**
+   * Returns true if the 'Suspended users' filter should be displayed
+   * @returns {boolean}
+   */
+  get shouldDisplaySuspendedUsersFilter() {
+    return this.props.userWorkspaceContext.shouldDisplaySuspendedUsersFilter();
   }
 
   render() {
@@ -95,6 +119,19 @@ class FilterUsersByShortcut extends React.Component {
               </div>
             </div>
           </li>
+          {this.shouldDisplaySuspendedUsersFilter &&
+            <li>
+              <div className={`row ${this.isSuspendedUsersSelected ? "selected" : ""}`} onClick={this.handleSuspendedUsersClick}>
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button className="link no-border" type="button" id="suspended-users">
+                      <span><Trans>Suspended users</Trans></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          }
         </ul>
       </div>
     );

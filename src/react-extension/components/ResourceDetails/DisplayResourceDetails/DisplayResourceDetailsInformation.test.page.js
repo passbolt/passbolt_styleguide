@@ -209,6 +209,20 @@ class DisplayInformationPageObject {
   }
 
   /**
+   * Returns the expiry elements of information
+   */
+  get expiry() {
+    return this._container.querySelector('.expiry .value');
+  }
+
+  /**
+   * Returns the expiry label elements of information
+   */
+  get expiryLabel() {
+    return this._container.querySelector('.expiry .label').textContent;
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {

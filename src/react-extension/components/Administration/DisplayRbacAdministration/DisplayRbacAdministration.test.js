@@ -55,9 +55,9 @@ describe("DisplayRbacAdministration", () => {
       const props = propsWithPopulatedRbacContext();
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
-      expect.assertions(21);
+      expect.assertions(23);
 
-      expect(page.getAllSelectsByRole('admin').length).toEqual(10);
+      expect(page.getAllSelectsByRole('admin').length).toEqual(12);
       expect(page.select('admin', uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select('admin', uiActions.RESOURCES_IMPORT).className).toContain('disabled');
       expect(page.select('admin', uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
@@ -78,15 +78,17 @@ describe("DisplayRbacAdministration", () => {
       expect(page.select('admin', uiActions.SHARE_VIEW_LIST).className).toContain('disabled');
       expect(page.select('admin', uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select('admin', uiActions.USERS_VIEW_WORKSPACE).className).toContain('disabled');
+      expect(page.select('admin', uiActions.MOBILE_TRANSFER).className).toContain('disabled');
+      expect(page.select('admin', uiActions.DESKTOP_TRANSFER).className).toContain('disabled');
     });
 
     it('As a logged in administrator I can see all rbac settings relative to the user role', async() => {
       const props = propsWithPopulatedRbacContext();
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
-      expect.assertions(11);
+      expect.assertions(13);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(10);
+      expect(page.getAllSelectsByRole('user').length).toEqual(12);
       expect(page.select('user', uiActions.RESOURCES_IMPORT).textContent).toStrictEqual(controlFunctions.DENY);
       expect(page.select('user', uiActions.RESOURCES_EXPORT).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select('user', uiActions.SECRETS_PREVIEW).textContent).toStrictEqual(controlFunctions.DENY);
@@ -97,6 +99,8 @@ describe("DisplayRbacAdministration", () => {
       expect(page.select('user', uiActions.TAGS_USE).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select('user', uiActions.SHARE_VIEW_LIST).textContent).toStrictEqual(controlFunctions.ALLOW);
       expect(page.select('user', uiActions.USERS_VIEW_WORKSPACE).textContent).toStrictEqual(controlFunctions.DENY);
+      expect(page.select('user', uiActions.MOBILE_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
+      expect(page.select('user', uiActions.DESKTOP_TRANSFER).textContent).toContain(controlFunctions.ALLOW);
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to import if disabled by feature flag', async() => {
@@ -105,7 +109,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
       expect(page.select('user', uiActions.RESOURCES_IMPORT)).toBeUndefined();
     });
 
@@ -115,7 +119,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
       expect(page.select('user', uiActions.RESOURCES_EXPORT)).toBeUndefined();
     });
 
@@ -125,7 +129,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
       expect(page.select('user', uiActions.SECRETS_PREVIEW)).toBeUndefined();
     });
 
@@ -135,7 +139,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
       expect(page.select('user', uiActions.TAGS_USE)).toBeUndefined();
     });
 
@@ -145,7 +149,7 @@ describe("DisplayRbacAdministration", () => {
       await waitFor(() => {});
       expect.assertions(2);
 
-      expect(page.getAllSelectsByRole('user').length).toEqual(9);
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
       expect(page.select('user', uiActions.FOLDERS_USE)).toBeUndefined();
     });
   });

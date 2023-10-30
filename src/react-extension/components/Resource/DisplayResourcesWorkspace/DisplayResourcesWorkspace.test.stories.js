@@ -29,6 +29,7 @@ import mockStorage from "../../../../../test/mocks/mockStorage";
 import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
 import Footer from "../../Common/Footer/Footer";
+import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 
 /**
  * DisplayResourcesWorkspace stories
@@ -41,29 +42,31 @@ export default {
 const Template = ({...args}) =>
   <MemoryRouter initialEntries={['/app/passwords']}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
-      <DialogContextProvider>
-        <NavigationContextProvider>
-          <ContextualMenuContextProvider>
-            <ResourceWorkspaceContextProvider>
-              <ResourcePasswordGeneratorContextProvider>
-                <ManageContextualMenu/>
-                <ManageDialogs/>
-                <DragContextProvider>
-                  <div id="container" className="page password">
-                    <div id="app" className="app ready" tabIndex="1000">
-                      <div className="header first">
-                        <DisplayMainMenu/>
+      <RbacContextProvider>
+        <DialogContextProvider>
+          <NavigationContextProvider>
+            <ContextualMenuContextProvider>
+              <ResourceWorkspaceContextProvider>
+                <ResourcePasswordGeneratorContextProvider>
+                  <ManageContextualMenu/>
+                  <ManageDialogs/>
+                  <DragContextProvider>
+                    <div id="container" className="page password">
+                      <div id="app" className="app ready" tabIndex="1000">
+                        <div className="header first">
+                          <DisplayMainMenu/>
+                        </div>
+                        <DisplayResourcesWorkspace {...args}/>
                       </div>
-                      <DisplayResourcesWorkspace {...args}/>
+                      <Footer/>
                     </div>
-                    <Footer/>
-                  </div>
-                </DragContextProvider>
-              </ResourcePasswordGeneratorContextProvider>
-            </ResourceWorkspaceContextProvider>
-          </ContextualMenuContextProvider>
-        </NavigationContextProvider>
-      </DialogContextProvider>
+                  </DragContextProvider>
+                </ResourcePasswordGeneratorContextProvider>
+              </ResourceWorkspaceContextProvider>
+            </ContextualMenuContextProvider>
+          </NavigationContextProvider>
+        </DialogContextProvider>
+      </RbacContextProvider>
     </ExtAppContextProvider>
   </MemoryRouter>;
 

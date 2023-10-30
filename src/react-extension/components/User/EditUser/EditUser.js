@@ -24,6 +24,8 @@ import {Trans, withTranslation} from "react-i18next";
 import {maxSizeValidation} from '../../../lib/Error/InputValidator';
 import Icon from "../../../../shared/components/Icons/Icon";
 import {USER_INPUT_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import {DateTime} from "luxon";
 
 class EditUser extends Component {
   /**
@@ -44,6 +46,7 @@ class EditUser extends Component {
   get defaultState() {
     const user = this.props.context.users.find(user => user.id === this.props.context.editUserDialogProps.id);
     const role = this.props.context.roles.find(role => role.id === user.role_id);
+    const disabled = user.disabled ? new Date(user.disabled) : null;
     return {
       // Dialog states
       loading: true,
@@ -57,6 +60,7 @@ class EditUser extends Component {
       last_nameError: null,
       last_nameWarning: "",
       username: user.username,
+      disabled: disabled,
       is_admin: role.name === 'admin',
       hasAlreadyBeenValidated: false // True if the form has alreadt been submitted once
     };
@@ -102,6 +106,7 @@ class EditUser extends Component {
     this.handleFirstNameInputOnKeyUp = this.handleFirstNameInputOnKeyUp.bind(this);
     this.handleLastNameInputOnKeyUp = this.handleLastNameInputOnKeyUp.bind(this);
     this.handleCheckboxClick = this.handleCheckboxClick.bind(this);
+    this.handleIsSuspendedCheckboxClick = this.handleIsSuspendedCheckboxClick.bind(this);
   }
 
   /**
@@ -135,6 +140,20 @@ class EditUser extends Component {
     const checked = target.checked;
     const name = target.name;
     this.setState({[name]: checked});
+  }
+
+  /**
+   * Handle "is suspended" checkbox input changes.
+   * @params {ReactEvent} The react event
+   * @returns {void}
+   */
+  handleIsSuspendedCheckboxClick(event) {
+    const checked = event.target.checked;
+    const disabled = checked
+      ? new Date()
+      : null;
+
+    this.setState({disabled});
   }
 
   /**
@@ -172,14 +191,14 @@ class EditUser extends Component {
     // Avoid the form to be submitted.
     event.preventDefault();
 
-    await this.setState({hasAlreadyBeenValidated: true});
+    this.setState({hasAlreadyBeenValidated: true});
 
     // Do not re-submit an already processing form
     if (!this.state.processing) {
-      await this.toggleProcessing();
+      this.toggleProcessing();
       await this.validate();
       if (this.hasValidationError()) {
-        await this.toggleProcessing();
+        this.toggleProcessing();
         this.focusFirstFieldError();
         return;
       }
@@ -231,11 +250,10 @@ class EditUser extends Component {
 
   /**
    * Toggle processing state
-   * @returns {Promise<void>}
    */
-  async toggleProcessing() {
+  toggleProcessing() {
     const prev = this.state.processing;
-    return this.setState({processing: !prev});
+    this.setState({processing: !prev});
   }
 
   /**
@@ -263,8 +281,11 @@ class EditUser extends Component {
         first_name: this.state.first_name,
         last_name: this.state.last_name
       },
-      role_id: role.id
+      role_id: role.id,
     };
+    if (this.isSuspendedUserFeatureEnabled()) {
+      userDto.disabled = this.getFormattedDate(this.state.disabled);
+    }
     return await this.props.context.port.request("passbolt.users.update", userDto);
   }
 
@@ -328,11 +349,68 @@ class EditUser extends Component {
   }
 
   /**
+   * Is the user currently suspended.
+   * @returns {boolean}
+   */
+  isUserSuspended() {
+    if (!this.state.disabled) {
+      return false;
+    }
+
+    const suspendedSince = new Date(this.state.disabled);
+    return suspendedSince <= new Date();
+  }
+
+  /**
+   * Returns the time at when the user will be suspended if any
+   * @returns {string|null}
+   */
+  get suspendedDate() {
+    if (!this.state.disabled) {
+      return null;
+    }
+
+    return DateTime
+      .fromJSDate(new Date(this.state.disabled))
+      .setLocale(this.props.context.locale)
+      .toLocaleString(DateTime.DATETIME_FULL);
+  }
+
+  /**
    * Should input be disabled? True if state is loading or processing
    * @returns {boolean}
    */
   hasAllInputDisabled() {
     return this.state.processing || this.state.loading;
+  }
+
+  /**
+   * Returns true if the plugin `disableUser` is enabled
+   * @returns {boolean}
+   */
+  isSuspendedUserFeatureEnabled() {
+    return this.props.context.siteSettings.canIUse('disableUser');
+  }
+
+  /**
+   * Returns a date string value compatible with the API
+   * @param {Date|null} date
+   * @returns {string}
+   */
+  getFormattedDate(date) {
+    if (!date || !(date instanceof Date)) {
+      return null;
+    }
+
+    const formatNumber = num => num.toString().padStart(2, '0');
+    const Y = date.getFullYear();
+    const M = formatNumber(date.getUTCMonth() + 1);
+    const D = formatNumber(date.getUTCDate());
+    const h = formatNumber(date.getUTCHours());
+    const m = formatNumber(date.getUTCMinutes());
+    const s = formatNumber(date.getUTCSeconds());
+
+    return `${Y}-${M}-${D}T${h}:${m}:${s}`;
   }
 
   /**
@@ -348,6 +426,7 @@ class EditUser extends Component {
    * @returns {JSX}
    */
   render() {
+    const isUserSuspended = this.isUserSuspended();
     return (
       <DialogWrapper className='user-edit-dialog' title={this.translate('Edit User')}
         onClose={this.handleClose} disabled={this.hasAllInputDisabled()}>
@@ -402,22 +481,46 @@ class EditUser extends Component {
               />
             </div>
             <div className={`input checkbox-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="is_admin_checkbox"><Trans>Role</Trans></label>
-              <div className="input checkbox">
+              <label><Trans>Role</Trans></label>
+              <span className="input toggle-switch form-element ready">
                 <input
                   id="is_admin_checkbox"
                   name="is_admin"
                   disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
                   onChange={this.handleCheckboxClick}
+                  className="toggle-switch-checkbox checkbox"
                   checked={this.state.is_admin}
-                  type="checkbox"/>
-                <label htmlFor="is_admin_checkbox"> <Trans>This user is an administrator</Trans></label>
-              </div>
-              <div className="help-message">
-                <Trans>Note: Administrators can add and delete users; They can also create groups and assign group managers; By default they can not see all passwords.</Trans>
-              </div>
+                  type="checkbox"
+                />
+                <label htmlFor="is_admin_checkbox"><Trans>This user is an administrator</Trans></label>
+                <Tooltip message={this.translate("Administrators can add and delete users. They can also create groups and assign group managers. By default they can not see all passwords.")}>
+                  <Icon name="info-circle"/>
+                </Tooltip>
+              </span>
+              {this.isSuspendedUserFeatureEnabled() &&
+                <span className="input toggle-switch form-element ready">
+                  <input
+                    id="is_suspended_checkbox"
+                    name="disabled"
+                    disabled={this.isLoggedInUserAsEditing || this.hasAllInputDisabled()}
+                    onChange={this.handleIsSuspendedCheckboxClick}
+                    checked={isUserSuspended}
+                    type="checkbox"
+                    className="toggle-switch-checkbox checkbox"
+                  />
+                  <label htmlFor="is_suspended_checkbox"> <Trans>Suspend this user</Trans></label>
+                  <Tooltip message={this.translate("This user will not be able to sign in to passbolt and receive email notifications. Other users can share resource with it and add this user to a group.")}>
+                    <Icon name="info-circle"/>
+                  </Tooltip>
+                </span>
+              }
             </div>
           </div>
+          {!isUserSuspended && this.state.disabled &&
+            <div className="message warning">
+              <Trans><b>Warning:</b> Suspension is scheduled for the {this.suspendedDate}</Trans>
+            </div>
+          }
           <div className="submit-wrapper clearfix">
             <FormCancelButton disabled={this.hasAllInputDisabled()} onClick={this.handleClose}/>
             <FormSubmitButton disabled={this.hasAllInputDisabled()} processing={this.state.processing} value={this.translate("Save")}/>

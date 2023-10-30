@@ -3,18 +3,10 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import MockPort from "../../../react-extension/test/mock/MockPort";
-import UserSettings from "../../../shared/lib/Settings/UserSettings";
-import userSettingsFixture from "../../../react-extension/test/fixture/Settings/userSettings";
-import {defaultProSiteSettings} from "../../../react-extension/test/fixture/Settings/siteSettings.test.data";
-import SiteSettings from "../../../shared/lib/Settings/SiteSettings";
+import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 
 export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    userSettings: new UserSettings(userSettingsFixture),
-    siteSettings: new SiteSettings(defaultProSiteSettings())
-  };
+  const defaultAppContext = defaultUserAppContext();
   return Object.assign(defaultAppContext, appContext || {});
 }
 

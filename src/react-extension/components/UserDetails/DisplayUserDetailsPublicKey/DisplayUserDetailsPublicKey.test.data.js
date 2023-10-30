@@ -1,5 +1,7 @@
 import MockPort from "../../../test/mock/MockPort";
 import {TEST_ROLE_USER_ID} from "../../../../shared/models/entity/role/role.test.data";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 
 /**
  * Returns the default app context for the unit test
@@ -12,9 +14,7 @@ export function defaultAppContext(appContext) {
     userSettings: {
       getTrustedDomain: () => (new URL(window.location.href)).origin
     },
-    siteSettings: {
-      getServerTimezone: () => ""
-    },
+    siteSettings: new SiteSettings(siteSettingsFixture),
     roles: [
       {
         id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',

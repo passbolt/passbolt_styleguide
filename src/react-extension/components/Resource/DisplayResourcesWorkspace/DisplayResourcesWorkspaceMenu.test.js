@@ -23,9 +23,12 @@ import {
   defaultPropsMultipleResourceUpdateRights,
   defaultPropsNoResource,
   defaultPropsOneResourceNotOwned,
-  defaultPropsOneResourceOwned
+  defaultPropsOneResourceOwned, defaultPropsOneTotpResourceOwned
 } from "./DisplayResourcesWorkspaceMenu.test.data";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {
+  plaintextSecretPasswordDescriptionTotpDto, plaintextSecretPasswordStringDto
+} from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -117,11 +120,11 @@ describe("See Workspace Menu", () => {
       // Mock the notification function
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
       });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
 
       await page.displayMenu.clickOnMenu(page.displayMenu.copyMenu);
 
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id, {showProgress: true});
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
@@ -134,13 +137,12 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.dropdownMenuSecret).not.toBeNull();
       expect(page.displayMenu.hasDropdownMenuSecretDisabled()).toBeFalsy();
       // Mock the notification function
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
 
       await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSecret);
 
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id, {showProgress: true});
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
@@ -168,6 +170,54 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
       expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+    });
+  });
+
+  describe('As LU I can see the workspace menu with one totp resource selected owned', () => {
+    const propsOneResourceOwned = defaultPropsOneTotpResourceOwned(); // The props to pass
+
+    /**
+     * Given a selected resource
+     * When I open the more menu
+     * Then I should see the delete
+     * Then I should see the edit menu
+     * Then I should see the copy totp menu
+     */
+
+    beforeEach(() => {
+      page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
+    });
+
+    it('As LU I can start deleting a resource via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
+      expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
+    });
+
+    it('As LU I can start editing a resource via the workspace main menu', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.editMenu).not.toBeNull();
+      expect(page.displayMenu.hasEditMenuDisabled()).toBeFalsy();
+    });
+
+    it('As LU I should be able to copy a resource secret from the more menu', async() => {
+      expect.assertions(7);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSecret).not.toBeNull();
+      expect(page.displayMenu.hasDropdownMenuSecretDisabled()).toBeFalsy();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuTotp);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].id);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });
 

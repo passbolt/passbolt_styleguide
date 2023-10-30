@@ -20,6 +20,7 @@ import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetch
 import {waitFor} from "@testing-library/react";
 import EditUserPage from "./EditUser.test.page";
 import {defaultAppContext, defaultProps} from "./EditUser.test.data";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,7 +32,7 @@ describe("See the Create Dialog User", () => {
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
   const editUserDialogProps = {
-    id: "8e3874ae-4b40-590b-968a-418f704b9d9a"
+    id: context.users[0].id
   };
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
@@ -46,6 +47,11 @@ describe("See the Create Dialog User", () => {
     });
 
     it('As AD I see a success toaster message after editing a user with success', async() => {
+      expect.assertions(9);
+      //ensure the date returned is always the same to make sure the unit test doesn't randomly failed due to execution durationjest
+      jest.useFakeTimers()
+        .setSystemTime(new Date());
+
       expect(page.editUser.exists()).toBeTruthy();
       // edit user
       const userMeta = {
@@ -56,14 +62,18 @@ describe("See the Create Dialog User", () => {
         },
         is_admin: true,
       };
+
       // check fields in the form
       expect(page.editUser.firstName.value).toBe(context.users[0].profile.first_name);
       expect(page.editUser.lastName.value).toBe(context.users[0].profile.last_name);
       expect(page.editUser.email.value).toBe(context.users[0].username);
+      expect(page.editUser.isAdmin.checked).toBe(false);
+      expect(page.editUser.isSuspended.checked).toBe(false);
       // Fill the form
       page.editUser.fillInput(page.editUser.firstName, userMeta.profile.first_name);
       page.editUser.fillInput(page.editUser.lastName, userMeta.profile.last_name);
       await page.editUser.click(page.editUser.isAdmin);
+      await page.editUser.click(page.editUser.isSuspended);
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
@@ -77,6 +87,7 @@ describe("See the Create Dialog User", () => {
           last_name: "admin",
         },
         role_id: context.roles[0].id,
+        disabled: new Date().toISOString().split('.')[0],
       };
 
       await page.editUser.click(page.editUser.saveButton);
@@ -87,6 +98,7 @@ describe("See the Create Dialog User", () => {
     });
 
     it('As AD I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
+      expect.assertions(5);
       // Mock the request function to make it the expected result
       let updateResolve;
       const requestMockImpl = jest.fn(() => new Promise(resolve => {
@@ -97,17 +109,18 @@ describe("See the Create Dialog User", () => {
       mockContextRequest(context, requestMockImpl);
       page.editUser.clickWithoutWaitFor(page.editUser.saveButton);
       // API calls are made on submit, wait they are resolved.
-      await waitFor(() => {
-        expect(page.editUser.firstName.getAttribute("disabled")).not.toBeNull();
-        expect(page.editUser.lastName.getAttribute("disabled")).not.toBeNull();
-        expect(page.editUser.email.getAttribute("disabled")).not.toBeNull();
-        expect(page.editUser.saveButton.getAttribute("disabled")).not.toBeNull();
-        expect(page.editUser.saveButtonProcessing).not.toBeNull();
-        updateResolve();
-      });
+      await waitForTrue(() => page.editUser.firstName.getAttribute("disabled") !== null);
+
+      expect(page.editUser.firstName.getAttribute("disabled")).not.toBeNull();
+      expect(page.editUser.lastName.getAttribute("disabled")).not.toBeNull();
+      expect(page.editUser.email.getAttribute("disabled")).not.toBeNull();
+      expect(page.editUser.saveButton.getAttribute("disabled")).not.toBeNull();
+      expect(page.editUser.saveButtonProcessing).not.toBeNull();
+      updateResolve();
     });
 
     it('As AD I shouldn’t be able to submit the form if there is an invalid field', async() => {
+      expect.assertions(3);
       expect(page.editUser.exists()).toBeTruthy();
       // empty the form
       page.editUser.fillInput(page.editUser.firstName, "");
@@ -120,24 +133,28 @@ describe("See the Create Dialog User", () => {
     });
 
     it('As AD I can stop editing a user by clicking on the cancel button', async() => {
+      expect.assertions(2);
       expect(page.editUser.exists()).toBeTruthy();
       await page.editUser.click(page.editUser.cancelButton);
       expect(props.onClose).toBeCalled();
     });
 
     it('As AD I can stop editing a user by closing the dialog', async() => {
+      expect.assertions(2);
       expect(page.editUser.exists()).toBeTruthy();
       await page.editUser.click(page.editUser.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
     it('As AD I can stop adding a user with the keyboard (escape)', async() => {
+      expect.assertions(2);
       expect(page.editUser.exists()).toBeTruthy();
       await page.editUser.escapeKey(page.editUser.dialogClose);
       expect(props.onClose).toBeCalled();
     });
 
     it('As AD I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
+      expect.assertions(2);
       // Mock the request function to make it return an error.
       jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
@@ -159,6 +176,36 @@ describe("See the Create Dialog User", () => {
 
       expect(page.editUser.firstnameWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.editUser.lastnameWarningMessage.textContent).toEqual(truncatedWarningMessage);
+    });
+  });
+
+  describe("As Admin I can toggle 'is suspended' checkbox", () => {
+    it("As a user I should see the 'disable user' checkbox if the plugin is enabled", async() => {
+      expect.assertions(1);
+      const context = defaultAppContext();
+      const props = defaultProps(); // The props to pass
+      const editUserDialogProps = {
+        id: context.users[0].id
+      };
+      context.setContext({editUserDialogProps});
+      const page = new EditUserPage(context, props);
+      await waitFor(() => {});
+
+      expect(page.editUser.isSuspended).not.toBeNull();
+    });
+    it("As a user I should see the 'disable user' checkbox if the plugin is disabled", async() => {
+      expect.assertions(1);
+      const context = defaultAppContext(); // The applicative context
+      jest.spyOn(context.siteSettings, 'canIUse').mockImplementation(() => false);
+      const props = defaultProps(); // The props to pass
+      const editUserDialogProps = {
+        id: context.users[0].id
+      };
+      context.setContext({editUserDialogProps});
+      const page = new EditUserPage(context, props);
+      await waitFor(() => {});
+
+      expect(page.editUser.isSuspended).toBeNull();
     });
   });
 });
