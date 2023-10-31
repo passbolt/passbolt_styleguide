@@ -151,7 +151,7 @@ class CreateResourceFolder extends Component {
    */
   async handleSaveSuccess(folderId) {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The folder has been added successfully"));
-    this.props.history.push(`/app/passwords/view/${folderId}`);
+    this.props.history.push(`/app/folders/view/${folderId}`);
     this.props.onClose();
   }
 

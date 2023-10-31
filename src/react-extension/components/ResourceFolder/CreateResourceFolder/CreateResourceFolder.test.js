@@ -56,7 +56,7 @@ describe("Create Folder", () => {
       const folderId = 'some folder id';
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({id: folderId}));
       await page.create({name: 'My super folder'});
-      expect(props.history.push).toHaveBeenCalledWith(`/app/passwords/view/${folderId}`);
+      expect(props.history.push).toHaveBeenCalledWith(`/app/folders/view/${folderId}`);
     });
 
     it('As LU I should see the close of the dialog', async() => {
