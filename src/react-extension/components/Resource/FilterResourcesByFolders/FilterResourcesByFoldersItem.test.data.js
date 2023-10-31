@@ -46,7 +46,7 @@ export function defaultProps() {
     },
     match: {
       params: {
-        filterByFolderId: foldersMock[2].id
+        filterByFolderId: foldersMock[0].id
       }
     }
   };
