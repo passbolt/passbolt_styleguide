@@ -192,11 +192,14 @@ class ManageSsoSettings extends React.Component {
    */
   get allSsoProviders() {
     const apiSupportedProvider = this.state.providers;
-    return SsoProviders.map(bextKnownProvider => {
-      const newProvider = {...bextKnownProvider};
-      newProvider.disabled = Boolean(newProvider.disabled) || !apiSupportedProvider.includes(newProvider.id);
-      return newProvider;
-    });
+    return SsoProviders
+      .map(bextKnownProvider => {
+        const newProvider = {...bextKnownProvider};
+        newProvider.disabled = Boolean(newProvider.disabled) || !apiSupportedProvider.includes(newProvider.id);
+        return newProvider;
+      })
+      // make sure to hide the providers we want to hide if their are not available on the API
+      .filter(provider => !provider.disabled || (provider.disabled && !provider?.hiddenIfDisabled));
   }
 
   /**
