@@ -50,21 +50,21 @@ describe("ApiTriageContext", () => {
   it("As an anonymous, I cannot self register if my email domain is not allowed", async() => {
     expect.assertions(6);
 
-    // Case error 400
+    // Case error 400, the feature is activated, the domain is not allowed => user requires an invitation
     jest.spyOn(apiTriageContext, "isDomainAllowedToSelfRegister").mockImplementation(() => Promise.reject(generateError("", 400)));
     await apiTriageContext.handleTriageError(error, testEmail);
 
-    expect(apiTriageContext.state.state).toEqual(ApiTriageContextState.ERROR_STATE);
+    expect(apiTriageContext.state.state).toEqual(ApiTriageContextState.USERNAME_NOT_FOUND_ERROR);
     expect(apiTriageContext.state.username).toEqual(testEmail);
 
-    // Case error 403
+    // Case error 403, the feature is activated, the domain is not allowed => user requires an invitation
     jest.spyOn(apiTriageContext, "isDomainAllowedToSelfRegister").mockImplementation(() => Promise.reject(generateError("", 403)));
     await apiTriageContext.handleTriageError(error, testEmail);
 
-    expect(apiTriageContext.state.state).toEqual(ApiTriageContextState.ERROR_STATE);
+    expect(apiTriageContext.state.state).toEqual(ApiTriageContextState.USERNAME_NOT_FOUND_ERROR);
     expect(apiTriageContext.state.username).toEqual(testEmail);
 
-    //Case error 500 should redirect to unexpected error
+    //Case error 500 should redirect to unexpected error, the feature is activated, the API fails => unexpected error
     jest.spyOn(apiTriageContext, "isDomainAllowedToSelfRegister").mockImplementation(() => Promise.reject(generateError("", 500)));
     await apiTriageContext.handleTriageError(error, testEmail);
 
@@ -72,13 +72,13 @@ describe("ApiTriageContext", () => {
     expect(apiTriageContext.state.username).toEqual(testEmail);
   });
 
-  it('As an anonymous, I cannot self register if the self registration plugin is disabled or flage is disabled', async() => {
+  it('As an anonymous, I cannot self register if the self registration plugin is disabled or flag is disabled', async() => {
     expect.assertions(1);
 
     initContext("selfRegistration");
 
     await apiTriageContext.handleTriageError(error, testEmail);
-    expect(apiTriageContext.state.state).toEqual(ApiTriageContextState.ERROR_STATE);
+    expect(apiTriageContext.state.state).toEqual(ApiTriageContextState.USERNAME_NOT_FOUND_ERROR);
   });
 
   it('As an anonymous, I cannot self register if the email is already used (common behaviour, send recover confirmation email)', async() => {
