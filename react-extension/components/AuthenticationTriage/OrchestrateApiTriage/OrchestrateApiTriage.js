@@ -72,7 +72,7 @@ class OrchestrateApiTriage extends Component {
         return <CheckMailBox/>;
       case ApiTriageContextState.NAME_STATE:
         return <EnterNameForm/>;
-      case ApiTriageContextState.ERROR_STATE:
+      case ApiTriageContextState.USERNAME_NOT_FOUND_ERROR:
         return <DisplayRequireInvitationError/>;
       case ApiTriageContextState.UNEXPECTED_ERROR_STATE:
         return <DisplayUnexpectedError

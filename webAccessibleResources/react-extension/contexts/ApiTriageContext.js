@@ -122,23 +122,38 @@ export class ApiTriageContextProvider extends React.Component {
     const apiClient = new ApiClient(apiClientOptions);
     let response = null;
     try {
+      // The feature is enabled, let's check if there's a configuration valid
       response = await apiClient.findAll();
     } catch (e) {
-      console.log(e);
-      this.handleTriageError(e);
-      return;
+      // if the feature is disabled, the server should still answer with a 200, something wrong happened here
+      console.error(e);
+      return null;
     }
 
     const providerId = response.body.provider;
 
-    const isProviderValid = SsoProviders.some(provider => provider.id === providerId);
-    if (!isProviderValid) {
-      const error = new Error("The given SSO provider id is not valid");
-      console.error(error);
-      this.handleTriageError(error);
-      return;
+    if (!providerId) {
+      //The feature flag is set but there's no configuration yet
+      return null;
     }
 
+    const knownProvider = SsoProviders
+      .find(provider => provider.id === providerId);
+
+    if (!knownProvider) {
+      // The provider ID from the API is unknown to the Styleguide
+      const error = new Error("The given SSO provider id is not valid");
+      console.error(error);
+      return null;
+    }
+
+    if (knownProvider.disabledForRecover) {
+      // The provider ID from the API is known but is not supported for ssoRecover
+      console.log("Recover processes with this SSO provider is not supported");
+      return null;
+    }
+
+    // Everything is fine
     return providerId;
   }
 
@@ -169,7 +184,7 @@ export class ApiTriageContextProvider extends React.Component {
    */
   async handleTriageError(error, username) {
     const userNotFound = error.data && error.data.code === 404;
-    let nextState = ApiTriageContextState.ERROR_STATE;
+    let nextState = ApiTriageContextState.USERNAME_NOT_FOUND_ERROR;
     if (userNotFound && this.canIUseSelfRegistrationSettings) {
       try {
         await this.isDomainAllowedToSelfRegister(username);
@@ -222,7 +237,7 @@ export class ApiTriageContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async handleRegistrationError() {
-    this.setState({state: ApiTriageContextState.ERROR_STATE});
+    this.setState({state: ApiTriageContextState.UNEXPECTED_ERROR_STATE});
   }
 
   /**
@@ -331,6 +346,6 @@ export const ApiTriageContextState = {
   SSO_SIGN_IN_STATE: 'SSO Sign in state',
   CHECK_MAILBOX_STATE: 'Check mailbox state',
   NAME_STATE: 'Enter name state',
-  NAME_ERROR: 'Error state',
+  USERNAME_NOT_FOUND_ERROR: 'Username not found error state',
   UNEXPECTED_ERROR_STATE: 'Unexpected error state',
 };
