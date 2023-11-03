@@ -178,9 +178,13 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
    */
   get configurationSource() {
     return {
-      'db': this.props.t('database'),
+      'legacyEnv': this.props.t('environment variables (legacy)'),
       'env': this.props.t('environment variables'),
-    }[this.settingsSource] || this.props.t('default configuration');
+      'legacyFile': this.props.t('file (legacy)'),
+      'file': this.props.t('file'),
+      'db': this.props.t('database'),
+      'default': this.props.t('default configuration'),
+    }[this.settingsSource] || this.props.t('unknown');
   }
 
   /**
@@ -205,7 +209,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
           {adminContext.isSourceChanging() &&
             <div className="warning message" id="password-policies-setting-source-changing-banner">
               <p>
-                <Trans>The current configuration comes from the environment variable. If you save them, they will be overwritten and come from the database instead.</Trans>
+                <Trans>The current configuration comes from a file or environment variables. If you save them, they will be overwritten and come from the database instead.</Trans>
               </p>
             </div>
           }

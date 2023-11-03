@@ -129,11 +129,12 @@ class ColumnsSettingCollection extends EntityCollection {
    *
    */
   updateColumnShowValueFromDefault(id, show) {
-    const index = this.items.findIndex(column => column.id === id);
-    const columnSettingDto = this.constructor.DEFAULT.items[index].toDto();
+    const hasSameId = column => column.id === id;
+    const columnSettingDto = this.constructor.DEFAULT.items.find(hasSameId).toDto();
     // Update the show value
     columnSettingDto.show = show;
     // Set the column setting
+    const index = this.items.findIndex(hasSameId);
     this.items[index] = new ColumnSettingEntity(columnSettingDto);
   }
 
