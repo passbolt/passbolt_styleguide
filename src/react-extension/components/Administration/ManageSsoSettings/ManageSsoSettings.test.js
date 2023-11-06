@@ -48,9 +48,11 @@ describe("ManageSsoSettings", () => {
         }
       });
 
+      const visibleProviderCount = SsoProviders.filter(provider => !provider.hiddenIfDisabled).length;
+
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Single Sign-On");
-      expect(page.providerButtons.length).toBe(SsoProviders.length);
+      expect(page.providerButtons.length).toBe(visibleProviderCount);
     });
 
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Azure settings', async() => {

@@ -60,6 +60,28 @@ class FilterResourcesByFoldersItem extends React.Component {
   }
 
   /**
+   * Component did mount
+   */
+  componentDidMount() {
+    if (this.props.match.params.filterByFolderId) {
+      // Expand folder tree until the selected folder
+      this.openFolderParentTree(this.props.match.params.filterByFolderId);
+    }
+  }
+
+  /**
+   * Component did update
+   * @param prevProps The previous props
+   */
+  componentDidUpdate(prevProps) {
+    const hasFolderRouteChange = this.props.match.params.filterByFolderId !== prevProps.match.params.filterByFolderId;
+    if (hasFolderRouteChange && this.props.match.params.filterByFolderId) {
+      // Expand folder tree until the selected folder
+      this.openFolderParentTree(this.props.match.params.filterByFolderId);
+    }
+  }
+
+  /**
    * Close the create menu
    */
   handleCloseMoreMenu() {
@@ -101,7 +123,7 @@ class FilterResourcesByFoldersItem extends React.Component {
   openFolderParentTree(selectedFolderId) {
     const selectedFolder = this.props.context.folders.find(folder => folder.id === selectedFolderId);
     // If the selected folder has a parent. Open it if not yet open.
-    if (selectedFolder.folder_parent_id) {
+    if (selectedFolder?.folder_parent_id) {
       if (selectedFolder.folder_parent_id === this.props.folder.id) {
         this.setState({open: true});
       } else {
