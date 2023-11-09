@@ -18,6 +18,7 @@ import {
   defaultUserProps,
   deniedUsersWorkspaceRbacProps
 } from "./DisplayMainMenu.test.data";
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -55,5 +56,17 @@ describe("DisplayMainMenu", () => {
     const props = deniedUsersWorkspaceRbacProps();
     const page = new DisplayMainMenuTestPage(props);
     expect(page.usersLink).toBeNull();
+  });
+
+  it('As a desktop application I should not see the adminstration.', async() => {
+    expect.assertions(1);
+
+    window.chrome = {webview: {}};
+
+    const props = defaultAdministratorProps({
+      rbacContext: denyRbacContext()
+    });
+    const page = new DisplayMainMenuTestPage(props);
+    expect(page.administrationLink).toBeNull();
   });
 });
