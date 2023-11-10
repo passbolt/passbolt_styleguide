@@ -21,6 +21,9 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
 import {Trans, withTranslation} from "react-i18next";
+import {isValidSecurityToken} from "../../../../shared/utils/assertions";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import Icon from "../../../../shared/components/Icons/Icon";
 
 /**
  * This component displays the user choose security token information
@@ -58,7 +61,8 @@ class ChangeUserSecurityToken extends Component {
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyCode: false, // True if the token code is empty
-        lengthCode: false // True if the token code length is > 3
+        lengthCode: false, // True if the token code length is > 3
+        invalidRegex: false // True if the regex is not valid
       }
     };
   }
@@ -283,6 +287,12 @@ class ChangeUserSecurityToken extends Component {
       return;
     }
 
+    const invalidRegex = !isValidSecurityToken(code.trim());
+    if (invalidRegex) {
+      await this.setState({hasBeenValidated: true, errors: {invalidRegex}});
+      return;
+    }
+
     await this.setState({hasBeenValidated: true, errors: {}});
   }
 
@@ -300,7 +310,8 @@ class ChangeUserSecurityToken extends Component {
   get hasErrors() {
     return this.state.errors
       && (this.state.errors.emptyCode
-        || this.state.errors.lengthCode);
+        || this.state.errors.lengthCode
+        || this.state.errors.invalidRegex);
   }
 
   /**
@@ -315,7 +326,14 @@ class ChangeUserSecurityToken extends Component {
             <form onSubmit={this.handleSubmit}>
               <h3><Trans>Update the Security Token</Trans></h3>
               <div className={`input-security-token input required ${this.hasErrors ? "error" : ""} ${!this.areActionsAllowed ? 'disabled' : ''}`}>
-                <label htmlFor="security-token-text"><Trans>Security token</Trans></label>
+                <div className="label-required-inline">
+                  <label htmlFor="security-token-text">
+                    <Trans>Security token</Trans>
+                  </label>
+                  <Tooltip message={this.props.t("Only alphanumeric, dash and underscore characters are accepted.")}>
+                    <Icon name="info-circle"/>
+                  </Tooltip>
+                </div>
                 <input
                   id="security-token-text"
                   ref={this.tokenCodeInputRef}
@@ -357,6 +375,9 @@ class ChangeUserSecurityToken extends Component {
                 {this.state.errors.lengthCode &&
                 <div className="not-good-length-code error-message"><Trans>The security token code should be 3
                   characters long.</Trans></div>
+                }
+                {this.state.errors.invalidRegex &&
+                  <div className="not-good-regex-code error-message"><Trans>The security token code should contains only alphanumeric, dash and underscore characters.</Trans></div>
                 }
               </div>
               }
