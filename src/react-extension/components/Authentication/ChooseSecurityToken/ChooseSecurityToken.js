@@ -16,6 +16,9 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {CirclePicker} from "react-color";
 import SecretComplexity from "../../../../shared/lib/Secret/SecretComplexity";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import Icon from "../../../../shared/components/Icons/Icon";
+import {isValidSecurityToken} from "../../../../shared/utils/assertions";
 
 class ChooseSecurityToken extends Component {
   /**
@@ -50,7 +53,8 @@ class ChooseSecurityToken extends Component {
       hasBeenValidated: false, // true if the form has already validated once
       errors: {
         emptyCode: false, // True if the token code is empty
-        lengthCode: false // True if the token code length is > 3
+        lengthCode: false, // True if the token code length is > 3
+        invalidRegex: false // True if the regex is not valid
       }
     };
   }
@@ -251,6 +255,12 @@ class ChooseSecurityToken extends Component {
       return;
     }
 
+    const invalidRegex = !isValidSecurityToken(code.trim());
+    if (invalidRegex) {
+      await this.setState({hasBeenValidated: true, errors: {invalidRegex}});
+      return;
+    }
+
     await this.setState({hasBeenValidated: true, errors: {}});
   }
 
@@ -268,7 +278,8 @@ class ChooseSecurityToken extends Component {
   get hasErrors() {
     return this.state.errors
       && (this.state.errors.emptyCode
-      || this.state.errors.lengthCode);
+      || this.state.errors.lengthCode
+      || this.state.errors.invalidRegex);
   }
 
   /**
@@ -281,7 +292,14 @@ class ChooseSecurityToken extends Component {
         <h1><Trans>Pick a color and enter three characters.</Trans></h1>
         <form onSubmit={this.handleSubmit}>
           <div className={`input-security-token input required ${this.hasErrors ? "error" : ""}`}>
-            <label htmlFor="security-token-text"><Trans>Security token</Trans></label>
+            <div className="label-required-inline">
+              <label htmlFor="security-token-text">
+                <Trans>Security token</Trans>
+              </label>
+              <Tooltip message={this.props.t("Only alphanumeric, dash and underscore characters are accepted.")}>
+                <Icon name="info-circle"/>
+              </Tooltip>
+            </div>
             <input
               id="security-token-text"
               ref={this.tokenCodeInputRef}
@@ -321,6 +339,9 @@ class ChooseSecurityToken extends Component {
             {this.state.errors.lengthCode &&
             <div className="not-good-length-code error-message"><Trans>The security token code should be 3 characters long.</Trans></div>
             }
+            {this.state.errors.invalidRegex &&
+            <div className="not-good-regex-code error-message"><Trans>The security token code should contains only alphanumeric, dash and underscore characters.</Trans></div>
+            }
           </div>
           }
           <p>
@@ -347,6 +368,7 @@ class ChooseSecurityToken extends Component {
 
 ChooseSecurityToken.propTypes = {
   onComplete: PropTypes.func.isRequired, // The callback function to call when the form is submitted
+  t: PropTypes.func, // The translation function
 };
 
 export default withTranslation("common")(ChooseSecurityToken);

@@ -87,6 +87,13 @@ export default class ChangeUserSecurityTokenPage {
   }
 
   /**
+   * Returns true if the not good code regex error message is displayed
+   */
+  get hasNotGoodRegexCode() {
+    return Boolean(this._page.container.querySelector('.not-good-regex-code'));
+  }
+
+  /**
    * Selects a token color
    * @param color A token color
    */
