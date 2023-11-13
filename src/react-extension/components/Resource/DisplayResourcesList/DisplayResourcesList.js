@@ -408,7 +408,7 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
       return;
     }
 
@@ -421,7 +421,7 @@ class DisplayResourcesList extends React.Component {
 
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -555,7 +555,7 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be previewed."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be previewed."));
       return;
     }
 
