@@ -268,7 +268,7 @@ class ResourceViewPage extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      this.displayTemporarilyError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      this.displayTemporarilyError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
       this.setState({copyTotpState: 'default'});
       return;
     }
@@ -317,7 +317,7 @@ class ResourceViewPage extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      this.displayTemporarilyError(this.translate("The totp is empty and cannot be previewed."));
+      this.displayTemporarilyError(this.translate("The TOTP is empty and cannot be previewed."));
       return;
     }
 
