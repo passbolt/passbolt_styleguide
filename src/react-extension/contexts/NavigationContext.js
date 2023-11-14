@@ -130,7 +130,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
-      onGoToUserSettingsDuoSetupRequested: this.onGoToUserSettingsDuoSetupRequested.bind(this),// Whenever the user wants to navigate to the MFA duo settings through the API.
+      onGoToUserSettingsDuoSetupRequested: this.onGoToUserSettingsDuoSetupRequested.bind(this), // Whenever the user wants to navigate to the MFA duo settings through the API.
     };
   }
 
