@@ -145,7 +145,6 @@ class DisplayProviderList extends Component {
       <div className="grid grid-responsive-12">
         <div className="row mfa-provider-list">
           <div className="mfa-setup col8 main-column">
-            <p>BEXT</p>
             <h3><Trans>Multi factor authentication</Trans></h3>
             {
               !this.isProcessing && <>
