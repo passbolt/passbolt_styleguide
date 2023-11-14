@@ -21,6 +21,7 @@ import {MfaSettingsWorkflowStates, Providers, withMfa} from "../../../contexts/M
 import MfaProviders from "./MfaProviders.data";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * This component will display the Mfa provider enabled/disabled and allowed
@@ -118,7 +119,7 @@ class DisplayProviderList extends Component {
   handleProviderClick(provider) {
     const mfaUserSettings = this.props.mfaContext.getMfaUserSettings();
     this.props.mfaContext.setProvider(provider);
-    if (mfaUserSettings[provider]) {
+    if (mfaUserSettings[provider] && provider !== "duo") {
       this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
     } else {
       switch (provider) {
@@ -126,7 +127,7 @@ class DisplayProviderList extends Component {
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.TOTPOVERVIEW);
           break;
         case Providers.DUO:
-          //Todo
+          this.props.navigationContext.onGoToUserSettingsDuoSetupRequested();
           break;
         case Providers.YUBIKEY:
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPYUBIKEY);
@@ -144,6 +145,7 @@ class DisplayProviderList extends Component {
       <div className="grid grid-responsive-12">
         <div className="row mfa-provider-list">
           <div className="mfa-setup col8 main-column">
+            <p>BEXT</p>
             <h3><Trans>Multi factor authentication</Trans></h3>
             {
               !this.isProcessing && <>
@@ -202,6 +204,7 @@ DisplayProviderList.propTypes = {
   t: PropTypes.func, // The translation function
   mfaContext: PropTypes.object, // The mfa context
   rbacContext: PropTypes.any, // The role based access control context
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withAppContext(withMfa(withRbac(withTranslation("common")(DisplayProviderList))));
+export default withAppContext(withMfa(withRbac(withNavigationContext(withTranslation("common")(DisplayProviderList)))));

@@ -59,7 +59,6 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
             <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
-            <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
           </div>
         </div>
       </div>
