@@ -238,6 +238,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.hidePreviewedSecret();
     if (!isPasswordPreviewed) {
       await this.previewPassword();
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 
@@ -344,6 +345,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.hidePreviewedSecret();
     if (!isTotpPreviewed) {
       this.previewTotp();
+      this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 

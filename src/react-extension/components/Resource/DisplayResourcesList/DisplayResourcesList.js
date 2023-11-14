@@ -472,6 +472,7 @@ class DisplayResourcesList extends React.Component {
     this.hidePreviewedCellule();
     if (!isPasswordPreviewedPreviewed) {
       await this.previewPassword(resourceId);
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 
@@ -528,6 +529,7 @@ class DisplayResourcesList extends React.Component {
     this.hidePreviewedCellule();
     if (!isTotpPreviewedPreviewed) {
       await this.previewTotp(resourceId);
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 

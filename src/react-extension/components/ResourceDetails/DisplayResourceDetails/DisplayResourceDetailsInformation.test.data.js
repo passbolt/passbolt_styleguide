@@ -15,7 +15,7 @@
 import {defaultAdministratorRbacContext, denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
-import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {resourceWithTotpDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultUserDto} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
@@ -39,7 +39,7 @@ export function defaultProps(data = {}) {
     passwordExpiryContext: passwordExpiryContext,
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       details: {
-        resource: defaultResourceDto({
+        resource: resourceWithTotpDto({
           created_by: resourceOwner.id,
           modified_by: resourceOwner.id,
         }),
