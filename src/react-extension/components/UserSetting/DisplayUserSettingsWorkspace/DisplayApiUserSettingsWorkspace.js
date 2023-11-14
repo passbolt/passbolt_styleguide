@@ -20,7 +20,6 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
-import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
 import PropTypes from "prop-types";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {withMfa} from '../../../contexts/MFAContext';
