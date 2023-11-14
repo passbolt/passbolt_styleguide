@@ -65,6 +65,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     },
     onGoToResourceUriRequested: jest.fn(),
     onResourceCopied: jest.fn(),
+    onResourcePreviewed: jest.fn(),
     onResourceSelected: {
       all: jest.fn(),
       none: jest.fn(),
