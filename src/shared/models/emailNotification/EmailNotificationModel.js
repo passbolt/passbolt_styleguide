@@ -71,6 +71,7 @@ class EmailNotificationModel {
     this.accountRecoveryRequestPolicyUpdate = "send_accountRecovery_policy_update" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_policy_update : true;
     // Password expiry
     this.passwordExpiryExpiredUser = "send_password_expire" in emailNotificationDTO ? emailNotificationDTO.send_password_expire : true;
+    this.passwordExpiryAboutToExpire = "send_password_aboutToExpire" in emailNotificationDTO ? emailNotificationDTO.send_password_aboutToExpire : true;
   }
 }
 

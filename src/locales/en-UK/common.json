@@ -1257,6 +1257,7 @@
   "When an administrator answered to an account recovery request, notify the administrator at the origin of the action.": "When an administrator answered to an account recovery request, notify the administrator at the origin of the action.",
   "When members of a group change, notify the group manager(s).": "When members of a group change, notify the group manager(s).",
   "When new users are invited to passbolt, notify them.": "When new users are invited to passbolt, notify them.",
+  "When the password is about to expire, notify the owners to change it.": "When the password is about to expire, notify the owners to change it.",
   "When the password is expired, notify the owners to change it.": "When the password is expired, notify the owners to change it.",
   "When user roles change in a group, notify the corresponding users.": "When user roles change in a group, notify the corresponding users.",
   "When users are added to a group, notify them.": "When users are added to a group, notify them.",
