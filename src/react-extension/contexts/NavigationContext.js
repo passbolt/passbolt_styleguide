@@ -76,6 +76,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user want to navigate to a new url.
   onGoToAdministrationRbacsRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace rbacs section.
+  onGoToUserSettingsDuoSetupRequested: () => {
+  }, // Whenever the user wants to navigate to the MFA Duo setup.
 });
 
 /**
@@ -128,6 +130,7 @@ class NavigationContextProvider extends React.Component {
       onGoToUserSettingsDesktopRequested: this.onGoToUserSettingsDesktopRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace mobile section.
       onGoToUserSettingsAccountRecoveryRequested: this.onGoToUserSettingsAccountRecoveryRequested.bind(this), // Whenever the user wants to navigate to the users settings workspace account recovery section.
       onGoToAdministrationRbacsRequested: this.onGoToAdministrationRbacsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace rbacs section.
+      onGoToUserSettingsDuoSetupRequested: this.onGoToUserSettingsDuoSetupRequested.bind(this), // Whenever the user wants to navigate to the MFA duo settings through the API.
     };
   }
 
@@ -432,12 +435,15 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMfaRequested() {
-    //Application to point
-    let app = "api";
-    if (window.chrome?.webview) {
-      app = "browser-extension";
-    }
-    await this.goTo(app, "/app/settings/mfa");
+    await this.goTo("browser-extension", "/app/settings/mfa");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the users settings workspace mfa duo setup.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsDuoSetupRequested() {
+    await this.goTo("api", "/app/settings/mfa/duo");
   }
 
   /**

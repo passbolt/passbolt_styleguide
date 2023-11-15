@@ -20,7 +20,6 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import NavigateIntoUserSettingsWorkspace from "../NavigateIntoUserSettingsWorkspace/NavigateIntoUserSettingsWorkspace";
 import DisplayUserSettingsWorkspaceBreadcrumb
   from "../DisplayUserSettingsWorkspaceBreadcrumb/DisplayUserSettingsWorkspaceBreadcrumb";
-import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
 import PropTypes from "prop-types";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {withMfa} from '../../../contexts/MFAContext';
@@ -59,7 +58,6 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
             <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
-            <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
           </div>
         </div>
       </div>
