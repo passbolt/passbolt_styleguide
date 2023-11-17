@@ -278,7 +278,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
   get supportedAuthenticationMethod() {
     return [
       {value: "basic", label: this.props.t("Basic")},
-      {value: "sasl", label: "SASL"},
+      {value: "sasl", label: "SASL (EE)"},
     ];
   }
 
