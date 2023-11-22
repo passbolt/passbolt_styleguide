@@ -62,5 +62,12 @@ export default class NavigateIntoUserSettingsWorkspacePage {
   get desktopTransferMenuItem() {
     return this._page.container.querySelector('#navigation-item-desktop-setup');
   }
+
+  /**
+   * Returns the beta badge element for the desktop app setup
+   */
+  get desktopTransferMenuItemBadge() {
+    return this._page.container.querySelector('#navigation-item-desktop-setup .beta');
+  }
 }
 
