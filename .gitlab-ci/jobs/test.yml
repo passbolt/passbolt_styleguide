@@ -21,7 +21,7 @@ linter:
   extends: .rules
   script:
     - npm install
-    - npm run eslint
+    - npm run lint
 
 storybook:
   stage: test
