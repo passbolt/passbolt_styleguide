@@ -13,7 +13,7 @@
  */
 
 import {defaultLoggedInUser, groupsWithoutOwnership} from "../../../context/Rbac/RbacContext.test.data";
-import AllowIfGroupManagerInOneGroupFunction from "./AllowIfGroupManagerInOneGroupFunction";
+import AllowIfGroupManagerInOneGroupFunction from "./allowIfGroupManagerInOneGroupFunction";
 
 describe("AllowIfGroupManagerInOneGroupFunction", () => {
   it("should validate if user is owner of a group", () => {
