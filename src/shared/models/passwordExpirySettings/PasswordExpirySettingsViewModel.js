@@ -15,6 +15,7 @@
 import EntityValidationError from "../entity/abstract/entityValidationError";
 import EntitySchema from "../entity/abstract/entitySchema";
 import PasswordExpirySettingsEntity from "../entity/passwordExpiry/passwordExpirySettingsEntity";
+import PasswordExpiryProSettingsEntity from "../entity/passwordExpiryPro/passwordExpiryProSettingsEntity";
 
 /**
  * Model related to the user passphrase policies use only with the admin UI
@@ -23,13 +24,14 @@ class PasswordExpirySettingsViewModel {
   /**
    * Constructor
    * @param {PasswordExpirySettingsDto} [settings]
+   * @param {Boolean} [isPro]
    */
   constructor(settings = {}) {
     this.automatic_update = Boolean(settings?.automatic_update);
     this.policy_override = Boolean(settings?.policy_override);
-    this.automatic_expiry = Boolean(settings?.automatic_expiry) && !this.policy_override;
-    this.default_expiry_period = settings?.default_expiry_period || null;
-    this.expiry_notification = settings?.expiry_notification || null;
+    this.automatic_expiry = Boolean(settings?.automatic_expiry);
+    this.default_expiry_period = !isNaN(parseInt(settings?.default_expiry_period, 10)) ? parseInt(settings?.default_expiry_period, 10) : null;
+    this.expiry_notification = !isNaN(parseInt(settings?.expiry_notification, 10)) ? parseInt(settings?.expiry_notification, 10) : null;
 
     if (settings?.id) {
       this.id = settings?.id;
@@ -37,12 +39,21 @@ class PasswordExpirySettingsViewModel {
   }
 
   /**
-   * Get current view model schema
+   * Get current view model getSchema
+   * @param {boolean} isAvanced to adapt schema with the pro version
    * @returns {Object} schema
    */
-  static getSchema() {
-    const baseEntitySchema = PasswordExpirySettingsEntity.getSchema();
-    return {
+  static getSchema(isAvanced = false) {
+    const baseEntitySchema = !isAvanced ? PasswordExpirySettingsEntity.getSchema() : PasswordExpiryProSettingsEntity.getSchema();
+    return this.getDefaultSchema(baseEntitySchema, isAvanced);
+  }
+
+  /**
+   * Get current schema from PasswordExpirySettingsEntity depending of the version
+   * @returns {Object} schema
+   */
+  static getDefaultSchema(baseEntitySchema, isAdvanced = false) {
+    const schema =  {
       type: "object",
       required: [
         "automatic_expiry",
@@ -57,6 +68,13 @@ class PasswordExpirySettingsViewModel {
         expiry_notification: baseEntitySchema.properties.expiry_notification,
       }
     };
+
+    if (isAdvanced) {
+      schema.required.push("expiry_notification");
+      schema.required.push("policy_override");
+    }
+
+    return schema;
   }
 
   /**
@@ -69,8 +87,8 @@ class PasswordExpirySettingsViewModel {
       automatic_expiry: Boolean(entityDto?.automatic_expiry),
       automatic_update: Boolean(entityDto?.automatic_update),
       policy_override: Boolean(entityDto?.policy_override),
-      default_expiry_period: parseInt(entityDto?.default_expiry_period, 10) || null,
-      expiry_notification: parseInt(entityDto?.expiry_notification, 10) || null,
+      default_expiry_period: !isNaN(parseInt(entityDto?.default_expiry_period, 10)) ? parseInt(entityDto?.default_expiry_period, 10) : null,
+      expiry_notification: !isNaN(parseInt(entityDto?.expiry_notification, 10)) ? parseInt(entityDto?.expiry_notification, 10) : null,
     };
     if (entityDto?.id) {
       data.id = entityDto.id;
@@ -103,9 +121,9 @@ class PasswordExpirySettingsViewModel {
     return {
       automatic_expiry: this.automatic_expiry,
       automatic_update: this.automatic_update,
-      policy_override: false,
-      default_expiry_period: null,
-      expiry_notification: null
+      policy_override: this.policy_override,
+      default_expiry_period: this.default_expiry_period,
+      expiry_notification: this.expiry_notification
     };
   }
 
@@ -127,12 +145,16 @@ class PasswordExpirySettingsViewModel {
    * Validates the current object state
    * @returns {EntityValidationError}
    */
-  validate() {
-    const schema = PasswordExpirySettingsViewModel.getSchema();
-
+  validate(isAdvanced) {
+    const schema = PasswordExpirySettingsViewModel.getSchema(isAdvanced);
+    //We set the to expiry_notification in case the user missed it
+    if (isAdvanced && !this.expiry_notification) {
+      this.expiry_notification = 2;
+    }
     try {
       EntitySchema.validate(this.constructor.name, this, schema);
     } catch (e) {
+      console.log(e);
       return e;
     }
 
@@ -144,7 +166,7 @@ class PasswordExpirySettingsViewModel {
    * @returns {boolean}
    */
   get isSettingsDisabled() {
-    return !this.automatic_expiry && !this.automatic_update && !this.policy_override;
+    return !this.id;
   }
 }
 

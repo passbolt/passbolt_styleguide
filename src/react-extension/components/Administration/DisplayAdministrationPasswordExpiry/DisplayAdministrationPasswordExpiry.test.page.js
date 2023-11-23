@@ -85,6 +85,14 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
   }
 
   /**
+   * Returns password expired setting form
+   * @returns {HTMLElement}
+   */
+  get passwordExpirySettingsForm() {
+    return this.select('.password-expiry-settings-form');
+  }
+
+  /**
    * Returns the main title of the page
    * @returns {HTMLElement}
    */
@@ -98,6 +106,14 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
    */
   get saveWarningBanner() {
     return this.select("#password-expiry-settings-save-banner");
+  }
+
+  /**
+   * Returns the advanced forms
+   * @returns {HTMLElement}
+   */
+  get passwordExpiryFormAdvanced() {
+    return this.select("#password-expiry-form-advanced");
   }
 
   /**

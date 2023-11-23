@@ -115,7 +115,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * @returns {boolean}
    */
   canUsePasswordExpiry() {
-    return this.props.context.siteSettings.canIUse("passwordExpiry");
+    return this.props.context.siteSettings.canIUse("passwordExpiry") || this.props.context.siteSettings.canIUse("passwordExpiryPolicies");
   }
 
   /**
