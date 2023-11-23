@@ -58,7 +58,6 @@ class Select extends Component {
     if (this.props.search && this.state.search !== "") {
       return this.getItemsMatch(itemsFiltered, this.state.search);
     }
-
     return itemsFiltered;
   }
 
@@ -384,6 +383,9 @@ class Select extends Component {
   }
 
   render() {
+    console.log(this.state.open)
+    console.log(this.listItemsFiltered)
+    console.log(this.items)
     return (
       <div className={`select-container ${this.props.className}`} style={{width: this.state.style?.width, height: this.state.style?.height}}>
         <div onKeyDown={this.handleSelectKeyDown} onBlur={this.handleBlur} id={this.props.id} className={`select ${this.props.direction} ${this.state.open ? 'open' : ''}`} style={this.state.style}>
@@ -405,7 +407,7 @@ class Select extends Component {
             <ul ref={this.itemsRef} className="items">
               {this.hasFilteredItems() &&
                 this.listItemsFiltered.map(item =>
-                  <li tabIndex={item.disabled ? -1 : 0} key={item.value} className="option" onKeyDown={event => this.handleItemKeyDown(event, item)} onClick={() => this.handleItemClick(item)}>
+                  <li tabIndex={item.disabled ? -1 : 0} key={item.value} className={`option ${item.value}`} onKeyDown={event => this.handleItemKeyDown(event, item)} onClick={() => this.handleItemClick(item)}>
                     {item.label}
                   </li>
                 )

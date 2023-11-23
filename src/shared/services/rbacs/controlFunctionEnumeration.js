@@ -13,6 +13,7 @@
  */
 
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
+import AllowIfGroupManagerInOneGroupFunction from "./controlFunctions/AllowIfGroupManagerInOneGroupFunction";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import {uiActions} from "./uiActionEnumeration";
 
@@ -22,7 +23,8 @@ import {uiActions} from "./uiActionEnumeration";
  */
 export const controlFunctions = {
   ALLOW: 'Allow',
-  DENY: 'Deny'
+  DENY: 'Deny',
+  ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP: 'AllowIfGroupManagerInOneGroup'
 };
 
 /**
@@ -31,7 +33,8 @@ export const controlFunctions = {
  */
 export const controlFunctionResolutions = {
   [controlFunctions.ALLOW]: AllowControlFunction,
-  [controlFunctions.DENY]: DenyControlFunction
+  [controlFunctions.DENY]: DenyControlFunction,
+  [controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP]: AllowIfGroupManagerInOneGroupFunction
 };
 
 /**

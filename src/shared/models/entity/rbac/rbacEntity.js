@@ -82,7 +82,8 @@ class RbacEntity extends Entity {
           "type": "string",
           "enum": [
             controlFunctions.ALLOW,
-            controlFunctions.DENY
+            controlFunctions.DENY,
+            controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP
           ]
         },
         // Association
