@@ -9,53 +9,67 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.4.0
+ * @since         4.5.0
  */
 
 import each from "jest-each";
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import EntityValidationError from "passbolt-styleguide/src/shared/models/entity/abstract/entityValidationError";
-import PasswordExpirySettingsEntity from "./passwordExpirySettingsEntity";
-import {defaultPasswordExpirySettingsDto} from "./passwordExpirySettingsEntity.test.data";
+import PasswordExpiryProSettingsEntity from "./passwordExpiryProSettingsEntity";
+import {defaultPasswordExpiryProSettingsDto} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
 
-describe("PasswordExpiry entity", () => {
+describe("passwordExpiryProSettings entity", () => {
   it("schema must validate", () => {
-    EntitySchema.validateSchema(PasswordExpirySettingsEntity.ENTITY_NAME, PasswordExpirySettingsEntity.getSchema());
+    EntitySchema.validateSchema(PasswordExpiryProSettingsEntity.ENTITY_NAME, PasswordExpiryProSettingsEntity.getSchema());
   });
 
   it("should accept a mininal valid DTO", () => {
     expect.assertions(1);
-    const minmalDto = defaultPasswordExpirySettingsDto();
+    const minmalDto = defaultPasswordExpiryProSettingsDto();
 
-    expect(() => new PasswordExpirySettingsEntity(minmalDto)).not.toThrow();
+    expect(() => new PasswordExpiryProSettingsEntity(minmalDto)).not.toThrow();
   });
 
   it("should build an entity with default", () => {
     expect.assertions(1);
 
-    const entity = PasswordExpirySettingsEntity.createFromDefault();
+    const entity = PasswordExpiryProSettingsEntity.createFromDefault();
     expect(entity.toDto()).toStrictEqual({
-      automatic_update: false,
-      automatic_expiry: false,
+      automatic_update: true,
+      automatic_expiry: true,
       policy_override: false,
-      expiry_notification: null,
-      default_expiry_period: null
+      expiry_notification: 2,
+      default_expiry_period: 90
     });
   });
 
+  it("should build an entity with given parameters", () => {
+    expect.assertions(1);
+    const expectedDto = {
+      automatic_update: true,
+      automatic_expiry: false,
+      policy_override: true,
+      expiry_notification: 5,
+      default_expiry_period: 60
+    };
+
+    const entity = PasswordExpiryProSettingsEntity.createFromDefault(expectedDto);
+    expect(entity.toDto()).toStrictEqual(expectedDto);
+  });
+
   it("should throw an exception if required fields are not present", () => {
-    const requiredFieldNames = PasswordExpirySettingsEntity.getSchema().required;
-    const requiredFieldCount = 2;
+    const requiredFieldNames = PasswordExpiryProSettingsEntity.getSchema().required;
+    const requiredFieldCount = 4;
     expect.assertions(requiredFieldCount * 2 + 1);
 
     expect(requiredFieldNames.length).toStrictEqual(requiredFieldCount);
 
     for (let i = 0; i < requiredFieldNames.length; i++) {
       const fieldName = requiredFieldNames[i];
-      const dto = defaultPasswordExpirySettingsDto();
+      const dto = defaultPasswordExpiryProSettingsDto();
       delete dto[fieldName];
       try {
-        new PasswordExpirySettingsEntity(dto);
+        new PasswordExpiryProSettingsEntity(dto);
       } catch (e) {
         expect(e).toBeInstanceOf(EntityValidationError);
         expect(e.hasError(fieldName, "required")).toStrictEqual(true);
@@ -79,7 +93,6 @@ describe("PasswordExpiry entity", () => {
 
     {dto: {expiry_notification: true}, errorType: "type"},
     {dto: {expiry_notification: "50"}, errorType: "type"},
-    {dto: {expiry_notification: -1}, errorType: "type"},
 
     {dto: {created: "string but not a date"}, errorType: "format"},
     {dto: {created: -1}, errorType: "type"},
@@ -96,10 +109,10 @@ describe("PasswordExpiry entity", () => {
     it(`scenario: ${JSON.stringify(scenario)}`, () => {
       expect.assertions(2);
       const fieldName = Object.keys(scenario.dto)[0];
-      const erroneousDto = defaultPasswordExpirySettingsDto(scenario.dto);
+      const erroneousDto = defaultPasswordExpiryProSettingsDto(scenario.dto);
 
       try {
-        new PasswordExpirySettingsEntity(erroneousDto);
+        new PasswordExpiryProSettingsEntity(erroneousDto);
       } catch (e) {
         expect(e).toBeInstanceOf(EntityValidationError);
         expect(e.hasError(fieldName, scenario.errorType)).toStrictEqual(true);

@@ -9,26 +9,26 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.4.0
+ * @since         4.5.0
  */
 
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-const ENTITY_NAME = 'PasswordExpirySettings';
+const ENTITY_NAME = 'passwordExpiryProSettingsEntity';
 
-class PasswordExpirySettingsEntity extends Entity {
+class PasswordExpiryProSettingsEntity extends Entity {
   /**
    * Password Expiry entity constructor
    *
-   * @param {Object} PasswordExpirySettingsDto password expiry settings dto
+   * @param {Object} PasswordExpirySettingsDto password expiry pro settings dto
    * @throws {EntityValidationError} if the dto cannot be converted into an entity
    */
   constructor(PasswordExpirySettingsDto) {
     super(EntitySchema.validate(
-      PasswordExpirySettingsEntity.ENTITY_NAME,
+      PasswordExpiryProSettingsEntity.ENTITY_NAME,
       PasswordExpirySettingsDto,
-      PasswordExpirySettingsEntity.getSchema()
+      PasswordExpiryProSettingsEntity.getSchema()
     ));
   }
 
@@ -42,6 +42,8 @@ class PasswordExpirySettingsEntity extends Entity {
       "required": [
         "automatic_expiry",
         "automatic_update",
+        "policy_override",
+        "expiry_notification",
       ],
       "properties": {
         "id": {
@@ -49,7 +51,12 @@ class PasswordExpirySettingsEntity extends Entity {
           "format": "uuid",
         },
         "default_expiry_period": {
-          "type": "null"
+          "anyOf": [{
+            "type": "integer",
+            "gte": 0,
+          }, {
+            "type": "null"
+          }]
         },
         "policy_override": {
           "type": "boolean",
@@ -61,7 +68,8 @@ class PasswordExpirySettingsEntity extends Entity {
           "type": "boolean",
         },
         "expiry_notification": {
-          "type": "null"
+          "type": "integer",
+          "gte": 1,
         },
         "created": {
           "type": "string",
@@ -89,7 +97,7 @@ class PasswordExpirySettingsEntity extends Entity {
    * ==================================================
    */
   /**
-   * PasswordExpirySettingsEntity.ENTITY_NAME
+   * PasswordExpiryProSettingsEntity.ENTITY_NAME
    * @returns {string}
    */
   static get ENTITY_NAME() {
@@ -99,15 +107,16 @@ class PasswordExpirySettingsEntity extends Entity {
   /**
    * Return the default settings overriden with the given data if any.
    * @param {PasswordExpirySettingsDto} data the data to override the entity with
-   * @returns {PasswordExpirySettingsEntity}
+   * @returns {PasswordExpiryProSettingsEntity}
    */
   static createFromDefault(data = {}) {
     const defaultData = {
-      default_expiry_period: null,
+      // Default value depends on the db value saved
+      default_expiry_period: data.id ? data.default_expiry_period : 90,
       policy_override: false,
-      automatic_expiry: false,
-      automatic_update: false,
-      expiry_notification: null,
+      automatic_expiry: true,
+      automatic_update: true,
+      expiry_notification: 2,
     };
 
     const dto = {...defaultData, ...data};
@@ -115,8 +124,8 @@ class PasswordExpirySettingsEntity extends Entity {
       dto[key] ??= defaultData[key];
     }
 
-    return new PasswordExpirySettingsEntity(dto);
+    return new PasswordExpiryProSettingsEntity(dto);
   }
 }
 
-export default PasswordExpirySettingsEntity;
+export default PasswordExpiryProSettingsEntity;

@@ -119,3 +119,54 @@
     }
   }
 }
+
+.togglelist-alt {
+  .toggle-switch {
+    margin-top: 1.6rem;
+    border: 1px solid default-border;
+    border-radius: 3px;
+    background-color: @input-radio-list-background;
+    padding: 1.6rem;
+
+    label {
+      margin-left: 1.6rem;
+
+      .name {
+        margin: 0;
+        display:block;
+        font-size: 1.6rem;
+        background-color: @input-radio-list-background;
+      }
+      .info-input {
+        display: flex;
+        margin: 0;
+        font-weight: normal;
+        font-size: 1.3rem;
+        background-color: @input-radio-list-background;
+
+        input {
+          margin-left: 4px;
+          margin-right: 4px;
+        }
+
+        span, input{
+          margin-top: auto;
+          margin-bottom: auto;
+        }
+      }
+
+      .info {
+        margin: 0;
+        font-weight: normal;
+        font-size: 1.3rem;
+        display:block;
+        white-space: pre-wrap;
+        background-color: @input-radio-list-background;
+
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
