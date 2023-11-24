@@ -96,8 +96,6 @@
     "i18n:externalize": "i18next -c ./i18next-parser.config.js",
     "eslint": "eslint -c .eslintrc.json --ext js --ext jsx src/react-extension src/react-quickaccess src/react-web-integration src/shared",
     "eslint-fix": "eslint -c .eslintrc.json --ext js --ext jsx --fix src/react-extension src/react-quickaccess src/react-web-integration src/shared",
-    "preversion": "npm test && npm run eslint",
-    "version": "npx grunt && git add -A",
     "deploy-storybook": "storybook-to-ghpages --remote github",
     "dev:build:custom-theme": "npx grunt build_custom_theme",
     "dev:storybook:build": "NODE_OPTIONS=--max_old_space_size=2048 build-storybook",
