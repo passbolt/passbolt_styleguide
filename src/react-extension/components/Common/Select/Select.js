@@ -383,9 +383,6 @@ class Select extends Component {
   }
 
   render() {
-    console.log(this.state.open)
-    console.log(this.listItemsFiltered)
-    console.log(this.items)
     return (
       <div className={`select-container ${this.props.className}`} style={{width: this.state.style?.width, height: this.state.style?.height}}>
         <div onKeyDown={this.handleSelectKeyDown} onBlur={this.handleBlur} id={this.props.id} className={`select ${this.props.direction} ${this.state.open ? 'open' : ''}`} style={this.state.style}>
