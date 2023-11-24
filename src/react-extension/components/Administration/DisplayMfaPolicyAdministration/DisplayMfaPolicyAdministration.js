@@ -118,7 +118,7 @@ class DisplayMfaPolicyAdministration extends React.Component {
                   id="mfa-policy-mandatory-radio"
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="mfa-policy-mandatory-radio">
-                  <span className="name"><Trans>Mandatory</Trans></span>
+                  <span className="name"><Trans>Prompt</Trans></span>
                   <span className="info">
                     <Trans>Users have to enable multi factor authentication. If they don&apos;t, they will be reminded every time they log in.</Trans>
                   </span>
