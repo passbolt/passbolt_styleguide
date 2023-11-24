@@ -5388,22 +5388,22 @@ iframe.cachette {
 .input .input-wrapper-inline button.button-icon {
   margin-left: 0.8rem;
 }
-.input.input-totp-wrapper .totp button:first-child:disabled {
+.input.input-totp-wrapper .totp button:disabled {
   flex: 1;
   opacity: 1;
 }
-.input.input-totp-wrapper .totp button:first-child:disabled .totp-code {
+.input.input-totp-wrapper .totp button:disabled .totp-code {
   font-size: 1.8rem;
 }
-.input.input-totp-wrapper .totp button:first-child:disabled .totp-code + .svg-icon.timer {
+.input.input-totp-wrapper .totp button:disabled .totp-code + .svg-icon.timer {
   margin-left: 1rem;
 }
-.input.input-totp-wrapper .totp button:first-child:disabled .totp-code + .svg-icon.timer svg {
+.input.input-totp-wrapper .totp button:disabled .totp-code + .svg-icon.timer svg {
   width: 2rem;
   height: 2rem;
   --timer-stroke-width: 0.24rem;
 }
-.input.input-totp-wrapper.disabled .totp button:first-child:disabled {
+.input.input-totp-wrapper.disabled .totp button:disabled {
   opacity: 0.5;
 }
 .totp-code + .svg-icon.timer {

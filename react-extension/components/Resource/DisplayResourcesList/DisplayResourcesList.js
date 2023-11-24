@@ -272,8 +272,7 @@ class DisplayResourcesList extends React.Component {
    */
   handleResourceScroll() {
     const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource;
-    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some(value => value);
-    if (resourceToScroll && hasNotEmptyRange) {
+    if (resourceToScroll) {
       this.scrollTo(resourceToScroll.id);
       this.props.resourceWorkspaceContext.onResourceScrolled();
     }
@@ -681,12 +680,15 @@ class DisplayResourcesList extends React.Component {
   }
 
   scrollTo(resourceId) {
-    const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
-    const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
-    const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
-    if (isInvisible) {
-      // Important to have the -1 to show the selected column behind the header with sticky position
-      this.listRef.current.scrollTo(resourceIndex - 1);
+    if (this.listRef.current !== null) {
+      const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
+      const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
+      const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
+
+      if (isInvisible) {
+        // Important to have the -1 to show the selected column behind the header with sticky position
+        this.listRef.current.scrollTo(resourceIndex - 1);
+      }
     }
   }
 
@@ -773,14 +775,6 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
-   * Is grid ready and not empty
-   * @return {boolean}
-   */
-  get isGridReady() {
-    return this.isReady && this.resources.length !== 0 && this.columnsFiltered.length !== 0;
-  }
-
-  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -790,6 +784,7 @@ class DisplayResourcesList extends React.Component {
 
   render() {
     const isEmpty = this.isReady && this.resources.length === 0;
+    const isGridReady = this.isReady && this.columnsFiltered.length !== 0;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
@@ -852,7 +847,7 @@ class DisplayResourcesList extends React.Component {
             }
           </div>
         }
-        {this.isGridReady &&
+        {isGridReady &&
           <GridTable
             columns={this.columnsFiltered}
             rows={this.resources}

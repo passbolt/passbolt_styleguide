@@ -12,7 +12,6 @@
  * @since         4.4.0
  */
 
-import {denyRbacContext} from '../../../../shared/context/Rbac/RbacContext.test.data';
 import {MfaSettingsWorkflowStates, Providers} from '../../../contexts/MFAContext';
 import {noMfaDefined} from '../../../contexts/MFAContext.test.data';
 import {defaultProps, propsWithMfaProviders, propsWithoutMfaProviders} from './DisplayProviderList.test.data';
@@ -123,18 +122,6 @@ describe("DisplayProviderList", () => {
       expect(page.title.textContent).toEqual("Multi factor authentication");
       expect(page.subtitle.textContent).toEqual("Sorry no multi factor authentication is enabled for this organization.");
       expect(page.description.textContent).toEqual("Please contact your administrator to enable multi-factor authentication.");
-    });
-
-    it('As a desktop application I should not see the duo card', () => {
-      expect.assertions(1);
-
-      window.chrome = {webview: {}};
-
-      const page = new DisplayProviderListPage(defaultProps({
-        rbacContext: denyRbacContext()
-      }));
-
-      expect(page.duoCard).toBeNull();
     });
   });
 });

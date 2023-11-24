@@ -54,6 +54,7 @@ class RbacMeService extends AbstractService {
   async findMe(contains) {
     const options = contains ? this.formatContainOptions(contains, RbacMeService.getSupportedContainOptions()) : null;
     const response = await this.apiClient.findAll(options);
+
     return response.body;
   }
 }
