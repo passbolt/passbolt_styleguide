@@ -47,5 +47,3 @@ export const settingsRbacsCollectionData = () => [
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.MOBILE_TRANSFER})}),
   defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiActions.DESKTOP_TRANSFER})}),
 ];
-
-export const defaultRbacItem = (uiAction = uiActions.DESKTOP_TRANSFER) => defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiAction})});

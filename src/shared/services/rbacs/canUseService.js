@@ -18,7 +18,7 @@ import RoleEntity from "../../../shared/models/entity/role/roleEntity";
 export default class CanUse {
   /**
    * Check if a role can use a UI action
-   * @param {UserEntity} user The logged in user.
+   * @param {object} user The logged in user.
    * @param {RbacsCollection} rbacs The collection of rbacs
    * @param {string} actionName The action name to check the control function
    * @returns {boolean}
@@ -46,7 +46,7 @@ export default class CanUse {
    * Check if a role can use a UI action or return the default userr
    * @param {RbacEntity} rbac The rbac entity
    * @param {string} actionName The action name to check the control function
-   * @param {UserEntity} user The logged in user.
+   * @param {object} user The logged in user.
    * @returns {boolean}
    */
   static getByRbacOrDefault(rbac, actionName, user) {

@@ -12,7 +12,8 @@
  * @since         4.5.0
  */
 
-import {defaultLoggedInUser, groupsWithoutOwnership} from "../../../context/Rbac/RbacContext.test.data";
+import {defaultLoggedInUser} from "../../../context/Rbac/RbacContext.test.data";
+import {groupsWithoutOwnership} from "../../../models/entity/user/groupUserEntity.test.data";
 import AllowIfGroupManagerInOneGroupFunction from "./allowIfGroupManagerInOneGroupFunction";
 
 describe("AllowIfGroupManagerInOneGroupFunction", () => {

@@ -13,10 +13,10 @@
  */
 
 import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollection";
-import { settingsRbacsCollectionData } from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
+import {settingsRbacsCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
-import { rolesCollectionData } from "../../../../shared/models/entity/role/rolesCollection.test.data";
-import { uiActions } from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {rolesCollectionData} from "../../../../shared/models/entity/role/rolesCollection.test.data";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * Default props
