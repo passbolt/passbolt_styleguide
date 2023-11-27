@@ -50,6 +50,19 @@ export function denyRbacContext(data = {}) {
   };
 }
 
+export function defaultLoggedInAdmin(data = {}) {
+  const user = defaultLoggedInUser({
+    role: {
+      id: 'a58de6d3-f52c-5080-b79b-a601a647ac86',
+      name: 'admin',
+      description: 'Logged in user',
+    }
+  });
+
+  return Object.assign(user, data);
+}
+
+
 export function defaultLoggedInUser(data = {}) {
   const user = {
     role: {
@@ -65,18 +78,5 @@ export function defaultLoggedInUser(data = {}) {
       })
     ]
   };
-  return Object.assign(user, data);
-}
-
-
-export function defaultLoggedInAdmin(data = {}) {
-  const user = defaultLoggedInUser({
-    role: {
-      id: 'a58de6d3-f52c-5080-b79b-a601a647ac86',
-      name: 'admin',
-      description: 'Logged in user',
-    }
-  });
-
   return Object.assign(user, data);
 }
