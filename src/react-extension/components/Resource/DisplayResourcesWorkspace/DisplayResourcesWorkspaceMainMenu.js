@@ -254,7 +254,7 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
                   <div className="main-cell-wrapper">
                     <div className="main-cell">
                       <button type="button" className="link no-border" onClick={this.handleMenuCreateTotpClickEvent}>
-                        <span><Trans>New Totp</Trans></span>
+                        <span><Trans>New TOTP</Trans></span>
                       </button>
                     </div>
                   </div>
