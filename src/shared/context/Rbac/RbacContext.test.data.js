@@ -12,7 +12,7 @@
  * @since         4.1.0
  */
 
-import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
+import {defaultAdminUserDto, defaultUserDto} from "../../models/entity/user/userEntity.test.data";
 
 /**
  * Returns the default administrator rbac context for the unit test.
@@ -51,13 +51,7 @@ export function denyRbacContext(data = {}) {
 }
 
 export function defaultLoggedInAdmin(data = {}) {
-  const user = defaultLoggedInUser({
-    role: {
-      id: 'a58de6d3-f52c-5080-b79b-a601a647ac86',
-      name: 'admin',
-      description: 'Logged in user',
-    }
-  });
+  const user = defaultAdminUserDto();
 
   return Object.assign(user, data);
 }
