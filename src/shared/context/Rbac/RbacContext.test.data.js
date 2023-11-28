@@ -64,19 +64,12 @@ export function defaultLoggedInAdmin(data = {}) {
 
 
 export function defaultLoggedInUser(data = {}) {
-  const user = {
-    role: {
-      id: 'a58de6d3-f52c-5080-b79b-a601a647ac85',
-      name: 'user',
-      description: 'Logged in user',
-      created: '2012-07-04T13:39:25+00:00',
-      modified: '2012-07-04T13:39:25+00:00'
-    },
+  const user = defaultUserDto({
     groups_users: [
       defaultUserDto({
         is_admin: true
       })
     ]
-  };
+  });
   return Object.assign(user, data);
 }
