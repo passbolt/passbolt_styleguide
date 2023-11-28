@@ -12,6 +12,7 @@
  * @since         4.1.0
  */
 
+import { defaultGroupsUser } from "../../models/entity/user/groupUserEntity.test.data";
 import {defaultAdminUserDto, defaultUserDto} from "../../models/entity/user/userEntity.test.data";
 
 /**
@@ -60,7 +61,7 @@ export function defaultLoggedInAdmin(data = {}) {
 export function defaultLoggedInUser(data = {}) {
   const user = defaultUserDto({
     groups_users: [
-      defaultUserDto({
+      defaultGroupsUser({
         is_admin: true
       })
     ]
