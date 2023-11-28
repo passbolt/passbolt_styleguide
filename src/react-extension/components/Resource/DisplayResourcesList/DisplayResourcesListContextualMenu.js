@@ -34,6 +34,9 @@ import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCode
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {formatDateForApi} from "../../../../shared/utils/dateUtils";
+import {DateTime} from "luxon";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -58,6 +61,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handleTotpClickEvent = this.handleTotpClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
+    this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
   }
 
   /**
@@ -218,6 +222,21 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Handle mark as expired
+   * @return {Promise<void>}
+   */
+  async handleMarkAsExpiredClick() {
+    try {
+      await this.props.context.port.request("passbolt.resources.set-expiration-date", [{id: this.resource.id, expired: formatDateForApi(DateTime.utc())}]);
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired"));
+    } catch (error) {
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired"));
+    } finally {
+      this.props.hide();
+    }
+  }
+
+  /**
    * the resource selected
    * @returns {*}
    */
@@ -324,6 +343,15 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Can use password expiry
+   * @return {boolean}
+   */
+  get canUsePasswordExpiry() {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    return this.props.passwordExpiryContext.isFeatureEnabled() && passwordExpirySettings?.policy_override;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -411,6 +439,22 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        {this.canUsePasswordExpiry &&
+          <li key="option-mark-as-expired-resource" className="ready separator-after">
+            <div className="row">
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button
+                    type="button"
+                    id="mark-as-expired"
+                    className="link no-border"
+                    disabled={!this.canUpdate()}
+                    onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
+                </div>
+              </div>
+            </div>
+          </li>
+        }
         <li key="option-edit-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -466,7 +510,8 @@ DisplayResourcesListContextualMenu.propTypes = {
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
   workflowContext: PropTypes.any, // The workflow context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))));
+export default withAppContext(withRbac(withResourceWorkspace(withPasswordExpiry(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))));

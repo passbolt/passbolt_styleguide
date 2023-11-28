@@ -21,6 +21,7 @@ import {
   resourceWithUpdatePermissionDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Default component props.
@@ -38,6 +39,7 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     workflowContext: defaultWorkflowContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
     ...data
   };
 }

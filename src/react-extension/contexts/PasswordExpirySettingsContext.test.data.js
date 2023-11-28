@@ -17,7 +17,7 @@ import {defaultUserAppContext} from './ExtAppContext.test.data';
 export const defaultPasswordExpirySettingsContext = (data = {}) => {
   const settings = data?.getSettings
     ? data.getSettings()
-    : defaultPasswordExpirySettingsEntityDto();
+    : defaultPasswordExpirySettingsEntityDto(data);
 
   const isFeatureEnabled = Boolean(settings?.automatic_update)
     || Boolean(settings?.automatic_expiry)
