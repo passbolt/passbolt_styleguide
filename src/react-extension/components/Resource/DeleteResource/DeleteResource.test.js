@@ -17,12 +17,10 @@
  */
 
 
-import {defaultAppContext, defaultPropsOneResource} from "./DeleteResource.test.data";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {defaultPropsOneResource, defaultPropsMultipleResource} from "./DeleteResource.test.data";
 import DeleteResourcePage from "./DeleteResource.test.page";
-import {fireEvent, waitFor} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import {defaultPropsMultipleResource} from "../DisplayResourcesWorkspace/DisplayResourcesWorkspaceMenu.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -31,10 +29,9 @@ beforeEach(() => {
 
 describe("See Password Delete Dialog", () => {
   let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
 
   describe('As LU I can delete one resource', () => {
-    const propsOneResource = defaultPropsOneResource(); // The props to pass
+    let propsOneResource;
 
     /**
      * Given a selected resource
@@ -44,7 +41,8 @@ describe("See Password Delete Dialog", () => {
      */
 
     beforeEach(() => {
-      page = new DeleteResourcePage(context, propsOneResource);
+      propsOneResource = defaultPropsOneResource(); // The props to pass
+      page = new DeleteResourcePage(propsOneResource);
     });
 
     it('As LU I should know what resource I am deleting', () => {
@@ -52,7 +50,7 @@ describe("See Password Delete Dialog", () => {
       expect(page.deleteResourcePageObject.exists()).toBeTruthy();
       // title
       expect(page.deleteResourcePageObject.dialogTitle).not.toBeNull();
-      expect(page.deleteResourcePageObject.dialogTitle.textContent).toBe("Delete password?");
+      expect(page.deleteResourcePageObject.dialogTitle.textContent).toBe("Delete resource?");
       // close button
       expect(page.deleteResourcePageObject.closeButton).not.toBeNull();
       // submit button
@@ -67,19 +65,17 @@ describe("See Password Delete Dialog", () => {
 
     it('As LU I should see a toaster message after deleting a resource', async() => {
       const submitButton = page.deleteResourcePageObject.saveButton;
+      expect.assertions(3);
       // Mock the request function to make it the expected result
-      expect.assertions(1);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(message => {
-        expect(message).toBe("The password has been deleted successfull");
-      });
+      jest.spyOn(propsOneResource.actionFeedbackContext, 'displaySuccess');
+      jest.spyOn(propsOneResource.context.port, 'request').mockImplementationOnce(() => jest.fn());
 
       await page.deleteResourcePageObject.click(submitButton);
-      // ensure that the process really finishes before leaving the unit test.
-      await waitFor(() => {
-        if (ActionFeedbackContext._currentValue.displaySuccess.mock.calls.length == 0) {
-          throw new Error("Reousrce deletion didn't finish its process.");
-        }
-      });
+
+      const resourceIds = propsOneResource.resources.map(resource => resource.id);
+      expect(propsOneResource.context.port.request).toHaveBeenCalledWith("passbolt.resources.delete-all", resourceIds);
+      expect(propsOneResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
+      expect(propsOneResource.onClose).toHaveBeenCalledTimes(1);
     });
 
     it('As LU I should be able to cancel the operation by clicking on the cancel button', async() => {
@@ -103,7 +99,7 @@ describe("See Password Delete Dialog", () => {
     it('Displays an error when the API call fail', async() => {
       const submitButton = page.deleteResourcePageObject.saveButton;
       // Mock the request function to make it return an error.
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
+      jest.spyOn(propsOneResource.context.port, 'request').mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
 
@@ -130,18 +126,20 @@ describe("See Password Delete Dialog", () => {
      */
 
     beforeEach(() => {
-      page = new DeleteResourcePage(context, propsMultipleResource);
+      page = new DeleteResourcePage(propsMultipleResource);
     });
 
     it('As LU I should see a toaster message after deleting multiple resource', async() => {
       const submitButton = page.deleteResourcePageObject.saveButton;
       // Mock the request function to make it the expected result
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
+      jest.spyOn(propsMultipleResource.actionFeedbackContext, 'displaySuccess');
+      jest.spyOn(propsMultipleResource.context.port, 'request').mockImplementationOnce(() => jest.fn());
 
       await page.deleteResourcePageObject.click(submitButton);
-      expect.assertions(1);
-      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledTimes(1);
+      const resourceIds = propsMultipleResource.resources.map(resource => resource.id);
+      expect.assertions(2);
+      expect(propsMultipleResource.context.port.request).toHaveBeenCalledWith("passbolt.resources.delete-all", resourceIds);
+      expect(propsMultipleResource.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
     });
   });
 });

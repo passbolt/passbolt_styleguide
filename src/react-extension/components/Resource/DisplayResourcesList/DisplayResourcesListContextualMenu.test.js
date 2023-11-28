@@ -137,7 +137,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to delete a resource', async() => {
       await page.delete();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource, {resources: [props.resource]});
       expect(props.hide).toHaveBeenCalled();
     });
 

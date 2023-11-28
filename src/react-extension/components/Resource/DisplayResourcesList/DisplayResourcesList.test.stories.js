@@ -27,7 +27,7 @@ const Template = args =>
     </MemoryRouter>
   </AppContext.Provider>;
 
-export const Empty = Template.bind();
+export const Empty = Template.bind({});
 Empty.args = {
   resourceWorkspaceContext: defaultResourceWorkspaceContext()
 };
