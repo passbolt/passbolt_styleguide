@@ -12,11 +12,12 @@
  * @since         4.5.0
  */
 
-import {defaultLoggedInAdmin, defaultLoggedInUser} from "../../context/Rbac/RbacContext.test.data";
+import {defaultLoggedInUser} from "../../context/Rbac/RbacContext.test.data";
 import RbacEntity from "../../models/entity/rbac/rbacEntity";
 import RbacsCollection from "../../models/entity/rbac/rbacsCollection";
 import {defaultSettingsRbacsCollectionData, settingsRbacsCollectionData} from "../../models/entity/rbac/rbacsCollection.test.data";
 import RoleEntity from "../../models/entity/role/roleEntity";
+import {defaultAdminUserDto} from "../../models/entity/user/userEntity.test.data";
 import CanUse from "./canUseService";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import GetControlFunctionService from "./getControlFunctionService";
@@ -31,7 +32,7 @@ describe("CanUseService", () => {
       expect.assertions(2);
       jest.spyOn(GetControlFunctionService, "getDefaultForAdminAndUiAction");
 
-      const result = CanUse.canRoleUseUiAction(defaultLoggedInAdmin(),  new RbacsCollection(defaultSettingsRbacsCollectionData), uiActions.RESOURCES_EXPORT);
+      const result = CanUse.canRoleUseUiAction(defaultAdminUserDto(),  new RbacsCollection(defaultSettingsRbacsCollectionData), uiActions.RESOURCES_EXPORT);
 
       expect(result).toBeTruthy();
       expect(GetControlFunctionService.getDefaultForAdminAndUiAction).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);

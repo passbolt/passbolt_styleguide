@@ -51,13 +51,6 @@ export function denyRbacContext(data = {}) {
   };
 }
 
-export function defaultLoggedInAdmin(data = {}) {
-  const user = defaultAdminUserDto();
-
-  return Object.assign(user, data);
-}
-
-
 export function defaultLoggedInUser(data = {}) {
   const user = defaultUserDto({
     groups_users: [
