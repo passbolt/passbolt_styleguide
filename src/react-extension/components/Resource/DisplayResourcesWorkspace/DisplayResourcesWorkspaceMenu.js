@@ -32,6 +32,9 @@ import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCode
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {formatDateForApi} from "../../../../shared/utils/dateUtils";
+import {DateTime} from "luxon";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -86,6 +89,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleExportClickEvent = this.handleExportClickEvent.bind(this);
     this.handleViewColumnsClickEvent = this.handleViewColumnsClickEvent.bind(this);
     this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
+    this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
   }
 
   componentDidMount() {
@@ -160,6 +164,21 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.props.context.setContext({passwordDeleteDialogProps});
     this.props.dialogContext.open(DeleteResource);
     this.handleCloseMoreMenu();
+  }
+
+  /**
+   * Handle mark as expired
+   */
+  async handleMarkAsExpiredClick() {
+    const resourcesExpiryDateToUpdate = this.selectedResources.map(resource => ({id: resource.id, expired: formatDateForApi(DateTime.utc())}));
+    try {
+      await this.props.context.port.request("passbolt.resources.set-expiration-date", resourcesExpiryDateToUpdate);
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resources has been marked as expired", {count: resourcesExpiryDateToUpdate.length}));
+    } catch (error) {
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark resources as expired", {count: resourcesExpiryDateToUpdate.length}));
+    } finally {
+      this.handleCloseMoreMenu();
+    }
   }
 
   /**
@@ -513,6 +532,15 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
+   * Can use password expiry
+   * @return {boolean}
+   */
+  get canUsePasswordExpiry() {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    return this.props.passwordExpiryContext.isFeatureEnabled() && passwordExpirySettings?.policy_override;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -632,7 +660,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                       </div>
                     </div>
                   </li>
-                  <li id="delete_action">
+                  <li id="delete_action" className={`${this.canUsePasswordExpiry ? "separator-after" : ""}`}>
                     <div className="row">
                       <div className="main-cell-wrapper">
                         <div className="main-cell">
@@ -644,6 +672,21 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
                       </div>
                     </div>
                   </li>
+                  {this.canUsePasswordExpiry &&
+                    <li id="mark-as-expired-action" className="ready">
+                      <div className="row">
+                        <div className="main-cell-wrapper">
+                          <div className="main-cell">
+                            <button
+                              type="button"
+                              disabled={!this.canUpdate()}
+                              className="link no-border"
+                              onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  }
                 </ul>
               </div>
             </li>
@@ -697,7 +740,8 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
   workflowContext: PropTypes.any, // The workflow context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withWorkflow(withProgress(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))));
+export default withAppContext(withRbac(withPasswordExpiry(withDialog(withWorkflow(withProgress(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))))));

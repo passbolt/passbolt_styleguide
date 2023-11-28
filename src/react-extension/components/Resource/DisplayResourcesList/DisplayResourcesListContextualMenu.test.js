@@ -49,7 +49,8 @@ describe("DisplayResourcesListContextualMenu", () => {
 
   describe('As LU I should be able to access all the offered capabilities on resources I have owner access', () => {
     const props = defaultProps(); // The props to pass
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 
     beforeEach(() => {
       page = new DisplayResourcesListContextualMenuPage(props);
@@ -57,7 +58,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 9 menu
+     * Then I should see the 10 menu
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
@@ -78,6 +79,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
@@ -137,6 +140,24 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource);
       expect(props.hide).toHaveBeenCalled();
     });
+
+    it('As LU I can start to mark a resource as expired', async() => {
+      expect.assertions(3);
+      jest.spyOn(props.context.port, "request");
+      await page.markAsExpired();
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.set-expiration-date", [{id: props.resource.id, expired: expect.any(String)}]);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it('As LU I cannot start to mark a resource as expired if there is an error', async() => {
+      expect.assertions(3);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw new Error('error'); });
+      await page.markAsExpired();
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.set-expiration-date", [{id: props.resource.id, expired: expect.any(String)}]);
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
   });
 
   describe('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
@@ -149,7 +170,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 9 menu
+     * Then I should see the 10 menu
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
@@ -170,6 +191,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the totp of a resource', async() => {
@@ -258,6 +281,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -285,6 +310,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute('disabled')).toBeTruthy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute('disabled')).toBeFalsy();
     });
   });
 

@@ -150,6 +150,13 @@ class DisplayMenuPageObject {
   }
 
   /**
+   * Returns the mark as expired menu elements of password workspace menu
+   */
+  get dropdownMenuMarkAsExpired() {
+    return this._container.querySelector('#mark-as-expired-action .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
    * Returns the permalink menu elements of password workspace menu
    */
   get dropdownMenuPermalink() {

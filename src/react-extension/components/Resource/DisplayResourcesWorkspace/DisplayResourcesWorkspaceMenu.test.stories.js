@@ -15,7 +15,7 @@ import React from "react";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import {
   defaultAppContext,
-  defaultPropsMultipleResource,
+  defaultPropsMultipleResourceUpdateRights,
   defaultPropsNoResource,
   defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned
@@ -54,7 +54,7 @@ propsNoResource.context = defaultAppContext();
 export const NoResource = Template.bind({});
 NoResource.args = {...propsNoResource};
 
-const propsMultipleResource = defaultPropsMultipleResource();
+const propsMultipleResource = defaultPropsMultipleResourceUpdateRights();
 propsMultipleResource.context = defaultAppContext();
 export const MultipleResource = Template.bind({});
 MultipleResource.args = {...propsMultipleResource};

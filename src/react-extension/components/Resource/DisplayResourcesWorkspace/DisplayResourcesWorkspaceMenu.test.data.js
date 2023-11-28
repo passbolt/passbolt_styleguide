@@ -29,13 +29,14 @@ import {
   defaultResourceDto, resourceStandaloneTotpDto,
   resourceWithFavoriteDto, resourceWithReadPermissionDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any | ({userSettings: UserSettings, siteSettings: SiteSettings, port: MockPort} & {})}
  */
-export function defaultAppContext(appContext) {
+export function defaultAppContext(appContext = {}) {
   const siteSettings = new SiteSettings(siteSettingsFixture);
   const defaultAppContext = {
     port: new MockPort(),
@@ -44,7 +45,7 @@ export function defaultAppContext(appContext) {
     setContext: () => jest.fn(),
     resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto())
   };
-  return Object.assign(defaultAppContext, appContext || {});
+  return Object.assign(defaultAppContext, appContext);
 }
 
 /**
@@ -69,7 +70,7 @@ export function defaultPropsOneResourceOwned() {
       onResourcesToExport: () => jest.fn(),
       onResourceCopied: () => jest.fn(),
       onChangeColumnView:  jest.fn()
-    }),
+    })
   };
 }
 
@@ -158,7 +159,8 @@ export function defaultPropsMultipleResourceUpdateRights() {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources,
       lockDisplayDetail: true
-    })
+    }),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
   };
 }
 
