@@ -290,6 +290,13 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   <Trans>When members of a group change, notify the group manager(s).</Trans>
                 </label>
               </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupManagerRequestAddUser" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={settings.groupManagerRequestAddUser} id="send-group-manager-request-add-user-toggle-button"/>
+                <label className="text" htmlFor="send-group-manager-request-add-user-toggle-button">
+                  <Trans>When LDAP requests the group manager(s) to add a user to a group.</Trans>
+                </label>
+              </span>
             </div>
           </div>
           <h3><Trans>Registration & Recovery</Trans></h3>

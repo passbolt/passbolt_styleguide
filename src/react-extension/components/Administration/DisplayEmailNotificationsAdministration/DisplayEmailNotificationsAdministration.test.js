@@ -47,7 +47,7 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
-      expect.assertions(34);
+      expect.assertions(35);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       //passwords
@@ -73,6 +73,7 @@ describe("See the Email Notifications Settings", () => {
 
       //group manager
       expect(page.groupManagerUpdate.checked).toBeTruthy();
+      expect(page.groupManagerRequestAddUser.checked).toBeTruthy();
 
       //Registration and recovery: Admin
       expect(page.userSetupCompletedAdmins.checked).toBeTruthy();
@@ -155,7 +156,7 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('I should see all fields disabled”', () => {
-      expect.assertions(33);
+      expect.assertions(34);
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
 
@@ -186,6 +187,7 @@ describe("See the Email Notifications Settings", () => {
 
       //group manager
       expectDisabled(page.groupManagerUpdate);
+      expectDisabled(page.groupManagerRequestAddUser);
 
       //Registration and recovery: Admin
       expectDisabled(page.userSetupCompletedAdmins);
