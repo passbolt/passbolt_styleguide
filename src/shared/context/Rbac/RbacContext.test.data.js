@@ -12,8 +12,8 @@
  * @since         4.1.0
  */
 
-import { defaultGroupsUser } from "../../models/entity/user/groupUserEntity.test.data";
-import {defaultAdminUserDto, defaultUserDto} from "../../models/entity/user/userEntity.test.data";
+import {defaultGroupsUser} from "../../models/entity/user/groupUserEntity.test.data";
+import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
 
 /**
  * Returns the default administrator rbac context for the unit test.
