@@ -30,8 +30,15 @@ class PasswordExpirySettingsViewModel {
     this.automatic_update = Boolean(settings?.automatic_update);
     this.policy_override = Boolean(settings?.policy_override);
     this.automatic_expiry = Boolean(settings?.automatic_expiry);
-    this.default_expiry_period = !isNaN(parseInt(settings?.default_expiry_period, 10)) ? parseInt(settings?.default_expiry_period, 10) : null;
-    this.expiry_notification = !isNaN(parseInt(settings?.expiry_notification, 10)) ? parseInt(settings?.expiry_notification, 10) : null;
+
+    const defaultExpiryPeriod = parseInt(settings?.default_expiry_period, 10);
+    const expiryNotification = parseInt(settings?.expiry_notification, 10);
+    this.default_expiry_period = !isNaN(defaultExpiryPeriod) ? defaultExpiryPeriod : null;
+    this.expiry_notification = !isNaN(expiryNotification) ? expiryNotification : null;
+
+    this.default_expiry_period_toggle = typeof(settings?.default_expiry_period_toggle) !== 'undefined'
+      ? Boolean(settings.default_expiry_period_toggle)
+      : Boolean(this.default_expiry_period);
 
     if (settings?.id) {
       this.id = settings?.id;
@@ -87,7 +94,7 @@ class PasswordExpirySettingsViewModel {
       automatic_expiry: Boolean(entityDto?.automatic_expiry),
       automatic_update: Boolean(entityDto?.automatic_update),
       policy_override: Boolean(entityDto?.policy_override),
-      default_expiry_period: !isNaN(parseInt(entityDto?.default_expiry_period, 10)) ? parseInt(entityDto?.default_expiry_period, 10) : null,
+      default_expiry_period: entityDto?.default_expiry_period !== null ? parseInt(entityDto?.default_expiry_period, 10) : null,
       expiry_notification: !isNaN(parseInt(entityDto?.expiry_notification, 10)) ? parseInt(entityDto?.expiry_notification, 10) : null,
     };
     if (entityDto?.id) {
@@ -145,20 +152,32 @@ class PasswordExpirySettingsViewModel {
    * Validates the current object state
    * @returns {EntityValidationError}
    */
-  validate(isAdvanced) {
+  validate(isAdvanced = false) {
+    const entityValidationError = new EntityValidationError();
     const schema = PasswordExpirySettingsViewModel.getSchema(isAdvanced);
-    //We set the to expiry_notification in case the user missed it
-    if (isAdvanced && !this.expiry_notification) {
-      this.expiry_notification = 2;
-    }
     try {
       EntitySchema.validate(this.constructor.name, this, schema);
+      this.validateFormInput(entityValidationError, isAdvanced);
     } catch (e) {
       console.log(e);
+      this.validateFormInput(e, isAdvanced);
       return e;
     }
 
-    return new EntityValidationError();
+    return entityValidationError;
+  }
+
+  /**
+   * Validates the input not present in entity
+   * @param entityValidationError the entity validation error
+   * @param isAdvanced is advanced feature enabled
+   * @returns {EntityValidationError}
+   */
+  validateFormInput(entityValidationError, isAdvanced) {
+    //Validate only if the toggle is enable
+    if (isAdvanced && this.default_expiry_period_toggle && this.default_expiry_period === null) {
+      entityValidationError.addError("default_expiry_period", 'required', `The default_expiry_period is required.`);
+    }
   }
 
   /**

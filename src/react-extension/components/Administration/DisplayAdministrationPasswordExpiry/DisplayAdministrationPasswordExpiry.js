@@ -29,7 +29,6 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.bindCallbacks();
   }
 
   /**
@@ -59,11 +58,6 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
     this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
   }
 
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-  }
 
   /**
    * Should input be disabled? True if state is loading or processing

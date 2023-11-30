@@ -160,20 +160,32 @@ textarea {
 }
 
 .input-alt {
-  display: flex;
   margin-top: 1.6rem;
   border: 1px solid @input-radio-list-background;
   border-radius: 3px;
   background-color: @input-radio-list-background;
   padding: 1.6rem;
 
-  input {
-    margin-left: 4px;
-    margin-right: 4px;
+  .toggle-input {
+    width: 4.2rem
   }
-
-  span, input{
-    margin-top: auto;
-    margin-bottom: auto;
+  .content {
+    display: flex;
+  
+    input {
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+  
+    span, input{
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+  .input {
+    .error-message {
+      margin-bottom: 0;
+      margin-top: 0.5rem;
+    }
   }
 }

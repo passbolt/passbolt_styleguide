@@ -220,6 +220,38 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
   }
 
   /**
+   * Returns the expiry period gte error
+   * @returns {HTMLElement}
+   */
+  get defaultExpiryPeriodGteError() {
+    return this.select('#default-expiry-period-gte');
+  }
+
+  /**
+   * Returns the expiry period required error
+   * @returns {HTMLElement}
+   */
+  get defaultExpiryPeriodRequiredError() {
+    return this.select('#default-expiry-period-required');
+  }
+
+  /**
+   * Returns the expiry notification gte error
+   * @returns {HTMLElement}
+   */
+  get expiryNotificationGteError() {
+    return this.select('#expiry-notification-gte');
+  }
+
+  /**
+   * Returns the expiry notification required error
+   * @returns {HTMLElement}
+   */
+  get expiryNotificationRequiredError() {
+    return this.select('#expiry-notification-required');
+  }
+
+  /**
    * Simulates a click on the default expiry period toggle
    * @returns {Promise<void>}
    */
@@ -298,7 +330,6 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
     element.focus();
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
-    jest.runAllTimers();
     await waitFor(() => {});
   }
 }

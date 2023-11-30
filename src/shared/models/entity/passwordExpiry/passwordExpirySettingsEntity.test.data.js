@@ -27,7 +27,7 @@ export const defaultPasswordExpirySettingsDto = (data = {}) => {
 
 export const defaultPasswordExpiryProSettingsDto = (data = {}) => {
   const defaultData = {
-    default_expiry_period: 0,
+    default_expiry_period: null,
     policy_override: false,
     automatic_expiry: true,
     automatic_update: true,
