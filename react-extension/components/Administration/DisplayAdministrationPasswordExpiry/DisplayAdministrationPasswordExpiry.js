@@ -20,6 +20,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withAdministrationWorkspace} from "../../../contexts/AdministrationWorkspaceContext";
 import {withAdminPasswordExpiry} from "../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiryActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationPasswordExpiryActions/DisplayAdministrationPasswordExpiryActions";
+import DisplayAdministrationPasswordExpiryAdvanced from "./DisplayAdministrationPasswordExpiryAdvanced/DisplayAdministrationPasswordExpiryAdvanced";
 
 class DisplayAdministrationPasswordExpiry extends React.PureComponent {
   /**
@@ -28,7 +29,6 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.bindCallbacks();
   }
 
   /**
@@ -58,12 +58,6 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
     this.props.administrationWorkspaceContext.resetDisplayAdministrationWorkspaceAction();
   }
 
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleSettingsActivationChange = this.handleSettingsActivationChange.bind(this);
-  }
 
   /**
    * Should input be disabled? True if state is loading or processing
@@ -74,14 +68,11 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
   }
 
   /**
-   * Handles checkbox check's state change
+   * Check if the user can use the advanced expiry password
+   * @returns {boolean}
    */
-  handleSettingsActivationChange(e) {
-    const value = Boolean(e.target.checked);
-    this.props.adminPasswordExpiryContext.setSettingsBulk({
-      automatic_expiry: value,
-      automatic_update: value,
-    });
+  get canUseAdvancedSettings() {
+    return this.props.context.siteSettings.canIUse('passwordExpiryPolicies');
   }
 
   /**
@@ -93,15 +84,15 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
       return null;
     }
     const adminContext = this.props.adminPasswordExpiryContext;
-    const settings = adminContext.getSettings();
-    const isActive = Boolean(settings?.automatic_expiry);
+    const isEnabled = adminContext.isFeatureToggleEnabled();
+
     return (
       <div className="row">
         <div className="password-expiry-settings col8 main-column">
           <h3 id="password-expiry-settings-title">
             <span className="input toggle-switch form-element">
               <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpirySettingsToggle"
-                onChange={this.handleSettingsActivationChange} checked={isActive} disabled={this.hasAllInputDisabled()}
+                onChange={() => adminContext.setFeatureToggle(!isEnabled)} checked={isEnabled} disabled={this.hasAllInputDisabled()}
                 id="passwordExpirySettingsToggle"/>
               <label htmlFor="passwordExpirySettingsToggle"><Trans>Password Expiry</Trans></label>
             </span>
@@ -113,34 +104,40 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
               </p>
             </div>
           }
-          {!isActive &&
+          {!isEnabled &&
             <p className="description">
               <Trans>No Password Expiry is configured. Enable it to activate automatic password expiration and automatic password expiration reset workflows.</Trans>
             </p>
           }
-          {isActive &&
+          {isEnabled && (
             <>
-              <h4 id="password-expiry-settings-automatic-workflows" className="title title--required no-border"><Trans>Automatic workflows</Trans></h4>
-              <div className="radiolist-alt">
-                <div className={`input radio`}>
-                  <label htmlFor="passwordExpiryAutomaticExpiry">
-                    <span className="name"><Trans>Automatic expiry</Trans></span>
-                    <span className="info">
-                      <Trans>Password automatically expires when a user or a group is removed from the permission list.</Trans>
-                    </span>
-                  </label>
+              {this.canUseAdvancedSettings ? (
+                <DisplayAdministrationPasswordExpiryAdvanced />
+              ) : (
+                <div id="#password-expiry-settings-form">
+                  <h4 id="password-expiry-settings-automatic-workflows" className="title title--required no-border"><Trans>Automatic workflows</Trans></h4>
+                  <div className="radiolist-alt">
+                    <div className={`input radio`}>
+                      <label htmlFor="passwordExpiryAutomaticExpiry">
+                        <span className="name"><Trans>Automatic expiry</Trans></span>
+                        <span className="info">
+                          <Trans>Password automatically expires when a user or a group is removed from the permission list.</Trans>
+                        </span>
+                      </label>
+                    </div>
+                    <div className={`input radio`}>
+                      <label htmlFor="passwordExpiryAutomatiUpdate">
+                        <span className="name"><Trans>Automatic update</Trans></span>
+                        <span className="info">
+                          <Trans>When users change their passwords, the expiry date is automatically renewed.</Trans>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
-                <div className={`input radio`}>
-                  <label htmlFor="passwordExpiryAutomatiUpdate">
-                    <span className="name"><Trans>Automatic update</Trans></span>
-                    <span className="info">
-                      <Trans>When users change their passwords, the expiry date is automatically renewed.</Trans>
-                    </span>
-                  </label>
-                </div>
-              </div>
+              )}
             </>
-          }
+          )}
         </div>
         <div className="col4 last">
           <div className="sidebar-help">

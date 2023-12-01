@@ -114,5 +114,16 @@ describe("Choose security token", () => {
     await page.save();
     expect(page.hasNotGoodLengthCode).toBeTruthy();
   });
+
+  it('As LU I should see an error if the security token do not valid the regex after submitting the form (first validation)', async() => {
+    props = defaultProps();
+    page = new ChooseSecurityTokenPage(props);
+
+    expect.assertions(1);
+    const notGoodRegexCode = 'A#B';
+    await page.fillCode(notGoodRegexCode);
+    await page.save();
+    expect(page.hasNotGoodRegexCode).toBeTruthy();
+  });
 });
 

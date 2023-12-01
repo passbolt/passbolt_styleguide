@@ -1262,6 +1262,32 @@ textarea.full_report {
   width: 30rem;
   height: 9rem;
 }
+.input-alt {
+  margin-top: 1.6rem;
+  border: 1px solid #353535;
+  border-radius: 3px;
+  background-color: #353535;
+  padding: 1.6rem;
+}
+.input-alt .toggle-input {
+  width: 4.2rem;
+}
+.input-alt .content {
+  display: flex;
+}
+.input-alt .content input {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.input-alt .content span,
+.input-alt .content input {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.input-alt .input .error-message {
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+}
 .input-password-wrapper {
   margin-bottom: 1.6rem;
 }
@@ -1912,6 +1938,60 @@ input[type=file] {
   background: #FFFFFF;
   transform: translateX(-65%);
   transition: all 0.4s ease, padding 0.3s ease, margin 0.3s ease;
+}
+.togglelist-alt {
+  margin-top: 1.6rem;
+  border: 1px solid default-border;
+  border-radius: 3px;
+  background-color: #353535;
+  padding: 1.6rem;
+}
+.togglelist-alt .toggle-input {
+  width: 4.2rem;
+}
+.togglelist-alt .input.has-error.toggle-switch {
+  margin-bottom: 1.2rem;
+}
+.togglelist-alt .toggle-switch label {
+  margin-left: 1.6rem;
+}
+.togglelist-alt .toggle-switch label .name {
+  margin: 0;
+  display: block;
+  font-size: 1.6rem;
+  background-color: #353535;
+}
+.togglelist-alt .toggle-switch label .info-input {
+  display: flex;
+  margin: 0;
+  font-weight: normal;
+  font-size: 1.3rem;
+  background-color: #353535;
+}
+.togglelist-alt .toggle-switch label .info-input input {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.togglelist-alt .toggle-switch label .info-input span,
+.togglelist-alt .toggle-switch label .info-input input {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.togglelist-alt .toggle-switch label .info {
+  margin: 0;
+  font-weight: normal;
+  font-size: 1.3rem;
+  display: block;
+  white-space: pre-wrap;
+  background-color: #353535;
+}
+.togglelist-alt .toggle-switch label .info span {
+  font-weight: bold;
+}
+.togglelist-alt .input .error-message {
+  margin-bottom: 0;
+  margin-top: 0.5rem;
+  margin-left: 4.1rem;
 }
 /** Select **/
 .select-container {
@@ -4571,6 +4651,9 @@ form.search label {
   -ms-text-overflow: ellipsis;
   display: block;
 }
+.navigation-secondary .row .main-cell .beta {
+  margin-left: 0.8rem;
+}
 .navigation-secondary .row .main-cell .tooltip {
   margin-left: 1rem;
 }
@@ -5388,22 +5471,22 @@ iframe.cachette {
 .input .input-wrapper-inline button.button-icon {
   margin-left: 0.8rem;
 }
-.input.input-totp-wrapper .totp button:disabled {
+.input.input-totp-wrapper .totp button:first-child:disabled {
   flex: 1;
   opacity: 1;
 }
-.input.input-totp-wrapper .totp button:disabled .totp-code {
+.input.input-totp-wrapper .totp button:first-child:disabled .totp-code {
   font-size: 1.8rem;
 }
-.input.input-totp-wrapper .totp button:disabled .totp-code + .svg-icon.timer {
+.input.input-totp-wrapper .totp button:first-child:disabled .totp-code + .svg-icon.timer {
   margin-left: 1rem;
 }
-.input.input-totp-wrapper .totp button:disabled .totp-code + .svg-icon.timer svg {
+.input.input-totp-wrapper .totp button:first-child:disabled .totp-code + .svg-icon.timer svg {
   width: 2rem;
   height: 2rem;
   --timer-stroke-width: 0.24rem;
 }
-.input.input-totp-wrapper.disabled .totp button:disabled {
+.input.input-totp-wrapper.disabled .totp button:first-child:disabled {
   opacity: 0.5;
 }
 .totp-code + .svg-icon.timer {

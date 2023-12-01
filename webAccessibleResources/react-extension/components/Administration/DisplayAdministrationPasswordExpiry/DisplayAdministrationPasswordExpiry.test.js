@@ -13,7 +13,7 @@
  */
 
 import {defaultAppContext} from '../../../contexts/ApiAppContext.test.data';
-import {defaultProps} from './DisplayAdministrationPasswordExpiry.test.data';
+import {defaultPropsCE, defaultPropsPro} from './DisplayAdministrationPasswordExpiry.test.data';
 import DisplayAdministrationPasswordExpirySettingsPage from './DisplayAdministrationPasswordExpiry.test.page';
 import {waitForTrue} from '../../../../../test/utils/waitFor';
 import NotifyError from '../../Common/Error/NotifyError/NotifyError';
@@ -37,7 +37,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('The component loads properly', async() => {
       expect.assertions(2);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
       props.context.port.addRequestListener("passbolt.password-expiry.find", () => defaultPasswordExpirySettingsEntityDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
@@ -50,7 +50,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator I can access the password expiry settings help page', async() => {
       expect.assertions(3);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
       props.context.port.addRequestListener("passbolt.password-expiry.find", () => defaultPasswordExpirySettingsEntityDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
@@ -67,7 +67,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator I can enable the password expiry feature', async() => {
       expect.assertions(1);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
 
       const expectedPasswordExpirySettingsDto = defaultPasswordExpirySettingsViewModelDto();
 
@@ -87,7 +87,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator I can delete the password expiry settings', async() => {
       expect.assertions(1);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
 
       const currentSettings = passwordExpirySettingsEntityDtoFromApi();
       const expectedPasswordExpirySettingsId = currentSettings.id;
@@ -107,7 +107,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator when I modify a field, I can see a changes warning message', async() => {
       expect.assertions(1);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
       props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
@@ -121,7 +121,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator when I save the policy, I can see a success feedback', async() => {
       expect.assertions(2);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
       props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
@@ -138,7 +138,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator when I save the policy, I cannot trigger an action on settings page', async() => {
       expect.assertions(2);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
       props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
 
       let savePromise;
@@ -165,7 +165,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
     it('As an administrator when an unexpected error happened while saving the policy, I should see the error dialog', async() => {
       expect.assertions(3);
       const context = defaultAppContext();
-      const props = defaultProps();
+      const props = defaultPropsCE();
       const entityDto = defaultPasswordExpirySettingsViewModelDto();
       const expectedError = new Error("Something went wrong!");
       props.context.port.addRequestListener("passbolt.password-expiry.find", () => entityDto);
@@ -173,10 +173,27 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
       await waitForTrue(() => page.exists());
+      await page.clickOnFeatureToggle();
       await page.clickOnSave();
+
       expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
       expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
+    });
+
+    it('As an administrator when the plugin for advanced settings is enabled I should see the advanced form', async() => {
+      expect.assertions(2);
+      const context = defaultAppContext();
+      const props = defaultPropsPro();
+      const entityDto = defaultPasswordExpirySettingsViewModelDto();
+      props.context.port.addRequestListener("passbolt.password-expiry.find", () => entityDto);
+
+      const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
+      await waitForTrue(() => page.exists());
+      await page.clickOnFeatureToggle();
+
+      expect(page.passwordExpirySettingsForm).toBeNull();
+      expect(page.passwordExpiryFormAdvanced).not.toBeNull();
     });
   });
 });

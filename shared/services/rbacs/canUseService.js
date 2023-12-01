@@ -23,14 +23,29 @@ export default class CanUse {
    * @returns {boolean}
    */
   static canRoleUseUiAction(role, rbacs, actionName) {
+    // Desktop action should
+    if (window.chrome?.webview) {
+      const rbac = rbacs.findRbacByActionName(actionName);
+      return this.getByRbacOrDefault(rbac, actionName);
+    }
+
     // Administrator action are not controlled by rbac.
     if (role.isAdmin()) {
       const adminControlFunction = GetControlFunctionService.getDefaultForAdminAndUiAction(actionName);
       return adminControlFunction.execute();
     }
-
     // If the action is controlled by rbac for the given role.
     const rbac = rbacs.findRbacByRoleAndUiActionName(role, actionName);
+    return this.getByRbacOrDefault(rbac, actionName);
+  }
+
+  /**
+   * Check if a role can use a UI action or return the default userr
+   * @param {RbacEntity} rbac The rbac entity
+   * @param {string} actionName The action name to check the control function
+   * @returns {boolean}
+   */
+  static getByRbacOrDefault(rbac, actionName) {
     if (rbac) {
       const rbacControlFunction = GetControlFunctionService.getByRbac(rbac);
       return rbacControlFunction.execute();

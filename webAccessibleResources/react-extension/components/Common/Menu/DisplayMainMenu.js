@@ -79,6 +79,7 @@ class DisplayMainMenu extends Component {
    */
   render() {
     const canViewUsersWorkspace = this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+    const canViewAdministrationWorkpace = this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE);
 
     return (
       <nav>
@@ -107,7 +108,7 @@ class DisplayMainMenu extends Component {
                 </div>
               </li>
             }
-            {this.isLoggedInUserAdmin() &&
+            {this.isLoggedInUserAdmin() && canViewAdministrationWorkpace &&
             <li key="administration">
               <div className={`row ${this.isSelected("administration") ? "selected" : ""}`}>
                 <div className="main-cell-wrapper">

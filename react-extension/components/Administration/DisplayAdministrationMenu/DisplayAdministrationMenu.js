@@ -145,7 +145,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUsePasswordExpiry() {
-    return this.canIUse('passwordExpiry');
+    return this.canIUse('passwordExpiry') && this.canIUse('passwordExpiryPolicies');
   }
 
   /**

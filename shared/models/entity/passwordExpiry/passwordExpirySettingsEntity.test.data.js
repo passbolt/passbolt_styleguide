@@ -25,6 +25,17 @@ export const defaultPasswordExpirySettingsDto = (data = {}) => {
   return Object.assign(defaultData, data);
 };
 
+export const defaultPasswordExpiryProSettingsDto = (data = {}) => {
+  const defaultData = {
+    default_expiry_period: null,
+    policy_override: false,
+    automatic_expiry: true,
+    automatic_update: true,
+    expiry_notification: 2,
+  };
+  return Object.assign(defaultData, data);
+};
+
 export const overridenPasswordExpirySettingsDto = (data = {}) => {
   const defaultData = {
     default_expiry_period: 60,

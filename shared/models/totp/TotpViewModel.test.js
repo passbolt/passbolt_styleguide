@@ -62,14 +62,15 @@ describe("TotpViewModel", () => {
 
   describe("::cloneWithMutation", () => {
     it("should instantiate another entity with the new data", () => {
-      expect.assertions(3);
+      expect.assertions(4);
       const viewModel = new TotpViewModel();
 
-      const otherViewModel = viewModel.cloneWithMutation("secret_key", "DAV3DS4ERAAF5QGH");
+      const otherViewModel = viewModel.cloneWithMutation("secret_key", "wevo g4iu zqza app7 uvc5 ysza g2dn d6t2");
 
       expect(viewModel === otherViewModel).toStrictEqual(false);
       expect(otherViewModel.secret_key).not.toStrictEqual(viewModel.secret_key);
       expect(otherViewModel.toSecretDto()).not.toStrictEqual(viewModel.toSecretDto());
+      expect(otherViewModel.toSecretDto().totp.secret_key).toStrictEqual("WEVOG4IUZQZAAPP7UVC5YSZAG2DND6T2");
     });
 
     it("should instantiate another entity even if data is actually unchanged", () => {

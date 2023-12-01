@@ -110,12 +110,21 @@ class DisplayEmailNotificationsAdministration extends React.Component {
   canUseAccountRecovery() {
     return this.props.context.siteSettings.canIUse("accountRecovery");
   }
+
   /**
    * Can use password expiry
    * @returns {boolean}
    */
   canUsePasswordExpiry() {
-    return this.props.context.siteSettings.canIUse("passwordExpiry");
+    return this.props.context.siteSettings.canIUse("passwordExpiry") || this.props.context.siteSettings.canIUse("passwordExpiryPolicies");
+  }
+
+  /**
+   * Can use password expiry advanced settings
+   * @returns {boolean}
+   */
+  canUsePasswordExpiryAdvancedSettings() {
+    return this.props.context.siteSettings.canIUse("passwordExpiryPolicies");
   }
 
   /**
@@ -409,13 +418,24 @@ class DisplayEmailNotificationsAdministration extends React.Component {
             <>
               <h3><Trans>Password expiry</Trans></h3>
               <div className="section">
-                <span className="input toggle-switch form-element">
-                  <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryExpiredUser" disabled={this.hasAllInputDisabled()}
-                    onChange={this.handleInputChange} checked={settings.passwordExpiryExpiredUser} id="password-expiry-expired-user-toggle-button"/>
-                  <label className="text" htmlFor="password-expiry-expired-user-toggle-button">
-                    <Trans>When the password is expired, notify the owners to change it.</Trans>
-                  </label>
-                </span>
+                <div>
+                  <span className="input toggle-switch form-element">
+                    <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryExpiredUser" disabled={this.hasAllInputDisabled()}
+                      onChange={this.handleInputChange} checked={settings.passwordExpiryExpiredUser} id="password-expiry-expired-user-toggle-button"/>
+                    <label className="text" htmlFor="password-expiry-expired-user-toggle-button">
+                      <Trans>When the password is expired, notify the owners to change it.</Trans>
+                    </label>
+                  </span>
+                  {this.canUsePasswordExpiryAdvancedSettings() &&
+                    <span className="input toggle-switch form-element">
+                      <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryAboutToExpire" disabled={this.hasAllInputDisabled()}
+                        onChange={this.handleInputChange} checked={settings.passwordExpiryAboutToExpire} id="password-expiry-about-to-expire-toggle-button"/>
+                      <label className="text" htmlFor="password-expiry-about-to-expire-toggle-button">
+                        <Trans>When the password is about to expire, notify the owners to change it.</Trans>
+                      </label>
+                    </span>
+                  }
+                </div>
               </div>
             </>
           }

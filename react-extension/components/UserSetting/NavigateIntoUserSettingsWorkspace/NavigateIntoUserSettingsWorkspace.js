@@ -195,6 +195,7 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}>
                     <span><Trans>Desktop app setup</Trans></span>
+                    <span className="chips beta">beta</span>
                   </button>
                 </div>
               </div>
