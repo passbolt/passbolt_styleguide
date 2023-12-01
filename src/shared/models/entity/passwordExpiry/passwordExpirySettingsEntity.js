@@ -111,10 +111,6 @@ class PasswordExpirySettingsEntity extends Entity {
     };
 
     const dto = {...defaultData, ...data};
-    for (const key in dto) {
-      dto[key] ??= defaultData[key];
-    }
-
     return new PasswordExpirySettingsEntity(dto);
   }
 }
