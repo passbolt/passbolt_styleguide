@@ -384,6 +384,15 @@ class ImportResources extends Component {
         onClose={this.handleCancel}>
         <form onSubmit={this.handleSubmit}>
           <div className="form-content">
+            <div className="warning message" id="import-resources-warning-message">
+              <p>
+                <Trans><span>Warning: Checkout the </span>
+                  <a  href="https://help.passbolt.com/faq/start/import-passwords" target="_blank" rel="noopener noreferrer">
+                    <span><Trans>documentation</Trans></span>
+                  </a>
+                  <span> to see what information is supported.</span></Trans>
+              </p>
+            </div>
             <div className={`input file ${this.hasAllInputDisabled() ? "disabled" : ""} ${invalidFileClassName}`}>
               <input
                 type="file"
