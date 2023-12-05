@@ -16,7 +16,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../AppContext/AppContext";
 import CanUse from "../../services/rbacs/canUseService";
-import RoleEntity from "../../models/entity/role/roleEntity";
 
 export const RbacContext = React.createContext({
   canIUseUiAction: () => {}
@@ -49,8 +48,7 @@ export class RbacContextProvider extends React.Component {
    * @return {boolean}
    */
   canIUseUiAction(actionName) {
-    const role = new RoleEntity(this.props.context.loggedInUser.role);
-    return CanUse.canRoleUseUiAction(role, this.props.context.rbacs, actionName);
+    return CanUse.canRoleUseUiAction(this.props.context.loggedInUser, this.props.context.rbacs, actionName);
   }
 
   /**

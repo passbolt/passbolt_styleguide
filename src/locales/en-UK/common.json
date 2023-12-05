@@ -128,6 +128,7 @@
   "All users": "All users",
   "Allow": "Allow",
   "Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.": "Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.",
+  "Allow group manager": "Allow group manager",
   "Allow passbolt to access external services to check if a password has been compromised.": "Allow passbolt to access external services to check if a password has been compromised.",
   "Allow passbolt to access external services to check if the user passphrase has been compromised when the user creates it.": "Allow passbolt to access external services to check if the user passphrase has been compromised when the user creates it.",
   "Allow users to override the default policy.": "Allow users to override the default policy.",

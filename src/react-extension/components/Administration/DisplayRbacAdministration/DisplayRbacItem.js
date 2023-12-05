@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class DisplayRbacItem extends React.Component {
   /**
@@ -41,10 +42,14 @@ class DisplayRbacItem extends React.Component {
    * @returns {[{label: string, value: string},{label: string, value: string}]}
    */
   get allowedCtlFunctions() {
-    return [
+    const controls =  [
       {value: controlFunctions.ALLOW, label: this.props.t('Allow')},
       {value: controlFunctions.DENY, label: this.props.t('Deny')},
     ];
+    if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
+      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
+    }
+    return controls;
   }
 
   /**
@@ -63,7 +68,6 @@ class DisplayRbacItem extends React.Component {
   getCtlFunctionForRole(role) {
     const rbac = this.props.rbacsUpdated?.findRbacByRoleAndUiActionName(role, this.props.actionName)
       || this.props.rbacs?.findRbacByRoleAndUiActionName(role, this.props.actionName);
-
     return rbac?.controlFunction || null;
   }
 
