@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class DisplayRbacItem extends React.Component {
   /**

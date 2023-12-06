@@ -13,7 +13,6 @@
  */
 
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
-import AllowIfGroupManagerInOneGroupFunction from "./controlFunctions/allowIfGroupManagerInOneGroupFunction";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import {uiActions} from "./uiActionEnumeration";
 
