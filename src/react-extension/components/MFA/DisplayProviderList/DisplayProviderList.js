@@ -161,21 +161,39 @@ class DisplayProviderList extends Component {
                   this.isRunningUnderHttps && this.props.mfaContext.hasMfaOrganisationSettings() && <>
                     <h4 className="no-border"><Trans>Please select a provider</Trans></h4>
                     <ul className="mfa-providers">
-                      {
-                        Object.entries(this.organisationMfaProviders).map(([key, value]) => (
-                          value && <li key={key} id={key}>
-                            <a href="#" onClick={() => this.handleProviderClick(key)}>
-                              <div className="provider-img">
-                                {this.getProvider(key).icon}
-                              </div>
-                              <span className="provider-name">{this.getProvider(key).name}</span>
-                            </a>
-                            <div className={`mfa-provider-status ${this.userMfaSettings[key]}`}>
-                              {this.userMfaSettings[key] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
-                            </div>
-                          </li>
-                        ))
-                      }
+                      {this.getProvider("totp") && <li id="totp">
+                        <a href="#" onClick={() => this.handleProviderClick("totp")}>
+                          <div className="provider-img">
+                            {this.getProvider("totp").icon}
+                          </div>
+                          <span className="provider-name">{this.getProvider("totp").name}</span>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["totp"]}`}>
+                          {this.userMfaSettings["totp"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>}
+                      {this.getProvider("duo") && <li id="duo">
+                        <a href="#" onClick={() => this.handleProviderClick("duo")}>
+                          <div className="provider-img">
+                            {this.getProvider("duo").icon}
+                          </div>
+                          <span className="provider-name">{this.getProvider("duo").name}</span>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["duo"]}`}>
+                          {this.userMfaSettings["duo"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>}
+                      {this.getProvider("yubikey") && <li id="yubikey">
+                        <a href="#" onClick={() => this.handleProviderClick("yubikey")}>
+                          <div className="provider-img">
+                            {this.getProvider("yubikey").icon}
+                          </div>
+                          <span className="provider-name">{this.getProvider("yubikey").name}</span>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["yubikey"]}`}>
+                          {this.userMfaSettings["yubikey"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>}
                     </ul>
                   </>
                 }</>
