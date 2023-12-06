@@ -16,7 +16,6 @@ import RbacEntity from "./rbacEntity";
 import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
 import RoleEntity from "../role/roleEntity";
-import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
 
 const ENTITY_NAME = 'Rbacs';
 const RULE_UNIQUE_ID = 'unique_id';

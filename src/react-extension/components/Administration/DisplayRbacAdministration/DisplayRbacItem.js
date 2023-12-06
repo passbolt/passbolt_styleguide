@@ -100,13 +100,17 @@ class DisplayRbacItem extends React.Component {
               value={controlFunctions.ALLOW}
               disabled={true}/>
           </div>
-          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item">
+          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
               className={`medium ${role.name}`}
               items={this.allowedCtlFunctions}
               value={this.getCtlFunctionForRole(role)}
-              disabled={!(this.props.rbacs?.length > 0)}
+              disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}
               onChange={event => this.handleInputChange(event, role)}/>
+            {
+              !this.getCtlFunctionForRole(role) && <div className="warning-message">There is no valid setting found for this action.</div>
+            }
+
           </div>
           )}
         </div>
