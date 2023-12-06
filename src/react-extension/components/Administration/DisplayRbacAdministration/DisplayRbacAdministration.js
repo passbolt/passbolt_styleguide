@@ -99,7 +99,7 @@ class DisplayRbacAdministration extends React.Component {
     const apiClientOptions = this.props.context.getApiClientOptions();
     const rbacService = new this.props.RbacService(apiClientOptions);
     const rbacsDto = await rbacService.findAll({ui_action: true});
-    const rbacs = new RbacsCollection(rbacsDto);
+    const rbacs = new RbacsCollection(rbacsDto, true);
     this.props.adminRbacContext.setRbacs(rbacs);
   }
 

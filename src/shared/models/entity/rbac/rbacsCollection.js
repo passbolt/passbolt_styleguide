@@ -16,6 +16,7 @@ import RbacEntity from "./rbacEntity";
 import EntityCollection from "../abstract/entityCollection";
 import EntitySchema from "../abstract/entitySchema";
 import RoleEntity from "../role/roleEntity";
+import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
 
 const ENTITY_NAME = 'Rbacs';
 const RULE_UNIQUE_ID = 'unique_id';
@@ -24,16 +25,25 @@ class RbacsCollection extends EntityCollection {
   /**
    * @inheritDoc
    */
-  constructor(collectionDto) {
+  constructor(collectionDto, excludeInvalid = false) {
     super(EntitySchema.validate(
       RbacsCollection.ENTITY_NAME,
       collectionDto,
       RbacsCollection.getSchema()
     ));
 
-    // Directly push into the private property _items[]
+    /*
+     * Directly push into the private property _items[]
+     * Do not add if excludeInvalid is true and control function are not allow
+     */
     this._props.forEach(dto => {
-      this._items.push(new RbacEntity(dto));
+      try {
+        this._items.push(new RbacEntity(dto));
+      } catch (e) {
+        if (!excludeInvalid) {
+          throw e;
+        }
+      }
     });
 
     // We do not keep original props
