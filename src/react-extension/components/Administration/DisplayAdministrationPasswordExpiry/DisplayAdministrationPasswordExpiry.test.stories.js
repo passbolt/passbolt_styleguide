@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import {defaultProps} from "./DisplayAdministrationPasswordExpiry.test.data";
+import {defaultPropsCE, defaultPropsPro} from "./DisplayAdministrationPasswordExpiry.test.data";
 import AdministrationPasswordExpiryContextProvider from "../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry";
 
@@ -23,10 +23,10 @@ export default {
   component: DisplayAdministrationPasswordExpiry
 };
 
-const Template = ({adminPasswordExpirySettingsContext, context, ...args}) =>
+const Template = args =>
   <div className="panel middle">
     <div className="grid grid-responsive-12">
-      <AdministrationPasswordExpiryContextProvider context={context} adminPasswordExpirySettingsContext={adminPasswordExpirySettingsContext}>
+      <AdministrationPasswordExpiryContextProvider {...args}>
         <DisplayAdministrationPasswordExpiry {...args}/>
       </AdministrationPasswordExpiryContextProvider>
     </div>
@@ -37,5 +37,8 @@ Template.propTypes = {
   adminPasswordExpirySettingsContext: PropTypes.object,
 };
 
-export const Initial = Template.bind({});
-Initial.args = defaultProps();
+export const ProVersion = Template.bind({});
+ProVersion.args = defaultPropsPro();
+
+export const CeVersion = Template.bind({});
+CeVersion.args = defaultPropsCE();

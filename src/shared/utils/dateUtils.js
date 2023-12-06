@@ -55,3 +55,10 @@ export const formatExpirationDateTimeAgo = (date, translate, locale) => {
 
   return formatDateTimeAgo(date, translate, locale);
 };
+
+/**
+ * Format the given date such that it matches the API format
+ * @param {DateTime} date
+ * @returns {string}
+ */
+export const formatDateForApi = date => date.toISO();

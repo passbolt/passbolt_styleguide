@@ -17,7 +17,7 @@
  */
 import {
   defaultProps,
-  propsDenyUIActions,
+  propsDenyUIActions, propsResourceStandaloneTotp,
   propsResourceTotp,
   propsResourceWithReadOnlyPermission,
   propsResourceWithUpdatePermission,
@@ -31,6 +31,8 @@ import {
   plaintextSecretPasswordDescriptionTotpDto,
   plaintextSecretPasswordStringDto
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 
 beforeEach(() => {
   jest.resetModules();
@@ -47,7 +49,8 @@ describe("DisplayResourcesListContextualMenu", () => {
 
   describe('As LU I should be able to access all the offered capabilities on resources I have owner access', () => {
     const props = defaultProps(); // The props to pass
-    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 
     beforeEach(() => {
       page = new DisplayResourcesListContextualMenuPage(props);
@@ -55,7 +58,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 9 menu
+     * Then I should see the 10 menu
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
@@ -76,6 +79,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
@@ -135,6 +140,24 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(DeleteResource);
       expect(props.hide).toHaveBeenCalled();
     });
+
+    it('As LU I can start to mark a resource as expired', async() => {
+      expect.assertions(3);
+      jest.spyOn(props.context.port, "request");
+      await page.markAsExpired();
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.set-expiration-date", [{id: props.resource.id, expired: expect.any(String)}]);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it('As LU I cannot start to mark a resource as expired if there is an error', async() => {
+      expect.assertions(3);
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => { throw new Error('error'); });
+      await page.markAsExpired();
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.set-expiration-date", [{id: props.resource.id, expired: expect.any(String)}]);
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
   });
 
   describe('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
@@ -147,13 +170,59 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 9 menu
+     * Then I should see the 10 menu
      */
     it('As LU I should see all menu name', () => {
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
       expect(page.copyPasswordItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyUriItem).not.toBeNull();
+      expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyPermalinkItem).not.toBeNull();
+      expect(page.copyPermalinkItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.copyTotpItem).not.toBeNull();
+      expect(page.copyTotpItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.openUriItem).not.toBeNull();
+      expect(page.openUriItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.editItem).not.toBeNull();
+      expect(page.editItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.shareItem).not.toBeNull();
+      expect(page.shareItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.deleteItem).not.toBeNull();
+      expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
+    });
+
+    it('As LU I can start to copy the totp of a resource', async() => {
+      expect.assertions(4);
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
+      await page.copyTotp();
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
+  });
+
+  describe('As LU I should be able to access all the offered capabilities on a standalone totp resources I have owner access', () => {
+    const props = propsResourceStandaloneTotp(); // The props to pass
+    jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
+
+    beforeEach(() => {
+      page = new DisplayResourcesListContextualMenuPage(props);
+    });
+
+    /**
+     * Given an organization with 1 resource
+     * Then I should see the 9 menu
+     */
+    it('As LU I should see all menu name', () => {
+      expect(page.copyUsernameItem).not.toBeNull();
+      expect(page.copyUsernameItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.copyPasswordItem).not.toBeNull();
+      expect(page.copyPasswordItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.copyUriItem).not.toBeNull();
       expect(page.copyUriItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPermalinkItem).not.toBeNull();
@@ -177,6 +246,13 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it('As LU I can start to edit the totp of a resource', async() => {
+      expect.assertions(2);
+      await page.edit();
+      expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
       expect(props.hide).toHaveBeenCalled();
     });
   });
@@ -205,6 +281,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -232,6 +310,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem.hasAttribute('disabled')).toBeTruthy();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.markAsExpiredItem).not.toBeNull();
+      expect(page.markAsExpiredItem.hasAttribute('disabled')).toBeFalsy();
     });
   });
 

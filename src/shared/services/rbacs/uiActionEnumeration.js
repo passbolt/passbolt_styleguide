@@ -27,5 +27,7 @@ export const uiActions = {
   DESKTOP_TRANSFER: "Desktop.transfer",
   ADMINSTRATION_VIEW_WORKSPACE: "Administration.viewWorkspace",
   DUO_CONFIGURATION: "Duo.configuration",
-  AVATAR_UPLOAD: "Avatar.upload"
+  AVATAR_UPLOAD: "Avatar.upload",
 };
+
+

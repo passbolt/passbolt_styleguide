@@ -135,6 +135,22 @@ class DisplayRbacAdministration extends React.Component {
   }
 
   /**
+   * Is the user allowed to use the desktop export capability
+   * @returns {boolean}
+   */
+  get canIUseDesktop() {
+    return this.props.context.siteSettings.canIUse("desktop");
+  }
+
+  /**
+   * Is the user allowed to use the mobile export capability
+   * @returns {boolean}
+   */
+  get canIUseMobile() {
+    return this.props.context.siteSettings.canIUse("mobile");
+  }
+
+  /**
    * Is the user allowed to use the folders capability
    * @returns {boolean}
    */
@@ -287,20 +303,27 @@ class DisplayRbacAdministration extends React.Component {
                       roles={this.state.roles}
                       onChange={this.updateRbacControlFunction}/>
                   </DisplayRbacSection>
-                  <DisplayRbacSection label={this.props.t('User settings')} level={1}>
-                    <DisplayRbacItem label={this.props.t('Can see mobile setup')}
-                      actionName={uiActions.MOBILE_TRANSFER} level={3}
-                      rbacs={this.props.adminRbacContext.rbacs}
-                      rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                      roles={this.state.roles}
-                      onChange={this.updateRbacControlFunction}/>
-                    <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
-                      actionName={uiActions.DESKTOP_TRANSFER} level={3}
-                      rbacs={this.props.adminRbacContext.rbacs}
-                      rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
-                      roles={this.state.roles}
-                      onChange={this.updateRbacControlFunction}/>
-                  </DisplayRbacSection>
+                  {
+                    (this.canIUseMobile || this.canIUseDesktop) && <DisplayRbacSection label={this.props.t('User settings')} level={1}>
+                      {
+                        this.canIUseMobile && <DisplayRbacItem label={this.props.t('Can see mobile setup')}
+                          actionName={uiActions.MOBILE_TRANSFER} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                      }
+                      {
+                        this.canIUseDesktop && <DisplayRbacItem label={this.props.t('Can see desktop application setup')}
+                          actionName={uiActions.DESKTOP_TRANSFER} level={3}
+                          rbacs={this.props.adminRbacContext.rbacs}
+                          rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                          roles={this.state.roles}
+                          onChange={this.updateRbacControlFunction}/>
+                      }
+
+                    </DisplayRbacSection>
+                  }
                 </>
               }
             </div>

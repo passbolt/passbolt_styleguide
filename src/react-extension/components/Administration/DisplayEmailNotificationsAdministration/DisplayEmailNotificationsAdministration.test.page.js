@@ -154,6 +154,13 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
+   * Returns the group manager request add user input element
+   */
+  get groupManagerRequestAddUser() {
+    return this._page.container.querySelector('#send-group-manager-request-add-user-toggle-button');
+  }
+
+  /**
    * Returns the "user completed the setup" notification for all admins input element
    */
   get userSetupCompletedAdmins() {

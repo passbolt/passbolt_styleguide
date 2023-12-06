@@ -74,6 +74,14 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.hasEditMenuDisabled()).toBeFalsy();
     });
 
+    it('As LU I cannot start to mark as expired a resource via the workspace main menu if password expiry is not enabled', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
+    });
+
+
     it('As LU I can start copying a resource\'s permalink via the workspace main menu', async() => {
       expect.assertions(6);
       expect(page.displayMenu.exists()).toBeTruthy();
@@ -340,6 +348,38 @@ describe("See Workspace Menu", () => {
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
       expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
+    });
+
+    it('As LU I should be able to mark resources as expired from the more menu', async() => {
+      expect.assertions(5);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => jest.fn());
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuMarkAsExpired);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.set-expiration-date', propsMultipleResource.resourceWorkspaceContext.selectedResources.map(resource => ({id: resource.id, expired: expect.any(String)})));
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+    });
+
+    it('As LU I should be see an error if the resources cannot be mark as expired from the more menu', async() => {
+      expect.assertions(5);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => { throw new Error('error'); });
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuMarkAsExpired);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.set-expiration-date', propsMultipleResource.resourceWorkspaceContext.selectedResources.map(resource => ({id: resource.id, expired: expect.any(String)})));
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalled();
     });
   });
 

@@ -49,12 +49,7 @@ class PasswordExpirySettingsEntity extends Entity {
           "format": "uuid",
         },
         "default_expiry_period": {
-          "anyOf": [{
-            "type": "integer",
-            "gte": 0,
-          }, {
-            "type": "null"
-          }]
+          "type": "null"
         },
         "policy_override": {
           "type": "boolean",
@@ -66,12 +61,7 @@ class PasswordExpirySettingsEntity extends Entity {
           "type": "boolean",
         },
         "expiry_notification": {
-          "anyOf": [{
-            "type": "integer",
-            "gte": 0,
-          }, {
-            "type": "null"
-          }]
+          "type": "null"
         },
         "created": {
           "type": "string",
@@ -113,14 +103,18 @@ class PasswordExpirySettingsEntity extends Entity {
    */
   static createFromDefault(data = {}) {
     const defaultData = {
-      default_expiry_period: 0,
+      default_expiry_period: null,
       policy_override: false,
       automatic_expiry: false,
       automatic_update: false,
-      expiry_notification: 0,
+      expiry_notification: null,
     };
 
-    const dto = Object.assign(defaultData, data);
+    const dto = {...defaultData, ...data};
+    for (const key in dto) {
+      dto[key] ??= defaultData[key];
+    }
+
     return new PasswordExpirySettingsEntity(dto);
   }
 }

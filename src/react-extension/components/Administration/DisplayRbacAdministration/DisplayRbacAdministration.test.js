@@ -16,7 +16,7 @@ import {enableFetchMocks} from 'jest-fetch-mock';
 import {waitFor} from '@testing-library/react';
 import {
   defaultProps,
-  propsWithDisabledFlag,
+  propsWithDisabledFlags,
   propsWithPopulatedRbacContext, propsWithUpdatedRbacs
 } from "./DisplayRbacAdministration.test.data";
 import DisplayRbacAdministrationPage from "./DisplayRbacAdministration.test.page";
@@ -104,7 +104,7 @@ describe("DisplayRbacAdministration", () => {
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to import if disabled by feature flag', async() => {
-      const props = propsWithDisabledFlag('import');
+      const props = propsWithDisabledFlags(['import']);
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
       expect.assertions(2);
@@ -114,7 +114,7 @@ describe("DisplayRbacAdministration", () => {
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to export if disabled by feature flag', async() => {
-      const props = propsWithDisabledFlag('export');
+      const props = propsWithDisabledFlags(['export']);
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
       expect.assertions(2);
@@ -124,7 +124,7 @@ describe("DisplayRbacAdministration", () => {
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to preview password if disabled by feature flag', async() => {
-      const props = propsWithDisabledFlag('previewPassword');
+      const props = propsWithDisabledFlags(['previewPassword']);
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
       expect.assertions(2);
@@ -134,7 +134,7 @@ describe("DisplayRbacAdministration", () => {
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to tags if disabled by feature flag', async() => {
-      const props = propsWithDisabledFlag('tags');
+      const props = propsWithDisabledFlags(['tags']);
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
       expect.assertions(2);
@@ -144,7 +144,7 @@ describe("DisplayRbacAdministration", () => {
     });
 
     it('As a logged in administrator I should not see the rbac settings relative to folders if disabled by feature flag', async() => {
-      const props = propsWithDisabledFlag('folders');
+      const props = propsWithDisabledFlags(['folders']);
       const page = new DisplayRbacAdministrationPage(props);
       await waitFor(() => {});
       expect.assertions(2);
@@ -177,6 +177,40 @@ describe("DisplayRbacAdministration", () => {
       expect(page.row(updatedRbacUiActionName1).className).toContain('highlighted');
       const updatedRbacUiActionName2 = props.adminRbacContext.rbacsUpdated.items[0].uiAction.name;
       expect(page.row(updatedRbacUiActionName2).className).toContain('highlighted');
+    });
+
+    it('As a logged in administrator I should not see the rbac for mobile if plugin is disabled', async() => {
+      const props = propsWithDisabledFlags(['mobile']);
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
+      expect(page.select('user', uiActions.MOBILE_TRANSFER)).toBeUndefined();
+    });
+
+    it('As a logged in administrator I should not see the rbac for desktop if plugin is disabled', async() => {
+      const props = propsWithDisabledFlags(['desktop']);
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(2);
+
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(11);
+      expect(page.select('user', uiActions.DESKTOP_TRANSFER)).toBeUndefined();
+    });
+
+    it('As a logged in administrator I should not see the rbac user setting if mobile and desktop are not enabled', async() => {
+      const props = propsWithDisabledFlags(['desktop', 'mobile']);
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+      expect.assertions(3);
+
+
+      expect(page.getAllSelectsByRole('user').length).toEqual(10);
+      expect(page.select('user', uiActions.DESKTOP_TRANSFER)).toBeUndefined();
+      expect(page.select('user', uiActions.MOBILE_TRANSFER)).toBeUndefined();
     });
   });
 });

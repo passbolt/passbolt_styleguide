@@ -115,7 +115,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
    * @returns {boolean}
    */
   canUsePasswordExpiry() {
-    return this.props.context.siteSettings.canIUse("passwordExpiry");
+    return this.props.context.siteSettings.canIUse("passwordExpiry") || this.props.context.siteSettings.canIUse("passwordExpiryPolicies");
   }
 
   /**
@@ -288,6 +288,13 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   onChange={this.handleInputChange} checked={settings.groupManagerUpdate} id="send-group-manager-update-toggle-button"/>
                 <label className="text" htmlFor="send-group-manager-update-toggle-button">
                   <Trans>When members of a group change, notify the group manager(s).</Trans>
+                </label>
+              </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupManagerRequestAddUser" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={settings.groupManagerRequestAddUser} id="send-group-manager-request-add-user-toggle-button"/>
+                <label className="text" htmlFor="send-group-manager-request-add-user-toggle-button">
+                  <Trans>When group managers are requested to add users to a group, notify them.</Trans>
                 </label>
               </span>
             </div>

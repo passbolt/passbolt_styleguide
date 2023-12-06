@@ -55,7 +55,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.toggleRememberLabel.textContent).toBe('Allow “Remember this device for a month.“ option during MFA.');
       // mandatory policy
       expect(page.mandatoryPolicy.checked).toBeFalsy();
-      expect(page.mandatoryPolicyName.textContent).toEqual("Mandatory");
+      expect(page.mandatoryPolicyName.textContent).toEqual("Prompt");
       expect(page.mandatoryPolicyInfo.textContent).toEqual("Users have to enable multi factor authentication. If they don't, they will be reminded every time they log in.");
       // opt-in policy
       expect(page.optInPolicy.value).toBeTruthy();

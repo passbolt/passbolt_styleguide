@@ -68,6 +68,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onResourceShared: () => {}, // Whenever a resource is shared
   onResourcePermissionsRefreshed: () => {}, // Whenever the resource permissions have been refreshed
   onResourceCopied: () => {}, // Whenever a resource (password)  has been copied
+  onResourcePreviewed: () => {}, // Whenever a resource has been previewed
   onResourceActivitiesRefreshed: () => {}, // Whenever the resource activities have been refreshed
   onSorterChanged: () => {}, // Whenever the sorter changed
   onResourceSelected: {
@@ -142,6 +143,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourceShared: this.handleResourceShared.bind(this), // Whenever a resource is shared
       onResourcePermissionsRefreshed:  this.handleResourcePermissionsRefreshed.bind(this), // Whenever the resource permissions have been refreshed
       onResourceCopied: this.handleResourceCopied.bind(this), // Whenever a resource (password) has been copied
+      onResourcePreviewed: this.handleResourcePreviewed.bind(this), // Whenever a resource (password) has been copied
       onResourceActivitiesRefreshed: this.handleResourceActivitiesRefreshed.bind(this), // Whenever the resource activities have been refreshed
       onSorterChanged: this.handleSorterChange.bind(this), // Whenever the sorter changed
       onResourceSelected: {
@@ -455,6 +457,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Handle the copied resource
    */
   async handleResourceCopied() {
+    await this.refreshSelectedResourceActivities();
+  }
+
+  /**
+   * Handle the previewed resource
+   */
+  async handleResourcePreviewed() {
     await this.refreshSelectedResourceActivities();
   }
 

@@ -201,9 +201,14 @@ class EditResourceDescription extends React.Component {
     const description = this.state.description;
     const resourceDto = {...this.props.resource};
     resourceDto.description = '';
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-    );
+
+    // If the resource has no encrypted description, change the resource type to "resource with encrypted description"
+    const isResourceTypeIdIsLegacy = this.resourceTypesSettings.assertResourceTypeIdIsLegacy(this.props.resource.resource_type_id);
+    if (isResourceTypeIdIsLegacy) {
+      resourceDto.resource_type_id = this.resourceTypesSettings.findResourceTypeIdBySlug(
+        this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
+      );
+    }
 
     let plaintextSecretDto = this.props.plaintextSecretDto;
     // It happens if the description was previously not encrypted and the user decided to encrypt it.
