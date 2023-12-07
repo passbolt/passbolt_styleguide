@@ -161,7 +161,7 @@ class DisplayProviderList extends Component {
                   this.isRunningUnderHttps && this.props.mfaContext.hasMfaOrganisationSettings() && <>
                     <h4 className="no-border"><Trans>Please select a provider</Trans></h4>
                     <ul className="mfa-providers">
-                      {this.getProvider("totp") && <li id="totp">
+                      {this.organisationMfaProviders["totp"] && <li id="totp">
                         <a href="#" onClick={() => this.handleProviderClick("totp")}>
                           <div className="provider-img">
                             {this.getProvider("totp").icon}
@@ -172,7 +172,7 @@ class DisplayProviderList extends Component {
                           {this.userMfaSettings["totp"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
                         </div>
                       </li>}
-                      {this.getProvider("duo") && <li id="duo">
+                      {this.organisationMfaProviders["duo"] && <li id="duo">
                         <a href="#" onClick={() => this.handleProviderClick("duo")}>
                           <div className="provider-img">
                             {this.getProvider("duo").icon}
@@ -183,7 +183,7 @@ class DisplayProviderList extends Component {
                           {this.userMfaSettings["duo"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
                         </div>
                       </li>}
-                      {this.getProvider("yubikey") && <li id="yubikey">
+                      {this.organisationMfaProviders["yubikey"] && <li id="yubikey">
                         <a href="#" onClick={() => this.handleProviderClick("yubikey")}>
                           <div className="provider-img">
                             {this.getProvider("yubikey").icon}
