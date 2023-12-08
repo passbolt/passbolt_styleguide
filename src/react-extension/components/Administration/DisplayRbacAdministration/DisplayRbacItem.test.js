@@ -55,7 +55,7 @@ describe("DisplayRbacItem", () => {
   });
 
   it("should display the default value for role other than admin", async() => {
-    expect.assertions(3);
+    expect.assertions(2);
 
     const props = defaultProps();
     const page = new DisplayRbacItemPage(props);
@@ -65,11 +65,14 @@ describe("DisplayRbacItem", () => {
 
     expect(page.selectedRoleOption("user").classList.contains('disabled')).toBeFalsy();
     expect(page.getRoleOption("user", controlFunctions.DENY)).not.toBeNull();
-    expect(page.getRoleOption("user", controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).toBeNull();
+    /*
+     * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
+     *  expect(page.getRoleOption("user", controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).toBeNull();
+     */
   });
 
   it("should display the an extra option for group manager when ", async() => {
-    expect.assertions(3);
+    expect.assertions(2);
 
     const props = defaultProps({
       actionName: uiActions.USERS_VIEW_WORKSPACE,
@@ -81,6 +84,9 @@ describe("DisplayRbacItem", () => {
 
     expect(page.selectedRoleOption("user").classList.contains('disabled')).toBeFalsy();
     expect(page.getRoleOption("user", controlFunctions.ALLOW)).not.toBeNull();
-    expect(page.getRoleOption("user", controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).not.toBeNull();
+    /*
+     * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
+     * expect(page.getRoleOption("user", controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP)).not.toBeNull();
+     */
   });
 });

@@ -17,7 +17,6 @@ import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class DisplayRbacItem extends React.Component {
   /**
@@ -46,9 +45,12 @@ class DisplayRbacItem extends React.Component {
       {value: controlFunctions.ALLOW, label: this.props.t('Allow')},
       {value: controlFunctions.DENY, label: this.props.t('Deny')},
     ];
-    if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
-      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
-    }
+    /**
+     * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
+     * if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
+     *  controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
+     *}
+     */
     return controls;
   }
 
