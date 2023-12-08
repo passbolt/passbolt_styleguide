@@ -152,7 +152,7 @@ class ApiAppContextProvider extends React.Component {
       const rbacService = new RbacMeService(apiClientOptions);
       rbacsDto = await rbacService.findMe({ui_action: true});
     }
-    const rbacs = new RbacsCollection(rbacsDto);
+    const rbacs = new RbacsCollection(rbacsDto, true);
     this.setState({rbacs});
   }
 
