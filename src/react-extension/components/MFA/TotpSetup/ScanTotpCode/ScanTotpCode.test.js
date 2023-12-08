@@ -12,7 +12,7 @@
  * @since         4.4.0
  */
 
-import {TotpCodeGeneratorService} from "../../../../../shared/services/otp/TotpCodeGeneratorService";
+import {waitFor} from "@testing-library/dom";
 import {defaultProps} from "./ScanTotpCode.test.data";
 import ScanTotpCodePage from "./ScanTotpCode.test.page";
 import QRCode from 'qrcode';
@@ -40,18 +40,20 @@ describe("ScanTotpCode", () => {
       expect(page.inputLabelOtp.textContent).toEqual("One Time Password (OTP)");
     });
 
-    it('I should be able to generate a qr code', async() => {
-      expect.assertions(2);
+    it('I should be able to retrieve code from the bext and generate it', async() => {
+      expect.assertions(1);
 
-      jest.spyOn(TotpCodeGeneratorService, "generateUri");
+      const uri = "otpauth://totp/www.passbolt.test:admin%40passbolt.com?issuer=www.passbolt.local&secret=&algorithm=SHA1&digits=6&period=30";
+
+      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.resolve(uri));
       jest.spyOn(QRCode, "toDataURL");
 
       page = new ScanTotpCodePage(props);
+      await waitFor(() => {});
 
-      expect(TotpCodeGeneratorService.generateUri).toHaveBeenCalledWith(expect.objectContaining({"issuer": "localhost", "label": "ada@passbolt.com"}));
       expect(QRCode.toDataURL).toHaveBeenCalledWith(expect.arrayContaining(
         [expect.objectContaining({
-          data: expect.stringContaining("otpauth://totp/localhost:ada%40passbolt.com?issuer=localhost&"),
+          data: uri,
           "mode": "byte"
         }
         )],
