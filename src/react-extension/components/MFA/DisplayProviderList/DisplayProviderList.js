@@ -119,7 +119,7 @@ class DisplayProviderList extends Component {
   handleProviderClick(provider) {
     const mfaUserSettings = this.props.mfaContext.getMfaUserSettings();
     this.props.mfaContext.setProvider(provider);
-    if (mfaUserSettings[provider] && provider !== "duo") {
+    if (mfaUserSettings[provider]) {
       this.props.mfaContext.navigate(MfaSettingsWorkflowStates.VIEWCONFIGURATION);
     } else {
       switch (provider) {

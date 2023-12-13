@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import SearchBar from "../../Common/Navigation/Search/SearchBar";
 import {withMfa} from '../../../contexts/MFAContext';
 import DisplayUserMfaProvider from '../DisplayUserMfa/DisplayUserMfaProvider';
+import DisplayUserMfa from "../DisplayUserMfa/DisplayUserMfa";
 
 /**
  * This component is a container for all the user settings workspace features
@@ -58,6 +59,7 @@ class DisplayApiUserSettingsWorkspace extends React.Component {
           <div className="panel middle">
             <DisplayUserSettingsWorkspaceBreadcrumb/>
             <Route exact path="/app/settings/mfa/:provider" component={DisplayUserMfaProvider}></Route>
+            <Route exact path="/app/settings/mfa" component={DisplayUserMfa}></Route>
           </div>
         </div>
       </div>
