@@ -190,6 +190,7 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationMfaRequested() {
+    console.log("requested")
     await this.goTo("api", "/app/administration/mfa");
   }
 
@@ -432,7 +433,12 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToUserSettingsMfaRequested() {
-    await this.goTo("browser-extension", "/app/settings/mfa");
+    //Application to point
+    let app = "api";
+    if (window.chrome?.webview) {
+      app = "browser-extension";
+    }
+    await this.goTo(app, "/app/settings/mfa");
   }
 
   /**
