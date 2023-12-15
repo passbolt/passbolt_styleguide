@@ -85,12 +85,19 @@ class StandaloneTotpViewModel extends TotpViewModel {
       name: url.pathname.substring(7).split(":").join(": "),
       uri: url.searchParams.get('issuer') || "",
       secret_key: url.searchParams.get('secret').toUpperCase(),
-      algorithm: url.searchParams.get('algorithm'),
+      algorithm: url.searchParams.get('algorithm') || TotpViewModel.SUPPORTED_ALGORITHMS[0],
       digits: parseInt(url.searchParams.get('digits'), 10) || 6,
       period: parseInt(url.searchParams.get('period'), 10) || 30,
     };
 
-    return new StandaloneTotpViewModel(totp);
+    const standaloneTotp =  new StandaloneTotpViewModel(totp);
+    const errors = standaloneTotp.validate();
+
+    if (!errors.hasErrors()) {
+      return standaloneTotp;
+    } else {
+      throw errors;
+    }
   }
 }
 
