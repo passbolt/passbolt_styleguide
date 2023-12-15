@@ -23,6 +23,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {getUserStatus} from "../../../../shared/utils/userUtils";
 
 class ReviewAccountRecoveryRequest extends Component {
   constructor(props) {
@@ -128,6 +129,15 @@ class ReviewAccountRecoveryRequest extends Component {
   }
 
   /**
+   * Get the user role who initiated the account recovery request.
+   * @returns {object}
+   */
+  get creatorRole() {
+    const roleName = this.props.context.roles.find(role => role.id === this.creator.role_id).name;
+    return roleName;
+  }
+
+  /**
    * Get the user who initiated the account recovery request.
    * @returns {object}
    */
@@ -136,11 +146,11 @@ class ReviewAccountRecoveryRequest extends Component {
   }
 
   /**
-   * Get the creator first name.
-   * @returns {string}
+   * Get the creator name.
+   * @returns {JSX}
    */
-  get creatorFirstName() {
-    return this.creator.profile.first_name;
+  get creatorName() {
+    return (<>{this.creator.profile.first_name} {this.creator.profile.last_name} ({this.creator.username})</>);
   }
 
   /**
@@ -172,7 +182,7 @@ class ReviewAccountRecoveryRequest extends Component {
    * @returns {JSX}
    */
   render() {
-    const requesterFirstname = this.creatorFirstName;
+    const creatorStatus = getUserStatus(this.creator);
     return (
       <DialogWrapper
         title={this.translate("Review account recovery request")}
@@ -187,12 +197,18 @@ class ReviewAccountRecoveryRequest extends Component {
                   <div className="content">
                     <div>
                       <Tooltip message={this.fingerprint} direction="bottom">
-                        <span className="name-with-tooltip">{requesterFirstname}</span>
+                        <span className="name-with-tooltip">{this.creatorName}</span>
                       </Tooltip>
                       &nbsp;
                       <span className="name"><Trans>requested an account recovery</Trans></span>
                     </div>
-                    <div className="subinfo light">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</div>
+                    <div className="subinfo light">
+                      <span className="dateTimeAgo">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
+                      <span className="chips-group">
+                        <span className={`chips user-status ${creatorStatus}`}>{this.props.t(creatorStatus)}</span>
+                        <span className={`chips user-role ${this.creatorRole}`}>{this.creatorRole}</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <UserAvatar
@@ -214,7 +230,7 @@ class ReviewAccountRecoveryRequest extends Component {
                 <label htmlFor="statusRecoverAccountReject">
                   <span className="name"><Trans>Reject</Trans></span>
                   <span className="info">
-                    <Trans>{{requesterFirstname}} did not initiate this request.</Trans>
+                    <Trans>{this.creatorName} did not initiate this request.</Trans>
                   </span>
                 </label>
               </div>
@@ -229,7 +245,7 @@ class ReviewAccountRecoveryRequest extends Component {
                 <label htmlFor="statusRecoverAccountAccept">
                   <span className="name"><Trans>Approve</Trans></span>
                   <span className="info">
-                    <Trans>I verified with <span>{{requesterFirstname}}</span> that the request is valid.</Trans>
+                    <Trans>I verified with <span>{this.creatorName}</span> that the request is valid.</Trans>
                   </span>
                 </label>
               </div>

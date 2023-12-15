@@ -21,7 +21,7 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {withDialog} from "../../../contexts/DialogContext";
 import ShareDialog from "../../Share/ShareDialog";
 import {Trans, withTranslation} from "react-i18next";
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 const PERMISSIONS_LABEL = {
   1: 'can read',

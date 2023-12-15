@@ -25,7 +25,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation, Trans} from "react-i18next";
 import DisplayUserDetailsAccountRecovery from "../DisplayUserDetailsAccountRecovery/DisplayUserDetailsAccountRecovery";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 class DisplayUserDetails extends React.Component {
   /**

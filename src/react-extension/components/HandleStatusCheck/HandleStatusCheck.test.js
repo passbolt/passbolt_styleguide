@@ -15,12 +15,12 @@
 /**
  * Unit tests on SessionExpired in regard of specifications
  */
-import {waitFor} from "@testing-library/dom";
 import {defaultProps, defaultAccountRecoveryUserService, getOrganizationAccountRecoveryPolicy} from "./HandleStatusCheck.test.data";
 import HandleStatusCheck from "./HandleStatusCheck.test.page";
 import AccountRecoveryInviteUserSettingPreferenceDialog from "../../components/AccountRecovery/AccountRecoveryInviteUserSettingPreferenceDialog/AccountRecoveryInviteUserSettingPreferenceDialog";
 import MfaInviteUserSettingsPreferenceDialog from "../MFA/MfaInviteUserSettingsPreferenceDialog/MfaInviteUserSettingsPreferenceDialog";
 import {MfaPolicyEnumerationTypes} from "../../../shared/models/mfaPolicy/MfaPolicyEnumeration";
+import {waitForTrue} from "../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -29,14 +29,6 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks();
 });
-
-async function waitForTrue(callback) {
-  return waitFor(() => {
-    if (!callback()) {
-      throw new Error("state has not changed yet");
-    }
-  });
-}
 
 describe("As a logged in user, I have to approve or reject the new account recovery policy", () => {
   /**

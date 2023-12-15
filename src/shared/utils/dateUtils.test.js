@@ -13,44 +13,12 @@
  */
 
 import {DateTime} from "luxon";
-import {formatDateTimeAgo, formatExpirationDateTimeAgo, isUserSuspended} from "./dateUtils";
+import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "./dateUtils";
 import each from 'jest-each';
 
 describe("dateUtils", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  describe("::isUserSuspended", () => {
-    it("should return false if the user is not defined", () => {
-      expect.assertions(1);
-      const user = undefined;
-      expect(isUserSuspended(user)).toStrictEqual(false);
-    });
-
-    it("should return false if the user has no `disabled` property", () => {
-      expect.assertions(1);
-      const user = {};
-      expect(isUserSuspended(user)).toStrictEqual(false);
-    });
-
-    it("should return false if the user a `disabled` property but falsy", () => {
-      expect.assertions(1);
-      const user = {disabled: false};
-      expect(isUserSuspended(user)).toStrictEqual(false);
-    });
-
-    it("should return false if the user a `disabled` property but later than now", () => {
-      expect.assertions(1);
-      const user = {disabled: new Date("3023-11-11T08:09:00")};
-      expect(isUserSuspended(user)).toStrictEqual(false);
-    });
-
-    it("should return true if the user a `disabled` set before now", () => {
-      expect.assertions(1);
-      const user = {disabled: new Date("2022-11-11T08:09:00")};
-      expect(isUserSuspended(user)).toStrictEqual(true);
-    });
   });
 
   describe("::formatDateTimeAgo", () => {
