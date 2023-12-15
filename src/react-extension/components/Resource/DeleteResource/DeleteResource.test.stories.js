@@ -2,7 +2,11 @@ import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DeleteResource from "./DeleteResource";
-import {defaultAppContext} from "./DeleteResource.test.data";
+import {
+  defaultPropsMultipleResource,
+  defaultPropsOneResource,
+  defaultPropsOneResourceLongPassword
+} from "./DeleteResource.test.data";
 
 
 export default {
@@ -17,28 +21,13 @@ const Template = context => args =>
     </MemoryRouter>
   </AppContext.Provider>;
 
-export const SinglePassword = Template(defaultAppContext()).bind({});
-SinglePassword.args = {
-  onClose: () => {}
-};
+export const SinglePassword = Template().bind({});
+SinglePassword.args = defaultPropsOneResource();
 
-export const MultiplePassword = Template(defaultAppContext({passwordDeleteDialogProps: {
-  resources: [
-    {name: "My Password"},
-    {name: "My Another Password"}
-  ]
-}})).bind({});
-MultiplePassword.args = {
-  onClose: () => {}
-};
+export const MultiplePassword = Template().bind({});
+MultiplePassword.args = defaultPropsMultipleResource();
 
 
 
-export const WithLongPassword = Template(defaultAppContext({passwordDeleteDialogProps: {
-  resources: [
-    {name: "MyPassword".repeat(10)},
-  ]
-}})).bind({});
-MultiplePassword.args = {
-  onClose: () => {}
-};
+export const WithLongPassword = Template().bind({});
+WithLongPassword.args = defaultPropsOneResourceLongPassword();

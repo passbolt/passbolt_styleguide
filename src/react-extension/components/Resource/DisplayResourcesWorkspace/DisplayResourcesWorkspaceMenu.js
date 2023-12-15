@@ -158,11 +158,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle delete one or more resources
    */
   handleDeleteClickEvent() {
-    const passwordDeleteDialogProps = {
-      resources: this.selectedResources
-    };
-    this.props.context.setContext({passwordDeleteDialogProps});
-    this.props.dialogContext.open(DeleteResource);
+    this.props.dialogContext.open(DeleteResource, {resources: this.selectedResources});
     this.handleCloseMoreMenu();
   }
 

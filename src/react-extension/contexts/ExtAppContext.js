@@ -89,11 +89,6 @@ class ExtAppContextProvider extends React.Component {
       // passphrase dialog
       passphraseRequestId: '',
 
-      // Resource delete dialogs
-      passwordDeleteDialogProps: {
-        resources: null
-      },
-
       // folder dialogs
       folder: {},
       folderMoveStrategyProps: {

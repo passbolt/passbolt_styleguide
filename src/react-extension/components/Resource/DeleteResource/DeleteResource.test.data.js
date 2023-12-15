@@ -1,28 +1,44 @@
-import MockPort from "../../../test/mock/MockPort";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any | ({port: MockPort} & {})}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort(),
-    passwordDeleteDialogProps: {
-      resources: [resourcesMock[0]]
-    },
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
-
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
 
 /**
  * Default props one selected resource owned
- * @returns {{resourceWorkspaceContext}}
+ * @returns {*}
  */
 export function defaultPropsOneResource() {
   return {
-    onClose: jest.fn()
+    context: defaultUserAppContext(),
+    resources: [resourcesMock[0]],
+    onClose: jest.fn(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+  };
+}
+
+/**
+ * Default props multiple selected resource owned
+ * @returns {*}
+ */
+export function defaultPropsMultipleResource() {
+  return {
+    context: defaultUserAppContext(),
+    resources: resourcesMock,
+    onClose: jest.fn(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+  };
+}
+
+/**
+ * Default props multiple selected resource owned
+ * @returns {*}
+ */
+export function defaultPropsOneResourceLongPassword() {
+  const resource = resourcesMock[0];
+  resource.name = "MyPassword".repeat(10);
+  return {
+    context: defaultUserAppContext(),
+    resources: [resource],
+    onClose: jest.fn(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
   };
 }
 

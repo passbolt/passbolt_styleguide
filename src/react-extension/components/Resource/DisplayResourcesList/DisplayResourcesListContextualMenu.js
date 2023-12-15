@@ -209,8 +209,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   handleDeleteClickEvent() {
     const resources = [this.resource];
-    this.props.context.setContext({passwordDeleteDialogProps: {resources}});
-    this.props.dialogContext.open(DeleteResource);
+    this.props.dialogContext.open(DeleteResource, {resources});
     this.props.hide();
   }
 

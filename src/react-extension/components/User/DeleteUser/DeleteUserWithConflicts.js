@@ -524,12 +524,12 @@ class DeleteUserWithConflicts extends Component {
             }
             {this.hasResourcesConflict() &&
             <div>
-              <h3>Passwords</h3>
+              <h3><Trans>Resources</Trans></h3>
               <ul className="ownership-transfer-items">
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:</label>
                       <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
                     </div>
                   </li>
@@ -539,7 +539,7 @@ class DeleteUserWithConflicts extends Component {
             }
             {this.hasGroupsConflict() &&
             <div>
-              <h3>Groups</h3>
+              <h3><Trans>Groups</Trans></h3>
               <ul className="ownership-transfer-items">
                 {this.groupsErrors.map(groupError =>
                   <li key={groupError.id}>
