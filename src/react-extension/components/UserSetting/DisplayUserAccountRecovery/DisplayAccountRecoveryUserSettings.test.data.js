@@ -12,6 +12,7 @@
  * @since         3.6.0
  */
 
+import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 /**
@@ -30,21 +31,19 @@ export function defaultProps(data = {}) {
   return Object.assign(defaultProps, data);
 }
 
-export const mockedData = {
+export const defaultAccountRecoveryPolicyDto = data => ({
   policy: {
     policy: "opt-out"
   },
   creator: {
-    profile: {
-      first_name: "Ada",
-      last_name: "Lovelace"
-    },
+    ...users.ada,
     gpgkey: {
       fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
     },
   },
-  modified: "2022-01-13T15:27:26.301Z"
-};
+  modified: "2022-01-13T15:27:26.301Z",
+  ...data
+});
 
 export function getAccountRecoveryUserService(mockedData) {
   return {

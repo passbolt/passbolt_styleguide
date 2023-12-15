@@ -20,7 +20,7 @@ import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettin
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
 import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
-import {adminRoleDto, TEST_ROLE_ADMIN_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
+import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
 import {resourceTypesCollectionDto} from "../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
@@ -50,6 +50,9 @@ export function defaultAppContext(appContext = {}) {
     roles: [{
       id: TEST_ROLE_ADMIN_ID,
       name: 'admin'
+    }, {
+      id: TEST_ROLE_USER_ID,
+      name: 'user'
     }],
     setContext: jest.fn()
   };

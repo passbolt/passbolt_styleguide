@@ -20,7 +20,8 @@ import DeleteComment from "../DeleteResourceComment/DeleteComment";
 import {Trans, withTranslation} from "react-i18next";
 import {DateTime} from "luxon";
 import Icon from "../../../../shared/components/Icons/Icon";
-import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 class DisplayResourceCommentList extends React.Component {
   /**

@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import UserAvatar from "../../Avatar/UserAvatar";
 import GroupAvatar from "../../Avatar/GroupAvatar";
-import {isUserSuspended} from "../../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../../shared/utils/userUtils";
 import {Trans} from "react-i18next";
 
 class AutocompleteItem extends Component {

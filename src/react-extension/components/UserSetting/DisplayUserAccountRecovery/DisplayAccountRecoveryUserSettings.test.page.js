@@ -85,7 +85,7 @@ export default class DisplayAccountRecoveryUserSettingsPage {
    * @returns {HTMLElement}
    */
   get requestDate() {
-    return this.selector('.account-recovery-profile .account-recovery-status ul li .subinfo');
+    return this.selector('.account-recovery-profile .account-recovery-status ul li .subinfo .dateTimeAgo');
   }
 
   /**

@@ -26,6 +26,7 @@ import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {getUserStatus} from "../../../../shared/utils/userUtils";
 
 class ManageAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -156,6 +157,15 @@ class ManageAccountRecoveryUserSettings extends Component {
   }
 
   /**
+   * Get the user role who initiated the account recovery request.
+   * @returns {object}
+   */
+  get requestorRole() {
+    const roleName = this.props.context.roles.find(role => role.id === this.requestor.role_id).name;
+    return roleName;
+  }
+
+  /**
    * Get the user requesting the current user to subscribe to the account recovery program.
    * @returns {*}
    */
@@ -168,7 +178,7 @@ class ManageAccountRecoveryUserSettings extends Component {
    * @returns {string}
    */
   get requestorName() {
-    return `${this.requestor.profile.first_name} ${this.requestor.profile.last_name}`;
+    return (<>{this.requestor.profile.first_name} {this.requestor.profile.last_name} ({this.requestor.username})</>);
   }
 
   /**
@@ -206,6 +216,7 @@ class ManageAccountRecoveryUserSettings extends Component {
    * @returns {JSX}
    */
   render() {
+    const requestorStatus = getUserStatus(this.requestor);
     return (
       <DialogWrapper
         title={`${this.translate("Recovery")} (${this.type})`}
@@ -223,11 +234,17 @@ class ManageAccountRecoveryUserSettings extends Component {
                 <div className="content-wrapper">
                   <div className="content">
                     <Tooltip message={this.formatFingerprint(this.requestor.gpgkey.fingerprint)} direction="bottom">
-                      <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
+                      <span className="name-with-tooltip">{this.requestorName}</span>
                     </Tooltip>
                     &nbsp;
                     <span className="name"><Trans>requested this operation</Trans></span>
-                    <div className="subinfo light">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</div>
+                    <div className="subinfo light">
+                      <span className="dateTimeAgo">{formatDateTimeAgo(this.date, this.props.t, this.props.context.locale)}</span>
+                      <span className="chips-group">
+                        <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
+                        <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>

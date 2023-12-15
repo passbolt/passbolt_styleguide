@@ -16,6 +16,9 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import DisplayAccountRecoveryUserSettings from "./DisplayAccountRecoveryUserSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {defaultAccountRecoveryPolicyDto} from "./DisplayAccountRecoveryUserSettings.test.data";
 
 export default {
   title: "Components/UserSetting/DisplayAccountRecoveryUserSettings",
@@ -32,13 +35,7 @@ const Template = args =>
 
 
 const getTemplateArgs = () => ({
-  context: {
-    locale: "en-US",
-    userSettings: {
-      // eslint-disable-next-line no-undef
-      getTrustedDomain: () => process.env.ORIGIN_URL
-    }
-  },
+  context: defaultAppContext(),
   accountRecoveryContext: {
     status: "approved",
     isReady: () => true,
@@ -47,15 +44,13 @@ const getTemplateArgs = () => ({
       policy: "opt-out",
     }),
     getRequestor: () => ({
-      profile: {
-        first_name: "Ada",
-        last_name: "Lovelace"
-      },
+      ...users.ada,
       gpgkey: {
         fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
       }
     }),
-    getRequestedDate: () => "2021-05-25T09:08:34.123"
+    getRequestedDate: () => "2021-05-25T09:08:34.123",
+    getOrganizationPolicy: () => defaultAccountRecoveryPolicyDto()
   }
 });
 

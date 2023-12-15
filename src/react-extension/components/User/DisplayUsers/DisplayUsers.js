@@ -23,7 +23,8 @@ import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/Use
 import DisplayUsersContextualMenu from "../DisplayUsersContextualMenu/DisplayUsersContextualMenu";
 import {Trans, withTranslation} from "react-i18next";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 
 /**
