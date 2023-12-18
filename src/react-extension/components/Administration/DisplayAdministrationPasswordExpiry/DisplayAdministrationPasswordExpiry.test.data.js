@@ -33,7 +33,6 @@ export function defaultPropsPro(data = {}) {
   defaultData.context.siteSettings.canIUse = () => true;
   return Object.assign(defaultData, data);
 }
-
 /**
  * Props with API flags disabled
  * @param {object} props Override the default props.

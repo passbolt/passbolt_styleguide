@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withTranslation} from "react-i18next";
 import PasswordExpirySettingsViewModel from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsViewModel";
+import PasswordExpiryProSettingsEntity from "../../../../shared/models/entity/passwordExpiryPro/passwordExpiryProSettingsEntity";
 
 /**
  * The Administration User Passphrase Policies Context
@@ -34,7 +35,8 @@ export const AdministrationPasswordExpiryContext = React.createContext({
   isFeatureToggleEnabled: () => {}, // returns the main toggle is enable for UI
   setFeatureToggle: () => {}, // enable or disable the feature by the users
   hasSettingsChanges: () => {}, // returns true if the data has changed
-  isDefaultExpiryPeriodEnabled: () => {}, // returns if the default period is enable
+  isSubmitted: () => {}, // returns if the form has been submitted
+  setSubmitted: () => {}, // set submitted state
   setDefaultExpiryToggle: () => {}, // enable or disable the feature by the users
 });
 
@@ -60,7 +62,7 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
       errors: null,
       hasBeenValidated: false,
       isDataModified: false,
-      defaultExpiryPeriodToggle: true, //The default expiry period toggle
+      submitted: false,
       currentSettings: new PasswordExpirySettingsViewModel(), // the saved settings from db
       featureToggleEnabled: false, // the main toggle from the page state
       settings: new PasswordExpirySettingsViewModel(), // the current password expiry settings
@@ -75,7 +77,8 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
       isFeatureToggleEnabled: this.isFeatureToggleEnabled.bind(this), // returns the main toggle is enable for UI
       setFeatureToggle: this.setFeatureToggle.bind(this), // enable or disable the feature by the users
       setDefaultExpiryToggle: this.setDefaultExpiryToggle.bind(this), // set the default expiry toggle
-      isDefaultExpiryPeriodEnabled: this.isDefaultExpiryPeriodEnabled.bind(this), // returns if the default period is enable
+      isSubmitted: this.isSubmitted.bind(this), // returns if the form has been submitted
+      setSubmitted: this.setSubmitted.bind(this) // set submitted state
     };
   }
 
@@ -85,16 +88,15 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
    */
   async findSettings() {
     this.setState({processing: true});
+    this.setState({submitted: false});
 
     const result = await this.props.context.port.request("passbolt.password-expiry.find");
     const settings = PasswordExpirySettingsViewModel.fromEntityDto(result);
-    const defaultExpiryPeriodToggle = settings.default_expiry_period !== null;
 
     //Init saved setting
     this.setState({
       toggleEnabled: settings?.id,
       settings,
-      defaultExpiryPeriodToggle,
       currentSettings: settings,
       processing: false,
     });
@@ -105,13 +107,12 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
    * @returns {void}
    */
   setDefaultExpiryToggle(value) {
-    //Set value by default if value is null
+    let default_expiry_period = this.state.settings.default_expiry_period;
     if (value && this.state.settings.default_expiry_period === null) {
-      this.setSettingsBulk({default_expiry_period: 90});
+      //Set value to its default if the toggle is on but the value is null
+      default_expiry_period = 90;
     }
-    this.setState({
-      defaultExpiryPeriodToggle: value
-    });
+    this.setSettingsBulk({default_expiry_period_toggle: value, default_expiry_period});
   }
 
   /**
@@ -120,6 +121,22 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
    */
   getSettings() {
     return this.state.settings;
+  }
+
+  /**
+   * Set submitted variable
+   * @returns {object}
+   */
+  setSubmitted(value) {
+    this.setState({submitted: value});
+  }
+
+  /**
+   * Returns if the form has been submitted.
+   * @returns {object}
+   */
+  isSubmitted() {
+    return this.state.submitted;
   }
 
   /**
@@ -137,8 +154,8 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
       this.setState({settings: newSettings, isDataModified});
       return;
     }
-
-    const errors = newSettings.validate();
+    const isAdvanced = this.props.context.siteSettings.canIUse('passwordExpiryPolicies');
+    const errors = newSettings.validate(isAdvanced);
     this.setState({errors, settings: newSettings, isDataModified});
   }
 
@@ -156,13 +173,6 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
    */
   isFeatureToggleEnabled() {
     return this.state.toggleEnabled;
-  }
-
-  /**
-   * Returns true if the default expiry period is enable
-   */
-  isDefaultExpiryPeriodEnabled() {
-    return this.state.defaultExpiryPeriodToggle;
   }
 
   /**
@@ -209,16 +219,15 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
     this.setState({processing: true});
     const newState = {processing: false};
 
-
     try {
       const hasToDeleteSettings = !this.isFeatureToggleEnabled() && Boolean(this.state.settings.id);
       const newSettings = hasToDeleteSettings
         ? await this.doDeleteSettings()
         : await this.doSaveSettings();
-
       newState.settings = newSettings;
       newState.currentSettings = newSettings;
       newState.isDataModified = false;
+      newState.submitted = false;
     } finally {
       this.setState(newState);
     }
@@ -231,6 +240,9 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
    */
   async doDeleteSettings() {
     this.props.context.port.request("passbolt.password-expiry.delete", this.state.settings.id);
+    if (this.props.context.siteSettings.canIUse('passwordExpiryPolicies')) {
+      return new PasswordExpirySettingsViewModel(PasswordExpiryProSettingsEntity.createFromDefault().toDto());
+    }
     return new PasswordExpirySettingsViewModel();
   }
 
@@ -243,8 +255,8 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
     const isAdvanced = this.props.context.siteSettings.canIUse('passwordExpiryPolicies');
     const settings = this.state.settings.toEntityDto();
     // For pro version we set default expiry period to null if the toggle is disabled
-    if (isAdvanced && !this.isDefaultExpiryPeriodEnabled()) {
-      settings["default_expiry_period"] = null;
+    if (isAdvanced && !this.state.settings.default_expiry_period_toggle) {
+      settings.default_expiry_period = null;
     }
     const passwordExpirySettingsEntityDto = await this.props.context.port.request("passbolt.password-expiry.save", settings);
     return new PasswordExpirySettingsViewModel(passwordExpirySettingsEntityDto);

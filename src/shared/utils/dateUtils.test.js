@@ -13,7 +13,7 @@
  */
 
 import {DateTime} from "luxon";
-import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "./dateUtils";
+import {formatDateForApi, formatDateTimeAgo, formatExpirationDateTimeAgo} from "./dateUtils";
 import each from 'jest-each';
 
 describe("dateUtils", () => {
@@ -143,6 +143,20 @@ describe("dateUtils", () => {
 
       expect(spyOnDateTimeToRelative).toHaveBeenCalledWith({locale: language});
       expect(spyOnDateTimeToRelative).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("::formatDateForApi", () => {
+    it("should return a string compatible with the API format", () => {
+      expect.assertions(1);
+      const date = DateTime.fromISO("2023-05-07T09:45:23.190Z");
+
+      expect(formatDateForApi(date)).toStrictEqual("2023-05-07T09:45:23.190Z");
+    });
+
+    it("should return null if the given parameter is null", () => {
+      expect.assertions(1);
+      expect(formatDateForApi(null)).toBeNull();
     });
   });
 });

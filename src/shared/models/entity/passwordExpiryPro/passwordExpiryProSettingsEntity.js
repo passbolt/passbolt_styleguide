@@ -53,7 +53,8 @@ class PasswordExpiryProSettingsEntity extends Entity {
         "default_expiry_period": {
           "anyOf": [{
             "type": "integer",
-            "gte": 0,
+            "gte": 1,
+            "lte": 999
           }, {
             "type": "null"
           }]
@@ -70,6 +71,7 @@ class PasswordExpiryProSettingsEntity extends Entity {
         "expiry_notification": {
           "type": "integer",
           "gte": 1,
+          "lte": 999
         },
         "created": {
           "type": "string",
@@ -111,8 +113,7 @@ class PasswordExpiryProSettingsEntity extends Entity {
    */
   static createFromDefault(data = {}) {
     const defaultData = {
-      // Default value depends on the db value saved
-      default_expiry_period: data.id ? data.default_expiry_period : 90,
+      default_expiry_period: null,
       policy_override: false,
       automatic_expiry: true,
       automatic_update: true,
@@ -120,10 +121,6 @@ class PasswordExpiryProSettingsEntity extends Entity {
     };
 
     const dto = {...defaultData, ...data};
-    for (const key in dto) {
-      dto[key] ??= defaultData[key];
-    }
-
     return new PasswordExpiryProSettingsEntity(dto);
   }
 }

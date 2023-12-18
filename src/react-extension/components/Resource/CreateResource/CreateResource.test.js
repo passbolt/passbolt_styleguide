@@ -19,7 +19,7 @@ import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
+import {defaultAppContext, defaultProps, defaultResourceMeta} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {
@@ -29,6 +29,12 @@ import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
+import {formatDateForApi} from "../../../../shared/utils/dateUtils";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {defaultPasswordExpirySettingsEntityDto, overridenPasswordExpirySettingsEntityDto} from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import {DateTime} from "luxon";
+import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
+import {defaultProSiteSettings} from "../../../test/fixture/Settings/siteSettings.test.data";
 
 describe("See the Create Resource", () => {
   let page, props, context;
@@ -156,41 +162,35 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
-      const resourceMeta = {
-        name: "Password name",
-        uri: "https://uri.dev",
-        username: "Password username",
-        password: "password-value",
-        description: "Password description"
-      };
+      const resourceMeta = defaultResourceMeta();
+      const resourcePassword = "password-value";
+
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
       page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
-      await page.passwordCreate.fillInputPassword(resourceMeta.password);
-
-      expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
-      expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
       await page.passwordCreate.click(page.passwordCreate.descriptionEncryptedLock);
+
+      await page.passwordCreate.fillInputPassword(resourcePassword);
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
+      expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
 
       const requestMockImpl = jest.fn((message, data) => Object.assign({id: createdResourceId}, data));
       mockContextRequest(requestMockImpl);
       jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      const onApiUpdateResourceMeta = {
+      const onApiUpdateResourceMeta = defaultResourceMeta({
         folder_parent_id: null,
-        name: resourceMeta.name,
-        uri: resourceMeta.uri,
-        username: resourceMeta.username,
-        description: resourceMeta.description,
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
-      };
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+        expired: null,
+        ...resourceMeta
+      });
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
       await waitFor(() => {});
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceMeta, resourceMeta.password);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceMeta, resourcePassword);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.onClose).toBeCalled();
     });
@@ -199,22 +199,20 @@ describe("See the Create Resource", () => {
       expect.assertions(6);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
+
       // create password
-      const resourceMeta = {
-        name: "Password name",
-        uri: "https://uri.dev",
-        username: "Password username",
-        password: "password-value",
-        description: "Password description"
-      };
+      const resourceMeta = defaultResourceMeta();
+      const resourcePassword = "password-value";
+
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
       page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
-      await page.passwordCreate.fillInputPassword(resourceMeta.password);
+      page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
+
+      await page.passwordCreate.fillInputPassword(resourcePassword);
       expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
-      page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
 
       const requestMockImpl = jest.fn((message, data) => Object.assign({id: createdResourceId}, data));
       mockContextRequest(requestMockImpl);
@@ -222,15 +220,16 @@ describe("See the Create Resource", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       const onApiUpdateResourceDto = {
+        ...resourceMeta,
         folder_parent_id: null,
-        name: resourceMeta.name,
-        uri: resourceMeta.uri,
-        username: resourceMeta.username,
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        expired: null,
       };
+      delete onApiUpdateResourceDto.description;
+
       const onApiUpdateSecretDto = {
         description: resourceMeta.description,
-        password: resourceMeta.password
+        password: resourcePassword
       };
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
@@ -240,7 +239,278 @@ describe("See the Create Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I shouldn’t be able to submit the form if there is an invalid field', async() => {
+    describe("should set an expiry date on the created resource based on the password expiry configuration", () => {
+      it('with feature flag enabled and an existing password expiry configuration', async() => {
+        expect.assertions(3);
+
+        const expirationPeriod = 15;
+        const passwordExpirySettings = overridenPasswordExpirySettingsEntityDto({
+          default_expiry_period: expirationPeriod
+        });
+
+        const fakeNow = new Date('2023-01-01T00:00:00.000Z');
+
+        jest
+          .useFakeTimers()
+          .setSystemTime(fakeNow);
+
+        const expectedExpiryDate = DateTime.utc().plus({days: expirationPeriod});
+
+        const props = defaultProps({
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({
+            getSettings: () => passwordExpirySettings,
+          })
+        });
+        const context = defaultAppContext();
+        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
+
+        const page = new CreateResourcePage(context, props);
+        await waitFor(() => {});
+
+        expect(page.passwordCreate.exists()).toBeTruthy();
+        // create password
+        const resourceMeta = {
+          name: "Password name",
+          uri: "",
+          username: "",
+          password: "password-value",
+          description: "",
+          expired: formatDateForApi(expectedExpiryDate)
+        };
+
+        // Fill the form
+        page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+        await page.passwordCreate.fillInputPassword(resourceMeta.password);
+
+        //Reset the system time at the desired one as filling input runs some jest timers.
+        jest.setSystemTime(fakeNow);
+
+        const onApiUpdateResourceMeta = {
+          folder_parent_id: null,
+          name: resourceMeta.name,
+          uri: resourceMeta.uri,
+          username: resourceMeta.username,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          expired: resourceMeta.expired,
+        };
+
+        const createResourceSecretDto = {
+          description: '',
+          password: resourceMeta.password
+        };
+
+        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
+          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
+          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
+        });
+
+        await page.passwordCreate.click(page.passwordCreate.saveButton);
+      });
+
+      it('with feature flag enabled and default_expiry_period disabled', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps({
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({
+            getSettings: () => defaultPasswordExpirySettingsEntityDto({
+              default_expiry_period: null,
+            }),
+          }),
+        });
+
+        const context = defaultAppContext();
+
+        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
+
+        const page = new CreateResourcePage(context, props);
+        await waitFor(() => {});
+
+        expect(page.passwordCreate.exists()).toBeTruthy();
+        // create password
+        const resourceMeta = defaultResourceMeta({
+          uri: "",
+          username: "",
+          description: "",
+          expired: null
+        });
+
+        const resourcePassword = "password-value";
+
+        // Fill the form
+        page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+        await page.passwordCreate.fillInputPassword(resourcePassword);
+
+        const onApiUpdateResourceMeta = {
+          ...resourceMeta,
+          folder_parent_id: null,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        };
+        delete onApiUpdateResourceMeta.description;
+
+        const createResourceSecretDto = {
+          description: resourceMeta.description,
+          password: resourcePassword
+        };
+
+        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
+          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
+          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
+        });
+
+        await page.passwordCreate.click(page.passwordCreate.saveButton);
+      });
+
+      it('with a feature flag enabled but the password expiry disabled', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps({
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({
+            getSettings: () => null,
+          })
+        });
+        const context = defaultAppContext();
+        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
+
+        const page = new CreateResourcePage(context, props);
+        await waitFor(() => {});
+
+        expect(page.passwordCreate.exists()).toBeTruthy();
+        // create password
+        const resourceMeta = {
+          name: "Password name",
+          uri: "",
+          username: "",
+          password: "password-value",
+          description: "",
+        };
+
+        // Fill the form
+        page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+        await page.passwordCreate.fillInputPassword(resourceMeta.password);
+
+        const onApiUpdateResourceMeta = {
+          folder_parent_id: null,
+          name: resourceMeta.name,
+          uri: resourceMeta.uri,
+          username: resourceMeta.username,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        };
+
+        const createResourceSecretDto = {
+          description: '',
+          password: resourceMeta.password
+        };
+
+        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
+          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
+          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
+        });
+
+        await page.passwordCreate.click(page.passwordCreate.saveButton);
+      });
+
+      it('with feature flag disabled', async() => {
+        expect.assertions(3);
+
+        const props = defaultProps({
+          passwordExpiryContext: defaultPasswordExpirySettingsContext({
+            isFeatureEnabled: () => false,
+          })
+        });
+
+        const context = defaultAppContext();
+
+        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
+
+        const page = new CreateResourcePage(context, props);
+        await waitFor(() => {});
+
+        expect(page.passwordCreate.exists()).toBeTruthy();
+        // create password
+        const resourceMeta = {
+          name: "Password name",
+          uri: "",
+          username: "",
+          password: "password-value",
+          description: "",
+        };
+
+        // Fill the form
+        page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+        await page.passwordCreate.fillInputPassword(resourceMeta.password);
+
+        const onApiUpdateResourceMeta = {
+          folder_parent_id: null,
+          name: resourceMeta.name,
+          uri: resourceMeta.uri,
+          username: resourceMeta.username,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        };
+
+        const createResourceSecretDto = {
+          description: '',
+          password: resourceMeta.password
+        };
+
+        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
+          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
+          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
+        });
+
+        await page.passwordCreate.click(page.passwordCreate.saveButton);
+      });
+    });
+
+    it('should ask for a resource to be created without expiry date if password expiry feature flag is deactivated.', async() => {
+      expect.assertions(3);
+
+      const props = defaultProps();
+      const proSettings = defaultProSiteSettings();
+      proSettings.passbolt.plugins.passwordPolicies.enabled = false;
+      const siteSettings = new SiteSettings(proSettings);
+      const context = defaultAppContext({siteSettings});
+
+      context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
+
+      const page = new CreateResourcePage(context, props);
+      await waitFor(() => {});
+
+      expect(page.passwordCreate.exists()).toBeTruthy();
+      // create password
+      const resourceMeta = defaultResourceMeta({
+        uri: "",
+        username: "",
+        description: "",
+        expired: null
+      });
+      const resourcePassword = "password-value";
+
+      // Fill the form
+      page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
+      await page.passwordCreate.fillInputPassword(resourcePassword);
+
+      const onApiUpdateResourceMeta = {
+        ...resourceMeta,
+        folder_parent_id: null,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        expired: resourceMeta.expired,
+      };
+      delete onApiUpdateResourceMeta.description;
+
+      const createResourceSecretDto = {
+        description: '',
+        password: resourcePassword
+      };
+
+      context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
+        expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
+        expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
+      });
+
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+    });
+
+    it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
       expect.assertions(3);
       expect(page.passwordCreate.exists()).toBeTruthy();
       await page.passwordCreate.click(page.passwordCreate.saveButton);

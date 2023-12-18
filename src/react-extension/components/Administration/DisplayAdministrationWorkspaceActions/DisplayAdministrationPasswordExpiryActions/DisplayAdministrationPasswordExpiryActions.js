@@ -55,6 +55,8 @@ class DisplayAdministrationPasswordExpiryActions extends React.Component {
    * @return {Promise<void>}
    */
   async handleSave() {
+    this.props.adminPasswordExpiryContext.setSubmitted(true);
+
     if (!this.isActionEnabled || !this.props.adminPasswordExpiryContext.validateData()) {
       return;
     }

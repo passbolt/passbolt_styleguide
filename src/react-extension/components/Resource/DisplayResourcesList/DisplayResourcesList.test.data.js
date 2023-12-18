@@ -51,6 +51,7 @@ const getResources = () => [
   defaultResourceDto({name: 'test'}),
   resourceWithTotpDto({name: 'totp'}),
   resourceStandaloneTotpDto({name: 'standalone totp'}),
+  defaultResourceDto({name: 'will-expire', expired: "3023-12-25T00:00:00.000Z"}),
 ];
 
 /**
