@@ -37,6 +37,7 @@ import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {DateTime} from "luxon";
+import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -61,6 +62,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handleTotpClickEvent = this.handleTotpClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
+    this.handleSetExpiryDateClick = this.handleSetExpiryDateClick.bind(this);
     this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
   }
 
@@ -227,15 +229,27 @@ class DisplayResourcesListContextualMenu extends React.Component {
   async handleMarkAsExpiredClick() {
     try {
       await this.props.context.port.request("passbolt.resources.set-expiration-date", [{id: this.resource.id, expired: formatDateForApi(DateTime.utc())}]);
-      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired"));
+      // a count: 1 is used to minimize the translation file as a singular/plural version already exist.
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: 1}));
     } catch (error) {
-      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired"));
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: 1}));
     } finally {
       this.props.hide();
     }
   }
 
   /**
+   * Handle set expiry date click.
+   */
+  handleSetExpiryDateClick() {
+    this.props.dialogContext.open(PasswordExpiryDialog, {
+      resources: [this.resource]
+    });
+    this.props.hide();
+  }
+
+  /**
+   *
    * the resource selected
    * @returns {*}
    */
@@ -335,7 +349,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
 
   /**
    * Can use Totp
-   * @return {*}
+   * @return {boolean}
    */
   get canUseTotp() {
     return this.props.context.siteSettings.canIUse('totpResourceTypes');
@@ -439,20 +453,36 @@ class DisplayResourcesListContextualMenu extends React.Component {
           </div>
         </li>
         {this.canUsePasswordExpiry &&
-          <li key="option-mark-as-expired-resource" className="ready separator-after">
-            <div className="row">
-              <div className="main-cell-wrapper">
-                <div className="main-cell">
-                  <button
-                    type="button"
-                    id="mark-as-expired"
-                    className="link no-border"
-                    disabled={!this.canUpdate()}
-                    onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
+          <>
+            <li key="option-set-expiry-date" className="ready">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      type="button"
+                      id="set-expiry-date"
+                      className="link no-border"
+                      disabled={!this.canUpdate()}
+                      onClick={this.handleSetExpiryDateClick}><span><Trans>Set expiry date</Trans></span></button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
+            <li key="option-mark-as-expired-resource" className="ready separator-after">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      type="button"
+                      id="mark-as-expired"
+                      className="link no-border"
+                      disabled={!this.canUpdate()}
+                      onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </>
         }
         <li key="option-edit-resource" className="ready">
           <div className="row">

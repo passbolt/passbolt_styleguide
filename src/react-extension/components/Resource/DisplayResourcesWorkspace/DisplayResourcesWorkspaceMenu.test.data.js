@@ -30,6 +30,7 @@ import {
   resourceWithFavoriteDto, resourceWithReadPermissionDto, resourceWithTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -70,7 +71,8 @@ export function defaultPropsOneResourceOwned() {
       onResourcesToExport: () => jest.fn(),
       onResourceCopied: () => jest.fn(),
       onChangeColumnView:  jest.fn()
-    })
+    }),
+    dialogContext: defaultDialogContext(),
   };
 }
 
@@ -161,6 +163,7 @@ export function defaultPropsMultipleResourceUpdateRights() {
       lockDisplayDetail: true
     }),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
+    dialogContext: defaultDialogContext(),
   };
 }
 

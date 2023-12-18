@@ -764,8 +764,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * @param filter A "expired" filter
    */
   async seachByExpired(filter) {
-    const now = new Date();
-    const filteredResources = this.resources.filter(resource => resource.expired && new Date(resource.expired) <= now);
+    const aboutToExpireDelay = this.props.passwordExpiryContext.getExpiryNotificationDelay();
+    const expirationDateThreshold = DateTime.utc().plus({days: aboutToExpireDelay}).toJSDate();
+    const filteredResources = this.resources.filter(resource => resource.expired && new Date(resource.expired) <= expirationDateThreshold);
     this.setState({filter, filteredResources});
   }
 

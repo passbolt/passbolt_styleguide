@@ -67,6 +67,24 @@ export const defaultPasswordExpirySettingsEntityDto = (data = {}) => {
 };
 
 /**
+ * The default password expiry settings Entity DTO
+ * This DTO has the same structure has the one served by the API/Bext
+ * @param {Object} data The data to override
+ * @returns {Object}
+ */
+export const overridenPasswordExpirySettingsEntityDto = (data = {}) => {
+  const defaultData = {
+    automatic_update: true,
+    automatic_expiry: true,
+    policy_override: true,
+    default_expiry_period: 30,
+    expiry_notification: 2,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+/**
  * A password expiry settings Entity DTO as registered on the API
  * @param {Object} data The data to override
  * @returns {Object}

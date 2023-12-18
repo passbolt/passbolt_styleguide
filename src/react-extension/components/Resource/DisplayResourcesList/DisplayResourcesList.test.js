@@ -89,12 +89,13 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      expect(page.resourcesCount).toBe(5);
+      expect(page.resourcesCount).toBe(6);
       expect(page.resource(1).name).toBe('apache');
       expect(page.resource(2).name).toBe('bower');
       expect(page.resource(3).name).toBe('test');
       expect(page.resource(4).name).toBe('totp');
       expect(page.resource(5).name).toBe('standalone totp');
+      expect(page.resource(6).name).toBe('will-expire');
     });
   });
 

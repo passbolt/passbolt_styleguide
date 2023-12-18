@@ -32,7 +32,6 @@ describe("See Resource FilterResourcesByShortcuts", () => {
      * Given a selected filter type
      * And I should be able to identify the filter type selected
      */
-
     it('As LU I should see the filter by shortcuts', () => {
       const props = defaultProps(); // The prop
       const page = new FilterResourcesByShortcutsPage(props);

@@ -39,7 +39,7 @@ describe("passwordExpiryProSettings entity", () => {
       automatic_expiry: true,
       policy_override: false,
       expiry_notification: 2,
-      default_expiry_period: 90
+      default_expiry_period: null
     });
   });
 

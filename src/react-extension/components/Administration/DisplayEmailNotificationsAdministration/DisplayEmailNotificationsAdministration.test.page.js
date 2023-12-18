@@ -259,6 +259,13 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
+   * Returns the "password is about to expired" notification for the resource owner input element
+   */
+  get passwordExpiryAboutToExpire() {
+    return this._page.container.querySelector('#password-expiry-about-to-expire-toggle-button');
+  }
+
+  /**
    * Returns the show username input element
    */
   get showUsername() {

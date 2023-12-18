@@ -16,6 +16,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {withTranslation} from "react-i18next";
+import {formatDateForApi} from "../../shared/utils/dateUtils";
+import {DateTime} from "luxon";
 
 /**
  * The User Passphrase Policies Context
@@ -23,6 +25,8 @@ import {withTranslation} from "react-i18next";
  */
 export const PasswordExpirySettingsContext = React.createContext({
   getSettings: () => {}, // Returns settings for UI changes
+  getExpiryNotificationDelay: () => {}, // Returns the configured expiry_notification or 0 if none
+  getDefaultExpirationDate: () => {}, // Returns the expiry date based on the configuration if any.
   findSettings: () => {}, // request the settings from the background page
   isFeatureEnabled: () => {}, // Returns true if the feature flag is enabled and the settings are set
 });
@@ -48,6 +52,8 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
       settings: null, // the current password expiry settings
       findSettings: this.findSettings.bind(this), // find the Password expiry settings
       getSettings: this.getSettings.bind(this), // returns the settings that have been fetch previously
+      getExpiryNotificationDelay: this.getExpiryNotificationDelay.bind(this), // Returns the configured expiry_notification or 0 if none
+      getDefaultExpirationDate: this.getDefaultExpirationDate.bind(this), // Returns the expiry date based on the configuration if any.
       isFeatureEnabled: this.isFeatureEnabled.bind(this), // Returns true if the feature flag is enabled and the settings are set
     };
   }
@@ -73,6 +79,33 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
   }
 
   /**
+   * Returns the expiry notification delay configured or 0 by defaults.
+   * @returns {number}
+   */
+  getExpiryNotificationDelay() {
+    return this.getSettings()?.expiry_notification || 0;
+  }
+
+  /**
+   * Returns the expiry date based on the configuration if any.
+   * @returns {string|null}
+   */
+  getDefaultExpirationDate() {
+    if (!this.props.context.siteSettings.canIUse('passwordExpiryPolicies')) {
+      return null;
+    }
+
+    const settings = this.getSettings();
+    if (!settings?.default_expiry_period) {
+      return null;
+    }
+
+    const durationInDays = settings.default_expiry_period;
+    const expirationDate = DateTime.utc().plus({days: durationInDays});
+    return formatDateForApi(expirationDate);
+  }
+
+  /**
    * Returns true if the feature flag is enabled and the settings are set.
    * @returns {boolean}
    */
@@ -82,7 +115,7 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
       return false;
     }
 
-    const areSettingsEnabled = settings.automatic_expiry || settings.policy_override || settings.automatic_update;
+    const areSettingsEnabled = Boolean(settings.id);
     return areSettingsEnabled;
   }
 
@@ -112,7 +145,7 @@ export default withAppContext(withTranslation('common')(PasswordExpirySettingsCo
  * @param WrappedComponent
  */
 export function withPasswordExpiry(WrappedComponent) {
-  return class WithAdminUserPassphrasePolicies extends React.Component {
+  return class WithPasswordExpiry extends React.Component {
     render() {
       return (
         <PasswordExpirySettingsContext.Consumer>

@@ -186,6 +186,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "desktop": {
         "enabled": true,
+      },
+      "passwordExpiryPolicies": {
+        "enabled": isProEdition,
       }
     }
   }

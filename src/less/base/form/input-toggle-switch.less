@@ -121,12 +121,21 @@
 }
 
 .togglelist-alt {
+  margin-top: 1.6rem;
+  border: 1px solid @default-border;
+  border-radius: 3px;
+  background-color: @input-radio-list-background;
+  padding: 1.6rem;
+
+  .toggle-input {
+    width: 4.2rem
+  }
+
+  .input.has-error.toggle-switch {
+    margin-bottom: 1.2rem;
+  }
   .toggle-switch {
-    margin-top: 1.6rem;
-    border: 1px solid default-border;
-    border-radius: 3px;
-    background-color: @input-radio-list-background;
-    padding: 1.6rem;
+    margin-bottom: 0;
 
     label {
       margin-left: 1.6rem;
@@ -167,6 +176,13 @@
           font-weight: bold;
         }
       }
+    }
+  }
+  .input {
+    .error-message {
+      margin-bottom: 0;
+      margin-top: 0.5rem;
+      margin-left: 4.1rem;
     }
   }
 }

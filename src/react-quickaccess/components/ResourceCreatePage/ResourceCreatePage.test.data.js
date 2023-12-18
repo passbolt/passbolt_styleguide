@@ -7,6 +7,8 @@ import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceConte
 import {defaultPasswordPoliciesContext} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../react-extension/contexts/PasswordExpirySettingsContext.test.data";
+import {overridenPasswordExpirySettingsEntityDto} from "../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
 
 export function defaultAppContext(appContext) {
   const defaultAppContext = defaultUserAppContext({
@@ -25,6 +27,9 @@ export function defaultAppContext(appContext) {
  */
 export const defaultProps = (props = {}) => ({
   prepareResourceContext: defaultPrepareResourceContext(),
+  passwordExpiryContext: defaultPasswordExpirySettingsContext({
+    getSettings: () => overridenPasswordExpirySettingsEntityDto()
+  }),
   passwordPoliciesContext: defaultPasswordPoliciesContext({
     getPolicies: jest.fn(() => defaultPasswordPoliciesDto())
   }),

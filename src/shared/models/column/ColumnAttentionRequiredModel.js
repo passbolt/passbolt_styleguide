@@ -30,7 +30,6 @@ class ColumnAttentionRequiredModel extends ColumnModel {
     columnDto.resizable = false;
     columnDto.draggable = false;
     columnDto.sortable = true;
-    columnDto.getValue = value => ({id: value.id, expired: value.expired});
     super(columnDto);
   }
 }

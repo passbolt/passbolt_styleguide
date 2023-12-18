@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.4.0
  */
+import {DateTime} from 'luxon';
 import {defaultPasswordExpirySettingsEntityDto} from '../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data';
 import {defaultUserAppContext} from './ExtAppContext.test.data';
 
@@ -23,10 +24,15 @@ export const defaultPasswordExpirySettingsContext = (data = {}) => {
     || Boolean(settings?.automatic_expiry)
     || Boolean(settings?.policy_override);
 
+  const defaultExpiryDate = DateTime.utc().plus({days: settings?.default_expiry_period}).toISO();
+  const expiryNotificationDelay = settings?.expiry_notification || 0;
+
   const defaultData = {
-    findSettings: jest.fn(),
-    getSettings: jest.fn(() => settings),
-    isFeatureEnabled: jest.fn(() => isFeatureEnabled),
+    findSettings: () => {},
+    getSettings: () => settings,
+    getExpiryNotificationDelay: () => expiryNotificationDelay,
+    isFeatureEnabled: () => isFeatureEnabled,
+    getDefaultExpirationDate: () => defaultExpiryDate
   };
 
   return Object.assign(defaultData, data);

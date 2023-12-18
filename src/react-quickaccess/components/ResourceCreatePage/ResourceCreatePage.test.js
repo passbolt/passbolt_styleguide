@@ -136,6 +136,12 @@ describe("ResourceCreatePage", () => {
 
   describe("Form submition", () => {
     it("should create a new password on submit", async() => {
+      const fakeNow = new Date("2023-11-24T00:00:00.000Z");
+      expect.assertions(6);
+      jest
+        .useFakeTimers()
+        .setSystemTime(fakeNow);
+
       const createPasswordEventMockCallback = jest.fn();
       const context = defaultAppContext();
       const props = defaultProps();
@@ -181,7 +187,7 @@ describe("ResourceCreatePage", () => {
         <MockTranslationProvider>
           <StaticRouter context={context}>
             <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
-              <ResourceCreatePage context={context} passwordPoliciesContext={props.passwordPoliciesContext} debug />
+              <ResourceCreatePage context={context} passwordPoliciesContext={props.passwordPoliciesContext} passwordExpiryContext={props.passwordExpiryContext} debug />
             </PrepareResourceContextProvider>
           </StaticRouter>
         </MockTranslationProvider>
@@ -209,6 +215,9 @@ describe("ResourceCreatePage", () => {
       await waitFor(() => {});
       expect(pwnedWarningMessage().textContent).toBe("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
 
+      //Reset the system time at the desired one as filling input runs some jest timers.
+      jest.setSystemTime(fakeNow);
+
       // Submit the form.
       const submitButton = component.container.querySelector('button[type="submit"]');
       fireEvent.click(submitButton, {button: 0});
@@ -221,7 +230,8 @@ describe("ResourceCreatePage", () => {
         name: "Passbolt Browser Extension Test",
         uri: "https://passbolt-browser-extension/test",
         username: "test@passbolt.com",
-        resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
+        resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+        expired: "2023-12-24T00:00:00.000Z",
       };
 
       const secretDto = {

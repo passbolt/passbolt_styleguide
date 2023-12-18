@@ -33,6 +33,8 @@ import {
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
 import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -58,9 +60,10 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     /**
      * Given an organization with 1 resource
-     * Then I should see the 10 menu
+     * Then I should see the 11 menu
      */
     it('As LU I should see all menu name', () => {
+      expect.assertions(22);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -81,6 +84,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the username of a resource', async() => {
@@ -158,6 +163,23 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
+
+    it('As LU I can mark a resource as expired', async() => {
+      expect.assertions(3);
+      jest.spyOn(props.context.port, "request");
+      await page.markAsExpired();
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.set-expiration-date", [{id: props.resource.id, expired: expect.any(String)}]);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+      expect(props.hide).toHaveBeenCalled();
+    });
+
+    it('As LU I can start to set expiry expiry date of a resource', async() => {
+      await page.setExpiryDate();
+      expect(props.dialogContext.open).toHaveBeenCalledWith(PasswordExpiryDialog, {
+        resources: [props.resource]
+      });
+      expect(props.hide).toHaveBeenCalled();
+    });
   });
 
   describe('As LU I should be able to access all the offered capabilities on totp resources I have owner access', () => {
@@ -193,6 +215,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.deleteItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeFalsy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeFalsy();
     });
 
     it('As LU I can start to copy the totp of a resource', async() => {
@@ -264,7 +288,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       page = new DisplayResourcesListContextualMenuPage(props);
     });
 
-    it('As LU I should not be able to edit/share/delete a password I have read only access', async() => {
+    it('As LU I should not be able to edit/share/delete/expire a password I have read only access', async() => {
+      expect.assertions(20);
       expect(page.copyUsernameItem).not.toBeNull();
       expect(page.copyUsernameItem.hasAttribute("disabled")).toBeFalsy();
       expect(page.copyPasswordItem).not.toBeNull();
@@ -283,6 +308,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.deleteItem.hasAttribute("disabled")).toBeTruthy();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute("disabled")).toBeTruthy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
@@ -312,6 +339,8 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
       expect(page.markAsExpiredItem).not.toBeNull();
       expect(page.markAsExpiredItem.hasAttribute('disabled')).toBeFalsy();
+      expect(page.setExpiryDateItem).not.toBeNull();
+      expect(page.setExpiryDateItem.hasAttribute("disabled")).toBeFalsy();
     });
   });
 
@@ -337,6 +366,29 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect(page.shareItem).toBeNull();
       expect(page.deleteItem).not.toBeNull();
       expect(page.deleteItem.hasAttribute('disabled')).toBeFalsy();
+    });
+  });
+
+  describe('As LU I should not see expiry feature items', () => {
+    it("when the feature flag is disabled", () => {
+      const props = propsResourceWithUpdatePermission();
+      props.passwordExpiryContext = defaultPasswordExpirySettingsContext();
+      props.passwordExpiryContext.isFeatureEnabled = () => false;
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.markAsExpiredItem).toBeNull();
+      expect(page.setExpiryDateItem).toBeNull();
+    });
+
+    it("when the feature flag is enabled but the settings are set to disabled", () => {
+      const props = propsResourceWithUpdatePermission();
+      props.passwordExpiryContext = defaultPasswordExpirySettingsContext({
+        policy_override: false,
+        automatic_update: false,
+        automatic_expiry: false,
+      });
+      page = new DisplayResourcesListContextualMenuPage(props);
+      expect(page.markAsExpiredItem).toBeNull();
+      expect(page.setExpiryDateItem).toBeNull();
     });
   });
 });

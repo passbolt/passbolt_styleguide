@@ -32,6 +32,11 @@ import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {
+  disabledPasswordExpirySettingsViewModelDto
+} from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import {DateTime} from "luxon";
 
 describe("See the Edit Resource", () => {
   const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
@@ -206,7 +211,8 @@ describe("See the Edit Resource", () => {
 
     it('requests the addon to edit a resource with encrypted description when clicking on the submit button.', async() => {
       expect.assertions(5);
-      const props = defaultProps(); // The props to pass
+      const passwordExpiryContext = defaultPasswordExpirySettingsContext({default_expiry_period: 365});
+      const props = defaultProps({passwordExpiryContext}); // The props to pass
       const resource = props.context.resources[0];
       mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
       const page = new EditResourcePage(props);
@@ -238,13 +244,16 @@ describe("See the Edit Resource", () => {
       jest.spyOn(props.context.port, 'request').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
+      const date = DateTime.utc().plus({days: props.passwordExpiryContext.default_expiry_period});
+
       const onApiUpdateResourceMeta = {
         id: resource.id,
         name: resourceMeta.name,
         uri: resourceMeta.uri,
         username: resourceMeta.username,
         description: "",
-        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        expired: date.toISO(),
       };
       const onApiUpdateSecretDto = {
         password: resourceMeta.password,
@@ -369,7 +378,8 @@ describe("See the Edit Resource", () => {
 
     it('requests the addon to edit a resource with non encrypted description when clicking on the submit button.', async() => {
       expect.assertions(6);
-      const props = defaultPropsLegacyResource(); // The props to pass
+      const passwordExpiryContext = defaultPasswordExpirySettingsContext(disabledPasswordExpirySettingsViewModelDto());
+      const props = defaultPropsLegacyResource({passwordExpiryContext}); // The props to pass
       const resource = props.context.resources[0];
       mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
       const page = new EditResourcePage(props);
@@ -381,7 +391,7 @@ describe("See the Edit Resource", () => {
         uri: "https://uri.dev",
         username: "Password username",
         password: "password-value",
-        description: "Password description"
+        description: "Password description",
       };
       // Fill the form
       page.passwordEdit.fillInput(page.passwordEdit.name, resourceMeta.name);

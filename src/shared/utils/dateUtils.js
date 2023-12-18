@@ -53,4 +53,4 @@ export const formatExpirationDateTimeAgo = (date, translate, locale) => {
  * @param {DateTime} date
  * @returns {string}
  */
-export const formatDateForApi = date => date.toISO();
+export const formatDateForApi = date => date?.toUTC().toISO() || null;

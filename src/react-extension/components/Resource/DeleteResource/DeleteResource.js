@@ -76,7 +76,7 @@ class DeleteResource extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been deleted successfully", {count: this.resources.length}));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been deleted successfully.", {count: this.resources.length}));
     this.props.onClose();
   }
 
