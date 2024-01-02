@@ -52,7 +52,7 @@ describe("ApiAccountRecoveryContextProvider", () => {
       await contextProvider.onInitializeAccountRecoveryRequested();
       expect(mockApiContinueFetch).toHaveBeenCalled();
       expect(contextProvider.state.state).toEqual(ApiAccountRecoveryContextState.UNEXPECTED_ERROR_STATE);
-      expect(contextProvider.state.unexpectedError.message).toEqual("Unexpected Error");
+      expect(contextProvider.state.unexpectedError.message).toEqual("Unable to reach the server, an unexpected error occurred");
     });
 
     it("should display a dedicated error if the user is already signed in and the machine state should be set to: ERROR_ALREADY_SIGNED_IN_STATE", async() => {
