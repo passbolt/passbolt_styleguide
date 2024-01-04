@@ -212,5 +212,26 @@ describe("DisplayRbacAdministration", () => {
       expect(page.select('user', uiActions.DESKTOP_TRANSFER)).toBeUndefined();
       expect(page.select('user', uiActions.MOBILE_TRANSFER)).toBeUndefined();
     });
+
+    it('As a logged in administrator I should not see the selected rbac function into the list of choices from the select', async() => {
+      expect.assertions(3);
+      const props = propsWithUpdatedRbacs();
+      jest.spyOn(props.adminRbacContext.rbacsUpdated, "remove");
+      jest.spyOn(props.adminRbacContext.rbacs, "findRbacByRoleAndUiActionName").mockImplementation(() => ({controlFunction: controlFunctions.DENY}));
+
+      const page = new DisplayRbacAdministrationPage(props);
+      await waitFor(() => {});
+
+      //Click to open the select
+      await page.click(page.select('user', uiActions.FOLDERS_USE));
+      //Expect have the unselected value
+      expect(page.selectItems('user', uiActions.FOLDERS_USE).children.length).toEqual(1);
+      expect(page.selectItems('user', uiActions.FOLDERS_USE).textContent).toEqual(controlFunctions.DENY);
+
+      //Change the value and expect Deny to not be present anymore
+      await page.clickToSelectFirstItem('user', uiActions.FOLDERS_USE);
+
+      expect(props.adminRbacContext.rbacsUpdated.remove).toHaveBeenCalledWith({"controlFunction": "Deny"});
+    });
   });
 });

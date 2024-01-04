@@ -16,6 +16,20 @@ import RbacsCollection from "../../../../shared/models/entity/rbac/rbacsCollecti
 import RolesCollection from "../../../../shared/models/entity/role/rolesCollection";
 import {rolesCollectionData} from "../../../../shared/models/entity/role/rolesCollection.test.data";
 import {settingsRbacsCollectionData} from "../../../../shared/models/entity/rbac/rbacsCollection.test.data";
+import {defaultAppContext} from "../../ApiAppContext.test.data";
+
+/**
+ * Default props.
+ * @returns {object}
+ * @param data
+ */
+export function defaultProps(data = {}) {
+  const defaultProps = {
+    context: defaultAppContext(data?.context),
+    adminRbacContext: defaultAdministrationRbacContext,
+  };
+  return Object.assign(defaultProps, data);
+}
 
 /**
  * Returns the default administration rbac context for the unit test
@@ -28,9 +42,12 @@ export function defaultAdministrationRbacContext(context = {}) {
     roles: null,
     rbacsUpdated: new RbacsCollection([]),
     setRbacs: jest.fn(),
+    isProcessing: jest.fn(),
     setRbacsUpdated: jest.fn(),
     updateRbacControlFunction: jest.fn(),
     clearContext: jest.fn(),
+    save: jest.fn(),
+    hasSettingsChanges: jest.fn(),
     ...context
   };
 }

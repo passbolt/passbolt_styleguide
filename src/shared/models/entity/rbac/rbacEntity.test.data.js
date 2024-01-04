@@ -80,3 +80,11 @@ export const defaultRbacWithAllAssociationData = (data = {}) => {
 };
 
 export const rbacWithUiActionName = (uiAction = uiActions.DESKTOP_TRANSFER) => defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiAction})});
+
+export const defaultUnknownRbac = (data = {}) => {
+  const defaultData = {
+    "control_function": "unknown",
+    "action": "unknown",
+  };
+  return Object.assign(defaultRbacData(defaultData, data));
+};
