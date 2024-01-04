@@ -100,6 +100,21 @@ export default class DisplayRbacAdministrationPage {
   }
 
   /**
+   * Returns the opened item list
+   * @param {string} id
+   */
+  selectItems(roleName, actionName) {
+    return this.row(actionName)?.querySelector(`.select-container.${roleName} .items`);
+  }
+
+  /**
+   * Returns the first item from the option list
+   */
+  selectFirstItemList(roleName, actionName) {
+    return this.row(actionName)?.querySelector(`.select-container.${roleName} .option[tabindex = "0"]`);
+  }
+
+  /**
    * Returns true if the page object exists in the container
    */
   exists() {
@@ -108,11 +123,18 @@ export default class DisplayRbacAdministrationPage {
 
   /**
    * Click on the element
-   *
+   * @param {HTMLElement} element
    */
   async click(element) {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
+  }
+
+  /**
+   * Click to select the first item from the list
+   */
+  async clickToSelectFirstItem(roleName, actionName) {
+    await this.click(this.selectFirstItemList(roleName, actionName));
   }
 }

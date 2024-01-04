@@ -97,8 +97,6 @@ export default class DisplayRbacItemPage {
    * @returns {Element}
    */
   getRoleOption(roleName, option) {
-    console.log(option);
-    console.log(this._page.container.querySelector(`.medium.${roleName} .items`).innerHTML);
     return this._page.container.querySelector(`.medium.${roleName} .option.${option}`);
   }
 
