@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import ManageSsoSettings from "./ManageSsoSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -19,6 +19,8 @@ import AdminSsoContextProvider from "../../../contexts/AdminSsoContext";
 import DisplayAdministrationSsoSettingsActions from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationSsoActions/DisplayAdministrationSsoActions";
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 /**
  * The ManageSsoSettings component represented as a page
@@ -41,13 +43,15 @@ export default class ManageSsoSettingsPage {
    */
   render(props) {
     this._page = render(<MockTranslationProvider>
-      <DialogContextProvider>
-        <AdminSsoContextProvider {...props}>
-          <ManageDialogs/>
-          <ManageSsoSettings {...props}/>
-          <DisplayAdministrationSsoSettingsActions/>
-        </AdminSsoContextProvider>
-      </DialogContextProvider>
+      <AppContext.Provider value={props.context}>
+        <DialogContextProvider>
+          <AdminSsoContextProvider {...props}>
+            <ManageDialogs/>
+            <ManageSsoSettings {...props}/>
+            <DisplayAdministrationSsoSettingsActions/>
+          </AdminSsoContextProvider>
+        </DialogContextProvider>
+      </AppContext.Provider>
     </MockTranslationProvider>);
   }
 
@@ -89,11 +93,7 @@ export default class ManageSsoSettingsPage {
   async clickOn(element, callback) {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
-    await waitFor(() => {
-      if (!callback()) {
-        throw new Error("Page didn't react yet on the event.");
-      }
-    });
+    await waitForTrue(() => callback());
   }
 
   /**
@@ -104,8 +104,7 @@ export default class ManageSsoSettingsPage {
    * @returns {Promise<void>}
    */
   async setFormWith(formData) {
-    let key;
-    for (key in formData) {
+    for (const key in formData) {
       const element = this[key];
       const value = formData[key];
       await (this.isSelectElement(element)
@@ -122,11 +121,6 @@ export default class ManageSsoSettingsPage {
    * @returns {Promise<void>}
    */
   async setSelectField(element, value) {
-    const currentValue = element.querySelector('.value').textContent;
-    if (currentValue === value) {
-      return;
-    }
-
     await this.clickOn(element, () => element.querySelectorAll('.option').length > 0);
     const availableValues = Array.from(element.querySelectorAll('.option'));
     const targetOptionElement = availableValues.find(el => el.textContent === value);
@@ -141,11 +135,7 @@ export default class ManageSsoSettingsPage {
    */
   async setInputField(element, value) {
     fireEvent.input(element, {target: {value: value}});
-    await waitFor(() => {
-      if (element.value !== value) {
-        throw new Error("The value is not set yet");
-      }
-    });
+    await waitForTrue(() => element.value === value);
   }
 
   /**
@@ -327,5 +317,45 @@ export default class ManageSsoSettingsPage {
    */
   get email_claim() {
     return this.select("#email-claim-input");
+  }
+
+  /**
+   * Returns the OAuth2 url input HTML element
+   * @returns {HTMLElement}
+   */
+  get oauth2_url() {
+    return this.select(".sso-settings #sso-oauth2-url-input");
+  }
+
+  /**
+   * Returns the OAuth2 client_id input HTML element
+   * @returns {HTMLElement}
+   */
+  get oauth2_client_id() {
+    return this.select(".sso-settings #sso-oauth2-client-id-input");
+  }
+
+  /**
+   * Returns the OAuth2 client_secret input HTML element
+   * @returns {HTMLElement}
+   */
+  get oauth2_client_secret() {
+    return this.select(".sso-settings #sso-oauth2-secret-input");
+  }
+
+  /**
+   * Returns the OAuth2 scope input HTML element
+   * @returns {HTMLElement}
+   */
+  get oauth2_scope() {
+    return this.select(".sso-settings #sso-oauth2-scope-input");
+  }
+
+  /**
+   * Returns the OAuth2 openid_configuration_path input HTML element
+   * @returns {HTMLElement}
+   */
+  get oauth2_openid_configuration_path() {
+    return this.select(".sso-settings #sso-oauth2-openid-configuration-path-input");
   }
 }

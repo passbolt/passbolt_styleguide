@@ -76,14 +76,14 @@ describe("SsoContextProvider", () => {
       await contextProvider.loadSsoConfiguration();
       await contextProvider.runSignInProcess();
 
-      expect(props.context.port.requestListeners["passbolt.sso.sign-in-with-azure"]).toHaveBeenCalledTimes(1);
+      expect(props.context.port.requestListeners["passbolt.sso.sign-in"]).toHaveBeenCalledTimes(1);
       expect(props.context.port.requestListeners["passbolt.auth.post-login-redirect"]).toHaveBeenCalledTimes(1);
     });
 
     it("Should throw an error when something wrong happens during sign-in", async() => {
       const error = new Error("An unexpected error occured");
       const props = defaultProps(null, "azure");
-      props.context.port.addRequestListener("passbolt.sso.sign-in-with-azure", jest.fn(() => Promise.reject(error)));
+      props.context.port.addRequestListener("passbolt.sso.sign-in", jest.fn(() => Promise.reject(error)));
       const contextProvider = new SsoContextProvider(props);
       mockComponentSetState(contextProvider);
 
@@ -97,7 +97,7 @@ describe("SsoContextProvider", () => {
         expect(e).toStrictEqual(error);
       }
 
-      expect(props.context.port.requestListeners["passbolt.sso.sign-in-with-azure"]).toHaveBeenCalledTimes(1);
+      expect(props.context.port.requestListeners["passbolt.sso.sign-in"]).toHaveBeenCalledTimes(1);
       expect(props.context.port.requestListeners["passbolt.auth.post-login-redirect"]).not.toHaveBeenCalled();
     });
 

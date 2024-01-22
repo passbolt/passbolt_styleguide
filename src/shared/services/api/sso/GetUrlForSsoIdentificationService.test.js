@@ -27,8 +27,8 @@ beforeEach(() => {
 });
 
 const scenarios = [
-  {providerId: 'azure'},
-  {providerId: 'google'},
+  {providerId: 'azure', expectedUrl: "https://login.microsoftonline.us"},
+  {providerId: 'google', expectedUrl: "https://accounts.google.com"},
 ];
 
 each(scenarios).describe("GetUrlForSsoIdentificationService", scenario => {
@@ -40,17 +40,16 @@ each(scenarios).describe("GetUrlForSsoIdentificationService", scenario => {
         .setBaseUrl(baseUrl);
 
       const expectedUrlCall = `${baseUrl}/sso/recover/${scenario.providerId}.json?api-version=v2`;
-      const expectedUrl = "https://login.microsoftonline.us";
 
       const service = new GetUrlForSsoIdentificationService(apiClientOptions);
 
       fetch.doMockOnce(req => {
         expect(req.method).toStrictEqual("POST");
         expect(req.url).toStrictEqual(expectedUrlCall);
-        return mockApiResponse({url: expectedUrl});
+        return mockApiResponse({url: scenario.expectedUrl});
       });
 
-      return expect(service.getUrl(scenario.providerId)).resolves.toStrictEqual(new URL(expectedUrl));
+      return expect(service.getUrl(scenario.providerId)).resolves.toStrictEqual(new URL(scenario.expectedUrl));
     });
 
     it('Should throw an Error if the domain in the response is not the exoected one', () => {

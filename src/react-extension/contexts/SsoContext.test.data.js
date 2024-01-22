@@ -33,7 +33,7 @@ function mockedTranslation(string, parameters) {
 export function defaultProps(data = {}, providerId = null) {
   const port = new MockPort();
   port.addRequestListener("passbolt.sso.get-local-configured-provider", jest.fn(() => Promise.resolve(providerId)));
-  port.addRequestListener("passbolt.sso.sign-in-with-azure", jest.fn(() => Promise.resolve()));
+  port.addRequestListener('passbolt.sso.sign-in', jest.fn(() => Promise.resolve()));
   port.addRequestListener("passbolt.auth.post-login-redirect", jest.fn(() => Promise.resolve()));
 
   const defaultAuthenticationLoginAppContext = {

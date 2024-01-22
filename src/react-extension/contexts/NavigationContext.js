@@ -190,7 +190,6 @@ class NavigationContextProvider extends React.Component {
    * @returns {Promise<void>}
    */
   async onGoToAdministrationMfaRequested() {
-    console.log("requested")
     await this.goTo("api", "/app/administration/mfa");
   }
 
