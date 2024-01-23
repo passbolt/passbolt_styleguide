@@ -62,7 +62,6 @@ class EmailNotificationDTO {
     this.show_username = "showUsername" in emailNotificationModel ? emailNotificationModel.showUsername : true;
     this.show_comment = "showComment" in emailNotificationModel ? emailNotificationModel.showComment : true;
     this.send_password_expire = "passwordExpiryExpiredUser" in emailNotificationModel ? emailNotificationModel.passwordExpiryExpiredUser : true;
-    this.send_password_aboutToExpire = "passwordExpiryAboutToExpire" in emailNotificationModel ? emailNotificationModel.passwordExpiryAboutToExpire : true;
   }
 }
 

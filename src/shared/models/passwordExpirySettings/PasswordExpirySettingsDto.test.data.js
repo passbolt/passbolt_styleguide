@@ -25,7 +25,6 @@ export const defaultPasswordExpirySettingsViewModelDto = (data = {}) => {
     policy_override: false,
     automatic_expiry: true,
     default_expiry_period: null,
-    expiry_notification: null,
   };
 
   return Object.assign(defaultData, data);
@@ -42,7 +41,6 @@ export const disabledPasswordExpirySettingsViewModelDto = (data = {}) => {
     policy_override: false,
     automatic_expiry: false,
     default_expiry_period: null,
-    expiry_notification: null,
   };
 
   return Object.assign(defaultData, data);
@@ -60,7 +58,6 @@ export const defaultPasswordExpirySettingsEntityDto = (data = {}) => {
     automatic_expiry: true,
     policy_override: false,
     default_expiry_period: null,
-    expiry_notification: null,
   };
 
   return Object.assign(defaultData, data);
@@ -78,7 +75,6 @@ export const overridenPasswordExpirySettingsEntityDto = (data = {}) => {
     automatic_expiry: true,
     policy_override: true,
     default_expiry_period: 30,
-    expiry_notification: 2,
   };
 
   return Object.assign(defaultData, data);

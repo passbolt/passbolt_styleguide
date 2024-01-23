@@ -139,46 +139,6 @@ describe("PasswordExpirySettingsContext", () => {
     });
   });
 
-  describe("::getExpiryNotificationDelay", () => {
-    it('should return 0 if the feature flag is disabled', async() => {
-      expect.assertions(1);
-
-      const props = defaultProps();
-      props.context.siteSettings.canIUse = () => false;
-
-      const context = new PasswordExpirySettingsContextProvider(props);
-      expect(context.getExpiryNotificationDelay()).toStrictEqual(0);
-    });
-
-    it('should return 0 if there is no settings set', async() => {
-      expect.assertions(1);
-
-      const props = defaultProps();
-      props.context.siteSettings.canIUse = () => true;
-
-      const context = new PasswordExpirySettingsContextProvider(props);
-      expect(context.getExpiryNotificationDelay()).toStrictEqual(0);
-    });
-
-    it('should return the date from the settings', async() => {
-      expect.assertions(1);
-
-      const expectedPeriod = 5;
-      const expectedSettings = defaultPasswordExpirySettingsEntityDto({
-        expiry_notification: expectedPeriod,
-      });
-
-      const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.find', () => expectedSettings);
-
-      const context = new PasswordExpirySettingsContextProvider(props);
-      mockState(context);
-
-      await context.findSettings();
-      expect(context.getExpiryNotificationDelay()).toStrictEqual(expectedPeriod);
-    });
-  });
-
   describe("::getDefaultExpirationDate", () => {
     it('should return null if the feature flag is disabled', async() => {
       expect.assertions(1);

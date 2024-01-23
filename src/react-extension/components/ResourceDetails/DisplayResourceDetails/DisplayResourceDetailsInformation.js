@@ -33,7 +33,6 @@ import Totp from "../../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
-import {DateTime} from "luxon";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -459,10 +458,8 @@ class DisplayResourceDetailsInformation extends React.Component {
       return false;
     }
 
-    const aboutToExpireDelay = this.props.passwordExpiryContext.getExpiryNotificationDelay();
     const expiryDate = new Date(this.resource.expired);
-
-    return expiryDate <= DateTime.utc().plus({days: aboutToExpireDelay}).toJSDate();
+    return expiryDate <= new Date();
   }
 
   /**

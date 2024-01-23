@@ -101,7 +101,6 @@ export const mockResult = {
   send_accountRecovery_response_created_allAdmins: true,
   send_accountRecovery_policy_update: true,
   send_password_expire: true,
-  send_password_aboutToExpire: true,
   sources_database: true,
   sources_file: false,
 };
@@ -148,7 +147,6 @@ export const mockModel = {
   userRecoverCompleteAdmin: true,
   userSetupCompleteAdmin: true,
   passwordExpiryExpiredUser: true,
-  passwordExpiryAboutToExpire: true,
 };
 
 /**

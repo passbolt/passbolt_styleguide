@@ -25,7 +25,6 @@ import {DateTime} from "luxon";
  */
 export const PasswordExpirySettingsContext = React.createContext({
   getSettings: () => {}, // Returns settings for UI changes
-  getExpiryNotificationDelay: () => {}, // Returns the configured expiry_notification or 0 if none
   getDefaultExpirationDate: () => {}, // Returns the expiry date based on the configuration if any.
   findSettings: () => {}, // request the settings from the background page
   isFeatureEnabled: () => {}, // Returns true if the feature flag is enabled and the settings are set
@@ -52,7 +51,6 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
       settings: null, // the current password expiry settings
       findSettings: this.findSettings.bind(this), // find the Password expiry settings
       getSettings: this.getSettings.bind(this), // returns the settings that have been fetch previously
-      getExpiryNotificationDelay: this.getExpiryNotificationDelay.bind(this), // Returns the configured expiry_notification or 0 if none
       getDefaultExpirationDate: this.getDefaultExpirationDate.bind(this), // Returns the expiry date based on the configuration if any.
       isFeatureEnabled: this.isFeatureEnabled.bind(this), // Returns true if the feature flag is enabled and the settings are set
     };
@@ -76,14 +74,6 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
    */
   getSettings() {
     return this.state.settings;
-  }
-
-  /**
-   * Returns the expiry notification delay configured or 0 by defaults.
-   * @returns {number}
-   */
-  getExpiryNotificationDelay() {
-    return this.getSettings()?.expiry_notification || 0;
   }
 
   /**

@@ -94,9 +94,6 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
     const defaultExpiryPeriod = this.settings.default_expiry_period || "";
     const isDefaultExpiryPeriodToggleChecked = Boolean(this.settings?.default_expiry_period_toggle);
 
-    const expiryNotification = parseInt(this.settings.expiry_notification, 10) || 1;
-    const expiryNotificationInputValue = this.settings.expiry_notification || ""; //avoids a React error if we have null value
-
     return (
       <div id="password-expiry-form-advanced">
         <form className="form">
@@ -189,36 +186,6 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
                 </span>
               </label>
             </span>
-          </div>
-          <h4 className="no-border" id="expiry-notification-subtitle"><Trans>Expiry notifications</Trans></h4>
-          <p id="expiry-notification-description">
-            <Trans>In this section you can choose how many days before an expiry date a notification should be sent.</Trans>
-          </p>
-          <div className="input-alt" id="expiry-notification">
-            <div className="content">
-              <Trans count={expiryNotification}>A notification will be sent <input
-                type="text"
-                id="expiry-notification-input"
-                className="toggle-input"
-                name="expiry_notification"
-                onChange={this.handleInputChange}
-                min="1"
-                maxLength={3}
-                disabled={this.hasAllInputDisabled()}
-                value={expiryNotificationInputValue}/> day before the expiry date.
-              </Trans>
-            </div>
-            {
-              this.errors?.expiry_notification && isSubmitted &&
-            <div className="input">
-              {
-                !this.errors?.expiry_notification.type && <div className="expiry-notification-gte  error-message"><Trans>The expiration notification should be a number between 1 and 999 days.</Trans></div>
-              }
-              {
-                this.errors?.expiry_notification.type && <div className="expiry-notification-required  error-message"><Trans>The warning period for the expiration date should be a valid number.</Trans></div>
-              }
-            </div>
-            }
           </div>
         </form>
       </div>

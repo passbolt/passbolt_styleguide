@@ -433,15 +433,6 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                       <Trans>When a password is expired, notify the owners to change it.</Trans>
                     </label>
                   </span>
-                  {this.canUsePasswordExpiryAdvancedSettings() &&
-                    <span className="input toggle-switch form-element">
-                      <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryAboutToExpire" disabled={this.hasAllInputDisabled()}
-                        onChange={this.handleInputChange} checked={settings.passwordExpiryAboutToExpire} id="password-expiry-about-to-expire-toggle-button"/>
-                      <label className="text" htmlFor="password-expiry-about-to-expire-toggle-button">
-                        <Trans>When a password is about to expire, notify the owners to change it.</Trans>
-                      </label>
-                    </span>
-                  }
                 </div>
               </div>
             </>
