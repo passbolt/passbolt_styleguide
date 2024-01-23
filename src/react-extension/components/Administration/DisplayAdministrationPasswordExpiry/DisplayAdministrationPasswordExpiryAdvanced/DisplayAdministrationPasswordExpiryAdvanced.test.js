@@ -136,29 +136,4 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
       expect(page.policyOverrideToggle.checked).toBeTruthy();
     });
   });
-
-  describe('As an administrator I can set the expiry notification', () => {
-    it('As an administrator I can see the expiry notification section', async() => {
-      expect.assertions(3);
-
-      expect(page.expiryNotificationTitle.textContent).toEqual("Expiry notifications");
-      expect(page.expiryNotificationDescription.textContent).toEqual("In this section you can choose how many days before an expiry date a notification should be sent.");
-      expect(page.expiryNotificationToggle).not.toBeNull();
-    });
-
-    it('As an administrator I can see the expiry notification input', async() => {
-      expect.assertions(2);
-
-      expect(page.expiryNotificationInfo.textContent).toEqual("A notification will be sent  day before the expiry date.");
-      expect(page.expiryNotificationInput).not.toBeNull();
-    });
-
-    it('As an administrator I can set the automatic expiry when the toggle is triggered', async() => {
-      expect.assertions(1);
-
-      await page.fillExpiryNotification(90);
-
-      expect(page.expiryNotificationInput.value).toEqual("90");
-    });
-  });
 });

@@ -47,7 +47,7 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('As AD I should see if all fields is available for my Passbolt instance on the administration settings page', async() => {
-      expect.assertions(36);
+      expect.assertions(35);
       await waitFor(() => {});
       expect(page.exists()).toBeTruthy();
       //passwords
@@ -99,7 +99,6 @@ describe("See the Email Notifications Settings", () => {
 
       //Password expiry
       expect(page.passwordExpiryExpired.checked).toBeTruthy();
-      expect(page.passwordExpiryAboutToExpire.checked).toBeTruthy();
 
       //Email Content Visibility
       expect(page.showUsername.checked).toBeTruthy();
@@ -157,7 +156,7 @@ describe("See the Email Notifications Settings", () => {
     });
 
     it('I should see all fields disabled”', () => {
-      expect.assertions(35);
+      expect.assertions(34);
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => mockApiResponse(settings));
       page = new DisplayEmailNotificationsAdministrationPage(context, props);
 
@@ -214,7 +213,6 @@ describe("See the Email Notifications Settings", () => {
 
       //Password expiry
       expectDisabled(page.passwordExpiryExpired);
-      expectDisabled(page.passwordExpiryAboutToExpire);
 
       //Email Content Visibility
       expectDisabled(page.showUsername);

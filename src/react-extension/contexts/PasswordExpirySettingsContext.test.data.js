@@ -25,12 +25,10 @@ export const defaultPasswordExpirySettingsContext = (data = {}) => {
     || Boolean(settings?.policy_override);
 
   const defaultExpiryDate = DateTime.utc().plus({days: settings?.default_expiry_period}).toISO();
-  const expiryNotificationDelay = settings?.expiry_notification || 0;
 
   const defaultData = {
     findSettings: () => {},
     getSettings: () => settings,
-    getExpiryNotificationDelay: () => expiryNotificationDelay,
     isFeatureEnabled: () => isFeatureEnabled,
     getDefaultExpirationDate: () => defaultExpiryDate
   };

@@ -14,8 +14,6 @@
 import React, {Component, memo} from "react";
 import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
-import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
-import {DateTime} from "luxon";
 
 /**
  * This component represents a table cell favorite
@@ -28,13 +26,13 @@ class CellAttentionRequired extends Component {
    * @returns {boolean}
    * @private
    */
-  static isAttentionRequiredOnExpiryDate(expirationDate, aboutToExpireDelay) {
+  static isAttentionRequiredOnExpiryDate(expirationDate) {
     if (!expirationDate) {
       return false;
     }
 
     const expiryDate = new Date(expirationDate);
-    return expiryDate <= DateTime.utc().plus({days: aboutToExpireDelay}).toJSDate();
+    return expiryDate <= new Date();
   }
 
   /**
@@ -42,7 +40,7 @@ class CellAttentionRequired extends Component {
    * @return {JSX}
    */
   render() {
-    const displayIcon = CellAttentionRequired.isAttentionRequiredOnExpiryDate(this.props.value, this.props.passwordExpiryContext.getExpiryNotificationDelay());
+    const displayIcon = CellAttentionRequired.isAttentionRequiredOnExpiryDate(this.props.value);
     if (!displayIcon) {
       return null;
     }
@@ -55,7 +53,6 @@ class CellAttentionRequired extends Component {
 
 CellAttentionRequired.propTypes = {
   value: PropTypes.string, // The value from which to compute the "is attention required?",
-  passwordExpiryContext: PropTypes.object, // the password expiry context
 };
 
-export default memo(withPasswordExpiry(CellAttentionRequired));
+export default memo(CellAttentionRequired);

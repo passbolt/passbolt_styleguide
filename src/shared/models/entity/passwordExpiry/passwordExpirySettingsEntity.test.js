@@ -38,7 +38,6 @@ describe("PasswordExpiry entity", () => {
       automatic_update: false,
       automatic_expiry: false,
       policy_override: false,
-      expiry_notification: null,
       default_expiry_period: null
     });
   });
@@ -76,10 +75,6 @@ describe("PasswordExpiry entity", () => {
     {dto: {automatic_update: 0}, errorType: "type"},
 
     {dto: {automatic_expiry: 0}, errorType: "type"},
-
-    {dto: {expiry_notification: true}, errorType: "type"},
-    {dto: {expiry_notification: "50"}, errorType: "type"},
-    {dto: {expiry_notification: -1}, errorType: "type"},
 
     {dto: {created: "string but not a date"}, errorType: "format"},
     {dto: {created: -1}, errorType: "type"},
