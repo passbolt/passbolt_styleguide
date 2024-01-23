@@ -161,7 +161,7 @@ describe("AdministrationSelfRegistrationContext", () => {
     });
 
     it("should not save settings and display feedback when we have an error", async() => {
-      const error = {message: "The service is unavailable"};
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
 
       fetch.doMockOnceIf(/self-registration\/settings*/, () => Promise.reject(error));
 

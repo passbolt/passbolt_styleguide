@@ -88,7 +88,7 @@ describe("See the MFA settings", () => {
       await page.checkYubikey();
 
       // Mock the request function to make it return an error.
-      const error = {message: "The service is unavailable"};
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
 
       fetch.doMockOnceIf(/mfa\/settings*/, () => Promise.reject(error));
 
@@ -99,7 +99,7 @@ describe("See the MFA settings", () => {
 
       expect.assertions(2);
       // Throw general error message
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
 
     it('As AD I should see an error message if inputs are empty', async() => {
