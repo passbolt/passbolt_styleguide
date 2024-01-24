@@ -57,8 +57,8 @@ class ConfirmDeleteSsoSettingsDialog extends React.Component {
     event.preventDefault();
     this.setState({processing: true});
     await this.props.adminSsoContext.deleteSettings();
-    this.props.onClose();
     this.setState({processing: false});
+    this.props.onClose();
   }
 
   /**

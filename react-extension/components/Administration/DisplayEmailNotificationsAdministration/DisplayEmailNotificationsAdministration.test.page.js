@@ -154,6 +154,13 @@ export default class DisplayEmailNotificationsAdministrationPage {
   }
 
   /**
+   * Returns the group manager request add user input element
+   */
+  get groupManagerRequestAddUser() {
+    return this._page.container.querySelector('#send-group-manager-request-add-user-toggle-button');
+  }
+
+  /**
    * Returns the "user completed the setup" notification for all admins input element
    */
   get userSetupCompletedAdmins() {
@@ -249,13 +256,6 @@ export default class DisplayEmailNotificationsAdministrationPage {
    */
   get passwordExpiryExpired() {
     return this._page.container.querySelector('#password-expiry-expired-user-toggle-button');
-  }
-
-  /**
-   * Returns the "password is about to expired" notification for the resource owner input element
-   */
-  get passwordExpiryAboutToExpire() {
-    return this._page.container.querySelector('#password-expiry-about-to-expire-toggle-button');
   }
 
   /**

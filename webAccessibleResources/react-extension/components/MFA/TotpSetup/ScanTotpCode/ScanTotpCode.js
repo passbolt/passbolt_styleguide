@@ -15,10 +15,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
-import * as OTPAuth from "otpauth";
 import {Trans} from 'react-i18next';
 import QRCode from 'qrcode';
-import {TotpCodeGeneratorService} from "../../../../../shared/services/otp/TotpCodeGeneratorService";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 import {MfaSettingsWorkflowStates, withMfa} from "../../../../contexts/MFAContext";
 import Icon from "../../../../../shared/components/Icons/Icon";
@@ -99,23 +97,12 @@ class ScanTotpCode extends Component {
   }
 
   /**
-   * Generate the totp code for QR code
+   * Get totp uri from bext
    * @returns the totp code
    */
-  generateTotpUri() {
-    const username = this.props.context.userSettings.username;
-    const arr = new Uint32Array(32);
-    const secretBuffer = window.crypto.getRandomValues(arr);
-    const secret = new OTPAuth.Secret({buffer: secretBuffer, size: 32});
-    const issuer = this.getIssuer();
-
-    const uri = TotpCodeGeneratorService.generateUri({
-      label: username,
-      secret_key: secret.base32,
-      issuer
-    });
+  async getQrCodeUri() {
+    const uri = await this.props.context.port.request("passbolt.mfa-setup.get-totp-code");
     this.setState({uri});
-    // Convert to Google Authenticator key URI
     return uri;
   }
 
@@ -173,7 +160,7 @@ class ScanTotpCode extends Component {
    * @returns {Promise<void>}
    */
   async getQrCode() {
-    const totpUri = this.generateTotpUri();
+    const totpUri = await this.getQrCodeUri();
     const qrCode = await QRCode.toDataURL([{
       data: totpUri,
       mode: 'byte'
@@ -266,7 +253,8 @@ class ScanTotpCode extends Component {
 ScanTotpCode.propTypes = {
   context: PropTypes.object, // the app context
   t: PropTypes.func, // The translation function
-  mfaContext: PropTypes.object, // The mfa context
+  mfaContext: PropTypes.object, // The mfa Context
+  port: PropTypes.object,
 };
 
 export default withAppContext(withMfa(withTranslation("common")(ScanTotpCode)));

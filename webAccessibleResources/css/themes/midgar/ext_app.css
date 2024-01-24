@@ -54,6 +54,7 @@
 /* feedback card */
 /* account recovery */
 /* user card */
+/* user card chips */
 /* messages */
 /* default icon svg fill */
 /* favorite icon fill */
@@ -1264,7 +1265,7 @@ textarea.full_report {
 }
 .input-alt {
   margin-top: 1.6rem;
-  border: 1px solid #353535;
+  border: 1px solid #202020;
   border-radius: 3px;
   background-color: #353535;
   padding: 1.6rem;
@@ -1813,6 +1814,7 @@ input[type=file] {
   background-color: #353535;
   padding: 1.6rem;
   margin-top: 1.6rem;
+  margin-right: 0;
 }
 .radiolist-alt .input.radio.checked {
   border: 1px solid #2894DF;
@@ -1941,7 +1943,7 @@ input[type=file] {
 }
 .togglelist-alt {
   margin-top: 1.6rem;
-  border: 1px solid default-border;
+  border: 1px solid #202020;
   border-radius: 3px;
   background-color: #353535;
   padding: 1.6rem;
@@ -1951,6 +1953,9 @@ input[type=file] {
 }
 .togglelist-alt .input.has-error.toggle-switch {
   margin-bottom: 1.2rem;
+}
+.togglelist-alt .toggle-switch {
+  margin-bottom: 0;
 }
 .togglelist-alt .toggle-switch label {
   margin-left: 1.6rem;
@@ -7158,6 +7163,40 @@ table.table-info.horizontal tbody tr:hover {
   color: #FFFFFF;
   font-size: 0.929em;
   /* 13px */
+  margin-top: 0.4rem;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .dateTimeAgo {
+  color: #FFFFFF;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group {
+  float: right;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips {
+  font-size: 1.4rem;
+  color: #202020;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  border-radius: 1.2rem;
+  margin-top: -0.1rem;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips.user-role {
+  background-color: #EBEBE9;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips.user-role.admin {
+  color: #FFFFFF;
+  background-color: #353535;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips.active {
+  background-color: #EDF7EB;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips.suspended {
+  background-color: #FFDBA6;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips.deleted {
+  background-color: #FFA6A6;
+}
+.usercard-col-2 .content-wrapper .content .subinfo .chips-group .chips + .chips {
+  margin-left: 0.4rem;
 }
 .usercard-col-2 .avatar {
   float: left;
@@ -7289,6 +7328,40 @@ table.table-info.horizontal tbody tr:hover {
   color: #FFFFFF;
   font-size: 0.929em;
   /* 13px */
+  margin-top: 0.4rem;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .dateTimeAgo {
+  color: #FFFFFF;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group {
+  float: right;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips {
+  font-size: 1.4rem;
+  color: #202020;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  border-radius: 1.2rem;
+  margin-top: -0.1rem;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips.user-role {
+  background-color: #EBEBE9;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips.user-role.admin {
+  color: #FFFFFF;
+  background-color: #353535;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips.active {
+  background-color: #EDF7EB;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips.suspended {
+  background-color: #FFDBA6;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips.deleted {
+  background-color: #FFA6A6;
+}
+.usercard-detailed-col-2 .content-wrapper .content .subinfo .chips-group .chips + .chips {
+  margin-left: 0.4rem;
 }
 .usercard-detailed-col-2 .avatar {
   float: left;
@@ -7724,6 +7797,45 @@ table.table-info.horizontal tbody tr:hover {
 }
 .passphrase-entry.dialog-wrapper .remember-me .input.checkbox input[type="checkbox"] + label {
   margin: 0 0 0 0.8rem;
+}
+.password-expiry-dialog .radiolist-alt .radio {
+  padding: 0;
+  margin-right: 0;
+}
+.password-expiry-dialog .radiolist-alt .radio label {
+  display: flex;
+  align-items: center;
+  margin-left: 0;
+  width: 100%;
+  padding: 1.6rem;
+}
+.password-expiry-dialog .radiolist-alt .radio label > span {
+  margin-left: 1.6rem;
+  width: 100%;
+}
+.password-expiry-dialog .radiolist-alt .radio label .date-wrapper {
+  width: 100%;
+}
+.password-expiry-dialog .radiolist-alt .radio label .date-wrapper .button-inline {
+  width: 100%;
+}
+.password-expiry-dialog .radiolist-alt .radio label .date-wrapper .svg-icon svg {
+  height: auto;
+  width: auto;
+}
+.password-expiry-dialog .radiolist-alt .radio span.error-message {
+  margin: 0.4rem 0 0;
+  display: block;
+}
+.password-expiry-dialog .radiolist-alt .radio span.info {
+  display: flex;
+  align-items: baseline;
+  margin-top: 0.4rem;
+  font-size: 1.5rem;
+}
+.password-expiry-dialog .radiolist-alt .radio span.info input {
+  margin-right: 0.8rem;
+  margin-bottom: 0;
 }
 .progress-bar-wrapper .progress-bar.big.infinite {
   width: 0;
@@ -8413,6 +8525,18 @@ table.table-info.horizontal tbody tr:hover {
   background-color: #101010;
   border: none;
 }
+#password-expiry-form-advanced,
+#password-expiry-settings-form {
+  margin: 0;
+}
+#password-expiry-form-advanced .radiolist-alt .input.radio,
+#password-expiry-settings-form .radiolist-alt .input.radio {
+  margin: 1.6rem;
+}
+#password-expiry-form-advanced #expiry-notification .content,
+#password-expiry-settings-form #expiry-notification .content {
+  align-items: center;
+}
 #setup-mfa {
   width: 100%;
   height: calc(100% - 3.9rem);
@@ -8820,7 +8944,7 @@ table.table-info.horizontal tbody tr:hover {
   background: #444442;
   padding: 2.5em;
   width: calc(100% - 294px);
-  height: 250px;
+  height: 235px;
   box-sizing: border-box;
   border: 3px solid #444442;
   border-left: 0;
@@ -8831,7 +8955,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .mfa-setup .totp-setup .qrcode {
   float: left;
-  height: 250px;
+  height: 235px;
   max-width: 262px;
   box-sizing: border-box;
   border: 3px solid #444442;

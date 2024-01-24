@@ -82,7 +82,7 @@ export class SsoContextProvider extends React.Component {
   async runSignInProcess() {
     try {
       const provider = this.getProvider();
-      await this.props.context.port.request(`passbolt.sso.sign-in-with-${provider}`, true);
+      await this.props.context.port.request('passbolt.sso.sign-in', provider, true);
     } catch (e) {
       console.error(e);
       this.handleSpecificError(e);

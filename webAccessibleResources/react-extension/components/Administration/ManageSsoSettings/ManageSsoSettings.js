@@ -22,7 +22,12 @@ import DisplayAdministrationSsoActions from "../DisplayAdministrationWorkspaceAc
 import {withAdminSso} from "../../../contexts/AdminSsoContext";
 import SsoProviders from "./SsoProviders.data";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import Password from "../../../../shared/components/Password/Password";
+import AzureSsoProviderForm from "./SsoProviderForm/AzureSsoProviderForm";
+import GoogleSsoProviderForm from "./SsoProviderForm/GoogleSsoProviderForm";
+import OAuth2SsoProviderForm from "./SsoProviderForm/OAuth2SsoProviderForm";
+import AzureSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
+import GoogleSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
+import OAuth2SsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
 
 /**
  * This component displays the SSO administration settings
@@ -36,7 +41,6 @@ class ManageSsoSettings extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.bindCallbacks();
-    this.createRefs();
   }
 
   /**
@@ -47,7 +51,6 @@ class ManageSsoSettings extends React.Component {
     return {
       loading: true,
       providers: [],
-      advancedSettingsOpened: false,
     };
   }
 
@@ -56,83 +59,16 @@ class ManageSsoSettings extends React.Component {
     await this.props.adminSsoContext.loadSsoConfiguration();
     this.setState({
       loading: false,
-      providers: this.props.adminSsoContext.getSsoConfiguration()?.providers || []
+      providers: this.props.adminSsoContext.getProviderList() || []
     });
-  }
-
-  componentDidUpdate() {
-    if (!this.props.adminSsoContext.shouldFocusOnError()) {
-      return;
-    }
-
-    const errors = this.props.adminSsoContext.getErrors();
-    const fieldToFocus = this.getFirstFieldInError(errors, ["url", "openid_configuration_path", "scope", "client_id", "tenant_id", "client_secret", "client_secret_expiry", "prompt", "email_claim"]);
-
-    switch (fieldToFocus) {
-      case "url":
-        this.urlInputRef.current.focus();
-        break;
-      case "openid_configuration_path":
-        this.openIdConfigurationPathInputRef.current.focus();
-        break;
-      case "scope":
-        this.scopeInputRef.current.focus();
-        break;
-      case "client_id":
-        this.clientIdInputRef.current.focus();
-        break;
-      case "tenant_id":
-        this.tenantIdInputRef.current.focus();
-        break;
-      case "client_secret":
-        this.clientSecretInputRef.current.focus();
-        break;
-      case "client_secret_expiry":
-        this.clientSecretExpiryInputRef.current.focus();
-        break;
-      case "prompt":
-        this.promptInputRef.current.focus();
-        break;
-      case "email_claim":
-        this.emailClaimInputRef.current.focus();
-        break;
-    }
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleProviderInputChange = this.handleProviderInputChange.bind(this);
     this.handleSsoSettingToggle = this.handleSsoSettingToggle.bind(this);
-    this.handleCopyRedirectUrl = this.handleCopyRedirectUrl.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-    this.handleAdvancedSettingsCLick = this.handleAdvancedSettingsCLick.bind(this);
-  }
-
-  createRefs() {
-    this.urlInputRef = React.createRef();
-    this.clientIdInputRef = React.createRef();
-    this.tenantIdInputRef = React.createRef();
-    this.clientSecretInputRef = React.createRef();
-    this.clientSecretExpiryInputRef = React.createRef();
-    this.promptInputRef = React.createRef();
-    this.emailClaimInputRef = React.createRef();
-    this.openIdConfigurationPathInputRef = React.createRef();
-    this.scopeInputRef = React.createRef();
-  }
-
-  /**
-   * Handle form input changes.
-   * @params {ReactEvent} The react event
-   * @returns {void}
-   */
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-    this.props.adminSsoContext.setValue(name, value);
   }
 
   /**
@@ -148,33 +84,10 @@ class ManageSsoSettings extends React.Component {
    * Handle the SSO settings toggle
    */
   handleSsoSettingToggle() {
-    this.props.adminSsoContext.disableSso();
-  }
-
-  /**
-   * Handle advanced settings panel button click
-   */
-  handleAdvancedSettingsCLick() {
-    this.setState({
-      advancedSettingsOpened: !this.state.advancedSettingsOpened
-    });
-  }
-
-  /**
-   * Handle the copy to clipboard button
-   */
-  async handleCopyRedirectUrl() {
-    await navigator.clipboard.writeText(this.fullRedirectUrl);
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The redirection URL has been copied to the clipboard."));
-  }
-
-  async handleFormSubmit(event) {
-    event.preventDefault();
-    const context = this.props.adminSsoContext;
-    if (!context.hasFormChanged() || !context.validateData()) {
-      return;
+    const isToggleEnabled = this.props.adminSsoContext.isSsoConfigActivated();
+    if (isToggleEnabled) {
+      this.props.adminSsoContext.disableSso();
     }
-    await context.saveAndTestConfiguration();
   }
 
   /**
@@ -213,47 +126,17 @@ class ManageSsoSettings extends React.Component {
      * Obviously, the API can't work with an unknown provider.
      * On Bext side, we can't provide a third-party SSO provider specific form if it's is unknown
      */
-    return providerIdList.map(providerId => {
+    const providerDataList = [];
+    providerIdList.forEach(providerId => {
       const providerData = SsoProviders.find(provider => provider.id === providerId);
       if (providerData && !providerData.disabled) {
-        return {
+        providerDataList.push({
           value: providerData.id,
           label: providerData.name
-        };
+        });
       }
     });
-  }
-
-  /**
-   * Get the different options for email claim select input.
-   * @returns {Array<{value: string, label: string}}
-   */
-  get emailClaimList() {
-    return [
-      {value: "email", label: this.translate("Email")},
-      {value: "preferred_username", label: this.translate("Preferred username")},
-      {value: "upn", label: this.translate("UPN")},
-    ];
-  }
-
-  /**
-   * Get the different options for prompt select input.
-   * @returns {Array<{value: string, label: string}}
-   */
-  get promptOptionList() {
-    return [
-      {value: "login", label: this.translate("Login")},
-      {value: "none", label: this.translate("None")},
-    ];
-  }
-
-  /**
-   * Get the full redirection URL;
-   */
-  get fullRedirectUrl() {
-    const ssoConfig = this.props.adminSsoContext.getSsoConfiguration();
-    const trustedDomain = this.props.context.userSettings.getTrustedDomain();
-    return `${trustedDomain}/sso/${ssoConfig?.provider}/redirect`;
+    return providerDataList;
   }
 
   /**
@@ -266,30 +149,6 @@ class ManageSsoSettings extends React.Component {
   }
 
   /**
-   * Returns the first field with an error (first in the given list)
-   * @param {object} errors a map of erroneous field
-   * @param {Array<string>} fieldPriority the ordered list of field to check
-   * @returns {string|null}
-   */
-  getFirstFieldInError(errors, fieldPriority) {
-    for (let i = 0; i < fieldPriority.length; i++) {
-      const fieldName = fieldPriority[i];
-      if (typeof(errors[fieldName]) !== "undefined") {
-        return fieldName;
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
-   */
-  get translate() {
-    return this.props.t;
-  }
-
-  /**
    * Render the component
    * @returns {JSX}
    */
@@ -297,7 +156,6 @@ class ManageSsoSettings extends React.Component {
     const ssoContext = this.props.adminSsoContext;
     const ssoConfig = ssoContext.getSsoConfiguration();
     const isSsoActivated = ssoContext.isSsoConfigActivated();
-    const errors = ssoContext.getErrors();
     return (
       <div className="row">
         <div className="third-party-provider-settings sso-settings col8 main-column">
@@ -336,268 +194,15 @@ class ManageSsoSettings extends React.Component {
             </>
           }
           {this.isReady() && isSsoActivated &&
-            <form className="form" onSubmit={this.handleFormSubmit}>
+            <form className="form">
               <div className="select-wrapper input">
                 <label htmlFor="sso-provider-input"><Trans>Single Sign-On provider</Trans></label>
                 <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
               </div>
-              {ssoConfig?.provider === "azure" &&
-                <>
-                  <hr/>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Login URL</Trans></label>
-                    <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
-                      value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.url &&
-                      <div className="error-message">{errors.url}</div>
-                    }
-                    <p>
-                      <Trans>The Azure AD authentication endpoint. See <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/authentication-national-cloud#azure-ad-authentication-endpoints" rel="noopener noreferrer" target="_blank">alternatives</a>.</Trans>
-                    </p>
-                  </div>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Redirect URL</Trans></label>
-                    <div className="button-inline">
-                      <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-                        value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
-                      <button type="button" onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button-icon">
-                        <Icon name="copy-to-clipboard"/>
-                      </button>
-                    </div>
-                    <p>
-                      <Trans>The URL to provide to Azure when registering the application.</Trans>
-                    </p>
-                  </div>
-                  <hr/>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Application (client) ID</Trans></label>
-                    <input id="sso-azure-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
-                      value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.client_id &&
-                      <div className="error-message">{errors.client_id}</div>
-                    }
-                    <p>
-                      <Trans>The public identifier for the app in Azure in UUID format.</Trans> <a href="https://learn.microsoft.com/en-us/azure/healthcare-apis/register-application#application-id-client-id" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
-                    </p>
-                  </div>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Directory (tenant) ID</Trans></label>
-                    <input id="sso-azure-tenant-id-input" type="text" className="fluid form-element" name="tenant_id" ref={this.tenantIdInputRef}
-                      value={ssoConfig?.data?.tenant_id} onChange={this.handleInputChange} placeholder={this.translate("Directory ID")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.tenant_id &&
-                      <div className="error-message">{errors.tenant_id}</div>
-                    }
-                    <p>
-                      <Trans>The Azure Active Directory tenant ID, in UUID format.</Trans> <a href="https://learn.microsoft.com/en-gb/azure/active-directory/fundamentals/active-directory-how-to-find-tenant" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
-                    </p>
-                  </div>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Secret</Trans></label>
-                    <Password
-                      id="sso-azure-secret-input"
-                      className="fluid form-element"
-                      onChange={this.handleInputChange}
-                      autoComplete="off"
-                      name="client_secret"
-                      placeholder={this.translate("Secret")}
-                      disabled={this.hasAllInputDisabled()}
-                      value={ssoConfig?.data?.client_secret}
-                      preview={true}
-                      inputRef={this.clientSecretInputRef}/>
-                    {errors.client_secret &&
-                      <div className="error-message">{errors.client_secret}</div>
-                    }
-                    <p>
-                      <Trans>Allows Azure and Passbolt API to securely share information.</Trans> <a href="https://learn.microsoft.com/en-us/azure/marketplace/create-or-update-client-ids-and-secrets#add-a-client-id-and-client-secret" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
-                    </p>
-                  </div>
-                  <div className={`input text date-wrapper required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Secret expiry</Trans></label>
-                    <div className="button-inline">
-                      <input id="sso-azure-secret-expiry-input" type="date" className={`fluid form-element ${ssoConfig.data.client_secret_expiry ? "" : "empty"}`} name="client_secret_expiry"  ref={this.clientSecretExpiryInputRef}
-                        value={ssoConfig?.data?.client_secret_expiry} onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}/>
-                      <Icon name="calendar"/>
-                    </div>
-                    {errors.client_secret_expiry &&
-                      <div className="error-message">{errors.client_secret_expiry}</div>
-                    }
-                  </div>
-                  <div className="warning message">
-                    <Trans><b>Warning</b>: This secret will expire after some time (typically a few months). Make sure you save the expiry date and rotate it on time.</Trans>
-                  </div>
-                  <div>
-                    <div className={`accordion operation-details ${this.state.advancedSettingsOpened ? "" : "closed"}`}>
-                      <div className="accordion-header" onClick={this.handleAdvancedSettingsCLick}>
-                        <button type="button" className="link no-border" id="advanced-settings-panel-button">
-                          <Trans>Advanced settings</Trans>&nbsp;<Icon name={this.state.advancedSettingsOpened ? "caret-down" : "caret-right"}/>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  {this.state.advancedSettingsOpened &&
-                    <>
-                      <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label htmlFor="email-claim-input"><Trans>Email claim</Trans></label>
-                        <Select id="email-claim-input" name="email_claim" items={this.emailClaimList} value={ssoConfig.data?.email_claim} onChange={this.handleInputChange}/>
-                        <p><Trans>Defines which Azure field needs to be used as Passbolt username.</Trans></p>
-                      </div>
-                      {ssoConfig.data?.email_claim === "upn" &&
-                        <div className="warning message">
-                          <Trans><b>Warning</b>: UPN is not active by default on Azure and requires a specific option set on Azure to be working.</Trans>
-                        </div>
-                      }
-                      <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                        <label htmlFor="prompt-input"><Trans>Prompt</Trans></label>
-                        <Select id="prompt-input" name="prompt" items={this.promptOptionList} value={ssoConfig.data?.prompt} onChange={this.handleInputChange}/>
-                        <p><Trans>Defines the Azure login behaviour by prompting the user to fully login each time or not.</Trans></p>
-                      </div>
-                    </>
-                  }
-                </>
-              }
-              {ssoConfig?.provider === "google" &&
-                <>
-                  <hr/>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Redirect URL</Trans></label>
-                    <div className="button-inline">
-                      <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-                        value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
-                      <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-                        <Icon name="copy-to-clipboard"/>
-                      </a>
-                    </div>
-                    <p>
-                      <Trans>The URL to provide to Google when registering the application.</Trans>
-                    </p>
-                  </div>
-                  <hr/>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Application (client) ID</Trans></label>
-                    <input id="sso-google-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
-                      value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.client_id &&
-                      <div className="error-message">{errors.client_id}</div>
-                    }
-                    <p>
-                      <Trans>The public identifier for the app in Google in UUID format.</Trans> <a href="https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
-                    </p>
-                  </div>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Secret</Trans></label>
-                    <Password
-                      id="sso-google-secret-input"
-                      className="fluid form-element"
-                      onChange={this.handleInputChange}
-                      autoComplete="off"
-                      name="client_secret"
-                      placeholder={this.translate("Secret")}
-                      disabled={this.hasAllInputDisabled()}
-                      value={ssoConfig?.data?.client_secret}
-                      preview={true}
-                      inputRef={this.clientSecretInputRef}/>
-                    {errors.client_secret &&
-                      <div className="error-message">{errors.client_secret}</div>
-                    }
-                    <p>
-                      <Trans>Allows Google and Passbolt API to securely share information.</Trans> <a href="https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters" rel="noopener noreferrer" target="_blank"><Trans>Where to find it?</Trans></a>
-                    </p>
-                  </div>
-                </>
-              }
-              {ssoConfig?.provider === "oauth2" &&
-                <>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Login URL</Trans></label>
-                    <input id="sso-oauth2-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
-                      value={ssoConfig?.data?.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.url &&
-                      <div className="error-message">{errors.url}</div>
-                    }
-                    <p>
-                      <Trans>The OAuth2 authentication endpoint.</Trans>
-                    </p>
-                  </div>
-                  <hr/>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Redirect URL</Trans></label>
-                    <div className="button-inline">
-                      <input id="sso-redirect-url-input" type="text" className="fluid form-element disabled" name="redirect_url"
-                        value={this.fullRedirectUrl} placeholder={this.translate("Redirect URL")} readOnly disabled={true}/>
-                      <a onClick={this.handleCopyRedirectUrl} className="copy-to-clipboard button button-icon">
-                        <Icon name="copy-to-clipboard"/>
-                      </a>
-                    </div>
-                    <p>
-                      <Trans>The URL to provide to the OAuth2 platform when registering the application.</Trans>
-                    </p>
-                  </div>
-                  <hr/>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>OpenId Configuration Path</Trans></label>
-                    <input id="sso-oauth2-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
-                      value={ssoConfig?.data?.openid_configuration_path} onChange={this.handleInputChange} placeholder={this.translate("OpenId Configuration Path")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.openid_configuration_path &&
-                      <div className="error-message">{errors.openid_configuration_path}</div>
-                    }
-                    <p>
-                      <Trans>The OpenId configuration relative path from the given login url.</Trans>
-                    </p>
-                  </div>
-                  <hr/>
-                  <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Scope</Trans></label>
-                    <input id="sso-oauth2-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
-                      value={ssoConfig?.data?.scope} onChange={this.handleInputChange} placeholder={this.translate("Scope")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.scope &&
-                      <div className="error-message">{errors.scope}</div>
-                    }
-                    <p>
-                      <Trans>The OpenId scope.</Trans>
-                    </p>
-                  </div>
-                  <hr/>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Application (client) ID</Trans></label>
-                    <input id="sso-google-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
-                      value={ssoConfig?.data?.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
-                      disabled={this.hasAllInputDisabled()}/>
-                    {errors.client_id &&
-                      <div className="error-message">{errors.client_id}</div>
-                    }
-                    <p>
-                      <Trans>The public identifier for the OpenId app.</Trans>
-                    </p>
-                  </div>
-                  <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-                    <label><Trans>Secret</Trans></label>
-                    <Password
-                      id="sso-google-secret-input"
-                      className="fluid form-element"
-                      onChange={this.handleInputChange}
-                      autoComplete="off"
-                      name="client_secret"
-                      placeholder={this.translate("Secret")}
-                      disabled={this.hasAllInputDisabled()}
-                      value={ssoConfig?.data?.client_secret}
-                      preview={true}
-                      inputRef={this.clientSecretInputRef}/>
-                    {errors.client_secret &&
-                      <div className="error-message">{errors.client_secret}</div>
-                    }
-                    <p>
-                      <Trans>Allows your OAuth2 provider and Passbolt API to securely share information.</Trans>
-                    </p>
-                  </div>
-                </>
-              }
+              <hr/>
+              {ssoConfig.provider === AzureSsoSettingsEntity.PROVIDER_ID && <AzureSsoProviderForm/>}
+              {ssoConfig.provider === GoogleSsoSettingsEntity.PROVIDER_ID && <GoogleSsoProviderForm/>}
+              {ssoConfig.provider === OAuth2SsoSettingsEntity.PROVIDER_ID && <OAuth2SsoProviderForm/>}
             </form>
           }
         </div>

@@ -23,7 +23,7 @@ import EditUserGroup from "../components/UserGroup/EditUserGroup/EditUserGroup";
 import {withDialog} from "./DialogContext";
 import {DateTime} from "luxon";
 import {withTranslation} from "react-i18next";
-import {isUserSuspended} from "../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../shared/utils/userUtils";
 
 /**
  * Context related to users ( filter, current selections, etc.)

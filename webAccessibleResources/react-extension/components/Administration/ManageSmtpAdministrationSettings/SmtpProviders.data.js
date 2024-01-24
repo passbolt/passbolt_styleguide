@@ -159,6 +159,24 @@ const Mandrill = {
 };
 Mandrill.defaultConfiguration = getConfiguration(Mandrill, 587);
 
+const Office365 = {
+  id: "office-365",
+  name: "Office 365",
+  icon: "office365.svg",
+  help_page: "https://learn.microsoft.com/exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365",
+  availableConfigurations: generateConfiguration(["smtp.office365.com"], [25, 587])
+};
+Office365.defaultConfiguration = getConfiguration(Office365, 587);
+
+const Outlook = {
+  id: "outlook",
+  name: "Outlook",
+  icon: "outlook.svg",
+  help_page: "https://support.microsoft.com/office/pop-imap-and-smtp-settings-for-outlook-com-d088b986-291d-42b8-9564-9c414e2aa040",
+  availableConfigurations: generateConfiguration(["smtp-mail.outlook.com"], [587])
+};
+Outlook.defaultConfiguration = getConfiguration(Outlook, 587);
+
 const Sendgrid = {
   id: "sendgrid",
   name: "Sendgrid",
@@ -206,6 +224,8 @@ const SmtpProviders = [
   MailGun,
   Mailjet,
   Mandrill,
+  Office365,
+  Outlook,
   Sendgrid,
   Sendinblue,
   Zoho,

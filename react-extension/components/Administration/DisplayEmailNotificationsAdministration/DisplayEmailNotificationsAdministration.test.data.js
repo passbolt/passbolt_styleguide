@@ -80,6 +80,7 @@ export const mockResult = {
   send_group_user_delete: true,
   send_group_user_update: true,
   send_group_manager_update: true,
+  send_group_manager_requestAddUser: true,
   send_user_create: true,
   send_user_recover: true,
   send_user_recoverComplete: true,
@@ -100,7 +101,6 @@ export const mockResult = {
   send_accountRecovery_response_created_allAdmins: true,
   send_accountRecovery_policy_update: true,
   send_password_expire: true,
-  send_password_aboutToExpire: true,
   sources_database: true,
   sources_file: false,
 };
@@ -125,6 +125,7 @@ export const mockModel = {
   folderUpdate: true,
   groupDelete: true,
   groupManagerUpdate: true,
+  groupManagerRequestAddUser: true,
   groupUserAdd: true,
   groupUserDelete: true,
   groupUserUpdate: true,
@@ -146,7 +147,6 @@ export const mockModel = {
   userRecoverCompleteAdmin: true,
   userSetupCompleteAdmin: true,
   passwordExpiryExpiredUser: true,
-  passwordExpiryAboutToExpire: true,
 };
 
 /**

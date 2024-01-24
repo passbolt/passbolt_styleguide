@@ -46,10 +46,10 @@ export function propsWithPopulatedRbacContext(props = {}) {
   });
 }
 
-export function propsWithDisabledFlag(featureName, props = {}) {
+export function propsWithDisabledFlags(featureName, props = {}) {
   const siteSettings = {
     getServerTimezone: () => '',
-    canIUse: canIUserFeatureName => canIUserFeatureName !== featureName,
+    canIUse: canIUserFeatureName => !featureName.some(flag => canIUserFeatureName === flag),
   };
   return propsWithPopulatedRbacContext({
     context: defaultAppContext({siteSettings}),

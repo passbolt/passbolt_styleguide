@@ -229,7 +229,7 @@ describe("As AD I should see the user directory settings", () => {
       //button should be enable with changes
       expect(page.isSaveButtonEnabled()).toBeTruthy();
       // Mock the request function to make it return an error.
-      const error = {message: "The service is unavailable"};
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
 
       fetch.doMockOnceIf(/directorysync*/, () => Promise.reject(error));
 
@@ -238,7 +238,7 @@ describe("As AD I should see the user directory settings", () => {
 
       await waitFor(() => {});
       // Throw general error message
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
 
     it('As AD I should be able to simulate the synchronization', async() => {

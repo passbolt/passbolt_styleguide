@@ -46,7 +46,7 @@ export function azureConfiguredSso(data = {}) {
     provider: "azure",
     providers: ["azure", "google"],
     data: {
-      url: "https://login.microsoftonline.com/..",
+      url: "https://login.microsoftonline.com",
       tenant_id: "5n6p8r9s-m5n6-6p7q-3k5n-8r9s3k4m5n7q",
       client_id: "f2j3m5n6-c3k4-m5p7-x2j4-y2k4m5n7q8r9",
       client_secret: "u8x!A%D*G-KaPdSgVkYp3s6v9y$B?E..",

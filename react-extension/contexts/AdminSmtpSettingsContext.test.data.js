@@ -14,6 +14,23 @@
 
 import SmtpProviders from "../components/Administration/ManageSmtpAdministrationSettings/SmtpProviders.data";
 
+export function emptySmtpSettings(data = {}) {
+  const defaultData = {
+    username: "",
+    password: "",
+    host: "",
+    tls: false,
+    port: 25,
+    sender_email: "",
+    sender_name: "",
+  };
+
+  return {
+    ...defaultData,
+    ...data
+  };
+}
+
 export function defaultSmtpSettings(data = {}) {
   const defaultData = {
     username: "",

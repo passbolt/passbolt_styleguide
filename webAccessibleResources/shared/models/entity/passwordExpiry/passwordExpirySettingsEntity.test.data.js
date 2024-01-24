@@ -20,7 +20,6 @@ export const defaultPasswordExpirySettingsDto = (data = {}) => {
     policy_override: false,
     automatic_expiry: true,
     automatic_update: true,
-    expiry_notification: null,
   };
   return Object.assign(defaultData, data);
 };
@@ -31,7 +30,6 @@ export const defaultPasswordExpiryProSettingsDto = (data = {}) => {
     policy_override: false,
     automatic_expiry: true,
     automatic_update: true,
-    expiry_notification: 2,
   };
   return Object.assign(defaultData, data);
 };
@@ -42,7 +40,6 @@ export const overridenPasswordExpirySettingsDto = (data = {}) => {
     policy_override: true,
     automatic_expiry: true,
     automatic_update: false,
-    expiry_notification: 2,
   };
   return Object.assign(defaultData, data);
 };

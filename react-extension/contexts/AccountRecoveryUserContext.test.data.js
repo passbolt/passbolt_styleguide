@@ -64,7 +64,8 @@ export function defaultAccountRecoveryUserContext(context = {}) {
     findAccountRecoveryPolicy: jest.fn(),
     loadAccountRecoveryPolicy: jest.fn(),
     reloadAccountRecoveryPolicy: jest.fn(),
-    isPolicyEnabled: jest.fn(() => true)
+    isPolicyEnabled: jest.fn(() => true),
+    setUserAccountRecoveryStatus: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

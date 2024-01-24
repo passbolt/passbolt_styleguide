@@ -38,7 +38,6 @@ describe("passwordExpiryProSettings entity", () => {
       automatic_update: true,
       automatic_expiry: true,
       policy_override: false,
-      expiry_notification: 2,
       default_expiry_period: null
     });
   });
@@ -49,7 +48,6 @@ describe("passwordExpiryProSettings entity", () => {
       automatic_update: true,
       automatic_expiry: false,
       policy_override: true,
-      expiry_notification: 5,
       default_expiry_period: 60
     };
 
@@ -59,7 +57,7 @@ describe("passwordExpiryProSettings entity", () => {
 
   it("should throw an exception if required fields are not present", () => {
     const requiredFieldNames = PasswordExpiryProSettingsEntity.getSchema().required;
-    const requiredFieldCount = 4;
+    const requiredFieldCount = 3;
     expect.assertions(requiredFieldCount * 2 + 1);
 
     expect(requiredFieldNames.length).toStrictEqual(requiredFieldCount);
@@ -88,11 +86,7 @@ describe("passwordExpiryProSettings entity", () => {
     {dto: {policy_override: 0}, errorType: "type"},
 
     {dto: {automatic_update: 0}, errorType: "type"},
-
     {dto: {automatic_expiry: 0}, errorType: "type"},
-
-    {dto: {expiry_notification: true}, errorType: "type"},
-    {dto: {expiry_notification: "50"}, errorType: "type"},
 
     {dto: {created: "string but not a date"}, errorType: "format"},
     {dto: {created: -1}, errorType: "type"},

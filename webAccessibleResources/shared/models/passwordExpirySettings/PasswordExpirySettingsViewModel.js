@@ -32,9 +32,7 @@ class PasswordExpirySettingsViewModel {
     this.automatic_expiry = Boolean(settings?.automatic_expiry);
 
     const defaultExpiryPeriod = parseInt(settings?.default_expiry_period, 10);
-    const expiryNotification = parseInt(settings?.expiry_notification, 10);
     this.default_expiry_period = !isNaN(defaultExpiryPeriod) ? defaultExpiryPeriod : null;
-    this.expiry_notification = !isNaN(expiryNotification) ? expiryNotification : null;
 
     this.default_expiry_period_toggle = typeof(settings?.default_expiry_period_toggle) !== 'undefined'
       ? Boolean(settings.default_expiry_period_toggle)
@@ -72,12 +70,10 @@ class PasswordExpirySettingsViewModel {
         automatic_update: baseEntitySchema.properties.automatic_update,
         policy_override: baseEntitySchema.properties.policy_override,
         default_expiry_period: baseEntitySchema.properties.default_expiry_period,
-        expiry_notification: baseEntitySchema.properties.expiry_notification,
       }
     };
 
     if (isAdvanced) {
-      schema.required.push("expiry_notification");
       schema.required.push("policy_override");
     }
 
@@ -95,7 +91,6 @@ class PasswordExpirySettingsViewModel {
       automatic_update: Boolean(entityDto?.automatic_update),
       policy_override: Boolean(entityDto?.policy_override),
       default_expiry_period: entityDto?.default_expiry_period !== null ? parseInt(entityDto?.default_expiry_period, 10) : null,
-      expiry_notification: !isNaN(parseInt(entityDto?.expiry_notification, 10)) ? parseInt(entityDto?.expiry_notification, 10) : null,
     };
     if (entityDto?.id) {
       data.id = entityDto.id;
@@ -115,7 +110,6 @@ class PasswordExpirySettingsViewModel {
       "automatic_update",
       "policy_override",
       "default_expiry_period",
-      "expiry_notification",
     ];
     return keys.some(key => a[key] !== b[key]);
   }
@@ -125,12 +119,15 @@ class PasswordExpirySettingsViewModel {
    * @returns {object}
    */
   toEntityDto() {
+    const default_expiry_period = this.default_expiry_period_toggle
+      ? this.default_expiry_period
+      : null;
+
     return {
       automatic_expiry: this.automatic_expiry,
       automatic_update: this.automatic_update,
       policy_override: this.policy_override,
-      default_expiry_period: this.default_expiry_period,
-      expiry_notification: this.expiry_notification
+      default_expiry_period: default_expiry_period,
     };
   }
 
@@ -159,7 +156,10 @@ class PasswordExpirySettingsViewModel {
       EntitySchema.validate(this.constructor.name, this, schema);
       this.validateFormInput(entityValidationError, isAdvanced);
     } catch (e) {
-      console.log(e);
+      if (!(e instanceof EntityValidationError)) {
+        throw e;
+      }
+
       this.validateFormInput(e, isAdvanced);
       return e;
     }

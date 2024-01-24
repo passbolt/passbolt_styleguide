@@ -19,7 +19,7 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 /**
  * This component allows to edit an user group

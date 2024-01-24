@@ -147,5 +147,15 @@ describe("StandaloneTotpViewModel", () => {
         }
       });
     });
+
+    it("should not construct a ViewModel from url if it is not valid", () => {
+      expect.assertions(1);
+      const url = new URL('otpauth://totp/pro.passbolt.local:admin@passbolt.com?issuer=pro.passbolt.local&secret=OFL3VF3OU4BZP45D4ZME6KTF654ùJRSSO4Q2EO6FJFGPKHRHYSVJA');
+      try {
+        StandaloneTotpViewModel.createStandaloneTotpFromUrl(url);
+      } catch (error) {
+        expect(error.message).toStrictEqual("Could not validate entity StandaloneTotpViewModel.");
+      }
+    });
   });
 });

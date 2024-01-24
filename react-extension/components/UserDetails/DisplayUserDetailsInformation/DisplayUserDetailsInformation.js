@@ -19,7 +19,8 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
-import {formatDateTimeAgo, isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 /**
  * This component displays the user details about information

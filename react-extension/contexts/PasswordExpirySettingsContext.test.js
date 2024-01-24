@@ -13,9 +13,10 @@
  */
 
 import {PasswordExpirySettingsContextProvider} from "./PasswordExpirySettingsContext";
-import {defaultPasswordExpirySettingsEntityDto} from "../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import {defaultPasswordExpirySettingsEntityDto, passwordExpirySettingsEntityDtoFromApi} from "../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
 import {defaultProps} from "./PasswordExpirySettingsContext.test.data";
 import {v4 as uuid} from 'uuid';
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -96,7 +97,6 @@ describe("PasswordExpirySettingsContext", () => {
     });
   });
 
-
   describe('::isFeatureEnabled', () => {
     it('should return false if the feature flag is disabled', async() => {
       expect.assertions(1);
@@ -111,11 +111,7 @@ describe("PasswordExpirySettingsContext", () => {
     it('should return false if the feature flag is enabled but settings is disabled', async() => {
       expect.assertions(1);
 
-      const expectedSettings = defaultPasswordExpirySettingsEntityDto({
-        automatic_expiry: false,
-        automatic_update: false,
-        policy_override: false,
-      });
+      const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       const props = defaultProps();
       props.context.port.addRequestListener('passbolt.password-expiry.find', () => expectedSettings);
@@ -130,11 +126,7 @@ describe("PasswordExpirySettingsContext", () => {
     it('should return true if the feature flag is enabled and settings is enabled', async() => {
       expect.assertions(1);
 
-      const expectedSettings = defaultPasswordExpirySettingsEntityDto({
-        automatic_expiry: true,
-        automatic_update: false,
-        policy_override: true,
-      });
+      const expectedSettings = passwordExpirySettingsEntityDtoFromApi();
 
       const props = defaultProps();
       props.context.port.addRequestListener('passbolt.password-expiry.find', () => expectedSettings);
@@ -144,6 +136,55 @@ describe("PasswordExpirySettingsContext", () => {
 
       await context.findSettings();
       expect(context.isFeatureEnabled()).toStrictEqual(true);
+    });
+  });
+
+  describe("::getDefaultExpirationDate", () => {
+    it('should return null if the feature flag is disabled', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps();
+      props.context.siteSettings.canIUse = () => false;
+
+      const context = new PasswordExpirySettingsContextProvider(props);
+      expect(context.getDefaultExpirationDate()).toStrictEqual(null);
+    });
+
+    it('should return 0 if there is no settings set', async() => {
+      expect.assertions(1);
+
+      const props = defaultProps();
+      props.context.siteSettings.canIUse = () => true;
+
+      const context = new PasswordExpirySettingsContextProvider(props);
+      expect(context.getDefaultExpirationDate()).toStrictEqual(null);
+    });
+
+    // @todo move this to a service
+    it('should return the date from the settings', async() => {
+      expect.assertions(1);
+
+      jest
+        .useFakeTimers()
+        .setSystemTime(new Date("2024-01-01T00:00:00.000Z"));
+
+      const expectedPeriod = 5;
+      const expectedSettings = defaultPasswordExpirySettingsEntityDto({
+        default_expiry_period: expectedPeriod,
+      });
+
+      const props = defaultProps();
+      props.context.port.addRequestListener('passbolt.password-expiry.find', async() => expectedSettings);
+
+      const context = new PasswordExpirySettingsContextProvider(props);
+      mockState(context);
+
+      const findSettingsPromise = context.findSettings();
+      await waitFor(() => {});
+      jest.runAllTimers();
+      await findSettingsPromise;
+      const expectedDefaultDate = "2024-01-06T00:00:00.000Z";
+      expect(context.getDefaultExpirationDate()).toStrictEqual(expectedDefaultDate);
     });
   });
 });

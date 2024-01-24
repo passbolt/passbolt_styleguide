@@ -25,6 +25,7 @@ import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccou
 import HandleAccountRecoveryUserSettingsRoute from "../../AccountRecovery/HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {getUserStatus} from "../../../../shared/utils/userUtils";
 
 class DisplayAccountRecoveryUserSettings extends Component {
   constructor(props) {
@@ -94,12 +95,12 @@ class DisplayAccountRecoveryUserSettings extends Component {
   }
 
   /**
-   * Get the user requesting the current user to subscribe to the account recovery program.
-   * @returns {string|void}
+   * Get the user role who initiated the account recovery request.
+   * @returns {object}
    */
-  get requestorFingerprint() {
-    const requestor = this.requestor;
-    return requestor && requestor.gpgkey.fingerprint;
+  get requestorRole() {
+    const roleName = this.props.context.roles.find(role => role.id === this.requestor.role_id).name;
+    return roleName;
   }
 
   /**
@@ -107,8 +108,16 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * @returns {string}
    */
   get requestorName() {
+    return (<>{this.requestor.profile.first_name} {this.requestor.profile.last_name} ({this.requestor.username})</>);
+  }
+
+  /**
+   * Get the user requesting the current user to subscribe to the account recovery program.
+   * @returns {string|void}
+   */
+  get requestorFingerprint() {
     const requestor = this.requestor;
-    return requestor && `${requestor.profile.first_name} ${requestor.profile.last_name}`;
+    return requestor && requestor.gpgkey.fingerprint;
   }
 
   /**
@@ -119,6 +128,10 @@ class DisplayAccountRecoveryUserSettings extends Component {
     return this.props.accountRecoveryContext.getRequestedDate();
   }
 
+  /**
+   * Returns true if the account recovery feature is not disabled
+   * @returns {boolean}
+   */
   get isAccountRecoveryFeatureEnabled() {
     return this.policy !== "disabled";
   }
@@ -152,6 +165,7 @@ class DisplayAccountRecoveryUserSettings extends Component {
    * @returns {JSX}
    */
   render() {
+    const requestorStatus = getUserStatus(this.requestor);
     return (
       <>
         {this.props.context.loggedInUser && this.props.accountRecoveryContext.getOrganizationPolicy() &&
@@ -186,12 +200,18 @@ class DisplayAccountRecoveryUserSettings extends Component {
                           <div className="content">
                             <div>
                               <Tooltip message={this.formatFingerprint(this.requestorFingerprint)} direction="bottom">
-                                <span className="name-with-tooltip">{`${this.requestorName} (${this.translate("admin")})`}</span>
+                                <span className="name-with-tooltip">{this.requestorName}</span>
                               </Tooltip>
                               &nbsp;
                               <span className="name"><Trans>requested this operation</Trans></span>
                             </div>
-                            <div className="subinfo light">{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</div>
+                            <div className="subinfo light">
+                              <span className="dateTimeAgo">{formatDateTimeAgo(this.requestedDate, this.props.t, this.props.context.locale)}</span>
+                              <span className="chips-group">
+                                <span className={`chips user-status ${requestorStatus}`}>{this.props.t(requestorStatus)}</span>
+                                <span className={`chips user-role ${this.requestorRole}`}>{this.requestorRole}</span>
+                              </span>
+                            </div>
                           </div>
                         </div>
                         <UserAvatar user={this.requestor} baseUrl={this.props.context.userSettings.getTrustedDomain()}/>

@@ -12,6 +12,9 @@
  * @since         4.1.0
  */
 
+import {defaultGroupsUser} from "../../models/entity/user/groupUserEntity.test.data";
+import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
+
 /**
  * Returns the default administrator rbac context for the unit test.
  * @param {Object} data Override the default context.
@@ -46,4 +49,15 @@ export function denyRbacContext(data = {}) {
     canIUseUiAction: () => false,
     ...data
   };
+}
+
+export function defaultLoggedInUser(data = {}) {
+  const user = defaultUserDto({
+    groups_users: [
+      defaultGroupsUser({
+        is_admin: true
+      })
+    ]
+  });
+  return Object.assign(user, data);
 }

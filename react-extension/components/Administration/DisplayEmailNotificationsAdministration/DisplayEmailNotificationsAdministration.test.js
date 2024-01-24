@@ -73,6 +73,7 @@ describe("See the Email Notifications Settings", () => {
 
       //group manager
       expect(page.groupManagerUpdate.checked).toBeTruthy();
+      expect(page.groupManagerRequestAddUser.checked).toBeTruthy();
 
       //Registration and recovery: Admin
       expect(page.userSetupCompletedAdmins.checked).toBeTruthy();
@@ -98,7 +99,6 @@ describe("See the Email Notifications Settings", () => {
 
       //Password expiry
       expect(page.passwordExpiryExpired.checked).toBeTruthy();
-      expect(page.passwordExpiryAboutToExpire.checked).toBeTruthy();
 
       //Email Content Visibility
       expect(page.showUsername.checked).toBeTruthy();
@@ -133,7 +133,7 @@ describe("See the Email Notifications Settings", () => {
       await page.checkCommentAdd();
 
       // Mock the request function to make it return an error.
-      const error = {message: "The service is unavailable"};
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
 
       fetch.doMockOnceIf(/settings\/emails\/notifications*/, () => Promise.reject(error));
 
@@ -142,7 +142,7 @@ describe("See the Email Notifications Settings", () => {
 
       await waitFor(() => {});
       // Throw general error message
-      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith("The service is unavailable");
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalledWith(error.message);
     });
 
     it('As AD I should not be able to click on save if there is no change', async() => {
@@ -187,6 +187,7 @@ describe("See the Email Notifications Settings", () => {
 
       //group manager
       expectDisabled(page.groupManagerUpdate);
+      expectDisabled(page.groupManagerRequestAddUser);
 
       //Registration and recovery: Admin
       expectDisabled(page.userSetupCompletedAdmins);
@@ -212,7 +213,6 @@ describe("See the Email Notifications Settings", () => {
 
       //Password expiry
       expectDisabled(page.passwordExpiryExpired);
-      expectDisabled(page.passwordExpiryAboutToExpire);
 
       //Email Content Visibility
       expectDisabled(page.showUsername);

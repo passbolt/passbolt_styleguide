@@ -128,7 +128,8 @@ class ExtBootstrapApp extends Component {
               "/app/administration/users-directory",
               "/app/administration/email-notification",
               "/app/administration/smtp-settings",
-              "/app/settings/mfa/duo",
+              "/app/settings/mfa/:provider",
+              "/app/settings/mfa",
             ]}>
               <>
                 {this.isLegacyAppjs &&
@@ -155,7 +156,6 @@ class ExtBootstrapApp extends Component {
               "/app/settings/profile",
               "/app/settings/passphrase",
               "/app/settings/security-token",
-              "/app/settings/mfa",
               "/app/settings/mobile",
               "/app/settings/desktop",
               "/app/settings/account-recovery",

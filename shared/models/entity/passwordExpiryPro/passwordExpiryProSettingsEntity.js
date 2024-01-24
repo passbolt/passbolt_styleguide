@@ -43,7 +43,6 @@ class PasswordExpiryProSettingsEntity extends Entity {
         "automatic_expiry",
         "automatic_update",
         "policy_override",
-        "expiry_notification",
       ],
       "properties": {
         "id": {
@@ -67,11 +66,6 @@ class PasswordExpiryProSettingsEntity extends Entity {
         },
         "automatic_update": {
           "type": "boolean",
-        },
-        "expiry_notification": {
-          "type": "integer",
-          "gte": 1,
-          "lte": 999
         },
         "created": {
           "type": "string",
@@ -117,7 +111,6 @@ class PasswordExpiryProSettingsEntity extends Entity {
       policy_override: false,
       automatic_expiry: true,
       automatic_update: true,
-      expiry_notification: 2,
     };
 
     const dto = {...defaultData, ...data};

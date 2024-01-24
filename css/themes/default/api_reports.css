@@ -54,6 +54,7 @@
 /* feedback card */
 /* account recovery */
 /* user card */
+/* user card chips */
 /* messages */
 /* default icon svg fill */
 /* favorite icon fill */
@@ -1263,7 +1264,7 @@ textarea.full_report {
 }
 .input-alt {
   margin-top: 1.6rem;
-  border: 1px solid #F8F8F8;
+  border: 1px solid #E0E0E0;
   border-radius: 3px;
   background-color: #F8F8F8;
   padding: 1.6rem;
@@ -1812,6 +1813,7 @@ input[type=file] {
   background-color: #F8F8F8;
   padding: 1.6rem;
   margin-top: 1.6rem;
+  margin-right: 0;
 }
 .radiolist-alt .input.radio.checked {
   border: 1px solid #2894DF;
@@ -1940,7 +1942,7 @@ input[type=file] {
 }
 .togglelist-alt {
   margin-top: 1.6rem;
-  border: 1px solid default-border;
+  border: 1px solid #E0E0E0;
   border-radius: 3px;
   background-color: #F8F8F8;
   padding: 1.6rem;
@@ -1950,6 +1952,9 @@ input[type=file] {
 }
 .togglelist-alt .input.has-error.toggle-switch {
   margin-bottom: 1.2rem;
+}
+.togglelist-alt .toggle-switch {
+  margin-bottom: 0;
 }
 .togglelist-alt .toggle-switch label {
   margin-left: 1.6rem;
@@ -5206,6 +5211,9 @@ iframe.cachette {
   margin-bottom: 2px;
   margin-top: 2px;
 }
+.flex-item .warning-message {
+  text-align: center;
+}
 .inner.level-2 .flex-item.first {
   padding-left: 10px;
   width: calc(33.33% - 30px);
@@ -6073,7 +6081,7 @@ html.launching .launching-screen p {
   background: #F0F0F0;
   padding: 2.5em;
   width: calc(100% - 294px);
-  height: 250px;
+  height: 235px;
   box-sizing: border-box;
   border: 3px solid #F0F0F0;
   border-left: 0;
@@ -6084,7 +6092,7 @@ html.launching .launching-screen p {
 }
 .mfa-setup .totp-setup .qrcode {
   float: left;
-  height: 250px;
+  height: 235px;
   max-width: 262px;
   box-sizing: border-box;
   border: 3px solid #F0F0F0;

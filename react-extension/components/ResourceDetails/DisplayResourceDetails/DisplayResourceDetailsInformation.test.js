@@ -89,7 +89,7 @@ describe("DisplayResourceDetailsInformation", () => {
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe("root");
       expect(page.displayInformationList.expiryLabel).toBe('Expiry ');
-      expect(page.displayInformationList.expiry.textContent).toBe("Never");
+      expect(page.displayInformationList.expiry.textContent).toBe("Not set");
     });
 
     it('I can see the folder a resource is contained in', async() => {

@@ -19,6 +19,8 @@ import ManageAccountRecoveryUserSettingsPage from "./ManageAccountRecoveryUserSe
 import {waitFor} from "@testing-library/react";
 import {defaultProps} from "./ManageAccountRecoveryUserSettings.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
+import {optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -38,7 +40,7 @@ describe("ManageAccountRecoveryUserSettings", () => {
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state recommended)', async() => {
     expect.assertions(3);
-    const props = defaultProps("opt-out");
+    const props = defaultProps();
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 
@@ -61,7 +63,11 @@ describe("ManageAccountRecoveryUserSettings", () => {
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies (default state optional)', async() => {
     expect.assertions(3);
-    const props = defaultProps("opt-in");
+    const props = defaultProps({
+      organizationPolicy: optOutOrganizationPolicy({
+        policy: "opt-in"
+      }),
+    });
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 
@@ -100,7 +106,17 @@ describe("ManageAccountRecoveryUserSettings", () => {
    * And  I see the Account recovery status enabled with a green dot
    */
   it('As a logged in user who has a pending organization account recovery policy, I can select not to join the account recovery program if the policy is “opt-out”', async() => {
-    const props = defaultProps("opt-in");
+    const props = defaultProps({
+      organizationPolicy: optOutOrganizationPolicy({
+        policy: "opt-in"
+      }),
+    });
+    props.context.port.addRequestListener("passbolt.account-recovery.save-user-settings", async accountRecoveryUserSettingDto => {
+      expect(accountRecoveryUserSettingDto).toStrictEqual({status: 'rejected'});
+    });
+    props.context.port.addRequestListener("passbolt.users.find-logged-in-user", async refreshCache => {
+      expect(refreshCache).toStrictEqual(true);
+    });
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 
@@ -109,17 +125,22 @@ describe("ManageAccountRecoveryUserSettings", () => {
     expect(page.rejectCheckbox.checked).toBeTruthy();
 
     await page.clickOnSave();
-    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.account-recovery.save-user-settings", {status: 'rejected'});
+    await waitForTrue(() => props.accountRecoveryContext.setUserAccountRecoveryStatus.mock.calls.length > 0);
+
     expect(props.accountRecoveryContext.setUserAccountRecoveryStatus).toHaveBeenCalledWith('rejected');
-    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.users.find-logged-in-user", true);
     expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The account recovery subscription setting has been updated.');
     expect(props.onClose).toHaveBeenCalledTimes(1);
   });
 
   it('should display an error notification dialog if an error happens when communicating with the background page', async() => {
-    const props = defaultProps("opt-in");
+    const props = defaultProps({
+      organizationPolicy: optOutOrganizationPolicy({
+        policy: "opt-in"
+      }),
+    });
     const errorMessage = "The background page couldn't process the request";
-    props.context.port.request.mockImplementation(() => { throw new Error(errorMessage); });
+    props.context.port.addRequestListener("passbolt.account-recovery.save-user-settings", async() => { throw new Error(errorMessage); });
+
     const page = new ManageAccountRecoveryUserSettingsPage(props);
     await waitFor(() => { });
 

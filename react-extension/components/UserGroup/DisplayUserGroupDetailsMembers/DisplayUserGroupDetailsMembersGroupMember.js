@@ -18,7 +18,7 @@ import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {Trans, withTranslation} from "react-i18next";
-import {isUserSuspended} from "../../../../shared/utils/dateUtils";
+import {isUserSuspended} from "../../../../shared/utils/userUtils";
 
 /**
  * This component displays a group member for the group details members

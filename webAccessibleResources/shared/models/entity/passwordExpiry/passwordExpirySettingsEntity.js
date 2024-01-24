@@ -60,9 +60,6 @@ class PasswordExpirySettingsEntity extends Entity {
         "automatic_update": {
           "type": "boolean",
         },
-        "expiry_notification": {
-          "type": "null"
-        },
         "created": {
           "type": "string",
           "format": "date-time"
@@ -107,7 +104,6 @@ class PasswordExpirySettingsEntity extends Entity {
       policy_override: false,
       automatic_expiry: false,
       automatic_update: false,
-      expiry_notification: null,
     };
 
     const dto = {...defaultData, ...data};

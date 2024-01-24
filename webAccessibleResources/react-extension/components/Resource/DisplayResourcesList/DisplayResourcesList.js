@@ -50,8 +50,9 @@ import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCode
 import ColumnAttentionRequiredModel from "../../../../shared/models/column/ColumnAttentionRequiredModel";
 import CellAttentionRequired from "../../../../shared/components/Table/CellAttentionRequired";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
-import {formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import CellDate from "../../../../shared/components/Table/CellDate";
+import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -121,11 +122,12 @@ class DisplayResourcesList extends React.Component {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
     this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
     if (this.hasAttentionRequiredFeature) {
-      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
+      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
     }
+
     this.defaultColumns.push(new ColumnNameModel({label: this.translate("Name")}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
-      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), getValue: value => formatExpirationDateTimeAgo(value.expired, this.props.t, this.props.context.locale)}));
+      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), cellRenderer: {component: CellExpiryDate}}));
     }
     this.defaultColumns.push(new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}));
     this.defaultColumns.push(new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}));
@@ -133,7 +135,7 @@ class DisplayResourcesList extends React.Component {
       this.defaultColumns.push(new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}));
     }
     this.defaultColumns.push(new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}));
-    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)}));
+    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), cellRenderer: {component: CellDate}}));
   }
 
   /**

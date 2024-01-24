@@ -100,6 +100,22 @@ class Row extends Component {
   }
 
   /**
+   * Returns the column value to pass to the CellWrapper.
+   * It uses the method `getValue` of the column if it exists.
+   * Otherwise use the item's field value associated to the column.
+   * @param {Object} column
+   * @param {Object} item
+   * @returns {any}
+   */
+  getColumnValue(column, item) {
+    if (column.getValue) {
+      return column.getValue(item);
+    }
+
+    return item[column.field];
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -112,7 +128,7 @@ class Row extends Component {
         onDragStart={this.handleDragStart}
         onDragEnd={this.handleDragEnd}>
         {this.columns.map(column =>
-          <CellWrapper key={column.id} column={column} isSelected={isSelected} value={column.getValue?.(this.item) || this.item[column.field]}/>
+          <CellWrapper key={column.id} column={column} isSelected={isSelected} value={this.getColumnValue(column, this.item)}/>
         )}
       </tr>
     );

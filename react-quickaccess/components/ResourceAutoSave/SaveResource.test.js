@@ -33,6 +33,10 @@ describe("See the Create Resource - save resource", () => {
 
   it("As a signed-in user creating a password on the quickaccess, I should get warn when I enter a pwned password and not be blocked", async() => {
     expect.assertions(3);
+    const fakeNow = new Date("2023-11-24T00:00:00.000Z");
+    jest
+      .useFakeTimers()
+      .setSystemTime(fakeNow);
 
     const context = defaultAppContext(); // The applicative context
     const props = defaultProps(); // The props to pass
@@ -43,7 +47,8 @@ describe("See the Create Resource - save resource", () => {
       name: "Passbolt Browser Extension Test",
       uri: "https://passbolt-browser-extension/test",
       username: "test@passbolt.com",
-      resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
+      resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+      expired: "2023-12-24T00:00:00.000Z",
     };
 
     context.port.addRequestListener("passbolt.quickaccess.prepare-autosave", async() => ({
@@ -75,6 +80,9 @@ describe("See the Create Resource - save resource", () => {
     await waitFor(() => {});
     // we expect a warning to inform about a network issue
     expect(page.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
+
+    //Reset the system time at the desired one as filling input runs some jest timers.
+    jest.setSystemTime(fakeNow);
 
     await page.click(page.saveButton);
 

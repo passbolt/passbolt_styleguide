@@ -90,8 +90,8 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
     const context = this.props.adminPasswordExpiryContext;
     const isSubmitted = context.isSubmitted();
 
-    //undefined instead of null avoids a React error.
-    const defaultExpiryPeriod = this.settings.default_expiry_period || undefined;
+    //empty string instead of null avoids a React error.
+    const defaultExpiryPeriod = this.settings.default_expiry_period || "";
     const isDefaultExpiryPeriodToggleChecked = Boolean(this.settings?.default_expiry_period_toggle);
 
     return (
@@ -112,7 +112,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
                 <span className="name"><Trans>Default password expiry period</Trans></span>
                 <span className="info-input">
                   <Trans>
-                    <span>When a user creates a resource, a default expiry date is set for </span>
+                    <span>When a user creates a resource, a default expiry date is set to </span>
                     <input
                       type="text"
                       className="toggle-input"
@@ -135,7 +135,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
                   !this.errors.default_expiry_period.required && <div className="default-expiry-period-gte error-message"><Trans>The default password expiry period should be a number between 1 and 999 days.</Trans></div>
                 }
                 {
-                  this.errors?.default_expiry_period.required && <div className="default-expiry-period-required  error-message"><Trans>The default password expiry period is required.</Trans></div>
+                  this.errors?.default_expiry_period.required && <div className="default-expiry-period-required  error-message"><Trans>The default password expiry period should be a valid number.</Trans></div>
                 }
               </div>
             }
@@ -165,7 +165,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
               <label htmlFor="automatic_expiry">
                 <span className="name"><Trans>Automatic Expiry</Trans></span>
                 <span className="info">
-                  <Trans>Password automatically expires when a user or a group is removed from the permission list.</Trans>
+                  <Trans>Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.</Trans>
                 </span>
               </label>
             </span>
@@ -178,41 +178,14 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
               <label htmlFor="automatic_update">
                 <span className="name"><Trans>Automatic Update</Trans></span>
                 <span className="info">
-                  <Trans>When users change their passwords, the expiry date is increased by number of days set in the default password expiry period.</Trans>
+                  {isDefaultExpiryPeriodToggleChecked ? (
+                    <Trans>Password expiry date is renewed based on the default password expiry period whenever a password is updated.</Trans>
+                  ) : (
+                    <Trans>Password is no longer marked as expired whenever the password is updated.</Trans>
+                  )}
                 </span>
               </label>
             </span>
-          </div>
-          <h4 className="no-border" id="expiry-notification-subtitle"><Trans>Expiry notifications</Trans></h4>
-          <p id="expiry-notification-description">
-            <Trans>In this section you can choose when a notification is sent before an expiry date.</Trans>
-          </p>
-          <div className="input-alt" id="expiry-notification">
-            <div className="content">
-              <span>A notification sent</span>
-              <input
-                type="text"
-                id="expiry-notification-input"
-                className="toggle-input"
-                name="expiry_notification"
-                onChange={this.handleInputChange}
-                min="1"
-                maxLength={3}
-                disabled={this.hasAllInputDisabled()}
-                value={this.settings.expiry_notification}/>
-              <span>days before the expiry date</span>
-            </div>
-            {
-              this.errors?.expiry_notification && isSubmitted &&
-            <div className="input">
-              {
-                !this.errors?.expiry_notification.type && <div className="expiry-notification-gte  error-message"><Trans>The expiration notification should be a number between 1 and 999 days.</Trans></div>
-              }
-              {
-                this.errors?.expiry_notification.type && <div className="expiry-notification-required  error-message"><Trans>The expiration notification is required.</Trans></div>
-              }
-            </div>
-            }
           </div>
         </form>
       </div>

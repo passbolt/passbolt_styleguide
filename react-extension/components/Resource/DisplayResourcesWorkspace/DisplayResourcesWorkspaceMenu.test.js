@@ -29,6 +29,7 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {
   plaintextSecretPasswordDescriptionTotpDto, plaintextSecretPasswordStringDto
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
+import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 
 beforeEach(() => {
   jest.resetModules();
@@ -72,6 +73,20 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.exists()).toBeTruthy();
       expect(page.displayMenu.editMenu).not.toBeNull();
       expect(page.displayMenu.hasEditMenuDisabled()).toBeFalsy();
+    });
+
+    it('As LU I cannot start to mark as expired a resource if the feature flag password expiry is enabled but the feature is disabled', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
+    });
+
+    it('As LU I cannot start to set the expiry date on a resource via the workspace main menu if password expiry is not enabled', () => {
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSetExpiryDate).toBeNull();
     });
 
     it('As LU I can start copying a resource\'s permalink via the workspace main menu', async() => {
@@ -170,6 +185,21 @@ describe("See Workspace Menu", () => {
       expect(page.displayMenu.menuDetailInformationSelected).not.toBeNull();
       await page.displayMenu.clickOnMenu(page.displayMenu.menuDetailInformationSelected);
       expect(propsOneResourceOwned.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+    });
+  });
+
+  describe("As LU I cannot use the password expiry feature if the feature flag is disabled", () => {
+    it('As LU when I open the more menu, the password expiry feature is not present', () => {
+      expect.assertions(2);
+      const context = defaultAppContext(); // The applicative context
+      context.siteSettings.settings.passbolt.plugins.passwordExpiry.enabled = false;
+
+      const propsOneResourceOwned = defaultPropsOneResourceOwned(); // The props to pass
+      const page = new DisplayResourcesWorkspaceMenuPage(context, propsOneResourceOwned);
+
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).toBeNull();
+      expect(page.displayMenu.dropdownMenuSetExpiryDate).toBeNull();
     });
   });
 
@@ -340,6 +370,50 @@ describe("See Workspace Menu", () => {
       page.displayMenu.clickOnMoreMenu();
       expect(page.displayMenu.dropdownMenuDelete).not.toBeNull();
       expect(page.displayMenu.hasDropdownMenuDeleteDisabled()).toBeFalsy();
+    });
+
+    it('As LU I should be able to mark resources as expired from the more menu', async() => {
+      expect.assertions(5);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => jest.fn());
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuMarkAsExpired);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.set-expiration-date', propsMultipleResource.resourceWorkspaceContext.selectedResources.map(resource => ({id: resource.id, expired: expect.any(String)})));
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
+    });
+
+    it('As LU I should see an error if the resources cannot be mark as expired from the more menu', async() => {
+      expect.assertions(5);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuMarkAsExpired).not.toBeNull();
+      // Mock the notification function
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
+      jest.spyOn(context.port, 'request').mockImplementationOnce(() => { throw new Error('error'); });
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuMarkAsExpired);
+
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.set-expiration-date', propsMultipleResource.resourceWorkspaceContext.selectedResources.map(resource => ({id: resource.id, expired: expect.any(String)})));
+      expect(ActionFeedbackContext._currentValue.displayError).toHaveBeenCalled();
+    });
+
+    it('As LU I should be able to set expiry date from the more menu', async() => {
+      expect.assertions(4);
+      expect(page.displayMenu.exists()).toBeTruthy();
+      expect(page.displayMenu.moreMenu).not.toBeNull();
+      page.displayMenu.clickOnMoreMenu();
+      expect(page.displayMenu.dropdownMenuSetExpiryDate).not.toBeNull();
+
+      await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuSetExpiryDate);
+
+      expect(propsMultipleResource.dialogContext.open).toHaveBeenCalledWith(PasswordExpiryDialog, {resources: propsMultipleResource.resourceWorkspaceContext.selectedResources});
     });
   });
 

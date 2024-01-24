@@ -299,6 +299,13 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                   <Trans>When members of a group change, notify the group manager(s).</Trans>
                 </label>
               </span>
+              <span className="input toggle-switch form-element">
+                <input type="checkbox" className="toggle-switch-checkbox checkbox" name="groupManagerRequestAddUser" disabled={this.hasAllInputDisabled()}
+                  onChange={this.handleInputChange} checked={settings.groupManagerRequestAddUser} id="send-group-manager-request-add-user-toggle-button"/>
+                <label className="text" htmlFor="send-group-manager-request-add-user-toggle-button">
+                  <Trans>When group managers are requested to add users to a group, notify them.</Trans>
+                </label>
+              </span>
             </div>
           </div>
           <h3><Trans>Registration & Recovery</Trans></h3>
@@ -423,18 +430,9 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryExpiredUser" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={settings.passwordExpiryExpiredUser} id="password-expiry-expired-user-toggle-button"/>
                     <label className="text" htmlFor="password-expiry-expired-user-toggle-button">
-                      <Trans>When the password is expired, notify the owners to change it.</Trans>
+                      <Trans>When a password is expired, notify the owners to change it.</Trans>
                     </label>
                   </span>
-                  {this.canUsePasswordExpiryAdvancedSettings() &&
-                    <span className="input toggle-switch form-element">
-                      <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryAboutToExpire" disabled={this.hasAllInputDisabled()}
-                        onChange={this.handleInputChange} checked={settings.passwordExpiryAboutToExpire} id="password-expiry-about-to-expire-toggle-button"/>
-                      <label className="text" htmlFor="password-expiry-about-to-expire-toggle-button">
-                        <Trans>When the password is about to expire, notify the owners to change it.</Trans>
-                      </label>
-                    </span>
-                  }
                 </div>
               </div>
             </>

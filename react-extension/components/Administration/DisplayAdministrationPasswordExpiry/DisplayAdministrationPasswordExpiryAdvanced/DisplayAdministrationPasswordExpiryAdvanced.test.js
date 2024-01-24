@@ -44,7 +44,7 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
       expect.assertions(3);
 
       expect(page.automaticExpiryLabel.textContent).toEqual("Automatic Expiry");
-      expect(page.automaticExpiryInfo.textContent).toEqual("Password automatically expires when a user or a group is removed from the permission list.");
+      expect(page.automaticExpiryInfo.textContent).toEqual("Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.");
       expect(page.automaticExpiryToggle.checked).toBeFalsy();
     });
 
@@ -60,7 +60,7 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
       expect.assertions(3);
 
       expect(page.automaticUpdateLabel.textContent).toEqual("Automatic Update");
-      expect(page.automaticUpdateInfo.textContent).toEqual("When users change their passwords, the expiry date is increased by number of days set in the default password expiry period.");
+      expect(page.automaticUpdateInfo.textContent).toEqual("Password is no longer marked as expired whenever the password is updated.");
       expect(page.automaticUpdateToggle.checked).toBeFalsy();
     });
 
@@ -87,7 +87,7 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
       expect.assertions(3);
 
       expect(page.defaultExpiryPeriodLabel.textContent).toEqual("Default password expiry period");
-      expect(page.defaultExpiryPeriodInfo.textContent).toEqual("When a user creates a resource, a default expiry date is set for days");
+      expect(page.defaultExpiryPeriodInfo.textContent).toEqual("When a user creates a resource, a default expiry date is set to days");
       expect(page.defaultExpiryPeriodToggle.checked).toBeFalsy();
     });
 
@@ -134,31 +134,6 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
       await page.clickOnPolicyOverrideToggle();
 
       expect(page.policyOverrideToggle.checked).toBeTruthy();
-    });
-  });
-
-  describe('As an administrator I can set the expiry notification', () => {
-    it('As an administrator I can see the expiry notification section', async() => {
-      expect.assertions(3);
-
-      expect(page.expiryNotificationTitle.textContent).toEqual("Expiry notifications");
-      expect(page.expiryNotificationDescription.textContent).toEqual("In this section you can choose when a notification is sent before an expiry date.");
-      expect(page.expiryNotificationToggle).not.toBeNull();
-    });
-
-    it('As an administrator I can see the expiry notification input', async() => {
-      expect.assertions(2);
-
-      expect(page.expiryNotificationInfo.textContent).toEqual("A notification sentdays before the expiry date");
-      expect(page.expiryNotificationInput).not.toBeNull();
-    });
-
-    it('As an administrator I can set the automatic expiry when the toggle is triggered', async() => {
-      expect.assertions(1);
-
-      await page.fillExpiryNotification(90);
-
-      expect(page.expiryNotificationInput.value).toEqual("90");
     });
   });
 });

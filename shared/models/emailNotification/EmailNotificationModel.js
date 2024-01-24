@@ -46,6 +46,7 @@ class EmailNotificationModel {
     this.groupUserUpdate = "send_group_user_update" in emailNotificationDTO ? emailNotificationDTO.send_group_user_update : true;
     // Group Manager
     this.groupManagerUpdate = "send_group_manager_update" in emailNotificationDTO ? emailNotificationDTO.send_group_manager_update : true;
+    this.groupManagerRequestAddUser = "send_group_manager_requestAddUser" in emailNotificationDTO ? emailNotificationDTO.send_group_manager_requestAddUser : true;
     // Registration & Recovery
     this.userCreate = "send_user_create" in emailNotificationDTO ? emailNotificationDTO.send_user_create : true;
     this.userRecover = "send_user_recover" in emailNotificationDTO ? emailNotificationDTO.send_user_recover : true;
@@ -71,7 +72,6 @@ class EmailNotificationModel {
     this.accountRecoveryRequestPolicyUpdate = "send_accountRecovery_policy_update" in emailNotificationDTO ? emailNotificationDTO.send_accountRecovery_policy_update : true;
     // Password expiry
     this.passwordExpiryExpiredUser = "send_password_expire" in emailNotificationDTO ? emailNotificationDTO.send_password_expire : true;
-    this.passwordExpiryAboutToExpire = "send_password_aboutToExpire" in emailNotificationDTO ? emailNotificationDTO.send_password_aboutToExpire : true;
   }
 }
 

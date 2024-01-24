@@ -54,6 +54,7 @@
 /* feedback card */
 /* account recovery */
 /* user card */
+/* user card chips */
 /* messages */
 /* default icon svg fill */
 /* favorite icon fill */
@@ -558,7 +559,7 @@ textarea.full_report {
 }
 .input-alt {
   margin-top: 1.6rem;
-  border: 1px solid #F8F8F8;
+  border: 1px solid #E0E0E0;
   border-radius: 3px;
   background-color: #F8F8F8;
   padding: 1.6rem;
@@ -1107,6 +1108,7 @@ input[type=file] {
   background-color: #F8F8F8;
   padding: 1.6rem;
   margin-top: 1.6rem;
+  margin-right: 0;
 }
 .radiolist-alt .input.radio.checked {
   border: 1px solid #2894DF;
@@ -1235,7 +1237,7 @@ input[type=file] {
 }
 .togglelist-alt {
   margin-top: 1.6rem;
-  border: 1px solid default-border;
+  border: 1px solid #E0E0E0;
   border-radius: 3px;
   background-color: #F8F8F8;
   padding: 1.6rem;
@@ -1245,6 +1247,9 @@ input[type=file] {
 }
 .togglelist-alt .input.has-error.toggle-switch {
   margin-bottom: 1.2rem;
+}
+.togglelist-alt .toggle-switch {
+  margin-bottom: 0;
 }
 .togglelist-alt .toggle-switch label {
   margin-left: 1.6rem;

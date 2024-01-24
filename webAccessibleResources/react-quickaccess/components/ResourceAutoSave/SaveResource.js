@@ -24,6 +24,7 @@ import debounce from "debounce-promise";
 import PownedService from '../../../shared/services/api/secrets/pownedService';
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
 
 class SaveResource extends React.Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class SaveResource extends React.Component {
   }
 
   async componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
     this.loadPasswordMetaFromTabForm();
     await this.props.passwordPoliciesContext.findPolicies();
     this.initPwnedPasswordService();
@@ -137,7 +139,8 @@ class SaveResource extends React.Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
+      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+      expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
     };
 
     const secretDto = {
@@ -310,6 +313,7 @@ SaveResource.propTypes = {
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withPasswordPolicies(withTranslation('common')(SaveResource))));
+export default withAppContext(withRouter(withPasswordPolicies(withPasswordExpiry(withTranslation('common')(SaveResource)))));

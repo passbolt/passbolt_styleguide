@@ -12,13 +12,14 @@ import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Returns the default app context for the unit test
  * @param appContext An existing app context
  * @returns {any}
  */
-export function defaultAppContext(appContext) {
+export function defaultAppContext(appContext = {}) {
   const port = new MockPort();
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
@@ -34,7 +35,7 @@ export function defaultAppContext(appContext) {
       Object.assign(this, newContext);
     },
   };
-  return Object.assign(defaultAppContext, appContext || {});
+  return Object.assign(defaultAppContext, appContext);
 }
 
 /**
@@ -46,6 +47,7 @@ export function defaultProps(data = {}) {
     folderParentId: null,
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     onClose: () => {},
     dialogContext: {
       open: () => {},
@@ -57,3 +59,11 @@ export function defaultProps(data = {}) {
 
   return Object.assign(defaultData, data);
 }
+
+export const defaultResourceMeta = (data = {}) => ({
+  name: "Password name",
+  uri: "https://uri.dev",
+  username: "Password username",
+  description: "Password description",
+  ...data
+});

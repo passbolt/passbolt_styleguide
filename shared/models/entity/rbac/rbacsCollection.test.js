@@ -46,4 +46,14 @@ describe("Rbacs Collection", () => {
       expect(error.hasError('id', 'format')).toBeTruthy();
     }
   });
+
+  it("constructor doesn't include rbac item having an unsupported control", () => {
+    expect.assertions(2);
+
+    const collectionDto = [defaultRbacData(), defaultRbacData({control_function: "NotSupported"})];
+    const collection = new RbacsCollection(collectionDto, true);
+
+    expect(collection.items.length).toEqual(1);
+    expect(collection.items[0].id).toEqual(collectionDto[0].id);
+  });
 });

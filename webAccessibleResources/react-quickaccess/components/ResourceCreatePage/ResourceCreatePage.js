@@ -12,6 +12,7 @@ import debounce from 'debounce-promise';
 import PownedService from "../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {
@@ -64,6 +65,7 @@ class ResourceCreatePage extends React.Component {
    * @returns {Promise<void>}
    */
   async componentDidMount() {
+    this.props.passwordExpiryContext.findSettings();
     this.initPwnedPasswordService();
     this.handleLastGeneratedPassword();
     await this.handlePreparedResource();
@@ -269,7 +271,8 @@ class ResourceCreatePage extends React.Component {
       name: this.state.name,
       username: this.state.username,
       uri: this.state.uri,
-      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION)
+      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+      expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
     };
 
     const secretDto = {
@@ -559,6 +562,7 @@ ResourceCreatePage.propTypes = {
   location: PropTypes.any,
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withPrepareResourceContext(withPasswordPolicies(withTranslation('common')(ResourceCreatePage)))));
+export default withAppContext(withRouter(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ResourceCreatePage))))));

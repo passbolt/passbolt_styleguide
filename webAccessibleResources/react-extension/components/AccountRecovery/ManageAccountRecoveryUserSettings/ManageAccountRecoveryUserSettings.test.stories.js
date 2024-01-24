@@ -16,7 +16,9 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import ManageAccountRecoveryUserSettings from "./ManageAccountRecoveryUserSettings";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
-
+import {defaultProps} from './ManageAccountRecoveryUserSettings.test.data';
+import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
+import {defaultAccountRecoveryPolicyCreator, optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
 
 export default {
   title: 'Components/AccountRecovery/ManageAccountRecoveryUserSettings',
@@ -32,76 +34,24 @@ const Template = args =>
   </MockTranslationProvider>;
 
 export const OptOut = Template.bind({});
-OptOut.args = {
-  context: {
-    locale: "en-US",
-    userSettings: {
-      // eslint-disable-next-line no-undef
-      getTrustedDomain: () => process.env.ORIGIN_URL
-    }
-  },
-  organizationPolicy: {
-    creator: {
-      profile: {
-        first_name: "Ada",
-        last_name: "Lovelace"
-      },
-      gpgkey: {
-        fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-      }
-    },
-    policy: "opt-out",
-    modified: "2021-05-25T09:08:34.123",
-  },
-  onClose: () => {}
-};
+OptOut.args = defaultProps({
+  organizationPolicy: optOutOrganizationPolicy({
+    creator: defaultAccountRecoveryPolicyCreator({...users.ada}),
+  })
+});
 
 export const OptIn = Template.bind({});
-OptIn.args = {
-  context: {
-    locale: "en-US",
-    userSettings: {
-      // eslint-disable-next-line no-undef
-      getTrustedDomain: () => process.env.ORIGIN_URL
-    }
-  },
-  organizationPolicy: {
-    creator: {
-      profile: {
-        first_name: "Ada",
-        last_name: "Lovelace"
-      },
-      gpgkey: {
-        fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-      }
-    },
+OptIn.args = defaultProps({
+  organizationPolicy: optOutOrganizationPolicy({
     policy: "opt-in",
-    modified: "2021-05-25T09:08:34.123",
-  },
-  onClose: () => {}
-};
+    creator: defaultAccountRecoveryPolicyCreator({disabled: new Date().toISOString()}),
+  }),
+});
 
 export const Mandatory = Template.bind({});
-Mandatory.args = {
-  context: {
-    locale: "en-US",
-    userSettings: {
-      // eslint-disable-next-line no-undef
-      getTrustedDomain: () => process.env.ORIGIN_URL
-    }
-  },
-  organizationPolicy: {
-    creator: {
-      profile: {
-        first_name: "Ada",
-        last_name: "Lovelace"
-      },
-      gpgkey: {
-        fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-      }
-    },
+Mandatory.args = defaultProps({
+  organizationPolicy: optOutOrganizationPolicy({
     policy: "mandatory",
-    modified: "2021-05-25T09:08:34.123",
-  },
-  onClose: () => {}
-};
+    creator: defaultAccountRecoveryPolicyCreator({deleted: true}),
+  }),
+});

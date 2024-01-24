@@ -41,6 +41,7 @@ import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {DateTime} from "luxon";
 
 class EditResource extends Component {
   constructor(props) {
@@ -403,7 +404,7 @@ class EditResource extends Component {
     const isPasswordExpiryEnabled = this.props.passwordExpiryContext.isFeatureEnabled();
     const hasPasswordChanged = this.state.password !== this.state.passwordOriginal;
     if (isPasswordExpiryEnabled && hasPasswordChanged) {
-      resourceDto.expired = this.computeNewExpirationDate();
+      this.setResourceExpirationDate(resourceDto);
     }
 
     if (!this.areResourceTypesEnabled()) {
@@ -424,12 +425,30 @@ class EditResource extends Component {
   }
 
   /**
-   * Returns the new expiration date for the given resource according the the password expiry settings.
-   * @todo: implement the computation with the full settings
-   * @returns {Date|null}
+   * Sets the expiration date on the given resource according to the password expiry settings
+   * @param {object}
    */
-  computeNewExpirationDate() {
-    return null;
+  setResourceExpirationDate(resourceDto) {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    if (!passwordExpirySettings) {
+      // no settings are defined, we don't process any expiration date
+      return;
+    }
+
+    if (!passwordExpirySettings.automatic_update) {
+      // the settings are defined such that we don't do any update on a password change.
+      return;
+    }
+
+    if (passwordExpirySettings.default_expiry_period == null) {
+      // settings say we need to update the expiration date but the default_expiry_period is null so, we mark the resource as "not expired".
+      resourceDto.expired = null;
+      return;
+    }
+
+    // we have to update the expiration date in future based on the configuration.
+    const date = DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period});
+    resourceDto.expired = date.toISO();
   }
 
   /**

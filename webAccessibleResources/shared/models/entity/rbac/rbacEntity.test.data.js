@@ -18,6 +18,7 @@ import {defaultActionData} from "./actionEntity.test.data";
 import {defaultUiActionData} from "./uiActionEntity.test.data";
 import {controlFunctions} from "../../../services/rbacs/controlFunctionEnumeration";
 import {TEST_ROLE_USER_ID} from "../role/role.test.data";
+import {uiActions} from "../../../services/rbacs/uiActionEnumeration";
 
 export const defaultRbacData = (data = {}) => {
   const defaultData = {
@@ -76,4 +77,14 @@ export const defaultRbacWithAllAssociationData = (data = {}) => {
   };
 
   return defaultRbacData(defaultData);
+};
+
+export const rbacWithUiActionName = (uiAction = uiActions.DESKTOP_TRANSFER) => defaultRbacWithUiActionData({ui_action: defaultUiActionData({name: uiAction})});
+
+export const defaultUnknownRbac = (data = {}) => {
+  const defaultData = {
+    "control_function": "unknown",
+    "action": "unknown",
+  };
+  return Object.assign(defaultRbacData(defaultData, data));
 };

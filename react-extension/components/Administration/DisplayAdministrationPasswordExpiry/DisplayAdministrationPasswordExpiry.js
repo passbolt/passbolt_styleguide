@@ -112,16 +112,16 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
           {isEnabled && (
             <>
               {this.canUseAdvancedSettings ? (
-                <DisplayAdministrationPasswordExpiryAdvanced />
+                <DisplayAdministrationPasswordExpiryAdvanced/>
               ) : (
-                <div id="#password-expiry-settings-form">
+                <div id="password-expiry-settings-form">
                   <h4 id="password-expiry-settings-automatic-workflows" className="title title--required no-border"><Trans>Automatic workflows</Trans></h4>
                   <div className="radiolist-alt">
                     <div className={`input radio`}>
                       <label htmlFor="passwordExpiryAutomaticExpiry">
                         <span className="name"><Trans>Automatic expiry</Trans></span>
                         <span className="info">
-                          <Trans>Password automatically expires when a user or a group is removed from the permission list.</Trans>
+                          <Trans>Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.</Trans>
                         </span>
                       </label>
                     </div>
@@ -129,7 +129,7 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
                       <label htmlFor="passwordExpiryAutomatiUpdate">
                         <span className="name"><Trans>Automatic update</Trans></span>
                         <span className="info">
-                          <Trans>When users change their passwords, the expiry date is automatically renewed.</Trans>
+                          <Trans>Password is no longer marked as expired whenever the password is updated.</Trans>
                         </span>
                       </label>
                     </div>
@@ -141,7 +141,7 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
         </div>
         <div className="col4 last">
           <div className="sidebar-help">
-            <h3><Trans>What is password expiry?</Trans></h3>
+            <h3><Trans>About password expiry</Trans></h3>
             <p><Trans>For more information about the password expiry, checkout the dedicated page on the help website.</Trans></p>
             <a className="button" href="https://help.passbolt.com/configure/password-expiry" target="_blank" rel="noopener noreferrer">
               <Icon name="life-ring"/>

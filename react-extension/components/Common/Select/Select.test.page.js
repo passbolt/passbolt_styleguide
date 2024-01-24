@@ -184,5 +184,5 @@ export const SelectorEnum = {
   select: '.select',
   selectedValue: '.selected-value',
   option: '.option',
-  firstItem: '.option[tabindex = "1"]',
+  firstItem: '.option[tabindex = "0"]',
 };

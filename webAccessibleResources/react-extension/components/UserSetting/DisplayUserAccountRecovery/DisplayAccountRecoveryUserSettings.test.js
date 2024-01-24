@@ -16,7 +16,7 @@
  * Unit tests on EnterNewPassphrase in regard of specifications
  */
 import DisplayAccountRecoveryUserSettingsPage from "./DisplayAccountRecoveryUserSettings.test.page";
-import {defaultProps, mockedData, getAccountRecoveryUserService} from "./DisplayAccountRecoveryUserSettings.test.data";
+import {defaultProps, defaultAccountRecoveryPolicyDto, getAccountRecoveryUserService} from "./DisplayAccountRecoveryUserSettings.test.data";
 import {waitFor} from "@testing-library/react";
 import ManageAccountRecoveryUserSettings from "../../AccountRecovery/ManageAccountRecoveryUserSettings/ManageAccountRecoveryUserSettings";
 import {formatDateTimeAgo} from "../../../../../test/utils/dateUtils";
@@ -33,15 +33,16 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	I see my current account recovery settings
    */
   it('As a logged in user I can see my account recovery settings', async() => {
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(mockedData);
+    const accountRecoveryPolicyDto = defaultAccountRecoveryPolicyDto();
+    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(accountRecoveryPolicyDto);
     const props = defaultProps({status: "pending"});
     const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
     await waitFor(() => {});
 
     expect(page.exists()).toBeTruthy();
     expect(page.status.textContent).toBe("pending");
-    expect(page.requestorName.textContent).toBe("Ada Lovelace (admin)");
-    expect(page.requestDate.textContent).toBe(formatDateTimeAgo(mockedData.modified, props.context.locale));
+    expect(page.requestorName.textContent).toBe("Ada Lovelace (ada@passbolt.com)");
+    expect(page.requestDate.textContent).toBe(formatDateTimeAgo(accountRecoveryPolicyDto.modified, props.context.locale));
     expect(page.fingerprint).toBe("848E 95CC 7493 129A D862 5831 29B8 1CA8 9360 23DD");
   });
 
@@ -71,7 +72,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	I see the account recovery dialog prompt
    */
   it('As a logged in user who has rejected the account recovery program, I can change my choice from my settings workspace', async() => {
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(mockedData);
+    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(defaultAccountRecoveryPolicyDto());
     const props = defaultProps({status: "disabled"});
     const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
     await waitFor(() => {});
@@ -93,7 +94,8 @@ describe("DisplayAccountRecoveryUserSettings", () => {
    * Then	 I see the “Recovery (Optional)” or “Recovery (Mandatory)” dialog
    */
   it('As a logged in user I can update my account recovery choice when my review is pending for the Opt-in, Mandatory and Opt-out policies', async() => {
-    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(mockedData);
+    const accountRecoveryPoliciesDto = defaultAccountRecoveryPolicyDto();
+    const mockedAccountRecoveryUserService = getAccountRecoveryUserService(accountRecoveryPoliciesDto);
     const props = defaultProps({status: "disabled"});
     const page = new DisplayAccountRecoveryUserSettingsPage(props, mockedAccountRecoveryUserService);
     await waitFor(() => {});
@@ -102,7 +104,7 @@ describe("DisplayAccountRecoveryUserSettings", () => {
     await page.clickOnReview();
 
     expect(props.dialogContext.open).toHaveBeenCalledWith(ManageAccountRecoveryUserSettings, {
-      organizationPolicy: mockedData
+      organizationPolicy: accountRecoveryPoliciesDto
     });
   });
 });

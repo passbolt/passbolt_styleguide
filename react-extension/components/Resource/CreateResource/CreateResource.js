@@ -45,6 +45,8 @@ import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import Totp from "../../../../shared/components/Totp/Totp";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {DateTime} from "luxon";
 
 class CreateResource extends Component {
   constructor() {
@@ -113,7 +115,10 @@ class CreateResource extends Component {
    */
   async componentDidMount() {
     this.initResourceType();
-    await this.props.passwordPoliciesContext.findPolicies();
+    await Promise.all([
+      this.props.passwordPoliciesContext.findPolicies(),
+      this.props.passwordExpiryContext.findSettings(),
+    ]);
     this.initPwnedPasswordService();
     this.initPasswordGeneratorConfiguration();
   }
@@ -384,6 +389,10 @@ class CreateResource extends Component {
       folder_parent_id: this.props.folderParentId,
     };
 
+    if (this.props.passwordExpiryContext.isFeatureEnabled()) {
+      this.setResourceExpirationDate(resourceDto);
+    }
+
     // No resource types, legacy case
     if (!this.state.resourceTypeId) {
       return this.createResourceLegacy(resourceDto, this.state.password);
@@ -407,6 +416,33 @@ class CreateResource extends Component {
       description: this.state.description,
       password: this.state.password
     });
+  }
+
+  /**
+   * Sets the expiration date on the given resource according to the password expiry settings
+   * @param {object}
+   */
+  setResourceExpirationDate(resourceDto) {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    if (!passwordExpirySettings) {
+      // no settings are defined, we don't process any expiration date
+      return;
+    }
+
+    if (!passwordExpirySettings.automatic_update) {
+      // the settings are defined such that we don't do any update on a password change.
+      return;
+    }
+
+    if (passwordExpirySettings.default_expiry_period == null) {
+      // settings say we need to update the expiration date but the default_expiry_period is null so, we mark the resource as "not expired".
+      resourceDto.expired = null;
+      return;
+    }
+
+    // we have to update the expiration date in future based on the configuration.
+    const date = DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period});
+    resourceDto.expired = date.toISO();
   }
 
   /**
@@ -889,6 +925,7 @@ CreateResource.propTypes = {
   folderParentId: PropTypes.string, // The folder parent id
   onClose: PropTypes.func, // Whenever the component must be closed
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   t: PropTypes.func, // The translation function
@@ -896,5 +933,5 @@ CreateResource.propTypes = {
   workflowContext: PropTypes.any, // The workflow context
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource)))))))));
 
