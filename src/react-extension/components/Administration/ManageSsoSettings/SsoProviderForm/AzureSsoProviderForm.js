@@ -21,6 +21,7 @@ import {withAppContext} from "../../../../../shared/context/AppContext/AppContex
 import Select from "../../../Common/Select/Select";
 import Icon from "../../../../../shared/components/Icons/Icon";
 import Password from "../../../../../shared/components/Password/Password";
+import AzureSsoSettingsEntity from "../../../../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
 
 /**
  * This component displays the Azure SSO settings form
@@ -57,7 +58,6 @@ class AzureSsoProviderForm extends React.Component {
   }
 
   createRefs() {
-    this.urlInputRef = React.createRef();
     this.clientIdInputRef = React.createRef();
     this.tenantIdInputRef = React.createRef();
     this.clientSecretInputRef = React.createRef();
@@ -70,12 +70,9 @@ class AzureSsoProviderForm extends React.Component {
     }
 
     const errors = this.props.adminSsoContext.getErrors();
-    const fieldToFocus = this.getFirstFieldInError(errors, ["url", "client_id", "tenant_id", "client_secret", "client_secret_expiry"]);
+    const fieldToFocus = this.getFirstFieldInError(errors, ["client_id", "tenant_id", "client_secret", "client_secret_expiry"]);
 
     switch (fieldToFocus) {
-      case "url":
-        this.urlInputRef.current.focus();
-        break;
       case "client_id":
         this.clientIdInputRef.current.focus();
         break;
@@ -154,6 +151,17 @@ class AzureSsoProviderForm extends React.Component {
   }
 
   /**
+   * Get the different URLs Azure supports for the URL select input.
+   * @returns {Array<{value: string, label: string}}
+   */
+  get availableUrlList() {
+    return AzureSsoSettingsEntity.SUPPORTED_URLS.map(url => ({
+      value: url, label: url,
+    }));
+  }
+
+
+  /**
    * Get the different options for email claim select input.
    * @returns {Array<{value: string, label: string}}
    */
@@ -202,14 +210,9 @@ class AzureSsoProviderForm extends React.Component {
     const errors = ssoContext.getErrors();
     return (
       <>
-        <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-          <label><Trans>Login URL</Trans></label>
-          <input id="sso-azure-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
-            value={ssoConfig.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
-            disabled={this.hasAllInputDisabled()}/>
-          {errors?.hasError('url') &&
-            <div className="error-message">{this.displayErrors(errors.getError('url'))}</div>
-          }
+        <div className={`select-wrapper input required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+          <label htmlFor="sso-azure-url-input"><Trans>Login URL</Trans></label>
+          <Select id="sso-azure-url-input" name="url" items={this.availableUrlList} value={ssoConfig.url} onChange={this.handleInputChange}/>
           <p>
             <Trans>The Azure AD authentication endpoint. See <a href="https://learn.microsoft.com/en-us/azure/active-directory/develop/authentication-national-cloud#azure-ad-authentication-endpoints" rel="noopener noreferrer" target="_blank">alternatives</a>.</Trans>
           </p>

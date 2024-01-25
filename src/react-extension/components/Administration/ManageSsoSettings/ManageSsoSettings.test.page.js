@@ -208,6 +208,14 @@ export default class ManageSsoSettingsPage {
   }
 
   /**
+   * Returns the url input HTML element
+   * @returns {HTMLElement}
+   */
+  get url_value() {
+    return this.select(".sso-settings #sso-azure-url-input .selected-value .value")?.textContent;
+  }
+
+  /**
    * Returns the redirect_url input HTML element
    * @returns {HTMLElement}
    */
@@ -315,8 +323,24 @@ export default class ManageSsoSettingsPage {
    * Returns the delete SSO Settings dialog HTML element
    * @returns {HTMLElement}
    */
+  get prompt_value() {
+    return this.select("#prompt-input .selected-value .value")?.textContent;
+  }
+
+  /**
+   * Returns the delete SSO Settings dialog HTML element
+   * @returns {HTMLElement}
+   */
   get email_claim() {
     return this.select("#email-claim-input");
+  }
+
+  /**
+   * Returns the delete SSO Settings dialog HTML element
+   * @returns {HTMLElement}
+   */
+  get email_claim_value() {
+    return this.select("#email-claim-input .selected-value .value")?.textContent;
   }
 
   /**
