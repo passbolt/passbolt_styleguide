@@ -17,6 +17,9 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 import {withAdminPasswordExpiry} from "../../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
+import {withActionFeedback} from "../../../../contexts/ActionFeedbackContext";
+import {withDialog} from "../../../../contexts/DialogContext";
+import NotifyError from "../../../Common/Error/NotifyError/NotifyError";
 
 class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
   /**
@@ -31,6 +34,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
    * Bind callbacks methods
    */
   bindCallbacks() {
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleExpiryPeriodToggleClick = this.handleExpiryPeriodToggleClick.bind(this);
   }
@@ -41,10 +45,10 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
    * @returns {void}
    */
   handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : parseInt(target.value, 10);
-    const name = target.name;
-    this.props.adminPasswordExpiryContext.setSettingsBulk({[name]: value});
+    event.preventDefault();
+    const {type, checked, value, name} = event.target;
+    const filedValue = type === "checkbox" ? checked : parseInt(value, 10);
+    this.props.adminPasswordExpiryContext.setSettingsBulk({[name]: filedValue});
   }
 
   /**
@@ -55,6 +59,46 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
   handleExpiryPeriodToggleClick(event) {
     const value = event.target.checked;
     this.props.adminPasswordExpiryContext.setDefaultExpiryToggle(value);
+  }
+
+  /**
+   * Handle form submission that can be trigger when hitting `enter`
+   * @param {Event} event
+   */
+  async handleFormSubmit(event) {
+    // Avoid the form to be submitted natively by the browser and avoid a redirect to a broken page.
+    event.preventDefault();
+
+    this.props.adminPasswordExpiryContext.setSubmitted(true);
+
+    if (this.props.adminPasswordExpiryContext.isProcessing() || !this.props.adminPasswordExpiryContext.validateData()) {
+      return;
+    }
+
+    try {
+      await this.props.adminPasswordExpiryContext.save();
+      await this.handleSaveSuccess();
+    } catch (error) {
+      await this.handleSaveError(error);
+    }
+  }
+
+  /**
+   * Handle save operation success.
+   * @returns {Promise<void>}
+   */
+  async handleSaveSuccess() {
+    await this.props.actionFeedbackContext.displaySuccess(this.props.t("The password expiry settings were updated."));
+  }
+
+  /**
+   * Handle save operation error.
+   * @param {object} error The returned error
+   * @returns {Promise<void>}
+   */
+  async handleSaveError(error) {
+    await this.props.actionFeedbackContext.displayError(error.message);
+    this.props.dialogContext.open(NotifyError, {error});
   }
 
   /**
@@ -96,7 +140,7 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
 
     return (
       <div id="password-expiry-form-advanced">
-        <form className="form">
+        <form className="form" onSubmit={this.handleFormSubmit}>
           <h4 className="no-border" id="expiry-policies-subtitle"><Trans>Expiry Policies</Trans></h4>
           <p id="expiry-policies-description">
             <Trans>In this section you can choose the default behaviour of password expiry policy for all users.</Trans>
@@ -196,7 +240,9 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
 DisplayAdministrationPasswordExpiryAdvanced.propTypes = {
   context: PropTypes.object, // Application context
   adminPasswordExpiryContext: PropTypes.object, // The admin password context context
+  actionFeedbackContext: PropTypes.object, // The action feedback context
+  dialogContext: PropTypes.object, // The dialog context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withAdminPasswordExpiry(withTranslation('common')(DisplayAdministrationPasswordExpiryAdvanced)));
+export default withAppContext(withAdminPasswordExpiry(withActionFeedback(withDialog(withTranslation('common')(DisplayAdministrationPasswordExpiryAdvanced)))));
