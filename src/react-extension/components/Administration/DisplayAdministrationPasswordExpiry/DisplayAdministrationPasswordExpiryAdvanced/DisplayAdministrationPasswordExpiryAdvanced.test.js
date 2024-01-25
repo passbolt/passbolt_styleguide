@@ -15,6 +15,11 @@
 import {defaultAppContext} from '../../../../contexts/ApiAppContext.test.data';
 import {defaultPropsPro} from '../DisplayAdministrationPasswordExpiry.test.data';
 import DisplayAdministrationPasswordExpirySettingsAdvancedPage from './DisplayAdministrationPasswordExpiryAdvanced.test.page.js';
+import NotifyError from '../../../Common/Error/NotifyError/NotifyError.js';
+import {waitFor} from '@testing-library/dom';
+import {waitForTrue} from '../../../../../../test/utils/waitFor.js';
+import {overridenPasswordExpirySettingsEntityDto} from "../../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data.js";
+import {defaultAdminPasswordExpiryContext} from '../../../../contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPasswordExpiryContext.test.data.js';
 
 /**
  * Unit tests on DisplayAdministrationPasswordExpirySettingsAdvancedPage in regard of specifications
@@ -134,6 +139,92 @@ describe("DisplayAdministrationPasswordExpiryAdvanced", () => {
       await page.clickOnPolicyOverrideToggle();
 
       expect(page.policyOverrideToggle.checked).toBeTruthy();
+    });
+
+    it('As an administrator I can save the policy when hitting `enter`', async() => {
+      expect.assertions(2);
+      const props = defaultPropsPro({
+        adminPasswordExpiryContext: defaultAdminPasswordExpiryContext()
+      });
+
+      props.adminPasswordExpiryContext.isProcessing.mockImplementation(() => false);
+      props.adminPasswordExpiryContext.validateData.mockImplementation(() => true);
+      props.adminPasswordExpiryContext.getSettings.mockImplementation(() => overridenPasswordExpirySettingsEntityDto());
+
+      const page = new DisplayAdministrationPasswordExpirySettingsAdvancedPage(context, props);
+      page.submitForm();
+
+      await waitForTrue(() => props.actionFeedbackContext.displaySuccess.mock.calls.length > 0);
+
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledTimes(1);
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith('The password expiry settings were updated.');
+    });
+
+    it('As an administrator when an unexpected error happened while saving the policy by hitting `enter`', async() => {
+      expect.assertions(3);
+      const expectedError = new Error("Something wrong happened");
+      const context = defaultAppContext();
+      const props = defaultPropsPro({
+        adminPasswordExpiryContext: defaultAdminPasswordExpiryContext()
+      });
+      props.adminPasswordExpiryContext.isProcessing.mockImplementation(() => false);
+      props.adminPasswordExpiryContext.validateData.mockImplementation(() => true);
+      props.adminPasswordExpiryContext.getSettings.mockImplementation(() => overridenPasswordExpirySettingsEntityDto());
+      props.adminPasswordExpiryContext.save.mockImplementation(() => { throw expectedError; });
+
+      const page = new DisplayAdministrationPasswordExpirySettingsAdvancedPage(context, props);
+      page.submitForm();
+      await waitFor(() => {});
+
+      expect(props.actionFeedbackContext.displayError).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledTimes(1);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error: expectedError});
+    });
+
+    it('As an administrator I should not be able to submit the form if the form is not valide', async() => {
+      expect.assertions(5);
+      const context = defaultAppContext();
+      const props = defaultPropsPro({
+        adminPasswordExpiryContext: defaultAdminPasswordExpiryContext()
+      });
+      props.adminPasswordExpiryContext.isProcessing.mockImplementation(() => false);
+      props.adminPasswordExpiryContext.validateData.mockImplementation(() => false);
+      props.adminPasswordExpiryContext.getSettings.mockImplementation(() => overridenPasswordExpirySettingsEntityDto());
+
+      const page = new DisplayAdministrationPasswordExpirySettingsAdvancedPage(context, props);
+      const processingCallCountDuringRender = props.adminPasswordExpiryContext.isProcessing.mock.calls.length;
+      page.submitForm();
+      await waitFor(() => {});
+
+      expect(props.actionFeedbackContext.displayError).not.toHaveBeenCalled();
+      expect(props.dialogContext.open).not.toHaveBeenCalled();
+      expect(props.adminPasswordExpiryContext.save).not.toHaveBeenCalled();
+
+      // to ensure the form submission is calling `isProcessing` we need to know the count of call made before the form submit event and add 1
+      expect(props.adminPasswordExpiryContext.isProcessing).toHaveBeenCalledTimes(processingCallCountDuringRender + 1);
+      expect(props.adminPasswordExpiryContext.validateData).toHaveBeenCalledTimes(1);
+    });
+
+    it('As a system I should not make multiple submission calls to the API when processing', async() => {
+      expect.assertions(5);
+      const context = defaultAppContext();
+      const props = defaultPropsPro({
+        adminPasswordExpiryContext: defaultAdminPasswordExpiryContext()
+      });
+      props.adminPasswordExpiryContext.isProcessing.mockImplementation(() => true);
+      props.adminPasswordExpiryContext.getSettings.mockImplementation(() => overridenPasswordExpirySettingsEntityDto());
+
+      const page = new DisplayAdministrationPasswordExpirySettingsAdvancedPage(context, props);
+      const processingCallCountDuringRender = props.adminPasswordExpiryContext.isProcessing.mock.calls.length;
+      page.submitForm();
+      await waitFor(() => {});
+
+      expect(props.actionFeedbackContext.displayError).not.toHaveBeenCalled();
+      expect(props.dialogContext.open).not.toHaveBeenCalled();
+      expect(props.adminPasswordExpiryContext.save).not.toHaveBeenCalled();
+      expect(props.adminPasswordExpiryContext.validateData).not.toHaveBeenCalled();
+      // to ensure the form submission is calling `isProcessing` we need to know the count of call made before the form submit event and add 1
+      expect(props.adminPasswordExpiryContext.isProcessing).toHaveBeenCalledTimes(processingCallCountDuringRender + 1);
     });
   });
 });
