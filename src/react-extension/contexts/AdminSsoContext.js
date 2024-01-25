@@ -361,7 +361,7 @@ export class AdminSsoContextProvider extends React.Component {
     try {
       const ssoSettingsId = this.state.originalConfig.id;
       await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettingsId);
-      this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings has been deleted successfully"));
+      this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings have been deleted successfully"));
       this.isSsoConfigExisting = false;
       this.setState({
         ssoConfig: null,
