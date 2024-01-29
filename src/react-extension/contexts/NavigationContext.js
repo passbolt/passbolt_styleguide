@@ -441,6 +441,19 @@ class NavigationContextProvider extends React.Component {
   }
 
   /**
+   * Whenever the user wants to navigate to the users settings workspace mfa duo setup.
+   * @returns {Promise<void>}
+   */
+  async onGoToUserSettingsDuoSetupRequested() {
+    //Application to point
+    let app = "api";
+    if (window.chrome?.webview) {
+      app = "browser-extension";
+    }
+    await this.goTo(app, "/app/settings/mfa");
+  }
+
+  /**
    * Whenever the user wants to navigate to the users settings workspace keys section.
    * @returns {Promise<void>}
    */

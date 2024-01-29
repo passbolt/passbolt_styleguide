@@ -25,4 +25,9 @@ export const uiActions = {
   USERS_VIEW_WORKSPACE: "Users.viewWorkspace",
   MOBILE_TRANSFER: "Mobile.transfer",
   DESKTOP_TRANSFER: "Desktop.transfer",
+  ADMINSTRATION_VIEW_WORKSPACE: "Administration.viewWorkspace",
+  DUO_CONFIGURATION: "Duo.configuration",
+  AVATAR_UPLOAD: "Avatar.upload",
 };
+
+

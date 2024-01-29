@@ -158,6 +158,9 @@ const siteSettings = (isProEdition = true) => ({
             locale: "ro-RO",
             label: "Română (beta)"
           }, {
+            locale: "ru-RU",
+            label: "Pусский (beta)"
+          }, {
             locale: "sv-SE",
             label: "Svenska"
           }
@@ -183,6 +186,12 @@ const siteSettings = (isProEdition = true) => ({
       },
       "passwordExpiry": {
         "enabled": true,
+      },
+      "desktop": {
+        "enabled": true,
+      },
+      "passwordExpiryPolicies": {
+        "enabled": isProEdition,
       }
     }
   }

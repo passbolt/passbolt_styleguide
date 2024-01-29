@@ -28,13 +28,12 @@ import DeleteResource from "./DeleteResource";
 export default class DeleteResourceTestPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <AppContextProvider context={appContext}>
+        <AppContextProvider context={props.context}>
           <DialogContextProvider>
             <ManageDialogs/>
             <DeleteResource {...props}/>

@@ -21,8 +21,6 @@ import {Router, NavLink, Route, Switch} from "react-router-dom";
 import {createMemoryHistory} from "history";
 import UserWorkspaceContextProvider, {UserWorkspaceFilterTypes, UserWorkspaceContext} from "./UserWorkspaceContext";
 
-
-
 /**
  * The UserWorkspaceContextPage component represented as a page
  */

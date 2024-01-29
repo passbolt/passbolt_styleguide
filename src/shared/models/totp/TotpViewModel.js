@@ -48,7 +48,7 @@ class TotpViewModel {
         secret_key: {
           type: "string",
           notEmpty: true,
-          pattern: /^\s*[A-Za-z2-7]+=*\s*$/, // BASE32 pattern including lowercase and space before and after
+          pattern: /^\s*[A-Za-z2-7\s]+=*\s*$/, // BASE32 pattern including lowercase and space before and after
           maxLength: RESOURCE_TOTP_KEY_MAX_LENGTH
         },
         period: {
@@ -79,7 +79,7 @@ class TotpViewModel {
         algorithm:  this.algorithm,
         digits: this.digits,
         period: this.period,
-        secret_key: this.secret_key.trim().toUpperCase(),
+        secret_key: this.secret_key.replaceAll(/\s+/g, "").toUpperCase(),
       },
     };
   }

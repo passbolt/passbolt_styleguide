@@ -23,7 +23,8 @@ import UploadUserProfileAvatar from "../UploadUserProfileAvatar/UploadUserProfil
 import {Trans, withTranslation} from "react-i18next";
 import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import {formatDateTimeAgo} from '../../../../shared/utils/dateUtils';
-
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 /**
  * This component displays the user profile information
  */
@@ -83,6 +84,15 @@ class DisplayUserProfile extends React.Component {
     return this.props.context.siteSettings.canIUse('locale');
   }
 
+  /**
+   * Can the user access upload a new avatar capability.
+   * @returns {bool}
+   */
+  get canIUseUploadAvatarCapability() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.AVATAR_UPLOAD);
+  }
+
+
   render() {
     return (
       <div className="grid grid-responsive-12 profile-detailed-information">
@@ -139,16 +149,18 @@ class DisplayUserProfile extends React.Component {
                     className=""/>
                 </div>
               </div>
-              <div>
-                <button
-                  className="button edit-avatar-action"
-                  title={this.translate("Upload a new avatar picture")}
-                  type="button"
-                  onClick={this.handleUploadPicture}>
-                  <Icon name="upload"/>
-                  <span className="help-text"><Trans>Upload a new avatar picture</Trans></span>
-                </button>
-              </div>
+              {
+                this.canIUseUploadAvatarCapability && <div>
+                  <button
+                    className="button edit-avatar-action"
+                    title={this.translate("Upload a new avatar picture")}
+                    type="button"
+                    onClick={this.handleUploadPicture}>
+                    <Icon name="upload"/>
+                    <span className="help-text"><Trans>Upload a new avatar picture</Trans></span>
+                  </button>
+                </div>
+              }
             </div>
           </div>
         </div>
@@ -160,10 +172,11 @@ class DisplayUserProfile extends React.Component {
 
 DisplayUserProfile.propTypes = {
   context: PropTypes.any, // The application context
+  rbacContext: PropTypes.object, // The rbac context
   dialogContext: PropTypes.object, // The dialog context
   userSettingsContext: PropTypes.object, // The user settings context
   t: PropTypes.func, // The translation function
   i18n: PropTypes.any // The i18n context translation
 };
 
-export default withAppContext(withDialog(withUserSettings(withTranslation('common')(DisplayUserProfile))));
+export default withAppContext(withDialog(withUserSettings(withRbac(withTranslation('common')(DisplayUserProfile)))));

@@ -24,6 +24,8 @@ import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import {waitFor} from "@testing-library/dom";
 import {DateTime} from "luxon";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -65,11 +67,13 @@ describe("DisplayResourceDetailsInformation", () => {
       const modificationDate = DateTime.fromISO(absoluteModificationDate).toRelative();
       const absoluteCreationDate = props.resourceWorkspaceContext.details.resource.created;
       const creationDate = DateTime.fromISO(absoluteCreationDate).toRelative();
-      expect.assertions(20);
+      expect.assertions(22);
       expect(page.displayInformationList.usernameLabel).toBe('Username');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
       expect(page.displayInformationList.passwordLabel).toBe('Password');
       expect(page.displayInformationList.password.textContent).toBe("Copy password to clipboard");
+      expect(page.displayInformationList.totpLabel).toBe('TOTP');
+      expect(page.displayInformationList.totp.textContent).toBe("Copy TOTP to clipboard");
       expect(page.displayInformationList.uriLabel).toBe('URI');
       expect(page.displayInformationList.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.uri);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
@@ -85,7 +89,7 @@ describe("DisplayResourceDetailsInformation", () => {
       expect(page.displayInformationList.locationLabel).toBe('Location');
       expect(page.displayInformationList.location.textContent).toBe("root");
       expect(page.displayInformationList.expiryLabel).toBe('Expiry ');
-      expect(page.displayInformationList.expiry.textContent).toBe("Never");
+      expect(page.displayInformationList.expiry.textContent).toBe("Not set");
     });
 
     it('I can see the folder a resource is contained in', async() => {
@@ -133,9 +137,10 @@ describe("DisplayResourceDetailsInformation", () => {
     });
   });
 
-  describe(' As LU I can copy password of a resource to clipboard', () => {
-    it('AS LU, I should be able to copy the password of a resource to clipboard', async() => {
+  describe(' As LU I can copy a secret of a resource to clipboard', () => {
+    it('AS LU, I should be able to copy the secret of a resource to clipboard', async() => {
       page = new DisplayResourceDetailsInformationPage(props);
+      const totp = defaultTotpViewModelDto();
       await waitFor(() => {});
       mockContextRequest(copyClipboardMockImpl);
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
@@ -143,10 +148,16 @@ describe("DisplayResourceDetailsInformation", () => {
 
       await page.displayInformationList.click(page.displayInformationList.password);
 
-      expect.assertions(3);
+      expect.assertions(5);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.secret.decrypt", props.resourceWorkspaceContext.details.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-copy');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The secret has been copied to clipboard");
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      await page.displayInformationList.click(page.displayInformationList.totp);
+      const code = TotpCodeGeneratorService.generate(totp);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
+      expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
@@ -154,24 +165,35 @@ describe("DisplayResourceDetailsInformation", () => {
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
 
-      expect.assertions(1);
+      expect.assertions(2);
       expect(page.displayInformationList.passwordLink.hasAttribute("disabled")).toBeTruthy();
+      expect(page.displayInformationList.totpLink.hasAttribute("disabled")).toBeTruthy();
     });
   });
 
   describe(' As LU I can preview secret of a resource', () => {
     it('AS LU, I should be able to preview secret of a resource', async() => {
       page = new DisplayResourceDetailsInformationPage(props);
+      const totp = defaultTotpViewModelDto();
       await waitFor(() => {});
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-copy'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
 
-      expect.assertions(3);
+      expect.assertions(7);
       await page.displayInformationList.click(page.displayInformationList.viewPassword);
       expect(page.displayInformationList.password.textContent).toBe('secret-copy');
+      expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalled();
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.details.resource.id);
       await page.displayInformationList.click(page.displayInformationList.viewPassword);
       expect(page.displayInformationList.password.textContent).toBe('Copy password to clipboard');
+
+      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
+      await page.displayInformationList.click(page.displayInformationList.viewTotp);
+      const code = TotpCodeGeneratorService.generate(totp);
+      expect(page.displayInformationList.totp.textContent.replaceAll(/\s+/g, "")).toBe(code);
+      expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalledTimes(2);
+      await page.displayInformationList.click(page.displayInformationList.viewTotp);
+      expect(page.displayInformationList.totp.textContent).toBe('Copy TOTP to clipboard');
     });
 
     it('AS LU, I cannot preview secret of resource if disabled by API flag', async() => {

@@ -18,7 +18,6 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import PropTypes from "prop-types";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
-import DialogContextProvider from "../../../contexts/DialogContext";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 
@@ -35,10 +34,8 @@ export default class DisplayResourcesWorkspaceMenuPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContextProvider context={appContext}>
-          <DialogContextProvider>
-            <ManageDialogs/>
-            <DisplayResourcesWorkspaceMenu {...props}/>
-          </DialogContextProvider>
+          <ManageDialogs/>
+          <DisplayResourcesWorkspaceMenu {...props}/>
         </AppContextProvider>
       </MockTranslationProvider>
     );
@@ -147,6 +144,20 @@ class DisplayMenuPageObject {
    */
   hasDropdownMenuDeleteDisabled() {
     return this.dropdownMenuDelete.hasAttribute("disabled");
+  }
+
+  /**
+   * Returns the mark as expired menu elements of password workspace menu
+   */
+  get dropdownMenuMarkAsExpired() {
+    return this._container.querySelector('#mark_as_expired_action .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
+   * Returns the "set expiry date" menu element of the password workspace menu
+   */
+  get dropdownMenuSetExpiryDate() {
+    return this._container.querySelector('#set_expiry_date_action .row .main-cell-wrapper .main-cell button');
   }
 
   /**

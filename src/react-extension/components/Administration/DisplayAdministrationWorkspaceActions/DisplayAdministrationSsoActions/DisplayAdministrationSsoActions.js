@@ -49,7 +49,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
       return;
     }
 
-    if (ssoContext.validateData()) {
+    if (ssoContext.validateData(true)) {
       await ssoContext.saveAndTestConfiguration();
     }
   }
@@ -59,7 +59,7 @@ class DisplayAdministrationWorkspaceActions extends React.Component {
    * @returns {boolean}
    */
   isSaveEnabled() {
-    return this.props.adminSsoContext.hasFormChanged() || this.props.adminSsoContext.canDeleteSettings();
+    return Boolean(this.props.adminSsoContext.ssoConfig?.provider) || this.props.adminSsoContext.canDeleteSettings();
   }
 
   /**

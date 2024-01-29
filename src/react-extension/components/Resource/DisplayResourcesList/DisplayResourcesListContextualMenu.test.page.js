@@ -112,6 +112,22 @@ export default class DisplayResourcesListContextualMenuPage {
     return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#delete');
   }
 
+  /**
+   * Returns the mark as expired item.
+   * @return {HTMLElement}
+   */
+  get markAsExpiredItem() {
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#mark-as-expired');
+  }
+
+  /**
+   * Returns the item.
+   * @return {HTMLElement}
+   */
+  get setExpiryDateItem() {
+    return this.menu.querySelector('li .row .main-cell-wrapper .main-cell button#set-expiry-date');
+  }
+
   /** Click on the component */
   async click(component)  {
     const leftClick = {button: 0};
@@ -162,23 +178,37 @@ export default class DisplayResourcesListContextualMenuPage {
   }
 
   /**
-   * Click on the menu edir folder
+   * Click on the menu edit folder
    */
   async edit() {
     await this.click(this.editItem);
   }
 
   /**
-   * Click on the menu edir folder
+   * Click on the menu share folder
    */
   async share() {
     await this.click(this.shareItem);
   }
 
   /**
-   * Click on the menu edir folder
+   * Click on the menu delete folder
    */
   async delete() {
     await this.click(this.deleteItem);
+  }
+
+  /**
+   * Click on the menu "mark as expired"
+   */
+  async markAsExpired() {
+    await this.click(this.markAsExpiredItem);
+  }
+
+  /**
+   * Click on the menu set-expiry-date
+   */
+  async setExpiryDate() {
+    await this.click(this.setExpiryDateItem);
   }
 }

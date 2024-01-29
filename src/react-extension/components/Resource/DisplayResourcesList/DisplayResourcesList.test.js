@@ -89,12 +89,13 @@ describe("Display Resources", () => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      expect(page.resourcesCount).toBe(5);
+      expect(page.resourcesCount).toBe(6);
       expect(page.resource(1).name).toBe('apache');
       expect(page.resource(2).name).toBe('bower');
       expect(page.resource(3).name).toBe('test');
       expect(page.resource(4).name).toBe('totp');
       expect(page.resource(5).name).toBe('standalone totp');
+      expect(page.resource(6).name).toBe('will-expire');
     });
   });
 
@@ -287,7 +288,7 @@ describe("Display Resources", () => {
 
   describe('As LU, I should preview the secret.', () => {
     it('AS LU, I should preview the secret of a resource ', async() => {
-      expect.assertions(6);
+      expect.assertions(7);
       const props = propsWithFilteredResources();
       const totp = defaultTotpViewModelDto();
       const page = new DisplayResourcesListPage(props);
@@ -306,6 +307,7 @@ describe("Display Resources", () => {
       const code = TotpCodeGeneratorService.generate(totp);
       expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[3].id);
       expect(page.resource(4).totp.replaceAll(/\s+/g, "")).toBe(code);
+      expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalledTimes(2);
       await page.resource(4).selectViewTotp();
       expect(page.resource(4).totp).toBe('Copy TOTP to clipboard');
     });

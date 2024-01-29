@@ -9,6 +9,7 @@ import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.dat
 import {
   TEST_RESOURCE_TYPE_PASSWORD_STRING
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Default props
@@ -26,7 +27,8 @@ export const defaultProps = (props = {}) => {
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
-    passwordPoliciesContext: defaultPasswordPoliciesContext(props?.passwordPoliciesContext),
+    passwordPoliciesContext: defaultPasswordPoliciesContext(),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     workflowContext: defaultWorkflowContext(),
     ...props
   };

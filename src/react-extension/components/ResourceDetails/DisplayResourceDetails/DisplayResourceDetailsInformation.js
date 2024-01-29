@@ -238,6 +238,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.hidePreviewedSecret();
     if (!isPasswordPreviewed) {
       await this.previewPassword();
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 
@@ -320,7 +321,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
       return;
     }
 
@@ -333,7 +334,7 @@ class DisplayResourceDetailsInformation extends React.Component {
 
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -344,6 +345,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.hidePreviewedSecret();
     if (!isTotpPreviewed) {
       this.previewTotp();
+      this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 
@@ -373,7 +375,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be previewed."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be previewed."));
       return;
     }
 
@@ -433,7 +435,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   get isAttentionRequired() {
-    return this.isResourceExpired;
+    return this.isAttentionRequiredOnExpiryDate;
   }
 
   /**
@@ -441,20 +443,23 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {string}
    */
   get resourceExpirationStatus() {
+    if (!this.resource?.expired) {
+      return this.translate("Not set");
+    }
     return formatExpirationDateTimeAgo(this.resource?.expired, this.props.t, this.props.context.locale);
   }
 
   /**
-   * Returns true if the current resource is expired.
+   * Returns true if the current resource is expired or about to expire.
    * @returns {boolean}
    */
-  get isResourceExpired() {
+  get isAttentionRequiredOnExpiryDate() {
     if (!this.resource?.expired) {
       return false;
     }
 
-    const now = new Date();
-    return new Date(this.resource.expired) <= now;
+    const expiryDate = new Date(this.resource.expired);
+    return expiryDate <= new Date();
   }
 
   /**
@@ -491,7 +496,7 @@ class DisplayResourceDetailsInformation extends React.Component {
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
               <span>
                 <Trans>Information</Trans>
-                {this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
+                {canUsePasswordExpiry && this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
               </span>
               {this.state.open &&
               <Icon name="caret-down"/>
@@ -591,9 +596,9 @@ class DisplayResourceDetailsInformation extends React.Component {
           }
           {canUsePasswordExpiry &&
             <li className="expiry">
-              <span className="label"><Trans>Expiry</Trans> {this.isResourceExpired && <Icon name="exclamation" baseline={true}/>}
+              <span className="label"><Trans>Expiry</Trans> {this.isAttentionRequiredOnExpiryDate && <Icon name="exclamation" baseline={true}/>}
               </span>
-              <span className="value">{this.resourceExpirationStatus}</span>
+              <span className="value" title={this.resource.expired}>{this.resourceExpirationStatus}</span>
             </li>
           }
         </ul>

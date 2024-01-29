@@ -68,6 +68,20 @@ describe("NavigateIntoUserSettingsWorkspace", () => {
     expect(page.attentionRequired.length === 2).toBeTruthy();
   });
 
+
+  it("As signed-in user I can see the beta chip next to the desktop app menu item in the users settings menu", async() => {
+    expect.assertions(1);
+
+    const props = defaultProps({
+      rbacContext: defaultUserRbacContext()
+    });
+
+    page = new NavigateIntoUserSettingsWorkspacePage(context, props);
+    await waitFor(() => {});
+
+    expect(page.desktopTransferMenuItemBadge.textContent).toEqual("beta");
+  });
+
   each([
     {uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem'},
     {uiAction: uiActions.DESKTOP_TRANSFER, pageProperty: 'desktopTransferMenuItem'},

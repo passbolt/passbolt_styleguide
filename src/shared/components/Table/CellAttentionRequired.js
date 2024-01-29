@@ -20,18 +20,28 @@ import Icon from "../Icons/Icon";
  */
 class CellAttentionRequired extends Component {
   /**
+   * Returns true if the given date is under the current date with the given `aboutToExpireDelay` threshold..
+   * @param {string} expirationDate the expiration date
+   * @param {number} aboutToExpireDelay the configuration expiry notification period
+   * @returns {boolean}
+   * @private
+   */
+  static isAttentionRequiredOnExpiryDate(expirationDate) {
+    if (!expirationDate) {
+      return false;
+    }
+
+    const expiryDate = new Date(expirationDate);
+    return expiryDate <= new Date();
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
   render() {
-    const value = this.props.value;
-    const isAttentionRequired = Boolean(value.expired);
-    if (!isAttentionRequired) {
-      return null;
-    }
-
-    const now = new Date();
-    if (now <= new Date(value.expired)) {
+    const displayIcon = CellAttentionRequired.isAttentionRequiredOnExpiryDate(this.props.value);
+    if (!displayIcon) {
       return null;
     }
 
@@ -42,7 +52,7 @@ class CellAttentionRequired extends Component {
 }
 
 CellAttentionRequired.propTypes = {
-  value: PropTypes.object.isRequired, // The value to display
+  value: PropTypes.string, // The value from which to compute the "is attention required?",
 };
 
 export default memo(CellAttentionRequired);

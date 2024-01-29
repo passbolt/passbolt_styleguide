@@ -17,7 +17,7 @@ export function defaultSsoSettings(data = {}) {
   const defaultData = {
     provider: null,
     data: null,
-    providers: ["azure"]
+    providers: ["azure", "google"]
   };
 
   return {
@@ -32,7 +32,7 @@ export function withAzureSsoSettings(data = {}) {
     status: "active",
     provider: "azure",
     data: {
-      url: "https://login.microsoftonline.com/..",
+      url: "https://login.microsoftonline.com",
       tenant_id: "5n6p8r9s-m5n6-6p7q-3k5n-8r9s3k4m5n7q",
       client_id: "f2j3m5n6-c3k4-m5p7-x2j4-y2k4m5n7q8r9",
       client_secret: "u8x!A%D*G-KaPdSgVkYp3s6v9y$B?E..",
@@ -58,6 +58,30 @@ export function withGoogleSsoSettings(data = {}) {
     data: {
       client_id: "f2j3m5n6-c3k4-m5p7-x2j4-y2k4m5n7q8r9",
       client_secret: "u8x!A%D*G-KaPdSgVkYp3s6v9y$B?E..",
+    },
+    created_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    modified_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
+    created: "2022-11-24T09:14:13+00:00",
+    modified: "2022-11-24T09:14:13+00:00",
+  });
+
+  return {
+    ...defaultData,
+    ...data
+  };
+}
+
+export function withOAuth2SsoSettings(data = {}) {
+  const defaultData = defaultSsoSettings({
+    id: uuid(),
+    status: "active",
+    provider: "oauth2",
+    data: {
+      url: "https://localhost.com/realms/Passbolt",
+      client_id: "f2j3m5n6-c3k4-m5p7-x2j4-y2k4m5n7q8r9",
+      client_secret: "u8x!A%D*G-KaPdSgVkYp3s6v9y$B?E..",
+      scope: "openid email profile",
+      openid_configuration_path: "/.well-known/sso-configuration",
     },
     created_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
     modified_by: "d57c10f5-639d-5160-9c81-8a0c6c4ec856",

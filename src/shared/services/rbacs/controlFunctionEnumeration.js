@@ -22,7 +22,11 @@ import {uiActions} from "./uiActionEnumeration";
  */
 export const controlFunctions = {
   ALLOW: 'Allow',
-  DENY: 'Deny'
+  DENY: 'Deny',
+  /*
+   * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
+   * ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP: 'AllowIfGroupManagerInOneGroup'
+   */
 };
 
 /**
@@ -31,7 +35,11 @@ export const controlFunctions = {
  */
 export const controlFunctionResolutions = {
   [controlFunctions.ALLOW]: AllowControlFunction,
-  [controlFunctions.DENY]: DenyControlFunction
+  [controlFunctions.DENY]: DenyControlFunction,
+  /*
+   *  Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
+   * [controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP]: AllowIfGroupManagerInOneGroupFunction
+   */
 };
 
 /**

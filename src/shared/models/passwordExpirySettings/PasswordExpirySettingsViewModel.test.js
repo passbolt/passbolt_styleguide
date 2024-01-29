@@ -22,7 +22,7 @@ import PasswordExpirySettingsViewModel from "./PasswordExpirySettingsViewModel";
 describe("PasswordExpirySettingsViewModel", () => {
   describe("::constructor", () => {
     it("should construct a ViewModel", () => {
-      expect.assertions(5);
+      expect.assertions(4);
 
       const viewModelDto = defaultPasswordExpirySettingsViewModelDto();
       const viewModel = new PasswordExpirySettingsViewModel(viewModelDto);
@@ -31,7 +31,6 @@ describe("PasswordExpirySettingsViewModel", () => {
       expect(viewModel.automatic_update).toStrictEqual(viewModelDto.automatic_update);
       expect(viewModel.default_expiry_period).toStrictEqual(viewModelDto.default_expiry_period);
       expect(viewModel.policy_override).toStrictEqual(viewModelDto.policy_override);
-      expect(viewModel.expiry_notification).toStrictEqual(viewModelDto.expiry_notification);
     });
 
     it("should construct a default ViewModel with empty settings", () => {
@@ -55,7 +54,7 @@ describe("PasswordExpirySettingsViewModel", () => {
     });
 
     it("should build a valid ViewModel when no data is provided", () => {
-      expect.assertions(5);
+      expect.assertions(4);
 
       const viewModel = PasswordExpirySettingsViewModel.fromEntityDto(null);
 
@@ -63,7 +62,6 @@ describe("PasswordExpirySettingsViewModel", () => {
       expect(viewModel.automatic_update).toStrictEqual(false);
       expect(viewModel.default_expiry_period).toStrictEqual(null);
       expect(viewModel.policy_override).toStrictEqual(false);
-      expect(viewModel.expiry_notification).toStrictEqual(null);
     });
   });
 
@@ -73,7 +71,6 @@ describe("PasswordExpirySettingsViewModel", () => {
       {policy_override: true},
       {automatic_expiry: false},
       {default_expiry_period: 60},
-      {expiry_notification: 2},
     ]).describe("should return true if at least 1 difference is found between 2 ViewModel", scenario => {
       it(`for: ${JSON.stringify(scenario)}`, () => {
         expect.assertions(1);
@@ -166,13 +163,9 @@ describe("PasswordExpirySettingsViewModel", () => {
       },
       {
         dto: {default_expiry_period: -1},
-        expectedErrors: {default_expiry_period: {type: "The default_expiry_period does not match any of the supported types."}},
+        expectedErrors: {default_expiry_period: {type: "The default_expiry_period is not a valid null."}},
       },
-      {
-        dto: {expiry_notification: -1},
-        expectedErrors: {expiry_notification: {type: "The expiry_notification does not match any of the supported types."}},
-      },
-    ]).describe("should validate the current data set", scenario => {
+    ]).describe("should validate the current data set with PasswordExpirySettingsEntity", scenario => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {
         const expectedErroneousField = Object.keys(scenario.expectedErrors);
         const expectedErroneousFieldCount = expectedErroneousField.length;
@@ -182,6 +175,46 @@ describe("PasswordExpirySettingsViewModel", () => {
         const field = Object.keys(scenario.dto)[0];
         viewModel[field] = scenario.dto[scenario.dto];
         const validationErrors = viewModel.validate();
+
+        for (let i = 0; i < expectedErroneousFieldCount; i++) {
+          const erroneousField = expectedErroneousField[i];
+          const errors = validationErrors.getError(erroneousField);
+          expect(errors).toStrictEqual(scenario.expectedErrors[erroneousField]);
+        }
+      });
+    });
+
+    each([
+      {
+        dto: {id: 50},
+        expectedErrors: {id: {type: "The id is not a valid string."}},
+      },
+      {
+        dto: {automatic_expiry: 50},
+        expectedErrors: {automatic_expiry: {type: "The automatic_expiry is not a valid boolean."}},
+      },
+      {
+        dto: {automatic_update: 50},
+        expectedErrors: {automatic_update: {type: "The automatic_update is not a valid boolean."}},
+      },
+      {
+        dto: {policy_override: 50},
+        expectedErrors: {policy_override: {type: "The policy_override is not a valid boolean."}},
+      },
+      {
+        dto: {default_expiry_period: -1},
+        expectedErrors: {default_expiry_period: {type: "The default_expiry_period does not match any of the supported types."}},
+      },
+    ]).describe("should validate the current data set with PasswordExpiryProSettingsEntity", scenario => {
+      it(`for: ${JSON.stringify(scenario.dto)}`, () => {
+        const expectedErroneousField = Object.keys(scenario.expectedErrors);
+        const expectedErroneousFieldCount = expectedErroneousField.length;
+        expect.assertions(expectedErroneousFieldCount);
+
+        const viewModel = new PasswordExpirySettingsViewModel();
+        const field = Object.keys(scenario.dto)[0];
+        viewModel[field] = scenario.dto[scenario.dto];
+        const validationErrors = viewModel.validate(true);
 
         for (let i = 0; i < expectedErroneousFieldCount; i++) {
           const erroneousField = expectedErroneousField[i];

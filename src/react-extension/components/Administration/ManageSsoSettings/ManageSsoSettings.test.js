@@ -17,16 +17,17 @@
  */
 import SsoProviders from "./SsoProviders.data";
 import ManageSsoSettingsPage from "./ManageSsoSettings.test.page";
-import {waitFor} from "@testing-library/react";
 import {defaultProps} from "./ManageSsoSettings.test.data";
 import {
   defaultSsoSettings,
   withAzureSsoSettings,
   withGoogleSsoSettings,
+  withOAuth2SsoSettings,
 } from "../../../contexts/AdminSsoContext.test.data";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {v4 as uuid} from "uuid";
 import TestSsoSettingsDialog from "../TestSsoSettingsDialog/TestSsoSettingsDialog";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -42,11 +43,7 @@ describe("ManageSsoSettings", () => {
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (page.providerButtons.length === 0) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
+      await waitForTrue(() => Boolean(page.providerButtons.length));
 
       const visibleProviderCount = SsoProviders.filter(provider => !provider.hiddenIfDisabled).length;
 
@@ -58,6 +55,8 @@ describe("ManageSsoSettings", () => {
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Azure settings', async() => {
       expect.assertions(19);
       const settingsData = withAzureSsoSettings();
+      settingsData.data.prompt = 'none';
+      settingsData.data.email_claim = 'upn';
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
@@ -66,11 +65,7 @@ describe("ManageSsoSettings", () => {
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (!page.url) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
+      await waitForTrue(() => Boolean(page.url));
 
       await page.toggleAdvancedSettings();
 
@@ -86,14 +81,14 @@ describe("ManageSsoSettings", () => {
       expect(page.prompt).toBeTruthy();
       expect(page.email_claim).toBeTruthy();
 
-      expect(page.url.value).toBe(settingsData.data.url);
+      expect(page.url_value).toBe(settingsData.data.url);
       expect(page.redirect_url.value).toBe(exepectedRedirectUrl);
       expect(page.tenant_id.value).toBe(settingsData.data.tenant_id);
       expect(page.client_id.value).toBe(settingsData.data.client_id);
       expect(page.client_secret.value).toBe(settingsData.data.client_secret);
       expect(page.client_secret_expiry.value).toBe(settingsData.data.client_secret_expiry);
-      expect(page.prompt.value).toBe(settingsData.data.prompt);
-      expect(page.email_claim.value).toBe(settingsData.data.email_claim);
+      expect(page.prompt_value).toBe("None");
+      expect(page.email_claim_value).toBe("UPN");
     });
 
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Google settings', async() => {
@@ -107,11 +102,7 @@ describe("ManageSsoSettings", () => {
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (!page.google_client_id) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
+      await waitForTrue(() => Boolean(page.google_client_id));
 
       expect(page.exists()).toBeTruthy();
       expect(page.title.textContent).toBe("Single Sign-On");
@@ -139,12 +130,7 @@ describe("ManageSsoSettings", () => {
 
       new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        const callCount = mockDialogContext.dialogContext.open.mock.calls.length;
-        if (!callCount) {
-          throw new Error("Call to dialog has not been done yet");
-        }
-      });
+      await waitForTrue(() => Boolean(mockDialogContext.dialogContext.open.mock.calls.length));
 
       expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
@@ -161,11 +147,7 @@ describe("ManageSsoSettings", () => {
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (!page.url) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
+      await waitForTrue(() => Boolean(page.url));
 
       await page.toggleSsoSettings();
 
@@ -182,27 +164,28 @@ describe("ManageSsoSettings", () => {
   });
 
   describe("As a signed-in administrator I can save the SSO server settings", () => {
-    it('As a signed-in administrator when the “Single Sign On” settings have not changed, I cannot trigger the “Save settings” action', async() => {
-      expect.assertions(2);
+    it('As a signed-in administrator when the “Single Sign On” settings have not changed but exists already, I can trigger the “Save settings” action', async() => {
+      expect.assertions(1);
       const settingsData = withAzureSsoSettings();
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (!page.url) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
-
-      expect(page.toolbarActionsSaveSettingsButton.hasAttribute("disabled")).toBeTruthy();
-
-      await page.setFormWith({
-        tenant_id: "tenant id test"
-      });
+      await waitForTrue(() => Boolean(page.url));
 
       expect(page.toolbarActionsSaveSettingsButton.hasAttribute("disabled")).toBeFalsy();
+    });
+
+    it('As a signed-in administrator when the “Single Sign On” settings have not changed and there is no config, I cannot trigger the “Save settings” action', async() => {
+      expect.assertions(1);
+      const settingsData = defaultSsoSettings();
+      const props = defaultProps();
+      props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
+
+      const page = new ManageSsoSettingsPage(props);
+
+      expect(page.toolbarActionsSaveSettingsButton.hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As AD I cannot save the SSO settings before testing them (with Azure settings)', async() => {
@@ -216,13 +199,13 @@ describe("ManageSsoSettings", () => {
       const props = defaultProps(mockDialogContext);
 
       const formData = {
-        prompt: "None",
-        email_claim: "UPN",
-        url: "https://fakeurl.passbolt.com/",
+        url: "https://login.microsoftonline.us",
         client_id: uuid(),
         tenant_id: uuid(),
         client_secret: uuid(),
-        client_secret_expiry: "2050-12-31"
+        client_secret_expiry: "2050-12-31",
+        prompt: "None",
+        email_claim: "UPN",
       };
 
       const promptValue = "none";
@@ -237,7 +220,7 @@ describe("ManageSsoSettings", () => {
             tenant_id: formData.tenant_id,
             client_id: formData.client_id,
             client_secret: formData.client_secret,
-            client_secret_expiry: formData.client_secret_expiry,
+            client_secret_expiry: `${formData.client_secret_expiry} 00:00:00`,
             prompt: promptValue,
             email_claim: emailClaimValue,
           },
@@ -247,11 +230,7 @@ describe("ManageSsoSettings", () => {
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (!page.url) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
+      await waitForTrue(() => Boolean(page.url));
 
       await page.toggleAdvancedSettings();
       await page.setFormWith(formData);
@@ -295,11 +274,7 @@ describe("ManageSsoSettings", () => {
 
       const page = new ManageSsoSettingsPage(props);
 
-      await waitFor(() => {
-        if (!page.google_client_id) {
-          throw new Error("Page is not loaded yet");
-        }
-      });
+      await waitForTrue(() => Boolean(page.google_client_id));
 
       await page.setFormWith(formData);
 
@@ -307,6 +282,58 @@ describe("ManageSsoSettings", () => {
 
       expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
         provider: SsoProviders.find(provider => provider.id === "google"),
+        configurationId: settingsData.id,
+        handleClose: expect.any(Function),
+        onSuccessfulSettingsActivation: expect.any(Function),
+      }));
+    });
+
+    it('As AD I cannot save the SSO settings before testing them (with OAuth2 settings)', async() => {
+      expect.assertions(2);
+      const settingsData = withOAuth2SsoSettings({
+        providers: ["azure", "google", "oauth2"],
+      });
+
+      const mockDialogContext = {
+        dialogContext: {
+          open: jest.fn()
+        }
+      };
+      const props = defaultProps(mockDialogContext);
+
+      const formData = {
+        oauth2_url: "https://localhost.com/realms/new-passbolt",
+        oauth2_client_id: "Passbolt",
+        oauth2_client_secret: uuid(),
+        oauth2_scope: "openid",
+        oauth2_openid_configuration_path: "/.well-known/openid-configuration",
+      };
+
+      props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
+      props.context.port.addRequestListener("passbolt.sso.save-draft", async ssoSettings => {
+        expect(ssoSettings).toStrictEqual({
+          provider: settingsData.provider,
+          data: {
+            url: formData.oauth2_url,
+            client_id: formData.oauth2_client_id,
+            client_secret: formData.oauth2_client_secret,
+            scope: formData.oauth2_scope,
+            openid_configuration_path: formData.oauth2_openid_configuration_path,
+          },
+        });
+        return Object.assign({}, settingsData, ssoSettings);
+      });
+
+      const page = new ManageSsoSettingsPage(props);
+
+      await waitForTrue(() => Boolean(page.oauth2_client_id));
+
+      await page.setFormWith(formData);
+
+      await page.saveSettings(() => mockDialogContext.dialogContext.open.mock.calls.length > 0);
+
+      expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
+        provider: SsoProviders.find(provider => provider.id === "oauth2"),
         configurationId: settingsData.id,
         handleClose: expect.any(Function),
         onSuccessfulSettingsActivation: expect.any(Function),

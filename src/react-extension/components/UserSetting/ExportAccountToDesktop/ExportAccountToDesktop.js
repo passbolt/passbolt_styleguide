@@ -78,7 +78,7 @@ class ExportAccountToDesktop extends React.Component {
               <p>
                 <Trans>Passbolt is available on the Windows store.</Trans>
               </p>
-              <a className="windows-store" href="https://apps.microsoft.com/store/detail/passbolt/TBD" target="_blank" rel="noopener noreferrer">
+              <a className="windows-store" href="https://apps.microsoft.com/detail/passbolt/9PFXS2WVKVPB" target="_blank" rel="noopener noreferrer">
                 <svg width="160" height="56" viewBox="0 0 160 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g clipPath="url(#clip0_94_20105)">
                     <path d="M159.592 0.410278H0.425781V55.2598H159.592V0.410278Z" fill="black" />
@@ -128,7 +128,7 @@ class ExportAccountToDesktop extends React.Component {
                 <p><Trans>3. Open the application.</Trans></p>
                 <p><Trans>4. Upload the account kit on the desktop app.</Trans></p>
                 <p><Trans>5. And you are done!</Trans></p>
-                <a className="button" href="https://help.passbolt.com/TBD" target="_blank" rel="noopener noreferrer">
+                <a className="button" href="https://help.passbolt.com/configure/windows-app" target="_blank" rel="noopener noreferrer">
                   <Icon name="document" />
                   <span><Trans>Read the documentation</Trans></span>
                 </a>

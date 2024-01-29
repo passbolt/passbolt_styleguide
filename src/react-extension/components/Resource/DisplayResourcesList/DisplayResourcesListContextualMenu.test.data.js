@@ -17,9 +17,11 @@ import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {
-  defaultResourceDto, resourceWithReadPermissionDto, resourceWithTotpDto,
+  defaultResourceDto, resourceStandaloneTotpDto, resourceWithReadPermissionDto, resourceWithTotpDto,
   resourceWithUpdatePermissionDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 
 /**
  * Default component props.
@@ -35,7 +37,9 @@ export function defaultProps(data = {}) {
     left: 0,
     top: 0,
     dialogContext: defaultDialogContext(),
+    workflowContext: defaultWorkflowContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+    passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
     ...data
   };
 }
@@ -48,6 +52,17 @@ export function propsResourceTotp() {
   return {
     ...defaultProps(),
     resource: resourceWithTotpDto(),
+  };
+}
+
+/**
+ * Props with a selected resource with totp where the user has a read only permission on
+ * @returns {object}
+ */
+export function propsResourceStandaloneTotp() {
+  return {
+    ...defaultProps(),
+    resource: resourceStandaloneTotpDto(),
   };
 }
 

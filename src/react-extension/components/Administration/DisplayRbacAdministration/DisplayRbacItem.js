@@ -41,10 +41,17 @@ class DisplayRbacItem extends React.Component {
    * @returns {[{label: string, value: string},{label: string, value: string}]}
    */
   get allowedCtlFunctions() {
-    return [
+    const controls =  [
       {value: controlFunctions.ALLOW, label: this.props.t('Allow')},
       {value: controlFunctions.DENY, label: this.props.t('Deny')},
     ];
+    /**
+     * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
+     * if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
+     *  controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
+     *}
+     */
+    return controls;
   }
 
   /**
@@ -63,7 +70,6 @@ class DisplayRbacItem extends React.Component {
   getCtlFunctionForRole(role) {
     const rbac = this.props.rbacsUpdated?.findRbacByRoleAndUiActionName(role, this.props.actionName)
       || this.props.rbacs?.findRbacByRoleAndUiActionName(role, this.props.actionName);
-
     return rbac?.controlFunction || null;
   }
 
@@ -100,13 +106,17 @@ class DisplayRbacItem extends React.Component {
               value={controlFunctions.ALLOW}
               disabled={true}/>
           </div>
-          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item">
+          {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
               className={`medium ${role.name}`}
               items={this.allowedCtlFunctions}
               value={this.getCtlFunctionForRole(role)}
-              disabled={!(this.props.rbacs?.length > 0)}
+              disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}
               onChange={event => this.handleInputChange(event, role)}/>
+            {
+              !this.getCtlFunctionForRole(role) && <div className="warning-message">There is no valid setting found for this action.</div>
+            }
+
           </div>
           )}
         </div>

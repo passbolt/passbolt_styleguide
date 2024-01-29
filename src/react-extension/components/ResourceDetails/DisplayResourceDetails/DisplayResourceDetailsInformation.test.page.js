@@ -128,7 +128,7 @@ class DisplayInformationPageObject {
    * Returns the password link element of information
    */
   get passwordLink() {
-    return this._container.querySelector('.secret button');
+    return this._container.querySelector('.secret-password button');
   }
 
   /**
@@ -150,6 +150,41 @@ class DisplayInformationPageObject {
    */
   get isViewPasswordExist() {
     return Boolean(this._container.querySelector('.password .password-view'));
+  }
+
+  /**
+   * Returns the totp label elements of information
+   */
+  get totpLabel() {
+    return this._container.querySelector('.totp .label').textContent;
+  }
+
+  /**
+   * Returns the totp link element of information
+   */
+  get totpLink() {
+    return this._container.querySelector('.secret-totp button');
+  }
+
+  /**
+   * Returns the totp elements of information
+   */
+  get totp() {
+    return this.totpLink.querySelector('span');
+  }
+
+  /**
+   * Returns the view totp elements of information
+   */
+  get viewTotp() {
+    return this._container.querySelector('.totp .totp-view');
+  }
+
+  /**
+   * Get view totp exist
+   */
+  get isViewTotpExist() {
+    return Boolean(this._container.querySelector('.totp .totp-view'));
   }
 
   /**

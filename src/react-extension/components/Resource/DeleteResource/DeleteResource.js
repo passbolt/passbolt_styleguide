@@ -49,7 +49,7 @@ class DeleteResource extends Component {
    * @returns {[]|null}
    */
   get resources() {
-    return this.props.context.passwordDeleteDialogProps.resources;
+    return this.props.resources;
   }
 
   /**
@@ -76,7 +76,7 @@ class DeleteResource extends Component {
    * Handle save operation success.
    */
   async handleSaveSuccess() {
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been deleted successfully", {count: this.resources.length}));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been deleted successfully.", {count: this.resources.length}));
     this.props.onClose();
   }
 
@@ -148,7 +148,7 @@ class DeleteResource extends Component {
   render() {
     return (
       <DialogWrapper
-        title={this.translate("Delete password?", {count: this.resources.length})}
+        title={this.translate("Delete resource?", {count: this.resources.length})}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
         className="delete-password-dialog">
@@ -158,15 +158,15 @@ class DeleteResource extends Component {
             <>
               <p>
                 <Trans>
-                  Are you sure you want to delete the password <strong className="dialog-variable">{{resourceName: this.resources[0].name}}</strong>?
+                  Are you sure you want to delete the resource <strong className="dialog-variable">{{resourceName: this.resources[0].name}}</strong>?
                 </Trans>
               </p>
-              <p><Trans>Once the password is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
+              <p><Trans>Once the resource is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
             </>
             }
             {this.hasMultipleResources() &&
             <p>
-              <Trans>Please confirm you really want to delete the passwords. After clicking ok, the passwords will be deleted permanently.</Trans>
+              <Trans>Please confirm you really want to delete the resources. After clicking ok, the resources will be deleted permanently.</Trans>
             </p>
             }
           </div>
@@ -186,6 +186,7 @@ DeleteResource.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  resources: PropTypes.array, // The resources to delete
   t: PropTypes.func, // The translation function
 };
 

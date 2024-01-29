@@ -25,7 +25,6 @@ export const defaultPasswordExpirySettingsViewModelDto = (data = {}) => {
     policy_override: false,
     automatic_expiry: true,
     default_expiry_period: null,
-    expiry_notification: null,
   };
 
   return Object.assign(defaultData, data);
@@ -42,7 +41,6 @@ export const disabledPasswordExpirySettingsViewModelDto = (data = {}) => {
     policy_override: false,
     automatic_expiry: false,
     default_expiry_period: null,
-    expiry_notification: null,
   };
 
   return Object.assign(defaultData, data);
@@ -60,7 +58,23 @@ export const defaultPasswordExpirySettingsEntityDto = (data = {}) => {
     automatic_expiry: true,
     policy_override: false,
     default_expiry_period: null,
-    expiry_notification: null,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+/**
+ * The default password expiry settings Entity DTO
+ * This DTO has the same structure has the one served by the API/Bext
+ * @param {Object} data The data to override
+ * @returns {Object}
+ */
+export const overridenPasswordExpirySettingsEntityDto = (data = {}) => {
+  const defaultData = {
+    automatic_update: true,
+    automatic_expiry: true,
+    policy_override: true,
+    default_expiry_period: 30,
   };
 
   return Object.assign(defaultData, data);

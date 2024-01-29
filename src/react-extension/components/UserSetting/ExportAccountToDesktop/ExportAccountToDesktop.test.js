@@ -57,7 +57,7 @@ describe("ExportAccountToDesktop", () => {
       expect(page.helpBoxDescription[3].textContent).toEqual("4. Upload the account kit on the desktop app.");
       expect(page.helpBoxDescription[4].textContent).toEqual("5. And you are done!");
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/TBD');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/windows-app');
       expect(page.helpBoxButton.getAttribute('rel')).toEqual('noopener noreferrer');
     });
 
@@ -65,7 +65,7 @@ describe("ExportAccountToDesktop", () => {
       expect.assertions(2);
 
       expect(page.windowsStoreButton.getAttribute('class')).toEqual("windows-store");
-      expect(page.windowsStoreButton.getAttribute('href')).toEqual('https://apps.microsoft.com/store/detail/passbolt/TBD');
+      expect(page.windowsStoreButton.getAttribute('href')).toEqual('https://apps.microsoft.com/detail/passbolt/9PFXS2WVKVPB');
     });
 
     it('As LU user on the web application configuring the desktop app I should be able to download the account kit <success>', async() => {

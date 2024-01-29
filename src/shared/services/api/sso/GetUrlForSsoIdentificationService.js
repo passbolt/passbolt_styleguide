@@ -13,13 +13,13 @@
  */
 
 import {ApiClient} from "../../../lib/apiClient/apiClient";
+import AzureSsoSettingsEntity from "../../../models/entity/ssoSettings/AzureSsoSettingsEntity";
+import GoogleSsoSettingsEntity from "../../../models/entity/ssoSettings/GoogleSsoSettingsEntity";
 
-const SSO_LOGIN_SUPPORTED_URLS = [
-  'https://login.microsoftonline.com',
-  'https://login.microsoftonline.us',
-  'https://login.partner.microsoftonline.cn',
-  'https://accounts.google.com',
-];
+const SSO_LOGIN_SUPPORTED_URLS = {
+  [AzureSsoSettingsEntity.PROVIDER_ID]: AzureSsoSettingsEntity.SUPPORTED_URLS,
+  [GoogleSsoSettingsEntity.PROVIDER_ID]: GoogleSsoSettingsEntity.SUPPORTED_URLS,
+};
 
 /**
  * Handles query to the API to get an SSO login URL to identify the current user
@@ -45,7 +45,13 @@ class GetUrlForSsoIdentificationService {
     const response = await apiClient.create();
     const url = new URL(response.body.url);
 
-    const isValidUrl = SSO_LOGIN_SUPPORTED_URLS.some(supportedUrl => supportedUrl === url.origin);
+    const supportedUrl = SSO_LOGIN_SUPPORTED_URLS[providerId];
+
+    if (!supportedUrl) {
+      throw new Error('The url should be part of the list of supported single sign-on urls.');
+    }
+
+    const isValidUrl = supportedUrl.some(supportedUrl => supportedUrl === url.origin);
     if (!isValidUrl) {
       throw new Error('The url should be part of the list of supported single sign-on urls.');
     }

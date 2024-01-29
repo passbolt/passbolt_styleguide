@@ -25,6 +25,48 @@
             .subinfo {
                 color: @default-text-color;
                 font-size: 0.929em; /* 13px */
+                margin-top: 0.4rem;
+
+                .dateTimeAgo {
+                    color: @default-text-color;
+                }
+
+                .chips-group {
+                    float: right;
+                    .chips {
+                        font-size: 1.4rem;
+                        color: @chips-user-status-text-color;
+                        padding-top: 0.1rem;
+                        padding-bottom: 0.1rem;
+                        border-radius: 1.2rem;
+                        margin-top: -0.1rem;
+
+                        &.user-role {
+                            background-color: @chips-user-status-background;
+
+                            &.admin {
+                                color: @chips-user-status-admin-text-color;
+                                background-color: @chips-user-status-admin-background;
+                            }
+                        }
+
+                        &.active {
+                            background-color: @message-success-background;
+                        }
+
+                        &.suspended {
+                            background-color: @message-warning-background;
+                        }
+
+                        &.deleted {
+                            background-color: @message-error-background;
+                        }
+
+                        & + .chips {
+                            margin-left: 0.4rem;
+                        }
+                    }
+                }
             }
         }
     }

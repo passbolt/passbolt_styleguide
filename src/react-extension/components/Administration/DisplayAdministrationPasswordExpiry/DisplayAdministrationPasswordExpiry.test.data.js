@@ -22,7 +22,7 @@ import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
  * @param {Object} data The props to override
  * @returns {object}
  */
-export function defaultProps(data = {}) {
+export function defaultPropsPro(data = {}) {
   const defaultData = {
     context: defaultAdministratorAppContext(),
     dialogContext: defaultDialogContext(),
@@ -30,5 +30,16 @@ export function defaultProps(data = {}) {
     actionFeedbackContext: defaultActionFeedbackContext(),
     t: text => text,
   };
+  defaultData.context.siteSettings.canIUse = () => true;
   return Object.assign(defaultData, data);
+}
+/**
+ * Props with API flags disabled
+ * @param {object} props Override the default props.
+ * @returns {object}
+ */
+export function defaultPropsCE(props = {}) {
+  const defaultProps = defaultPropsPro();
+  defaultProps.context.siteSettings.canIUse = () => false;
+  return Object.assign(defaultProps, props);
 }

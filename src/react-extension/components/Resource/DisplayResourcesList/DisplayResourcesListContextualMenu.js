@@ -31,6 +31,13 @@ import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {withProgress} from "../../../contexts/ProgressContext";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
+import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import {withWorkflow} from "../../../contexts/WorkflowContext";
+import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import {formatDateForApi} from "../../../../shared/utils/dateUtils";
+import {DateTime} from "luxon";
+import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -55,6 +62,8 @@ class DisplayResourcesListContextualMenu extends React.Component {
     this.handleTotpClickEvent = this.handleTotpClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
+    this.handleSetExpiryDateClick = this.handleSetExpiryDateClick.bind(this);
+    this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
   }
 
   /**
@@ -62,7 +71,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   handleEditClickEvent() {
     if (this.isStandaloneTotpResource) {
-      // TODO
+      this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
     } else {
       this.props.dialogContext.open(EditResource, {resourceId: this.resource.id});
     }
@@ -181,7 +190,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
       return;
     }
 
@@ -194,7 +203,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
 
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -202,8 +211,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   handleDeleteClickEvent() {
     const resources = [this.resource];
-    this.props.context.setContext({passwordDeleteDialogProps: {resources}});
-    this.props.dialogContext.open(DeleteResource);
+    this.props.dialogContext.open(DeleteResource, {resources});
     this.props.hide();
   }
 
@@ -215,6 +223,33 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
+   * Handle mark as expired
+   * @return {Promise<void>}
+   */
+  async handleMarkAsExpiredClick() {
+    try {
+      await this.props.context.port.request("passbolt.resources.set-expiration-date", [{id: this.resource.id, expired: formatDateForApi(DateTime.utc())}]);
+      // a count: 1 is used to minimize the translation file as a singular/plural version already exist.
+      await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: 1}));
+    } catch (error) {
+      await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: 1}));
+    } finally {
+      this.props.hide();
+    }
+  }
+
+  /**
+   * Handle set expiry date click.
+   */
+  handleSetExpiryDateClick() {
+    this.props.dialogContext.open(PasswordExpiryDialog, {
+      resources: [this.resource]
+    });
+    this.props.hide();
+  }
+
+  /**
+   *
    * the resource selected
    * @returns {*}
    */
@@ -253,7 +288,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyUsername() {
-    return this.resource.username !== "";
+    return this.resource?.username && this.resource.username !== "";
   }
 
   /**
@@ -314,10 +349,19 @@ class DisplayResourcesListContextualMenu extends React.Component {
 
   /**
    * Can use Totp
-   * @return {*}
+   * @return {boolean}
    */
   get canUseTotp() {
     return this.props.context.siteSettings.canIUse('totpResourceTypes');
+  }
+
+  /**
+   * Can use password expiry
+   * @return {boolean}
+   */
+  get canUsePasswordExpiry() {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
+    return this.props.passwordExpiryContext.isFeatureEnabled() && passwordExpirySettings?.policy_override;
   }
 
   /**
@@ -408,6 +452,38 @@ class DisplayResourcesListContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        {this.canUsePasswordExpiry &&
+          <>
+            <li key="option-set-expiry-date" className="ready">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      type="button"
+                      id="set-expiry-date"
+                      className="link no-border"
+                      disabled={!this.canUpdate()}
+                      onClick={this.handleSetExpiryDateClick}><span><Trans>Set expiry date</Trans></span></button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li key="option-mark-as-expired-resource" className="ready separator-after">
+              <div className="row">
+                <div className="main-cell-wrapper">
+                  <div className="main-cell">
+                    <button
+                      type="button"
+                      id="mark-as-expired"
+                      className="link no-border"
+                      disabled={!this.canUpdate()}
+                      onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </>
+        }
         <li key="option-edit-resource" className="ready">
           <div className="row">
             <div className="main-cell-wrapper">
@@ -462,7 +538,9 @@ DisplayResourcesListContextualMenu.propTypes = {
   progressContext: PropTypes.any, // The progress context
   resource: PropTypes.object, // resource selected
   actionFeedbackContext: PropTypes.any, // The action feedback context
+  workflowContext: PropTypes.any, // The workflow context
+  passwordExpiryContext: PropTypes.object, // The password expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withDialog(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))));
+export default withAppContext(withRbac(withResourceWorkspace(withPasswordExpiry(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))));

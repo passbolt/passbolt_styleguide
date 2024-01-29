@@ -15,14 +15,6 @@
 import {DateTime} from "luxon";
 
 /**
- * Returns true if the user is suspended since the given date
- * @param {User} user the user to check the suspended state
- * @returns {boolean}
- */
-export const isUserSuspended = user => Boolean(user?.disabled && new Date(user.disabled) <= new Date());
-
-
-/**
  * Format date in time ago
  * @param {string} date The date to format
  * @param {function} translate The translation function
@@ -55,3 +47,10 @@ export const formatExpirationDateTimeAgo = (date, translate, locale) => {
 
   return formatDateTimeAgo(date, translate, locale);
 };
+
+/**
+ * Format the given date such that it matches the API format
+ * @param {DateTime} date
+ * @returns {string}
+ */
+export const formatDateForApi = date => date?.toUTC().toISO() || null;

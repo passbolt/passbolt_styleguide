@@ -50,8 +50,9 @@ import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCode
 import ColumnAttentionRequiredModel from "../../../../shared/models/column/ColumnAttentionRequiredModel";
 import CellAttentionRequired from "../../../../shared/components/Table/CellAttentionRequired";
 import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredModel";
-import {formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import CellDate from "../../../../shared/components/Table/CellDate";
+import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -121,11 +122,12 @@ class DisplayResourcesList extends React.Component {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
     this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
     if (this.hasAttentionRequiredFeature) {
-      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
+      this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
     }
+
     this.defaultColumns.push(new ColumnNameModel({label: this.translate("Name")}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
-      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), getValue: value => formatExpirationDateTimeAgo(value.expired, this.props.t, this.props.context.locale)}));
+      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), cellRenderer: {component: CellExpiryDate}}));
     }
     this.defaultColumns.push(new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}));
     this.defaultColumns.push(new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}));
@@ -133,7 +135,7 @@ class DisplayResourcesList extends React.Component {
       this.defaultColumns.push(new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}));
     }
     this.defaultColumns.push(new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}));
-    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), getValue: value => this.formatDateTimeAgo(value.modified)}));
+    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), cellRenderer: {component: CellDate}}));
   }
 
   /**
@@ -272,7 +274,8 @@ class DisplayResourcesList extends React.Component {
    */
   handleResourceScroll() {
     const resourceToScroll = this.props.resourceWorkspaceContext.scrollTo.resource;
-    if (resourceToScroll) {
+    const hasNotEmptyRange = this.listRef.current?.getVisibleRange().some(value => value);
+    if (resourceToScroll && hasNotEmptyRange) {
       this.scrollTo(resourceToScroll.id);
       this.props.resourceWorkspaceContext.onResourceScrolled();
     }
@@ -407,7 +410,7 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be copied to clipboard."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be copied to clipboard."));
       return;
     }
 
@@ -420,7 +423,7 @@ class DisplayResourcesList extends React.Component {
 
     await ClipBoard.copy(code, this.props.context.port);
     await this.props.resourceWorkspaceContext.onResourceCopied();
-    await this.props.actionFeedbackContext.displaySuccess(this.translate("The totp has been copied to clipboard"));
+    await this.props.actionFeedbackContext.displaySuccess(this.translate("The TOTP has been copied to clipboard"));
   }
 
   /**
@@ -471,6 +474,7 @@ class DisplayResourcesList extends React.Component {
     this.hidePreviewedCellule();
     if (!isPasswordPreviewedPreviewed) {
       await this.previewPassword(resourceId);
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 
@@ -527,6 +531,7 @@ class DisplayResourcesList extends React.Component {
     this.hidePreviewedCellule();
     if (!isTotpPreviewedPreviewed) {
       await this.previewTotp(resourceId);
+      await this.props.resourceWorkspaceContext.onResourcePreviewed();
     }
   }
 
@@ -554,7 +559,7 @@ class DisplayResourcesList extends React.Component {
     }
 
     if (!plaintextSecretDto.totp) {
-      await this.props.actionFeedbackContext.displayError(this.translate("The totp is empty and cannot be previewed."));
+      await this.props.actionFeedbackContext.displayError(this.translate("The TOTP is empty and cannot be previewed."));
       return;
     }
 
@@ -680,15 +685,12 @@ class DisplayResourcesList extends React.Component {
   }
 
   scrollTo(resourceId) {
-    if (this.listRef.current !== null) {
-      const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
-      const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
-      const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
-
-      if (isInvisible) {
-        // Important to have the -1 to show the selected column behind the header with sticky position
-        this.listRef.current.scrollTo(resourceIndex - 1);
-      }
+    const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
+    const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();
+    const isInvisible = resourceIndex < visibleStartIndex || resourceIndex > visibleEndIndex;
+    if (isInvisible) {
+      // Important to have the -1 to show the selected column behind the header with sticky position
+      this.listRef.current.scrollTo(resourceIndex - 1);
     }
   }
 
@@ -775,6 +777,14 @@ class DisplayResourcesList extends React.Component {
   }
 
   /**
+   * Is grid ready and not empty
+   * @return {boolean}
+   */
+  get isGridReady() {
+    return this.isReady && this.resources.length !== 0 && this.columnsFiltered.length !== 0;
+  }
+
+  /**
    * Get the translate function
    * @returns {function(...[*]=)}
    */
@@ -784,7 +794,6 @@ class DisplayResourcesList extends React.Component {
 
   render() {
     const isEmpty = this.isReady && this.resources.length === 0;
-    const isGridReady = this.isReady && this.columnsFiltered.length !== 0;
     const filterType = this.props.resourceWorkspaceContext.filter.type;
 
     return (
@@ -847,7 +856,7 @@ class DisplayResourcesList extends React.Component {
             }
           </div>
         }
-        {isGridReady &&
+        {this.isGridReady &&
           <GridTable
             columns={this.columnsFiltered}
             rows={this.resources}

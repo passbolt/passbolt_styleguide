@@ -38,23 +38,8 @@ describe("PasswordExpiry entity", () => {
       automatic_update: false,
       automatic_expiry: false,
       policy_override: false,
-      expiry_notification: 0,
-      default_expiry_period: 0
+      default_expiry_period: null
     });
-  });
-
-  it("should build an entity with given parameters", () => {
-    expect.assertions(1);
-    const expectedDto = {
-      automatic_update: true,
-      automatic_expiry: false,
-      policy_override: true,
-      expiry_notification: 5,
-      default_expiry_period: 60
-    };
-
-    const entity = PasswordExpirySettingsEntity.createFromDefault(expectedDto);
-    expect(entity.toDto()).toStrictEqual(expectedDto);
   });
 
   it("should throw an exception if required fields are not present", () => {
@@ -90,10 +75,6 @@ describe("PasswordExpiry entity", () => {
     {dto: {automatic_update: 0}, errorType: "type"},
 
     {dto: {automatic_expiry: 0}, errorType: "type"},
-
-    {dto: {expiry_notification: true}, errorType: "type"},
-    {dto: {expiry_notification: "50"}, errorType: "type"},
-    {dto: {expiry_notification: -1}, errorType: "type"},
 
     {dto: {created: "string but not a date"}, errorType: "format"},
     {dto: {created: -1}, errorType: "type"},

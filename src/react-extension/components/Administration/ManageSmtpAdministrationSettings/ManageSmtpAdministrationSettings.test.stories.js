@@ -17,7 +17,7 @@ import ManageSmtpAdministrationSettings from "../ManageSmtpAdministrationSetting
 import DialogContextProvider from "../../../contexts/DialogContext";
 import ManageDialogs from "../../Common/Dialog/ManageDialogs/ManageDialogs";
 import {defaultProps} from "./ManageSmtpAdministrationSettings.test.data";
-import {defaultSmtpSettings, withExistingSmtpSettings, withAwsSesSmtpSettings} from "../../../contexts/AdminSmtpSettingsContext.test.data";
+import {withExistingSmtpSettings, withAwsSesSmtpSettings, emptySmtpSettings} from "../../../contexts/AdminSmtpSettingsContext.test.data";
 import MockFetch from "../../../test/mock/MockFetch";
 import AdminSmtpSettingsContextProvider from "../../../contexts/AdminSmtpSettingsContext";
 import {mockApiResponse} from "../../../../../test/mocks/mockApiResponse";
@@ -32,7 +32,7 @@ const mockFetch = new MockFetch();
 mockFetch.addGetFetchRequest(/smtp\/settings\.json/, async() => {
   switch (currentStory) {
     case 'components-administration-managesmtpadministrationsettings--default': {
-      return mockApiResponse(defaultSmtpSettings());
+      return mockApiResponse(emptySmtpSettings());
     }
     case 'components-administration-managesmtpadministrationsettings--with-smtp-settings': {
       return mockApiResponse(withExistingSmtpSettings());

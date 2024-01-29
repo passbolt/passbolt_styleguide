@@ -12,45 +12,25 @@
  * @since         3.6.0
  */
 
+import {defaultAccountRecoveryUserContext} from "../../../contexts/AccountRecoveryUserContext.test.data";
+import {defaultActionFeedbackContext} from "../../../contexts/ActionFeedbackContext.test.data";
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
+import {optOutOrganizationPolicy} from "../HandleAccountRecoveryUserSettingsRoute/HandleAccountRecoveryUserSettingsRoute.test.data";
+
 /**
  * Default props
+ * @param {object} [data]
  * @returns {object}
  */
-export function defaultProps(policy) {
+export function defaultProps(data = {}) {
   return {
-    context: {
-      locale: "en-US",
-      userSettings: {
-        // eslint-disable-next-line no-undef
-        getTrustedDomain: () => process.env.ORIGIN_URL
-      },
-      port: {
-        request: jest.fn()
-      },
-      setContext: jest.fn()
-    },
-    organizationPolicy: {
-      modified: "2022-01-13T15:27:26.301Z",
-      creator: {
-        profile: {
-          first_name: "Ada",
-          last_name: "Lovelace"
-        },
-        gpgkey: {
-          fingerprint: "848E95CC7493129AD862583129B81CA8936023DD"
-        },
-      },
-      policy: policy
-    },
+    context: defaultUserAppContext(),
+    accountRecoveryContext: defaultAccountRecoveryUserContext(),
+    actionFeedbackContext: defaultActionFeedbackContext(),
+    dialogContext: defaultDialogContext(),
     onClose: jest.fn(),
-    accountRecoveryContext: {
-      setUserAccountRecoveryStatus: jest.fn()
-    },
-    actionFeedbackContext: {
-      displaySuccess: jest.fn()
-    },
-    dialogContext: {
-      open: jest.fn()
-    }
+    organizationPolicy: optOutOrganizationPolicy(),
+    ...data
   };
 }

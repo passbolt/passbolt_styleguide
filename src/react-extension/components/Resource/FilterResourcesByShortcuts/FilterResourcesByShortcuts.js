@@ -204,7 +204,7 @@ class FilterResourcesByShortcuts extends React.Component {
                 <div className="main-cell-wrapper">
                   <div className="main-cell">
                     <button type="button" className="link no-border">
-                      <span><Trans>Expired</Trans></span>
+                      <span><Trans>Expiry</Trans></span>
                     </button>
                   </div>
                 </div>

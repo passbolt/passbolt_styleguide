@@ -12,6 +12,7 @@
  * @since         4.4.0
  */
 
+import {defaultUserRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {allProviders, mfaDefined, noMfaDefined} from "../../../contexts/MFAContext.test.data";
 
@@ -19,6 +20,7 @@ export function defaultProps(props = {}) {
   return {
     context: defaultAppContext(props.appContext),
     mfaContext: mockMfaContext(props.mfaContext),
+    rbacContext: defaultUserRbacContext()
   };
 }
 

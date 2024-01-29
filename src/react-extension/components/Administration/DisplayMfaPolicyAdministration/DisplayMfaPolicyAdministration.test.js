@@ -55,7 +55,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.toggleRememberLabel.textContent).toBe('Allow “Remember this device for a month.“ option during MFA.');
       // mandatory policy
       expect(page.mandatoryPolicy.checked).toBeFalsy();
-      expect(page.mandatoryPolicyName.textContent).toEqual("Mandatory");
+      expect(page.mandatoryPolicyName.textContent).toEqual("Prompt");
       expect(page.mandatoryPolicyInfo.textContent).toEqual("Users have to enable multi factor authentication. If they don't, they will be reminded every time they log in.");
       // opt-in policy
       expect(page.optInPolicy.value).toBeTruthy();
@@ -109,7 +109,7 @@ describe("DisplayMfaPolicyAdministration", () => {
     it('As a logged in administrator I can update the “MFA policy” setting <<Error>', async() => {
       expect.assertions(3);
       //save mock
-      const error = {message: "The service is unavailable"};
+      const error = {message: "Unable to reach the server, an unexpected error occurred"};
       fetch.doMockOnceIf(/mfa-policies\/settings*/, () => Promise.reject(error));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displayError').mockImplementation(() => {});
 

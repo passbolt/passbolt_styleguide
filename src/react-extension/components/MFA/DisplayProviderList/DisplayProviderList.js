@@ -19,6 +19,9 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import PropTypes from "prop-types";
 import {MfaSettingsWorkflowStates, Providers, withMfa} from "../../../contexts/MFAContext";
 import MfaProviders from "./MfaProviders.data";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withNavigationContext} from "../../../contexts/NavigationContext";
 
 /**
  * This component will display the Mfa provider enabled/disabled and allowed
@@ -68,14 +71,22 @@ class DisplayProviderList extends Component {
    * Return the allowed providers by organization
    */
   get organisationMfaProviders() {
-    return this.props.mfaContext.getMfaOrganisationSettings();
+    const providers = this.props.mfaContext.getMfaOrganisationSettings();
+    if (!this.canUseDuoProvider) {
+      delete providers.duo;
+    }
+    return providers;
   }
 
   /**
    * Return the mfa settings from the user
    */
   get userMfaSettings() {
-    return this.props.mfaContext.getMfaUserSettings();
+    const settings = this.props.mfaContext.getMfaUserSettings();
+    if (!this.canUseDuoProvider) {
+      delete settings.duo;
+    }
+    return settings;
   }
 
   /**
@@ -94,6 +105,14 @@ class DisplayProviderList extends Component {
   }
 
   /**
+   * Can the user confige a dup provider.
+   * @returns {bool}
+   */
+  get canUseDuoProvider() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.DUO_CONFIGURATION);
+  }
+
+  /**
    * handle provider click
    * @param {string} provider
    */
@@ -108,7 +127,7 @@ class DisplayProviderList extends Component {
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.TOTPOVERVIEW);
           break;
         case Providers.DUO:
-          //Todo
+          this.props.navigationContext.onGoToUserSettingsDuoSetupRequested();
           break;
         case Providers.YUBIKEY:
           this.props.mfaContext.navigate(MfaSettingsWorkflowStates.SETUPYUBIKEY);
@@ -142,21 +161,39 @@ class DisplayProviderList extends Component {
                   this.isRunningUnderHttps && this.props.mfaContext.hasMfaOrganisationSettings() && <>
                     <h4 className="no-border"><Trans>Please select a provider</Trans></h4>
                     <ul className="mfa-providers">
-                      {
-                        Object.entries(this.organisationMfaProviders).map(([key, value]) => (
-                          value && <li key={key} id={key}>
-                            <a href="#" onClick={() => this.handleProviderClick(key)}>
-                              <div className="provider-img">
-                                {this.getProvider(key).icon}
-                              </div>
-                              <span className="provider-name">{this.getProvider(key).name}</span>
-                            </a>
-                            <div className={`mfa-provider-status ${this.userMfaSettings[key]}`}>
-                              {this.userMfaSettings[key] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
-                            </div>
-                          </li>
-                        ))
-                      }
+                      {this.organisationMfaProviders["totp"] && <li id="totp">
+                        <a href="#" onClick={() => this.handleProviderClick("totp")}>
+                          <div className="provider-img">
+                            {this.getProvider("totp").icon}
+                          </div>
+                          <span className="provider-name">{this.getProvider("totp").name}</span>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["totp"]}`}>
+                          {this.userMfaSettings["totp"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>}
+                      {this.organisationMfaProviders["duo"] && <li id="duo">
+                        <a href="#" onClick={() => this.handleProviderClick("duo")}>
+                          <div className="provider-img">
+                            {this.getProvider("duo").icon}
+                          </div>
+                          <span className="provider-name">{this.getProvider("duo").name}</span>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["duo"]}`}>
+                          {this.userMfaSettings["duo"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>}
+                      {this.organisationMfaProviders["yubikey"] && <li id="yubikey">
+                        <a href="#" onClick={() => this.handleProviderClick("yubikey")}>
+                          <div className="provider-img">
+                            {this.getProvider("yubikey").icon}
+                          </div>
+                          <span className="provider-name">{this.getProvider("yubikey").name}</span>
+                        </a>
+                        <div className={`mfa-provider-status ${this.userMfaSettings["yubikey"]}`}>
+                          {this.userMfaSettings["yubikey"] ? <Trans>Enabled</Trans> : <Trans>Disabled</Trans>}
+                        </div>
+                      </li>}
                     </ul>
                   </>
                 }</>
@@ -183,6 +220,8 @@ DisplayProviderList.propTypes = {
   context: PropTypes.object, // the app context
   t: PropTypes.func, // The translation function
   mfaContext: PropTypes.object, // The mfa context
+  rbacContext: PropTypes.any, // The role based access control context
+  navigationContext: PropTypes.any, // The application navigation context
 };
 
-export default withAppContext(withMfa(withTranslation("common")(DisplayProviderList)));
+export default withAppContext(withMfa(withRbac(withNavigationContext(withTranslation("common")(DisplayProviderList)))));

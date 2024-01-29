@@ -13,17 +13,20 @@
  */
 import React from "react";
 import PropTypes from "prop-types";
-import {withAppContext} from "../../shared/context/AppContext/AppContext";
-import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
-import {withDialog} from "./DialogContext";
 import NotifyError from "../components/Common/Error/NotifyError/NotifyError";
+import {withAppContext} from "../../shared/context/AppContext/AppContext";
+import {withDialog} from "./DialogContext";
 import {withTranslation} from "react-i18next";
+import {withActionFeedback} from "./ActionFeedbackContext";
+import SsoProviders from "../components/Administration/ManageSsoSettings/SsoProviders.data";
 import TestSsoSettingsDialog from "../components/Administration/TestSsoSettingsDialog/TestSsoSettingsDialog";
 import ConfirmDeleteSsoSettingsDialog from "../components/Administration/ConfirmDeleteSsoSettingsDialog/ConfirmDeleteSsoSettingsDialog";
-import {withActionFeedback} from "./ActionFeedbackContext";
-
-// taken from Validator.isUUID()
-const UUID_REGEXP = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[0-5][a-fA-F0-9]{3}-[089aAbB][a-fA-F0-9]{3}-[a-fA-F0-9]{12}$/;
+import AzureSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
+import AzureSsoSettingsViewModel from "../../shared/models/ssoSettings/AzureSsoSettingsViewModel";
+import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
+import OAuth2SsoSettingsViewModel from "../../shared/models/ssoSettings/OAuth2SsoSettingsViewModel";
+import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
+import GoogleSsoSettingsViewModel from "../../shared/models/ssoSettings/GoogleSsoSettingsViewModel";
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -31,6 +34,7 @@ export const AdminSsoContext = React.createContext({
   isProcessing: () => {}, // true when the form is being processed
   loadSsoConfiguration: () => {}, // Load the current sso configuration and store it in the state
   getSsoConfiguration: () => {}, // Return the current sso configuration from the context state
+  getProviderList: () => {}, // Returns a list of the available providers on the API
   isSsoConfigActivated: () => {}, // Returns true if the sso settings are set to active
   isDataReady: () => {}, // Returns true if the data has been loaded from the API already
   save: () => {}, // Save the sso configuration changes
@@ -43,7 +47,6 @@ export const AdminSsoContext = React.createContext({
   getErrors: () => {}, // Returns the errors detected during validation
   deleteSettings: () => {}, // Delete the current SSO settings
   showDeleteConfirmationDialog: () => {}, // Show the delete SSO settings confirmation dialog
-  shouldFocusOnError: () => {}, // Returns true the first time it is asked after a form validation process detected an error
 });
 
 /**
@@ -59,7 +62,7 @@ export class AdminSsoContextProvider extends React.Component {
     this.state = this.defaultState;
     this.bindCallbacks();
     this.isSsoConfigExisting = false;
-    this.hasError = false;
+    this.shouldFocusOnError = false;
   }
 
   /**
@@ -67,17 +70,20 @@ export class AdminSsoContextProvider extends React.Component {
    */
   get defaultState() {
     return {
-      ssoConfig: this.defaultSsoSettings, // The current sso configuration
-      errors: {}, // The errors detected during the data validation
+      ssoConfig: null, // The current sso configuration
+      providers: [], // The list of the current available providers on the API.
+      errors: null,
+      originalConfig: null, // the current configuration from the API
+      cachedSsoConfig: {}, // The currently cached SSO configuration,
       isLoaded: false, // is the SSO settings data loading from the server finished
-      hasSettingsChanged: false, // has the current form changed
       processing: false, // true when the form is being processed
-      getErrors: this.getErrors.bind(this), // Returns the errors detected during validation
+      hasBeenValidated: false, // true when the has been validated once but not submitted
       hasFormChanged: this.hasFormChanged.bind(this), // Returns true if the current form changed
       isProcessing: this.isProcessing.bind(this), // returns true if a process is running and the UI must be disabled
       isDataReady: this.isDataReady.bind(this), // returns true if the data has been loaded from the API already
       loadSsoConfiguration: this.loadSsoConfiguration.bind(this), // Load the current sso configuration and store it in the state
       getSsoConfiguration: this.getSsoConfiguration.bind(this), // Return the current sso configuration from the context state
+      getProviderList: this.getProviderList.bind(this), // Returns a list of the available providers on the API
       isSsoConfigActivated: this.isSsoConfigActivated.bind(this), // Returns true if the sso settings are set to active
       changeProvider: this.changeProvider.bind(this), // change the provider
       disableSso: this.disableSso.bind(this), // Disable the SSO configuration
@@ -85,29 +91,11 @@ export class AdminSsoContextProvider extends React.Component {
       validateData: this.validateData.bind(this), // Validates the current data in the state
       saveAndTestConfiguration: this.saveAndTestConfiguration.bind(this), // Saves the current settings as a new draft and run the test dialog
       handleError: this.handleError.bind(this), // Handles error by displaying a NotifyError dialog
+      getErrors: this.getErrors.bind(this), // Returns the errors detected during validation
       deleteSettings: this.deleteSettings.bind(this), // Delete the current SSO settings
       canDeleteSettings: this.canDeleteSettings.bind(this), // Returns true if it is possible to call for a settings deletion
       showDeleteConfirmationDialog: this.showDeleteConfirmationDialog.bind(this), // Show the delete SSO settings confirmation dialog
-      shouldFocusOnError: this.shouldFocusOnError.bind(this), // Returns true the first time it is asked after a form validation process detected an error
-    };
-  }
-
-  /**
-   * Returns a default empty SSO settings.
-   * @returns {object}
-   */
-  get defaultSsoSettings() {
-    return {
-      provider: null,
-      data: {
-        url: "",
-        client_id: "",
-        tenant_id: "",
-        client_secret: "",
-        client_secret_expiry: "",
-        prompt: "login",
-        email_claim: "email",
-      }
+      consumeFocusOnError: this.consumeFocusOnError.bind(this), // Returns true the first time it is asked after a form validation process detected an error
     };
   }
 
@@ -129,22 +117,43 @@ export class AdminSsoContextProvider extends React.Component {
       ssoConfig = await this.props.context.port.request("passbolt.sso.get-current");
     } catch (error) {
       this.props.dialogContext.open(NotifyError, {error});
+      return;
     }
 
-    this.isSsoConfigExisting = Boolean(ssoConfig?.provider);
+    this.isSsoConfigExisting = Boolean(ssoConfig.provider);
+    const registeredConfig = this.getSsoProviderViewModel(ssoConfig);
 
     this.setState({
-      ssoConfig: ssoConfig,
+      ssoConfig: registeredConfig,
+      originalConfig: registeredConfig,
+      providers: ssoConfig.providers,
       isLoaded: true,
     });
   }
 
   /**
-   * Returns true if an SSO settings exists
-   * @returns {boolean}
+   * Constructor
+   * @param {SsoSettingsDto} settings
+   * @returns {SsoSettingsViewModel}
    */
-  isSsoSettingsExisting() {
-    return this.state.ssoConfig?.provider;
+  getSsoProviderViewModel(settings) {
+    if (!settings?.provider) {
+      return null;
+    }
+
+    switch (settings.provider) {
+      case (AzureSsoSettingsEntity.PROVIDER_ID): {
+        return AzureSsoSettingsViewModel.fromEntityDto(settings);
+      }
+      case (GoogleSsoSettingsEntity.PROVIDER_ID): {
+        return GoogleSsoSettingsViewModel.fromEntityDto(settings);
+      }
+      case (OAuth2SsoSettingsEntity.PROVIDER_ID): {
+        return OAuth2SsoSettingsViewModel.fromEntityDto(settings);
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -156,16 +165,20 @@ export class AdminSsoContextProvider extends React.Component {
   }
 
   /**
+   * Returns a list of the available providers on the API.
+   * @returns {Array<string>}
+   */
+  getProviderList() {
+    return this.state.providers;
+  }
+
+  /**
    * Get the current SSO configuration with data ready for the background page.
    * @return {Object}
    * @private
    */
   getSsoConfigurationDto() {
-    const config = this.getSsoConfiguration();
-    return {
-      provider: config.provider,
-      data: Object.assign({}, config.data),
-    };
+    return this.state.ssoConfig.toEntityDto();
   }
 
   /**
@@ -173,7 +186,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   isSsoConfigActivated() {
-    return Boolean(this.state.ssoConfig?.provider);
+    return Boolean(this.state.ssoConfig);
   }
 
   /**
@@ -181,7 +194,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   hasFormChanged() {
-    return this.state.hasSettingsChanged;
+    return this.state.isDataModified;
   }
 
   /**
@@ -190,17 +203,26 @@ export class AdminSsoContextProvider extends React.Component {
    * @param {string} value
    */
   setValue(key, value) {
-    const ssoConfig = this.getSsoConfiguration();
-    ssoConfig.data[key] = value;
-    this.setState({ssoConfig, hasSettingsChanged: true});
+    const newConfig = this.state.ssoConfig.cloneWithMutation(key, value);
+    const isDataModified = this.state.originalConfig
+      ? this.state.originalConfig.isDataDifferent(newConfig)
+      : false;
+
+    this.setState({ssoConfig: newConfig, isDataModified}, () => {
+      if (this.state.hasBeenValidated) {
+        this.validateData();
+      }
+    });
   }
 
   /**
    * Disable the Sso configuration.
    */
   disableSso() {
-    const ssoConfig = Object.assign({}, this.state.ssoConfig, {provider: null, data: {}});
-    this.setState({ssoConfig});
+    const cachedSsoConfig = this.state.cachedSsoConfig;
+    cachedSsoConfig[this.state.ssoConfig.provider] = this.state.ssoConfig;
+    const ssoConfig = null;
+    this.setState({ssoConfig, cachedSsoConfig});
   }
 
   /**
@@ -227,220 +249,71 @@ export class AdminSsoContextProvider extends React.Component {
       return;
     }
 
-    const selectedProvider = SsoProviders.find(p => p.id === provider.id);
+    const cachedSsoConfig = this.state.cachedSsoConfig;
+    const currentProviderConfig = this.state.ssoConfig?.provider;
+    if (currentProviderConfig) {
+      cachedSsoConfig[currentProviderConfig] = this.state.ssoConfig;
+    }
 
     this.setState({
-      ssoConfig: {
-        provider: selectedProvider.id,
-        data: Object.assign({}, selectedProvider?.defaultConfig)
+      ssoConfig: this.getCachedSsoConfigOrDefault(provider.id),
+      cachedSsoConfig,
+    }, () => {
+      if (this.state.hasBeenValidated) {
+        this.validateData();
       }
     });
   }
 
   /**
-   * Returns the errors detected during validation
-   * @returns {object}
+   * For the given provider returns the SSO config cached or the default configuration if none exists yet.
+   * @param {string} providerId
+   * @returns {SsoSettingsViewModel}
    */
-  getErrors() {
-    return this.state.errors;
+  getCachedSsoConfigOrDefault(providerId) {
+    if (this.state.cachedSsoConfig[providerId]) {
+      return this.state.cachedSsoConfig[providerId];
+    }
+
+    const defaultProviderConfiguration = SsoProviders.find(provider => provider.id === providerId);
+    const entityDto = {
+      id: this.state.ssoConfig?.id,
+      provider: providerId,
+      data: defaultProviderConfiguration.defaultConfig,
+    };
+    return this.getSsoProviderViewModel(entityDto);
   }
 
   /**
    * Validates the current data in the state
+   * @param {boolean} applyFieldFocusOnError if true a focus on the first erroneous field will be asked
    * @returns {boolean} true if the data is valid, false otherwise
    */
-  validateData() {
-    const settings = this.state.getSsoConfiguration();
-    const errors = {};
-
-    const isProviderValid = this.validate_provider(settings.provider, errors);
-
-    if (!isProviderValid) {
-      this.setState({errors, hasSumittedForm: true});
-      return false;
-    }
-
-    const validationCallback = `validateDataFromProvider_${settings.provider}`;
-    const isFormValid = this[validationCallback](settings.data, errors);
-
-    this.setState({errors, hasSumittedForm: true});
-
-    return isFormValid;
-  }
-
-  /**
-   * Validates the current data in the state.
-   * @param {string} provider the provider id to validate
-   * @param {object} errors a ref object to put the validation onto
-   */
-  validate_provider(provider, errors) {
-    const isProviderValid = SsoProviders.find(p => p.id === provider);
-
-    if (!isProviderValid) {
-      errors.provider = this.props.t("The Single Sign-On provider must be a supported provider.");
-    }
-
-    return isProviderValid;
-  }
-
-  /**
-   * Validates the current data in the state assuming the SSO provider is Azure
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validateDataFromProvider_azure(data, errors) {
-    const {url, client_id, tenant_id, client_secret, client_secret_expiry} = data;
-    let isDataValid = true;
-    if (!url?.length) { // Validation of url
-      errors.url = this.props.t("The Login URL is required");
-      isDataValid = false;
-    } else if (!this.isValidUrl(url)) {
-      errors.url = this.props.t("The Login URL must be a valid URL");
-      isDataValid = false;
-    }
-
-    if (!client_id?.length) { // Validation of client_id
-      errors.client_id = this.props.t("The Application (client) ID is required");
-      isDataValid = false;
-    } else if (!this.isValidUuid(client_id)) {
-      errors.client_id = this.props.t("The Application (client) ID must be a valid UUID");
-      isDataValid = false;
-    }
-
-    if (!tenant_id?.length) { // Validation of tenant_id
-      errors.tenant_id = this.props.t("The Directory (tenant) ID is required");
-      isDataValid = false;
-    } else if (!this.isValidUuid(tenant_id)) {
-      errors.tenant_id = this.props.t("The Directory (tenant) ID must be a valid UUID");
-      isDataValid = false;
-    }
-
-    // Validation of client_secret
-    if (!client_secret?.length) {
-      errors.client_secret = this.props.t("The Secret is required");
-      isDataValid = false;
-    }
-
-    // Validation of client_secret_expiry
-    if (!client_secret_expiry) {
-      errors.client_secret_expiry = this.props.t("The Secret expiry is required");
-      isDataValid = false;
-    }
-
-    this.hasError = true;
-    return isDataValid;
-  }
-
-  /**
-   * Validates the current data in the state assuming the SSO provider is Google
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validateDataFromProvider_google(data, errors) {
-    const {client_id, client_secret} = data;
-    let isDataValid = true;
-    if (!client_id?.length) { // Validation of client_id
-      errors.client_id = this.props.t("The Application (client) ID is required");
-      isDataValid = false;
-    }
-
-    // Validation of client_secret
-    if (!client_secret?.length) {
-      errors.client_secret = this.props.t("The Secret is required");
-      isDataValid = false;
-    }
-
-    this.hasError = true;
-    return isDataValid;
-  }
-
-  /**
-   * Validates the current data in the state assuming the SSO provider is OAuth2
-   * @param {string} data the data to validate
-   * @param {object} errors a ref object to put the validation onto
-   * @returns {boolean}
-   */
-  validateDataFromProvider_oauth2(data, errors) {
-    const {url, client_id, client_secret, scope, openid_configuration_path} = data;
-    let isDataValid = true;
-
-    if (!url?.length) { // Validation of url
-      errors.url = this.props.t("The Login URL is required");
-      isDataValid = false;
-    } else if (!this.isValidHttpsUrl(url)) {
-      errors.url = this.props.t("The Login URL must be a valid HTTPS URL");
-      isDataValid = false;
-    }
-
-    if (!openid_configuration_path?.length) { // Validation of client_id
-      errors.openid_configuration_path = this.props.t("The OpenId Configuration Path is required");
-      isDataValid = false;
-    }
-
-    if (!scope?.length) { // Validation of client_id
-      errors.scope = this.props.t("The Scope is required");
-      isDataValid = false;
-    }
-
-    if (!client_id?.length) { // Validation of client_id
-      errors.client_id = this.props.t("The Application (client) ID is required");
-      isDataValid = false;
-    }
-
-    // Validation of client_secret
-    if (!client_secret?.length) {
-      errors.client_secret = this.props.t("The Secret is required");
-      isDataValid = false;
-    }
-
-    this.hasError = true;
-    return isDataValid;
+  validateData(applyFieldFocusOnError = false) {
+    const validattionError = this.state.ssoConfig.validate();
+    const hasErrors = validattionError.hasErrors();
+    const errors = hasErrors ? validattionError : null;
+    this.setState({errors, hasBeenValidated: true});
+    this.shouldFocusOnError = applyFieldFocusOnError && hasErrors;
+    return !hasErrors;
   }
 
   /**
    * Returns true the first time it is asked after a form validation process detected an error
    * @returns {boolean}
    */
-  shouldFocusOnError() {
-    const hasError = this.hasError;
-    this.hasError = false;
-    return hasError;
+  consumeFocusOnError() {
+    const doFocusOnError = this.shouldFocusOnError;
+    this.shouldFocusOnError = false;
+    return doFocusOnError;
   }
 
   /**
-   * Returns true if the url is valid;
-   * @param {string} stringUrl
+   * Returns the error set during validation.
+   * @returns {EntityValidationError}
    */
-  isValidUrl(stringUrl) {
-    try {
-      const url = new URL(stringUrl);
-      return url.protocol === "http:" || url.protocol === "https:";
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /**
-   * Returns true if the url is valid;
-   * @param {string} stringUrl
-   */
-  isValidHttpsUrl(stringUrl) {
-    try {
-      const url = new URL(stringUrl);
-      return url.protocol === "https:";
-    } catch (_) {
-      return false;
-    }
-  }
-
-  /**
-   * Returns true if the UUID is valid;
-   * @param {string} stringUuid
-   */
-  isValidUuid(stringUuid) {
-    return UUID_REGEXP.test(stringUuid);
+  getErrors() {
+    return this.state.errors;
   }
 
   /**
@@ -460,7 +333,7 @@ export class AdminSsoContextProvider extends React.Component {
     }
 
     await this.runTestConfig(draftConfiguration);
-    const ssoConfig = Object.assign({}, this.state.ssoConfig, draftConfiguration);
+    const ssoConfig = this.getSsoProviderViewModel(draftConfiguration);
     this.setState({ssoConfig});
   }
 
@@ -469,8 +342,7 @@ export class AdminSsoContextProvider extends React.Component {
    * @returns {boolean}
    */
   canDeleteSettings() {
-    const config = this.getSsoConfiguration();
-    return this.isSsoConfigExisting && config.provider === null;
+    return this.isSsoConfigExisting && this.state.ssoConfig === null;
   }
 
   /**
@@ -487,12 +359,13 @@ export class AdminSsoContextProvider extends React.Component {
   async deleteSettings() {
     this.setState({processing: true});
     try {
-      const ssoSettings = this.getSsoConfiguration();
-      await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettings.id);
-      this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings has been deleted successfully"));
+      const ssoSettingsId = this.state.originalConfig.id;
+      await this.props.context.port.request("passbolt.sso.delete-settings", ssoSettingsId);
+      this.props.actionFeedbackContext.displaySuccess(this.props.t("The SSO settings have been deleted successfully"));
       this.isSsoConfigExisting = false;
       this.setState({
-        ssoConfig: this.defaultSsoSettings,
+        ssoConfig: null,
+        originalConfig: null,
         processing: false,
       });
     } catch (e) {
@@ -527,7 +400,8 @@ export class AdminSsoContextProvider extends React.Component {
    * Handles the UI processing after a successful settings activation
    */
   handleSettingsActivation() {
-    this.setState({hasSettingsChanged: false});
+    this.isSsoConfigExisting = true;
+    this.setState({originalConfig: this.state.ssoConfig});
   }
 
   /**
