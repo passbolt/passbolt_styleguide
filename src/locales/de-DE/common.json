@@ -7,7 +7,7 @@
   "(tag)": "(Tag)",
   "{column.label}": "{column.label}",
   "{errors.get(key)}": "{errors.get(key)}",
-  "{this.creatorName} did not initiate this request.": "{this.creatorName} did not initiate this request.",
+  "{this.creatorName} did not initiate this request.": "{this.creatorName} hat diese Anfrage nicht initiiert.",
   "{this.state.warnings.get(key)}": "{this.state.warnings.get(key)}",
   "@your-domain.com": "@your-domain.com",
   "<0>{{activityCreatorName}}</0> accepted the account recovery policy": "<0>{{activityCreatorName}}</0> hat die Kontowiederherstellungsrichtlinie akzeptiert",
