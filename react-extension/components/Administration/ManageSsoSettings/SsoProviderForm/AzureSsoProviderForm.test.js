@@ -78,7 +78,6 @@ describe("AzureSsoProviderForm", () => {
 
   describe("Should handle errors", () => {
     const rawErrors = {
-      url: "url is not a valid URL",
       client_id: "client_id is not a valid UUID",
       tenant_id: "tenant_id is not a valid UUID",
       client_secret: "client_secret is not a valid UUID",
@@ -86,7 +85,7 @@ describe("AzureSsoProviderForm", () => {
     };
 
     it("Should show the error in the form", async() => {
-      expect.assertions(10);
+      expect.assertions(8);
 
       const errors = new EntityValidationError();
       Object.keys(rawErrors).forEach(key => {
@@ -98,8 +97,6 @@ describe("AzureSsoProviderForm", () => {
       const page = new AzureSsoProviderFormPage(props);
       await waitFor(() => {});
 
-      expect(page.urlError).not.toBeNull();
-      expect(page.urlError.textContent).toStrictEqual(rawErrors.url);
       expect(page.clientIdError).not.toBeNull();
       expect(page.clientIdError.textContent).toStrictEqual(rawErrors.client_id);
       expect(page.tenantIdError).not.toBeNull();

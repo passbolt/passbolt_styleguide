@@ -14,19 +14,19 @@
 
 export function defaultAdminPasswordExpiryContext(props) {
   const context = {
-    getSettings: () => jest.fn(),
-    setSettingsBulk: () => jest.fn(),
-    findSettings: () => jest.fn(),
-    isProcessing: () => jest.fn(),
-    validateData: () => jest.fn(),
-    save: () => jest.fn(),
-    getErrors: () => jest.fn(),
-    isFeatureToggleEnabled: () => jest.fn(),
-    setFeatureToggle: () => jest.fn(),
-    hasSettingsChanges: () => jest.fn(),
-    isSubmitted: () => jest.fn(),
-    setSubmitted: () => jest.fn(),
-    setDefaultExpiryToggle: () => jest.fn(),
+    getSettings: jest.fn(),
+    setSettingsBulk: jest.fn(),
+    findSettings: jest.fn(),
+    isProcessing: jest.fn(),
+    validateData: jest.fn(),
+    save: jest.fn(),
+    getErrors: jest.fn(),
+    isFeatureToggleEnabled: jest.fn(),
+    setFeatureToggle: jest.fn(),
+    hasSettingsChanges: jest.fn(),
+    isSubmitted: jest.fn(),
+    setSubmitted: jest.fn(),
+    setDefaultExpiryToggle: jest.fn(),
   };
 
   return Object.assign(context, props);

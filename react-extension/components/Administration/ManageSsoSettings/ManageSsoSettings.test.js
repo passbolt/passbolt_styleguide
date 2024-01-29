@@ -55,6 +55,8 @@ describe("ManageSsoSettings", () => {
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Azure settings', async() => {
       expect.assertions(19);
       const settingsData = withAzureSsoSettings();
+      settingsData.data.prompt = 'none';
+      settingsData.data.email_claim = 'upn';
 
       const props = defaultProps();
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
@@ -79,14 +81,14 @@ describe("ManageSsoSettings", () => {
       expect(page.prompt).toBeTruthy();
       expect(page.email_claim).toBeTruthy();
 
-      expect(page.url.value).toBe(settingsData.data.url);
+      expect(page.url_value).toBe(settingsData.data.url);
       expect(page.redirect_url.value).toBe(exepectedRedirectUrl);
       expect(page.tenant_id.value).toBe(settingsData.data.tenant_id);
       expect(page.client_id.value).toBe(settingsData.data.client_id);
       expect(page.client_secret.value).toBe(settingsData.data.client_secret);
       expect(page.client_secret_expiry.value).toBe(settingsData.data.client_secret_expiry);
-      expect(page.prompt.value).toBe(settingsData.data.prompt);
-      expect(page.email_claim.value).toBe(settingsData.data.email_claim);
+      expect(page.prompt_value).toBe("None");
+      expect(page.email_claim_value).toBe("UPN");
     });
 
     it('As a signed-in administrator on the administration workspace, I can see the SSO settings populated with the current settings: with Google settings', async() => {
@@ -197,7 +199,7 @@ describe("ManageSsoSettings", () => {
       const props = defaultProps(mockDialogContext);
 
       const formData = {
-        url: "https://login.microsoftonline.com",
+        url: "https://login.microsoftonline.us",
         client_id: uuid(),
         tenant_id: uuid(),
         client_secret: uuid(),

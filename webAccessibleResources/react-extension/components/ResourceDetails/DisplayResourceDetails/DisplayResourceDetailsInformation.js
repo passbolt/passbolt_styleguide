@@ -496,7 +496,7 @@ class DisplayResourceDetailsInformation extends React.Component {
             <button className="link no-border" type="button" onClick={this.handleTitleClickEvent}>
               <span>
                 <Trans>Information</Trans>
-                {this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
+                {canUsePasswordExpiry && this.isAttentionRequired && <Icon name="exclamation" baseline={true}/>}
               </span>
               {this.state.open &&
               <Icon name="caret-down"/>

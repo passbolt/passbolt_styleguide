@@ -104,14 +104,6 @@ export default class AzureSsoProviderFormPage {
   }
 
   /**
-   * Returns the url error HTML element
-   * @returns {HTMLElement}
-   */
-  get urlError() {
-    return this.select("#sso-azure-url-input + .error-message");
-  }
-
-  /**
    * Returns the redirect_url input HTML element
    * @returns {HTMLElement}
    */

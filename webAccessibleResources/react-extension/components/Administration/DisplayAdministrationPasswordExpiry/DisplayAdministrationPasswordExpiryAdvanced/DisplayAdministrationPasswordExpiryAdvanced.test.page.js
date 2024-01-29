@@ -252,6 +252,14 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
   }
 
   /**
+   * Returns the expiry notification required error
+   * @returns {HTMLElement}
+   */
+  get form() {
+    return this.select('#password-expiry-form-advanced form');
+  }
+
+  /**
    * Simulates a click on the default expiry period toggle
    * @returns {Promise<void>}
    */
@@ -331,5 +339,13 @@ export default class DisplayAdministrationPasswordExpirySettingsPage {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(element, dataInputEvent);
     await waitFor(() => {});
+  }
+
+  /**
+   * Simulate a form submission event.
+   * Used to simulate a submission from the keyboard.
+   */
+  submitForm() {
+    fireEvent.submit(this.form);
   }
 }

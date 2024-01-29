@@ -7814,6 +7814,7 @@ table.table-info.horizontal tbody tr:hover {
 }
 .password-expiry-dialog .radiolist-alt .radio label .date-wrapper {
   width: 100%;
+  white-space: normal;
 }
 .password-expiry-dialog .radiolist-alt .radio label .date-wrapper .button-inline {
   width: 100%;
