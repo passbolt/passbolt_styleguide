@@ -65,7 +65,7 @@ describe("See the Confirm Save Account Recovery Settings", () => {
       page = new ConfirmSaveAccountRecoverySettingsPage(props);
 
       // Policy label
-      expect(page.accountRecoveryPolicy).toBe('Mandatory');
+      expect(page.accountRecoveryPolicy).toBe('Prompt');
       expect(page.accountRecoveryPolicyInfo).toBe("Every user is required to provide a copy of their private key and passphrase during setup.Warning: You should inform your users not to store personal passwords.");
 
       // organization recovery key
