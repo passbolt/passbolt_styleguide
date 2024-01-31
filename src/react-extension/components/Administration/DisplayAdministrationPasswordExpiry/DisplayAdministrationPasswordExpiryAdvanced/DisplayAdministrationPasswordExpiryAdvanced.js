@@ -45,7 +45,6 @@ class DisplayAdministrationPasswordExpiryAdvanced extends React.PureComponent {
    * @returns {void}
    */
   handleInputChange(event) {
-    event.preventDefault();
     const {type, checked, value, name} = event.target;
     const filedValue = type === "checkbox" ? checked : parseInt(value, 10);
     this.props.adminPasswordExpiryContext.setSettingsBulk({[name]: filedValue});
