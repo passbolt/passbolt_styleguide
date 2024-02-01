@@ -213,11 +213,14 @@ class DisplayResourceDetailsInformation extends React.Component {
         if (error.name !== "UserAbortsOperationError") {
           this.props.actionFeedbackContext.displayError(error.message);
         }
-        return;
       }
     }
 
     this.props.progressContext.close();
+
+    if (!plaintextSecretDto) {
+      return;
+    }
 
     if (!plaintextSecretDto?.password?.length) {
       await this.props.actionFeedbackContext.displayError(this.translate("The password is empty and cannot be copied to clipboard."));

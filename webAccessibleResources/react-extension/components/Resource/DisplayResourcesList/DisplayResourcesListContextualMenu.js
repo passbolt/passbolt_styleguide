@@ -33,7 +33,7 @@ import {withProgress} from "../../../contexts/ProgressContext";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
-import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {DateTime} from "luxon";

@@ -289,7 +289,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
                   id="accountRecoveryPolicyMandatory"
                   disabled={this.hasAllInputDisabled()}/>
                 <label htmlFor="accountRecoveryPolicyMandatory">
-                  <span className="name"><Trans>Mandatory</Trans></span>
+                  <span className="name"><Trans>Prompt</Trans></span>
                   <span className="info">
                     <Trans>Every user is required to provide a copy of their private key and passphrase during setup.</Trans><br/>
                     <Trans>You should inform your users not to store personal passwords.</Trans>

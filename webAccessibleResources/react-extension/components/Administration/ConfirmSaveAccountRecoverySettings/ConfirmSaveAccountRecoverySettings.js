@@ -151,7 +151,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
                     <label htmlFor="accountPolicy">
                       <span className="name">
                         {{
-                          mandatory: <Trans>Mandatory</Trans>,
+                          mandatory: <Trans>Prompt</Trans>,
                           'opt-out': <Trans>Optional, Opt-out</Trans>,
                           'opt-in': <Trans>Optional, Opt-in</Trans>,
                           disabled: <Trans>Disable</Trans>

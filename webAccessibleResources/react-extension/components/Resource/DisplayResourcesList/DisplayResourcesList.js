@@ -181,16 +181,16 @@ class DisplayResourcesList extends React.Component {
    * Returns true if the component should be re-rendered
    */
   shouldComponentUpdate(nextProps, nextState) {
-    const {filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting} = this.props.resourceWorkspaceContext;
+    const {filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting} = nextProps.resourceWorkspaceContext;
     const hasFilteredResourcesChanged = nextProps.resourceWorkspaceContext.filteredResources !== filteredResources;
-    const hasBothSingleSelection = selectedResources.length === 1 && nextProps.resourceWorkspaceContext.selectedResources.length === 1;
+    const hasBothSingleSelection = selectedResources.length === 1 && this.props.resourceWorkspaceContext.selectedResources.length === 1;
     const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== nextProps.resourceWorkspaceContext.selectedResources[0].id;
-    const hasSelectedResourcesLengthChanged = nextProps.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
-    const hasSorterChanged = sorter !== nextProps.resourceWorkspaceContext.sorter;
+    const hasSelectedResourcesLengthChanged = this.props.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
+    const hasSorterChanged = sorter !== this.props.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewSecretChange = nextState.previewedCellule !== this.state.previewedCellule;
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
-    const hasColumnsResourceViewChange = nextProps.resourceWorkspaceContext.columnsResourceSetting?.hasDifferentShowValue(columnsResourceSetting);
+    const hasColumnsResourceViewChange = this.props.resourceWorkspaceContext.columnsResourceSetting?.hasDifferentShowValue(columnsResourceSetting);
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedCellule();
@@ -684,6 +684,10 @@ class DisplayResourcesList extends React.Component {
     this.props.actionFeedbackContext.displayError(message);
   }
 
+  /**
+   * Triggers a scroll of the grid to a resource given its id, if the resource is not visible yet.
+   * @param {string} resourceId
+   */
   scrollTo(resourceId) {
     const resourceIndex = this.resources.findIndex(resource => resource.id === resourceId);
     const [visibleStartIndex, visibleEndIndex] = this.listRef.current.getVisibleRange();

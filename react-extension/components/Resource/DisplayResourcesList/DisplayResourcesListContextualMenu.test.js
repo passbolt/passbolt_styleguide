@@ -31,7 +31,7 @@ import {
   plaintextSecretPasswordDescriptionTotpDto,
   plaintextSecretPasswordStringDto
 } from "../../../../shared/models/entity/plaintextSecret/plaintextSecretEntity.test.data";
-import {HandleTotpWorkflow} from "../HandleTotpWorkflow/HandleTotpWorkflow";
+import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
