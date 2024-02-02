@@ -182,9 +182,9 @@ class DisplayResourcesList extends React.Component {
    */
   shouldComponentUpdate(nextProps, nextState) {
     const {filteredResources, selectedResources, sorter, scrollTo, columnsResourceSetting} = nextProps.resourceWorkspaceContext;
-    const hasFilteredResourcesChanged = nextProps.resourceWorkspaceContext.filteredResources !== filteredResources;
+    const hasFilteredResourcesChanged = this.props.resourceWorkspaceContext.filteredResources !== filteredResources;
     const hasBothSingleSelection = selectedResources.length === 1 && this.props.resourceWorkspaceContext.selectedResources.length === 1;
-    const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== nextProps.resourceWorkspaceContext.selectedResources[0].id;
+    const hasSingleSelectedResourceChanged = hasBothSingleSelection && selectedResources[0].id !== this.props.resourceWorkspaceContext.selectedResources[0].id;
     const hasSelectedResourcesLengthChanged = this.props.resourceWorkspaceContext.selectedResources.length !== selectedResources.length;
     const hasSorterChanged = sorter !== this.props.resourceWorkspaceContext.sorter;
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
