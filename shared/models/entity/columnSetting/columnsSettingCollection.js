@@ -144,7 +144,7 @@ class ColumnsSettingCollection extends EntityCollection {
    * @return {boolean}
    */
   hasDifferentShowValue(columnsSettingCollection) {
-    if (columnsSettingCollection !== null) {
+    if (columnsSettingCollection) {
       return this.items.some((column, index) => column?.show !== columnsSettingCollection.items[index]?.show);
     }
     return true;
