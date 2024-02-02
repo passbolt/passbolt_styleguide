@@ -190,7 +190,7 @@ class DisplayResourcesList extends React.Component {
     const hasResourceToScrollChange = Boolean(scrollTo.resource && scrollTo.resource.id);
     const hasResourcePreviewSecretChange = nextState.previewedCellule !== this.state.previewedCellule;
     const hasResourceColumnsChange = nextState.columns !== this.state.columns;
-    const hasColumnsResourceViewChange = this.props.resourceWorkspaceContext.columnsResourceSetting?.hasDifferentShowValue(columnsResourceSetting);
+    const hasColumnsResourceViewChange = columnsResourceSetting?.hasDifferentShowValue(this.props.resourceWorkspaceContext.columnsResourceSetting);
     const mustHidePreviewPassword = hasFilteredResourcesChanged || hasSingleSelectedResourceChanged || hasSelectedResourcesLengthChanged || hasSorterChanged;
     if (mustHidePreviewPassword) {
       this.hidePreviewedCellule();
