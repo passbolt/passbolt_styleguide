@@ -1105,15 +1105,15 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
     const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
     // process the search after the grid setting is loaded
-    this.setState({columnsResourceSetting, sorter}, () => {
-      this.search(this.state.filter);
+    this.setState({columnsResourceSetting, sorter}, async() => {
+      await this.search(this.state.filter);
       /*
        * we run scrollTo again here as all data is loaded and the previous sort is loaded as well.
        * This make sure that the computed scroll position takes into account the sort and scolls the grid where it should
        */
-      const selectedResource = this.state.selectedResources;
-      if (selectedResource.length === 1) {
-        this.scrollTo(selectedResource[0]);
+      const selectedResources = this.state.selectedResources;
+      if (selectedResources.length === 1) {
+        await this.scrollTo(selectedResources[0]);
       }
     });
   }
