@@ -152,7 +152,7 @@ class ExportResourcesCredentials extends Component {
     const foldersIds = this.props.resourceWorkspaceContext.resourcesToExport.foldersIds;
     const resourcesIds = this.props.resourceWorkspaceContext.resourcesToExport.resourcesIds;
     const exportDto = {
-      format: "kdbx",
+      format: this.props.format,
       folders_ids: foldersIds,
       resources_ids: resourcesIds,
       options: options
@@ -293,6 +293,7 @@ ExportResourcesCredentials.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  format: PropTypes.string, // The kdbx format
   t: PropTypes.func, // The translation function
 };
 
