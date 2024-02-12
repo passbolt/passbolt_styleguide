@@ -48,7 +48,7 @@ describe("As LU I should see the password export dialog", () => {
       expect(page.title).toBe("Export passwords");
 
       // Fill the form
-      await page.selectFormat(2);
+      await page.selectFormat(3);
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(requestMockImpl);
@@ -79,13 +79,13 @@ describe("As LU I should see the password export dialog", () => {
       await page.submitExport();
       await waitFor(() => {});
 
-      expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResourcesCredentials);
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ExportResourcesCredentials, {format: "kdbx"});
       expect(props.onClose).toBeCalled();
     });
 
     it('As LU I cannot update the form fields and I should see a processing feedback while submitting the form', async() => {
       // Fill the form
-      await page.selectFormat(1);
+      await page.selectFormat(2);
       // Mock the request function to make it the expected result
       let updateResolve;
       const requestMockImpl = jest.fn(() => new Promise(resolve => {

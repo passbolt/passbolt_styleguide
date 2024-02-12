@@ -165,8 +165,9 @@ class ExportResources extends React.Component {
    */
   get exportFormats() {
     return [
-      {label: "kdbx (keepass / keepassx)", value: "kdbx"},
-      {label: "csv (keepass / keepassx)", value: "csv-kdbx"},
+      {label: "kdbx (keepass)", value: "kdbx"},
+      {label: "kdbx (keepassXC & others)", value: "kdbx-others"},
+      {label: "csv (keepass)", value: "csv-kdbx"},
       {label: "csv (lastpass)", value: "csv-lastpass"},
       {label: "csv (1password)", value: "csv-1password"},
       {label: "csv (chromium based browsers)", value: "csv-chromium"},
@@ -200,7 +201,7 @@ class ExportResources extends React.Component {
         .then(this.onExportSuccess.bind(this))
         .catch(this.onExportFailure.bind(this));
     } else { // KDBX case
-      await this.props.dialogContext.open(ExportResourcesCredentials);
+      await this.props.dialogContext.open(ExportResourcesCredentials, {format: this.state.selectedExportFormat});
       this.close();
     }
   }
