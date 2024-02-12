@@ -90,7 +90,7 @@ export class AdministrationPasswordExpiryContextProvider extends React.Component
     this.setState({processing: true});
     this.setState({submitted: false});
 
-    const result = await this.props.context.port.request("passbolt.password-expiry.find");
+    const result = await this.props.context.port.request("passbolt.password-expiry.get-or-find", true);
     const settings = PasswordExpirySettingsViewModel.fromEntityDto(result);
 
     //Init saved setting

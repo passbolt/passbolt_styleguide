@@ -38,7 +38,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultPropsCE();
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => defaultPasswordExpirySettingsEntityDto());
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => defaultPasswordExpirySettingsEntityDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
       await waitForTrue(() => page.exists());
@@ -51,7 +51,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       expect.assertions(3);
       const context = defaultAppContext();
       const props = defaultPropsCE();
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => defaultPasswordExpirySettingsEntityDto());
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => defaultPasswordExpirySettingsEntityDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
       await waitForTrue(() => page.exists());
@@ -71,7 +71,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
 
       const expectedPasswordExpirySettingsDto = defaultPasswordExpirySettingsViewModelDto();
 
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => disabledPasswordExpirySettingsViewModelDto());
       props.context.port.addRequestListener("passbolt.password-expiry.save", async passwordExpirySettingsDto => {
         expect(passwordExpirySettingsDto).toStrictEqual(expectedPasswordExpirySettingsDto);
         return passwordExpirySettingsDto;
@@ -92,7 +92,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       const currentSettings = passwordExpirySettingsEntityDtoFromApi();
       const expectedPasswordExpirySettingsId = currentSettings.id;
 
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => currentSettings);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => currentSettings);
       props.context.port.addRequestListener("passbolt.password-expiry.delete", async passwordExpirySettingsId => {
         expect(passwordExpirySettingsId).toStrictEqual(expectedPasswordExpirySettingsId);
       });
@@ -108,7 +108,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       expect.assertions(1);
       const context = defaultAppContext();
       const props = defaultPropsCE();
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => disabledPasswordExpirySettingsViewModelDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
       await waitForTrue(() => page.exists());
@@ -122,7 +122,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultPropsCE();
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => disabledPasswordExpirySettingsViewModelDto());
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
       await waitForTrue(() => page.exists());
@@ -139,7 +139,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       expect.assertions(2);
       const context = defaultAppContext();
       const props = defaultPropsCE();
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => disabledPasswordExpirySettingsViewModelDto());
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => disabledPasswordExpirySettingsViewModelDto());
 
       let savePromise;
       props.context.port.addRequestListener("passbolt.password-expiry.save", () => new Promise(resolve => {
@@ -168,7 +168,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       const props = defaultPropsCE();
       const entityDto = defaultPasswordExpirySettingsViewModelDto();
       const expectedError = new Error("Something went wrong!");
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => entityDto);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => entityDto);
       props.context.port.addRequestListener("passbolt.password-expiry.save", () => { throw expectedError; });
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
@@ -186,7 +186,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       const context = defaultAppContext();
       const props = defaultPropsPro();
       const entityDto = defaultPasswordExpirySettingsViewModelDto();
-      props.context.port.addRequestListener("passbolt.password-expiry.find", () => entityDto);
+      props.context.port.addRequestListener("passbolt.password-expiry.get-or-find", () => entityDto);
 
       const page = new DisplayAdministrationPasswordExpirySettingsPage(context, props);
       await waitForTrue(() => page.exists());
