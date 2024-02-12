@@ -263,6 +263,18 @@ class InFormCallToActionField {
     this.scrollableFieldParent.addEventListener('scroll', this.removeCallToActionIframe);
   }
 
+  /** AUTOFILL **/
+
+  /**
+   * Autofill a field
+   * @param text
+   */
+  autofill(text) {
+    const inputEvent = new InputEvent("input", {inputType: "insertText", data: text, bubbles: true});
+    this.field.value = text;
+    this.field.dispatchEvent(inputEvent);
+  }
+
   /** DESTROY */
 
   /**
