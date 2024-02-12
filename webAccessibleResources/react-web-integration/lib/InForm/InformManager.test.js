@@ -849,6 +849,40 @@ describe("InformManager", () => {
     expect(informManager.username.value).toBe('test');
   });
 
+  it("As LU I should see the inform call to action when I clicked on it and autofill fields should trigger input and change events", async() => {
+    expect.assertions(11);
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.clickOnInformCallToAction();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.clickOnInformCallToAction();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    informManager.username.addEventListener('input', event => {
+      expect(event.target.value).toBe('test');
+    });
+    informManager.username.addEventListener('change', event => {
+      expect(event.target.value).toBe('test');
+    });
+    informManager.password.addEventListener('input', event => {
+      expect(event.target.value).toBe('password');
+    });
+    informManager.password.addEventListener('change', event => {
+      expect(event.target.value).toBe('password');
+    });
+    await informManager.autofillCredentials('test', 'password');
+  });
+
   it("As LU I should see the inform call to action when I clicked on it and autofill only fields in the same parent container", async() => {
     // Set up document body
     // eslint-disable-next-line no-unsanitized/property

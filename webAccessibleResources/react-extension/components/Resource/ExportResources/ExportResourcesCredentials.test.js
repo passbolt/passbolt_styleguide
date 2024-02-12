@@ -59,7 +59,7 @@ describe("As LU I should see the export resources credentials dialog", () => {
       await waitFor(() => {});
 
       const exportDto = {
-        format: "kdbx",
+        format: props.format,
         folders_ids: props.resourceWorkspaceContext.resourcesToExport.foldersIds,
         resources_ids: props.resourceWorkspaceContext.resourcesToExport.resourcesIds,
         options: {credentials: {password: 'test', keyfile: "dGVzdA=="}}

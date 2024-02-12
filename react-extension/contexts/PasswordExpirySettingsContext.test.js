@@ -25,13 +25,13 @@ beforeEach(() => {
 
 describe("PasswordExpirySettingsContext", () => {
   describe('::findSettings', () => {
-    it('should not call for passbolt.password-expiry.find if the feature flag is disabled', async() => {
+    it('should not call for passbolt.password-expiry.get-or-find if the feature flag is disabled', async() => {
       expect.assertions(1);
 
       const props = defaultProps();
       props.context.siteSettings.canIUse = () => false;
 
-      props.context.port.addRequestListener('passbolt.password-expiry.find', () => {
+      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => {
         throw new Error("Shouldn't not be called");
       });
 
@@ -42,13 +42,13 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.getSettings()).toStrictEqual(null);
     });
 
-    it('should call for passbolt.password-expiry.find to retrieve the settings', async() => {
+    it('should call for passbolt.password-expiry.get-or-find to retrieve the settings', async() => {
       expect.assertions(1);
 
       const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.find', () => expectedSettings);
+      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -57,14 +57,14 @@ describe("PasswordExpirySettingsContext", () => {
       expect(context.getSettings()).toStrictEqual(expectedSettings);
     });
 
-    it('should not called twice passbolt.password-expiry.find', async() => {
+    it('should not called twice passbolt.password-expiry.get-or-find', async() => {
       expect.assertions(2);
 
       const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       let callCount = 0;
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.find', () => {
+      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => {
         callCount++;
         return expectedSettings;
       });
@@ -114,7 +114,7 @@ describe("PasswordExpirySettingsContext", () => {
       const expectedSettings = defaultPasswordExpirySettingsEntityDto();
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.find', () => expectedSettings);
+      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -129,7 +129,7 @@ describe("PasswordExpirySettingsContext", () => {
       const expectedSettings = passwordExpirySettingsEntityDtoFromApi();
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.find', () => expectedSettings);
+      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', () => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);
@@ -174,7 +174,7 @@ describe("PasswordExpirySettingsContext", () => {
       });
 
       const props = defaultProps();
-      props.context.port.addRequestListener('passbolt.password-expiry.find', async() => expectedSettings);
+      props.context.port.addRequestListener('passbolt.password-expiry.get-or-find', async() => expectedSettings);
 
       const context = new PasswordExpirySettingsContextProvider(props);
       mockState(context);

@@ -13,9 +13,7 @@
  */
 import React, {Component, memo} from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
 import {formatExpirationDateTimeAgo} from "../../utils/dateUtils";
-import {withAppContext} from "../../context/AppContext/AppContext";
 
 /**
  * This component represents a table date cell
@@ -32,7 +30,7 @@ class CellExpiryDate extends Component {
       return null;
     }
 
-    const displayedDate = formatExpirationDateTimeAgo(this.props.value, this.props.t, this.props.context.locale);
+    const displayedDate = formatExpirationDateTimeAgo(this.props.value, this.props.t, this.props.locale);
     return (
       <div title={this.props.value || displayedDate}>
         {displayedDate}
@@ -43,8 +41,8 @@ class CellExpiryDate extends Component {
 
 CellExpiryDate.propTypes = {
   value: PropTypes.string,
-  context: PropTypes.object, // the application context
+  locale: PropTypes.string, // the locale language
   t: PropTypes.func, // the translation function
 };
 
-export default memo(withAppContext(withTranslation("common")(CellExpiryDate)));
+export default memo(CellExpiryDate);

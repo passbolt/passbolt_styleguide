@@ -15,7 +15,6 @@
 import InFormCallToActionField from "./InFormCallToActionField";
 import InFormFieldSelector from "./InFormFieldSelector";
 import InFormMenuField from "./InformMenuField";
-import {fireEvent} from "@testing-library/dom/dist/events";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
@@ -252,22 +251,22 @@ class InFormManager {
       const isUsernameType = currentFieldType === 'username';
       const isPasswordType = currentFieldType === 'password';
       if (!isUsernameType) {
-        fireEvent.change(this.lastCallToActionFieldClicked.field, {target: {value: password}});
+        this.lastCallToActionFieldClicked.autofill(password);
         // Get username fields and find the one with the lowest common ancestor
         const usernameFields = this.callToActionFields
           .filter(callToActionField => callToActionField.fieldType === 'username');
         const usernameField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, usernameFields);
         if (usernameField) {
-          fireEvent.change(usernameField.field, {target: {value: username}});
+          usernameField.autofill(username);
         }
       } else if (!isPasswordType) {
-        fireEvent.change(this.lastCallToActionFieldClicked.field, {target: {value: username}});
+        this.lastCallToActionFieldClicked.autofill(username);
         // Get password fields and find the one with the lowest common ancestor
         const passwordFields = this.callToActionFields
           .filter(callToActionField => callToActionField.fieldType === 'password');
         const passwordField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, passwordFields);
         if (passwordField) {
-          fireEvent.change(passwordField.field, {target: {value: password}});
+          passwordField.autofill(password);
         }
       }
     });
@@ -281,7 +280,7 @@ class InFormManager {
       const passwordFields = this.callToActionFields
         .filter(callToActionField => callToActionField.fieldType === 'password');
       // Autofill only empty passwords field
-      passwordFields.forEach(callToActionField => !callToActionField.field.value && fireEvent.change(callToActionField.field, {target: {value: password}}));
+      passwordFields.forEach(callToActionField => !callToActionField.field.value && callToActionField.autofill(password));
       this.menuField.removeMenuIframe();
       // Listen the auto-save on the appropriate form field
       const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));
