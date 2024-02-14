@@ -52,5 +52,5 @@ export const defaultAdminUiActionControlResolution = {
  * @type {object}
  */
 export const defaultUserUiActionControlResolution = {
-  [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW] // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
+  [uiActions.ADMINSTRATION_VIEW_WORKSPACE]: controlFunctionResolutions[controlFunctions.DENY],
 };
