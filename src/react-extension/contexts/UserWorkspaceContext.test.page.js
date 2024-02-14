@@ -30,10 +30,11 @@ export default class UserWorkspaceContextPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext) {
+  constructor(appContext, props) {
     this.context = appContext;
+    this.props = props;
     this.configureTranslation();
-    this.setup(appContext);
+    this.setup(appContext, props);
   }
 
   /*
@@ -122,7 +123,7 @@ export default class UserWorkspaceContextPage {
    * Go to the All Users search filter route
    */
   async goToAllUsers() {
-    this.setup(this.context);
+    this.setup(this.context, this.props);
     await this.goToLink('.all');
   }
 
@@ -145,7 +146,7 @@ export default class UserWorkspaceContextPage {
    * @param text A specific text search filter
    */
   async goToText(text) {
-    this.setup(this.context, {text});
+    this.setup(this.context, this.props, {text});
     await this.goToLink('.text');
   }
 
@@ -154,7 +155,7 @@ export default class UserWorkspaceContextPage {
    * @param group A specific group search filter
    */
   async goToGroup(group) {
-    this.setup(this.context, {group});
+    this.setup(this.context, this.props, {group});
     await this.goToLink('.group');
   }
 
@@ -182,10 +183,9 @@ export default class UserWorkspaceContextPage {
    * @param text a specific text search filter
    * @param tag a specific tag search filter
    */
-  setup(appContext, args = {}) {
+  setup(appContext, props, args = {}) {
     this._page = render(
       <AppContext.Provider value={appContext}>
-
         <Router history={createMemoryHistory({initialEntries: [
           "/app/groups/view/:selectedGroupId",
           "/app/users/view/:selectedResourceId",
@@ -197,7 +197,7 @@ export default class UserWorkspaceContextPage {
               "/app/users/view/:selectedUserId",
               "/app/users",
             ]}>
-              <UserWorkspaceContextProvider>
+              <UserWorkspaceContextProvider {...props}>
                 <UserWorkspaceContext.Consumer>
                   {
                     UserWorkspaceContext => {
