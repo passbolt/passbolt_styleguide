@@ -18,7 +18,7 @@ export function defaultAppContext(appContext) {
 
 /**
  * Default props
- * @returns {{resource: {id: string, name: string}}}
+ * @return {{onClose: *, dialogContext: {open: *}, format: string, resourceWorkspaceContext: {resourcesToExport: {foldersIds: [{id: string}], resourcesIds: [{id: string},{id: string}]}, onResourcesToExport: *}}}
  */
 export function defaultProps() {
   return {
@@ -26,6 +26,7 @@ export function defaultProps() {
     dialogContext: {
       open: jest.fn()
     },
+    format: "kdbx",
     resourceWorkspaceContext: {
       onResourcesToExport: jest.fn(),
       resourcesToExport: {

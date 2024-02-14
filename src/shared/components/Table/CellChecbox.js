@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.2.0
  */
-import React, {Component} from "react";
+import React, {Component, memo} from "react";
 import PropTypes from "prop-types";
 
 /**
@@ -70,4 +70,4 @@ CellCheckbox.propTypes = {
   onClick: PropTypes.func, // The onClick event function
 };
 
-export default CellCheckbox;
+export default memo(CellCheckbox);

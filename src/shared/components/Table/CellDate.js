@@ -13,9 +13,7 @@
  */
 import React, {Component, memo} from "react";
 import PropTypes from "prop-types";
-import {withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../utils/dateUtils";
-import {withAppContext} from "../../context/AppContext/AppContext";
 
 /**
  * This component represents a table date cell
@@ -32,7 +30,7 @@ class CellDate extends Component {
       return null;
     }
 
-    const displayedDate = formatDateTimeAgo(this.props.value, this.props.t, this.props.context.locale);
+    const displayedDate = formatDateTimeAgo(this.props.value, this.props.t, this.props.locale);
     return (
       <div title={this.props.value}>
         {displayedDate}
@@ -43,8 +41,8 @@ class CellDate extends Component {
 
 CellDate.propTypes = {
   value: PropTypes.string, // a string formatted as a date or null
-  context: PropTypes.object, // the application context
+  locale: PropTypes.string, // the locale language
   t: PropTypes.func, // the translation function
 };
 
-export default memo(withAppContext(withTranslation("common")(CellDate)));
+export default memo(CellDate);
