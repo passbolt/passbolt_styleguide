@@ -64,7 +64,7 @@ export class PasswordExpirySettingsContextProvider extends React.Component {
     if (!this.props.context.siteSettings.canIUse('passwordExpiry') || this.getSettings() !== null) {
       return;
     }
-    const settings = await this.props.context.port.request("passbolt.password-expiry.find");
+    const settings = await this.props.context.port.request("passbolt.password-expiry.get-or-find");
     this.setState({settings});
   }
 

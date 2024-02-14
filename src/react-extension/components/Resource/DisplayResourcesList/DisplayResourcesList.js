@@ -127,7 +127,7 @@ class DisplayResourcesList extends React.Component {
 
     this.defaultColumns.push(new ColumnNameModel({label: this.translate("Name")}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
-      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), cellRenderer: {component: CellExpiryDate}}));
+      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}}));
     }
     this.defaultColumns.push(new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}));
     this.defaultColumns.push(new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}));
@@ -135,7 +135,7 @@ class DisplayResourcesList extends React.Component {
       this.defaultColumns.push(new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}));
     }
     this.defaultColumns.push(new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}));
-    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), cellRenderer: {component: CellDate}}));
+    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}}));
   }
 
   /**
