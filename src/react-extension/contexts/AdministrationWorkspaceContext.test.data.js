@@ -11,25 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.0.0
  */
-import MockPort from "../test/mock/MockPort";
-
-/**
- * Returns the default app context for the unit test
- * @param appContext An existing app context
- * @returns {any}
- */
-export function defaultAppContext(appContext) {
-  const defaultAppContext = {
-    port: new MockPort()
-  };
-  return Object.assign(defaultAppContext, appContext || {});
-}
 
 /**
  * Default props
  */
-export function defaultProps() {
-  return {};
+export function defaultProps(data = {}) {
+  return {
+    rbacContext: {
+      canIUseUiAction: () => true
+    },
+    ...data,
+  };
 }
 
 /**

@@ -43,6 +43,7 @@ import DisplayRbacAdministration from "./DisplayRbacAdministration/DisplayRbacAd
 import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdministration/DisplayPasswordPoliciesAdministration";
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
+import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -157,6 +158,22 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  /**
+   * If the page access is denied
+   * @returns {boolean}
+   */
+  get isHttpError403() {
+    return AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If the page accessed does not exist or if the corresponding feature flag is disabled
+   * @returns {boolean}
+   */
+  get isHttpError404() {
+    return AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -178,11 +195,21 @@ class AdministrationWorkspace extends Component {
           <div className="panel main">
             <div>
               <div className="panel left">
+                {!this.isHttpError403 &&
                 <DisplayAdministrationMenu/>
+                }
               </div>
               <div className="panel middle">
+                {!this.isHttpError403 &&
                 <DisplayAdministrationWorkspaceBreadcrumb/>
+                }
                 <div className="grid grid-responsive-12">
+                  {this.isHttpError403 &&
+                  <DisplayHttpError errorCode={403}/>
+                  }
+                  {this.isHttpError404 &&
+                  <DisplayHttpError errorCode={404}/>
+                  }
                   {this.isMfaSelected() &&
                   <DisplayMfaAdministration/>
                   }
