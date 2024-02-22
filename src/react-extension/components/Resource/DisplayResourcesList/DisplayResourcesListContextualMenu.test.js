@@ -15,6 +15,7 @@
 /**
  * Unit tests on DisplayGridContextualMenuContextualMenu in regard of specifications
  */
+import "../../../../../test/mocks/mockClipboard";
 import {
   defaultProps,
   propsDenyUIActions, propsResourceStandaloneTotp,
@@ -38,12 +39,6 @@ import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordEx
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("DisplayResourcesListContextualMenu", () => {

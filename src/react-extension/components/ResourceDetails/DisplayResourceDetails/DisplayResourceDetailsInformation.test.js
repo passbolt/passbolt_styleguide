@@ -16,6 +16,7 @@
  * Unit tests on DisplayResourceDetailsInformation in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import {
   defaultProps, propsWithDenyUiAction,
 } from "./DisplayResourceDetailsInformation.test.data";
@@ -29,12 +30,6 @@ import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.te
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("DisplayResourceDetailsInformation", () => {

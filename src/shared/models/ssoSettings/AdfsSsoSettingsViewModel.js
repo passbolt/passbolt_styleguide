@@ -9,22 +9,25 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.5.0
+ * @since         4.6.0
  */
 
 import EntitySchema from "../entity/abstract/entitySchema";
 import EntityValidationError from "../entity/abstract/entityValidationError";
-import GoogleSsoSettingsEntity from "../entity/ssoSettings/GoogleSsoSettingsEntity";
+import AdfsSsoSettingsEntity from "../entity/ssoSettings/AdfsSsoSettingsEntity";
 
 /**
- * Model related to the Google SSO settings TOTP
+ * Model related to the AD FS SSO settings TOTP
  */
-class GoogleSsoSettingsViewModel {
+class AdfsSsoSettingsViewModel {
   /**
    * Constructor
-   * @param {GoogleSsoSettingsDto} [settings]
+   * @param {AdfsSsoSettingsDto} [settings]
    */
   constructor(settings = {}) {
+    this.url = settings?.url;
+    this.openid_configuration_path = settings?.openid_configuration_path;
+    this.scope = settings?.scope;
     this.client_id = settings?.client_id;
     this.client_secret = settings?.client_secret;
 
@@ -38,7 +41,7 @@ class GoogleSsoSettingsViewModel {
    * @returns {string}
    */
   get provider() {
-    return GoogleSsoSettingsEntity.PROVIDER_ID;
+    return AdfsSsoSettingsEntity.PROVIDER_ID;
   }
 
   /**
@@ -46,10 +49,13 @@ class GoogleSsoSettingsViewModel {
    * @returns {Object} schema
    */
   static getSchema() {
-    const baseEntitySchema = GoogleSsoSettingsEntity.getSchema();
+    const baseEntitySchema = AdfsSsoSettingsEntity.getSchema();
     return {
       type: "object",
       required: [
+        "url",
+        "openid_configuration_path",
+        "scope",
         "client_id",
         "client_secret",
       ],
@@ -58,6 +64,9 @@ class GoogleSsoSettingsViewModel {
           "type": "string",
           "format": "uuid",
         },
+        url: baseEntitySchema.properties.url,
+        openid_configuration_path: baseEntitySchema.properties.openid_configuration_path,
+        scope: baseEntitySchema.properties.scope,
         client_id: baseEntitySchema.properties.client_id,
         client_secret: baseEntitySchema.properties.client_secret,
       }
@@ -66,12 +75,15 @@ class GoogleSsoSettingsViewModel {
 
   /**
    * Returns true if both state object's internal state have a difference
-   * @param {OAuth2SsoSettingsViewModel} a
-   * @param {OAuth2SsoSettingsViewModel} b
+   * @param {AdfsSsoSettingsViewModel} a
+   * @param {AdfsSsoSettingsViewModel} b
    * @returns {boolean}
    */
   static isDataDifferent(a, b) {
     const keys = [
+      "url",
+      "openid_configuration_path",
+      "scope",
       "client_id",
       "client_secret",
     ];
@@ -84,11 +96,11 @@ class GoogleSsoSettingsViewModel {
    * @returns {boolean}
    */
   isDataDifferent(b) {
-    if (!(b instanceof GoogleSsoSettingsViewModel)) {
+    if (!(b instanceof AdfsSsoSettingsViewModel)) {
       return true;
     }
 
-    return GoogleSsoSettingsViewModel.isDataDifferent(this, b);
+    return AdfsSsoSettingsViewModel.isDataDifferent(this, b);
   }
 
   /**
@@ -99,6 +111,9 @@ class GoogleSsoSettingsViewModel {
     return {
       id: this.id,
       provider: this.provider,
+      url: this.url,
+      openid_configuration_path: this.openid_configuration_path,
+      scope: this.scope,
       client_id: this.client_id,
       client_secret: this.client_secret,
     };
@@ -108,12 +123,12 @@ class GoogleSsoSettingsViewModel {
    * Clone the current object and modify the clone with the given value on the given field
    * @param {string} field the field to change
    * @param {string|number|boolean|null|undefined} value the value to apply on the field
-   * @returns {GoogleSsoSettingsViewModel} the cloned object with the field modified
+   * @returns {AdfsSsoSettingsViewModel} the cloned object with the field modified
    */
   cloneWithMutation(field, value) {
     const dto = this.toDto();
     dto[field] = value;
-    return new GoogleSsoSettingsViewModel(dto);
+    return new AdfsSsoSettingsViewModel(dto);
   }
 
   /**
@@ -121,7 +136,7 @@ class GoogleSsoSettingsViewModel {
    * @returns {EntityValidationError}
    */
   validate() {
-    const schema = GoogleSsoSettingsViewModel.getSchema();
+    const schema = AdfsSsoSettingsViewModel.getSchema();
 
     try {
       EntitySchema.validate(this.constructor.name, this, schema);
@@ -143,10 +158,13 @@ class GoogleSsoSettingsViewModel {
     const data = settings.data;
     const dto = {
       id: settings?.id,
+      url: data.url,
+      openid_configuration_path: data.openid_configuration_path,
+      scope: data.scope,
       client_id: data.client_id,
       client_secret: data.client_secret,
     };
-    return new GoogleSsoSettingsViewModel(dto);
+    return new AdfsSsoSettingsViewModel(dto);
   }
 
   /**
@@ -157,6 +175,9 @@ class GoogleSsoSettingsViewModel {
     const entityDto = {
       provider: this.provider,
       data: {
+        url: this.url,
+        openid_configuration_path: this.openid_configuration_path,
+        scope: this.scope,
         client_id: this.client_id,
         client_secret: this.client_secret,
       }
@@ -166,4 +187,4 @@ class GoogleSsoSettingsViewModel {
   }
 }
 
-export default GoogleSsoSettingsViewModel;
+export default AdfsSsoSettingsViewModel;

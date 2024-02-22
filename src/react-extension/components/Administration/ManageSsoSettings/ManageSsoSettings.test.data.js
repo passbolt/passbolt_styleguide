@@ -27,7 +27,10 @@ export function defaultProps(data = {}) {
       must: {
         save: jest.fn()
       }
-    }
+    },
+    dialogContext: {
+      open: jest.fn()
+    },
   };
   delete data.context; // Treated in the default
   return Object.assign(defaultProps, data);
