@@ -33,7 +33,8 @@ export function propsWithUserDetails() {
       details: {
         user: 'some user',
         locked: true
-      }
+      },
+      isAccessAllowed: () => true,
     }
   };
 }
@@ -47,7 +48,8 @@ export function propsWithGroupDetails() {
       details: {
         group: 'some group',
         locked: true
-      }
+      },
+      isAccessAllowed: () => true,
     }
   };
 }
@@ -61,7 +63,8 @@ export function propsWithoutLock() {
     userWorkspaceContext: {
       details: {
         locked: false
-      }
+      },
+      isAccessAllowed: () => true,
     }
   };
 }

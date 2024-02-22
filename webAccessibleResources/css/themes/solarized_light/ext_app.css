@@ -5212,6 +5212,30 @@ iframe.cachette {
   margin: 1.6rem 0 1.6rem 0;
   border-radius: 0.4rem;
 }
+.http-error {
+  margin-top: 4.7rem;
+}
+.http-error > * {
+  text-align: center;
+}
+.http-error h3 {
+  font-weight: 700;
+  font-size: 15rem;
+  line-height: 15rem;
+  margin: 0;
+  border: 0;
+  color: hsl(44, 50%, 76%);
+}
+.http-error h4 {
+  font-size: 1.6rem;
+  line-height: 1.36;
+  margin: 0.7rem 0 0.5rem;
+}
+.http-error p {
+  font-size: 1.3rem;
+  max-width: none;
+  margin-top: 0.2rem;
+}
 .input.location {
   /*
      * Clearfix: contain floats

@@ -24,6 +24,8 @@ import {withDialog} from "./DialogContext";
 import {DateTime} from "luxon";
 import {withTranslation} from "react-i18next";
 import {isUserSuspended} from "../../shared/utils/userUtils";
+import {withRbac} from "../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * Context related to users ( filter, current selections, etc.)
@@ -48,6 +50,7 @@ export const UserWorkspaceContext = React.createContext({
     user: null // The user to scroll to
   },
   groupToEdit: null, // The group to edit
+  isAccessAllowed: () => {}, // is the current user allowed to access the user workspace
   onUserScrolled: () => {}, // Whenever one scrolled to a user
   onDetailsLocked: () => {}, // Lock or unlock detail  (hide or display the group or user details)
   onSorterChanged: () => {}, // Whenever the sorter changed
@@ -93,6 +96,7 @@ class UserWorkspaceContextProvider extends React.Component {
         user: null // The user to scroll to
       },
       groupToEdit: null, // The group to edit
+      isAccessAllowed: this.isAccessAllowed.bind(this), // is the current user allowed to access the user workspace
       getTranslatedRoleName: this.getTranslatedRoleName.bind(this), // Tools to retrieve a user translated role name
       onUserScrolled: this.handleUserScrolled.bind(this), // Whenever one scrolled to a user
       onDetailsLocked: this.handleDetailsLocked.bind(this), // Lock or unlock detail  (hide or display the group or user details)
@@ -119,8 +123,18 @@ class UserWorkspaceContextProvider extends React.Component {
    * Whenever the component is mounted
    */
   componentDidMount() {
-    this.populate();
-    this.handleUsersWaitedFor();
+    if (this.isAccessAllowed()) {
+      this.populate();
+      this.handleUsersWaitedFor();
+    }
+  }
+
+  /**
+   * Returns true if the current user allowed to access the user workspace
+   * @returns {boolean}
+   */
+  isAccessAllowed() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
   }
 
   /**
@@ -742,10 +756,11 @@ UserWorkspaceContextProvider.propTypes = {
   actionFeedbackContext: PropTypes.object, // The action feedback context
   loadingContext: PropTypes.object, // The loading context
   dialogContext: PropTypes.any, // The dialog context
+  rbacContext: PropTypes.object, // The Rbac context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withDialog(withActionFeedback(withLoading(withTranslation('common')(UserWorkspaceContextProvider))))));
+export default withAppContext(withRouter(withRbac(withDialog(withActionFeedback(withLoading(withTranslation('common')(UserWorkspaceContextProvider)))))));
 
 /**
  * User Workspace Context Consumer HOC

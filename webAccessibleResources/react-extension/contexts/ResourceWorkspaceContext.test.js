@@ -270,15 +270,15 @@ describe("Resource Workspace Context", () => {
       expect.assertions(2);
       await page.goToAllItems();
       const defaultColumnsSetting = [
-        {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "attentionRequired", label: "Attention", position: 2, show: true},
-        {id: "name", label: "Name", position: 3, show: true},
-        {id: "expired", label: "Expiry", position: 4, show: true},
-        {id: "username", label: "Username", position: 5, show: true},
-        {id: "password", label: "Password", position: 6, show: true},
-        {id: "totp", label: "TOTP", position: 7, show: true},
-        {id: "uri", label: "URI", position: 8, show: true},
-        {id: "modified", label: "Modified", position: 9, show: true}
+        {id: "favorite", position: 1, show: true},
+        {id: "attentionRequired", position: 2, show: true},
+        {id: "name", position: 3, show: true},
+        {id: "expired", position: 4, show: true},
+        {id: "username", position: 5, show: true},
+        {id: "password", position: 6, show: true},
+        {id: "totp", position: 7, show: true},
+        {id: "uri", position: 8, show: true},
+        {id: "modified", position: 9, show: true}
       ];
       expect(page.columnsResourceSetting.items.length).toStrictEqual(9);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
@@ -287,15 +287,15 @@ describe("Resource Workspace Context", () => {
     it("As LU I should be able to load resource columns setting", async() => {
       expect.assertions(3);
       const columnsSetting = [
-        {id: "favorite", label: "Favorite", position: 1, show: true},
-        {id: "attentionRequired", label: "Attention", position: 2, show: true},
-        {id: "name", label: "Name", width: 200, position: 3, show: true},
-        {id: "expired", label: "Expiry", width: 200, position: 4, show: true},
-        {id: "username", label: "Username", position: 5, show: false},
-        {id: "password", label: "Password", width: 300, position: 6, show: true},
-        {id: "totp", label: "TOTP", position: 7, width: 190, show: true},
-        {id: "uri", label: "URI", position: 8, show: false},
-        {id: "modified", label: "Modified", width: 250, position: 9, show: true}
+        {id: "favorite", position: 1, show: true},
+        {id: "attentionRequired", position: 2, show: true},
+        {id: "name", width: 200, position: 3, show: true},
+        {id: "expired", width: 200, position: 4, show: true},
+        {id: "username", position: 5, show: false},
+        {id: "password", width: 300, position: 6, show: true},
+        {id: "totp", position: 7, width: 190, show: true},
+        {id: "uri", position: 8, show: false},
+        {id: "modified", width: 250, position: 9, show: true}
       ];
       const sorter = {
         propertyName: 'name',
@@ -337,23 +337,23 @@ describe("Resource Workspace Context", () => {
     it("As LU I should be able to show a resource column", async() => {
       expect.assertions(2);
       const columnsSetting = [
-        {id: "favorite", label: "Favorite", position: 1, width: 20},
-        {id: "username", label: "Username", position: 2, width: 200},
-        {id: "password", label: "Password", position: 3, width: 100},
-        {id: "totp", label: "TOTP", position: 5, width: 190},
-        {id: "uri", label: "URI", position: 4, width: 300},
-        {id: "modified", label: "Modified", position: 5, width: 250}
+        {id: "favorite", position: 1, width: 20},
+        {id: "username", position: 2, width: 200},
+        {id: "password", position: 3, width: 100},
+        {id: "totp", position: 5, width: 190},
+        {id: "uri", position: 4, width: 300},
+        {id: "modified", position: 5, width: 250}
       ];
       const mergedColumnsSetting = [
-        {id: "favorite", label: "Favorite", position: 1, width: 20, show: true},
-        {id: "attentionRequired", label: "Attention", position: 2, show: true},
-        {id: "name", label: "Name", position: 3, show: false},
-        {id: "expired", label: "Expiry", position: 4, show: true},
-        {id: "username", label: "Username", position: 2, width: 200, show: true},
-        {id: "password", label: "Password", position: 3, width: 100, show: true},
-        {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
-        {id: "uri", label: "URI", position: 4, width: 300, show: true},
-        {id: "modified", label: "Modified", position: 5, width: 250, show: true}
+        {id: "favorite", position: 1, width: 20, show: true},
+        {id: "attentionRequired", position: 2, show: true},
+        {id: "name", position: 3, show: false},
+        {id: "expired", position: 4, show: true},
+        {id: "username", position: 2, width: 200, show: true},
+        {id: "password", position: 3, width: 100, show: true},
+        {id: "totp", position: 5, width: 190, show: true},
+        {id: "uri", position: 4, width: 300, show: true},
+        {id: "modified", position: 5, width: 250, show: true}
       ];
       await page.goToAllItems();
       await page.onChangeColumnView("name", false);

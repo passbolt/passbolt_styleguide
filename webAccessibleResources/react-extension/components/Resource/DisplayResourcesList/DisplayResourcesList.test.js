@@ -12,6 +12,7 @@
  * @since         2.11.0
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import {
   defaultProps,
   propsWithAllResourcesSelected,
@@ -31,12 +32,6 @@ import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display Resources", () => {

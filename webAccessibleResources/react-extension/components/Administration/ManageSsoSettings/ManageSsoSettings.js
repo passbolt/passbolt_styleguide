@@ -25,9 +25,11 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import AzureSsoProviderForm from "./SsoProviderForm/AzureSsoProviderForm";
 import GoogleSsoProviderForm from "./SsoProviderForm/GoogleSsoProviderForm";
 import OAuth2SsoProviderForm from "./SsoProviderForm/OAuth2SsoProviderForm";
+import AdfsSsoProviderForm from "./SsoProviderForm/AdfsSsoProviderForm";
 import AzureSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/OAuth2SsoSettingsEntity";
+import AdfsSsoSettingsEntity from "../../../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
 
 /**
  * This component displays the SSO administration settings
@@ -200,9 +202,10 @@ class ManageSsoSettings extends React.Component {
                 <Select id="sso-provider-input" name="provider" items={this.supportedSsoProviders} value={ssoConfig?.provider} onChange={this.handleProviderInputChange}/>
               </div>
               <hr/>
-              {ssoConfig.provider === AzureSsoSettingsEntity.PROVIDER_ID && <AzureSsoProviderForm/>}
-              {ssoConfig.provider === GoogleSsoSettingsEntity.PROVIDER_ID && <GoogleSsoProviderForm/>}
-              {ssoConfig.provider === OAuth2SsoSettingsEntity.PROVIDER_ID && <OAuth2SsoProviderForm/>}
+              {ssoConfig?.provider === AzureSsoSettingsEntity.PROVIDER_ID && <AzureSsoProviderForm/>}
+              {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID && <GoogleSsoProviderForm/>}
+              {ssoConfig?.provider === OAuth2SsoSettingsEntity.PROVIDER_ID && <OAuth2SsoProviderForm/>}
+              {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID && <AdfsSsoProviderForm/>}
             </form>
           }
         </div>
@@ -222,7 +225,7 @@ class ManageSsoSettings extends React.Component {
               <span><Trans>Read the documentation</Trans></span>
             </a>
           </div>
-          {ssoConfig?.provider === "azure" &&
+          {ssoConfig?.provider === AzureSsoSettingsEntity.PROVIDER_ID &&
           <div className="sidebar-help">
             <h3><Trans>How do I configure a AzureAD SSO?</Trans></h3>
             <a className="button" href="https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/add-application-portal-setup-sso" target="_blank" rel="noopener noreferrer">
@@ -231,10 +234,19 @@ class ManageSsoSettings extends React.Component {
             </a>
           </div>
           }
-          {ssoConfig?.provider === "google" &&
+          {ssoConfig?.provider === GoogleSsoSettingsEntity.PROVIDER_ID &&
           <div className="sidebar-help">
             <h3><Trans>How do I configure a Google SSO?</Trans></h3>
             <a className="button" href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" rel="noopener noreferrer">
+              <Icon name="external-link"/>
+              <span><Trans>Read the documentation</Trans></span>
+            </a>
+          </div>
+          }
+          {ssoConfig?.provider === AdfsSsoSettingsEntity.PROVIDER_ID &&
+          <div className="sidebar-help">
+            <h3><Trans>How do I configure an AD FS SSO?</Trans></h3>
+            <a className="button" href="https://learn.microsoft.com/en-gb/microsoft-365/troubleshoot/active-directory/set-up-adfs-for-single-sign-on" target="_blank" rel="noopener noreferrer">
               <Icon name="external-link"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

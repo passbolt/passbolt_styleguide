@@ -16,6 +16,7 @@
  * Unit tests on DisplayComments in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import DisplayResourcesWorkspaceMenuPage from "./DisplayResourcesWorkspaceMenu.test.page";
 import {
   defaultAppContext,
@@ -33,12 +34,6 @@ import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("See Workspace Menu", () => {

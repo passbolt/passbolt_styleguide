@@ -16,6 +16,7 @@
  * Unit tests on FolderSidebar in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import React from 'react';
 import {
   defaultAppContext, defaultProps
@@ -29,12 +30,6 @@ jest.mock("./DisplayResourceFolderDetailsPermissions", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("See Resource Sidebar", () => {

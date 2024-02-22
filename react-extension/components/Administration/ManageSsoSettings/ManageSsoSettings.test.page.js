@@ -382,4 +382,44 @@ export default class ManageSsoSettingsPage {
   get oauth2_openid_configuration_path() {
     return this.select(".sso-settings #sso-oauth2-openid-configuration-path-input");
   }
+
+  /**
+   * Returns the AD FS url input HTML element
+   * @returns {HTMLElement}
+   */
+  get adfs_url() {
+    return this.select(".sso-settings #sso-adfs-url-input");
+  }
+
+  /**
+   * Returns the OAuth2 client_id input HTML element
+   * @returns {HTMLElement}
+   */
+  get adfs_client_id() {
+    return this.select(".sso-settings #sso-adfs-client-id-input");
+  }
+
+  /**
+   * Returns the OAuth2 client_secret input HTML element
+   * @returns {HTMLElement}
+   */
+  get adfs_client_secret() {
+    return this.select(".sso-settings #sso-adfs-secret-input");
+  }
+
+  /**
+   * Returns the OAuth2 scope input HTML element
+   * @returns {HTMLElement}
+   */
+  get adfs_scope() {
+    return this.select(".sso-settings #sso-adfs-scope-input");
+  }
+
+  /**
+   * Returns the OAuth2 openid_configuration_path input HTML element
+   * @returns {HTMLElement}
+   */
+  get adfs_openid_configuration_path() {
+    return this.select(".sso-settings #sso-adfs-openid-configuration-path-input");
+  }
 }

@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 
 import each from "jest-each";
@@ -21,11 +21,13 @@ import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
 import {
   defaultSsoSettings,
+  defaultSsoSettingsWithAdfs,
   defaultSsoSettingsWithAzure,
   defaultSsoSettingsWithGoogle,
   defaultSsoSettingsWithOAuth2
 } from "./SsoSettingsEntity.test.data";
 import {v4 as uuid} from "uuid";
+import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 
 describe("SsoSettingsEntity", () => {
   describe("SsoSettingsEntity:constructor", () => {
@@ -38,6 +40,7 @@ describe("SsoSettingsEntity", () => {
       {provider: AzureSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAzure({id: uuid()})},
       {provider: GoogleSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithGoogle({id: uuid()})},
       {provider: OAuth2SsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithOAuth2({id: uuid()})},
+      {provider: AdfsSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAdfs({id: uuid()})},
     ]).describe("it should instantiate the entity with a minimal dto", scenario => {
       it(`For: ${scenario.provider}`, () => {
         expect.assertions(4);

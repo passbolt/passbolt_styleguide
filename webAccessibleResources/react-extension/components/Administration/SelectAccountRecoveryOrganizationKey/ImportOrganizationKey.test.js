@@ -15,25 +15,17 @@
 /**
  * Unit tests on ConfirmSaveAccountRecoverySettings in regard of specifications
  */
+import "../../../../../test/mocks/mockClipboard";
 import {waitFor} from "@testing-library/react";
 import SelectAccountRecoveryOrganizationKeyPage from "./SelectAccountRecoveryOrganizationKey.test.page";
 import MockPort from "../../../test/mock/MockPort";
 
-const originalClipboard = global.navigator.clipboard;
-
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 afterEach(() => {
   jest.resetAllMocks();
-  global.navigator.clipboard = originalClipboard;
 });
 
 function defaultProps() {

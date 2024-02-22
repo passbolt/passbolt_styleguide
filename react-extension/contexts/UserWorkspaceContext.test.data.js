@@ -23,8 +23,17 @@ export function defaultAppContext(appContext) {
 /**
  * Default props
  */
-export function defaultProps() {
-  return {};
+export function defaultProps(data = {}) {
+  return {
+    rbacContext: {
+      canIUseUiAction: () => true,
+    },
+    loadingContext: {
+      add: jest.fn(),
+      remove: jest.fn(),
+    },
+    ...data,
+  };
 }
 
 /**

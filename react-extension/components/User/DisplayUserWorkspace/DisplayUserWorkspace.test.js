@@ -45,21 +45,36 @@ describe("Display User Workspace", () => {
   const context = defaultContext(); // The applicative context
 
   it('As LU, I should see the user details area if the area is locked and the details is on an user', async() => {
+    expect.assertions(2);
     page = new DisplayUserWorkspacePage(context, propsWithUserDetails());
     await waitFor(() => {});
+    expect(page.isGridDisplayed).toBeTruthy();
     expect(page.hasUserDetails).toBeTruthy();
   });
 
   it('As LU, I should see the user group details area if the area is locked and the details is on an user group', async() => {
+    expect.assertions(2);
     page = new DisplayUserWorkspacePage(context, propsWithGroupDetails());
     await waitFor(() => {});
+    expect(page.isGridDisplayed).toBeTruthy();
     expect(page.hasUserGroupDetails).toBeTruthy();
   });
 
   it('As LU, I should not see any details area if the area is not locked', async() => {
+    expect.assertions(3);
     page = new DisplayUserWorkspacePage(context, propsWithoutLock());
     await waitFor(() => {});
+    expect(page.isGridDisplayed).toBeTruthy();
     expect(page.hasUserDetails).toBeFalsy();
     expect(page.hasUserGroupDetails).toBeFalsy();
+  });
+
+  it("As LU, I should not see the workspace if I'm not allowed to", async() => {
+    expect.assertions(1);
+    const props = propsWithUserDetails();
+    props.userWorkspaceContext.isAccessAllowed = () => false;
+    page = new DisplayUserWorkspacePage(context, props);
+    await waitFor(() => {});
+    expect(page.isGridDisplayed).toBeFalsy();
   });
 });

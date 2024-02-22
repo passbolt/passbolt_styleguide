@@ -16,18 +16,13 @@
  * Unit tests on FilterUserByShortcut in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import {defaultAppContext, defaultProps, mockGpgKey, mockInvalidGpgKey} from "./DisplayUserDetailsPublicKey.test.data";
 import DisplayUserDetailsPublicKeyPage from "./DisplayUserDetailsPublicKey.test.page";
 import {DateTime} from "luxon";
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 function formatDate(data) {

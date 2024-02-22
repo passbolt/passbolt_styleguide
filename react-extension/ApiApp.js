@@ -81,7 +81,7 @@ class ApiApp extends Component {
                             <Router basename={appContext.basename}>
                               <NavigationContextProvider>
                                 <Switch>
-                                  { /* The following routes are not handled by the browser extension application. */}
+                                  { /* The following routes are handled by the browser extension application. */}
                                   <Route exact path={[
                                     "/app/administration/subscription",
                                     "/app/administration/account-recovery",

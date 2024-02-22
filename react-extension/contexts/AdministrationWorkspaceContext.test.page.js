@@ -30,9 +30,10 @@ export default class AdministrationWorkspaceContextPage {
    * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(appContext) {
+  constructor(appContext, props) {
     this.context = appContext;
-    this.setup(appContext);
+    this.props = props;
+    this.setup(appContext, props);
   }
 
 
@@ -115,7 +116,7 @@ export default class AdministrationWorkspaceContextPage {
    * Go to the mfa route
    */
   async goToMfa() {
-    this.setup(this.context);
+    this.setup(this.context, this.props);
     await this.goToLink('.mfa');
   }
 
@@ -227,7 +228,7 @@ export default class AdministrationWorkspaceContextPage {
    * @param text a specific text search filter
    * @param tag a specific tag search filter
    */
-  setup(appContext) {
+  setup(appContext, props) {
     this._page = render(
       <AppContext.Provider value={appContext}>
 
@@ -238,7 +239,7 @@ export default class AdministrationWorkspaceContextPage {
             <Route path={[
               "/app/administration",
             ]}>
-              <AdministrationWorkspaceContextProvider>
+              <AdministrationWorkspaceContextProvider {...props}>
                 <AdministrationWorkspaceContext.Consumer>
                   {
                     AdministrationWorkspaceContext => {

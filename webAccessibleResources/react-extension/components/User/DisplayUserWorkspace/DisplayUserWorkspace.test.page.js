@@ -45,6 +45,13 @@ export default class DisplayUserWorkspacePage {
   /**
    * Returns true if the user details area is visible
    */
+  get isGridDisplayed() {
+    return Boolean(this._page.container.querySelector('.tableview.ready'));
+  }
+
+  /**
+   * Returns true if the user details area is visible
+   */
   get hasUserDetails() {
     return Boolean(this._page.container.querySelector('.user-details'));
   }

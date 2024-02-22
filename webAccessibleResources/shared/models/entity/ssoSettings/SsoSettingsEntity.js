@@ -9,13 +9,14 @@
  * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
+import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
 
 const ENTITY_NAME = "SsoSettings";
 
@@ -102,7 +103,7 @@ class SsoSettingsEntity extends Entity {
   /**
    * Return the corresponding SSO Settings Entity
    * @param {string} providerId
-   * @returns {AzureSsoSettingsEntity|GoogleSsoSettingsEntity|OAuth2SsoSettingsEntity}
+   * @returns {AzureSsoSettingsEntity|GoogleSsoSettingsEntity|OAuth2SsoSettingsEntity|AdfsSsoSettingsEntity}
    * @throws {Error} if the given provider is not supported.
    * @private
    */
@@ -114,6 +115,8 @@ class SsoSettingsEntity extends Entity {
         return new GoogleSsoSettingsEntity(data);
       case (OAuth2SsoSettingsEntity.PROVIDER_ID):
         return new OAuth2SsoSettingsEntity(data);
+      case (AdfsSsoSettingsEntity.PROVIDER_ID):
+        return new AdfsSsoSettingsEntity(data);
       default:
         /*
          * We don't throw an Error here as this could happen.
@@ -207,6 +210,7 @@ class SsoSettingsEntity extends Entity {
       AzureSsoSettingsEntity.PROVIDER_ID,
       GoogleSsoSettingsEntity.PROVIDER_ID,
       OAuth2SsoSettingsEntity.PROVIDER_ID,
+      AdfsSsoSettingsEntity.PROVIDER_ID,
     ];
   }
 }

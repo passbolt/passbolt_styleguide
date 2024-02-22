@@ -15,6 +15,7 @@
 /**
  * Unit tests on GeneratePasswordPage in regard of specifications
  */
+import "../../../../test/mocks/mockClipboard";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
 import {defaultProps, withLastGeneratedPasswordProps} from "./GeneratePasswordPage.test.data";
 import GeneratePasswordTestPage from "./GeneratePasswordPage.test.page";
@@ -65,10 +66,6 @@ describe("Generate password", () => {
       expect.assertions(1);
       const props = withLastGeneratedPasswordProps(); // The props to pass
       const page = new GeneratePasswordTestPage(props);
-      const mockClipboard = {
-        writeText: jest.fn()
-      };
-      global.navigator.clipboard = mockClipboard;
       await page.copyPassword();
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(page.password);
     });
