@@ -15,6 +15,7 @@
 /**
  * Unit tests on GenerateResourcePasswordPage in regard of specifications
  */
+import "../../../../../test/mocks/mockClipboard";
 import {defaultProps} from "./GenerateResourcePassword.test.data";
 import GenerateResourcePasswordPage from "./GenerateResourcePassword.test.page";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
@@ -54,10 +55,6 @@ describe("Generate password", () => {
 
     it('As LU I should copy a password', async() => {
       expect.assertions(1);
-      const mockClipboard = {
-        writeText: jest.fn()
-      };
-      global.navigator.clipboard = mockClipboard;
       await page.copyPassword();
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(page.password);
     });

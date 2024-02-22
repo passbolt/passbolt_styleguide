@@ -9,13 +9,14 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 import {v4 as uuid} from 'uuid';
 import AzureSsoSettingsEntity from "./AzureSsoSettingsEntity";
 import GoogleSsoSettingsEntity from "./GoogleSsoSettingsEntity";
 import OAuth2SsoSettingsEntity from "./OAuth2SsoSettingsEntity";
 import SsoSettingsEntity from "./SsoSettingsEntity";
+import AdfsSsoSettingsEntity from './AdfsSsoSettingsEntity';
 
 export function defaultSsoSettings(data = {}) {
   const defaultData = {
@@ -49,6 +50,14 @@ export function defaultSsoSettingsWithOAuth2(data = {}) {
   return Object.assign(defaultData, data);
 }
 
+export function defaultSsoSettingsWithAdfs(data = {}) {
+  const defaultData = defaultSsoSettings({
+    provider: AdfsSsoSettingsEntity.PROVIDER_ID,
+    data: defaultAdfsSsoSettingsDto(),
+  });
+  return Object.assign(defaultData, data);
+}
+
 export const defaultAzureSsoSettingsDto = (data = {}) => {
   const defaultData = {
     url: "https://login.microsoftonline.com",
@@ -75,6 +84,18 @@ export const defaultGoogleSsoSettingsDto = (data = {}) => {
 export const defaultOAuth2SsoSettingsDto = (data = {}) => {
   const defaultData = {
     url: "https://openid.passbolt.com",
+    openid_configuration_path: "/.well-known/openid-configuration",
+    scope: "openid email profile",
+    client_id: "Passbolt",
+    client_secret: uuid(),
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+export const defaultAdfsSsoSettingsDto = (data = {}) => {
+  const defaultData = {
+    url: "https://adfs.passbolt.com",
     openid_configuration_path: "/.well-known/openid-configuration",
     scope: "openid email profile",
     client_id: "Passbolt",

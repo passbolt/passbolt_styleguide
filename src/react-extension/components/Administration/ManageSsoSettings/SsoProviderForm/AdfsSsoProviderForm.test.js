@@ -9,15 +9,15 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.5.0
+ * @since         4.6.0
  */
 
 import "../../../../../../test/mocks/mockClipboard";
 import each from "jest-each";
-import {waitFor} from "@testing-library/dom";
-import OAuth2SsoProviderFormPage from "./OAuth2SsoProviderForm.test.page";
-import {defaultOAuth2Props} from "./SsoProviderForm.test.data";
 import EntityValidationError from "../../../../../shared/models/entity/abstract/entityValidationError";
+import AdfsSsoProviderFormPage from "./AdfsSsoProviderForm.test.page";
+import {defaultAdfsProps} from "./SsoProviderForm.test.data";
+import {waitFor} from "@testing-library/dom";
 import {waitForTrue} from "../../../../../../test/utils/waitFor";
 
 beforeEach(() => {
@@ -29,23 +29,23 @@ afterEach(() => {
 });
 
 /**
- * Unit tests on OAuth2SsoProviderForm in regard of specifications
+ * Unit tests on AdfsSsoProviderForm in regard of specifications
  */
-describe("OAuth2SsoProviderForm", () => {
+describe("AdfsSsoProviderForm", () => {
   it("Should display the form", () => {
     expect.assertions(1);
-    const page = new OAuth2SsoProviderFormPage(defaultOAuth2Props());
+    const page = new AdfsSsoProviderFormPage(defaultAdfsProps());
     expect(page.exists()).toStrictEqual(true);
   });
 
   it("Should copy the redirect URL in the clipboard", async() => {
     expect.assertions(5);
-    const props = defaultOAuth2Props();
-    const page = new OAuth2SsoProviderFormPage(props);
+    const props = defaultAdfsProps();
+    const page = new AdfsSsoProviderFormPage(props);
     page.clickOn(page.redirectUrlButton);
     await waitFor(() => {});
 
-    const expectedRedirectUrl = "http://localhost/sso/oauth2/redirect";
+    const expectedRedirectUrl = "http://localhost/sso/adfs/redirect";
     expect(page.redirect_url.value).toStrictEqual(expectedRedirectUrl);
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expectedRedirectUrl);
@@ -70,9 +70,9 @@ describe("OAuth2SsoProviderForm", () => {
         errors.addError(key, "format", rawErrors[key]);
       });
 
-      const props = defaultOAuth2Props();
+      const props = defaultAdfsProps();
       props.adminSsoContext.getErrors = () => errors;
-      const page = new OAuth2SsoProviderFormPage(props);
+      const page = new AdfsSsoProviderFormPage(props);
       await waitFor(() => {});
 
       expect(page.urlError).not.toBeNull();
@@ -96,12 +96,12 @@ describe("OAuth2SsoProviderForm", () => {
         const errors = new EntityValidationError();
         errors.addError(scenario.field, "format", "field is erroneous");
 
-        const props = defaultOAuth2Props();
-        const page = new OAuth2SsoProviderFormPage(props);
+        const props = defaultAdfsProps();
+        const page = new AdfsSsoProviderFormPage(props);
         await waitFor(() => {});
 
         //force a call to `componentDidUpdate`
-        const newProps = defaultOAuth2Props();
+        const newProps = defaultAdfsProps();
         newProps.adminSsoContext.getErrors = () => errors;
         newProps.adminSsoContext.consumeFocusOnError = () => true;
         page.render(newProps);
@@ -110,6 +110,23 @@ describe("OAuth2SsoProviderForm", () => {
 
         expect(page.currentActiveElement).toStrictEqual(page[scenario.field]);
       });
+    });
+
+    it("As an administrator I should not have focus on field when there is no error", async() => {
+      expect.assertions(1);
+
+      const props = defaultAdfsProps();
+      const page = new AdfsSsoProviderFormPage(props);
+      await waitFor(() => {});
+
+      //force a call to `componentDidUpdate`
+      const newProps = defaultAdfsProps();
+      newProps.adminSsoContext.getErrors = () => new EntityValidationError();
+      newProps.adminSsoContext.consumeFocusOnError = () => true;
+      page.render(newProps);
+      await waitFor(() => {});
+
+      expect(page.hasActiveElement).toStrictEqual(false);
     });
   });
 });

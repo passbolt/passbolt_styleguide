@@ -12,6 +12,7 @@
  * @since         4.1.0
  */
 
+import "../../../../test/mocks/mockClipboard";
 import ResourceViewPagePage from "./ResourceViewPage.test.page";
 import {
   defaultProps,
@@ -28,11 +29,6 @@ import {denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.dat
 beforeEach(() => {
   jest.resetModules();
   jest.clearAllMocks();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  global.navigator.clipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
 });
 
 describe("ResourceViewPage", () => {

@@ -9,21 +9,20 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.5.0
+ * @since         4.6.0
  */
 import {fireEvent, render} from "@testing-library/react";
 import React from "react";
 import MockTranslationProvider from "../../../../test/mock/components/Internationalisation/MockTranslationProvider";
 import {waitForTrue} from "../../../../../../test/utils/waitFor";
-import AzureSsoProviderForm from "./AzureSsoProviderForm";
+import AdfsSsoProviderForm from "./AdfsSsoProviderForm";
 
 /**
- * The AzureSsoProviderForm component represented as a page
+ * The AdfsSsoProviderFormPage component represented as a page
  */
-export default class AzureSsoProviderFormPage {
+export default class AdfsSsoProviderFormPage {
   /**
    * Default constructor
-   * @param appContext An app context
    * @param props Props to attach
    */
   constructor(props) {
@@ -38,7 +37,7 @@ export default class AzureSsoProviderFormPage {
    */
   render(props) {
     const contentToRender = <MockTranslationProvider>
-      <AzureSsoProviderForm {...props}/>
+      <AdfsSsoProviderForm {...props}/>
     </MockTranslationProvider>;
 
     if (this._page) {
@@ -62,7 +61,7 @@ export default class AzureSsoProviderFormPage {
    * @returns {boolean}
    */
   exists() {
-    return Boolean(this.url);
+    return Boolean(this.client_id);
   }
 
   /**
@@ -79,28 +78,19 @@ export default class AzureSsoProviderFormPage {
   }
 
   /**
-   * Clicks on advanced settings toggle.
-   * @returns {Promise<void>}
-   */
-  async toggleAdvancedSettings() {
-    const currentState = this.isAdvancedSettingsVisible;
-    await this.clickOn(this.advancedSettingsButton, () => this.isAdvancedSettingsVisible !== currentState);
-  }
-
-  /**
-   * Returns true if the advanced settings panel is visible, false otherwise
-   * @returns {boolean}
-   */
-  get isAdvancedSettingsVisible() {
-    return Boolean(this.prompt);
-  }
-
-  /**
    * Returns the url input HTML element
    * @returns {HTMLElement}
    */
   get url() {
-    return this.select("#sso-azure-url-input");
+    return this.select("#sso-adfs-url-input");
+  }
+
+  /**
+   * Returns the url error HTML element
+   * @returns {HTMLElement}
+   */
+  get urlError() {
+    return this.select("#sso-adfs-url-input + .error-message");
   }
 
   /**
@@ -120,27 +110,11 @@ export default class AzureSsoProviderFormPage {
   }
 
   /**
-   * Returns the tenant_id input HTML element
-   * @returns {HTMLElement}
-   */
-  get tenant_id() {
-    return this.select("#sso-azure-tenant-id-input");
-  }
-
-  /**
-   * Returns the tenant_id error HTML element
-   * @returns {HTMLElement}
-   */
-  get tenantIdError() {
-    return this.select("#sso-azure-tenant-id-input+ .error-message");
-  }
-
-  /**
    * Returns the client_id input HTML element
    * @returns {HTMLElement}
    */
   get client_id() {
-    return this.select("#sso-azure-client-id-input");
+    return this.select("#sso-adfs-client-id-input");
   }
 
   /**
@@ -148,7 +122,7 @@ export default class AzureSsoProviderFormPage {
    * @returns {HTMLElement}
    */
   get clientIdError() {
-    return this.select("#sso-azure-client-id-input + .error-message");
+    return this.select("#sso-adfs-client-id-input + .error-message");
   }
 
   /**
@@ -156,7 +130,7 @@ export default class AzureSsoProviderFormPage {
    * @returns {HTMLElement}
    */
   get client_secret() {
-    return this.select("#sso-azure-secret-input");
+    return this.select("#sso-adfs-secret-input");
   }
 
   /**
@@ -168,35 +142,35 @@ export default class AzureSsoProviderFormPage {
   }
 
   /**
-   * Returns the client_secret input HTML element
+   * Returns the openid_configuration_path input HTML element
    * @returns {HTMLElement}
    */
-  get client_secret_expiry() {
-    return this.select("#sso-azure-secret-expiry-input");
+  get openid_configuration_path() {
+    return this.select("#sso-adfs-openid-configuration-path-input");
   }
 
   /**
-   * Returns the client_secret_expiry error HTML element
+   * Returns the openid_configuration_path error HTML element
    * @returns {HTMLElement}
    */
-  get clientSecretExpiryError() {
-    return this.select(".date-wrapper .error-message");
+  get openidConfigurationPathError() {
+    return this.select("#sso-adfs-openid-configuration-path-input + .error-message");
   }
 
   /**
-   * Returns the advanced settings toggle button HTML element
+   * Returns the scope input HTML element
    * @returns {HTMLElement}
    */
-  get advancedSettingsButton() {
-    return this.select("#advanced-settings-panel-button");
+  get scope() {
+    return this.select("#sso-adfs-scope-input");
   }
 
   /**
-   * Returns the prompt select field
+   * Returns the scope error HTML element
    * @returns {HTMLElement}
    */
-  get prompt() {
-    return this.select("#prompt-input");
+  get scopeError() {
+    return this.select("#sso-adfs-scope-input + .error-message");
   }
 
   /**
@@ -208,7 +182,7 @@ export default class AzureSsoProviderFormPage {
   }
 
   /**
-   * Returns true if an element in the page has a focus
+   * Returns the current element in the page having the focus
    * @returns {boolean}
    */
   get hasActiveElement() {

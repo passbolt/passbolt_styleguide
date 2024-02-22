@@ -9,31 +9,31 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.5.0
+ * @since         4.6.0
  */
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
 
-const ENTITY_NAME = "OAuth2SsoSettings";
-const OAUTH2 = "oauth2";
+const ENTITY_NAME = "ADFSSsoSettings";
+const ADFS = "adfs";
 
-const OAUTH2_SUPPORTED_URLS = /^https:\/\/.+[^\/]$/;
+const ADFS_SUPPORTED_URLS = /^https:\/\/.+[^\/]$/;
 
 /**
  * Entity related to the SSO settings
  */
-class OAuth2SsoSettingsEntity extends Entity {
+class AdfsSsoSettingsEntity extends Entity {
   /**
-   * OAuth2 Sso Settings entity constructor
+   * AD FS Sso Settings entity constructor
    *
-   * @param {Object} oAuth2SsoSettingsDto SSO settings DTO
+   * @param {Object} adfsSsoSettingsDto SSO settings DTO
    * @throws EntityValidationError if the dto cannot be converted into an entity
    */
-  constructor(oAuth2SsoSettingsDto) {
+  constructor(adfsSsoSettingsDto) {
     super(EntitySchema.validate(
-      OAuth2SsoSettingsEntity.ENTITY_NAME,
-      oAuth2SsoSettingsDto,
-      OAuth2SsoSettingsEntity.getSchema()
+      AdfsSsoSettingsEntity.ENTITY_NAME,
+      adfsSsoSettingsDto,
+      AdfsSsoSettingsEntity.getSchema()
     ));
   }
 
@@ -54,7 +54,7 @@ class OAuth2SsoSettingsEntity extends Entity {
       "properties": {
         "url": {
           "type": "string",
-          "pattern": OAUTH2_SUPPORTED_URLS
+          "pattern": ADFS_SUPPORTED_URLS
         },
         "openid_configuration_path": {
           "type": "string",
@@ -78,11 +78,35 @@ class OAuth2SsoSettingsEntity extends Entity {
 
   /*
    * ==================================================
+   * Custom validators
+   * ==================================================
+   */
+
+  static validateUrl(value) {
+    if (typeof value !== "string") {
+      throw new TypeError("The url should be a string.");
+    }
+
+    let url;
+
+    try {
+      url = new URL(value);
+    } catch (error) {
+      throw new Error('The url should be a valid url.');
+    }
+
+    if (url.protocol !== "https:") {
+      throw new Error('The url protocol should be HTTPS.');
+    }
+  }
+
+  /*
+   * ==================================================
    * Static properties getters
    * ==================================================
    */
   /**
-   * OAuth2SsoSettingsEntity.ENTITY_NAME
+   * AdfsSsoSettingsEntity.ENTITY_NAME
    * @returns {string}
    */
   static get ENTITY_NAME() {
@@ -90,12 +114,12 @@ class OAuth2SsoSettingsEntity extends Entity {
   }
 
   /**
-   * OAuth2SsoSettingsEntity.PROVIDER_ID
+   * AdfsSsoSettingsEntity.PROVIDER_ID
    * @returns {string}
    */
   static get PROVIDER_ID() {
-    return OAUTH2;
+    return ADFS;
   }
 }
 
-export default OAuth2SsoSettingsEntity;
+export default AdfsSsoSettingsEntity;

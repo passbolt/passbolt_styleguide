@@ -10,7 +10,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.5.0
+ * @since         4.6.0
  */
 import React from "react";
 import {Trans, withTranslation} from "react-i18next";
@@ -22,9 +22,9 @@ import Icon from "../../../../../shared/components/Icons/Icon";
 import Password from "../../../../../shared/components/Password/Password";
 
 /**
- * This component displays the OAuth2 SSO settings form
+ * This component displays the Adfs SSO settings form
  */
-class OAuth2SsoProviderForm extends React.Component {
+class AdfsSsoProviderForm extends React.Component {
   /**
    * Constructor
    * @param {Object} props
@@ -43,6 +43,9 @@ class OAuth2SsoProviderForm extends React.Component {
     this.handleCopyRedirectUrl = this.handleCopyRedirectUrl.bind(this);
   }
 
+  /**
+   * Create DOM nodes or React elements references in order to be able to access them programmatically.
+   */
   createRefs() {
     this.urlInputRef = React.createRef();
     this.clientIdInputRef = React.createRef();
@@ -51,6 +54,9 @@ class OAuth2SsoProviderForm extends React.Component {
     this.scopeInputRef = React.createRef();
   }
 
+  /**
+   * Whenever the component has updated in terms of props or state
+   */
   componentDidUpdate() {
     if (!this.props.adminSsoContext.consumeFocusOnError()) {
       return;
@@ -100,9 +106,7 @@ class OAuth2SsoProviderForm extends React.Component {
    * @returns {void}
    */
   handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
+    const {value, name} = event.target;
     this.props.adminSsoContext.setValue(name, value);
   }
 
@@ -136,7 +140,7 @@ class OAuth2SsoProviderForm extends React.Component {
    */
   get fullRedirectUrl() {
     const trustedDomain = this.props.context.userSettings.getTrustedDomain();
-    return `${trustedDomain}/sso/oauth2/redirect`;
+    return `${trustedDomain}/sso/adfs/redirect`;
   }
 
   /**
@@ -159,14 +163,14 @@ class OAuth2SsoProviderForm extends React.Component {
       <>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Login URL</Trans></label>
-          <input id="sso-oauth2-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
+          <input id="sso-adfs-url-input" type="text" className="fluid form-element" name="url" ref={this.urlInputRef}
             value={ssoConfig.url} onChange={this.handleInputChange} placeholder={this.translate("Login URL")}
             disabled={this.hasAllInputDisabled()}/>
           {errors?.hasError('url') &&
             <div className="error-message">{this.displayErrors(errors.getError('url'))}</div>
           }
           <p>
-            <Trans>The OAuth2 authentication endpoint.</Trans>
+            <Trans>The AD FS authentication endpoint.</Trans>
           </p>
         </div>
         <hr/>
@@ -180,52 +184,52 @@ class OAuth2SsoProviderForm extends React.Component {
             </a>
           </div>
           <p>
-            <Trans>The URL to provide to the OAuth2 platform when registering the application.</Trans>
+            <Trans>The URL to provide to the AD FS platform when registering the application.</Trans>
           </p>
         </div>
         <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>OpenId Configuration Path</Trans></label>
-          <input id="sso-oauth2-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
+          <input id="sso-adfs-openid-configuration-path-input" type="text" className="fluid form-element" name="openid_configuration_path" ref={this.openIdConfigurationPathInputRef}
             value={ssoConfig.openid_configuration_path} onChange={this.handleInputChange} placeholder={this.translate("OpenId Configuration Path")}
             disabled={this.hasAllInputDisabled()}/>
           {errors?.hasError('openid_configuration_path') &&
             <div className="error-message">{this.displayErrors(errors.getError('openid_configuration_path'))}</div>
           }
           <p>
-            <Trans>The OpenId configuration relative path from the given login url.</Trans>
+            <Trans>The AD FS configuration relative path from the given login url.</Trans>
           </p>
         </div>
         <hr/>
         <div className={`input text input-wrapper ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Scope</Trans></label>
-          <input id="sso-oauth2-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
+          <input id="sso-adfs-scope-input" type="text" className="fluid form-element" name="scope" ref={this.scopeInputRef}
             value={ssoConfig.scope} onChange={this.handleInputChange} placeholder={this.translate("Scope")}
             disabled={this.hasAllInputDisabled()}/>
           {errors?.hasError('scope') &&
             <div className="error-message">{this.displayErrors(errors.getError('scope'))}</div>
           }
           <p>
-            <Trans>The OpenId scope.</Trans>
+            <Trans>The AD FS scope.</Trans>
           </p>
         </div>
         <hr/>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Application (client) ID</Trans></label>
-          <input id="sso-oauth2-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
+          <input id="sso-adfs-client-id-input" type="text" className="fluid form-element" name="client_id" ref={this.clientIdInputRef}
             value={ssoConfig.client_id} onChange={this.handleInputChange} placeholder={this.translate("Application (client) ID")}
             disabled={this.hasAllInputDisabled()}/>
           {errors?.hasError('client_id') &&
             <div className="error-message">{this.displayErrors(errors.getError('client_id'))}</div>
           }
           <p>
-            <Trans>The public identifier for the OpenId app.</Trans>
+            <Trans>The public identifier for the AD FS app.</Trans>
           </p>
         </div>
         <div className={`input text required ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
           <label><Trans>Secret</Trans></label>
           <Password
-            id="sso-oauth2-secret-input"
+            id="sso-adfs-secret-input"
             className="fluid form-element"
             onChange={this.handleInputChange}
             autoComplete="off"
@@ -239,7 +243,7 @@ class OAuth2SsoProviderForm extends React.Component {
             <div className="error-message">{this.displayErrors(errors.getError('client_secret'))}</div>
           }
           <p>
-            <Trans>Allows your OAuth2 provider and Passbolt API to securely share information.</Trans>
+            <Trans>Allows your AD FS provider and Passbolt API to securely share information.</Trans>
           </p>
         </div>
       </>
@@ -247,11 +251,11 @@ class OAuth2SsoProviderForm extends React.Component {
   }
 }
 
-OAuth2SsoProviderForm.propTypes = {
+AdfsSsoProviderForm.propTypes = {
   adminSsoContext: PropTypes.object, // The administration sso configuration context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withActionFeedback(withAdminSso(withTranslation('common')(OAuth2SsoProviderForm))));
+export default withAppContext(withActionFeedback(withAdminSso(withTranslation('common')(AdfsSsoProviderForm))));
