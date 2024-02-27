@@ -17,16 +17,10 @@ class EntityCollection extends Entity {
   /**
    * EntityCollection constructor
    * @param {array} props
-   * @param {array} [items] optional
    */
-  constructor(props, items) {
+  constructor(props = []) {
     super(props);
-    if (items) {
-      this._props = null;
-      this._items = items;
-    } else {
-      this._items = [];
-    }
+    this._items = [];
   }
 
   /*
