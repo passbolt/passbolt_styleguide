@@ -156,6 +156,14 @@ class DisplayPermissionPageObject {
   }
 
   /**
+   * Returns the share button html element
+   * @returns {HTMLElement}
+   */
+  get shareButton() {
+    return this.container.querySelector("#share-folder");
+  }
+
+  /**
    * Wait for the activities to be loaded while an in-progress function should be satisfied
    * @param inProgressFn An in-progress function
    * @returns {Promise<void>} The promise that the load operation is completed

@@ -69,6 +69,13 @@ export default class DisplayResourceFolderDetailsPage {
   }
 
   /**
+   * Returns the share with button
+   */
+  get shareWith() {
+    return this._page.container.querySelector('.sharedwith');
+  }
+
+  /**
    * Returns the close button
    */
   get closeButton() {

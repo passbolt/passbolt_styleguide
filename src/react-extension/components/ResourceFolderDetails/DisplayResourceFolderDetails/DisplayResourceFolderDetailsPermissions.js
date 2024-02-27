@@ -208,7 +208,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
         </div>
         <div className="accordion-content">
           {this.canShare() &&
-          <button type="button" onClick={this.handlePermissionsEditClickEvent} className="section-action button-transparent">
+          <button type="button" onClick={this.handlePermissionsEditClickEvent} id="share-folder" className="section-action button-transparent">
             <Icon name="edit"/>
             <span className="visuallyhidden"><Trans>modify</Trans></span>
           </button>
