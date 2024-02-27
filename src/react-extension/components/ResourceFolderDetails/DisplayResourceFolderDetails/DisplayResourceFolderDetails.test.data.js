@@ -3,6 +3,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
+import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -31,6 +32,7 @@ export function defaultProps() {
           "name": "Accounting",
         }
       },
+      rbacContext: defaultAdministratorRbacContext(),
       onLockDetail: jest.fn()
     }
   };

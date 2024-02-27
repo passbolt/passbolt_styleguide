@@ -154,6 +154,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
     const canUpdate = this.canUpdate();
     const canShare = this.canShare();
     const canExport = this.canExport();
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
 
     return (
       <ContextualMenuWrapper
@@ -191,7 +192,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
             </div>
           </div>
         </li>
-        <li key="option-share-folder" className="ready closed">
+        {canViewShare && <li key="option-share-folder" className="ready closed">
           <div className="row">
             <div className="main-cell-wrapper">
               <div className="main-cell">
@@ -206,6 +207,7 @@ class FilterResourcesByFoldersItemContextualMenu extends React.Component {
             </div>
           </div>
         </li>
+        }
         {canExport &&
           <li key="option-export-folder" className="ready closed">
             <div className="row">

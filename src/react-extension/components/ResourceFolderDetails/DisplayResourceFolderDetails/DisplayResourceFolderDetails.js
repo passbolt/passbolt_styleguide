@@ -22,6 +22,8 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
 import {Trans, withTranslation} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 
 class DisplayResourceFolderDetails extends React.Component {
   /**
@@ -71,6 +73,8 @@ class DisplayResourceFolderDetails extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
+
     return (
       <div className="panel aside ready">
         <div className="sidebar resource">
@@ -94,7 +98,9 @@ class DisplayResourceFolderDetails extends React.Component {
             </button>
           </div>
           <DisplayResourceFolderDetailsInformation/>
-          <DisplayResourceFolderDetailsPermissions/>
+          {canViewShare &&
+            <DisplayResourceFolderDetailsPermissions/>
+          }
           <DisplayResourceFolderDetailsActivity/>
         </div>
       </div>
@@ -112,6 +118,7 @@ DisplayResourceFolderDetails.propTypes = {
   resourceWorkspaceContext: PropTypes.object,
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
+  rbacContext: PropTypes.any, // The role based access control context
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails))));
+export default withAppContext(withRbac(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceFolderDetails)))));
