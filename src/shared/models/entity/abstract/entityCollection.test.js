@@ -87,6 +87,24 @@ describe("EntityCollection", () => {
       expect(dtos[2]).toBeUndefined();
       expect(dtos[0].name).toEqual('first altered');
     });
+
+    it("should work on the reference of the provided dtos, not a copy", () => {
+      const dtos = [{name: 'first'}, {name: 'second'}, {name: 'first'}];
+      const collection = new EntityCollection(dtos, {clone: false});
+      expect.assertions(9);
+      expect(collection.length).toBe(0);
+      expect(collection.items).toEqual([]);
+      expect(collection.items[0]).toEqual(undefined);
+      expect(collection._props).toEqual(dtos);
+      // Assert the data are cloned
+      dtos[0].name = "first altered";
+      delete dtos[2];
+      expect(collection._props).toEqual(dtos);
+      expect(collection._props.length).toEqual(3); // the array size didn't change
+      expect(collection._props[0].name).toEqual('first altered');
+      expect(collection._props[1].name).toEqual('second');
+      expect(collection._props[2]).toBeUndefined();
+    });
   });
 
   describe("EntityCollection::push", () => {

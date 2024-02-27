@@ -16,14 +16,22 @@ class EntityCollection {
   /**
    * EntityCollection constructor
    * @param {array} dtos (Optional) Array of entities dto to add to the collection.
+   * @param {object} options Options.
+   * @param {boolean} [options.clone] Clone the given props to ensure original data remain unaltered. Default: true.
+   * Attention: altering the original dtos alters also the entities using this information, therefore bypass any
+   * validation applied previously.
    */
-  constructor(dtos = []) {
+  constructor(dtos = [], options = {}) {
+    const clone = options?.clone ?? true;
     this._items = [];
+    if (clone) {
+      dtos = JSON.parse(JSON.stringify(dtos));
+    }
     /*
      * Keep a reference of the dtos as props for historical reasons.
      * @todo _props property to remove
      */
-    this._props = JSON.parse(JSON.stringify(dtos));
+    this._props = dtos;
   }
 
   /*
