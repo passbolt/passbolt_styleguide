@@ -47,6 +47,8 @@ export const NavigationContext = React.createContext({
   }, // Whenever the user wants to navigate to the administration workspace user passphrase policies
   onGoToAdministrationPasswordExpirySettingsRequested: () => {
   }, // Whenever the user wants to navigate to the administration workspace password expiry settings
+  onGoToAdministrationHealthcheckRequested: () => {
+  }, // Whenever the user wants to navigate to the administration workspace healthcheck section.
   // Passwords
   onGoToPasswordsRequested: () => {
   }, // Whenever the user wants to navigate to the passwords workspace
@@ -113,6 +115,7 @@ class NavigationContextProvider extends React.Component {
       onGoToAdministrationPasswordPoliciesRequested: this.onGoToAdministrationPasswordPoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password policies
       onGoToAdministrationUserPassphrasePoliciesRequested: this.onGoToAdministrationUserPassphrasePoliciesRequested.bind(this), // Whenever the user wants to navigate to the administration workspace user passphrase policies
       onGoToAdministrationPasswordExpirySettingsRequested: this.onGoToAdministrationPasswordExpirySettingsRequested.bind(this), // Whenever the user wants to navigate to the administration workspace password expiry settings
+      onGoToAdministrationHealthcheckRequested: this.onGoToAdministrationHealthcheckRequested.bind(this),
       // Passwords
       onGoToPasswordsRequested: this.onGoToPasswordsRequested.bind(this), // Whenever the user wants to navigate to the passwords workspace
       // Users
@@ -224,6 +227,14 @@ class NavigationContextProvider extends React.Component {
    */
   async onGoToAdministrationUsersDirectoryRequested() {
     await this.goTo("api", "/app/administration/users-directory");
+  }
+
+  /**
+   * Whenever the user wants to navigate to the administration healthcheck directory.
+   * @returns {Promise<void>}
+   */
+  async onGoToAdministrationHealthcheckRequested() {
+    await this.goTo("api", "/app/administration/healthcheck");
   }
 
   /**

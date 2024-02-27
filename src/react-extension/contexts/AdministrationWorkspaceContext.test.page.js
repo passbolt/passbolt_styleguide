@@ -141,6 +141,13 @@ export default class AdministrationWorkspaceContextPage {
     await this.goToLink('.subscription');
   }
 
+  /**
+   * Go to the healthcheck route
+   */
+  async goToHealthcheck() {
+    await this.goToLink('.healthcheck');
+  }
+
 
   /**
    * on save enabled
@@ -266,6 +273,10 @@ export default class AdministrationWorkspaceContextPage {
           <NavLink
             to={{pathname: "/app/administration/subscription"}}>
             <a className="subscription"></a>
+          </NavLink>
+          <NavLink
+            to={{pathname: "/app/administration/healthcheck"}}>
+            <a className="healthcheck"></a>
           </NavLink>
         </Router>
       </AppContext.Provider>

@@ -44,6 +44,7 @@ import DisplayPasswordPoliciesAdministration from "./DisplayPasswordPoliciesAdmi
 import DisplayAdministrationUserPassphrasePolicies from "./DisplayAdministrationUserPassphrasePolicies/DisplayAdministrationUserPassphrasePolicies";
 import DisplayAdministrationPasswordExpiry from "./DisplayAdministrationPasswordExpiry/DisplayAdministrationPasswordExpiry";
 import DisplayHttpError from "../Common/Error/DisplayHttpError/DisplayHttpError";
+import DisplayHealthcheckAdministration from "./DisplayHealthcheckAdministration/DisplayHealthcheckAdministration";
 
 class AdministrationWorkspace extends Component {
   /**
@@ -174,6 +175,10 @@ class AdministrationWorkspace extends Component {
     return AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
+  isHealthcheckSelected() {
+    return AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
   render() {
     const AdministrationWorkspaceAction = this.props.administrationWorkspaceContext.administrationWorkspaceAction;
     return (
@@ -251,6 +256,9 @@ class AdministrationWorkspace extends Component {
                   }
                   {this.isPasswordExpirySelected() &&
                   <DisplayAdministrationPasswordExpiry/>
+                  }
+                  {this.isHealthcheckSelected() &&
+                    <DisplayHealthcheckAdministration/>
                   }
                 </div>
               </div>

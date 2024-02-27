@@ -1,0 +1,88 @@
+.healthcheck-settings {
+  .healthcheck-environment-section,
+  .healthcheck-configFiles-section,
+  .healthcheck-core-section,
+  .healthcheck-ssl-section,
+  .healthcheck-database-section,
+  .healthcheck-gpg-section,
+  .healthcheck-app-section,
+  .healthcheck-smtp-section {
+    .healthcheck-success,
+    .healthcheck-warning,
+    .healthcheck-fail,
+    .healthcheck-info {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 5px;
+      padding-left: 15px;
+
+      .tooltip {
+        margin-left: 6px;
+      }
+
+      .svg-icon {
+        padding-right: 10px;
+      }
+    }
+    .healthcheck-success {
+      background-color: @healthcheck-pass;
+    }
+    .healthcheck-warning {
+      background-color: @healthcheck-warning;
+    }
+    .healthcheck-fail {
+      background-color: @healthcheck-fail;
+    }
+    .healthcheck-info {
+      background-color: @healthcheck-info;
+    }
+  }
+}
+
+.healthcheck-color-legends {
+  .svg-icon {
+    margin-left: 10px;
+    margin-bottom: -7px;
+    align-self: center;
+    padding-right: 10px;
+  }
+
+  .healthcheck-success {
+    background-color: @healthcheck-pass;
+    display: grid;
+    grid-template-columns: 0.1fr 1fr;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 5px;
+    padding-left: 15px;
+  }
+  .healthcheck-warning {
+    background-color: @healthcheck-warning;
+    display: grid;
+    grid-template-columns: 0.1fr 1fr;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 5px;
+    padding-left: 15px;
+  }
+  .healthcheck-fail {
+    background-color: @healthcheck-fail;
+    display: grid;
+    grid-template-columns: 0.1fr 1fr;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 5px;
+    padding-left: 15px;
+  }
+  .healthcheck-info {
+    background-color: @healthcheck-info;
+    display: grid;
+    grid-template-columns: 0.1fr 1fr;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 5px;
+    padding-left: 15px;
+  }
+}
