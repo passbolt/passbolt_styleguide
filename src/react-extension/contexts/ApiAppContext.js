@@ -22,7 +22,7 @@ import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
 import {CsrfToken} from "../../shared/lib/apiClient/csrfToken";
 import RbacMeService from "../../shared/services/api/rbac/rbacMeService";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
-import AuthService from "../../shared/services/api/auth/AuthService";
+import AuthLogoutService from "../../shared/services/api/auth/AuthLogoutService";
 
 const IS_AUTHENTICATED_CHECK_PERIOD = 60000;
 
@@ -33,7 +33,7 @@ class ApiAppContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.authService = new AuthService(this.getApiClientOptions());
+    this.authLogoutService = new AuthLogoutService(this.getApiClientOptions());
   }
 
   /**
@@ -216,7 +216,7 @@ class ApiAppContextProvider extends React.Component {
    * Listen when the user wants to logout.
    */
   async onLogoutRequested() {
-    await this.authService.logout();
+    await this.authLogoutService.logout();
     window.location.href = this.state.trustedDomain;
   }
 
