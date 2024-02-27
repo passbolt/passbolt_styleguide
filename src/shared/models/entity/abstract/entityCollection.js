@@ -11,16 +11,19 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import Entity from "../abstract/entity";
 
-class EntityCollection extends Entity {
+class EntityCollection {
   /**
    * EntityCollection constructor
-   * @param {array} props
+   * @param {array} dtos (Optional) Array of entities dto to add to the collection.
    */
-  constructor(props = []) {
-    super(props);
+  constructor(dtos = []) {
     this._items = [];
+    /*
+     * Keep a reference of the dtos as props for historical reasons.
+     * @todo _props property to remove
+     */
+    this._props = JSON.parse(JSON.stringify(dtos));
   }
 
   /*

@@ -70,6 +70,23 @@ describe("EntityCollection", () => {
       expect(collection.items).toEqual([]);
       expect(collection.items[0]).toEqual(undefined);
     });
+
+    it("clones & stores provided dtos in local _props but do nothing else with it", () => {
+      const dtos = [{name: 'first'}, {name: 'second'}, {name: 'first'}];
+      const collection = new EntityCollection(dtos);
+      expect.assertions(8);
+      expect(collection.length).toBe(0);
+      expect(collection.items).toEqual([]);
+      expect(collection.items[0]).toEqual(undefined);
+      expect(collection._props).toEqual(dtos);
+      // Assert the data are cloned
+      dtos[0].name = "first altered";
+      delete dtos[2];
+      expect(collection._props).not.toEqual(dtos);
+      expect(collection._props[0].name).toEqual('first');
+      expect(dtos[2]).toBeUndefined();
+      expect(dtos[0].name).toEqual('first altered');
+    });
   });
 
   describe("EntityCollection::push", () => {
