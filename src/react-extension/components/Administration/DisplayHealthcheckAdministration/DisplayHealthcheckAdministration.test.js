@@ -81,7 +81,7 @@ describe("See the healthCheck settings", () => {
 
   describe('As AD, I should see the healthcheck status failed on the administration page', () => {
     let page;
-    const props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckDataAllChecksFail.checks})});
+    const props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckDataAllChecksFail})});
 
     beforeEach(() => {
       page = new DisplayHealthcheckAdministrationPage(props);

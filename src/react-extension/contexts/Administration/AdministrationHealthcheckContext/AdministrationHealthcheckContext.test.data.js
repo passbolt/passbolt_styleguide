@@ -32,7 +32,7 @@ export function defaultProps(data = {}) {
 
 export function defaultAdministrationHealthcheckContext(data = {}) {
   return {
-    healthcheckData: new HealthcheckEntity(mockHealthcheckData.checks),
+    healthcheckData: new HealthcheckEntity(mockHealthcheckData),
     isProcessing: jest.fn(),
     setProcessing: jest.fn(),
     loadHealthcheckData: jest.fn(),
@@ -41,314 +41,308 @@ export function defaultAdministrationHealthcheckContext(data = {}) {
   };
 }
 export const mockHealthcheckData = {
-  "checks": {
-    "ssl": {
-      "peerValid": true,
-      "hostValid": true,
-      "notSelfSigned": true
+  "ssl": {
+    "peerValid": true,
+    "hostValid": true,
+    "notSelfSigned": true
+  },
+  "database": {
+    "tablesCount": true,
+    "info": {
+      "tablesCount": 49
     },
-    "database": {
-      "tablesCount": true,
-      "info": {
-        "tablesCount": 49
-      },
-      "connect": true,
-      "supportedBackend": true,
-      "defaultContent": true
+    "connect": true,
+    "supportedBackend": true,
+    "defaultContent": true
+  },
+  "application": {
+    "info": {
+      "remoteVersion": "4.3.0",
+      "currentVersion": "4.1.1"
     },
-    "application": {
-      "info": {
-        "remoteVersion": "4.3.0",
-        "currentVersion": "4.1.1"
-      },
-      "latestVersion": true,
-      "schema": true,
-      "robotsIndexDisabled": true,
-      "sslForce": true,
-      "sslFullBaseUrl": true,
-      "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
-      "seleniumDisabled": true,
-      "registrationClosed": {
-        "isSelfRegistrationPluginEnabled": true,
-        "selfRegistrationProvider": null,
-        "isRegistrationPublicRemovedFromPassbolt": true
-      },
-      "hostAvailabilityCheckEnabled": true,
-      "jsProd": true,
-      "emailNotificationEnabled": true
+    "latestVersion": true,
+    "schema": true,
+    "robotsIndexDisabled": true,
+    "sslForce": true,
+    "sslFullBaseUrl": true,
+    "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
+    "seleniumDisabled": true,
+    "registrationClosed": {
+      "isSelfRegistrationPluginEnabled": true,
+      "selfRegistrationProvider": null,
+      "isRegistrationPublicRemovedFromPassbolt": true
     },
-    "gpg": {
-      "canDecryptVerify": true,
-      "canVerify": true,
-      "gpgKeyPublicInKeyring": true,
-      "canEncrypt": true,
-      "canDecrypt": true,
-      "canEncryptSign": true,
-      "canSign": true,
-      "gpgHome": true,
-      "gpgKeyPrivateFingerprint": true,
-      "gpgKeyPublicFingerprint": true,
-      "gpgKeyPublicEmail": true,
-      "gpgKeyPublicReadable": true,
-      "gpgKeyPrivateReadable": true,
-      "gpgKey": true,
-      "lib": true,
-      "gpgKeyNotDefault": true,
-      "info": {
-        "gpgHome": "\/home\/www-data\/.gnupg",
-        "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
-      },
-      "gpgHomeWritable": true,
-      "gpgKeyPublic": true,
-      "gpgKeyPublicBlock": true,
-      "gpgKeyPrivate": true,
-      "gpgKeyPrivateBlock": true,
-      "isPublicServerKeyGopengpgCompatible": true,
-      "isPrivateServerKeyGopengpgCompatible": true
+    "hostAvailabilityCheckEnabled": true,
+    "jsProd": true,
+    "emailNotificationEnabled": true
+  },
+  "gpg": {
+    "canDecryptVerify": true,
+    "canVerify": true,
+    "gpgKeyPublicInKeyring": true,
+    "canEncrypt": true,
+    "canDecrypt": true,
+    "canEncryptSign": true,
+    "canSign": true,
+    "gpgHome": true,
+    "gpgKeyPrivateFingerprint": true,
+    "gpgKeyPublicFingerprint": true,
+    "gpgKeyPublicEmail": true,
+    "gpgKeyPublicReadable": true,
+    "gpgKeyPrivateReadable": true,
+    "gpgKey": true,
+    "lib": true,
+    "gpgKeyNotDefault": true,
+    "info": {
+      "gpgHome": "\/home\/www-data\/.gnupg",
+      "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
     },
-    "environment": {
-      "phpVersion": true,
-      "info": {
-        "phpVersion": "8.1.17"
-      },
-      "pcre": true,
-      "mbstring": true,
-      "gnupg": true,
-      "intl": true,
-      "image": true,
-      "tmpWritable": true,
-      "logWritable": true
+    "gpgHomeWritable": true,
+    "gpgKeyPublic": true,
+    "gpgKeyPublicBlock": true,
+    "gpgKeyPrivate": true,
+    "gpgKeyPrivateBlock": true,
+    "isPublicServerKeyGopengpgCompatible": true,
+    "isPrivateServerKeyGopengpgCompatible": true
+  },
+  "environment": {
+    "phpVersion": true,
+    "info": {
+      "phpVersion": "8.1.17"
     },
-    "configFile": {
-      "app": true,
-      "passbolt": true
+    "pcre": true,
+    "mbstring": true,
+    "gnupg": true,
+    "intl": true,
+    "image": true,
+    "tmpWritable": true,
+    "logWritable": true
+  },
+  "configFile": {
+    "app": true,
+    "passbolt": true
+  },
+  "core": {
+    "cache": true,
+    "debugDisabled": true,
+    "salt": true,
+    "fullBaseUrl": true,
+    "validFullBaseUrl": true,
+    "info": {
+      "fullBaseUrl": "https:\/\/dev.local"
     },
-    "core": {
-      "cache": true,
-      "debugDisabled": true,
-      "salt": true,
-      "fullBaseUrl": true,
-      "validFullBaseUrl": true,
-      "info": {
-        "fullBaseUrl": "https:\/\/dev.local"
-      },
-      "fullBaseUrlReachable": true
-    },
-    "smtpSettings": {
-      "isEnabled": true,
-      "areEndpointsDisabled": true,
-      "errorMessage": false,
-      "source": "database",
-      "isInDb": true
-    }
+    "fullBaseUrlReachable": true
+  },
+  "smtpSettings": {
+    "isEnabled": true,
+    "areEndpointsDisabled": true,
+    "errorMessage": false,
+    "source": "database",
+    "isInDb": true
   }
 };
 
 export const mockHealthcheckWrongData = {
-  "checks": {
-    "ssl": {
-      "peerValid": false,
-      "hostValid": false,
-      "notSelfSigned": false,
-      "info": false,
+  "ssl": {
+    "peerValid": false,
+    "hostValid": false,
+    "notSelfSigned": false,
+    "info": false,
+  },
+  "database": {
+    "tablesCount": 'true',
+    "info": {
+      "tablesCount": '48'
     },
-    "database": {
-      "tablesCount": 'true',
-      "info": {
-        "tablesCount": '48'
-      },
-      "connect": true,
-      "supportedBackend": true,
-      "defaultContent": true
+    "connect": true,
+    "supportedBackend": true,
+    "defaultContent": true
+  },
+  "application": {
+    "info": {
+      "remoteVersion": "4.4.2",
+      "currentVersion": "4.1.1"
     },
-    "application": {
-      "info": {
-        "remoteVersion": "4.4.2",
-        "currentVersion": "4.1.1"
-      },
-      "latestVersion": false,
-      "schema": true,
-      "robotsIndexDisabled": true,
-      "sslForce": false,
-      "sslFullBaseUrl": true,
-      "configPath": "/var/www/passbolt/config/passbolt.php",
-      "seleniumDisabled": true,
-      "registrationClosed": {
-        "isSelfRegistrationPluginEnabled": true,
-        "selfRegistrationProvider": null,
-        "isRegistrationPublicRemovedFromPassbolt": true
-      },
-      "hostAvailabilityCheckEnabled": false,
-      "jsProd": true,
-      "emailNotificationEnabled": false
+    "latestVersion": false,
+    "schema": true,
+    "robotsIndexDisabled": true,
+    "sslForce": false,
+    "sslFullBaseUrl": true,
+    "configPath": "/var/www/passbolt/config/passbolt.php",
+    "seleniumDisabled": true,
+    "registrationClosed": {
+      "isSelfRegistrationPluginEnabled": true,
+      "selfRegistrationProvider": null,
+      "isRegistrationPublicRemovedFromPassbolt": true
     },
-    "gpg": {
-      "canDecryptVerify": true,
-      "canVerify": 2,
-      "gpgKeyPublicInKeyring": true,
-      "canEncrypt": true,
-      "canDecrypt": true,
-      "canEncryptSign": true,
-      "canSign": true,
-      "gpgHome": true,
-      "gpgKeyPrivateFingerprint": true,
-      "gpgKeyPublicFingerprint": true,
-      "gpgKeyPublicEmail": true,
-      "gpgKeyPublicReadable": true,
-      "gpgKeyPrivateReadable": true,
-      "gpgKey": true,
-      "lib": true,
-      "gpgKeyNotDefault": true,
-      "info": {
-        "gpgHome": "/home/www-data/.gnupg",
-        "gpgKeyPrivate": "/var/www/passbolt/config/gpg/serverkey_private.asc"
-      },
-      "gpgHomeWritable": true,
-      "gpgKeyPublic": true,
-      "gpgKeyPublicBlock": true,
-      "gpgKeyPrivate": true,
-      "gpgKeyPrivateBlock": true,
-      "isPublicServerKeyGopengpgCompatible": true,
-      "isPrivateServerKeyGopengpgCompatible": true
+    "hostAvailabilityCheckEnabled": false,
+    "jsProd": true,
+    "emailNotificationEnabled": false
+  },
+  "gpg": {
+    "canDecryptVerify": true,
+    "canVerify": 2,
+    "gpgKeyPublicInKeyring": true,
+    "canEncrypt": true,
+    "canDecrypt": true,
+    "canEncryptSign": true,
+    "canSign": true,
+    "gpgHome": true,
+    "gpgKeyPrivateFingerprint": true,
+    "gpgKeyPublicFingerprint": true,
+    "gpgKeyPublicEmail": true,
+    "gpgKeyPublicReadable": true,
+    "gpgKeyPrivateReadable": true,
+    "gpgKey": true,
+    "lib": true,
+    "gpgKeyNotDefault": true,
+    "info": {
+      "gpgHome": "/home/www-data/.gnupg",
+      "gpgKeyPrivate": "/var/www/passbolt/config/gpg/serverkey_private.asc"
     },
-    "environment": {
-      "phpVersion": true,
-      "info": {
-        "phpVersion": "8.1.25"
-      },
-      "pcre": true,
-      "mbstring": true,
-      "gnupg": true,
-      "intl": true,
-      "image": true,
-      "tmpWritable": true,
-      "logWritable": 'false'
+    "gpgHomeWritable": true,
+    "gpgKeyPublic": true,
+    "gpgKeyPublicBlock": true,
+    "gpgKeyPrivate": true,
+    "gpgKeyPrivateBlock": true,
+    "isPublicServerKeyGopengpgCompatible": true,
+    "isPrivateServerKeyGopengpgCompatible": true
+  },
+  "environment": {
+    "phpVersion": true,
+    "info": {
+      "phpVersion": "8.1.25"
     },
-    "configFile": {
-      "app": true,
-      "passbolt": false
+    "pcre": true,
+    "mbstring": true,
+    "gnupg": true,
+    "intl": true,
+    "image": true,
+    "tmpWritable": true,
+    "logWritable": 'false'
+  },
+  "configFile": {
+    "app": true,
+    "passbolt": false
+  },
+  "core": {
+    "cache": true,
+    "debugDisabled": false,
+    "salt": true,
+    "fullBaseUrl": true,
+    "validFullBaseUrl": true,
+    "info": {
+      "fullBaseUrl": "https://dev.local"
     },
-    "core": {
-      "cache": true,
-      "debugDisabled": false,
-      "salt": true,
-      "fullBaseUrl": true,
-      "validFullBaseUrl": true,
-      "info": {
-        "fullBaseUrl": "https://dev.local"
-      },
-      "fullBaseUrlReachable": true
-    },
-    "smtpSettings": {
-      "isEnabled": true,
-      "areEndpointsDisabled": false,
-      "errorMessage": false,
-      "source": "database",
-      "isInDb": 2
-    }
+    "fullBaseUrlReachable": true
+  },
+  "smtpSettings": {
+    "isEnabled": true,
+    "areEndpointsDisabled": false,
+    "errorMessage": false,
+    "source": "database",
+    "isInDb": 2
   }
 };
 
 export const mockHealthcheckDataAllChecksFail = {
-  "checks": {
-    "ssl": {
-      "peerValid": false,
-      "hostValid": false,
-      "notSelfSigned": false
+  "ssl": {
+    "peerValid": false,
+    "hostValid": false,
+    "notSelfSigned": false
+  },
+  "database": {
+    "tablesCount": false,
+    "info": {
+      "tablesCount": 49
     },
-    "database": {
-      "tablesCount": false,
-      "info": {
-        "tablesCount": 49
-      },
-      "connect": false,
-      "supportedBackend": false,
-      "defaultContent": false
+    "connect": false,
+    "supportedBackend": false,
+    "defaultContent": false
+  },
+  "application": {
+    "info": {
+      "remoteVersion": "4.3.0",
+      "currentVersion": "4.1.1"
     },
-    "application": {
-      "info": {
-        "remoteVersion": "4.3.0",
-        "currentVersion": "4.1.1"
-      },
-      "latestVersion": false,
-      "schema": false,
-      "robotsIndexDisabled": false,
-      "sslForce": false,
-      "sslFullBaseUrl": false,
-      "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
-      "seleniumDisabled": false,
-      "registrationClosed": {
-        "isSelfRegistrationPluginEnabled": false,
-        "selfRegistrationProvider": "open",
-        "isRegistrationPublicRemovedFromPassbolt": false
-      },
-      "hostAvailabilityCheckEnabled": false,
-      "jsProd": false,
-      "emailNotificationEnabled": false
+    "latestVersion": false,
+    "schema": false,
+    "robotsIndexDisabled": false,
+    "sslForce": false,
+    "sslFullBaseUrl": false,
+    "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
+    "seleniumDisabled": false,
+    "registrationClosed": {
+      "isSelfRegistrationPluginEnabled": false,
+      "selfRegistrationProvider": "open",
+      "isRegistrationPublicRemovedFromPassbolt": false
     },
-    "gpg": {
-      "canDecryptVerify": false,
-      "canVerify": false,
-      "gpgKeyPublicInKeyring": false,
-      "canEncrypt": false,
-      "canDecrypt": false,
-      "canEncryptSign": false,
-      "canSign": false,
-      "gpgHome": false,
-      "gpgKeyPrivateFingerprint": false,
-      "gpgKeyPublicFingerprint": false,
-      "gpgKeyPublicEmail": false,
-      "gpgKeyPublicReadable": false,
-      "gpgKeyPrivateReadable": false,
-      "gpgKey": false,
-      "lib": false,
-      "gpgKeyNotDefault": false,
-      "info": {
-        "gpgHome": "\/home\/www-data\/.gnupg",
-        "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
-      },
-      "gpgHomeWritable": false,
-      "gpgKeyPublic": false,
-      "gpgKeyPublicBlock": false,
-      "gpgKeyPrivate": false,
-      "gpgKeyPrivateBlock": false,
-      "isPublicServerKeyGopengpgCompatible": false,
-      "isPrivateServerKeyGopengpgCompatible": false
+    "hostAvailabilityCheckEnabled": false,
+    "jsProd": false,
+    "emailNotificationEnabled": false
+  },
+  "gpg": {
+    "canDecryptVerify": false,
+    "canVerify": false,
+    "gpgKeyPublicInKeyring": false,
+    "canEncrypt": false,
+    "canDecrypt": false,
+    "canEncryptSign": false,
+    "canSign": false,
+    "gpgHome": false,
+    "gpgKeyPrivateFingerprint": false,
+    "gpgKeyPublicFingerprint": false,
+    "gpgKeyPublicEmail": false,
+    "gpgKeyPublicReadable": false,
+    "gpgKeyPrivateReadable": false,
+    "gpgKey": false,
+    "lib": false,
+    "gpgKeyNotDefault": false,
+    "info": {
+      "gpgHome": "\/home\/www-data\/.gnupg",
+      "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
     },
-    "environment": {
-      "phpVersion": false,
-      "info": {
-        "phpVersion": "8.1.17"
-      },
-      "pcre": false,
-      "mbstring": false,
-      "gnupg": false,
-      "intl": false,
-      "image": false,
-      "tmpWritable": false,
-      "logWritable": false
+    "gpgHomeWritable": false,
+    "gpgKeyPublic": false,
+    "gpgKeyPublicBlock": false,
+    "gpgKeyPrivate": false,
+    "gpgKeyPrivateBlock": false,
+    "isPublicServerKeyGopengpgCompatible": false,
+    "isPrivateServerKeyGopengpgCompatible": false
+  },
+  "environment": {
+    "phpVersion": false,
+    "info": {
+      "phpVersion": "8.1.17"
     },
-    "configFile": {
-      "app": false,
-      "passbolt": false
+    "pcre": false,
+    "mbstring": false,
+    "gnupg": false,
+    "intl": false,
+    "image": false,
+    "tmpWritable": false,
+    "logWritable": false
+  },
+  "configFile": {
+    "app": false,
+    "passbolt": false
+  },
+  "core": {
+    "cache": false,
+    "debugDisabled": false,
+    "salt": false,
+    "fullBaseUrl": false,
+    "validFullBaseUrl": false,
+    "info": {
+      "fullBaseUrl": "https:\/\/dev.local"
     },
-    "core": {
-      "cache": false,
-      "debugDisabled": false,
-      "salt": false,
-      "fullBaseUrl": false,
-      "validFullBaseUrl": false,
-      "info": {
-        "fullBaseUrl": "https:\/\/dev.local"
-      },
-      "fullBaseUrlReachable": false
-    },
-    "smtpSettings": {
-      "isEnabled": false,
-      "areEndpointsDisabled": false,
-      "errorMessage": true,
-      "source": "database",
-      "isInDb": false
-    }
+    "fullBaseUrlReachable": false
+  },
+  "smtpSettings": {
+    "isEnabled": false,
+    "areEndpointsDisabled": false,
+    "errorMessage": true,
+    "source": "database",
+    "isInDb": false
   }
 };

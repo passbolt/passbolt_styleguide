@@ -35,7 +35,7 @@ class HealthcheckService {
   async fetchHealthcheck() {
     this.initClient();
     const result = await this.apiClient.findAll();
-    return result.body?.checks;
+    return result?.body;
   }
 
 

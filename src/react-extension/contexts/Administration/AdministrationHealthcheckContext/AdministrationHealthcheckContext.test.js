@@ -38,7 +38,7 @@ describe("AdministrationHealthcheckContext", () => {
       expect.assertions(2);
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
       await adminHealthcheckContext.state.loadHealthcheckData();
-      const expectedData = new HealthcheckEntity(mockHealthcheckData.checks);
+      const expectedData = new HealthcheckEntity(mockHealthcheckData);
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
       expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedData.toDto());
     });
@@ -100,12 +100,12 @@ describe("AdministrationHealthcheckContext", () => {
 
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckData));
       await adminHealthcheckContext.state.loadHealthcheckData();
-      const expectedData = new HealthcheckEntity(mockHealthcheckData.checks);
+      const expectedData = new HealthcheckEntity(mockHealthcheckData);
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
       expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedData.toDto());
 
       fetch.doMockOnceIf(/healthcheck*/, () => mockApiResponse(mockHealthcheckDataAllChecksFail));
-      const expectedDataUpdated = new HealthcheckEntity(mockHealthcheckDataAllChecksFail.checks);
+      const expectedDataUpdated = new HealthcheckEntity(mockHealthcheckDataAllChecksFail);
       await adminHealthcheckContext.state.loadHealthcheckData();
       expect(adminHealthcheckContext.state.healthcheckData).not.toBeNull();
       expect(adminHealthcheckContext.state.healthcheckData.toDto()).toEqual(expectedDataUpdated.toDto());

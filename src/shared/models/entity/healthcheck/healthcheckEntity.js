@@ -118,7 +118,7 @@ class HealthcheckEntity extends Entity {
    * ==================================================
    */
   isSSLValid() {
-    const ssl = this._props.checks.ssl;
+    const ssl = this._props.ssl;
     return ssl.peerValid && ssl.hostValid && !ssl.notSelfSigned;
   }
 
