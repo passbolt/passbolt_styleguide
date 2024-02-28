@@ -177,6 +177,36 @@ describe("As AD I can see the administration menu", () => {
     });
   });
 
+  describe("As a logged in administrator in the administrator workspace, I can see the Passbolt API status settings option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.goToHealthcheck();
+      expect(page.healthCheck).toBeTruthy();
+      expect(page.menuSelected).toBe('Passbolt API Status');
+      expect(props.navigationContext.onGoToAdministrationHealthcheckRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "healthcheckUi"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.healthCheck).toBeNull();
+    });
+  });
+
   describe("As a signed-in administrator on the administration workspace, I can see the SSO setting option in the left-side bar", () => {
     it('If the feature flag is true, the menu should be visible', async() => {
       expect.assertions(4);
