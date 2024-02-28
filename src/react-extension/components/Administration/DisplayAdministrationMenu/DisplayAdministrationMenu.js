@@ -153,7 +153,7 @@ class DisplayAdministrationMenu extends React.Component {
    * @returns {boolean}
    */
   get canIUseHealthcheck() {
-    return this.canIUse('healthcheck');
+    return this.canIUse('healthcheckUi');
   }
 
   /**
