@@ -11,16 +11,27 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import Entity from "../abstract/entity";
 
-class EntityCollection extends Entity {
+class EntityCollection {
   /**
    * EntityCollection constructor
-   * @param {array} props
+   * @param {array} dtos (Optional) Array of entities dto to add to the collection.
+   * @param {object} options Options.
+   * @param {boolean} [options.clone=true] Clone the given props to ensure original data remain unaltered.
+   * Attention: altering the original dtos alters also the entities using this information, therefore bypass any
+   * validation applied previously.
    */
-  constructor(props = []) {
-    super(props);
+  constructor(dtos = [], options = {}) {
+    const clone = options?.clone ?? true;
     this._items = [];
+    if (clone) {
+      dtos = JSON.parse(JSON.stringify(dtos));
+    }
+    /*
+     * Keep a reference of the dtos as props for historical reasons.
+     * @todo _props property to remove
+     */
+    this._props = dtos;
   }
 
   /*
@@ -94,8 +105,10 @@ class EntityCollection extends Entity {
    * @returns {array} all the items matching search
    */
   getAll(propName, search) {
-    if (typeof propName !== 'string' || typeof search !== 'string') {
-      throw new TypeError('EntityCollection find by expect propName and search to be strings');
+    if (typeof propName !== 'string') {
+      throw new TypeError('EntityCollection excludeAll expects propName to be string.');
+    } else if (typeof search !== 'string') {
+      throw new TypeError('EntityCollection excludeAll expects search to be string.');
     }
     return this._items.filter(item => (Object.prototype.hasOwnProperty.call(item._props, propName) && item._props[propName] === search));
   }
@@ -119,6 +132,31 @@ class EntityCollection extends Entity {
   }
 
   /**
+   * Extract the property values of all the collection items.
+   * @param {string} propName The target property
+   * @returns {array<*>}
+   * @throws TypeError if parameters are invalid
+   */
+  extract(propName) {
+    if (typeof propName !== 'string') {
+      throw new TypeError('EntityCollection extract expects propName to be a string.');
+    }
+
+    return this._items.reduce((accumulator, item) => {
+      if (typeof item._props[propName] !== "undefined") {
+        accumulator.push(item._props[propName]);
+      }
+      return accumulator;
+    }, []);
+  }
+
+  /*
+   * ==================================================
+   * Items manipulation
+   * ==================================================
+   */
+
+  /**
    * Push an item in the list
    * @param {*} item
    * @returns {int} new length of collection
@@ -136,6 +174,39 @@ class EntityCollection extends Entity {
   unshift(item) {
     this._items.unshift(item);
     return this._items.length;
+  }
+
+  /*
+   * ==================================================
+   * Filters
+   * ==================================================
+   */
+
+  /**
+   * Filter all items having the given property matching one of the value of the provided needles array.
+   *
+   * @param {string} propName The property to filter by.
+   * @param {array<string|number|boolean>} needles The array of value to match the property with.
+   * @param {boolean} [excludeUndefined=true] Filter out resources not having a defined resource type.
+   * @return {void} The function alters the collection itself.
+   * @throws TypeError if parameters are invalid
+   */
+  filterByPropertyValueIn(propName, needles, excludeUndefined = true) {
+    if (typeof propName !== 'string') {
+      throw new TypeError('EntityCollection filterByPropertyValueIn expects propName to be a string.');
+    }
+    if (!Array.isArray(needles)) {
+      throw new TypeError('EntityCollection filterByPropertyValueIn expects needles to be an array.');
+    }
+
+    for (let currentIndex = this._items.length - 1; currentIndex >= 0; currentIndex--) {
+      const item = this._items[currentIndex];
+      const isPropertyDefined = Object.prototype.hasOwnProperty.call(item._props, propName);
+      if ((excludeUndefined && !isPropertyDefined) // exclude undefined property.
+        || (isPropertyDefined && !needles.includes(item._props[propName]))) { // or exclude defined property not matching the search.
+        this._items.splice(currentIndex, 1);
+      }
+    }
   }
 }
 
