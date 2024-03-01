@@ -199,11 +199,27 @@ class EntityCollection {
       throw new TypeError('EntityCollection filterByPropertyValueIn expects needles to be an array.');
     }
 
-    for (let currentIndex = this._items.length - 1; currentIndex >= 0; currentIndex--) {
-      const item = this._items[currentIndex];
+    this.filterByCallback(item => {
       const isPropertyDefined = Object.prototype.hasOwnProperty.call(item._props, propName);
-      if ((excludeUndefined && !isPropertyDefined) // exclude undefined property.
-        || (isPropertyDefined && !needles.includes(item._props[propName]))) { // or exclude defined property not matching the search.
+      return !((excludeUndefined && !isPropertyDefined) // exclude undefined property.
+        || (isPropertyDefined && !needles.includes(item._props[propName]))); // or exclude defined property not matching the search.
+    });
+  }
+
+  /**
+   * Filter all items with a callback method.
+   *
+   * @param {function} callback The callback execute on each collection item used to filter the collection.
+   * @return {void} The function alters the collection itself.
+   * @throws TypeError if parameters are invalid
+   */
+  filterByCallback(callback) {
+    if (typeof callback !== "function") {
+      throw new TypeError('EntityCollection filterByCallback expects callback to be a function.');
+    }
+
+    for (let currentIndex = this._items.length - 1; currentIndex >= 0; currentIndex--) {
+      if (!callback(this._items[currentIndex])) {
         this._items.splice(currentIndex, 1);
       }
     }
