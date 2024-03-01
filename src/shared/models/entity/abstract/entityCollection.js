@@ -17,7 +17,7 @@ class EntityCollection {
    * EntityCollection constructor
    * @param {array} dtos (Optional) Array of entities dto to add to the collection.
    * @param {object} options Options.
-   * @param {boolean} [options.clone] Clone the given props to ensure original data remain unaltered. Default: true.
+   * @param {boolean} [options.clone=true] Clone the given props to ensure original data remain unaltered.
    * Attention: altering the original dtos alters also the entities using this information, therefore bypass any
    * validation applied previously.
    */
@@ -187,7 +187,7 @@ class EntityCollection {
    *
    * @param {string} propName The property to filter by.
    * @param {array<string|number|boolean>} needles The array of value to match the property with.
-   * @param {boolean} [excludeUndefined] Filter out resources not having a defined resource type. Default: true.
+   * @param {boolean} [excludeUndefined=true] Filter out resources not having a defined resource type.
    * @return {void} The function alters the collection itself.
    * @throws TypeError if parameters are invalid
    */

@@ -16,7 +16,7 @@ class Entity {
    * Entity constructor
    * @param {object} dto entity data.
    * @param {object} options Options.
-   * @param {boolean} [options.clone] Clone the given props to ensure original data remain unaltered. Default: true.
+   * @param {boolean} [options.clone=true] Clone the given props to ensure original data remain unaltered.
    * Attention: altering the original dto, alter the entity properties and bypass any validation applied previously.
    */
   constructor(dto, options = {}) {
