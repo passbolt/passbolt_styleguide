@@ -292,6 +292,12 @@ class DisplayRbacAdministration extends React.Component {
                         rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
                         roles={this.state.roles}
                         onChange={this.updateRbacControlFunction}/>
+                      <DisplayRbacItem label={this.props.t('Can share folders')}
+                        actionName={uiActions.SHARE_FOLDER} level={3}
+                        rbacs={this.props.adminRbacContext.rbacs}
+                        rbacsUpdated={this.props.adminRbacContext.rbacsUpdated}
+                        roles={this.state.roles}
+                        onChange={this.updateRbacControlFunction}/>
                     </DisplayRbacSection>
                   </DisplayRbacSection>
                   <DisplayRbacSection label={this.props.t('Users')} level={1}>

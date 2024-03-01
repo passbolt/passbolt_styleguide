@@ -13,6 +13,7 @@
 /* attention required */
 /* quickaccess */
 /* logos */
+/* healthcheck */
 /* Inform menu */
 /* dialog */
 /* share dialog */
@@ -6183,6 +6184,195 @@ html.launching .launching-screen p {
   font-size: 11px;
   overflow: auto;
   height: 220px;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-success,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-success,
+.healthcheck-settings .healthcheck-core-section .healthcheck-success,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-success,
+.healthcheck-settings .healthcheck-database-section .healthcheck-success,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-success,
+.healthcheck-settings .healthcheck-app-section .healthcheck-success,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-success,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-core-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-database-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-app-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-core-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-database-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-app-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-info,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-info,
+.healthcheck-settings .healthcheck-core-section .healthcheck-info,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-info,
+.healthcheck-settings .healthcheck-database-section .healthcheck-info,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-info,
+.healthcheck-settings .healthcheck-app-section .healthcheck-info,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+  padding-left: 15px;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-core-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-database-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-app-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-core-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-database-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-app-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-core-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-database-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-app-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-core-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-database-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-app-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info .tooltip {
+  margin-left: 6px;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-core-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-database-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-app-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-success .svg-icon,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-core-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-database-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-app-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning .svg-icon,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-core-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-database-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-app-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail .svg-icon,
+.healthcheck-settings .healthcheck-environment-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-core-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-database-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-app-section .healthcheck-info .svg-icon,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info .svg-icon {
+  padding-right: 10px;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-success,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-success,
+.healthcheck-settings .healthcheck-core-section .healthcheck-success,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-success,
+.healthcheck-settings .healthcheck-database-section .healthcheck-success,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-success,
+.healthcheck-settings .healthcheck-app-section .healthcheck-success,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-success {
+  background-color: #EDF7EB;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-core-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-database-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-app-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning {
+  background-color: #F9DBAD;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-core-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-database-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-app-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail {
+  background-color: #F4A5A6;
+}
+.healthcheck-settings .healthcheck-environment-section .healthcheck-info,
+.healthcheck-settings .healthcheck-configFiles-section .healthcheck-info,
+.healthcheck-settings .healthcheck-core-section .healthcheck-info,
+.healthcheck-settings .healthcheck-ssl-section .healthcheck-info,
+.healthcheck-settings .healthcheck-database-section .healthcheck-info,
+.healthcheck-settings .healthcheck-gpg-section .healthcheck-info,
+.healthcheck-settings .healthcheck-app-section .healthcheck-info,
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info {
+  background-color: #ADCBF9;
+}
+.healthcheck-color-legends .svg-icon {
+  margin-left: 10px;
+  margin-bottom: -7px;
+  align-self: center;
+  padding-right: 10px;
+}
+.healthcheck-color-legends .healthcheck-success {
+  background-color: #EDF7EB;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+  padding-left: 15px;
+}
+.healthcheck-color-legends .healthcheck-warning {
+  background-color: #F9DBAD;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+  padding-left: 15px;
+}
+.healthcheck-color-legends .healthcheck-fail {
+  background-color: #F4A5A6;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+  padding-left: 15px;
+}
+.healthcheck-color-legends .healthcheck-info {
+  background-color: #ADCBF9;
+  display: grid;
+  grid-template-columns: 0.1fr 1fr;
+  margin: 10px 0;
+  padding: 8px;
+  border-radius: 5px;
+  padding-left: 15px;
 }
 .email-notification-settings .section {
   display: flex;

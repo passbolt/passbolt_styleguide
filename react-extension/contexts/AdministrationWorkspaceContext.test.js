@@ -105,6 +105,18 @@ describe("Administration Workspace Context", () => {
       expect(page.isSynchronizeEnabled).toBeFalsy();
       expect(page.mustSynchronizeSettings).toBeFalsy();
     });
+
+    it("As AD I should have healthcheck status settings with all disabled", async() => {
+      expect.assertions(7);
+      await page.goToHealthcheck();
+      expect(page.selectedAdministration).toBe(AdministrationWorkspaceMenuTypes.HEALTHCHECK);
+      expect(page.isSaveEnabled).toBeFalsy();
+      expect(page.mustSaveSettings).toBeFalsy();
+      expect(page.isTestEnabled).toBeFalsy();
+      expect(page.mustTestSettings).toBeFalsy();
+      expect(page.isSynchronizeEnabled).toBeFalsy();
+      expect(page.mustSynchronizeSettings).toBeFalsy();
+    });
   });
 
   describe("As AD I should have the appropriate button enabled at any time", () => {

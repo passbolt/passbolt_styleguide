@@ -14,10 +14,17 @@
 class Entity {
   /**
    * Entity constructor
-   * @param {*} props
+   * @param {object} dto entity data.
+   * @param {object} options Options.
+   * @param {boolean} [options.clone=true] Clone the given props to ensure original data remain unaltered.
+   * Attention: altering the original dto, alter the entity properties and bypass any validation applied previously.
    */
-  constructor(props) {
-    this._props = JSON.parse(JSON.stringify(props));
+  constructor(dto, options = {}) {
+    const clone = options?.clone ?? true;
+    if (clone) {
+      dto = JSON.parse(JSON.stringify(dto));
+    }
+    this._props = dto;
   }
 
   /*

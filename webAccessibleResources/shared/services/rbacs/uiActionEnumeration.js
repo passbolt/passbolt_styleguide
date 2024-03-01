@@ -28,6 +28,7 @@ export const uiActions = {
   ADMINSTRATION_VIEW_WORKSPACE: "Administration.viewWorkspace",
   DUO_CONFIGURATION: "Duo.configuration",
   AVATAR_UPLOAD: "Avatar.upload",
+  SHARE_FOLDER: "Folders.share",
 };
 
 

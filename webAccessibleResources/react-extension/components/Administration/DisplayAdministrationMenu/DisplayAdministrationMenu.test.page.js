@@ -91,6 +91,13 @@ export default class DisplayAdministrationMenuPage {
   }
 
   /**
+   * Return the healthcheck menu
+   */
+  get healthCheck() {
+    return this._page.container.querySelector('#healthcheck_menu .row .main-cell-wrapper .main-cell button');
+  }
+
+  /**
    * Returns the subscription menu
    */
   get subscription() {
@@ -174,6 +181,11 @@ export default class DisplayAdministrationMenuPage {
   /** Click on the email notifications element */
   async goToEmailNotifications() {
     await this.click(this.emailNotifications);
+  }
+
+  /** Click on the healthcheck element */
+  async goToHealthcheck() {
+    await this.click(this.healthCheck);
   }
 
   /** Click on the subscription element */
