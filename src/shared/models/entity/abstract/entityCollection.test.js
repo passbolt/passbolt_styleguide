@@ -279,4 +279,38 @@ describe("EntityCollection", () => {
       expect(() => collection.filterByPropertyValueIn(42)).toThrow(TypeError);
     });
   });
+
+  describe("EntityCollection::filterByCallback", () => {
+    it("should filter out all items the callback function will return false for.", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({}));
+      collection.push(new TestEntity({name: null}));
+
+      expect.assertions(1);
+      collection.filterByCallback(() => false);
+      expect(collection).toHaveLength(0);
+    });
+
+    it("should filter in all items the callback function will return false for.", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({}));
+      collection.push(new TestEntity({name: null}));
+
+      expect.assertions(1);
+      collection.filterByCallback(() => true);
+      expect(collection).toHaveLength(5);
+    });
+
+    it("should throw an exception if the callback parameter is not a function.", () => {
+      const collection = new EntityCollection();
+      expect.assertions(1);
+      expect(() => collection.filterByCallback(42)).toThrow(TypeError);
+    });
+  });
 });

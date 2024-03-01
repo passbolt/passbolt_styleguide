@@ -39,9 +39,9 @@ export const defaultResourceDto = (data = {}) => {
     personal: false,
     resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     permission: ownerPermissionDto({aco_foreign_key: id}),
-    // permissions: [],
+    // permissions: [], // Permission are not retrieved by the process storing the information in the local storage.
     favorite: null,
-    secrets: [],
+    // secrets: [], // Secrets are not retrieved by the process storing the information in the local storage.
     ...data
   };
 };
