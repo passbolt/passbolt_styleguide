@@ -23,6 +23,7 @@ const RULE_UNIQUE_ID = 'unique_id';
 class ColumnsSettingCollection extends EntityCollection {
   /**
    * @inheritDoc
+   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
   constructor(columnsSettingCollectionDto, options = {}) {
     super(EntitySchema.validate(

@@ -22,6 +22,7 @@ const RULE_UNIQUE_ID = 'unique_id';
 class RolesCollection extends EntityCollection {
   /**
    * @inheritDoc
+   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
   constructor(rolesCollectionDto, options = {}) {
     super(EntitySchema.validate(
