@@ -19,17 +19,14 @@ const ENTITY_NAME = 'PasswordExpirySettings';
 
 class PasswordExpirySettingsEntity extends Entity {
   /**
-   * Password Expiry entity constructor
-   *
-   * @param {Object} PasswordExpirySettingsDto password expiry settings dto
-   * @throws {EntityValidationError} if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(PasswordExpirySettingsDto) {
+  constructor(PasswordExpirySettingsDto, options = {}) {
     super(EntitySchema.validate(
       PasswordExpirySettingsEntity.ENTITY_NAME,
       PasswordExpirySettingsDto,
       PasswordExpirySettingsEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

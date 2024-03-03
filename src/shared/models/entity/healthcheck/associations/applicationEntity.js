@@ -18,13 +18,14 @@ const ENTITY_NAME = "application";
 
 class ApplicationEntity extends Entity {
   /**
-   * Application entity constructor
-   *
-   * @param {Object} dto Application DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(dto) {
-    super(EntitySchema.validate(ApplicationEntity.ENTITY_NAME, dto, ApplicationEntity.getSchema()));
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      ApplicationEntity.ENTITY_NAME,
+      dto,
+      ApplicationEntity.getSchema()
+    ), options);
   }
 
   /**

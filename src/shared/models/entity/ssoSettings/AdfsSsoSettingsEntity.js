@@ -24,17 +24,14 @@ const ADFS_SUPPORTED_URLS = /^https:\/\/.+[^\/]$/;
  */
 class AdfsSsoSettingsEntity extends Entity {
   /**
-   * AD FS Sso Settings entity constructor
-   *
-   * @param {Object} adfsSsoSettingsDto SSO settings DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(adfsSsoSettingsDto) {
+  constructor(adfsSsoSettingsDto, options = {}) {
     super(EntitySchema.validate(
       AdfsSsoSettingsEntity.ENTITY_NAME,
       adfsSsoSettingsDto,
       AdfsSsoSettingsEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

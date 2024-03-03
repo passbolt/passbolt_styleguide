@@ -26,12 +26,12 @@ class RbacEntity extends Entity {
   /**
    * @inheritDoc
    */
-  constructor(dto) {
+  constructor(dto, options = {}) {
     super(EntitySchema.validate(
       RbacEntity.ENTITY_NAME,
       dto,
       RbacEntity.getSchema()
-    ));
+    ), options);
 
     // Associations
     if (this._props.action) {
