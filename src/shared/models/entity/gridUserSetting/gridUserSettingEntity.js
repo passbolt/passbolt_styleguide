@@ -24,17 +24,14 @@ const ENTITY_NAME = 'GridUserSetting';
  */
 class GridUserSettingEntity extends Entity {
   /**
-   * GridSetting entity constructor
-   *
-   * @param {Object} gridSettingDto gridSetting DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(gridSettingDto) {
+  constructor(gridSettingDto, options = {}) {
     super(EntitySchema.validate(
       GridUserSettingEntity.ENTITY_NAME,
       gridSettingDto,
       GridUserSettingEntity.getSchema()
-    ));
+    ), options);
 
     // Associations
     if (this._props.columns_setting) {

@@ -25,17 +25,14 @@ const ENTITY_NAME = "SsoSettings";
  */
 class SsoSettingsEntity extends Entity {
   /**
-   * Setup entity constructor
-   *
-   * @param {Object} ssoSettingsDto SSO settings DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(ssoSettingsDto) {
+  constructor(ssoSettingsDto, options = {}) {
     super(EntitySchema.validate(
       SsoSettingsEntity.ENTITY_NAME,
       ssoSettingsDto,
       SsoSettingsEntity.getSchema()
-    ));
+    ), options);
 
     // Sso settings associations.
     if (this._props.data) {

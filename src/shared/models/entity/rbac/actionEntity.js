@@ -21,12 +21,12 @@ class ActionEntity extends Entity {
   /**
    * @inheritDoc
    */
-  constructor(dto) {
+  constructor(dto, options = {}) {
     super(EntitySchema.validate(
       ActionEntity.ENTITY_NAME,
       dto,
       ActionEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

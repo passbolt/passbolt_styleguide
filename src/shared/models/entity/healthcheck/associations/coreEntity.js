@@ -17,8 +17,15 @@ import EntitySchema from "../../abstract/entitySchema";
 const ENTITY_NAME = "core";
 
 class CoreEntity extends Entity {
-  constructor(dto) {
-    super(EntitySchema.validate(CoreEntity.ENTITY_NAME, dto, CoreEntity.getSchema()));
+  /**
+   * @inheritDoc
+   */
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      CoreEntity.ENTITY_NAME,
+      dto,
+      CoreEntity.getSchema()
+    ), options);
   }
 
   static getSchema() {

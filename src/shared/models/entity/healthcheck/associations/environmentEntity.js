@@ -17,8 +17,15 @@ import EntitySchema from "../../abstract/entitySchema";
 const ENTITY_NAME = "environment";
 
 class EnvironmentEntity extends Entity {
-  constructor(dto) {
-    super(EntitySchema.validate(EnvironmentEntity.ENTITY_NAME, dto, EnvironmentEntity.getSchema()));
+  /**
+   * @inheritDoc
+   */
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      EnvironmentEntity.ENTITY_NAME,
+      dto,
+      EnvironmentEntity.getSchema()
+    ), options);
   }
 
   static getSchema() {

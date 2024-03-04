@@ -28,17 +28,14 @@ const ENTITY_NAME = "healthcheck";
 
 class HealthcheckEntity extends Entity {
   /**
-   * Healthcheck entity constructor
-   *
-   * @param {Object} dto Healthcheck DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(dto) {
+  constructor(dto, options = {}) {
     super(EntitySchema.validate(
       HealthcheckEntity.ENTITY_NAME,
       dto,
       HealthcheckEntity.getSchema()
-    ));
+    ), options);
 
     // Associations
     if (this._props.ssl) {

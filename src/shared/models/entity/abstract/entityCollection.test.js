@@ -22,8 +22,8 @@ import EntitySchema from "./entitySchema";
  */
 
 class TestEntity extends Entity {
-  constructor(dto) {
-    super(EntitySchema.validate('TestEntity', dto, TestEntity.getSchema()));
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate('TestEntity', dto, TestEntity.getSchema()), options);
   }
   get name() {
     return this._props.name;
@@ -47,8 +47,8 @@ class TestEntity extends Entity {
 
 /* eslint-disable no-unused-vars */
 class TestEntityCollection extends Entity {
-  constructor(dto) {
-    super(EntitySchema.validate('TestEntityCollection', dto, TestEntityCollection.getSchema()));
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate('TestEntityCollection', dto, TestEntityCollection.getSchema()), options);
   }
   static getSchema() {
     return {
