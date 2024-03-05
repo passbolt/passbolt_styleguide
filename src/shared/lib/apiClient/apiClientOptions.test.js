@@ -12,8 +12,15 @@
  * @since         2.13.0
  */
 import {ApiClientOptions} from "./apiClientOptions";
+import {v4 as uuid} from 'uuid';
 
 describe("ApiClientOption testsuite", () => {
+  it("should build the API client options if the given base URL is fine", () => {
+    expect(() => {
+      (new ApiClientOptions()).setBaseUrl("https://localhost");
+    }).not.toThrow();
+  });
+
   it("should throw an error if url is empty", () => {
     expect(() => {
       (new ApiClientOptions()).setBaseUrl();
@@ -42,5 +49,24 @@ describe("ApiClientOption testsuite", () => {
     expect(() => {
       (new ApiClientOptions()).setResourceName({'test': 'test'});
     }).toThrow(TypeError);
+  });
+
+  it("should return no headers if there is no CSRF token", async() => {
+    jest.spyOn(browser.cookies, "get").mockImplementation(() => (null));
+
+    const apiClientOptions = new ApiClientOptions().setBaseUrl("https://localhost");
+    const headers = await apiClientOptions.getHeaders();
+
+    expect(headers).toBeFalsy();
+  });
+
+  it("should return the headers with the right CSRF token", async() => {
+    const csrfToken = uuid();
+    jest.spyOn(browser.cookies, "get").mockImplementation(() => ({value: csrfToken}));
+
+    const apiClientOptions = new ApiClientOptions().setBaseUrl("https://localhost");
+    const headers = await apiClientOptions.getHeaders();
+
+    expect(headers).toStrictEqual({'X-CSRF-Token': csrfToken});
   });
 });

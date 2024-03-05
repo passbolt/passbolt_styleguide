@@ -65,13 +65,14 @@ export class ApiClient {
   }
 
   /**
-   * @returns {Object} fetchOptions
+   * @returns {Promise<Object>} fetchOptions
    * @private
    */
-  buildFetchOptions() {
+  async buildFetchOptions() {
+    const optionHeaders = await this.options.getHeaders();
     return {
       credentials: 'include',
-      headers: {...this.getDefaultHeaders(), ...this.options.getHeaders()}
+      headers: {...this.getDefaultHeaders(), ...optionHeaders}
     };
   }
 
@@ -342,7 +343,8 @@ export class ApiClient {
       this.assertBody(body);
     }
 
-    const fetchOptions = {...this.buildFetchOptions(), ...options};
+    const builtFecthOptions = await this.buildFetchOptions();
+    const fetchOptions = {...builtFecthOptions, ...options};
     fetchOptions.method = method;
     if (body) {
       fetchOptions.body = body;
