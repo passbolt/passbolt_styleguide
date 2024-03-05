@@ -35,11 +35,11 @@ class RbacEntity extends Entity {
 
     // Associations
     if (this._props.action) {
-      this._action = new ActionEntity(this._props.action);
+      this._action = new ActionEntity(this._props.action, {clone: false});
     }
     delete this._props.action;
     if (this._props.ui_action) {
-      this._ui_action = new UiActionEntity(this._props.ui_action);
+      this._ui_action = new UiActionEntity(this._props.ui_action, {clone: false});
     }
     delete this._props.ui_action;
   }

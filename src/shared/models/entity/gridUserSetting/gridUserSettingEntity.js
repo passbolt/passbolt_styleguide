@@ -35,11 +35,11 @@ class GridUserSettingEntity extends Entity {
 
     // Associations
     if (this._props.columns_setting) {
-      this._columns_setting = new ColumnsSettingCollection(this._props.columns_setting);
+      this._columns_setting = new ColumnsSettingCollection(this._props.columns_setting, {clone: false});
     }
     delete this._props._columns_setting;
     if (this._props.sorter) {
-      this._sorter = new SorterEntity(this._props.sorter);
+      this._sorter = new SorterEntity(this._props.sorter, {clone: false});
     }
     delete this._props.sorter;
   }

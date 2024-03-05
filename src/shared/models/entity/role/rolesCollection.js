@@ -36,7 +36,7 @@ class RolesCollection extends EntityCollection {
      * Collection validation will fail at the first item that doesn't validate
      */
     this._props.forEach(role => {
-      this.push(new RoleEntity(role));
+      this.push(new RoleEntity(role, {clone: false}));
     });
 
     // We do not keep original props
