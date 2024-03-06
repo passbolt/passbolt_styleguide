@@ -95,6 +95,20 @@ export class ApiClientOptions {
    * @private
    */
   async getCsrfToken() {
+    //if this is called from an API-served page
+    if (typeof browser === "undefined" || typeof browser.cookies === "undefined") {
+      const csrfToken = document?.cookie
+        ?.split('; ')
+        ?.find(row => row.startsWith('csrfToken'))
+        ?.split('=');
+
+      if (csrfToken && csrfToken.length === 2) {
+        return csrfToken[1];
+      }
+      return null;
+    }
+
+    // else this is called from the browser extension
     const stringUrl = this.baseUrl.toString();
     const url = stringUrl.slice(-1) === "/" ? stringUrl : `${stringUrl}/`;
     const csrfCookie = await browser.cookies.get({name: "csrfToken", url: url});

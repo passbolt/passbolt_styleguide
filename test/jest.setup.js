@@ -18,7 +18,6 @@ chrome.runtime.id = "test id";
 browser.cookies = {
   ...browser.cookies,
   get: jest.fn().mockImplementation(async options => {
-    console.log("options", options);
     if (options.name === "csrfToken") {
       return "csrfToken";
     }
