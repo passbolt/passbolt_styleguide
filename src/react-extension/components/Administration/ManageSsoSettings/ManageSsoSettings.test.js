@@ -20,6 +20,7 @@ import ManageSsoSettingsPage from "./ManageSsoSettings.test.page";
 import {defaultProps} from "./ManageSsoSettings.test.data";
 import {
   defaultSsoSettings,
+  withAdfsSsoSettings,
   withAzureSsoSettings,
   withGoogleSsoSettings,
   withOAuth2SsoSettings,
@@ -118,21 +119,15 @@ describe("ManageSsoSettings", () => {
 
     it("As a signed-in administrator on the administration workspace, I can see a dialog with detailed error if the settings can't be read from the server", async() => {
       expect.assertions(1);
-      const mockDialogContext = {
-        dialogContext: {
-          open: jest.fn()
-        }
-      };
-
       const error = new Error("Something went wrong!");
-      const props = defaultProps(mockDialogContext);
+      const props = defaultProps();
       props.context.port.addRequestListener("passbolt.sso.get-current", async() => { throw error; });
 
       new ManageSsoSettingsPage(props);
 
-      await waitForTrue(() => Boolean(mockDialogContext.dialogContext.open.mock.calls.length));
+      await waitForTrue(() => Boolean(props.dialogContext.open.mock.calls.length));
 
-      expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
     });
 
     it("As an administrator I can disable SSO Settings", async() => {
@@ -145,6 +140,8 @@ describe("ManageSsoSettings", () => {
         expect(settingsId).toStrictEqual(settingsData.id);
       });
 
+      //avoid the page's dialogContext to be overriden by the data props
+      delete props.dialogContext;
       const page = new ManageSsoSettingsPage(props);
 
       await waitForTrue(() => Boolean(page.url));
@@ -191,12 +188,7 @@ describe("ManageSsoSettings", () => {
     it('As AD I cannot save the SSO settings before testing them (with Azure settings)', async() => {
       expect.assertions(2);
       const settingsData = withAzureSsoSettings();
-      const mockDialogContext = {
-        dialogContext: {
-          open: jest.fn()
-        }
-      };
-      const props = defaultProps(mockDialogContext);
+      const props = defaultProps();
 
       const formData = {
         url: "https://login.microsoftonline.us",
@@ -235,9 +227,9 @@ describe("ManageSsoSettings", () => {
       await page.toggleAdvancedSettings();
       await page.setFormWith(formData);
 
-      await page.saveSettings(() => mockDialogContext.dialogContext.open.mock.calls.length > 0);
+      await page.saveSettings(() => props.dialogContext.open.mock.calls.length > 0);
 
-      expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
+      expect(props.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
         provider: SsoProviders.find(provider => provider.id === "azure"),
         configurationId: settingsData.id,
         handleClose: expect.any(Function),
@@ -248,12 +240,7 @@ describe("ManageSsoSettings", () => {
     it('As AD I cannot save the SSO settings before testing them (with Google settings)', async() => {
       expect.assertions(2);
       const settingsData = withGoogleSsoSettings();
-      const mockDialogContext = {
-        dialogContext: {
-          open: jest.fn()
-        }
-      };
-      const props = defaultProps(mockDialogContext);
+      const props = defaultProps();
 
       const formData = {
         google_client_id: uuid(),
@@ -278,9 +265,9 @@ describe("ManageSsoSettings", () => {
 
       await page.setFormWith(formData);
 
-      await page.saveSettings(() => mockDialogContext.dialogContext.open.mock.calls.length > 0);
+      await page.saveSettings(() => props.dialogContext.open.mock.calls.length > 0);
 
-      expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
+      expect(props.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
         provider: SsoProviders.find(provider => provider.id === "google"),
         configurationId: settingsData.id,
         handleClose: expect.any(Function),
@@ -293,13 +280,7 @@ describe("ManageSsoSettings", () => {
       const settingsData = withOAuth2SsoSettings({
         providers: ["azure", "google", "oauth2"],
       });
-
-      const mockDialogContext = {
-        dialogContext: {
-          open: jest.fn()
-        }
-      };
-      const props = defaultProps(mockDialogContext);
+      const props = defaultProps();
 
       const formData = {
         oauth2_url: "https://localhost.com/realms/new-passbolt",
@@ -330,14 +311,58 @@ describe("ManageSsoSettings", () => {
 
       await page.setFormWith(formData);
 
-      await page.saveSettings(() => mockDialogContext.dialogContext.open.mock.calls.length > 0);
+      await page.saveSettings(() => props.dialogContext.open.mock.calls.length > 0);
 
-      expect(mockDialogContext.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
+      expect(props.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
         provider: SsoProviders.find(provider => provider.id === "oauth2"),
         configurationId: settingsData.id,
         handleClose: expect.any(Function),
         onSuccessfulSettingsActivation: expect.any(Function),
       }));
     });
+  });
+
+  it('As AD I cannot save the SSO settings before testing them (with AD FS settings)', async() => {
+    expect.assertions(2);
+    const settingsData = withAdfsSsoSettings();
+    const props = defaultProps();
+
+    const formData = {
+      adfs_url: "https://localhost.com/realms/new-passbolt",
+      adfs_client_id: "Passbolt",
+      adfs_client_secret: uuid(),
+      adfs_scope: "openid",
+      adfs_openid_configuration_path: "/.well-known/openid-configuration",
+    };
+
+    props.context.port.addRequestListener("passbolt.sso.get-current", async() => settingsData);
+    props.context.port.addRequestListener("passbolt.sso.save-draft", async ssoSettings => {
+      expect(ssoSettings).toStrictEqual({
+        provider: settingsData.provider,
+        data: {
+          url: formData.adfs_url,
+          client_id: formData.adfs_client_id,
+          client_secret: formData.adfs_client_secret,
+          scope: formData.adfs_scope,
+          openid_configuration_path: formData.adfs_openid_configuration_path,
+        },
+      });
+      return Object.assign({}, settingsData, ssoSettings);
+    });
+
+    const page = new ManageSsoSettingsPage(props);
+
+    await waitForTrue(() => Boolean(page.adfs_client_id));
+
+    await page.setFormWith(formData);
+
+    await page.saveSettings(() => props.dialogContext.open.mock.calls.length > 0);
+
+    expect(props.dialogContext.open).toHaveBeenCalledWith(TestSsoSettingsDialog, expect.objectContaining({
+      provider: SsoProviders.find(provider => provider.id === "adfs"),
+      configurationId: settingsData.id,
+      handleClose: expect.any(Function),
+      onSuccessfulSettingsActivation: expect.any(Function),
+    }));
   });
 });

@@ -9,10 +9,15 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 import EntityValidationError from "../../../../../shared/models/entity/abstract/entityValidationError";
-import {azureSsoSettingsEntityDtoFromApi, googleSsoSettingsEntityDtoFromApi, oAuth2SsoSettingsEntityDtoFromApi} from "../../../../../shared/models/ssoSettings/SsoSettingsViewModel.test.data";
+import {
+  adfsSsoSettingsEntityDtoFromApi,
+  azureSsoSettingsEntityDtoFromApi,
+  googleSsoSettingsEntityDtoFromApi,
+  oAuth2SsoSettingsEntityDtoFromApi
+} from "../../../../../shared/models/ssoSettings/SsoSettingsViewModel.test.data";
 import {defaultAppContext} from "../../../../contexts/ExtAppContext.test.data";
 
 /**
@@ -65,6 +70,21 @@ export function defaultOAuth2Props(data = {}) {
       getErrors: () => new EntityValidationError(),
       isProcessing: () => false,
       consumeFocusOnError: () => false,
+    },
+    actionFeedbackContext: {
+      displaySuccess: jest.fn(),
+    }
+  });
+  return Object.assign(defaultData, data);
+}
+
+export function defaultAdfsProps(data = {}) {
+  const defaultData = defaultProps({
+    adminSsoContext: {
+      getSsoConfiguration: () => adfsSsoSettingsEntityDtoFromApi(),
+      getErrors: () => new EntityValidationError(),
+      isProcessing: () => false,
+      shouldFocusOnError: () => false,
     },
     actionFeedbackContext: {
       displaySuccess: jest.fn(),

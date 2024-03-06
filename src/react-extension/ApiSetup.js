@@ -21,7 +21,6 @@ import {ApiClient} from "../shared/lib/apiClient/apiClient";
 import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiSetupLocale from "./components/Internationalisation/ChangeLocale/ChangeApiSetupLocale";
-import {CsrfToken} from "../shared/lib/apiClient/csrfToken";
 
 /**
  * The setup application served by the API.
@@ -100,8 +99,7 @@ class ApiSetup extends Component {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(CsrfToken.getToken());
+      .setBaseUrl(this.state.trustedDomain);
   }
 
   /**

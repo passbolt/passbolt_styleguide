@@ -15,6 +15,9 @@ import PropTypes from "prop-types";
 import {withAppContext} from "../../shared/context/AppContext/AppContext";
 import {withRouter} from "react-router-dom";
 import {withLoading} from "./LoadingContext";
+import {withRbac} from "../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
+
 /**
  * Context related to resources ( filter, current selections, etc.)
  */
@@ -150,36 +153,50 @@ class AdministrationWorkspaceContextProvider extends React.Component {
    * Handle the administration menu route change
    */
   handleAdministrationMenuRouteChange() {
-    const isMfaLocation = this.props.location.pathname.includes('mfa');
-    const isMfaPolicyLocation = this.props.location.pathname.includes('mfa-policy');
-    const isPasswordPoliciesLocation = this.props.location.pathname.includes('password-policies');
-    const isUserDirectoryLocation = this.props.location.pathname.includes('users-directory');
-    const isEmailNotificationLocation = this.props.location.pathname.includes('email-notification');
-    const isSubscriptionLocation = this.props.location.pathname.includes('subscription');
-    const isInternationalizationLocation = this.props.location.pathname.includes('internationalization');
-    const isAccountRecoveryLocation = this.props.location.pathname.includes('account-recovery');
-    const isSmtpSettingsLocation = this.props.location.pathname.includes('smtp-settings');
-    const isSelfRegistrationLocation = this.props.location.pathname.includes('self-registration');
-    const isSso = this.props.location.pathname.includes('sso');
-    const rbac = this.props.location.pathname.includes('rbac');
-    const isUserPassphrasePolicies = this.props.location.pathname.includes('user-passphrase-policies');
-    const isPasswordExpirySettings = this.props.location.pathname.includes('password-expiry');
-    const can = {
-      save: false,
-      test: false,
-      synchronize: false
+    const newState = {
+      can: {
+        save: false,
+        test: false,
+        synchronize: false
+      },
+      must: {
+        save: false,
+        test: false,
+        synchronize: false,
+        editSubscriptionKey: false,
+        refreshSubscriptionKey: false
+      },
     };
-    const must = {
-      save: false,
-      test: false,
-      synchronize: false,
-      editSubscriptionKey: false,
-      refreshSubscriptionKey: false
-    };
+
+    if (!this.props.rbacContext.canIUseUiAction(uiActions.ADMINSTRATION_VIEW_WORKSPACE)) {
+      newState.selectedAdministration = AdministrationWorkspaceMenuTypes.HTTP_403_ACCESS_DENIED;
+      this.setState(newState);
+      return;
+    }
+
+    const location = this.props.location.pathname;
+    const isAdminHomePageLocation = ADMIN_URL_REGEXP.homePage.test(location);
+    const isMfaLocation = ADMIN_URL_REGEXP.mfa.test(location);
+    const isMfaPolicyLocation = ADMIN_URL_REGEXP.mfaPolicy.test(location);
+    const isPasswordPoliciesLocation = ADMIN_URL_REGEXP.passwordPolicies.test(location);
+    const isUserDirectoryLocation = ADMIN_URL_REGEXP.usersDirectory.test(location);
+    const isEmailNotificationLocation = ADMIN_URL_REGEXP.emailNotification.test(location);
+    const isSubscriptionLocation = ADMIN_URL_REGEXP.subscription.test(location);
+    const isInternationalizationLocation = ADMIN_URL_REGEXP.internationalization.test(location);
+    const isAccountRecoveryLocation = ADMIN_URL_REGEXP.accountRecovery.test(location);
+    const isSmtpSettingsLocation = ADMIN_URL_REGEXP.smtpSettings.test(location);
+    const isSelfRegistrationLocation = ADMIN_URL_REGEXP.selfRegistration.test(location);
+    const isSso = ADMIN_URL_REGEXP.sso.test(location);
+    const rbac = ADMIN_URL_REGEXP.rbac.test(location);
+    const isUserPassphrasePolicies = ADMIN_URL_REGEXP.userPassphrasePolicies.test(location);
+    const isPasswordExpirySettings = ADMIN_URL_REGEXP.passwordExpirySettings.test(location);
+    const healthcheck = ADMIN_URL_REGEXP.healthcheck.test(location);
+
 
     let selectedAdministration;
-
-    if (isMfaPolicyLocation) {
+    if (isAdminHomePageLocation) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.HOME;
+    } else if (isMfaPolicyLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.MFA_POLICY;
     } else if (isPasswordPoliciesLocation) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES;
@@ -207,8 +224,33 @@ class AdministrationWorkspaceContextProvider extends React.Component {
       selectedAdministration = AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES;
     } else if (isPasswordExpirySettings) {
       selectedAdministration = AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY;
+    } else if (healthcheck) {
+      selectedAdministration = AdministrationWorkspaceMenuTypes.HEALTHCHECK;
     }
-    this.setState({selectedAdministration, can, must});
+
+    // let's check if the current URL is actually supported
+    const isUrlUnknown = !selectedAdministration;
+    if (isUrlUnknown) {
+      newState.selectedAdministration = AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND;
+      this.setState(newState);
+      return;
+    }
+
+    // temporary fallback for the homepage while it's not implemented
+    if (isAdminHomePageLocation) {
+      // @todo remove or udpate this when the admin homepage will be available
+      this.setState(newState);
+      return;
+    }
+
+    // the URL is supported, now check if the feature flag is enabled or not (except for email notification which doesn't have flag).
+    const currentFeatureFlag = AdministrationWorkspaceFeatureFlag?.[selectedAdministration];
+
+    newState.selectedAdministration = currentFeatureFlag && !this.props.context.siteSettings.canIUse(currentFeatureFlag)
+      ? AdministrationWorkspaceMenuTypes.HTTP_404_NOT_FOUND
+      : selectedAdministration;
+
+    this.setState(newState);
   }
 
   /**
@@ -256,10 +298,11 @@ AdministrationWorkspaceContextProvider.propTypes = {
   location: PropTypes.object, // The router location
   match: PropTypes.object, // The router match helper
   history: PropTypes.object, // The router history
-  loadingContext: PropTypes.object // The loading context
+  loadingContext: PropTypes.object, // The loading context
+  rbacContext: PropTypes.object, // The role based access control context
 };
 
-export default withRouter(withAppContext(withLoading(AdministrationWorkspaceContextProvider)));
+export default withRouter(withAppContext(withRbac(withLoading(AdministrationWorkspaceContextProvider))));
 
 /**
  * Administration Workspace Context Consumer HOC
@@ -284,6 +327,7 @@ export function withAdministrationWorkspace(WrappedComponent) {
  */
 export const AdministrationWorkspaceMenuTypes = {
   NONE: 'NONE', // Initial administration menu selected
+  HOME: 'HOME', // The administration homepage
   MFA: 'MFA', // MFA administration menu selected
   MFA_POLICY: 'MFA-POLICY', //MFA Policy menu seleted
   PASSWORD_POLICIES: 'PASSWORD-POLICIES', //Password Policies menu selected
@@ -298,4 +342,48 @@ export const AdministrationWorkspaceMenuTypes = {
   RBAC: "RBAC", // RBAC administration menu selected
   USER_PASSPHRASE_POLICIES: "USER-PASSPHRASE-POLICIES", // User Passphrase Policies administration menu selected
   PASSWORD_EXPIRY: "PASSWORD-EXPIRY", // Password Expiry administration menu selected
+  HTTP_403_ACCESS_DENIED: "403-ACCESS-DENIED", // The HTTP error 403 access denied page
+  HTTP_404_NOT_FOUND: "404-NOT-FOUND", // The HTTP error 404 not found page
+  HEALTHCHECK: "HEALTHCHECK" // Healthcheck administration menu selected
+};
+
+/**
+ * A map of administration workspace menu keys with the corresponding feature flag values
+ */
+export const AdministrationWorkspaceFeatureFlag = {
+  [AdministrationWorkspaceMenuTypes.MFA]: 'multiFactorAuthentication', // MFA administration menu selected
+  [AdministrationWorkspaceMenuTypes.MFA_POLICY]: 'mfaPolicies', //MFA Policy menu seleted
+  [AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES]: 'passwordPoliciesUpdate', //Password Policies menu selected
+  [AdministrationWorkspaceMenuTypes.USER_DIRECTORY]: 'directorySync', // User directory administration menu selected
+  [AdministrationWorkspaceMenuTypes.SUBSCRIPTION]: 'ee', // Subscription administration menu selected
+  [AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION]: 'locale', // Internationalization administration menu selected
+  [AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY]: 'accountRecovery', // Account Recovery administration menu selected
+  [AdministrationWorkspaceMenuTypes.SMTP_SETTINGS]: 'smtpSettings', // Smtp settings administration menu selected
+  [AdministrationWorkspaceMenuTypes.SELF_REGISTRATION]: 'selfRegistration', // Self registration settings administration menu selected
+  [AdministrationWorkspaceMenuTypes.SSO]: "sso", // SSO administration menu selected
+  [AdministrationWorkspaceMenuTypes.RBAC]: "rbacs", // RBAC administration menu selected
+  [AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES]: "userPassphrasePolicies", // User Passphrase Policies administration menu selected
+  [AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY]: "passwordExpiry", // Password Expiry administration menu selected
+};
+
+/**
+ * The list of administration regular expression URL
+ */
+const ADMIN_URL_REGEXP = {
+  homePage: /^\/app\/administration\/?$/,
+  mfa: /^\/app\/administration\/mfa\/?$/,
+  mfaPolicy: /^\/app\/administration\/mfa-policy\/?$/,
+  passwordPolicies: /^\/app\/administration\/password-policies\/?$/,
+  usersDirectory: /^\/app\/administration\/users-directory\/?$/,
+  emailNotification: /^\/app\/administration\/email-notification\/?$/,
+  subscription: /^\/app\/administration\/subscription\/?$/,
+  internationalization: /^\/app\/administration\/internationalization\/?$/,
+  accountRecovery: /^\/app\/administration\/account-recovery\/?$/,
+  smtpSettings: /^\/app\/administration\/smtp-settings\/?$/,
+  selfRegistration: /^\/app\/administration\/self-registration\/?$/,
+  sso: /^\/app\/administration\/sso\/?$/,
+  rbac: /^\/app\/administration\/rbacs\/?$/,
+  userPassphrasePolicies: /^\/app\/administration\/user-passphrase-policies\/?$/,
+  passwordExpirySettings: /^\/app\/administration\/password-expiry\/?$/,
+  healthcheck: /^\/app\/administration\/healthcheck\/?$/
 };

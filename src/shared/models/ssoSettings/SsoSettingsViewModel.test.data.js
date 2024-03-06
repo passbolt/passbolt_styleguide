@@ -9,13 +9,14 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 
 import {v4 as uuid} from 'uuid';
 import AzureSsoSettingsEntity from '../entity/ssoSettings/AzureSsoSettingsEntity';
 import GoogleSsoSettingsEntity from '../entity/ssoSettings/GoogleSsoSettingsEntity';
 import OAuth2SsoSettingsEntity from '../entity/ssoSettings/OAuth2SsoSettingsEntity';
+import ADFSSsoSettingsEntity from '../entity/ssoSettings/AdfsSsoSettingsEntity';
 
 /**
  * The default azure SSO settings ViewModel DTO
@@ -29,6 +30,7 @@ export const defaultSsoSettingsViewModelDto = (data = {}) => {
       AzureSsoSettingsEntity.PROVIDER_ID,
       GoogleSsoSettingsEntity.PROVIDER_ID,
       OAuth2SsoSettingsEntity.PROVIDER_ID,
+      ADFSSsoSettingsEntity.PROVIDER_ID,
     ],
     data: defaultAzureSsoSettingsViewModelDto(),
   };
@@ -77,6 +79,23 @@ export const defaultGoogleSsoSettingsViewModelDto = (data = {}) => {
 export const defaultOAuth2SsoSettingsViewModelDto = (data = {}) => {
   const defaultData = {
     url: "https://openid.passbolt.com",
+    openid_configuration_path: "/.well-known/openid-configuration",
+    scope: "openid email profile",
+    client_id: "Passbolt",
+    client_secret: uuid(),
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+/**
+ * The default AD FS SSO settings ViewModel DTO
+ * @param {Object} data The data to override
+ * @returns {Object}
+ */
+export const defaultAdfsSsoSettingsViewModelDto = (data = {}) => {
+  const defaultData = {
+    url: "https://adfs.passbolt.com",
     openid_configuration_path: "/.well-known/openid-configuration",
     scope: "openid email profile",
     client_id: "Passbolt",
@@ -149,3 +168,23 @@ export const oAuth2SsoSettingsEntityDtoFromApi = (data = {}) => {
   return Object.assign(defaultData, data);
 };
 
+/**
+ * An ADFS SSO Settings Entity DTO as registered on the API
+ * @param {Object} data The data to override
+ * @returns {Object}
+ */
+export const adfsSsoSettingsEntityDtoFromApi = (data = {}) => {
+  const defaultData = defaultSsoSettingsViewModelDto({
+    id: uuid(),
+    provider: ADFSSsoSettingsEntity.PROVIDER_ID,
+    data: defaultAdfsSsoSettingsViewModelDto(data.data),
+    created: "2023-08-06T10:05:46+00:00",
+    created_by: uuid(),
+    modified: "2023-08-06T10:05:46+00:00",
+    modified_by: uuid()
+  });
+
+  delete data?.data;
+
+  return Object.assign(defaultData, data);
+};

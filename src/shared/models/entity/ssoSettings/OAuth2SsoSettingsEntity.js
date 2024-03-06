@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
@@ -24,17 +24,14 @@ const OAUTH2_SUPPORTED_URLS = /^https:\/\/.+[^\/]$/;
  */
 class OAuth2SsoSettingsEntity extends Entity {
   /**
-   * OAuth2 Sso Settings entity constructor
-   *
-   * @param {Object} oAuth2SsoSettingsDto SSO settings DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(oAuth2SsoSettingsDto) {
+  constructor(oAuth2SsoSettingsDto, options = {}) {
     super(EntitySchema.validate(
       OAuth2SsoSettingsEntity.ENTITY_NAME,
       oAuth2SsoSettingsDto,
       OAuth2SsoSettingsEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

@@ -22,17 +22,14 @@ const ENTITY_NAME = 'Sorter';
  */
 class SorterEntity extends Entity {
   /**
-   * Sorter entity constructor
-   *
-   * @param {Object} sorterDto sorter DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(sorterDto) {
+  constructor(sorterDto, options = {}) {
     super(EntitySchema.validate(
       SorterEntity.ENTITY_NAME,
       sorterDto,
       SorterEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

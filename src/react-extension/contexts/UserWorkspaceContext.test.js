@@ -20,6 +20,7 @@
 import {defaultAppContext, defaultProps} from "./UserWorkspaceContext.test.data";
 import UserWorkspaceContextPage from "./UserWorkspaceContext.test.page";
 import {UserWorkspaceFilterTypes} from "./UserWorkspaceContext";
+import {waitFor} from "@testing-library/dom";
 
 beforeEach(() => {
   jest.resetModules();
@@ -36,6 +37,7 @@ describe("User Workspace Context", () => {
 
   describe("As LU I should have the appropriate search filter at any time", () => {
     it("AS LU I should have an initial filter set to NONE", () => {
+      const page = new UserWorkspaceContextPage(context, props);
       expect(page.filter).toBeDefined();
       expect(page.filter.type).toBe(UserWorkspaceFilterTypes.NONE);
     });
@@ -145,6 +147,32 @@ describe("User Workspace Context", () => {
       await page.select(user);
       expect(page.details.user).toBe(user);
       expect(page.lockDisplayDetail).toBeFalsy();
+    });
+  });
+
+  describe("As LU my access should be check by RBAC", () => {
+    it("As LU, I can't access the User Workspace if RBAC denies me", async() => {
+      const props = defaultProps({
+        rbacContext: {
+          canIUseUiAction: () => false,
+        },
+      });
+      new UserWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+
+      expect(props.loadingContext.add).not.toHaveBeenCalled();
+    });
+
+    it("As LU, I can access the User Workspace if RBAC allow me", async() => {
+      const props = defaultProps({
+        rbacContext: {
+          canIUseUiAction: () => true
+        },
+      });
+      new UserWorkspaceContextPage(context, props);
+      await waitFor(() => {});
+
+      expect(props.loadingContext.add).toHaveBeenCalledTimes(1);
     });
   });
 });

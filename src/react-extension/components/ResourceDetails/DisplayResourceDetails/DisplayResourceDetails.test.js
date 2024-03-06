@@ -16,6 +16,7 @@
  * Unit tests on PasswordSidebar in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import React from 'react';
 import {defaultProps} from "./DisplayResourceDetails.test.data";
 import DisplayResourceDetailsPage from "./DisplayResourceDetails.test.page";
@@ -30,12 +31,6 @@ jest.mock("./DisplayResourceDetailsComment", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("DisplayResourceDetails", () => {

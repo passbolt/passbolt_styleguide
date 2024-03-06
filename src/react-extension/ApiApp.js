@@ -45,6 +45,7 @@ import AdminMfaPolicyContextProvider from "./contexts/Administration/Administrat
 import MfaContextProvider from "./contexts/MFAContext";
 import RbacContextProvider from "../shared/context/Rbac/RbacContext";
 import AdminRbacContextProvider from "./contexts/Administration/AdministrationRbacContext/AdministrationRbacContext";
+import AdministrationHealthcheckContextProvider from "./contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
 
 /**
  * The passbolt application served by the API.
@@ -81,7 +82,7 @@ class ApiApp extends Component {
                             <Router basename={appContext.basename}>
                               <NavigationContextProvider>
                                 <Switch>
-                                  { /* The following routes are not handled by the browser extension application. */}
+                                  { /* The following routes are handled by the browser extension application. */}
                                   <Route exact path={[
                                     "/app/administration/subscription",
                                     "/app/administration/account-recovery",
@@ -102,7 +103,9 @@ class ApiApp extends Component {
                                                 <AdminEmailNotificationContextProvider>
                                                   <AdminInternationalizationContextProvider>
                                                     <AdminRbacContextProvider>
-                                                      <AdministrationWorkspace/>
+                                                      <AdministrationHealthcheckContextProvider>
+                                                        <AdministrationWorkspace/>
+                                                      </AdministrationHealthcheckContextProvider>
                                                     </AdminRbacContextProvider>
                                                   </AdminInternationalizationContextProvider>
                                                 </AdminEmailNotificationContextProvider>

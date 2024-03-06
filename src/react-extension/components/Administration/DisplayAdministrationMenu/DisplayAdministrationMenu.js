@@ -149,6 +149,14 @@ class DisplayAdministrationMenu extends React.Component {
   }
 
   /**
+   * Can I use the healthcheck plugin
+   * @returns {boolean}
+   */
+  get canIUseHealthcheck() {
+    return this.canIUse('healthcheckUi');
+  }
+
+  /**
    * Bind callbacks methods
    */
   bindCallbacks() {
@@ -166,6 +174,7 @@ class DisplayAdministrationMenu extends React.Component {
     this.handlePasswordPoliciesClick = this.handlePasswordPoliciesClick.bind(this);
     this.handleUserPassphrasePoliciesClick = this.handleUserPassphrasePoliciesClick.bind(this);
     this.handlePasswordExpirySettingsClick = this.handlePasswordExpirySettingsClick.bind(this);
+    this.handleHealthcheckClick = this.handleHealthcheckClick.bind(this);
   }
 
   /**
@@ -264,6 +273,13 @@ class DisplayAdministrationMenu extends React.Component {
    */
   handlePasswordExpirySettingsClick() {
     this.props.navigationContext.onGoToAdministrationPasswordExpirySettingsRequested();
+  }
+
+  /**
+   * Handle when the user click on the Mfa policy settings menu
+   */
+  handleHealthcheckClick() {
+    this.props.navigationContext.onGoToAdministrationHealthcheckRequested();
   }
 
   /**
@@ -376,6 +392,14 @@ class DisplayAdministrationMenu extends React.Component {
    */
   isPasswordExpirySettingsSelected() {
     return AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY === this.props.administrationWorkspaceContext.selectedAdministration;
+  }
+
+  /**
+   * If Healthcheck menu is selected
+   * @returns {boolean}
+   */
+  isHealthcheckSelected() {
+    return AdministrationWorkspaceMenuTypes.HEALTHCHECK === this.props.administrationWorkspaceContext.selectedAdministration;
   }
 
   /**
@@ -546,6 +570,19 @@ class DisplayAdministrationMenu extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.handlePasswordExpirySettingsClick}>
                     <span><Trans>Password Expiry</Trans></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          }
+          {this.canIUseHealthcheck &&
+          <li id="healthcheck_menu">
+            <div className={`row  ${this.isHealthcheckSelected() ? "selected" : ""}`}>
+              <div className="main-cell-wrapper">
+                <div className="main-cell">
+                  <button className="link no-border" type="button" onClick={this.handleHealthcheckClick}>
+                    <span><Trans>Passbolt API Status</Trans></span>
                   </button>
                 </div>
               </div>

@@ -17,10 +17,10 @@ import {uiActions} from "./uiActionEnumeration";
 
 describe('uiActions', () => {
   it('should have the expected UI action keys', () => {
-    expect.assertions(16);
+    expect.assertions(17);
 
 
-    expect(Object.keys(uiActions).length).toEqual(15);
+    expect(Object.keys(uiActions).length).toEqual(16);
     expect(uiActions['FOLDERS_USE']).toEqual("Folders.use");
     expect(uiActions['RESOURCES_IMPORT']).toEqual("Resources.import");
     expect(uiActions['RESOURCES_EXPORT']).toEqual("Resources.export");
@@ -36,5 +36,6 @@ describe('uiActions', () => {
     expect(uiActions['ADMINSTRATION_VIEW_WORKSPACE']).toEqual("Administration.viewWorkspace");
     expect(uiActions['DUO_CONFIGURATION']).toEqual("Duo.configuration");
     expect(uiActions['AVATAR_UPLOAD']).toEqual("Avatar.upload");
+    expect(uiActions['SHARE_FOLDER']).toEqual("Folders.share");
   });
 });

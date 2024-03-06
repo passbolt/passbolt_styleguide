@@ -55,6 +55,7 @@ describe("As AD I can see a Breadcrumb", () => {
     {menuType: AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES, expectedBreadcrumb: "Password Policy"},
     {menuType: AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES, expectedBreadcrumb: "User Passphrase Policies"},
     {menuType: AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY, expectedBreadcrumb: "Password Expiry"},
+    {menuType: AdministrationWorkspaceMenuTypes.HEALTHCHECK, expectedBreadcrumb: "Passbolt API Status"},
   ]).describe("As AD I should see a breadcrumb for each menu", scenario => {
     it(`for: ${scenario.menuType}`, () => {
       const props = defaultProps(scenario.menuType); // The props to pass

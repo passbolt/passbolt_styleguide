@@ -9,9 +9,10 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 
+import "../../../../../../test/mocks/mockClipboard";
 import each from "jest-each";
 import {waitFor} from "@testing-library/dom";
 import GoogleSsoProviderFormPage from "./GoogleSsoProviderForm.test.page";
@@ -19,22 +20,12 @@ import {defaultGoogleProps} from "./SsoProviderForm.test.data";
 import EntityValidationError from "../../../../../shared/models/entity/abstract/entityValidationError";
 import {waitForTrue} from "../../../../../../test/utils/waitFor";
 
-
-const originalClipboard = global.navigator.clipboard;
-
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 afterEach(() => {
   jest.resetAllMocks();
-  global.navigator.clipboard = originalClipboard;
 });
 
 /**

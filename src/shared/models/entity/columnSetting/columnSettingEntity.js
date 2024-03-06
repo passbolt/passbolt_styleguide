@@ -17,24 +17,20 @@ import EntitySchema from "../abstract/entitySchema";
 
 const ENTITY_NAME = 'ColumnSetting';
 const COLUMN_ID_MAX_LENGTH = 255;
-const COLUMN_LABEL_MAX_LENGTH = 255;
 
 /**
  * Column setting entity
  */
 class ColumnSettingEntity extends Entity {
   /**
-   * ColumnSetting entity constructor
-   *
-   * @param {Object} columnSettingDto columnSetting DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(columnSettingDto) {
+  constructor(columnSettingDto, options = {}) {
     super(EntitySchema.validate(
       ColumnSettingEntity.ENTITY_NAME,
       columnSettingDto,
       ColumnSettingEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**
@@ -53,11 +49,6 @@ class ColumnSettingEntity extends Entity {
           "type": "string",
           "pattern": /^[a-zA-Z]+$/,
           "maxLength": COLUMN_ID_MAX_LENGTH,
-        },
-        "label": {
-          "type": "string",
-          "pattern": /^[a-zA-Z]+$/,
-          "maxLength": COLUMN_LABEL_MAX_LENGTH,
         },
         "width": {
           "type": "number"
@@ -83,14 +74,6 @@ class ColumnSettingEntity extends Entity {
    */
   get id() {
     return this._props.id;
-  }
-
-  /**
-   * Get column label
-   * @returns {string}
-   */
-  get label() {
-    return this._props.label;
   }
 
   /**

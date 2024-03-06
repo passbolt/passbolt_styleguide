@@ -44,7 +44,8 @@ describe("UserDirectoryModel model", () => {
               users: mockResult.fields_mapping.openldap.group.users
             }
           }
-        }
+        },
+        source: model.source,
       });
       expect(model).toEqual(expectedData);
     });
@@ -66,7 +67,8 @@ describe("UserDirectoryModel model", () => {
               users: mockResult.fields_mapping.openldap.group.users
             }
           }
-        }
+        },
+        source: model.source,
       });
       expect(model).toEqual(expectedData);
     });

@@ -23,7 +23,6 @@ import TranslationProvider from "./components/Common/Internationalisation/Transl
 import ChangeApiRecoverLocale from "./components/Internationalisation/ChangeLocale/ChangeApiRecoverLocale";
 import OrchestrateApiAccountRecovery
   from "./components/AuthenticationAccountRecovery/OrchestrateApiAccountRecovery/OrchestrateApiAccountRecovery";
-import {CsrfToken} from "../shared/lib/apiClient/csrfToken";
 
 /**
  * The recover application served by the API.
@@ -102,8 +101,7 @@ class ApiAccountRecovery extends Component {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(CsrfToken.getToken());
+      .setBaseUrl(this.state.trustedDomain);
   }
 
   /**

@@ -55,6 +55,8 @@ describe("As AD I should see the user directory settings", () => {
       expect.assertions(35);
 
       expect(page.exists()).toBeTruthy();
+      await waitFor(() => {});
+
       // check fields in the form
       expect(page.userDirectory.checked).toBeTruthy();
 
@@ -103,6 +105,7 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should test the user directory on the administration settings page', async() => {
       expect.assertions(3);
+      await waitFor(() => {});
 
       //button should be enable has we have data
       expect(page.isTestButtonEnabled()).toBeTruthy();
@@ -121,6 +124,8 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should save the user directory on the administration settings page', async() => {
       expect.assertions(6);
+      await waitFor(() => {});
+
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
 
@@ -147,6 +152,8 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should delete the user directory on the administration settings page', async() => {
       expect.assertions(12);
+      await waitFor(() => {});
+
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
 
@@ -176,6 +183,8 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD I shouldn't be able to submit the form if there is an invalid field", async() => {
       expect.assertions(5);
+      await waitFor(() => {});
+
       await page.click(page.directoryConfigurationTitle);
 
       // empty fields
@@ -201,6 +210,8 @@ describe("As AD I should see the user directory settings", () => {
 
     it("As AD if I put an invalid value for field mapping, when switching directory type, the value should be resetted", async() => {
       expect.assertions(4);
+      await waitFor(() => {});
+
       await page.click(page.directoryConfigurationTitle);
 
       // put invalid value on AD's field mapping
@@ -222,6 +233,8 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should see an error toaster if the submit operation fails for an unexpected reason', async() => {
       expect.assertions(3);
+      await waitFor(() => {});
+
       //button should not be enable without changes
       expect(page.isSaveButtonEnabled()).toBeFalsy();
       // change field
@@ -243,6 +256,7 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should be able to simulate the synchronization', async() => {
       expect.assertions(2);
+      await waitFor(() => {});
 
       //button should be enable has we have data
       expect(page.isSimulateButtonEnabled()).toBeTruthy();
@@ -260,6 +274,7 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should be able to synchronize the users', async() => {
       expect.assertions(2);
+      await waitFor(() => {});
 
       //button should be enable has we have data
       expect(page.isSynchronizeButtonEnabled()).toBeTruthy();
@@ -278,6 +293,7 @@ describe("As AD I should see the user directory settings", () => {
 
     it('As AD I should see the synchronize popup when requested by simulate', async() => {
       expect.assertions(1);
+      await waitFor(() => {});
 
       //Call to simulate the settings
       fetch.doMockOnceIf(/directorysync*/, () => mockApiResponse(mockResult));
@@ -306,6 +322,7 @@ describe("As AD I should see the user directory settings", () => {
 
     it('::when the source is database', async() => {
       expect.assertions(1);
+      await waitFor(() => {});
 
       const context = defaultAppContext(); // The applicative context
       const props = defaultProps(); // The props to pass

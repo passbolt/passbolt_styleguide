@@ -52,38 +52,39 @@ class UserDirectoryFormService {
 
   /**
    * Validate the form.
-   * @returns {Promise<boolean>}
+   * @returns {boolean}
    */
-  async validate() {
+  validate() {
     // Validate the form inputs.
     const validation = {
-      ...this.validateHostInput(),
-      ...this.validatePortInput(),
-      ...this.validateDomainInput(),
-      ...this.validateFieldsMappingAdUserUsernameInput(),
-      ...this.validateOpenLdapFieldsMappingGroupUsersInput(),
+      hostError: this.validateHostInput(),
+      portError: this.validatePortInput(),
+      domainError: this.validateDomainInput(),
+      fieldsMappingAdUserUsernameError: this.validateFieldsMappingAdUserUsernameInput(),
+      fieldsMappingOpenLdapGroupUsersError: this.validateOpenLdapFieldsMappingGroupUsersInput(),
     };
 
-    await this.context.setErrors(validation);
+    this.context.setErrors(validation);
     //Check if we have errors
-    return Object.values(validation).filter(x => x).length === 0;
+    return Object.values(validation).filter(x => x !== null).length === 0;
   }
 
   /**
    * Validate the host input.
-   * @returns {Promise<object>}
+   * @returns {string|null} the error message if any or null
+   * @private
    */
   validateHostInput() {
     const settings = this.context.getSettings();
     const host = settings.host?.trim();
     const hostError = host.length ? null : this.translate("A host is required.");
-    this.context.setError("hostError", hostError);
-    return {hostError};
+    return hostError;
   }
 
   /**
    * Validate the port input.
-   * @returns {Promise<object>}
+   * @returns {string|null} the error message if any or null
+   * @private
    */
   validatePortInput() {
     const settings = this.context.getSettings();
@@ -94,13 +95,13 @@ class UserDirectoryFormService {
     } else if (!XRegExp("^[0-9]+").test(port)) {
       portError = this.translate("Only numeric characters allowed.");
     }
-    this.context.setError("portError", portError);
-    return {portError};
+    return portError;
   }
 
   /**
    * Validate the field mapping's username input for active directory.
-   * @returns {Promise<object>}
+   * @returns {string|null} the error message if any or null
+   * @private
    */
   validateFieldsMappingAdUserUsernameInput() {
     const settings = this.context.getSettings();
@@ -112,13 +113,13 @@ class UserDirectoryFormService {
       fieldsMappingAdUserUsernameError = this.translate("The user username field mapping cannot exceed 128 characters.");
     }
 
-    this.context.setError("fieldsMappingAdUserUsernameError", fieldsMappingAdUserUsernameError);
-    return {fieldsMappingAdUserUsernameError};
+    return fieldsMappingAdUserUsernameError;
   }
 
   /**
    * Validate the field mapping's username input for active directory.
-   * @returns {Promise<object>}
+   * @returns {string|null} the error message if any or null
+   * @private
    */
   validateOpenLdapFieldsMappingGroupUsersInput() {
     const settings = this.context.getSettings();
@@ -130,13 +131,13 @@ class UserDirectoryFormService {
       fieldsMappingOpenLdapGroupUsersError = this.translate("The group users field mapping cannot exceed 128 characters.");
     }
 
-    this.context.setError("fieldsMappingOpenLdapGroupUsersError", fieldsMappingOpenLdapGroupUsersError);
-    return {fieldsMappingOpenLdapGroupUsersError};
+    return fieldsMappingOpenLdapGroupUsersError;
   }
 
   /**
    * Validate the domain input.
-   * @returns {Promise<void>}
+   * @returns {string|null} the error message if any or null
+   * @private
    */
   validateDomainInput() {
     const settings = this.context.getSettings();
@@ -145,8 +146,7 @@ class UserDirectoryFormService {
     if (!domain.length) {
       domainError = this.translate("A domain name is required.");
     }
-    this.context.setError("domainError", domainError);
-    return {domainError};
+    return domainError;
   }
 }
 
