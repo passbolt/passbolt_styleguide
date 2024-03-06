@@ -23,7 +23,7 @@ export const mockedDefaultData = (data = {}) => {
     openCredentials: true,
     openDirectoryConfiguration: false,
     openSynchronizationOptions: false,
-    source: "db",
+    source: "default",
     directoryType: "ad",
     connectionType: "plain",
     host: "",
