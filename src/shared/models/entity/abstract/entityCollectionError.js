@@ -30,7 +30,7 @@ class EntityCollectionError extends Error {
       throw new TypeError('EntityCollectionError requires a valid rule');
     }
     if (!message || typeof message !== 'string') {
-      throw new TypeError('EntityCollectionError requires a valid rule');
+      throw new TypeError('EntityCollectionError requires a valid message');
     }
     this.position = position;
     this.rule = rule;

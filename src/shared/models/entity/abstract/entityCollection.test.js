@@ -14,6 +14,7 @@
 import Entity from "./entity";
 import EntityCollection from "./entityCollection";
 import EntitySchema from "./entitySchema";
+import EntityCollectionError from "./entityCollectionError";
 
 /*
  * ===========================================
@@ -33,7 +34,14 @@ class TestEntity extends Entity {
       "type": "object",
       "required": [],
       "properties": {
-        "name": {
+        "id": {
+          "anyOf": [{
+            "type": "string",
+            "format": "uuid"
+          }, {
+            "type": "null"
+          }],
+        }, "name": {
           "anyOf": [{
             "type": "string"
           }, {
@@ -311,6 +319,66 @@ describe("EntityCollection", () => {
       const collection = new EntityCollection();
       expect.assertions(1);
       expect(() => collection.filterByCallback(42)).toThrow(TypeError);
+    });
+  });
+
+  describe("EntityCollection::assertUniqueByProperty", () => {
+    it("should not throw if no duplicate found", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: 'third'}));
+      collection.push(new TestEntity({}));
+      collection.push(new TestEntity({name: null}));
+
+      expect.assertions(1);
+      expect(() => collection.assertUniqueByProperty('name')).not.toThrow();
+    });
+
+    it("should not throw if duplicates found on undefined value", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({}));
+
+      expect.assertions(1);
+      expect(() => collection.assertUniqueByProperty('name')).not.toThrow();
+    });
+
+    it("should throw if duplicates found", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: 'first'}));
+
+      expect.assertions(1);
+      expect(() => collection.assertUniqueByProperty('name')).toThrow(EntityCollectionError);
+    });
+
+    it("should throw the index and rule id", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: 'third'}));
+      collection.push(new TestEntity({name: 'second'}));
+
+      expect.assertions(2);
+      try {
+        collection.assertUniqueByProperty('name');
+      } catch (error) {
+        expect(error.position).toEqual(1);
+        expect(error.rule).toEqual('unique_name');
+      }
+    });
+
+    it("should throw if duplicates found on null value", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: null}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: null}));
+
+      expect.assertions(1);
+      expect(() => collection.assertUniqueByProperty('name')).toThrow(EntityCollectionError);
     });
   });
 });
