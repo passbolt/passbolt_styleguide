@@ -45,8 +45,8 @@ describe("UserDirectoryFormService", () => {
     });
 
     it("should not create a new instance -", () => {
-      const newInstance = UserDirectoryFormService.getInstance();
       expect.assertions(1);
+      const newInstance = UserDirectoryFormService.getInstance();
       expect(userDirectoryFormService).toEqual(newInstance);
     });
   });
@@ -54,123 +54,156 @@ describe("UserDirectoryFormService", () => {
 
   describe("UserDirectoryFormService::killInstance", () => {
     it("should kill the instance and create a new one", () => {
+      expect.assertions(1);
       UserDirectoryFormService.killInstance();
       userDirectoryFormService = UserDirectoryFormService.getInstance(null, null);
-      expect.assertions(1);
       expect(userDirectoryFormService).toEqual({"context": null, "translate": null});
+    });
+  });
+
+  describe("UserDirectoryFormService::validate", () => {
+    it("should set error message to all erroneous fields and return false", () => {
+      expect.assertions(2);
+
+      userDirectoryContext.setSettings("host", "");
+      userDirectoryContext.setSettings("port", "");
+      userDirectoryContext.setSettings("domain", "");
+      userDirectoryContext.setAdUserFieldsMappingSettings("username", "");
+      userDirectoryContext.setOpenLdapGroupFieldsMappingSettings("users", "");
+
+      const expectedErrors = {
+        hostError: "A host is required.",
+        portError: "A port is required.",
+        domainError: "A domain name is required.",
+        fieldsMappingAdUserUsernameError: "The user username field mapping cannot be empty",
+        fieldsMappingOpenLdapGroupUsersError: "The group users field mapping cannot be empty",
+      };
+      const result = userDirectoryFormService.validate();
+      expect(result).toEqual(false);
+      expect(userDirectoryContext.getErrors()).toStrictEqual(expectedErrors);
+    });
+
+    it("should reset error message and return true", () => {
+      expect.assertions(2);
+
+      userDirectoryContext.setSettings("host", "192.0.0.0");
+      userDirectoryContext.setSettings("port", "389");
+      userDirectoryContext.setSettings("domain", "passbolt.com");
+      userDirectoryContext.setAdUserFieldsMappingSettings("username", "uniquePrincipalName");
+      userDirectoryContext.setOpenLdapGroupFieldsMappingSettings("users", "member");
+
+      const expectedErrors = {
+        hostError: null,
+        portError: null,
+        domainError: null,
+        fieldsMappingAdUserUsernameError: null,
+        fieldsMappingOpenLdapGroupUsersError: null,
+      };
+      const result = userDirectoryFormService.validate();
+      expect(result).toEqual(true);
+      expect(userDirectoryContext.getErrors()).toStrictEqual(expectedErrors);
     });
   });
 
   describe("UserDirectoryFormService::validateHostInput", () => {
     it("should return required message", () => {
+      expect.assertions(1);
       userDirectoryContext.setSettings("host", "");
-      const requiredMessage = {"hostError": "A host is required."};
+      const expectedErrorMessage = "A host is required.";
       const result = userDirectoryFormService.validateHostInput();
-      expect.assertions(2);
-      expect(result).toEqual(requiredMessage);
-      expect(userDirectoryContext.getErrors().hostError).toEqual(requiredMessage.hostError);
+      expect(result).toEqual(expectedErrorMessage);
     });
+
     it("should not return message", () => {
+      expect.assertions(1);
       userDirectoryContext.setSettings("host", "192.0.0.0");
       const result = userDirectoryFormService.validateHostInput();
-      expect.assertions(2);
-      expect(result.hostError).toEqual(null);
-      expect(userDirectoryContext.getErrors().hostError).toEqual(null);
+      expect(result).toEqual(null);
     });
   });
 
   describe("UserDirectoryFormService::validatePortInput", () => {
     it("should return required message", () => {
+      expect.assertions(1);
       userDirectoryContext.setSettings("port", "");
-      const requiredMessage = {"portError": "A port is required."};
+      const requiredMessage = "A port is required.";
       const result = userDirectoryFormService.validatePortInput();
-      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
-      expect(userDirectoryContext.getErrors().portError).toEqual(requiredMessage.portError);
     });
+
     it("should return regex message", () => {
+      expect.assertions(1);
       //Only numbers are allowed
       userDirectoryContext.setSettings("port", "ABC");
-      const regExMessage = {"portError": "Only numeric characters allowed."};
+      const regExMessage = "Only numeric characters allowed.";
       const result = userDirectoryFormService.validatePortInput();
-      expect.assertions(2);
       expect(result).toEqual(regExMessage);
-      expect(userDirectoryContext.getErrors().portError).toEqual(regExMessage.portError);
     });
+
     it("should not return message", () => {
+      expect.assertions(1);
       userDirectoryContext.setSettings("port", "389");
       const result = userDirectoryFormService.validatePortInput();
-      expect.assertions(2);
-      expect(result.portError).toEqual(null);
-      expect(userDirectoryContext.getErrors().portError).toEqual(null);
+      expect(result).toEqual(null);
     });
   });
 
   describe("UserDirectoryFormService::validateDomainInput", () => {
     it("should return required message", () => {
+      expect.assertions(1);
       userDirectoryContext.setSettings("domain", "");
-      const requiredMessage = {"domainError": "A domain name is required."};
+      const requiredMessage = "A domain name is required.";
       const result = userDirectoryFormService.validateDomainInput();
-      expect.assertions(2);
       expect(result).toEqual(requiredMessage);
-      expect(userDirectoryContext.getErrors().domainError).toEqual(requiredMessage.domainError);
     });
+
     it("should not return message", () => {
+      expect.assertions(1);
       userDirectoryContext.setSettings("domain", "passbolt.com");
       const result = userDirectoryFormService.validateDomainInput();
-      expect.assertions(2);
-      expect(result.domainError).toEqual(null);
-      expect(userDirectoryContext.getErrors().domainError).toEqual(null);
+      expect(result).toEqual(null);
     });
   });
 
   describe("UserDirectoryFormService::validateFieldsMappingAdUserUsernameInput", () => {
-    const errorField = "fieldsMappingAdUserUsernameError";
-
     it("should return required message", () => {
-      expect.assertions(2);
-      const requiredMessage = {[errorField]: "The user username field mapping cannot be empty"};
+      expect.assertions(1);
+      const requiredMessage = "The user username field mapping cannot be empty";
 
       userDirectoryContext.setAdUserFieldsMappingSettings("username", "");
       const result = userDirectoryFormService.validateFieldsMappingAdUserUsernameInput();
 
       expect(result).toEqual(requiredMessage);
-      expect(userDirectoryContext.getErrors()[errorField]).toEqual(requiredMessage[errorField]);
     });
 
     it("should not return message", () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       userDirectoryContext.setAdUserFieldsMappingSettings("username", "uniquePrincipalName");
       const result = userDirectoryFormService.validateFieldsMappingAdUserUsernameInput();
 
-      expect(result[errorField]).toEqual(null);
-      expect(userDirectoryContext.getErrors()[errorField]).toEqual(null);
+      expect(result).toEqual(null);
     });
   });
 
   describe("UserDirectoryFormService::validateOpenLdapFieldsMappingGroupUsersInput", () => {
-    const errorField = "fieldsMappingOpenLdapGroupUsersError";
-
     it("should return required message", () => {
-      expect.assertions(2);
-      const requiredMessage = {[errorField]: "The group users field mapping cannot be empty"};
+      expect.assertions(1);
+      const requiredMessage = "The group users field mapping cannot be empty";
 
       userDirectoryContext.setOpenLdapGroupFieldsMappingSettings("users", "");
       const result = userDirectoryFormService.validateOpenLdapFieldsMappingGroupUsersInput();
 
       expect(result).toEqual(requiredMessage);
-      expect(userDirectoryContext.getErrors()[errorField]).toEqual(requiredMessage[errorField]);
     });
 
     it("should not return message", () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       userDirectoryContext.setOpenLdapGroupFieldsMappingSettings("users", "member");
       const result = userDirectoryFormService.validateOpenLdapFieldsMappingGroupUsersInput();
 
-      expect(result[errorField]).toEqual(null);
-      expect(userDirectoryContext.getErrors()[errorField]).toEqual(null);
+      expect(result).toEqual(null);
     });
   });
 });

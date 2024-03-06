@@ -34,7 +34,7 @@ class UserDirectoryService {
   /**
    * Find the user directory setting using Passbolt API
    *
-   * @return {Promise<Array<SmtpSettingsDto>>|null>}
+   * @return {Promise<Array<UserDirectoryDto>|null>>}
    */
   async findAll() {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}/settings`);
@@ -55,6 +55,7 @@ class UserDirectoryService {
 
   /**
    * delete the given user directory settings using Passbolt API
+   * @returns {Promise<any>}
    */
   async delete() {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}`);
@@ -91,17 +92,6 @@ class UserDirectoryService {
     this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}/synchronize`);
     const apiClient = new ApiClient(this.apiClientOptions);
     return (await apiClient.create({})).body;
-  }
-
-
-  /**
-   * Whenever the users is requested.
-   * @return {Promise<object>}
-   */
-  async findUsers() {
-    this.apiClientOptions.setResourceName(`${USER_DIRECTORY_RESOURCE_NAME}/users`);
-    const apiClient = new ApiClient(this.apiClientOptions);
-    return apiClient.findAll();
   }
 }
 
