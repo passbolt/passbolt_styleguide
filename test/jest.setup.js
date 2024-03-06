@@ -21,6 +21,6 @@ browser.cookies = {
     if (options.name === "csrfToken") {
       return "csrfToken";
     }
-    throw new Error(`Browser.cookies.get with cookie name ${options.name} is not mocked`);
+    return null;
   }),
 };

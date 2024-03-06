@@ -69,4 +69,32 @@ describe("ApiClientOption testsuite", () => {
 
     expect(headers).toStrictEqual({'X-CSRF-Token': csrfToken});
   });
+
+  describe("Should return the right cookie value when browser API is not available", () => {
+    let originalBrowserCookies;
+    beforeAll(() => {
+      originalBrowserCookies = browser.cookies;
+      delete browser.cookies;
+    });
+
+    afterAll(() => { browser.cookies = originalBrowserCookies; });
+
+    it("should return no headers if there is no CSRF token and browser API is not available", async() => {
+      document.cookie = null;
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("https://localhost");
+      const headers = await apiClientOptions.getHeaders();
+
+      expect(headers).toBeFalsy();
+    });
+
+    it("should return the headers with the right CSRF token and browser API is not available", async() => {
+      const csrfToken = uuid();
+      document.cookie = `csrfToken=${csrfToken}`;
+
+      const apiClientOptions = new ApiClientOptions().setBaseUrl("https://localhost");
+      const headers = await apiClientOptions.getHeaders();
+
+      expect(headers).toStrictEqual({'X-CSRF-Token': csrfToken});
+    });
+  });
 });
