@@ -238,7 +238,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
    */
   shouldShowSourceWarningMessage() {
     const context = this.props.adminUserDirectoryContext;
-    return context?.getCurrentSettings()?.source !== "db" && context?.hasSettingsChanges();
+    return context?.getCurrentSettings()?.source === "file" && context?.hasSettingsChanges();
   }
 
   /**
@@ -258,6 +258,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
       'env': this.props.t('environment variables'),
       'file': this.props.t('file'),
       'db': this.props.t('database'),
+      'default': this.props.t('default'),
     }[this.settingsSource] || this.props.t('unknown');
   }
 

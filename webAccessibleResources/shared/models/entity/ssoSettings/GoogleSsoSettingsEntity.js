@@ -26,17 +26,14 @@ const SUPPORTED_URLS = [
  */
 class GoogleSsoSettingsEntity extends Entity {
   /**
-   * Google Sso Settings entity constructor
-   *
-   * @param {Object} googleSsoSettingsDto SSO settings DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(googleSsoSettingsDto) {
+  constructor(googleSsoSettingsDto, options = {}) {
     super(EntitySchema.validate(
       GoogleSsoSettingsEntity.ENTITY_NAME,
       googleSsoSettingsDto,
       GoogleSsoSettingsEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

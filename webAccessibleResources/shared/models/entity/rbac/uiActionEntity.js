@@ -21,12 +21,12 @@ class UiActionEntity extends Entity {
   /**
    * @inheritDoc
    */
-  constructor(dto) {
+  constructor(dto, options = {}) {
     super(EntitySchema.validate(
       UiActionEntity.ENTITY_NAME,
       dto,
       UiActionEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

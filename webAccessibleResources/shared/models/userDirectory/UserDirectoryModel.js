@@ -84,7 +84,7 @@ class UserDirectoryModel {
     this.openDirectoryConfiguration = false;
     this.openSynchronizationOptions = false;
     // Source
-    this.source = "db";
+    this.source = "default";
     // CREDENTIALS FIELDS
     this.authenticationType = "basic";
     this.directoryType = "ad";

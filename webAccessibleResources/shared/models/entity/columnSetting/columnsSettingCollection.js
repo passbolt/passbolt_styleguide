@@ -22,17 +22,15 @@ const RULE_UNIQUE_ID = 'unique_id';
 
 class ColumnsSettingCollection extends EntityCollection {
   /**
-   * ColumnsSetting collection constructor
-   *
-   * @param {Object} columnsSettingCollectionDto columns setting DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
+   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
-  constructor(columnsSettingCollectionDto) {
+  constructor(columnsSettingCollectionDto, options = {}) {
     super(EntitySchema.validate(
       ColumnsSettingCollection.ENTITY_NAME,
       columnsSettingCollectionDto,
       ColumnsSettingCollection.getSchema()
-    ));
+    ), options);
 
     // Directly push into the private property _items[]
     this._props.forEach(columnSetting => {

@@ -25,21 +25,18 @@ const ENTITY_NAME = "SsoSettings";
  */
 class SsoSettingsEntity extends Entity {
   /**
-   * Setup entity constructor
-   *
-   * @param {Object} ssoSettingsDto SSO settings DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(ssoSettingsDto) {
+  constructor(ssoSettingsDto, options = {}) {
     super(EntitySchema.validate(
       SsoSettingsEntity.ENTITY_NAME,
       ssoSettingsDto,
       SsoSettingsEntity.getSchema()
-    ));
+    ), options);
 
     // Sso settings associations.
     if (this._props.data) {
-      this._data = SsoSettingsEntity.buildSsoProviderSettingsFromData(this._props.provider, this._props.data);
+      this._data = SsoSettingsEntity.buildSsoProviderSettingsFromData(this._props.provider, this._props.data, {clone: false});
       delete this._props.data;
     }
   }
@@ -103,20 +100,23 @@ class SsoSettingsEntity extends Entity {
   /**
    * Return the corresponding SSO Settings Entity
    * @param {string} providerId
+   * @param {object} data The settings dto
+   * @param {object} options The entity constructor options. Check the constructors options parameters of the entities
+   * this factory is building to know more.
    * @returns {AzureSsoSettingsEntity|GoogleSsoSettingsEntity|OAuth2SsoSettingsEntity|AdfsSsoSettingsEntity}
    * @throws {Error} if the given provider is not supported.
    * @private
    */
-  static buildSsoProviderSettingsFromData(providerId, data) {
+  static buildSsoProviderSettingsFromData(providerId, data, options = {}) {
     switch (providerId) {
       case (AzureSsoSettingsEntity.PROVIDER_ID):
-        return new AzureSsoSettingsEntity(data);
+        return new AzureSsoSettingsEntity(data, options);
       case (GoogleSsoSettingsEntity.PROVIDER_ID):
-        return new GoogleSsoSettingsEntity(data);
+        return new GoogleSsoSettingsEntity(data, options);
       case (OAuth2SsoSettingsEntity.PROVIDER_ID):
-        return new OAuth2SsoSettingsEntity(data);
+        return new OAuth2SsoSettingsEntity(data, options);
       case (AdfsSsoSettingsEntity.PROVIDER_ID):
-        return new AdfsSsoSettingsEntity(data);
+        return new AdfsSsoSettingsEntity(data, options);
       default:
         /*
          * We don't throw an Error here as this could happen.

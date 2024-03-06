@@ -69,7 +69,7 @@ class DisplayAdministrationUserDirectoryActions extends React.Component {
 
   async handleFormSubmit(action) {
     try {
-      const isValid = await this.userDirectoryFormService.validate();
+      const isValid = this.userDirectoryFormService.validate();
       if (isValid) {
         switch (action) {
           case 'save':

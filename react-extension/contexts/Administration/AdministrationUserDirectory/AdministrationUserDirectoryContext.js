@@ -15,10 +15,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {withDialog} from "../../../contexts/DialogContext";
 import UserDirectoryService from '../../../../shared/services/api/userDirectory/UserDirectoryService';
 import UserService from '../../../../shared/services/api/user/UserService';
 import UserDirectoryModel from '../../../../shared/models/userDirectory/UserDirectoryModel';
 import UserDirectoryDTO from '../../../../shared/models/userDirectory/UserDirectoryDTO';
+import NotifyError from "../../../components/Common/Error/NotifyError/NotifyError";
 
 const DIRECTORY_TYPE_FIELD_NAME = "directoryType";
 const DIRECTORY_TYPE_OPENLDAP = "openldap";
@@ -129,20 +131,23 @@ export class AdminUserDirectoryContextProvider extends React.Component {
    */
   async findUserDirectorySettings() {
     this.setProcessing(true);
-    const result = await this.userDirectoryService.findAll();
-    const usersResult = await this.userService.findAll();
+    let userDirectorySettings = [];
+    try {
+      userDirectorySettings = await this.userDirectoryService.findAll();
+    } catch (e) {
+      this.handleError(e);
+    }
+    const users = await this.userService.findAll();
+    const userLogged = users.find(user => this.props.context.loggedInUser.id === user.id);
+    //@todo replace this approach with the ViewModel
+    const currentSettings = new UserDirectoryModel(userDirectorySettings, userLogged.id);
 
-    const userLogged = usersResult.body.find(user => this.props.context.loggedInUser.id === user.id);
-
-    const currentSettings = new UserDirectoryModel(result, userLogged.id);
-    //Init users
-    this.setState({users: this.sortUsers(usersResult.body)});
-    //Init saved setting
-    this.setState({currentSettings});
-    //Init setting which will interact with UI
-    this.setState({settings: Object.assign({}, currentSettings)});
-
-    this.setProcessing(false);
+    this.setState({
+      users: this.sortUsers(users),
+      currentSettings,
+      settings: Object.assign({}, currentSettings),
+      processing: false,
+    });
   }
 
   /**
@@ -397,6 +402,17 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   }
 
   /**
+   * handle error to display the error dialog
+   * @param error
+   */
+  handleError(error) {
+    const errorDialogProps = {
+      error: error
+    };
+    this.props.dialogContext.open(NotifyError, errorDialogProps);
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -412,9 +428,10 @@ export class AdminUserDirectoryContextProvider extends React.Component {
 AdminUserDirectoryContextProvider.propTypes = {
   context: PropTypes.any, // The application context
   children: PropTypes.any, // The children components
+  dialogContext: PropTypes.object, // The dialog context
 };
 
-export default withAppContext(AdminUserDirectoryContextProvider);
+export default withAppContext(withDialog(AdminUserDirectoryContextProvider));
 
 
 /**

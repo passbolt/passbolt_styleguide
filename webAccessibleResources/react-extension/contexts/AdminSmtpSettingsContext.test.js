@@ -103,7 +103,7 @@ describe("AdminSmtpSettingsContext", () => {
         password: "other passphrase test",
         host: "smtp.other.com",
         port: 25,
-        client: "",
+        client: null,
         tls: false,
         sender_email: "othertest@passbolt.com",
         sender_name: "other Passbolt test",
@@ -123,16 +123,14 @@ describe("AdminSmtpSettingsContext", () => {
       });
 
       await adminSmtpContext.findSmtpSettings();
-
       for (const key in newFormData) {
-        adminSmtpContext.setData(key, newFormData[key]);
+        adminSmtpContext.setData({[key]: newFormData[key]});
       }
 
       await adminSmtpContext.saveSmtpSettings();
       const settings = await adminSmtpContext.getCurrentSmtpSettings();
 
-      // 1 call is a GET, the other is the POST
-      expect(smtpSettingsCallMock).toHaveBeenCalledTimes(2);
+      expect(smtpSettingsCallMock).toHaveBeenCalledTimes(1);
       expect(settings.source).toEqual("db");
     });
   });

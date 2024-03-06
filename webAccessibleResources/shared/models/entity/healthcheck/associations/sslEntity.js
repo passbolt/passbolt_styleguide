@@ -5,13 +5,14 @@ const ENTITY_NAME = "ssl";
 
 class SslEntity extends Entity {
   /**
-   * Ssl entity constructor
-   *
-   * @param {Object} dto Ssl DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(dto) {
-    super(EntitySchema.validate(SslEntity.ENTITY_NAME, dto, SslEntity.getSchema()));
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      SslEntity.ENTITY_NAME,
+      dto,
+      SslEntity.getSchema()
+    ), options);
   }
 
   /**

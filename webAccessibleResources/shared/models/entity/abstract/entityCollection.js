@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+import EntityCollectionError from "./entityCollectionError";
 
 class EntityCollection {
   /**
@@ -223,6 +224,30 @@ class EntityCollection {
         this._items.splice(currentIndex, 1);
       }
     }
+  }
+
+  /*
+   * ==================================================
+   * Assertions
+   * ==================================================
+   */
+
+  /**
+   * Assert that each item in the collection has a unique value for the given property.
+   * @param {string} propName The property name for checking value uniqueness.
+   * @param {string} [message] The error message. If none given, it will fallback on a default one.
+   * @throw {EntityCollectionError} If the rule is not respected and at least two items share the same value for the given property.
+   */
+  assertUniqueByProperty(propName, message) {
+    const ruleId = `unique_${propName}`;
+    const propValues = this.extract(propName);
+    message = message || `The collection should only contain items with unique values for the property: ${propName}.`;
+    propValues.forEach((item, index) => {
+      const foundIndex = propValues.lastIndexOf(item);
+      if (foundIndex !== index) {
+        throw new EntityCollectionError(index, ruleId, message);
+      }
+    });
   }
 }
 

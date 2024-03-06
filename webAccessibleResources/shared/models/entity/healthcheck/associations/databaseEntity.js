@@ -5,13 +5,14 @@ const ENTITY_NAME = "database";
 
 class DatabaseEntity extends Entity {
   /**
-   * Database entity constructor
-   *
-   * @param {Object} dto Database DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(dto) {
-    super(EntitySchema.validate(DatabaseEntity.ENTITY_NAME, dto, DatabaseEntity.getSchema()));
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      DatabaseEntity.ENTITY_NAME,
+      dto,
+      DatabaseEntity.getSchema()
+    ), options);
   }
 
   /**

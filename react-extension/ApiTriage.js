@@ -21,7 +21,6 @@ import SiteSettings from "../shared/lib/Settings/SiteSettings";
 import Footer from "./components/Common/Footer/Footer";
 import TranslationProvider from "./components/Common/Internationalisation/TranslationProvider";
 import ChangeApiTriageLocale from "./components/Internationalisation/ChangeLocale/ChangeApiTriageLocale";
-import {CsrfToken} from "../shared/lib/apiClient/csrfToken";
 
 /**
  * The triage application served by the API.
@@ -81,8 +80,7 @@ class ApiTriage extends Component {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(CsrfToken.getToken());
+      .setBaseUrl(this.state.trustedDomain);
   }
 
   /**

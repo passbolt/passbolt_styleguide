@@ -19,7 +19,6 @@ import {ApiClientOptions} from "../../shared/lib/apiClient/apiClientOptions";
 import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltSubscriptionError from "../lib/Error/PassboltSubscriptionError";
-import {CsrfToken} from "../../shared/lib/apiClient/csrfToken";
 import RbacMeService from "../../shared/services/api/rbac/rbacMeService";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
 import AuthService from "../../shared/services/api/auth/AuthService";
@@ -124,8 +123,7 @@ class ApiAppContextProvider extends React.Component {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.state.trustedDomain)
-      .setCsrfToken(CsrfToken.getToken());
+      .setBaseUrl(this.state.trustedDomain);
   }
 
   /**

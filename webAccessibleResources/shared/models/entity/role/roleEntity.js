@@ -23,17 +23,14 @@ const ROLE_NAME_MAX_LENGTH = 255;
 
 class RoleEntity extends Entity {
   /**
-   * Role entity constructor
-   *
-   * @param {Object} roleDto role DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(roleDto) {
+  constructor(roleDto, options = {}) {
     super(EntitySchema.validate(
       RoleEntity.ENTITY_NAME,
       roleDto,
       RoleEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

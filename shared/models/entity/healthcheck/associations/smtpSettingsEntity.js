@@ -17,8 +17,15 @@ import EntitySchema from "../../abstract/entitySchema";
 const ENTITY_NAME = "smtpSettings";
 
 class SmtpSettingsEntity extends Entity {
-  constructor(dto) {
-    super(EntitySchema.validate(SmtpSettingsEntity.ENTITY_NAME, dto, SmtpSettingsEntity.getSchema()));
+  /**
+   * @inheritDoc
+   */
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      SmtpSettingsEntity.ENTITY_NAME,
+      dto,
+      SmtpSettingsEntity.getSchema()
+    ), options);
   }
 
   static getSchema() {

@@ -17,8 +17,15 @@ import EntitySchema from "../../abstract/entitySchema";
 const ENTITY_NAME = "configFile";
 
 class ConfigFileEntity extends Entity {
-  constructor(dto) {
-    super(EntitySchema.validate(ConfigFileEntity.ENTITY_NAME, dto, ConfigFileEntity.getSchema()));
+  /**
+   * @inheritDoc
+   */
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      ConfigFileEntity.ENTITY_NAME,
+      dto,
+      ConfigFileEntity.getSchema()
+    ), options);
   }
 
   static getSchema() {

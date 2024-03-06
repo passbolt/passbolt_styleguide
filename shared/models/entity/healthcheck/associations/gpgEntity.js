@@ -18,13 +18,14 @@ const ENTITY_NAME = "gpg";
 
 class GpgEntity extends Entity {
   /**
-   * Gpg entity constructor
-   *
-   * @param {Object} dto Gpg DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(dto) {
-    super(EntitySchema.validate(GpgEntity.ENTITY_NAME, dto, GpgEntity.getSchema()));
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate(
+      GpgEntity.ENTITY_NAME,
+      dto,
+      GpgEntity.getSchema()
+    ), options);
   }
 
   /**

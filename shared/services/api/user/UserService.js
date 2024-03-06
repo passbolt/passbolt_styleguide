@@ -37,7 +37,8 @@ class UserService {
    */
   async findAll() {
     const apiClient = new ApiClient(this.apiClientOptions);
-    return apiClient.findAll();
+    const response = await apiClient.findAll();
+    return response.body;
   }
 }
 

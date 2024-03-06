@@ -26,20 +26,20 @@ class RbacEntity extends Entity {
   /**
    * @inheritDoc
    */
-  constructor(dto) {
+  constructor(dto, options = {}) {
     super(EntitySchema.validate(
       RbacEntity.ENTITY_NAME,
       dto,
       RbacEntity.getSchema()
-    ));
+    ), options);
 
     // Associations
     if (this._props.action) {
-      this._action = new ActionEntity(this._props.action);
+      this._action = new ActionEntity(this._props.action, {clone: false});
     }
     delete this._props.action;
     if (this._props.ui_action) {
-      this._ui_action = new UiActionEntity(this._props.ui_action);
+      this._ui_action = new UiActionEntity(this._props.ui_action, {clone: false});
     }
     delete this._props.ui_action;
   }
