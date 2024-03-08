@@ -17,6 +17,7 @@ import EntitySchema from "../abstract/entitySchema";
 
 const ENTITY_NAME = 'ColumnSetting';
 const COLUMN_ID_MAX_LENGTH = 255;
+const COLUMN_LABEL_MAX_LENGTH = 255;
 
 /**
  * Column setting entity
@@ -50,6 +51,11 @@ class ColumnSettingEntity extends Entity {
           "pattern": /^[a-zA-Z]+$/,
           "maxLength": COLUMN_ID_MAX_LENGTH,
         },
+        "label": {
+          "type": "string",
+          "pattern": /^[a-zA-Z]+$/,
+          "maxLength": COLUMN_LABEL_MAX_LENGTH,
+        },
         "width": {
           "type": "number"
         },
@@ -74,6 +80,14 @@ class ColumnSettingEntity extends Entity {
    */
   get id() {
     return this._props.id;
+  }
+
+  /**
+   * Get column label
+   * @returns {string}
+   */
+  get label() {
+    return this._props.label;
   }
 
   /**

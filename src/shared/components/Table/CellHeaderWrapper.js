@@ -253,11 +253,11 @@ class CellHeaderWrapper extends Component {
    */
   get propsCellHeader() {
     const props = this.column.headerCellRenderer?.props || {};
-    // For column checkbox add a checked props value else add the label
+    // For column checkbox add a checked props value else use the one already defined or add the label
     if (this.column.id === "checkbox") {
       props.checked = this.props.tableContext.isSelectAllChecked();
     } else {
-      props.label = this.column.label;
+      props.label = props.label || this.column.label;
     }
     return props;
   }
