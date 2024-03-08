@@ -105,7 +105,7 @@
   "All users": "Tous les utilisateurs",
   "Allow": "Autoriser",
   "Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.": "Allow &ldquo;Remember this device for a month.&ldquo; option during MFA.",
-  "Allow group manager": "Autoriser le gestionnaire de groupe",
+  "Allow group manager": "Autoriser le groupe manager",
   "Allow passbolt to access external services to check if a password has been compromised.": "Allow passbolt to access external services to check if a password has been compromised.",
   "Allow passbolt to access external services to check if the user passphrase has been compromised when the user creates it.": "Allow passbolt to access external services to check if the user passphrase has been compromised when the user creates it.",
   "Allow users to override the default policy.": "Permettre aux utilisateurs de remplacer la politique par défaut.",
