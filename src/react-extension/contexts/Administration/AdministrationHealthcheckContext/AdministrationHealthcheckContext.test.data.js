@@ -341,7 +341,7 @@ export const mockHealthcheckDataAllChecksFail = {
   "smtpSettings": {
     "isEnabled": false,
     "areEndpointsDisabled": false,
-    "errorMessage": true,
+    "errorMessage": "error message",
     "source": "database",
     "isInDb": false
   }
