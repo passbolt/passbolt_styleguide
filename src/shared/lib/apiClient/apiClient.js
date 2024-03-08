@@ -270,8 +270,10 @@ export class ApiClient {
    * @private
    */
   assertBody(body) {
-    if (typeof body !== 'string') {
-      throw new TypeError(`ApiClient.assertBody error: body should be a string.`);
+    // Body form data is needed to verify the server, and sign-in a user.
+    const isFormData = body instanceof FormData;
+    if (!isFormData && typeof body !== 'string') {
+      throw new TypeError(`ApiClient.assertBody error: body should be a string or a FormData.`);
     }
   }
 
