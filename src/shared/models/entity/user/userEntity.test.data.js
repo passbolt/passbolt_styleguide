@@ -12,26 +12,31 @@
  * @since         4.1.0
  */
 
-import {v4 as uuidv4} from 'uuid';
+import {v4 as uuid} from "uuid";
 import {defaultProfileDto} from "../profile/ProfileEntity.test.data";
-import {adminRoleDto, userRoleDto} from "../role/role.test.data";
+import {adminRoleDto, TEST_ROLE_USER_ID, userRoleDto} from "../role/role.test.data";
+import {defaultGroupsUser} from "./groupUserEntity.test.data";
+import {defaultGpgkeyDto} from "../gpgkey/gpgkeyEntity.test.data";
+import {
+  createAcceptedAccountRecoveryUserSettingDto
+} from "../accountRecovery/accountRecoveryUserSettingEntity.test.data";
+import {pendingAccountRecoveryRequestDto} from "../accountRecovery/pendingAccountRecoveryRequestEntity.test.data";
 
 /**
  * Default user dto.
  * @param {Object} data The data to override
+ * @param {Object} [options]
+ * @param {Object} [options.withGroupsUsers=false] Add groups users default dto.
+ * @param {Object} [options.withRole=false] Add role default dto.
+ * @param {Object} [options.withGpgkey=false] Add gpg key default dto.
+ * @param {Object} [options.withAccountRecoveryUserSetting=false] Add account recover user settings default dto.
+ * @param {Object} [options.withPendingAccountRecoveryUserRequest=false] Add pending account recover user request default dto.
  * @returns {object}
  */
-export const defaultUserDto = (data = {}) => {
-  const id = uuidv4();
-  const role = data?.role || userRoleDto(data?.role);
-  const profile = data?.profile || defaultProfileDto({
-    user_id: id,
-    ...data?.profile
-  });
-
-  return {
-    "id": id,
-    "role_id": role.id,
+export const defaultUserDto = (data = {}, options = {}) => {
+  const defaultData = {
+    "id": uuid(),
+    "role_id": TEST_ROLE_USER_ID,
     "username": "ada@passbolt.com",
     "active": true,
     "deleted": false,
@@ -39,10 +44,36 @@ export const defaultUserDto = (data = {}) => {
     "modified": "2020-04-20T11:32:16+00:00",
     "last_logged_in": "2022-07-04T13:39:25+00:00",
     "is_mfa_enabled": false,
-    ...data,
-    "profile": profile,
-    "role": role,
+    ...data
   };
+
+  if (!data.role) {
+    defaultData.role = userRoleDto();
+  }
+
+  const profile = data?.profile || defaultProfileDto({
+    user_id: defaultData.id,
+    ...data?.profile
+  });
+  defaultData.profile =  profile;
+
+  if (!data.groups_users && options?.withGroupsUsers) {
+    defaultData.groups_users = [defaultGroupsUser({user_id: defaultData.id})];
+  }
+
+  if (!data.gpgkey && options?.withGpgkey) {
+    defaultData.gpgkey = defaultGpgkeyDto();
+  }
+
+  if (!data.account_recovery_user_setting && options?.withAccountRecoveryUserSetting) {
+    defaultData.account_recovery_user_setting = createAcceptedAccountRecoveryUserSettingDto();
+  }
+
+  if (!data.pending_account_recovery_request && options?.withPendingAccountRecoveryUserRequest) {
+    defaultData.pending_account_recovery_request = pendingAccountRecoveryRequestDto();
+  }
+
+  return defaultData;
 };
 
 /**
