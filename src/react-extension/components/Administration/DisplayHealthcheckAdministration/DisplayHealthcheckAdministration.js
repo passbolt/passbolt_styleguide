@@ -74,7 +74,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             SSL peer certificate does not validate
-            <Tooltip message={<span>Check <a href="https://help.passbolt.com/faq/hosting/troubleshoot-ssl">this guide</a></span>}>
+            <Tooltip message={<span>Check <a href="https://help.passbolt.com/faq/hosting/troubleshoot-ssl" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -95,7 +95,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             Hostname does not match when validating certificates
-            <Tooltip message={<span>Check <a href="https://help.passbolt.com/faq/hosting/troubleshoot-ssl">this guide</a></span>}>
+            <Tooltip message={<span>Check <a href="https://help.passbolt.com/faq/hosting/troubleshoot-ssl" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -441,7 +441,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close" />
             You must enable the gd or imagick extensions to use Passbolt
-            <Tooltip message={<span>See <a href="https://secure.php.net/manual/en/book.image.php">this guide</a></span>}>
+            <Tooltip message={<span>See <a href="https://secure.php.net/manual/en/book.image.php" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -462,7 +462,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close" />
             You must enable the intl extension to use Passbolt
-            <Tooltip message={<span>See <a href="https://secure.php.net/manual/en/book.intl.php">this guide</a></span>}>
+            <Tooltip message={<span>See <a href="https://secure.php.net/manual/en/book.intl.php" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -483,7 +483,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             You must enable the mbstring extension to use Passbolt
-            <Tooltip message={<span>See <a href="https://secure.php.net/manual/en/book.mbstring.php">this guide</a></span>}>
+            <Tooltip message={<span>See <a href="https://secure.php.net/manual/en/book.mbstring.php" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -507,7 +507,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             PHP GPG Module is not installed or loaded
-            <Tooltip message={<span>Install php-gnupg, see <a href="http://php.net/manual/en/gnupg.installation.php">this guide</a></span>}>
+            <Tooltip message={<span>Install php-gnupg, see <a href="http://php.net/manual/en/gnupg.installation.php" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -805,7 +805,7 @@ class DisplayHealthcheckAdministration extends Component {
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             The installation is not up to date. Currently using {healthcheckData.application.info.currentVersion.toString()} and it should be {healthcheckData.application.info.remoteVersion.toString()}
-            <Tooltip message={<span>See <a href="https://help.passbolt.com/hosting/update">this guide</a></span>}>
+            <Tooltip message={<span>See <a href="https://help.passbolt.com/hosting/update" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
