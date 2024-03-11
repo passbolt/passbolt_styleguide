@@ -20,21 +20,22 @@ import {
 } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 
 describe("See the healthCheck settings", () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.resetModules();
     jest.resetAllMocks();
   });
 
   describe('As AD, I should see the healthcheck status on the administration page', () => {
-    let page;
-    const props = defaultProps();
+    let page, props;
 
     beforeEach(() => {
+      props = defaultProps();
       page = new DisplayHealthcheckAdministrationPage(props);
     });
 
     it('should be able to refresh', async() => {
-      expect.assertions(1);
+      expect.assertions(2);
+      expect(props.adminHealthcheckContext.loadHealthcheckData).toHaveBeenCalledTimes(1);
       await page.click(page.toolbarActionsRefreshButton);
       // Should be called twice: first on render, second on refresh
       expect(props.adminHealthcheckContext.loadHealthcheckData).toHaveBeenCalledTimes(2);
@@ -80,10 +81,10 @@ describe("See the healthCheck settings", () => {
   });
 
   describe('As AD, I should see the healthcheck status failed on the administration page', () => {
-    let page;
-    const props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckDataAllChecksFail})});
+    let page, props;
 
     beforeEach(() => {
+      props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckDataAllChecksFail})});
       page = new DisplayHealthcheckAdministrationPage(props);
     });
     it('should display all subssections fail status', async() => {
@@ -116,6 +117,21 @@ describe("See the healthCheck settings", () => {
     });
     it('should display refresh button disabled', async() => {
       expect.assertions(1);
+      expect(page.isRefreshButtonEnabled()).toBeFalsy();
+    });
+  });
+
+  describe('As AD, I should not be able to refresh the data if the endpoint is disabled', () => {
+    it('should display refresh button disabled', async() => {
+      expect.assertions(1);
+      const adminHealthcheckContext = defaultAdministrationHealthcheckContext({
+        isHealthcheckEndpointEnabled: () => false,
+        isProcessing: () => false
+      });
+
+      const props = defaultProps({adminHealthcheckContext});
+      const page = new DisplayHealthcheckAdministrationPage(props);
+
       expect(page.isRefreshButtonEnabled()).toBeFalsy();
     });
   });

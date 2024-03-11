@@ -47,7 +47,7 @@ class DisplayAdministrationHealthcheckActions extends React.Component {
    * @returns {boolean}
    */
   isRefreshEnabled() {
-    return !this.props.adminHealthcheckContext.isProcessing();
+    return this.props.adminHealthcheckContext.isHealthcheckEndpointEnabled() && !this.props.adminHealthcheckContext.isProcessing();
   }
 
   /**
