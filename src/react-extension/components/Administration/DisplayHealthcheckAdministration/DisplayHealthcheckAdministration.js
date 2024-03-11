@@ -1104,17 +1104,10 @@ class DisplayHealthcheckAdministration extends Component {
 
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing())  {
-        return (
-          <div className="col8 main-column">
-            <h3>Passbolt API Status</h3>
-            <Icon name="spinner" />
-          </div>
-        );
+        return (<Icon name="spinner" />);
       } else {
         return (
-          <div className="healthcheck-settings col8 main-column">
-            <h3>Passbolt API Status</h3>
-
+          <>
             <div className="healthcheck-environment-section">
               <h4>Environment</h4>
               <div>{whichPhpVersionIsInstalled()}</div>
@@ -1197,14 +1190,23 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{whatIsSmtpSettingsSource()}</div>
               <div>{isSmtpEndpointsDisabled()}</div>
             </div>
-          </div>
+          </>
         );
       }
     };
 
+    const isEndpointEnabled = this.props.adminHealthcheckContext.isHealthcheckEndpointEnabled();
     return (
       <div className="row">
-        {renderHealthcheck()}
+        <div className="healthcheck-settings col8 main-column">
+          <h3>Passbolt API Status</h3>
+          {isEndpointEnabled
+            ? renderHealthcheck()
+            : <div>
+              <Trans>The health check API endpoint has been disabled in the server configuration.</Trans>
+            </div>
+          }
+        </div>
         <div className="col4 last">
           <div className="sidebar-help">
             <h3><Trans>What is this page?</Trans></h3>
@@ -1228,7 +1230,7 @@ class DisplayHealthcheckAdministration extends Component {
           <div className="sidebar-help">
             <h3><Trans>Something wrong?</Trans></h3>
             <p><Trans>Hang in there! Depending your installation, you might need to check the documentation in order to run the healthcheck from the CLI</Trans></p>
-            <a className="button" href="https://passbolt.com/faq/hosting/logs" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://www.passbolt.com/docs/hosting/troubleshooting/logs/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

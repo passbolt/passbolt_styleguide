@@ -18,7 +18,6 @@ import AppContext from '../../../../shared/context/AppContext/AppContext';
 import MockTranslationProvider from '../../../test/mock/components/Internationalisation/MockTranslationProvider';
 import DisplayHealthcheckAdministration from './DisplayHealthcheckAdministration';
 import DisplayAdministrationHealthcheckActions from '../DisplayAdministrationWorkspaceActions/DisplayAdministrationHealthcheckActions/DisplayAdministrationHealthcheckActions';
-import AdministrationHealthcheckContextProvider from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext";
 
 /**
  * The DisplayHealthcheckAdministration component represented as a page
@@ -32,10 +31,8 @@ export default class DisplayHealthcheckAdministrationPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={props.context}>
-          <AdministrationHealthcheckContextProvider {...props}>
-            <DisplayAdministrationHealthcheckActions {...props} />
-            <DisplayHealthcheckAdministration {...props}/>
-          </AdministrationHealthcheckContextProvider>
+          <DisplayAdministrationHealthcheckActions {...props} />
+          <DisplayHealthcheckAdministration {...props}/>
         </AppContext.Provider>
       </MockTranslationProvider>
     );
