@@ -28,10 +28,7 @@ export const defaultGroupsUser = (data = {}) => {
   const defaultData = createGroupUser({
     id: uuidv4(),
     user_id: uuidv4(),
-    created_by: uuidv4(),
-    modified_by: uuidv4(),
     created: "2022-01-13T13:19:04.661Z",
-    modified: "2022-01-13T13:19:04.661Z",
   });
   return Object.assign(defaultData, data);
 };

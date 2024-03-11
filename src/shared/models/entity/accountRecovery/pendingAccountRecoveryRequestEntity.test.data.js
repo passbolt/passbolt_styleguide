@@ -14,14 +14,12 @@
 
 import {v4 as uuidv4} from "uuid";
 
-export const pendingAccountRecoveryRequestDto = (data = {}) => {
-  return {
-    id: uuidv4(),
-    status: "pending",
-    created: "2020-05-04T20:31:45+00:00",
-    modified: "2020-05-04T20:31:45+00:00",
-    created_by: uuidv4(),
-    modified_by: uuidv4(),
-    ...data
-  };
-};
+export const pendingAccountRecoveryRequestDto = (data = {}) => ({
+  id: uuidv4(),
+  status: "pending",
+  created: "2020-05-04T20:31:45+00:00",
+  modified: "2020-05-04T20:31:45+00:00",
+  created_by: uuidv4(),
+  modified_by: uuidv4(),
+  ...data
+});
