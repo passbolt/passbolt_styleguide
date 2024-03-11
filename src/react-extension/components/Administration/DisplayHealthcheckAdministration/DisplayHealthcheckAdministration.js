@@ -1214,16 +1214,16 @@ class DisplayHealthcheckAdministration extends Component {
             <p><Trans>The color is really important here so it&apos;s easier for you to spot what&apos;s not running as expected</Trans></p>
             <div className="healthcheck-color-legends">
               <div className="healthcheck-success">
-                <Icon name="check" /> Everything is running as expected.
+                <Icon name="check" width={18} height={18}/> Everything is running as expected.
               </div>
               <div className="healthcheck-warning">
-                <Icon name="warning" /> Something inside your configuration is not what we recommend, but you can skip it if it has been done on purpose.
+                <Icon name="warning" width={18} height={18}/> Something inside your configuration is not what we recommend, but you can skip it if it has been done on purpose.
               </div>
               <div className="healthcheck-fail">
-                <Icon name="close" /> There is an error with the current configuration, you might want to resolve it.
+                <Icon name="close" width={18} height={18}/> There is an error with the current configuration, you might want to resolve it.
               </div>
               <div className="healthcheck-info">
-                <Icon name="question-circle" /> This is just an information shared, no action is required.
+                <Icon name="question-circle" width={18} height={18}/> This is just an information shared, no action is required.
               </div>
             </div>
           </div>

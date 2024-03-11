@@ -45,6 +45,24 @@ class Icon extends Component {
   }
 
   /**
+   * Get width from props or default value
+   * @param {number} defaultValue default svg width value
+   * @returns {number}
+   */
+  getWidth(defaultValue) {
+    return this.props.width || defaultValue;
+  }
+
+  /**
+   * Get height from props or default value
+   * @param {number} defaultValue default svg height value
+   * @returns {number}
+   */
+  getHeight(defaultValue) {
+    return this.props.height || defaultValue;
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -222,7 +240,7 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'check' &&
-          <svg width="15" height="11" viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width={this.getWidth(15)} height={this.getHeight(11)} viewBox="0 0 15 11" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M13.6647 0.940002L4.86478 9.74L0.864777 5.74" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         }
@@ -255,7 +273,7 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'close' &&
-          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width={this.getWidth(11)} height={this.getHeight(11)} viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9.69525 1.2L1.41522 9.48" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M1.41522 1.2L9.69525 9.48" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -575,7 +593,7 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'question-circle' &&
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width={this.getWidth(16)} height={this.getHeight(16)} viewBox="0 0 16 16"  fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.04996 15.24C9.41465 15.24 10.7487 14.8353 11.8834 14.0771C13.0181 13.319 13.9025 12.2413 14.4247 10.9805C14.947 9.71971 15.0836 8.33235 14.8174 6.99388C14.5511 5.65541 13.894 4.42595 12.929 3.46097C11.964 2.49599 10.7345 1.83882 9.39608 1.57259C8.05761 1.30635 6.67026 1.44299 5.40945 1.96524C4.14864 2.48748 3.071 3.37187 2.31282 4.50657C1.55464 5.64127 1.14996 6.97531 1.14996 8.34C1.14996 10.17 1.87692 11.925 3.17092 13.219C4.46492 14.513 6.21996 15.24 8.04996 15.24Z" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M6.03998 6.27001C6.20089 5.80813 6.52015 5.41815 6.94115 5.16921C7.36216 4.92026 7.85772 4.82844 8.33997 4.91001C8.8197 4.99744 9.25434 5.24832 9.56998 5.62001C9.88695 5.99449 10.0606 6.46939 10.06 6.96001C10.06 8.34001 7.98997 9.03001 7.98997 9.03001" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M8.04993 11.79V11.73" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
@@ -799,7 +817,7 @@ class Icon extends Component {
           * @license       https://opensource.org/licenses/MIT MIT License
         */}
         {this.props.name === 'warning' &&
-          <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width={this.getWidth(16)} height={this.getHeight(15)} viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.04506 1.94L1.39504 11.38C1.30734 11.5316 1.25039 11.699 1.22756 11.8726C1.20473 12.0462 1.21645 12.2227 1.26198 12.3918C1.30751 12.5609 1.38602 12.7193 1.49294 12.858C1.59986 12.9967 1.73308 13.1129 1.88503 13.2C2.08111 13.3184 2.30599 13.3807 2.53505 13.38H13.845C14.0205 13.3787 14.1941 13.3427 14.3556 13.274C14.5171 13.2053 14.6634 13.1054 14.7862 12.9799C14.9089 12.8544 15.0055 12.7058 15.0706 12.5428C15.1356 12.3798 15.1677 12.2055 15.1651 12.03C15.1657 11.8009 15.1034 11.5761 14.985 11.38L9.33498 1.94C9.2446 1.78868 9.12507 1.65685 8.98329 1.55214C8.84152 1.44744 8.68038 1.37195 8.50917 1.33008C8.33797 1.28821 8.1602 1.28079 7.9861 1.30824C7.812 1.33569 7.64503 1.39748 7.49501 1.49C7.312 1.60289 7.15795 1.75699 7.04506 1.94V1.94Z" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M8.1951 5.37V8.04" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
             <path d="M8.1951 10.71H8.20511" fill="none" stroke="var(--icon-color)" vectorEffect="non-scaling-stroke" strokeWidth="var(--icon-stroke-width)" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1193,7 +1211,9 @@ Icon.propTypes = {
   dim: PropTypes.bool,
   baseline: PropTypes.bool,
   onClick: PropTypes.func,
-  style: PropTypes.object
+  style: PropTypes.object,
+  width: PropTypes.number,
+  height: PropTypes.number
 };
 
 export default Icon;
