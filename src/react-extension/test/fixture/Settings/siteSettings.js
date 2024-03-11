@@ -192,6 +192,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "passwordExpiryPolicies": {
         "enabled": isProEdition,
+      },
+      "healthcheckUi": {
+        "enabled": true,
       }
     }
   }

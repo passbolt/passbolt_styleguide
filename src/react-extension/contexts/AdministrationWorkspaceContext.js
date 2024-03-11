@@ -351,19 +351,20 @@ export const AdministrationWorkspaceMenuTypes = {
  * A map of administration workspace menu keys with the corresponding feature flag values
  */
 export const AdministrationWorkspaceFeatureFlag = {
-  [AdministrationWorkspaceMenuTypes.MFA]: 'multiFactorAuthentication', // MFA administration menu selected
+  [AdministrationWorkspaceMenuTypes.MFA]: 'multiFactorAuthentication', // MFA administration feature flag
   [AdministrationWorkspaceMenuTypes.MFA_POLICY]: 'mfaPolicies', //MFA Policy menu seleted
-  [AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES]: 'passwordPoliciesUpdate', //Password Policies menu selected
-  [AdministrationWorkspaceMenuTypes.USER_DIRECTORY]: 'directorySync', // User directory administration menu selected
-  [AdministrationWorkspaceMenuTypes.SUBSCRIPTION]: 'ee', // Subscription administration menu selected
-  [AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION]: 'locale', // Internationalization administration menu selected
-  [AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY]: 'accountRecovery', // Account Recovery administration menu selected
-  [AdministrationWorkspaceMenuTypes.SMTP_SETTINGS]: 'smtpSettings', // Smtp settings administration menu selected
-  [AdministrationWorkspaceMenuTypes.SELF_REGISTRATION]: 'selfRegistration', // Self registration settings administration menu selected
-  [AdministrationWorkspaceMenuTypes.SSO]: "sso", // SSO administration menu selected
-  [AdministrationWorkspaceMenuTypes.RBAC]: "rbacs", // RBAC administration menu selected
-  [AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES]: "userPassphrasePolicies", // User Passphrase Policies administration menu selected
-  [AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY]: "passwordExpiry", // Password Expiry administration menu selected
+  [AdministrationWorkspaceMenuTypes.PASSWORD_POLICIES]: 'passwordPoliciesUpdate', //Password Policies feature flag
+  [AdministrationWorkspaceMenuTypes.USER_DIRECTORY]: 'directorySync', // User directory administration feature flag
+  [AdministrationWorkspaceMenuTypes.SUBSCRIPTION]: 'ee', // Subscription administration feature flag
+  [AdministrationWorkspaceMenuTypes.INTERNATIONALIZATION]: 'locale', // Internationalization administration feature flag
+  [AdministrationWorkspaceMenuTypes.ACCOUNT_RECOVERY]: 'accountRecovery', // Account Recovery administration feature flag
+  [AdministrationWorkspaceMenuTypes.SMTP_SETTINGS]: 'smtpSettings', // Smtp settings administration feature flag
+  [AdministrationWorkspaceMenuTypes.SELF_REGISTRATION]: 'selfRegistration', // Self registration settings administration feature flag
+  [AdministrationWorkspaceMenuTypes.SSO]: "sso", // SSO administration feature flag
+  [AdministrationWorkspaceMenuTypes.RBAC]: "rbacs", // RBAC administration feature flag
+  [AdministrationWorkspaceMenuTypes.USER_PASSPHRASE_POLICIES]: "userPassphrasePolicies", // User Passphrase Policies administration feature flag
+  [AdministrationWorkspaceMenuTypes.PASSWORD_EXPIRY]: "passwordExpiry", // Password Expiry administration feature flag
+  [AdministrationWorkspaceMenuTypes.HEALTHCHECK]: "healthcheckUi", // HealthCheck UI administration feature flag
 };
 
 /**
