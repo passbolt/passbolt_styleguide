@@ -1108,8 +1108,8 @@ class DisplayHealthcheckAdministration extends Component {
       } else {
         return (
           <>
+            <h4 className="no-border">Environment</h4>
             <div className="healthcheck-environment-section">
-              <h4>Environment</h4>
               <div>{whichPhpVersionIsInstalled()}</div>
               <div>{isPCREcompiled()}</div>
               <div>{isTmpWrittable()}</div>
@@ -1119,14 +1119,14 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isMbStringInstalled()}</div>
             </div>
 
+            <h4>Config files</h4>
             <div className="healthcheck-configFiles-section">
-              <h4>Config files</h4>
               <div>{isAppConfigFilePresent()}</div>
               <div>{isApiConfigFilePresent()}</div>
             </div>
 
+            <h4>Core config</h4>
             <div className="healthcheck-core-section">
-              <h4>Core config</h4>
               {isDebugDisabled()}
               <div>{isCacheWorking()}</div>
               <div>{isSaltUnique()}</div>
@@ -1135,22 +1135,22 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isFullBaseUrlReachable()}</div>
             </div>
 
+            <h4>SSL Certificate</h4>
             <div className="healthcheck-ssl-section">
-              <h4>SSL Certificate</h4>
               <div>{peerIsValid()}</div>
               <div>{hostIsValid()}</div>
               <div>{isNotASelfSignedCertificate()}</div>
             </div>
 
+            <h4>Database</h4>
             <div className="healthcheck-database-section">
-              <h4>Database</h4>
               <div>{canConnectToDabase()}</div>
               <div>{numberOfTables()}</div>
               <div>{isDefaultContentPresent()}</div>
             </div>
 
+            <h4>GPG Configuration</h4>
             <div className="healthcheck-gpg-section">
-              <h4>GPG Configuration</h4>
               <div>{isGpgModuleInstalled()}</div>
               <div>{isGpgEnvSet()}</div>
               <div>{isKeyringWrittableByWebServer()}</div>
@@ -1168,8 +1168,8 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isServerPrivateKeyInGopenGpg()}</div>
             </div>
 
+            <h4>Application configuration</h4>
             <div className="healthcheck-app-section">
-              <h4>Application configuration</h4>
               <div>{isUsingLatestVersion()}</div>
               <div>{isForceSSLEnabled()}</div>
               <div>{isFullBaseUrlSetToHTTPS()}</div>
@@ -1183,8 +1183,8 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isEmailNotificationEnabled()}</div>
             </div>
 
+            <h4>SMTP Settings</h4>
             <div className="healthcheck-smtp-section">
-              <h4>SMTP Settings</h4>
               <div>{isSmtpPluginEnabled()}</div>
               <div>{isSmtpSettingsCoherent()}</div>
               <div>{whatIsSmtpSettingsSource()}</div>
