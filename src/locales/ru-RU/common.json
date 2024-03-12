@@ -959,6 +959,7 @@
   "The group name already exists.": "Такое имя группы уже существует.",
   "The group users field mapping cannot be empty": "Сопоставление поля пользователей группы не может быть пустым",
   "The group users field mapping cannot exceed 128 characters.": "Сопоставление полей пользователей группы не должно превышать 128 символов.",
+  "The health check API endpoint has been disabled in the server configuration.": "The health check API endpoint has been disabled in the server configuration.",
   "The healthcheck has been successfully refreshed": "The healthcheck has been successfully refreshed",
   "The internationalization settings were updated.": "Параметры интернационализации обновлены.",
   "The invitation is expired.": "Приглашение недействительно.",
