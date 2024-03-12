@@ -35,7 +35,11 @@ class SmtpSettingsEntity extends Entity {
       "properties": {
         "isEnabled": {"type": "boolean"},
         "areEndpointsDisabled": {"type": "boolean"},
-        "errorMessage": {"type": "boolean"},
+        "errorMessage": {"anyOf": [{
+          "type": "boolean",
+        }, {
+          "type": "string"
+        }]},
         "source": {"type": "string"},
         "isInDb": {"type": "boolean"}
       }

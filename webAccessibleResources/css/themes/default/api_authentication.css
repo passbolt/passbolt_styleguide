@@ -3243,6 +3243,9 @@ html {
   text-align: left;
   /* only right for now */
 }
+.tooltip .tooltip-text a {
+  font-size: 1.2rem;
+}
 .tooltip .tooltip-text::after {
   content: " ";
   position: absolute;

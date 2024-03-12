@@ -37,6 +37,8 @@ export function defaultAdministrationHealthcheckContext(data = {}) {
     setProcessing: jest.fn(),
     loadHealthcheckData: jest.fn(),
     clearContext: jest.fn(),
+    fetchHealthcheckData: jest.fn(),
+    isHealthcheckEndpointEnabled: jest.fn(() => true),
     ...data
   };
 }
@@ -341,7 +343,7 @@ export const mockHealthcheckDataAllChecksFail = {
   "smtpSettings": {
     "isEnabled": false,
     "areEndpointsDisabled": false,
-    "errorMessage": true,
+    "errorMessage": "error message",
     "source": "database",
     "isInDb": false
   }

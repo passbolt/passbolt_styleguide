@@ -45,7 +45,7 @@ export default class DisplayRbacItemPage {
    * @returns {string}
    */
   get selectAdmin() {
-    return this._page.container.querySelector('.medium.admin');
+    return this._page.container.querySelector('.admin');
   }
 
   /**
@@ -70,7 +70,7 @@ export default class DisplayRbacItemPage {
    * @returns {string}
    */
   selectRole(roleName) {
-    return this._page.container.querySelector(`.medium.${roleName}`);
+    return this._page.container.querySelector(`.${roleName}`);
   }
 
   /**
@@ -87,7 +87,7 @@ export default class DisplayRbacItemPage {
    * @returns {Element}
    */
   selectedRoleOption(roleName) {
-    return this._page.container.querySelector(`.medium.${roleName} .selected-value`);
+    return this._page.container.querySelector(`.${roleName} .selected-value`);
   }
 
   /**
@@ -97,7 +97,7 @@ export default class DisplayRbacItemPage {
    * @returns {Element}
    */
   getRoleOption(roleName, option) {
-    return this._page.container.querySelector(`.medium.${roleName} .option.${option}`);
+    return this._page.container.querySelector(`.${roleName} .option.${option}`);
   }
 
   /**

@@ -25,12 +25,13 @@ describe("ColumnSettingEntity", () => {
     });
 
     it("it should instantiate the entity with a minimal dto", () => {
-      expect.assertions(2);
+      expect.assertions(3);
       const dto = defaultColumnSettingData();
       const entity = new ColumnSettingEntity(dto);
 
       expect(entity).toBeInstanceOf(ColumnSettingEntity);
       expect(entity.id).toEqual(dto.id);
+      expect(entity.label).toEqual(dto.label);
     });
 
     each([
@@ -50,6 +51,25 @@ describe("ColumnSettingEntity", () => {
         }
       });
     });
+
+    each([
+      {scenario: 'required', rule: 'type'},
+      {scenario: 'not null', rule: 'type', value: null},
+    ]).describe("Should validate the label", test => {
+      it(`Should not accept: ${test.scenario}`, async() => {
+        expect.assertions(2);
+        const dto = defaultColumnSettingData({
+          id: "id",
+          label: test.value
+        });
+        try {
+          new ColumnSettingEntity(dto);
+        } catch (error) {
+          expect(error).toBeInstanceOf(EntityValidationError);
+          expect(error.hasError('label', test.rule)).toBeTruthy();
+        }
+      });
+    });
   });
 
   describe("ColumnSettingEntity:toDto", () => {
@@ -57,6 +77,7 @@ describe("ColumnSettingEntity", () => {
       expect.assertions(2);
       const expectedKeys = [
         'id',
+        'label'
       ];
 
       const dto = defaultColumnSettingData();

@@ -4383,6 +4383,9 @@ form.search label {
   text-align: left;
   /* only right for now */
 }
+.tooltip .tooltip-text a {
+  font-size: 1.2rem;
+}
 .tooltip .tooltip-text::after {
   content: " ";
   position: absolute;
@@ -5207,8 +5210,8 @@ iframe.cachette {
 }
 .flex-item {
   box-sizing: border-box;
-  flex: 0 23%;
-  width: calc(23% - 10px);
+  flex: 0 28%;
+  width: calc(28% - 10px);
   margin: 0 5px;
   padding-top: 3px;
   padding-bottom: 3px;
@@ -5226,8 +5229,8 @@ iframe.cachette {
   text-align: center;
 }
 .flex-item.first {
-  flex: 0 50%;
-  width: calc(50% - 10px);
+  flex: 0 40%;
+  width: calc(40% - 10px);
 }
 .flex-item.full-width {
   flex: 0 100%;
@@ -5236,6 +5239,7 @@ iframe.cachette {
   margin: auto;
   margin-bottom: 2px;
   margin-top: 2px;
+  width: 100%;
 }
 .flex-item .warning-message {
   text-align: center;
@@ -6220,10 +6224,10 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-info {
   display: flex;
   align-items: center;
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 5px;
-  padding-left: 15px;
+  margin: 1rem 0;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-success .tooltip,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-success .tooltip,
@@ -6257,41 +6261,7 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-info .tooltip,
 .healthcheck-settings .healthcheck-app-section .healthcheck-info .tooltip,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-info .tooltip {
-  margin-left: 6px;
-}
-.healthcheck-settings .healthcheck-environment-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-configFiles-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-core-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-ssl-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-database-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-gpg-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-app-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-success .svg-icon,
-.healthcheck-settings .healthcheck-environment-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-core-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-ssl-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-database-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-gpg-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-app-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning .svg-icon,
-.healthcheck-settings .healthcheck-environment-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-core-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-ssl-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-database-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-gpg-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-app-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail .svg-icon,
-.healthcheck-settings .healthcheck-environment-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-configFiles-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-core-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-ssl-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-database-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-gpg-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-app-section .healthcheck-info .svg-icon,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-info .svg-icon {
-  padding-right: 10px;
+  margin: 0.3rem 0 0 -0.5rem;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-success,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-success,
@@ -6311,7 +6281,7 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-app-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-warning {
-  background-color: #F9DBAD;
+  background-color: #FFDBA6;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail,
@@ -6321,7 +6291,7 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-app-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-fail {
-  background-color: #F4A5A6;
+  background-color: #FFA6A6;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-info,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-info,
@@ -6331,49 +6301,38 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-info,
 .healthcheck-settings .healthcheck-app-section .healthcheck-info,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-info {
-  background-color: #ADCBF9;
+  background-color: #AAD2F9;
 }
-.healthcheck-color-legends .svg-icon {
-  margin-left: 10px;
-  margin-bottom: -7px;
-  align-self: center;
-  padding-right: 10px;
+.healthcheck-settings .svg-icon {
+  width: 1.8rem;
+  min-width: 1.8rem;
+  height: 1.8rem;
+  align-items: center;
+  justify-content: center;
+}
+.healthcheck-color-legends {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.healthcheck-color-legends > * {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1rem 1.6rem;
+  border-radius: 0.5rem;
 }
 .healthcheck-color-legends .healthcheck-success {
   background-color: #EDF7EB;
-  display: grid;
-  grid-template-columns: 0.1fr 1fr;
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 5px;
-  padding-left: 15px;
 }
 .healthcheck-color-legends .healthcheck-warning {
-  background-color: #F9DBAD;
-  display: grid;
-  grid-template-columns: 0.1fr 1fr;
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 5px;
-  padding-left: 15px;
+  background-color: #FFDBA6;
 }
 .healthcheck-color-legends .healthcheck-fail {
-  background-color: #F4A5A6;
-  display: grid;
-  grid-template-columns: 0.1fr 1fr;
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 5px;
-  padding-left: 15px;
+  background-color: #FFA6A6;
 }
 .healthcheck-color-legends .healthcheck-info {
-  background-color: #ADCBF9;
-  display: grid;
-  grid-template-columns: 0.1fr 1fr;
-  margin: 10px 0;
-  padding: 8px;
-  border-radius: 5px;
-  padding-left: 15px;
+  background-color: #AAD2F9;
 }
 .email-notification-settings .section {
   display: flex;
