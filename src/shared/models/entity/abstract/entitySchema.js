@@ -112,7 +112,7 @@ class EntitySchema {
     const schemaProps = schema.properties;
 
     const result = {};
-    const validationError = new EntityValidationError(`Could not validate entity ${name}.`);
+    let validationError;
 
     for (const propName in schemaProps) {
       if (!Object.prototype.hasOwnProperty.call(schemaProps, propName)) {
@@ -122,7 +122,8 @@ class EntitySchema {
       // Check if property is required
       if (requiredProps.includes(propName)) {
         if (!Object.prototype.hasOwnProperty.call(dto, propName)) {
-          validationError.addError(propName, 'required',  `The ${propName} is required.`);
+          validationError = EntitySchema.getOrInitEntityValidationError(name, validationError);
+          validationError.addError(propName, 'required', `The ${propName} is required.`, validationError);
           continue;
         }
       } else {
@@ -136,6 +137,7 @@ class EntitySchema {
         result[propName] = EntitySchema.validateProp(propName, dto[propName], schemaProps[propName]);
       } catch (error) {
         if (error instanceof EntityValidationError) {
+          validationError = EntitySchema.getOrInitEntityValidationError(name, validationError);
           validationError.details[propName] = error.details[propName];
         } else {
           throw error;
@@ -144,11 +146,21 @@ class EntitySchema {
     }
 
     // Throw error if some issues were gathered
-    if (validationError.hasErrors()) {
+    if (validationError) {
       throw validationError;
     }
 
     return result;
+  }
+
+  /**
+   * Get or init entity validation error.
+   * @param {string} name The name of the entity.
+   * @param {EntityValidationError|null} [validationError] The entity validation error to get or init if does not exist.
+   * @returns {EntityValidationError}
+   */
+  static getOrInitEntityValidationError(name, validationError) {
+    return validationError || new EntityValidationError(`Could not validate entity ${name}.`);
   }
 
   /**
@@ -225,9 +237,7 @@ class EntitySchema {
    */
   static validatePropType(propName, prop, propSchema) {
     if (!EntitySchema.isValidPropType(prop, propSchema.type)) {
-      const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
-      validationError.addError(propName, 'type',  `The ${propName} is not a valid ${propSchema.type}.`);
-      throw validationError;
+      throw EntitySchema.handlePropertyValidationError(propName, 'type',  `The ${propName} is not a valid ${propSchema.type}.`);
     }
   }
 
@@ -245,9 +255,7 @@ class EntitySchema {
     try {
       propSchema.validationCallback(prop);
     } catch (e) {
-      const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
-      validationError.addError(propName, 'custom',  `The ${propName} is not valid: ${e.message}`);
-      throw validationError;
+      throw EntitySchema.handlePropertyValidationError(propName, 'custom',  `The ${propName} is not valid: ${e.message}`);
     }
   }
 
@@ -262,45 +270,62 @@ class EntitySchema {
    * @returns void
    */
   static validatePropTypeString(propName, prop, propSchema) {
-    const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
+    let validationError;
     if (propSchema.format) {
       if (!EntitySchema.isValidStringFormat(prop, propSchema.format)) {
-        validationError.addError(propName, 'format', `The ${propName} is not a valid ${propSchema.format}.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'format', `The ${propName} is not a valid ${propSchema.format}.`, validationError);
       }
     }
     if (propSchema.notEmpty) {
       if (!EntitySchema.isValidStringNotEmpty(prop)) {
-        validationError.addError(propName, 'notEmpty', `The ${propName} should be not empty`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'notEmpty', `The ${propName} should be not empty`, validationError);
       }
     }
     if (propSchema.length) {
       if (!EntitySchema.isValidStringLength(prop, propSchema.length, propSchema.length)) {
-        validationError.addError(propName, 'length', `The ${propName} should be ${propSchema.length} character in length.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'length', `The ${propName} should be ${propSchema.length} character in length.`, validationError);
       }
     }
     if (propSchema.minLength) {
       if (!EntitySchema.isValidStringLength(prop, propSchema.minLength)) {
-        validationError.addError(propName, 'minLength', `The ${propName} should be ${propSchema.minLength} character in length minimum.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'minLength', `The ${propName} should be ${propSchema.minLength} character in length minimum.`, validationError);
       }
     }
     if (propSchema.maxLength) {
       if (!EntitySchema.isValidStringLength(prop, 0, propSchema.maxLength)) {
-        validationError.addError(propName, 'maxLength', `The ${propName} should be ${propSchema.maxLength} character in length maximum.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'maxLength', `The ${propName} should be ${propSchema.maxLength} character in length maximum.`, validationError);
       }
     }
     if (propSchema.pattern) {
       if (!Validator.matches(prop, propSchema.pattern)) {
-        validationError.addError(propName, 'pattern', `The ${propName} is not valid.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'pattern', `The ${propName} is not valid.`, validationError);
       }
     }
     if (propSchema.custom) {
       if (!propSchema.custom(prop)) {
-        validationError.addError(propName, 'custom', `The ${propName} is not valid.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'custom', `The ${propName} is not valid.`, validationError);
       }
     }
-    if (validationError.hasErrors()) {
+    if (validationError) {
       throw validationError;
     }
+  }
+
+  /**
+   * Handle property validation error.
+   *   instantiate it if it does not exist yet.
+   * @param {string} [propName] The failing property.
+   * @param {string} [rule] The failing rule.
+   * @param {string} [message] The error message.
+   * @param {EntityValidationError|null} [validationError=null] The entity validation error to add the error to,
+   *   instantiate it if it does not exist yet.
+   * @returns {EntityValidationError}
+   */
+  static handlePropertyValidationError(propName, rule, message, validationError = null) {
+    validationError = validationError || new EntityValidationError(`Could not validate property ${propName}.`);
+    validationError.addError(propName, rule, message);
+
+    return validationError;
   }
 
   /**
@@ -314,18 +339,18 @@ class EntitySchema {
    * @returns void
    */
   static validatePropTypeNumber(propName, prop, propSchema) {
-    const validationError = new EntityValidationError(`Could not validate property ${propName}.`);
+    let validationError;
     if (typeof(propSchema.gte) === 'number') {
       if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.gte)) {
-        validationError.addError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`, validationError);
       }
     }
     if (typeof(propSchema.lte) === 'number') {
       if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.lte)) {
-        validationError.addError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`);
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`, validationError);
       }
     }
-    if (validationError.hasErrors()) {
+    if (validationError) {
       throw validationError;
     }
   }
