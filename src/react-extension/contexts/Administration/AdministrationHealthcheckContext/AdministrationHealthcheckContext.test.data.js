@@ -37,6 +37,8 @@ export function defaultAdministrationHealthcheckContext(data = {}) {
     setProcessing: jest.fn(),
     loadHealthcheckData: jest.fn(),
     clearContext: jest.fn(),
+    fetchHealthcheckData: jest.fn(),
+    isHealthcheckEndpointEnabled: jest.fn(() => true),
     ...data
   };
 }

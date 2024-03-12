@@ -25,10 +25,12 @@ import {withActionFeedback} from "../../ActionFeedbackContext";
  */
 export const AdministrationHealthcheckContext = React.createContext({
   healthcheckData: null, // The healthcheck data
+  endpointEnabled: true, // true if the endpoint is enabled
   setProcessing: () => {}, //Update processing object
   isProcessing: () => {}, // returns true if a process is running and the UI must be disabled
   loadHealthcheckData: () => {}, // Load the healthcheck data
   clearContext: () => {},
+  isHealthcheckEndpointEnabled: () => {}, // returns true of the Healthcheck API endpoint is enabled
 });
 
 /**
@@ -52,11 +54,22 @@ export class AdministrationHealthcheckContextProvider extends React.Component {
   get defaultState() {
     return {
       healthcheckData: null,
+      endpointEnabled: true,
       processing: false,
       isProcessing: this.isProcessing.bind(this),
       loadHealthcheckData: this.fetchHealthcheckData.bind(this),
       clearContext: this.clearContext.bind(this),
+      isHealthcheckEndpointEnabled: this.isHealthcheckEndpointEnabled.bind(this),
     };
+  }
+
+  /**
+   * Returns true if the healthcheck API endpoint is enabled.
+   * It is true by default as it requires a first call to the endpoint to know if it crashes or not.
+   * @returns {boolean}
+   */
+  isHealthcheckEndpointEnabled() {
+    return this.state.endpointEnabled;
   }
 
   /**
@@ -64,6 +77,10 @@ export class AdministrationHealthcheckContextProvider extends React.Component {
    * @return {Promise<void>}
    */
   async fetchHealthcheckData() {
+    if (!this.isHealthcheckEndpointEnabled()) {
+      return;
+    }
+
     this.setProcessing(true);
     try {
       const result = await this.healthcheckService.fetchHealthcheck();
@@ -75,6 +92,7 @@ export class AdministrationHealthcheckContextProvider extends React.Component {
       }
     } catch (error) {
       console.error(error);
+      this.setState({endpointEnabled: false});
       this.props.actionFeedbackContext.displayError(error.message);
     } finally {
       this.setProcessing(false);

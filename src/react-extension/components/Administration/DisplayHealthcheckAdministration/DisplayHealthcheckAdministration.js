@@ -1104,19 +1104,12 @@ class DisplayHealthcheckAdministration extends Component {
 
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing())  {
-        return (
-          <div className="col8 main-column">
-            <h3>Passbolt API Status</h3>
-            <Icon name="spinner" />
-          </div>
-        );
+        return (<Icon name="spinner" />);
       } else {
         return (
-          <div className="healthcheck-settings col8 main-column">
-            <h3>Passbolt API Status</h3>
-
+          <>
+            <h4 className="no-border">Environment</h4>
             <div className="healthcheck-environment-section">
-              <h4>Environment</h4>
               <div>{whichPhpVersionIsInstalled()}</div>
               <div>{isPCREcompiled()}</div>
               <div>{isTmpWrittable()}</div>
@@ -1126,14 +1119,14 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isMbStringInstalled()}</div>
             </div>
 
+            <h4>Config files</h4>
             <div className="healthcheck-configFiles-section">
-              <h4>Config files</h4>
               <div>{isAppConfigFilePresent()}</div>
               <div>{isApiConfigFilePresent()}</div>
             </div>
 
+            <h4>Core config</h4>
             <div className="healthcheck-core-section">
-              <h4>Core config</h4>
               {isDebugDisabled()}
               <div>{isCacheWorking()}</div>
               <div>{isSaltUnique()}</div>
@@ -1142,22 +1135,22 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isFullBaseUrlReachable()}</div>
             </div>
 
+            <h4>SSL Certificate</h4>
             <div className="healthcheck-ssl-section">
-              <h4>SSL Certificate</h4>
               <div>{peerIsValid()}</div>
               <div>{hostIsValid()}</div>
               <div>{isNotASelfSignedCertificate()}</div>
             </div>
 
+            <h4>Database</h4>
             <div className="healthcheck-database-section">
-              <h4>Database</h4>
               <div>{canConnectToDabase()}</div>
               <div>{numberOfTables()}</div>
               <div>{isDefaultContentPresent()}</div>
             </div>
 
+            <h4>GPG Configuration</h4>
             <div className="healthcheck-gpg-section">
-              <h4>GPG Configuration</h4>
               <div>{isGpgModuleInstalled()}</div>
               <div>{isGpgEnvSet()}</div>
               <div>{isKeyringWrittableByWebServer()}</div>
@@ -1175,8 +1168,8 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isServerPrivateKeyInGopenGpg()}</div>
             </div>
 
+            <h4>Application configuration</h4>
             <div className="healthcheck-app-section">
-              <h4>Application configuration</h4>
               <div>{isUsingLatestVersion()}</div>
               <div>{isForceSSLEnabled()}</div>
               <div>{isFullBaseUrlSetToHTTPS()}</div>
@@ -1190,21 +1183,30 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isEmailNotificationEnabled()}</div>
             </div>
 
+            <h4>SMTP Settings</h4>
             <div className="healthcheck-smtp-section">
-              <h4>SMTP Settings</h4>
               <div>{isSmtpPluginEnabled()}</div>
               <div>{isSmtpSettingsCoherent()}</div>
               <div>{whatIsSmtpSettingsSource()}</div>
               <div>{isSmtpEndpointsDisabled()}</div>
             </div>
-          </div>
+          </>
         );
       }
     };
 
+    const isEndpointEnabled = this.props.adminHealthcheckContext.isHealthcheckEndpointEnabled();
     return (
       <div className="row">
-        {renderHealthcheck()}
+        <div className="healthcheck-settings col8 main-column">
+          <h3>Passbolt API Status</h3>
+          {isEndpointEnabled
+            ? renderHealthcheck()
+            : <div>
+              <Trans>The health check API endpoint has been disabled in the server configuration.</Trans>
+            </div>
+          }
+        </div>
         <div className="col4 last">
           <div className="sidebar-help">
             <h3><Trans>What is this page?</Trans></h3>
@@ -1212,23 +1214,23 @@ class DisplayHealthcheckAdministration extends Component {
             <p><Trans>The color is really important here so it&apos;s easier for you to spot what&apos;s not running as expected</Trans></p>
             <div className="healthcheck-color-legends">
               <div className="healthcheck-success">
-                <Icon name="check" /> Everything is running as expected.
+                <Icon name="check" width={18} height={18}/> Everything is running as expected.
               </div>
               <div className="healthcheck-warning">
-                <Icon name="warning" /> Something inside your configuration is not what we recommend, but you can skip it if it has been done on purpose.
+                <Icon name="warning" width={18} height={18}/> Something inside your configuration is not what we recommend, but you can skip it if it has been done on purpose.
               </div>
               <div className="healthcheck-fail">
-                <Icon name="close" /> There is an error with the current configuration, you might want to resolve it.
+                <Icon name="close" width={18} height={18}/> There is an error with the current configuration, you might want to resolve it.
               </div>
               <div className="healthcheck-info">
-                <Icon name="question-circle" /> This is just an information shared, no action is required.
+                <Icon name="question-circle" width={18} height={18}/> This is just an information shared, no action is required.
               </div>
             </div>
           </div>
           <div className="sidebar-help">
             <h3><Trans>Something wrong?</Trans></h3>
             <p><Trans>Hang in there! Depending your installation, you might need to check the documentation in order to run the healthcheck from the CLI</Trans></p>
-            <a className="button" href="https://passbolt.com/faq/hosting/logs" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://www.passbolt.com/docs/hosting/troubleshooting/logs/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>
