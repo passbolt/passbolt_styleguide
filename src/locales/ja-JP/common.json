@@ -959,6 +959,7 @@
   "The group name already exists.": "このグループ名はすでに存在します。",
   "The group users field mapping cannot be empty": "The group users field mapping cannot be empty",
   "The group users field mapping cannot exceed 128 characters.": "The group users field mapping cannot exceed 128 characters.",
+  "The health check API endpoint has been disabled in the server configuration.": "The health check API endpoint has been disabled in the server configuration.",
   "The healthcheck has been successfully refreshed": "The healthcheck has been successfully refreshed",
   "The internationalization settings were updated.": "国際化設定が更新されました。",
   "The invitation is expired.": "招待の有効期限が切れています。",

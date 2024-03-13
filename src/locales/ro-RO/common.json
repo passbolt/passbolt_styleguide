@@ -959,6 +959,7 @@
   "The group name already exists.": "Numele grupului există deja.",
   "The group users field mapping cannot be empty": "The group users field mapping cannot be empty",
   "The group users field mapping cannot exceed 128 characters.": "The group users field mapping cannot exceed 128 characters.",
+  "The health check API endpoint has been disabled in the server configuration.": "The health check API endpoint has been disabled in the server configuration.",
   "The healthcheck has been successfully refreshed": "The healthcheck has been successfully refreshed",
   "The internationalization settings were updated.": "Setările de limbă au fost actualizate.",
   "The invitation is expired.": "Invitația a expirat.",
