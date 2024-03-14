@@ -12,7 +12,6 @@
  * @since         2.13.0
  */
 import EntityCollectionError from "./entityCollectionError";
-import EntityValidationError from "./entityValidationError";
 
 class EntityCollection {
   /**
@@ -242,37 +241,13 @@ class EntityCollection {
   assertUniqueByProperty(propName, message) {
     const ruleId = `unique_${propName}`;
     const propValues = this.extract(propName);
-    // Set is the preferred approach for performance reasons, it does a deduplicate in 0n.
-    const uniqueElements = new Set();
     message = message || `The collection should only contain items with unique values for the property: ${propName}.`;
-    propValues.forEach((propValue, index) => {
-      uniqueElements.add(propValue);
-      if (index !== uniqueElements.size - 1) {
+    propValues.forEach((item, index) => {
+      const foundIndex = propValues.lastIndexOf(item);
+      if (foundIndex !== index) {
         throw new EntityCollectionError(index, ruleId, message);
       }
     });
-  }
-
-  /**
-   * Assert that no item in the collection already has the given value for the given property.
-   * @param {string} propName The property name for checking value uniqueness.
-   * @param {string|boolean|number} propValue The property value for checking value uniqueness.
-   * @param {string} [message] The error message. If none given, it will fallback on a default one.
-   * @throw {EntityValidationError} If another item already has the given value for the given property.
-   */
-  assertNotExist(propName, propValue, message) {
-    const propValues = this.extract(propName);
-    // Set is the preferred approach for performance reasons, it does a deduplicate in 0n.
-    const uniqueElements = new Set(propValues);
-    const sizeBefore = uniqueElements.size;
-    uniqueElements.add(propValue);
-
-    if (sizeBefore === uniqueElements.size) {
-      const error = new EntityValidationError();
-      message = message || `The collection already includes an element that has a property (${propName}) with an identical value.`;
-      error.addError(propName, 'unique', message);
-      throw error;
-    }
   }
 }
 

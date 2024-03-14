@@ -11,10 +11,67 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+import Entity from "./entity";
 import EntityCollection from "./entityCollection";
+import EntitySchema from "./entitySchema";
 import EntityCollectionError from "./entityCollectionError";
-import {TestEntity} from "./entity.test.data";
-import EntityValidationError from "./entityValidationError";
+
+/*
+ * ===========================================
+ *  Fixture classes
+ * ===========================================
+ */
+
+class TestEntity extends Entity {
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate('TestEntity', dto, TestEntity.getSchema()), options);
+  }
+  get name() {
+    return this._props.name;
+  }
+  static getSchema() {
+    return {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "id": {
+          "anyOf": [{
+            "type": "string",
+            "format": "uuid"
+          }, {
+            "type": "null"
+          }],
+        }, "name": {
+          "anyOf": [{
+            "type": "string"
+          }, {
+            "type": "null"
+          }],
+        }
+      }
+    };
+  }
+}
+
+/* eslint-disable no-unused-vars */
+class TestEntityCollection extends Entity {
+  constructor(dto, options = {}) {
+    super(EntitySchema.validate('TestEntityCollection', dto, TestEntityCollection.getSchema()), options);
+  }
+  static getSchema() {
+    return {
+      "type": "array",
+      "items": TestEntity.getSchema(),
+    };
+  }
+}
+/* eslint-enable no-unused-vars */
+
+/*
+ * ===========================================
+ *  Tests
+ * ===========================================
+ */
 
 describe("EntityCollection", () => {
   describe("EntityCollection::constructor", () => {
@@ -309,7 +366,7 @@ describe("EntityCollection", () => {
       try {
         collection.assertUniqueByProperty('name');
       } catch (error) {
-        expect(error.position).toEqual(3);
+        expect(error.position).toEqual(1);
         expect(error.rule).toEqual('unique_name');
       }
     });
@@ -322,44 +379,6 @@ describe("EntityCollection", () => {
 
       expect.assertions(1);
       expect(() => collection.assertUniqueByProperty('name')).toThrow(EntityCollectionError);
-    });
-  });
-
-  describe("EntityCollection::assertNotExist", () => {
-    it("should not throw if no item exists for the given property and value", () => {
-      const collection = new EntityCollection();
-      collection.push(new TestEntity({name: 'first'}));
-      collection.push(new TestEntity({name: 'second'}));
-      collection.push(new TestEntity({name: 'third'}));
-      collection.push(new TestEntity({}));
-      collection.push(new TestEntity({name: null}));
-
-      expect.assertions(1);
-      expect(() => collection.assertNotExist('name', 'zero')).not.toThrow();
-    });
-
-    it("should throw if an item exists for the given property and value", () => {
-      const collection = new EntityCollection();
-      collection.push(new TestEntity({name: 'first'}));
-      collection.push(new TestEntity({name: 'second'}));
-
-      expect.assertions(2);
-      try {
-        collection.assertNotExist('name', 'second');
-      } catch (error) {
-        expect(error).toBeInstanceOf(EntityValidationError);
-        expect(error?.details?.name?.unique).toBeTruthy();
-      }
-    });
-
-    it("should not throw if an item exists for the same property but another value", () => {
-      const collection = new EntityCollection();
-      collection.push(new TestEntity({name: 'first'}));
-      collection.push(new TestEntity({name: 'second'}));
-      collection.push(new TestEntity({name: 'second'}));
-
-      expect.assertions(1);
-      expect(() => collection.assertNotExist('name', 'zero')).not.toThrow();
     });
   });
 });
