@@ -959,7 +959,7 @@
   "The group name already exists.": "그룹 이름이 이미 존재합니다.",
   "The group users field mapping cannot be empty": "그룹 사용자 필드 매핑은 비워 둘 수 없습니다",
   "The group users field mapping cannot exceed 128 characters.": "그룹 사용자 필드 매핑은 128자를 초과할 수 없습니다.",
-  "The health check API endpoint has been disabled in the server configuration.": "The health check API endpoint has been disabled in the server configuration.",
+  "The health check API endpoint has been disabled in the server configuration.": "상태 확인 API 엔드포인트가 서버 구성에서 비활성화되었습니다.",
   "The healthcheck has been successfully refreshed": "상태 확인이 성공적으로 새로 고쳐졌습니다.",
   "The internationalization settings were updated.": "국제화 설정이 업데이트되었습니다.",
   "The invitation is expired.": "초대가 만료되었습니다.",
