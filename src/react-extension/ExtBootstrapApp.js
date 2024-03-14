@@ -130,6 +130,7 @@ class ExtBootstrapApp extends Component {
               "/app/administration/smtp-settings",
               "/app/settings/mfa/:provider",
               "/app/settings/mfa",
+              "/app/administration/healthcheck",
             ]}>
               <>
                 {this.isLegacyAppjs &&

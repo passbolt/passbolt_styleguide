@@ -27,6 +27,8 @@ import OAuth2SsoSettingsEntity from "../../shared/models/entity/ssoSettings/OAut
 import OAuth2SsoSettingsViewModel from "../../shared/models/ssoSettings/OAuth2SsoSettingsViewModel";
 import GoogleSsoSettingsEntity from "../../shared/models/entity/ssoSettings/GoogleSsoSettingsEntity";
 import GoogleSsoSettingsViewModel from "../../shared/models/ssoSettings/GoogleSsoSettingsViewModel";
+import AdfsSsoSettingsEntity from "../../shared/models/entity/ssoSettings/AdfsSsoSettingsEntity";
+import AdfsSsoSettingsViewModel from "../../shared/models/ssoSettings/AdfsSsoSettingsViewModel";
 
 export const AdminSsoContext = React.createContext({
   ssoConfig: null, // The current sso configuration
@@ -150,6 +152,9 @@ export class AdminSsoContextProvider extends React.Component {
       }
       case (OAuth2SsoSettingsEntity.PROVIDER_ID): {
         return OAuth2SsoSettingsViewModel.fromEntityDto(settings);
+      }
+      case (AdfsSsoSettingsEntity.PROVIDER_ID): {
+        return AdfsSsoSettingsViewModel.fromEntityDto(settings);
       }
     }
 

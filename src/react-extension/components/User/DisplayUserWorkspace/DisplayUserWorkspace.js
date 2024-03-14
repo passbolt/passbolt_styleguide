@@ -30,6 +30,7 @@ import DisplayUserGroupDetails from "../../UserGroup/DisplayUserGroupDetails/Dis
 import DisplayUserWorkspaceMainActions from "../DisplayUserWorkspaceMainActions/DisplayUserWorkspaceMainActions";
 import FilterUsersByBreadcrumb from "../FilterUsersByBreadcrumb/FilterUsersByBreadcrumb";
 import HandleReviewAccountRecoveryRequestRoute from "../HandleReviewAccountRecoveryRequestRoute/HandleReviewAccountRecoveryRequestRoute";
+import DisplayHttpError from '../../Common/Error/DisplayHttpError/DisplayHttpError';
 
 /**
  * This component is a container for all the user workspace features
@@ -37,6 +38,7 @@ import HandleReviewAccountRecoveryRequestRoute from "../HandleReviewAccountRecov
 class DisplayUserWorkspace extends React.Component {
   /**
    * Returns true if the user details must be displayed
+   * @returns {boolean}
    */
   get mustDisplayUserDetails() {
     const {details} = this.props.userWorkspaceContext;
@@ -45,10 +47,19 @@ class DisplayUserWorkspace extends React.Component {
 
   /**
    * Returns true if the group details must be displayed
+   * @returns {boolean}
    */
   get mustDisplayGroupDetails() {
     const {details} = this.props.userWorkspaceContext;
     return details.group && details.locked;
+  }
+
+  /**
+   * Returns true if current user is allowed to access the user workspace
+   * @returns {boolean}
+   */
+  get isAccessAllowed() {
+    return this.props.userWorkspaceContext.isAccessAllowed();
   }
 
   /**
@@ -68,19 +79,27 @@ class DisplayUserWorkspace extends React.Component {
         </div>
         <div className="header third">
           <DisplayUserWorkspaceMainActions/>
+          {this.isAccessAllowed &&
           <DisplayUserWorkspaceActions/>
+          }
         </div>
         <div className="panel main">
-          <div className="panel left">
-            <FilterUsersByShortcut/>
-            <DisplayGroups/>
-          </div>
-          <div className="panel middle">
-            <FilterUsersByBreadcrumb/>
-            <DisplayUsers/>
-            {this.mustDisplayUserDetails && <DisplayUserDetails/>}
-            {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
-          </div>
+          {this.isAccessAllowed ? (
+            <>
+              <div className="panel left">
+                <FilterUsersByShortcut/>
+                <DisplayGroups/>
+              </div>
+              <div className="panel middle">
+                <FilterUsersByBreadcrumb/>
+                <DisplayUsers/>
+                {this.mustDisplayUserDetails && <DisplayUserDetails/>}
+                {this.mustDisplayGroupDetails && <DisplayUserGroupDetails/>}
+              </div>
+            </>
+          ) : (
+            <DisplayHttpError errorCode={403}/>
+          )}
         </div>
       </div>
     );

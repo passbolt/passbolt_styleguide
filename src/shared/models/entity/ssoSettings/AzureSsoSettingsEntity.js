@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.6.0
+ * @since         4.5.0
  */
 import Entity from "../abstract/entity";
 import EntitySchema from "../abstract/entitySchema";
@@ -30,18 +30,15 @@ const AZURE_SUPPORTED_URLS = /^https:\/\/login\.(microsoftonline\.(com|us)|partn
  */
 class AzureSsoSettingsEntity extends Entity {
   /**
-   * Azure Sso Settings entity constructor
-   *
-   * @param {Object} azureSsoSettingsDto SSO settings DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(azureSsoSettingsDto) {
+  constructor(azureSsoSettingsDto, options = {}) {
     const sanitizedAzureSsoSettingsDto = AzureSsoSettingsEntity.sanitizeDto(azureSsoSettingsDto);
     super(EntitySchema.validate(
       AzureSsoSettingsEntity.ENTITY_NAME,
       sanitizedAzureSsoSettingsDto,
       AzureSsoSettingsEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

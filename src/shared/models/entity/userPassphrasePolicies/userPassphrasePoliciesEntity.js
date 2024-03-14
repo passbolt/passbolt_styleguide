@@ -19,17 +19,14 @@ const ENTITY_NAME = 'UserPassphrasePolicies';
 
 class UserPassphrasePoliciesEntity extends Entity {
   /**
-   * User Passphrase Policies entity constructor
-   *
-   * @param {Object} userPassphrasePoliciesDto user passphrase policies dto
-   * @throws {EntityValidationError} if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(userPassphrasePoliciesDto) {
+  constructor(userPassphrasePoliciesDto, options = {}) {
     super(EntitySchema.validate(
       UserPassphrasePoliciesEntity.ENTITY_NAME,
       userPassphrasePoliciesDto,
       UserPassphrasePoliciesEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

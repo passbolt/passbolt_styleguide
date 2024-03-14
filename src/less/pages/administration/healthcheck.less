@@ -1,0 +1,73 @@
+.healthcheck-settings {
+  .healthcheck-environment-section,
+  .healthcheck-configFiles-section,
+  .healthcheck-core-section,
+  .healthcheck-ssl-section,
+  .healthcheck-database-section,
+  .healthcheck-gpg-section,
+  .healthcheck-app-section,
+  .healthcheck-smtp-section {
+    .healthcheck-success,
+    .healthcheck-warning,
+    .healthcheck-fail,
+    .healthcheck-info {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: .5rem;
+
+      .tooltip {
+        margin: .3rem 0 0 -.5rem;
+      }
+    }
+    .healthcheck-success {
+      background-color: @healthcheck-pass;
+    }
+    .healthcheck-warning {
+      background-color: @healthcheck-warning;
+    }
+    .healthcheck-fail {
+      background-color: @healthcheck-fail;
+    }
+    .healthcheck-info {
+      background-color: @healthcheck-info;
+    }
+  }
+
+  .svg-icon {
+    width: 1.8rem;
+    min-width: 1.8rem;
+    height: 1.8rem;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.healthcheck-color-legends {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  & > * {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 1rem 1.6rem;
+    border-radius: .5rem;
+  }
+
+  .healthcheck-success {
+    background-color: @healthcheck-pass;
+  }
+  .healthcheck-warning {
+    background-color: @healthcheck-warning;
+  }
+  .healthcheck-fail {
+    background-color: @healthcheck-fail;
+  }
+  .healthcheck-info {
+    background-color: @healthcheck-info;
+  }
+}

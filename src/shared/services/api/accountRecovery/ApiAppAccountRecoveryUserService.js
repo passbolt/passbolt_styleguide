@@ -46,8 +46,7 @@ export default class ApiAppAccountRecoveryUserService {
    */
   getApiClientOptions() {
     return new ApiClientOptions()
-      .setBaseUrl(this.baseUrl)
-      .setCsrfToken(this.getCsrfToken());
+      .setBaseUrl(this.baseUrl);
   }
 
   /**

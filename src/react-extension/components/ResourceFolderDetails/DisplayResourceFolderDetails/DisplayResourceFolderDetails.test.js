@@ -16,12 +16,14 @@
  * Unit tests on FolderSidebar in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import React from 'react';
 import {
   defaultAppContext, defaultProps
 } from "./DisplayResourceFolderDetails.test.data";
 import DisplayResourceFolderDetailsPage from "./DisplayResourceFolderDetails.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
 
 jest.mock("./DisplayResourceFolderDetailsInformation", () => () => <></>);
 jest.mock("./DisplayResourceFolderDetailsActivity", () => () => <></>);
@@ -29,12 +31,6 @@ jest.mock("./DisplayResourceFolderDetailsPermissions", () => () => <></>);
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("See Resource Sidebar", () => {
@@ -75,6 +71,29 @@ describe("See Resource Sidebar", () => {
     it('As LU I should be able to close the folder details', async() => {
       await page.closeFolderDetails();
       expect(props.resourceWorkspaceContext.onLockDetail).toHaveBeenCalled();
+    });
+
+    it("I should see the share option when rbac is available", async() => {
+      expect.assertions(1);
+
+      expect(props.shareWith).not.toBeNull();
+    });
+
+
+    it("I should see the share option when rbac is not defined", async() => {
+      expect.assertions(1);
+
+      expect(props.shareWith).not.toBeNull();
+    });
+
+    it("I should not see the share option when rbac is unavailable", async() => {
+      expect.assertions(1);
+
+      const props = defaultProps(); // The props to pass
+      props.rbacContext = denyRbacContext();
+      page = new DisplayResourceFolderDetailsPage(context, props);
+
+      expect(props.shareWith).toBeUndefined();
     });
   });
 });

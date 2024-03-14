@@ -19,6 +19,7 @@ import AdminSsoSettingsContextProvider from "../../../contexts/AdminSsoContext";
 import {defaultProps, disabledSso, azureConfiguredSso} from "./ManageSsoSettings.test.data";
 import DisplayActionFeedbacks from "../../Common/ActionFeedback/DisplayActionFeedbacks";
 import ActionFeedbackContextProvider from "../../../contexts/ActionFeedbackContext";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 
 export default {
   title: 'Components/Administration/ManageSsoSettings',
@@ -26,21 +27,23 @@ export default {
 };
 
 const Template = args =>
-  <DialogContextProvider>
-    <ManageDialogs/>
-    <ActionFeedbackContextProvider>
-      <DisplayActionFeedbacks/>
-      <AdminSsoSettingsContextProvider {...args}>
-        <div className="panel main">
-          <div className="panel middle">
-            <div className="grid grid-responsive-12">
-              <ManageSsoSettings {...args}/>
+  <AppContext.Provider value={args.context}>
+    <DialogContextProvider>
+      <ManageDialogs/>
+      <ActionFeedbackContextProvider>
+        <DisplayActionFeedbacks/>
+        <AdminSsoSettingsContextProvider {...args}>
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="grid grid-responsive-12">
+                <ManageSsoSettings {...args}/>
+              </div>
             </div>
           </div>
-        </div>
-      </AdminSsoSettingsContextProvider>
-    </ActionFeedbackContextProvider>
-  </DialogContextProvider>;
+        </AdminSsoSettingsContextProvider>
+      </ActionFeedbackContextProvider>
+    </DialogContextProvider>
+  </AppContext.Provider>;
 
 export const Default = Template.bind({});
 Default.args = defaultProps();
@@ -51,5 +54,7 @@ Azure.args = defaultProps();
 Azure.args.context.port.addRequestListener("passbolt.sso.get-current", azureConfiguredSso);
 
 export const ErrorFromTheServer = Template.bind({});
-ErrorFromTheServer.args = defaultProps();
+const props = defaultProps();
+delete props.dialogContext; //making sure that this prop is not overriden and avoid a bug where the dialog doesn't display
+ErrorFromTheServer.args = props;
 ErrorFromTheServer.args.context.port.addRequestListener("passbolt.sso.get-current", () => { throw new Error("Something went wrong"); });

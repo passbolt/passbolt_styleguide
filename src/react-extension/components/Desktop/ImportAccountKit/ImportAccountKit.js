@@ -170,7 +170,7 @@ class ImportAccountKit extends React.Component {
    * @returns {Promise<void>}
    */
   openDocumentation() {
-    this.props.context.port.emit("passbolt.rendered.open-to-browser", "https://help.passbolt.com/TBD");
+    this.props.context.port.emit("passbolt.rendered.open-to-browser", "https://help.passbolt.com/configure/windows-app");
   }
 
   /**

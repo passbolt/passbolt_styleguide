@@ -21,24 +21,22 @@ const RULE_UNIQUE_ID = 'unique_id';
 
 class RolesCollection extends EntityCollection {
   /**
-   *Roles Entity constructor
-   *
-   * @param {Object} rolesCollectionDto roles DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
+   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
    */
-  constructor(rolesCollectionDto) {
+  constructor(rolesCollectionDto, options = {}) {
     super(EntitySchema.validate(
       RolesCollection.ENTITY_NAME,
       rolesCollectionDto,
       RolesCollection.getSchema()
-    ));
+    ), options);
 
     /*
      * Note: there is no "multi-item" validation
      * Collection validation will fail at the first item that doesn't validate
      */
     this._props.forEach(role => {
-      this.push(new RoleEntity(role));
+      this.push(new RoleEntity(role, {clone: false}));
     });
 
     // We do not keep original props

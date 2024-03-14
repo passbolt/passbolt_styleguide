@@ -82,7 +82,7 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
     expect(page.displayBreadcrumb.item(1)).toBe("All items");
-    expect(page.displayBreadcrumb.item(2)).toBe("Expiry");
+    expect(page.displayBreadcrumb.item(2)).toBe("Expired");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toBe("0");
   });
 

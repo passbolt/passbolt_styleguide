@@ -41,7 +41,6 @@ export function defaultAppContext(appContext = {}, userId = uuidv4()) {
     baseUrl: "https://localhost:6006",
     getApiClientOptions: () => new ApiClientOptions()
       .setBaseUrl("https://localhost:6006")
-      .setCsrfToken("ca880ecf37c9bb06bd32d5967b050b324a4a5c3f9bc5b9dcbde31f0526c876286ffd0b0b5f920340b8c8829fb00c0edecacacd668f151a895782d9241a433413")
   };
   return Object.assign(defaultAppContext, appContext);
 }

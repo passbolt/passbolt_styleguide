@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import Select from "../../Common/Select/Select";
 import {controlFunctions} from "../../../../shared/services/rbacs/controlFunctionEnumeration";
+import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 
 class DisplayRbacItem extends React.Component {
   /**
@@ -45,12 +46,10 @@ class DisplayRbacItem extends React.Component {
       {value: controlFunctions.ALLOW, label: this.props.t('Allow')},
       {value: controlFunctions.DENY, label: this.props.t('Deny')},
     ];
-    /**
-     * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
-     * if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
-     *  controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
-     *}
-     */
+
+    if (this.props.actionName === uiActions.USERS_VIEW_WORKSPACE) {
+      controls.push({value: controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP, label: this.props.t('Allow group manager')});
+    }
     return controls;
   }
 
@@ -108,7 +107,7 @@ class DisplayRbacItem extends React.Component {
           </div>
           {customizableRoles.map(role => <div key={`${this.props.actionName}-${role.id}`} className="flex-item input">
             <Select
-              className={`medium ${role.name}`}
+              className={`${role.name}`}
               items={this.allowedCtlFunctions}
               value={this.getCtlFunctionForRole(role)}
               disabled={!(this.props.rbacs?.length > 0) || !this.getCtlFunctionForRole(role)}

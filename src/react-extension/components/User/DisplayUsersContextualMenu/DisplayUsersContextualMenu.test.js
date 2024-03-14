@@ -16,6 +16,7 @@
  * Unit tests on DisplayUsersContextualMenu in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import {
   contextWithoutDelete,
   contextWithoutDisableMFA,
@@ -33,12 +34,6 @@ import HandleReviewAccountRecoveryWorkflow from "../../AccountRecovery/HandleRev
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display Users Contextual Menu", () => {

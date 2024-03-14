@@ -16,18 +16,13 @@
  * Unit tests on DisplayUserDetails in regard of specifications
  */
 
+import "../../../../../test/mocks/mockClipboard";
 import {defaultAppContext, defaultProps} from "./DisplayUserDetails.test.data";
 import DisplayUserDetailsPage from "./DisplayUserDetails.test.page";
 import {waitFor} from "@testing-library/react";
 
 beforeEach(() => {
   jest.resetModules();
-  let clipboardData = ''; //initalizing clipboard data so it can be used in testing
-  const mockClipboard = {
-    writeText: jest.fn(data => clipboardData = data),
-    readText: jest.fn(() => document.activeElement.value = clipboardData),
-  };
-  global.navigator.clipboard = mockClipboard;
 });
 
 describe("Display User Details", () => {

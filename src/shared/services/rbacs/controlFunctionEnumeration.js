@@ -13,6 +13,7 @@
  */
 
 import AllowControlFunction from "./controlFunctions/allowControlFunction";
+import AllowIfGroupManagerInOneGroupFunction from "./controlFunctions/allowIfGroupManagerInOneGroupFunction";
 import DenyControlFunction from "./controlFunctions/denyControlFunction";
 import {uiActions} from "./uiActionEnumeration";
 
@@ -23,10 +24,7 @@ import {uiActions} from "./uiActionEnumeration";
 export const controlFunctions = {
   ALLOW: 'Allow',
   DENY: 'Deny',
-  /*
-   * Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
-   * ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP: 'AllowIfGroupManagerInOneGroup'
-   */
+  ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP: 'AllowIfGroupManagerInOneGroup'
 };
 
 /**
@@ -36,10 +34,7 @@ export const controlFunctions = {
 export const controlFunctionResolutions = {
   [controlFunctions.ALLOW]: AllowControlFunction,
   [controlFunctions.DENY]: DenyControlFunction,
-  /*
-   *  Remove ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP for version 4.5.0
-   * [controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP]: AllowIfGroupManagerInOneGroupFunction
-   */
+  [controlFunctions.ALLOW_IF_GROUP_MANAGER_IN_ONE_GROUP]: AllowIfGroupManagerInOneGroupFunction
 };
 
 /**
@@ -57,5 +52,5 @@ export const defaultAdminUiActionControlResolution = {
  * @type {object}
  */
 export const defaultUserUiActionControlResolution = {
-  [uiActions.FOLDERS_USE]: controlFunctionResolutions[controlFunctions.ALLOW] // Default example, to be removed when the placeholder won't be necessary anymore to explain the dat structure
+  [uiActions.ADMINSTRATION_VIEW_WORKSPACE]: controlFunctionResolutions[controlFunctions.DENY],
 };

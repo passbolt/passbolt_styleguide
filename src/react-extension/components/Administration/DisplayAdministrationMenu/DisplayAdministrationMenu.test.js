@@ -69,6 +69,18 @@ describe("As AD I can see the administration menu", () => {
     expect(props.navigationContext.onGoToAdministrationEmailNotificationsRequested).toHaveBeenCalled();
   });
 
+  it('As AD I should be able to go to the healthcheck', async() => {
+    expect.assertions(3);
+    const props = defaultProps({
+      administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
+    }); // The props to pass
+    page = new DisplayAdministrationMenuPage(context, props);
+    expect(page.exists()).toBeTruthy();
+    await page.goToHealthcheck();
+    expect(page.menuSelected).toBe('Passbolt API Status');
+    expect(props.navigationContext.onGoToAdministrationHealthcheckRequested).toHaveBeenCalled();
+  });
+
   it('As AD I should be able to go to subscription', async() => {
     expect.assertions(3);
     const props = defaultProps({
@@ -162,6 +174,36 @@ describe("As AD I can see the administration menu", () => {
       page = new DisplayAdministrationMenuPage(context, props);
       expect(page.exists()).toBeTruthy();
       expect(page.selfRegistration).toBeNull();
+    });
+  });
+
+  describe("As a logged in administrator in the administrator workspace, I can see the Passbolt API status settings option in the left-side bar", () => {
+    it('If the feature flag is true, the menu should be visible', async() => {
+      expect.assertions(4);
+      const props = defaultProps({
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      await page.goToHealthcheck();
+      expect(page.healthCheck).toBeTruthy();
+      expect(page.menuSelected).toBe('Passbolt API Status');
+      expect(props.navigationContext.onGoToAdministrationHealthcheckRequested).toHaveBeenCalled();
+    });
+
+    it('If the feature flag is false, the menu should not be visible', async() => {
+      expect.assertions(2);
+      const props = defaultProps({
+        context: {
+          siteSettings: {
+            canIUse: feature => feature !== "healthcheckUi"
+          }
+        },
+        administrationWorkspaceContext: {selectedAdministration: AdministrationWorkspaceMenuTypes.HEALTHCHECK}
+      }); // The props to pass
+      page = new DisplayAdministrationMenuPage(context, props);
+      expect(page.exists()).toBeTruthy();
+      expect(page.healthCheck).toBeNull();
     });
   });
 

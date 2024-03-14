@@ -137,6 +137,7 @@ class ExtApp extends Component {
                                             "/app/administration/smtp-settings",
                                             "/app/settings/mfa/:provider",
                                             "/app/settings/mfa",
+                                            "/app/administration/healthcheck",
                                           ]}/>
                                           {/* Passwords workspace */}
                                           <Route path={[

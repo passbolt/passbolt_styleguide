@@ -309,7 +309,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  const assertBodyError = new TypeError(`ApiClient.assertBody error: body should be a string.`);
+  const assertBodyError = new TypeError(`ApiClient.assertBody error: body should be a string or a FormData.`);
   each([
     {body: 1, error: assertBodyError},
     {body: true, error: assertBodyError},

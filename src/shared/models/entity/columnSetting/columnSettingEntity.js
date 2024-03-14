@@ -24,17 +24,14 @@ const COLUMN_LABEL_MAX_LENGTH = 255;
  */
 class ColumnSettingEntity extends Entity {
   /**
-   * ColumnSetting entity constructor
-   *
-   * @param {Object} columnSettingDto columnSetting DTO
-   * @throws EntityValidationError if the dto cannot be converted into an entity
+   * @inheritDoc
    */
-  constructor(columnSettingDto) {
+  constructor(columnSettingDto, options = {}) {
     super(EntitySchema.validate(
       ColumnSettingEntity.ENTITY_NAME,
       columnSettingDto,
       ColumnSettingEntity.getSchema()
-    ));
+    ), options);
   }
 
   /**

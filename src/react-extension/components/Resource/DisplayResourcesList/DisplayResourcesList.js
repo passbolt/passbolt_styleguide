@@ -53,6 +53,7 @@ import ColumnExpiredModel from "../../../../shared/models/column/ColumnExpiredMo
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import CellDate from "../../../../shared/components/Table/CellDate";
 import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
+import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -125,17 +126,17 @@ class DisplayResourcesList extends React.Component {
       this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
     }
 
-    this.defaultColumns.push(new ColumnNameModel({label: this.translate("Name")}));
+    this.defaultColumns.push(new ColumnNameModel({headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Name")}}}));
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
-      this.defaultColumns.push(new ColumnExpiredModel({label: this.translate("Expiry"), cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}}));
+      this.defaultColumns.push(new ColumnExpiredModel({cellRenderer: {component: CellExpiryDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Expiry")}}}));
     }
-    this.defaultColumns.push(new ColumnUsernameModel({label: this.translate("Username"), cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}}));
-    this.defaultColumns.push(new ColumnPasswordModel({label: this.translate("Password"), cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}}));
+    this.defaultColumns.push(new ColumnUsernameModel({cellRenderer: {component: CellButton, props: {onClick: this.handleCopyUsernameClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Username")}}}));
+    this.defaultColumns.push(new ColumnPasswordModel({cellRenderer: {component: CellPassword, props: {title: this.translate("secret"), getPreviewPassword: this.getPreviewPassword, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onPasswordClick: this.handleCopyPasswordClick, onPreviewPasswordClick: this.handlePreviewPasswordButtonClick, hasPassword: this.isPasswordResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Password")}}}));
     if (this.props.context.siteSettings.canIUse('totpResourceTypes')) {
-      this.defaultColumns.push(new ColumnTotpModel({label: this.translate("TOTP"), cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}}));
+      this.defaultColumns.push(new ColumnTotpModel({cellRenderer: {component: CellTotp, props: {title: this.translate("secret"), getPreviewTotp: this.getPreviewTotp, canCopy: this.canCopySecret, canPreview: this.canPreviewSecret, onTotpClick: this.handleCopyTotpClick, onPreviewTotpClick: this.handlePreviewTotpButtonClick, hasTotp: this.isTotpResources}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("TOTP")}}}));
     }
-    this.defaultColumns.push(new ColumnUriModel({label: this.translate("URI"), cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}}));
-    this.defaultColumns.push(new ColumnModifiedModel({label: this.translate("Modified"), cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}}));
+    this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
+    this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
   }
 
   /**
