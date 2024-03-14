@@ -11,8 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.1.0
  */
-
-import PassboltApiFetchError from "../../../lib/Error/PassboltApiFetchError";
 import {ApiClient} from "../../../lib/apiClient/apiClient";
 
 const AUTH_RESOURCE_NAME = "auth";
