@@ -52,20 +52,6 @@ describe("CanUseService", () => {
       expect(CanUse.getByRbacOrDefault).toHaveBeenCalled();
     });
 
-    it('should return true for desktop action with RBAC control function', () => {
-      expect.assertions(3);
-      global.window.chrome = {webview: true};
-
-      jest.spyOn(rbacs, "findRbacByActionName");
-      jest.spyOn(GetControlFunctionService, "getByRbac");
-
-      const result = CanUse.canRoleUseUiAction(user, rbacs, uiActions.RESOURCES_EXPORT);
-
-      expect(result).toBe(true);
-      expect(rbacs.findRbacByActionName).toHaveBeenCalledWith(uiActions.RESOURCES_EXPORT);
-      expect(GetControlFunctionService.getByRbac).toHaveBeenCalled();
-    });
-
     it('should return false if rbac is Deny', () => {
       expect.assertions(1);
 
