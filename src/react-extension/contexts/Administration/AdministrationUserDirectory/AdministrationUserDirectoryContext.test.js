@@ -12,7 +12,7 @@
  * @since         3.8.0
  */
 
-import {defaultProps} from "../../../../react-extension/components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
+import {defaultProps} from "../../../components/Administration/DisplayUserDirectoryAdministration/DisplayUserDirectoryAdministration.test.data";
 import {enableFetchMocks} from 'jest-fetch-mock';
 import {AdminUserDirectoryContextProvider} from "./AdministrationUserDirectoryContext";
 import {mockApiResponse, mockApiResponseError} from '../../../../../test/mocks/mockApiResponse';
