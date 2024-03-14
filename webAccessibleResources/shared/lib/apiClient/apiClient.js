@@ -141,7 +141,7 @@ export class ApiClient {
    */
   async findAll(urlOptions) {
     const url = this.buildUrl(this.baseUrl.toString(), urlOptions || {});
-    return await this.fetchAndHandleResponse('GET', url);
+    return this.fetchAndHandleResponse('GET', url);
   }
 
   /**
@@ -382,20 +382,27 @@ export class ApiClient {
    * @public
    */
   async fetchAndHandleResponse(method, url, body, options) {
-    let responseJson;
     const response = await this.sendRequest(method, url, body, options);
+    return this.parseResponseJson(response);
+  }
 
+  /**
+   * Parse the response into json
+   * @param {Response} response Fetch response
+   * @return {Promise<object>}
+   */
+  async parseResponseJson(response) {
+    let responseJson;
     try {
       responseJson = await response.json();
     } catch (error) {
-      console.debug(url.toString(), error);
+      console.debug(response.url.toString(), error);
       /*
        * If the response cannot be parsed, it's not a Passbolt API response.
        * It can be a for example a proxy timeout error (504).
        */
       throw new PassboltBadResponseError(error, response);
     }
-
     if (!response.ok) {
       const message = responseJson.header.message;
       throw new PassboltApiFetchError(message, {

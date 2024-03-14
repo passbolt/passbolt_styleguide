@@ -11,6 +11,10 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+
+/**
+ * @deprecated to replace with CollectionValidationError.
+ */
 class EntityCollectionError extends Error {
   /**
    * EntityCollectionError
