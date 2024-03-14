@@ -6,7 +6,7 @@ import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../../../shared/models/e
  * @param {Object} data The props to override
  * @returns {object}
  */
-export function defaultProps(data) {
+export function defaultProps(data = {}) {
   const defaultProps = {
     context: defaultAppContext({
       loggedInUser: {
