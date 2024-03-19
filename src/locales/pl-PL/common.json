@@ -657,7 +657,7 @@
   "Password": "Hasło",
   "Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.": "Password automatically expires when a user or group with a user who has accessed the password is removed from the permission list.",
   "Password expiry": "Data ważności hasła",
-  "Password Expiry": "Data wygaśnięcia hasła",
+  "Password Expiry": "Polityki wygaszania haseł",
   "Password expiry date is renewed based on the default password expiry period whenever a password is updated.": "Password expiry date is renewed based on the default password expiry period whenever a password is updated.",
   "Password Generator": "Generator haseł",
   "Password generator default settings": "Domyślne ustawienia generatora haseł",
