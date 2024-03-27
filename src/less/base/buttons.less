@@ -255,6 +255,51 @@ button,
           box-shadow: none;
         }
     }
+
+  /* attention */
+  &.attention {
+    background: @button-attention-background;
+    box-shadow: inset 0 0 0 .1rem @button-attention-border;
+    color: @button-attention-color;
+
+    svg {
+      --icon-color: @icon-warning-color;
+      --icon-background-color: @icon-warning-background-color;
+    }
+
+    &.processing {
+      color: transparent;
+      background: @button-attention-background;
+      box-shadow: inset 0 0 0 1px @button-attention-border;
+
+      &.disabled, &:disabled {
+        background: rgba(@button-attention-background, 0.5);
+      }
+
+      .svg-icon.spinner {
+        --spinner-color: @icon-spinner-warning-color;
+        --spinner-background: rgba(@icon-spinner-warning-background, 0.25);
+      }
+    }
+
+    &:hover {
+      box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-attention-border;
+    }
+
+    &:focus {
+      box-shadow: 0 0 .4rem @shadow-focus-color;
+    }
+
+    &:active {
+      background: @button-attention-background;
+      box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-attention-border;
+    }
+
+    /* disabled */
+    &.disabled, &:disabled {
+      box-shadow: none;
+    }
+  }
 }
 
 /* sizes */
