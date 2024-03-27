@@ -349,7 +349,6 @@ class CreateResource extends Component {
       const resource = await this.createResource();
       await this.handleSaveSuccess(resource);
     } catch (error) {
-      console.log(error);
       await this.toggleProcessing();
       await this.handleSaveError(error);
     }
