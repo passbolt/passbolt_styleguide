@@ -20,12 +20,14 @@ import each from "jest-each";
 import {CreateGpgKeyVariation} from "./CreateGpgKey";
 import {defaultProps} from "./CreateGpgKey.test.data";
 import CreateGpgKeyPage from "./CreateGpgKey.test.page";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import {passphraseIsInDictionnary} from "../../../../shared/services/api/secrets/pownedService.data";
+import {defaultUserPassphrasePoliciesEntityDto} from "../../../../shared/models/userPassphrasePolicies/UserPassphrasePoliciesDto.test.data";
 
 jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
 
 beforeEach(() => {
   jest.resetModules();
-  jest.useFakeTimers();
   jest.clearAllMocks();
 });
 
@@ -210,6 +212,84 @@ describe("CreateGpgKey", () => {
       await page.clickSecondaryActionLink();
       expect(props.onSecondaryActionClick).toHaveBeenCalled();
     });
+
+    it(`As AN on the setup workflow I cannot set a passphrase from a data breach`, async() => {
+      expect.assertions(5);
+      const spyOnPwnedService = jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
+      const passphrase = "passphrase from breached data";
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
+      await page.fill(passphrase);
+
+      expect(page.passphraseErrorMessage).toBeNull();
+      await page.generateKey();
+
+      expect(spyOnPwnedService).toHaveBeenCalledTimes(1);
+      expect(spyOnPwnedService).toHaveBeenCalledWith(passphrase);
+      expect(page.passphraseErrorMessage.textContent).toBe("The passphrase is part of an exposed data breach.");
+      expect(page.nextButton.disabled).toStrictEqual(true);
+    });
+
+    it('As AN on the setup workflow, if the pwnedpassword feature flag is unset I do not know if my passphrase is found in a data breach', async() => {
+      expect.assertions(2);
+
+      let generateResolve = null;
+      const onComplete = jest.fn(() => new Promise(resolve => generateResolve = resolve));
+      const props = defaultProps({
+        onComplete,
+        displayAs: CreateGpgKeyVariation.SETUP,
+        userPassphrasePolicies: defaultUserPassphrasePoliciesEntityDto({
+          external_dictionary_check: false,
+        })
+      });
+
+      const spyOnPwnedService = jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
+      const passphrase = "passphrase from breached data";
+      const page = new CreateGpgKeyPage(props);
+      await page.fill(passphrase);
+
+      expect(page.passphraseErrorMessage).toBeNull();
+      await page.generateKey();
+      await generateResolve();
+
+      expect(spyOnPwnedService).not.toHaveBeenCalled();
+    });
+
+    it(`As AN on the setup workflow I see the entropy updated when I type a character after having typed a passphrase from a data breach`, async() => {
+      expect.assertions(3);
+      jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
+      await page.fill("passphrase from breached data");
+
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+      await page.generateKey();
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 0.0");
+
+      await page.fill("passphrase from breached tada");
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+    });
+
+    it(`As AN on the setup workflow I can submit the from after having changed the passphrase used from a data breach`, async() => {
+      expect.assertions(4);
+      const notBreachedPassphrase = "notBreachedPassphrase";
+      jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(passphrase => passphraseIsInDictionnary({
+        inDictionary: passphrase !== notBreachedPassphrase
+      }));
+      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
+      const page = new CreateGpgKeyPage(props);
+      await page.fill("passphrase from breached data");
+
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+      await page.generateKey();
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 0.0");
+
+      await page.fill(notBreachedPassphrase);
+      await page.generateKey();
+
+      expect(props.onComplete).toHaveBeenCalledTimes(1);
+      expect(props.onComplete).toHaveBeenCalledWith(notBreachedPassphrase);
+    });
   });
 
   describe('As AN on the Recover workflow', () => {
@@ -219,16 +299,6 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
 
       expect(page.title).toBe("Welcome to Passbolt, please select a passphrase!");
-    });
-
-    it('As AN I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
-      expect.assertions(1);
-      const props = defaultProps({displayAs: CreateGpgKeyVariation.SETUP});
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
-      const page = new CreateGpgKeyPage(props);
-      await waitFor(() => {});
-      await page.fill("ispowned service unavailable");
-      expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
     });
 
     it("As AN I should see a complexity as Quality if the passphrase is empty", async() => {
