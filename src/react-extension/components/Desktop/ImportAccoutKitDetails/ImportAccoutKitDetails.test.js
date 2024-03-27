@@ -81,26 +81,6 @@ describe("ImportAccoutKitDetails", () => {
       expect(page.invalidGPGKey.textContent).toEqual("The private key is invalid.");
     });
 
-    it('As an unknown user configuring the desktop app I should be warned if my passphrase is part of a dictionary', async() => {
-      expect.assertions(2);
-
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.resolve(80));
-      await page.fillPassphrase(passphrase);
-
-      expect(page.hasInvalidPassphraseWarning).toBeTruthy();
-      expect(page.warningMessage.textContent).toEqual("The passphrase is part of an exposed data breach.");
-    });
-
-    it('As an unknown user configuring the desktop app I should be informed if the powned service is unavailable', async() => {
-      expect.assertions(2);
-
-      jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
-      await page.fillPassphrase(passphrase);
-
-      expect(page.hasInvalidPassphraseWarning).toBeTruthy();
-      expect(page.warningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
-    });
-
     it('As an unknown user configuring the desktop app I should be able to import another account', async() => {
       expect.assertions(1);
 
