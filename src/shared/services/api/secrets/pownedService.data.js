@@ -18,6 +18,12 @@ export const passphraseIsInDictionnary = (data = {}) => ({
   ...data,
 });
 
+export const passphraseIsNotInDictionnary = (data = {}) => ({
+  inDictionary: false,
+  isPwnedServiceAvailable: true,
+  ...data,
+});
+
 export const pownedServiceUnavailable = (data = {}) => ({
   inDictionary: false,
   isPwnedServiceAvailable: false,
