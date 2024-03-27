@@ -228,7 +228,7 @@ describe("See the Edit Resource", () => {
         name: "Password name",
         uri: "https://uri.dev",
         username: "Password username",
-        password: "password-value12345",
+        password: "RN9n8XuECN312345",
         description: "Password description"
       };
       // Fill the form
@@ -394,7 +394,7 @@ describe("See the Edit Resource", () => {
         name: "Password name",
         uri: "https://uri.dev",
         username: "Password username",
-        password: "password-value",
+        password: "RN9n8XuECN3",
         description: "Password description",
       };
       // Fill the form
@@ -495,7 +495,7 @@ describe("See the Edit Resource", () => {
       // Mock the request function to make it return an error.
       page.passwordEdit.focusInput(page.passwordEdit.password);
 
-      await page.passwordEdit.fillInputPassword("password");
+      await page.passwordEdit.fillInputPassword("RN9n8XuECN3");
       page.passwordEdit.blurInput(page.passwordEdit.password);
 
       const error = new PassboltApiFetchError("Jest simulate API error.");
@@ -527,7 +527,7 @@ describe("See the Edit Resource", () => {
 
       page.passwordEdit.focusInput(page.passwordEdit.password);
 
-      await page.passwordEdit.fillInputPassword("password");
+      await page.passwordEdit.fillInputPassword("RN9n8XuECN3");
       page.passwordEdit.blurInput(page.passwordEdit.password);
 
       // Mock the request function to make it the expected result
@@ -607,6 +607,36 @@ describe("See the Edit Resource", () => {
         resourceName: resource.name,
         operation: ConfirmEditCreateOperationVariations.EDIT,
         rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+        onConfirm: expect.any(Function),
+        onReject: expect.any(Function),
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+    });
+
+    it("As a signed-in user editing a password which part of a dictionary on the application, I should confirm the password edition in a separate dialog", async() => {
+      expect.assertions(2);
+
+      const props = defaultProps();
+      const resource = props.context.resources[0];
+
+      const mockRequests = jest.fn(async message => ({
+        "passbolt.secret.decrypt": {password: "azerty", description: "description"},
+        "passbolt.secrets.powned-password": 2
+      }[message]));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+      await waitFor(() => {});
+
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      const confirmDialogProps = {
+        resourceName: resource.name,
+        operation: ConfirmEditCreateOperationVariations.EDIT,
+        rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
         onConfirm: expect.any(Function),
         onReject: expect.any(Function),
       };
