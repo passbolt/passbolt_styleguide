@@ -49,14 +49,23 @@ class FormCancelButton extends Component {
    */
   render() {
     return (
-      <button type="button" disabled={this.props.disabled} className="link cancel" onClick={this.handleClick}><Trans>Cancel</Trans></button>
+      <button type="button" disabled={this.props.disabled} className="link cancel" onClick={this.handleClick}>{this.props.value}</button>
     );
   }
 }
 
+FormCancelButton.defaultProps = {
+  value: <Trans>Cancel</Trans>,
+};
+
 FormCancelButton.propTypes = {
   disabled: PropTypes.bool,
   onClick: PropTypes.func,
+  value: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string,
+  ]),
 };
 
 export default withTranslation("common")(FormCancelButton);
