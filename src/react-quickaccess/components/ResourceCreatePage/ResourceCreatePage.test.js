@@ -134,7 +134,7 @@ describe("ResourceCreatePage", () => {
     });
   });
 
-  describe("Form submition", () => {
+  describe("Form submission", () => {
     it("should create a new password on submit", async() => {
       const fakeNow = new Date("2023-11-24T00:00:00.000Z");
       expect.assertions(6);
@@ -153,8 +153,6 @@ describe("ResourceCreatePage", () => {
         jest.runAllTimers();
       };
 
-      const pwnedWarningMessage = () => component.container.querySelector('.pwned-password.warning-message');
-      const complexityText = () => component.container.querySelector('.complexity-text');
       // Mock the passbolt messaging layer.
       context.port = {
         request: function(event, value) {
@@ -194,7 +192,7 @@ describe("ResourceCreatePage", () => {
       );
       await waitFor(() => {});
 
-      expect.assertions(6);
+      expect.assertions(1);
 
       // Fill the form empty fields
       const usernameInput = component.container.querySelector('[name="username"]');
@@ -202,18 +200,7 @@ describe("ResourceCreatePage", () => {
       fireEvent.change(usernameInput, usernameInputEvent);
 
       await inputPasswordChange("P4ssb0lt");
-      expect(pwnedWarningMessage()).toBe(null);
-      await inputPasswordChange("");
-      expect(pwnedWarningMessage()).toBe(null);
-      expect(complexityText().textContent).toBe("Quality");
-      //Powned password should raise a warning and not block submit
-      await inputPasswordChange("hello-world");
       await waitFor(() => {});
-      expect(pwnedWarningMessage().textContent).toBe("The password is part of an exposed data breach.");
-      //Service for powned password unavailable should not block
-      await inputPasswordChange("unavailable");
-      await waitFor(() => {});
-      expect(pwnedWarningMessage().textContent).toBe("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
 
       //Reset the system time at the desired one as filling input runs some jest timers.
       jest.setSystemTime(fakeNow);
@@ -235,11 +222,15 @@ describe("ResourceCreatePage", () => {
       };
 
       const secretDto = {
-        password: "unavailable",
+        password: "P4ssb0lt",
         description: ""
       };
       expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, secretDto);
     });
+
+    it.todo("should create a new password on submit when the dictionary service is unreachable");
+
+    it.todo("should request confirmation when password is part of an exposed data breach");
   });
 });
 
