@@ -117,8 +117,8 @@ class ConfirmCreateEdit extends Component {
     return (
       <DialogWrapper
         title={{
-          [ConfirmEditCreateOperationVariations.CREATE]: <Trans>Confirm password creation</Trans>,
-          [ConfirmEditCreateOperationVariations.EDIT]: <Trans>Confirm password edition</Trans>,
+          [ConfirmEditCreateOperationVariations.CREATE]: <Trans>Confirm resource creation</Trans>,
+          [ConfirmEditCreateOperationVariations.EDIT]: <Trans>Confirm resource edition</Trans>,
         }[this.props.operation]}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
@@ -132,22 +132,26 @@ class ConfirmCreateEdit extends Component {
               }[this.props.rule]}
             </p>
             <p>
-              <Trans>
-                Are you sure you want to create the resource <strong
-                  className="dialog-variable">{{resourceName: this.props.resourceName}}</strong>?
-              </Trans>
+              {{
+                [ConfirmEditCreateOperationVariations.CREATE]: <Trans>
+                  Are you sure you want to create the resource <strong
+                    className="dialog-variable">{{resourceName: this.props.resourceName}}</strong>?
+                </Trans>,
+                [ConfirmEditCreateOperationVariations.EDIT]: <Trans>
+                  Are you sure you want to edit the resource <strong
+                    className="dialog-variable">{{resourceName: this.props.resourceName}}</strong>?
+                </Trans>,
+              }[this.props.operation]}
             </p>
           </div>
           <div className="submit-wrapper clearfix">
             <FormCancelButton value={this.translate("Edit password")}
               disabled={this.hasAllInputDisabled()}
               onClick={this.handleRejectClicked}/>
-            <FormSubmitButton value={{
-              [ConfirmEditCreateOperationVariations.CREATE]: <Trans>Proceed anyway</Trans>,
-            }[this.props.operation]}
-            disabled={this.hasAllInputDisabled()}
-            processing={this.state.processing}
-            attention={true}/>
+            <FormSubmitButton value={this.translate("Proceed anyway")}
+              disabled={this.hasAllInputDisabled()}
+              processing={this.state.processing}
+              attention={true}/>
           </div>
         </form>
       </DialogWrapper>

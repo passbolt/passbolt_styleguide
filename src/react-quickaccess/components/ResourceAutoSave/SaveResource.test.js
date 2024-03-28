@@ -16,7 +16,6 @@ beforeEach(() => {
 });
 
 describe("See the Create Resource - save resource", () => {
-
   it.todo("As a signed-in user creating a password on the quickaccess, I should fill the form with meta received");
 
   it.todo("As a signed-in user creating a password on the quickaccess, I should be able to save resource");

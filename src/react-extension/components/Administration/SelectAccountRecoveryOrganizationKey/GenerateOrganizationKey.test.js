@@ -286,7 +286,7 @@ describe('As AD I can generate an ORK', () => {
     expect(page.passphraseFieldError).not.toBeNull();
     expect(page.passphraseFieldError.textContent).toBe("The passphrase should not be part of an exposed data breach.");
 
-    //Typing new password should remove the powned service error 
+    //Typing new password should remove the powned service error
     await page.type("new password", page.passphraseField);
     expect(page.passphraseFieldError.textContent).toBe("A strong passphrase is required. The minimum complexity must be 'fair'.");
   });

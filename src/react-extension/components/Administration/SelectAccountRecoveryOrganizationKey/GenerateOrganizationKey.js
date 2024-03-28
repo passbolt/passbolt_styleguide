@@ -386,7 +386,7 @@ class GenerateOrganizationKey extends React.Component {
     const isEmailValid = this.validateEmailInput();
     const isPassphraseValid = this.validatePassphraseInput();
     const isPassphraseConfirmationValid = this.validatePassphraseConfirmationInput();
-    
+
     return isNameValid && isEmailValid && isPassphraseValid && isPassphraseConfirmationValid;
   }
 
