@@ -171,6 +171,7 @@ class CreateGpgKey extends Component {
     // is current form valid
     if (!this.isValid) {
       this.toggleProcessing();
+      this.focusOnPassphrase();
       return;
     }
 
@@ -178,6 +179,7 @@ class CreateGpgKey extends Component {
     const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
     if (isPassphrasePwned) {
       this.toggleProcessing();
+      this.focusOnPassphrase();
       return;
     }
 
