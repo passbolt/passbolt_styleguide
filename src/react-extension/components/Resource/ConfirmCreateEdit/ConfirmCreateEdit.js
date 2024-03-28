@@ -25,6 +25,7 @@ import {withDialog} from "../../../contexts/DialogContext";
  */
 export const ConfirmEditCreateOperationVariations = {
   CREATE: 'Create',
+  EDIT: 'Edit',
 };
 
 /**
@@ -117,6 +118,7 @@ class ConfirmCreateEdit extends Component {
       <DialogWrapper
         title={{
           [ConfirmEditCreateOperationVariations.CREATE]: <Trans>Confirm password creation</Trans>,
+          [ConfirmEditCreateOperationVariations.EDIT]: <Trans>Confirm password edition</Trans>,
         }[this.props.operation]}
         onClose={this.handleCloseClick}
         disabled={this.state.processing}
@@ -156,6 +158,7 @@ class ConfirmCreateEdit extends Component {
 ConfirmCreateEdit.propTypes = {
   operation: PropTypes.oneOf([
     ConfirmEditCreateOperationVariations.CREATE,
+    ConfirmEditCreateOperationVariations.EDIT,
   ]), // Defines which resource operation the dialog has to be displayed for.
   rule: PropTypes.oneOf([
     ConfirmEditCreateRuleVariations.IN_DICTIONARY,

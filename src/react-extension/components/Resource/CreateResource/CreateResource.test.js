@@ -639,7 +639,7 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
 
-    it("As a signed-in user creating a password on the application, I should confirm the password creation in a separate dialog", async() => {
+    it("As a signed-in user creating a password which part of a dictionary on the application, I should confirm the password creation in a separate dialog", async() => {
       expect.assertions(2);
 
       const mockRequests = jest.fn(async message => ({
@@ -658,6 +658,26 @@ describe("See the Create Resource", () => {
         resourceName,
         operation: ConfirmEditCreateOperationVariations.CREATE,
         rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+        onConfirm: expect.any(Function),
+        onReject: expect.any(Function),
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+    });
+
+    it("As a signed-in user creating a very weak password on the application, I should confirm the password creation in a separate dialog", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
+      const resourceName = 'password in dictionary';
+      await page.passwordCreate.fillInput(page.passwordCreate.name, resourceName);
+      await page.passwordCreate.fillInputPassword('abcdefghij');
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+      const confirmDialogProps = {
+        resourceName,
+        operation: ConfirmEditCreateOperationVariations.CREATE,
+        rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
         onConfirm: expect.any(Function),
         onReject: expect.any(Function),
       };
