@@ -33,6 +33,7 @@ export const ConfirmEditCreateOperationVariations = {
  */
 export const ConfirmEditCreateRuleVariations = {
   IN_DICTIONARY: 'In dictionary',
+  MINIMUM_ENTROPY: 'Minimum entropy'
 };
 
 /**
@@ -125,6 +126,7 @@ class ConfirmCreateEdit extends Component {
             <p>
               {{
                 [ConfirmEditCreateRuleVariations.IN_DICTIONARY]: <Trans>The password is part of an exposed data breach.</Trans>,
+                [ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY]: <Trans>The password is very weak and might be part of an exposed data breach.</Trans>,
               }[this.props.rule]}
             </p>
             <p>
@@ -157,6 +159,7 @@ ConfirmCreateEdit.propTypes = {
   ]), // Defines which resource operation the dialog has to be displayed for.
   rule: PropTypes.oneOf([
     ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+    ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
   ]), // Defines which resource failing rule the dialog has to be displayed for.
   resourceName: PropTypes.string,
   onClose: PropTypes.func, // Whenever the user closes the dialog
