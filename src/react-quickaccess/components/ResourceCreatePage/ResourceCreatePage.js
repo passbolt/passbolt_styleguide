@@ -29,7 +29,6 @@ class ResourceCreatePage extends React.Component {
    * @returns {void}
    */
   getDefaultState(props) {
-    console.log(props.location);
     return {
       loaded: false,
       error: "",

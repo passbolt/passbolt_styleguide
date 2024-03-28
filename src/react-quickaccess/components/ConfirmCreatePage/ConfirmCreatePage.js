@@ -60,23 +60,23 @@ class ConfirmCreatePage extends React.PureComponent {
 
   /**
    * Handles click on the `go back` button and cancel button
-   * @param {React.Event} ev
+   * @param {React.Event} event
    */
-  handleGoBackClick(ev) {
-    ev.preventDefault();
+  handleGoBackClick(event) {
+    event.preventDefault();
     // Caution: Hack to notify the previous component that the resource is part of a dictionary, it does not handle previous page original state.
     const backPath = "/webAccessibleResources/quickaccess/resources/create";
     const additionalState = {passwordInDictionary: true};
     this.props.history.replace({pathname: backPath, state: additionalState});
     this.props.history.goBack();
   }
-
   /**
    * Handles the click on the "x" button
+   * @param {React.Event} event
    */
-  handleConfirmClick(ev) {
+  handleConfirmClick(event) {
     // Prevent submit default behavior.
-    ev.preventDefault();
+    event.preventDefault();
     this.save();
   }
 
