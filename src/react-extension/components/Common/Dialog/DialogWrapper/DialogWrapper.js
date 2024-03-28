@@ -110,7 +110,11 @@ class DialogWrapper extends Component {
 DialogWrapper.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string,
+  ]),
   subtitle: PropTypes.string,
   tooltip: PropTypes.string,
   disabled: PropTypes.bool,

@@ -21,11 +21,16 @@ class AnimatedSwitch extends React.Component {
     } else if (currentLocationPath === "/webAccessibleResources/quickaccess/resources/create" && this._previousLocationPathname === "/webAccessibleResources/quickaccess/resources/generate-password") {
       // Resource create transition
       transition = "slideRight";
+    } else if (currentLocationPath === "/webAccessibleResources/quickaccess/resources/create" && this._previousLocationPathname === "/webAccessibleResources/quickaccess/resources/confirm-create") {
+      // Resource create transition
+      transition = "slideRight";
     } else if (currentLocationPath === "/webAccessibleResources/quickaccess/resources/create") {
       transition = "slideLeft";
     } else if (currentLocationPath.indexOf("/webAccessibleResources/quickaccess/resources/view") !== -1 && this._previousLocationPathname === "/webAccessibleResources/quickaccess/resources/create") {
       transition = "slideLeft";
     } else if (currentLocationPath === "/webAccessibleResources/quickaccess/resources/generate-password" && this._previousLocationPathname === "/webAccessibleResources/quickaccess/resources/create") {
+      transition = "slideLeft";
+    } else if (currentLocationPath === "/webAccessibleResources/quickaccess/resources/confirm-create" && this._previousLocationPathname === "/webAccessibleResources/quickaccess/resources/create") {
       transition = "slideLeft";
     } else if (this._previousLocationPathname === "/webAccessibleResources/quickaccess/resources/create") {
       // Whatever current location is, if the previous location was the resource create page then slide right

@@ -37,11 +37,15 @@ import {
   disabledPasswordExpirySettingsViewModelDto
 } from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
 import {DateTime} from "luxon";
+import ConfirmCreateEdit, {
+  ConfirmEditCreateOperationVariations,
+  ConfirmEditCreateRuleVariations
+} from "../ConfirmCreateEdit/ConfirmCreateEdit";
 
 describe("See the Edit Resource", () => {
   const truncatedWarningMessage = "Warning: this is the maximum size for this field, make sure your data was not truncated.";
 
-  describe('As LU I can start adding a password', () => {
+  describe('As LU I can start editing a password', () => {
     const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
     /**
      * I should see the edit password dialog
@@ -224,7 +228,7 @@ describe("See the Edit Resource", () => {
         name: "Password name",
         uri: "https://uri.dev",
         username: "Password username",
-        password: "password-value12345",
+        password: "RN9n8XuECN312345",
         description: "Password description"
       };
       // Fill the form
@@ -390,7 +394,7 @@ describe("See the Edit Resource", () => {
         name: "Password name",
         uri: "https://uri.dev",
         username: "Password username",
-        password: "password-value",
+        password: "RN9n8XuECN3",
         description: "Password description",
       };
       // Fill the form
@@ -471,7 +475,7 @@ describe("See the Edit Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('As LU I can stop adding a password with the keyboard (escape)', async() => {
+    it('As LU I can stop editing a password with the keyboard (escape)', async() => {
       expect.assertions(2);
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
@@ -491,13 +495,17 @@ describe("See the Edit Resource", () => {
       // Mock the request function to make it return an error.
       page.passwordEdit.focusInput(page.passwordEdit.password);
 
-      await page.passwordEdit.fillInputPassword("password");
+      await page.passwordEdit.fillInputPassword("RN9n8XuECN3");
       page.passwordEdit.blurInput(page.passwordEdit.password);
 
       const error = new PassboltApiFetchError("Jest simulate API error.");
-      jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => {
-        throw error;
+      const mockRequests = jest.fn(message => {
+        switch (message) {
+          case "passbolt.resources.update": throw error;
+          case "passbolt.secrets.powned-password": return false;
+        }
       });
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
 
       await page.passwordEdit.click(page.passwordEdit.saveButton);
 
@@ -519,7 +527,7 @@ describe("See the Edit Resource", () => {
 
       page.passwordEdit.focusInput(page.passwordEdit.password);
 
-      await page.passwordEdit.fillInputPassword("password");
+      await page.passwordEdit.fillInputPassword("RN9n8XuECN3");
       page.passwordEdit.blurInput(page.passwordEdit.password);
 
       // Mock the request function to make it the expected result
@@ -574,29 +582,65 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
 
-    it("As a signed-in user editing a password on the application, I should get warn when I enter a pwned password and not be blocked", async() => {
-      expect.assertions(2);
+    it("As a signed-in user editing a password which part of a dictionary on the application, I should confirm the password edition in a separate dialog", async() => {
+      expect.assertions(3);
 
-      const props = defaultProps({resourceId: "8e3874ae-4b40-590b-968a-418f704b9d9a"});
+      const props = defaultProps();
+      const resource = props.context.resources[0];
 
-      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
-      mockContextRequest(props.context, () => Promise.resolve(2));
+      const mockRequests = jest.fn(async message => ({
+        "passbolt.secret.decrypt": {password: "secret-decrypted", description: "description"},
+        "passbolt.secrets.powned-password": 2
+      }[message]));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
 
       const page = new EditResourcePage(props);
       await waitFor(() => {});
       await waitForTrue(() => !page.passwordEdit.password.disabled);
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+      await waitFor(() => {});
 
-      // we expect a warning to inform about powned password
-      await page.passwordEdit.fillInputPassword('hello-world');
-      await waitForTrue(() => page.passwordEdit.pwnedWarningMessage);
-      const exposedPasswordMessage = "The password is part of an exposed data breach.";
-      expect(page.passwordEdit.pwnedWarningMessage.textContent).toEqual(exposedPasswordMessage);
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      expect(props.context.port.request).toHaveBeenNthCalledWith(2, "passbolt.secrets.powned-password", "secret-decrypted");
+      const confirmDialogProps = {
+        resourceName: resource.name,
+        operation: ConfirmEditCreateOperationVariations.EDIT,
+        rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+        onConfirm: expect.any(Function),
+        onReject: expect.any(Function),
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+    });
 
-      // we expect a warning to inform about a network issue
-      mockContextRequest(props.context, () => Promise.reject());
-      await page.passwordEdit.fillInputPassword('another test');
-      await waitForTrue(() => page.passwordEdit.pwnedWarningMessage !== exposedPasswordMessage);
-      expect(page.passwordEdit.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
+    it("As a signed-in user editing a password which part of a dictionary on the application, I should confirm the password edition in a separate dialog", async() => {
+      expect.assertions(2);
+
+      const props = defaultProps();
+      const resource = props.context.resources[0];
+
+      const mockRequests = jest.fn(async message => ({
+        "passbolt.secret.decrypt": {password: "azerty", description: "description"},
+        "passbolt.secrets.powned-password": 2
+      }[message]));
+      jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
+      const page = new EditResourcePage(props);
+      await waitFor(() => {});
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
+      await page.passwordEdit.click(page.passwordEdit.saveButton);
+      await waitFor(() => {});
+
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      const confirmDialogProps = {
+        resourceName: resource.name,
+        operation: ConfirmEditCreateOperationVariations.EDIT,
+        rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+        onConfirm: expect.any(Function),
+        onReject: expect.any(Function),
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
     });
 
     it("As a signed-in user editing a password on the application, I should see a complexity as Quality if the passphrase is empty", async() => {

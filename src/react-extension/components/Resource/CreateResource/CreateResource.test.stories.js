@@ -33,8 +33,8 @@ Template.propTypes = {
   context: PropTypes.object
 };
 
-export const Initial = Template.bind({});
-Initial.args = {
+export const PasswordInDictionary = Template.bind({});
+PasswordInDictionary.args = {
   context: defaultAppContext({port: mockedPort}),
   ...defaultProps()
 };

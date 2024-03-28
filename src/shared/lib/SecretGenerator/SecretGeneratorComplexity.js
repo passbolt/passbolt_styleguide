@@ -17,36 +17,45 @@
 import PassphraseGeneratorWords from "./PassphraseGeneratorWords";
 import GraphemeSplitter from "grapheme-splitter";
 
+export const ENTROPY_THRESHOLDS = {
+  NOT_AVAILABLE: 0,
+  VERY_WEAK: 1,
+  WEAK: 60,
+  FAIR: 80,
+  STRONG: 112,
+  VERY_STRONG: 128,
+};
+
 const STRENGTH = [
   {
     id: 'not_available',
     label: 'n/a',
-    strength: 0
+    strength: ENTROPY_THRESHOLDS.NOT_AVAILABLE,
   },
   {
     id: 'very-weak',
     label: 'Very weak',
-    strength: 1
+    strength: ENTROPY_THRESHOLDS.VERY_WEAK,
   },
   {
     id: 'weak',
     label: 'Weak',
-    strength: 60
+    strength: ENTROPY_THRESHOLDS.WEAK,
   },
   {
     id: 'fair',
     label: 'Fair',
-    strength: 80
+    strength: ENTROPY_THRESHOLDS.FAIR,
   },
   {
     id: 'strong',
     label: 'Strong',
-    strength: 112
+    strength: ENTROPY_THRESHOLDS.STRONG,
   },
   {
     id: 'very-strong',
     label: 'Very strong',
-    strength: 128
+    strength: ENTROPY_THRESHOLDS.VERY_STRONG,
   }
 ];
 
