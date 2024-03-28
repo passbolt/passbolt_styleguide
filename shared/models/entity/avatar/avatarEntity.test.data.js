@@ -32,7 +32,7 @@ export const minimalAvatarDto = (data = {}) => ({
  * @param {object} data The data to override
  * @returns {object}
  */
-export const defaultAvatarDto = (data = {}) => ({
+export const defaultAvatarDto = (data = {}) => minimalAvatarDto({
   "id": uuidv4(),
   "url": {
     "medium": "/avatars/view/e6927385-195c-4c7f-a107-a202ea86de40/medium.jpg",

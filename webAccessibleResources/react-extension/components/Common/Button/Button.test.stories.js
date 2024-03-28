@@ -61,6 +61,25 @@ const Template = () =>
         <Icon name="spinner"/>
       </button>
     </div>
+    <span style={{width: "100%", marginTop: "3rem"}}>Attention button</span>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button attention">Proceed</button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button attention" disabled={true}>Proceed</button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button attention processing">
+        Proceed
+        <Icon name="spinner"/>
+      </button>
+    </div>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <button className="button attention processing" disabled={true}>
+        Proceed
+        <Icon name="spinner"/>
+      </button>
+    </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Secondary button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button" type="button">Learn more</button>
@@ -229,6 +248,6 @@ const Template = () =>
       </div>
     </div>
   </div>
-  ;
+;
 
 export const Default = Template.bind({});

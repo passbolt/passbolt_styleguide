@@ -18,13 +18,10 @@ import {withUserSettings} from "../../../contexts/UserSettingsContext";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {withDialog} from "../../../contexts/DialogContext";
-import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
-import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
 import PasswordComplexityWithGoal from '../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal';
 import {withUserPassphrasePolicies} from '../../../contexts/UserPassphrasePoliciesContext';
@@ -41,7 +38,6 @@ class EnterNewPassphrase extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.isPwndProcessingPromise = null;
-    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
     this.bindEventHandlers();
     this.createReferences();
   }
@@ -56,7 +52,6 @@ class EnterNewPassphrase extends React.Component {
       actions: {
         processing: false, // True if one's processing passphrase
       },
-      isPwnedServiceAvailable: true // True if the isPwned service can be reached
     };
   }
   /**
@@ -70,10 +65,9 @@ class EnterNewPassphrase extends React.Component {
    * Returns true if the passphrase is valid
    */
   get isValid() {
-    const userPassphrasePolicies = this.props.userPassphrasePoliciesContext.getSettings();
     const validation = {
-      notInDictionary: !this.state.isPwnedServiceAvailable || !this.state.passphraseInDictionnary,
-      enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy >= userPassphrasePolicies.entropy_minimum
+      notInDictionary: !this.state.passphraseInDictionnary,
+      enoughEntropy: this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy)
     };
 
     return Object.values(validation).every(value => value);
@@ -133,8 +127,6 @@ class EnterNewPassphrase extends React.Component {
     const userPasphrasePolicies = this.props.userPassphrasePoliciesContext.getSettings();
     if (userPasphrasePolicies.external_dictionary_check) {
       this.pownedService = new PownedService(this.props.context.port);
-    } else {
-      this.setState({isPwnedServiceAvailable: false});
     }
   }
 
@@ -146,6 +138,7 @@ class EnterNewPassphrase extends React.Component {
     const newState = {
       passphrase: event.target.value,
       passphraseEntropy: null,
+      passphraseInDictionnary: false,
     };
 
     if (!newState.passphrase.length) {
@@ -155,11 +148,6 @@ class EnterNewPassphrase extends React.Component {
     }
 
     newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
-    if (this.state.isPwnedServiceAvailable && this.isMinimumRequiredEntropyReached(newState.passphraseEntropy)) {
-      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
-    } else {
-      newState.passphraseInDictionnary = false;
-    }
     this.setState(newState);
   }
 
@@ -167,9 +155,23 @@ class EnterNewPassphrase extends React.Component {
    * Whenever the user submits the passphrase
    * @param event A form submit event
    */
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
-    this.generateGpgKey();
+    this.toggleProcessing();
+    // is current form valid
+    if (!this.isValid) {
+      this.toggleProcessing();
+      return;
+    }
+
+    //the form is valid, check if passphrase is pwned
+    const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
+    if (isPassphrasePwned) {
+      this.toggleProcessing();
+      return;
+    }
+    await this.generateGpgKey();
+    this.toggleProcessing();
   }
 
   /**
@@ -178,41 +180,15 @@ class EnterNewPassphrase extends React.Component {
    * @return {Promise<void>}
    */
   async evaluatePassphraseIsInDictionary(passphrase) {
-    let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
-    if (!isPwnedServiceAvailable) {
-      return;
+    if (!this.pownedService) {
+      return false;
     }
 
-    let passphraseInDictionnary = false;
+    const result = await this.pownedService.evaluateSecret(passphrase);
+    const passphraseInDictionnary = result.inDictionary;
 
-    try {
-      const result =  await this.pownedService.evaluateSecret(passphrase);
-      //we ensure after the resolution of the deobunced promise that the passphrase is not empty and the minimum entropy is still reached so we do not display the 'in dictionary' warning message when not relevant
-      passphraseInDictionnary = this.state.passphrase && result.inDictionary && this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
-      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-    } catch (error) {
-      // If the service is unavailable don't block the user journey.
-      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
-        isPwnedServiceAvailable = false;
-        passphraseInDictionnary = false;
-      } else {
-        throw error;
-      }
-    }
-
-    this.setState({
-      isPwnedServiceAvailable,
-      passphraseInDictionnary,
-    });
-  }
-
-  /**
-   * Await for isPwned service to finish its process and returns true if the current displayed passphrase is pwned.
-   * @return {Promise<boolean>}
-   */
-  async isCurrentPassphrasePwned() {
-    await this.isPwndProcessingPromise;
-    return this.state.passphraseInDictionnary;
+    this.setState({passphraseInDictionnary});
+    return passphraseInDictionnary;
   }
 
   /**
@@ -220,13 +196,6 @@ class EnterNewPassphrase extends React.Component {
    * @return {Promise<void>}
    */
   async generateGpgKey() {
-    this.toggleProcessing();
-    const isPwned = await this.isCurrentPassphrasePwned();
-    if (isPwned) {
-      this.toggleProcessing();
-      return;
-    }
-
     try {
       await this.props.userSettingsContext.onUpdatePassphraseRequested(this.state.passphrase);
     } catch (e) {
@@ -274,7 +243,7 @@ class EnterNewPassphrase extends React.Component {
    * @returns {boolean}
    */
   isMinimumRequiredEntropyReached(passphraseEntropy) {
-    return passphraseEntropy >= this.props.userPassphrasePoliciesContext.getSettings().entropy_minimum;
+    return passphraseEntropy && passphraseEntropy >= this.props.userPassphrasePoliciesContext.getSettings().entropy_minimum;
   }
 
   render() {
@@ -303,11 +272,8 @@ class EnterNewPassphrase extends React.Component {
                     disabled={!this.areActionsAllowed}/>
                   <PasswordComplexityWithGoal entropy={passphraseEntropy} targetEntropy={userPassphrasePolicies.entropy_minimum}/>
                   <>
-                    {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
-                      <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
-                    }
                     {this.state.passphraseInDictionnary &&
-                      <div className="invalid-passphrase warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+                      <div className="invalid-passphrase error-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
                     }
                   </>
                 </div>

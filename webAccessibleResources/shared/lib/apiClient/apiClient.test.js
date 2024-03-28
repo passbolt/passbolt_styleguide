@@ -80,25 +80,6 @@ describe("Unit testing apiClient with mocked fetch", () => {
     });
   });
 
-  it("Should call the endpoint with form data body and return the response as-is with sendRequest", async() => {
-    expect.assertions(4);
-    const testClient = new ApiClient(options);
-
-    const currentUrl = new URL(url);
-    const spyOnAssertUrl = jest.spyOn(testClient, "assertUrl");
-    const spyOnAssertMethod = jest.spyOn(testClient, "assertMethod");
-    const spyOnAssertBody = jest.spyOn(testClient, "assertBody");
-    const body = new FormData();
-    body.append('data[test]', "test");
-
-    fetch.mockResponseOnce(async() => responseJson);
-    const result = await testClient.sendRequest("POST", currentUrl, body);
-    expect(result.text()).resolves.toStrictEqual(responseJson);
-    expect(spyOnAssertUrl).toHaveBeenLastCalledWith(currentUrl);
-    expect(spyOnAssertMethod).toHaveBeenLastCalledWith("POST");
-    expect(spyOnAssertBody).toHaveBeenCalledWith(body);
-  });
-
   each([
     {responseBody: responseJson, method: "GET"},
     {responseBody: responseJson, method: "POST"},
@@ -384,7 +365,7 @@ describe("Unit testing apiClient with mocked fetch", () => {
   each([
     {body: JSON.stringify({string: 'string', object: {}, array: []})},
     {body: uuid()},
-  ]).describe("should send the given body if it is a string or a form data", scenario => {
+  ]).describe("should send the given body if it is a string", scenario => {
     it(`scenario: ${JSON.stringify(scenario)}`, async() => {
       expect.assertions(5);
       const testClient = new ApiClient(options);

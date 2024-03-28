@@ -206,7 +206,7 @@ describe('As AD I can generate an ORK', () => {
   });
 
   it("As a logged in administrator in the administration workspace, I can generate OpenPGP Public key when the form validates", async() => {
-    expect.assertions(6);
+    expect.assertions(5);
     const props = defaultProps();
 
     const expectedDto = {
@@ -241,7 +241,7 @@ describe('As AD I can generate an ORK', () => {
     expect(page.passphraseConfirmationFieldError.textContent).toStrictEqual("");
   });
 
-  it('As AD I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
+  it('As AD I should not be blocked if the powned password service is unavailable', async() => {
     expect.assertions(1);
     const props = defaultProps();
     jest.spyOn(props.context.port, "request").mockImplementationOnce(() => Promise.reject());
@@ -250,33 +250,45 @@ describe('As AD I can generate an ORK', () => {
 
     await page.clickOnGenerateTab();
 
+    await page.type("passbolt", page.nameField);
+    await page.type("admin@passbolt.com",  page.emailField);
     await page.type("This a strong passphrase to test a service not working", page.passphraseField);
+    await page.type("This a strong passphrase to test a service not working", page.passphraseConfirmationField);
+
     await waitFor(() => {});
 
-    expect(page.passwordWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.");
+    await page.clickOnGenerateButton(() => {});
+
+    expect(page.passphraseFieldError.textContent).toBe("");
   });
 
-  it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned", async() => {
-    expect.assertions(4);
+  it("As an administrator I want to know if the weak passphrase I am entering to generate an organization recovery key has been pwned when submit", async() => {
+    expect.assertions(5);
     const props = defaultProps();
-    jest.spyOn(props.context.port, "request").mockImplementation(() => 2);
+    jest.spyOn(props.context.port, "request").mockImplementation(() => Promise.resolve(2));
     const page = new SelectAccountRecoveryOrganizationKeyPage(props);
     await waitFor(() => {});
 
     await page.clickOnGenerateTab();
 
+    await page.type("azerty", page.nameField);
+    await page.type("admin@passbolt.com",  page.emailField);
     await page.type("azertyazertyazerty", page.passphraseField);
+    await page.type("azertyazertyazerty", page.passphraseConfirmationField);
+
     await waitFor(() => {});
 
-    expect(page.passwordWarningMessage.textContent).toBe("The passphrase is part of an exposed data breach.");
-    await page.clickOnGenerateButton(() => {
-      if (page.passphraseFieldError === null) {
-        throw new Error("Changes are not available yet");
-      }
-    });
+    expect(page.passphraseFieldError).toBeNull();
+
+    await page.clickOnGenerateButton(() => {});
+
     expect(page.passwordWarningMessage === null).toBeTruthy();
     expect(page.passphraseFieldError).not.toBeNull();
-    expect(page.passphraseFieldError.textContent).toBe(`The passphrase should not be part of an exposed data breach.`);
+    expect(page.passphraseFieldError.textContent).toBe("The passphrase should not be part of an exposed data breach.");
+
+    //Typing new password should remove the powned service error
+    await page.type("new password", page.passphraseField);
+    expect(page.passphraseFieldError.textContent).toBe("A strong passphrase is required. The minimum complexity must be 'fair'.");
   });
 
   it("As an administrator generating an account recovery organization key, I should see the warning banner after submiting the form", async() => {
@@ -304,4 +316,3 @@ describe('As AD I can generate an ORK', () => {
     expect(page.passphraseFieldError).toBeNull();
   });
 });
-

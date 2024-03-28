@@ -742,6 +742,7 @@ button,
   /* processing state */
   /* primary */
   /* warning */
+  /* attention */
 }
 button:hover,
 .button:hover {
@@ -982,6 +983,54 @@ button.warning.disabled,
 .button.warning.disabled,
 button.warning:disabled,
 .button.warning:disabled {
+  box-shadow: none;
+}
+button.attention,
+.button.attention {
+  background: #DD6A00;
+  box-shadow: inset 0 0 0 0.1rem #DD6A00;
+  color: #FFFFFF;
+  /* disabled */
+}
+button.attention svg,
+.button.attention svg {
+  --icon-color: #FFFFFF;
+  --icon-background-color: #000000;
+}
+button.attention.processing,
+.button.attention.processing {
+  color: transparent;
+  background: #DD6A00;
+  box-shadow: inset 0 0 0 1px #DD6A00;
+}
+button.attention.processing.disabled,
+.button.attention.processing.disabled,
+button.attention.processing:disabled,
+.button.attention.processing:disabled {
+  background: rgba(221, 106, 0, 0.5);
+}
+button.attention.processing .svg-icon.spinner,
+.button.attention.processing .svg-icon.spinner {
+  --spinner-color: #FFFFFF;
+  --spinner-background: rgba(255, 255, 255, 0.25);
+}
+button.attention:hover,
+.button.attention:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px #DD6A00;
+}
+button.attention:focus,
+.button.attention:focus {
+  box-shadow: 0 0 0.4rem #2A9CEB;
+}
+button.attention:active,
+.button.attention:active {
+  background: #DD6A00;
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px #DD6A00;
+}
+button.attention.disabled,
+.button.attention.disabled,
+button.attention:disabled,
+.button.attention:disabled {
   box-shadow: none;
 }
 /* sizes */
@@ -3997,6 +4046,13 @@ body {
 }
 .quickaccess .generate-password .select-inline > label {
   margin-right: 1rem;
+}
+.quickaccess .confirm-create .form-container {
+  margin: 1.6rem;
+}
+.quickaccess .confirm-create p {
+  margin: 1.6rem 0;
+  font-size: 1.5rem;
 }
 /* tabs */
 .tabs {

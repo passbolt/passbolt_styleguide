@@ -743,6 +743,7 @@ button,
   /* processing state */
   /* primary */
   /* warning */
+  /* attention */
 }
 button:hover,
 .button:hover {
@@ -983,6 +984,54 @@ button.warning.disabled,
 .button.warning.disabled,
 button.warning:disabled,
 .button.warning:disabled {
+  box-shadow: none;
+}
+button.attention,
+.button.attention {
+  background: hsl(18, 80%, 54%);
+  box-shadow: inset 0 0 0 0.1rem hsl(18, 80%, 54%);
+  color: hsl(44, 87%, 98%);
+  /* disabled */
+}
+button.attention svg,
+.button.attention svg {
+  --icon-color: hsl(44, 87%, 98%);
+  --icon-background-color: hsl(194, 81%, 14%);
+}
+button.attention.processing,
+.button.attention.processing {
+  color: transparent;
+  background: hsl(18, 80%, 54%);
+  box-shadow: inset 0 0 0 1px hsl(18, 80%, 54%);
+}
+button.attention.processing.disabled,
+.button.attention.processing.disabled,
+button.attention.processing:disabled,
+.button.attention.processing:disabled {
+  background: rgba(232, 100, 44, 0.5);
+}
+button.attention.processing .svg-icon.spinner,
+.button.attention.processing .svg-icon.spinner {
+  --spinner-color: hsl(44, 87%, 98%);
+  --spinner-background: rgba(254, 252, 245, 0.25);
+}
+button.attention:hover,
+.button.attention:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.2), inset 0 0 0 1px hsl(18, 80%, 54%);
+}
+button.attention:focus,
+.button.attention:focus {
+  box-shadow: 0 0 0.4rem hsl(194, 100%, 20%);
+}
+button.attention:active,
+.button.attention:active {
+  background: hsl(18, 80%, 54%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.35), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.35), inset 0 0 0 1px hsl(18, 80%, 54%);
+}
+button.attention.disabled,
+.button.attention.disabled,
+button.attention:disabled,
+.button.attention:disabled {
   box-shadow: none;
 }
 /* sizes */

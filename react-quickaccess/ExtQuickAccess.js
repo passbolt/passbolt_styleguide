@@ -35,6 +35,7 @@ import AppContext from "../shared/context/AppContext/AppContext";
 import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import ResourceTypesSettings from "../shared/lib/Settings/ResourceTypesSettings";
 import PasswordExpirySettingsContextProvider from "../react-extension/contexts/PasswordExpirySettingsContext";
+import ConfirmCreatePage from "./components/ConfirmCreatePage/ConfirmCreatePage";
 
 const SEARCH_VISIBLE_ROUTES = [
   '/webAccessibleResources/quickaccess/home',
@@ -412,6 +413,7 @@ class ExtQuickAccess extends React.Component {
                               <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/recently-modified" component={FilterResourcesByRecentlyModifiedPage}/>
                               <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/shared-with-me" component={FilterResourcesBySharedWithMePage}/>
                               <PrivateRoute path="/webAccessibleResources/quickaccess/resources/create" component={ResourceCreatePage}/>
+                              <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/confirm-create" component={ConfirmCreatePage}/>
                               <PrivateRoute exact path="/webAccessibleResources/quickaccess/resources/autosave" component={SaveResource}/>
                               <PrivateRoute path="/webAccessibleResources/quickaccess/resources/view/:id" component={ResourceViewPage}/>
                               <PrivateRoute exact path="/webAccessibleResources/quickaccess/more-filters" component={MoreFiltersPage}/>

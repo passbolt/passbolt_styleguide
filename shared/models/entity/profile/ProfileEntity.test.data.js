@@ -31,11 +31,9 @@ export const minimalProfileDto = (data = {}) => ({
  * @param {object} data The data to override
  * @returns {object}
  */
-export const defaultProfileDto = (data = {}) => ({
+export const defaultProfileDto = (data = {}) => minimalProfileDto({
   "id": uuidv4(),
   "user_id": uuidv4(),
-  "first_name": "Ada",
-  "last_name": "Lovelace",
   "created": "2020-04-20T11:32:17+00:00",
   "modified": "2020-04-20T11:32:17+00:00",
   "avatar": defaultAvatarDto(),

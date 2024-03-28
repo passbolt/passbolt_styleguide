@@ -12,6 +12,7 @@
  * @since         2.11.0
  */
 import {fireEvent, render, waitFor} from "@testing-library/react";
+import AppContext from "../../../../shared/context/AppContext/AppContext";
 import React from "react";
 import DisplayUserDirectoryAdministration from "./DisplayUserDirectoryAdministration";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
@@ -24,15 +25,18 @@ import {AdminUserDirectoryContextProvider} from "../../../contexts/Administratio
 export default class DisplayUserDirectoryAdministrationPage {
   /**
    * Default constructor
+   * @param appContext An app context
    * @param props Props to attach
    */
-  constructor(props) {
+  constructor(appContext, props) {
     this._page = render(
       <MockTranslationProvider>
-        <AdminUserDirectoryContextProvider context={props.context}>
-          <DisplayAdministrationUserDirectoryActions {...props}/>
-          <DisplayUserDirectoryAdministration {...props}/>
-        </AdminUserDirectoryContextProvider>
+        <AppContext.Provider value={appContext}>
+          <AdminUserDirectoryContextProvider {...props}>
+            <DisplayAdministrationUserDirectoryActions />
+            <DisplayUserDirectoryAdministration {...props}/>
+          </AdminUserDirectoryContextProvider>
+        </AppContext.Provider>
       </MockTranslationProvider>
     );
   }

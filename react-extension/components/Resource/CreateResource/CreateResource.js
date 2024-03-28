@@ -33,12 +33,11 @@ import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import {
+  RESOURCE_DESCRIPTION_MAX_LENGTH,
   RESOURCE_NAME_MAX_LENGTH,
   RESOURCE_PASSWORD_MAX_LENGTH,
   RESOURCE_URI_MAX_LENGTH,
-  RESOURCE_DESCRIPTION_MAX_LENGTH,
 } from "../../../../shared/constants/inputs.const";
-import debounce from "debounce-promise";
 import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
@@ -47,6 +46,11 @@ import {withWorkflow} from "../../../contexts/WorkflowContext";
 import Totp from "../../../../shared/components/Totp/Totp";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {DateTime} from "luxon";
+import ConfirmCreateEdit, {
+  ConfirmEditCreateOperationVariations,
+  ConfirmEditCreateRuleVariations
+} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 class CreateResource extends Component {
   constructor() {
@@ -54,7 +58,6 @@ class CreateResource extends Component {
     this.state = this.getDefaultState();
     this.initEventHandlers();
     this.createInputRef();
-    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   getDefaultState() {
@@ -76,7 +79,8 @@ class CreateResource extends Component {
       encryptDescription: false,
       resourceTypeId: null, // The resource type id
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
-      isPwnedServiceAvailable: true,
+      isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
+      isPasswordDictionaryCheckServiceAvailable: true, // Is the password dictionary check service available.
       passwordInDictionary: false,
       passwordEntropy: null,
       generatorSettings: null,
@@ -100,6 +104,8 @@ class CreateResource extends Component {
     this.applyTotp = this.applyTotp.bind(this);
     this.handleEditTotpClick = this.handleEditTotpClick.bind(this);
     this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
+    this.save = this.save.bind(this);
+    this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
   }
 
   /**
@@ -154,13 +160,13 @@ class CreateResource extends Component {
    * Initialize the pwned password service
    */
   initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
 
-    if (isPwnedServiceAvailable) {
+    if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPwnedServiceAvailable});
+    this.setState({isPasswordDictionaryCheckRequested});
   }
 
   /**
@@ -199,7 +205,8 @@ class CreateResource extends Component {
     this.setState({
       password: lastGeneratedPassword,
       generatorSettings,
-      passwordEntropy
+      passwordEntropy,
+      passwordInDictionary: false,
     });
   }
 
@@ -277,6 +284,62 @@ class CreateResource extends Component {
       return;
     }
 
+    if (!this.isMinimumRequiredEntropyReached()) {
+      this.handlePasswordMinimumEntropyNotReached();
+      return;
+    } else if (await this.isPasswordInDictionary()) {
+      this.handlePasswordInDictionary();
+      return;
+    }
+
+    await this.save();
+  }
+
+  /**
+   * Request password not reaching minimum entropy creation confirmation.
+   */
+  handlePasswordMinimumEntropyNotReached() {
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      resourceName: this.state.name,
+      onConfirm: this.save,
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Request password in dictionary creation confirmation.
+   */
+  handlePasswordInDictionary() {
+    this.setState({
+      passwordInDictionary: true
+    });
+
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      resourceName: this.state.name,
+      onConfirm: this.save,
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Reject the creation confirmation.
+   */
+  async rejectCreationConfirmation() {
+    await this.toggleProcessing();
+    this.passwordInputRef.current.focus();
+  }
+
+  /**
+   * Save the resource
+   * @returns {Promise<void>}
+   */
+  async save() {
     try {
       const resource = await this.createResource();
       await this.handleSaveSuccess(resource);
@@ -355,21 +418,32 @@ class CreateResource extends Component {
   }
 
   /**
-   * Evaluate to check if password is in a dictionary.
-   * @param {string} password the password to evaluate
-   * @return {Promise<void>}
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @returns {boolean}
    */
-  async evaluatePasswordIsInDictionaryDebounce(password) {
-    if (!this.state.isPwnedServiceAvailable || !password) {
-      return;
+  isMinimumRequiredEntropyReached() {
+    return this.state.passwordEntropy
+      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
+  }
+
+
+  /**
+   * Check if the password is part of a dictionary.
+   * @return {Promise<boolean>}
+   */
+  async isPasswordInDictionary() {
+    if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
+      return false;
     }
 
-    const result = await this.pownedService.evaluateSecret(password);
-    this.setState({
-      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
-      //if after the debounced promised resolution the passphrase is empty we do not display the 'in dictionary' warning message
-      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
-    });
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.password);
+
+    if (!isPwnedServiceAvailable) {
+      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      return false;
+    }
+
+    return inDictionary;
   }
 
   /*
@@ -564,15 +638,14 @@ class CreateResource extends Component {
     const name = target.name;
 
     const newState = {
-      [name]: value
+      [name]: value,
     };
 
     if (name === "password") {
+      newState.passwordInDictionary = false;
       if (value.length) {
-        this.evaluatePasswordIsInDictionaryDebounce(value);
         newState.passwordEntropy = SecretGenerator.entropy(value);
       } else {
-        newState.passwordInDictionary = false;
         newState.passwordEntropy = null;
       }
     }
@@ -622,8 +695,6 @@ class CreateResource extends Component {
       passwordInDictionary: false,
       passwordEntropy
     });
-
-    this.evaluatePasswordIsInDictionaryDebounce(password);
   }
 
   /**
@@ -811,9 +882,6 @@ class CreateResource extends Component {
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-password">
                 <Trans>Password</Trans>
-                {(this.state.passwordWarning || this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable) && this.pownedService &&
-                  <Icon name="exclamation"/>
-                }
               </label>
               <div className="password-button-inline">
                 <Password id="create-password-form-password"
@@ -845,12 +913,6 @@ class CreateResource extends Component {
               }
               {this.state.passwordWarning &&
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
-              }
-              {!this.state.isPwnedServiceAvailable && this.pownedService &&
-                <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-              }
-              {this.state.passwordInDictionary  && this.pownedService &&
-                <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
               }
             </div>
             <div className={`input textarea ${this.state.processing ? 'disabled' : ''}`}>

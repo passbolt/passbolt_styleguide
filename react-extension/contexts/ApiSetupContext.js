@@ -18,7 +18,7 @@ import {ApiClient} from "../../shared/lib/apiClient/apiClient";
 import {BROWSER_NAMES, detectBrowserName} from "../../shared/lib/Browser/detectBrowserName";
 import PassboltApiFetchError from "../../shared/lib/Error/PassboltApiFetchError";
 import PassboltServiceUnavailableError from "../../shared/lib/Error/PassboltServiceUnavailableError";
-import AuthLogoutService from "../../shared/services/api/auth/AuthLogoutService";
+import AuthService from "../../shared/services/api/auth/AuthService";
 
 /**
  * The Api setup context.
@@ -48,7 +48,7 @@ class ApiSetupContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = Object.assign(this.defaultState, props.value);
-    this.authLogoutService = new AuthLogoutService(props.context.getApiClientOptions());
+    this.authService = new AuthService(props.context.getApiClientOptions());
   }
 
   /**
@@ -96,7 +96,7 @@ class ApiSetupContextProvider extends React.Component {
    */
   async logoutUserAndRefresh() {
     try {
-      await this.authLogoutService.logout();
+      await this.authService.logout();
     } catch (e) {
       const error = new PassboltServiceUnavailableError(e.message);
       return this.setState({unexpectedError: error, state: ApiSetupContextState.UNEXPECTED_ERROR_STATE});

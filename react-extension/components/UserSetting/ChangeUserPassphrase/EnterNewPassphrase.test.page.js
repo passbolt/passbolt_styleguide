@@ -84,45 +84,52 @@ export default class EnterNewPassphrasePage {
   }
 
   /**
+   * Returns the element where is displayed the passphrase complexity text
+   */
+  get passphraseComplexity() {
+    return this._page.container.querySelector('.complexity-text');
+  }
+
+  /**
    * Returns true if the current passphrase is very weak
    */
   get isVeryWeakPassphrase() {
-    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Very weak'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith('Very weak'));
   }
 
   /**
    * Returns true if the current passphrase is weak
    */
   get isWeakPassphrase() {
-    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Weak'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith('Weak'));
   }
 
   /**
    * Returns true if the current passphrase is fair
    */
   get isFairPassphrase() {
-    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Fair'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith('Fair'));
   }
 
   /**
    * Returns true if the current passphrase is strong
    */
   get isStrongPassphrase() {
-    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Strong'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith('Strong'));
   }
 
   /**
    * Returns true if the current passphrase is empty
    */
   get isEmptyPassphrase() {
-    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Quality'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith('Quality'));
   }
 
   /**
    * Returns true if the current passphrase is very strong
    */
   get isVeryStrongPassphrase() {
-    return Boolean(this._page.container.querySelector('.complexity-text').textContent.startsWith('Very strong'));
+    return Boolean(this.passphraseComplexity.textContent.startsWith('Very strong'));
   }
 
   /**
@@ -161,10 +168,10 @@ export default class EnterNewPassphrasePage {
   }
 
   /**
-   * Returns the passphrase's warning message for powned password
+   * Returns the passphrase's error message for powned password
    */
-  get passphraseWarningMessage() {
-    return this._page.container.querySelector(".invalid-passphrase.warning-message");
+  get passphraseBreachedErrorMessage() {
+    return this._page.container.querySelector(".invalid-passphrase.error-message");
   }
 
   /**
@@ -197,7 +204,6 @@ export default class EnterNewPassphrasePage {
   async insertPassphrase(data)  {
     this.fillInput(this.passphraseInput, data);
     await waitForTrue(() => this.passphraseInput.value === data);
-    jest.runAllTimers();
   }
 
   /** click update */

@@ -18,7 +18,7 @@ import LoginPage from "./LoginPage";
 import MockTranslationProvider from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
- * The ConfigurePassphraseGenerator component represented as a page
+ * The Login component represented as a page
  */
 export default class LoginPageTest {
   /**

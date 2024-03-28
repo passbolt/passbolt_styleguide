@@ -743,6 +743,7 @@ button,
   /* processing state */
   /* primary */
   /* warning */
+  /* attention */
 }
 button:hover,
 .button:hover {
@@ -983,6 +984,54 @@ button.warning.disabled,
 .button.warning.disabled,
 button.warning:disabled,
 .button.warning:disabled {
+  box-shadow: none;
+}
+button.attention,
+.button.attention {
+  background: hsl(18, 80%, 54%);
+  box-shadow: inset 0 0 0 0.1rem hsl(18, 80%, 54%);
+  color: hsl(46, 42%, 88%);
+  /* disabled */
+}
+button.attention svg,
+.button.attention svg {
+  --icon-color: hsl(46, 42%, 88%);
+  --icon-background-color: hsl(194, 14%, 31%);
+}
+button.attention.processing,
+.button.attention.processing {
+  color: transparent;
+  background: hsl(18, 80%, 54%);
+  box-shadow: inset 0 0 0 1px hsl(18, 80%, 54%);
+}
+button.attention.processing.disabled,
+.button.attention.processing.disabled,
+button.attention.processing:disabled,
+.button.attention.processing:disabled {
+  background: rgba(232, 100, 44, 0.5);
+}
+button.attention.processing .svg-icon.spinner,
+.button.attention.processing .svg-icon.spinner {
+  --spinner-color: hsl(46, 42%, 88%);
+  --spinner-background: rgba(237, 231, 212, 0.25);
+}
+button.attention:hover,
+.button.attention:hover {
+  box-shadow: inset 0.1rem 0.1rem 0 rgba(255, 255, 255, 0.25), 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px hsl(18, 80%, 54%);
+}
+button.attention:focus,
+.button.attention:focus {
+  box-shadow: 0 0 0.4rem hsl(45, 100%, 50%);
+}
+button.attention:active,
+.button.attention:active {
+  background: hsl(18, 80%, 54%);
+  box-shadow: inset -0.1rem -0.1rem 0 rgba(255, 255, 255, 0.25), inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.5), inset 0 0 0 1px hsl(18, 80%, 54%);
+}
+button.attention.disabled,
+.button.attention.disabled,
+button.attention:disabled,
+.button.attention:disabled {
   box-shadow: none;
 }
 /* sizes */
@@ -3998,6 +4047,13 @@ body {
 }
 .quickaccess .generate-password .select-inline > label {
   margin-right: 1rem;
+}
+.quickaccess .confirm-create .form-container {
+  margin: 1.6rem;
+}
+.quickaccess .confirm-create p {
+  margin: 1.6rem 0;
+  font-size: 1.5rem;
 }
 /* tabs */
 .tabs {

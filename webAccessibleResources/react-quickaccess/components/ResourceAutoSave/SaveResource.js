@@ -18,10 +18,6 @@ import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
-import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
-import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
-import debounce from "debounce-promise";
-import PownedService from '../../../shared/services/api/secrets/pownedService';
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
@@ -31,15 +27,12 @@ class SaveResource extends React.Component {
     super(props);
     this.initEventHandlers();
     this.state = this.getDefaultState();
-    this.isPwndProcessingPromise = null;
-    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   async componentDidMount() {
     this.props.passwordExpiryContext.findSettings();
     this.loadPasswordMetaFromTabForm();
     await this.props.passwordPoliciesContext.findPolicies();
-    this.initPwnedPasswordService();
   }
 
   initEventHandlers() {
@@ -61,22 +54,7 @@ class SaveResource extends React.Component {
       uriError: "",
       password: "",
       passwordError: "",
-      passwordEntropy: null,
-      isPwnedServiceAvailable: true,
-      passwordInDictionary: false,
     };
-  }
-
-  /**
-   * Initialize the pwned password service
-   */
-  initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
-
-    if (isPwnedServiceAvailable) {
-      this.pownedService = new PownedService(this.props.context.port);
-    }
-    this.setState({isPwnedServiceAvailable});
   }
 
   /**
@@ -92,7 +70,6 @@ class SaveResource extends React.Component {
     this.setState({name, uri, username, password: secret_clear});
     this.loadPassword(secret_clear);
     this.setState({loaded: true});
-    this.evaluatePasswordIsInDictionaryDebounce(secret_clear);
   }
 
   handleClose() {
@@ -184,13 +161,6 @@ class SaveResource extends React.Component {
   }
 
   handlePasswordChange(event) {
-    if (event.target.value.length && this.state.isPwnedServiceAvailable) {
-      this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce(event.target.value);
-    } else {
-      this.setState({
-        passwordInDictionary: false,
-      });
-    }
     this.loadPassword(event.target.value);
   }
 
@@ -205,8 +175,7 @@ class SaveResource extends React.Component {
   }
 
   loadPassword(password) {
-    const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
-    this.setState({password, passwordEntropy});
+    this.setState({password});
   }
 
   /**
@@ -217,26 +186,7 @@ class SaveResource extends React.Component {
     return this.props.context.resourceTypesSettings;
   }
 
-  /**
-   * Evaluate to check if password is in a dictionary.
-   * @param {string} password the password to evaluate
-   * @return {Promise<void>}
-   */
-  async evaluatePasswordIsInDictionaryDebounce(password) {
-    if (!this.state.isPwnedServiceAvailable || !password) {
-      return;
-    }
-
-    const result = await this.pownedService.evaluateSecret(password);
-    this.setState({
-      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
-    });
-  }
-
   render() {
-    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     return (
       <div className="resource-auto-save">
         <h1 className="title"><Trans>Would you like to save this credential ?</Trans></h1>
@@ -268,25 +218,18 @@ class SaveResource extends React.Component {
                 }
               </div>
               <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-                <label htmlFor="password"><Trans>Password</Trans>
-                  {this.pownedService && (this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  &&
-                  <Icon name="exclamation"/>
-                  }</label>
+                <label htmlFor="password"><Trans>Password</Trans></label>
                 <div className="password-button-inline">
                   <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
                     placeholder={this.translate('Password')} id="password" autoComplete="new-password"/>
                 </div>
-                <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
                 }
-                {!this.state.isPwnedServiceAvailable &&
-                  <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-                }
-                {this.state.passwordInDictionary &&
-                  <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-                }
               </div>
+              {this.state.error &&
+                <div className="error-message">{this.state.error}</div>
+              }
             </div>
           </div>
           <div className="submit-wrapper input flex-row-end">
@@ -298,9 +241,6 @@ class SaveResource extends React.Component {
                 <Icon name="spinner"/>
               }
             </button>
-            {this.state.error &&
-            <div className="error-message">{this.state.error}</div>
-            }
           </div>
         </form>
       </div>

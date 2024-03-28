@@ -35,6 +35,10 @@ import {defaultPasswordExpirySettingsEntityDto, overridenPasswordExpirySettingsE
 import {DateTime} from "luxon";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import {defaultProSiteSettings} from "../../../test/fixture/Settings/siteSettings.test.data";
+import ConfirmCreateEdit, {
+  ConfirmEditCreateOperationVariations,
+  ConfirmEditCreateRuleVariations
+} from "../ConfirmCreateEdit/ConfirmCreateEdit";
 
 describe("See the Create Resource", () => {
   let page, props, context;
@@ -158,12 +162,12 @@ describe("See the Create Resource", () => {
     });
 
     it('requests the addon to create a resource with encrypted description when clicking on the submit button.', async() => {
-      expect.assertions(6);
+      expect.assertions(7);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
       const resourceMeta = defaultResourceMeta();
-      const resourcePassword = "password-value";
+      const resourcePassword = "RN9n8XuECN3";
 
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
@@ -176,8 +180,11 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
 
-      const requestMockImpl = jest.fn((message, data) => Object.assign({id: createdResourceId}, data));
-      mockContextRequest(requestMockImpl);
+      const mockRequests = jest.fn(async(message, arg1) => ({
+        "passbolt.resources.create": Object.assign({id: createdResourceId}, arg1),
+        "passbolt.secrets.powned-password": false
+      }[message]));
+      jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
       jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
@@ -190,19 +197,20 @@ describe("See the Create Resource", () => {
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
       await waitFor(() => {});
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceMeta, resourcePassword);
+      expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+      expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, resourcePassword);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.onClose).toBeCalled();
     });
 
     it('requests the addon to create a resource with non encrypted description when clicking on the submit button.', async() => {
-      expect.assertions(6);
+      expect.assertions(7);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
 
       // create password
       const resourceMeta = defaultResourceMeta();
-      const resourcePassword = "password-value";
+      const resourcePassword = "RN9n8XuECN3";
 
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
@@ -214,8 +222,11 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.complexityText.textContent).not.toBe("Complexity: n/aEntropy: NaN bits");
       expect(page.passwordCreate.progressBar.classList.contains("not_available")).toBe(false);
 
-      const requestMockImpl = jest.fn((message, data) => Object.assign({id: createdResourceId}, data));
-      mockContextRequest(requestMockImpl);
+      const mockRequests = jest.fn(async(message, arg1) => ({
+        "passbolt.resources.create": Object.assign({id: createdResourceId}, arg1),
+        "passbolt.secrets.powned-password": false
+      }[message]));
+      jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
       jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
@@ -234,7 +245,8 @@ describe("See the Create Resource", () => {
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.create", onApiUpdateResourceDto, onApiUpdateSecretDto);
+      expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+      expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceDto, onApiUpdateSecretDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.onClose).toBeCalled();
     });
@@ -262,8 +274,6 @@ describe("See the Create Resource", () => {
           })
         });
         const context = defaultAppContext();
-        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
-
         const page = new CreateResourcePage(context, props);
         await waitFor(() => {});
 
@@ -273,7 +283,7 @@ describe("See the Create Resource", () => {
           name: "Password name",
           uri: "",
           username: "",
-          password: "password-value",
+          password: "RN9n8XuECN3",
           description: "",
           expired: formatDateForApi(expectedExpiryDate)
         };
@@ -299,12 +309,15 @@ describe("See the Create Resource", () => {
           password: resourceMeta.password
         };
 
-        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
-          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
-          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
-        });
+        const mockRequests = jest.fn(async message => ({
+          "passbolt.resources.create": jest.fn(),
+          "passbolt.secrets.powned-password": false
+        }[message]));
+        jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
 
         await page.passwordCreate.click(page.passwordCreate.saveButton);
+        expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+        expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, createResourceSecretDto);
       });
 
       it('with feature flag enabled and default_expiry_period disabled', async() => {
@@ -319,9 +332,6 @@ describe("See the Create Resource", () => {
         });
 
         const context = defaultAppContext();
-
-        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
-
         const page = new CreateResourcePage(context, props);
         await waitFor(() => {});
 
@@ -334,7 +344,7 @@ describe("See the Create Resource", () => {
           expired: null
         });
 
-        const resourcePassword = "password-value";
+        const resourcePassword = "RN9n8XuECN3";
 
         // Fill the form
         page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
@@ -352,12 +362,16 @@ describe("See the Create Resource", () => {
           password: resourcePassword
         };
 
-        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
-          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
-          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
-        });
+        const mockRequests = jest.fn(async message => ({
+          "passbolt.resources.create": jest.fn(),
+          "passbolt.secrets.powned-password": false
+        }[message]));
+        jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
 
         await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+        expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+        expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, createResourceSecretDto);
       });
 
       it('with a feature flag enabled but the password expiry disabled', async() => {
@@ -369,8 +383,6 @@ describe("See the Create Resource", () => {
           })
         });
         const context = defaultAppContext();
-        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
-
         const page = new CreateResourcePage(context, props);
         await waitFor(() => {});
 
@@ -380,7 +392,7 @@ describe("See the Create Resource", () => {
           name: "Password name",
           uri: "",
           username: "",
-          password: "password-value",
+          password: "RN9n8XuECN3",
           description: "",
         };
 
@@ -401,12 +413,15 @@ describe("See the Create Resource", () => {
           password: resourceMeta.password
         };
 
-        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
-          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
-          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
-        });
+        const mockRequests = jest.fn(async message => ({
+          "passbolt.resources.create": jest.fn(),
+          "passbolt.secrets.powned-password": false
+        }[message]));
+        jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
 
         await page.passwordCreate.click(page.passwordCreate.saveButton);
+        expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+        expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, createResourceSecretDto);
       });
 
       it('with feature flag disabled', async() => {
@@ -419,9 +434,6 @@ describe("See the Create Resource", () => {
         });
 
         const context = defaultAppContext();
-
-        context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
-
         const page = new CreateResourcePage(context, props);
         await waitFor(() => {});
 
@@ -431,7 +443,7 @@ describe("See the Create Resource", () => {
           name: "Password name",
           uri: "",
           username: "",
-          password: "password-value",
+          password: "RN9n8XuECN3",
           description: "",
         };
 
@@ -452,12 +464,15 @@ describe("See the Create Resource", () => {
           password: resourceMeta.password
         };
 
-        context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
-          expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
-          expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
-        });
+        const mockRequests = jest.fn(async message => ({
+          "passbolt.resources.create": jest.fn(),
+          "passbolt.secrets.powned-password": false
+        }[message]));
+        jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
 
         await page.passwordCreate.click(page.passwordCreate.saveButton);
+        expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+        expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, createResourceSecretDto);
       });
     });
 
@@ -469,9 +484,6 @@ describe("See the Create Resource", () => {
       proSettings.passbolt.plugins.passwordPolicies.enabled = false;
       const siteSettings = new SiteSettings(proSettings);
       const context = defaultAppContext({siteSettings});
-
-      context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
-
       const page = new CreateResourcePage(context, props);
       await waitFor(() => {});
 
@@ -483,7 +495,7 @@ describe("See the Create Resource", () => {
         description: "",
         expired: null
       });
-      const resourcePassword = "password-value";
+      const resourcePassword = "RN9n8XuECN3";
 
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
@@ -502,12 +514,15 @@ describe("See the Create Resource", () => {
         password: resourcePassword
       };
 
-      context.port.addRequestListener('passbolt.resources.create', (resourceMetaDto, resourceSecretDto) => {
-        expect(resourceMetaDto).toStrictEqual(onApiUpdateResourceMeta);
-        expect(resourceSecretDto).toStrictEqual(createResourceSecretDto);
-      });
+      const mockRequests = jest.fn(async message => ({
+        "passbolt.resources.create": jest.fn(),
+        "passbolt.secrets.powned-password": false
+      }[message]));
+      jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
+      expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+      expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, createResourceSecretDto);
     });
 
     it("As LU I shouldn't be able to submit the form if there is an invalid field", async() => {
@@ -535,7 +550,7 @@ describe("See the Create Resource", () => {
       }));
 
       page.passwordCreate.fillInput(page.passwordCreate.name, "name");
-      await page.passwordCreate.fillInputPassword("password");
+      await page.passwordCreate.fillInputPassword("RN9n8XuECN3");
 
       // Mock the request function to make it the expected result
       mockContextRequest(requestMockImpl);
@@ -571,13 +586,18 @@ describe("See the Create Resource", () => {
       expect.assertions(1);
       // Mock the request function to make it return an error.
       page.passwordCreate.fillInput(page.passwordCreate.name, "name");
-      await page.passwordCreate.fillInputPassword("password");
+      await page.passwordCreate.fillInputPassword("RN9n8XuECN3");
 
       const error = new PassboltApiFetchError("Jest simulate API error.");
-      jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
-        throw error;
+      const mockRequests = jest.fn(message => {
+        switch (message) {
+          case "passbolt.resources.create": throw error;
+          case "passbolt.secrets.powned-password": return false;
+        }
       });
+      jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
       jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
@@ -619,19 +639,49 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
 
-    it("As a signed-in user creating a password on the application, I should get warn when I enter a pwned password and not be blocked", async() => {
+    it("As a signed-in user creating a password which part of a dictionary on the application, I should confirm the password creation in a separate dialog", async() => {
       expect.assertions(2);
 
-      mockContextRequest(() => Promise.resolve(2));
-      await page.passwordCreate.fillInputPassword('hello-world');
-      // we expect a warning to inform about powned password
-      await waitFor(() => {});
-      expect(page.passwordCreate.pwnedWarningMessage.textContent).toEqual("The password is part of an exposed data breach.");
-      mockContextRequest(() => Promise.reject());
-      await page.passwordCreate.fillInputPassword('another test');
-      // we expect a warning to inform about a network issue
-      await waitFor(() => {});
-      expect(page.passwordCreate.pwnedWarningMessage.textContent).toEqual("The pwnedpasswords service is unavailable, your password might be part of an exposed data breach");
+      const mockRequests = jest.fn(async message => ({
+        "passbolt.secrets.powned-password": 2
+      }[message]));
+      jest.spyOn(context.port, 'request').mockImplementation(mockRequests);
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
+      const resourceName = 'password in dictionary';
+      await page.passwordCreate.fillInput(page.passwordCreate.name, resourceName);
+      await page.passwordCreate.fillInputPassword('RN9n8XuECN3');
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+      expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
+      const confirmDialogProps = {
+        resourceName,
+        operation: ConfirmEditCreateOperationVariations.CREATE,
+        rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+        onConfirm: expect.any(Function),
+        onReject: expect.any(Function),
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
+    });
+
+    it("As a signed-in user creating a very weak password on the application, I should confirm the password creation in a separate dialog", async() => {
+      expect.assertions(1);
+
+      jest.spyOn(props.dialogContext, 'open').mockImplementationOnce(jest.fn);
+
+      const resourceName = 'password in dictionary';
+      await page.passwordCreate.fillInput(page.passwordCreate.name, resourceName);
+      await page.passwordCreate.fillInputPassword('abcdefghij');
+      await page.passwordCreate.click(page.passwordCreate.saveButton);
+
+      const confirmDialogProps = {
+        resourceName,
+        operation: ConfirmEditCreateOperationVariations.CREATE,
+        rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+        onConfirm: expect.any(Function),
+        onReject: expect.any(Function),
+      };
+      expect(props.dialogContext.open).toHaveBeenCalledWith(ConfirmCreateEdit, confirmDialogProps);
     });
 
     it("As a signed-in user creating a password on the application, I should see a complexity as Quality if the passphrase is empty", async() => {

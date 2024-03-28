@@ -32,7 +32,6 @@ import PasswordComplexity from "../../../../shared/components/PasswordComplexity
 import {maxSizeValidation} from "../../../lib/Error/InputValidator";
 import {RESOURCE_PASSWORD_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 import {RESOURCE_NAME_MAX_LENGTH, RESOURCE_DESCRIPTION_MAX_LENGTH, RESOURCE_URI_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
-import debounce  from 'debounce-promise';
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import Totp from "../../../../shared/components/Totp/Totp";
@@ -42,6 +41,11 @@ import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
 import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {DateTime} from "luxon";
+import ConfirmCreateEdit, {
+  ConfirmEditCreateOperationVariations,
+  ConfirmEditCreateRuleVariations
+} from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 class EditResource extends Component {
   constructor(props) {
@@ -49,7 +53,6 @@ class EditResource extends Component {
     this.state = this.defaultState;
     this.initEventHandlers();
     this.createInputRef();
-    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   get defaultState() {
@@ -77,7 +80,8 @@ class EditResource extends Component {
       isSecretDecrypting: true,
       resourceTypeIdOriginal: resource.resource_type_id || "",
       resourceTypeId: resource.resource_type_id || "",
-      isPwnedServiceAvailable: true,
+      isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
+      isPasswordDictionaryCheckServiceAvailable: true, // Is the password dictionary check service available.
       passwordInDictionary: false,
       passwordEntropy: null,
       processing: false,
@@ -103,6 +107,8 @@ class EditResource extends Component {
     this.handleEditTotpClick = this.handleEditTotpClick.bind(this);
     this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
     this.applyTotp = this.applyTotp.bind(this);
+    this.save = this.save.bind(this);
+    this.rejectEditionConfirmation = this.rejectEditionConfirmation.bind(this);
   }
 
   /**
@@ -155,13 +161,13 @@ class EditResource extends Component {
    * @returns {void}
    */
   initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
 
-    if (isPwnedServiceAvailable) {
+    if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPwnedServiceAvailable});
+    this.setState({isPasswordDictionaryCheckRequested});
   }
 
   /**
@@ -202,7 +208,8 @@ class EditResource extends Component {
     this.setState({
       password: lastGeneratedPassword,
       generatorSettings,
-      passwordEntropy
+      passwordEntropy,
+      passwordInDictionary: false,
     });
   }
 
@@ -284,6 +291,62 @@ class EditResource extends Component {
       return;
     }
 
+    if (!this.isMinimumRequiredEntropyReached()) {
+      this.handlePasswordMinimumEntropyNotReached();
+      return;
+    } else if (await this.isPasswordInDictionary()) {
+      this.handlePasswordInDictionary();
+      return;
+    }
+
+    await this.save();
+  }
+
+  /**
+   * Request password not reaching minimum entropy edition confirmation.
+   */
+  handlePasswordMinimumEntropyNotReached() {
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.EDIT,
+      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      resourceName: this.state.name,
+      onConfirm: this.save,
+      onReject: this.rejectEditionConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Request password in dictionary creation confirmation.
+   */
+  handlePasswordInDictionary() {
+    this.setState({
+      passwordInDictionary: true
+    });
+
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.EDIT,
+      rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+      resourceName: this.state.name,
+      onConfirm: this.save,
+      onReject: this.rejectEditionConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
+  }
+
+  /**
+   * Reject the creation confirmation.
+   */
+  async rejectEditionConfirmation() {
+    await this.toggleProcessing();
+    this.passwordInputRef.current.focus();
+  }
+
+  /**
+   * Save the resource
+   * @returns {Promise<void>}
+   */
+  async save() {
     try {
       const resource = await this.updateResource();
       await this.handleSaveSuccess(resource);
@@ -366,23 +429,32 @@ class EditResource extends Component {
   }
 
   /**
-   * Evaluate to check if password is in a dictionary.
-   * @param {string} password the password to evaluate
-   * @return {Promise<void>}
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @returns {boolean}
    */
-  async evaluatePasswordIsInDictionaryDebounce(password) {
-    if (!this.state.isPwnedServiceAvailable || !password) {
-      return;
-    }
-
-    const result = await this.pownedService.evaluateSecret(password);
-    this.setState({
-      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
-    });
+  isMinimumRequiredEntropyReached() {
+    return this.state.passwordEntropy
+      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
   }
 
+  /**
+   * Check if the password is part of a dictionary.
+   * @return {Promise<boolean>}
+   */
+  async isPasswordInDictionary() {
+    if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
+      return false;
+    }
+
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.password);
+
+    if (!isPwnedServiceAvailable) {
+      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      return false;
+    }
+
+    return inDictionary;
+  }
 
   /*
    * =============================================================
@@ -582,11 +654,10 @@ class EditResource extends Component {
     };
 
     if (name === "password") {
+      newState.passwordInDictionary = false;
       if (value.length) {
-        this.evaluatePasswordIsInDictionaryDebounce(value);
         newState.passwordEntropy = SecretGenerator.entropy(value);
       } else {
-        newState.passwordInDictionary = false;
         newState.passwordEntropy = null;
       }
     }
@@ -637,7 +708,7 @@ class EditResource extends Component {
     const password = SecretGenerator.generate(this.state.generatorSettings);
     const passwordEntropy = SecretGenerator.entropy(password);
     this.setState({password: password, passwordEntropy, passwordInDictionary: false});
-    this.evaluatePasswordIsInDictionaryDebounce(password);
+    this.isPasswordInDictionary(password);
   }
 
   /**
@@ -755,7 +826,6 @@ class EditResource extends Component {
     try {
       const plaintextSecretDto = await this.getDecryptedSecret();
       const password = plaintextSecretDto.password;
-      this.evaluatePasswordIsInDictionaryDebounce(password);
       const newState = {
         password: password,
         passwordOriginal: password,
@@ -979,9 +1049,6 @@ class EditResource extends Component {
             <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">
                 <Trans>Password</Trans>
-                {(this.state.passwordWarning || this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable) && this.pownedService &&
-                  <Icon name="exclamation"/>
-                }
               </label>
               <div className="password-button-inline">
                 <Password id="edit-password-form-password" name="password"
@@ -1013,12 +1080,6 @@ class EditResource extends Component {
               }
               {this.state.passwordWarning &&
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
-              }
-              {!this.state.isPwnedServiceAvailable && this.pownedService &&
-                    <div className="pwned-password invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-              }
-              {this.state.passwordInDictionary && this.pownedService &&
-                    <div className="pwned-password invalid-passphrase warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
               }
             </div>
             <div className={`input textarea ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>

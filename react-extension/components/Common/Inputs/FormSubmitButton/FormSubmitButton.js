@@ -42,6 +42,8 @@ class FormSubmitButton extends Component {
     let name = 'button primary';
     if (this.props.warning) {
       name += ' warning';
+    } else if (this.props.attention) {
+      name += ' attention';
     }
     if (this.props.disabled) {
       name += ' disabled';
@@ -80,14 +82,20 @@ class FormSubmitButton extends Component {
 }
 
 FormSubmitButton.defaultProps = {
-  warning: false
+  warning: false,
+  attention: false,
 };
 
 FormSubmitButton.propTypes = {
   processing: PropTypes.bool,
   disabled: PropTypes.bool,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+    PropTypes.string,
+  ]),
   warning: PropTypes.bool,
+  attention: PropTypes.bool,
   big: PropTypes.bool,
   medium: PropTypes.bool,
   fullWidth: PropTypes.bool
