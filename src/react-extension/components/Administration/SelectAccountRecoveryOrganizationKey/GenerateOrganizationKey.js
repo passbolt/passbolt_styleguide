@@ -525,17 +525,19 @@ class GenerateOrganizationKey extends React.Component {
                 }
               </div>
             }
-            <div className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}>
-              <label htmlFor="generate-organization-key-form-password">
-                <Trans>Organization key passphrase confirmation</Trans>
-              </label>
-              <Password id="generate-organization-key-form-password-confirmation" name="passphraseConfirmation"
-                placeholder={this.translate("Passphrase confirmation")} autoComplete="new-password" preview={true}
-                securityToken={this.props.context.userSettings.getSecurityToken()}
-                value={this.state.passphraseConfirmation}
-                onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
-                inputRef={this.passphraseConfirmationInputRef}/>
-              {this.state.hasAlreadyBeenValidated &&
+          </div>
+
+          <div className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}>
+            <label htmlFor="generate-organization-key-form-password">
+              <Trans>Organization key passphrase confirmation</Trans>
+            </label>
+            <Password id="generate-organization-key-form-password-confirmation" name="passphraseConfirmation"
+              placeholder={this.translate("Passphrase confirmation")} autoComplete="new-password" preview={true}
+              securityToken={this.props.context.userSettings.getSecurityToken()}
+              value={this.state.passphraseConfirmation}
+              onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
+              inputRef={this.passphraseConfirmationInputRef}/>
+            {this.state.hasAlreadyBeenValidated &&
                 <div className="password-confirmation error-message">
                   {this.isEmptyPasswordConfirmation() &&
                     <div className="empty-passphrase-confirmation error-message"><Trans>The passphrase confirmation is required.</Trans></div>
@@ -544,8 +546,7 @@ class GenerateOrganizationKey extends React.Component {
                     <div className="invalid-passphrase-confirmation error-message"><Trans>The passphrase confirmation should match the passphrase</Trans></div>
                   }
                 </div>
-              }
-            </div>
+            }
           </div>
         </div>
         <div className="warning message" id="generate-organization-key-setting-overridden-banner">
