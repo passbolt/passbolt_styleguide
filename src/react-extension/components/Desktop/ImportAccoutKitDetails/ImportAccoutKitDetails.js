@@ -17,15 +17,8 @@ import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
 import {ImportAccountKitWorkflowStates, withImportAccountKitContext} from "../../../contexts/Desktop/ImportAccountKitContext";
 import Password from "../../../../shared/components/Password/Password";
-import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-import PownedService from "../../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
-import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import Icon from "../../../../shared/components/Icons/Icon";
-import debounce from "debounce-promise";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
-import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 
 class ImportAccoutKitDetails extends React.Component {
   /**
@@ -37,15 +30,6 @@ class ImportAccoutKitDetails extends React.Component {
     this.state = this.defaultState;
     this.bindEventHandlers();
     this.createReferences();
-    this.isPwndProcessingPromise = null;
-    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
-  }
-
-  /**
-   * Whenever the component is mounted
-   */
-  componentDidMount() {
-    this.pownedService = new PownedService(this.props.context.port);
   }
 
   /**
@@ -60,9 +44,6 @@ class ImportAccoutKitDetails extends React.Component {
         invalidGpgKey: false, // True if the gpg key is invalid
         invalidPassphrase: false // True if the passphrase is invalid
       },
-      passphraseInDictionnary: false, // True if the passphrase is part of a data breach
-      isPwnedServiceAvailable: true, // True if the isPwned service can be reached
-      passwordEntropy: null
     };
   }
 
@@ -113,18 +94,7 @@ class ImportAccoutKitDetails extends React.Component {
   handleChangePassphrase(event) {
     const passphrase = event.target.value;
 
-    let passphraseEntropy = null;
-    if (passphrase.length) {
-      passphraseEntropy = SecretGenerator.entropy(passphrase);
-      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce();
-    } else {
-      this.setState({
-        passphraseInDictionnary: false,
-        passphraseEntropy,
-      });
-    }
-
-    this.setState({passphrase, passphraseEntropy});
+    this.setState({passphrase});
     if (this.state.hasBeenValidated) {
       this.validate();
     }
@@ -179,46 +149,6 @@ class ImportAccoutKitDetails extends React.Component {
   }
 
   /**
-   * Evaluate if the passphrase is in dictionary
-   * @return {Promise<void>}
-   */
-  async evaluatePassphraseIsInDictionary() {
-    let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
-    if (!isPwnedServiceAvailable) {
-      return;
-    }
-
-    let passphraseInDictionnary = false;
-    let passphraseEntropy = this.state.passphraseEntropy;
-
-    try {
-      const result = await this.pownedService.evaluateSecret(this.state.passphrase);
-
-      passphraseInDictionnary = result.inDictionary;
-      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-
-      if (passphraseInDictionnary) {
-        passphraseEntropy = 0;
-      }
-    } catch (error) {
-      // If the service is unavailable don't block the user journey.
-      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
-        isPwnedServiceAvailable = false;
-        passphraseInDictionnary = false;
-      } else {
-        throw error;
-      }
-    }
-
-    this.setState({
-      isPwnedServiceAvailable,
-      passphraseEntropy,
-      passphraseInDictionnary,
-    });
-  }
-
-
-  /**
    * Redirect to the importation screen
    * @return {void}
    */
@@ -232,8 +162,6 @@ class ImportAccoutKitDetails extends React.Component {
    * @returns {JSX.Element}
    */
   render() {
-    const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
-
     return (
       <div className="import-account-kit-details">
         <div className="user">
@@ -243,10 +171,7 @@ class ImportAccoutKitDetails extends React.Component {
           <p className="user-domain">{this.props.importAccountKitContext.accountKit?.domain}</p>
         </div>
         <div className="input-password-wrapper input required">
-          <label htmlFor="passphrase"><Trans>Passphrase</Trans>
-            {!this.state.hasBeenValidated && (!this.state.isPwnedServiceAvailable || this.state.passphraseInDictionnary) &&
-              <Icon name="exclamation" />
-            }</label>
+          <label htmlFor="passphrase"><Trans>Passphrase</Trans></label>
           <Password
             id="passphrase-input"
             autoComplete="off"
@@ -270,13 +195,6 @@ class ImportAccoutKitDetails extends React.Component {
               }
             </>
           }
-          {!this.state.isPwnedServiceAvailable &&
-                <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
-          }
-          {this.state.passphraseInDictionnary &&
-                <div className="invalid-passphrase warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
-          }
-          <PasswordComplexity entropy={passphraseEntropy} />
         </div>
         <div className="form-actions">
           <button
