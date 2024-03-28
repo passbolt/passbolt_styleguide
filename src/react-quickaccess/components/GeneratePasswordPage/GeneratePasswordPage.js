@@ -27,16 +27,12 @@ import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
-import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import PownedService from "../../../shared/services/api/secrets/pownedService";
-import debounce from "debounce-promise";
 
 class GeneratePasswordPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
     this.initEventHandlers();
-    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   get defaultState() {
@@ -46,9 +42,7 @@ class GeneratePasswordPage extends React.Component {
       isObfuscated: true, // True if the passphrase should not be visible
       copySecretState: "default",
       processing: false,
-      isPwnedServiceAvailable: false,
       passwordEntropy: null,
-      passwordInDictionary: false,
     };
   }
 
@@ -56,41 +50,9 @@ class GeneratePasswordPage extends React.Component {
    * Whenever the component has been mounted
    */
   componentDidMount() {
-    this.initPwnedPasswordService();
     const generatorSettings = this.props.prepareResourceContext.getSettings();
     const password = this.generatePassword(generatorSettings);
     this.setState({generatorSettings, password});
-  }
-
-  /**
-   * Initialize the pwned password service
-   */
-  initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
-
-    if (isPwnedServiceAvailable) {
-      this.pownedService = new PownedService(this.props.context.port);
-    }
-
-    this.setState({isPwnedServiceAvailable});
-  }
-
-  /**
-   * Evaluate to check if password is in a dictionary.
-   * @param {string} passphrase the passphrase to evaluate
-   * @return {Promise<void>}
-   */
-  async evaluatePasswordIsInDictionaryDebounce(password) {
-    if (!this.state.isPwnedServiceAvailable || !password) {
-      return;
-    }
-
-    const result = await this.pownedService.evaluateSecret(password);
-    this.setState({
-      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary,
-    });
   }
 
   /**
@@ -210,7 +172,6 @@ class GeneratePasswordPage extends React.Component {
     const password = SecretGenerator.generate(generatorConfiguration);
     const passwordEntropy = password?.length > 0 ? SecretGenerator.entropy(password) : null;
     this.setState({passwordEntropy});
-    this.evaluatePasswordIsInDictionaryDebounce(password);
     return password;
   }
 
@@ -232,7 +193,6 @@ class GeneratePasswordPage extends React.Component {
   }
 
   render() {
-    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     const generatorConfiguration = this.state.generatorSettings;
     return (
       <div className="generate-password">
@@ -292,13 +252,7 @@ class GeneratePasswordPage extends React.Component {
                   <span className="visually-hidden"><Trans>Copy</Trans></span>
                 </a>
               </div>
-              <PasswordComplexity entropy={passwordEntropy}/>
-              {!this.state.isPwnedServiceAvailable && this.pownedService &&
-                <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-              }
-              {this.state.passwordInDictionary  && this.pownedService &&
-                <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-              }
+              <PasswordComplexity entropy={this.state.passwordEntropy}/>
             </div>
             {this.hasGeneratorConfiguration() &&
             <Tabs activeTabName={generatorConfiguration.default_generator}>
@@ -345,9 +299,8 @@ class GeneratePasswordPage extends React.Component {
 GeneratePasswordPage.propTypes = {
   context: PropTypes.any, // The application context
   prepareResourceContext: PropTypes.any, // The password generator context
-  passwordPoliciesContext: PropTypes.object, // The password policy context
   history: PropTypes.any, // The history router
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withPrepareResourceContext(withPasswordPolicies(withTranslation('common')(GeneratePasswordPage))));
+export default withRouter(withPrepareResourceContext(withTranslation('common')(GeneratePasswordPage)));

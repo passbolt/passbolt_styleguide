@@ -45,12 +45,7 @@ import ConfirmCreateEdit, {
   ConfirmEditCreateOperationVariations,
   ConfirmEditCreateRuleVariations
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
-
-/**
- * The default minimum entropy used to trigger the user confirmation.
- * @type {number}
- */
-const DEFAULT_MINIMUM_ENTROPY = 60;
+import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 class EditResource extends Component {
   constructor(props) {
@@ -439,7 +434,7 @@ class EditResource extends Component {
    */
   isMinimumRequiredEntropyReached() {
     return this.state.passwordEntropy
-      && this.state.passwordEntropy >= DEFAULT_MINIMUM_ENTROPY;
+      && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
   }
 
   /**
