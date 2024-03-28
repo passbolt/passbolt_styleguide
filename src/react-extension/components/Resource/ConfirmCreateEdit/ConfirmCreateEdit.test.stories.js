@@ -37,8 +37,22 @@ CreateConfirmPwnedPassword.args = {
 };
 
 export const CreateConfirmMinimumEntropyPassword = Template().bind({});
-CreateConfirmPwnedPassword.args = {
+CreateConfirmMinimumEntropyPassword.args = {
   operation: ConfirmEditCreateOperationVariations.CREATE,
+  rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+  resourceName: defaultResourceDto().name
+};
+
+export const EditConfirmPwnedPassword = Template().bind({});
+EditConfirmPwnedPassword.args = {
+  operation: ConfirmEditCreateOperationVariations.EDIT,
+  rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
+  resourceName: defaultResourceDto().name
+};
+
+export const EditConfirmMinimumEntropyPassword = Template().bind({});
+EditConfirmMinimumEntropyPassword.args = {
+  operation: ConfirmEditCreateOperationVariations.EDIT,
   rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
   resourceName: defaultResourceDto().name
 };
