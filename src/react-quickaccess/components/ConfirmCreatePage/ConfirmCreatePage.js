@@ -66,7 +66,8 @@ class ConfirmCreatePage extends React.PureComponent {
     event.preventDefault();
     // Caution: Hack to notify the previous component that the resource is part of a dictionary, it does not handle previous page original state.
     const backPath = "/webAccessibleResources/quickaccess/resources/create";
-    const additionalState = {passwordInDictionary: true};
+    const isPasswordInDictionary = this.props.location.state.rule === ConfirmCreatePageRuleVariations.IN_DICTIONARY;
+    const additionalState = {passwordInDictionary: isPasswordInDictionary};
     this.props.history.replace({pathname: backPath, state: additionalState});
     this.props.history.goBack();
   }
