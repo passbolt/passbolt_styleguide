@@ -157,8 +157,8 @@ class ConfirmCreatePage extends React.PureComponent {
         <div className="form-container">
           <p>
             {{
-              [ConfirmCreatePageRuleVariations.IN_DICTIONARY]: <Trans>The password is part of an exposed data
-                breach.</Trans>,
+              [ConfirmCreatePageRuleVariations.IN_DICTIONARY]: <Trans>The password is part of an exposed data breach.</Trans>,
+              [ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY]: <Trans>The password is very weak and might be part of an exposed data breach.</Trans>,
             }[this.props.location.state.rule]}
           </p>
           <p>

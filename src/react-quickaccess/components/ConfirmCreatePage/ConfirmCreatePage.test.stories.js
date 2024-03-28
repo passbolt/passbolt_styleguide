@@ -39,3 +39,12 @@ Initial.args = {
 };
 Initial.parameters = parameters;
 
+export const VeryWeakEntropy = Template.bind({});
+VeryWeakEntropy.args = {
+  state: {
+    rule: ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY,
+    resourceName: "Resource Name"
+  }
+};
+VeryWeakEntropy.parameters = parameters;
+
