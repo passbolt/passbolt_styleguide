@@ -51,6 +51,12 @@ import ConfirmCreateEdit, {
   ConfirmEditCreateRuleVariations
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
 
+/**
+ * The default minimum entropy used to trigger the user confirmation.
+ * @type {number}
+ */
+const DEFAULT_MINIMUM_ENTROPY = 60;
+
 class CreateResource extends Component {
   constructor() {
     super();
@@ -283,12 +289,29 @@ class CreateResource extends Component {
       return;
     }
 
-    if (await this.isPasswordInDictionary()) {
+    if (!this.isMinimumRequiredEntropyReached()) {
+      this.handlePasswordMinimumEntropyNotReached();
+      return;
+    } else if (await this.isPasswordInDictionary()) {
       this.handlePasswordInDictionary();
       return;
     }
 
     await this.save();
+  }
+
+  /**
+   * Request password not reaching minimum entropy creation confirmation.
+   */
+  handlePasswordMinimumEntropyNotReached() {
+    const confirmCreationDialog = {
+      operation: ConfirmEditCreateOperationVariations.CREATE,
+      rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
+      resourceName: this.state.name,
+      onConfirm: this.save,
+      onReject: this.rejectCreationConfirmation
+    };
+    this.props.dialogContext.open(ConfirmCreateEdit, confirmCreationDialog);
   }
 
   /**
@@ -399,6 +422,16 @@ class CreateResource extends Component {
       this.setState({nameError: nameError}, resolve);
     });
   }
+
+  /**
+   * Returns true if the given entropy is greater or equal to the minimum required entropy.
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached() {
+    return this.state.passwordEntropy
+      && this.state.passwordEntropy >= DEFAULT_MINIMUM_ENTROPY;
+  }
+
 
   /**
    * Check if the password is part of a dictionary.
