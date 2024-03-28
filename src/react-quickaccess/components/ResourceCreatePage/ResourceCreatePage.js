@@ -8,27 +8,28 @@ import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext"
 import Icon from "../../../shared/components/Icons/Icon";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
-import debounce from 'debounce-promise';
 import PownedService from "../../../shared/services/api/secrets/pownedService";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
+import {ConfirmCreatePageRuleVariations} from "../ConfirmCreatePage/ConfirmCreatePage";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {
     super(props);
     this.initEventHandlers();
-    this.state = this.getDefaultState();
+    this.state = this.getDefaultState(props);
     this.createInputRef();
     this.isPwndProcessingPromise = null;
-    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   /**
    * Get the default state
+   * @param {object} props The component props
    * @returns {void}
    */
-  getDefaultState() {
+  getDefaultState(props) {
+    console.log(props.location);
     return {
       loaded: false,
       error: "",
@@ -41,8 +42,9 @@ class ResourceCreatePage extends React.Component {
       password: "",
       passwordError: "",
       passwordEntropy: null,
-      isPwnedServiceAvailable: true,
-      passwordInDictionary: false
+      isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
+      isPasswordDictionaryCheckServiceAvailable: true, // Is the password dictionary check service available.
+      passwordInDictionary: props.location.state?.passwordInDictionary || false
     };
   }
 
@@ -58,6 +60,8 @@ class ResourceCreatePage extends React.Component {
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleCancelButtonClick = this.handleCancelButtonClick.bind(this);
+    this.save = this.save.bind(this);
+    this.rejectCreationConfirmation = this.rejectCreationConfirmation.bind(this);
   }
 
   /**
@@ -75,13 +79,13 @@ class ResourceCreatePage extends React.Component {
    * Initialize the pwned password service
    */
   initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
+    const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
 
-    if (isPwnedServiceAvailable) {
+    if (isPasswordDictionaryCheckRequested) {
       this.pownedService = new PownedService(this.props.context.port);
     }
 
-    this.setState({isPwnedServiceAvailable});
+    this.setState({isPasswordDictionaryCheckRequested});
   }
 
   createInputRef() {
@@ -115,7 +119,7 @@ class ResourceCreatePage extends React.Component {
     const lastGeneratedPassword = this.props.prepareResourceContext.lastGeneratedPassword;
     if (resource) {
       this.setState({name: resource.name, uri: resource.uri, username: resource.username});
-      this.loadPassword(lastGeneratedPassword ?? resource.password);
+      this.loadPassword(lastGeneratedPassword ?? resource.password, false);
     } else {
       await this.loadPasswordMetaFromTabInfo();
     }
@@ -267,6 +271,39 @@ class ResourceCreatePage extends React.Component {
       return;
     }
 
+    if (await this.isPasswordInDictionary()) {
+      this.handlePasswordInDictionary();
+      return;
+    }
+
+    await this.save();
+  }
+
+  /**
+   * Request password in dictionary creation confirmation.
+   */
+  handlePasswordInDictionary() {
+    this.persistResourceInPreparedStorage();
+    const pageProps = {
+      resourceName: this.state.name,
+      rule: ConfirmCreatePageRuleVariations.IN_DICTIONARY
+    };
+    this.props.history.push('/webAccessibleResources/quickaccess/resources/confirm-create', pageProps);
+  }
+
+  /**
+   * Reject the creation confirmation.
+   */
+  async rejectCreationConfirmation() {
+    await this.toggleProcessing();
+    this.passwordInputRef.current.focus();
+  }
+
+  /**
+   * Save the resource
+   * @returns {Promise<void>}
+   */
+  async save() {
     const resourceDto = {
       name: this.state.name,
       username: this.state.username,
@@ -324,21 +361,22 @@ class ResourceCreatePage extends React.Component {
   }
 
   /**
-   * Evaluate to check if password is in a dictionary.
-   * @param {string} password the password to evaluate
-   * @return {Promise<void>}
+   * Check if the password is part of a dictionary.
+   * @return {Promise<boolean>}
    */
-  async evaluatePasswordIsInDictionaryDebounce(password) {
-    if (!this.state.isPwnedServiceAvailable || !password) {
-      return;
+  async isPasswordInDictionary() {
+    if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
+      return false;
     }
 
-    const result = await this.pownedService.evaluateSecret(password);
-    this.setState({
-      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
-    });
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.password);
+
+    if (!isPwnedServiceAvailable) {
+      this.setState({isPasswordDictionaryCheckServiceAvailable: false});
+      return false;
+    }
+
+    return inDictionary;
   }
 
   /**
@@ -359,13 +397,6 @@ class ResourceCreatePage extends React.Component {
    */
   handlePasswordChange(event) {
     const password = event.target.value;
-    if (password.length) {
-      this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce(password);
-    } else {
-      this.setState({
-        passwordInDictionary: false,
-      });
-    }
     this.loadPassword(password);
   }
 
@@ -390,7 +421,6 @@ class ResourceCreatePage extends React.Component {
     if (this.state.processing) {
       return;
     }
-    this.setState({passwordInDictionary: false});
     const password = this.generateSecret();
     this.loadPassword(password);
   }
@@ -412,9 +442,15 @@ class ResourceCreatePage extends React.Component {
       return;
     }
 
-    const password = this.generateSecret();
-    this.loadPassword(password);
+    this.persistResourceInPreparedStorage();
+    this.props.history.push('/webAccessibleResources/quickaccess/resources/generate-password');
+  }
 
+  /**
+   * Persist the current resource state in the prepared storage.
+   * It is used when the user is opening the generator or has to confirm the resource creation.
+   */
+  persistResourceInPreparedStorage() {
     const resource = {
       name: this.state.name,
       username: this.state.username,
@@ -422,13 +458,17 @@ class ResourceCreatePage extends React.Component {
       password: this.state.password
     };
     this.props.prepareResourceContext.onPrepareResource(resource);
-    this.props.history.push('/webAccessibleResources/quickaccess/resources/generate-password');
   }
 
-  loadPassword(password) {
+  /**
+   * Load password
+   * @param {string} password
+   * @param {boolean} resetPasswordInDictionary Reset the password in dictionary flag
+   */
+  loadPassword(password, resetPasswordInDictionary = true) {
     const passwordEntropy = password ? SecretGenerator.entropy(password) : null;
-    this.setState({passwordEntropy, password});
-    this.isPwndProcessingPromise = this.evaluatePasswordIsInDictionaryDebounce(password);
+    const passwordInDictionary = resetPasswordInDictionary ? false : this.state.passwordInDictionary;
+    this.setState({passwordEntropy, password, passwordInDictionary});
   }
 
   /**
@@ -499,10 +539,7 @@ class ResourceCreatePage extends React.Component {
                 }
               </div>
               <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
-                <label htmlFor="password"><Trans>Password</Trans>
-                  {(this.state.passwordInDictionary || !this.state.isPwnedServiceAvailable)  && this.pownedService &&
-                  <Icon name="exclamation"/>
-                  }</label>
+                <label htmlFor="password"><Trans>Password</Trans></label>
                 <div className="password-button-inline">
                   <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
                     autoComplete="new-password" placeholder={this.translate('Password')} id="password" inputRef={this.passwordInputRef}/>
@@ -522,17 +559,6 @@ class ResourceCreatePage extends React.Component {
                 <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
                 {this.state.passwordError &&
                   <div className="error-message">{this.state.passwordError}</div>
-                }
-
-                {this.pownedService &&
-                  <>
-                    {!this.state.isPwnedServiceAvailable && this.pownedService !== null &&
-                      <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-                    }
-                    {this.state.passwordInDictionary && this.pownedService !== null &&
-                      <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-                    }
-                  </>
                 }
               </div>
             </div>
