@@ -13,6 +13,7 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
 import {ConfirmCreatePageRuleVariations} from "../ConfirmCreatePage/ConfirmCreatePage";
+import {ENTROPY_THRESHOLDS} from "../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 
 class ResourceCreatePage extends React.Component {
   constructor(props) {
@@ -270,8 +271,13 @@ class ResourceCreatePage extends React.Component {
       return;
     }
 
+    if (!this.isMinimumRequiredEntropyReached()) {
+      this.handleComfirmPasswordCreation(ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY);
+      return;
+    }
+
     if (await this.isPasswordInDictionary()) {
-      this.handlePasswordInDictionary();
+      this.handleComfirmPasswordCreation(ConfirmCreatePageRuleVariations.IN_DICTIONARY);
       return;
     }
 
@@ -279,13 +285,14 @@ class ResourceCreatePage extends React.Component {
   }
 
   /**
-   * Request password in dictionary creation confirmation.
+   * Handle the request to confirm password creation when it is weak
+   * @param {string} createPageRuleVariation
    */
-  handlePasswordInDictionary() {
+  handleComfirmPasswordCreation(createPageRuleVariation) {
     this.persistResourceInPreparedStorage();
     const pageProps = {
       resourceName: this.state.name,
-      rule: ConfirmCreatePageRuleVariations.IN_DICTIONARY
+      rule: createPageRuleVariation
     };
     this.props.history.push('/webAccessibleResources/quickaccess/resources/confirm-create', pageProps);
   }
@@ -376,6 +383,15 @@ class ResourceCreatePage extends React.Component {
     }
 
     return inDictionary;
+  }
+
+  /**
+   * Returns true if the strict minimum entropy is reached (entropy is higher than very weak entropy)
+   * @param {number} passphraseEntropy
+   * @returns {boolean}
+   */
+  isMinimumRequiredEntropyReached() {
+    return this.state.passwordEntropy && this.state.passwordEntropy >= ENTROPY_THRESHOLDS.WEAK;
   }
 
   /**
