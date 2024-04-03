@@ -52,7 +52,6 @@ import mockRequestGroupsCreate from "./request/mockRequestGroupsCreate";
 import mockRequestGroupsUpdate from "./request/mockRequestGroupsUpdate";
 import mockRequestFindAllThemes from "./request/mockRequestFindAllThemes";
 import mockRequestFindActivities from "./request/mockRequestFindActivities";
-import mockRequestAuthIsAuthenticated from "./request/mockRequestAuthIsAuthenticated";
 import mockRequestGetLocale from "./request/mockRequestGetLocale";
 import mockRequestRoleGet from "./request/mockRequestRoleGet";
 import mockRequestPasswordPolicies from "./request/mockRequestPasswordPolicies";
@@ -107,7 +106,6 @@ export default storage => {
   mockPort.addRequestListener("passbolt.groups.create", mockRequestGroupsCreate);
   mockPort.addRequestListener("passbolt.groups.update", mockRequestGroupsUpdate);
   mockPort.addRequestListener("passbolt.themes.find-all", mockRequestFindAllThemes);
-  mockPort.addRequestListener("passbolt.auth.is-authenticated", mockRequestAuthIsAuthenticated);
   mockPort.addRequestListener("passbolt.locale.get", mockRequestGetLocale);
   mockPort.addRequestListener("passbolt.password-policies.get", mockRequestPasswordPolicies);
   mockPort.addRequestListener("passbolt.mobile.transfer.create", mockRequestMobileTransferCreate);
