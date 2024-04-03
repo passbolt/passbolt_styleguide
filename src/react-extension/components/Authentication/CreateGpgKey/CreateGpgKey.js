@@ -13,12 +13,9 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import debounce from "debounce-promise";
 import {Trans, withTranslation} from "react-i18next";
 import Password from "../../../../shared/components/Password/Password";
 import {SecretGenerator} from "../../../../shared/lib/SecretGenerator/SecretGenerator";
-import ExternalServiceUnavailableError from "../../../../shared/lib/Error/ExternalServiceUnavailableError";
-import ExternalServiceError from "../../../../shared/lib/Error/ExternalServiceError";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
 import PasswordComplexityWithGoal from "../../../../shared/components/PasswordComplexityWithGoal/PasswordComplexityWithGoal";
@@ -45,8 +42,6 @@ class CreateGpgKey extends Component {
     super(props);
     this.state = this.defaultState;
     this.pownedService = null;
-    this.isPwndProcessingPromise = null;
-    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
 
     this.bindEventHandlers();
     this.createReferences();
@@ -63,7 +58,6 @@ class CreateGpgKey extends Component {
         processing: false, // True if one's processing passphrase
       },
       passphraseInDictionnary: false, // True if the passphrase is part of a data breach
-      isPwnedServiceAvailable: true, // True if the isPwned service can be reached
     };
   }
 
@@ -80,7 +74,7 @@ class CreateGpgKey extends Component {
   get isValid() {
     const validation = {
       notInDictionary: this.pownedService === null || !this.state.passphraseInDictionnary,
-      enoughEntropy: this.state.passphraseEntropy && this.state.passphraseEntropy >= this.minimumEntropyRequired
+      enoughEntropy: this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy)
     };
 
     return Object.values(validation).every(value => value);
@@ -129,8 +123,6 @@ class CreateGpgKey extends Component {
     this.focusOnPassphrase();
     if (this.props.userPassphrasePolicies.external_dictionary_check) {
       this.initPwnedPasswordService();
-    } else {
-      this.setState({isPwnedServiceAvailable: false});
     }
   }
 
@@ -156,6 +148,7 @@ class CreateGpgKey extends Component {
     const newState = {
       passphrase: event.target.value,
       passphraseEntropy: null,
+      passphraseInDictionnary: false,
     };
 
     if (!newState.passphrase.length) {
@@ -165,11 +158,6 @@ class CreateGpgKey extends Component {
     }
 
     newState.passphraseEntropy = SecretGenerator.entropy(newState.passphrase);
-    if (this.state.isPwnedServiceAvailable && this.isMinimumRequiredEntropyReached(newState.passphraseEntropy)) {
-      this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(newState.passphrase);
-    } else {
-      newState.passphraseInDictionnary = false;
-    }
     this.setState(newState);
   }
 
@@ -177,65 +165,50 @@ class CreateGpgKey extends Component {
    * Whenever the user submits the passphrase
    * @param event A form submit event
    */
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
-    this.generateGpgKey();
+    this.toggleProcessing();
+    // is current form valid
+    if (!this.isValid) {
+      this.toggleProcessing();
+      this.focusOnPassphrase();
+      return;
+    }
+
+    //the form is valid, check if passphrase is pwned
+    const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
+    if (isPassphrasePwned) {
+      this.toggleProcessing();
+      this.focusOnPassphrase();
+      return;
+    }
+
+    await this.generateGpgKey();
+    this.toggleProcessing();
   }
 
   /**
    * Evaluate if the passphrase is in dictionary
    * @param {string} passphrase the passphrase to evaluate
-   * @return {Promise<void>}
-   */
-  async evaluatePassphraseIsInDictionary(passphrase) {
-    let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
-    if (!isPwnedServiceAvailable) {
-      return;
-    }
-
-    let passphraseInDictionnary = false;
-
-    try {
-      const result =  await this.pownedService.evaluateSecret(passphrase);
-      //we ensure after the resolution of the deobunced promise that the passphrase is not empty and the minimum entropy is still reached so we do not display the 'in dictionary' warning message when not relevant
-      passphraseInDictionnary = this.state.passphrase && result.inDictionary && this.isMinimumRequiredEntropyReached(this.state.passphraseEntropy);
-      isPwnedServiceAvailable = result.isPwnedServiceAvailable;
-    } catch (error) {
-      // If the service is unavailable don't block the user journey.
-      if (error instanceof ExternalServiceUnavailableError || error instanceof ExternalServiceError) {
-        isPwnedServiceAvailable = false;
-        passphraseInDictionnary = false;
-      } else {
-        throw error;
-      }
-    }
-
-    this.setState({
-      isPwnedServiceAvailable,
-      passphraseInDictionnary,
-    });
-  }
-
-  /**
-   * Await for isPwned service to finish its process and returns true if the current displayed passphrase is pwned.
    * @return {Promise<boolean>}
    */
-  async isCurrentPassphrasePwned() {
-    await this.isPwndProcessingPromise;
-    return this.state.passphraseInDictionnary;
+  async evaluatePassphraseIsInDictionary(passphrase) {
+    if (!this.pownedService) {
+      return false;
+    }
+
+    const result = await this.pownedService.evaluateSecret(passphrase);
+    const passphraseInDictionnary = result.inDictionary;
+
+    this.setState({passphraseInDictionnary});
+    return passphraseInDictionnary;
   }
 
   /**
    * Generate the Gpg key
    */
   async generateGpgKey() {
-    this.toggleProcessing();
-    const isPwned = await this.isCurrentPassphrasePwned();
-    if (isPwned) {
-      this.toggleProcessing();
-      return;
-    }
-    this.props.onComplete(this.state.passphrase);
+    await this.props.onComplete(this.state.passphrase);
   }
 
   /**
@@ -255,7 +228,7 @@ class CreateGpgKey extends Component {
    * @returns {boolean}
    */
   isMinimumRequiredEntropyReached(passphraseEntropy) {
-    return passphraseEntropy >= this.props.userPassphrasePolicies.entropy_minimum;
+    return passphraseEntropy && passphraseEntropy >= this.props.userPassphrasePolicies.entropy_minimum;
   }
 
   /**
@@ -292,11 +265,8 @@ class CreateGpgKey extends Component {
               entropy={passphraseEntropy}
               targetEntropy={this.props.userPassphrasePolicies.entropy_minimum}/>
             <>
-              {!this.state.isPwnedServiceAvailable && this.state.passphrase?.length > 0 &&
-                <div className="invalid-passphrase warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach</Trans></div>
-              }
               {this.state.passphraseInDictionnary &&
-                <div className="invalid-passphrase warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
+                <div className="invalid-passphrase error-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
               }
             </>
           </div>

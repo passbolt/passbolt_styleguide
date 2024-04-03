@@ -20,6 +20,8 @@ import {defaultProps, propsWithExternalDictionaryCheckDisabled} from "./EnterNew
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
+import PownedService from "../../../../shared/services/api/secrets/pownedService";
+import {passphraseIsInDictionnary, passphraseIsNotInDictionnary} from "../../../../shared/services/api/secrets/pownedService.data";
 
 jest.mock("../../../../shared/lib/Secret/PwnedPasswords");
 
@@ -28,7 +30,6 @@ describe("As LU I should see the user confirm passphrase page", () => {
   const props = defaultProps();
 
   beforeEach(() => {
-    jest.useFakeTimers();
     jest.resetModules();
     jest.clearAllMocks();
     jest.spyOn(props.context.siteSettings, 'canIUse').mockImplementation(() => false); // Hackaton: Don't break the tests with the introduction of the password policy default entropy
@@ -152,6 +153,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
     it('As LU I should see a processing feedback while submitting the form', async() => {
       expect.assertions(1);
 
+      jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsNotInDictionnary());
       let generateResolve = null;
       props.userSettingsContext.onUpdatePassphraseRequested.mockImplementation(() => new Promise(resolve => {
         generateResolve = resolve;
@@ -183,30 +185,74 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, ErrorDialogProps);
     });
 
-    it('As LU I should be inform about ExternalServiceUnavailableError for powned password service', async() => {
-      expect.assertions(1);
-      props.context.port.addRequestListener("passbolt.secrets.powned-password", () => Promise.reject());
-      await page.insertPassphrase("ispowned service unavailable");
-      await waitForTrue(() => Boolean(page.passphraseWarningMessage));
-      expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
-    });
-
     it('As LU I should see a complexity as Quality if the passphrase is empty', async() => {
       expect.assertions(1);
       await page.insertPassphrase("");
       expect(page.isEmptyPassphrase).toBeTruthy();
     });
+
+    it(`As LU I cannot update my passphrase with a secret from a data breach`, async() => {
+      expect.assertions(2);
+      jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
+      await page.insertPassphrase('abcdefgh1234=5ABCD===');
+      await page.update(() => true);
+      expect(page.isProcessing).toBeFalsy();
+      expect(page.passphraseBreachedErrorMessage.textContent).toBe("The passphrase is part of an exposed data breach.");
+    });
+
+    it(`As LU I see the entropy updated when I type a character after having typed a passphrase from a data breach`, async() => {
+      expect.assertions(3);
+      jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
+      await page.insertPassphrase('passphrase from breached data');
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+      await page.update(() => true);
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 0.0");
+      await page.insertPassphrase("passphrase from breached tada");
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+    });
+
+    it(`As LU I can update my passphrase after having changed the passphrase used from a data breach`, async() => {
+      expect.assertions(3);
+
+      const notBreachedPassphrase = "notBreachedPassphrase";
+      props.userSettingsContext.onUpdatePassphraseRequested.mockImplementation(passphrase => {
+        expect(passphrase).toStrictEqual(notBreachedPassphrase);
+      });
+
+      jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(passphrase => passphraseIsInDictionnary({
+        inDictionary: passphrase !== notBreachedPassphrase
+      }));
+
+      await page.insertPassphrase('passphrase from breached data');
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+
+      await page.update(() => true);
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 0.0");
+
+      await page.insertPassphrase(notBreachedPassphrase);
+      await page.update(() => true);
+    });
   });
 
   describe("With user passphrase policies external dictionary check disabled", () => {
     it("As LU I should be inform that my passphrae might be part of a data breach if external dictionary check is disabled", async() => {
-      expect.assertions(1);
+      expect.assertions(2);
       const props = propsWithExternalDictionaryCheckDisabled();
+
+      let generateResolve = null;
+      props.userSettingsContext.onUpdatePassphraseRequested.mockImplementation(() => new Promise(resolve => {
+        generateResolve = resolve;
+      }));
 
       const page = new EnterNewPassphrasePage(props);
       await page.insertPassphrase("ispowned service unavailable");
 
-      expect(page.passphraseWarningMessage.textContent).toBe("The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach");
+      const spyOnPownedService = jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
+      await page.insertPassphrase('passphrase from breached data');
+      expect(page.passphraseComplexity.textContent).toContain("entropy: 136.3");
+      await page.update(() => true);
+      await generateResolve();
+      expect(spyOnPownedService).not.toHaveBeenCalled();
     });
   });
 });

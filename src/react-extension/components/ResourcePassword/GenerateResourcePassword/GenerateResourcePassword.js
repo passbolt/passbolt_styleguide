@@ -29,9 +29,6 @@ import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePa
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
-import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import debounce from "debounce-promise";
-import PownedService from "../../../../shared/services/api/secrets/pownedService";
 
 /**
  * This component generate password or passphrase following configuration
@@ -41,7 +38,6 @@ class GenerateResourcePassword extends Component {
     super(props);
     this.state = this.defaultState;
     this.initEventHandlers();
-    this.evaluatePasswordIsInDictionaryDebounce = debounce(this.evaluatePasswordIsInDictionaryDebounce, 300);
   }
 
   get defaultState() {
@@ -51,7 +47,6 @@ class GenerateResourcePassword extends Component {
       isObfuscated: true, // True if the passphrase should not be visible
       loading: true,
       processing: false,
-      isPwnedServiceAvailable: false,
     };
   }
 
@@ -59,9 +54,6 @@ class GenerateResourcePassword extends Component {
    * Whenever the component has been mounted
    */
   async componentDidMount() {
-    await this.props.passwordPoliciesContext.findPolicies();
-    this.initPwnedPasswordService();
-
     const generatorSettings = this.props.resourcePasswordGeneratorContext.getSettings();
     const password = this.generatePassword(generatorSettings);
     this.setState({
@@ -69,19 +61,6 @@ class GenerateResourcePassword extends Component {
       generatorSettings,
       password
     });
-  }
-
-  /**
-   * Initialize the pwned password service
-   */
-  initPwnedPasswordService() {
-    const isPwnedServiceAvailable = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
-
-    if (isPwnedServiceAvailable) {
-      this.pownedService = new PownedService(this.props.context.port);
-    }
-
-    this.setState({isPwnedServiceAvailable});
   }
 
   /**
@@ -190,26 +169,7 @@ class GenerateResourcePassword extends Component {
     const password = SecretGenerator.generate(generatorConfiguration);
     const passwordEntropy = password.length > 0 ? SecretGenerator.entropy(password) : null;
     this.setState({passwordEntropy});
-    this.evaluatePasswordIsInDictionaryDebounce(password);
     return password;
-  }
-
-  /**
-   * Evaluate to check if password is in a dictionary.
-   * @param {string} password the password to evaluate
-   * @return {Promise<void>}
-   */
-  async evaluatePasswordIsInDictionaryDebounce(password) {
-    if (!this.state.isPwnedServiceAvailable || !password) {
-      return;
-    }
-
-    const result = await this.pownedService.evaluateSecret(password);
-    this.setState({
-      isPwnedServiceAvailable: result.isPwnedServiceAvailable,
-      //we ensure after the resolution of the deobunced promise that if the passphrase is empty we do not display the 'in dictionary' warning message
-      passwordInDictionary: this.state.password && this.state.password !== "" && result.inDictionary
-    });
   }
 
   /**
@@ -229,7 +189,6 @@ class GenerateResourcePassword extends Component {
    * @returns {JSX}
    */
   render() {
-    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     const generatorConfiguration = this.state.generatorSettings;
     return (
       <>
@@ -264,13 +223,7 @@ class GenerateResourcePassword extends Component {
                     <span className="visually-hidden"><Trans>View</Trans></span>
                   </button>
                 </div>
-                <PasswordComplexity entropy={passwordEntropy}/>
-                {!this.state.isPwnedServiceAvailable && this.pownedService &&
-                  <div className="pwned-password warning-message"><Trans>The pwnedpasswords service is unavailable, your password might be part of an exposed data breach</Trans></div>
-                }
-                {this.state.passwordInDictionary  && this.pownedService &&
-                  <div className="pwned-password warning-message"><Trans>The password is part of an exposed data breach.</Trans></div>
-                }
+                <PasswordComplexity entropy={this.state.passwordEntropy}/>
               </div>
               {generatorConfiguration?.default_generator &&
               <Tabs activeTabName={generatorConfiguration.default_generator}>
@@ -315,7 +268,6 @@ GenerateResourcePassword.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   onClose: PropTypes.func, // Whenever the component must be closed
   t: PropTypes.func, // The translation function
-  passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withActionFeedback(withPasswordPolicies(withResourcePasswordGeneratorContext(withTranslation('common')(GenerateResourcePassword)))));
+export default withAppContext(withActionFeedback(withResourcePasswordGeneratorContext(withTranslation('common')(GenerateResourcePassword))));

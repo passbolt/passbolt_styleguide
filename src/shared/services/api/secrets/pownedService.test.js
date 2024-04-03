@@ -26,19 +26,12 @@ describe('PownedService', () => {
   });
 
   describe('evaluateSecret', () => {
-    it('should returns inDictionary=false and isPwnedServiceAvailable=true for secrets of length 8 or more', async() => {
+    it('should returns inDictionary=false and isPwnedServiceAvailable=true for password not in dictionary', async() => {
       expect.assertions(1);
 
       port.request.mockResolvedValue(0);
       const result = await pownedService.evaluateSecret('password123');
       expect(result).toEqual({inDictionary: false, isPwnedServiceAvailable: true});
-    });
-
-    it('should returns inDictionary=true and isPwnedServiceAvailable=true for secrets of length less than 8', async() => {
-      expect.assertions(1);
-
-      const result = await pownedService.evaluateSecret('pass');
-      expect(result).toEqual({inDictionary: true, isPwnedServiceAvailable: true});
     });
 
     it('should returns inDictionary=false and isPwnedServiceAvailable=false when checkIfPasswordPowned throws an error', async() => {

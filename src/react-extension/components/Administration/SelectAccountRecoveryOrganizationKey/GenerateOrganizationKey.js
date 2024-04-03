@@ -14,7 +14,6 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import debounce from "debounce-promise";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
@@ -46,8 +45,6 @@ class GenerateOrganizationKey extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.isPwndProcessingPromise = null;
-    this.evaluatePassphraseIsInDictionaryDebounce = debounce(this.evaluatePassphraseIsInDictionary, 300);
     this.bindCallbacks();
     this.createInputRef();
   }
@@ -181,9 +178,6 @@ class GenerateOrganizationKey extends React.Component {
 
     if (this.state.passphrase.length > 0) {
       passphraseEntropy = SecretGenerator.entropy(this.state.passphrase);
-      if (this.state.isPwnedServiceAvailable) {
-        this.isPwndProcessingPromise = this.evaluatePassphraseIsInDictionaryDebounce(this.state.passphrase);
-      }
     } else {
       this.setState({
         passphraseInDictionnary: false,
@@ -191,6 +185,9 @@ class GenerateOrganizationKey extends React.Component {
       });
     }
     if (this.state.hasAlreadyBeenValidated) {
+      this.setState({
+        passphraseInDictionnary: false,
+      });
       this.validatePassphraseInput();
     } else {
       const hasResourcePassphraseMaxLength = this.state.passphrase.length >= RESOURCE_PASSWORD_MAX_LENGTH;
@@ -261,12 +258,12 @@ class GenerateOrganizationKey extends React.Component {
   /**
    * Evaluate if the passphrase is in dictionary
    * @param {string} passphrase the passphrase to evaluate
-   * @return {Promise<void>}
+   * @return {Promise<boolean>}
    */
   async evaluatePassphraseIsInDictionary(passphrase) {
     let isPwnedServiceAvailable = this.state.isPwnedServiceAvailable;
-    if (!isPwnedServiceAvailable) {
-      return;
+    if (!isPwnedServiceAvailable || !this.pownedService) {
+      return false;
     }
 
     let passphraseInDictionnary = false;
@@ -290,6 +287,8 @@ class GenerateOrganizationKey extends React.Component {
       isPwnedServiceAvailable,
       passphraseInDictionnary,
     });
+
+    return passphraseInDictionnary;
   }
 
   /**
@@ -332,19 +331,10 @@ class GenerateOrganizationKey extends React.Component {
    */
   async handleFormSubmit(event) {
     event.preventDefault();
-
     if (this.state.processing) {
       return;
     }
     this.setState({hasAlreadyBeenValidated: true});
-
-    if (this.state.isPwnedServiceAvailable) {
-      await this.isPwndProcessingPromise;
-    }
-
-    if (this.state.passphraseInDictionnary && this.pownedService) {
-      return;
-    }
 
     await this.save();
   }
@@ -360,7 +350,6 @@ class GenerateOrganizationKey extends React.Component {
     ];
     validations.push(this.hasWeakPassword());
     validations.push(!this.pownedService && this.state.passphrase.length < 8);
-
     return validations.includes(true);
   }
 
@@ -372,6 +361,13 @@ class GenerateOrganizationKey extends React.Component {
 
     if (!await this.validate()) {
       this.handleValidateError();
+      this.toggleProcessing();
+      return;
+    }
+
+    //the form is valid, check if passphrase is pwned
+    const isPassphrasePwned = await this.evaluatePassphraseIsInDictionary(this.state.passphrase);
+    if (isPassphrasePwned) {
       this.toggleProcessing();
       return;
     }
@@ -456,7 +452,7 @@ class GenerateOrganizationKey extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const passphraseEntropy = this.state.passphraseInDictionnary ? 0 : this.state.passphraseEntropy;
+    const passphraseEntropy = this.state.passphraseInDictionnary  ? 0 : this.state.passphraseEntropy;
 
     return (
       <form onSubmit={this.handleFormSubmit} noValidate>
@@ -529,30 +525,19 @@ class GenerateOrganizationKey extends React.Component {
                 }
               </div>
             }
-            {this.state.passphrase?.length > 0 && !this.state.hasAlreadyBeenValidated && this.pownedService &&
-                <>
-                  {!this.state.isPwnedServiceAvailable &&
-                    <div className="password warning-message"><Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
-                  }
-                  {this.state.passphraseInDictionnary &&
-                    <div className="password warning-message"><Trans>The passphrase is part of an exposed data breach.</Trans></div>
-                  }
-                </>
-            }
-            {!this.state.isPwnedServiceAvailable && this.pownedService !== null &&
-              <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>The pwnedpasswords service is unavailable, your passphrase might be part of an exposed data breach.</Trans></div>
-            }
-            <div className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}>
-              <label htmlFor="generate-organization-key-form-password">
-                <Trans>Organization key passphrase confirmation</Trans>
-              </label>
-              <Password id="generate-organization-key-form-password-confirmation" name="passphraseConfirmation"
-                placeholder={this.translate("Passphrase confirmation")} autoComplete="new-password" preview={true}
-                securityToken={this.props.context.userSettings.getSecurityToken()}
-                value={this.state.passphraseConfirmation}
-                onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
-                inputRef={this.passphraseConfirmationInputRef}/>
-              {this.state.hasAlreadyBeenValidated &&
+          </div>
+
+          <div className={`input-password-wrapper input required ${this.state.hasAlreadyBeenValidated && !this.validatePassphraseConfirmationInput() ? "error" : ""}`}>
+            <label htmlFor="generate-organization-key-form-password">
+              <Trans>Organization key passphrase confirmation</Trans>
+            </label>
+            <Password id="generate-organization-key-form-password-confirmation" name="passphraseConfirmation"
+              placeholder={this.translate("Passphrase confirmation")} autoComplete="new-password" preview={true}
+              securityToken={this.props.context.userSettings.getSecurityToken()}
+              value={this.state.passphraseConfirmation}
+              onChange={this.handleInputChange} disabled={this.hasAllInputDisabled()}
+              inputRef={this.passphraseConfirmationInputRef}/>
+            {this.state.hasAlreadyBeenValidated &&
                 <div className="password-confirmation error-message">
                   {this.isEmptyPasswordConfirmation() &&
                     <div className="empty-passphrase-confirmation error-message"><Trans>The passphrase confirmation is required.</Trans></div>
@@ -561,8 +546,7 @@ class GenerateOrganizationKey extends React.Component {
                     <div className="invalid-passphrase-confirmation error-message"><Trans>The passphrase confirmation should match the passphrase</Trans></div>
                   }
                 </div>
-              }
-            </div>
+            }
           </div>
         </div>
         <div className="warning message" id="generate-organization-key-setting-overridden-banner">
