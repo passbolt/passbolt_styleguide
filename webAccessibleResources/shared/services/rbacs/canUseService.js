@@ -24,6 +24,12 @@ export default class CanUse {
    * @returns {boolean}
    */
   static canRoleUseUiAction(user, rbacs, actionName) {
+    // Desktop action should always be driven by rbac
+    if (window.chrome?.webview) {
+      const rbac = rbacs.findRbacByActionName(actionName);
+      return this.getByRbacOrDefault(rbac, actionName);
+    }
+
     const role =  new RoleEntity(user.role);
     // Administrator action are not controlled by rbac.
     if (role.isAdmin()) {
