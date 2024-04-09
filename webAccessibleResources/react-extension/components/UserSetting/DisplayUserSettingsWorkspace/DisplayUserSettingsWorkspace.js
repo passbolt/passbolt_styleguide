@@ -74,7 +74,8 @@ class DisplayUserSettingsWorkspace extends React.Component {
    * @returns {bool}
    */
   get canIUseAccountRecoveryCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
+    const canViewAccountRecovery = this.props.rbacContext.canIUseUiAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
+    return canViewAccountRecovery && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
   }
 
   /**
