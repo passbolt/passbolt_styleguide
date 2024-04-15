@@ -211,6 +211,17 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
+   * Return the healthcheck app sub section isSuccess with air gapped
+   */
+  get isAllHealthcheckSubSectionAppSuccessAirGapped() {
+    const healthcheckSuccesses = this.healthCheckApp.querySelectorAll('.healthcheck-success');
+    const healthcheckInfos = this.healthCheckApp.querySelectorAll('.healthcheck-info');
+    const healthcheckFails = this.healthCheckApp.querySelectorAll('.healthcheck-fail');
+
+    return healthcheckSuccesses.length === 8 && healthcheckInfos.length === 2 && healthcheckFails.length === 1;
+  }
+
+  /**
    * Returns the healthcheck app sub sections isFailed
    */
   get isAllHealthcheckSubSectionAppFailed() {

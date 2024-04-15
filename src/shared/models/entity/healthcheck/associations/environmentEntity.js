@@ -31,9 +31,10 @@ class EnvironmentEntity extends Entity {
   static getSchema() {
     return {
       "type": "object",
-      "required": ["phpVersion", "pcre", "mbstring", "gnupg", "intl", "image", "tmpWritable", "logWritable"],
+      "required": ["phpVersion", "nextMinPhpVersion", "pcre", "mbstring", "gnupg", "intl", "image", "tmpWritable", "logWritable"],
       "properties": {
         "phpVersion": {"type": "boolean"},
+        "nextMinPhpVersion": {"type": "boolean"},
         "pcre": {"type": "boolean"},
         "mbstring": {"type": "boolean"},
         "gnupg": {"type": "boolean"},
@@ -61,6 +62,10 @@ class EnvironmentEntity extends Entity {
    */
   get phpVersion() {
     return this._props.phpVersion;
+  }
+
+  get nextMinPhpVersion() {
+    return this._props.nextMinPhpVersion;
   }
 
   get pcre() {

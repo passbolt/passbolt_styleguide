@@ -14,7 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import HealthcheckEntity from "./healthcheckEntity";
-import {defaultHealthcheckData} from "./associations/healthcheckEntity.test.data";
+import {defaultHealthcheckData, defaultHealthcheckAirgappedData} from "./associations/healthcheckEntity.test.data";
 import healthcheckEntity from "./healthcheckEntity";
 import DatabaseEntity from "./associations/databaseEntity";
 import SslEntity from "./associations/sslEntity";
@@ -45,6 +45,22 @@ describe("HealthcheckEntity", () => {
       expect(entity.core.toDto()).toEqual(dto.core);
       expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
     });
+
+    it("it should instatiate the entity with the airgapped dto", () => {
+      expect.assertions(9);
+      const dto = defaultHealthcheckAirgappedData();
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
+      expect(entity.ssl.toDto()).toEqual(dto.ssl);
+      expect(entity.database.toDto()).toEqual(dto.database);
+      expect(entity.application.toDto()).toEqual(dto.application);
+      expect(entity.gpg.toDto()).toEqual(dto.gpg);
+      expect(entity.environment.toDto()).toEqual(dto.environment);
+      expect(entity.configFile.toDto()).toEqual(dto.configFile);
+      expect(entity.core.toDto()).toEqual(dto.core);
+      expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+    });
+
 
     it('it should create a DatabaseEntity with all properties', () => {
       const databaseDTO = {
@@ -122,6 +138,48 @@ describe("HealthcheckEntity", () => {
       expect(applicationEntity.emailNotificationEnabled).toBeTruthy();
     });
 
+    it('it should create a ApplicationEntity with an airgaped instance properties', () => {
+      const applicationDTO = {
+        info: {
+          remoteVersion: 'undefined',
+          currentVersion: '4.5.2',
+        },
+        latestVersion: null,
+        schema: true,
+        robotsIndexDisabled: true,
+        sslForce: false,
+        sslFullBaseUrl: true,
+        seleniumDisabled: true,
+        configPath: '/var/www/passbolt/config',
+        registrationClosed: {
+          isSelfRegistrationPluginEnabled: false,
+          selfRegistrationProvider: null,
+          isRegistrationPublicRemovedFromPassbolt: true
+        },
+        hostAvailabilityCheckEnabled: false,
+        jsProd: true,
+        emailNotificationEnabled: true
+      };
+
+      const applicationEntity = new ApplicationEntity(applicationDTO);
+
+      expect(applicationEntity.info.remoteVersion).toEqual('undefined');
+      expect(applicationEntity.info.currentVersion).toEqual('4.5.2');
+      expect(applicationEntity.latestVersion).toBeNull();
+      expect(applicationEntity.schema).toBeTruthy();
+      expect(applicationEntity.robotsIndexDisabled).toBeTruthy();
+      expect(applicationEntity.sslForce).toBeFalsy();
+      expect(applicationEntity.sslFullBaseUrl).toBeTruthy();
+      expect(applicationEntity.seleniumDisabled).toBeTruthy();
+      expect(applicationEntity.configPath).toEqual('/var/www/passbolt/config');
+      expect(applicationEntity.registrationClosed.isSelfRegistrationPluginEnabled).toBeFalsy();
+      expect(applicationEntity.registrationClosed.selfRegistrationProvider).toBeNull();
+      expect(applicationEntity.registrationClosed.isRegistrationPublicRemovedFromPassbolt).toBeTruthy();
+      expect(applicationEntity.hostAvailabilityCheckEnabled).toBeFalsy();
+      expect(applicationEntity.jsProd).toBeTruthy();
+      expect(applicationEntity.emailNotificationEnabled).toBeTruthy();
+    });
+
     it('it should create a GpgEntity with all properties', () => {
       const gpgDTO = {
         canDecryptVerify: true,
@@ -183,6 +241,7 @@ describe("HealthcheckEntity", () => {
     it('it should create a EnvironmentEntity with all properties', () => {
       const environmentDTO = {
         "phpVersion": true,
+        "nextMinPhpVersion": true,
         "info": {
           "phpVersion": "8.1.25"
         },
@@ -198,6 +257,7 @@ describe("HealthcheckEntity", () => {
       const environmentEntity = new EnvironmentEntity(environmentDTO);
 
       expect(environmentEntity.phpVersion).toBeTruthy();
+      expect(environmentEntity.nextMinPhpVersion).toBeTruthy();
       expect(environmentEntity.info.phpVersion).toEqual('8.1.25');
       expect(environmentEntity.pcre).toBeTruthy();
       expect(environmentEntity.mbstring).toBeTruthy();

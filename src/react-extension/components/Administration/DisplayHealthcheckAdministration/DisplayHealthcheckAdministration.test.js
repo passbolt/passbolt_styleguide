@@ -16,7 +16,7 @@ import {
 } from './DisplayHealthcheckAdministration.test.data';
 import DisplayHealthcheckAdministrationPage from './DisplayHealthcheckAdministration.test.page';
 import {
-  defaultAdministrationHealthcheckContext, mockHealthcheckDataAllChecksFail
+  defaultAdministrationHealthcheckContext, mockHealthcheckAirGappedEnvironment, mockHealthcheckDataAllChecksFail
 } from "../../../contexts/Administration/AdministrationHealthcheckContext/AdministrationHealthcheckContext.test.data";
 
 describe("See the healthCheck settings", () => {
@@ -105,6 +105,19 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionAppSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionGPGSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeFalsy();
+    });
+  });
+
+  describe('As AD running an air gaped environment, I should see the application sub section healthcheck status failing on the administration page', () => {
+    let page, props;
+
+    beforeEach(() => {
+      props = defaultProps({adminHealthcheckContext: defaultAdministrationHealthcheckContext({healthcheckData: mockHealthcheckAirGappedEnvironment})});
+      page = new DisplayHealthcheckAdministrationPage(props);
+    });
+    it('should display a fail for the app sub section on a air gaped environment', async() => {
+      expect.assertions(1);
+      expect(page.isAllHealthcheckSubSectionAppSuccessAirGapped).toBeTruthy();
     });
   });
 
