@@ -97,11 +97,6 @@ class SetupAuthentication extends Component {
         return <DisplayUnexpectedError
           error={this.props.authenticationSetupContext.error}
         />;
-      case AuthenticationSetupWorkflowStates.RETRY_SETUP:
-        return <DisplayUnexpectedError
-          title={<Trans>Time is up</Trans>}
-          message={<><Trans>You took too long to set up your account.</Trans> <Trans>Please try again.</Trans></>}
-        />;
       case AuthenticationSetupWorkflowStates.LOADING:
         return <LoadingSpinner/>;
     }
