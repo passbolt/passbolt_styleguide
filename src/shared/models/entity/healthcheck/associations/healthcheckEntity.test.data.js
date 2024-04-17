@@ -13,7 +13,7 @@
  */
 import {defaultSslData} from "./sslEntity.data";
 import {defaultDatabaseData} from "./databaseEntity.data";
-import {defaultApplicationData} from "./applicationEntity.data";
+import {defaultApplicationAirgappedData, defaultApplicationData} from "./applicationEntity.data";
 import {defaultGpgData} from "./gpgEntity.data";
 import {defaultEnvironmentData} from "./environmentEntity.data";
 import {defaultConfigFileData} from "./configFileEntity.data";
@@ -36,4 +36,19 @@ export const defaultHealthcheckData = (data = {}) => {
   return Object.assign(defaultData, data);
 };
 
+export const defaultHealthcheckAirgappedData = (data = {}) => {
+  const defaultData = {
+    "ssl": defaultSslData(),
+    "database": defaultDatabaseData(),
+    "application": defaultApplicationAirgappedData(),
+    "gpg": defaultGpgData(),
+    "environment": defaultEnvironmentData(),
+    "configFile": defaultConfigFileData(),
+    "core": defaultCoreData(),
+    "smtpSettings": defaultSmtpSettingsData(),
+    ...data,
+  };
+
+  return Object.assign(defaultData, data);
+};
 

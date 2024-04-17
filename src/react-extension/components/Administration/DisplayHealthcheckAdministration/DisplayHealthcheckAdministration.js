@@ -800,12 +800,22 @@ class DisplayHealthcheckAdministration extends Component {
             Using latest passbolt version ({healthcheckData.application.info.remoteVersion.toString()})
           </span>
         );
-      } else {
+      } else if (healthcheckData.application.latestVersion === false && healthcheckData.application.info.remoteVersion) {
         return (
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             The installation is not up to date. Currently using {healthcheckData.application.info.currentVersion.toString()} and it should be {healthcheckData.application.info.remoteVersion.toString()}
             <Tooltip message={<span>See <a href="https://help.passbolt.com/hosting/update" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
+              <Icon name='info-circle'/>
+            </Tooltip>
+          </span>
+        );
+      } else if (healthcheckData.application.latestVersion === null && healthcheckData.application.info.remoteVersion === "undefined") {
+        return (
+          <span className='healthcheck-fail'>
+            <Icon name="close"/>
+            It seems that the server is not able to reach internet.
+            <Tooltip message={<span>To confirm that you are running the latest version, check <a href="https://help.passbolt.com/releases/" target="_blank" rel="noopener noreferrer">all the releases notes</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
