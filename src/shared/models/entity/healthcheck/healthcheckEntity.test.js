@@ -24,6 +24,8 @@ import EnvironmentEntity from "./associations/environmentEntity";
 import ConfigFileEntity from "./associations/configFileEntity";
 import CoreEntity from "./associations/coreEntity";
 import SmtpSettingsEntity from "./associations/smtpSettingsEntity";
+import DirectorySyncEntity from "./associations/directorySyncEntity";
+import SsoEntity from "./associations/ssoEntity";
 
 describe("HealthcheckEntity", () => {
   describe("HealthcheckEntity:constructor", () => {
@@ -32,7 +34,7 @@ describe("HealthcheckEntity", () => {
     });
 
     it("it should instatiate the entity with the default dto", () => {
-      expect.assertions(9);
+      expect.assertions(11);
       const dto = defaultHealthcheckData();
       const entity = new healthcheckEntity(dto);
       expect(entity).toBeInstanceOf(healthcheckEntity);
@@ -44,10 +46,12 @@ describe("HealthcheckEntity", () => {
       expect(entity.configFile.toDto()).toEqual(dto.configFile);
       expect(entity.core.toDto()).toEqual(dto.core);
       expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+      expect(entity.directorySync.toDto()).toEqual(dto.directorySync);
+      expect(entity.sso.toDto()).toEqual(dto.sso);
     });
 
     it("it should instatiate the entity with the airgapped dto", () => {
-      expect.assertions(9);
+      expect.assertions(11);
       const dto = defaultHealthcheckAirgappedData();
       const entity = new healthcheckEntity(dto);
       expect(entity).toBeInstanceOf(healthcheckEntity);
@@ -59,6 +63,8 @@ describe("HealthcheckEntity", () => {
       expect(entity.configFile.toDto()).toEqual(dto.configFile);
       expect(entity.core.toDto()).toEqual(dto.core);
       expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+      expect(entity.directorySync.toDto()).toEqual(dto.directorySync);
+      expect(entity.sso.toDto()).toEqual(dto.sso);
     });
 
 
@@ -320,6 +326,26 @@ describe("HealthcheckEntity", () => {
       expect(smtpSettingsEntity.errorMessage).toBeFalsy();
       expect(smtpSettingsEntity.source).toEqual('database');
       expect(smtpSettingsEntity.isInDb).toBeTruthy();
+    });
+
+    it('it should create a directorySyncEntity with all properties', () => {
+      const directorySyncDTO = {
+        "endpointsDisabled": true
+      };
+
+      const directorySyncEntity = new DirectorySyncEntity(directorySyncDTO);
+
+      expect(directorySyncEntity.endpointsDisabled).toBeTruthy();
+    });
+
+    it('it should create a ssoEntity with all properties', () => {
+      const ssoDTO = {
+        "sslHostVerification": false
+      };
+
+      const ssoEntity = new SsoEntity(ssoDTO);
+
+      expect(ssoEntity.sslHostVerification).toBeFalsy();
     });
   });
 });

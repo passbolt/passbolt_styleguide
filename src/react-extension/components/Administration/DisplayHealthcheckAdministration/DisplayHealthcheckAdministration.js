@@ -1112,6 +1112,48 @@ class DisplayHealthcheckAdministration extends Component {
       }
     };
 
+    const isDirectorySyncEndpointsDisabled = () => {
+      if (healthcheckData.directorySync.endpointsDisabled === true) {
+        return (
+          <span className='healthcheck-success'>
+            <Icon name="check"/>
+            The endpoints for updating the users directory configurations are disabled.
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-warning'>
+            <Icon name="warning"/>
+            The endpoints for updating the users directory configurations are enabled.
+            <Tooltip message={`It is recommended to disable endpoints for updating the users directory configurations.`}>
+              <Icon name='info-circle'/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
+    const isSSlCertificationValidationEnabled = () => {
+      if (healthcheckData.sso.sslHostVerification === true) {
+        return (
+          <span className='healthcheck-success'>
+            <Icon name="check"/>
+            SSL certification validation for SSO instance is enabled.
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-warning'>
+            <Icon name="warning"/>
+            SSL certification validation for SSO instance is disabled.
+            <Tooltip message={`'Disabling the ssl verify check can lead to security attacks.`}>
+              <Icon name='info-circle'/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing())  {
         return (<Icon name="spinner" />);
@@ -1199,6 +1241,16 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isSmtpSettingsCoherent()}</div>
               <div>{whatIsSmtpSettingsSource()}</div>
               <div>{isSmtpEndpointsDisabled()}</div>
+            </div>
+
+            <h4>Directory Sync</h4>
+            <div className="healthcheck-directorySync-section">
+              <div>{isDirectorySyncEndpointsDisabled()}</div>
+            </div>
+
+            <h4>SSO</h4>
+            <div className="healthcheck-sso-section">
+              <div>{isSSlCertificationValidationEnabled()}</div>
             </div>
           </>
         );
