@@ -257,6 +257,52 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
+   * Returns the healthcheck directorySync section
+   */
+  get healthcheckDirectorySync() {
+    return this._page.container.querySelector('.healthcheck-directorySync-section');
+  }
+
+  /**
+   * Returns the healthcheck directorySync sub sections isSucesss
+   */
+  get isAllHealthcheckSubSectionDirectorySyncSuccess() {
+    const healthcheckSuccesses = this.healthcheckDirectorySync.querySelectorAll('.healthcheck-success');
+    return healthcheckSuccesses.length === 1;
+  }
+
+  /**
+   * Returns the healthcheck directorySync sub sections isFailed
+   */
+  get isAllHealthcheckSubSectionDirectorySyncWarned() {
+    const healthcheckWarnings = this.healthcheckDirectorySync.querySelectorAll('.healthcheck-warning');
+    return healthcheckWarnings.length === 1;
+  }
+
+  /**
+   * Returns the healthcheck sso section
+   */
+  get healthcheckSso() {
+    return this._page.container.querySelector('.healthcheck-sso-section');
+  }
+
+  /**
+   * Returns the healthcheck sso sub sections isSucesss
+   */
+  get isAllHealthcheckSubSectionSsoSuccess() {
+    const healthcheckSuccesses = this.healthcheckSso.querySelectorAll('.healthcheck-success');
+    return healthcheckSuccesses.length === 1;
+  }
+
+  /**
+   * Returns the healthcheck sso sub sections isFailed
+   */
+  get isAllHealthcheckSubSectionSsoWarned() {
+    const healthcheckWarnings = this.healthcheckSso.querySelectorAll('.healthcheck-warning');
+    return healthcheckWarnings.length === 1;
+  }
+
+  /**
    * Click on the element
    */
   async click(element) {

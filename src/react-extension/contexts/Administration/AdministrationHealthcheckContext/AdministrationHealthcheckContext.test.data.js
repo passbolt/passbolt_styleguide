@@ -142,6 +142,12 @@ export const mockHealthcheckData = {
     "errorMessage": false,
     "source": "database",
     "isInDb": true
+  },
+  "directorySync": {
+    "endpointsDisabled": true
+  },
+  "sso": {
+    "sslHostVerification": true
   }
 };
 
@@ -246,6 +252,12 @@ export const mockHealthcheckWrongData = {
     "errorMessage": false,
     "source": "database",
     "isInDb": 2
+  },
+  "directorySync": {
+    "endpointsDisabled": true
+  },
+  "sso": {
+    "sslHostVerification": false
   }
 };
 
@@ -349,6 +361,12 @@ export const mockHealthcheckDataAllChecksFail = {
     "errorMessage": "error message",
     "source": "database",
     "isInDb": false
+  },
+  "directorySync": {
+    "endpointsDisabled": false
+  },
+  "sso": {
+    "sslHostVerification": false
   }
 };
 
@@ -452,5 +470,11 @@ export const mockHealthcheckAirGappedEnvironment = {
     "errorMessage": false,
     "source": "database",
     "isInDb": true
+  },
+  "directorySync": {
+    "endpointsDisabled": true
+  },
+  "sso": {
+    "sslHostVerification": false
   }
 };

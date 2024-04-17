@@ -19,6 +19,8 @@ import {defaultEnvironmentData} from "./environmentEntity.data";
 import {defaultConfigFileData} from "./configFileEntity.data";
 import {defaultCoreData} from "./coreEntity.data";
 import {defaultSmtpSettingsData} from "./smtpSettingsEntity.data";
+import {defaultDirectorySyncData} from "./directorySyncEntity.data";
+import {defaultSsoData} from "./ssoEntity.data";
 
 export const defaultHealthcheckData = (data = {}) => {
   const defaultData = {
@@ -30,6 +32,8 @@ export const defaultHealthcheckData = (data = {}) => {
     "configFile": defaultConfigFileData(),
     "core": defaultCoreData(),
     "smtpSettings": defaultSmtpSettingsData(),
+    "directorySync": defaultDirectorySyncData(),
+    "sso": defaultSsoData(),
     ...data,
   };
 
@@ -46,6 +50,8 @@ export const defaultHealthcheckAirgappedData = (data = {}) => {
     "configFile": defaultConfigFileData(),
     "core": defaultCoreData(),
     "smtpSettings": defaultSmtpSettingsData(),
+    "directorySync": defaultDirectorySyncData(),
+    "sso": defaultSsoData(),
     ...data,
   };
 

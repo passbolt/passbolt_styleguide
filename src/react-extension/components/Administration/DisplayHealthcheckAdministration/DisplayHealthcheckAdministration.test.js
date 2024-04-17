@@ -48,7 +48,7 @@ describe("See the healthCheck settings", () => {
     });
 
     it('should display all the healthcheck sections', () => {
-      expect.assertions(8);
+      expect.assertions(9);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
       expect(page.healthCheckGPG).not.toBeNull();
@@ -57,10 +57,11 @@ describe("See the healthCheck settings", () => {
       expect(page.healthCheckSmtp).not.toBeNull();
       expect(page.healthCheckSSL).not.toBeNull();
       expect(page.healthCheckCore).not.toBeNull();
+      expect(page.healthcheckDirectorySync).not.toBeNull();
     });
 
     it('should display all subssections success status', () => {
-      expect.assertions(16);
+      expect.assertions(20);
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeTruthy();
@@ -69,6 +70,8 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionAppSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionGPGSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionCoreFailed).toBeFalsy();
@@ -77,6 +80,8 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionAppFailed).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionGPGFailed).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSMTPFailed).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionSsoWarned).toBeFalsy();
     });
   });
 
@@ -88,7 +93,7 @@ describe("See the healthCheck settings", () => {
       page = new DisplayHealthcheckAdministrationPage(props);
     });
     it('should display all subssections fail status', async() => {
-      expect.assertions(16);
+      expect.assertions(20);
       expect(page.isAllHealthcheckSubSectionEnvironmentFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionConfigFilesWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionCoreFailed).toBeTruthy();
@@ -97,6 +102,8 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionAppFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionGPGFailed).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionSMTPFailed).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionDirectorySyncWarned).toBeTruthy();
+      expect(page.isAllHealthcheckSubSectionSsoWarned).toBeTruthy();
       expect(page.isAllHealthcheckSubSectionEnvironmentSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionConfigFilesSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionCoreSuccess).toBeFalsy();
@@ -105,6 +112,8 @@ describe("See the healthCheck settings", () => {
       expect(page.isAllHealthcheckSubSectionAppSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionGPGSuccess).toBeFalsy();
       expect(page.isAllHealthcheckSubSectionSMTPSuccess).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionDirectorySyncSuccess).toBeFalsy();
+      expect(page.isAllHealthcheckSubSectionSsoSuccess).toBeFalsy();
     });
   });
 
