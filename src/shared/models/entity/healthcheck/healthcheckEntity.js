@@ -100,7 +100,8 @@ class HealthcheckEntity extends Entity {
   static getSchema() {
     return {
       "type": "object",
-      "required": ["database", "ssl", "application", "gpg", "configFile", "core", "smtpSettings", "directorySync", "sso"],
+      // SSO and directorySync are not required as it is PRO features only
+      "required": ["database", "ssl", "application", "gpg", "configFile", "core", "smtpSettings"],
       "properties": {
         "database": DatabaseEntity.getSchema(),
         "ssl": SslEntity.getSchema(),

@@ -48,7 +48,7 @@ describe("See the healthCheck settings", () => {
     });
 
     it('should display all the healthcheck sections', () => {
-      expect.assertions(9);
+      expect.assertions(10);
       expect(page.healthCheckEnvironment).not.toBeNull();
       expect(page.healthCheckApp).not.toBeNull();
       expect(page.healthCheckGPG).not.toBeNull();
@@ -58,6 +58,7 @@ describe("See the healthCheck settings", () => {
       expect(page.healthCheckSSL).not.toBeNull();
       expect(page.healthCheckCore).not.toBeNull();
       expect(page.healthcheckDirectorySync).not.toBeNull();
+      expect(page.healthcheckSso).not.toBeNull();
     });
 
     it('should display all subssections success status', () => {
@@ -155,6 +156,75 @@ describe("See the healthCheck settings", () => {
       const page = new DisplayHealthcheckAdministrationPage(props);
 
       expect(page.isRefreshButtonEnabled()).toBeFalsy();
+    });
+  });
+
+  describe('As AD, I am not able to see the SSO section if it is disabled', () => {
+    let page, props;
+
+    beforeEach(() => {
+      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "sso"}}});
+      page = new DisplayHealthcheckAdministrationPage(props);
+    });
+
+    it('should display all the healthcheck sections except the sso', () => {
+      expect.assertions(10);
+      expect(page.healthCheckEnvironment).not.toBeNull();
+      expect(page.healthCheckApp).not.toBeNull();
+      expect(page.healthCheckGPG).not.toBeNull();
+      expect(page.healthCheckConfigurationFiles).not.toBeNull();
+      expect(page.healthCheckDatabase).not.toBeNull();
+      expect(page.healthCheckSmtp).not.toBeNull();
+      expect(page.healthCheckSSL).not.toBeNull();
+      expect(page.healthCheckCore).not.toBeNull();
+      expect(page.healthcheckDirectorySync).not.toBeNull();
+      expect(page.healthcheckSso).toBeNull();
+    });
+  });
+
+  describe('As AD, I am not able to see the directorySync section if it is disabled', () => {
+    let page, props;
+
+    beforeEach(() => {
+      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "directorySync"}}});
+      page = new DisplayHealthcheckAdministrationPage(props);
+    });
+
+    it('should display all the healthcheck sections except the directorySync', () => {
+      expect.assertions(10);
+      expect(page.healthCheckEnvironment).not.toBeNull();
+      expect(page.healthCheckApp).not.toBeNull();
+      expect(page.healthCheckGPG).not.toBeNull();
+      expect(page.healthCheckConfigurationFiles).not.toBeNull();
+      expect(page.healthCheckDatabase).not.toBeNull();
+      expect(page.healthCheckSmtp).not.toBeNull();
+      expect(page.healthCheckSSL).not.toBeNull();
+      expect(page.healthCheckCore).not.toBeNull();
+      expect(page.healthcheckDirectorySync).toBeNull();
+      expect(page.healthcheckSso).not.toBeNull();
+    });
+  });
+
+  describe('As AD, I am not able to see the SSO and directorySync section if it is disabled', () => {
+    let page, props;
+
+    beforeEach(() => {
+      props = defaultProps({context: {siteSettings: {canIUse: plugins => plugins !== "sso" && plugins !== "directorySync"}}});
+      page = new DisplayHealthcheckAdministrationPage(props);
+    });
+
+    it('should display all the healthcheck sections except directorySync and SSO', () => {
+      expect.assertions(10);
+      expect(page.healthCheckEnvironment).not.toBeNull();
+      expect(page.healthCheckApp).not.toBeNull();
+      expect(page.healthCheckGPG).not.toBeNull();
+      expect(page.healthCheckConfigurationFiles).not.toBeNull();
+      expect(page.healthCheckDatabase).not.toBeNull();
+      expect(page.healthCheckSmtp).not.toBeNull();
+      expect(page.healthCheckSSL).not.toBeNull();
+      expect(page.healthCheckCore).not.toBeNull();
+      expect(page.healthcheckDirectorySync).toBeNull();
+      expect(page.healthcheckSso).toBeNull();
     });
   });
 });
