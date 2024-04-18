@@ -40,6 +40,22 @@ export const defaultHealthcheckData = (data = {}) => {
   return Object.assign(defaultData, data);
 };
 
+export const defaultHealthcheckCEdata = (data = {}) => {
+  const defaultData = {
+    "ssl": defaultSslData(),
+    "database": defaultDatabaseData(),
+    "application": defaultApplicationData(),
+    "gpg": defaultGpgData(),
+    "environment": defaultEnvironmentData(),
+    "configFile": defaultConfigFileData(),
+    "core": defaultCoreData(),
+    "smtpSettings": defaultSmtpSettingsData(),
+    ...data,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
 export const defaultHealthcheckAirgappedData = (data = {}) => {
   const defaultData = {
     "ssl": defaultSslData(),
@@ -52,6 +68,57 @@ export const defaultHealthcheckAirgappedData = (data = {}) => {
     "smtpSettings": defaultSmtpSettingsData(),
     "directorySync": defaultDirectorySyncData(),
     "sso": defaultSsoData(),
+    ...data,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+export const defaultHealthcheckDataWithoutDirectorySyncAndSso = (data = {}) => {
+  const defaultData = {
+    "ssl": defaultSslData(),
+    "database": defaultDatabaseData(),
+    "application": defaultApplicationAirgappedData(),
+    "gpg": defaultGpgData(),
+    "environment": defaultEnvironmentData(),
+    "configFile": defaultConfigFileData(),
+    "core": defaultCoreData(),
+    "smtpSettings": defaultSmtpSettingsData(),
+    ...data,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+export const defaultHealthcheckDataWithoutDirectorySync = (data = {}) => {
+  const defaultData = {
+    "ssl": defaultSslData(),
+    "database": defaultDatabaseData(),
+    "application": defaultApplicationAirgappedData(),
+    "gpg": defaultGpgData(),
+    "environment": defaultEnvironmentData(),
+    "configFile": defaultConfigFileData(),
+    "core": defaultCoreData(),
+    "smtpSettings": defaultSmtpSettingsData(),
+    "sso": defaultSsoData(),
+    ...data,
+  };
+
+  return Object.assign(defaultData, data);
+};
+
+
+export const defaultHealthcheckDataWithoutSso = (data = {}) => {
+  const defaultData = {
+    "ssl": defaultSslData(),
+    "database": defaultDatabaseData(),
+    "application": defaultApplicationAirgappedData(),
+    "gpg": defaultGpgData(),
+    "environment": defaultEnvironmentData(),
+    "configFile": defaultConfigFileData(),
+    "core": defaultCoreData(),
+    "smtpSettings": defaultSmtpSettingsData(),
+    "directorySync": defaultDirectorySyncData(),
     ...data,
   };
 

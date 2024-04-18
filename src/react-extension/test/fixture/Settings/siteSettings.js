@@ -195,6 +195,9 @@ const siteSettings = (isProEdition = true) => ({
       },
       "healthcheckUi": {
         "enabled": true,
+      },
+      "sso": {
+        "enabled": isProEdition,
       }
     }
   }

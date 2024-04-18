@@ -23,6 +23,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DisplayAdministrationHealthcheckActions
   from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationHealthcheckActions/DisplayAdministrationHealthcheckActions";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 
 class DisplayHealthcheckAdministration extends Component {
   /**
@@ -53,6 +54,33 @@ class DisplayHealthcheckAdministration extends Component {
   get healthCheckData() {
     return this.props.adminHealthcheckContext.healthcheckData;
   }
+
+  /**
+   * Returns true if the given feature flag exists and is enabled
+   * @param {string} featureFlag
+   * @returns {boolean}
+   */
+  canIUse(featureFlag) {
+    return Boolean(this.props.context.siteSettings?.canIUse(featureFlag));
+  }
+
+  /**
+   * Returns true if the user has the user directory capability
+   * @returns {boolean}
+   */
+  get isUserDirectoryEnabled() {
+    return this.canIUse('directorySync');
+  }
+
+
+  /**
+   * Can I use the sso plugin
+   * @returns {boolean}
+   */
+  get canIUseSso() {
+    return this.canIUse('sso');
+  }
+
 
 
   render() {
@@ -1243,15 +1271,24 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{isSmtpEndpointsDisabled()}</div>
             </div>
 
-            <h4>Directory Sync</h4>
-            <div className="healthcheck-directorySync-section">
-              <div>{isDirectorySyncEndpointsDisabled()}</div>
-            </div>
+            {this.isUserDirectoryEnabled &&
+              <>
+                <h4>Directory Sync</h4>
+                <div className="healthcheck-directorySync-section">
+                  <div>{isDirectorySyncEndpointsDisabled()}</div>
+                </div>
+              </>
+            }
 
-            <h4>SSO</h4>
-            <div className="healthcheck-sso-section">
-              <div>{isSSlCertificationValidationEnabled()}</div>
-            </div>
+            {this.canIUseSso &&
+              <>
+                <h4>SSO</h4>
+                <div className="healthcheck-sso-section">
+                  <div>{isSSlCertificationValidationEnabled()}</div>
+                </div>
+              </>
+            }
+
           </>
         );
       }
@@ -1313,4 +1350,4 @@ DisplayHealthcheckAdministration.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAdministrationWorkspace(withAdministrationHealthcheck(withTranslation('common')(DisplayHealthcheckAdministration)));
+export default withAppContext(withAdministrationWorkspace(withAdministrationHealthcheck(withTranslation('common')(DisplayHealthcheckAdministration))));

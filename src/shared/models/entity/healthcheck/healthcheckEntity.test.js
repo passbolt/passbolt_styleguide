@@ -14,7 +14,7 @@
 
 import EntitySchema from "../abstract/entitySchema";
 import HealthcheckEntity from "./healthcheckEntity";
-import {defaultHealthcheckData, defaultHealthcheckAirgappedData} from "./associations/healthcheckEntity.test.data";
+import {defaultHealthcheckData, defaultHealthcheckAirgappedData, defaultHealthcheckCEdata, defaultHealthcheckDataWithoutDirectorySyncAndSso, defaultHealthcheckDataWithoutDirectorySync, defaultHealthcheckDataWithoutSso} from "./associations/healthcheckEntity.test.data";
 import healthcheckEntity from "./healthcheckEntity";
 import DatabaseEntity from "./associations/databaseEntity";
 import SslEntity from "./associations/sslEntity";
@@ -33,7 +33,7 @@ describe("HealthcheckEntity", () => {
       EntitySchema.validateSchema(HealthcheckEntity.ENTITY_NAME, HealthcheckEntity.getSchema());
     });
 
-    it("it should instatiate the entity with the default dto", () => {
+    it("it should instantiate the entity with the default dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckData();
       const entity = new healthcheckEntity(dto);
@@ -50,7 +50,22 @@ describe("HealthcheckEntity", () => {
       expect(entity.sso.toDto()).toEqual(dto.sso);
     });
 
-    it("it should instatiate the entity with the airgapped dto", () => {
+    it("it should not break the entity if sso and directorySync are not present", () => {
+      expect.assertions(9);
+      const dto = defaultHealthcheckCEdata();
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
+      expect(entity.ssl.toDto()).toEqual(dto.ssl);
+      expect(entity.database.toDto()).toEqual(dto.database);
+      expect(entity.application.toDto()).toEqual(dto.application);
+      expect(entity.gpg.toDto()).toEqual(dto.gpg);
+      expect(entity.environment.toDto()).toEqual(dto.environment);
+      expect(entity.configFile.toDto()).toEqual(dto.configFile);
+      expect(entity.core.toDto()).toEqual(dto.core);
+      expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+    });
+
+    it("it should instantiate the entity with the airgapped dto", () => {
       expect.assertions(11);
       const dto = defaultHealthcheckAirgappedData();
       const entity = new healthcheckEntity(dto);
@@ -65,6 +80,57 @@ describe("HealthcheckEntity", () => {
       expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
       expect(entity.directorySync.toDto()).toEqual(dto.directorySync);
       expect(entity.sso.toDto()).toEqual(dto.sso);
+    });
+
+    it("it should instantiate the entity without directorySync dto", () => {
+      expect.assertions(11);
+      const dto = defaultHealthcheckDataWithoutDirectorySync();
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
+      expect(entity.ssl.toDto()).toEqual(dto.ssl);
+      expect(entity.database.toDto()).toEqual(dto.database);
+      expect(entity.application.toDto()).toEqual(dto.application);
+      expect(entity.gpg.toDto()).toEqual(dto.gpg);
+      expect(entity.environment.toDto()).toEqual(dto.environment);
+      expect(entity.configFile.toDto()).toEqual(dto.configFile);
+      expect(entity.core.toDto()).toEqual(dto.core);
+      expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+      expect(entity.directorySync).toBeNull();
+      expect(entity.sso.toDto()).toEqual(dto.sso);
+    });
+
+    it("it should instantiate the entity without SSO dto", () => {
+      expect.assertions(11);
+      const dto = defaultHealthcheckDataWithoutSso();
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
+      expect(entity.ssl.toDto()).toEqual(dto.ssl);
+      expect(entity.database.toDto()).toEqual(dto.database);
+      expect(entity.application.toDto()).toEqual(dto.application);
+      expect(entity.gpg.toDto()).toEqual(dto.gpg);
+      expect(entity.environment.toDto()).toEqual(dto.environment);
+      expect(entity.configFile.toDto()).toEqual(dto.configFile);
+      expect(entity.core.toDto()).toEqual(dto.core);
+      expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+      expect(entity.directorySync.toDto()).toEqual(dto.directorySync);
+      expect(entity.sso).toBeNull();
+    });
+
+    it("it should instantiate the entity without directorySync and SSO dto", () => {
+      expect.assertions(11);
+      const dto = defaultHealthcheckDataWithoutDirectorySyncAndSso();
+      const entity = new healthcheckEntity(dto);
+      expect(entity).toBeInstanceOf(healthcheckEntity);
+      expect(entity.ssl.toDto()).toEqual(dto.ssl);
+      expect(entity.database.toDto()).toEqual(dto.database);
+      expect(entity.application.toDto()).toEqual(dto.application);
+      expect(entity.gpg.toDto()).toEqual(dto.gpg);
+      expect(entity.environment.toDto()).toEqual(dto.environment);
+      expect(entity.configFile.toDto()).toEqual(dto.configFile);
+      expect(entity.core.toDto()).toEqual(dto.core);
+      expect(entity.smtpSettings.toDto()).toEqual(dto.smtpSettings);
+      expect(entity.directorySync).toBeNull();
+      expect(entity.sso).toBeNull();
     });
 
 
