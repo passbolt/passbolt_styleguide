@@ -82,6 +82,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleAdUserFieldsMappingInputChange = this.handleAdUserFieldsMappingInputChange.bind(this);
     this.handleOpenLdapGroupFieldsMappingInputChange = this.handleOpenLdapGroupFieldsMappingInputChange.bind(this);
+    this.handleAdFallbackFieldInputChange = this.handleAdFallbackFieldInputChange.bind(this);
   }
 
   /**
@@ -129,10 +130,18 @@ class DisplayUserDirectoryAdministration extends React.Component {
    * @returns {void}
    */
   handleAdUserFieldsMappingInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
+    const {value, name} = event.target;
     this.props.adminUserDirectoryContext.setAdUserFieldsMappingSettings(name, value);
+  }
+
+  /**
+   * Handle specific Active Directory fields mapping input changes.
+   * @param {ReactEvent} event the react event
+   * @returns {void}
+   */
+  handleAdFallbackFieldInputChange(event) {
+    const {value, name} = event.target;
+    this.props.adminUserDirectoryContext.setAdFallbackFieldsSettings(name, value);
   }
 
   /**
@@ -604,6 +613,18 @@ class DisplayUserDirectoryAdministration extends React.Component {
                      <Trans>Synchronize only the users which are members of this group.</Trans>
                    </div>
                  </div>
+                 {this.isActiveDirectoryChecked &&
+                  <div className={`input text ad openldap ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+                    <label><Trans>User username fallback field</Trans></label>
+                    <input id="fallback-fields-ad-username-fallback-input" type="text" aria-required={true} name="username" value={settings.fallbackFields.ad.username}
+                      onChange={this.handleAdFallbackFieldInputChange} className="fluid form-element" placeholder={this.props.t("User username fallback field")}
+                      disabled={this.hasAllInputDisabled()}/>
+                    <div className="help-message"><Trans>Directory user&apos;s username fallback field to use when user username field cannot be found.</Trans></div>
+                    {errors.fallbackFieldsAdUsernameError && isSubmitted &&
+                      <div id="fallback-fields-ad-username-fallback-input-feedback" className="error-message">{errors.fallbackFieldsAdUsernameError}</div>
+                    }
+                  </div>
+                 }
                  {this.isActiveDirectoryChecked() &&
                  <div className={`input text clearfix ad ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
                    <label><Trans>Enabled users only</Trans></label>
