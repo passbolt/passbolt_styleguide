@@ -66,13 +66,12 @@ describe("ImportAccountKit", () => {
       expect(page.errorMessage.textContent).toEqual("Only passbolt format is allowed.");
     });
 
-    it('As an unknown user I should be notified if the file is missing', async() => {
-      expect.assertions(2);
+    it('As an unknown user I should see the upload button disable if I did not upload any file', async() => {
+      expect.assertions(1);
 
       await page.click(page.importButton);
 
-      expect(page.hasError).toBeTruthy();
-      expect(page.errorMessage.textContent).toEqual("A file is required.");
+      expect(page.importButton.hasAttribute("disabled")).toBeTruthy();
     });
 
     it('As an unknown user I should be able to upload a account kit', async() => {
