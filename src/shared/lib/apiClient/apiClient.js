@@ -345,6 +345,9 @@ export class ApiClient {
       this.assertBody(body);
     }
 
+    // Determine the fetch strategy, in some cases it could use a custom fetch as for MV3 to solve the invalid certificate issue.
+    // eslint-disable-next-line no-undef
+    const fetchStrategy = typeof customApiClientFetch !== "undefined" ? customApiClientFetch : fetch;
     const builtFecthOptions = await this.buildFetchOptions();
     const fetchOptions = {...builtFecthOptions, ...options};
     fetchOptions.method = method;
@@ -352,7 +355,7 @@ export class ApiClient {
       fetchOptions.body = body;
     }
     try {
-      return await fetch(url.toString(), fetchOptions);
+      return await fetchStrategy(url.toString(), fetchOptions);
     } catch (error) {
       // Display the error in the console to see the details (maybe more details should appear in the future)
       console.error(error);
