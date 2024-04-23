@@ -668,4 +668,20 @@ describe("Unit testing apiClient with mocked fetch", () => {
       expect(apiClient.baseUrl.toString()).toStrictEqual(scenario.expected);
     });
   });
+
+  it("should use a custom fetch strategy if provided.", async() => {
+    expect.assertions(2);
+
+    global.customApiClientFetch = jest.fn();
+    const url = 'https://test.passbolt.com/passbolt-unit-test';
+    const resourceName = 'fake-resource';
+    const options = (new ApiClientOptions())
+      .setBaseUrl(url)
+      .setResourceName(resourceName);
+    const apiClient = new ApiClient(options);
+
+    await expect(apiClient.sendRequest("GET", new URL(`${url}/test.json`))).resolves.not.toThrow();
+    expect(global.customApiClientFetch).toHaveBeenCalled();
+    delete global.customApiClientFetch;
+  });
 });
