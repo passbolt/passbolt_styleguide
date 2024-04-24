@@ -107,11 +107,6 @@ class RecoverAuthentication extends Component {
         return <DisplayUnexpectedError
           error={this.props.authenticationRecoverContext.error}
         />;
-      case AuthenticationRecoverWorkflowStates.RETRY_RECOVER:
-        return <DisplayUnexpectedError
-          title={<Trans>Time is up</Trans>}
-          message={<><Trans>You took too long to recover your account.</Trans> <Trans>Please try again.</Trans></>}
-        />;
       case AuthenticationRecoverWorkflowStates.LOADING:
         return <LoadingSpinner/>;
     }

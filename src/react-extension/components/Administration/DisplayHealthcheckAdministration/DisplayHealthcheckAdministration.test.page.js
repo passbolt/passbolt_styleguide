@@ -211,6 +211,17 @@ export default class DisplayHealthcheckAdministrationPage {
   }
 
   /**
+   * Return the healthcheck app sub section isSuccess with air gapped
+   */
+  get isAllHealthcheckSubSectionAppSuccessAirGapped() {
+    const healthcheckSuccesses = this.healthCheckApp.querySelectorAll('.healthcheck-success');
+    const healthcheckInfos = this.healthCheckApp.querySelectorAll('.healthcheck-info');
+    const healthcheckFails = this.healthCheckApp.querySelectorAll('.healthcheck-fail');
+
+    return healthcheckSuccesses.length === 8 && healthcheckInfos.length === 2 && healthcheckFails.length === 1;
+  }
+
+  /**
    * Returns the healthcheck app sub sections isFailed
    */
   get isAllHealthcheckSubSectionAppFailed() {
@@ -243,6 +254,52 @@ export default class DisplayHealthcheckAdministrationPage {
     const healthcheckFails = this.healthCheckSmtp.querySelectorAll('.healthcheck-fail');
     const healthcheckWarnings = this.healthCheckSmtp.querySelectorAll('.healthcheck-warning');
     return healthcheckFails.length === 2 && healthcheckWarnings.length === 2;
+  }
+
+  /**
+   * Returns the healthcheck directorySync section
+   */
+  get healthcheckDirectorySync() {
+    return this._page.container.querySelector('.healthcheck-directorySync-section');
+  }
+
+  /**
+   * Returns the healthcheck directorySync sub sections isSucesss
+   */
+  get isAllHealthcheckSubSectionDirectorySyncSuccess() {
+    const healthcheckSuccesses = this.healthcheckDirectorySync.querySelectorAll('.healthcheck-success');
+    return healthcheckSuccesses.length === 1;
+  }
+
+  /**
+   * Returns the healthcheck directorySync sub sections isFailed
+   */
+  get isAllHealthcheckSubSectionDirectorySyncWarned() {
+    const healthcheckWarnings = this.healthcheckDirectorySync.querySelectorAll('.healthcheck-warning');
+    return healthcheckWarnings.length === 1;
+  }
+
+  /**
+   * Returns the healthcheck sso section
+   */
+  get healthcheckSso() {
+    return this._page.container.querySelector('.healthcheck-sso-section');
+  }
+
+  /**
+   * Returns the healthcheck sso sub sections isSucesss
+   */
+  get isAllHealthcheckSubSectionSsoSuccess() {
+    const healthcheckSuccesses = this.healthcheckSso.querySelectorAll('.healthcheck-success');
+    return healthcheckSuccesses.length === 1;
+  }
+
+  /**
+   * Returns the healthcheck sso sub sections isFailed
+   */
+  get isAllHealthcheckSubSectionSsoWarned() {
+    const healthcheckWarnings = this.healthcheckSso.querySelectorAll('.healthcheck-warning');
+    return healthcheckWarnings.length === 1;
   }
 
   /**

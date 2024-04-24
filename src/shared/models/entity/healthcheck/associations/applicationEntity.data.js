@@ -39,3 +39,31 @@ export const defaultApplicationData = (data = {}) => {
   };
   return Object.assign(defaultData, data);
 };
+
+export const defaultApplicationAirgappedData = (data = {}) => {
+  const defaultData = {
+    info: {
+      remoteVersion: "undefined",
+      currentVersion: "4.1.0",
+      ...data.info,
+    },
+    latestVersion: null,
+    schema: true,
+    robotsIndexDisabled: true,
+    sslForce: false,
+    sslFullBaseUrl: true,
+    configPath: "/var/www/passbolt/config/passbolt.php",
+    seleniumDisabled: true,
+    registrationClosed: {
+      isSelfRegistrationPluginEnabled: true,
+      selfRegistrationProvider: null,
+      isRegistrationPublicRemovedFromPassbolt: true,
+      ...data.registrationClosed,
+    },
+    hostAvailabilityCheckEnabled: false,
+    jsProd: true,
+    emailNotificationEnabled: false,
+    ...data,
+  };
+  return Object.assign(defaultData, data);
+};

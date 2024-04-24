@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 
 class DisplayUnexpectedError extends Component {
   /**
@@ -47,7 +48,12 @@ class DisplayUnexpectedError extends Component {
    * Whenever the user click on the action
    */
   onClick() {
-    window.location.reload();
+    if (this.props.context.port) {
+      // A reload from iframe cannot reload the parent due to cross origin so the extension will do
+      this.props.context.port.request("passbolt.tab.reload");
+    } else {
+      window.location.reload();
+    }
   }
 
   /**
@@ -124,6 +130,7 @@ DisplayUnexpectedError.defaultProps = {
 };
 
 DisplayUnexpectedError.propTypes = {
+  context: PropTypes.any, // The application context
   title: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
@@ -136,4 +143,4 @@ DisplayUnexpectedError.propTypes = {
   ]),
   error: PropTypes.any, // The error to display
 };
-export default withTranslation("common")(DisplayUnexpectedError);
+export default withAppContext(withTranslation("common")(DisplayUnexpectedError));

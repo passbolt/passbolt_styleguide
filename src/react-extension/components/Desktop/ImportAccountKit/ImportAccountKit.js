@@ -221,6 +221,7 @@ class ImportAccountKit extends React.Component {
           <div className="form-actions">
             <button
               type="submit"
+              disabled={!this.state.accountKit || !this.state.filename}
               className="button primary big full-width">
               <Trans>Import account</Trans>
             </button>

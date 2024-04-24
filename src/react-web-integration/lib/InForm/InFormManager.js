@@ -46,7 +46,7 @@ class InFormManager {
     this.findAndSetAuthenticationFields();
     this.handleDomChange();
     this.handleInformCallToActionRepositionEvent();
-    this.handlePortDisconnectEvent();
+    this.handlePortDestroyEvent();
     this.handleInFormMenuInsertionEvent();
     this.handleInFormMenuRemoveEvent();
     this.handleInformCallToActionClickEvent();
@@ -123,8 +123,8 @@ class InFormManager {
       this.credentialsFormFields = newCredentialsFormFields.map(newField => {
         const matchField = fieldToMatch => credentialsFormField => credentialsFormField.field === fieldToMatch;
         const existingField = this.credentialsFormFields.find(matchField(newField));
-        const usernameField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'username' && newField.contains(callToActionField.field));
-        const passwordField =  this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'password' && newField.contains(callToActionField.field));
+        const usernameField = this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'username' && newField.contains(callToActionField.field));
+        const passwordField = this.callToActionFields.find(callToActionField => callToActionField.fieldType === 'password' && newField.contains(callToActionField.field));
         return existingField || new InFormCredentialsFormField(newField, usernameField?.field, passwordField?.field);
       });
     } else {
@@ -155,7 +155,10 @@ class InFormManager {
       }
     };
     // Debounce the mutation observer to avoid too many requests
-    const updateAuthenticationFieldsDebounce = debounce(updateAuthenticationFields, 1000, {leading: true, accumulate: false});
+    const updateAuthenticationFieldsDebounce = debounce(updateAuthenticationFields, 1000, {
+      leading: true,
+      accumulate: false
+    });
     // Search again for authentication callToActionFields to attach when the DOM changes
     this.mutationObserver = new MutationObserver(updateAuthenticationFieldsDebounce);
     this.mutationObserver.observe(document.body, {subtree: true, childList: true});
@@ -211,14 +214,19 @@ class InFormManager {
    * Handle the click on the in-form call-to-action (iframe)
    */
   handleInformCallToActionClickEvent() {
-    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => { this.lastCallToActionFieldClicked = callToActionField; });
+    const setLastCallToActionFieldClicked = callToActionField => callToActionField.onClick(() => {
+      this.lastCallToActionFieldClicked = callToActionField;
+    });
     this.callToActionFields.forEach(setLastCallToActionFieldClicked);
   }
 
   /** Whenever one requires to get the type and value of the input attached to the last call-to-action performed */
   handleGetLastCallToActionClickedInput() {
     port.on('passbolt.web-integration.last-performed-call-to-action-input', requestId => {
-      port.emit(requestId, 'SUCCESS', {type: this.lastCallToActionFieldClicked.fieldType, value: this.lastCallToActionFieldClicked.field.value});
+      port.emit(requestId, 'SUCCESS', {
+        type: this.lastCallToActionFieldClicked.fieldType,
+        value: this.lastCallToActionFieldClicked.field.value
+      });
     });
   }
 
@@ -300,10 +308,16 @@ class InFormManager {
   }
 
   /**
-   * Whenever the port is disconnected due to an update of the extension
+   * Whenever the port should be destroyed due to an update of the extension
    */
-  handlePortDisconnectEvent() {
-    port._port.onDisconnect.addListener(this.destroy);
+  handlePortDestroyEvent() {
+    /*
+     * This is extremely important, when an extension update has been done
+     * and if the port has not been destroyed correctly,
+     * The port cannot reconnect due to an invalid context,
+     * so the port receive the message 'passbolt.port.destroy' to clean all data and listeners
+     */
+    port.on('passbolt.content-script.destroy', this.destroy);
   }
 }
 
