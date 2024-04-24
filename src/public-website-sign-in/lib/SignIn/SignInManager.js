@@ -28,7 +28,7 @@ class SignInManager {
    */
   initialize() {
     this.addClassToDomElement()
-    this.handlePortDisconnectEvent();
+    this.handlePortDestroyEvent();
     this.handlePublicWebsiteClickEvent();
   }
 
@@ -74,10 +74,16 @@ class SignInManager {
   }
 
   /**
-   * Whenever the port is disconnected due to an update of the extension
+   * Whenever the port should be destroyed due to an update of the extension
    */
-  handlePortDisconnectEvent() {
-    port._port.onDisconnect.addListener(this.destroy);
+  handlePortDestroyEvent() {
+    /*
+     * This is extremely important, when an extension update has been done
+     * and if the port has not been destroyed correctly,
+     * The port cannot reconnect due to an invalid context,
+     * so the port receive the message 'passbolt.port.destroy' to clean all data and listeners
+     */
+    port.on('passbolt.content-script.destroy', this.destroy);
   }
 }
 

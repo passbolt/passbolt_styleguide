@@ -981,5 +981,20 @@ describe("InformManager", () => {
     await informManager.blurOnPasswordIframe();
     expect(informManager.iframesLength).toBe(1);
   });
+
+  it("As LU I should destroy inform on port specific message", async() => {
+    expect.assertions(4);
+    // Set up document body
+    // eslint-disable-next-line no-unsanitized/property
+    document.body.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
+    jest.spyOn(InFormManager, 'destroy');
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.destroy();
+    expect(InFormManager.destroy).toHaveBeenCalledTimes(1);
+    expect(informManager.iframesLength).toBe(0);
+  });
 });
 

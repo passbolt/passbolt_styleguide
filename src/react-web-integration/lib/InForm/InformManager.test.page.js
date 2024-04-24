@@ -28,8 +28,11 @@ export default class InformManagerPage {
     InFormManager.initialize();
   }
 
-  destroy() {
-    InFormManager.destroy();
+  /**
+   * Destroy by port message
+   */
+  async destroy() {
+    await port.emit('passbolt.content-script.destroy');
   }
 
   /**

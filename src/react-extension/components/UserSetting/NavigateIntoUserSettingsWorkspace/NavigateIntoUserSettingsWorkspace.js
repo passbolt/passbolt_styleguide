@@ -64,7 +64,8 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
    * @return {bool} true if the plugin is enabled and if an admin enabled the feature.
    */
   get canIUseAccountRecoveryCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
+    const canViewAccountRecovery = this.props.rbacContext.canIUseUiAction(uiActions.PROFIL_ACCOUNT_RECOVERY);
+    return canViewAccountRecovery && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountRecovery');
   }
 
   /**
@@ -195,7 +196,6 @@ class NavigateIntoUserSettingsWorkspace extends React.Component {
                 <div className="main-cell">
                   <button className="link no-border" type="button" onClick={this.props.navigationContext.onGoToUserSettingsDesktopRequested}>
                     <span><Trans>Desktop app setup</Trans></span>
-                    <span className="chips beta">beta</span>
                   </button>
                 </div>
               </div>

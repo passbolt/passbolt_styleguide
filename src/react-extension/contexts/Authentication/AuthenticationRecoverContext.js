@@ -33,7 +33,6 @@ export const AuthenticationRecoverWorkflowStates = {
   UNEXPECTED_ERROR: 'Unexpected Error',
   VALIDATE_PASSPHRASE: 'Validate passphrase',
   CHECK_MAILBOX: 'Check mailbox',
-  RETRY_RECOVER: 'Retry recover',
 };
 
 /**
@@ -83,7 +82,6 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.defaultState;
-    this.bindCallbacks();
   }
 
   /**
@@ -113,26 +111,10 @@ export class AuthenticationRecoverContextProvider extends React.Component {
   }
 
   /**
-   * Binds the callbacks
-   */
-  bindCallbacks() {
-    this.retryRecover = this.retryRecover.bind(this);
-  }
-
-  /**
    * Whenever the component is initialized
    */
   componentDidMount() {
     this.initialize();
-    // For MV3 to avoid unexpected error after service worker has been shutdown
-    this.props.context.port._port.onDisconnect.addListener(this.retryRecover);
-  }
-
-  /**
-   * Whenever the component is unmount
-   */
-  componentWillUnmount() {
-    this.props.context.port._port.onDisconnect.removeListener(this.retryRecover);
   }
 
   /**
@@ -163,13 +145,6 @@ export class AuthenticationRecoverContextProvider extends React.Component {
       : AuthenticationRecoverWorkflowStates.IMPORT_GPG_KEY;
 
     this.setState({state, userPassphrasePolicies});
-  }
-
-  /**
-   * Force retry recover
-   */
-  retryRecover() {
-    this.setState({state: AuthenticationRecoverWorkflowStates.RETRY_RECOVER});
   }
 
   /**

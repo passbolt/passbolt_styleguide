@@ -12,8 +12,6 @@
  * @since         3.3.0
  */
 
-import {fireEvent} from "@testing-library/dom/dist/events";
-
 const PASSWORD_INPUT_SELECTOR = "input[type='password']:not([hidden]):not([disabled]), input[type='Password']:not([hidden]):not([disabled]), input[type='PASSWORD']:not([hidden]):not([disabled])";
 const USERNAME_INPUT_SELECTOR = "input[type='text']:not([hidden]):not([disabled]), input[type='Text']:not([hidden]):not([disabled]), input[type='TEXT']:not([hidden]):not([disabled]), input[type='email']:not([hidden]):not([disabled]), input[type='Email']:not([hidden]):not([disabled]), input[type='EMAIL']:not([hidden]):not([disabled]), input:not([type]):not([hidden]):not([disabled])";
 
@@ -138,11 +136,21 @@ const fillInputField = function(element, value) {
    */
 
   if (element || '') {
-    element.addEventListener('click', function clickHandler(event) {
-      fireEvent.input(element, {target: {value}});
-      event.target.removeEventListener(event.type, clickHandler);  // Remove the event listener after it has fired
-    }, false);
-    fireEvent.click(element, {button: 0});
+    const keydownEvent = new KeyboardEvent("keydown", {bubbles: true});
+    const keypressEvent = new KeyboardEvent("keypress", {bubbles: true});
+    const inputEvent = new InputEvent("input", {inputType: "insertText", data: value, bubbles: true});
+    const keyupEvent = new KeyboardEvent("keyup", {bubbles: true});
+    const changeEvent = new Event("change", {bubbles: true});
+
+    element.value = value;
+
+    // Dispatch events, they happen in this order: down, press, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
+    element.focus();
+    element.dispatchEvent(keydownEvent);
+    element.dispatchEvent(keypressEvent);
+    element.dispatchEvent(inputEvent);
+    element.dispatchEvent(keyupEvent);
+    element.dispatchEvent(changeEvent);
   }
 };
 

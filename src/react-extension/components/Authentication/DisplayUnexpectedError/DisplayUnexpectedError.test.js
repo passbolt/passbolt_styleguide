@@ -13,6 +13,7 @@
  */
 import {defaultProps, passboltApiFetchErrorProps} from "./DisplayUnexpectedError.test.data";
 import DisplayUnexpectedErrorTestPage from "./DisplayUnexpectedError.test.page";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -41,6 +42,20 @@ describe("DisplayUnexpectedError", () => {
     await page.showErrorDetails();
     expect(page.moreDetailsCta).toBeTruthy();
     expect(page.errorDetails.value).toEqual(JSON.stringify(props.error.data, null, 4));
+  });
+
+  it('As AN I should be able to try again from iframe (setup, recover, account recovery)', async() => {
+    const props = defaultProps({context: defaultAppContext()});
+    const page = new DisplayUnexpectedErrorTestPage(props);
+
+    jest.spyOn(props.context.port, "request");
+    expect.assertions(2);
+    Object.defineProperty(window, "location", {
+      value: {reload: jest.fn()},
+    });
+    expect(page.moreDetailsCta).toBeNull();
+    await page.tryAgain();
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.tab.reload");
   });
 });
 

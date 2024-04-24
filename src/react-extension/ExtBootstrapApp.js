@@ -17,9 +17,7 @@ import PropTypes from "prop-types";
 import InsertAppIframe from "./components/InsertAppIframe";
 import InsertFileIframe from "./components/InsertFileIframe";
 import UserSettings from "../shared/lib/Settings/UserSettings";
-import HandleLegacyAppjs from "./components/Common/Legacy/HandleLegacyAppjs";
 import HandleExtAppBootstrapRouteChangeRequested from "./components/Common/Route/HandleExtAppBootstrapRouteChangeRequested";
-import CleanupLegacyAppjs from "./components/Common/Legacy/CleanupLegacyAppjs";
 
 /**
  * The bootstrap of the passbolt application served by the browser extension.
@@ -94,23 +92,6 @@ class ExtBootstrapApp extends Component {
     return urlTrustedDomain.pathname;
   }
 
-  /**
-   * Return true if the legacy appjs is detected on the page.
-   */
-  get isLegacyAppjs() {
-    // The application is legacy if the page contains the script steal.production.js
-    const legacyScripts = document.getElementsByTagName('script');
-    if (legacyScripts) {
-      for (let i = 0; i < legacyScripts.length; i++) {
-        const src = legacyScripts[i].src || "";
-        if (src.indexOf("steal.production.js") !== -1) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   render() {
     if (!this.isPassboltApp()) {
       return null;
@@ -122,22 +103,6 @@ class ExtBootstrapApp extends Component {
         <Router basename={this.basename}>
           <HandleExtAppBootstrapRouteChangeRequested port={this.props.port}/>
           <Switch>
-            <Route exact path={[
-              "/app/administration",
-              "/app/administration/mfa",
-              "/app/administration/users-directory",
-              "/app/administration/email-notification",
-              "/app/administration/smtp-settings",
-              "/app/settings/mfa/:provider",
-              "/app/settings/mfa",
-              "/app/administration/healthcheck",
-            ]}>
-              <>
-                {this.isLegacyAppjs &&
-                <HandleLegacyAppjs port={this.props.port}/>
-                }
-              </>
-            </Route>
             <Route exact path={[
               "/app/account-recovery/requests/review/:accountRecoveryRequestId",
               "/app/administration/subscription",
@@ -167,9 +132,6 @@ class ExtBootstrapApp extends Component {
               "/app",
               "/",
             ]}>
-              {this.isLegacyAppjs &&
-              <CleanupLegacyAppjs/>
-              }
               <InsertAppIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
               <InsertFileIframe port={this.props.port} browserExtensionUrl={this.props.browserExtensionUrl}/>
             </Route>

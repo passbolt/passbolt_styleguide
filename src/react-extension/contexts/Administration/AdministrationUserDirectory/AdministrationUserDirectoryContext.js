@@ -27,6 +27,7 @@ const DIRECTORY_TYPE_OPENLDAP = "openldap";
 const DIRECTORY_TYPE_ACTIVE_DIRECTORY = "ad";
 const AD_FIELDS_MAPPING_USER_USERNAME_ERROR = "fieldsMappingAdUserUsernameError";
 const OPENLDAP_FIELDS_MAPPING_GROUP_USERS_ERROR = "fieldsMappingOpenLdapGroupUsersError";
+const AD_FIELDS_MAPPING_USER_USERNAME_FALLBACK_ERROR = "fieldsMappingAdUserUsernameFallbackeError";
 
 /**
  * The Administration user directory Context
@@ -38,6 +39,7 @@ export const AdminUserDirectoryContext = React.createContext({
   setSettings: () => {}, // Set the settings object with changes
   setAdUserFieldsMappingSettings: () => {}, //  Handles active directory's user field mapping settings changes.
   setOpenLdapGroupFieldsMappingSettings: () => {}, // Handles open ldap's group field mapping settings changes.
+  setAdFallbackFieldsSettings: () => {}, // Handles fallback fields settings changes.
   hadDisabledSettings: () => {}, // returns true if the config is present even if disabled
   getUsers: () => {}, // Returns users for UI changes
   hasSettingsChanges: () => {}, // Check if the policy has changes
@@ -91,6 +93,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
       setSettings: this.setSettings.bind(this),  // Set the settings object with changes
       setAdUserFieldsMappingSettings: this.setAdUserFieldsMappingSettings.bind(this), // Set the field mapping settings object for the active directory part
       setOpenLdapGroupFieldsMappingSettings: this.setOpenLdapGroupFieldsMappingSettings.bind(this), // Handles open ldap's group field mapping settings changes.
+      setAdFallbackFieldsSettings: this.setAdFallbackFieldsSettings.bind(this), //t
       hadDisabledSettings: this.hadDisabledSettings.bind(this), // returns true if the config is present even if disabled
       findUserDirectorySettings: this.findUserDirectorySettings.bind(this), // Find the current settings and store it in the state
       hasSettingsChanges: this.hasSettingsChanges.bind(this), // Check if setting has changes
@@ -210,6 +213,7 @@ export class AdminUserDirectoryContextProvider extends React.Component {
     if (this.isAdFieldsMappingUserUsernameResetNeeded(key, value)) {
       newSettings.fieldsMapping.ad.user.username = UserDirectoryModel.DEFAULT_AD_FIELDS_MAPPING_USER_USERNAME_VALUE;
       this.setError(AD_FIELDS_MAPPING_USER_USERNAME_ERROR, null);
+      this.setError(AD_FIELDS_MAPPING_USER_USERNAME_FALLBACK_ERROR, null);
     }
 
     if (this.isOpenLdapFieldsMappingGroupUsersResetNeeded(key, value)) {
@@ -263,6 +267,19 @@ export class AdminUserDirectoryContextProvider extends React.Component {
   setOpenLdapGroupFieldsMappingSettings(key, value) {
     const newSettings = Object.assign({}, this.state.settings);
     newSettings.fieldsMapping.openldap.group[key] = value;
+    this.setState({settings: newSettings});
+  }
+
+
+  /**
+   * Handles open ldap's group field mapping settings changes.
+   * @param {string} key the field to change
+   * @param {string} value the value to change the field with
+   * @returns {void}
+   */
+  setAdFallbackFieldsSettings(key, value) {
+    const newSettings = Object.assign({}, this.state.settings);
+    newSettings.fallbackFields.ad[key] = value;
     this.setState({settings: newSettings});
   }
 
