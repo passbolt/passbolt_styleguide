@@ -62,6 +62,7 @@ class UserDirectoryModel {
     this.emailPrefix = userDirectoryDTO.email_prefix || "";
     this.emailSuffix = userDirectoryDTO.email_suffix || "";
     this.fieldsMapping = UserDirectoryModel.defaultFieldsMapping(userDirectoryDTO.fields_mapping);
+    this.fallbackFields = UserDirectoryModel.defaultFallbackFields(userDirectoryDTO.field_fallbacks);
     // SYNCHRONIZATION OPTIONS
     this.defaultAdmin = userDirectoryDTO.default_user || userId;
     this.defaultGroupAdmin = userDirectoryDTO.default_group_admin_user || userId;
@@ -109,6 +110,7 @@ class UserDirectoryModel {
     this.emailPrefix = "";
     this.emailSuffix = "";
     this.fieldsMapping = UserDirectoryModel.defaultFieldsMapping();
+    this.fallbackFields = UserDirectoryModel.defaultFallbackFields();
     // SYNCHRONIZATION OPTIONS
     this.defaultAdmin = userId;
     this.defaultGroupAdmin = userId;
@@ -127,6 +129,7 @@ class UserDirectoryModel {
 
   /**
    * Returns a default empty field mapping object
+   * @param {object} [data = {}] data to override the default values
    * @returns {object}
    * @private
    */
@@ -168,6 +171,20 @@ class UserDirectoryModel {
           users: DEFAULT_OPENLDAP_FIELDS_MAPPING_GROUP_USERS_VALUE,
         }, data?.openldap?.group)
       },
+    };
+  }
+
+  /**
+   * Returns a default empty fallback fields mappin object
+   * @param {object} [data = {}] data to override the default values
+   * @returns {object}
+   * @private
+   */
+  static defaultFallbackFields(data = {}) {
+    return {
+      ad: Object.assign({
+        username: "",
+      }, data?.ad)
     };
   }
 

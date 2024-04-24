@@ -58,6 +58,7 @@ export const mockedDefaultData = (data = {}) => {
     userDirectoryToggle: false,
     authenticationType: "basic",
     fieldsMapping: defaultFieldsMapping(data.fieldsMapping),
+    fallbackFields: defaultFallbackFields(data.fallbackFields),
   };
 
   delete data.fieldsMapping;
@@ -116,4 +117,10 @@ export const defaultFieldsMapping = (data = {}) => ({
       users: "uniqueMember",
     }, data?.openldap?.group)
   },
+});
+
+export const defaultFallbackFields = (data = {}) => ({
+  ad: Object.assign({
+    username: ""
+  }, data?.ad),
 });

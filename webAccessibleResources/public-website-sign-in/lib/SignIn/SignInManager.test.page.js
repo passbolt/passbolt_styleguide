@@ -27,8 +27,8 @@ export default class SignInManagerPage {
     SignInManager.initialize();
   }
 
-  destroy() {
-    SignInManager.destroy();
+  async destroy() {
+    await port.emit('passbolt.content-script.destroy');
   }
 
   /**

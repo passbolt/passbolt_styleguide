@@ -41,17 +41,21 @@ class ApplicationEntity extends Entity {
           "type": "object",
           "required": ["remoteVersion", "currentVersion"],
           "properties": {
-            "remoteVersion": {
+            "remoteVersion": {"anyOf": [{
               "type": "string"
-            },
+            }, {
+              "type": "null"
+            }]},
             "currentVersion": {
               "type": "string"
             }
           }
         },
-        "latestVersion": {
-          "type": "boolean"
-        },
+        "latestVersion": {"anyOf": [{
+          "type": "boolean",
+        }, {
+          "type": "null"
+        }]},
         "schema": {
           "type": "boolean"
         },
@@ -77,9 +81,11 @@ class ApplicationEntity extends Entity {
             "isSelfRegistrationPluginEnabled": {
               "type": "boolean"
             },
-            "selfRegistrationProvider": {
+            "selfRegistrationProvider": {"anyOf": [{
               "type": "string"
-            },
+            }, {
+              "type": "null"
+            }]},
             "isRegistrationPublicRemovedFromPassbolt": {
               "type": "boolean"
             }

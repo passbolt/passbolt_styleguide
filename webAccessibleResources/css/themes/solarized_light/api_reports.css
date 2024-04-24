@@ -6247,6 +6247,8 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-success,
 .healthcheck-settings .healthcheck-app-section .healthcheck-success,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-success,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-success,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-success,
 .healthcheck-settings .healthcheck-environment-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-core-section .healthcheck-warning,
@@ -6255,6 +6257,8 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-app-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-core-section .healthcheck-fail,
@@ -6263,6 +6267,8 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-app-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-environment-section .healthcheck-info,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-info,
 .healthcheck-settings .healthcheck-core-section .healthcheck-info,
@@ -6270,7 +6276,9 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-database-section .healthcheck-info,
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-info,
 .healthcheck-settings .healthcheck-app-section .healthcheck-info,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-info {
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-info,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-info {
   display: flex;
   align-items: center;
   margin: 1rem 0;
@@ -6286,6 +6294,8 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-success .tooltip,
 .healthcheck-settings .healthcheck-app-section .healthcheck-success .tooltip,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-success .tooltip,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-success .tooltip,
 .healthcheck-settings .healthcheck-environment-section .healthcheck-warning .tooltip,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-warning .tooltip,
 .healthcheck-settings .healthcheck-core-section .healthcheck-warning .tooltip,
@@ -6294,6 +6304,8 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-warning .tooltip,
 .healthcheck-settings .healthcheck-app-section .healthcheck-warning .tooltip,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-warning .tooltip,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-warning .tooltip,
 .healthcheck-settings .healthcheck-environment-section .healthcheck-fail .tooltip,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-fail .tooltip,
 .healthcheck-settings .healthcheck-core-section .healthcheck-fail .tooltip,
@@ -6302,6 +6314,8 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-fail .tooltip,
 .healthcheck-settings .healthcheck-app-section .healthcheck-fail .tooltip,
 .healthcheck-settings .healthcheck-smtp-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-fail .tooltip,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-fail .tooltip,
 .healthcheck-settings .healthcheck-environment-section .healthcheck-info .tooltip,
 .healthcheck-settings .healthcheck-configFiles-section .healthcheck-info .tooltip,
 .healthcheck-settings .healthcheck-core-section .healthcheck-info .tooltip,
@@ -6309,7 +6323,9 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-database-section .healthcheck-info .tooltip,
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-info .tooltip,
 .healthcheck-settings .healthcheck-app-section .healthcheck-info .tooltip,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-info .tooltip {
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-info .tooltip,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-info .tooltip {
   margin: 0.3rem 0 0 -0.5rem;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-success,
@@ -6319,7 +6335,9 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-database-section .healthcheck-success,
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-success,
 .healthcheck-settings .healthcheck-app-section .healthcheck-success,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-success {
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-success,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-success,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-success {
   background-color: #EDF7EB;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-warning,
@@ -6329,7 +6347,9 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-database-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-warning,
 .healthcheck-settings .healthcheck-app-section .healthcheck-warning,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning {
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-warning,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-warning {
   background-color: #FFDBA6;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-fail,
@@ -6339,7 +6359,9 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-database-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-fail,
 .healthcheck-settings .healthcheck-app-section .healthcheck-fail,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail {
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-fail,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-fail {
   background-color: #FFA6A6;
 }
 .healthcheck-settings .healthcheck-environment-section .healthcheck-info,
@@ -6349,7 +6371,9 @@ html.launching .launching-screen p {
 .healthcheck-settings .healthcheck-database-section .healthcheck-info,
 .healthcheck-settings .healthcheck-gpg-section .healthcheck-info,
 .healthcheck-settings .healthcheck-app-section .healthcheck-info,
-.healthcheck-settings .healthcheck-smtp-section .healthcheck-info {
+.healthcheck-settings .healthcheck-smtp-section .healthcheck-info,
+.healthcheck-settings .healthcheck-directorySync-section .healthcheck-info,
+.healthcheck-settings .healthcheck-sso-section .healthcheck-info {
   background-color: #AAD2F9;
 }
 .healthcheck-settings .svg-icon {

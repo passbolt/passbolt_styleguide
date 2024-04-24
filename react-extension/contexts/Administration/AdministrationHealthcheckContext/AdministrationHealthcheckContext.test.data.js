@@ -109,6 +109,7 @@ export const mockHealthcheckData = {
   },
   "environment": {
     "phpVersion": true,
+    "nextMinPhpVersion": true,
     "info": {
       "phpVersion": "8.1.17"
     },
@@ -141,6 +142,12 @@ export const mockHealthcheckData = {
     "errorMessage": false,
     "source": "database",
     "isInDb": true
+  },
+  "directorySync": {
+    "endpointsDisabled": true
+  },
+  "sso": {
+    "sslHostVerification": true
   }
 };
 
@@ -212,6 +219,7 @@ export const mockHealthcheckWrongData = {
   },
   "environment": {
     "phpVersion": true,
+    "nextMinPhpVersion": true,
     "info": {
       "phpVersion": "8.1.25"
     },
@@ -244,6 +252,12 @@ export const mockHealthcheckWrongData = {
     "errorMessage": false,
     "source": "database",
     "isInDb": 2
+  },
+  "directorySync": {
+    "endpointsDisabled": true
+  },
+  "sso": {
+    "sslHostVerification": false
   }
 };
 
@@ -314,6 +328,7 @@ export const mockHealthcheckDataAllChecksFail = {
   },
   "environment": {
     "phpVersion": false,
+    "nextMinPhpVersion": true,
     "info": {
       "phpVersion": "8.1.17"
     },
@@ -346,5 +361,120 @@ export const mockHealthcheckDataAllChecksFail = {
     "errorMessage": "error message",
     "source": "database",
     "isInDb": false
+  },
+  "directorySync": {
+    "endpointsDisabled": false
+  },
+  "sso": {
+    "sslHostVerification": false
+  }
+};
+
+export const mockHealthcheckAirGappedEnvironment = {
+  "ssl": {
+    "peerValid": true,
+    "hostValid": true,
+    "notSelfSigned": true
+  },
+  "database": {
+    "tablesCount": true,
+    "info": {
+      "tablesCount": 49
+    },
+    "connect": true,
+    "supportedBackend": true,
+    "defaultContent": true
+  },
+  "application": {
+    "info": {
+      "remoteVersion": "undefined",
+      "currentVersion": "4.1.1"
+    },
+    "latestVersion": null,
+    "schema": true,
+    "robotsIndexDisabled": true,
+    "sslForce": true,
+    "sslFullBaseUrl": true,
+    "configPath": "\/var\/www\/passbolt\/config\/passbolt.php",
+    "seleniumDisabled": true,
+    "registrationClosed": {
+      "isSelfRegistrationPluginEnabled": true,
+      "selfRegistrationProvider": null,
+      "isRegistrationPublicRemovedFromPassbolt": true
+    },
+    "hostAvailabilityCheckEnabled": true,
+    "jsProd": true,
+    "emailNotificationEnabled": true
+  },
+  "gpg": {
+    "canDecryptVerify": true,
+    "canVerify": true,
+    "gpgKeyPublicInKeyring": true,
+    "canEncrypt": true,
+    "canDecrypt": true,
+    "canEncryptSign": true,
+    "canSign": true,
+    "gpgHome": true,
+    "gpgKeyPrivateFingerprint": true,
+    "gpgKeyPublicFingerprint": true,
+    "gpgKeyPublicEmail": true,
+    "gpgKeyPublicReadable": true,
+    "gpgKeyPrivateReadable": true,
+    "gpgKey": true,
+    "lib": true,
+    "gpgKeyNotDefault": true,
+    "info": {
+      "gpgHome": "\/home\/www-data\/.gnupg",
+      "gpgKeyPrivate": "\/var\/www\/passbolt\/config\/gpg\/serverkey_private.asc"
+    },
+    "gpgHomeWritable": true,
+    "gpgKeyPublic": true,
+    "gpgKeyPublicBlock": true,
+    "gpgKeyPrivate": true,
+    "gpgKeyPrivateBlock": true,
+    "isPublicServerKeyGopengpgCompatible": true,
+    "isPrivateServerKeyGopengpgCompatible": true
+  },
+  "environment": {
+    "phpVersion": true,
+    "nextMinPhpVersion": true,
+    "info": {
+      "phpVersion": "8.1.17"
+    },
+    "pcre": true,
+    "mbstring": true,
+    "gnupg": true,
+    "intl": true,
+    "image": true,
+    "tmpWritable": true,
+    "logWritable": true
+  },
+  "configFile": {
+    "app": true,
+    "passbolt": true
+  },
+  "core": {
+    "cache": true,
+    "debugDisabled": true,
+    "salt": true,
+    "fullBaseUrl": true,
+    "validFullBaseUrl": true,
+    "info": {
+      "fullBaseUrl": "https:\/\/dev.local"
+    },
+    "fullBaseUrlReachable": true
+  },
+  "smtpSettings": {
+    "isEnabled": true,
+    "areEndpointsDisabled": true,
+    "errorMessage": false,
+    "source": "database",
+    "isInDb": true
+  },
+  "directorySync": {
+    "endpointsDisabled": true
+  },
+  "sso": {
+    "sslHostVerification": false
   }
 };

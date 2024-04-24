@@ -15,6 +15,7 @@
 export const defaultEnvironmentData = (data = {}) => {
   const defaultData = {
     phpVersion: true,
+    nextMinPhpVersion: true,
     info: {
       phpVersion: "8.1.7",
       ...data.info,

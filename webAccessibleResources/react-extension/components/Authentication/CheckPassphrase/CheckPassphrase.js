@@ -116,7 +116,7 @@ class CheckPassphrase extends Component {
       this.toggleProcessing();
       await this.check();
     } else {
-      this.focusOnPassphrase()
+      this.focusOnPassphrase();
     }
   }
 
@@ -162,7 +162,7 @@ class CheckPassphrase extends Component {
     this.toggleProcessing();
     if (error.name === "InvalidMasterPasswordError") {
       this.setState({errors: {...this.state.errors, invalidPassphrase: true}});
-      this.focusOnPassphrase()
+      this.focusOnPassphrase();
     } else {
       throw error;
     }

@@ -23,6 +23,7 @@ import {Trans, withTranslation} from "react-i18next";
 import DisplayAdministrationHealthcheckActions
   from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationHealthcheckActions/DisplayAdministrationHealthcheckActions";
 import Tooltip from "../../Common/Tooltip/Tooltip";
+import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 
 class DisplayHealthcheckAdministration extends Component {
   /**
@@ -53,6 +54,33 @@ class DisplayHealthcheckAdministration extends Component {
   get healthCheckData() {
     return this.props.adminHealthcheckContext.healthcheckData;
   }
+
+  /**
+   * Returns true if the given feature flag exists and is enabled
+   * @param {string} featureFlag
+   * @returns {boolean}
+   */
+  canIUse(featureFlag) {
+    return Boolean(this.props.context.siteSettings?.canIUse(featureFlag));
+  }
+
+  /**
+   * Returns true if the user has the user directory capability
+   * @returns {boolean}
+   */
+  get isUserDirectoryEnabled() {
+    return this.canIUse('directorySync');
+  }
+
+
+  /**
+   * Can I use the sso plugin
+   * @returns {boolean}
+   */
+  get canIUseSso() {
+    return this.canIUse('sso');
+  }
+
 
 
   render() {
@@ -800,12 +828,22 @@ class DisplayHealthcheckAdministration extends Component {
             Using latest passbolt version ({healthcheckData.application.info.remoteVersion.toString()})
           </span>
         );
-      } else {
+      } else if (healthcheckData.application.latestVersion === false && healthcheckData.application.info.remoteVersion) {
         return (
           <span className='healthcheck-fail'>
             <Icon name="close"/>
             The installation is not up to date. Currently using {healthcheckData.application.info.currentVersion.toString()} and it should be {healthcheckData.application.info.remoteVersion.toString()}
             <Tooltip message={<span>See <a href="https://help.passbolt.com/hosting/update" target="_blank" rel="noopener noreferrer">this guide</a></span>}>
+              <Icon name='info-circle'/>
+            </Tooltip>
+          </span>
+        );
+      } else if (healthcheckData.application.latestVersion === null && healthcheckData.application.info.remoteVersion === "undefined") {
+        return (
+          <span className='healthcheck-fail'>
+            <Icon name="close"/>
+            It seems that the server is not able to reach internet.
+            <Tooltip message={<span>To confirm that you are running the latest version, check <a href="https://help.passbolt.com/releases/" target="_blank" rel="noopener noreferrer">all the releases notes</a></span>}>
               <Icon name='info-circle'/>
             </Tooltip>
           </span>
@@ -1102,6 +1140,48 @@ class DisplayHealthcheckAdministration extends Component {
       }
     };
 
+    const isDirectorySyncEndpointsDisabled = () => {
+      if (healthcheckData.directorySync.endpointsDisabled === true) {
+        return (
+          <span className='healthcheck-success'>
+            <Icon name="check"/>
+            The endpoints for updating the users directory configurations are disabled.
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-warning'>
+            <Icon name="warning"/>
+            The endpoints for updating the users directory configurations are enabled.
+            <Tooltip message={`It is recommended to disable endpoints for updating the users directory configurations.`}>
+              <Icon name='info-circle'/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
+    const isSSlCertificationValidationEnabled = () => {
+      if (healthcheckData.sso.sslHostVerification === true) {
+        return (
+          <span className='healthcheck-success'>
+            <Icon name="check"/>
+            SSL certification validation for SSO instance is enabled.
+          </span>
+        );
+      } else {
+        return (
+          <span className='healthcheck-warning'>
+            <Icon name="warning"/>
+            SSL certification validation for SSO instance is disabled.
+            <Tooltip message={`'Disabling the ssl verify check can lead to security attacks.`}>
+              <Icon name='info-circle'/>
+            </Tooltip>
+          </span>
+        );
+      }
+    };
+
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing())  {
         return (<Icon name="spinner" />);
@@ -1190,6 +1270,25 @@ class DisplayHealthcheckAdministration extends Component {
               <div>{whatIsSmtpSettingsSource()}</div>
               <div>{isSmtpEndpointsDisabled()}</div>
             </div>
+
+            {this.isUserDirectoryEnabled &&
+              <>
+                <h4>Directory Sync</h4>
+                <div className="healthcheck-directorySync-section">
+                  <div>{isDirectorySyncEndpointsDisabled()}</div>
+                </div>
+              </>
+            }
+
+            {this.canIUseSso &&
+              <>
+                <h4>SSO</h4>
+                <div className="healthcheck-sso-section">
+                  <div>{isSSlCertificationValidationEnabled()}</div>
+                </div>
+              </>
+            }
+
           </>
         );
       }
@@ -1251,4 +1350,4 @@ DisplayHealthcheckAdministration.propTypes = {
   t: PropTypes.func, // translation function
 };
 
-export default withAdministrationWorkspace(withAdministrationHealthcheck(withTranslation('common')(DisplayHealthcheckAdministration)));
+export default withAppContext(withAdministrationWorkspace(withAdministrationHealthcheck(withTranslation('common')(DisplayHealthcheckAdministration))));

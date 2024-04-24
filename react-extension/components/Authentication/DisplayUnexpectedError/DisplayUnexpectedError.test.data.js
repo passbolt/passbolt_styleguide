@@ -22,7 +22,8 @@ import EntityValidationError from "../../../../shared/lib/Error/EntityValidation
  */
 export function defaultProps(props = {}) {
   const defaultProps = {
-    error: new Error("Mocked unexpected error.")
+    error: new Error("Mocked unexpected error."),
+    context: {}
   };
   return Object.assign(defaultProps, props);
 }

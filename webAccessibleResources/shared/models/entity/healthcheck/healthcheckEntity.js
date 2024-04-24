@@ -23,6 +23,8 @@ import EnvironmentEntity from "./associations/environmentEntity";
 import ConfigFileEntity from "./associations/configFileEntity";
 import CoreEntity from "./associations/coreEntity";
 import SmtpSettingsEntity from "./associations/smtpSettingsEntity";
+import DirectorySyncEntity from "./associations/directorySyncEntity";
+import SsoEntity from "./associations/ssoEntity";
 
 const ENTITY_NAME = "healthcheck";
 
@@ -77,6 +79,16 @@ class HealthcheckEntity extends Entity {
       this._smtpSettings = new SmtpSettingsEntity(this._props.smtpSettings, {clone: false});
     }
     delete this._props.smtpSettings;
+
+    if (this._props.directorySync) {
+      this._directorySync = new DirectorySyncEntity(this._props.directorySync, {clone: false});
+    }
+    delete this._props.directorySync;
+
+    if (this._props.sso) {
+      this._sso = new SsoEntity(this._props.sso, {clone: false});
+    }
+    delete this._props.sso;
   }
 
 
@@ -88,6 +100,7 @@ class HealthcheckEntity extends Entity {
   static getSchema() {
     return {
       "type": "object",
+      // SSO and directorySync are not required as it is PRO features only
       "required": ["database", "ssl", "application", "gpg", "configFile", "core", "smtpSettings"],
       "properties": {
         "database": DatabaseEntity.getSchema(),
@@ -97,7 +110,9 @@ class HealthcheckEntity extends Entity {
         "environment": EnvironmentEntity.getSchema(),
         "configFile": ConfigFileEntity.getSchema(),
         "core": CoreEntity.getSchema(),
-        "smtpSettings": SmtpSettingsEntity.getSchema()
+        "smtpSettings": SmtpSettingsEntity.getSchema(),
+        "directorySync": DirectorySyncEntity.getSchema(),
+        "sso": SsoEntity.getSchema()
       }
     };
   }
@@ -165,5 +180,14 @@ class HealthcheckEntity extends Entity {
   get smtpSettings() {
     return this._smtpSettings || null;
   }
+
+  get directorySync() {
+    return this._directorySync || null;
+  }
+
+  get sso() {
+    return this._sso || null;
+  }
 }
+
 export default HealthcheckEntity;
