@@ -15,7 +15,7 @@
 import {v4 as uuid} from "uuid";
 import {defaultProfileDto} from "../profile/ProfileEntity.test.data";
 import {adminRoleDto, TEST_ROLE_USER_ID, userRoleDto} from "../role/role.test.data";
-import {defaultGroupsUser} from "./groupUserEntity.test.data";
+import {defaultGroupUser} from "../groupUser/groupUserEntity.test.data";
 import {defaultGpgkeyDto} from "../gpgkey/gpgkeyEntity.test.data";
 import {
   createAcceptedAccountRecoveryUserSettingDto
@@ -58,7 +58,7 @@ export const defaultUserDto = (data = {}, options = {}) => {
   defaultData.profile =  profile;
 
   if (!data.groups_users && options?.withGroupsUsers) {
-    defaultData.groups_users = [defaultGroupsUser({user_id: defaultData.id})];
+    defaultData.groups_users = [defaultGroupUser({user_id: defaultData.id})];
   }
 
   if (!data.gpgkey && options?.withGpgkey) {
