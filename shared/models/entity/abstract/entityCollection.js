@@ -257,19 +257,24 @@ class EntityCollection {
    * Assert that no item in the collection already has the given value for the given property.
    * @param {string} propName The property name for checking value uniqueness.
    * @param {string|boolean|number} propValue The property value for checking value uniqueness.
-   * @param {string} [message] The error message. If none given, it will fallback on a default one.
+   * @param {object} [options] Options.
+   * @param {string} [options.message] The error message. If none given, it will fallback on a default one.
+   * @param {Set} [options.haystackSet] A haystack set to reuse if given. Used as cache to improve performance.
    * @throw {EntityValidationError} If another item already has the given value for the given property.
    */
-  assertNotExist(propName, propValue, message) {
-    const propValues = this.extract(propName);
-    // Set is the preferred approach for performance reasons, it does a deduplicate in 0n.
-    const uniqueElements = new Set(propValues);
-    const sizeBefore = uniqueElements.size;
-    uniqueElements.add(propValue);
+  assertNotExist(propName, propValue, options = {}) {
+    let haystackSet = options?.haystackSet;
 
-    if (sizeBefore === uniqueElements.size) {
+    // If not given initialize the haystack set with the values of the items properties.
+    if (!haystackSet) {
+      const propValues = this.extract(propName);
+      haystackSet = new Set(propValues);
+    }
+
+    if (haystackSet.has(propValue)) {
       const error = new EntityValidationError();
-      message = message || `The collection already includes an element that has a property (${propName}) with an identical value.`;
+      const message = options?.message
+        || `The collection already includes an element that has a property (${propName}) with an identical value.`;
       error.addError(propName, 'unique', message);
       throw error;
     }

@@ -145,8 +145,26 @@ describe("EntityV2Collection", () => {
       expect(collection.items[0]._props.name).toEqual(entity.name);
     });
 
-    // @todo do we want this capability on this function?
-    it.todo("should ignore invalid content");
+    it("should call the onItemPushed callback when an item is added to the collection", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity = new TestEntity(defaultTestEntityDto());
+      const onItemPushed = jest.fn();
+
+      expect.assertions(1);
+      collection.push(entity, {}, {onItemPushed});
+      expect(onItemPushed).toHaveBeenLastCalledWith(expect.anything(TestEntity));
+    });
+
+    it("should pass along validateBuildRules options", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity = new TestEntity(defaultTestEntityDto());
+      const validateBuildRules = {opt1: "value1"};
+      jest.spyOn(collection, "validateBuildRules");
+
+      expect.assertions(1);
+      collection.push(entity, {}, {validateBuildRules});
+      expect(collection.validateBuildRules).toHaveBeenLastCalledWith(expect.anything(TestEntity), validateBuildRules);
+    });
   });
 
   describe("GroupsCollection:pushMany", () => {
@@ -276,6 +294,18 @@ describe("EntityV2Collection", () => {
       expect(collection.items[0].id).toEqual(entity1.id);
       expect(collection.items[1]).toBeInstanceOf(TestEntity);
       expect(collection.items[1].id).toEqual(entity3.id);
+    });
+
+    it("should pass along entities options and local options to push function", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity = defaultTestEntityDto();
+      const entitiesOptions = {ignoreInvalidEntity: true};
+      const options = {opt1: "value1"};
+      jest.spyOn(collection, "push");
+
+      expect.assertions(1);
+      collection.pushMany([entity], entitiesOptions, options);
+      expect(collection.push).toHaveBeenLastCalledWith(expect.anything(Object), entitiesOptions, options);
     });
   });
 });
