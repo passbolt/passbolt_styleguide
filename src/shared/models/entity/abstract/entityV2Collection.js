@@ -33,9 +33,10 @@ class EntityV2Collection extends EntityCollection {
   /**
    * Validate the collection build rules.
    * @param {Entity} item The entity to validate the build rules for.
+   * @param {object} [options] Options.
    */
   // eslint-disable-next-line no-unused-vars
-  validateBuildRules(item) {
+  validateBuildRules(item, options = {}) {
     // Override this method to add entity validation build rules.
   }
 
@@ -52,8 +53,11 @@ class EntityV2Collection extends EntityCollection {
    * @param {object} [entityOptions] Options for constructing the entity, identical to those accepted by the Entity
    *   constructor that will be utilized for its creation.
    * @throws {EntityValidationError} If the item doesn't validate.
+   * @param {object} [options] Options.
+   * @param {object} [options.validateBuildRules] Options to pass to validate build rules function @see EntityV2Collection::validateBuildRules
+   * @param {function} [options.onItemPushed] Callback to execute after the item has been pushed to the collection.
    */
-  push(data, entityOptions = {}) {
+  push(data, entityOptions = {}, options = {}) {
     if (!data || typeof data !== 'object') {
       throw new TypeError(`Collection push expects "data" to be an object.`);
     }
@@ -63,8 +67,9 @@ class EntityV2Collection extends EntityCollection {
     }
 
     const entity = new this.entityClass(data, entityOptions);
-    this.validateBuildRules(entity);
+    this.validateBuildRules(entity, options?.validateBuildRules);
     this._items.push(entity);
+    options?.onItemPushed?.(entity);
   }
 
   /**
@@ -72,17 +77,21 @@ class EntityV2Collection extends EntityCollection {
    * @param {object|Entity|array} data The item(s) to add to the collection should be in the form of a DTO, an entity,
    *   or an array comprising any of the aforementioned.
    * @param {object} [entityOptions] Options for constructing the entity, identical to those accepted by the Entity
-   *   constructor that will be utilized for its creation.
+   *   constructor that will be utilized for its creation. Note, this entity options will be passed to the associated
+   *   collections and entities.
+   * @param {object} [options] Options.
+   * @param {object} [options.validateBuildRules] Options to pass to validate build rules function @see EntityV2Collection::validateBuildRules
+   * @param {function} [options.onItemPushed] Callback to execute after the item has been pushed to the collection.
    * @throws {CollectionValidationError} If one item doesn't validate.
    */
-  pushMany(data, entityOptions = {}) {
+  pushMany(data, entityOptions = {}, options = {}) {
     if (!Array.isArray(data)) {
       throw new TypeError(`${this.constructor.name} pushMany expects "data" to be an array.`);
     }
 
     data.forEach((itemDto, index) => {
       try {
-        this.push(itemDto, entityOptions);
+        this.push(itemDto, entityOptions, options);
       } catch (error) {
         if (error instanceof EntityValidationError || error instanceof CollectionValidationError || error instanceof EntityCollectionError) {
           if (!entityOptions?.ignoreInvalidEntity) {
