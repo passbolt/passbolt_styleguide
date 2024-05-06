@@ -58,6 +58,6 @@ export function defaultLoggedInUser(data = {}) {
         is_admin: true
       })
     ]
-  });
+  }, {withRole: true});
   return Object.assign(user, data);
 }
