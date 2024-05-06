@@ -58,7 +58,12 @@ export const defaultUserDto = (data = {}, options = {}) => {
   defaultData.profile =  profile;
 
   if (!data.groups_users && options?.withGroupsUsers) {
-    defaultData.groups_users = [defaultGroupUser({user_id: defaultData.id})];
+    const groupsUsersCount = typeof options?.withGroupsUsers === "number" ? options?.withGroupsUsers : 1;
+    defaultData.groups_users = [];
+    for (let i = 0; i < groupsUsersCount; i++) {
+      const groupUserDto = defaultGroupUser({user_id: defaultData.id});
+      defaultData.groups_users.push(groupUserDto);
+    }
   }
 
   if (!data.gpgkey && options?.withGpgkey) {
