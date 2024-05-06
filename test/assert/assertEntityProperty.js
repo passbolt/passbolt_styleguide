@@ -15,7 +15,8 @@ import {v4 as uuidv4} from "uuid";
 
 export const SCENARIO_EMPTY = {scenario: "empty", value: ""};
 export const SCENARIO_STRING = {scenario: "a string", value: "valid-string"};
-export const SCENARIO_INTEGER = {scenario: "a number", value: 42};
+export const SCENARIO_INTEGER = {scenario: "an integer", value: 42};
+export const SCENARIO_FLOAT = {scenario: "a float", value: 42.2};
 export const SCENARIO_OBJECT = {scenario: "an object", value: {str: "string"}};
 export const SCENARIO_ARRAY = {scenario: "an array", value: ["string"]};
 export const SCENARIO_UUID = {scenario: "a uuid", value: uuidv4()};
@@ -190,4 +191,16 @@ export const FAIL_LOCALE_SCENARIO = [
 ];
 export const locale = (EntityClass, propertyName) => {
   assert(EntityClass, propertyName, SUCCESS_LOCALE_SCENARIO, FAIL_LOCALE_SCENARIO, "format");
+};
+
+export const enumeration = (EntityClass, propertyName, successValues, failValues = []) => {
+  const successScenario = successValues.map(successValue => ({scenario: successValue, value: successValue}));
+  const failScenario = failValues.map(failValue => ({scenario: failValue, value: failValue}));
+  assert(EntityClass, propertyName, successScenario, failScenario, "enum");
+};
+
+export const SUCCESS_INTEGER_SCENARIO = [SCENARIO_INTEGER];
+export const FAIL_INTEGER_SCENARIO = [SCENARIO_EMPTY, SCENARIO_STRING, SCENARIO_FLOAT, SCENARIO_OBJECT, SCENARIO_ARRAY];
+export const integer = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_INTEGER_SCENARIO, FAIL_INTEGER_SCENARIO, "type");
 };
