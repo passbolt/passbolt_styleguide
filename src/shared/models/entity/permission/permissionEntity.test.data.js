@@ -12,25 +12,61 @@
  * @since         4.1.0
  */
 import {v4 as uuidv4} from "uuid";
+import {defaultUserDto} from "../user/userEntity.test.data";
+import {defaultGroupDto} from "../group/groupEntity.test.data";
 
-export const ownerPermissionDto = (data = {}) => ({
-  id: uuidv4(),
+export const minimumPermissionDto = (data = {}) => ({
   aco: "Resource",
   aco_foreign_key: uuidv4(),
   aro: "User",
   aro_foreign_key: uuidv4(),
-  created: "2022-03-04T13:59:11+00:00",
-  modified: "2022-03-04T13:59:11+00:00",
   type: 15,
   ...data
 });
 
-export const updatePermissionDto = (data = {}) => ownerPermissionDto({
+/**
+ * Build default permissiondto.
+ * @param {object} data The data to override the default dto.
+ * @param {Object} [options]
+ * @param {Object} [options.withUser=false] Add user default dto.
+ * @param {Object} [options.withGroup=false] Add group default dto.
+ * @returns {object}
+ */
+export const defaultPermissionDto = (data = {}, options = {}) => {
+  const defaultData = {
+    id: uuidv4(),
+    aco: "Resource",
+    aco_foreign_key: uuidv4(),
+    aro: "User",
+    aro_foreign_key: uuidv4(),
+    created: "2022-03-04T13:59:11+00:00",
+    modified: "2022-03-04T13:59:11+00:00",
+    type: 15,
+    ...data
+  };
+
+  if (!data.user && options?.withUser) {
+    defaultData.user = defaultUserDto({id: defaultData.aro_foreign_key});
+  }
+
+  if (!data.group && options?.withGroup) {
+    defaultData.group = defaultGroupDto({id: defaultData.aro_foreign_key});
+  }
+
+  return defaultData;
+};
+
+export const ownerPermissionDto = (data = {}) => defaultPermissionDto({
+  type: 15,
+  ...data
+});
+
+export const updatePermissionDto = (data = {}) => defaultPermissionDto({
   type: 7,
   ...data
 });
 
-export const readPermissionDto = (data = {}) => ownerPermissionDto({
+export const readPermissionDto = (data = {}) => defaultPermissionDto({
   type: 1,
   ...data
 });

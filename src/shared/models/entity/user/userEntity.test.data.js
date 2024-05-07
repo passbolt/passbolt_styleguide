@@ -26,11 +26,11 @@ import {pendingAccountRecoveryRequestDto} from "../accountRecovery/pendingAccoun
  * Default user dto.
  * @param {Object} data The data to override
  * @param {Object} [options]
- * @param {Object} [options.withGroupsUsers=false] Add groups users default dto.
- * @param {Object} [options.withRole=false] Add role default dto.
- * @param {Object} [options.withGpgkey=false] Add gpg key default dto.
- * @param {Object} [options.withAccountRecoveryUserSetting=false] Add account recover user settings default dto.
- * @param {Object} [options.withPendingAccountRecoveryUserRequest=false] Add pending account recover user request default dto.
+ * @param {boolean|integer} [options.withGroupsUsers=false] Add groups users default dto.
+ * @param {boolean} [options.withRole=false] Add role default dto.
+ * @param {boolean} [options.withGpgkey=false] Add gpg key default dto.
+ * @param {boolean} [options.withAccountRecoveryUserSetting=false] Add account recover user settings default dto.
+ * @param {boolean} [options.withPendingAccountRecoveryUserRequest=false] Add pending account recover user request default dto.
  * @returns {object}
  */
 export const defaultUserDto = (data = {}, options = {}) => {
@@ -47,8 +47,8 @@ export const defaultUserDto = (data = {}, options = {}) => {
     ...data
   };
 
-  if (!data.role) {
-    defaultData.role = userRoleDto();
+  if (!data.role && options?.withRole) {
+    defaultData.role = userRoleDto({id: defaultData.role_id});
   }
 
   const profile = data?.profile || defaultProfileDto({
