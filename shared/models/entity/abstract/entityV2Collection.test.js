@@ -152,7 +152,7 @@ describe("EntityV2Collection", () => {
 
       expect.assertions(1);
       collection.push(entity, {}, {onItemPushed});
-      expect(onItemPushed).toHaveBeenLastCalledWith(expect.anything(TestEntity));
+      expect(onItemPushed).toHaveBeenLastCalledWith(entity);
     });
 
     it("should pass along validateBuildRules options", () => {
@@ -163,7 +163,7 @@ describe("EntityV2Collection", () => {
 
       expect.assertions(1);
       collection.push(entity, {}, {validateBuildRules});
-      expect(collection.validateBuildRules).toHaveBeenLastCalledWith(expect.anything(TestEntity), validateBuildRules);
+      expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity, validateBuildRules);
     });
   });
 
@@ -305,7 +305,7 @@ describe("EntityV2Collection", () => {
 
       expect.assertions(1);
       collection.pushMany([entity], entitiesOptions, options);
-      expect(collection.push).toHaveBeenLastCalledWith(expect.anything(Object), entitiesOptions, options);
+      expect(collection.push).toHaveBeenLastCalledWith(entity, entitiesOptions, options);
     });
   });
 });
