@@ -338,6 +338,18 @@ describe("EntityCollection", () => {
       expect(() => collection.assertNotExist('name', 'zero')).not.toThrow();
     });
 
+    it("should not throw if the given property value is not defined", () => {
+      const collection = new EntityCollection();
+      collection.push(new TestEntity({name: 'first'}));
+      collection.push(new TestEntity({name: 'second'}));
+      collection.push(new TestEntity({name: 'third'}));
+      collection.push(new TestEntity({}));
+      collection.push(new TestEntity({name: null}));
+
+      expect.assertions(1);
+      expect(() => collection.assertNotExist('name', undefined)).not.toThrow();
+    });
+
     it("should throw if an item exists for the given property and value", () => {
       const collection = new EntityCollection();
       collection.push(new TestEntity({name: 'first'}));
