@@ -24,12 +24,29 @@ export const minimumPermissionDto = (data = {}) => ({
   ...data
 });
 
+export const ownerMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
+  aco: "Folder",
+  ...data
+});
+
+export const updateMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
+  aco: "Folder",
+  type: 7,
+  ...data
+});
+
+export const readMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
+  aco: "Folder",
+  type: 1,
+  ...data
+});
+
 /**
  * Build default permissiondto.
  * @param {object} data The data to override the default dto.
  * @param {Object} [options]
- * @param {Object} [options.withUser=false] Add user default dto.
- * @param {Object} [options.withGroup=false] Add group default dto.
+ * @param {Object|boolean} [options.withUser=false] Add user default dto. Can be used to pass parameter to the user factory.
+ * @param {Object|boolean} [options.withGroup=false] Add group default dto. Can be used to pass parameter to the group factory.
  * @returns {object}
  */
 export const defaultPermissionDto = (data = {}, options = {}) => {
@@ -46,11 +63,11 @@ export const defaultPermissionDto = (data = {}, options = {}) => {
   };
 
   if (!data.user && options?.withUser) {
-    defaultData.user = defaultUserDto({id: defaultData.aro_foreign_key});
+    defaultData.user = defaultUserDto({id: defaultData.aro_foreign_key}, options.withUser);
   }
 
   if (!data.group && options?.withGroup) {
-    defaultData.group = defaultGroupDto({id: defaultData.aro_foreign_key});
+    defaultData.group = defaultGroupDto({id: defaultData.aro_foreign_key}, options.withGroup);
   }
 
   return defaultData;
