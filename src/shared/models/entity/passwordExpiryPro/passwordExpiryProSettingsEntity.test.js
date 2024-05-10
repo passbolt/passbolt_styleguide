@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";;
+import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import PasswordExpiryProSettingsEntity from "./passwordExpiryProSettingsEntity";
 import {defaultPasswordExpiryProSettingsDto} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
