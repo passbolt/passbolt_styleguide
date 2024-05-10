@@ -255,6 +255,8 @@ class EntityCollection {
 
   /**
    * Assert that no item in the collection already has the given value for the given property.
+   * Note: The assertion ignore undefined prop value, it is the schema responsibility to ensure properties are defined.
+   *
    * @param {string} propName The property name for checking value uniqueness.
    * @param {string|boolean|number} propValue The property value for checking value uniqueness.
    * @param {object} [options] Options.
@@ -263,6 +265,10 @@ class EntityCollection {
    * @throw {EntityValidationError} If another item already has the given value for the given property.
    */
   assertNotExist(propName, propValue, options = {}) {
+    if (typeof propValue === "undefined") {
+      return;
+    }
+
     let haystackSet = options?.haystackSet;
 
     // If not given initialize the haystack set with the values of the items properties.
