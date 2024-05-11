@@ -18,6 +18,40 @@ import {TestEntityV2Collection} from "./entityV2Collection.test.data";
 import {defaultAssociatedTestEntityDto, defaultTestEntityDto, TestEntity} from "./entity.test.data";
 
 describe("EntityV2Collection", () => {
+  describe("EntityV2Collection:buildOrCloneEntity", () => {
+    it("should throw an exception if the data parameter is not an object.", () => {
+      const collection = new TestEntityV2Collection([]);
+      expect.assertions(1);
+      expect(() => collection.buildOrCloneEntity(42)).toThrow(TypeError);
+    });
+
+    it("should create entity from dto.", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entityDto1  = defaultTestEntityDto();
+
+      expect.assertions(3);
+      const entity = collection.buildOrCloneEntity(entityDto1);
+      expect(entity).toBeInstanceOf(TestEntity);
+      expect(entity.id).toEqual(entityDto1.id);
+      expect(entity.name).toEqual(entityDto1.name);
+    });
+
+    it("should clone entity.", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity1  = new TestEntity(defaultTestEntityDto());
+
+      expect.assertions(5);
+      const entity2 = collection.buildOrCloneEntity(entity1);
+      expect(entity2).toBeInstanceOf(TestEntity);
+      expect(entity2.id).toEqual(entity1.id);
+      expect(entity2.name).toEqual(entity1.name);
+      entity1.id = crypto.randomUUID();
+      entity1.name = "updated name";
+      expect(entity2.id).not.toEqual(entity1.id);
+      expect(entity2.name).not.toEqual(entity1.name);
+    });
+  });
+
   describe("EntityV2Collection:push", () => {
     it("should throw an exception if the data parameter is not an object.", () => {
       const collection = new TestEntityV2Collection([]);
@@ -27,7 +61,7 @@ describe("EntityV2Collection", () => {
 
     it("should accept dto as data parameter", () => {
       const collection = new TestEntityV2Collection([]);
-      const entityDto1 = defaultTestEntityDto();
+      const entityDto1  = defaultTestEntityDto();
       const entityDto2 = defaultTestEntityDto();
       const entityDto3 = defaultTestEntityDto();
 

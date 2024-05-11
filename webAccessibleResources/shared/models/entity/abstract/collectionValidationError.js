@@ -22,7 +22,7 @@ class CollectionValidationError extends Error {
   constructor(message = 'Collection validation error.') {
     super(message);
     this.name = 'CollectionValidationError';
-    this.items = [];
+    this.errors = [];
   }
 
   /**
@@ -38,7 +38,16 @@ class CollectionValidationError extends Error {
     if (!(validationError instanceof EntityValidationError) && !(validationError instanceof CollectionValidationError)) {
       throw new TypeError('CollectionValidationError addEntityValidationError expects "entityValidationError" to be an instance of EntityValidationError or CollectionValidationError.');
     }
-    this.items[position] = validationError;
+    this.errors[position] = validationError;
+  }
+
+  /**
+   * Add a collection validation error.
+   * @param {string} rule The collection rule.
+   * @param {string} message The error message.
+   */
+  addCollectionValidationError(rule, message) {
+    this.errors[rule] = message;
   }
 
   /**
@@ -47,8 +56,14 @@ class CollectionValidationError extends Error {
    */
   get details() {
     const details = [];
-    for (const itemPosition in this.items) {
-      details[itemPosition] = this.items[itemPosition].details;
+    for (const key in this.errors) {
+      if (this.errors[key] instanceof EntityValidationError) {
+        details[key] = this.errors[key].details;
+      } else if (this.errors[key] instanceof CollectionValidationError) {
+        details[key] = this.errors[key].details;
+      } else {
+        details[key] = this.errors[key];
+      }
     }
     return details;
   }

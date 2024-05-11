@@ -25,13 +25,34 @@ class EntityV2Collection extends EntityCollection {
     throw new Error("The collection class should declare the entity class that is handled.");
   }
 
+  /**
+   * Build or clone entity.
+   * @param {object|Entity} data The data of the item to push
+   * @param {object} [entityOptions] Options for constructing the entity, identical to those accepted by the Entity
+   *   constructor that will be utilized for its creation.
+   * @throws {EntityValidationError} If the item doesn't validate.
+   * @returns {this.entityClass}
+   */
+  buildOrCloneEntity(data, entityOptions = {}) {
+    if (!data || typeof data !== 'object') {
+      throw new TypeError(`${this.entityClass.name}::buildOrCloneEntity expects "data" to be an object.`);
+    }
+
+    if (data instanceof this.entityClass) {
+      data = data.toDto(this.entityClass?.ALL_CONTAIN_OPTIONS); // deep clone
+    }
+
+    return new this.entityClass(data, entityOptions);
+  }
+
   /*
    * ==================================================
    * Validation
    * ==================================================
    */
+
   /**
-   * Validate the collection build rules.
+   * Validate the item build rules. It is used to verify the integrity of the collection before adding an item to it.
    * @param {Entity} item The entity to validate the build rules for.
    * @param {object} [options] Options.
    */
@@ -58,15 +79,7 @@ class EntityV2Collection extends EntityCollection {
    * @param {function} [options.onItemPushed] Callback to execute after the item has been pushed to the collection.
    */
   push(data, entityOptions = {}, options = {}) {
-    if (!data || typeof data !== 'object') {
-      throw new TypeError(`Collection push expects "data" to be an object.`);
-    }
-
-    if (data instanceof this.entityClass) {
-      data = data.toDto(this.entityClass?.ALL_CONTAIN_OPTIONS); // deep clone
-    }
-
-    const entity = new this.entityClass(data, entityOptions);
+    const entity = this.buildOrCloneEntity(data, entityOptions);
     this.validateBuildRules(entity, options?.validateBuildRules);
     this._items.push(entity);
     options?.onItemPushed?.(entity);
@@ -93,24 +106,37 @@ class EntityV2Collection extends EntityCollection {
       try {
         this.push(itemDto, entityOptions, options);
       } catch (error) {
-        if (error instanceof EntityValidationError || error instanceof CollectionValidationError || error instanceof EntityCollectionError) {
-          if (!entityOptions?.ignoreInvalidEntity) {
-            /*
-             * The validation process for checking entity associations in the collection is functional. However, the error
-             * details provided is not fully detailed. While it identifies the correct data item that fails validation in
-             * the collection, it fails to clearly indicate which specific property of the parent entity is problematic.
-             */
-            const collectionValidationError = new CollectionValidationError();
-            collectionValidationError.addEntityValidationError(index, error);
-            throw collectionValidationError;
-          } else {
-            console.debug(`${this.entityClass.name}::pushMany ignore item (${index}) due to validation error ${JSON.stringify(error?.details)}`);
-          }
-        } else {
-          throw error;
-        }
+        this.handlePushItemError(index, error, entityOptions);
       }
     });
+  }
+
+  /**
+   * Handle error occurring while adding an item to the collection.
+   * @param {number} index The index the error occurred on.
+   * @param {Error} error The error.
+   * @param {object} [entityOptions] Options for constructing the entity, identical to those accepted by the Entity
+   *   constructor that will be utilized for its creation. Note, this entity options will be passed to the associated
+   *   collections and entities.
+   * @protected
+   */
+  handlePushItemError(index, error, entityOptions) {
+    if (error instanceof EntityValidationError || error instanceof CollectionValidationError || error instanceof EntityCollectionError) {
+      if (!entityOptions?.ignoreInvalidEntity) {
+        /*
+         * The validation process for checking entity associations in the collection is functional. However, the error
+         * details provided is not fully detailed. While it identifies the correct data item that fails validation in
+         * the collection, it fails to clearly indicate which specific property of the parent entity is problematic.
+         */
+        const collectionValidationError = new CollectionValidationError();
+        collectionValidationError.addEntityValidationError(index, error);
+        throw collectionValidationError;
+      } else {
+        console.debug(`${this.entityClass.name}::pushMany ignore item (${index}) due to validation error ${JSON.stringify(error?.details)}`);
+      }
+    } else {
+      throw error;
+    }
   }
 }
 
