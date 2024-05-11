@@ -18,14 +18,16 @@ import {defaultPermissionDto} from "./permissionEntity.test.data";
 /**
  * Build dtos.
  * @param {number} [count=10] The number of dtos.
+ * @param {object} data The data to override the default dto.
+ * @param {object} options Options to pass to the permission factory.
  * @returns {object}
  */
-export const defaultPermissionsDtos = (count = 10) => {
+export const defaultPermissionsDtos = (count = 10, data = {}, options = {}) => {
   const dtos = [];
   const acoForeignKey = crypto.randomUUID();
   for (let i = 0; i < count; i++) {
-    const groupDto = defaultPermissionDto({aco_foreign_key: acoForeignKey});
-    dtos.push(groupDto);
+    const dto = defaultPermissionDto({aco_foreign_key: acoForeignKey, ...data}, options);
+    dtos.push(dto);
   }
   return dtos;
 };
