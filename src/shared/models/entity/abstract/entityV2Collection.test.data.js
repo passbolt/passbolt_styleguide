@@ -20,10 +20,9 @@ export class TestEntityV2Collection extends EntityV2Collection {
     return TestEntity;
   }
 
-  constructor(dto, options = {}) {
-    super(EntitySchema.validate(TestEntityV2Collection.name, dto, TestEntityV2Collection.getSchema()), options);
-    this.pushMany(this._props, {...options, clone: false});
-    this._props = null;
+  constructor(dtos = [], options = {}) {
+    dtos = EntitySchema.validate(TestEntityV2Collection.name, dtos, TestEntityV2Collection.getSchema());
+    super(dtos, options);
   }
 
   /**
