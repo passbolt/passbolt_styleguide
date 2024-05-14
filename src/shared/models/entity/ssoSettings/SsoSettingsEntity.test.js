@@ -71,7 +71,7 @@ describe("SsoSettingsEntity", () => {
       const successScenarios = successValues.map(value => ({scenario: `with value "${value}}"`, value: value}));
       const failingScenarios = failingValues.map(value => ({scenario: `with value "${value}}"`, value: value}));
 
-      assertEntityProperty.assert(SsoSettingsEntity, "provider", successScenarios, failingScenarios, "type");
+      assertEntityProperty.assert(SsoSettingsEntity, "provider", successScenarios, failingScenarios, "enum");
       assertEntityProperty.nullable(SsoSettingsEntity, "provider");
       assertEntityProperty.notRequired(SsoSettingsEntity, "provider");
     });

@@ -119,11 +119,21 @@ class EntitySchema {
         continue;
       }
 
+      // check if propery is null
+      if (dto?.[propName] === null) {
+        // the prop is explicitly null, is it explicitly nullable?
+        if ((schemaProps[propName]?.nullable) === true) {
+          result[propName] = null;
+          continue;
+        }
+        // @todo: else => props is not nullable and null we could set an error and then continue but it requires all schema to migrate to explicit "nullable": true
+      }
+
       // Check if property is required
       if (requiredProps.includes(propName)) {
         if (!Object.prototype.hasOwnProperty.call(dto, propName)) {
           validationError = EntitySchema.getOrInitEntityValidationError(name, validationError);
-          validationError.addError(propName, 'required', `The ${propName} is required.`, validationError);
+          validationError.addError(propName, 'required', `The ${propName} is required.`);
           continue;
         }
       } else {
