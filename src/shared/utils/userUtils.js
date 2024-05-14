@@ -16,7 +16,7 @@
  * An enum to gather the different possible user statuses.
  * These are use in the UI directly and needs to be translated.
  *
- * Hack the translation mecanism:
+ * Hack the translation mechanism:
  * this.props.t('active')
  * this.props.t('suspended')
  * this.props.t('deleted')

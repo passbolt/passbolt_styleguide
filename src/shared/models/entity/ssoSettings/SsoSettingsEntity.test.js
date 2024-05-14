@@ -28,13 +28,98 @@ import {
 } from "./SsoSettingsEntity.test.data";
 import {v4 as uuid} from "uuid";
 import AdfsSsoSettingsEntity from "./AdfsSsoSettingsEntity";
+import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("SsoSettingsEntity", () => {
-  describe("SsoSettingsEntity:constructor", () => {
+  describe("SsoSettingsEntity::getSchema", () => {
     it("schema must validate", () => {
       EntitySchema.validateSchema(SsoSettingsEntity.ENTITY_NAME, SsoSettingsEntity.getSchema());
     });
 
+    it("validates id property", () => {
+      assertEntityProperty.uuid(SsoSettingsEntity, "id");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "id");
+    });
+
+    it("validates providers property", () => {
+      const successScenarios = [
+        assertEntityProperty.SCENARIO_ARRAY
+      ];
+      const failingScenarios = [
+        assertEntityProperty.SCENARIO_INTEGER,
+        assertEntityProperty.SCENARIO_STRING,
+        assertEntityProperty.SCENARIO_NULL
+      ];
+      assertEntityProperty.assert(SsoSettingsEntity, "providers", successScenarios, failingScenarios, "type");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "providers");
+    });
+
+    it("validates provider property", () => {
+      const successValues = [
+        "azure",
+        "adfs",
+        "google",
+        "oauth2",
+      ];
+
+      const failingValues = [
+        "test",
+        "other",
+        "unknown"
+      ];
+
+      const successScenarios = successValues.map(value => ({scenario: `with value "${value}}"`, value: value}));
+      const failingScenarios = failingValues.map(value => ({scenario: `with value "${value}}"`, value: value}));
+
+      assertEntityProperty.assert(SsoSettingsEntity, "provider", successScenarios, failingScenarios, "type");
+      assertEntityProperty.nullable(SsoSettingsEntity, "provider");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "provider");
+    });
+
+    it("validates data property", () => {
+      const successScenarios = [
+        assertEntityProperty.SCENARIO_OBJECT,
+      ];
+
+      /*
+       * @todo: add object failing scenarios when the schema will handled such checks
+       * const failingScenarios = [
+       *   assertEntityProperty.SCENARIO_INTEGER,
+       *   assertEntityProperty.SCENARIO_NULL,
+       *   assertEntityProperty.SCENARIO_STRING,
+       *   assertEntityProperty.SCENARIO_ARRAY
+       * ];
+       */
+
+      const failingScenarios = [];
+      assertEntityProperty.assert(SsoSettingsEntity, "data", successScenarios, failingScenarios, "type");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "data");
+    });
+
+    it("validates created property", () => {
+      assertEntityProperty.string(SsoSettingsEntity, "created");
+      assertEntityProperty.dateTime(SsoSettingsEntity, "created");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "created");
+    });
+
+    it("validates modified property", () => {
+      assertEntityProperty.string(SsoSettingsEntity, "modified");
+      assertEntityProperty.dateTime(SsoSettingsEntity, "modified");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "modified");
+    });
+
+    it("validates created_by property", () => {
+      assertEntityProperty.uuid(SsoSettingsEntity, "created_by");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "created_by");
+    });
+
+    it("validates modified_by property", () => {
+      assertEntityProperty.uuid(SsoSettingsEntity, "modified_by");
+      assertEntityProperty.notRequired(SsoSettingsEntity, "modified_by");
+    });
+  });
+
+  describe("SsoSettingsEntity:constructor", () => {
     each([
       {provider: null, dto: defaultSsoSettings()},
       {provider: AzureSsoSettingsEntity.PROVIDER_ID, dto: defaultSsoSettingsWithAzure({id: uuid()})},
@@ -50,27 +135,6 @@ describe("SsoSettingsEntity", () => {
         expect(entity.toJSON()).toEqual(scenario.dto);
         expect(entity.id).toStrictEqual(scenario.dto?.id);
         expect(entity.provider).toStrictEqual(scenario.dto?.provider);
-      });
-    });
-
-    each([
-      {dto: {id: "string but not uuid"}, errorType: "format"},
-      {dto: {id: -1}, errorType: "type"},
-
-      {dto: {providers: -1}, errorType: "type"},
-
-      {dto: {data: 15}, errorType: "type"},
-    ]).describe("should throw an exception if DTO contains invalid values", scenario => {
-      it(`scenario: ${JSON.stringify(scenario)}`, () => {
-        expect.assertions(2);
-        const fieldName = Object.keys(scenario.dto)[0];
-        const erroneousDto = defaultSsoSettingsWithAzure(scenario.dto);
-        try {
-          new SsoSettingsEntity(erroneousDto);
-        } catch (e) {
-          expect(e).toBeInstanceOf(EntityValidationError);
-          expect(e.hasError(fieldName, scenario.errorType)).toStrictEqual(true);
-        }
       });
     });
 
