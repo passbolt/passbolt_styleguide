@@ -129,7 +129,7 @@ class EntityV2Collection extends EntityCollection {
          * the collection, it fails to clearly indicate which specific property of the parent entity is problematic.
          */
         const collectionValidationError = new CollectionValidationError();
-        collectionValidationError.addEntityValidationError(index, error);
+        collectionValidationError.addItemValidationError(index, error);
         throw collectionValidationError;
       } else {
         console.debug(`${this.entityClass.name}::pushMany ignore item (${index}) due to validation error ${JSON.stringify(error?.details)}`);
