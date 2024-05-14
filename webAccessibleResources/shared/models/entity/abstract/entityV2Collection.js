@@ -20,9 +20,27 @@ class EntityV2Collection extends EntityCollection {
   /**
    * Retrieve the entity class this collection is handling
    * @return {Class}
+   * @abstract
    */
   get entityClass() {
     throw new Error("The collection class should declare the entity class that is handled.");
+  }
+
+  /**
+   * @inheritDoc
+   * The EntityV2 collection will push the dtos into the collection.
+   * @throws {EntityCollectionError} If a item does not validate its entity schema.
+   * @throws {EntityCollectionError} If a item does not validate the collection validation build rules.
+   */
+  constructor(dtos = [], options = {}) {
+    super(dtos, options);
+    /*
+     * Push the items into the collection.
+     * Use the the _props property where EntityCollection V1 clone the dtos into.
+     * Delete it after usage.
+     */
+    this.pushMany(this._props, {...options, clone: false});
+    this._props = null;
   }
 
   /**
