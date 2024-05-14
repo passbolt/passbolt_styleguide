@@ -18,6 +18,10 @@ import {TestEntityV2Collection} from "./entityV2Collection.test.data";
 import {defaultAssociatedTestEntityDto, defaultTestEntityDto, TestEntity} from "./entity.test.data";
 import EntityV2Collection from "./entityV2Collection";
 
+beforeEach(() => {
+  TestEntityV2Collection._cachedSchema = {};
+});
+
 describe("EntityV2Collection", () => {
   describe("::entityClass", () => {
     // It is expected to throw an error but does not for an unexpected reason.
@@ -101,9 +105,9 @@ describe("EntityV2Collection", () => {
     it("should retrieve the schema on first validation and cache for later usage.", () => {
       expect.assertions(3);
       jest.spyOn(TestEntityV2Collection, "getSchema");
-      expect(TestEntityV2Collection._cachedSchema).toBeUndefined();
+      expect(TestEntityV2Collection._cachedSchema.TestEntityV2Collection).toBeUndefined();
       new TestEntityV2Collection([]);
-      expect(TestEntityV2Collection._cachedSchema).toEqual(TestEntityV2Collection.getSchema());
+      expect(TestEntityV2Collection._cachedSchema.TestEntityV2Collection).toEqual(TestEntityV2Collection.getSchema());
       new TestEntityV2Collection([]);
       expect(TestEntityV2Collection.getSchema).toHaveBeenCalledTimes(2);
     });

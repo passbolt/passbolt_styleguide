@@ -19,11 +19,12 @@ import EntitySchema from "./entitySchema";
 
 class EntityV2Collection extends EntityCollection {
   /**
-   * The collection cached schema.
+   * The collection cached schemas referenced by collection class name.
+   * The key will represent the collection class name while the value will be the schema definition object.
    * @type {object}
    * @private
    */
-  static _cachedSchema;
+  static _cachedSchema = {};
 
   /**
    * Retrieve the entity class this collection is handling
@@ -70,11 +71,11 @@ class EntityV2Collection extends EntityCollection {
    * @private
    */
   get cachedSchema() {
-    if (!this.constructor._cachedSchema) {
-      this.constructor._cachedSchema = this.constructor.getSchema();
+    if (!this.constructor._cachedSchema[this.constructor.name]) {
+      this.constructor._cachedSchema[this.constructor.name] = this.constructor.getSchema();
     }
 
-    return this.constructor._cachedSchema;
+    return this.constructor._cachedSchema[this.constructor.name];
   }
 
   /**
