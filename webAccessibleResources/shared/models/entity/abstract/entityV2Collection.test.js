@@ -52,6 +52,42 @@ describe("EntityV2Collection", () => {
     });
   });
 
+  describe("EntityV2Collection:constructor", () => {
+    it("should validate the collection schema.", () => {
+      expect.assertions(1);
+      expect(() => new TestEntityV2Collection({})).toThrowEntityValidationError("items");
+    });
+
+    it("should push the dtos given as parameter into the collection.", () => {
+      expect.assertions(10);
+      const entityDto1  = defaultTestEntityDto();
+      const entityDto2 = defaultTestEntityDto();
+      const entityDto3 = defaultTestEntityDto();
+      const dtos = [entityDto1, entityDto2, entityDto3];
+      const collection = new TestEntityV2Collection(dtos);
+      expect(collection.items).toHaveLength(3);
+      expect(collection.items[0]).toBeInstanceOf(TestEntity);
+      expect(collection.items[0].id).toEqual(entityDto1.id);
+      expect(collection.items[0].name).toEqual(entityDto1.name);
+      expect(collection.items[1]).toBeInstanceOf(TestEntity);
+      expect(collection.items[1].id).toEqual(entityDto2.id);
+      expect(collection.items[1].name).toEqual(entityDto2.name);
+      expect(collection.items[2]).toBeInstanceOf(TestEntity);
+      expect(collection.items[2].id).toEqual(entityDto3.id);
+      expect(collection.items[2].name).toEqual(entityDto3.name);
+    });
+
+    it("should delete the _props property.", () => {
+      expect.assertions(1);
+      const entityDto1  = defaultTestEntityDto();
+      const entityDto2 = defaultTestEntityDto();
+      const entityDto3 = defaultTestEntityDto();
+      const dtos = [entityDto1, entityDto2, entityDto3];
+      const collection = new TestEntityV2Collection(dtos);
+      expect(collection._props).toBeNull();
+    });
+  });
+
   describe("EntityV2Collection:push", () => {
     it("should throw an exception if the data parameter is not an object.", () => {
       const collection = new TestEntityV2Collection([]);

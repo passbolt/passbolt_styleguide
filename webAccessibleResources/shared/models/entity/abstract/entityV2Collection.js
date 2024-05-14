@@ -15,6 +15,7 @@ import EntityValidationError from "./entityValidationError";
 import EntityCollection from "./entityCollection";
 import CollectionValidationError from "./collectionValidationError";
 import EntityCollectionError from "./entityCollectionError";
+import EntitySchema from "./entitySchema";
 
 class EntityV2Collection extends EntityCollection {
   /**
@@ -33,14 +34,24 @@ class EntityV2Collection extends EntityCollection {
    * @throws {EntityCollectionError} If a item does not validate the collection validation build rules.
    */
   constructor(dtos = [], options = {}) {
+    // Note: EntityCollection V1 will clone the dtos into the instance _props property. Delete it after usage.
     super(dtos, options);
-    /*
-     * Push the items into the collection.
-     * Use the the _props property where EntityCollection V1 clone the dtos into.
-     * Delete it after usage.
-     */
+    this._props = EntitySchema.validate(
+      this.constructor.name,
+      this._props,
+      this.constructor.getSchema()
+    );
     this.pushMany(this._props, {...options, clone: false});
     this._props = null;
+  }
+
+  /**
+   * Return the schema representing this collection.
+   * @return {object}
+   * @abstract
+   */
+  static getSchema() {
+    return {};
   }
 
   /**
@@ -147,7 +158,7 @@ class EntityV2Collection extends EntityCollection {
          * the collection, it fails to clearly indicate which specific property of the parent entity is problematic.
          */
         const collectionValidationError = new CollectionValidationError();
-        collectionValidationError.addEntityValidationError(index, error);
+        collectionValidationError.addItemValidationError(index, error);
         throw collectionValidationError;
       } else {
         console.debug(`${this.entityClass.name}::pushMany ignore item (${index}) due to validation error ${JSON.stringify(error?.details)}`);

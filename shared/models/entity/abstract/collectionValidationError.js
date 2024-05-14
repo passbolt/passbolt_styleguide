@@ -26,36 +26,49 @@ class CollectionValidationError extends Error {
   }
 
   /**
-   * Add a given an error for a given property and rule
+   * Add an error relative to an item and its position.
+   * Note: Collection validation error is supported as long as entity are not catching and associating them to the
+   * property which failed.
    *
-   * @param {number} position The index of the collection the error occurred.
-   * @param {EntityValidationError|CollectionValidationError} validationError The entity or collection validation error.
+   * @param {number} position The index of the item in the collection.
+   * @param {EntityValidationError|CollectionValidationError} validationError The validation error.
+   * @throws {TypeError} if the position is not an integer.
+   * @throws {TypeError} if the error is EntityValidationError or a CollectionValidationError.
    */
-  addEntityValidationError(position, validationError) {
+  addItemValidationError(position, validationError) {
     if (!Number.isInteger(position)) {
-      throw new TypeError('CollectionValidationError addEntityValidationError expects "position" to be an integer.');
+      throw new TypeError('CollectionValidationError::addEntityValidationError expects "position" to be an integer.');
     }
     if (!(validationError instanceof EntityValidationError) && !(validationError instanceof CollectionValidationError)) {
-      throw new TypeError('CollectionValidationError addEntityValidationError expects "entityValidationError" to be an instance of EntityValidationError or CollectionValidationError.');
+      throw new TypeError('CollectionValidationError::addEntityValidationError expects "entityValidationError" to be an instance of EntityValidationError or CollectionValidationError.');
     }
     this.errors[position] = validationError;
   }
 
   /**
-   * Add a collection validation error.
+   * Add an error relative a collection rule.
+   *
    * @param {string} rule The collection rule.
-   * @param {string} message The error message.
+   * @param {error|string} error The error.
+   * @throws {TypeError} if the rule is not a string.
+   * @throws {TypeError} if the error is not a string.
    */
-  addCollectionValidationError(rule, message) {
-    this.errors[rule] = message;
+  addCollectionValidationError(rule, error) {
+    if (typeof rule !== "string") {
+      throw new TypeError('CollectionValidationError::addCollectionValidationError expects "rule" to be a string.');
+    }
+    if (typeof error !== "string") {
+      throw new TypeError('CollectionValidationError::addCollectionValidationError expects "error" to be a string.');
+    }
+    this.errors[rule] = error;
   }
 
   /**
    * Return the error in the details expected format.
-   * @return {array}
+   * @return {object}
    */
   get details() {
-    const details = [];
+    const details = {};
     for (const key in this.errors) {
       if (this.errors[key] instanceof EntityValidationError) {
         details[key] = this.errors[key].details;
