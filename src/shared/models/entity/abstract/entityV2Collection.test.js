@@ -19,7 +19,7 @@ import {defaultAssociatedTestEntityDto, defaultTestEntityDto, TestEntity} from "
 import EntityV2Collection from "./entityV2Collection";
 
 describe("EntityV2Collection", () => {
-  describe("EntityV2Collection:entityClass", () => {
+  describe("::entityClass", () => {
     // It is expected to throw an error but does not for an unexpected reason.
     it.failing("should throw an exception if called to mimic its abstract nature", () => {
       expect.assertions(1);
@@ -27,7 +27,7 @@ describe("EntityV2Collection", () => {
     });
   });
 
-  describe("EntityV2Collection:buildOrCloneEntity", () => {
+  describe("::buildOrCloneEntity", () => {
     it("should throw an exception if the data parameter is not an object.", () => {
       const collection = new TestEntityV2Collection([]);
       expect.assertions(1);
@@ -36,7 +36,7 @@ describe("EntityV2Collection", () => {
 
     it("should create entity from dto.", () => {
       const collection = new TestEntityV2Collection([]);
-      const entityDto1  = defaultTestEntityDto();
+      const entityDto1 = defaultTestEntityDto();
 
       expect.assertions(3);
       const entity = collection.buildOrCloneEntity(entityDto1);
@@ -47,7 +47,7 @@ describe("EntityV2Collection", () => {
 
     it("should clone entity.", () => {
       const collection = new TestEntityV2Collection([]);
-      const entity1  = new TestEntity(defaultTestEntityDto());
+      const entity1 = new TestEntity(defaultTestEntityDto());
 
       expect.assertions(5);
       const entity2 = collection.buildOrCloneEntity(entity1);
@@ -61,7 +61,7 @@ describe("EntityV2Collection", () => {
     });
   });
 
-  describe("EntityV2Collection:constructor", () => {
+  describe("::constructor", () => {
     it("should validate the collection schema.", () => {
       expect.assertions(1);
       expect(() => new TestEntityV2Collection({})).toThrowEntityValidationError("items");
@@ -69,7 +69,7 @@ describe("EntityV2Collection", () => {
 
     it("should push the dtos given as parameter into the collection.", () => {
       expect.assertions(10);
-      const entityDto1  = defaultTestEntityDto();
+      const entityDto1 = defaultTestEntityDto();
       const entityDto2 = defaultTestEntityDto();
       const entityDto3 = defaultTestEntityDto();
       const dtos = [entityDto1, entityDto2, entityDto3];
@@ -88,7 +88,7 @@ describe("EntityV2Collection", () => {
 
     it("should delete the _props property.", () => {
       expect.assertions(1);
-      const entityDto1  = defaultTestEntityDto();
+      const entityDto1 = defaultTestEntityDto();
       const entityDto2 = defaultTestEntityDto();
       const entityDto3 = defaultTestEntityDto();
       const dtos = [entityDto1, entityDto2, entityDto3];
@@ -97,14 +97,26 @@ describe("EntityV2Collection", () => {
     });
   });
 
-  describe("EntityV2Collection:getSchema", () => {
+  describe("::validateSchema", () => {
+    it("should retrieve the schema on first validation and cache for later usage.", () => {
+      expect.assertions(3);
+      jest.spyOn(TestEntityV2Collection, "getSchema");
+      expect(TestEntityV2Collection._cachedSchema).toBeUndefined();
+      new TestEntityV2Collection([]);
+      expect(TestEntityV2Collection._cachedSchema).toEqual(TestEntityV2Collection.getSchema());
+      new TestEntityV2Collection([]);
+      expect(TestEntityV2Collection.getSchema).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe("::getSchema", () => {
     it("should throw an exception if called to mimic its abstract nature", () => {
       expect.assertions(1);
       expect(() => EntityV2Collection.getSchema()).toThrow();
     });
   });
 
-  describe("EntityV2Collection:push", () => {
+  describe("::push", () => {
     it("should throw an exception if the data parameter is not an object.", () => {
       const collection = new TestEntityV2Collection([]);
       expect.assertions(1);
@@ -113,7 +125,7 @@ describe("EntityV2Collection", () => {
 
     it("should accept dto as data parameter", () => {
       const collection = new TestEntityV2Collection([]);
-      const entityDto1  = defaultTestEntityDto();
+      const entityDto1 = defaultTestEntityDto();
       const entityDto2 = defaultTestEntityDto();
       const entityDto3 = defaultTestEntityDto();
 
