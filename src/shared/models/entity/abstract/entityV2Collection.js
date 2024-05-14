@@ -51,7 +51,7 @@ class EntityV2Collection extends EntityCollection {
    * @abstract
    */
   static getSchema() {
-    return {};
+    throw new Error("The collection class should declare its schema.");
   }
 
   /**
