@@ -190,7 +190,7 @@ export const FAIL_LOCALE_SCENARIO = [
   {scenario: "Incomplete", value: "fr"},
 ];
 export const locale = (EntityClass, propertyName) => {
-  assert(EntityClass, propertyName, SUCCESS_LOCALE_SCENARIO, FAIL_LOCALE_SCENARIO, "type");
+  assert(EntityClass, propertyName, SUCCESS_LOCALE_SCENARIO, FAIL_LOCALE_SCENARIO, "pattern");
 };
 
 export const enumeration = (EntityClass, propertyName, successValues, failValues = []) => {
