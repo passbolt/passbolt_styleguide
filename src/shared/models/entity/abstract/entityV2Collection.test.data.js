@@ -11,18 +11,12 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.7.0
  */
-import EntitySchema from "./entitySchema";
 import EntityV2Collection from "./entityV2Collection";
 import {TestEntity} from "./entity.test.data";
 
 export class TestEntityV2Collection extends EntityV2Collection {
   get entityClass() {
     return TestEntity;
-  }
-
-  constructor(dtos = [], options = {}) {
-    dtos = EntitySchema.validate(TestEntityV2Collection.name, dtos, TestEntityV2Collection.getSchema());
-    super(dtos, options);
   }
 
   /**
