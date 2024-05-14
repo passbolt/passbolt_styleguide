@@ -47,13 +47,10 @@ class PasswordExpiryProSettingsEntity extends Entity {
           "format": "uuid",
         },
         "default_expiry_period": {
-          "anyOf": [{
-            "type": "integer",
-            "gte": 1,
-            "lte": 999
-          }, {
-            "type": "null"
-          }]
+          "type": "integer",
+          "gte": 1,
+          "lte": 999,
+          "nullable": true,
         },
         "policy_override": {
           "type": "boolean",

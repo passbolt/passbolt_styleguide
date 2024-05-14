@@ -16,8 +16,17 @@ import CollectionValidationError from "./collectionValidationError";
 import EntityValidationError from "./entityValidationError";
 import {TestEntityV2Collection} from "./entityV2Collection.test.data";
 import {defaultAssociatedTestEntityDto, defaultTestEntityDto, TestEntity} from "./entity.test.data";
+import EntityV2Collection from "./entityV2Collection";
 
 describe("EntityV2Collection", () => {
+  describe("EntityV2Collection:entityClass", () => {
+    // It is expected to throw an error but does not for an unexpected reason.
+    it.failing("should throw an exception if called to mimic its abstract nature", () => {
+      expect.assertions(1);
+      expect(() => EntityV2Collection.entityClass).toThrow();
+    });
+  });
+
   describe("EntityV2Collection:buildOrCloneEntity", () => {
     it("should throw an exception if the data parameter is not an object.", () => {
       const collection = new TestEntityV2Collection([]);
@@ -85,6 +94,13 @@ describe("EntityV2Collection", () => {
       const dtos = [entityDto1, entityDto2, entityDto3];
       const collection = new TestEntityV2Collection(dtos);
       expect(collection._props).toBeNull();
+    });
+  });
+
+  describe("EntityV2Collection:getSchema", () => {
+    it("should throw an exception if called to mimic its abstract nature", () => {
+      expect.assertions(1);
+      expect(() => EntityV2Collection.getSchema()).toThrow();
     });
   });
 

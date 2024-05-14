@@ -61,12 +61,9 @@ class SsoSettingsEntity extends Entity {
           },
         },
         "provider": {
-          "anyOf": [{
-            "type": "string",
-            "enum": SsoSettingsEntity.AVAILABLE_PROVIDERS,
-          }, {
-            "type": "null"
-          }],
+          "type": "string",
+          "enum": SsoSettingsEntity.AVAILABLE_PROVIDERS,
+          "nullable": true,
         },
         "data": {
           "type": "object",
