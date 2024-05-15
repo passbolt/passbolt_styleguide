@@ -67,6 +67,7 @@ class EntityV2Collection extends EntityCollection {
 
   /**
    * Get the collection cached schema
+   * Note: The getter can only be accessed only from an instance context as it uses the instance scope.
    * @returns {object}
    * @private
    */
