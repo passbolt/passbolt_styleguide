@@ -19,6 +19,14 @@ import EntitySchema from "./entitySchema";
 
 class EntityV2Collection extends EntityCollection {
   /**
+   * The collection cached schemas referenced by collection class name.
+   * The key will represent the collection class name while the value will be the schema definition object.
+   * @type {object}
+   * @private
+   */
+  static _cachedSchema = {};
+
+  /**
    * Retrieve the entity class this collection is handling
    * @return {Class}
    * @abstract
@@ -29,24 +37,51 @@ class EntityV2Collection extends EntityCollection {
 
   /**
    * @inheritDoc
-   * The EntityV2 collection will push the dtos into the collection.
+   * Additionally to the EntityCollection, the EntityV2 collection will:
+   * - Validate the collection schema.
+   * - Push the dtos into the collection.
+   *
    * @throws {EntityCollectionError} If a item does not validate its entity schema.
    * @throws {EntityCollectionError} If a item does not validate the collection validation build rules.
    */
   constructor(dtos = [], options = {}) {
     // Note: EntityCollection V1 will clone the dtos into the instance _props property. Delete it after usage.
     super(dtos, options);
-    this._props = EntitySchema.validate(
-      this.constructor.name,
-      this._props,
-      this.constructor.getSchema()
-    );
+    this.validateSchema();
     this.pushMany(this._props, {...options, clone: false});
     this._props = null;
   }
 
   /**
+   * Validate the collection schema.
+   * Note: the collection schema will be created on first call and cached into a class static property.
+   * @private
+   */
+  validateSchema() {
+    this._props = EntitySchema.validate(
+      this.constructor.name,
+      this._props,
+      this.cachedSchema
+    );
+  }
+
+  /**
+   * Get the collection cached schema
+   * Note: The getter can only be accessed only from an instance context as it uses the instance scope.
+   * @returns {object}
+   * @private
+   */
+  get cachedSchema() {
+    if (!this.constructor._cachedSchema[this.constructor.name]) {
+      this.constructor._cachedSchema[this.constructor.name] = this.constructor.getSchema();
+    }
+
+    return this.constructor._cachedSchema[this.constructor.name];
+  }
+
+  /**
    * Return the schema representing this collection.
+   * Override this method to define the collection schema.
    * @return {object}
    * @abstract
    */
