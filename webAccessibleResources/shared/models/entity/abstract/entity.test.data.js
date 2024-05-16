@@ -53,16 +53,9 @@ export class TestEntity extends Entity {
   get id() {
     return this._props.id;
   }
-  set id(id) {
-    this._props.id = id;
-  }
 
   get name() {
     return this._props.name;
-  }
-
-  set name(name) {
-    this._props.name = name;
   }
 }
 

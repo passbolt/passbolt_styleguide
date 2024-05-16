@@ -255,32 +255,21 @@ class EntityCollection {
 
   /**
    * Assert that no item in the collection already has the given value for the given property.
-   * Note: The assertion ignore undefined prop value, it is the schema responsibility to ensure properties are defined.
-   *
    * @param {string} propName The property name for checking value uniqueness.
    * @param {string|boolean|number} propValue The property value for checking value uniqueness.
-   * @param {object} [options] Options.
-   * @param {string} [options.message] The error message. If none given, it will fallback on a default one.
-   * @param {Set} [options.haystackSet] A haystack set to reuse if given. Used as cache to improve performance.
+   * @param {string} [message] The error message. If none given, it will fallback on a default one.
    * @throw {EntityValidationError} If another item already has the given value for the given property.
    */
-  assertNotExist(propName, propValue, options = {}) {
-    if (typeof propValue === "undefined") {
-      return;
-    }
+  assertNotExist(propName, propValue, message) {
+    const propValues = this.extract(propName);
+    // Set is the preferred approach for performance reasons, it does a deduplicate in 0n.
+    const uniqueElements = new Set(propValues);
+    const sizeBefore = uniqueElements.size;
+    uniqueElements.add(propValue);
 
-    let haystackSet = options?.haystackSet;
-
-    // If not given initialize the haystack set with the values of the items properties.
-    if (!haystackSet) {
-      const propValues = this.extract(propName);
-      haystackSet = new Set(propValues);
-    }
-
-    if (haystackSet.has(propValue)) {
+    if (sizeBefore === uniqueElements.size) {
       const error = new EntityValidationError();
-      const message = options?.message
-        || `The collection already includes an element that has a property (${propName}) with an identical value.`;
+      message = message || `The collection already includes an element that has a property (${propName}) with an identical value.`;
       error.addError(propName, 'unique', message);
       throw error;
     }

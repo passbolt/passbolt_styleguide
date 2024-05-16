@@ -12,78 +12,25 @@
  * @since         4.1.0
  */
 import {v4 as uuidv4} from "uuid";
-import {defaultUserDto} from "../user/userEntity.test.data";
-import {defaultGroupDto} from "../group/groupEntity.test.data";
 
-export const minimumPermissionDto = (data = {}) => ({
+export const ownerPermissionDto = (data = {}) => ({
+  id: uuidv4(),
   aco: "Resource",
   aco_foreign_key: uuidv4(),
   aro: "User",
   aro_foreign_key: uuidv4(),
+  created: "2022-03-04T13:59:11+00:00",
+  modified: "2022-03-04T13:59:11+00:00",
   type: 15,
   ...data
 });
 
-export const ownerMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
-  aco: "Folder",
-  ...data
-});
-
-export const updateMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
-  aco: "Folder",
+export const updatePermissionDto = (data = {}) => ownerPermissionDto({
   type: 7,
   ...data
 });
 
-export const readMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
-  aco: "Folder",
-  type: 1,
-  ...data
-});
-
-/**
- * Build default permissiondto.
- * @param {object} data The data to override the default dto.
- * @param {Object} [options]
- * @param {Object|boolean} [options.withUser=false] Add user default dto. Can be used to pass parameter to the user factory.
- * @param {Object|boolean} [options.withGroup=false] Add group default dto. Can be used to pass parameter to the group factory.
- * @returns {object}
- */
-export const defaultPermissionDto = (data = {}, options = {}) => {
-  const defaultData = {
-    id: uuidv4(),
-    aco: "Resource",
-    aco_foreign_key: uuidv4(),
-    aro: "User",
-    aro_foreign_key: uuidv4(),
-    created: "2022-03-04T13:59:11+00:00",
-    modified: "2022-03-04T13:59:11+00:00",
-    type: 15,
-    ...data
-  };
-
-  if (!data.user && options?.withUser) {
-    defaultData.user = defaultUserDto({id: defaultData.aro_foreign_key}, options.withUser);
-  }
-
-  if (!data.group && options?.withGroup) {
-    defaultData.group = defaultGroupDto({id: defaultData.aro_foreign_key}, options.withGroup);
-  }
-
-  return defaultData;
-};
-
-export const ownerPermissionDto = (data = {}) => defaultPermissionDto({
-  type: 15,
-  ...data
-});
-
-export const updatePermissionDto = (data = {}) => defaultPermissionDto({
-  type: 7,
-  ...data
-});
-
-export const readPermissionDto = (data = {}) => defaultPermissionDto({
+export const readPermissionDto = (data = {}) => ownerPermissionDto({
   type: 1,
   ...data
 });

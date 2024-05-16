@@ -12,7 +12,7 @@
  * @since         4.1.0
  */
 
-import {defaultGroupUser} from "../../models/entity/groupUser/groupUserEntity.test.data";
+import {defaultGroupsUser} from "../../models/entity/user/groupUserEntity.test.data";
 import {defaultUserDto} from "../../models/entity/user/userEntity.test.data";
 
 /**
@@ -54,10 +54,10 @@ export function denyRbacContext(data = {}) {
 export function defaultLoggedInUser(data = {}) {
   const user = defaultUserDto({
     groups_users: [
-      defaultGroupUser({
+      defaultGroupsUser({
         is_admin: true
       })
     ]
-  }, {withRole: true});
+  });
   return Object.assign(user, data);
 }

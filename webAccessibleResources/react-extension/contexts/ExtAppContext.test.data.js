@@ -74,7 +74,7 @@ export const defaultUserAppContext = (data = {}) => {
     resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto()),
     port: new MockPort(),
     storage: new MockStorage(),
-    loggedInUser: defaultUserDto({}, {withRole: true}),
+    loggedInUser: defaultUserDto(),
     users: [],
     roles: [userRoleDto(), adminRoleDto()],
     resources: [],
@@ -90,6 +90,6 @@ export const defaultUserAppContext = (data = {}) => {
  * @returns {object}
  */
 export const defaultAdministratorAppContext = (data = {}) => defaultUserAppContext({
-  loggedInUser: defaultAdminUserDto({}, {withRole: true}),
+  loggedInUser: defaultAdminUserDto(),
   ...data
 });

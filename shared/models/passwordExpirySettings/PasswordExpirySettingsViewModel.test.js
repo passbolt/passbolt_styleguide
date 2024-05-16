@@ -203,7 +203,7 @@ describe("PasswordExpirySettingsViewModel", () => {
       },
       {
         dto: {default_expiry_period: -1},
-        expectedErrors: {default_expiry_period: {type: "The default_expiry_period is not a valid integer."}},
+        expectedErrors: {default_expiry_period: {type: "The default_expiry_period does not match any of the supported types."}},
       },
     ]).describe("should validate the current data set with PasswordExpiryProSettingsEntity", scenario => {
       it(`for: ${JSON.stringify(scenario.dto)}`, () => {

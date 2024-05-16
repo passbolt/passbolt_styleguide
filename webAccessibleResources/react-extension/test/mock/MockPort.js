@@ -10,7 +10,6 @@ class MockPort {
     this.onListeners = {};
     this.requestListeners = {};
     this.emitListener = {};
-    this.onConnectErrorHandler = {};
   }
 
   async emit(name, eventObject) {
@@ -64,10 +63,6 @@ class MockPort {
 
   addRequestListener(name, callback) {
     this.requestListeners[name] = callback;
-  }
-
-  onConnectError(callback) {
-    this.onConnectErrorHandler.callback = callback;
   }
 }
 

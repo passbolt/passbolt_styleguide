@@ -18,7 +18,6 @@ import InFormMenuField from "./InformMenuField";
 import InFormCredentialsFormField from "./InFormCredentialsFormField";
 import DomUtils from "../Dom/DomUtils";
 import debounce from "debounce-promise";
-import UserEventsService from "../User/UserEventsService";
 
 /**
  * Manages the in-form web integration including call-to-action and menu
@@ -260,26 +259,22 @@ class InFormManager {
       const isUsernameType = currentFieldType === 'username';
       const isPasswordType = currentFieldType === 'password';
       if (!isUsernameType) {
-        // Simulate a user to autofill the password field
-        UserEventsService.autofill(this.lastCallToActionFieldClicked.field, password);
+        this.lastCallToActionFieldClicked.autofill(password);
         // Get username fields and find the one with the lowest common ancestor
         const usernameFields = this.callToActionFields
           .filter(callToActionField => callToActionField.fieldType === 'username');
         const usernameField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, usernameFields);
         if (usernameField) {
-          // Simulate a user to autofill the username field
-          UserEventsService.autofill(usernameField.field, username);
+          usernameField.autofill(username);
         }
       } else if (!isPasswordType) {
-        // Simulate a user to autofill the username field
-        UserEventsService.autofill(this.lastCallToActionFieldClicked.field, username);
+        this.lastCallToActionFieldClicked.autofill(username);
         // Get password fields and find the one with the lowest common ancestor
         const passwordFields = this.callToActionFields
           .filter(callToActionField => callToActionField.fieldType === 'password');
         const passwordField = DomUtils.getFieldWithLowestCommonAncestor(this.lastCallToActionFieldClicked.field, passwordFields);
         if (passwordField) {
-          // Simulate a user to autofill the password field
-          UserEventsService.autofill(passwordField.field, password);
+          passwordField.autofill(password);
         }
       }
     });
@@ -293,7 +288,7 @@ class InFormManager {
       const passwordFields = this.callToActionFields
         .filter(callToActionField => callToActionField.fieldType === 'password');
       // Autofill only empty passwords field
-      passwordFields.forEach(callToActionField => !callToActionField.field.value && UserEventsService.autofill(callToActionField.field, password));
+      passwordFields.forEach(callToActionField => !callToActionField.field.value && callToActionField.autofill(password));
       this.menuField.removeMenuIframe();
       // Listen the auto-save on the appropriate form field
       const formField = this.credentialsFormFields.find(formField => formField.field.contains(this.lastCallToActionFieldClicked.field));
@@ -317,16 +312,12 @@ class InFormManager {
    */
   handlePortDestroyEvent() {
     /*
-     * This is extremely important, when an extension is available
+     * This is extremely important, when an extension update has been done
+     * and if the port has not been destroyed correctly,
+     * The port cannot reconnect due to an invalid context,
      * so the port receive the message 'passbolt.port.destroy' to clean all data and listeners
      */
     port.on('passbolt.content-script.destroy', this.destroy);
-    /*
-     * If the port has not been destroyed correctly,
-     * The port cannot reconnect due to an invalid context in case of a manual update of the extension,
-     * So to prevent error, a callback destroy listeners is assigned
-     */
-    port.onConnectError(this.destroy);
   }
 }
 

@@ -11,8 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.3.0
  */
-import UserEventsService from "../lib/User/UserEventsService";
-import InFormFieldSelector from "../lib/InForm/InFormFieldSelector";
+
+const PASSWORD_INPUT_SELECTOR = "input[type='password']:not([hidden]):not([disabled]), input[type='Password']:not([hidden]):not([disabled]), input[type='PASSWORD']:not([hidden]):not([disabled])";
+const USERNAME_INPUT_SELECTOR = "input[type='text']:not([hidden]):not([disabled]), input[type='Text']:not([hidden]):not([disabled]), input[type='TEXT']:not([hidden]):not([disabled]), input[type='email']:not([hidden]):not([disabled]), input[type='Email']:not([hidden]):not([disabled]), input[type='EMAIL']:not([hidden]):not([disabled]), input:not([type]):not([hidden]):not([disabled])";
 
 /**
  * Fill the login form.
@@ -43,10 +44,10 @@ const fillForm = function(formData) {
       usernameElement = getUsernameElementBasedOnPasswordElement(formData, passwordElement.parentElement);
       // If username element exists, fill username
       if (usernameElement !== null) {
-        UserEventsService.autofill(usernameElement, formData.username);
+        fillInputField(usernameElement, formData.username);
       }
       // Fill password
-      UserEventsService.autofill(passwordElement, formData.secret);
+      fillInputField(passwordElement, formData.secret);
     } else {
       /*
        * When no password element found on the page
@@ -55,7 +56,7 @@ const fillForm = function(formData) {
       usernameElement = getUsernameElement(formData, document);
       // If username element exists, fill username
       if (usernameElement !== null) {
-        UserEventsService.autofill(usernameElement, formData.username);
+        fillInputField(usernameElement, formData.username);
       } else {
         throw new Error('Unable to find the username element on this page.');
       }
@@ -121,6 +122,39 @@ const validateData = function(formData) {
 };
 
 /**
+ * Fill form field.
+ * @param {DomElement} element The element to fill
+ * @param {string} value The value to use
+ */
+const fillInputField = function(element, value) {
+  /*
+   * In order to ensure a high level of compatibility with most forms (even ones
+   * controlled by javascript), the process needs to simulate how a user will
+   * interact with the form:
+   * 1. Focus the element by clicking on it;
+   * 2. Once focused, trigger an input event to change the value of the field.
+   */
+
+  if (element || '') {
+    const keydownEvent = new KeyboardEvent("keydown", {bubbles: true});
+    const keypressEvent = new KeyboardEvent("keypress", {bubbles: true});
+    const inputEvent = new InputEvent("input", {inputType: "insertText", data: value, bubbles: true});
+    const keyupEvent = new KeyboardEvent("keyup", {bubbles: true});
+    const changeEvent = new Event("change", {bubbles: true});
+
+    element.value = value;
+
+    // Dispatch events, they happen in this order: down, press, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
+    element.focus();
+    element.dispatchEvent(keydownEvent);
+    element.dispatchEvent(keypressEvent);
+    element.dispatchEvent(inputEvent);
+    element.dispatchEvent(keyupEvent);
+    element.dispatchEvent(changeEvent);
+  }
+};
+
+/**
  * Get input elements from an iframe
  * @param {string} type - either `password` or `username` to find elements
  * @param {Object} formData - to check same origin request
@@ -177,13 +211,13 @@ const getAccessedIframeContentDocument = function(iframe) {
 const findInputElementInIframe = function(type, iframeDocument) {
   let inputElement = null;
   if (type === 'password') {
-    inputElement = iframeDocument.querySelectorAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+    inputElement = iframeDocument.querySelectorAll(PASSWORD_INPUT_SELECTOR);
     //  Password element has been found.
     if (inputElement.length) {
       return inputElement[0];
     }
   } else if (type === 'username') {
-    inputElement = iframeDocument.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+    inputElement = iframeDocument.querySelectorAll(USERNAME_INPUT_SELECTOR);
     if (inputElement.length) {
       // When username element found, extract it from an array of dom elements.
       inputElement = extractUsernameElementWithFallback(inputElement);
@@ -198,10 +232,10 @@ const findInputElementInIframe = function(type, iframeDocument) {
 
 /**
  * Find the password element on the page.
- * @return {HTMLInputElement/null}
+ * @return {DomElement/null}
  */
 const getPasswordElement = function(formData) {
-  const passwordElements = document.querySelectorAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+  const passwordElements = document.querySelectorAll(PASSWORD_INPUT_SELECTOR);
 
   // A password element has been found.
   if (passwordElements.length) {
@@ -225,7 +259,7 @@ const getPasswordElement = function(formData) {
 /**
  * Find the username element on the page based on password's parent as reference element.
  * @param {DomElement} referenceElement The element reference to start the search.
- * @return {HTMLInputElement/null}
+ * @return {DomElement/null}
  */
 const getUsernameElementBasedOnPasswordElement = function(formData, referenceElement) {
   // No parent element found.
@@ -239,7 +273,7 @@ const getUsernameElementBasedOnPasswordElement = function(formData, referenceEle
   let usernameElement = null;
 
   // The username field can be an input field of type email or text.
-  const elements = referenceElement.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+  const elements = referenceElement.querySelectorAll(USERNAME_INPUT_SELECTOR);
 
   /*
    * No input fields found in the reference element.
@@ -268,13 +302,13 @@ const getUsernameElementBasedOnPasswordElement = function(formData, referenceEle
 /**
  * Find the username element on the page.
  * @param {DomElement} fallbackUsernameElement The element reference to start the search.
- * @return {HTMLInputElement/null}
+ * @return {DomElement/null}
  */
 const getUsernameElement = function(formData, fallbackUsernameElement) {
   let usernameElement = null;
 
   // The username field can be an input field of type email or text.
-  const elements = fallbackUsernameElement.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+  const elements = fallbackUsernameElement.querySelectorAll(USERNAME_INPUT_SELECTOR);
 
   // When username element found, extract it from an array of dom elements.
   if (elements.length) {

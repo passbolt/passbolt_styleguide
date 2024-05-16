@@ -19,58 +19,31 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP
 } from "../resourceType/resourceTypeEntity.test.data";
-import {defaultUserDto} from "../user/userEntity.test.data";
-import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
 
-/**
- * Build default resource dto.
- * @param {object} data The data to override the default dto.
- * @param {Object} [options]
- * @param {boolean} [options.withModifier=false] Add modifier default dto.
- * @param {boolean} [options.withCreator=false] Add creator default dto.
- * @param {boolean|integer} [options.withPermissions=0] Add permission default dtos.
- * @param {boolean|integer} [options.withFavorite=false] Add favorite default dto.
- * @returns {object}
- */
-export const defaultResourceDto = (data = {}, options = {}) => {
+export const defaultResourceDto = (data = {}) => {
   const id = data?.id || uuidv4();
-  const defaultData = {
+
+  return {
     id: id,
-    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     name: "Passbolt",
-    username: "admin@passbolt.com",
     uri: "https://passbolt.com",
-    description: "",
+    username: "admin@passbolt.com",
+    folder_parent_id: null,
+    created: "2022-03-04T13:59:11+00:00",
+    created_by: uuidv4(),
+    modified: "2022-03-04T13:59:11+00:00",
+    modified_by: uuidv4(),
     expired: null,
     deleted: false,
-    created: "2022-03-04T13:59:11+00:00",
-    modified: "2022-03-04T13:59:11+00:00",
-    created_by: uuidv4(),
-    modified_by: uuidv4(),
-    folder_parent_id: null,
+    description: "",
     personal: false,
-    favorite: null,
+    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
     permission: ownerPermissionDto({aco_foreign_key: id}),
+    // permissions: [], // Permission are not retrieved by the process storing the information in the local storage.
+    favorite: null,
+    // secrets: [], // Secrets are not retrieved by the process storing the information in the local storage.
     ...data
   };
-
-  if (!data.permissions && options.withPermissions) {
-    defaultData.permissions = defaultPermissionsDtos(options.withPermissions, {aco_foreign_key: id});
-  }
-
-  if (!data.creator && options?.withCreator) {
-    defaultData.creator = defaultUserDto();
-  }
-
-  if (!data.modifier && options?.withModifier) {
-    defaultData.modifier = defaultUserDto();
-  }
-
-  if (!data.favorite && options?.withFavorite) {
-    defaultData.favorite = defaultFavoriteDto({foreign_key: id});
-  }
-
-  return defaultData;
 };
 
 export const resourceWithUpdatePermissionDto = (data = {}) => {

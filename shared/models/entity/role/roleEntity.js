@@ -11,7 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import EntityV2 from "../abstract/entityV2";
+import Entity from "../abstract/entity";
+import EntitySchema from "../abstract/entitySchema";
 
 const ENTITY_NAME = 'Role';
 const ROLE_ADMIN = 'admin';
@@ -20,7 +21,18 @@ const ROLE_GUEST = 'guest';
 const ROLE_ROOT = 'root';
 const ROLE_NAME_MAX_LENGTH = 255;
 
-class RoleEntity extends EntityV2 {
+class RoleEntity extends Entity {
+  /**
+   * @inheritDoc
+   */
+  constructor(roleDto, options = {}) {
+    super(EntitySchema.validate(
+      RoleEntity.ENTITY_NAME,
+      roleDto,
+      RoleEntity.getSchema()
+    ), options);
+  }
+
   /**
    * Get role entity schema
    * @returns {Object} schema

@@ -16,7 +16,7 @@ import {v4 as uuidv4} from "uuid";
 import {
   bettyAccountRecoveryPrivateKeyPasswordDto,
   defaultAccountRecoveryPrivateKeyPasswordDto
-} from "./accountRecoveryPrivateKeyPasswordEntity.test.data";
+} from "../../../../../../passbolt-browser-extension/src/all/background_page/model/entity/accountRecovery/accountRecoveryPrivateKeyPasswordEntity.test.data";
 import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 export const defaultAccountRecoveryPrivateKeyDto = (data = {}) => {

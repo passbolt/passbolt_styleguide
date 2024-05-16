@@ -11,69 +11,16 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.5.0
  */
+
+import each from "jest-each";
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
+import EntityValidationError from "passbolt-styleguide/src/shared/models/entity/abstract/entityValidationError";
 import PasswordExpiryProSettingsEntity from "./passwordExpiryProSettingsEntity";
 import {defaultPasswordExpiryProSettingsDto} from "../passwordExpiry/passwordExpirySettingsEntity.test.data";
-import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 
 describe("passwordExpiryProSettings entity", () => {
-  describe("PasswordExpiryProSettingsEntity::getSchema", () => {
-    it("schema must validate", () => {
-      EntitySchema.validateSchema(PasswordExpiryProSettingsEntity.ENTITY_NAME, PasswordExpiryProSettingsEntity.getSchema());
-    });
-
-    it("validates id property", () => {
-      assertEntityProperty.uuid(PasswordExpiryProSettingsEntity, "id");
-      assertEntityProperty.notRequired(PasswordExpiryProSettingsEntity, "id");
-    });
-
-    it("validates default_expiry_period property", () => {
-      assertEntityProperty.integer(PasswordExpiryProSettingsEntity, "default_expiry_period");
-      assertEntityProperty.nullable(PasswordExpiryProSettingsEntity, "default_expiry_period", 1);
-      /*
-       * @todo: add min and max validation where the schema will be reviewed
-       * assertEntityProperty.min(PasswordExpiryProSettingsEntity, "default_expiry_period", 1);
-       * assertEntityProperty.max(PasswordExpiryProSettingsEntity, "default_expiry_period", 999);
-       */
-      assertEntityProperty.notRequired(PasswordExpiryProSettingsEntity, "default_expiry_period");
-    });
-
-    it("validates policy_override property", () => {
-      assertEntityProperty.boolean(PasswordExpiryProSettingsEntity, "policy_override");
-      assertEntityProperty.required(PasswordExpiryProSettingsEntity, "policy_override");
-    });
-
-    it("validates automatic_expiry property", () => {
-      assertEntityProperty.boolean(PasswordExpiryProSettingsEntity, "automatic_expiry");
-      assertEntityProperty.required(PasswordExpiryProSettingsEntity, "automatic_expiry");
-    });
-
-    it("validates automatic_update property", () => {
-      assertEntityProperty.boolean(PasswordExpiryProSettingsEntity, "automatic_update");
-      assertEntityProperty.required(PasswordExpiryProSettingsEntity, "automatic_update");
-    });
-
-    it("validates created property", () => {
-      assertEntityProperty.string(PasswordExpiryProSettingsEntity, "created");
-      assertEntityProperty.dateTime(PasswordExpiryProSettingsEntity, "created");
-      assertEntityProperty.notRequired(PasswordExpiryProSettingsEntity, "created");
-    });
-
-    it("validates modified property", () => {
-      assertEntityProperty.string(PasswordExpiryProSettingsEntity, "modified");
-      assertEntityProperty.dateTime(PasswordExpiryProSettingsEntity, "modified");
-      assertEntityProperty.notRequired(PasswordExpiryProSettingsEntity, "modified");
-    });
-
-    it("validates created_by property", () => {
-      assertEntityProperty.uuid(PasswordExpiryProSettingsEntity, "created_by");
-      assertEntityProperty.notRequired(PasswordExpiryProSettingsEntity, "created_by");
-    });
-
-    it("validates modified_by property", () => {
-      assertEntityProperty.uuid(PasswordExpiryProSettingsEntity, "modified_by");
-      assertEntityProperty.notRequired(PasswordExpiryProSettingsEntity, "modified_by");
-    });
+  it("schema must validate", () => {
+    EntitySchema.validateSchema(PasswordExpiryProSettingsEntity.ENTITY_NAME, PasswordExpiryProSettingsEntity.getSchema());
   });
 
   it("should accept a mininal valid DTO", () => {
@@ -106,5 +53,64 @@ describe("passwordExpiryProSettings entity", () => {
 
     const entity = PasswordExpiryProSettingsEntity.createFromDefault(expectedDto);
     expect(entity.toDto()).toStrictEqual(expectedDto);
+  });
+
+  it("should throw an exception if required fields are not present", () => {
+    const requiredFieldNames = PasswordExpiryProSettingsEntity.getSchema().required;
+    const requiredFieldCount = 3;
+    expect.assertions(requiredFieldCount * 2 + 1);
+
+    expect(requiredFieldNames.length).toStrictEqual(requiredFieldCount);
+
+    for (let i = 0; i < requiredFieldNames.length; i++) {
+      const fieldName = requiredFieldNames[i];
+      const dto = defaultPasswordExpiryProSettingsDto();
+      delete dto[fieldName];
+      try {
+        new PasswordExpiryProSettingsEntity(dto);
+      } catch (e) {
+        expect(e).toBeInstanceOf(EntityValidationError);
+        expect(e.hasError(fieldName, "required")).toStrictEqual(true);
+      }
+    }
+  });
+
+  each([
+    {dto: {id: "string but not uuid"}, errorType: "format"},
+    {dto: {id: -1}, errorType: "type"},
+
+    {dto: {default_expiry_period: true}, errorType: "type"},
+    {dto: {default_expiry_period: "50"}, errorType: "type"},
+    {dto: {default_expiry_period: -1}, errorType: "type"},
+
+    {dto: {policy_override: 0}, errorType: "type"},
+
+    {dto: {automatic_update: 0}, errorType: "type"},
+    {dto: {automatic_expiry: 0}, errorType: "type"},
+
+    {dto: {created: "string but not a date"}, errorType: "format"},
+    {dto: {created: -1}, errorType: "type"},
+
+    {dto: {created_by: "string but not uuid"}, errorType: "format"},
+    {dto: {created_by: -1}, errorType: "type"},
+
+    {dto: {modified: "string but not a date"}, errorType: "format"},
+    {dto: {modified: -1}, errorType: "type"},
+
+    {dto: {modified_by: "string but not uuid"}, errorType: "format"},
+    {dto: {modified_by: -1}, errorType: "type"},
+  ]).describe("should throw an exception if DTO contains invalid values", scenario => {
+    it(`scenario: ${JSON.stringify(scenario)}`, () => {
+      expect.assertions(2);
+      const fieldName = Object.keys(scenario.dto)[0];
+      const erroneousDto = defaultPasswordExpiryProSettingsDto(scenario.dto);
+
+      try {
+        new PasswordExpiryProSettingsEntity(erroneousDto);
+      } catch (e) {
+        expect(e).toBeInstanceOf(EntityValidationError);
+        expect(e.hasError(fieldName, scenario.errorType)).toStrictEqual(true);
+      }
+    });
   });
 });

@@ -263,6 +263,30 @@ class InFormCallToActionField {
     this.scrollableFieldParent.addEventListener('scroll', this.removeCallToActionIframe);
   }
 
+
+  /** AUTOFILL **/
+
+  /**
+   * Autofill a field
+   * @param text the text to fill in the field
+   */
+  autofill(text) {
+    const keydownEvent = new KeyboardEvent("keydown", {bubbles: true});
+    const keypressEvent = new KeyboardEvent("keypress", {bubbles: true});
+    const inputEvent = new InputEvent("input", {inputType: "insertText", data: text, bubbles: true});
+    const keyupEvent = new KeyboardEvent("keyup", {bubbles: true});
+    const changeEvent = new Event("change", {bubbles: true});
+
+    this.field.value = text;
+
+    // Dispatch events, they happen in this order: down, press, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
+    this.field.dispatchEvent(keydownEvent);
+    this.field.dispatchEvent(keypressEvent);
+    this.field.dispatchEvent(inputEvent);
+    this.field.dispatchEvent(keyupEvent);
+    this.field.dispatchEvent(changeEvent);
+  }
+
   /** DESTROY */
 
   /**
