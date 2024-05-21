@@ -12,6 +12,7 @@
  * @since         4.9.0
  */
 
+import EntityV2 from "./entityV2";
 import {
   defaultTestEntityV2Dto,
   minimalTestEntityV2Dto,
@@ -71,6 +72,13 @@ describe("EntityV2", () => {
       expect.assertions(1);
       const dto = minimalTestEntityV2Dto({name: "K4r3n"});
       expect(() => new TestEntityV2(dto)).toThrowEntityValidationError("name", "karen");
+    });
+
+    it("should throw an error if getSchema is not overriden.", () => {
+      expect.assertions(1);
+      const expectedError = new Error("The entity class should declare its schema.");
+      const dto = minimalTestEntityV2Dto({name: "K4r3n"});
+      expect(() => new EntityV2(dto)).toThrow(expectedError);
     });
   });
 

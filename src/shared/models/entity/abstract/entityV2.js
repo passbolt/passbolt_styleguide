@@ -43,7 +43,7 @@ class EntityV2 extends Entity {
   /**
    * Marshall the entity props.
    * Caution, the marshalling happens before the validation.
-   * @private
+   * @protected
    */
   marshall() {
     // Override this method to marshall the entity props prior to validation.

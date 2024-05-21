@@ -52,6 +52,7 @@ export class TestEntityV2 extends EntityV2 {
     if (this._props?.name === "K4r3n") {
       this._props.name = "Karen";
     }
+    super.marshall();
   }
 
   // eslint-disable-next-line no-unused-vars
