@@ -312,7 +312,7 @@ describe('As AD I can generate an ORK', () => {
 
     await page.type("", page.passphraseField);
 
-    expect(page.passphraseStrength.textContent).toBe("Quality");
+    expect(page.passphraseStrength.textContent).toBe("Quality Entropy: 0.0 / 80.0 bits");
     expect(page.passphraseFieldError).toBeNull();
   });
 });
