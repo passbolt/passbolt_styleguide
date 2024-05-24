@@ -168,6 +168,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   initializeProperties() {
     this.resources = null; // A cache of the last known list of resources from the App context
     this.folders = null; // A cache of the last known list of folders from the App context
+    this.foldersMapById = {}; // A cache of the last known list of folders map by ID from the App context
   }
 
   /**
@@ -243,6 +244,10 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasFoldersChanged = this.props.context.folders !== this.folders;
     if (hasFoldersChanged) {
       this.folders = this.props.context.folders;
+      this.foldersMapById = this.folders.reduce((result, folder) => {
+        result[folder.id] = folder;
+        return result;
+      }, {});
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
@@ -676,15 +681,26 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const text = filter.payload;
     const words =  (text && text.split(/\s+/)) || [''];
     const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const foldersMatchCache = {};
 
     // Test match of some escaped test words against the name / username / uri / description /tags resource properties
     const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const matchTagProperty = (word, resource) => resource.tags.some(tag => matchWord(word, tag.slug));
+    const getFolderById = id => this.foldersMapById[id];
+    const matchFolderNameProperty = (word, folder) => matchWord(word, folder?.name);
+    const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder.folder_parent_id !== null && matchFolderCache(word, folder.folder_parent_id));
+    const matchFolderCache = (word, id) => {
+      const key = word + id;
+      if (typeof foldersMatchCache[key] === "undefined") {
+        foldersMatchCache[key] = matchFolder(word, getFolderById(id));
+      }
+      return foldersMatchCache[key];
+    };
+    const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
     const matchStringProperty = (word, resource) => ['name', 'username', 'uri', 'description'].some(key => matchWord(word, resource[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource));
+    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource.folder_parent_id !== null && matchFolderCache(word, resource.folder_parent_id));
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);

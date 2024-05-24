@@ -647,6 +647,32 @@ const resources = [
     "tags": [],
     "folder_parent_id": "907c3f61-f416-5834-86d2-e721501ee493",
     "personal": true
+  },
+  {
+    "id": "97d75fef-d7ad-5a0d-8df0-0a0ffb7c44c9",
+    "name": "Inside Bank Password",
+    "username": "vector",
+    "uri": "https:\/\/private.org\/",
+    "description": "Bank password.",
+    "deleted": false,
+    "created": "2020-08-27T08:35:19+00:00",
+    "modified": "2020-08-27T08:35:19+00:00",
+    "created_by": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+    "modified_by": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+    "favorite": null,
+    "permission": {
+      "id": "9ea3efed-b358-541c-8379-7b7162a8f562",
+      "aco": "Resource",
+      "aco_foreign_key": "76d75fef-d7ed-5a0d-8df0-0a0ffb7c44c8",
+      "aro": "User",
+      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+      "type": 7,
+      "created": "2020-08-27T08:35:19+00:00",
+      "modified": "2020-08-27T08:35:19+00:00"
+    },
+    "tags": [],
+    "folder_parent_id": "6592f71b-8874-5e91-bf6d-829b8ad188f5",
+    "personal": true
   }
 ];
 

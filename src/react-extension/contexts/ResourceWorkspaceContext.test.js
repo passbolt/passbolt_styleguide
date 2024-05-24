@@ -111,7 +111,7 @@ describe("Resource Workspace Context", () => {
     it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
 
     it("AS LU I should have resources shared with me when the filter is SHARED-WITH-ME", async() => {
-      const expectedResourcesCount = 16;
+      const expectedResourcesCount = 17;
       await page.goToShareWithMe();
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
@@ -133,6 +133,13 @@ describe("Resource Workspace Context", () => {
       await page.goToText("docker");
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
       expect(page.filteredResources[0].name).toBe("Docker");
+    });
+
+    it("AS LU I should have resources matching a text when the filter is TEXT in folder name", async() => {
+      const expectedResourcesCount = 1;
+      await page.goToText("Accounting");
+      expect(page.filteredResources).toHaveLength(expectedResourcesCount);
+      expect(page.filteredResources[0].name).toBe("Inside Bank Password");
     });
 
     it("AS LU I should have resources belonged to a group when the filter is GROUP", async() => {
