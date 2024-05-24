@@ -49,7 +49,7 @@ describe("Generate password", () => {
       jest.runAllTimers();
 
       expect(page.title).toBe('Generate password');
-      expect(page.complexityText).toBe('Fair (entropy: 111.1 bits)');
+      expect(page.complexityText).toBe('Fair Entropy: 111.1 bits');
       await page.applyGeneratePassword();
       expect(props.history.goBack).toHaveBeenCalledTimes(1);
     });
