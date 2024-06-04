@@ -39,7 +39,8 @@ export default class InformManagerPage {
    * Returns the username element
    */
   get username() {
-    return document.querySelector(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+    const username = InFormManager.callToActionFields.find(field => field.fieldType === "username");
+    return username?.field;
   }
 
   /**
@@ -54,14 +55,17 @@ export default class InformManagerPage {
    * Returns the usernames element
    */
   get usernames() {
-    return document.querySelectorAll(InFormFieldSelector.USERNAME_FIELD_SELECTOR);
+    const isUsername = informCallToActionField => informCallToActionField.fieldType === "username";
+    const getField = informCallToActionField => informCallToActionField.field;
+    return InFormManager.callToActionFields.filter(isUsername).map(getField);
   }
 
   /**
    * Returns the password element
    */
   get password() {
-    return document.querySelector(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+    const password = InFormManager.callToActionFields.find(field => field.fieldType === "password");
+    return password?.field;
   }
 
   /**
@@ -75,7 +79,9 @@ export default class InformManagerPage {
    * Returns the passwords element
    */
   get passwords() {
-    return document.querySelectorAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+    const isPassword = informCallToActionField => informCallToActionField.fieldType === "password";
+    const getField = informCallToActionField => informCallToActionField.field;
+    return InFormManager.callToActionFields.filter(isPassword).map(getField);
   }
 
   /**
