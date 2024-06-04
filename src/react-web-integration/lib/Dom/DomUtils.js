@@ -38,6 +38,31 @@ class DomUtils {
     return iframeContentDocument;
   }
 
+  /**
+   * Returns accessible shadow dom documents in the page
+   * @return {Array<Document>} iframe document
+   */
+  static getShadowDomDocuments() {
+    const filterByShadowRoot = element => element.shadowRoot ? NodeFilter.FILTER_ACCEPT
+      : NodeFilter.FILTER_SKIP;
+    const treeWalker = document.createTreeWalker(
+      document.activeElement,
+      NodeFilter.SHOW_ELEMENT,
+      filterByShadowRoot
+    );
+    const shadowDomDocuments = [];
+    // Check directly the next node to not have the main document
+    let currentNode = treeWalker?.nextNode();
+    while (currentNode) {
+      const shadowDom = browser.dom?.openOrClosedShadowRoot(currentNode) || currentNode.shadowRoot;
+      if (shadowDom) {
+        shadowDomDocuments.push(shadowDom);
+      }
+      currentNode = treeWalker?.nextNode();
+    }
+    return shadowDomDocuments;
+  }
+
 
   /**
    * Check the requested document, top document and an iframe form is initiated from same domain.

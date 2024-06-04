@@ -27,7 +27,8 @@ class InFormCallToActionField {
   static findAll(selector) {
     const domFields =  Array.from(document.querySelectorAll(selector));
     const iframesFields = InFormCallToActionField.findAllInIframes(selector);
-    return domFields.concat(iframesFields);
+    const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
+    return domFields.concat(iframesFields).concat(shadowDomFields);
   }
 
   /**
@@ -38,6 +39,18 @@ class InFormCallToActionField {
     const iframes = DomUtils.getAccessibleAndSameDomainIframes();
     const queryMapper = iframe => Array.from(iframe.contentDocument.querySelectorAll(selector));
     return iframes
+      .map(queryMapper)
+      .flat();
+  }
+
+  /**
+   * Retrieve all the shadow dom elements which can be an in-form username or password fields
+   * @return {*}
+   */
+  static findAllInShadowDom(selector) {
+    const shadowDomDocuments = DomUtils.getShadowDomDocuments();
+    const queryMapper = shadowDom => Array.from(shadowDom.querySelectorAll(selector));
+    return shadowDomDocuments
       .map(queryMapper)
       .flat();
   }
