@@ -97,5 +97,21 @@ describe("EntityV2", () => {
       expect(TestEntityV2.getSchema).toHaveBeenCalledTimes(2);
       expect(TestAssociatedEntityV2.getSchema).toHaveBeenCalledTimes(4);
     });
+
+    it("should not validate the schema if `validate: false` is passed as an option.", () => {
+      expect.assertions(4);
+
+      jest.spyOn(TestEntityV2.prototype, "validateSchema");
+      jest.spyOn(TestAssociatedEntityV2.prototype, "validateSchema");
+      jest.spyOn(TestEntityV2.prototype, "validateBuildRules");
+      jest.spyOn(TestAssociatedEntityV2.prototype, "validateBuildRules");
+
+      new TestEntityV2(defaultTestEntityV2Dto(), {validate: false});
+
+      expect(TestEntityV2.prototype.validateSchema).not.toHaveBeenCalled();
+      expect(TestAssociatedEntityV2.prototype.validateSchema).not.toHaveBeenCalled();
+      expect(TestEntityV2.prototype.validateBuildRules).not.toHaveBeenCalled();
+      expect(TestAssociatedEntityV2.prototype.validateBuildRules).not.toHaveBeenCalled();
+    });
   });
 });
