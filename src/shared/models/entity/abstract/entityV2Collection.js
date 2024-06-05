@@ -37,6 +37,8 @@ class EntityV2Collection extends EntityCollection {
 
   /**
    * @inheritDoc
+   * @param {boolean} [options.validate=true] validate the given props against the entity schema and the build rules.
+   *
    * Additionally to the EntityCollection, the EntityV2 collection will:
    * - Validate the collection schema.
    * - Push the dtos into the collection.
@@ -47,7 +49,10 @@ class EntityV2Collection extends EntityCollection {
   constructor(dtos = [], options = {}) {
     // Note: EntityCollection V1 will clone the dtos into the instance _props property. Delete it after usage.
     super(dtos, options);
-    this.validateSchema();
+    const validate = options?.validate ?? true;
+    if (validate) {
+      this.validateSchema();
+    }
     this.pushMany(this._props, {...options, clone: false});
     this._props = null;
   }

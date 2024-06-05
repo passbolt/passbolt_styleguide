@@ -25,6 +25,8 @@ class EntityV2 extends Entity {
 
   /**
    * @inheritDoc
+   * @param {boolean} [options.validate=true] validate the given props against the entity schema and the build rules.
+   *
    * Additionally to the Entity, the EntityV2 will:
    * - Validate the entity schema.
    * - Validate the entity build rules.
@@ -36,8 +38,11 @@ class EntityV2 extends Entity {
     // Note: Entity V1 will clone the dtos into the instance _props property.
     super(dtos, options);
     this.marshall();
-    this.validateSchema();
-    this.validateBuildRules();
+    const validate = options?.validate ?? true;
+    if (validate) {
+      this.validateSchema();
+      this.validateBuildRules(options?.validateBuildRules);
+    }
   }
 
   /**

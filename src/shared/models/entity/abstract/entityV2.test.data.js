@@ -19,7 +19,7 @@ export class TestEntityV2 extends EntityV2 {
   constructor(dto, options) {
     super(dto, options);
     if (this._props.associated_entity) {
-      this._associatedEntity = new TestAssociatedEntityV2(this._props.associated_entity);
+      this._associatedEntity = new TestAssociatedEntityV2(this._props.associated_entity, options);
       delete this._props.associated_entity;
     }
   }

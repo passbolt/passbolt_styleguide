@@ -17,6 +17,7 @@ import EntityValidationError from "./entityValidationError";
 import {TestEntityV2Collection} from "./entityV2Collection.test.data";
 import {defaultAssociatedTestEntityDto, defaultTestEntityDto, TestEntity} from "./entity.test.data";
 import EntityV2Collection from "./entityV2Collection";
+import {defaultTestEntityV2Dto} from "./entityV2.test.data";
 
 beforeEach(() => {
   TestEntityV2Collection._cachedSchema = {};
@@ -110,6 +111,16 @@ describe("EntityV2Collection", () => {
       expect(TestEntityV2Collection._cachedSchema.TestEntityV2Collection).toEqual(TestEntityV2Collection.getSchema());
       new TestEntityV2Collection([]);
       expect(TestEntityV2Collection.getSchema).toHaveBeenCalledTimes(2);
+    });
+
+    it("should not validate the schema if `validate: false` is passed as an option.", () => {
+      expect.assertions(1);
+
+      jest.spyOn(TestEntityV2Collection.prototype, "validateSchema");
+
+      new TestEntityV2Collection([defaultTestEntityV2Dto()], {validate: false});
+
+      expect(TestEntityV2Collection.prototype.validateSchema).not.toHaveBeenCalled();
     });
   });
 
