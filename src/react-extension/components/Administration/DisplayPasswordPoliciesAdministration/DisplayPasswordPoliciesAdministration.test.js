@@ -161,8 +161,8 @@ describe("DisplayPasswordPoliciesAdministration", () => {
     it("As a logged in administrator I should see the expected entropy of the passphrase configurator change based on the current configuration", async() => {
       expect.assertions(2);
 
-      const passphraseEntropyWith9Words = "116.5 bits";
-      const passphraseEntropyWith20Words = "259.0 bits";
+      const passphraseEntropyWith9Words = "130.6 bits";
+      const passphraseEntropyWith20Words = "290.2 bits";
 
       await page.togglePassphrasePanel();
 

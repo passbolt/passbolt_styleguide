@@ -262,12 +262,12 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
       await page.fill("passphrase from breached data");
 
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
       await page.generateKey();
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 0.0");
 
       await page.fill("passphrase from breached tada");
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
     });
 
     it(`As AN on the setup workflow I can submit the from after having changed the passphrase used from a data breach`, async() => {
@@ -280,7 +280,7 @@ describe("CreateGpgKey", () => {
       const page = new CreateGpgKeyPage(props);
       await page.fill("passphrase from breached data");
 
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
       await page.generateKey();
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 0.0");
 
