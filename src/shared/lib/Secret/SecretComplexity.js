@@ -11,6 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.14.0
  */
+import {SecretGeneratorComplexity} from "../SecretGenerator/SecretGeneratorComplexity";
 import PwnedPasswords from "./PwnedPasswords";
 
 const STRENGTH = [
@@ -86,40 +87,13 @@ export default class SecretComplexity {
   }
 
   /**
-   * Calculate the entropy regarding the given primitives.
-   * @param length {int} The number of characters
-   * @param maskSize {int} The number of possibility for each character
-   * @return {int}
-   */
-  static calculEntropy(length, maskSize) {
-    return (length && maskSize) ? length * (Math.log(maskSize) / Math.log(2)) : 0;
-  }
-
-  /**
-   * Mesure the entropy of a password.
-   * @param pwd {srtring} The password to test the entropy
-   * @return {int}
-   */
-  static entropy(pwd = '') {
-    let maskSize = 0;
-
-    for (const i in MASKS) {
-      if (pwd.match(MASKS[i].pattern)) {
-        maskSize += MASKS[i].size;
-      }
-    }
-
-    return this.calculEntropy(pwd.length, maskSize);
-  }
-
-  /**
    * Get the entropy level regarding the mesure of the entropy.
    * @param txt {string} The text to work on
    * @return {Object} The text strength, an element of the STRENGTH array.
    */
   static getStrength(txt) {
     txt = txt || "";
-    const entropy = this.entropy(txt);
+    const entropy = SecretGeneratorComplexity.entropyPassword(txt);
 
     const strength = STRENGTH.reduce((accumulator, item) => {
       if (!accumulator) { return item; }
@@ -128,28 +102,6 @@ export default class SecretComplexity {
     });
 
     return strength;
-  }
-
-  /**
-   * Check if a text matches multiple masks.
-   * @param txt {string} The text to
-   * @returns {array} The list of masks as following :
-   *   {
-   *     alpha: true,
-   *     uppercase: false,
-   *     ...
-   *   }
-   */
-  static matchMasks(txt) {
-    const matches = {};
-    for (const i in MASKS) {
-      matches[i] = false;
-      if (txt.match(MASKS[i].pattern)) {
-        matches[i] = true;
-      }
-    }
-
-    return matches;
   }
 
   /**
@@ -174,14 +126,14 @@ export default class SecretComplexity {
      * Try maximum 10 times.
      */
     let j = 0;
-    const expectedEntropy = this.calculEntropy(length, mask.length);
+    const expectedEntropy = SecretGeneratorComplexity.calculEntropy(length, mask.length);
 
     do {
       secret = '';
       for (let i = 0; i < length; i++) {
         secret += mask[this.randomRange(0, mask.length - 1)];
       }
-    } while (this.entropy(secret) < expectedEntropy && j++ < 10);
+    } while (SecretGeneratorComplexity.entropyPassword(secret) < expectedEntropy && j++ < 10);
 
     return secret;
   }

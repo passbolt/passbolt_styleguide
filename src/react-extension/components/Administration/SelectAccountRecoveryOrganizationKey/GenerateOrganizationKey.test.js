@@ -191,7 +191,7 @@ describe('As AD I can generate an ORK', () => {
 
     await page.type("test", page.nameField);
     await page.type("test@passbolt.com", page.emailField);
-    await page.type("almost fair passw", page.passphraseField);
+    await page.type("almost fair", page.passphraseField);
 
     await page.clickOnGenerateButton(() => {
       if (page.passphraseFieldError === null) {

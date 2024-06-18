@@ -204,11 +204,11 @@ describe("As LU I should see the user confirm passphrase page", () => {
       expect.assertions(3);
       jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
       await page.insertPassphrase('passphrase from breached data');
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
       await page.update(() => true);
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 0.0");
       await page.insertPassphrase("passphrase from breached tada");
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
     });
 
     it(`As LU I can update my passphrase after having changed the passphrase used from a data breach`, async() => {
@@ -224,7 +224,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
       }));
 
       await page.insertPassphrase('passphrase from breached data');
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
 
       await page.update(() => true);
       expect(page.passphraseComplexity.textContent).toContain("Entropy: 0.0");
@@ -249,7 +249,7 @@ describe("As LU I should see the user confirm passphrase page", () => {
 
       const spyOnPownedService = jest.spyOn(PownedService.prototype, "evaluateSecret").mockImplementation(() => passphraseIsInDictionnary());
       await page.insertPassphrase('passphrase from breached data');
-      expect(page.passphraseComplexity.textContent).toContain("Entropy: 136.3");
+      expect(page.passphraseComplexity.textContent).toContain("Entropy: 137.9");
       await page.update(() => true);
       await generateResolve();
       expect(spyOnPownedService).not.toHaveBeenCalled();
