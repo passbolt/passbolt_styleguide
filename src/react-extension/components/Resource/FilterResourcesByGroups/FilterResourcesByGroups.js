@@ -40,7 +40,25 @@ class FilterResourcesByGroups extends React.Component {
   get defaultState() {
     return {
       open: true, // open the group section
+      groups: null, // the groups the user is member of
+      loading: false, // is the data currently loading
     };
+  }
+
+  async componentDidMount() {
+    await this.loadGroupsData();
+  }
+
+  /**
+   * Loads the groups the current user is member of.
+   * @returns {Promise<void>}
+   */
+  async loadGroupsData() {
+    if (!this.state.loading) {
+      this.setState({loading: true});
+      const groups = await this.props.context.port.request('passbolt.groups.find-my-groups');
+      this.setState({groups, loading: false});
+    }
   }
 
   /**
@@ -54,9 +72,13 @@ class FilterResourcesByGroups extends React.Component {
   /**
    * Handle when the user click on the title.
    */
-  handleTitleClickEvent() {
+  async handleTitleClickEvent() {
     const open = !this.state.open;
     this.setState({open});
+
+    if (open) {
+      await this.loadGroupsData();
+    }
   }
 
   /**
@@ -84,7 +106,7 @@ class FilterResourcesByGroups extends React.Component {
    * @returns {*|boolean}
    */
   hasGroup() {
-    return this.props.context.groups && this.groups.length > 0;
+    return this.groups && this.groups.length > 0;
   }
 
   /**
@@ -92,7 +114,7 @@ class FilterResourcesByGroups extends React.Component {
    * @returns {*}
    */
   get groups() {
-    return this.props.context.groups.filter(group => group.my_group_user !== null);
+    return this.state.groups;
   }
 
   /**
