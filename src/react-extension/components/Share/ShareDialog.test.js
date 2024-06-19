@@ -17,7 +17,6 @@
  */
 import ShareDialogPage from "./ShareDialog.test.page";
 import {
-  autocompleteResult,
   defaultAppContext,
   defaultProps, folders,
   mockResultsFolders,
@@ -27,6 +26,7 @@ import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
 import NotifyError from "../Common/Error/NotifyError/NotifyError";
+import {waitForTrue} from "../../../../test/utils/waitFor";
 
 beforeAll(() => {
   global.scrollTo = jest.fn();
@@ -69,18 +69,19 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.title).toBe('Share 3 resources');
       expect(page.count).toBe(11);
 
-      const requestKeyInfoMockImpl = () => ({
-        fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"
-      });
+      const requestBextMockImpl = (request, option) => {
+        switch (request) {
+          case "passbolt.keyring.get-public-key-info-by-user":
+            return {fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"};
+          case "passbolt.share.search-aros":
+            return context.users.filter(user => user.username.indexOf(option) !== -1);
+        }
+      };
 
-      mockContextRequest(requestKeyInfoMockImpl);
+      mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
       jest.runOnlyPendingTimers();
-      await waitFor(() => {
-        if (!page.userOrGroupAutocomplete(1)) {
-          throw new Error("Page is not ready yet.");
-        }
-      });
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
       expect(page.warningMessage).toBe('Click save to apply your pending changes.');
@@ -114,21 +115,23 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I can remove a permission', async() => {
       expect.assertions(2);
+      await waitForTrue(() => page.count !== 3);
       expect(page.count).toBe(11);
       await page.selectRemovePermission(1);
       expect(page.count).toBe(10);
     });
 
     it('As LU I should see a processing feedback while submitting the form', async() => {
-      const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
-      mockContextRequest(requestAutocompleteResultMockImpl);
+      const requestBextMockImpl = (request, option) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return context.users.filter(user => user.username.indexOf(option) !== -1);
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
       jest.runOnlyPendingTimers();
-      await waitFor(() => {
-        if (!page.userOrGroupAutocomplete(1)) {
-          throw new Error("Page is not ready yet.");
-        }
-      });
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
       // Mock the request function to make it the expected result
@@ -183,15 +186,16 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I should see an error dialog if the submit operation fails for an unexpected reason', async() => {
       expect.assertions(1);
-      const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
-      mockContextRequest(requestAutocompleteResultMockImpl);
+      const requestBextMockImpl = (request, option) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return context.users.filter(user => user.username.indexOf(option) !== -1);
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
       jest.runOnlyPendingTimers();
-      await waitFor(() => {
-        if (!page.userOrGroupAutocomplete(1)) {
-          throw new Error("Page is not ready yet.");
-        }
-      });
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
       // Mock the request function to make it return an error.
@@ -229,15 +233,16 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.subtitle).toBe('apache');
       expect(page.count).toBe(11);
 
-      const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
-      mockContextRequest(requestAutocompleteResultMockImpl);
+      const requestBextMockImpl = (request, option) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return context.users.filter(user => user.username.indexOf(option) !== -1);
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
       jest.runOnlyPendingTimers();
-      await waitFor(() => {
-        if (!page.userOrGroupAutocomplete(1)) {
-          throw new Error("Page is not ready yet.");
-        }
-      });
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
       expect(page.count).toBe(12);
@@ -289,13 +294,19 @@ describe("As Lu I should see the share dialog", () => {
       });
       mockContextRequest(requestKeyInfoMockImpl);
 
+      const requestBextMockImpl = (request, option) => {
+        switch (request) {
+          case "passbolt.keyring.get-public-key-info-by-user":
+            return {fingerprint: "079D6F4FDA3BFDC2D8E562D8AA44B1DA4BFB36B6"};
+          case "passbolt.share.search-aros":
+            return context.users.filter(user => user.username.indexOf(option) !== -1);
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
+
       await page.searchName("ad");
       jest.runOnlyPendingTimers();
-      await waitFor(() => {
-        if (!page.userOrGroupAutocomplete(2)) {
-          throw new Error("Page is not ready yet.");
-        }
-      });
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(2);
 
       expect(page.count).toBe(3);
@@ -337,15 +348,16 @@ describe("As Lu I should see the share dialog", () => {
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 2 items');
 
-      const requestAutocompleteResultMockImpl = jest.fn(() => autocompleteResult);
-      mockContextRequest(requestAutocompleteResultMockImpl);
+      const requestBextMockImpl = (request, option) => {
+        switch (request) {
+          case "passbolt.share.search-aros":
+            return context.users.filter(user => user.username.indexOf(option) !== -1);
+        }
+      };
+      mockContextRequest(requestBextMockImpl);
       await page.searchName("adm");
       jest.runOnlyPendingTimers();
-      await waitFor(() => {
-        if (!page.userOrGroupAutocomplete(1)) {
-          throw new Error("Page is not ready yet.");
-        }
-      });
+      await waitForTrue(() => Boolean(page.userOrGroupAutocomplete(1)));
       await page.selectUserOrGroup(1);
 
       await page.savePermissions();

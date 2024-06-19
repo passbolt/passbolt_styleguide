@@ -103,7 +103,7 @@ class Autocomplete extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.selectNext = this.selectNext.bind(this);
     this.selectPrevious = this.selectPrevious.bind(this);
-    this.handleAutocompleteChangeDebounced = debounce(this.handleAutocompleteChange.bind(this), 150);
+    this.handleAutocompleteChangeDebounced = debounce(this.handleAutocompleteChange.bind(this), 300);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -126,7 +126,8 @@ class Autocomplete extends Component {
    */
   async autocompleteSearch(keyword) {
     if (!this.cache[keyword] || this.cache[keyword].cacheExpiry < (new Date()).getTime()) {
-      this.cache[keyword] = await this.getItems(keyword);
+      const results = await this.getItems(keyword);
+      this.cache[keyword] = results;
       this.cache[keyword].cacheExpiry = (new Date()).getTime() + this.cacheExpiry;
     }
     return this.cache[keyword];
@@ -194,22 +195,21 @@ class Autocomplete extends Component {
     const name = target.name;
     this.setState({
       [name]: value
-    }, () => {
-      if (name === 'name') {
-        this.handleAfterNameUpdate();
-      }
     });
+    if (name === 'name') {
+      this.handleNameUpdate(value);
+    }
   }
 
   /**
-   * Handle after name update
-   * @param {ReactEvent} event The triggered event
+   * Handle name update
+   * @param {string} value
    * @return {void}
    */
-  handleAfterNameUpdate() {
-    if (this.state.name) {
-      if (!this.state.name.endsWith(' ')) {
-        this.handleAutocompleteChangeDebounced();
+  handleNameUpdate(value) {
+    if (value) {
+      if (!value.endsWith(' ')) {
+        this.handleAutocompleteChangeDebounced(value);
       }
     } else {
       this.closeAutocomplete();
@@ -218,14 +218,15 @@ class Autocomplete extends Component {
 
   /**
    * Handle autocomplete change
+   * @param {string} searchedName
    * @returns {Promise<void>}
    */
-  async handleAutocompleteChange() {
-    const keyword = this.state.name;
+  async handleAutocompleteChange(keyword) {
     if (!keyword) {
       this.closeAutocomplete();
       return;
     }
+
     try {
       const autocompleteItems = await this.autocompleteSearch(keyword);
       let selected = null;
@@ -363,7 +364,7 @@ class Autocomplete extends Component {
           <div className="autocomplete-wrapper">
             <div className="autocomplete-content scroll" ref={this.listRef}>
               <ul>
-                {this.state.processing &&
+                {this.state.processing && this.state.name &&
                 <AutocompleteItemLoading/>
                 }
                 {!this.state.processing && (!this.state.autocompleteItems || !this.state.autocompleteItems.length) &&

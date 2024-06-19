@@ -116,7 +116,7 @@ export default class AutocompletePage {
   async fillInput(data, inProgressFn = () => {}) {
     const dataInputEvent = {target: {value: data}};
     fireEvent.change(this.input, dataInputEvent);
-    jest.advanceTimersByTime(150);
+    jest.advanceTimersByTime(300);
     await waitFor(inProgressFn);
   }
 }
