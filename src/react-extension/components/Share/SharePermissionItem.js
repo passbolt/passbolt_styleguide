@@ -149,7 +149,7 @@ class SharePermissionItem extends Component {
    * @returns {*}
    */
   hasGpgKey() {
-    return this.state.gpgKey && this.state.gpgKey.fingerprint;
+    return this.state.gpgKey?.fingerprint;
   }
 
   getClassName() {

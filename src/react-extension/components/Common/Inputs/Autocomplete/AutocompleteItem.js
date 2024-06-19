@@ -16,7 +16,8 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Avatar/UserAvatar";
 import GroupAvatar from "../../Avatar/GroupAvatar";
 import {isUserSuspended} from "../../../../../shared/utils/userUtils";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
 
 class AutocompleteItem extends Component {
   /**
@@ -25,7 +26,21 @@ class AutocompleteItem extends Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindCallbacks();
+  }
+
+  get defaultState() {
+    return {
+      gpgKey: null
+    };
+  }
+
+  async componentDidMount() {
+    if (this.props.user) {
+      const gpgKey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.user.id);
+      this.setState({gpgKey});
+    }
   }
 
   /**
@@ -53,16 +68,13 @@ class AutocompleteItem extends Component {
    * @returns {string}
    */
   getSubtitle() {
-    if (this.props.user) {
-      const longId = this.props.user.gpgkey.fingerprint.substr(this.props.user.gpgkey.fingerprint.length - 16);
+    if (this.props.user && this.state.gpgKey) {
+      const longId = this.state.gpgKey.fingerprint.substr(this.state.gpgKey.fingerprint.length - 16);
       return longId.replace(/(.{4})/g, "$1 ");
-    } else {
-      if (this.props.group?.groups_users?.length > 1) {
-        return `${this.props.group.groups_users.length} group members`;
-      } else {
-        return `One group member`;
-      }
+    } else if (this.props.group) {
+      return this.props.t("{{count}} group member", {count: this.props.group.user_count});
     }
+    return "";
   }
 
   /**
@@ -125,6 +137,7 @@ AutocompleteItem.defaultProps = {
 };
 
 AutocompleteItem.propTypes = {
+  context: PropTypes.object,
   baseUrl: PropTypes.string,
   id: PropTypes.number,
   user: PropTypes.object,
@@ -132,6 +145,7 @@ AutocompleteItem.propTypes = {
   selected: PropTypes.bool,
   onClick: PropTypes.func,
   canShowUserAsSuspended: PropTypes.bool.isRequired, // is the feature disableUser enabled?
+  t: PropTypes.func, // the translation function
 };
 
-export default AutocompleteItem;
+export default withAppContext(withTranslation("common")(AutocompleteItem));
