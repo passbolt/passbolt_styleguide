@@ -43,11 +43,17 @@
 
 /* hide icons if there is no space */
 @media all and (max-width: 1024px) {
+    .header.third .main-action-wrapper {
+        button {
+            width: 4.8rem;
+        }
+    }
     .header.third .main-action-wrapper,
     .header.third .actions-wrapper {
         button {
             min-width: 1em;
             font-size: 1em;
+            height: 3.6rem;
         }
         button span + span {
             &.svg-icon {
