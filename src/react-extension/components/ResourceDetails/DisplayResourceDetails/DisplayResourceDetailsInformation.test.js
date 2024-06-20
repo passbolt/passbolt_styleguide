@@ -28,15 +28,20 @@ import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 
-beforeEach(() => {
-  jest.resetModules();
-});
-
 describe("DisplayResourceDetailsInformation", () => {
-  let page; // The page to test against
-  const props = defaultProps(); // The props to pass
+  let page, props;
   const mockContextRequest = implementation => jest.spyOn(props.context.port, 'request').mockImplementation(implementation);
   const copyClipboardMockImpl = jest.fn((message, data) => data);
+
+  beforeEach(() => {
+    jest.resetModules();
+    jest.clearAllMocks();
+    props = defaultProps(); // The props to pass
+
+    const user = props.context.users[0];
+    const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+    props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
+  });
 
   /**
    * Given a selected resource having information
@@ -63,6 +68,7 @@ describe("DisplayResourceDetailsInformation", () => {
       const absoluteCreationDate = props.resourceWorkspaceContext.details.resource.created;
       const creationDate = DateTime.fromISO(absoluteCreationDate).toRelative();
       expect.assertions(22);
+      await waitFor(() => {});
       expect(page.displayInformationList.usernameLabel).toBe('Username');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
       expect(page.displayInformationList.passwordLabel).toBe('Password');
@@ -96,6 +102,9 @@ describe("DisplayResourceDetailsInformation", () => {
 
     it('I cannot see the folder a resource is contained in if disbaled by RBAC', async() => {
       const props = propsWithDenyUiAction();
+      const user = props.context.users[0];
+      const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+      props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(1);
       expect(page.displayInformationList.location).toBeNull();
@@ -107,6 +116,9 @@ describe("DisplayResourceDetailsInformation", () => {
           isFeatureEnabled: () => false
         }
       });
+      const user = props.context.users[0];
+      const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+      props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
 
       page = new DisplayResourceDetailsInformationPage(props);
       expect.assertions(1);
@@ -118,11 +130,7 @@ describe("DisplayResourceDetailsInformation", () => {
     it('AS LU, I should be able to copy the username of a resource to clipboard', async() => {
       expect.assertions(3);
       page = new DisplayResourceDetailsInformationPage(props);
-      await waitFor(() => {
-      });
-      mockContextRequest(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
       await page.displayInformationList.click(page.displayInformationList.username);
 
@@ -157,6 +165,9 @@ describe("DisplayResourceDetailsInformation", () => {
 
     it('AS LU, I cannot copy secret of resource if denied by RBAC', async() => {
       const props = propsWithDenyUiAction();
+      const user = props.context.users[0];
+      const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+      props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
 
@@ -199,6 +210,10 @@ describe("DisplayResourceDetailsInformation", () => {
         }
       });
       const props = defaultProps({context});
+      const user = props.context.users[0];
+      const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+      props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
+
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
 
@@ -208,6 +223,10 @@ describe("DisplayResourceDetailsInformation", () => {
 
     it('AS LU, I cannot preview secret of resource if denied by RBAC', async() => {
       const props = propsWithDenyUiAction();
+      const user = props.context.users[0];
+      const resourceWithContain = Object.assign({}, props.resourceWorkspaceContext.details.resource, {creator: user, modifier: user});
+      props.context.port.addRequestListener("passbolt.resources.find-details", async() => resourceWithContain);
+
       page = new DisplayResourceDetailsInformationPage(props);
       await waitFor(() => {});
 
