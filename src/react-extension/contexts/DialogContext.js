@@ -50,7 +50,8 @@ export default class DialogContextProvider extends React.Component {
         this.setState({dialogs: [...this.state.dialogs, {key: dialogKey, Dialog, DialogProps}]});
         return dialogKey;
       },
-      close: dialogKey => this.setState({dialogs: this.state.dialogs.filter(dialog => dialogKey !== dialog.key)})
+      close: dialogKey => this.setState({dialogs: this.state.dialogs.filter(dialog => dialogKey !== dialog.key)}),
+      closeAll: () => this.setState({dialogs: []})
     };
   }
 
