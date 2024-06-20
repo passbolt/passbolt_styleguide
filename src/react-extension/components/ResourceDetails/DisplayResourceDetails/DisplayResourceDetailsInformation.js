@@ -53,7 +53,9 @@ class DisplayResourceDetailsInformation extends React.Component {
     return {
       open: true,
       previewedSecret: null, // The type of previewed secret
-      plaintextSecretDto: null // The current resource password decrypted
+      plaintextSecretDto: null, // The current resource password decrypted
+      creator: null, // the data of the resource creator
+      modifier: null, // the data of the resource creator
     };
   }
 
@@ -73,6 +75,9 @@ class DisplayResourceDetailsInformation extends React.Component {
 
   componentDidMount() {
     this.props.passwordExpiryContext.findSettings();
+    if (this.state.open) {
+      this.loadUserInformation();
+    }
   }
 
   /**
@@ -84,6 +89,26 @@ class DisplayResourceDetailsInformation extends React.Component {
   }
 
   /**
+   * Loads the information about the creator and the modifier of the current selected resource.
+   * @returns {Promise<void>}
+   */
+  async loadUserInformation() {
+    const resourceInformation = await this.props.context.port.request("passbolt.resources.find-details", this.resource.id);
+    const hasInformationChanged = this.resource.created_by !== resourceInformation.created_by
+      || this.resource.modified_by !== resourceInformation.modified_by;
+
+    if (hasInformationChanged) {
+      //current selected resource might have changed and the information received doesn't match anymore. In such case we don't update the state.
+      return;
+    }
+
+    this.setState({
+      creator: resourceInformation?.creator,
+      modifier: resourceInformation?.modifier,
+    });
+  }
+
+  /**
    * Check if the resource has changed and fetch
    * @param previousResource
    */
@@ -92,6 +117,22 @@ class DisplayResourceDetailsInformation extends React.Component {
     const hasResourceUpdated = this.resource.modified !== previousResource.modified;
     if ((hasResourceChanged || hasResourceUpdated) && this.state.open) {
       this.setState({plaintextSecretDto: null, previewedSecret: null});
+    }
+
+    if (!hasResourceChanged) {
+      return;
+    }
+
+    const hasModifierOrCreatorChanged = this.resource.created_by !== previousResource.created_by
+      || this.resource.modified_by !== previousResource.modified_by;
+
+    if (!hasModifierOrCreatorChanged) {
+      return;
+    }
+
+    this.setState({creator: null, modifier: null});
+    if (this.state.open) {
+      this.loadUserInformation();
     }
   }
 
@@ -134,6 +175,12 @@ class DisplayResourceDetailsInformation extends React.Component {
   handleTitleClickEvent() {
     const open = !this.state.open;
     this.setState({open});
+
+    if (!open) {
+      this.setState({creator: null, modifier: null, plaintextSecretDto: null, previewedSecret: null});
+    } else {
+      this.loadUserInformation();
+    }
   }
 
   /**
@@ -142,21 +189,6 @@ class DisplayResourceDetailsInformation extends React.Component {
   async handleUsernameClickEvent() {
     await ClipBoard.copy(this.resource.username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
-  }
-
-  /**
-   * Get a user username
-   * @param {string} userId The user id
-   */
-  getUserUsername(userId) {
-    if (this.props.context.users) {
-      const user = this.props.context.users.find(item => item.id === userId);
-      if (user) {
-        return user.username;
-      }
-    }
-
-    return "";
   }
 
   /**
@@ -485,8 +517,8 @@ class DisplayResourceDetailsInformation extends React.Component {
     const canUsePasswordExpiry = this.props.passwordExpiryContext.isFeatureEnabled();
     const canCopySecret = this.props.rbacContext.canIUseUiAction(uiActions.SECRETS_COPY);
 
-    const creatorUsername = this.getUserUsername(this.resource.created_by);
-    const modifierUsername = this.getUserUsername(this.resource.modified_by);
+    const creatorUsername = this.state.creator?.username || "";
+    const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.resource.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.resource.modified, this.props.t, this.props.context.locale);
     const isPasswordPreviewed = this.isPasswordPreviewed();
