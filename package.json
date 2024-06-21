@@ -85,7 +85,8 @@
     },
     "glob-stream": {
       "glob-parent": "5.1.2"
-    }
+    },
+    "ws": "8.17.1"
   },
   "scripts": {
     "build": "npm run build-api-app",
