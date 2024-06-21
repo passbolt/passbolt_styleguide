@@ -21,7 +21,8 @@ export function defaultDialogContext(context = {}) {
   const defaultContext = {
     dialogs: [],
     open: jest.fn(),
-    close: jest.fn()
+    close: jest.fn(),
+    closeAll: jest.fn(),
   };
   return Object.assign(defaultContext, context);
 }

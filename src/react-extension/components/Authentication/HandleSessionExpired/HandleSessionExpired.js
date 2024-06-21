@@ -46,6 +46,8 @@ class HandleSessionExpired extends React.Component {
    * Handle the session expired event
    */
   handleSessionExpiredEvent() {
+    // Close all dialogs before to open the session expired dialog
+    this.props.dialogContext.closeAll();
     this.props.dialogContext.open(NotifyExpiredSession);
   }
 
