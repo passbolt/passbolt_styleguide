@@ -182,11 +182,13 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
         <div className="accordion-header">
           <h4>
             <button className="link no-border" type="button" onClick={this.handleTitleClicked}>
-              <Trans>Account recovery</Trans>
-              {this.isAccountRecoveryPending &&
-                <Icon name="exclamation" baseline={true}/>
-              }
-              {this.state.open && <Icon name="caret-down"/>}
+              <span>
+                <Trans>Account recovery</Trans>
+                {this.isAccountRecoveryPending &&
+                  <Icon name="exclamation" baseline={true}/>
+                }
+                {this.state.open && <Icon name="caret-down"/>}
+              </span>
               {!this.state.open && <Icon name="caret-right"/>}
             </button>
           </h4>
