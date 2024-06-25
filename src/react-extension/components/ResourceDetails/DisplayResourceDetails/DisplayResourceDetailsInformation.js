@@ -216,9 +216,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @returns {boolean}
    */
   isFolderParentShared() {
-    let isShared = false;
-    console.log(this.props.context.folders)
-    console.log(this.resource.folder_parent_id)
+    const isShared = false;
 
     if (this.resource.folder_parent_id !== null && this.props.context.folders) {
       const folder = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
@@ -226,7 +224,7 @@ class DisplayResourceDetailsInformation extends React.Component {
         return !folder.personal;
       }
     }
-    
+
     return isShared;
   }
 
