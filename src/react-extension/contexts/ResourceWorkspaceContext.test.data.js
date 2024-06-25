@@ -9,6 +9,7 @@ import {defaultResourceDto} from "../../shared/models/entity/resource/resourceEn
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import {defaultUserAppContext} from "./ExtAppContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "./PasswordExpirySettingsContext.test.data";
+import {defaultUserRbacContext} from "../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * @deprecated should use defaultUserAppContext.
@@ -25,11 +26,10 @@ export function defaultAppContext(appContext) {
  * Default props
  */
 export function defaultProps() {
-  const defaultData = {
+  return {
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
+    rbacContext: defaultUserRbacContext()
   };
-
-  return defaultData;
 }
 
 /**
@@ -54,7 +54,8 @@ export function defaultResourceWorkspaceContext(data = {}) {
       {id: "password", label: "Password", position: 6, show: true},
       {id: "totp", label: "TOTP", position: 7, show: true},
       {id: "uri", label: "URI", position: 8, show: true},
-      {id: "modified", label: "Modified", position: 9, show: true}]),
+      {id: "modified", label: "Modified", position: 9, show: true},
+      {id: "location", label: "Location", position: 10, show: true}]),
     filter: {
       type: ResourceWorkspaceFilterTypes.ALL
     },
@@ -82,6 +83,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onLockDetail: jest.fn(),
     onChangeColumnView:  jest.fn(),
     onChangeColumnsSettings:  jest.fn(),
+    getHierarchyFolderCache: jest.fn(() => []),
     ...data
   };
 }
