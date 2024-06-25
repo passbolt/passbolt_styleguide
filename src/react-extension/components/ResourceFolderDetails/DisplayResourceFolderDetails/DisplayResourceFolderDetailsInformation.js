@@ -162,7 +162,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
               <span className="label"><Trans>Location</Trans></span>
               <span className="value">
                 <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
-                  <Icon name="folder"/>
+                { this.folder.personal ? <Icon name="folder"/> : <Icon name="folder-shared"/> }
                   <span>{folderParentName}</span>
                 </button>
               </span>

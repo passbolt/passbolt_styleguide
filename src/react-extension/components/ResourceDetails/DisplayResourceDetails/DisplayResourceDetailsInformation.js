@@ -71,6 +71,7 @@ class DisplayResourceDetailsInformation extends React.Component {
     this.handleTotpClick = this.handleTotpClick.bind(this);
     this.handlePreviewTotpButtonClick = this.handlePreviewTotpButtonClick.bind(this);
     this.handleGoToResourceUriClick = this.handleGoToResourceUriClick.bind(this);
+    this.isFolderParentShared = this.isFolderParentShared.bind(this);
   }
 
   componentDidMount() {
@@ -101,7 +102,6 @@ class DisplayResourceDetailsInformation extends React.Component {
       //current selected resource might have changed and the information received doesn't match anymore. In such case we don't update the state.
       return;
     }
-
     this.setState({
       creator: resourceInformation?.creator,
       modifier: resourceInformation?.modifier,
@@ -209,6 +209,25 @@ class DisplayResourceDetailsInformation extends React.Component {
     }
 
     return "";
+  }
+
+  /**
+   * Check if folder parent is shared
+   * @returns {boolean}
+   */
+  isFolderParentShared() {
+    let isShared = false;
+    console.log(this.props.context.folders)
+    console.log(this.resource.folder_parent_id)
+
+    if (this.resource.folder_parent_id !== null && this.props.context.folders) {
+      const folder = this.props.context.folders.find(item => item.id === this.resource.folder_parent_id);
+      if (folder) {
+        return !folder.personal;
+      }
+    }
+    
+    return isShared;
   }
 
   /**
@@ -623,7 +642,7 @@ class DisplayResourceDetailsInformation extends React.Component {
             <span className="label"><Trans>Location</Trans></span>
             <span className="value">
               <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
-                <Icon name="folder"/>
+                { this.isFolderParentShared() ? <Icon name="folder-shared"/> : <Icon name="folder"/>}
                 <span>{this.getFolderName(this.resource.folder_parent_id)}</span>
               </button>
             </span>
