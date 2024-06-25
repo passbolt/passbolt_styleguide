@@ -397,4 +397,13 @@ describe("Resource Workspace Context", () => {
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
     });
   });
+
+  describe("As LU I should be able to get the folder hierarchy", () => {
+    it("As LU I should be able to show a resource column", async() => {
+      expect.assertions(1);
+      await page.goToAllItems();
+      const hierarchy = page.getHierarchyFolderCache(context.folders[1].id);
+      expect(hierarchy.length).toStrictEqual(2);
+    });
+  });
 });
