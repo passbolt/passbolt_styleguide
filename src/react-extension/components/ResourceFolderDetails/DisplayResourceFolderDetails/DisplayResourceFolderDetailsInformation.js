@@ -110,6 +110,24 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
     return "";
   }
 
+
+  /**
+   * Check if folder parent is shared
+   * @returns {boolean}
+   */
+  isFolderParentShared() {
+    const isShared = false;
+
+    if (this.folder.folder_parent_id !== null && this.props.context.folders) {
+      const folder = this.props.context.folders.find(item => item.id === this.folder.folder_parent_id);
+      if (folder) {
+        return !folder.personal;
+      }
+    }
+
+    return isShared;
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -162,7 +180,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
               <span className="label"><Trans>Location</Trans></span>
               <span className="value">
                 <button type="button" onClick={this.handleFolderParentClickEvent} disabled={!this.props.context.folders} className="link no-border folder-link">
-                  { this.folder.personal || this.folder.folder_parent_id == null ? <Icon name="folder"/> : <Icon name="folder-shared"/> }
+                  { !this.isFolderParentShared() ? <Icon name="folder"/> : <Icon name="folder-shared"/> }
                   <span>{folderParentName}</span>
                 </button>
               </span>
