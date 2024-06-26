@@ -229,9 +229,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasFilterChanged = !this.isFilterEqual(previousFilter, this.state.filter);
     if (hasFilterChanged) {
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
-      const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
-      if (isNotNonePreviousFilter) {
-        await this.unselectAll();
+      const isNonePreviousFilter = previousFilter.type === ResourceWorkspaceFilterTypes.NONE;
+      if (isNonePreviousFilter) {
+        return;
+      }
+      await this.unselectAll();
+
+      if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP) {
         await this.populateDebounced();
       }
     }

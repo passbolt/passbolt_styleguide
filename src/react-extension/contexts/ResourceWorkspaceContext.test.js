@@ -158,12 +158,16 @@ describe("Resource Workspace Context", () => {
 
     it("AS LU I should have resources belonged to a group when the filter is GROUP", async() => {
       const mockGroupResources = context.resources.slice(0, 3);
-      const expectedResourcesCount = 3;
+      const expectedResourcesCount = mockGroupResources.length;
       const leadershipTeamGroup = {group: {id: "516c2db6-0aed-52d8-854f-b3f3499995e7"}};
-      mockContextRequest(context, (path, args) => {
-        const isGroupResourcesRequest = path === "passbolt.resources.find-all" && args.filters;
-        return isGroupResourcesRequest ? mockGroupResources : context.port.request;
+
+      context.port.addRequestListener("passbolt.resources.find-all", async() => mockGroupResources);
+      context.port.addRequestListener("passbolt.resources.update-local-storage", async() => {
+        if (page.filter.type === ResourceWorkspaceFilterTypes.GROUP) {
+          throw new Error("'passbolt.resources.update-local-storage' should have been called after filtering by GROUP");
+        }
       });
+
       await page.goToAllItems();
       await page.goToGroup(leadershipTeamGroup);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
