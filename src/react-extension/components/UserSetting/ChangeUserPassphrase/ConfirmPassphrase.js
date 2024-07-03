@@ -223,7 +223,7 @@ class ConfirmPassphrase extends React.Component {
             <div className="sidebar-help">
               <h3><Trans>What if I forgot my passphrase?</Trans></h3>
               <p><Trans>Unfortunately you need your passphrase in order to continue. If you forgot it, please contact your administrator.</Trans></p>
-              <a className="button" href="https://help.passbolt.com/faq/start/passphrase-recovery" target="_blank" rel="noopener noreferrer">
+              <a className="button" href="https://www.passbolt.com/docs/user/settings/browser/account-recovery-setup/" target="_blank" rel="noopener noreferrer">
                 <span><Trans>Learn more</Trans></span>
               </a>
             </div>
