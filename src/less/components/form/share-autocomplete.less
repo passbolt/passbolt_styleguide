@@ -108,8 +108,14 @@
             }
         }
 
-        .autocomplete-item.suspended {
-            opacity: 0.5;
+        .autocomplete-item {
+            &.suspended {
+                opacity: 0.5;
+            }
+
+            button {
+                max-width: 100%;
+            }
         }
     }
 
