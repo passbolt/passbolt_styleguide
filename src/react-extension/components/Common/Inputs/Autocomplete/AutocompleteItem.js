@@ -62,7 +62,7 @@ class AutocompleteItem extends Component {
    */
   getSubtitle() {
     if (this.props.user) {
-      return this.props.user.username
+      return this.props.user.username;
     } else if (this.props.group) {
       return this.props.t("{{count}} group member", {count: this.props.group.user_count});
     }
@@ -112,8 +112,8 @@ class AutocompleteItem extends Component {
                 <GroupAvatar group={this.props.group}/>
                 }
                 <div className="user">
-                  <span className="name">{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                  <span className="details">{this.getSubtitle()}</span>
+                  <span className="name ellipsis" title={this.getTitle()}>{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
+                  <span className="details ellipsis" title={this.getSubtitle()}>{this.getSubtitle()}</span>
                 </div>
               </button>
             </div>
