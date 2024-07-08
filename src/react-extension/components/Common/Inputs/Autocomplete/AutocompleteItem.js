@@ -36,13 +36,6 @@ class AutocompleteItem extends Component {
     };
   }
 
-  async componentDidMount() {
-    if (this.props.user) {
-      const gpgKey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.user.id);
-      this.setState({gpgKey});
-    }
-  }
-
   /**
    * Bind callbacks methods
    * @return {void}
@@ -57,7 +50,7 @@ class AutocompleteItem extends Component {
    */
   getTitle() {
     if (this.props.user) {
-      return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name} (${this.props.user.username})`;
+      return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name}`;
     } else {
       return `${this.props.group.name}`;
     }
@@ -68,9 +61,8 @@ class AutocompleteItem extends Component {
    * @returns {string}
    */
   getSubtitle() {
-    if (this.props.user && this.state.gpgKey) {
-      const longId = this.state.gpgKey.fingerprint.substr(this.state.gpgKey.fingerprint.length - 16);
-      return longId.replace(/(.{4})/g, "$1 ");
+    if (this.props.user) {
+      return this.props.user.username
     } else if (this.props.group) {
       return this.props.t("{{count}} group member", {count: this.props.group.user_count});
     }
