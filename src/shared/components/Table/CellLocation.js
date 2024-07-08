@@ -14,6 +14,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import Icon from "../Icons/Icon";
+import TooltipPortal from "../../../react-extension/components/Common/Tooltip/TooltipPortal";
 
 /**
  * This component represents a table cell location
@@ -22,7 +23,7 @@ class CellLocation extends Component {
   /**
    * Handle click
    * @param event
-   * @param {string} id The folder id
+   * @param {string | null} id The folder id
    */
   handleClick(event, id) {
     event.stopPropagation();
@@ -46,6 +47,20 @@ class CellLocation extends Component {
   }
 
   /**
+   * Get the tooltip hierarchy folder message
+   */
+  get tooltipHierarchyFolder() {
+    return this.value.map((folder, index) =>
+      <div key={folder.id} className="folder-level" style={{marginLeft: `${5 * index}px`}}>
+        {folder.folder_parent_id !== null &&
+          <span className="caret">›</span>
+        }
+        <span>{folder.name}</span>
+      </div>
+    );
+  }
+
+  /**
    * Render the component
    * @return {React.JSX.Element|null}
    */
@@ -53,16 +68,18 @@ class CellLocation extends Component {
     // return empty array if a resource have no folder parent
     if (this.value.length === 0) {
       return (
-        <button className="link no-border" type="button" onClick={event => this.handleClick(event, null)}>
-          <span>
-            <Icon name="folder"/>
-            <span>{this.props.t("root")}</span>
-          </span>
-        </button>
+        <TooltipPortal message={<span>{this.props.t("root")}</span>} direction="auto">
+          <button className="link no-border" type="button" onClick={event => this.handleClick(event, null)}>
+            <span>
+              <Icon name="folder"/>
+              <span>{this.props.t("root")}</span>
+            </span>
+          </button>
+        </TooltipPortal>
       );
     }
     return (
-      <div title={this.lastFolder.name}>
+      <TooltipPortal message={this.tooltipHierarchyFolder} direction="auto">
         <button className="link no-border" type="button" onClick={event => this.handleClick(event, this.lastFolder.id)}>
           <span>
             {!this.lastFolder.personal &&
@@ -81,7 +98,7 @@ class CellLocation extends Component {
             )}
           </span>
         </button>
-      </div>
+      </TooltipPortal>
     );
   }
 }
