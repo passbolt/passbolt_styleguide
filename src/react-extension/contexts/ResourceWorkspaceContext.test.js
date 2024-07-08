@@ -317,9 +317,10 @@ describe("Resource Workspace Context", () => {
         {id: "password", label: "Password", position: 6, show: true},
         {id: "totp", label: "TOTP", position: 7, show: true},
         {id: "uri", label: "URI", position: 8, show: true},
-        {id: "modified", label: "Modified", position: 9, show: true}
+        {id: "modified", label: "Modified", position: 9, show: true},
+        {id: "location", label: "Location", position: 10, show: true}
       ];
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(9);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(10);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(defaultColumnsSetting);
     });
 
@@ -334,7 +335,8 @@ describe("Resource Workspace Context", () => {
         {id: "password", label: "Password", width: 300, position: 6, show: true},
         {id: "totp", label: "TOTP", position: 7, width: 190, show: true},
         {id: "uri", label: "URI", position: 8, show: false},
-        {id: "modified", label: "Modified", width: 250, position: 9, show: true}
+        {id: "modified", label: "Modified", width: 250, position: 9, show: true},
+        {id: "location", label: "Location", position: 10, show: true}
       ];
       const sorter = {
         propertyName: 'name',
@@ -350,7 +352,7 @@ describe("Resource Workspace Context", () => {
       });
       await page.goToAllItems();
       await page.goToRootFolder();
-      expect(page.columnsResourceSetting.items.length).toStrictEqual(9);
+      expect(page.columnsResourceSetting.items.length).toStrictEqual(10);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(columnsSetting);
       expect(page.sorter.toDto()).toStrictEqual(sorter);
     });
@@ -392,13 +394,23 @@ describe("Resource Workspace Context", () => {
         {id: "password", label: "Password", position: 3, width: 100, show: true},
         {id: "totp", label: "TOTP", position: 5, width: 190, show: true},
         {id: "uri", label: "URI", position: 4, width: 300, show: true},
-        {id: "modified", label: "Modified", position: 5, width: 250, show: true}
+        {id: "modified", label: "Modified", position: 5, width: 250, show: true},
+        {id: "location", label: "Location", position: 10, show: true}
       ];
       await page.goToAllItems();
       await page.onChangeColumnView("name", false);
       await page.onChangeColumnsSettings(columnsSetting);
-      expect(page.columnsResourceSetting.length).toStrictEqual(9);
+      expect(page.columnsResourceSetting.length).toStrictEqual(10);
       expect(page.columnsResourceSetting.toDto()).toStrictEqual(mergedColumnsSetting);
+    });
+  });
+
+  describe("As LU I should be able to get the folder hierarchy", () => {
+    it("As LU I should be able to show a resource column", async() => {
+      expect.assertions(1);
+      await page.goToAllItems();
+      const hierarchy = page.getHierarchyFolderCache(context.folders[1].id);
+      expect(hierarchy.length).toStrictEqual(2);
     });
   });
 });

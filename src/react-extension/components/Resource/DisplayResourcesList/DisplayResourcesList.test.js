@@ -331,13 +331,35 @@ describe("Display Resources", () => {
   });
 
   describe('As LU, I should open the uri of a resource.', () => {
-    it('As LU, I should be able to follow the uri of a resource', async() => {
+    it('As LU, I should be able to follow the uri of a resource', async () => {
+      const props = propsWithFilteredResources();
+      const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {
+      });
+      jest.spyOn(props.resourceWorkspaceContext, 'onGoToResourceUriRequested').mockImplementationOnce(() => {
+      });
+      await page.resource(1).selectUri();
+      expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
+    });
+  });
+
+  describe('As LU, I should go to the folder location of a resource.', () => {
+    it('As LU, I should be able to go to the folder root if a resource is not in a folder', async() => {
+      expect.assertions(1);
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
-      jest.spyOn(props.resourceWorkspaceContext, 'onGoToResourceUriRequested').mockImplementationOnce(() => {});
-      await page.resource(1).selectUri();
-      expect(props.resourceWorkspaceContext.onGoToResourceUriRequested).toHaveBeenCalled();
+      await page.resource(1).selectLocation();
+      expect(page.resource(1).locationLink).toStrictEqual("root");
+    });
+
+    it('As LU, I should be able to go to the folder location of a resource', async() => {
+      expect.assertions(1);
+      const props = propsWithFilteredResourcesAndColumnsHidden();
+      const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
+      await page.resource(1).selectLocation();
+      expect(page.resource(1).locationLink).toStrictEqual("Accounting›Bank");
     });
   });
 
@@ -459,7 +481,7 @@ describe("Display Resources", () => {
       await waitFor(() => {});
 
       // 6 columns should be displayed
-      expect(page.columnsCount).toStrictEqual(6);
+      expect(page.columnsCount).toStrictEqual(7);
       expect(page.columns(3).name).toStrictEqual("");
       expect(page.columns(4).name).toStrictEqual("Name");
       expect(page.columns(5).name).toStrictEqual("Password");
