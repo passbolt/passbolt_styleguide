@@ -1189,7 +1189,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   /**
    * Get the hierarchy of a folder by ID in cache
    * @param {string} id The id of the folder
-   * @returns {*[]}
+   * @returns {array<object>} Array of folders
    */
   getHierarchyFolderCache(id) {
     // When resources are not in a folder
