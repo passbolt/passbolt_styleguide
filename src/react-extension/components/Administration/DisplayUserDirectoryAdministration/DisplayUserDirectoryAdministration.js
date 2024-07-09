@@ -692,7 +692,7 @@ class DisplayUserDirectoryAdministration extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out our ldap configuration guide.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/ldap" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/user-provisioning/users-directory/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

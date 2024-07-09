@@ -214,13 +214,13 @@ class ManageSsoSettings extends React.Component {
             <h3><Trans>Important notice:</Trans></h3>
             <p>
               <Trans>Enabling SSO changes the security risks.</Trans> <Trans>For example an attacker with a local machine access maybe be able to access secrets, if the user is still logged in with the Identity provider.</Trans> <Trans>Make sure users follow screen lock best practices.</Trans>
-              <a href="https://help.passbolt.com/configure/sso" target="_blank" rel="noopener noreferrer"><Trans>Learn more</Trans></a>
+              <a href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer"><Trans>Learn more</Trans></a>
             </p>
           </div>
           <div className="sidebar-help">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about SSO, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/sso" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/authentication/sso/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

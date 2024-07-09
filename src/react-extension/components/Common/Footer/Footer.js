@@ -19,7 +19,7 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import Tooltip from "../Tooltip/Tooltip";
 
 const CREDITS_URL = "https://www.passbolt.com/credits";
-const UNSAFE_URL = "https://help.passbolt.com/faq/hosting/why-unsafe";
+const UNSAFE_URL = "https://www.passbolt.com/docs/hosting/faq/why-I-see-unsafe-mode-banner/";
 
 /**
  * The application footer

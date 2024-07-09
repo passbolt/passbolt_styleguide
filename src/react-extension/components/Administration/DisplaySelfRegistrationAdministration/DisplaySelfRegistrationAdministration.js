@@ -349,7 +349,7 @@ class DisplaySelfRegistrationAdministration extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>What is user self registration?</Trans></h3>
             <p><Trans>User self registration enables users with an email from a whitelisted domain to create their passbolt account without prior admin invitation.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/self-registration" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/user-provisioning/self-registration/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

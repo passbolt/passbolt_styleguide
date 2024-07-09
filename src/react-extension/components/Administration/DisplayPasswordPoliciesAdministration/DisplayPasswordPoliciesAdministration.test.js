@@ -60,7 +60,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.helpBoxTitle.textContent).toBe("What is password policy?");
       expect(page.helpBoxDescription.textContent).toBe("For more information about the password policy settings, checkout the dedicated page on the help website.");
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/password-policies');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/password-configuration/password-policy/');
     });
   });
 
