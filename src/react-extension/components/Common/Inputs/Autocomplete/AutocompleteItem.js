@@ -18,6 +18,10 @@ import GroupAvatar from "../../Avatar/GroupAvatar";
 import {isUserSuspended} from "../../../../../shared/utils/userUtils";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import Icon from "../../../../../shared/components/Icons/Icon";
+import TooltipPortal from "../../Tooltip/TooltipPortal";
+import TooltipMessageFingerprintLoading from "../../Tooltip/TooltipMessageFingerprintLoading";
+import Fingerprint from "../../Fingerprint/Fingerprint";
 
 class AutocompleteItem extends Component {
   /**
@@ -30,9 +34,12 @@ class AutocompleteItem extends Component {
     this.bindCallbacks();
   }
 
+  /**
+   * Returns the component default state
+   */
   get defaultState() {
     return {
-      gpgKey: null
+      tooltipFingerprintMessage: null,
     };
   }
 
@@ -42,6 +49,7 @@ class AutocompleteItem extends Component {
    */
   bindCallbacks() {
     this.handleClick = this.handleClick.bind(this);
+    this.onTooltipFingerprintMouseHover = this.onTooltipFingerprintMouseHover.bind(this);
   }
 
   /**
@@ -67,6 +75,20 @@ class AutocompleteItem extends Component {
       return this.props.t("{{count}} group member", {count: this.props.group.user_count});
     }
     return "";
+  }
+
+  /**
+   * Handle whenever the user passes its mouse hover the tooltip.
+   * @returns {Promise<JSX>}
+   */
+  async onTooltipFingerprintMouseHover() {
+    if (this.state.tooltipFingerprintMessage) {
+      return;
+    }
+
+    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.user.id);
+    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
+    this.setState({tooltipFingerprintMessage});
   }
 
   /**
@@ -112,8 +134,18 @@ class AutocompleteItem extends Component {
                 <GroupAvatar group={this.props.group}/>
                 }
                 <div className="user">
-                  <span className="name ellipsis" title={this.getTitle()}>{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                  <span className="details ellipsis" title={this.getSubtitle()}>{this.getSubtitle()}</span>
+                  <span className="user-fullname-container">
+                    <span className="name ellipsis">{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
+                    {this.props.user &&
+                      <TooltipPortal
+                        message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
+                        direction="auto"
+                        onMouseHover={this.onTooltipFingerprintMouseHover}>
+                        <Icon name="info-circle" baseline={true}/>
+                      </TooltipPortal>
+                    }
+                  </span>
+                  <span className="details ellipsis">{this.getSubtitle()}</span>
                 </div>
               </button>
             </div>

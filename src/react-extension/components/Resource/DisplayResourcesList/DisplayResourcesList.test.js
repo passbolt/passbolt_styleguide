@@ -331,7 +331,7 @@ describe("Display Resources", () => {
   });
 
   describe('As LU, I should open the uri of a resource.', () => {
-    it('As LU, I should be able to follow the uri of a resource', async () => {
+    it('As LU, I should be able to follow the uri of a resource', async() => {
       const props = propsWithFilteredResources();
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {
