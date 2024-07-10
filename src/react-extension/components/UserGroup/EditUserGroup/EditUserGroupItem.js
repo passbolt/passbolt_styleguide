@@ -96,7 +96,7 @@ class EditUserGroupItem extends Component {
       <div className="email ellipsis"><strong>{this.props.groupUser.user.username}</strong></div>
       <Fingerprint fingerprint={gpgkey.fingerprint}/>
     </div>;
-    setTimeout(() => this.setState({tooltipFingerprintMessage}), 2000);
+    this.setState({tooltipFingerprintMessage});
   }
 
   /**
