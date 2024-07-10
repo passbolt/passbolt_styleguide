@@ -24,6 +24,9 @@ import Icon from "../../../shared/components/Icons/Icon";
 import Tooltip from "../Common/Tooltip/Tooltip";
 import Select from "../Common/Select/Select";
 import {isUserSuspended} from "../../../shared/utils/userUtils";
+import TooltipPortal from "../Common/Tooltip/TooltipPortal";
+import TooltipMessageFingerprintLoading from "../Common/Tooltip/TooltipMessageFingerprintLoading";
+import Fingerprint from "../Common/Fingerprint/Fingerprint";
 
 class SharePermissionItem extends Component {
   /**
@@ -32,7 +35,7 @@ class SharePermissionItem extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = this.defaultState;
     if (!Number.isInteger(props.permissionType)) {
       throw new TypeError(this.translate("Invalid permission type for share permission item."));
     }
@@ -41,14 +44,12 @@ class SharePermissionItem extends Component {
   }
 
   /**
-   * Component did mount
-   * @returns {Promise<void>}
+   * Returns the component default state
    */
-  async componentDidMount() {
-    if (this.isUser()) {
-      const gpgKey = await this.findUserGpgKey(this.props.aro.profile.user_id);
-      this.setState({gpgKey});
-    }
+  get defaultState() {
+    return {
+      tooltipFingerprintMessage: null,
+    };
   }
 
   /**
@@ -64,15 +65,7 @@ class SharePermissionItem extends Component {
   bindEventHandlers() {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  /**
-   * Find a user gpg key
-   * @param {string} userId
-   * @returns {Promise<object>}
-   */
-  async findUserGpgKey(userId) {
-    return await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
+    this.onTooltipFingerprintMouseHover = this.onTooltipFingerprintMouseHover.bind(this);
   }
 
   /**
@@ -108,24 +101,17 @@ class SharePermissionItem extends Component {
   }
 
   /**
-   * Get the tooltip message
-   * @returns {JSX.Element}
+   * Handle whenever the user passes its mouse hover the tooltip.
+   * @returns {Promise<JSX>}
    */
-  get tooltipMessage() {
-    return <>
-      <div className="email"><strong>{this.props.aro.username}</strong></div>
-      <div className="fingerprint">{this.formatFingerprint(this.state.gpgKey.fingerprint)}</div>
-    </>;
-  }
+  async onTooltipFingerprintMouseHover() {
+    if (this.state.tooltipFingerprintMessage) {
+      return;
+    }
 
-  /**
-   * Format fingerprint
-   * @param {string} fingerprint An user finger print
-   * @returns {JSX.Element}
-   */
-  formatFingerprint(fingerprint) {
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.aro.id);
+    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
+    this.setState({tooltipFingerprintMessage});
   }
 
   /**
@@ -142,14 +128,6 @@ class SharePermissionItem extends Component {
    */
   isGroup() {
     return !(this.props.aro && this.props.aro.profile);
-  }
-
-  /**
-   * Has a gpg key fingerprint
-   * @returns {*}
-   */
-  hasGpgKey() {
-    return this.state.gpgKey?.fingerprint;
   }
 
   getClassName() {
@@ -218,10 +196,13 @@ class SharePermissionItem extends Component {
         <div className="aro">
           <div className="aro-name">
             <span className="ellipsis">{this.getAroName()}</span>
-            {this.hasGpgKey() &&
-              <Tooltip message={this.tooltipMessage}>
-                <Icon name="info-circle"/>
-              </Tooltip>
+            {this.isUser() &&
+              <TooltipPortal
+                message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
+                direction="auto"
+                onMouseHover={this.onTooltipFingerprintMouseHover}>
+                <Icon name="info-circle" baseline={true}/>
+              </TooltipPortal>
             }
           </div>
           <div className="aro-details">
