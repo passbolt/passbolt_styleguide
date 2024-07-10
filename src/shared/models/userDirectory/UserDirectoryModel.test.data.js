@@ -59,6 +59,7 @@ export const mockedDefaultData = (data = {}) => {
     authenticationType: "basic",
     fieldsMapping: defaultFieldsMapping(data.fieldsMapping),
     fallbackFields: defaultFallbackFields(data.fallbackFields),
+    deleteUserBehavior: "delete",
   };
 
   delete data.fieldsMapping;
