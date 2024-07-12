@@ -104,7 +104,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
 
     if (this.props.context.folders) {
       const folder = this.props.context.folders.find(item => item.id === folderId);
-      return folder.name;
+      return folder?.name;
     }
 
     return "";
