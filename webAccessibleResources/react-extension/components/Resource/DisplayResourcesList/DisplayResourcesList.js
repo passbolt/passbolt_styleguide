@@ -54,6 +54,8 @@ import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContex
 import CellDate from "../../../../shared/components/Table/CellDate";
 import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
+import ColumnLocationModel from "../../../../shared/models/column/ColumnLocationModel";
+import CellLocation from "../../../../shared/components/Table/CellLocation";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -114,6 +116,7 @@ class DisplayResourcesList extends React.Component {
     this.getPreviewTotp = this.getPreviewTotp.bind(this);
     this.isPasswordResources = this.isPasswordResources.bind(this);
     this.isTotpResources = this.isTotpResources.bind(this);
+    this.handleLocationClick = this.handleLocationClick.bind(this);
   }
 
   /**
@@ -137,6 +140,9 @@ class DisplayResourcesList extends React.Component {
     }
     this.defaultColumns.push(new ColumnUriModel({cellRenderer: {component: CellLink, props: {onClick: this.handleGoToResourceUriClick}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("URI")}}}));
     this.defaultColumns.push(new ColumnModifiedModel({cellRenderer: {component: CellDate, props: {locale: this.props.context.locale, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Modified")}}}));
+    if (this.canUseFolders) {
+      this.defaultColumns.push(new ColumnLocationModel({getValue: resource => this.props.resourceWorkspaceContext.getHierarchyFolderCache(resource.folder_parent_id), cellRenderer: {component: CellLocation, props: {onClick: this.handleLocationClick, t: this.props.t}}, headerCellRenderer: {component: CellHeaderDefault, props: {label: this.translate("Location")}}}));
+    }
   }
 
   /**
@@ -212,6 +218,15 @@ class DisplayResourcesList extends React.Component {
   createRefs() {
     this.tableviewRef = React.createRef();
     this.listRef = React.createRef();
+  }
+
+  /**
+   * Check if the user can use folders.
+   * @returns {boolean}
+   */
+  get canUseFolders() {
+    return this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
   }
 
   /**
@@ -666,6 +681,18 @@ class DisplayResourcesList extends React.Component {
       this.displaySuccessNotification(this.translate("The password has been removed from favorites"));
     } catch (error) {
       this.displayErrorNotification(error.message);
+    }
+  }
+
+  /**
+   * Handle the user click on location folder from the grid.
+   */
+  handleLocationClick(folderId) {
+    if (folderId) {
+      this.props.history.push(`/app/folders/view/${folderId}`);
+    } else { // Case of root folder
+      const filter = {type: ResourceWorkspaceFilterTypes.ROOT_FOLDER};
+      this.props.history.push(`/app/passwords`, {filter});
     }
   }
 

@@ -59,7 +59,7 @@ describe("DisplayAdministrationPasswordExpirySettingsPage", () => {
       const helpPageLink = page.helpPageLink;
       expect(helpPageLink).not.toBeNull();
       expect(helpPageLink.getAttribute('rel')).toStrictEqual("noopener noreferrer");
-      expect(helpPageLink.getAttribute('href')).toStrictEqual("https://help.passbolt.com/configure/password-expiry");
+      expect(helpPageLink.getAttribute('href')).toStrictEqual("https://passbolt.com/docs/admin/password-configuration/password-expiry");
     });
   });
 

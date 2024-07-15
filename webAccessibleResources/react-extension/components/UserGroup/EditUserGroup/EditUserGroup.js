@@ -31,7 +31,6 @@ import {maxSizeValidation} from '../../../lib/Error/InputValidator';
 import Icon from "../../../../shared/components/Icons/Icon";
 import {RESOURCE_GROUP_NAME_MAX_LENGTH} from "../../../../shared/constants/inputs.const";
 
-
 /**
  * This component allows to edit an user group
  */
@@ -148,25 +147,6 @@ class EditUserGroup extends Component {
    */
   findUser(userId) {
     return this.props.context.users.find(user => user.id === userId);
-  }
-
-  /**
-   * Find a user gpg key
-   * @param {string} userId
-   * @returns {Promise<object>}
-   */
-  async findUserGpgkey(userId) {
-    return await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
-  }
-
-  /**
-   * Decorate users with their associated gpg key
-   * @param users
-   * @returns {Promise<array>}
-   */
-  async decorateUsersWithGpgkey(users) {
-    const mapUserWithGpgkey = async user => Object.assign(user, {gpgkey: await this.findUserGpgkey(user.id)});
-    return Promise.all(users.map(mapUserWithGpgkey));
   }
 
   /**
@@ -652,7 +632,7 @@ class EditUserGroup extends Component {
     const matchText = user => words.every(word => matchUser(word, user));
 
     let currentCount = 0;
-    const firstUsersMatched = this.props.context.users.filter(user => {
+    return this.props.context.users.filter(user => {
       const isUserMatching = currentCount < Autocomplete.DISPLAY_LIMIT
         && user.active === true
         && !this.isMember(user)
@@ -663,7 +643,6 @@ class EditUserGroup extends Component {
       }
       return isUserMatching;
     });
-    return this.decorateUsersWithGpgkey(firstUsersMatched);
   }
 
   /**

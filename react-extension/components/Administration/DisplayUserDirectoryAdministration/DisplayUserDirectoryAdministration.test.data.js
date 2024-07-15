@@ -170,6 +170,7 @@ export const mockModel = {
   createGroups: true,
   deleteGroups: true,
   updateGroups: true,
+  deleteUserBehavior: "delete",
   fieldsMapping: {
     ad: {
       user: {

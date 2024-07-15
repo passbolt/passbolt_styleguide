@@ -276,6 +276,14 @@ export default class ResourceWorkspaceContextPage {
   }
 
   /**
+   * get the folder hierarchy
+   * @param {string} id The id of the folder
+   */
+  getHierarchyFolderCache(id) {
+    return this.resourceWorkspaceContext.getHierarchyFolderCache(id);
+  }
+
+  /**
    * Returns the rendering of  the page
    * @param appContext a app context
    * @param args the args

@@ -16,9 +16,122 @@ import CollectionValidationError from "./collectionValidationError";
 import EntityValidationError from "./entityValidationError";
 import {TestEntityV2Collection} from "./entityV2Collection.test.data";
 import {defaultAssociatedTestEntityDto, defaultTestEntityDto, TestEntity} from "./entity.test.data";
+import EntityV2Collection from "./entityV2Collection";
+import {defaultTestEntityV2Dto} from "./entityV2.test.data";
+
+beforeEach(() => {
+  TestEntityV2Collection._cachedSchema = {};
+});
 
 describe("EntityV2Collection", () => {
-  describe("EntityV2Collection:push", () => {
+  describe("::entityClass", () => {
+    // It is expected to throw an error but does not for an unexpected reason.
+    it.failing("should throw an exception if called to mimic its abstract nature", () => {
+      expect.assertions(1);
+      expect(() => EntityV2Collection.entityClass).toThrow();
+    });
+  });
+
+  describe("::buildOrCloneEntity", () => {
+    it("should throw an exception if the data parameter is not an object.", () => {
+      const collection = new TestEntityV2Collection([]);
+      expect.assertions(1);
+      expect(() => collection.buildOrCloneEntity(42)).toThrow(TypeError);
+    });
+
+    it("should create entity from dto.", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entityDto1 = defaultTestEntityDto();
+
+      expect.assertions(3);
+      const entity = collection.buildOrCloneEntity(entityDto1);
+      expect(entity).toBeInstanceOf(TestEntity);
+      expect(entity.id).toEqual(entityDto1.id);
+      expect(entity.name).toEqual(entityDto1.name);
+    });
+
+    it("should clone entity.", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity1 = new TestEntity(defaultTestEntityDto());
+
+      expect.assertions(5);
+      const entity2 = collection.buildOrCloneEntity(entity1);
+      expect(entity2).toBeInstanceOf(TestEntity);
+      expect(entity2.id).toEqual(entity1.id);
+      expect(entity2.name).toEqual(entity1.name);
+      entity1.id = crypto.randomUUID();
+      entity1.name = "updated name";
+      expect(entity2.id).not.toEqual(entity1.id);
+      expect(entity2.name).not.toEqual(entity1.name);
+    });
+  });
+
+  describe("::constructor", () => {
+    it("should validate the collection schema.", () => {
+      expect.assertions(1);
+      expect(() => new TestEntityV2Collection({})).toThrowEntityValidationError("items");
+    });
+
+    it("should push the dtos given as parameter into the collection.", () => {
+      expect.assertions(10);
+      const entityDto1 = defaultTestEntityDto();
+      const entityDto2 = defaultTestEntityDto();
+      const entityDto3 = defaultTestEntityDto();
+      const dtos = [entityDto1, entityDto2, entityDto3];
+      const collection = new TestEntityV2Collection(dtos);
+      expect(collection.items).toHaveLength(3);
+      expect(collection.items[0]).toBeInstanceOf(TestEntity);
+      expect(collection.items[0].id).toEqual(entityDto1.id);
+      expect(collection.items[0].name).toEqual(entityDto1.name);
+      expect(collection.items[1]).toBeInstanceOf(TestEntity);
+      expect(collection.items[1].id).toEqual(entityDto2.id);
+      expect(collection.items[1].name).toEqual(entityDto2.name);
+      expect(collection.items[2]).toBeInstanceOf(TestEntity);
+      expect(collection.items[2].id).toEqual(entityDto3.id);
+      expect(collection.items[2].name).toEqual(entityDto3.name);
+    });
+
+    it("should delete the _props property.", () => {
+      expect.assertions(1);
+      const entityDto1 = defaultTestEntityDto();
+      const entityDto2 = defaultTestEntityDto();
+      const entityDto3 = defaultTestEntityDto();
+      const dtos = [entityDto1, entityDto2, entityDto3];
+      const collection = new TestEntityV2Collection(dtos);
+      expect(collection._props).toBeNull();
+    });
+  });
+
+  describe("::validateSchema", () => {
+    it("should retrieve the schema on first validation and cache for later usage.", () => {
+      expect.assertions(3);
+      jest.spyOn(TestEntityV2Collection, "getSchema");
+      expect(TestEntityV2Collection._cachedSchema.TestEntityV2Collection).toBeUndefined();
+      new TestEntityV2Collection([]);
+      expect(TestEntityV2Collection._cachedSchema.TestEntityV2Collection).toEqual(TestEntityV2Collection.getSchema());
+      new TestEntityV2Collection([]);
+      expect(TestEntityV2Collection.getSchema).toHaveBeenCalledTimes(2);
+    });
+
+    it("should not validate the schema if `validate: false` is passed as an option.", () => {
+      expect.assertions(1);
+
+      jest.spyOn(TestEntityV2Collection.prototype, "validateSchema");
+
+      new TestEntityV2Collection([defaultTestEntityV2Dto()], {validate: false});
+
+      expect(TestEntityV2Collection.prototype.validateSchema).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("::getSchema", () => {
+    it("should throw an exception if called to mimic its abstract nature", () => {
+      expect.assertions(1);
+      expect(() => EntityV2Collection.getSchema()).toThrow();
+    });
+  });
+
+  describe("::push", () => {
     it("should throw an exception if the data parameter is not an object.", () => {
       const collection = new TestEntityV2Collection([]);
       expect.assertions(1);
@@ -145,8 +258,26 @@ describe("EntityV2Collection", () => {
       expect(collection.items[0]._props.name).toEqual(entity.name);
     });
 
-    // @todo do we want this capability on this function?
-    it.todo("should ignore invalid content");
+    it("should call the onItemPushed callback when an item is added to the collection", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity = new TestEntity(defaultTestEntityDto());
+      const onItemPushed = jest.fn();
+
+      expect.assertions(1);
+      collection.push(entity, {}, {onItemPushed});
+      expect(onItemPushed).toHaveBeenLastCalledWith(entity);
+    });
+
+    it("should pass along validateBuildRules options", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity = new TestEntity(defaultTestEntityDto());
+      const validateBuildRules = {opt1: "value1"};
+      jest.spyOn(collection, "validateBuildRules");
+
+      expect.assertions(1);
+      collection.push(entity, {}, {validateBuildRules});
+      expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity, validateBuildRules);
+    });
   });
 
   describe("GroupsCollection:pushMany", () => {
@@ -276,6 +407,18 @@ describe("EntityV2Collection", () => {
       expect(collection.items[0].id).toEqual(entity1.id);
       expect(collection.items[1]).toBeInstanceOf(TestEntity);
       expect(collection.items[1].id).toEqual(entity3.id);
+    });
+
+    it("should pass along entities options and local options to push function", () => {
+      const collection = new TestEntityV2Collection([]);
+      const entity = defaultTestEntityDto();
+      const entitiesOptions = {ignoreInvalidEntity: true};
+      const options = {opt1: "value1"};
+      jest.spyOn(collection, "push");
+
+      expect.assertions(1);
+      collection.pushMany([entity], entitiesOptions, options);
+      expect(collection.push).toHaveBeenLastCalledWith(entity, entitiesOptions, options);
     });
   });
 });

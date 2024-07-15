@@ -60,7 +60,7 @@ describe("See the Autocomplete", () => {
     it('As LU I should see an item', async() => {
       expect.assertions(6);
       const items = [
-        {name: "group", groups_users: []}
+        {name: "group", user_count: 1}
       ];
       const requestMockImpl = jest.fn(() => items);
       jest.spyOn(props, 'searchCallback').mockImplementation(requestMockImpl);
@@ -77,7 +77,7 @@ describe("See the Autocomplete", () => {
     it('As LU I should see an item with the number of user into the group', async() => {
       expect.assertions(1);
       const items = [
-        {name: "group", groups_users: groups}
+        {name: "group", user_count: groups.length}
       ];
       const requestMockImpl = jest.fn(() => items);
       jest.spyOn(props, 'searchCallback').mockImplementation(requestMockImpl);

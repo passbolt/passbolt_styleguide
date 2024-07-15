@@ -112,9 +112,10 @@ export const MASKS = {
   }
 };
 
-const NUMBER_OF_ASCII_CHARACTER = 128;
 const NUMBER_OF_WORD_CASE = 3;
 const LOOK_ALIKE_CHARS = ["O", "l", "|", "I", "0", "1"];
+
+const ALL_CHARS = Object.values(MASKS).flatMap(mask => mask.characters);
 
 export const SecretGeneratorComplexity = {
   /**
@@ -152,7 +153,9 @@ export const SecretGeneratorComplexity = {
       }
     }
 
-    return calculEntropy(passwordCharacters.length, maskSize);
+    const unknownMaskSet = new Set(passwordCharacters.filter(character => !ALL_CHARS.includes(character)));
+
+    return calculEntropy(passwordCharacters.length, maskSize + unknownMaskSet.size);
   },
 
   /**
@@ -164,8 +167,8 @@ export const SecretGeneratorComplexity = {
   entropyPassphrase: (numberOfWords = 0, separator = '') => {
     const words = PassphraseGeneratorWords['en-UK'];
     // determine a constant for separator
-    const maskSize = (separator.length * NUMBER_OF_ASCII_CHARACTER) + words.length + NUMBER_OF_WORD_CASE;
-    return calculEntropy(numberOfWords, maskSize);
+    const wordMaskSize = words.length * NUMBER_OF_WORD_CASE;
+    return calculEntropy(numberOfWords, wordMaskSize) + SecretGeneratorComplexity.entropyPassword(separator);
   },
 
   /**

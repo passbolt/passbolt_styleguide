@@ -350,6 +350,8 @@ class ExtAppContextProvider extends React.Component {
     const displayExpiredSession = () => {
       if (!this.state.isSessionLogoutByUser) {
         callback();
+        // Flush resources to not leave sensitive data
+        this.setState({resources: []});
       }
     };
     this.props.port.on('passbolt.auth.after-logout', displayExpiredSession);

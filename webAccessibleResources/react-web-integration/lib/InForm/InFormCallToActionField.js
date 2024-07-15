@@ -27,7 +27,8 @@ class InFormCallToActionField {
   static findAll(selector) {
     const domFields =  Array.from(document.querySelectorAll(selector));
     const iframesFields = InFormCallToActionField.findAllInIframes(selector);
-    return domFields.concat(iframesFields);
+    const shadowDomFields = InFormCallToActionField.findAllInShadowDom(selector);
+    return domFields.concat(iframesFields).concat(shadowDomFields);
   }
 
   /**
@@ -38,6 +39,18 @@ class InFormCallToActionField {
     const iframes = DomUtils.getAccessibleAndSameDomainIframes();
     const queryMapper = iframe => Array.from(iframe.contentDocument.querySelectorAll(selector));
     return iframes
+      .map(queryMapper)
+      .flat();
+  }
+
+  /**
+   * Retrieve all the shadow dom elements which can be an in-form username or password fields
+   * @return {*}
+   */
+  static findAllInShadowDom(selector) {
+    const shadowDomDocuments = DomUtils.getShadowDomDocuments();
+    const queryMapper = shadowDom => Array.from(shadowDom.querySelectorAll(selector));
+    return shadowDomDocuments
       .map(queryMapper)
       .flat();
   }
@@ -261,30 +274,6 @@ class InFormCallToActionField {
     // Remove the call-to-action
     this.scrollableFieldParent = DomUtils.getScrollParent(this.field);
     this.scrollableFieldParent.addEventListener('scroll', this.removeCallToActionIframe);
-  }
-
-
-  /** AUTOFILL **/
-
-  /**
-   * Autofill a field
-   * @param text the text to fill in the field
-   */
-  autofill(text) {
-    const keydownEvent = new KeyboardEvent("keydown", {bubbles: true});
-    const keypressEvent = new KeyboardEvent("keypress", {bubbles: true});
-    const inputEvent = new InputEvent("input", {inputType: "insertText", data: text, bubbles: true});
-    const keyupEvent = new KeyboardEvent("keyup", {bubbles: true});
-    const changeEvent = new Event("change", {bubbles: true});
-
-    this.field.value = text;
-
-    // Dispatch events, they happen in this order: down, press, input, up, change, ↑, ↑, ↓, ↓, ←, →, ←, →, B, A
-    this.field.dispatchEvent(keydownEvent);
-    this.field.dispatchEvent(keypressEvent);
-    this.field.dispatchEvent(inputEvent);
-    this.field.dispatchEvent(keyupEvent);
-    this.field.dispatchEvent(changeEvent);
   }
 
   /** DESTROY */

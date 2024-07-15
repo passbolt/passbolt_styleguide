@@ -466,7 +466,7 @@ export class ManageSmtpAdministrationSettings extends React.Component {
             <div className="sidebar-help">
               <h3><Trans>Why do I need an SMTP server?</Trans></h3>
               <p><Trans>Passbolt needs an smtp server in order to send invitation emails after an account creation and to send email notifications.</Trans></p>
-              <a className="button" href="https://help.passbolt.com/configure/email/setup" target="_blank" rel="noopener noreferrer">
+              <a className="button" href="https://passbolt.com/docs/admin/emails/email-server/" target="_blank" rel="noopener noreferrer">
                 <Icon name="document"/>
                 <span><Trans>Read the documentation</Trans></span>
               </a>

@@ -17,76 +17,40 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans, withTranslation} from "react-i18next";
-import Tooltip from "../../Common/Tooltip/Tooltip";
 import Select from "../../Common/Select/Select";
 import {isUserSuspended} from "../../../../shared/utils/userUtils";
+import TooltipPortal from "../../Common/Tooltip/TooltipPortal";
+import Fingerprint from "../../Common/Fingerprint/Fingerprint";
+import TooltipMessageGroupUserDetailsLoading from "../../Common/Tooltip/TooltipMessageGroupUserDetailsLoading";
 
 /**
  * This component allows to edit an user group
  */
 class EditUserGroupItem extends Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Default constructor
+   * @param props The component props
    */
   constructor(props) {
     super(props);
     this.state = this.defaultState;
+    this.bindCallbacks();
   }
 
   /**
-   * Returns the default component state
+   * Returns the component default state
    */
   get defaultState() {
     return {
-      user: null,
-      fingerprint: null,
+      tooltipFingerprintMessage: null,
     };
   }
 
   /**
-   * Whenever the component is mounted
+   * Bind callbacks.
    */
-  async componentDidMount() {
-    await this.populate();
-  }
-
-  /**
-   * Populate the component with initial data
-   * @returns {Promise<void>}
-   */
-  async populate() {
-    const user = this.props.groupUser.user;
-    const fingerprint = await this.getFingerprintForUser(user.id);
-    this.setState({user, fingerprint});
-  }
-
-  /**
-   * Find a user gpg key
-   * @param {string} userId
-   * @returns {Promise<string>}
-   */
-  async getFingerprintForUser(userId) {
-    const keyInfo = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', userId);
-    return keyInfo.fingerprint;
-  }
-
-  /**
-   * Returns true if the comopinent is ready to be displayed with all information
-   * @returns {boolean}
-   */
-  get isReady() {
-    return this.state.user !== null && this.state.fingerprint !== null;
-  }
-
-  /**
-   * Format fingerprint
-   * @param {string} fingerprint An user finger print
-   * @returns {JSX.Element}
-   */
-  formatFingerprint(fingerprint) {
-    const result = fingerprint.toUpperCase().replace(/.{4}/g, '$& ');
-    return <>{result.substr(0, 24)}<br/>{result.substr(25)}</>;
+  bindCallbacks() {
+    this.onTooltipFingerprintMouseHover = this.onTooltipFingerprintMouseHover.bind(this);
   }
 
   /**
@@ -94,19 +58,8 @@ class EditUserGroupItem extends Component {
    * @returns {string}
    */
   getUserFullname() {
-    const user = this.state.user;
+    const user = this.props.groupUser.user;
     return `${user.profile.first_name} ${user.profile.last_name}`;
-  }
-
-  /**
-   * Get the tooltip message
-   * @returns {JSX.Element}
-   */
-  getTooltipMessage() {
-    return <>
-      <div className="email"><strong>{this.state.user.username}</strong></div>
-      <div className="fingerprint">{this.formatFingerprint(this.state.fingerprint)}</div>
-    </>;
   }
 
   /**
@@ -130,71 +83,74 @@ class EditUserGroupItem extends Component {
   }
 
   /**
+   * Handle whenever the user passes its mouse hover the tooltip.
+   * @returns {Promise<JSX>}
+   */
+  async onTooltipFingerprintMouseHover() {
+    if (this.state.tooltipFingerprintMessage) {
+      return;
+    }
+
+    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.groupUser.user.id);
+    const tooltipFingerprintMessage = <div className="group-user-details-tooltip">
+      <div className="email ellipsis"><strong>{this.props.groupUser.user.username}</strong></div>
+      <Fingerprint fingerprint={gpgkey.fingerprint}/>
+    </div>;
+    this.setState({tooltipFingerprintMessage});
+  }
+
+  /**
    * Render the component
    */
   render() {
-    const isReady = this.isReady;
-    const isSuspended = this.isUserSuspended(this.state.user);
+    const isSuspended = this.isUserSuspended(this.props.groupUser.user);
     return (
       <li
-        className={`row ${this.props.isMemberChanged ? 'permission-updated' : ''} ${!isReady ? "skeleton" : ""} ${isSuspended ? "suspended" : ""}`}
+        className={`row ${this.props.isMemberChanged ? 'permission-updated' : ''} ${isSuspended ? "suspended" : ""}`}
       >
-        {isReady &&
-          <>
-            <UserAvatar
-              baseUrl={this.props.context.userSettings.getTrustedDomain()}
-              user={this.state.user}/>
-            <div className="aro">
-              <div className="aro-name">
-                <span className="ellipsis">{this.getUserFullname()}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                <Tooltip message={this.getTooltipMessage()}>
-                  <Icon name="info-circle"/>
-                </Tooltip>
-              </div>
-              <div className="permission_changes">
-                {this.props.isMemberAdded && <span><Trans>Will be added</Trans></span>}
-                {this.props.isMemberChanged && !this.props.isMemberAdded &&
-                  <span><Trans>Will be updated</Trans></span>}
-                {!this.props.isMemberChanged && !this.props.isMemberAdded && <span><Trans>Unchanged</Trans></span>}
+        <UserAvatar
+          baseUrl={this.props.context.userSettings.getTrustedDomain()}
+          user={this.props.groupUser.user}/>
+        <div className="aro">
+          <div className="aro-name">
+            <span className="ellipsis">{this.getUserFullname()}{isSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
+            <TooltipPortal
+              message={this.state.tooltipFingerprintMessage || <TooltipMessageGroupUserDetailsLoading />}
+              direction="auto"
+              onMouseHover={this.onTooltipFingerprintMouseHover}>
+              <Icon name="info-circle" baseline={true}/>
+            </TooltipPortal>
+          </div>
+          <div className="permission_changes">
+            {this.props.isMemberAdded && <span><Trans>Will be added</Trans></span>}
+            {this.props.isMemberChanged && !this.props.isMemberAdded &&
+              <span><Trans>Will be updated</Trans></span>}
+            {!this.props.isMemberChanged && !this.props.isMemberAdded && <span><Trans>Unchanged</Trans></span>}
 
-              </div>
-            </div>
+          </div>
+        </div>
 
-            <div className="rights">
-              <Select
-                className="permission inline"
-                value={this.props.groupUser.is_admin}
-                items={this.isManagerSelectOptions}
-                onChange={event => this.props.onMemberRoleChange(event, this.props.groupUser)}
-                disabled={!this.props.areActionsAllowed}
-                direction={this.props.isLastItemDisplayed ? "top" : "bottom"}/>
-            </div>
+        <div className="rights">
+          <Select
+            className="permission inline"
+            value={this.props.groupUser.is_admin}
+            items={this.isManagerSelectOptions}
+            onChange={event => this.props.onMemberRoleChange(event, this.props.groupUser)}
+            disabled={!this.props.areActionsAllowed}
+            direction={this.props.isLastItemDisplayed ? "top" : "bottom"}/>
+        </div>
 
-            <div className="actions">
-              <button
-                type="button"
-                title={this.props.t("Remove")}
-                className="remove-item button-transparent"
-                disabled={!this.props.areActionsAllowed}
-                onClick={event => this.props.onMemberRemoved(event, this.props.groupUser)}>
-                <Icon name="close"/>
-                <span className="visuallyhidden"><Trans>Remove</Trans></span>
-              </button>
-            </div>
-          </>
-        }
-        {!isReady &&
-          <>
-            <div className="avatar"></div>
-            <div className="aro">
-              <div className="aro-name"></div>
-              <div className="aro-details"></div>
-            </div>
-            <div className="select rights"></div>
-            <div className="actions"></div>
-            <div className="shimmer"></div>
-          </>
-        }
+        <div className="actions">
+          <button
+            type="button"
+            title={this.props.t("Remove")}
+            className="remove-item button-transparent"
+            disabled={!this.props.areActionsAllowed}
+            onClick={event => this.props.onMemberRemoved(event, this.props.groupUser)}>
+            <Icon name="close"/>
+            <span className="visuallyhidden"><Trans>Remove</Trans></span>
+          </button>
+        </div>
       </li>
     );
   }

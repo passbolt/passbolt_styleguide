@@ -3,6 +3,7 @@ import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByGroups from "./FilterResourcesByGroups";
+import MockPort from "../../../test/mock/MockPort";
 
 
 export default {
@@ -10,13 +11,19 @@ export default {
   component: FilterResourcesByGroups
 };
 
+const mockedPort = new MockPort();
 const context = {
   groups: [
     {id: 1, name: 'Group 1'},
     {id: 2, name: 'Group 2'},
     {id: 3, name: 'Group 3'}
-  ]
+  ],
+  port: mockedPort,
 };
+
+
+mockedPort.addRequestListener("passbolt.groups.find-my-groups", () => context.groups);
+
 
 const Template = args =>
   <AppContext.Provider value={context}>

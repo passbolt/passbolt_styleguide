@@ -168,7 +168,6 @@ class CreateGroupPageObject {
 
   /**
    * Returns the user email for the 'index' one
-   * @param index the display of the user email
    */
   userEmail(index) {
     return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.email').textContent;
@@ -180,6 +179,15 @@ class CreateGroupPageObject {
    */
   userFingerprint(index) {
     return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.fingerprint').textContent;
+  }
+
+  /**
+   * Return the information icon associated to the "index"ed permission list row
+   * @param {number} index the number of the row in the permission list
+   * @returns {HTMLElement}
+   */
+  userInformationIcon(index) {
+    return this._container.querySelectorAll('.permissions.groups_users .row')[index - 1].querySelector('.tooltip-portal');
   }
 
   /**
@@ -270,6 +278,34 @@ class CreateGroupPageObject {
     await waitFor(() => {});
   }
 
+  /**
+   * Simulates a focus event on the given element
+   * @returns {Promise<void>}
+   */
+  async focus(element) {
+    fireEvent.focus(element);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a mouse hover on the given element
+   * @returns {Promise<void>}
+   */
+  async hover(element) {
+    const event = new MouseEvent("hover");
+    fireEvent(element, event);
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a mouse hover on the first autocomplete result item
+   * @returns {Promise<void>}
+   */
+  async hoverAutocompleteItemInformationIcon() {
+    const informationIcon = this.userAutocomplete?.querySelector(".tooltip-portal");
+    await this.hover(informationIcon);
+  }
+
   /** Click without wait for on the element */
   clickWithoutWaitFor(element)  {
     const leftClick = {button: 0};
@@ -300,8 +336,3 @@ class CreateGroupPageObject {
     await this.click(this.selectItem(index));
   }
 }
-
-
-
-
-

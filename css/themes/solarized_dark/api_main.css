@@ -2544,6 +2544,10 @@ table td {
   animation: shimmer 2s infinite;
   background: linear-gradient(45deg, rgba(50, 63, 67, 0) 0, rgba(50, 63, 67, 0.1) 30%, rgba(50, 63, 67, 0.5) 50%, rgba(50, 63, 67, 0));
 }
+.shimmer.shimmer-tooltip {
+  animation: shimmer 10s infinite;
+  background: linear-gradient(45deg, rgba(31, 38, 41, 0) 0, rgba(31, 38, 41, 0.1) 30%, rgba(31, 38, 41, 0.5) 50%, rgba(31, 38, 41, 0));
+}
 @keyframes shimmer {
   0% {
     background-position: 0 0;
@@ -3294,10 +3298,14 @@ html {
 }
 /* hide icons if there is no space */
 @media all and (max-width: 1024px) {
+  .header.third .main-action-wrapper button {
+    width: 4.8rem;
+  }
   .header.third .main-action-wrapper button,
   .header.third .actions-wrapper button {
     min-width: 1em;
     font-size: 1em;
+    height: 3.6rem;
   }
   .header.third .main-action-wrapper button span + span,
   .header.third .actions-wrapper button span + span {
@@ -5317,17 +5325,35 @@ iframe.cachette {
 .password-complexity .complexity-text {
   display: flex;
   font-size: 1rem;
-  line-height: 1.4rem;
+  line-height: 1.362rem;
   color: hsl(46, 42%, 88%);
+}
+.password-complexity .complexity-text .svg-icon {
+  display: inline;
+  vertical-align: middle;
+}
+.password-complexity .complexity-text .svg-icon svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 0.05rem;
+  --icon-color: hsl(46, 42%, 88%);
+  --icon-stroke-width: 0.1rem;
 }
 .password-complexity .progress {
   width: 100%;
   box-sizing: border-box;
   display: block;
+  position: relative;
+}
+.password-complexity .progress .tooltip {
+  width: 100%;
+  height: 0.9rem;
+  position: absolute;
+  left: 0;
+  top: -0.3rem;
+  z-index: 100;
 }
 .password-complexity .progress-bar {
-  --complexity-bar-background-default: hsl(194, 14%, 35%);
-  background: linear-gradient(to right, #A40000, #FFA724, #0EAA00);
   border-radius: 0.1rem;
   width: 100%;
   height: 0.2rem;
@@ -5336,6 +5362,17 @@ iframe.cachette {
 }
 .password-complexity .progress-bar.error {
   background: hsl(194, 14%, 35%);
+}
+.password-complexity .progress-bar.background {
+  background: hsl(194, 14%, 35%);
+}
+.password-complexity .progress-bar.foreground {
+  transition: width 0.3s ease-in-out;
+  width: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
 }
 .ldap-test-settings-report div.directory-structure {
   background: hsl(194, 14%, 5%);

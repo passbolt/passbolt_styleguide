@@ -74,7 +74,13 @@
     .avatar {
         float: left;
         width: @avatar-size;
+        height: @avatar-size;
         margin-left: -100%;
+
+        svg {
+          width: @avatar-size;
+          height: @avatar-size;
+        }
 
         img {
             width: @avatar-size;
@@ -91,6 +97,13 @@
                 margin-left: 0;
                 float: left;
                 width: (@avatar-size / 2);
+                height: (@avatar-size / 2);
+                align-items: center;
+
+                svg {
+                  width: (@avatar-size / 2);
+                  height: (@avatar-size / 2);
+                }
 
                 img {
                     width: (@avatar-size / 2);

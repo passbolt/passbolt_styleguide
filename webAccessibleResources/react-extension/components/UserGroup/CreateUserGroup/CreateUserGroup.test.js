@@ -66,12 +66,17 @@ describe("See the Create Dialog Group", () => {
       await page.createGroup.click(page.createGroup.userAutocomplete);
 
       await page.createGroup.selectFirstItem(2);
+      await page.createGroup.focus(page.createGroup.userInformationIcon(2));
+
       expect(page.createGroup.warningMessage).toBe('You need to click save for the changes to take place.');
 
       expect(page.createGroup.count()).toBe(2);
       expect(page.createGroup.userFirstNameLastName(2)).toBe('Ada Lovelace');
-      expect(page.createGroup.userEmail(2)).toBe('ada@passbolt.com');
-      expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23ACDF76 1353 B5B1 5D9B 054F ');
+      /*
+       * Commented following the usage of portal to display the tooltip.
+       * expect(page.createGroup.userEmail(2)).toBe('ada@passbolt.com');
+       * expect(page.createGroup.userFingerprint(2)).toBe('03F6 0E95 8F4C B297 23ACDF76 1353 B5B1 5D9B 054F ');
+       */
 
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
@@ -166,7 +171,11 @@ describe("See the Create Dialog Group", () => {
       const requestGpgMockImpl = jest.fn(() => mockGpgKey);
       mockContextRequest(context, requestGpgMockImpl);
       page.createGroup.fillInput(page.createGroup.usernameInput, "ada");
+
       jest.runOnlyPendingTimers();
+      await waitFor(() => {});
+
+      await page.createGroup.hoverAutocompleteItemInformationIcon();
 
       expect(context.port.request).toHaveBeenCalledWith("passbolt.keyring.get-public-key-info-by-user", mockUsers[1].id);
       await waitFor(() => {});

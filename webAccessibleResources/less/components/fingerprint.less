@@ -1,0 +1,24 @@
+.fingerprint {
+  .fingerprint-line {
+    text-transform: uppercase;
+    font-family: "Inconsolata";
+    font-size: 1.5rem;
+  }
+
+  &.skeleton {
+    position:relative;
+    .fingerprint-line {
+      margin: .3rem 0 0 0;
+      height: 1.3rem;
+      width: 18rem;
+      background: @tooltip-text-color;
+      opacity: 0.2;
+      .rounded();
+    }
+    .shimmer {
+      position:absolute;
+      top:0;
+      left:0;
+    }
+  }
+}

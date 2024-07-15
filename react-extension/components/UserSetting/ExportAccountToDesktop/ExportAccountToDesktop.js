@@ -128,7 +128,7 @@ class ExportAccountToDesktop extends React.Component {
                 <p><Trans>3. Open the application.</Trans></p>
                 <p><Trans>4. Upload the account kit on the desktop app.</Trans></p>
                 <p><Trans>5. And you are done!</Trans></p>
-                <a className="button" href="https://help.passbolt.com/configure/windows-app" target="_blank" rel="noopener noreferrer">
+                <a className="button" href="https://www.passbolt.com/docs/user/quickstart/desktop/windows-app/" target="_blank" rel="noopener noreferrer">
                   <Icon name="document" />
                   <span><Trans>Read the documentation</Trans></span>
                 </a>

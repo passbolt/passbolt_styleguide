@@ -2543,6 +2543,10 @@ table td {
   animation: shimmer 2s infinite;
   background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.1) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0));
 }
+.shimmer.shimmer-tooltip {
+  animation: shimmer 10s infinite;
+  background: linear-gradient(45deg, rgba(179, 179, 179, 0) 0, rgba(179, 179, 179, 0.1) 30%, rgba(179, 179, 179, 0.5) 50%, rgba(179, 179, 179, 0));
+}
 @keyframes shimmer {
   0% {
     background-position: 0 0;
@@ -3293,10 +3297,14 @@ html {
 }
 /* hide icons if there is no space */
 @media all and (max-width: 1024px) {
+  .header.third .main-action-wrapper button {
+    width: 4.8rem;
+  }
   .header.third .main-action-wrapper button,
   .header.third .actions-wrapper button {
     min-width: 1em;
     font-size: 1em;
+    height: 3.6rem;
   }
   .header.third .main-action-wrapper button span + span,
   .header.third .actions-wrapper button span + span {
@@ -5097,6 +5105,71 @@ iframe.cachette {
   right: 0.1rem;
   transform: translateX(0);
 }
+/*
+	Tooltips Portal
+*/
+/* Tooltip Portal container */
+.tooltip-portal {
+  display: flex;
+  cursor: pointer;
+}
+.tooltip-portal:focus,
+.tooltip-portal :focus-visible {
+  outline: 0;
+}
+.tooltip-portal span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+}
+/* Tooltip text */
+.tooltip-portal-text {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  max-width: 24rem;
+  width: max-content;
+  padding: 0.4rem 0.8rem;
+  background: #B3B3B3;
+  color: #000000;
+  border-radius: 0.3rem;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+  font-weight: normal;
+  text-align: left;
+  /* only right for now */
+}
+.tooltip-portal-text::after {
+  content: " ";
+  position: absolute;
+  border: 0.5rem solid transparent;
+}
+.tooltip-portal-text.top::after {
+  left: calc(50% - 5px);
+  top: 100%;
+  border-top-color: #B3B3B3;
+}
+.tooltip-portal-text.right::after {
+  bottom: calc(50% - 5px);
+  right: 100%;
+  border-right-color: #B3B3B3;
+}
+.tooltip-portal-text.bottom::after {
+  right: calc(50% - 5px);
+  bottom: 100%;
+  border-bottom-color: #B3B3B3;
+}
+.tooltip-portal-text.left::after {
+  top: calc(50% - 5px);
+  left: 100%;
+  border-left-color: #B3B3B3;
+}
+.tooltip-portal-text .folder-level span.caret {
+  margin-right: 0.5rem;
+}
 .panel.aside .activity div.actions {
   margin-top: 1.6rem;
   text-align: center;
@@ -5173,6 +5246,7 @@ iframe.cachette {
   margin-left: 1.6rem;
   margin-top: 0;
   border-radius: 0.3rem;
+  overflow-wrap: break-word;
 }
 .panel.aside .comments .comment .author.picture {
   width: 4.2rem;
@@ -5287,6 +5361,29 @@ iframe.cachette {
   font-size: 1.3rem;
   max-width: none;
   margin-top: 0.2rem;
+}
+.fingerprint .fingerprint-line {
+  text-transform: uppercase;
+  font-family: "Inconsolata";
+  font-size: 1.5rem;
+}
+.fingerprint.skeleton {
+  position: relative;
+}
+.fingerprint.skeleton .fingerprint-line {
+  margin: 0.3rem 0 0 0;
+  height: 1.3rem;
+  width: 18rem;
+  background: #000000;
+  opacity: 0.2;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+}
+.fingerprint.skeleton .shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .input.location {
   /*
@@ -5480,13 +5577,14 @@ iframe.cachette {
 }
 .autocomplete-wrapper .autocomplete-content .row .user,
 .autocomplete-wrapper .autocomplete-content .row .group {
-  width: 75%;
+  width: calc(100% - 5.6rem);
   float: left;
   padding-left: 1em;
   padding-right: 1em;
 }
 .autocomplete-wrapper .autocomplete-content .row .name {
-  display: block;
+  display: inline-block;
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -5512,6 +5610,18 @@ iframe.cachette {
 }
 .autocomplete-wrapper .autocomplete-content .autocomplete-item.suspended {
   opacity: 0.5;
+}
+.autocomplete-wrapper .autocomplete-content .autocomplete-item button {
+  width: 100%;
+}
+.autocomplete-wrapper .autocomplete-content .autocomplete-item button > span {
+  max-with: 100;
+}
+.autocomplete-wrapper .autocomplete-content .autocomplete-item .user-fullname-container {
+  display: flex;
+}
+.autocomplete-wrapper .autocomplete-content .autocomplete-item .user-fullname-container .tooltip-portal {
+  margin-left: 1rem;
 }
 @media all and (max-width: 440px) {
   .autocomplete-wrapper .autocomplete-content {
@@ -5686,17 +5796,35 @@ iframe.cachette {
 .password-complexity .complexity-text {
   display: flex;
   font-size: 1rem;
-  line-height: 1.4rem;
+  line-height: 1.362rem;
   color: #7C7C7C;
+}
+.password-complexity .complexity-text .svg-icon {
+  display: inline;
+  vertical-align: middle;
+}
+.password-complexity .complexity-text .svg-icon svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 0.05rem;
+  --icon-color: #7C7C7C;
+  --icon-stroke-width: 0.1rem;
 }
 .password-complexity .progress {
   width: 100%;
   box-sizing: border-box;
   display: block;
+  position: relative;
+}
+.password-complexity .progress .tooltip {
+  width: 100%;
+  height: 0.9rem;
+  position: absolute;
+  left: 0;
+  top: -0.3rem;
+  z-index: 100;
 }
 .password-complexity .progress-bar {
-  --complexity-bar-background-default: #BDBDBD;
-  background: linear-gradient(to right, #A40000, #FFA724, #0EAA00);
   border-radius: 0.1rem;
   width: 100%;
   height: 0.2rem;
@@ -5706,6 +5834,17 @@ iframe.cachette {
 .password-complexity .progress-bar.error {
   background: #BDBDBD;
 }
+.password-complexity .progress-bar.background {
+  background: #BDBDBD;
+}
+.password-complexity .progress-bar.foreground {
+  transition: width 0.3s ease-in-out;
+  width: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
 .password-complexity.with-goal {
   position: relative;
   margin-bottom: 1.2rem;
@@ -5713,7 +5852,7 @@ iframe.cachette {
 .password-complexity.with-goal .complexity-text {
   display: flex;
   font-size: 1rem;
-  line-height: 1.4rem;
+  line-height: 1.362rem;
   color: #7C7C7C;
 }
 .password-complexity.with-goal .progress {
@@ -5722,6 +5861,9 @@ iframe.cachette {
   position: relative;
   height: 1rem;
   width: 100%;
+}
+.password-complexity.with-goal .progress .tooltip {
+  top: 0;
 }
 .password-complexity.with-goal .progress-bar {
   position: absolute;
@@ -5754,6 +5896,9 @@ iframe.cachette {
 }
 .password-complexity.with-goal .progress-bar.target.required {
   background: #FFA6A6;
+}
+.password-complexity.with-goal .progress-bar.target.reached {
+  background: #7ac473;
 }
 .password-complexity.with-goal .target-entropy {
   position: absolute;
@@ -5904,11 +6049,8 @@ iframe.cachette {
 .dialog .permissions .row .aro .svg-icon svg {
   position: relative;
 }
-.dialog .permissions .row .tooltip {
-  display: flex;
-  align-items: center;
-  margin: 0 1rem 0 0.6rem;
-  line-height: 1.6rem;
+.dialog .permissions .row .tooltip-portal {
+  margin-left: 1rem;
 }
 .dialog .permissions .row .rights {
   float: left;
@@ -6732,22 +6874,36 @@ iframe.cachette {
   margin: 0 0 0 0.5rem;
 }
 .tableview table th.cell-favorite button,
-.tableview table td.cell-favorite button {
+.tableview table td.cell-favorite button,
+.tableview table th.cell-attentionRequired button,
+.tableview table td.cell-attentionRequired button {
   display: flex;
   align-items: center;
 }
 .tableview table th.cell-favorite button .cell-header,
-.tableview table td.cell-favorite button .cell-header {
+.tableview table td.cell-favorite button .cell-header,
+.tableview table th.cell-attentionRequired button .cell-header,
+.tableview table td.cell-attentionRequired button .cell-header {
   margin: 0;
   overflow: inherit;
 }
+.tableview table th.cell-favorite button .cell-header .svg-icon.exclamation,
+.tableview table td.cell-favorite button .cell-header .svg-icon.exclamation,
+.tableview table th.cell-attentionRequired button .cell-header .svg-icon.exclamation,
+.tableview table td.cell-attentionRequired button .cell-header .svg-icon.exclamation {
+  margin-top: 0.1rem;
+}
 .tableview table th.cell-favorite button .cell-header .cell-header-icon-sort,
-.tableview table td.cell-favorite button .cell-header .cell-header-icon-sort {
+.tableview table td.cell-favorite button .cell-header .cell-header-icon-sort,
+.tableview table th.cell-attentionRequired button .cell-header .cell-header-icon-sort,
+.tableview table td.cell-attentionRequired button .cell-header .cell-header-icon-sort {
   display: flex;
   margin: 0;
 }
 .tableview table th.cell-favorite button .cell-header .cell-header-icon-sort .svg-icon,
-.tableview table td.cell-favorite button .cell-header .cell-header-icon-sort .svg-icon {
+.tableview table td.cell-favorite button .cell-header .cell-header-icon-sort .svg-icon,
+.tableview table th.cell-attentionRequired button .cell-header .cell-header-icon-sort .svg-icon,
+.tableview table td.cell-attentionRequired button .cell-header .cell-header-icon-sort .svg-icon {
   margin: 0;
 }
 .tableview table th.attention-required .cell-header {
@@ -6792,6 +6948,9 @@ iframe.cachette {
 .tableview table td.cell-password:hover .totp-view,
 .tableview table td.cell-totp:hover .totp-view {
   display: flex;
+}
+.tableview table td.cell-location span.caret {
+  margin: 0 0.5rem;
 }
 table.table-info,
 table.table-info.vertical {
@@ -7169,6 +7328,34 @@ table.table-info.horizontal tbody tr:hover {
 .tag-editor .autocomplete-suggestions .autocomplete-suggestion.row.selected {
   background: #DCDCDC;
 }
+.group-user-details-tooltip.skeleton {
+  position: relative;
+}
+.group-user-details-tooltip.skeleton .email {
+  margin: 0.3rem 0 0 0;
+  height: 1.3rem;
+  width: 12rem;
+  background: #000000;
+  opacity: 0.2;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+}
+.group-user-details-tooltip.skeleton .fingerprint-line {
+  margin: 0.3rem 0 0 0;
+  height: 1.3rem;
+  width: 18rem;
+  background: #000000;
+  opacity: 0.2;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border-radius: 0.3rem;
+}
+.group-user-details-tooltip.skeleton .shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .usercard-col-2 {
   /*
      * Clearfix: contain floats
@@ -7277,7 +7464,12 @@ table.table-info.horizontal tbody tr:hover {
 .usercard-col-2 .avatar {
   float: left;
   width: 42px;
+  height: 42px;
   margin-left: -100%;
+}
+.usercard-col-2 .avatar svg {
+  width: 42px;
+  height: 42px;
 }
 .usercard-col-2 .avatar img {
   width: 42px;
@@ -7291,6 +7483,12 @@ table.table-info.horizontal tbody tr:hover {
   margin-left: 0;
   float: left;
   width: 21px;
+  height: 21px;
+  align-items: center;
+}
+.usercard-col-2 ul.permissions-list li .avatar svg {
+  width: 21px;
+  height: 21px;
 }
 .usercard-col-2 ul.permissions-list li .avatar img {
   width: 21px;
@@ -7442,7 +7640,12 @@ table.table-info.horizontal tbody tr:hover {
 .usercard-detailed-col-2 .avatar {
   float: left;
   width: 42px;
+  height: 42px;
   margin-left: -100%;
+}
+.usercard-detailed-col-2 .avatar svg {
+  width: 42px;
+  height: 42px;
 }
 .usercard-detailed-col-2 .avatar img {
   width: 42px;
@@ -7456,6 +7659,12 @@ table.table-info.horizontal tbody tr:hover {
   margin-left: 0;
   float: left;
   width: 21px;
+  height: 21px;
+  align-items: center;
+}
+.usercard-detailed-col-2 ul.permissions-list li .avatar svg {
+  width: 21px;
+  height: 21px;
 }
 .usercard-detailed-col-2 ul.permissions-list li .avatar img {
   width: 21px;

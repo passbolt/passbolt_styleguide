@@ -88,7 +88,7 @@ describe("See the Edit Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordEdit.complexityText.textContent).toBe("Quality");
+      expect(page.passwordEdit.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
 
       // Password view button exists.
       expect(page.passwordEdit.passwordViewButton).not.toBeNull();
@@ -240,7 +240,7 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.fillInputPassword(resourceMeta.password);
       await page.passwordEdit.blurInput(page.passwordEdit.password);
 
-      expect(page.passwordEdit.complexityText.textContent).not.toBe("Quality");
+      expect(page.passwordEdit.complexityText.textContent).not.toBe("Quality Entropy: 0.0 bits");
       expect(page.passwordEdit.progressBar.classList.contains("error")).toBe(false);
 
       page.passwordEdit.fillInput(page.passwordEdit.description, resourceMeta.description);
@@ -652,7 +652,7 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.fillInputPassword("");
       await waitFor(() => {});
       expect(page.passwordEdit.pwnedWarningMessage).toBeNull();
-      expect(page.passwordEdit.complexityText.textContent).toBe("Quality");
+      expect(page.passwordEdit.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
     });
   });
 });

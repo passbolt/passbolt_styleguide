@@ -11,6 +11,8 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  */
 
+import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+
 /**
  * Default props
  * @returns {{}}
@@ -20,9 +22,7 @@ export function defaultProps(props = {}) {
     context: {
       onExpiredSession: jest.fn(callback => callback())
     },
-    dialogContext: {
-      open: jest.fn()
-    }
+    dialogContext: defaultDialogContext()
   };
   return Object.assign(defaultProps, props);
 }

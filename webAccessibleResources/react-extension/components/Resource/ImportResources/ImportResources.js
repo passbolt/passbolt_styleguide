@@ -453,7 +453,7 @@ class ImportResources extends Component {
           </div>
           <div className="warning message" id="import-resources-warning-message">
             <p>
-              <span><Trans>Checkout the <a href="https://help.passbolt.com/faq/start/import-passwords" target="_blank" rel="noopener noreferrer">documentation</a> to see what information is supported.</Trans></span>
+              <span><Trans>Checkout the <a href="https://www.passbolt.com/docs/user/basic-features/browser/import/" target="_blank" rel="noopener noreferrer">documentation</a> to see what information is supported.</Trans></span>
             </p>
           </div>
           <div className="submit-wrapper clearfix">

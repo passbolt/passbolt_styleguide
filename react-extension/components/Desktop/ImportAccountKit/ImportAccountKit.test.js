@@ -48,7 +48,7 @@ describe("ImportAccountKit", () => {
       await page.click(page.getHelpMessage);
 
       expect(page.getHelpMessage).not.toBeNull();
-      expect(props.context.port.emit).toHaveBeenCalledWith("passbolt.rendered.open-to-browser", "https://help.passbolt.com/configure/windows-app");
+      expect(props.context.port.emit).toHaveBeenCalledWith("passbolt.rendered.open-to-browser", "https://www.passbolt.com/docs/user/quickstart/desktop/windows-app/");
     });
 
     it('As an unknown user I should be notified if I have uploaded a wrong file format', async() => {

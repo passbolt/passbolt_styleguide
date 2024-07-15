@@ -338,7 +338,7 @@ class DisplayRbacAdministration extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out the Role Based Access Control documentation.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/rbac" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/role-based-access-control/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read RBAC doc</Trans></span>
             </a>

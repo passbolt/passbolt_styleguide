@@ -2543,6 +2543,10 @@ table td {
   animation: shimmer 2s infinite;
   background: linear-gradient(45deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.1) 30%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0));
 }
+.shimmer.shimmer-tooltip {
+  animation: shimmer 10s infinite;
+  background: linear-gradient(45deg, rgba(179, 179, 179, 0) 0, rgba(179, 179, 179, 0.1) 30%, rgba(179, 179, 179, 0.5) 50%, rgba(179, 179, 179, 0));
+}
 @keyframes shimmer {
   0% {
     background-position: 0 0;

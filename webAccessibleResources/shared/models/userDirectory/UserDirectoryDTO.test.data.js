@@ -38,6 +38,7 @@ export const mockedData = {
   user_path: undefined,
   user_custom_filters: undefined,
   users_parent_group: undefined,
+  delete_user_behavior: "delete",
   domains: {
     org_domain: {
       base_dn: "DC=passbolt,DC=local",

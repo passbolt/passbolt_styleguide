@@ -55,7 +55,7 @@ describe("DisplayAdministrationUserPassphrasePolicies", () => {
       const helpPageLink = page.helpPageLink;
       expect(helpPageLink).not.toBeNull();
       expect(helpPageLink.getAttribute('rel')).toStrictEqual("noopener noreferrer");
-      expect(helpPageLink.getAttribute('href')).toStrictEqual("https://help.passbolt.com/configure/user-passphrase-policies");
+      expect(helpPageLink.getAttribute('href')).toStrictEqual("https://passbolt.com/docs/admin/authentication/user-passphrase-policies/");
     });
 
     it('As an administrator I should see the default settings', async() => {

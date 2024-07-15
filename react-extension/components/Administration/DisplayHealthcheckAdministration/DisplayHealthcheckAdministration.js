@@ -1329,7 +1329,7 @@ class DisplayHealthcheckAdministration extends Component {
           <div className="sidebar-help">
             <h3><Trans>Something wrong?</Trans></h3>
             <p><Trans>Hang in there! Depending your installation, you might need to check the documentation in order to run the healthcheck from the CLI</Trans></p>
-            <a className="button" href="https://www.passbolt.com/docs/hosting/troubleshooting/logs/" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://www.passbolt.com/docs/admin/server-maintenance/passbolt-api-status/" target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

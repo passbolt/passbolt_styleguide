@@ -57,7 +57,7 @@ describe("ExportAccountToDesktop", () => {
       expect(page.helpBoxDescription[3].textContent).toEqual("4. Upload the account kit on the desktop app.");
       expect(page.helpBoxDescription[4].textContent).toEqual("5. And you are done!");
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/windows-app');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://www.passbolt.com/docs/user/quickstart/desktop/windows-app/');
       expect(page.helpBoxButton.getAttribute('rel')).toEqual('noopener noreferrer');
     });
 

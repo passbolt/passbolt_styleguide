@@ -398,7 +398,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>What is password policy?</Trans></h3>
             <p><Trans>For more information about the password policy settings, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/password-policies" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/password-configuration/password-policy/" target="_blank" rel="noopener noreferrer">
               <Icon name="life-ring"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

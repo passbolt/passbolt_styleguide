@@ -100,7 +100,19 @@ export function propsWithFilteredResourcesAndColumnsHidden(data = {}) {
         {id: "password", label: "Password", position: 6, show: true},
         {id: "totp", label: "TOTP", position: 7, show: false},
         {id: "uri", label: "URI", position: 8, show: true},
-        {id: "modified", label: "Modified", position: 9, show: false}]),
+        {id: "modified", label: "Modified", position: 9, show: false},
+        {id: "location", label: "Location", position: 10, show: true}]),
+      getHierarchyFolderCache: () => [{
+        "id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
+        "name": "Accounting",
+        "folder_parent_id": null,
+        "personal": false
+      }, {
+        "id": "6592f71b-8874-5e91-bf6d-829b8ad188f5",
+        "name": "Bank",
+        "folder_parent_id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
+        "personal": false
+      }],
     }),
     ...data
   });

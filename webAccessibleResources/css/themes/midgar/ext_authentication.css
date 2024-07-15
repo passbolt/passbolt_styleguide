@@ -2544,6 +2544,10 @@ table td {
   animation: shimmer 2s infinite;
   background: linear-gradient(45deg, rgba(32, 32, 32, 0) 0, rgba(32, 32, 32, 0.1) 30%, rgba(32, 32, 32, 0.5) 50%, rgba(32, 32, 32, 0));
 }
+.shimmer.shimmer-tooltip {
+  animation: shimmer 10s infinite;
+  background: linear-gradient(45deg, rgba(21, 21, 21, 0) 0, rgba(21, 21, 21, 0.1) 30%, rgba(21, 21, 21, 0.5) 50%, rgba(21, 21, 21, 0));
+}
 @keyframes shimmer {
   0% {
     background-position: 0 0;
@@ -3393,17 +3397,35 @@ html {
 .password-complexity .complexity-text {
   display: flex;
   font-size: 1rem;
-  line-height: 1.4rem;
+  line-height: 1.362rem;
   color: #FFFFFF;
+}
+.password-complexity .complexity-text .svg-icon {
+  display: inline;
+  vertical-align: middle;
+}
+.password-complexity .complexity-text .svg-icon svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 0.05rem;
+  --icon-color: #FFFFFF;
+  --icon-stroke-width: 0.1rem;
 }
 .password-complexity .progress {
   width: 100%;
   box-sizing: border-box;
   display: block;
+  position: relative;
+}
+.password-complexity .progress .tooltip {
+  width: 100%;
+  height: 0.9rem;
+  position: absolute;
+  left: 0;
+  top: -0.3rem;
+  z-index: 100;
 }
 .password-complexity .progress-bar {
-  --complexity-bar-background-default: #424242;
-  background: linear-gradient(to right, #A40000, #FFA724, #0EAA00);
   border-radius: 0.1rem;
   width: 100%;
   height: 0.2rem;
@@ -3413,6 +3435,17 @@ html {
 .password-complexity .progress-bar.error {
   background: #424242;
 }
+.password-complexity .progress-bar.background {
+  background: #424242;
+}
+.password-complexity .progress-bar.foreground {
+  transition: width 0.3s ease-in-out;
+  width: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
 .password-complexity.with-goal {
   position: relative;
   margin-bottom: 1.2rem;
@@ -3420,7 +3453,7 @@ html {
 .password-complexity.with-goal .complexity-text {
   display: flex;
   font-size: 1rem;
-  line-height: 1.4rem;
+  line-height: 1.362rem;
   color: #FFFFFF;
 }
 .password-complexity.with-goal .progress {
@@ -3429,6 +3462,9 @@ html {
   position: relative;
   height: 1rem;
   width: 100%;
+}
+.password-complexity.with-goal .progress .tooltip {
+  top: 0;
 }
 .password-complexity.with-goal .progress-bar {
   position: absolute;
@@ -3461,6 +3497,9 @@ html {
 }
 .password-complexity.with-goal .progress-bar.target.required {
   background: #FFA6A6;
+}
+.password-complexity.with-goal .progress-bar.target.reached {
+  background: #7ac473;
 }
 .password-complexity.with-goal .target-entropy {
   position: absolute;

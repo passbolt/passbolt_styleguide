@@ -86,7 +86,7 @@ describe("See the Create Resource", () => {
       expect(passwordInputStyle.color).toBe("");
 
       // Complexity label exists but is not yet defined.
-      expect(page.passwordCreate.complexityText.textContent).toBe("Quality");
+      expect(page.passwordCreate.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
 
       // Password view button exists.
       expect(page.passwordCreate.passwordViewButton).not.toBeNull();
@@ -110,7 +110,7 @@ describe("See the Create Resource", () => {
       expect.assertions(2);
       page.passwordCreate.focusInput(page.passwordCreate.password);
       await page.passwordCreate.click(page.passwordCreate.passwordGenerateButton);
-      expect(page.passwordCreate.complexityText.textContent).not.toBe("Quality");
+      expect(page.passwordCreate.complexityText.textContent).not.toBe("Quality Entropy: 0.0 bits");
       expect(page.passwordCreate.progressBar.classList.contains("error")).toBe(false);
     });
 
@@ -690,7 +690,7 @@ describe("See the Create Resource", () => {
       page.passwordCreate.fillInput(page.passwordCreate.password, '');
       await page.passwordCreate.keyUpInput(page.passwordCreate.password);
 
-      expect(page.passwordCreate.complexityText.textContent).toBe("Quality");
+      expect(page.passwordCreate.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
       expect(page.passwordCreate.pwnedWarningMessage).toBeNull();
     });
   });
