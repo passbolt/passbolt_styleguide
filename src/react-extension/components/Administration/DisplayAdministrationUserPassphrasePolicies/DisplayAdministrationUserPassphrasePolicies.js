@@ -168,7 +168,7 @@ class DisplayAdministrationUserPassphrasePolicies extends React.PureComponent {
           <div className="sidebar-help">
             <h3><Trans>What is user passphrase policies?</Trans></h3>
             <p><Trans>For more information about the user passphrase policies, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/user-passphrase-policies" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/authentication/user-passphrase-policies/" target="_blank" rel="noopener noreferrer">
               <Icon name="life-ring"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

@@ -9,6 +9,7 @@ import {defaultResourceDto} from "../../shared/models/entity/resource/resourceEn
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import {defaultUserAppContext} from "./ExtAppContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "./PasswordExpirySettingsContext.test.data";
+import {defaultUserRbacContext} from "../../shared/context/Rbac/RbacContext.test.data";
 
 /**
  * @deprecated should use defaultUserAppContext.
@@ -25,11 +26,10 @@ export function defaultAppContext(appContext) {
  * Default props
  */
 export function defaultProps() {
-  const defaultData = {
+  return {
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
+    rbacContext: defaultUserRbacContext()
   };
-
-  return defaultData;
 }
 
 /**
@@ -54,7 +54,8 @@ export function defaultResourceWorkspaceContext(data = {}) {
       {id: "password", label: "Password", position: 6, show: true},
       {id: "totp", label: "TOTP", position: 7, show: true},
       {id: "uri", label: "URI", position: 8, show: true},
-      {id: "modified", label: "Modified", position: 9, show: true}]),
+      {id: "modified", label: "Modified", position: 9, show: true},
+      {id: "location", label: "Location", position: 10, show: true}]),
     filter: {
       type: ResourceWorkspaceFilterTypes.ALL
     },
@@ -82,6 +83,7 @@ export function defaultResourceWorkspaceContext(data = {}) {
     onLockDetail: jest.fn(),
     onChangeColumnView:  jest.fn(),
     onChangeColumnsSettings:  jest.fn(),
+    getHierarchyFolderCache: jest.fn(() => []),
     ...data
   };
 }
@@ -646,6 +648,32 @@ const resources = [
     },
     "tags": [],
     "folder_parent_id": "907c3f61-f416-5834-86d2-e721501ee493",
+    "personal": true
+  },
+  {
+    "id": "97d75fef-d7ad-5a0d-8df0-0a0ffb7c44c9",
+    "name": "Inside Bank Password",
+    "username": "vector",
+    "uri": "https:\/\/private.org\/",
+    "description": "Bank password.",
+    "deleted": false,
+    "created": "2020-08-27T08:35:19+00:00",
+    "modified": "2020-08-27T08:35:19+00:00",
+    "created_by": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+    "modified_by": "1ebc0060-9274-5451-aa12-ad0f31bc29dd",
+    "favorite": null,
+    "permission": {
+      "id": "9ea3efed-b358-541c-8379-7b7162a8f562",
+      "aco": "Resource",
+      "aco_foreign_key": "76d75fef-d7ed-5a0d-8df0-0a0ffb7c44c8",
+      "aro": "User",
+      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+      "type": 7,
+      "created": "2020-08-27T08:35:19+00:00",
+      "modified": "2020-08-27T08:35:19+00:00"
+    },
+    "tags": [],
+    "folder_parent_id": "6592f71b-8874-5e91-bf6d-829b8ad188f5",
     "personal": true
   }
 ];

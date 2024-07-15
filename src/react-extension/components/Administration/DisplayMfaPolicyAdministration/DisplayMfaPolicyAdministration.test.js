@@ -70,7 +70,7 @@ describe("DisplayMfaPolicyAdministration", () => {
       expect(page.helpBoxTitle.textContent).toBe("Need some help?");
       expect(page.helpBoxDescription.textContent).toBe("For more information about MFA policy settings, checkout the dedicated page on the help website.");
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/mfa-policy');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/authentication/mfa-policy');
     });
   });
 

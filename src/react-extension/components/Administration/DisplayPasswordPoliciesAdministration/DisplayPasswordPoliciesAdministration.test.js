@@ -60,7 +60,7 @@ describe("DisplayPasswordPoliciesAdministration", () => {
       expect(page.helpBoxTitle.textContent).toBe("What is password policy?");
       expect(page.helpBoxDescription.textContent).toBe("For more information about the password policy settings, checkout the dedicated page on the help website.");
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/password-policies');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/password-configuration/password-policy/');
     });
   });
 
@@ -161,8 +161,8 @@ describe("DisplayPasswordPoliciesAdministration", () => {
     it("As a logged in administrator I should see the expected entropy of the passphrase configurator change based on the current configuration", async() => {
       expect.assertions(2);
 
-      const passphraseEntropyWith9Words = "116.5 bits";
-      const passphraseEntropyWith20Words = "259.0 bits";
+      const passphraseEntropyWith9Words = "130.6 bits";
+      const passphraseEntropyWith20Words = "290.2 bits";
 
       await page.togglePassphrasePanel();
 

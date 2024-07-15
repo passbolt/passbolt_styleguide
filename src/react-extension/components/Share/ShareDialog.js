@@ -268,34 +268,20 @@ class ShareDialog extends Component {
   /**
    * Get users or groups matching the given keyword
    * @param {string} keyword
-   * @returns {Promise<Object>} aros,
+   * @returns {Promise<Array>}
    */
   async fetchAutocompleteItems(keyword) {
     keyword = keyword.toLowerCase();
-    const words = (keyword && keyword.split(/\s+/)) || [''];
-    // Test match of some escaped test words against the name / username
-    const escapeWord = word => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const wordToRegex = word => new RegExp(escapeWord(word), 'i');
-    const matchWord = (word, value) => wordToRegex(word).test(value);
-
-    const matchUsernameProperty = (word, user) => matchWord(word, user.username);
-    const matchNameProperty = (word, user) => matchWord(word, user.profile.first_name) || matchWord(word, user.profile.last_name);
-    const matchUser = (word, user) => matchUsernameProperty(word, user) || matchNameProperty(word, user);
-    const matchUserText = user => words.every(word => matchUser(word, user));
-
-    const matchGroup = (word, group) => matchWord(word, group.name);
-    const matchGroupText = group => words.every(word => matchGroup(word, group));
+    const matchingUsersAndGroups = await this.props.context.port.request('passbolt.share.search-aros', keyword);
 
     const permissions = this.state.permissions;
-
     const hasPermissionsOnResources = aro_id =>
       permissions.some(permission => permission.id === aro_id);
 
     let currentcount = 0;
-    const groups = this.props.context.groups.filter(group => {
+    const usersAndGroupsToDisplay = matchingUsersAndGroups.filter(userOrGroup => {
       const isMatching = currentcount < Autocomplete.DISPLAY_LIMIT
-        && matchGroupText(group)
-        && !hasPermissionsOnResources(group.id);
+        && !hasPermissionsOnResources(userOrGroup.id);
 
       if (isMatching) {
         currentcount++;
@@ -304,27 +290,7 @@ class ShareDialog extends Component {
       return isMatching;
     });
 
-    const users = this.props.context.users.filter(user => {
-      const isMatching = currentcount < Autocomplete.DISPLAY_LIMIT
-        && user.active === true
-        && matchUserText(user)
-        && !hasPermissionsOnResources(user.id);
-
-      if (isMatching) {
-        currentcount++;
-      }
-
-      return isMatching;
-    });
-
-    await Promise.all(users.map(async user => {
-      if (!user.gpgkey) {
-        user.gpgkey = {
-          fingerprint: await this.getFingerprintForUser(user.id)
-        };
-      }
-    }));
-    return [...users, ...groups];
+    return usersAndGroupsToDisplay;
   }
 
   /**

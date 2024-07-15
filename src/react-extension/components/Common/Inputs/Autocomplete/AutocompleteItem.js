@@ -16,7 +16,12 @@ import PropTypes from "prop-types";
 import UserAvatar from "../../Avatar/UserAvatar";
 import GroupAvatar from "../../Avatar/GroupAvatar";
 import {isUserSuspended} from "../../../../../shared/utils/userUtils";
-import {Trans} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
+import {withAppContext} from "../../../../../shared/context/AppContext/AppContext";
+import Icon from "../../../../../shared/components/Icons/Icon";
+import TooltipPortal from "../../Tooltip/TooltipPortal";
+import TooltipMessageFingerprintLoading from "../../Tooltip/TooltipMessageFingerprintLoading";
+import Fingerprint from "../../Fingerprint/Fingerprint";
 
 class AutocompleteItem extends Component {
   /**
@@ -25,7 +30,17 @@ class AutocompleteItem extends Component {
    */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.bindCallbacks();
+  }
+
+  /**
+   * Returns the component default state
+   */
+  get defaultState() {
+    return {
+      tooltipFingerprintMessage: null,
+    };
   }
 
   /**
@@ -34,6 +49,7 @@ class AutocompleteItem extends Component {
    */
   bindCallbacks() {
     this.handleClick = this.handleClick.bind(this);
+    this.onTooltipFingerprintMouseHover = this.onTooltipFingerprintMouseHover.bind(this);
   }
 
   /**
@@ -42,7 +58,7 @@ class AutocompleteItem extends Component {
    */
   getTitle() {
     if (this.props.user) {
-      return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name} (${this.props.user.username})`;
+      return `${this.props.user.profile.first_name} ${this.props.user.profile.last_name}`;
     } else {
       return `${this.props.group.name}`;
     }
@@ -54,15 +70,25 @@ class AutocompleteItem extends Component {
    */
   getSubtitle() {
     if (this.props.user) {
-      const longId = this.props.user.gpgkey.fingerprint.substr(this.props.user.gpgkey.fingerprint.length - 16);
-      return longId.replace(/(.{4})/g, "$1 ");
-    } else {
-      if (this.props.group?.groups_users?.length > 1) {
-        return `${this.props.group.groups_users.length} group members`;
-      } else {
-        return `One group member`;
-      }
+      return this.props.user.username;
+    } else if (this.props.group) {
+      return this.props.t("{{count}} group member", {count: this.props.group.user_count});
     }
+    return "";
+  }
+
+  /**
+   * Handle whenever the user passes its mouse hover the tooltip.
+   * @returns {Promise<JSX>}
+   */
+  async onTooltipFingerprintMouseHover() {
+    if (this.state.tooltipFingerprintMessage) {
+      return;
+    }
+
+    const gpgkey = await this.props.context.port.request('passbolt.keyring.get-public-key-info-by-user', this.props.user.id);
+    const tooltipFingerprintMessage = <Fingerprint fingerprint={gpgkey.fingerprint}/>;
+    this.setState({tooltipFingerprintMessage});
   }
 
   /**
@@ -108,8 +134,18 @@ class AutocompleteItem extends Component {
                 <GroupAvatar group={this.props.group}/>
                 }
                 <div className="user">
-                  <span className="name">{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
-                  <span className="details">{this.getSubtitle()}</span>
+                  <span className="user-fullname-container">
+                    <span className="name ellipsis">{this.getTitle()}{this.isCurrentUserSuspended && <span className="suspended"> <Trans>(suspended)</Trans></span>}</span>
+                    {this.props.user &&
+                      <TooltipPortal
+                        message={this.state.tooltipFingerprintMessage || <TooltipMessageFingerprintLoading />}
+                        direction="auto"
+                        onMouseHover={this.onTooltipFingerprintMouseHover}>
+                        <Icon name="info-circle" baseline={true}/>
+                      </TooltipPortal>
+                    }
+                  </span>
+                  <span className="details ellipsis">{this.getSubtitle()}</span>
                 </div>
               </button>
             </div>
@@ -125,6 +161,7 @@ AutocompleteItem.defaultProps = {
 };
 
 AutocompleteItem.propTypes = {
+  context: PropTypes.object,
   baseUrl: PropTypes.string,
   id: PropTypes.number,
   user: PropTypes.object,
@@ -132,6 +169,7 @@ AutocompleteItem.propTypes = {
   selected: PropTypes.bool,
   onClick: PropTypes.func,
   canShowUserAsSuspended: PropTypes.bool.isRequired, // is the feature disableUser enabled?
+  t: PropTypes.func, // the translation function
 };
 
-export default AutocompleteItem;
+export default withAppContext(withTranslation("common")(AutocompleteItem));

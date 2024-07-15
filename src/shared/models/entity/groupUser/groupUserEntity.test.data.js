@@ -12,26 +12,29 @@
  * @since         4.5.0
  */
 import {v4 as uuidv4} from "uuid";
-import {defaultUserDto} from "./userEntity.test.data";
+import {defaultUserDto} from "../user/userEntity.test.data";
 
-export const createGroupUser = (data = {}) => {
-  const defaultData = {
-    user_id:  uuidv4(),
-    group_id: uuidv4(),
-    is_admin: false
-  };
+export const minimumGroupUserDto = (data = {}) => ({
+  user_id:  uuidv4(),
+  is_admin: false,
+  ...data
+});
 
-  return Object.assign(defaultData, data);
-};
+export const createGroupUser = (data = {}) => ({
+  user_id:  uuidv4(),
+  group_id: uuidv4(),
+  is_admin: false,
+  ...data
+});
 
-export const defaultGroupsUser = (data = {}) => {
-  const defaultData = createGroupUser({
-    id: uuidv4(),
-    user_id: uuidv4(),
-    created: "2022-01-13T13:19:04.661Z",
-  });
-  return Object.assign(defaultData, data);
-};
+export const defaultGroupUser = (data = {}) => ({
+  id: uuidv4(),
+  user_id: uuidv4(),
+  group_id: uuidv4(),
+  is_admin: false,
+  created: "2022-01-13T13:19:04.661Z",
+  ...data
+});
 
 export function groupsWithoutOwnership(data = {}) {
   const groupsUsers = [

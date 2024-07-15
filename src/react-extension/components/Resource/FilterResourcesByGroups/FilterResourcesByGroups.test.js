@@ -19,6 +19,7 @@ import {defaultProps, groupsMock} from "./FilterResourcesByGroups.test.data";
 import SidebarGroupFilterSectionPage from "./FilterResourcesByGroups.test.page";
 import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
 
 beforeEach(() => {
   jest.resetModules();
@@ -27,6 +28,7 @@ beforeEach(() => {
 describe("See groups", () => {
   let page; // The page to test against
   const props = defaultProps(); // The props to pass
+  props.context.port.addRequestListener('passbolt.groups.find-my-groups', async() => props.context.groups.filter(group => Boolean(group.my_group_user)));
 
   describe(' As LU I can see groups', () => {
     /**
@@ -41,13 +43,15 @@ describe("See groups", () => {
     });
 
     it('I should see the 10 groups made on the resource', async() => {
+      await waitForTrue(() => page.title.hyperlink !== null);
       await page.title.click();
       await page.title.click();
       expect(page.displayGroupList.exists()).toBeTruthy();
       expect(page.displayGroupList.count()).toBe(9);
     });
 
-    it('I should be able to identify each group name', () => {
+    it('I should be able to identify each group name', async() => {
+      await waitForTrue(() => page.title.hyperlink !== null);
       expect(page.displayGroupList.name(1)).toBe('Leadership team');
       expect(page.displayGroupList.name(2)).toBe('Management');
       expect(page.displayGroupList.name(3)).toBe('Marketing');
@@ -60,6 +64,7 @@ describe("See groups", () => {
     });
 
     it('I should be able to see the filtered group name selected', async() => {
+      await waitForTrue(() => page.title.hyperlink !== null);
       await page.displayGroupList.click(page.displayGroupList.group(8));
       expect(page.displayGroupList.groupSelected).not.toBeNull();
       const state = {

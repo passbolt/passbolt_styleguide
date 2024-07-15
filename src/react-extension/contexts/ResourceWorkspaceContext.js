@@ -27,6 +27,8 @@ import GridResourceUserSettingService
   from "../../shared/services/gridResourceUserSetting/GridResourceUserSettingService";
 import ColumnsResourceSettingCollection from "../../shared/models/entity/resource/columnsResourceSettingCollection";
 import {withPasswordExpiry} from "./PasswordExpirySettingsContext";
+import {withRbac} from "../../shared/context/Rbac/RbacContext";
+import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -84,6 +86,7 @@ export const ResourceWorkspaceContext = React.createContext({
   onGoToResourceUriRequested: () => {}, // Whenever the users wants to follow a resource uri
   onChangeColumnView: () => {}, // Whenever the users wants to show or hide a column
   onChangeColumnsSettings: () => {}, // Whenever the user change the columns configuration
+  getHierarchyFolderCache: () => {}, // Whenever the need to get folder hierarchy
 });
 
 /**
@@ -158,7 +161,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       onResourcesToExport: this.handleResourcesToExportChange.bind(this), // Whenever resources and/or folder have to be exported
       onGoToResourceUriRequested: this.onGoToResourceUriRequested.bind(this), // Whenever the users wants to follow a resource uri
       onChangeColumnView: this.handleChangeColumnView.bind(this), // Whenever the users wants to show or hide a column
-      onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this) // Whenever the user change the columns configuration
+      onChangeColumnsSettings: this.handleChangeColumnsSettings.bind(this), // Whenever the user change the columns configuration
+      getHierarchyFolderCache: this.getHierarchyFolderCache.bind(this) // Whenever the need to get folder hierarchy
     };
   }
 
@@ -168,6 +172,8 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   initializeProperties() {
     this.resources = null; // A cache of the last known list of resources from the App context
     this.folders = null; // A cache of the last known list of folders from the App context
+    this.foldersMapById = {}; // A cache of the last known list of folders map by ID from the App context
+    this.hierarchyFolderCache = {}; // A cache of the last known list of folders hierarchy by ID from the App context
   }
 
   /**
@@ -228,9 +234,13 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasFilterChanged = !this.isFilterEqual(previousFilter, this.state.filter);
     if (hasFilterChanged) {
       // Avoid a side-effect whenever one inputs a specific resource url (it unselect the resource otherwise )
-      const isNotNonePreviousFilter = previousFilter.type !== ResourceWorkspaceFilterTypes.NONE;
-      if (isNotNonePreviousFilter) {
-        await this.unselectAll();
+      const isNonePreviousFilter = previousFilter.type === ResourceWorkspaceFilterTypes.NONE;
+      if (isNonePreviousFilter) {
+        return;
+      }
+      await this.unselectAll();
+
+      if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP) {
         await this.populateDebounced();
       }
     }
@@ -243,6 +253,11 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const hasFoldersChanged = this.props.context.folders !== this.folders;
     if (hasFoldersChanged) {
       this.folders = this.props.context.folders;
+      this.foldersMapById = this.folders.reduce((result, folder) => {
+        result[folder.id] = folder;
+        return result;
+      }, {});
+      this.hierarchyFolderCache = {};
       await this.refreshSearchFilter();
       await this.updateDetails();
     }
@@ -582,17 +597,23 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     }
   }
 
+  /**
+   * Check if the user can use folders.
+   * @returns {boolean}
+   */
+  get canUseFolders() {
+    return this.props.context.siteSettings.canIUse("folders")
+      && this.props.rbacContext.canIUseUiAction(uiActions.FOLDERS_USE);
+  }
 
   /**
    * Populate the context with initial data such as resources and folders
    */
   populate() {
-    if (this.props.context.siteSettings.canIUse("folders")) {
+    if (this.canUseFolders) {
       this.props.context.port.request("passbolt.folders.update-local-storage");
     }
     this.props.context.port.request("passbolt.resources.update-local-storage");
-    this.props.context.port.request("passbolt.groups.update-local-storage");
-    this.props.context.port.request("passbolt.users.update-local-storage");
   }
 
   /** RESOURCE SEARCH  **/
@@ -676,15 +697,26 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     const text = filter.payload;
     const words =  (text && text.split(/\s+/)) || [''];
     const canUseTags = this.props.context.siteSettings.canIUse("tags");
+    const foldersMatchCache = {};
 
     // Test match of some escaped test words against the name / username / uri / description /tags resource properties
     const escapeWord = word =>  word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const wordToRegex = word =>  new RegExp(escapeWord(word), 'i');
     const matchWord = (word, value) => wordToRegex(word).test(value);
 
-    const matchTagProperty = (word, resource) => resource.tags.some(tag => matchWord(word, tag.slug));
+    const getFolderById = id => this.foldersMapById[id];
+    const matchFolderNameProperty = (word, folder) => matchWord(word, folder?.name);
+    const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder.folder_parent_id !== null && matchFolderCache(word, folder.folder_parent_id));
+    const matchFolderCache = (word, id) => {
+      const key = word + id;
+      if (typeof foldersMatchCache[key] === "undefined") {
+        foldersMatchCache[key] = matchFolder(word, getFolderById(id));
+      }
+      return foldersMatchCache[key];
+    };
+    const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
     const matchStringProperty = (word, resource) => ['name', 'username', 'uri', 'description'].some(key => matchWord(word, resource[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource));
+    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource.folder_parent_id !== null && matchFolderCache(word, resource.folder_parent_id));
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
@@ -864,8 +896,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Navigate to the appropriate url after some resources selection operation
    */
   redirectAfterSelection() {
-    const canUseFolders = this.props.context.siteSettings.canIUse('folders');
-    const contentLoaded = this.resources !== null && (!canUseFolders || this.folders !== null);
+    const contentLoaded = this.resources !== null && (!this.canUseFolders || this.folders !== null);
     if (!contentLoaded) {
       return;
     }
@@ -1103,6 +1134,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     if (!this.hasAttentionRequiredColumn()) {
       columnsResourceSetting.removeById("attentionRequired");
     }
+    if (!this.canUseFolders) {
+      columnsResourceSetting.removeById("location");
+    }
     const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
     // process the search after the grid setting is loaded
     this.setState({columnsResourceSetting, sorter}, async() => {
@@ -1157,6 +1191,44 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   }
 
   /**
+   * Get the hierarchy of a folder by ID in cache
+   * @param {string} id The id of the folder
+   * @returns {array<object>} Array of folders
+   */
+  getHierarchyFolderCache(id) {
+    // When resources are not in a folder
+    if (id === null) {
+      return [];
+    }
+    // Process the hierarchy with a cache map by folder id
+    if (typeof this.hierarchyFolderCache[id] === "undefined") {
+      this.hierarchyFolderCache[id] = this.getHierarchyFolder(id);
+    }
+    return this.hierarchyFolderCache[id];
+  }
+
+  /**
+   * Get the hierarchy of a folder by ID in cache
+   * @param {string} id The id of the folder
+   * @returns {*[]}
+   */
+  getHierarchyFolder(id) {
+    const hierarchy = [];
+    let currentFolderId = id;
+    while (currentFolderId) {
+      const folder = this.foldersMapById[currentFolderId];
+      // Prevent issue if foldersMapById is not loaded yet
+      if (!folder) {
+        return hierarchy;
+      }
+      hierarchy.unshift(folder);
+      currentFolderId = folder.folder_parent_id;
+    }
+    return hierarchy;
+  }
+
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -1177,10 +1249,11 @@ ResourceWorkspaceContextProvider.propTypes = {
   history: PropTypes.object,
   actionFeedbackContext: PropTypes.object,
   passwordExpiryContext: PropTypes.object, // the password expiry contexts
+  rbacContext: PropTypes.any, // The role based access control context
   loadingContext: PropTypes.object // The loading context
 };
 
-export default withAppContext(withPasswordExpiry(withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider)))));
+export default withAppContext(withRbac(withPasswordExpiry(withLoading(withActionFeedback(withRouter(ResourceWorkspaceContextProvider))))));
 
 /**
  * Resource Workspace Context Consumer HOC

@@ -143,7 +143,7 @@ class DisplayAdministrationPasswordExpiry extends React.PureComponent {
           <div className="sidebar-help">
             <h3><Trans>About password expiry</Trans></h3>
             <p><Trans>For more information about the password expiry, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/password-expiry" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/password-configuration/password-expiry" target="_blank" rel="noopener noreferrer">
               <Icon name="life-ring"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

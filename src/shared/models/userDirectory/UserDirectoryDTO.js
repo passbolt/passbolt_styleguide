@@ -48,6 +48,7 @@ class UserDirectoryDTO {
     this.sync_groups_update = userDirectoryModel.updateGroups;
     this.fields_mapping = userDirectoryModel.fieldsMapping;
     this.field_fallbacks = userDirectoryModel.fallbackFields;
+    this.delete_user_behavior = userDirectoryModel.deleteUserBehavior;
 
     this.domains = {
       // DEFAULT DOMAIN

@@ -17,7 +17,6 @@ import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import FormSubmitButton from "../../Common/Inputs/FormSubmitButton/FormSubmitButton";
 import FormCancelButton from "../../Common/Inputs/FormSubmitButton/FormCancelButton";
 import {Trans, withTranslation} from "react-i18next";
-import {withDialog} from "../../../contexts/DialogContext";
 
 /**
  * The component display operation variations.
@@ -69,6 +68,7 @@ class ConfirmCreateEdit extends Component {
     event.preventDefault();
 
     if (!this.state.processing) {
+      this.setState({processing: true});
       this.props.onConfirm();
       this.props.onClose();
     }
@@ -175,4 +175,4 @@ ConfirmCreateEdit.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withDialog(withTranslation('common')(ConfirmCreateEdit));
+export default withTranslation('common')(ConfirmCreateEdit);

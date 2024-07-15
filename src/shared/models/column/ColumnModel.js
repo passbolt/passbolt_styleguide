@@ -42,6 +42,7 @@ export const ColumnModelTypes = {
   CHECKBOX: 'checkbox',
   EXPIRED: 'expired',
   FAVORITE: 'favorite',
+  LOCATION: 'location',
   MODIFIED: 'modified',
   NAME: 'name',
   PASSWORD: 'password',

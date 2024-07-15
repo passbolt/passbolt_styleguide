@@ -123,6 +123,9 @@ export default class DisplayResourcesListPage {
       get copyTotpLink() {
         return element.querySelector('.cell-totp .secret-copy button');
       },
+      get locationLink() {
+        return element.querySelector('.cell-location button').textContent;
+      },
       async selectFavorite() {
         const favorite = element.querySelector('.cell-favorite button');
         fireEvent.click(favorite, leftClick);
@@ -156,6 +159,11 @@ export default class DisplayResourcesListPage {
       async selectUri() {
         const uri = element.querySelector('.cell-uri div button');
         fireEvent.click(uri, leftClick);
+        await waitFor(() => {});
+      },
+      async selectLocation() {
+        const location = element.querySelector('.cell-location button');
+        fireEvent.click(location, leftClick);
         await waitFor(() => {});
       },
       async select() {
