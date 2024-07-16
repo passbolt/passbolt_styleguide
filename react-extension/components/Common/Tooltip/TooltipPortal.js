@@ -62,7 +62,7 @@ class TooltipPortal extends Component {
    * Handle mouse over event
    */
   handleMouseEnter() {
-    this.props?.onMouseHover();
+    this.props.onMouseHover?.();
     this.setState({hasToDisplayTooltip: true}, this.findBestPosition);
   }
 
