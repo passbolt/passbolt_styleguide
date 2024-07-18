@@ -212,7 +212,7 @@ class ConfirmSaveAccountRecoverySettings extends Component {
           <div className="submit-wrapper clearfix">
             <a
               target="_blank" rel="noopener noreferrer"
-              href="https://help.passbolt.com/configure/account-recovery"
+              href="https://www.passbolt.com/docs/admin/authentication/account-recovery/"
               className={`button button-left ${this.isProcessing ? "disabled" : ''}`}>
               <Trans>Learn more</Trans>
             </a>
