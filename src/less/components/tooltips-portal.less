@@ -1,0 +1,79 @@
+/*
+	Tooltips Portal
+*/
+/* Tooltip Portal container */
+.tooltip-portal {
+  display: flex;
+  cursor: pointer;
+
+  // Tooltip focus
+  &:focus, :focus-visible {
+    outline: @outline-default-border;
+  }
+
+  span {
+    .ellipsis();
+  }
+}
+
+/* Tooltip text */
+.tooltip-portal-text {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  max-width: 24rem;
+  width: max-content;
+  padding: .4rem .8rem;
+  background: @tooltip-background;
+  color: @tooltip-text-color;
+  border-radius: .3rem;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+  font-weight: normal;
+  text-align: left;
+
+  &::after {
+    content: " ";
+    position: absolute;
+    border: .5rem solid transparent;
+  }
+
+  /* only right for now */
+
+  &.top {
+    &::after {
+      left: calc(50% - 5px);
+      top: 100%;
+      border-top-color: @tooltip-background;
+    }
+  }
+
+  &.right {
+    &::after {
+      bottom: calc(50% - 5px);
+      right: 100%;
+      border-right-color: @tooltip-background;
+    }
+  }
+
+  &.bottom {
+    &::after {
+      right: calc(50% - 5px);
+      bottom: 100%;
+      border-bottom-color: @tooltip-background;
+    }
+  }
+
+  &.left {
+    &::after {
+      top: calc(50% - 5px);
+      left: 100%;
+      border-left-color: @tooltip-background;
+    }
+  }
+
+  .folder-level span.caret {
+    margin-right: .5rem;
+  }
+}

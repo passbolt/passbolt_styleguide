@@ -35,8 +35,9 @@ describe("HandleSessionExpired", () => {
     });
 
     it('As LU I should add a callback for session expired in the app context', () => {
-      expect.assertions(2);
+      expect.assertions(3);
       expect(props.context.onExpiredSession).toHaveBeenCalledWith(expect.any(Function));
+      expect(props.dialogContext.closeAll).toHaveBeenCalled();
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyExpiredSession);
     });
   });

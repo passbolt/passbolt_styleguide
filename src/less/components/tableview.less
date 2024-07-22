@@ -265,13 +265,18 @@
 
     /* multi select and fav fix */
     th.cell-favorite,
-    td.cell-favorite {
+    td.cell-favorite,
+    th.cell-attentionRequired,
+    td.cell-attentionRequired {
       button {
         display: flex;
         align-items: center;
         .cell-header {
           margin: 0;
           overflow: inherit;
+          .svg-icon.exclamation {
+            margin-top: .1rem;
+          }
           .cell-header-icon-sort {
             display: flex;
             margin: 0;
@@ -335,6 +340,12 @@
         .password-view, .totp-view {
           display: flex;
         }
+      }
+    }
+
+    td.cell-location {
+      span.caret {
+        margin: 0 .5rem;
       }
     }
   }

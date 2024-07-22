@@ -404,7 +404,7 @@ class ManageAccountRecoveryAdministrationSettings extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>Need some help?</Trans></h3>
             <p><Trans>For more information about account recovery, checkout the dedicated page on the help website.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/account-recovery" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/authentication/account-recovery/" target="_blank" rel="noopener noreferrer">
               <Icon name="life-ring"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

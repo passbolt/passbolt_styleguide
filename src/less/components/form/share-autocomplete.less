@@ -81,13 +81,14 @@
             }
             .user,
             .group {
-                width: 75%;
+                width: calc(100% - 5.6rem);
                 float: left;
                 padding-left: 1em;
                 padding-right: 1em;
             }
             .name {
-                display: block;
+                display: inline-block;
+                max-width: 100%;
                 .ellipsis();
             }
             .details {
@@ -108,8 +109,26 @@
             }
         }
 
-        .autocomplete-item.suspended {
-            opacity: 0.5;
+        .autocomplete-item {
+            &.suspended {
+                opacity: 0.5;
+            }
+
+            button {
+                width: 100%;
+
+                & > span {
+                  max-with:100;
+                }
+            }
+
+            .user-fullname-container {
+              display: flex;
+
+              .tooltip-portal {
+                margin-left: 1rem;
+              }
+            }
         }
     }
 

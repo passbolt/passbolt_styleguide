@@ -153,9 +153,12 @@ export default class TableContextProvider extends Component {
    * Handle window resize event
    */
   handleWindowResizeEvent() {
-    this.setColumnsWidthFromActualWidth(this.state.tableviewWidth);
-    // Debounce the function to store the new columns width
-    this.handleChangeColumnsDebounced();
+    // Prevent wrong calculation if the tableviewWidth is not set
+    if (this.state.tableviewWidth !== null) {
+      this.setColumnsWidthFromActualWidth(this.state.tableviewWidth);
+      // Debounce the function to store the new columns width
+      this.handleChangeColumnsDebounced();
+    }
   }
 
   /**

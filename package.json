@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "4.8.0",
+  "version": "4.9.2",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -85,7 +85,8 @@
     },
     "glob-stream": {
       "glob-parent": "5.1.2"
-    }
+    },
+    "ws": "8.17.1"
   },
   "scripts": {
     "build": "npm run build-api-app",

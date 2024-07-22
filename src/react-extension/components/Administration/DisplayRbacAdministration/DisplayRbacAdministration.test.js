@@ -47,7 +47,7 @@ describe("DisplayRbacAdministration", () => {
       expect(page.helpBox).toBeDefined();
       expect(page.helpBoxButton).toBeDefined();
       expect(page.helpBoxButton.textContent).toEqual("Read RBAC doc");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/rbac');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/role-based-access-control/');
       expect(page.helpBoxButton.getAttribute('rel')).toEqual('noopener noreferrer');
     });
 

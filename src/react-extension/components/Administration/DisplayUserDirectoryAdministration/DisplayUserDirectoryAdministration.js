@@ -679,6 +679,38 @@ class DisplayUserDirectoryAdministration extends React.Component {
                      </div>
                    </div>
                  </div>
+                 <div className="input text clearfix ad openldap">
+                   <label><Trans>Delete or suspend users</Trans></label>
+                   <div className="help-message"><Trans>Define the behaviour when existing synchronized users are removed
+                     from the users directory</Trans>:
+                   </div>
+                   <div className="radiolist-alt">
+                     <div className={`input radio ${settings.deleteUserBehavior === "delete" ? 'checked' : ''}`}>
+                       <input type="radio" value="delete" onChange={this.handleInputChange} name="deleteUserBehavior"
+                         checked={settings.deleteUserBehavior === "delete"} id="deleteUserBehaviorDelete" disabled={this.hasAllInputDisabled()}/>
+                       <label htmlFor="deleteUserBehaviorDelete">
+                         <span className="name"><Trans>Delete users</Trans></span>
+                         <span className="info">
+                           <Trans>Delete the users and all the data associated with them.</Trans>
+                           &nbsp;
+                           <Trans>The data will be permanently deleted, this action cannot be undone.</Trans>
+                         </span>
+                       </label>
+                     </div>
+                     <div className={`input radio ${settings.deleteUserBehavior === "disable" ? 'checked' : ''}`}>
+                       <input type="radio" value="disable" onChange={this.handleInputChange} name="deleteUserBehavior"
+                         checked={settings.deleteUserBehavior === "disable"} id="deleteUserBehaviorSuspended" disabled={this.hasAllInputDisabled()}/>
+                       <label htmlFor="deleteUserBehaviorSuspended">
+                         <span className="name"><Trans>Suspend users</Trans></span>
+                         <span className="info">
+                           <Trans>Suspend the users, preventing them from signing in to Passbolt and from receiving email notifications.</Trans>
+                           &nbsp;
+                           <Trans>Other users can still share resources with them and add them to groups.</Trans>
+                         </span>
+                       </label>
+                     </div>
+                   </div>
+                 </div>
                </div>
              </div>
            </>
@@ -692,7 +724,8 @@ class DisplayUserDirectoryAdministration extends React.Component {
           <div className="sidebar-help">
             <h3><Trans>Need help?</Trans></h3>
             <p><Trans>Check out our ldap configuration guide.</Trans></p>
-            <a className="button" href="https://help.passbolt.com/configure/ldap" target="_blank" rel="noopener noreferrer">
+            <a className="button" href="https://passbolt.com/docs/admin/user-provisioning/users-directory/"
+              target="_blank" rel="noopener noreferrer">
               <Icon name="document"/>
               <span><Trans>Read the documentation</Trans></span>
             </a>

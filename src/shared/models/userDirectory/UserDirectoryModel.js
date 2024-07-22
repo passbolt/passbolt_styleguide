@@ -75,6 +75,7 @@ class UserDirectoryModel {
     this.createGroups = Boolean(userDirectoryDTO.sync_groups_create);
     this.deleteGroups = Boolean(userDirectoryDTO.sync_groups_delete);
     this.updateGroups = Boolean(userDirectoryDTO.sync_groups_update);
+    this.deleteUserBehavior = userDirectoryDTO.delete_user_behavior || "delete";
     //Form field option
     this.userDirectoryToggle = Boolean(this.port) && Boolean(this.host) && userDirectoryDTO?.enabled;
   }
@@ -123,6 +124,7 @@ class UserDirectoryModel {
     this.createGroups = true;
     this.deleteGroups = true;
     this.updateGroups = true;
+    this.deleteUserBehavior = "delete";
     //Form field option
     this.userDirectoryToggle = false;
   }

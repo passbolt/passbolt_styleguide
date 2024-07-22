@@ -68,7 +68,7 @@ describe("SecretGeneratorComplexity", () => {
       "aaaAAA1111": 59.54,
       "🇫🇷": 0, // A char which doesn't match the known masks.
       "😸😸😸😸😸😸😸😸": 50.58,
-      "😸😸😸😸😸😸😸🇫🇷": 50.58,
+      "😸😸😸😸😸😸😸🇫🇷": 50.72,
       "aA1(~:<😸": 59,
     };
 
@@ -82,10 +82,10 @@ describe("SecretGeneratorComplexity", () => {
     const entropyOf = (wordCount, spacing) => roundEntropy(SecretGeneratorComplexity.entropyPassphrase(wordCount, spacing));
     //Currently, the tests are written considering that there are 7776 words in the dictionnary and 3 word cases
 
-    expect(entropyOf(5, "")).toBe(64.63);
-    expect(entropyOf(5, "  ")).toBe(64.86);
-    expect(entropyOf(10, "")).toBe(129.25);
-    expect(entropyOf(10, "  ")).toBe(129.72);
+    expect(entropyOf(5, "")).toBe(72.55);
+    expect(entropyOf(5, "; ")).toBe(77.19);
+    expect(entropyOf(10, "")).toBe(72.55 * 2);
+    expect(entropyOf(10, "; ")).toBe(149.74);
   });
 });
 

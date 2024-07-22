@@ -73,7 +73,7 @@ describe("DisplaySelfRegistrationAdministration", () => {
 
       expect(page.helpBoxButton).toBeDefined();
       expect(page.helpBoxButton.textContent).toEqual("Read the documentation");
-      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://help.passbolt.com/configure/self-registration');
+      expect(page.helpBoxButton.getAttribute('href')).toEqual('https://passbolt.com/docs/admin/user-provisioning/self-registration/');
     });
 
     it('As a logged in administrator I can enable the User self registration setting', async() => {

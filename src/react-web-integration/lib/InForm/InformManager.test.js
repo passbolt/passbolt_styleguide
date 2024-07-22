@@ -958,6 +958,30 @@ describe("InformManager", () => {
     expect(informManager.iframesLength).toBe(0);
   });
 
+  it("As LU I should see the inform call to action on form with name attribute username in shadow dom", async() => {
+    const div = document.createElement("div");
+    div.id = "shadow-root";
+    document.body.appendChild(div);
+    const shadowRoot = div.attachShadow({mode: "open"});
+    // Set up document shadowRoot
+    // eslint-disable-next-line no-unsanitized/property
+    shadowRoot.innerHTML = domElementLoginWithNameAttributeUsername; // The Dom
+    const informManager = new InformManagerPage();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnPassword();
+    expect(informManager.iframesLength).toBe(2);
+    await informManager.blurOnUsername();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.blurOnPassword();
+    expect(informManager.iframesLength).toBe(0);
+    await informManager.focusOnPassword();
+    expect(informManager.iframesLength).toBe(1);
+    await informManager.mouseOverOnUsername();
+    expect(informManager.iframesLength).toBe(2);
+  });
+
   it("As LU I should see the inform call to action in iframe", async() => {
     jest.spyOn(DomUtils, "isRequestInitiatedFromSameOrigin").mockImplementation(() => true);
     // Set up document body
