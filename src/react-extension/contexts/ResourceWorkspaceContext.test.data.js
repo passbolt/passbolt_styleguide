@@ -1020,5 +1020,48 @@ const folders = [{
   },
   "folder_parent_id": "9e03fd73-04c0-5514-95fa-1a6cf2c7c093",
   "personal": false
-}];
+}, {
+  "id": "1e3874ae-4b46-590b-968a-418f704b9d9h",
+  "name": "resource corrupted",
+  "username": "www-data",
+  "uri": "http:\/\/www.corrupted.org\/",
+  "description": "Resource with folder relation broken.",
+  "deleted": false,
+  "created": "2020-08-25T08:35:19+00:00",
+  "modified": "2020-08-26T08:35:19+00:00",
+  "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
+  "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
+  "favorite": {
+    "id": "56216dba-b6da-592b-87cb-fb5cbbd0a424",
+    "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
+    "foreign_key": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    "foreign_model": "Resource",
+    "created": "2020-08-27T08:35:21+00:00",
+    "modified": "2020-08-27T08:35:21+00:00"
+  },
+  "permission": {
+    "id": "8dfd59a7-852d-5c57-bd45-75c28bbb3f6c",
+    "aco": "Resource",
+    "aco_foreign_key": "8e3874ae-4b40-590b-968a-418f704b9d9a",
+    "aro": "User",
+    "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
+    "type": 15,
+    "created": "2020-08-27T08:35:19+00:00",
+    "modified": "2020-08-27T08:35:19+00:00"
+  },
+  "tags": [
+    {
+      "id": "1c8afebc-7e23-51bd-a0b6-2e695afeb32f",
+      "slug": "#charlie",
+      "is_shared": true
+    },
+    {
+      "id": "ecd059e8-4cb3-574b-a063-6083e272ef27",
+      "slug": "#golf",
+      "is_shared": true
+    }
+  ],
+  "folder_parent_id": "999f613b-0706-570a-8656-956186384e0b",
+  "personal": false
+},];
 
