@@ -706,7 +706,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
 
     const getFolderById = id => this.foldersMapById[id];
     const matchFolderNameProperty = (word, folder) => matchWord(word, folder?.name);
-    const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder.folder_parent_id !== null && matchFolderCache(word, folder.folder_parent_id));
+    const matchFolder = (word, folder) => matchFolderNameProperty(word, folder) || (folder?.folder_parent_id && matchFolderCache(word, folder.folder_parent_id));
     const matchFolderCache = (word, id) => {
       const key = word + id;
       if (typeof foldersMatchCache[key] === "undefined") {
@@ -716,7 +716,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     };
     const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
     const matchStringProperty = (word, resource) => ['name', 'username', 'uri', 'description'].some(key => matchWord(word, resource[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource.folder_parent_id !== null && matchFolderCache(word, resource.folder_parent_id));
+    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
