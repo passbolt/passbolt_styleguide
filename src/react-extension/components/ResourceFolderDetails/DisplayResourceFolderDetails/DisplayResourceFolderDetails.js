@@ -74,6 +74,7 @@ class DisplayResourceFolderDetails extends React.Component {
    */
   render() {
     const canViewShare = this.props.rbacContext.canIUseUiAction(uiActions.SHARE_FOLDER);
+    const canUseAuditLog = this.props.context.siteSettings.canIUse("auditLog");
 
     return (
       <div className="panel aside ready">
@@ -101,7 +102,9 @@ class DisplayResourceFolderDetails extends React.Component {
           {canViewShare &&
             <DisplayResourceFolderDetailsPermissions/>
           }
-          <DisplayResourceFolderDetailsActivity/>
+          {canUseAuditLog &&
+            <DisplayResourceFolderDetailsActivity/>
+          }
         </div>
       </div>
     );
