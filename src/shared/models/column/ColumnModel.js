@@ -50,3 +50,18 @@ export const ColumnModelTypes = {
   URI: 'uri',
   USERNAME: 'username',
 };
+
+
+export const ColumnFields = {
+  ATTENTION_REQUIRED: 'attentionRequired',
+  CHECKBOX: 'checkbox',
+  EXPIRED: 'expired',
+  FAVORITE: 'favorite',
+  LOCATION: 'location',
+  MODIFIED: 'modified',
+  PASSWORD: 'password',
+  TOTP: 'totp',
+  METADATA_NAME: 'metadata.name',
+  METADATA_USERNAME: 'metadata.username',
+  METADATA_URIS: 'metadata.uris.0',
+};

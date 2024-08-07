@@ -54,15 +54,6 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     ...data
   };
 
-  defaultData.metadata = {
-    name: defaultData.name,
-    username: defaultData.username,
-    uris: [defaultData.uri],
-    description: defaultData.description,
-    resource_type_id: defaultData.resource_type_id,
-    ...defaultData.metadata,
-  };
-
   if (!data.permissions && options.withPermissions) {
     defaultData.permissions = defaultPermissionsDtos(options.withPermissions, {aco_foreign_key: id});
   }
@@ -85,7 +76,8 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     name: defaultData.name,
     username: defaultData.username,
     uris: defaultData.uri ? [defaultData.uri] : [],
-    description: defaultData.description
+    description: defaultData.description,
+    ...data.metadata,
   };
 
   return defaultData;

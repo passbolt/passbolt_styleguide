@@ -15,6 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import CellWrapper from "./CellWrapper";
 import {withTable} from "./Context/TableContext";
+import getPropValue from "../../../react-extension/lib/Object/getPropValue";
 
 /**
  * This component represents a table row
@@ -112,7 +113,7 @@ class Row extends Component {
       return column.getValue(item);
     }
 
-    return item[column.field];
+    return getPropValue(item, column.field);
   }
 
   /**

@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column favorite use only with the UI
@@ -24,7 +24,7 @@ class ColumnFavoriteModel extends ColumnModel {
    */
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.FAVORITE;
-    columnDto.field = ColumnModelTypes.FAVORITE;
+    columnDto.field = ColumnFields.FAVORITE;
     columnDto.width = columnDto.width || 20;
     columnDto.defaultWidth = 20;
     columnDto.resizable = false;

@@ -12,7 +12,7 @@
  * @since         4.9.0
  */
 
-import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column location use only with the UI
@@ -24,7 +24,7 @@ class ColumnLocationModel extends ColumnModel {
    */
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.LOCATION;
-    columnDto.field = ColumnModelTypes.LOCATION;
+    columnDto.field = ColumnFields.LOCATION;
     columnDto.width = columnDto.width || 210;
     columnDto.defaultWidth = 210;
     columnDto.resizable = true;
