@@ -3,7 +3,7 @@ import userSettingsFixture from "../../../test/fixture/Settings/userSettings";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import MockPort from "../../../test/mock/MockPort";
-import {v4 as uuidv4} from "uuid";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -28,10 +28,7 @@ export function defaultProps() {
   return {
     resourceWorkspaceContext: {
       details: {
-        resource: {
-          id: uuidv4(),
-          name: "resource_name"
-        }
+        resource: defaultResourceDto()
       },
       refresh: {
         activities: false
@@ -55,10 +52,6 @@ export const activitiesMock = [
             "id": "fa5f5d7a-32cc-4c5b-9478-f58584ca4222",
             "type": 1,
             "permissions_history_folder": null,
-            "resource": {
-              "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-              "name": "test_autocomplete_tag"
-            },
             "user": {
               "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
               "username": "admin@passbolt.com",
@@ -84,10 +77,6 @@ export const activitiesMock = [
             "id": "79dc7e17-0d98-4cab-964e-c47422b709cb",
             "type": 15,
             "permissions_history_folder": null,
-            "resource": {
-              "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-              "name": "test_autocomplete_tag"
-            },
             "user": {
               "id": "f848277c-5398-58f8-a82a-72397af2d450",
               "username": "ada@passbolt.com",
@@ -125,10 +114,6 @@ export const activitiesMock = [
         ],
         "removed": []
       },
-      "resource": {
-        "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-        "name": "test_autocomplete_tag"
-      },
       "folder": null
     },
     "creator": {
@@ -152,12 +137,7 @@ export const activitiesMock = [
   {
     "action_log_id": "6bb08a19-1dbc-48ed-bcfc-7e0e390d357e",
     "type": "Resource.Secrets.read",
-    "data": {
-      "resource": {
-        "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-        "name": "test_autocomplete_tag"
-      }
-    },
+    "data": {},
     "creator": {
       "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
       "username": "admin@passbolt.com",
@@ -179,12 +159,7 @@ export const activitiesMock = [
   {
     "action_log_id": "c255b7bc-0695-4c94-be62-34477f733e66",
     "type": "Resource.Secrets.read",
-    "data": {
-      "resource": {
-        "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-        "name": "test_autocomplete_tag"
-      }
-    },
+    "data": {},
     "creator": {
       "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
       "username": "admin@passbolt.com",
@@ -213,10 +188,6 @@ export const activitiesMock = [
             "id": "79dc7e17-0d98-4cab-964e-c47422b709cb",
             "type": 15,
             "permissions_history_folder": null,
-            "resource": {
-              "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-              "name": "test_autocomplete_tag"
-            },
             "user": {
               "id": "f848277c-5398-58f8-a82a-72397af2d450",
               "username": "ada@passbolt.com",
@@ -255,10 +226,6 @@ export const activitiesMock = [
         "updated": [],
         "removed": []
       },
-      "resource": {
-        "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-        "name": "test_autocomplete_tag"
-      },
       "folder": null
     },
     "creator": {
@@ -288,12 +255,7 @@ export const lastActivityMock = [
   {
     "action_log_id": "e65cd6d3-c738-478c-9f2d-f62224384c9e",
     "type": "Resources.created",
-    "data": {
-      "resource": {
-        "id": "f9f79749-4bce-4e61-8016-68c942a8f2d9",
-        "name": "test_autocomplete_tag"
-      }
-    },
+    "data": {},
     "creator": {
       "id": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
       "username": "admin@passbolt.com",
