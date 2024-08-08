@@ -715,8 +715,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return foldersMatchCache[key];
     };
     const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
-    const matchStringProperty = (word, resource) => ['name', 'username', 'uri', 'description'].some(key => matchWord(word, resource[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
+    const matchUrisProperty = (word, resource) => resource.metadata?.uris?.some(uri => matchWord(word, uri));
+    const matchStringProperty = (word, resource) => ['name', 'username', 'description'].some(key => matchWord(word, resource.metadata?.[key]));
+    const matchResource = (word, resource) => matchStringProperty(word, resource) || matchUrisProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
