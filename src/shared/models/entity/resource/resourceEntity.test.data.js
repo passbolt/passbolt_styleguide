@@ -75,7 +75,7 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     resource_type_id: defaultData.resource_type_id,
     name: defaultData.name,
     username: defaultData.username,
-    uris: defaultData.uri ? [defaultData.uri] : [],
+    uris: typeof(defaultData.uri) === "string" ? [defaultData.uri] : [],
     description: defaultData.description,
     ...data.metadata,
   };
