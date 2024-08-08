@@ -104,7 +104,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     it('As LU I can start to copy the uri of a resource', async() => {
       expect.assertions(3);
       await page.copyUri();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.uri);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.metadata.uris[0]);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
