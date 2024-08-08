@@ -267,7 +267,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
         whiteListedProtocols: resourceLinkAuthorizedProtocols,
         defaultProtocol: urlProtocols.HTTPS
       });
-  } 
+  }
 
   /**
    * Can update the resource
