@@ -12,7 +12,7 @@
  * @since         4.2.0
  */
 
-import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column name use only with the UI
@@ -24,7 +24,7 @@ class ColumnNameModel extends ColumnModel {
    */
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.NAME;
-    columnDto.field = ColumnModelTypes.NAME;
+    columnDto.field = ColumnFields.METADATA_NAME;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
     columnDto.resizable = true;

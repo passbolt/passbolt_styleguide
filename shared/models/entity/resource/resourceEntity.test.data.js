@@ -70,6 +70,16 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     defaultData.favorite = defaultFavoriteDto({foreign_key: id});
   }
 
+  defaultData.metadata = {
+    object_type: "PASSBOLT_METADATA_V5",
+    resource_type_id: defaultData.resource_type_id,
+    name: defaultData.name,
+    username: defaultData.username,
+    uris: typeof(defaultData.uri) === "string" ? [defaultData.uri] : [],
+    description: defaultData.description,
+    ...data.metadata,
+  };
+
   return defaultData;
 };
 

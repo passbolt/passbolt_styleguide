@@ -7,6 +7,9 @@ import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypes
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
+import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -26,53 +29,41 @@ export function defaultAppContext(appContext) {
   return Object.assign(defaultAppContext, appContext || {});
 }
 
-
-/**
- * Default props
- * @returns {any}
- */
-export function defaultProps() {
-  return {
-  };
-}
-
 /**
  * Mocked a resource
  */
-export const resourceWithDescriptionMock = {
-  "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-  "description": "Apache is the world's most used web server software.",
-  "permission": {
-    "type": 7
-  }
-};
+export const resourceWithDescriptionMock = defaultResourceDto({
+  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+  metadata: {
+    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+    description: "Apache is the world's most used web server software.",
+  },
+  permission: updatePermissionDto()
+});
 
 /**
  * Mocked a resource with the last shared tag
  */
-export const resourceOwnedWithNoDescriptionMock = {
-  "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-  "name": "apache",
-  "username": "www-data",
-  "uri": "http://www.apache.org/",
-  "description": "",
-  "deleted": false,
-  "created": "2019-12-05T13:38:43+00:00",
-  "modified": "2019-12-06T13:38:43+00:00",
-  "created_by": "f848277c-5398-58f8-a82a-72397af2d450",
-  "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
-  "permission": {
-    type: 15
-  }
-};
+export const resourceOwnedWithNoDescriptionMock = defaultResourceDto({
+  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+  metadata: {
+    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+    name: "apache",
+    username: "www-data",
+    uris: ["http://www.apache.org/"],
+    description: "",
+  },
+  permission: ownerPermissionDto()
+});
 
 /**
  * Mocked a resource
  */
 export const resourceOnlyReadWithNoDescriptionMock = {
-  "id": "8e3874ae-4b40-590b-968a-418f704b9d9a",
-  "description": "",
-  "permission": {
-    "type": 1
-  }
+  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+  metadata: {
+    resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+    description: "",
+  },
+  permission: readPermissionDto()
 };

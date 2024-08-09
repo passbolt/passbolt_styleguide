@@ -12,7 +12,7 @@
  * @since         4.4.0
  */
 
-import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column "attention required" use only with the UI
@@ -24,7 +24,7 @@ class ColumnAttentionRequiredModel extends ColumnModel {
    */
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.ATTENTION_REQUIRED;
-    columnDto.field = ColumnModelTypes.EXPIRED;
+    columnDto.field = ColumnFields.EXPIRED;
     columnDto.width = columnDto.width || 20;
     columnDto.defaultWidth = 20;
     columnDto.resizable = false;

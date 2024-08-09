@@ -275,8 +275,8 @@ class DisplayInFormMenu extends React.Component {
         onClick={() => this.handleUseSuggestedResourceRequestedEvent(resource.id)}
         processing={this.state.resourceIdProcessing === resource.id}
         disabled={this.state.resourceIdProcessing === resource.id}
-        title={resource.name}
-        description={resource.username}
+        title={resource.metadata.name}
+        description={resource.metadata?.username}
         icon="key"/>
     ]), []);
   }

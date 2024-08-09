@@ -28,7 +28,7 @@ import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextual
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
-import {ColumnModelTypes} from "../../../../shared/models/column/ColumnModel";
+import {ColumnFields} from "../../../../shared/models/column/ColumnModel";
 
 beforeEach(() => {
   jest.resetModules();
@@ -160,38 +160,38 @@ describe("Display Resources", () => {
 
     it('As LU, I should sort the resources by favorite', async() => {
       await page.sortByResourceFavorite();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.FAVORITE);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.FAVORITE);
     });
 
     it('As LU, I should sort the resources by name', async() => {
       await page.sortByResourceName();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.NAME);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.METADATA_NAME);
     });
 
     it('As LU, I should sort the resources by username', async() => {
       jest.spyOn(props.resourceWorkspaceContext, 'onSorterChanged').mockImplementationOnce(() => {});
       await page.sortByUsername();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.USERNAME);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.METADATA_USERNAME);
     });
 
     it('As LU, I should sort the resources by modified', async() => {
       await page.sortByModified();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.MODIFIED);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.MODIFIED);
     });
 
     it('As LU, I should sort the resources by uri', async() => {
       await page.sortByUri();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.URI);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.METADATA_URIS);
     });
 
     it('As LU, I should sort the resources by attention required', async() => {
       await page.sortByAttentionRequired();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.EXPIRED);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.EXPIRED);
     });
 
     it('As LU, I should sort the resources by expiration date', async() => {
       await page.sortByExpiry();
-      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnModelTypes.EXPIRED);
+      expect(props.resourceWorkspaceContext.onSorterChanged).toHaveBeenCalledWith(ColumnFields.EXPIRED);
     });
   });
 

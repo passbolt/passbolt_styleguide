@@ -29,6 +29,8 @@ import ColumnsResourceSettingCollection from "../../shared/models/entity/resourc
 import {withPasswordExpiry} from "./PasswordExpirySettingsContext";
 import {withRbac} from "../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../shared/services/rbacs/uiActionEnumeration";
+import {ColumnModelTypes} from "../../shared/models/column/ColumnModel";
+import getPropValue from "../lib/Object/getPropValue";
 
 /**
  * Context related to resources ( filter, current selections, etc.)
@@ -715,8 +717,9 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return foldersMatchCache[key];
     };
     const matchTagProperty = (word, resource) => resource.tags?.some(tag => matchWord(word, tag.slug));
-    const matchStringProperty = (word, resource) => ['name', 'username', 'uri', 'description'].some(key => matchWord(word, resource[key]));
-    const matchResource = (word, resource) => matchStringProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
+    const matchUrisProperty = (word, resource) => resource.metadata?.uris?.some(uri => matchWord(word, uri));
+    const matchStringProperty = (word, resource) => ['name', 'username', 'description'].some(key => matchWord(word, resource.metadata?.[key]));
+    const matchResource = (word, resource) => matchStringProperty(word, resource) || matchUrisProperty(word, resource) || (canUseTags && matchTagProperty(word, resource)) || (resource?.folder_parent_id && matchFolderCache(word, resource.folder_parent_id));
     const matchText = resource => words.every(word => matchResource(word, resource));
 
     const filteredResources = this.resources.filter(matchText);
@@ -966,7 +969,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async sort() {
     const reverseSorter = sorter => (s1, s2) => -sorter(s1, s2);
     const baseSorter =  sorter => this.state.sorter.asc ? sorter : reverseSorter(sorter);
-    const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(s1[key], s2[key]));
+    const keySorter = (key, sorter) => baseSorter((s1, s2) => sorter(getPropValue(s1, key), getPropValue(s2, key)));
     const stringSorter = (s1, s2) => (s1 || "").localeCompare(s2 || "");
     const booleanSorter = (s1, s2) => s1 === s2 ? 0 : s1 ? -1 : 1;
     const sorter = this.state.sorter.propertyName === "favorite" ? booleanSorter : stringSorter;
@@ -1126,16 +1129,16 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     // Merge the columns setting collection by ID
     const columnsResourceSetting = ColumnsResourceSettingCollection.createFromDefault(gridUserSettingEntity?.columnsSetting);
     if (!this.props.context.siteSettings.canIUse('totpResourceTypes')) {
-      columnsResourceSetting.removeById("totp");
+      columnsResourceSetting.removeById(ColumnModelTypes.TOTP);
     }
     if (!this.props.passwordExpiryContext.isFeatureEnabled()) {
-      columnsResourceSetting.removeById("expired");
+      columnsResourceSetting.removeById(ColumnModelTypes.EXPIRED);
     }
     if (!this.hasAttentionRequiredColumn()) {
-      columnsResourceSetting.removeById("attentionRequired");
+      columnsResourceSetting.removeById(ColumnModelTypes.ATTENTION_REQUIRED);
     }
     if (!this.canUseFolders) {
-      columnsResourceSetting.removeById("location");
+      columnsResourceSetting.removeById(ColumnModelTypes.LOCATION);
     }
     const sorter = gridUserSettingEntity?.sorter || this.state.sorter;
     // process the search after the grid setting is loaded

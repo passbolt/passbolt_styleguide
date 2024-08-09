@@ -12,7 +12,7 @@
  * @since         4.4.0
  */
 
-import ColumnModel, {ColumnModelTypes} from "./ColumnModel";
+import ColumnModel, {ColumnFields, ColumnModelTypes} from "./ColumnModel";
 
 /**
  * Model related to the column "expiry" use only with the UI
@@ -24,7 +24,7 @@ class ColumnExpiredModel extends ColumnModel {
    */
   constructor(columnDto = {}) {
     columnDto.id = ColumnModelTypes.EXPIRED;
-    columnDto.field = ColumnModelTypes.EXPIRED;
+    columnDto.field = ColumnFields.EXPIRED;
     columnDto.width = columnDto.width || 145;
     columnDto.defaultWidth = 145;
     columnDto.resizable = true;

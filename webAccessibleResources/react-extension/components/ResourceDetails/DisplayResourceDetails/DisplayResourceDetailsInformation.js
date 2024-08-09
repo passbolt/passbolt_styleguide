@@ -150,7 +150,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   get safeUri() {
     return sanitizeUrl(
-      this.resource.uri, {
+      this.resource.metadata.uris?.[0], {
         whiteListedProtocols: resourceLinkAuthorizedProtocols,
         defaultProtocol: urlProtocols.HTTPS
       });
@@ -187,7 +187,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Handle when the user select the username of the resource
    */
   async handleUsernameClickEvent() {
-    await ClipBoard.copy(this.resource.username, this.props.context.port);
+    await ClipBoard.copy(this.resource.metadata.username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -454,7 +454,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * Whenever the user wants to follow a resource uri.
    */
   handleGoToResourceUriClick() {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.uri);
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.metadata.uris[0]);
   }
 
   /**
@@ -564,7 +564,7 @@ class DisplayResourceDetailsInformation extends React.Component {
             <>
               <li className="username">
                 <span className="label"><Trans>Username</Trans></span>
-                <span className="value"><button type="button" className="link no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.username}</span></button></span>
+                <span className="value"><button type="button" className="link no-border" onClick={this.handleUsernameClickEvent}><span>{this.resource.metadata.username}</span></button></span>
               </li>
               <li className="password">
                 <span className="label"><Trans>Password</Trans></span>
@@ -615,8 +615,8 @@ class DisplayResourceDetailsInformation extends React.Component {
           <li className="uri">
             <span className="label"><Trans>URI</Trans></span>
             <span className="value">
-              {this.safeUri && <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}><span>{this.resource.uri}</span></button>}
-              {!this.safeUri && <span>{this.resource.uri}</span>}
+              {this.safeUri && <button type="button" className="link no-border" onClick={this.handleGoToResourceUriClick}><span>{this.resource.metadata.uris?.[0]}</span></button>}
+              {!this.safeUri && <span>{this.resource.metadata.uris?.[0]}</span>}
             </span>
           </li>
           <li className="modified">

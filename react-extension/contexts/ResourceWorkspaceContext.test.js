@@ -291,8 +291,8 @@ describe("Resource Workspace Context", () => {
     it("As LU I be able to follow a safe resource uri", () => {
       const resource = context.resources[0];
       jest.spyOn(window, 'open').mockImplementationOnce(() => {});
-      page.goToResourceUri(resource.uri);
-      expect(window.open).toHaveBeenCalledWith("https://passbolt.dev/", "_blank", "noopener,noreferrer");
+      page.goToResourceUri(resource.metadata.uris[0]);
+      expect(window.open).toHaveBeenCalledWith(resource.metadata.uris[0], "_blank", "noopener,noreferrer");
     });
 
     it("As LU I not be able to follow an unsafe resource uri", () => {

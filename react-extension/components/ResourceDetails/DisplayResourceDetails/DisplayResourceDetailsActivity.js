@@ -220,7 +220,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderResouceCreatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceName = this.resource.name;
+    const resourceName = this.resource.metadata.name;
     const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
@@ -247,7 +247,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderResourceUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceName = this.resource.name;
+    const resourceName = this.resource.metadata.name;
     const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
@@ -274,7 +274,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderSecretReadActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceName = this.resource.name;
+    const resourceName = this.resource.metadata.name;
     const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
@@ -301,7 +301,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderSecretUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceName = this.resource.name;
+    const resourceName = this.resource.metadata.name;
     const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
@@ -356,7 +356,7 @@ class DisplayResourceDetailsActivity extends React.Component {
    */
   renderPermissionsUpdatedActivity(activity) {
     const activityCreatorName = this.getActivityCreatorFullName(activity.creator);
-    const resourceName = this.resource.name;
+    const resourceName = this.resource.metadata.name;
     const activityFormattedDate = formatDateTimeAgo(activity.created, this.props.t, this.props.context.locale);
 
     return (
