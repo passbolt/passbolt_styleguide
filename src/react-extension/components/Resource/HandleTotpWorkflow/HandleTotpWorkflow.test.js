@@ -207,6 +207,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         resource_type_id: props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp"),
         ...totp.toResourceDto()
       };
+      resourceDto.metadata.resource_type_id = props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp");
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been updated successfully");
@@ -230,6 +231,7 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
         resource_type_id: props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp"),
         ...totp.toResourceDto()
       };
+      resourceDto.metadata.resource_type_id = props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp");
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});

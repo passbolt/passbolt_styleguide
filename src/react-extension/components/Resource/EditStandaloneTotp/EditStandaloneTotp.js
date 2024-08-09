@@ -43,8 +43,8 @@ class EditStandaloneTotp extends Component {
    */
   get defaultState() {
     const resource = this.props.resource || {};
-    const name = resource.name || "";
-    const uri = resource.uri || "";
+    const name = resource.metadata.name || "";
+    const uri = resource.metadata.uris?.[0] || "";
 
     return {
       nameOriginal: name,
