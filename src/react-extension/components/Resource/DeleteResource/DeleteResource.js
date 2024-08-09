@@ -158,7 +158,7 @@ class DeleteResource extends Component {
             <>
               <p>
                 <Trans>
-                  Are you sure you want to delete the resource <strong className="dialog-variable">{{resourceName: this.resources[0].name}}</strong>?
+                  Are you sure you want to delete the resource <strong className="dialog-variable">{{resourceName: this.resources[0].metadata.name}}</strong>?
                 </Trans>
               </p>
               <p><Trans>Once the resource is deleted, it will be removed permanently and will not be recoverable.</Trans></p>
