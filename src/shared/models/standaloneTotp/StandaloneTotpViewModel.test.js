@@ -71,8 +71,10 @@ describe("StandaloneTotpViewModel", () => {
 
       //expected dto
       const expectedResourceDto = {
-        name: viewModelDto.name,
-        uri: viewModelDto.uri
+        metadata: {
+          name: viewModelDto.name,
+          uris: [viewModelDto.uri]
+        }
       };
       const expectedSecretDto = {
         totp: {
