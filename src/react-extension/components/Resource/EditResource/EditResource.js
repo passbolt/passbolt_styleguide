@@ -59,21 +59,21 @@ class EditResource extends Component {
     const resource = this.props.context.resources.find(item => item.id === this.props.resourceId) || {};
 
     return {
-      nameOriginal: resource.name || "",
-      name: resource.name || "",
+      nameOriginal: resource.metadata.name || "",
+      name: resource.metadata.name || "",
       nameError: "",
       nameWarning: "",
-      username: resource.username || "",
+      username: resource.metadata.username || "",
       usernameError: "",
       usernameWarning: "",
-      uri: resource.uri || "",
+      uri: resource.metadata.uris?.[0] || "",
       uriError: "",
       uriWarning: "",
       passwordOriginal: null,
       password: "",
       passwordError: "",
       passwordWarning: "",
-      description: resource.description || "",
+      description: resource.metadata.description || "",
       descriptionError: "",
       descriptionWarning: "",
       totp: null, // The totp
@@ -468,9 +468,11 @@ class EditResource extends Component {
   async updateResource() {
     const resourceDto = {
       id: this.props.resourceId,
-      name: this.state.name,
-      username: this.state.username,
-      uri: this.state.uri,
+      metadata: {
+        name: this.state.name,
+        username: this.state.username,
+        uris: [this.state.uri],
+      }
     };
 
     const isPasswordExpiryEnabled = this.props.passwordExpiryContext.isFeatureEnabled();
@@ -529,7 +531,7 @@ class EditResource extends Component {
    * @deprecated will be removed when v2 support is dropped
    */
   async updateResourceLegacy(resourceDto) {
-    resourceDto.description = this.state.description;
+    resourceDto.metadata.description = this.state.description;
     const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
@@ -540,7 +542,9 @@ class EditResource extends Component {
    * @param resourceDto
    */
   async updateWithoutEncryptedDescription(resourceDto) {
-    resourceDto.description = this.state.description;
+    resourceDto.metadata.description = this.state.description;
+    resourceDto.metadata.resource_type_id = this.state.resourceTypeId;
+    // @TODO E2EE resource_type_id duplicate for resource
     resourceDto.resource_type_id = this.state.resourceTypeId;
     const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
 
@@ -552,8 +556,10 @@ class EditResource extends Component {
    * @param resourceDto
    */
   async updateWithEncryptedDescription(resourceDto) {
+    resourceDto.metadata.resource_type_id = this.state.resourceTypeId;
+    // @TODO E2EE resource_type_id duplicate for resource
     resourceDto.resource_type_id = this.state.resourceTypeId;
-    resourceDto.description = '';
+    resourceDto.metadata.description = '';
     let plaintextDto = null;
     if (this.hasSecretChanged()) {
       plaintextDto = {
@@ -570,8 +576,10 @@ class EditResource extends Component {
    * @param resourceDto
    */
   async updateWithEncryptedDescriptionAndTotp(resourceDto) {
+    resourceDto.metadata.resource_type_id = this.state.resourceTypeId;
+    // @TODO E2EE resource_type_id duplicate for resource
     resourceDto.resource_type_id = this.state.resourceTypeId;
-    resourceDto.description = '';
+    resourceDto.metadata.description = '';
 
     let plaintextDto = null;
     if (this.hasSecretChanged()) {
