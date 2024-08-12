@@ -388,7 +388,7 @@ class ShareDialog extends Component {
       return;
     }
     if (this.isAboutAResource()) {
-      return this.resources[0].name;
+      return this.resources[0].metadata.name;
     }
     if (this.isAboutAFolder()) {
       return this.folders[0].name;
@@ -408,7 +408,7 @@ class ShareDialog extends Component {
     if (!acos || !acos.length || acos.length === 1) {
       return '';
     }
-    return acos.map(acos => acos.name).join(', ');
+    return acos.map(aco => aco.permission.aco === "Resource" ? aco.metadata.name : aco.name).join(', ');
   }
 
   /**

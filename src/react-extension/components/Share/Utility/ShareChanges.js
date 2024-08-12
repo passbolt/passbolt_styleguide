@@ -120,11 +120,11 @@ export default class ShareChanges {
         // For each permission, aggregate the resources aro has access.
         aroPermissions.variesDetails = this._acos.reduce((carry, aco) => {
           const result = aroPermissions.permissions.filter(permission => permission.aco_foreign_key === aco.id);
-          if (!result.length) {
-            carry[0].push(aco.name);
-          } else {
-            carry[result[0].type].push(aco.name);
-          }
+          const carryType = result[0]?.type || 0;
+          const acoName = result.aco === "Resource"
+            ? aco.metadata.name
+            : aco.name;
+          carry[carryType].push(acoName);
           return carry;
         }, {0: [], 1: [], 7: [], 15: []});
       }
