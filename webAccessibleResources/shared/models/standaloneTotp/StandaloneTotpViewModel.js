@@ -24,12 +24,12 @@ import TotpViewModel from "../totp/TotpViewModel";
 class StandaloneTotpViewModel extends TotpViewModel {
   /**
    * Constructor
-   * @param {object} [resource]
+   * @param {object} [totpViewModelDto]
    */
-  constructor(resource = {}) {
-    super(resource);
-    this.name = resource.name || "";
-    this.uri = resource.uri || "";
+  constructor(totpViewModelDto = {}) {
+    super(totpViewModelDto);
+    this.name = totpViewModelDto.name || "";
+    this.uri = totpViewModelDto.uri || "";
   }
 
   /**
@@ -69,10 +69,11 @@ class StandaloneTotpViewModel extends TotpViewModel {
    * @returns {object}
    */
   toResourceDto() {
-    return {
+    const metadata = {
       name: this.name,
-      uri: this.uri
+      uris: [this.uri],
     };
+    return {metadata};
   }
 
   /**

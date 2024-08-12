@@ -83,6 +83,22 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   return defaultData;
 };
 
+export const defaultResourceV4Dto = (options = {}) => {
+  const defaultData = defaultResourceDto(
+    {
+      name: "Passbolt",
+      username: "admin@passbolt.com",
+      uri: "https://passbolt.com",
+      description: "",
+    },
+    options
+  );
+  //Remove metadata to match v4 format
+  delete defaultData.metadata;
+
+  return defaultData
+}
+
 export const resourceWithUpdatePermissionDto = (data = {}) => {
   const id = data?.id || uuidv4();
 

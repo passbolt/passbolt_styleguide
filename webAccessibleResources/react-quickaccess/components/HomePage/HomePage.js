@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         4.10.0
+ */
+
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import canSuggestUrl from "./canSuggestUrl";
@@ -65,8 +79,8 @@ class HomePage extends React.Component {
     }
 
     resources.sort((resource1, resource2) => {
-      const resource1Name = resource1.name.toUpperCase();
-      const resource2Name = resource2.name.toUpperCase();
+      const resource1Name = resource1.metadata.name.toUpperCase();
+      const resource2Name = resource2.metadata.name.toUpperCase();
       if (resource1Name > resource2Name) {
         return 1;
       } else if (resource2Name > resource1Name) {
@@ -100,11 +114,11 @@ class HomePage extends React.Component {
     const suggestedResources = [];
 
     for (const i in resources) {
-      if (!resources[i].uri) {
+      if (!resources[i].metadata.uris?.[0]) {
         continue;
       }
 
-      if (canSuggestUrl(activeTabUrl, resources[i].uri) && this.isPasswordResource(resources[i].resource_type_id)) {
+      if (resources[i].metadata.uris?.length > 0 && canSuggestUrl(activeTabUrl, resources[i].metadata.uris[0]) && this.isPasswordResource(resources[i].resource_type_id)) {
         suggestedResources.push(resources[i]);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
@@ -113,7 +127,11 @@ class HomePage extends React.Component {
     }
 
     // Sort the resources by uri lengths, the greater on top.
-    suggestedResources.sort((a, b) => b.uri.length - a.uri.length);
+    suggestedResources.sort((a, b) => {
+      const aUrisLength = a.metadata.uris?.[0]?.length || 0;
+      const bUrisLength = b.metadata.uris?.[0]?.length || 0;
+      return bUrisLength - aUrisLength;
+    });
 
     return suggestedResources;
   }
@@ -153,10 +171,10 @@ class HomePage extends React.Component {
       let match = true;
       for (const i in regexes) {
         // To match a resource would have to match all the words of the search.
-        match &= (regexes[i].test(resource.name)
-          || regexes[i].test(resource.username)
-          || regexes[i].test(resource.uri)
-          || regexes[i].test(resource.description));
+        match &= (regexes[i].test(resource.metadata.name)
+          || regexes[i].test(resource.metadata.username)
+          || regexes[i].test(resource.metadata.uris?.[0])
+          || regexes[i].test(resource.metadata.description));
       }
 
       return match;
@@ -248,10 +266,10 @@ class HomePage extends React.Component {
                     <li className="suggested-resource-entry" key={resource.id}>
                       <button type="button" className="resource-details link" onClick={() => this.handleUseOnThisTabClick(resource)}>
                         <div className="inline-resource-name">
-                          <span className="title">{resource.name}</span>
-                          <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                          <span className="title">{resource.metadata.name}</span>
+                          <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                         </div>
-                        <span className="url">{resource.uri}</span>
+                        <span className="url">{resource.metadata.uris[0]}</span>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                         <Icon name="chevron-right"/>
@@ -285,10 +303,10 @@ class HomePage extends React.Component {
                         <Link to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                           <div className="inline-resource-entry">
                             <div className='inline-resource-name'>
-                              <span className="title">{resource.name}</span>
-                              <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                              <span className="title">{resource.metadata.name}</span>
+                              <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                             </div>
-                            <span className="url">{resource.uri}</span>
+                            <span className="url">{resource.metadata.uris?.[0]}</span>
                           </div>
                           <Icon name="chevron-right"/>
                         </Link>

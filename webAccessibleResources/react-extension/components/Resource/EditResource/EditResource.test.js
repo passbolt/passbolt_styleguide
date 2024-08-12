@@ -158,8 +158,7 @@ describe("See the Edit Resource", () => {
 
     it('Add totp when clicking on the add totp button.', async() => {
       expect.assertions(4);
-      const context = defaultUserAppContext();
-      const props = defaultProps({context}); // The props to pass
+      const props = defaultProps(); // The props to pass
       const secretDto = {password: "secret-decrypted", description: "description"};
       mockContextRequest(props.context, () => secretDto);
       const page = new EditResourcePage(props);
@@ -180,8 +179,9 @@ describe("See the Edit Resource", () => {
 
     it('Edit totp when clicking on the edit totp button.', async() => {
       expect.assertions(2);
-      const context = defaultUserAppContext({resources: [resourceWithTotpDto()]});
-      const props = defaultProps({context}); // The props to pass
+      const resource = resourceWithTotpDto();
+      const context = defaultUserAppContext({resources: [resource]});
+      const props = defaultProps({context, resourceId: resource.id}); // The props to pass
       const secretDto = {
         password: "secret-decrypted",
         description: "description",
@@ -196,8 +196,9 @@ describe("See the Edit Resource", () => {
     });
 
     it('Delete totp when clicking on the delete totp button.', async() => {
-      const context = defaultUserAppContext({resources: [resourceWithTotpDto()]});
-      const props = defaultProps({context}); // The props to pass
+      const resource = resourceWithTotpDto();
+      const context = defaultUserAppContext({resources: [resource]});
+      const props = defaultProps({context, resourceId: resource.id}); // The props to pass
       const secretDto = {
         password: "secret-decrypted",
         description: "description",
@@ -252,10 +253,13 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
-        name: resourceMeta.name,
-        uri: resourceMeta.uri,
-        username: resourceMeta.username,
-        description: "",
+        metadata: {
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          name: resourceMeta.name,
+          uris: [resourceMeta.uri],
+          username: resourceMeta.username,
+          description: "",
+        },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         expired: date.toISO(),
       };
@@ -291,10 +295,13 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
-        name: resourceMeta.name,
-        uri: resource.uri,
-        username: resource.username,
-        description: "",
+        metadata: {
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          name: resourceMeta.name,
+          uris: [resource.uri],
+          username: resource.username,
+          description: "",
+        },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
       };
 
@@ -325,10 +332,13 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
-        name: resourceMeta.name,
-        uri: resource.uri,
-        username: resource.username,
-        description: resourceMeta.description,
+        metadata: {
+          name: resourceMeta.name,
+          uris: [resource.uri],
+          username: resource.username,
+          description: resourceMeta.description,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
+        },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
       };
 
@@ -368,10 +378,13 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
-        name: resourceMeta.name,
-        uri: resource.uri,
-        username: resource.username,
-        description: "",
+        metadata: {
+          name: resourceMeta.name,
+          uris: [resource.uri],
+          username: resource.username,
+          description: "",
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP
+        },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP
       };
 
@@ -415,10 +428,13 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceDto = {
         id: resource.id,
-        name: resourceMeta.name,
-        uri: resourceMeta.uri,
-        username: resourceMeta.username,
-        description: '',
+        metadata: {
+          name: resourceMeta.name,
+          uris: [resourceMeta.uri],
+          username: resourceMeta.username,
+          description: '',
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+        },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
       };
       const onApiUpdateSecretDto = {
