@@ -142,7 +142,7 @@ describe("See description", () => {
       await page.passwordSidebarDescriptionSection.click(page.descriptionEditor.saveButton);
       expect(page.descriptionEditor.component).toBeNull();
       const resourceDto = resourceOwnedWithNoDescriptionMock;
-      resourceDto.description = "Updated description";
+      resourceDto.metadata.description = "Updated description";
       expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, null);
       // notification toaster called
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The description has been updated successfully");

@@ -102,3 +102,24 @@ export const readFolderPermissionDto = (data = {}) => readPermissionDto({
   aco: "Folder",
   ...data
 });
+
+export const ownerGroupPermissionDto = (data = {}) => defaultPermissionDto({
+  type: 15,
+  aro: "Group",
+  user: null,
+  ...data
+}, {withGroup: true});
+
+export const updateGroupPermissionDto = (data = {}) => defaultPermissionDto({
+  type: 7,
+  aro: "Group",
+  user: null,
+  ...data
+}, {withGroup: true});
+
+export const readGroupPermissionDto = (data = {}) => defaultPermissionDto({
+  type: 1,
+  aro: "Group",
+  user: null,
+  ...data
+}, {withGroup: true});
