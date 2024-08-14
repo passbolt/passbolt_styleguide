@@ -219,6 +219,8 @@ class EntitySchema {
         EntitySchema.validatePropTypeNumber(propName, prop, propSchema);
         break;
       case 'array':
+        EntitySchema.validatePropTypeArray(propName, prop, propSchema);
+        break;
       case 'object':
       case 'boolean':
       case 'blob':
@@ -358,6 +360,37 @@ class EntitySchema {
     if (typeof(propSchema.lte) === 'number') {
       if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.lte)) {
         validationError = EntitySchema.handlePropertyValidationError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`, validationError);
+      }
+    }
+    if (validationError) {
+      throw validationError;
+    }
+  }
+
+  /**
+   * Validate a prop of type array
+   * Throw an error with the validation details if validation fails
+   *
+   * @param {string} propName example: name
+   * @param {[*]} prop example [*]
+   * @param {object} propSchema example {type: array, items: {type:string, maxLength: 64}}
+   * @throw {EntityValidationError}
+   * @returns void
+   */
+  static validatePropTypeArray(propName, prop, propSchema) {
+    let validationError;
+    for (let index = 0; index < prop.length; index++) {
+      const propItemName = `${propName}.${index}`;
+      try {
+        this.validateProp(propItemName, prop[index], propSchema.items);
+      } catch (error) {
+        if (error instanceof EntityValidationError) {
+          validationError = EntitySchema.getOrInitEntityValidationError(propName, validationError);
+          const errorDetails = error.details[propItemName];
+          validationError.details[propName] = {...validationError.details[propName], [index]: errorDetails};
+        } else {
+          throw error;
+        }
       }
     }
     if (validationError) {
