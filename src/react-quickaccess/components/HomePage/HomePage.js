@@ -22,6 +22,7 @@ import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
+import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 500;
@@ -131,46 +132,10 @@ class HomePage extends React.Component {
        * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
        * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
        */
-      browsedResources = this.filterResourcesBySearch(browsedResources, this.props.context.search);
+      browsedResources = filterResourcesBySearch(browsedResources, this.props.context.search);
     }
 
     return browsedResources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
-
-  /**
-   * Filter resources by keywords.
-   * Search on the name, the username, the uri and the description of the resources.
-   * @param {array} resources The list of resources to filter.
-   * @param {string} needle The needle to search.
-   * @return {array} The filtered resources.
-   */
-  filterResourcesBySearch(resources, needle) {
-    // Split the search by words
-    const needles = needle.split(/\s+/);
-    // Prepare the regexes for each word contained in the search.
-    const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
-
-    return resources.filter(resource => {
-      let match = true;
-      for (const i in regexes) {
-        // To match a resource would have to match all the words of the search.
-        match &= (regexes[i].test(resource.metadata.name)
-          || regexes[i].test(resource.metadata.username)
-          || regexes[i].test(resource.metadata.uris?.[0])
-          || regexes[i].test(resource.metadata.description));
-      }
-
-      return match;
-    });
-  }
-
-  /**
-   * Escape a string that is to be treated as a literal string within a regular expression.
-   * Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-   * @param {string} value The string to escape
-   */
-  escapeRegExp(value) {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   async handleUseOnThisTabClick(resource) {
