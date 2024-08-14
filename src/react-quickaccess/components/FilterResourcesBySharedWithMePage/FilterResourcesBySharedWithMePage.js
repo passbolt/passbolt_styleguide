@@ -4,6 +4,7 @@ import {Link, withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 
@@ -64,21 +65,8 @@ class FilterResourcesBySharedWithMePage extends React.Component {
   async findAndLoadResources() {
     const filters = {'is-shared-with-me': true};
     const resources = await this.props.context.port.request('passbolt.resources.find-all', {filters});
-    this.sortResourcesAlphabetically(resources);
+    sortResourcesAlphabetically(resources);
     this.setState({resources});
-  }
-
-  sortResourcesAlphabetically(resources) {
-    resources.sort((resource1, resource2) => {
-      const resource1Name = resource1.name.toUpperCase();
-      const resource2Name = resource2.name.toUpperCase();
-      if (resource1Name > resource2Name) {
-        return 1;
-      } else if (resource2Name > resource1Name) {
-        return -1;
-      }
-      return 0;
-    });
   }
 
   /**
