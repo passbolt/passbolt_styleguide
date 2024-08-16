@@ -19,6 +19,7 @@ export const SCENARIO_INTEGER = {scenario: "an integer", value: 42};
 export const SCENARIO_FLOAT = {scenario: "a float", value: 42.2};
 export const SCENARIO_OBJECT = {scenario: "an object", value: {str: "string"}};
 export const SCENARIO_ARRAY = {scenario: "an array", value: ["string"]};
+export const SCENARIO_EMPTY_ARRAY = {scenario: "an empty array", value: []};
 export const SCENARIO_UUID = {scenario: "a uuid", value: uuidv4()};
 export const SCENARIO_NULL = {scenario: "null", value: null};
 export const SCENARIO_YEAR = {scenario: "year", value: "2018"};
@@ -39,6 +40,19 @@ export const assert = (EntityClass, propertyName, successScenarios, failScenario
   failScenarios.forEach(test => {
     const dto = {[propertyName]: test.value};
     expect(() => new EntityClass(dto)).toThrowEntityValidationError(propertyName, rule, dto);
+  });
+};
+
+export const assertArrayItem = (EntityClass, propertyName, successScenarios, failScenarios, rule) => {
+  successScenarios.forEach(test => {
+    const propertyPath = `${propertyName}.0`;
+    const dto = {[propertyName]: [test.value]};
+    expect(() => new EntityClass(dto)).not.toThrowEntityValidationError(propertyPath, rule, dto);
+  });
+  failScenarios.forEach(test => {
+    const propertyPath = `${propertyName}.0`;
+    const dto = {[propertyName]: [test.value]};
+    expect(() => new EntityClass(dto)).toThrowEntityValidationError(propertyPath, rule, dto);
   });
 };
 
@@ -203,4 +217,18 @@ export const SUCCESS_INTEGER_SCENARIO = [SCENARIO_INTEGER];
 export const FAIL_INTEGER_SCENARIO = [SCENARIO_EMPTY, SCENARIO_STRING, SCENARIO_FLOAT, SCENARIO_OBJECT, SCENARIO_ARRAY];
 export const integer = (EntityClass, propertyName) => {
   assert(EntityClass, propertyName, SUCCESS_INTEGER_SCENARIO, FAIL_INTEGER_SCENARIO, "type");
+};
+
+export const SUCCESS_ARRAY_SCENARIO = [SCENARIO_EMPTY_ARRAY];
+export const FAIL_ARRAY_SCENARIOS = [SCENARIO_EMPTY, SCENARIO_STRING, SCENARIO_INTEGER, SCENARIO_FLOAT, SCENARIO_OBJECT, SCENARIO_TRUE, SCENARIO_FALSE];
+export const array = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_ARRAY_SCENARIO, FAIL_ARRAY_SCENARIOS, "type");
+};
+
+export const assertArrayItemString = (EntityClass, propertyName) => {
+  assertArrayItem(EntityClass, propertyName, SUCCESS_STRING_SCENARIOS, FAIL_STRING_SCENARIOS, "type");
+};
+
+export const arrayStringMaxLength = (EntityClass, propertyName, maxLength) => {
+  assertArrayItem(EntityClass, propertyName, SUCCESS_MAX_LENGTH_SCENARIO(maxLength), FAIL_MAX_LENGTH_SCENARIO(maxLength), "maxLength");
 };
