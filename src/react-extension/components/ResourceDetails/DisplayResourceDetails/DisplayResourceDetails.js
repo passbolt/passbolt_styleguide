@@ -124,7 +124,7 @@ class DisplayResourceDetails extends React.Component {
             </div>
             <h3>
               <div className="title-wrapper">
-                <span className="name">{this.props.resourceWorkspaceContext.details.resource.name}</span>
+                <span className="name">{this.props.resourceWorkspaceContext.details.resource.metadata.name}</span>
                 <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>
