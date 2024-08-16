@@ -440,7 +440,7 @@ class ResourceViewPage extends React.Component {
                   <span className="property-name"><Trans>Username</Trans></span>
                   {this.state.resource.metadata?.username &&
                     <a href="#" role="button" className="property-value" onClick={this.handleCopyLoginClick}>
-                      {this.state.resource.username}
+                      {this.state.resource.metadata?.username}
                     </a>
                   }
                   {!this.state.resource.metadata?.username &&

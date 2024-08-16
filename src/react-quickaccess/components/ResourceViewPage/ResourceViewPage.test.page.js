@@ -38,11 +38,27 @@ export default class ResourceViewPagePage {
   }
 
   /**
+   * Returns true if the page is loaded.
+   * @returns {boolean}
+   */
+  get isReady() {
+    return Boolean(this._page.container.querySelector(".property .property-name"));
+  }
+
+  /**
    * The username button element.
    * @returns {Element}
    */
   get username() {
-    return this._page.container.querySelector(".property-name a.property-value");
+    return this._page.container.querySelector(".property:first-child .property-name + a.property-value");
+  }
+
+  /**
+   * The uri element.
+   * @returns {Element}
+   */
+  get uri() {
+    return this._page.container.querySelector(".property:last-child .property-name + a.property-value");
   }
 
   /**
