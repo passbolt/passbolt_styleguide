@@ -6,6 +6,7 @@ import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
+import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 const BROWSED_GROUPS_LIMIT = 500;
@@ -149,7 +150,7 @@ class FilterResourcesByGroupPage extends React.Component {
     // Split the search by words
     const needles = needle.split(/\s+/);
     // Prepare the regexes for each word contained in the search.
-    const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
+    const regexes = needles.map(needle => new RegExp(escapeRegExp(needle), 'i'));
 
     return groups.filter(group => {
       let match = true;
@@ -174,46 +175,10 @@ class FilterResourcesByGroupPage extends React.Component {
        * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
        * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
        */
-      resources = this.filterResourcesBySearch(resources, this.props.context.search);
+      resources = filterResourcesBySearch(resources, this.props.context.search);
     }
 
     return resources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
-
-  /**
-   * Filter resources by keywords.
-   * Search on the name, the username, the uri and the description of the resources.
-   * @param {array} resources The list of resources to filter.
-   * @param {string} needle The needle to search.
-   * @return {array} The filtered resources.
-   */
-  filterResourcesBySearch(resources, needle) {
-    // Split the search by words
-    const needles = needle.split(/\s+/);
-    // Prepare the regexes for each word contained in the search.
-    const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
-
-    return resources.filter(resource => {
-      let match = true;
-      for (const i in regexes) {
-        // To match a resource would have to match all the words of the search.
-        match &= (regexes[i].test(resource.name)
-          || regexes[i].test(resource.username)
-          || regexes[i].test(resource.uri)
-          || regexes[i].test(resource.description));
-      }
-
-      return match;
-    });
-  }
-
-  /**
-   * Escape a string that is to be treated as a literal string within a regular expression.
-   * Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-   * @param {string} value The string to escape
-   */
-  escapeRegExp(value) {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   isReady() {
@@ -299,10 +264,10 @@ class FilterResourcesByGroupPage extends React.Component {
                           <a href="#" onClick={ev => this.handleSelectResourceClick(ev, resource.id)}>
                             <div className="inline-resource-entry">
                               <div className='inline-resource-name'>
-                                <span className="title">{resource.name}</span>
-                                <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                                <span className="title">{resource.metadata.name}</span>
+                                <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                               </div>
-                              <span className="url">{resource.uri}</span>
+                              <span className="url">{resource.metadata.uris?.[0]}</span>
                             </div>
                           </a>
                         </li>
