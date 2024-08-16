@@ -152,7 +152,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
                             <span className="title">{resource.metadata.name}</span>
                             <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                           </div>
-                          <span className="url">{resource.metadata.uris[0]}</span>
+                          <span className="url">{resource.metadata.uris?.[0]}</span>
                         </div>
                       </a>
                     </li>
