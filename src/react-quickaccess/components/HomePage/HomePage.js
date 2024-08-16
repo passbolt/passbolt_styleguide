@@ -21,6 +21,7 @@ import Icon from "../../../shared/components/Icons/Icon";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 500;
@@ -58,7 +59,7 @@ class HomePage extends React.Component {
   handleStorageChange(changes) {
     if (changes.resources) {
       const resources = changes.resources.newValue;
-      this.sortResourcesAlphabetically(resources);
+      sortResourcesAlphabetically(resources);
       this.setState({resources});
     }
   }
@@ -67,28 +68,10 @@ class HomePage extends React.Component {
     const storageData = await this.props.context.storage.local.get(["resources"]);
     if (storageData.resources) {
       const resources = storageData.resources;
-      this.sortResourcesAlphabetically(resources);
+      sortResourcesAlphabetically(resources);
       this.setState({resources});
     }
     this.props.context.port.request('passbolt.resources.update-local-storage');
-  }
-
-  sortResourcesAlphabetically(resources) {
-    if (resources == null) {
-      return;
-    }
-
-    resources.sort((resource1, resource2) => {
-      const resource1Name = resource1.metadata.name.toUpperCase();
-      const resource2Name = resource2.metadata.name.toUpperCase();
-      if (resource1Name > resource2Name) {
-        return 1;
-      } else if (resource2Name > resource1Name) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
   }
 
   async getActiveTabUrl() {
