@@ -214,11 +214,15 @@ describe("ResourceCreatePage", () => {
       await waitFor(() => {});
 
       // Assert the request to create a password has been called and contain the expected parameters.
+      const resourceTypeId = context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
       const resourceMeta = {
-        name: "Passbolt Browser Extension Test",
-        uri: "https://passbolt-browser-extension/test",
-        username: "test@passbolt.com",
-        resource_type_id: context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+        metadata: {
+          name: "Passbolt Browser Extension Test",
+          uris: ["https://passbolt-browser-extension/test"],
+          username: "test@passbolt.com",
+          resource_type_id: resourceTypeId,
+        },
+        resource_type_id: resourceTypeId,
         expired: "2023-12-24T00:00:00.000Z",
       };
 

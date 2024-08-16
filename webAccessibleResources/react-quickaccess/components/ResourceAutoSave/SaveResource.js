@@ -112,11 +112,15 @@ class SaveResource extends React.Component {
       return;
     }
 
+    const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
     const resourceDto = {
-      name: this.state.name,
-      username: this.state.username,
-      uri: this.state.uri,
-      resource_type_id: this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+      metadata: {
+        name: this.state.name,
+        username: this.state.username,
+        uris: [this.state.uri],
+        resource_type_id: resourceTypeId,
+      },
+      resource_type_id: resourceTypeId,
       expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
     };
 
