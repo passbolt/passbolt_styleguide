@@ -58,12 +58,10 @@ class DisplayResourceDetails extends React.Component {
       return "";
     }
 
-    if (resource.resource_type_id) {
-      const resourceType = this.props.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
-      switch (resourceType) {
-        case this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
-          return this.translate("Resource with encrypted description");
-      }
+    const resourceType = this.props.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
+    switch (resourceType) {
+      case this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
+        return this.translate("Resource with encrypted description");
     }
 
     return defaultSubtitle;
