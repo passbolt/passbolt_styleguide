@@ -229,6 +229,12 @@ export const assertArrayItemString = (EntityClass, propertyName) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_STRING_SCENARIOS, FAIL_STRING_SCENARIOS, "type");
 };
 
+
+export const FAIL_ARRAY_UUID_SCENARIOS = [SCENARIO_EMPTY, SCENARIO_STRING];
+export const assertArrayItemUuid = (EntityClass, propertyName) => {
+  assertArrayItem(EntityClass, propertyName, SUCCESS_UUID_SCENARIOS, FAIL_ARRAY_UUID_SCENARIOS, "format");
+};
+
 export const arrayStringMaxLength = (EntityClass, propertyName, maxLength) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_MAX_LENGTH_SCENARIO(maxLength), FAIL_MAX_LENGTH_SCENARIO(maxLength), "maxLength");
 };
