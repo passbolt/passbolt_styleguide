@@ -86,16 +86,17 @@ class ConfirmCreatePage extends React.PureComponent {
    * @returns {Promise<void>}
    */
   async save() {
+    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
+      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
+
     const preparedResource = this.props.prepareResourceContext.consumePreparedResource();
     const resourceDto = {
-      resource_type_id: this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-        this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+      resource_type_id: resourceTypeId,
       metadata: {
         name: preparedResource.name,
         username: preparedResource.username,
         uri: preparedResource.uri,
-        resource_type_id: this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-          this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION),
+        resource_type_id: resourceTypeId,
         expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
       },
     };
