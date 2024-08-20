@@ -57,8 +57,8 @@ import {
 describe("EntitySchema", () => {
   describe("::validate", () => {
     each([
-      {label: "null", data: null},
-      {label: "undefined", data: undefined},
+      SCENARIO_NULL,
+      SCENARIO_UNDEFINED,
       // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
     ]).describe("throws a TyperError if the argument name is not valid.", scenario => {
       it(`scenario: ${scenario.label}`, async() => {
@@ -68,8 +68,8 @@ describe("EntitySchema", () => {
     });
 
     each([
-      {label: "null", data: null},
-      {label: "undefined", data: undefined},
+      SCENARIO_NULL,
+      SCENARIO_UNDEFINED,
       // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
     ]).describe("throws a TyperError if the argument dto is not valid.", scenario => {
       it(`scenario: ${scenario.label}`, async() => {
@@ -79,8 +79,8 @@ describe("EntitySchema", () => {
     });
 
     each([
-      {label: "null", data: null},
-      {label: "undefined", data: undefined},
+      SCENARIO_NULL,
+      SCENARIO_UNDEFINED,
       // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
     ]).describe("throws a TyperError if the argument schema is not valid.", scenario => {
       it(`scenario: ${scenario.label}`, async() => {
@@ -90,8 +90,8 @@ describe("EntitySchema", () => {
     });
 
     each([
-      {label: "null", data: null},
-      {label: "undefined", data: undefined},
+      SCENARIO_NULL,
+      SCENARIO_UNDEFINED,
       {label: "invalid-type", data: "invalid-type"},
     ]).describe("throws a TyperError if the schema type is not supported.", scenario => {
       it(`scenario: ${scenario.label}`, async() => {
@@ -256,8 +256,8 @@ describe("EntitySchema", () => {
           SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
           {label: "1 as an integer", data: 1},
           {label: "0 as an integer", data: 0},
-          {label: "1 as an string", data: "1"},
-          {label: "0 as an string", data: "0"},
+          {label: "1 as a string", data: "1"},
+          {label: "0 as a string", data: "0"},
         ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
           it(`scenario: ${scenario.label}`, async() => {
             expect.assertions(1);
