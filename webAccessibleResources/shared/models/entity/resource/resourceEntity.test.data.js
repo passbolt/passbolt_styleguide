@@ -96,8 +96,8 @@ export const defaultResourceV4Dto = (options = {}) => {
   //Remove metadata to match v4 format
   delete defaultData.metadata;
 
-  return defaultData
-}
+  return defaultData;
+};
 
 export const resourceWithUpdatePermissionDto = (data = {}) => {
   const id = data?.id || uuidv4();

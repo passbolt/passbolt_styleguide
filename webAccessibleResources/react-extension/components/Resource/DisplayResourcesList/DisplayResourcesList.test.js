@@ -241,7 +241,7 @@ describe("Display Resources", () => {
       await waitFor(() => {});
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectUsername();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.filteredResources[0].metadata.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
   });

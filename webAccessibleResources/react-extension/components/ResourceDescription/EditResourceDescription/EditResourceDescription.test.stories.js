@@ -52,7 +52,8 @@ Initial.args = {
   resource: {
     resource_type_id: "669f8c64-242a-59fb-92fc-81f660975fd3",
     metadata: {
-      description: "This is an amazing resource!"
+      description: "This is an amazing resource!",
+      resource_type_id: "669f8c64-242a-59fb-92fc-81f660975fd3",
     }
   },
   onClose: () => {}

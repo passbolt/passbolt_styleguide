@@ -102,9 +102,6 @@ class DisplayResourceDetailsDescription extends React.Component {
    * =============================================================
    */
   isResourceDescriptionEncrypted() {
-    if (!this.resource.resource_type_id) {
-      return false;
-    }
     return this.props.context.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(
       this.resource.resource_type_id
     );

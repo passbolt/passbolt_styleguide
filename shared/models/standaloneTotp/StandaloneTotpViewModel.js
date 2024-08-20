@@ -91,7 +91,7 @@ class StandaloneTotpViewModel extends TotpViewModel {
       period: parseInt(url.searchParams.get('period'), 10) || 30,
     };
 
-    const standaloneTotp =  new StandaloneTotpViewModel(totp);
+    const standaloneTotp = new StandaloneTotpViewModel(totp);
     const errors = standaloneTotp.validate();
 
     if (!errors.hasErrors()) {

@@ -48,6 +48,16 @@ describe("ResourceViewPage", () => {
       expect(page.passwordText).toStrictEqual("secret-decrypted");
     });
 
+    it('As LU, I should see username, URI of a resource', async() => {
+      expect.assertions(2);
+      const props = defaultProps(); // The props to pass
+      const page = new ResourceViewPagePage(props);
+      await waitFor(() => {});
+
+      expect(page.username.textContent).toStrictEqual("admin@passbolt.com");
+      expect(page.uri.textContent).toStrictEqual("https://passbolt.com");
+    });
+
     it('As LU, I shouldn\'t be able to preview secret password of a resource if disabled by API flag', async() => {
       expect.assertions(1);
       const props = disabledApiFlagsProps();

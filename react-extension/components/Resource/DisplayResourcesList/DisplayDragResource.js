@@ -56,7 +56,7 @@ class DisplayDragResource extends React.Component {
   render() {
     return (
       <div className={`drag-and-drop ${this.hasMoreThanThreeResourcesSelected() ? "item-n" : `item-${this.numberOfResources}`}`}>
-        <span className="message">{this.selectedResources[0].name}</span>
+        <span className="message">{this.selectedResources[0].metadata.name}</span>
         {this.isMultipleSelected() &&
           <span className="count">
             {this.numberOfResources}
