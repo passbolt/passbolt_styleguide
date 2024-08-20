@@ -11,326 +11,820 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
+import each from "jest-each";
 import EntitySchema from "./entitySchema";
-import EntityValidationError from './entityValidationError';
+import {
+  SCENARIO_ARRAY,
+  SCENARIO_ARRAY_EMPTY,
+  SCENARIO_BOOL_FALSE,
+  SCENARIO_BOOL_TRUE,
+  SCENARIO_DATE_YEAR,
+  SCENARIO_DATE_YEAR_MONTH,
+  SCENARIO_DATE_YEAR_MONTH_DAY,
+  SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+  SCENARIO_EMPTY,
+  SCENARIO_FLOAT,
+  SCENARIO_INTEGER,
+  SCENARIO_NULL,
+  SCENARIO_OBJECT,
+  SCENARIO_STRING,
+  SCENARIO_STRING_UTF8,
+  SCENARIO_UNDEFINED,
+  SCENARIO_UUID,
+  schemaValidateAnyOf,
+  schemaValidateEnum,
+  schemaValidateFormatDateTime,
+  schemaValidateFormatEmail,
+  schemaValidateFormatInvalid,
+  schemaValidateFormatUuid,
+  schemaValidateFormatXBase64,
+  schemaValidateFormatXHexColor,
+  schemaValidateFormatXUrl,
+  schemaValidateMaxLength,
+  schemaValidateMinLength,
+  schemaValidateNullable, schemaValidatePattern,
+  schemaValidateRequired,
+  schemaValidateSimple,
+  schemaValidateTypeArray,
+  schemaValidateTypeBoolean,
+  schemaValidateTypeInteger,
+  schemaValidateTypeInvalid,
+  schemaValidateTypeNumber,
+  schemaValidateTypeObject,
+  schemaValidateTypeString,
+} from "./entitySchema.test.data";
 
-describe("Entity schema", () => {
-  // Fixtures
-  const validSchema = {
-    "type": "object",
-    "required": [
-      "name",
-    ],
-    "properties": {
-      "id": {
-        "type": "string",
-        "format": "uuid"
-      },
-      "name": {
-        "type": "string"
-      },
-      "some": {
-        "type": "string",
-        "enum": ["type1", "type2"]
-      },
-      "created": {
-        "type": "string",
-        "format": "date-time"
-      }
-    }
-  };
+describe("EntitySchema", () => {
+  describe("::validate", () => {
+    each([
+      {label: "null", data: null},
+      {label: "undefined", data: undefined},
+      // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
+    ]).describe("throws a TyperError if the argument name is not valid.", scenario => {
+      it(`scenario: ${scenario.label}`, async() => {
+        expect.assertions(1);
+        expect(() => EntitySchema.validate(scenario.data, {"name": "test"}, schemaValidateSimple)).toThrow(TypeError);
+      });
+    });
 
-  it("validate throws TypeError if name is empty", () => {
-    const t = () => {
-      EntitySchema.validate(null, {'name': 'test'}, validSchema);
-    };
-    expect(t).toThrow(TypeError);
-  });
+    each([
+      {label: "null", data: null},
+      {label: "undefined", data: undefined},
+      // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
+    ]).describe("throws a TyperError if the argument dto is not valid.", scenario => {
+      it(`scenario: ${scenario.label}`, async() => {
+        expect.assertions(1);
+        expect(() => EntitySchema.validate("TestObject", scenario.data, schemaValidateSimple)).toThrow(TypeError);
+      });
+    });
 
-  it("validate throws TypeError if dto is empty", () => {
-    const t = () => {
-      EntitySchema.validate('TestObject', null, validSchema);
-    };
-    expect(t).toThrow(TypeError);
-  });
+    each([
+      {label: "null", data: null},
+      {label: "undefined", data: undefined},
+      // @todo The function should be reworked and assert the kind of expected data, additional test should be written to support it.
+    ]).describe("throws a TyperError if the argument schema is not valid.", scenario => {
+      it(`scenario: ${scenario.label}`, async() => {
+        expect.assertions(1);
+        expect(() => EntitySchema.validate("TestObject", {"name": "test"}, scenario.data)).toThrow(TypeError);
+      });
+    });
 
-  it("validate throws TypeError if schema is empty", () => {
-    const t = () => {
-      EntitySchema.validate('TestObject', {'name': 'test'}, null);
-    };
-    expect(t).toThrow(TypeError);
-  });
+    each([
+      {label: "null", data: null},
+      {label: "undefined", data: undefined},
+      {label: "invalid-type", data: "invalid-type"},
+    ]).describe("throws a TyperError if the schema type is not supported.", scenario => {
+      it(`scenario: ${scenario.label}`, async() => {
+        expect.assertions(1);
+        const schema = {
+          type: scenario.data
+        };
+        expect(() => EntitySchema.validate("TestObject", {}, schema)).toThrow("Could not validate entity TestObject. Unsupported type.");
+      });
+    });
 
-  it("validate show throw EntityValidationError id dto is invalid", () => {
-    try {
+    it("validates object schema.", () => {
+      expect.assertions(2);
+      const validObjectMock = jest.spyOn(EntitySchema, "validateObject").mockImplementationOnce(() => {
+      });
+      const schema = {type: "object"};
+      expect(() => EntitySchema.validate("TestObject", {}, schema)).not.toThrow();
+      expect(validObjectMock).toHaveBeenCalled();
+    });
+
+    it("validates array schema.", () => {
+      expect.assertions(2);
+      const validateArrayMock = jest.spyOn(EntitySchema, "validateArray").mockImplementationOnce(() => {
+      });
+      const schema = {type: "array"};
+      expect(() => EntitySchema.validate("TestObject", {}, schema)).not.toThrow();
+      expect(validateArrayMock).toHaveBeenCalled();
+    });
+
+    it("throws EntityValidationError id dto is invalid.", () => {
+      expect.assertions(1);
       const testObject = {
-        'id': null,
-        //'name': 'missing',
-        'some': 'not in list',
-        'created': ['not a date']
+        "id": "nope",
+        "name": "ok",
+        "type": "not in list"
       };
-      EntitySchema.validate('TestObject', testObject, validSchema);
-    } catch (error) {
-      expect(error instanceof EntityValidationError).toBe(true);
-      expect(error.details.id.type).toEqual('The id is not a valid string.');
-      expect(error.details.id.format).toBe(undefined); // no format checking of invalid type
-      expect(error.details.name.required).toEqual('The name is required.');
-      expect(error.details.name.format).toBe(undefined); // no format checking of missing fields
-      expect(error.details.name.type).toBe(undefined); // no format checking of missing fields
-      expect(error.details.some.enum).toEqual('The some value is not included in the supported list.');
-    }
+      expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateSimple)).toThrowEntityValidationError("id", "format");
+    });
   });
 
-  it("validate show throw EntityValidationError id dto is invalid too", () => {
-    try {
+  describe("::validateObject", () => {
+    it("filters out props not part of the schema.", () => {
       const testObject = {
-        'id': 'nope',
-        'name': 'ok',
-        'type': 'not in list'
+        "name": "ok",
+        "some": "type1",
+        "not_in_schema": "must be removed"
       };
-      EntitySchema.validate('TestObject', testObject, validSchema);
-    } catch (error) {
-      expect(error instanceof EntityValidationError).toBe(true);
-      expect(error.details.id.type).toBe(undefined);
-      expect(error.details.id.format).toEqual('The id is not a valid uuid.');
-      expect(error.details.name).toBe(undefined);
-      expect(error.details.date).toBe(undefined);
-    }
-  });
+      const expected = {
+        "name": "ok",
+        "some": "type1",
+      };
+      const result = EntitySchema.validate("TestObject", testObject, schemaValidateSimple);
+      expect(result).toEqual(expected);
+    });
 
-  it("validate filters out props if dto is valid but with additional info", () => {
-    const testObject = {
-      'name': 'ok',
-      'some': 'type1',
-      'not_in_schema': 'must be removed'
-    };
-    const expected = {
-      'name': 'ok',
-      'some': 'type1',
-    };
-    const result = EntitySchema.validate('TestObject', testObject, validSchema);
-    expect(result).toEqual(expected);
-  });
-});
-
-describe("Entity schema anyof", () => {
-  it("validate works with anyof types", () => {
-    let testObject = {
-      'name': null
-    };
-    let expected = {
-      'name': null
-    };
-    const schema = {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        'name': {
-          'anyOf': [
-            {"type": "null"},
-            {"type": "string"}
-          ]
+    it("does not validate nested objects.", () => {
+      const testObject = {
+        "name": "ok",
+        "some": "type1",
+        "nested": {
+          "id": "invalid-id"
         }
-      }
-    };
-    let result = EntitySchema.validate('TestObject', testObject, schema);
-    expect(result).toEqual(expected);
+      };
+      const result = EntitySchema.validate("TestObject", testObject, schemaValidateSimple);
+      expect(result.nested.id).toEqual(testObject.nested.id);
+      // Ensure it would have been validated if nested object validated directly.
+      expect(() => EntitySchema.validate("NestedTestObject", testObject.nested, schemaValidateSimple.properties.nested)).toThrowEntityValidationError("id", "format");
+    });
 
-    testObject = {
-      'name': 'test'
-    };
-    expected = {
-      'name': 'test'
-    };
-    result = EntitySchema.validate('TestObject', testObject, schema);
-    expect(result).toEqual(expected);
-  });
-});
+    /*
+     * *************************************************************
+     * Common assertions
+     ***************************************************************
+     */
 
-describe("Entity schema isValidStringFormat", () => {
-  it("isValidStringFormat throws TypeError if misused", () => {
-    const t = () => {
-      EntitySchema.isValidStringFormat(null, null);
-    };
-    expect(t).toThrow(TypeError);
-  });
+    describe("::required", () => {
+      it("throws an error if required and not present", () => {
+        // Note that if the property is present but undefined, it will not validate due to other constraint such as the type.
+        expect.assertions(1);
+        expect(() => EntitySchema.validate("TestObject", {}, schemaValidateRequired)).toThrowEntityValidationError("property", "required");
+      });
 
-  it("isValidStringFormat throws TypeError if unsuported type", () => {
-    const t = () => {
-      EntitySchema.isValidStringFormat('super', 'walou');
-    };
-    expect(t).toThrow(TypeError);
-  });
+      each([
+        SCENARIO_NULL,
+        SCENARIO_INTEGER,
+        SCENARIO_FLOAT,
+        SCENARIO_OBJECT,
+        SCENARIO_ARRAY,
+        SCENARIO_ARRAY_EMPTY,
+        SCENARIO_EMPTY,
+        SCENARIO_STRING,
+        SCENARIO_UUID,
+        SCENARIO_DATE_YEAR,
+        SCENARIO_DATE_YEAR_MONTH,
+        SCENARIO_DATE_YEAR_MONTH_DAY,
+        SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        {label: "0 as an integer", data: 0},
+        {label: "0 as an string", data: "0"},
+        SCENARIO_BOOL_TRUE,
+        SCENARIO_BOOL_FALSE,
+      ]).describe("validates if the property is valid.", scenario => {
+        it(`scenario: ${scenario.label}`, async() => {
+          expect.assertions(1);
+          const testObject = {"property": scenario.data};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateRequired)).not.toThrow();
+        });
+      });
+    });
 
-  it("isValidStringFormat works with uuid", () => {
-    expect(EntitySchema.isValidStringFormat('6179af95-9526-4dfc-89ac-25df9b87d6e3', 'uuid')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('nope', 'uuid')).toBe(false);
-  });
+    describe("::nullable", () => {
+      it("does not throw if the property is nullable and null.", async() => {
+        expect.assertions(1);
+        const testObject = {"property": null};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateNullable)).not.toThrow();
+      });
+    });
 
-  it("isValidStringFormat works with date-time", () => {
-    expect(EntitySchema.isValidStringFormat('2018-11-13T20:20:39+00:00', 'date-time')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('2018-11-13 20:20:39', 'date-time')).toBe(true);
+    describe("::anyOf", () => {
+      it("throws if none of the condition is valid.", () => {
+        expect.assertions(1);
+        const testObject = {"name": 42};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateAnyOf)).toThrowEntityValidationError("name", "type");
+      });
 
-    expect(EntitySchema.isValidStringFormat('yesterday', 'date-time')).toBe(false);
-  });
+      it("validates one or the other conditions.", () => {
+        expect.assertions(4);
+        const schema = schemaValidateAnyOf;
+        // Validate one condition of the anyOf.
+        let testObject = {"name": null};
+        let result = EntitySchema.validate("TestObject", testObject, schema);
+        expect(Object.keys(result).length).toEqual(1); // The parsed object contains only one property.
+        expect(result.name).toBeNull();
+        // Validate the other condition of the anyOf.
+        testObject = {"name": "test"};
+        result = EntitySchema.validate("TestObject", testObject, schema);
+        expect(Object.keys(result).length).toEqual(1); // The parsed object contains only one property.
+        expect(result.name).toEqual("test");
+      });
+    });
 
-  it("isValidStringFormat works with email", () => {
-    expect(EntitySchema.isValidStringFormat('ada@passbolt.com', 'email')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('ada+test@passbolt.com', 'email')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('rémy@passbolt.com', 'email')).toBe(true);
+    describe("::type", () => {
+      it("throws an error if type is not supported", () => {
+        expect.assertions(1);
+        expect(() => EntitySchema.validate("TestObject", {property: ""}, schemaValidateTypeInvalid)).toThrow("EntitySchema validation type not supported.");
+      });
 
-    expect(EntitySchema.isValidStringFormat('not_an_email', 'date-time')).toBe(false);
-  });
+      describe("::type::boolean", () => {
+        each([
+          SCENARIO_NULL,
+          SCENARIO_UNDEFINED,
+          SCENARIO_INTEGER,
+          SCENARIO_FLOAT,
+          SCENARIO_OBJECT,
+          SCENARIO_ARRAY,
+          SCENARIO_ARRAY_EMPTY,
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+          {label: "1 as an integer", data: 1},
+          {label: "0 as an integer", data: 0},
+          {label: "1 as an string", data: "1"},
+          {label: "0 as an string", data: "0"},
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeBoolean)).toThrowEntityValidationError("property", "type");
+          });
+        });
 
-  it("isValidStringFormat works with URL", () => {
-    expect(EntitySchema.isValidStringFormat('https://localhost', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('https://localhost:8080', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('http://localhost', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('http://localhost:8080', 'x-url')).toBe(true);
+        each([
+          SCENARIO_BOOL_TRUE,
+          SCENARIO_BOOL_FALSE,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeBoolean)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('https://passbolt.test', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('https://passbolt.test:8080', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('https://www.passbolt.test', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('https://www.passbolt.test:8080', 'x-url')).toBe(true);
+      describe("::type::string", () => {
+        each([
+          SCENARIO_NULL,
+          SCENARIO_UNDEFINED,
+          SCENARIO_INTEGER,
+          SCENARIO_FLOAT,
+          SCENARIO_OBJECT,
+          SCENARIO_ARRAY,
+          SCENARIO_ARRAY_EMPTY,
+          SCENARIO_BOOL_TRUE,
+          SCENARIO_BOOL_FALSE,
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeString)).toThrowEntityValidationError("property", "type");
+          });
+        });
 
-    expect(EntitySchema.isValidStringFormat('https://passbolt.test/img/test.png', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('https://passbolt.test:8080/img/test.png', 'x-url')).toBe(true);
+        each([
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_STRING_UTF8,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeString)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('https://192.168.1.1', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('http://192.168.1.1', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('https://192.168.1.1:8080', 'x-url')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('http://192.168.1.1:8080', 'x-url')).toBe(true);
+      describe("::type::integer", () => {
+        each([
+          SCENARIO_NULL,
+          SCENARIO_UNDEFINED,
+          SCENARIO_FLOAT,
+          SCENARIO_OBJECT,
+          SCENARIO_ARRAY,
+          SCENARIO_ARRAY_EMPTY,
+          SCENARIO_BOOL_TRUE,
+          SCENARIO_BOOL_FALSE,
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeInteger)).toThrowEntityValidationError("property", "type");
+          });
+        });
 
-    expect(EntitySchema.isValidStringFormat('localhost', 'x-url')).toBe(true);
+        each([
+          SCENARIO_INTEGER,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeInteger)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('//localhost', 'x-url')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('//www.passbolt.test', 'x-url')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('mailto://test@passbolt.com', 'x-url')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('tel://123456789', 'x-url')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('moz-extension://134c1a66-c6e3-1343-a5d4-63c511465c17/test.png', 'x-url')).toBe(false);
-  });
+      describe("::type::number", () => {
+        each([
+          SCENARIO_NULL,
+          SCENARIO_UNDEFINED,
+          SCENARIO_OBJECT,
+          SCENARIO_ARRAY,
+          SCENARIO_ARRAY_EMPTY,
+          SCENARIO_BOOL_TRUE,
+          SCENARIO_BOOL_FALSE,
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeNumber)).toThrowEntityValidationError("property", "type");
+          });
+        });
 
-  it("isValidStringFormat works with hex color", () => {
-    expect(EntitySchema.isValidStringFormat('#012', 'x-hex-color')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('345', 'x-hex-color')).toBe(true);
+        each([
+          SCENARIO_INTEGER,
+          SCENARIO_FLOAT,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeNumber)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('#678', 'x-hex-color')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('9aB', 'x-hex-color')).toBe(true);
+      describe("::type::object", () => {
+        each([
+          SCENARIO_UNDEFINED,
+          /*
+           * @todo Entity schema validation should be strict
+           * SCENARIO_NULL,
+           * SCENARIO_ARRAY,
+           * SCENARIO_ARRAY_EMPTY,
+           */
+          SCENARIO_BOOL_TRUE,
+          SCENARIO_BOOL_FALSE,
+          SCENARIO_INTEGER,
+          SCENARIO_FLOAT,
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeObject)).toThrowEntityValidationError("property", "type");
+          });
+        });
 
-    expect(EntitySchema.isValidStringFormat('#cDeF01', 'x-hex-color')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('234567', 'x-hex-color')).toBe(true);
+        each([
+          SCENARIO_OBJECT,
+          // @todo Entity schema validation should be strict and the following should not validate.
+          SCENARIO_NULL,
+          SCENARIO_ARRAY,
+          SCENARIO_ARRAY_EMPTY,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeObject)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('#89aBcDeF', 'x-hex-color')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('01234567', 'x-hex-color')).toBe(true);
+      describe("::type::array", () => {
+        each([
+          SCENARIO_NULL,
+          SCENARIO_UNDEFINED,
+          SCENARIO_INTEGER,
+          SCENARIO_FLOAT,
+          SCENARIO_OBJECT,
+          SCENARIO_BOOL_TRUE,
+          SCENARIO_BOOL_FALSE,
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeArray)).toThrowEntityValidationError("property", "type");
+          });
+        });
 
-    expect(EntitySchema.isValidStringFormat('#012#01', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('##01201', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('012#', 'x-hex-color')).toBe(false);
+        each([
+          SCENARIO_ARRAY,
+          SCENARIO_ARRAY_EMPTY,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateTypeArray)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('#01', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('34', 'x-hex-color')).toBe(false);
+      describe.skip("::type::blob", () => {
+        // @todo
+      });
+    });
 
-    expect(EntitySchema.isValidStringFormat('#1', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('2', 'x-hex-color')).toBe(false);
+    /*
+     * *************************************************************
+     * String assertions
+     ***************************************************************
+     */
 
-    expect(EntitySchema.isValidStringFormat('#12345', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('12345', 'x-hex-color')).toBe(false);
+    describe("::format", () => {
+      it("throws an error if format is not supported", () => {
+        expect.assertions(1);
+        expect(() => EntitySchema.validate("TestObject", {property: ""}, schemaValidateFormatInvalid)).toThrow("EntitySchema string validation format invalid is not supported.");
+      });
 
-    expect(EntitySchema.isValidStringFormat('#1234567', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('1234567', 'x-hex-color')).toBe(false);
+      describe("::format::uuid", () => {
+        each([
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_STRING_UTF8,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatUuid)).toThrowEntityValidationError("property", "format");
+          });
+        });
 
-    expect(EntitySchema.isValidStringFormat('#123456789', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('123456789', 'x-hex-color')).toBe(false);
+        each([
+          SCENARIO_UUID,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatUuid)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('#abcdefgh', 'x-hex-color')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('abcdefgh', 'x-hex-color')).toBe(false);
-  });
+      describe("::format::date-time", () => {
+        each([
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_STRING_UTF8,
+          SCENARIO_UUID,
+          {label: "Date expressed in common language", data: "yesterday"},
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatDateTime)).toThrowEntityValidationError("property", "format");
+          });
+        });
 
-  it("isValidStringFormat works with base64", () => {
-    expect(EntitySchema.isValidStringFormat('aGVsbG8gcGFzc2JvbHQ=', 'x-base64')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('aGVsbG8gcGFzc2JvbHQ+', 'x-base64')).toBe(true);
-    expect(EntitySchema.isValidStringFormat('aGVsbG8gcGFzc2JvbHQ', 'x-base64')).toBe(false);
+        each([
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatDateTime)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02LUhVZ3pZUG05Zw==', 'x-base64')).toBe(true);
+      describe("::format::email", () => {
+        each([
+          SCENARIO_EMPTY,
+          SCENARIO_STRING,
+          SCENARIO_STRING_UTF8,
+          SCENARIO_UUID,
+          SCENARIO_DATE_YEAR,
+          SCENARIO_DATE_YEAR_MONTH,
+          SCENARIO_DATE_YEAR_MONTH_DAY,
+          SCENARIO_DATE_YEAR_MONTH_DAY_TIME,
+          {label: "abc@example", data: "abc@example"},
+          {label: "@example.com", data: "@example.com"},
+          {label: "abc@", data: "abc@"},
+          {label: "abc@example.c", data: "abc@example.c"},
+          {label: "abc@example.com.", data: "abc@example.com."},
+          {label: "abc.@example.com", data: "abc.@example.com"},
+          {label: "abc@example..com", data: "abc@example..com"},
+          {label: "abc@example.com.a", data: "abc@example.com.a"},
+          {label: "abc;@example.com", data: "abc;@example.com"},
+          {label: "abc@example.com;", data: "abc@example.com;"},
+          {label: "abc@efg@example.com", data: "abc@efg@example.com"},
+          {label: "abc@@example.com", data: "abc@@example.com"},
+          {label: "abc efg@example.com", data: "abc efg@example.com"},
+          {label: "abc,efg@example.com", data: "abc,efg@example.com"},
+          {label: "abc@sub,example.com", data: "abc@sub,example.com"},
+          {label: "abc@sub'example.com", data: "abc@sub'example.com"},
+          {label: "abc@sub/example.com", data: "abc@sub/example.com"},
+          {label: "abc@yahoo!.com", data: "abc@yahoo!.com"},
+          {label: "abc@example_underscored.com", data: "abc@example_underscored.com"},
+          {label: "raw@test.ra.ru....com", data: "raw@test.ra.ru....com"},
+          /*
+           * @todo Cleanup: does not validate in IsEmailValidator custom regex, but validate with the library Validator.isEmail
+           * {label: "ÊXÃMPLÊ@HÕST.ÇÕM", data: "ÊXÃMPLÊ@HÕST.ÇÕM"},
+           */
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatEmail)).toThrowEntityValidationError("property", "format");
+          });
+        });
 
-    expect(EntitySchema.isValidStringFormat('aGVsbG8gcG==Fzc2JvbHQ', 'x-base64')).toBe(false);
-    expect(EntitySchema.isValidStringFormat('==aGVsbG8gcGFzc2JvbHQ', 'x-base64')).toBe(false);
+        each([
+          {label: "abc.efg@domain.com", data: "abc.efg@domain.com"},
+          {label: "efg@domain.com", data: "efg@domain.com"},
+          {label: "abc-efg@domain.com", data: "abc-efg@domain.com"},
+          {label: "abc_efg@domain.com", data: "abc_efg@domain.com"},
+          {label: "raw@test.ra.ru", data: "raw@test.ra.ru"},
+          {label: "abc-efg@domain-hyphened.com", data: "abc-efg@domain-hyphened.com"},
+          {label: "p.o'malley@domain.com", data: "p.o'malley@domain.com"},
+          {label: "abc+efg@domain.com", data: "abc+efg@domain.com"},
+          {label: "abc&efg@domain.com", data: "abc&efg@domain.com"},
+          {label: "abc.efg@12345.com", data: "abc.efg@12345.com"},
+          {label: "abc.efg@12345.co.jp", data: "abc.efg@12345.co.jp"},
+          {label: "abc@g.cn", data: "abc@g.cn"},
+          {label: "abc@x.com", data: "abc@x.com"},
+          {label: "henrik@sbcglobal.net", data: "henrik@sbcglobal.net"},
+          {label: "sani@sbcglobal.net", data: "sani@sbcglobal.net"},
+          // all ICANN TLDs
+          {label: "abc@example.aero", data: "abc@example.aero"},
+          {label: "abc@example.asia", data: "abc@example.asia"},
+          {label: "abc@example.biz", data: "abc@example.biz"},
+          {label: "abc@example.cat", data: "abc@example.cat"},
+          {label: "abc@example.com", data: "abc@example.com"},
+          {label: "abc@example.coop", data: "abc@example.coop"},
+          {label: "abc@example.edu", data: "abc@example.edu"},
+          {label: "abc@example.gov", data: "abc@example.gov"},
+          {label: "abc@example.info", data: "abc@example.info"},
+          {label: "abc@example.int", data: "abc@example.int"},
+          {label: "abc@example.jobs", data: "abc@example.jobs"},
+          {label: "abc@example.mil", data: "abc@example.mil"},
+          {label: "abc@example.mobi", data: "abc@example.mobi"},
+          {label: "abc@example.museum", data: "abc@example.museum"},
+          {label: "abc@example.name", data: "abc@example.name"},
+          {label: "abc@example.net", data: "abc@example.net"},
+          {label: "abc@example.org", data: "abc@example.org"},
+          {label: "abc@example.pro", data: "abc@example.pro"},
+          {label: "abc@example.tel", data: "abc@example.tel"},
+          {label: "abc@example.travel", data: "abc@example.travel"},
+          {label: "someone@st.t-com.hr", data: "someone@st.t-com.hr"},
+          // gTLD's
+          {label: "example@host.local", data: "example@host.local"},
+          {label: "example@x.org", data: "example@x.org"},
+          {label: "example@host.xxx", data: "example@host.xxx"},
+          // strange, but technically valid email addresses
+          {
+            label: "S=postmaster/OU=rz/P=uni-frankfurt/A=d400/C=de@gateway.d400.de",
+            data: "S=postmaster/OU=rz/P=uni-frankfurt/A=d400/C=de@gateway.d400.de"
+          },
+          {label: "customer/department=shipping@example.com", data: "customer/department=shipping@example.com"},
+          {label: "$A12345@example.com", data: "$A12345@example.com"},
+          {label: "!def!xyz%abc@example.com", data: "!def!xyz%abc@example.com"},
+          {label: "_somename@example.com", data: "_somename@example.com"},
+          // Unicode
+          {label: "some@eräume.foo", data: "some@eräume.foo"},
+          {label: "äu@öe.eräume.foo", data: "äu@öe.eräume.foo"},
+          {label: "Nyrée.surname@example.com", data: "Nyrée.surname@example.com"},
+          // Uppercase
+          {label: "example@host.COM", data: "example@host.COM"},
+          {label: "example@HOST.ORG", data: "example@HOST.ORG"},
+          {label: "EXAMPLE@HOST.LU", data: "EXAMPLE@HOST.LU"},
+          {label: "ÊXÃMPLÊ@HÕST.LU", data: "ÊXÃMPLÊ@HÕST.LU"},
+          // @todo Cleanup: does not validate in IsEmailValidator custom regex, but validate with the library Validator.isEmail
+          {label: "ÊXÃMPLÊ@HÕST.ÇÕM", data: "ÊXÃMPLÊ@HÕST.ÇÕM"},
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatEmail)).not.toThrow();
+          });
+        });
+      });
 
-    expect(EntitySchema.isValidStringFormat('$€`£ù%*:', 'x-base64')).toBe(false);
-  });
-});
+      describe("::format::x-url", () => {
+        each([
+          {label: "//localhost", data: "//localhost"},
+          {label: "//www.passbolt.test", data: "//www.passbolt.test"},
+          {label: "mailto://test@passbolt.com", data: "mailto://test@passbolt.com"},
+          {label: "tel://123456789", data: "tel://123456789"},
+          {
+            label: "moz-extension://134c1a66-c6e3-1343-a5d4-63c511465c17/test.png",
+            data: "moz-extension://134c1a66-c6e3-1343-a5d4-63c511465c17/test.png"
+          },
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXUrl)).toThrowEntityValidationError("property", "format");
+          });
+        });
 
-describe("Entity schema isValidPropType", () => {
-  it("isValidPropType throws exception if misused", () => {
-    const t = () => { EntitySchema.isValidPropType(null, null); };
-    expect(t).toThrow(TypeError);
-  });
+        each([
+          {label: "https://localhost", data: "https://localhost"},
+          {label: "https://localhost:8080", data: "https://localhost:8080"},
+          {label: "http://localhost", data: "http://localhost"},
+          {label: "http://localhost:8080", data: "http://localhost:8080"},
+          {label: "https://passbolt.test", data: "https://passbolt.test"},
+          {label: "https://passbolt.test:8080", data: "https://passbolt.test:8080"},
+          {label: "https://www.passbolt.test", data: "https://www.passbolt.test"},
+          {label: "https://www.passbolt.test:8080", data: "https://www.passbolt.test:8080"},
+          {label: "https://passbolt.test/img/test.png", data: "https://passbolt.test/img/test.png"},
+          {label: "https://passbolt.test:8080/img/test.png", data: "https://passbolt.test:8080/img/test.png"},
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXUrl)).not.toThrow();
+          });
+        });
+      });
 
-  it("isValidPropType throws exception if unsuported type", () => {
-    const t = () => { EntitySchema.isValidPropType('super', 'walou'); };
-    expect(t).toThrow(TypeError);
-  });
+      describe("::format::x-hex-color", () => {
+        each([
+          {label: "", data: ""},
+          {label: "#012#01", data: "#012#01"},
+          {label: "##01201", data: "##01201"},
+          {label: "012#", data: "012#"},
+          {label: "#01", data: "#01"},
+          {label: "34", data: "34"},
+          {label: "#1", data: "#1"},
+          {label: "2", data: "2"},
+          {label: "#12345", data: "#12345"},
+          {label: "12345", data: "12345"},
+          {label: "#1234567", data: "#1234567"},
+          {label: "1234567", data: "1234567"},
+          {label: "#123456789", data: "#123456789"},
+          {label: "123456789", data: "123456789"},
+          {label: "#abcdefgh", data: "#abcdefgh"},
+          {label: "abcdefgh", data: "abcdefgh"},
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXHexColor)).toThrowEntityValidationError("property", "format");
+          });
+        });
 
-  it("isValidPropType works with booleans", () => {
-    expect(EntitySchema.isValidPropType(true, 'boolean')).toBe(true);
-    expect(EntitySchema.isValidPropType(false, 'boolean')).toBe(true);
+        each([
+          {label: "#012", data: "#012"},
+          {label: "345", data: "345"},
+          {label: "#678", data: "#678"},
+          {label: "9aB", data: "9aB"},
+          {label: "#cDeF01", data: "#cDeF01"},
+          {label: "234567", data: "234567"},
+          {label: "#89aBcDeF", data: "#89aBcDeF"},
+          {label: "01234567", data: "01234567"},
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXHexColor)).not.toThrow();
+          });
+        });
+      });
 
-    // Do not accept value that evaluates as true or false
-    expect(EntitySchema.isValidPropType(1, 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType(0, 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType("1", 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType("0", 'boolean')).toBe(false);
+      describe("::format::x-base64", () => {
+        each([
+          {label: "aGVsbG8gcGFzc2JvbHQ", data: "aGVsbG8gcGFzc2JvbHQ"},
+          {label: "aGVsbG8gcG==Fzc2JvbHQ", data: "aGVsbG8gcG==Fzc2JvbHQ"},
+          {label: "==aGVsbG8gcGFzc2JvbHQ", data: "==aGVsbG8gcGFzc2JvbHQ"},
+          {label: "$€`£ù%*:", data: "$€`£ù%*:"},
+        ]).describe("throws an EntityValidationError if the property is not valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXBase64)).toThrowEntityValidationError("property", "format");
+          });
+        });
 
-    expect(EntitySchema.isValidPropType('', 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType('nope', 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType('🔥', 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType({}, 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType({'hot': 'hot'}, 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType([], 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType(['hot'], 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType(null, 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType(undefined, 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType((() => false), 'boolean')).toBe(false);
-    expect(EntitySchema.isValidPropType((new Promise(s => s(false))), 'boolean')).toBe(false);
-  });
+        each([
+          {label: "aGVsbG8gcGFzc2JvbHQ=", data: "aGVsbG8gcGFzc2JvbHQ="},
+          {label: "aGVsbG8gcGFzc2JvbHQ+", data: "aGVsbG8gcGFzc2JvbHQ+"},
+          {
+            label: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02LUhVZ3pZUG05Zw==",
+            data: "aHR0cHM6Ly93d3cueW91dHViZS5jb20vd2F0Y2g/dj02LUhVZ3pZUG05Zw=="
+          },
+        ]).describe("validates if the property is valid.", scenario => {
+          it(`scenario: ${scenario.label}`, async() => {
+            expect.assertions(1);
+            const testObject = {"property": scenario.data};
+            expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateFormatXBase64)).not.toThrow();
+          });
+        });
+      });
+    });
 
-  it("isValidPropType works with strings", () => {
-    expect(EntitySchema.isValidPropType('hot', 'string')).toBe(true);
-    expect(EntitySchema.isValidPropType('🔥', 'string')).toBe(true);
-    expect(EntitySchema.isValidPropType('', 'string')).toBe(true);
+    describe("::enum", () => {
+      it("throws if the prop value is not part of the enum list.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "invalid"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateEnum)).toThrowEntityValidationError("property", "enum");
+      });
 
-    expect(EntitySchema.isValidPropType(true, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType(false, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType(1, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType(0, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType({}, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType({'hot': 'hot'}, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType([], 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType(['hot'], 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType(null, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType(undefined, 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType((() => 'string'), 'string')).toBe(false);
-    expect(EntitySchema.isValidPropType((new Promise(s => s('string'))), 'string')).toBe(false);
-  });
+      it("validates if part of the valid enum list.", () => {
+        expect.assertions(2);
+        const schema = schemaValidateEnum;
+        // Validate first item.
+        let testObject = {"property": "value1"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schema)).not.toThrow();
+        // Validate first item.
+        testObject = {"property": "value2"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schema)).not.toThrow();
+      });
+    });
 
-  it("isValidPropType works with integers", () => {
-    expect(EntitySchema.isValidPropType(1, 'integer')).toBe(true);
-    expect(EntitySchema.isValidPropType(0, 'integer')).toBe(true);
+    describe("::minLength", () => {
+      it("throws if the prop value length does not validate.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "12"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMinLength)).toThrowEntityValidationError("property", "minLength");
+      });
 
-    expect(EntitySchema.isValidPropType('hot', 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType('🔥', 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType('', 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType(true, 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType(false, 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType({}, 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType({'hot': 'hot'}, 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType([], 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType(['hot'], 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType(null, 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType(undefined, 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType((() => 1), 'integer')).toBe(false);
-    expect(EntitySchema.isValidPropType((new Promise(s => s(1))), 'integer')).toBe(false);
+      it("validates if the prop value length is above the minimum requirements.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "123"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMinLength)).not.toThrow();
+      });
+    });
+
+    describe("::maxLength", () => {
+      it("throws if the prop value length does not validate.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "1234"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaxLength)).toThrowEntityValidationError("property", "maxLength");
+      });
+
+      it("validates if the prop value length is bellow the minimum requirements.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "123"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaxLength)).not.toThrow();
+      });
+    });
+
+    describe("::pattern", () => {
+      it("throws if the prop value length does not validate.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "1+3"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidatePattern)).toThrowEntityValidationError("property", "pattern");
+      });
+
+      it("validates if the prop value length is bellow the minimum requirements.", () => {
+        expect.assertions(1);
+        const testObject = {"property": "123"};
+        expect(() => EntitySchema.validate("TestObject", testObject, schemaValidatePattern)).not.toThrow();
+      });
+    });
   });
 });

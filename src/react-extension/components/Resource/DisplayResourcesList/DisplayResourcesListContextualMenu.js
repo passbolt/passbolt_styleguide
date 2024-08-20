@@ -92,7 +92,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle username resource
    */
   async handleUsernameClickEvent() {
-    await ClipBoard.copy(this.resource.metadata.username,this.props.context.port);
+    await ClipBoard.copy(this.resource.metadata.username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
     this.props.hide();
   }

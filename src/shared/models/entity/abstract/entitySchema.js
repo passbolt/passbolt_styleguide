@@ -119,7 +119,7 @@ class EntitySchema {
         continue;
       }
 
-      // check if propery is null
+      // check if property is null
       if (dto?.[propName] === null) {
         // the prop is explicitly null, is it explicitly nullable?
         if ((schemaProps[propName]?.nullable) === true) {
@@ -379,6 +379,12 @@ class EntitySchema {
    */
   static validatePropTypeArray(propName, prop, propSchema) {
     let validationError;
+
+    // Do not validate array items if no schema items schema defined.
+    if (!propSchema?.items || !(typeof propSchema.items === 'object')) {
+      return;
+    }
+
     for (let index = 0; index < prop.length; index++) {
       const propItemName = `${propName}.${index}`;
       try {
