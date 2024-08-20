@@ -60,11 +60,13 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
       await page._instance.handleSave(totp);
 
+      const resourceTypeId = props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp");
       const resourceDto = {
         folder_parent_id: props.folderParentId,
-        resource_type_id: props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp"),
+        resource_type_id: resourceTypeId,
         ...totp.toResourceDto()
       };
+      resourceDto.metadata.resource_type_id = resourceTypeId;
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, totp.toSecretDto());
       expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been added successfully");
@@ -83,11 +85,13 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
       const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
       await page._instance.handleSave(totp);
 
+      const resourceTypeId = props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp");
       const resourceDto = {
         folder_parent_id: props.folderParentId,
-        resource_type_id: props.context.resourceTypesSettings.findResourceTypeIdBySlug("totp"),
+        resource_type_id: resourceTypeId,
         ...totp.toResourceDto()
       };
+      resourceDto.metadata.resource_type_id = resourceTypeId;
 
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, totp.toSecretDto());
       expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});

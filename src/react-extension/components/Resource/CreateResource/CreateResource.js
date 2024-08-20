@@ -457,19 +457,17 @@ class CreateResource extends Component {
    */
   async createResource() {
     const resourceDto = {
-      name: this.state.name,
-      username: this.state.username,
-      uri: this.state.uri,
       folder_parent_id: this.props.folderParentId,
+      metadata: {
+        name: this.state.name,
+        username: this.state.username,
+        uris: [this.state.uri],
+        resource_type_id: this.state.resourceTypeId,
+      },
     };
 
     if (this.props.passwordExpiryContext.isFeatureEnabled()) {
       this.setResourceExpirationDate(resourceDto);
-    }
-
-    // No resource types, legacy case
-    if (!this.state.resourceTypeId) {
-      return this.createResourceLegacy(resourceDto, this.state.password);
     }
 
     // Resource types enabled but legacy type requested
@@ -520,19 +518,6 @@ class CreateResource extends Component {
   }
 
   /**
-   * Create legacy resource with no resource type
-   *
-   * @param resourceDto
-   * @param {string} secretString
-   * @returns {Promise<*>}
-   * @deprecated will be removed when v2 support is dropped
-   */
-  async createResourceLegacy(resourceDto, secretString) {
-    resourceDto.description = this.state.description;
-    return this.props.context.port.request("passbolt.resources.create", resourceDto, secretString);
-  }
-
-  /**
    * Create with encrypted description type
    *
    * @param {object} resourceDto
@@ -567,7 +552,7 @@ class CreateResource extends Component {
     resourceDto.resource_type_id = this.resourceTypesSettings.findResourceTypeIdBySlug(
       this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
     );
-    resourceDto.description = this.state.description;
+    resourceDto.metadata.description = this.state.description;
 
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretString);
   }

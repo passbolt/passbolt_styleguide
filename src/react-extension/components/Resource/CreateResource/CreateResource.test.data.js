@@ -62,7 +62,7 @@ export function defaultProps(data = {}) {
 
 export const defaultResourceMeta = (data = {}) => ({
   name: "Password name",
-  uri: "https://uri.dev",
+  uris: ["https://uri.dev"],
   username: "Password username",
   description: "Password description",
   ...data

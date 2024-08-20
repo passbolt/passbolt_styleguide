@@ -171,7 +171,7 @@ describe("See the Create Resource", () => {
 
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
-      page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
+      page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uris[0]);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
       await page.passwordCreate.click(page.passwordCreate.descriptionEncryptedLock);
@@ -188,17 +188,20 @@ describe("See the Create Resource", () => {
       jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      const onApiUpdateResourceMeta = defaultResourceMeta({
+      const onApiResourceDto = {
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
         expired: null,
-        ...resourceMeta
-      });
+        metadata: {
+          ...resourceMeta,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+        }
+      };
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
       await waitFor(() => {});
       expect(context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secrets.powned-password", "RN9n8XuECN3");
-      expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiUpdateResourceMeta, resourcePassword);
+      expect(context.port.request).toHaveBeenNthCalledWith(2, "passbolt.resources.create", onApiResourceDto, resourcePassword);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.onClose).toBeCalled();
     });
@@ -214,7 +217,7 @@ describe("See the Create Resource", () => {
 
       // Fill the form
       page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
-      page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uri);
+      page.passwordCreate.fillInput(page.passwordCreate.uri, resourceMeta.uris[0]);
       page.passwordCreate.fillInput(page.passwordCreate.username, resourceMeta.username);
       page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
 
@@ -230,17 +233,21 @@ describe("See the Create Resource", () => {
       jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
+      const onApiUpdateSecretDto = {
+        password: resourcePassword,
+        description: resourceMeta.description,
+      };
+
+      delete resourceMeta.description;
+
       const onApiUpdateResourceDto = {
-        ...resourceMeta,
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         expired: null,
-      };
-      delete onApiUpdateResourceDto.description;
-
-      const onApiUpdateSecretDto = {
-        description: resourceMeta.description,
-        password: resourcePassword
+        metadata: {
+          ...resourceMeta,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        }
       };
 
       await page.passwordCreate.click(page.passwordCreate.saveButton);
@@ -281,7 +288,7 @@ describe("See the Create Resource", () => {
         // create password
         const resourceMeta = {
           name: "Password name",
-          uri: "",
+          uris: [""],
           username: "",
           password: "RN9n8XuECN3",
           description: "",
@@ -297,10 +304,13 @@ describe("See the Create Resource", () => {
 
         const onApiUpdateResourceMeta = {
           folder_parent_id: null,
-          name: resourceMeta.name,
-          uri: resourceMeta.uri,
-          username: resourceMeta.username,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          metadata: {
+            name: resourceMeta.name,
+            uris: resourceMeta.uris,
+            username: resourceMeta.username,
+            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          },
           expired: resourceMeta.expired,
         };
 
@@ -338,10 +348,9 @@ describe("See the Create Resource", () => {
         expect(page.passwordCreate.exists()).toBeTruthy();
         // create password
         const resourceMeta = defaultResourceMeta({
-          uri: "",
+          uris: [""],
           username: "",
-          description: "",
-          expired: null
+          description: ""
         });
 
         const resourcePassword = "RN9n8XuECN3";
@@ -351,11 +360,16 @@ describe("See the Create Resource", () => {
         await page.passwordCreate.fillInputPassword(resourcePassword);
 
         const onApiUpdateResourceMeta = {
-          ...resourceMeta,
+          metadata: {
+            ...resourceMeta,
+            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          },
           folder_parent_id: null,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          expired: null
         };
-        delete onApiUpdateResourceMeta.description;
+
+        delete onApiUpdateResourceMeta.metadata.description;
 
         const createResourceSecretDto = {
           description: resourceMeta.description,
@@ -390,7 +404,7 @@ describe("See the Create Resource", () => {
         // create password
         const resourceMeta = {
           name: "Password name",
-          uri: "",
+          uris: [""],
           username: "",
           password: "RN9n8XuECN3",
           description: "",
@@ -402,9 +416,12 @@ describe("See the Create Resource", () => {
 
         const onApiUpdateResourceMeta = {
           folder_parent_id: null,
-          name: resourceMeta.name,
-          uri: resourceMeta.uri,
-          username: resourceMeta.username,
+          metadata: {
+            name: resourceMeta.name,
+            uris: resourceMeta.uris,
+            username: resourceMeta.username,
+            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          },
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         };
 
@@ -441,7 +458,7 @@ describe("See the Create Resource", () => {
         // create password
         const resourceMeta = {
           name: "Password name",
-          uri: "",
+          uris: [""],
           username: "",
           password: "RN9n8XuECN3",
           description: "",
@@ -453,9 +470,12 @@ describe("See the Create Resource", () => {
 
         const onApiUpdateResourceMeta = {
           folder_parent_id: null,
-          name: resourceMeta.name,
-          uri: resourceMeta.uri,
-          username: resourceMeta.username,
+          metadata: {
+            name: resourceMeta.name,
+            uris: resourceMeta.uris,
+            username: resourceMeta.username,
+            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          },
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         };
 
@@ -490,10 +510,9 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.exists()).toBeTruthy();
       // create password
       const resourceMeta = defaultResourceMeta({
-        uri: "",
+        uris: [""],
         username: "",
-        description: "",
-        expired: null
+        description: ""
       });
       const resourcePassword = "RN9n8XuECN3";
 
@@ -502,12 +521,15 @@ describe("See the Create Resource", () => {
       await page.passwordCreate.fillInputPassword(resourcePassword);
 
       const onApiUpdateResourceMeta = {
-        ...resourceMeta,
+        metadata: {
+          ...resourceMeta,
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        },
         folder_parent_id: null,
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-        expired: resourceMeta.expired,
+        expired: null,
       };
-      delete onApiUpdateResourceMeta.description;
+      delete onApiUpdateResourceMeta.metadata.description;
 
       const createResourceSecretDto = {
         description: '',
