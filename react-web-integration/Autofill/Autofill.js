@@ -13,6 +13,7 @@
  */
 import UserEventsService from "../lib/User/UserEventsService";
 import InFormFieldSelector from "../lib/InForm/InFormFieldSelector";
+import InFormCallToActionField from "../lib/InForm/InFormCallToActionField";
 
 /**
  * Fill the login form.
@@ -33,7 +34,7 @@ const fillForm = function(formData) {
     }
 
     // Get password element
-    const passwordElement = getPasswordElement(formData);
+    const passwordElement = getPasswordElement();
     let usernameElement = null;
     /*
      * If password element exists
@@ -200,8 +201,8 @@ const findInputElementInIframe = function(type, iframeDocument) {
  * Find the password element on the page.
  * @return {HTMLInputElement/null}
  */
-const getPasswordElement = function(formData) {
-  const passwordElements = document.querySelectorAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
+const getPasswordElement = function() {
+  const passwordElements = InFormCallToActionField.findAll(InFormFieldSelector.PASSWORD_FIELD_SELECTOR);
 
   // A password element has been found.
   if (passwordElements.length) {
@@ -210,16 +211,9 @@ const getPasswordElement = function(formData) {
         return passwordElement;
       }
     }
-    // If all passwords are hidden return null to autofill only the username input (PB-20173)
-    return null;
-  } else {
-    /*
-     * If no password element found on the page, the login form could be served by an iframe.
-     * Search the password element in the page iframes. By instance reddit.com login page serves its login
-     * form in an iframe.
-     */
-    return getInputElementFromIframe('password', formData);
   }
+  // If all passwords are hidden return null to autofill only the username input (PB-20173)
+  return null;
 };
 
 /**

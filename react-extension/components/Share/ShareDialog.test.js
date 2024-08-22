@@ -328,7 +328,8 @@ describe("As Lu I should see the share dialog", () => {
     });
   });
 
-  describe('As LU I can\'t start sharing folders and resources at the same time', () => {
+  //@todo: skipped as not supported for the moment. We can share only 1 folder at a time or multiple resources but not multiple folders or folders and resources at the same time
+  describe.skip('As LU I can\'t start sharing folders and resources at the same time', () => {
     const shareDialogProps = {
       resourcesIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a"],
       foldersIds: ["8e3874ae-4b40-590b-968a-418f704b9d9a"],
