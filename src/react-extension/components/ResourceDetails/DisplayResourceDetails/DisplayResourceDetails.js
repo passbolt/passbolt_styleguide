@@ -58,12 +58,10 @@ class DisplayResourceDetails extends React.Component {
       return "";
     }
 
-    if (resource.resource_type_id) {
-      const resourceType = this.props.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
-      switch (resourceType) {
-        case this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
-          return this.translate("Resource with encrypted description");
-      }
+    const resourceType = this.props.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
+    switch (resourceType) {
+      case this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
+        return this.translate("Resource with encrypted description");
     }
 
     return defaultSubtitle;
@@ -124,7 +122,7 @@ class DisplayResourceDetails extends React.Component {
             </div>
             <h3>
               <div className="title-wrapper">
-                <span className="name">{this.props.resourceWorkspaceContext.details.resource.name}</span>
+                <span className="name">{this.props.resourceWorkspaceContext.details.resource.metadata.name}</span>
                 <button type="button" className="title-link link no-border" title={this.translate("Copy the link to this password")} onClick={this.handlePermalinkClick}>
                   <Icon name="link"/>
                   <span className="visuallyhidden"><Trans>Copy the link to this password</Trans></span>

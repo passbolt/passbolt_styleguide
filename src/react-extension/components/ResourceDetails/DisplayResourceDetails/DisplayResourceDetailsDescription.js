@@ -90,7 +90,7 @@ class DisplayResourceDetailsDescription extends React.Component {
       return this.decryptAndLoadEncryptedDescription();
     }
 
-    const description = this.resource.description;
+    const description = this.resource.metadata.description;
     const plaintextSecretDto = null; // Reset the plaintext secret description.
     const error = false; // Reset any errors.
     this.setState({description, plaintextSecretDto, error});
@@ -102,9 +102,6 @@ class DisplayResourceDetailsDescription extends React.Component {
    * =============================================================
    */
   isResourceDescriptionEncrypted() {
-    if (!this.resource.resource_type_id) {
-      return false;
-    }
     return this.props.context.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(
       this.resource.resource_type_id
     );

@@ -43,7 +43,7 @@ class EditResourceDescription extends React.Component {
   getDefaultState() {
     return {
       encryptDescription: this.mustEncryptDescription(),
-      description: this.props.plaintextSecretDto?.description || this.props.resource.description, // description of the resource
+      description: this.props.plaintextSecretDto?.description || this.props.resource.metadata.description, // description of the resource
       processing: false, // component processing
       error: "" // error to display
     };
@@ -185,7 +185,10 @@ class EditResourceDescription extends React.Component {
   async updateCleartextDescription() {
     const resourceDto = {
       ...this.props.resource,
-      description: this.state.description
+      metadata: {
+        ...this.props.resource.metadata,
+        description: this.state.description,
+      }
     };
 
     await this.props.context.port.request("passbolt.resources.update", resourceDto, null);

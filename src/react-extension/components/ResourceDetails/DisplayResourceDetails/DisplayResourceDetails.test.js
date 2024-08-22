@@ -48,7 +48,7 @@ describe("DisplayResourceDetails", () => {
 
     it('I can see the name of the selected resource', async() => {
       expect.assertions(2);
-      expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.name);
+      expect(page.name).toBe(props.resourceWorkspaceContext.details.resource.metadata.name);
       expect(page.subtitle).toBe('Resource with encrypted description');
     });
 

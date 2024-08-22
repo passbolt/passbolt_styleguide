@@ -9,15 +9,18 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.2.0
+ * @since         4.10.0
  */
 
 /**
- * Get the value of an object from a path using dot notation
- * @param obj
- * @param path
- * @returns {string|undefined}
+ * Sort an array of resources alphabetically
+ * @param {Array<ResourceEntityDto>} resources
+ * @returns {Array<ResourceEntityDto}
  */
-export default (obj, path) => path
-  .split('.')
-  .reduce((accumulator, key) => accumulator?.[key], obj);
+export const sortResourcesAlphabetically = resources => {
+  resources?.sort((resource1, resource2) => {
+    const resource1Name = resource1.metadata.name.toUpperCase();
+    const resource2Name = resource2.metadata.name.toUpperCase();
+    return resource1Name.localeCompare(resource2Name);
+  });
+};

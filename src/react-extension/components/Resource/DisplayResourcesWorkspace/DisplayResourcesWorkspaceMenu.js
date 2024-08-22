@@ -217,7 +217,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopyUsernameClickEvent() {
     this.handleCloseMoreMenu();
-    await ClipBoard.copy(this.selectedResources[0].username, this.props.context.port);
+    await ClipBoard.copy(this.selectedResources[0].metadata.username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
   }
 
@@ -433,7 +433,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyUsername() {
-    return this.hasOneResourceSelected() && this.selectedResources[0].username;
+    return this.hasOneResourceSelected() && this.selectedResources[0].metadata?.username;
   }
 
   /**

@@ -113,7 +113,7 @@ describe("See Workspace Menu", () => {
 
       await page.displayMenu.clickOnMenu(page.displayMenu.dropdownMenuUsername);
 
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(propsOneResourceOwned.resourceWorkspaceContext.selectedResources[0].metadata.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 

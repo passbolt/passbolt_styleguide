@@ -1,6 +1,6 @@
 {
   "name": "passbolt-styleguide",
-  "version": "4.9.3",
+  "version": "4.9.4",
   "license": "AGPL-3.0",
   "copyright": "Copyright 2023 Passbolt SA",
   "description": "Passbolt styleguide contains common styling assets used by the different sites, plugin, etc.",
@@ -37,7 +37,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-header": "^1.1.0",
     "grunt-shell": "^4.0.0",
-    "i18next-parser": "^8.12.0",
+    "i18next-parser": "^9.0.1",
     "jest": "^29.6.2",
     "jest-each": "^29.6.2",
     "jest-environment-jsdom": "^29.6.2",
@@ -45,7 +45,7 @@
     "jest-junit": "^16.0.0",
     "jest-useragent-mock": "^0.1.1",
     "jest-webextension-mock": "^3.8.9",
-    "lockfile-lint": "^4.12.1",
+    "lockfile-lint": "^4.14.0",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4"
   },

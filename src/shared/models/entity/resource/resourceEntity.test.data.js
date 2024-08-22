@@ -70,6 +70,32 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     defaultData.favorite = defaultFavoriteDto({foreign_key: id});
   }
 
+  defaultData.metadata = {
+    object_type: "PASSBOLT_METADATA_V5",
+    resource_type_id: defaultData.resource_type_id,
+    name: defaultData.name,
+    username: defaultData.username,
+    uris: typeof(defaultData.uri) === "string" ? [defaultData.uri] : [],
+    description: defaultData.description,
+    ...data.metadata,
+  };
+
+  return defaultData;
+};
+
+export const defaultResourceV4Dto = (options = {}) => {
+  const defaultData = defaultResourceDto(
+    {
+      name: "Passbolt",
+      username: "admin@passbolt.com",
+      uri: "https://passbolt.com",
+      description: "",
+    },
+    options
+  );
+  //Remove metadata to match v4 format
+  delete defaultData.metadata;
+
   return defaultData;
 };
 

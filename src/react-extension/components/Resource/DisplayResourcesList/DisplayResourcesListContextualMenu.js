@@ -92,7 +92,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle username resource
    */
   async handleUsernameClickEvent() {
-    await ClipBoard.copy(this.resource.username, this.props.context.port);
+    await ClipBoard.copy(this.resource.metadata.username, this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The username has been copied to clipboard"));
     this.props.hide();
   }
@@ -101,7 +101,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle uri resource
    */
   async handleUriClickEvent() {
-    await ClipBoard.copy(this.resource.uri, this.props.context.port);
+    await ClipBoard.copy(this.resource.metadata.uris[0], this.props.context.port);
     this.props.actionFeedbackContext.displaySuccess(this.translate("The uri has been copied to clipboard"));
     this.props.hide();
   }
@@ -219,7 +219,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * handle open the uri in a new tab
    */
   handleGoToResourceUriClick() {
-    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.uri);
+    this.props.resourceWorkspaceContext.onGoToResourceUriRequested(this.resource.metadata.uris[0]);
   }
 
   /**
@@ -263,7 +263,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    */
   get safeUri() {
     return sanitizeUrl(
-      this.resource.uri, {
+      this.resource.metadata.uris?.[0], {
         whiteListedProtocols: resourceLinkAuthorizedProtocols,
         defaultProtocol: urlProtocols.HTTPS
       });
@@ -288,7 +288,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyUsername() {
-    return this.resource?.username && this.resource.username !== "";
+    return this.resource.metadata?.username && this.resource.metadata.username !== "";
   }
 
   /**
@@ -344,7 +344,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @returns {boolean}
    */
   canCopyUri() {
-    return this.resource.uri !== "";
+    return this.resource.metadata?.uris?.length > 0 && this.resource.metadata.uris?.[0] !== "";
   }
 
   /**

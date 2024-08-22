@@ -46,19 +46,16 @@ class DomUtils {
     const filterByShadowRoot = element => element.shadowRoot ? NodeFilter.FILTER_ACCEPT
       : NodeFilter.FILTER_SKIP;
     const treeWalker = document.createTreeWalker(
-      document.activeElement,
+      document.body,
       NodeFilter.SHOW_ELEMENT,
       filterByShadowRoot
     );
     const shadowDomDocuments = [];
-    // Check directly the next node to not have the main document
-    let currentNode = treeWalker?.nextNode();
-    while (currentNode) {
-      const shadowDom = browser.dom?.openOrClosedShadowRoot(currentNode) || currentNode.shadowRoot;
+    while (treeWalker.nextNode()) {
+      const shadowDom = browser.dom?.openOrClosedShadowRoot(treeWalker.currentNode) || treeWalker.currentNode.shadowRoot;
       if (shadowDom) {
         shadowDomDocuments.push(shadowDom);
       }
-      currentNode = treeWalker?.nextNode();
     }
     return shadowDomDocuments;
   }

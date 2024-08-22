@@ -253,6 +253,7 @@ export class HandleTotpWorkflow extends React.Component {
     resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
       this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP
     );
+    resourceDto.metadata.resource_type_id = resourceDto.resource_type_id;
 
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
   }
@@ -269,6 +270,8 @@ export class HandleTotpWorkflow extends React.Component {
     resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
       this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP
     );
+    // @TODO E2EE resource_type_id duplicate for resource
+    resourceDto.metadata.resource_type_id = resourceDto.resource_type_id;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
   }

@@ -1,3 +1,17 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         4.10.0
+ */
+
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import canSuggestUrl from "./canSuggestUrl";
@@ -7,6 +21,8 @@ import Icon from "../../../shared/components/Icons/Icon";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
+import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
+import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 500;
@@ -44,7 +60,7 @@ class HomePage extends React.Component {
   handleStorageChange(changes) {
     if (changes.resources) {
       const resources = changes.resources.newValue;
-      this.sortResourcesAlphabetically(resources);
+      sortResourcesAlphabetically(resources);
       this.setState({resources});
     }
   }
@@ -53,28 +69,10 @@ class HomePage extends React.Component {
     const storageData = await this.props.context.storage.local.get(["resources"]);
     if (storageData.resources) {
       const resources = storageData.resources;
-      this.sortResourcesAlphabetically(resources);
+      sortResourcesAlphabetically(resources);
       this.setState({resources});
     }
     this.props.context.port.request('passbolt.resources.update-local-storage');
-  }
-
-  sortResourcesAlphabetically(resources) {
-    if (resources == null) {
-      return;
-    }
-
-    resources.sort((resource1, resource2) => {
-      const resource1Name = resource1.name.toUpperCase();
-      const resource2Name = resource2.name.toUpperCase();
-      if (resource1Name > resource2Name) {
-        return 1;
-      } else if (resource2Name > resource1Name) {
-        return -1;
-      } else {
-        return 0;
-      }
-    });
   }
 
   async getActiveTabUrl() {
@@ -100,11 +98,11 @@ class HomePage extends React.Component {
     const suggestedResources = [];
 
     for (const i in resources) {
-      if (!resources[i].uri) {
+      if (!resources[i].metadata.uris?.[0]) {
         continue;
       }
 
-      if (canSuggestUrl(activeTabUrl, resources[i].uri) && this.isPasswordResource(resources[i].resource_type_id)) {
+      if (resources[i].metadata.uris?.length > 0 && canSuggestUrl(activeTabUrl, resources[i].metadata.uris[0]) && this.isPasswordResource(resources[i].resource_type_id)) {
         suggestedResources.push(resources[i]);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
@@ -113,7 +111,11 @@ class HomePage extends React.Component {
     }
 
     // Sort the resources by uri lengths, the greater on top.
-    suggestedResources.sort((a, b) => b.uri.length - a.uri.length);
+    suggestedResources.sort((a, b) => {
+      const aUrisLength = a.metadata.uris?.[0]?.length || 0;
+      const bUrisLength = b.metadata.uris?.[0]?.length || 0;
+      return bUrisLength - aUrisLength;
+    });
 
     return suggestedResources;
   }
@@ -130,46 +132,10 @@ class HomePage extends React.Component {
        * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
        * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
        */
-      browsedResources = this.filterResourcesBySearch(browsedResources, this.props.context.search);
+      browsedResources = filterResourcesBySearch(browsedResources, this.props.context.search);
     }
 
     return browsedResources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
-
-  /**
-   * Filter resources by keywords.
-   * Search on the name, the username, the uri and the description of the resources.
-   * @param {array} resources The list of resources to filter.
-   * @param {string} needle The needle to search.
-   * @return {array} The filtered resources.
-   */
-  filterResourcesBySearch(resources, needle) {
-    // Split the search by words
-    const needles = needle.split(/\s+/);
-    // Prepare the regexes for each word contained in the search.
-    const regexes = needles.map(needle => new RegExp(this.escapeRegExp(needle), 'i'));
-
-    return resources.filter(resource => {
-      let match = true;
-      for (const i in regexes) {
-        // To match a resource would have to match all the words of the search.
-        match &= (regexes[i].test(resource.name)
-          || regexes[i].test(resource.username)
-          || regexes[i].test(resource.uri)
-          || regexes[i].test(resource.description));
-      }
-
-      return match;
-    });
-  }
-
-  /**
-   * Escape a string that is to be treated as a literal string within a regular expression.
-   * Reference: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
-   * @param {string} value The string to escape
-   */
-  escapeRegExp(value) {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
   async handleUseOnThisTabClick(resource) {
@@ -248,10 +214,10 @@ class HomePage extends React.Component {
                     <li className="suggested-resource-entry" key={resource.id}>
                       <button type="button" className="resource-details link" onClick={() => this.handleUseOnThisTabClick(resource)}>
                         <div className="inline-resource-name">
-                          <span className="title">{resource.name}</span>
-                          <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                          <span className="title">{resource.metadata.name}</span>
+                          <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                         </div>
-                        <span className="url">{resource.uri}</span>
+                        <span className="url">{resource.metadata.uris?.[0]}</span>
                       </button>
                       <Link className="chevron-right-wrapper" to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                         <Icon name="chevron-right"/>
@@ -285,10 +251,10 @@ class HomePage extends React.Component {
                         <Link to={`/webAccessibleResources/quickaccess/resources/view/${resource.id}`}>
                           <div className="inline-resource-entry">
                             <div className='inline-resource-name'>
-                              <span className="title">{resource.name}</span>
-                              <span className="username"> {resource.username ? `(${resource.username})` : ""}</span>
+                              <span className="title">{resource.metadata.name}</span>
+                              <span className="username"> {resource.metadata.username ? `(${resource.metadata.username})` : ""}</span>
                             </div>
-                            <span className="url">{resource.uri}</span>
+                            <span className="url">{resource.metadata.uris?.[0]}</span>
                           </div>
                           <Icon name="chevron-right"/>
                         </Link>

@@ -1,3 +1,16 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.2.0
+ */
 import React from "react";
 import Transition from 'react-transition-group/Transition';
 import PropTypes from "prop-types";
@@ -11,6 +24,8 @@ import HiddenPassword from "../../../shared/components/Password/HiddenPassword";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import Totp from "../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
+import sanitizeUrl, {urlProtocols} from "../../../react-extension/lib/Sanitize/sanitizeUrl";
+import {resourceLinkAuthorizedProtocols} from "../../../react-extension/contexts/ResourceWorkspaceContext";
 
 /**
  * Default display time of error message in ms.
@@ -93,13 +108,14 @@ class ResourceViewPage extends React.Component {
   async handleCopyLoginClick(event) {
     event.preventDefault();
     this.resetError();
-    if (!this.state.resource.username) {
+
+    if (!this.state.resource.metadata?.username) {
       return;
     }
 
     try {
       this.setState({copyLoginState: 'processing'});
-      await ClipBoard.copy(this.state.resource.username, this.props.context.port);
+      await ClipBoard.copy(this.state.resource.metadata?.username, this.props.context.port);
       this.setState({copyLoginState: 'done'});
       setTimeout(() => {
         this.setState({copyLoginState: 'default'});
@@ -351,34 +367,10 @@ class ResourceViewPage extends React.Component {
   }
 
   sanitizeResourceUrl() {
-    const resource = this.state.resource;
-    let uri = resource.uri;
-
-    // Wrong format.
-    if (!uri || typeof uri !== "string" || !uri.length) {
-      return false;
-    }
-
-    // Absolute url are not valid url.
-    if (uri[0] === "/") {
-      return false;
-    }
-
-    // If no protocol defined, use http.
-    if (!/^((?!:\/\/).)*:\/\//.test(uri)) {
-      uri = `http://${uri}`;
-    }
-
-    let url;
-    try {
-      url = new URL(uri);
-    } catch (error) {
-      return false;
-    }
-    if (!url || url.protocol.startsWith("javascript")) {
-      return false;
-    }
-    return url.href;
+    return sanitizeUrl(this.state.resource.metadata?.uris?.[0], {
+      whiteListedProtocols: resourceLinkAuthorizedProtocols,
+      defaultProtocol: urlProtocols.HTTPS
+    });
   }
 
   /**
@@ -422,6 +414,7 @@ class ResourceViewPage extends React.Component {
   }
 
   render() {
+    const primaryUri = this.state.resource.metadata?.uris?.[0];
     const sanitizeResourceUrl = this.sanitizeResourceUrl();
     const isPasswordPreviewed = this.isPasswordPreviewed();
     const isTotpPreviewed = this.isTotpPreviewed();
@@ -432,7 +425,7 @@ class ResourceViewPage extends React.Component {
         <div className="back-link">
           <a href="#" className="primary-action" onClick={this.handleGoBackClick}>
             <Icon name="chevron-left"/>
-            <span className="primary-action-title">{this.state.resource.name}</span>
+            <span className="primary-action-title">{this.state.resource.metadata?.name}</span>
           </a>
           <a href={`${this.props.context.userSettings.getTrustedDomain()}/app/passwords/view/${this.props.match.params.id}`} className="secondary-action button-transparent button" target="_blank" rel="noopener noreferrer" title={this.translate("View it in passbolt")}>
             <Icon name="internal-link"/>
@@ -445,18 +438,18 @@ class ResourceViewPage extends React.Component {
               <li className="property">
                 <div className="information">
                   <span className="property-name"><Trans>Username</Trans></span>
-                  {this.state.resource.username &&
+                  {this.state.resource.metadata?.username &&
                     <a href="#" role="button" className="property-value" onClick={this.handleCopyLoginClick}>
-                      {this.state.resource.username}
+                      {this.state.resource.metadata?.username}
                     </a>
                   }
-                  {!this.state.resource.username &&
+                  {!this.state.resource.metadata?.username &&
                     <span className="property-value empty">
                       <Trans>no username provided</Trans>
                     </span>
                   }
                 </div>
-                <a role="button" className={`button button-transparent property-action ${!this.state.resource.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("Copy to clipboard")}>
+                <a role="button" className={`button button-transparent property-action ${!this.state.resource.metadata?.username ? "disabled" : ""}`} onClick={this.handleCopyLoginClick} title={this.translate("Copy to clipboard")}>
                   <Transition in={this.state.copyLoginState === "default"} appear={false} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "default" ? "visually-hidden" : ""}`}>
@@ -614,17 +607,17 @@ class ResourceViewPage extends React.Component {
           <li className="property">
             <div className="information">
               <span className="property-name">URI</span>
-              {this.state.resource.uri && sanitizeResourceUrl &&
-                <a href={this.sanitizeResourceUrl()} role="button" className="property-value" target="_blank" rel="noopener noreferrer">
-                  {this.state.resource.uri}
+              {primaryUri && sanitizeResourceUrl &&
+                <a href={sanitizeResourceUrl} role="button" className="property-value" target="_blank" rel="noopener noreferrer">
+                  {primaryUri}
                 </a>
               }
-              {this.state.resource.uri && !sanitizeResourceUrl &&
+              {primaryUri && !sanitizeResourceUrl &&
                 <span className="property-value">
-                  {this.state.resource.uri}
+                  {primaryUri}
                 </span>
               }
-              {!this.state.resource.uri &&
+              {!primaryUri &&
                 <span className="property-value empty">
                   <Trans>no url provided</Trans>
                 </span>

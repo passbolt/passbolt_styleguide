@@ -145,7 +145,7 @@ describe("Resource Workspace Context", () => {
       await page.goToText("docker");
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
-      expect(page.filteredResources[0].name).toBe("Docker");
+      expect(page.filteredResources[0].metadata.name).toBe("Docker");
     });
 
     it("AS LU I should have resources matching a text when the filter is TEXT in folder name", async() => {
@@ -153,7 +153,7 @@ describe("Resource Workspace Context", () => {
       await page.goToText("Accounting");
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
-      expect(page.filteredResources[0].name).toBe("Inside Bank Password");
+      expect(page.filteredResources[0].metadata.name).toBe("Inside Bank Password");
     });
 
     it("AS LU I should have resources belonged to a group when the filter is GROUP", async() => {
@@ -291,8 +291,8 @@ describe("Resource Workspace Context", () => {
     it("As LU I be able to follow a safe resource uri", () => {
       const resource = context.resources[0];
       jest.spyOn(window, 'open').mockImplementationOnce(() => {});
-      page.goToResourceUri(resource.uri);
-      expect(window.open).toHaveBeenCalledWith("https://passbolt.dev/", "_blank", "noopener,noreferrer");
+      page.goToResourceUri(resource.metadata.uris[0]);
+      expect(window.open).toHaveBeenCalledWith(resource.metadata.uris[0], "_blank", "noopener,noreferrer");
     });
 
     it("As LU I not be able to follow an unsafe resource uri", () => {

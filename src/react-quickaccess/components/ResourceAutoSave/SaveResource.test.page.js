@@ -14,7 +14,7 @@
  */
 import React from "react";
 import {render, waitFor} from "@testing-library/react";
-import {StaticRouter} from 'react-router-dom';
+import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from '../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider';
 import {fireEvent} from '@testing-library/react';
 import SaveResource from "./SaveResource";
@@ -27,14 +27,35 @@ export default class SaveResourcePage {
    * Default constructor
    * @param props Props to attach
    */
-  constructor(context, props) {
+  constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <StaticRouter context={context}>
-          <SaveResource context={context} {...props} debug />
-        </StaticRouter>
+        <Router>
+          <SaveResource {...props}/>
+        </Router>
       </MockTranslationProvider>
     );
+  }
+
+  /**
+   * Returns the name input element
+   */
+  get name() {
+    return this._page.container.querySelector('#name');
+  }
+
+  /**
+   * Returns the username input element
+   */
+  get username() {
+    return this._page.container.querySelector('#username');
+  }
+
+  /**
+   * Returns the uri input element
+   */
+  get uri() {
+    return this._page.container.querySelector('#uri');
   }
 
   /**
@@ -45,31 +66,10 @@ export default class SaveResourcePage {
   }
 
   /**
-   * Returns the pwned warning message
-   */
-  get pwnedWarningMessage() {
-    return this._page.container.querySelector('.pwned-password.warning-message');
-  }
-
-  /**
-   * Returns the password complexity
-   */
-  get passwordComplexity() {
-    return this._page.container.querySelector('.complexity-text');
-  }
-
-  /**
    * Returns the save button element
    */
   get saveButton() {
     return this._page.container.querySelector('.submit-wrapper button[type=\"submit\"]');
-  }
-
-  /** fill the input password with data */
-  async fillInputPassword(data)  {
-    const dataInputEvent = {target: {value: data}};
-    fireEvent.change(this.password, dataInputEvent);
-    jest.runAllTimers();
   }
 
   /** Click on the element */
@@ -77,5 +77,10 @@ export default class SaveResourcePage {
     const leftClick = {button: 0};
     fireEvent.click(element, leftClick);
     await waitFor(() => {});
+  }
+
+  /** Submit teh form */
+  async save()  {
+    await this.click(this.saveButton);
   }
 }
