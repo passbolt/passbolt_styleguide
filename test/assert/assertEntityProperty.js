@@ -43,6 +43,17 @@ export const assert = (EntityClass, propertyName, successScenarios, failScenario
   });
 };
 
+export const assertAssociation = (EntityClass, propertyName, defaultValidDto, successScenarios, failScenarios) => {
+  successScenarios.forEach(test => {
+    const dto = Object.assign({}, defaultValidDto, {[propertyName]: test.value});
+    expect(() => new EntityClass(dto)).not.toThrow();
+  });
+  failScenarios.forEach(test => {
+    const dto = Object.assign({}, defaultValidDto, {[propertyName]: test.value});
+    expect(() => new EntityClass(dto)).toThrow();
+  });
+};
+
 export const assertArrayItem = (EntityClass, propertyName, successScenarios, failScenarios, rule) => {
   successScenarios.forEach(test => {
     const propertyPath = `${propertyName}.0`;
