@@ -126,7 +126,11 @@ class EntitySchema {
           result[propName] = null;
           continue;
         }
-        // @todo: else => props is not nullable and null we could set an error and then continue but it requires all schema to migrate to explicit "nullable": true
+        /*
+         * else:
+         * the property is null but not marked as nullable. However, it could still be valid if an `anyOf` rule is set
+         * with a type `null`. So, we cannot consider for the moment this data as invalid.
+         */
       }
 
       // Check if property is required
