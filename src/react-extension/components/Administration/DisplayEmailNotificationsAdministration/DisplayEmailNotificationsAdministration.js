@@ -430,7 +430,7 @@ class DisplayEmailNotificationsAdministration extends React.Component {
                     <input type="checkbox" className="toggle-switch-checkbox checkbox" name="passwordExpiryExpiredUser" disabled={this.hasAllInputDisabled()}
                       onChange={this.handleInputChange} checked={settings.passwordExpiryExpiredUser} id="password-expiry-expired-user-toggle-button"/>
                     <label className="text" htmlFor="password-expiry-expired-user-toggle-button">
-                      <Trans>When a password is expired, notify the owners to change it.</Trans>
+                      <Trans>When a permission is revoked on a consumed password, notify the owner(s) to change it.</Trans>
                     </label>
                   </span>
                 </div>
