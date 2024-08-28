@@ -48,8 +48,8 @@ class PasswordExpiryProSettingsEntity extends Entity {
         },
         "default_expiry_period": {
           "type": "integer",
-          "gte": 1,
-          "lte": 999,
+          "minimum": 1,
+          "maximum": 999,
           "nullable": true,
         },
         "policy_override": {

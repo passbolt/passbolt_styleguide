@@ -55,8 +55,8 @@ class PasswordExpiryDialogViewModel {
       properties: {
         passwordExpiryDurationInDay: {
           type: "integer",
-          lte: 999,
-          gte: -99
+          maximum: 999,
+          minimum: -99
         },
         passwordExpiryDate: {
           type: "string",
