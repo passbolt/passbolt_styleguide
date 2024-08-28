@@ -15,6 +15,19 @@ import {v4 as uuidv4} from "uuid";
 import {defaultUserDto} from "../user/userEntity.test.data";
 
 /**
+ * Build the minimum comment Dto needed
+ * @param {Object} [data] 
+ * @returns {Object}
+ */
+export const minimumCommentDto = (data = {}) => ({
+  user_id: "f848277c-5398-58f8-a82a-72397af2d450",
+  foreign_key: "5fe06fae-4fa0-4a7e-82dd-46d96c63733a",
+  foreign_model: "Resource",
+  content: "minimum content",
+  ...data
+})
+
+/**
  * Build default comment dto.
  * @param {object} data The data to override the default dto.
  * @param {Object} [options]

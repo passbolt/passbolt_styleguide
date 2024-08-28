@@ -356,6 +356,7 @@ class EntitySchema {
    */
   static validatePropTypeNumber(propName, prop, propSchema) {
     let validationError;
+    //@todo: remove gte and lte when all schemas have migrated to minimum, maximum
     if (typeof(propSchema.gte) === 'number') {
       if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.gte)) {
         validationError = EntitySchema.handlePropertyValidationError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`, validationError);
@@ -366,6 +367,18 @@ class EntitySchema {
         validationError = EntitySchema.handlePropertyValidationError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`, validationError);
       }
     }
+
+    if (typeof(propSchema.minimum) === 'number') {
+      if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.minimum)) {
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'minimum', `The ${propName} should be greater or equal to ${propSchema.minimum}.`, validationError);
+      }
+    }
+    if (typeof(propSchema.maximum) === 'number') {
+      if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.maximum)) {
+        validationError = EntitySchema.handlePropertyValidationError(propName, 'maximum', `The ${propName} should be lesser or equal to ${propSchema.maximum}.`, validationError);
+      }
+    }
+
     if (validationError) {
       throw validationError;
     }
