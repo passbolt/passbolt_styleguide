@@ -42,6 +42,10 @@ import {
   schemaValidateFormatXUrl,
   schemaValidateMaxLength,
   schemaValidateMinLength,
+  schemaValidateMinimumIntegerValue,
+  schemaValidateMaximumIntegerValue,
+  schemaValidateMinimumNumberValue,
+  schemaValidateMaximumNumberValue,
   schemaValidateNullable, schemaValidatePattern,
   schemaValidateRequired,
   schemaValidateSimple,
@@ -810,6 +814,66 @@ describe("EntitySchema", () => {
         expect.assertions(1);
         const testObject = {"property": "123"};
         expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaxLength)).not.toThrow();
+      });
+    });
+
+    describe("::minimum", () => {
+      describe("::type::number", () => {
+        it("throws if the prop value is lesser than expected.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 12};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMinimumNumberValue)).toThrowEntityValidationError("property", "minimum");
+        });
+
+        it("validates if the prop value length is above the minimum requirements.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 123};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMinimumNumberValue)).not.toThrow();
+        });
+      });
+
+      describe("::type::integer", () => {
+        it("throws if the prop value is lesser than expected.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 12};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMinimumIntegerValue)).toThrowEntityValidationError("property", "minimum");
+        });
+
+        it("validates if the prop value length is above the minimum requirements.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 123};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMinimumIntegerValue)).not.toThrow();
+        });
+      });
+    });
+
+    describe("::maximum", () => {
+      describe("::type::number", () => {
+        it("throws if the prop value is lesser than expected.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 123};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaximumNumberValue)).toThrowEntityValidationError("property", "maximum");
+        });
+
+        it("validates if the prop value length is above the minimum requirements.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 12};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaximumNumberValue)).not.toThrow();
+        });
+      });
+
+      describe("::type::integer", () => {
+        it("throws if the prop value is lesser than expected.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 123};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaximumIntegerValue)).toThrowEntityValidationError("property", "maximum");
+        });
+
+        it("validates if the prop value length is above the minimum requirements.", () => {
+          expect.assertions(1);
+          const testObject = {"property": 12};
+          expect(() => EntitySchema.validate("TestObject", testObject, schemaValidateMaximumIntegerValue)).not.toThrow();
+        });
       });
     });
 
