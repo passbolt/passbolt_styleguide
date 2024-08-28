@@ -16,9 +16,10 @@
  * Unit tests on DeleteComment in regard of specifications
  */
 
-import {administratorAppContext, commentsMock, defaultAppContext, defaultProps} from "./DeleteComment.test.data";
+import {administratorAppContext, defaultAppContext, defaultProps} from "./DeleteComment.test.data";
 import DisplayResourceDetailsPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {defaultCommentCollectionDto} from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,7 +33,9 @@ describe("Delete comments", () => {
 
   const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
   const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
-  const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
+  const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(defaultCommentCollectionDto({
+    id: '9e56b21f-36f1-44a7-a363-1c6ccbbf09e2'
+  })));
 
   describe("As AD I should be able to delete comments I don’t own", () => {
     describe('As AD I can delete a comment I don’t own', () => {
@@ -149,7 +152,7 @@ describe("Delete comments", () => {
 
       it('I should not be able to delete the comment', async() => {
         await page.title.click();
-        expect(page.displayCommentList.canDelete(2)).toBeFalsy();
+        expect(page.displayCommentList.canDelete(4)).toBeFalsy();
       });
     });
   });
