@@ -313,3 +313,47 @@ export const schemaValidatePattern = {
     }
   }
 };
+
+export const schemaValidateMinimumNumberValue = {
+  "type": "object",
+  "required": [],
+  "properties": {
+    "property": {
+      "type": "number",
+      "minimum": 15
+    }
+  }
+};
+
+export const schemaValidateMaximumNumberValue = {
+  "type": "object",
+  "required": [],
+  "properties": {
+    "property": {
+      "type": "number",
+      "maximum": 15
+    }
+  }
+};
+
+export const schemaValidateMinimumIntegerValue = {
+  "type": "object",
+  "required": [],
+  "properties": {
+    "property": {
+      "type": "integer",
+      "minimum": 15
+    }
+  }
+};
+
+export const schemaValidateMaximumIntegerValue = {
+  "type": "object",
+  "required": [],
+  "properties": {
+    "property": {
+      "type": "integer",
+      "maximum": 15
+    }
+  }
+};

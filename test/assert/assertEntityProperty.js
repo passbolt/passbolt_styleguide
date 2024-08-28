@@ -108,6 +108,18 @@ export const maxLength = (EntityClass, propertyName, maxLength) => {
   assert(EntityClass, propertyName, SUCCESS_MAX_LENGTH_SCENARIO(maxLength), FAIL_MAX_LENGTH_SCENARIO(maxLength), "maxLength");
 };
 
+const SUCCESS_MIN_SCENARIO = min => ([{scenario: "valid minimal value", value: min}]);
+const FAIL_MIN_SCENARIO = min => ([{scenario: "less than minimal value", value: min - 1}]);
+export const minimum = (EntityClass, propertyName, minimum) => {
+  assert(EntityClass, propertyName, SUCCESS_MIN_SCENARIO(minimum), FAIL_MIN_SCENARIO(minimum), "minimum");
+};
+
+const SUCCESS_MAX_SCENARIO = max => ([{scenario: "valid maximal value", value: max}]);
+const FAIL_MAX_SCENARIO = max => ([{scenario: "more than maximal value", value: max + 1}]);
+export const maximum = (EntityClass, propertyName, maximum) => {
+  assert(EntityClass, propertyName, SUCCESS_MAX_SCENARIO(maximum), FAIL_MAX_SCENARIO(maximum), "maximum");
+};
+
 export const SUCCESS_DATETIME_SCENARIO = [
   SCENARIO_YEAR,
   SCENARIO_YEAR_MONTH,
