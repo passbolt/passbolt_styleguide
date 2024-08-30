@@ -13,6 +13,7 @@
  */
 
 import {defaultPermissionTransferDto} from "../permission/permissionTransferEntity.test.data";
+import {v4 as uuidv4} from 'uuid';
 
 /**
  * Build default group transfer dto.
@@ -22,8 +23,25 @@ import {defaultPermissionTransferDto} from "../permission/permissionTransferEnti
 export const defaultGroupTransferDto = (data = {}) => {
   const defaultData = {
     owners: [
-        defaultPermissionTransferDto(data)
+      defaultPermissionTransferDto(data)
     ]
+  };
+
+  return defaultData;
+};
+
+/**
+ * Build default user transfer dto.
+ * @param {object} data The data to override the default dto.
+ * @returns {object}
+ */
+export const defaultUserTransferDto = (data = {}) => {
+  const id = data.id || uuidv4();
+
+  const defaultData = {
+    id: id,
+    group_id: uuidv4(),
+    ...data
   };
 
   return defaultData;
