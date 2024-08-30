@@ -107,8 +107,8 @@ describe("TotpViewModel", () => {
         },
         expectedErrors: {
           secret_key: {pattern: "The secret_key is not valid."},
-          digits: {lte: "The digits should be lesser or equal to 8."},
-          period: {gte: "The period should be greater or equal to 1."}
+          digits: {maximum: "The digits should be lesser or equal to 8."},
+          period: {minimum: "The period should be greater or equal to 1."}
         }
       },
       {
@@ -117,7 +117,7 @@ describe("TotpViewModel", () => {
           digits: 5
         },
         expectedErrors: {
-          digits: {gte: "The digits should be greater or equal to 6."},
+          digits: {minimum: "The digits should be greater or equal to 6."},
         }
       },
     ]).describe("should validate the current data set", scenario => {
