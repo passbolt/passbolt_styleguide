@@ -252,7 +252,6 @@ export const assertArrayItemString = (EntityClass, propertyName) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_STRING_SCENARIOS, FAIL_STRING_SCENARIOS, "type");
 };
 
-
 export const FAIL_ARRAY_UUID_SCENARIOS = [SCENARIO_EMPTY, SCENARIO_STRING];
 export const assertArrayItemUuid = (EntityClass, propertyName) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_UUID_SCENARIOS, FAIL_ARRAY_UUID_SCENARIOS, "format");
@@ -260,4 +259,49 @@ export const assertArrayItemUuid = (EntityClass, propertyName) => {
 
 export const arrayStringMaxLength = (EntityClass, propertyName, maxLength) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_MAX_LENGTH_SCENARIO(maxLength), FAIL_MAX_LENGTH_SCENARIO(maxLength), "maxLength");
+};
+
+export const assertCollection = (CollectionClass, successScenarios, failScenarios, rule) => {
+  successScenarios.forEach(test => {
+    const dto = test.value;
+    expect(() => new CollectionClass(dto)).not.toThrowCollectionValidationError(rule, dto);
+  });
+  failScenarios.forEach(test => {
+    const dto = test.value;
+    expect(() => new CollectionClass(dto)).toThrowCollectionValidationError(rule, dto);
+  });
+};
+
+export const SCENARIO_COLLECTION_EMPTY = {scenario: "collection empty", value: []};
+export const SCENARIO_COLLECTION_STRING = {scenario: "collection of string", value: ["valid-string"]};
+export const SCENARIO_COLLECTION_INTEGER = {scenario: "collection of integer", value: [42]};
+export const SCENARIO_COLLECTION_FLOAT = {scenario: "collection of float", value: [42.2]};
+export const SCENARIO_COLLECTION_OBJECT = {scenario: "collection of object", value: [{str: "string"}]};
+export const SCENARIO_COLLECTION_BOOLEAN = {scenario: "collection of boolean", value: [true, false]};
+
+export const SUCCESS_COLLECTION_SCENARIO = [
+  SCENARIO_COLLECTION_EMPTY,
+  SCENARIO_COLLECTION_STRING,
+  SCENARIO_COLLECTION_INTEGER,
+  SCENARIO_COLLECTION_FLOAT,
+  SCENARIO_COLLECTION_OBJECT,
+  SCENARIO_COLLECTION_BOOLEAN
+];
+export const FAIL_COLLECTION_SCENARIOS = [
+  // SCENARIO_EMPTY, // @todo Empty string is not well handled by schema validator, it fails but due to an assertion of the function parameters.
+  SCENARIO_STRING,
+  SCENARIO_INTEGER,
+  SCENARIO_FLOAT,
+  SCENARIO_OBJECT,
+  SCENARIO_TRUE,
+  // SCENARIO_FALSE // @todo False is not well handled by schema validator, it fails but due to an assertion of the function parameters.
+];
+export const collection = CollectionClass => {
+  assertCollection(CollectionClass, SUCCESS_COLLECTION_SCENARIO, FAIL_COLLECTION_SCENARIOS, "items.type");
+};
+
+const SUCCESS_COLLECTION_MIN_ITEMS_SCENARIO = minLength => ([{scenario: "valid length", value: "a".repeat(minLength).split("")}]);
+const FAIL_COLLECTION_MIN_ITEMS_SCENARIO = minLength => (!minLength ? [] : [{scenario: "too short", value: "a".repeat(minLength - 1).split("")}]);
+export const collectionMinItems = (CollectionClass, minLength) => {
+  assertCollection(CollectionClass, SUCCESS_COLLECTION_MIN_ITEMS_SCENARIO(minLength), FAIL_COLLECTION_MIN_ITEMS_SCENARIO(minLength), "minItems");
 };
