@@ -53,12 +53,12 @@ class TotpViewModel {
         },
         period: {
           type: "number",
-          gte: 1
+          minimum: 1
         },
         digits: {
           type: "number",
-          lte: 8,
-          gte: 6
+          maximum: 8,
+          minimum: 6
         },
         algorithm: {
           type: "string",

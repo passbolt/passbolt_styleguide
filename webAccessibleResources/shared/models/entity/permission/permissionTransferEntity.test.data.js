@@ -16,11 +16,11 @@ import {v4 as uuidv4} from "uuid";
 
 /**
  * Build the default permission transfer Dto needed
- * @param {Object} [data] 
+ * @param {Object} [data]
  * @returns {Object}
  */
 export const defaultPermissionTransferDto = (data = {}) => ({
-    id: uuidv4(),
-    aco_foreign_key: uuidv4(),
-    ...data
+  id: uuidv4(),
+  aco_foreign_key: uuidv4(),
+  ...data
 });

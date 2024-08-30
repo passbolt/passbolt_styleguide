@@ -13,6 +13,7 @@
  */
 import EntityValidationError from "./entityValidationError";
 import Validator from "validator";
+import CollectionValidationError from "./collectionValidationError";
 
 class EntitySchema {
   /**
@@ -95,7 +96,21 @@ class EntitySchema {
    * @throws ValidationError
    */
   static validateArray(name, dto, schema) {
-    return EntitySchema.validateProp('items', dto, schema);
+    let validationError;
+
+    const parsedItems = EntitySchema.validateProp('items', dto, schema);
+
+    if (typeof(schema.minItems) === 'number') {
+      if (!EntitySchema.isGreaterThanOrEqual(dto.length, schema.minItems)) {
+        validationError = EntitySchema.handleCollectionValidationError('minItems', `The items array should contain at least ${schema.minItems} item(s).`, validationError);
+      }
+    }
+
+    if (validationError) {
+      throw validationError;
+    }
+
+    return parsedItems;
   }
 
   /**
@@ -345,29 +360,33 @@ class EntitySchema {
   }
 
   /**
+   * Handle collection validation error.
+   *   instantiate it if it does not exist yet.
+   * @param {string} [rule] The failing rule.
+   * @param {string} [message] The error message.
+   * @param {CollectionValidationError|null} [validationError=null] The collection validation error to add the error to,
+   *   instantiate it if it does not exist yet.
+   * @returns {CollectionValidationError}
+   */
+  static handleCollectionValidationError(rule, message, validationError = null) {
+    validationError = validationError || new CollectionValidationError(`Could not validate collection.`);
+    validationError.addCollectionValidationError(rule, message);
+
+    return validationError;
+  }
+
+  /**
    * Validate a prop of type number
    * Throw an error with the validation details if validation fails
    *
    * @param {string} propName example: name
    * @param {*} prop example 42
-   * @param {object} propSchema example {type: number, gte: 64}
+   * @param {object} propSchema example {type: number, minimum: 64, maximum: 128}
    * @throw {EntityValidationError}
    * @returns void
    */
   static validatePropTypeNumber(propName, prop, propSchema) {
     let validationError;
-    //@todo: remove gte and lte when all schemas have migrated to minimum, maximum
-    if (typeof(propSchema.gte) === 'number') {
-      if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.gte)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'gte', `The ${propName} should be greater or equal to ${propSchema.gte}.`, validationError);
-      }
-    }
-    if (typeof(propSchema.lte) === 'number') {
-      if (!EntitySchema.isLesserThanOrEqual(prop, propSchema.lte)) {
-        validationError = EntitySchema.handlePropertyValidationError(propName, 'lte', `The ${propName} should be lesser or equal to ${propSchema.lte}.`, validationError);
-      }
-    }
-
     if (typeof(propSchema.minimum) === 'number') {
       if (!EntitySchema.isGreaterThanOrEqual(prop, propSchema.minimum)) {
         validationError = EntitySchema.handlePropertyValidationError(propName, 'minimum', `The ${propName} should be greater or equal to ${propSchema.minimum}.`, validationError);
