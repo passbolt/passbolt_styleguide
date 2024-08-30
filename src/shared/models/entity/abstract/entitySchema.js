@@ -13,6 +13,7 @@
  */
 import EntityValidationError from "./entityValidationError";
 import Validator from "validator";
+import CollectionValidationError from "./collectionValidationError";
 
 class EntitySchema {
   /**
@@ -95,7 +96,21 @@ class EntitySchema {
    * @throws ValidationError
    */
   static validateArray(name, dto, schema) {
-    return EntitySchema.validateProp('items', dto, schema);
+    let validationError;
+
+    const parsedItems = EntitySchema.validateProp('items', dto, schema);
+
+    if (typeof(schema.minItems) === 'number') {
+      if (!EntitySchema.isGreaterThanOrEqual(dto.length, schema.minItems)) {
+        validationError = EntitySchema.handleCollectionValidationError('minItems', `The items array should contain at least ${schema.minItems} item(s).`, validationError);
+      }
+    }
+
+    if (validationError) {
+      throw validationError;
+    }
+
+    return parsedItems;
   }
 
   /**
@@ -340,6 +355,22 @@ class EntitySchema {
   static handlePropertyValidationError(propName, rule, message, validationError = null) {
     validationError = validationError || new EntityValidationError(`Could not validate property ${propName}.`);
     validationError.addError(propName, rule, message);
+
+    return validationError;
+  }
+
+  /**
+   * Handle collection validation error.
+   *   instantiate it if it does not exist yet.
+   * @param {string} [rule] The failing rule.
+   * @param {string} [message] The error message.
+   * @param {CollectionValidationError|null} [validationError=null] The collection validation error to add the error to,
+   *   instantiate it if it does not exist yet.
+   * @returns {CollectionValidationError}
+   */
+  static handleCollectionValidationError(rule, message, validationError = null) {
+    validationError = validationError || new CollectionValidationError(`Could not validate collection.`);
+    validationError.addCollectionValidationError(rule, message);
 
     return validationError;
   }

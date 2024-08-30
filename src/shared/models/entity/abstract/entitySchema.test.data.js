@@ -357,3 +357,14 @@ export const schemaValidateMaximumIntegerValue = {
     }
   }
 };
+
+export const schemaValidateSimpleArray = {
+  "type": "array",
+  "items": schemaValidateSimple,
+};
+
+export const schemaValidateMinItemsArrayValue = {
+  "type": "array",
+  "items": schemaValidateSimple,
+  "minItems": 1
+};
