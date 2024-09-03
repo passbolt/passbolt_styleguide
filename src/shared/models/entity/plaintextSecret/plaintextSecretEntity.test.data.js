@@ -156,11 +156,6 @@ export const plaintextSecretPasswordDescriptionAndTotpSchema = (data = {}) => ({
   ...data
 });
 
-/**
- * Resource TOTP resource type DTO.
- * @param {object} data The data to override
- * @returns {object}
- */
 export const plaintextSecretStandaloneTotpSchema = (data = {}) => ({
   type: "object",
   required: [
