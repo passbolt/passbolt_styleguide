@@ -90,7 +90,7 @@ class DeleteUserWithConflicts extends Component {
   getResourcesErrors() {
     const errors = this.props.context.deleteUserWithConflictsDialogProps.errors;
     const resourcesErrors = errors.resources && errors.resources.sole_owner || [];
-    const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.name.localeCompare(resourcesB.name);
+    const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.metadata.name.localeCompare(resourcesB.metadata.name);
     return resourcesErrors.sort(resourcesSorterByName);
   }
 
