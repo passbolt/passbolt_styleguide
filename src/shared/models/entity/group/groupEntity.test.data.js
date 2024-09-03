@@ -56,7 +56,7 @@ export const defaultGroupDto = (data = {}, options = {}) => {
     defaultData.modifier = defaultUserDto();
   }
 
-  if (!data.groupsUsers && options?.withGroupsUsers) {
+  if (!data.groups_users && options?.withGroupsUsers) {
     const groupsUsersCount = typeof options?.withGroupsUsers === "number" ? options?.withGroupsUsers : 1;
     defaultData.groups_users = [];
     for (let i = 0; i < groupsUsersCount; i++) {
