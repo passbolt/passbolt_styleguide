@@ -21,38 +21,17 @@ import {fireEvent, waitFor} from "@testing-library/react";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import DeleteUserWithConflictsPage from "./DeleteUserWithConflicts.test.page";
 import {
-  defaultAppContext,
+  defaultContext,
   defaultProps,
-  mockFoldersError,
-  mockGroupsError,
-  mockResourcesError,
-  mockUsers
 } from "./DeleteUserWithConflicts.test.data";
+import {users} from "../../../../shared/models/entity/user/userEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("See Delete User Dialog", () => {
-  let page; // The page to test against
-  const context = defaultAppContext(); // The applicative context
-  const props = defaultProps(); // The props to pass
-  const deleteUserWithConflictsDialogProps = {
-    user: mockUsers[0],
-    errors: {
-      folders: {
-        sole_owner: mockFoldersError
-      },
-      resources: {
-        sole_owner: mockResourcesError
-      },
-      groups: {
-        sole_manager: mockGroupsError
-      }
-    }
-  };
-
-  const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
+  let page, context, props, mockContextRequest;
 
   describe('As AD I can delete a user', () => {
     /**
@@ -63,7 +42,9 @@ describe("See Delete User Dialog", () => {
      */
 
     beforeEach(() => {
-      context.setContext({deleteUserWithConflictsDialogProps});
+      context = defaultContext(); // The applicative context
+      props = defaultProps(); // The props to pass
+      mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
       page = new DeleteUserWithConflictsPage(context, props);
     });
 
@@ -81,32 +62,33 @@ describe("See Delete User Dialog", () => {
       expect(page.displayDeleteUserWithConflictsDialog.cancelButton).not.toBeNull();
       expect(page.displayDeleteUserWithConflictsDialog.cancelButton.textContent).toBe('Cancel');
       // user name
-      expect(page.displayDeleteUserWithConflictsDialog.userName.textContent).toBe(`${mockUsers[0].profile.first_name} ${mockUsers[0].profile.last_name}`);
+      const userA = users.ada;
+      expect(page.displayDeleteUserWithConflictsDialog.userName.textContent).toBe(`${userA.profile.first_name} ${userA.profile.last_name}`);
     });
 
     it('As AD I should see a toaster message after deleting a user', async() => {
+      const userA = users.ada;
       const submitButton = page.displayDeleteUserWithConflictsDialog.saveButton;
       // Mock the request function to make it the expected result
       const requestMockImpl = jest.fn((message, data) => data);
       mockContextRequest(context, requestMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {
-      });
-
+      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess')
+        .mockImplementation(() => {});
       await page.displayDeleteUserWithConflictsDialog.click(submitButton);
       const permissionTransfer = {
         owners: [
-          {aco_foreign_key: "8e3874ae-4b40-590b-968a-418f704b9d9a", id: "8dfd59a7-852d-5c57-bd45-75c28bbb3f6c"},
-          {aco_foreign_key: "f9f79749-4bce-4e61-8016-68c942a8f2d9", id: "640ebc06-5ec1-5322-a1ae-6120ed2f3a77"},
-          {aco_foreign_key: "9e03fd73-04c0-5514-95fa-1a6cf2c7c093", id: "6aada140-fe8b-5e69-a90f-ae0cec6d3dcf"},
-          {aco_foreign_key: "6592f71b-8874-5e91-bf6d-829b8ad188f5", id: "c5355878-fb96-5c21-8bb5-e8de4b24db8b"},
-          {aco_foreign_key: "7ecd7376-8540-58c1-88d9-678c027d464a", id: "e8ffb030-09f5-54cd-ad64-68e3e983a3d4"}
+          {aco_foreign_key: context.deleteUserWithConflictsDialogProps.errors.resources.sole_owner[0].id,
+            id: context.deleteUserWithConflictsDialogProps.errors.resources.sole_owner[0].permissions[1].id},
+          {aco_foreign_key: context.deleteUserWithConflictsDialogProps.errors.folders.sole_owner[0].id,
+            id: context.deleteUserWithConflictsDialogProps.errors.folders.sole_owner[0].permissions[1].id},
         ],
         managers: [
-          {group_id: "469edf9d-ca1e-5003-91d6-3a46755d5a50", id: "a932a3ce-82bc-59b6-ac4e-bf325435e534"}
+          {group_id: context.deleteUserWithConflictsDialogProps.errors.groups.sole_manager[0].id,
+            id: context.deleteUserWithConflictsDialogProps.errors.groups.sole_manager[0].groups_users[1].id}
         ],
       };
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", mockUsers[0].id, permissionTransfer);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.users.delete", userA.id, permissionTransfer);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
 

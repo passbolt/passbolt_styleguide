@@ -155,7 +155,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
           entropy_minimum: 30,
         },
         expectedErrors: {
-          entropy_minimum: {minimum: "The entropy_minimum should be greater or equal to 50."},
+          entropy_minimum: {gte: "The entropy_minimum should be greater or equal to 50."},
         }
       },
       {
@@ -163,7 +163,7 @@ describe("UserPassphrasePoliciesViewModel", () => {
           entropy_minimum: 250,
         },
         expectedErrors: {
-          entropy_minimum: {maximum: "The entropy_minimum should be lesser or equal to 224."},
+          entropy_minimum: {lte: "The entropy_minimum should be lesser or equal to 224."},
         }
       }
     ]).describe("should validate the current data set", scenario => {

@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import DeleteUser from "./DeleteUser";
 import {defaultAppContext, mockUser} from "./DeleteUser.test.data";
 
-
 export default {
   title: 'Components/User/DeleteUser',
   component: DeleteUser

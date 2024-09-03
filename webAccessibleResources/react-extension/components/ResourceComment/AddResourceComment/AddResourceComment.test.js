@@ -12,10 +12,9 @@
  * @since         2.11.0
  */
 
-import {defaultAppContext, defaultProps, tooLongComment} from "./AddResourceComment.test.data";
+import {commentsMock, defaultAppContext, defaultProps, tooLongComment} from "./AddResourceComment.test.data";
 import DisplayResourceDetailsCommentPage from "../../ResourceDetails/DisplayResourceDetails/DisplayResourceDetailsComment.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
-import {defaultCommentCollectionDto} from "../../../../shared/models/entity/comment/commentEntityCollection.test.data";
 
 /**
  * Unit tests on AddComponent in regard of specifications
@@ -33,7 +32,7 @@ describe("Add comments", () => {
   // The mocked context port request
   const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
   const noneCommentFoundRequestMockImpl = jest.fn(() => Promise.resolve([]));
-  const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(defaultCommentCollectionDto()));
+  const commentsFoundRequestMockImpl = jest.fn(() => Promise.resolve(commentsMock));
 
   describe("Scenario: As LU I should start editing if there is no comment yet", () => {
     /**

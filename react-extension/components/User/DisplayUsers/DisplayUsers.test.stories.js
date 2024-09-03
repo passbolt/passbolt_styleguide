@@ -16,7 +16,6 @@ import React from "react";
 import DisplayUsers from "./DisplayUsers";
 import {defaultContext, defaultProps, propsWithFirstUserAttentionRequired} from "./DisplayUsers.test.data";
 
-
 export default {
   title: 'Components/User/DisplayUsers',
   component: DisplayUsers

@@ -47,8 +47,8 @@ class UserPassphrasePoliciesEntity extends Entity {
         },
         "entropy_minimum": {
           "type": "integer",
-          "minimum": 50,
-          "maximum": 224,
+          "gte": 50,
+          "lte": 224,
         },
         "external_dictionary_check": {
           "type": "boolean"
