@@ -318,7 +318,7 @@ class EditStandaloneTotp extends Component {
     const error = this.state.errors?.getError('period');
     if (error?.type) {
       return this.translate("TOTP expiry is required.");
-    } else if (error?.gte) {
+    } else if (error?.minimum) {
       return this.translate("TOTP expiry must be greater than 0.");
     }
     return null;
@@ -332,7 +332,7 @@ class EditStandaloneTotp extends Component {
     const error = this.state.errors?.getError('digits');
     if (error?.type) {
       return this.translate("TOTP length is required.");
-    } else if (error?.gte || error?.lte) {
+    } else if (error?.minimum || error?.maximum) {
       return this.translate("TOTP length must be between 6 and 8.");
     }
     return null;
