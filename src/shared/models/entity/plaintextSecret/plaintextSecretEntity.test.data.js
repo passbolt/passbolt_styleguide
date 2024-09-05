@@ -12,6 +12,12 @@
  * @since         4.3.0
  */
 
+/*
+ * ==================================================
+ * DTOs
+ * ==================================================
+ */
+
 /**
  * Resource with string password DTO.
  * @param {object} data The data to override
@@ -61,6 +67,128 @@ export const plaintextSecretTotpDto = (data = {}) => ({
     digits: 6,
     period: 30,
     secret_key: "i73r3rn22atgcmdlqmotr2q7erukgmri46bvzxzlc6jbkckmtlpa",
+  },
+  ...data
+});
+
+/*
+ * ==================================================
+ * Schemas
+ * ==================================================
+ */
+
+export const plaintextSecretStringSchema = (data = {}) => ({
+  type: "object",
+  required: [
+    "password"
+  ],
+  properties: {
+    password: {
+      type: "string",
+      maxLength: 4096
+    },
+  },
+  ...data
+});
+
+export const plaintextSecretPasswordAndDescriptionSchema = (data = {}) => ({
+  type: "object",
+  required: [
+    "password"
+  ],
+  properties: {
+    password: {
+      type: "string",
+      maxLength: 4096
+    },
+    description: {
+      type: "string",
+      maxLength: 10000,
+      nullable: true,
+    },
+  },
+  ...data,
+});
+
+export const plaintextSecretPasswordDescriptionAndTotpSchema = (data = {}) => ({
+  type: "object",
+  required: [
+    "password"
+  ],
+  properties: {
+    password: {
+      type: "string",
+      maxLength: 4096
+    },
+    description: {
+      type: "string",
+      maxLength: 10000,
+      nullable: true,
+    },
+    totp: {
+      type: "object",
+      required: [
+        "secret_key",
+        "digits",
+        "algorithm"
+      ],
+      properties: {
+        algorithm: {
+          type: "string",
+          minLength: 4,
+          maxLength: 6
+        },
+        secret_key: {
+          type: "string",
+          maxLength: 1024
+        },
+        digits: {
+          type: "number",
+          minimum: 6,
+          maximum: 8
+        },
+        period: {
+          type: "number"
+        }
+      }
+    }
+  },
+  ...data
+});
+
+export const plaintextSecretStandaloneTotpSchema = (data = {}) => ({
+  type: "object",
+  required: [
+    "totp"
+  ],
+  properties: {
+    totp: {
+      type: "object",
+      required: [
+        "secret_key",
+        "digits",
+        "algorithm"
+      ],
+      properties: {
+        algorithm: {
+          type: "string",
+          minLength: 4,
+          maxLength: 6
+        },
+        secret_key: {
+          type: "string",
+          maxLength: 1024
+        },
+        digits: {
+          type: "number",
+          minimum: 6,
+          maximum: 8
+        },
+        period: {
+          type: "number"
+        }
+      }
+    }
   },
   ...data
 });
