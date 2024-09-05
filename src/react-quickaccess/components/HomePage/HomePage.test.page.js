@@ -12,12 +12,13 @@
  * @since         4.1.0
  */
 
-import {render} from "@testing-library/react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
 import React from "react";
-import {BrowserRouter as Router} from "react-router-dom";
+import {Router} from "react-router-dom";
 import HomePage from "./HomePage";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
+import {createMemoryHistory} from "history";
 
 /**
  * The HomePage component represented as a page
@@ -30,11 +31,59 @@ export default class HomePagePage {
   constructor(props) {
     this._page = render(
       <MockTranslationProvider>
-        <Router>
+        <Router history={props.history || createMemoryHistory()}>
           <HomePage {...props}/>
         </Router>
       </MockTranslationProvider>
     );
+  }
+
+  /**
+   * Returns the suggested resources if any
+   * @returns {NodeListOf<HTLMElement>}
+   */
+  get suggestedResourcesContent() {
+    return this._page.container.querySelectorAll(".list-section .list-items")[0];
+  }
+
+  /**
+   * Returns the suggested resources if any
+   * @returns {NodeListOf<HTLMElement>}
+   */
+  get suggestedResourcesEntries() {
+    return this._page.container.querySelectorAll(".list-section .list-items .suggested-resource-entry");
+  }
+
+  /**
+   * Returns a suggested resource if any
+   * @returns {HTLMElement | null}
+   */
+  getSuggestedResourceItem(index) {
+    return this.suggestedResourcesEntries?.[index] || null;
+  }
+
+  /**
+   * Returns a browsed resource if any
+   * @returns {HTLMElement | null}
+   */
+  getBrowsedResourceItem(index) {
+    return this.browsedResources?.[index] || null;
+  }
+
+  /**
+   * Returns the list section filter entries
+   * @returns {NodeListOf<Element>}
+   */
+  get browsedResources() {
+    return this._page.container.querySelectorAll(".list-section .list-items .browse-resource-entry");
+  }
+
+  /**
+   * Returns the list section filter entries
+   * @returns {NodeListOf<Element>}
+   */
+  get browsedResourcesContent() {
+    return this._page.container.querySelectorAll(".list-section .list-items")[0];
   }
 
   /**
@@ -49,7 +98,7 @@ export default class HomePagePage {
    * Returns the list section filter entries
    * @returns {NodeListOf<Element>}
    */
-  get filterEntries() {
+  get browserEntries() {
     return this._page.container.querySelectorAll(".list-section .list-items")[1].querySelectorAll(".filter-entry");
   }
 
@@ -58,14 +107,58 @@ export default class HomePagePage {
    * @returns {boolean}
    */
   get hasTagFilterEntry() {
-    return this.filterEntries.length > 2;
+    return this.browserEntries.length > 2;
+  }
+
+  /**
+   * Returns the Filters section in the browse entries
+   * @returns {HTMLElement}
+   */
+  get filtersSection() {
+    return this.browserEntries[0].querySelector('.filter-title');
+  }
+
+  /**
+   * Returns the Groups section in the browse entries
+   * @returns {HTMLElement}
+   */
+  get groupsSection() {
+    return this.browserEntries[1].querySelector('.filter-title');
   }
 
   /**
    * Returns the tag filter entry
-   * @returns {string}
+   * @returns {HTMLElement}
    */
-  get tagFilterEntryTitle() {
-    return this.filterEntries[2].querySelector('.filter-title').textContent;
+  get tagsSection() {
+    return this.browserEntries[2].querySelector('.filter-title');
+  }
+
+  /**
+   * Returns error message if any
+   * @returns {HTMLElement}
+   */
+  get useOnThisTabError() {
+    return this._page.container.querySelector(".submit-wrapper .error-message");
+  }
+
+  /**
+   * Simulates a click on the nth suggested resource given by the index
+   * @returns {Promise<void>}
+   */
+  async clickOnSuggestedResource(index) {
+    const element = this.getSuggestedResourceItem(index)?.querySelector("button");
+    fireEvent.click(element, {button: 0});
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a click on the nth suggested resource given by the index
+   * @returns {Promise<void>}
+   */
+  async clickOnBrowsedResource(index) {
+    const element = this.getBrowsedResourceItem(index)?.querySelector(".inline-resource-entry");
+    fireEvent.click(element, {button: 0});
+    await waitFor(() => {});
   }
 }
