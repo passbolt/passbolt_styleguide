@@ -115,7 +115,7 @@ class DisplayResourceDetailsDescription extends React.Component {
     this.setState({isSecretDecrypting: true});
 
     try {
-      const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", this.resource.id);
+      const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.resource.id);
       this.setState({
         description: plaintextSecretDto.description,
         plaintextSecretDto: plaintextSecretDto,

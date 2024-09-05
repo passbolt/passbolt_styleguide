@@ -79,7 +79,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
   mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
-  mockPort.addRequestListener("passbolt.secret.decrypt", mockRequestSecretDecrypt);
+  mockPort.addRequestListener("passbolt.secret.find-by-resource-id", mockRequestSecretDecrypt);
   mockPort.addRequestListener("passbolt.comments.create", mockRequestCommentsCreate);
   mockPort.addRequestListener("passbolt.comments.find-all-by-resource", mockRequestCommentsFind);
   mockPort.addRequestListener("passbolt.resource.update-description", mockRequestResourceUpdateDescription);

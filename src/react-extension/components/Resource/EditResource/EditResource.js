@@ -861,7 +861,7 @@ class EditResource extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    return this.props.context.port.request("passbolt.secret.decrypt", this.props.resourceId);
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resourceId);
   }
 
   /*

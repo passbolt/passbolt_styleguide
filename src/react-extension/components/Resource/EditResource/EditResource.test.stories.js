@@ -16,7 +16,7 @@ export default {
 
 const props = defaultProps();
 const port = new MockPort();
-port.addRequestListener("passbolt.secret.decrypt", () => ({password: "secret-decrypted", description: "description"}));
+port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({password: "secret-decrypted", description: "description"}));
 props.context.port = port;
 props.context.setContext = () => {};
 

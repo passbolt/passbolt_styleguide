@@ -85,7 +85,7 @@ class CellLink extends Component {
 }
 
 CellLink.propTypes = {
-  value: PropTypes.string.isRequired, // The value to display
+  value: PropTypes.string, // The value to display
   onClick: PropTypes.func, // The onClick event function
 };
 

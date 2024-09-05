@@ -257,14 +257,14 @@ describe("Display Resources", () => {
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password'}));
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       await page.resource(1).selectPassword();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
       await page.resource(4).selectTotp();
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[3].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[3].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
     });
@@ -293,14 +293,14 @@ describe("Display Resources", () => {
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementationOnce(() => {});
       await page.resource(1).selectViewPassword();
       expect(page.resource(1).password).toBe('secret-password');
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[0].id);
       await page.resource(1).selectViewPassword();
       expect(page.resource(1).password).toBe('Copy password to clipboard');
 
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => ({password: 'secret-password', description: "", totp: totp}));
       await page.resource(4).selectViewTotp();
       const code = TotpCodeGeneratorService.generate(totp);
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resourceWorkspaceContext.filteredResources[3].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resourceWorkspaceContext.filteredResources[3].id);
       expect(page.resource(4).totp.replaceAll(/\s+/g, "")).toBe(code);
       expect(props.resourceWorkspaceContext.onResourcePreviewed).toHaveBeenCalledTimes(2);
       await page.resource(4).selectViewTotp();
