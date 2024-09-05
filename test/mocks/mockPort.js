@@ -89,7 +89,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.tags.update", mockRequestUpdateTags);
   mockPort.addRequestListener("passbolt.tags.update-resource-tags", mockRequestTagsUpdateResourceTags);
   mockPort.addRequestListener("passbolt.tags.delete", mockRequestDeleteTags);
-  mockPort.addRequestListener("passbolt.resources.find-permissions", mockRequestResourcesFindPermissions);
+  mockPort.addRequestListener("passbolt.permissions.find-aco-permissions-for-display", mockRequestResourcesFindPermissions);
   mockPort.addRequestListener("passbolt.favorite.add", mockRequestResourceAddFavorite);
   mockPort.addRequestListener("passbolt.favorite.delete", mockRequestResourceDeleteFavorite);
   mockPort.addRequestListener("passbolt.resources.delete-all", mockRequestResourcesDelete);
