@@ -16,7 +16,6 @@ import MockPort from "../../src/react-extension/test/mock/MockPort";
 import mockRequestFoldersCreate from "./request/mockRequestFoldersCreate";
 import mockRequestFoldersDelete from "./request/mockRequestFoldersDelete";
 import mockRequestFoldersUpdate from "./request/mockRequestFoldersUpdate";
-import mockRequestFoldersFindPermissions from "./request/mockRequestFoldersFindPermissions";
 import mockRequestFoldersUpdateLocalStorage from "./request/mockRequestFoldersUpdateLocalStorage";
 import mockRequestResourcesCreate from "./request/mockRequestResourcesCreate";
 import mockRequestResourcesUpdate from "./request/mockRequestResourcesUpdate";
@@ -67,7 +66,6 @@ export default storage => {
   mockPort.addRequestListener("passbolt.folders.create", mockRequestFoldersCreate);
   mockPort.addRequestListener("passbolt.folders.delete", mockRequestFoldersDelete);
   mockPort.addRequestListener("passbolt.folders.update", mockRequestFoldersUpdate);
-  mockPort.addRequestListener("passbolt.folders.find-permissions", mockRequestFoldersFindPermissions);
   mockPort.addRequestListener("passbolt.user.get", mockRequestUserGet);
   mockPort.addRequestListener("passbolt.role.get-all", mockRequestRoleGet);
   mockPort.addRequestListener("passbolt.organization-settings.get", mockRequestSiteSettings);
