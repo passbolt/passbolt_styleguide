@@ -1375,7 +1375,7 @@
   "The resource has been deleted successfully._other": "Les ressources ont été supprimées avec succès.",
   "The resource has been marked as expired._one": "La ressource a été marquée comme expirée.",
   "The resource has been marked as expired._other": "Les ressources ont été marquées comme expirées.",
-  "This resource does not need an expiry date._one": "This resource does not need an expiry date.",
+  "This resource does not need an expiry date._one": "Cette ressource ne nécessite pas de date d'expiration.",
   "This resource does not need an expiry date._other": "Ces ressources ne nécessitent pas de date d'expiration.",
   "Unable to mark the resource as expired._one": "Impossible de marquer la ressource comme expirée.",
   "Unable to mark the resource as expired._other": "Impossible de marquer les ressources comme expirées."
