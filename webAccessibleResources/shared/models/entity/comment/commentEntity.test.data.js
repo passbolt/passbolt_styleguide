@@ -16,7 +16,7 @@ import {defaultUserDto} from "../user/userEntity.test.data";
 
 /**
  * Build the minimum comment Dto needed
- * @param {Object} [data] 
+ * @param {Object} [data]
  * @returns {Object}
  */
 export const minimumCommentDto = (data = {}) => ({
@@ -25,7 +25,7 @@ export const minimumCommentDto = (data = {}) => ({
   foreign_model: "Resource",
   content: "minimum content",
   ...data
-})
+});
 
 /**
  * Build default comment dto.
@@ -50,7 +50,7 @@ export const defaultCommentDto = (data = {}, options = {}) => {
     "modified_by": "f848277c-5398-58f8-a82a-72397af2d450",
     "user_id": "f848277c-5398-58f8-a82a-72397af2d450",
     ...data
-  }
+  };
 
   if (!data.creator && options?.withCreator) {
     defaultData.creator = defaultUserDto();

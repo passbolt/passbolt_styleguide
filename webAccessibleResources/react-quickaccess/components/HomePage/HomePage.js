@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.10.0
+ * @since         4.1.0
  */
 
 import React from "react";
@@ -21,61 +21,77 @@ import Icon from "../../../shared/components/Icons/Icon";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import memoize from "memoize-one";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
-const BROWSED_RESOURCES_LIMIT = 500;
+const BROWSED_RESOURCES_LIMIT = 100;
 
 class HomePage extends React.Component {
+  /**
+   * Should be true after the first HomePage mount
+   * @type {boolean}
+   * @private
+   */
+  static isInitialised = false;
+
+  /**
+   * Default constructor
+   * @param props The component props
+   */
   constructor(props) {
     super(props);
-    this.state = this.initState();
+    this.state = this.defaultState;
     this.initEventHandlers();
   }
 
-  componentDidMount() {
-    // Reset the search and any search history.
-    this.props.context.searchHistory = [];
-    this.props.context.updateSearch("");
-    this.props.context.focusSearch();
-    this.findResources();
-    this.getActiveTabUrl();
-  }
-
-  initEventHandlers() {
-    this.handleStorageChange = this.handleStorageChange.bind(this);
-    this.props.context.storage.onChanged.addListener(this.handleStorageChange);
-    this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
-  }
-
-  initState() {
+  /**
+   * Returns the component default state
+   * @return {object}
+   */
+  get defaultState() {
     return {
-      resources: null,
       activeTabUrl: null,
       usingOnThisTab: false
     };
   }
 
-  handleStorageChange(changes) {
-    if (changes.resources) {
-      const resources = changes.resources.newValue;
-      sortResourcesAlphabetically(resources);
-      this.setState({resources});
+  /**
+   * ComponentDidMount hook.
+   * Invoked immediately after component is inserted into the tree
+   */
+  componentDidMount() {
+    /*
+     * Given the specific nature of QuickA's usage—focused on quickly consuming and creating passwords rather
+     * than ongoing resource management — The local storage should be updated only the first time the application
+     * is open.
+     */
+    if (!HomePage.isInitialised) {
+      this.props.resourcesLocalStorageContext.updateLocalStorage();
+      HomePage.isInitialised = true;
     }
+
+    // Reset the search and any search history.
+    this.props.context.searchHistory = [];
+    this.props.context.updateSearch("");
+    this.props.context.focusSearch();
+
+    this.loadActiveTabUrl();
   }
 
-  async findResources() {
-    const storageData = await this.props.context.storage.local.get(["resources"]);
-    if (storageData.resources) {
-      const resources = storageData.resources;
-      sortResourcesAlphabetically(resources);
-      this.setState({resources});
-    }
-    this.props.context.port.request('passbolt.resources.update-local-storage');
+  /**
+   * Initialize the component event handlers
+   */
+  initEventHandlers() {
+    this.handleUseOnThisTabClick = this.handleUseOnThisTabClick.bind(this);
   }
 
-  async getActiveTabUrl() {
+  /**
+   * Loads the currently active tab URL, if any, into the state.
+   * @returns {Promise<void>}
+   */
+  async loadActiveTabUrl() {
     try {
       const activeTabUrl = await this.props.context.port.request("passbolt.active-tab.get-url", this.props.context.getOpenerTabId());
       this.setState({activeTabUrl});
@@ -86,11 +102,11 @@ class HomePage extends React.Component {
 
   /**
    * Get the resources for the suggested section.
+   * @param {Array} resources The list of resources to filter.
    * @param {string} activeTabUrl the active tab url
-   * @param {array} resources The list of resources to filter.
-   * @return {array} The list of filtered resources.
+   * @return {Array<Object>} The list of filtered resources.
    */
-  getSuggestedResources(activeTabUrl, resources) {
+  filterSuggestedResources =  memoize((resources, activeTabUrl) => {
     if (!activeTabUrl) {
       return [];
     }
@@ -98,12 +114,9 @@ class HomePage extends React.Component {
     const suggestedResources = [];
 
     for (const i in resources) {
-      if (!resources[i].metadata.uris?.[0]) {
-        continue;
-      }
-
-      if (resources[i].metadata.uris?.length > 0 && canSuggestUrl(activeTabUrl, resources[i].metadata.uris[0]) && this.isPasswordResource(resources[i].resource_type_id)) {
-        suggestedResources.push(resources[i]);
+      const resource = resources[i];
+      if (resource.metadata?.uris?.[0] && this.isPasswordResource(resource.resource_type_id) && canSuggestUrl(activeTabUrl, resource.metadata.uris[0])) {
+        suggestedResources.push(resource);
         if (suggestedResources.length === SUGGESTED_RESOURCES_LIMIT) {
           break;
         }
@@ -111,33 +124,30 @@ class HomePage extends React.Component {
     }
 
     // Sort the resources by uri lengths, the greater on top.
-    suggestedResources.sort((a, b) => {
-      const aUrisLength = a.metadata.uris?.[0]?.length || 0;
-      const bUrisLength = b.metadata.uris?.[0]?.length || 0;
+    return suggestedResources.sort((a, b) => {
+      const aUrisLength = a.metadata.uris[0].length || 0;
+      const bUrisLength = b.metadata.uris[0].length || 0;
       return bUrisLength - aUrisLength;
     });
-
-    return suggestedResources;
-  }
+  });
 
   /**
    * Get the resources for the browse section.
-   * @return {array} The list of resources.
+   * @param {array} resources The list of resources to filter.
+   * @param {string} search the current search to apply
+   * @returns {Array<Object>} The list of resources.
    */
-  getBrowsedResources() {
-    let browsedResources = this.state.resources.slice(0);
-
-    if (this.props.context.search.length) {
-      /*
-       * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
-       * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-       */
-      browsedResources = filterResourcesBySearch(browsedResources, this.props.context.search);
+  filterSearchedResources =  memoize((resources, search) => {
+    if (search && resources) {
+      return filterResourcesBySearch(resources, search, BROWSED_RESOURCES_LIMIT);
     }
+    return [];
+  });
 
-    return browsedResources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
-
+  /**
+   * Handles the click event of the button "Use on this tab".
+   * @returns {Promise<void>}
+   */
   async handleUseOnThisTabClick(resource) {
     this.setState({usingOnThisTab: true});
     try {
@@ -158,35 +168,28 @@ class HomePage extends React.Component {
 
   /**
    * Is password resource
-   * @return {boolean}
+   * @returns {boolean}
    */
   isPasswordResource(resourceId) {
-    return !this.areResourceTypesEnabled || this.props.context.resourceTypesSettings.assertResourceTypeIdHasPassword(resourceId);
+    return this.props.context.resourceTypesSettings.assertResourceTypeIdHasPassword(resourceId);
   }
 
   /**
-   * Are resource types enabled resource
-   * @return {boolean}
+   * Component renderer.
+   * @returns {JSX}
    */
-  get areResourceTypesEnabled() {
-    return this.props.context.resourceTypesSettings.areResourceTypesEnabled();
-  }
-
   render() {
-    const isReady = this.state.resources !== null && this.props.context.resourceTypesSettings != null;
-    const showSuggestedSection = !this.props.context.search.length;
-    const showBrowsedResourcesSection = this.props.context.search.length > 0;
-    const showFiltersSection = !this.props.context.search.length;
+    const isReady = this.props.resources !== null && this.props.context.resourceTypesSettings != null;
+    const hasSearch = this.props.context.search?.length > 0;
+    const showSuggestedSection = !hasSearch;
+    const showBrowsedResourcesSection = hasSearch;
+    const showFiltersSection = !hasSearch;
     const canUseTag = this.props.context.siteSettings.canIUse('tags') && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
     let browsedResources, suggestedResources;
 
     if (isReady) {
-      if (showSuggestedSection) {
-        suggestedResources = this.getSuggestedResources(this.state.activeTabUrl, this.state.resources);
-      }
-      if (showBrowsedResourcesSection) {
-        browsedResources = this.getBrowsedResources();
-      }
+      browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search);
+      suggestedResources = this.filterSuggestedResources(this.props.resources, this.state.activeTabUrl);
     }
 
     return (
@@ -313,7 +316,9 @@ class HomePage extends React.Component {
 HomePage.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  resources: PropTypes.array, // The resources from the local storage
+  resourcesLocalStorageContext: PropTypes.object, // The resources local storage context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withTranslation('common')(HomePage))));
+export default withAppContext(withRbac(withRouter(withResourcesLocalStorage(withTranslation('common')(HomePage)))));

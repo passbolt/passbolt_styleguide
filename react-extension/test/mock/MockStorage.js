@@ -30,8 +30,13 @@ class MockStorage {
     this.local = new LocalStorage(this.changeCallbacks);
     this.onChanged = {
       addListener: listener => {
-        console.debug("browser.storage.onChanged.addListener");
         this.changeCallbacks.push(listener);
+      },
+      removeListener: listener => {
+        const listenerIndex = this.changeCallbacks.indexOf(listener);
+        if (listenerIndex > -1) {
+          this.changeCallbacks.splice(listenerIndex, 1);
+        }
       }
     };
   }

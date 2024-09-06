@@ -20,13 +20,11 @@ import {defaultUserTransferDto} from "../group/groupTransfer.test.data";
  * @param {object} data The data to override the default dto.
  * @returns {object}
  */
-export const defaultUserDeleteTransferDto = (data = {}) => {
-  return {
-    owners: [
-      defaultPermissionTransferDto(data)
-    ],
-    managers: [
-      defaultUserTransferDto(data)
-    ]
-  };
-};
+export const defaultUserDeleteTransferDto = (data = {}) => ({
+  owners: [
+    defaultPermissionTransferDto(data)
+  ],
+  managers: [
+    defaultUserTransferDto(data)
+  ]
+});

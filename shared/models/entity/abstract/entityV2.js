@@ -26,6 +26,7 @@ class EntityV2 extends Entity {
   /**
    * @inheritDoc
    * @param {boolean} [options.validate=true] validate the given props against the entity schema and the build rules.
+   * @param {object} [options.schema] dynamic schema to be used for data validation.
    *
    * Additionally to the Entity, the EntityV2 will:
    * - Validate the entity schema.
@@ -40,7 +41,7 @@ class EntityV2 extends Entity {
     this.marshall();
     const validate = options?.validate ?? true;
     if (validate) {
-      this.validateSchema();
+      this.validateSchema(options?.schema);
       this.validateBuildRules(options?.validateBuildRules);
     }
   }
@@ -63,13 +64,14 @@ class EntityV2 extends Entity {
   /**
    * Validate the entity schema.
    * Note: the entity schema will be created on first call and cached into a class static property.
+   * @param {object} [schema] dynamic schema to be used for data validation instead of the cachedSchema.
    * @private
    */
-  validateSchema() {
+  validateSchema(schema = null) {
     this._props = EntitySchema.validate(
       this.constructor.name,
       this._props,
-      this.cachedSchema
+      schema ?? this.cachedSchema
     );
   }
 

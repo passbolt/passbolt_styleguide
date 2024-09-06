@@ -2,7 +2,7 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import ShareDialog from "./ShareDialog";
 import AppContext from "../../../shared/context/AppContext/AppContext";
-import {autocompleteResult, defaultAppContext, resources} from "./ShareDialog.test.data";
+import {defaultAppContext, resources} from "./ShareDialog.test.data";
 
 export default {
   title: 'Components/Share/ShareDialog',
@@ -17,12 +17,12 @@ const context = defaultAppContext({
     resourcesIds: resources.map(resource => resource.id)
   },
   port: {
-    request: path => {
+    request: (path, option) => {
       switch (path) {
         case 'passbolt.share.get-resources':
           return resources;
         case 'passbolt.share.search-aros':
-          return autocompleteResult;
+          return context.users.filter(user => user.username.indexOf(option) !== -1);
       }
     }
   },

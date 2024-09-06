@@ -25,24 +25,35 @@ export const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"
  * Search on the name, the username, the primary uri and the description of the resources.
  * @param {array} resources The list of resources to filter.
  * @param {string} needle The needle to search.
- * @return {array} The filtered resources.
+ * @param {number} [limit = Number.MAX_SAFE_INTEGER] the count limit of results.
+ * @returns {array} The filtered resources.
  */
-export const filterResourcesBySearch = (resources, needle) => {
+export const filterResourcesBySearch = (resources, needle, limit = Number.MAX_SAFE_INTEGER) => {
   // Split the search by words
   const needles = needle.split(/\s+/);
   // Prepare the regexes for each word contained in the search.
   const regexes = needles.map(needle => new RegExp(escapeRegExp(needle), 'i'));
 
+  let filterCount = 0;
   return resources.filter(resource => {
-    let match = true;
+    if (filterCount >= limit) {
+      return false;
+    }
+
     for (const i in regexes) {
       // To match a resource would have to match all the words of the search.
-      match &= (regexes[i].test(resource.metadata.name)
+      const match = (regexes[i].test(resource.metadata.name)
         || regexes[i].test(resource.metadata.username)
         || regexes[i].test(resource.metadata.uris?.[0])
         || regexes[i].test(resource.metadata.description));
+
+      if (!match) {
+        //early exit, there is no need to search for more matches in that case
+        return false;
+      }
     }
 
-    return match;
+    filterCount++;
+    return true;
   });
 };
