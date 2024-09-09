@@ -1,69 +1,72 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.0.0
+ */
+
 import PropTypes from "prop-types";
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import memoize from "memoize-one";
 
-const BROWSED_RESOURCES_LIMIT = 500;
-const BROWSED_TAGS_LIMIT = 500;
+const BROWSED_RESOURCES_LIMIT = 100;
+const BROWSED_TAGS_LIMIT = 100;
 
 class FilterResourcesByTagPage extends React.Component {
+  /**
+   * Default constructor
+   * @param props The component props
+   */
   constructor(props) {
     super(props);
-    this.state = this.initState();
     this.initEventHandlers();
   }
 
+  /**
+   * Returns the currently selected tag if any, null otherwise
+   * @returns {Object|null}
+   */
+  get selectedTag() {
+    return this.props.location.state?.selectedTag || null;
+  }
+
+  /**
+   * ComponentDidMount hook.
+   * Invoked immediately after component is inserted into the tree
+   */
   componentDidMount() {
     this.props.context.focusSearch();
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }
-
-    /*
-     * If a tag is selected, the component aims to display the resources marked by this tag.
-     * Load the resources
-     */
-    if (this.props.match.params.id) {
-      this.findAndLoadResources();
-    } else {
-      // Otherwise list the tags the user has resources marked with.
-      this.findAndLoadTags();
-    }
   }
 
+  /**
+   * Initializes event handlers
+   */
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleSelectTagClick = this.handleSelectTagClick.bind(this);
     this.handleSelectResourceClick = this.handleSelectResourceClick.bind(this);
   }
 
-  initState() {
-    let selectedTag = null;
-
-    // The selected tag to use to filter the resources is passed via the history.push state option.
-    if (this.props.location.state && this.props.location.state.selectedTag) {
-      selectedTag = this.props.location.state.selectedTag;
-    }
-
-    return {
-      selectedTag: selectedTag,
-      tags: null,
-      resources: null
-    };
-  }
-
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
+   * Handles the click event on the "Go back" button.
+   * @param {Event} ev
    */
-  get translate() {
-    return this.props.t;
-  }
-
   handleGoBackClick(ev) {
     ev.preventDefault();
     // Clean the search and remove the search history related to this page.
@@ -72,15 +75,25 @@ class FilterResourcesByTagPage extends React.Component {
     this.props.history.goBack();
   }
 
-  handleSelectTagClick(ev, tagId) {
+  /**
+   * Handles the click event on a tag from the list.
+   * @param {Event} ev
+   * @param {Object} tag
+   */
+  handleSelectTagClick(ev, tag) {
     ev.preventDefault();
     this.props.context.searchHistory[this.props.location.pathname] = this.props.context.search;
     this.props.context.updateSearch("");
+
     // Push the tag as state of the component.
-    const selectedTag = this.state.tags.find(tag => tag.id === tagId);
-    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tagId}`, {selectedTag});
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/tag/${tag.id}`, {selectedTag: tag});
   }
 
+  /**
+   * Handles the click event on a resource from the list.
+   * @param {Event} ev
+   * @param {string} resourceId
+   */
   handleSelectResourceClick(ev, resourceId) {
     ev.preventDefault();
     /*
@@ -93,121 +106,111 @@ class FilterResourcesByTagPage extends React.Component {
     this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resourceId}`);
   }
 
-  async findAndLoadTags() {
-    const tags = await this.props.context.port.request("passbolt.tags.find-all");
-    this.sortTagsAlphabetically(tags);
-    this.setState({tags});
-  }
+  /**
+   * Returns all the tags extracted from the available resources.
+   * @returns {Array<Object>}
+   */
+  getTagsFromResources = memoize(resources => {
+    const allTagsById = {};
 
-  async findAndLoadResources() {
-    const filters = {'has-tag': this.props.location.state.selectedTag.slug};
-    const resources = await this.props.context.port.request('passbolt.resources.find-all', {filters});
-    sortResourcesAlphabetically(resources);
-    this.setState({resources});
-  }
+    resources.forEach(resource =>
+      resource.tags?.forEach(tag => {
+        if (!allTagsById[tag.id]) {
+          allTagsById[tag.id] = tag;
+        }
+      })
+    );
 
-  sortTagsAlphabetically(tags) {
-    tags.sort((tag1, tag2) => {
+    return Object.values(allTagsById).sort((tag1, tag2) => {
       const tag1Slug = tag1.slug.toUpperCase();
       const tag2Slug = tag2.slug.toUpperCase();
-      if (tag1Slug > tag2Slug) {
-        return 1;
-      } else if (tag2Slug > tag1Slug) {
-        return -1;
-      }
-      return 0;
+      return tag1Slug.localeCompare(tag2Slug);
     });
-  }
+  });
 
   /**
-   * Get the tags to display
-   * @return {array} The list of tags.
+   * Filters the given resources by 'shared with me'
+   * @param {Array<Object>} resources
+   * @param {uuid} selectedTagId the id of the selected tag
+   * @returns {Array<Object>}
    */
-  getBrowsedTags() {
-    let tags = this.state.tags;
-
-    if (this.props.context.search.length) {
-      /*
-       * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
-       * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-       */
-      tags = this.filterTagsBySearch(tags, this.props.context.search);
-    }
-
-    return tags.slice(0, BROWSED_TAGS_LIMIT);
-  }
-
-  /**
-   * Filter tags by keywords.
-   * Search on the slug
-   * @param {array} tags The list of tags to filter.
-   * @param {string} needle The needle to search.
-   * @return {array} The filtered tags.
-   */
-  filterTagsBySearch(tags, needle) {
-    // Split the search by words
-    const needles = needle.split(/\s+/);
-    // Prepare the regexes for each word contained in the search.
-    const regexes = needles.map(needle => new RegExp(escapeRegExp(needle), 'i'));
-
-    return tags.filter(tag => {
-      let match = true;
-      for (const i in regexes) {
-        // To match a resource would have to match all the words of the search.
-        match &= regexes[i].test(tag.slug);
-      }
-
-      return match;
-    });
-  }
+  filterResourcesByTag = memoize((resources, selectedTagId) => resources.filter(resource => resource.tags?.some(tag => selectedTagId === tag.id)));
 
   /**
    * Get the resources to display
-   * @return {array} The list of resources.
+   * @param {Array<Object>} resources the resource list to filter from
+   * @param {string} search the keyword to search for in the list if any
+   * @param {uuid} selectedTagId the id of the selected tag
+   * @return {Array<Object>} The list of resources.
    */
-  getBrowsedResources() {
-    let resources = this.state.resources;
+  filterSearchedResources = memoize((resources, search, selectedTagId) => {
+    const resourcesMatchingTag = this.filterResourcesByTag(resources, selectedTagId);
+    return search
+      ? filterResourcesBySearch(resourcesMatchingTag, search, BROWSED_RESOURCES_LIMIT)
+      : resourcesMatchingTag;
+  });
 
-    if (this.props.context.search.length) {
-      /*
-       * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
-       * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-       */
-      resources = filterResourcesBySearch(resources, this.props.context.search);
-    }
+  /**
+   * Get the tags to display
+   * @param {Array<Object>} tags the tag list to filter from
+   * @param {string} search the keyword to search for in the list if any
+   * @return {Array<Object>} The list of tags.
+   */
+  filterSearchedTags = memoize((resources, search) => {
+    const tags = this.getTagsFromResources(resources);
+    // Split the search by words
+    const searches = search.split(/\s+/);
+    // Prepare the regexes for each word contained in the search.
+    const regexes = searches.map(needle => new RegExp(escapeRegExp(needle), 'i'));
 
-    return resources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
+    let tagFoundCount = 0;
+    return tags.filter(tag => {
+      if (tagFoundCount > BROWSED_TAGS_LIMIT) {
+        return false;
+      }
 
-  isReady() {
-    return this.state.tags !== null
-      || this.state.resources != null;
-  }
+      for (const i in regexes) {
+        // To match a tag would have to match all the words of the search.
+        const match = regexes[i].test(tag.slug);
+        if (!match) {
+          return false;
+        }
+      }
 
+      tagFoundCount++;
+      return true;
+    });
+  });
+
+  /**
+   * Component renderer.
+   * @returns {JSX}
+   */
   render() {
-    const isReady = this.isReady();
+    const isReady = this.props.resources !== null;
     const isSearching = this.props.context.search.length > 0;
-    const listTagsOnly = this.state.selectedTag === null;
+    const selectedTag = this.selectedTag;
+    const listTagsOnly = selectedTag === null;
     let browsedTags, browsedResources;
 
     if (isReady) {
       if (listTagsOnly) {
-        browsedTags = this.getBrowsedTags();
+        browsedTags = this.filterSearchedTags(this.props.resources, this.props.context.search);
       } else {
-        browsedResources = this.getBrowsedResources();
+        browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search, selectedTag?.id);
       }
     }
 
     return (
       <div className="index-list">
         <div className="back-link">
-          <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Go back")}>
+          <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.props.t("Go back")}>
             <Icon name="chevron-left"/>
             <span className="primary-action-title">
-              {this.state.selectedTag && this.state.selectedTag.slug || <Trans>Tags</Trans>}
+              {selectedTag?.slug || <Trans>Tags</Trans>}
             </span>
           </a>
-          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.props.t("Cancel")}>
             <Icon name="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
@@ -218,7 +221,7 @@ class FilterResourcesByTagPage extends React.Component {
               <li className="empty-entry">
                 <Icon name="spinner"/>
                 <p className="processing-text">
-                  {listTagsOnly ? <Trans>Retrieving your tags</Trans> : <Trans>Retrieving your passwords</Trans>}
+                  <Trans>Retrieving your tags</Trans>
                 </p>
               </li>
             }
@@ -237,7 +240,7 @@ class FilterResourcesByTagPage extends React.Component {
                     {(browsedTags.length > 0) &&
                       browsedTags.map(tag => (
                         <li className="filter-entry" key={tag.id}>
-                          <a href="#" onClick={ev => this.handleSelectTagClick(ev, tag.id)}>
+                          <a href="#" onClick={ev => this.handleSelectTagClick(ev, tag)}>
                             <span className="filter">{tag.slug}</span>
                           </a>
                         </li>
@@ -250,10 +253,7 @@ class FilterResourcesByTagPage extends React.Component {
                     {!browsedResources.length &&
                       <li className="empty-entry">
                         <p>
-                          {isSearching && <Trans>No result match your search. Try with another search term.</Trans>}
-                          {/* The below scenario should not happen */}
-                          {!isSearching && <Trans>No passwords are marked with this tag yet. Mark a password with this
-                            tag or wait for a team member to mark a password with this tag.</Trans>}
+                          <Trans>No result match your search. Try with another search term.</Trans>
                         </p>
                       </li>
                     }
@@ -289,6 +289,7 @@ class FilterResourcesByTagPage extends React.Component {
 
 FilterResourcesByTagPage.propTypes = {
   context: PropTypes.any, // The application context
+  resources: PropTypes.array, // The available resources
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -296,4 +297,4 @@ FilterResourcesByTagPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(FilterResourcesByTagPage)));
+export default withAppContext(withRouter(withResourcesLocalStorage(withTranslation('common')(FilterResourcesByTagPage))));

@@ -18,12 +18,12 @@ import {Router} from "react-router-dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import {createMemoryHistory} from "history";
-import FilterResourcesByFavoritePage from "./FilterResourcesByFavoritePage";
+import FilterResourcesByTagPage from "./FilterResourcesByTagPage";
 
 /**
- * The FilterResourcesByFavoritePage component represented as a page
+ * The FilterResourcesByTagPage component represented as a page
  */
-export default class FilterResourcesByFavoritePagePage {
+export default class FilterResourcesByTagPagePage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -32,7 +32,7 @@ export default class FilterResourcesByFavoritePagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <FilterResourcesByFavoritePage {...props}/>
+          <FilterResourcesByTagPage {...props}/>
         </Router>
       </MockTranslationProvider>
     );
@@ -47,6 +47,14 @@ export default class FilterResourcesByFavoritePagePage {
   }
 
   /**
+   * Returns the displayed tags if any
+   * @returns {NodeListOf<HTLMElement>}
+   */
+  get tags() {
+    return this._page.container.querySelectorAll(".list-items .filter-entry");
+  }
+
+  /**
    * Returns a resource by its index if any
    * @param {number} index
    * @returns {HTLMElement|null}
@@ -56,11 +64,27 @@ export default class FilterResourcesByFavoritePagePage {
   }
 
   /**
+   * Returns a tag by its index if any
+   * @param {number} index
+   * @returns {HTLMElement|null}
+   */
+  getTag(index) {
+    return this.tags[index] ?? null;
+  }
+
+  /**
    * Returns the back button element
    * @returns {HTLMElement}
    */
   get backButton() {
     return this._page.container.querySelector(".back-link a");
+  }
+  /**
+   * Returns the main message currently displayed
+   * @returns {string|null}
+   */
+  get displayedTitle() {
+    return this._page.container.querySelector(".primary-action-title")?.textContent || null;
   }
 
   /**
@@ -87,6 +111,16 @@ export default class FilterResourcesByFavoritePagePage {
    */
   async clickOnBackButton() {
     fireEvent.click(this.backButton, {button: 0});
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a click on the nth resource given by the index
+   * @returns {Promise<void>}
+   */
+  async clickOnTag(index) {
+    const element = this.getTag(index)?.querySelector("a");
+    fireEvent.click(element, {button: 0});
     await waitFor(() => {});
   }
 }

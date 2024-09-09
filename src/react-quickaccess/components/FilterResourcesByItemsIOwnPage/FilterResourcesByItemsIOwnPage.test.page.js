@@ -18,12 +18,12 @@ import {Router} from "react-router-dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import {createMemoryHistory} from "history";
-import FilterResourcesByFavoritePage from "./FilterResourcesByFavoritePage";
+import FilterResourcesByItemsIOwnPage from "./FilterResourcesByItemsIOwnPage";
 
 /**
- * The FilterResourcesByFavoritePage component represented as a page
+ * The FilterResourcesByItemsIOwnPage component represented as a page
  */
-export default class FilterResourcesByFavoritePagePage {
+export default class FilterResourcesByItemsIOwnPagePage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -32,7 +32,7 @@ export default class FilterResourcesByFavoritePagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <FilterResourcesByFavoritePage {...props}/>
+          <FilterResourcesByItemsIOwnPage {...props}/>
         </Router>
       </MockTranslationProvider>
     );

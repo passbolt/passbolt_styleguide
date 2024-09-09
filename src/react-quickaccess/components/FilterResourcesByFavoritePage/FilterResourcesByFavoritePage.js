@@ -112,6 +112,10 @@ class FilterResourcesByFavoritePage extends React.Component {
       browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search);
     }
 
+    /**
+     * Component renderer.
+     * @returns {JSX}
+     */
     return (
       <div className="index-list">
         <div className="back-link">
