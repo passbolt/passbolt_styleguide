@@ -20,7 +20,6 @@ import {withActionFeedback} from "./ActionFeedbackContext";
 import {withLoading} from "./LoadingContext";
 import sanitizeUrl, {urlProtocols} from "../lib/Sanitize/sanitizeUrl";
 import {DateTime} from "luxon";
-import debounce from "debounce-promise";
 import SorterEntity from "../../shared/models/entity/sorter/sorterEntity";
 import GridUserSettingEntity from "../../shared/models/entity/gridUserSetting/gridUserSettingEntity";
 import GridResourceUserSettingService
@@ -104,12 +103,6 @@ export class ResourceWorkspaceContextProvider extends React.Component {
     this.state = this.defaultState;
     this.initializeProperties();
     this.gridResourceUserSetting = new GridResourceUserSettingService(props.context.port);
-
-    /*
-     * Execute first request to refresh users, groups, etc. then wait 10sec to trigger next one
-     * E.g. Only perform two populate max per 10 sec
-     */
-    this.populateDebounced = debounce(this.populate, 10000, {leading: true, accumulate: false});
   }
 
   /**
@@ -184,7 +177,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
   async componentDidMount() {
     await this.props.passwordExpiryContext.findSettings();
     this.loadGridResourceSetting();
-    this.populateDebounced();
+    this.populate();
     this.handleResourcesWaitedFor();
   }
 
@@ -243,7 +236,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       await this.unselectAll();
 
       if (this.state.filter.type !== ResourceWorkspaceFilterTypes.GROUP) {
-        await this.populateDebounced();
+        await this.populate();
       }
     }
   }
