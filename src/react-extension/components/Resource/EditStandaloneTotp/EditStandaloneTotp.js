@@ -114,7 +114,7 @@ class EditStandaloneTotp extends Component {
    * @return {Promise<Object>}
    */
   async getDecryptedSecret() {
-    return this.props.context.port.request("passbolt.secret.decrypt", this.props.resource.id);
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resource.id);
   }
 
   /*

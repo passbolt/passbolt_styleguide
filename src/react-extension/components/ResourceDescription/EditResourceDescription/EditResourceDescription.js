@@ -216,7 +216,7 @@ class EditResourceDescription extends React.Component {
     let plaintextSecretDto = this.props.plaintextSecretDto;
     // It happens if the description was previously not encrypted and the user decided to encrypt it.
     if (!plaintextSecretDto) {
-      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.decrypt", resourceDto.id);
+      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceDto.id);
     }
     const plaintextSecretToUpdateDto = {
       ...plaintextSecretDto,
