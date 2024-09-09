@@ -25,7 +25,7 @@ export default {
 };
 
 const port = new MockPort();
-port.addRequestListener("passbolt.secret.decrypt", () => ({totp: defaultTotpViewModelDto()}));
+port.addRequestListener("passbolt.secret.find-by-resource-id", () => ({totp: defaultTotpViewModelDto()}));
 
 const Template = args  =>
   <EditStandaloneTotp {...args}/>;

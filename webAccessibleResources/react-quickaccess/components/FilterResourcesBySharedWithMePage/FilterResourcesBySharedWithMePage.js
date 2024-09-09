@@ -1,48 +1,62 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         2.0.0
+ */
+
 import PropTypes from "prop-types";
 import React from "react";
 import {Link, withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
-import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import memoize from "memoize-one";
 
-const BROWSED_RESOURCES_LIMIT = 500;
+const BROWSED_RESOURCES_LIMIT = 100;
 
 class FilterResourcesBySharedWithMePage extends React.Component {
+  /**
+   * Default constructor
+   * @param props The component props
+   */
   constructor(props) {
     super(props);
-    this.state = this.initState();
     this.initEventHandlers();
   }
 
+  /**
+   * ComponentDidMount hook.
+   * Invoked immediately after component is inserted into the tree
+   */
   componentDidMount() {
     this.props.context.focusSearch();
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }
-    this.findAndLoadResources();
   }
 
+  /**
+   * Initializes event handlers
+   */
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleSelectResourceClick = this.handleSelectResourceClick.bind(this);
   }
 
-  initState() {
-    return {
-      resources: null
-    };
-  }
-
   /**
-   * Get the translate function
-   * @returns {function(...[*]=)}
+   * Handles the click event on the "Go back" button.
+   * @param {Event} ev
    */
-  get translate() {
-    return this.props.t;
-  }
-
   handleGoBackClick(ev) {
     ev.preventDefault();
     // Clean the search and remove the search history related to this page.
@@ -51,6 +65,11 @@ class FilterResourcesBySharedWithMePage extends React.Component {
     this.props.history.goBack();
   }
 
+  /**
+   * Handles the click event on a resource from the list.
+   * @param {Event} ev
+   * @param {string} resourceId
+   */
   handleSelectResourceClick(ev, resourceId) {
     ev.preventDefault();
     /*
@@ -63,54 +82,49 @@ class FilterResourcesBySharedWithMePage extends React.Component {
     this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resourceId}`);
   }
 
-  async findAndLoadResources() {
-    const filters = {'is-shared-with-me': true};
-    const resources = await this.props.context.port.request('passbolt.resources.find-all', {filters});
-    sortResourcesAlphabetically(resources);
-    this.setState({resources});
-  }
+  /**
+   * Filters the given resources by 'shared with me'
+   * @param {Array<Object>} resources
+   * @returns {Array<Object>}
+   */
+  filterBySharedWithMe = memoize(resources => resources.filter(resource => resource.permission.type < 15));
 
   /**
    * Get the resources to display
-   * @return {array} The list of resources.
+   * @param {Array<Object>} resources the resource list to filter from
+   * @param {string} search the keyword to search for in the list if any
+   * @return {Array<Object>} The list of resources.
    */
-  getBrowsedResources() {
-    let resources = this.state.resources;
+  filterSearchedResources = memoize((resources, search) => {
+    const resourcesSharedWithMe = this.filterBySharedWithMe(resources);
+    return search
+      ? filterResourcesBySearch(resourcesSharedWithMe, search, BROWSED_RESOURCES_LIMIT)
+      : resourcesSharedWithMe;
+  });
 
-    if (this.props.context.search.length) {
-      /*
-       * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
-       * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-       */
-      resources = filterResourcesBySearch(resources, this.props.context.search);
-    }
-
-    return resources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
-
-  isReady() {
-    return this.state.resources != null;
-  }
-
+  /**
+   * Component renderer.
+   * @returns {JSX}
+   */
   render() {
-    const isReady = this.isReady();
+    const isReady = this.props.resources != null;
     const isSearching = this.props.context.search.length > 0;
     let browsedResources;
 
     if (isReady) {
-      browsedResources = this.getBrowsedResources();
+      browsedResources = this.filterSearchedResources(this.props.resources, this.props.context.search);
     }
 
     return (
       <div className="index-list">
         <div className="back-link">
-          <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.translate("Go back")}>
+          <a href="#" className="primary-action" onClick={this.handleGoBackClick} title={this.props.t("Go back")}>
             <Icon name="chevron-left"/>
             <span className="primary-action-title">
               <Trans>Shared with me</Trans>
             </span>
           </a>
-          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.translate("Cancel")}>
+          <Link to="/webAccessibleResources/quickaccess/home" className="secondary-action button-transparent button" title={this.props.t("Cancel")}>
             <Icon name="close"/>
             <span className="visually-hidden"><Trans>Cancel</Trans></span>
           </Link>
@@ -166,11 +180,11 @@ class FilterResourcesBySharedWithMePage extends React.Component {
 
 FilterResourcesBySharedWithMePage.propTypes = {
   context: PropTypes.any, // The application context
-  // Match, location and history props are injected by the withRouter decoration call.
-  match: PropTypes.object,
+  resources: PropTypes.array, // the available resources
+  // Location and history props are injected by the withRouter decoration call.
   location: PropTypes.object,
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(FilterResourcesBySharedWithMePage)));
+export default withAppContext(withRouter(withResourcesLocalStorage(withTranslation('common')(FilterResourcesBySharedWithMePage))));

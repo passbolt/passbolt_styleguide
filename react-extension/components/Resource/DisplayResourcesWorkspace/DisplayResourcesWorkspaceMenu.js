@@ -227,7 +227,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret() {
-    return this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", this.selectedResources[0].id);
   }
 
   /**

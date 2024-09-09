@@ -11,51 +11,55 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.7.4
  */
-
-import resourcesFixture from "../../../react-extension/test/fixture/Resources/resources";
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import MockPort from "../../../react-extension/test/mock/MockPort";
+import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 
 /**
  * Default component props
  * @param props
  * @return {Object}
  */
-export function defaultProps(props = {}) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.resources.find-all", () => new Promise(resolve => setTimeout(() => resolve([]), 4000)));
-  const defaultContext = {port};
-
-  const defaultProps = {
-    context: defaultAppContext(Object.assign(defaultContext, props?.context))
-  };
-  delete props.context; // Treated in the default
-
-  return Object.assign(defaultProps, props);
-}
+export const defaultProps = (data = {}) => ({
+  context: defaultAppContext(),
+  resources: null,
+  ...data,
+});
 
 /**
  * No filtered resources props.
  * @param props
  * @return {Object}
  */
-export function noFilteredResourcesProps(props) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.resources.find-all", () => []);
-  const defaultContext = {port};
-  const context = Object.assign(defaultContext, props?.context);
-  return defaultProps({context});
-}
+export const noFilteredResourcesProps = (data = {}) => ({
+  context: defaultAppContext(),
+  resources: [],
+  ...data,
+});
 
 /**
- * Suggested resources props.
+ * No filtered resources props.
  * @param props
  * @return {Object}
  */
-export function withFilteredResourcesProps(props) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.resources.find-all", () => resourcesFixture);
-  const defaultContext = {port};
-  const context = Object.assign(defaultContext, props?.context);
-  return defaultProps({context});
-}
+export const withFilteredResourcesProps = (data = {}) => ({
+  context: defaultAppContext(data.context),
+  resources: [
+    defaultResourceDto({
+      metadata: {
+        name: "apache",
+        username: "www-data",
+        uri: "http://www.apache.org/",
+        description: "Apache is the world's most used web server software.",
+      }
+    }, {withFavorite: true}),
+    defaultResourceDto({
+      metadata: {
+        name: "esaie",
+        username: "test",
+        uri: "http://www.essaie.org/",
+        description: "",
+      }
+    }, {withFavorite: true}),
+  ],
+  ...data,
+});

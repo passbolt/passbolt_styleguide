@@ -136,7 +136,7 @@ describe("ResourceViewPage", () => {
 
       await page.click(page.password);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.context.storage.local.get(["resources"]).resources[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-decrypted');
     });
 
@@ -149,7 +149,7 @@ describe("ResourceViewPage", () => {
 
       await page.click(page.copyPasswordButton);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.context.storage.local.get(["resources"]).resources[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-decrypted');
     });
 
@@ -178,7 +178,7 @@ describe("ResourceViewPage", () => {
       await page.click(page.totp);
       const code = TotpCodeGeneratorService.generate(totp);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.context.storage.local.get(["resources"]).resources[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
     });
 
@@ -193,7 +193,7 @@ describe("ResourceViewPage", () => {
       await page.click(page.copyTotpButton);
       const code = TotpCodeGeneratorService.generate(totp);
 
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.context.storage.local.get(["resources"]).resources[0].id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.context.storage.local.get(["resources"]).resources[0].id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(code);
     });
 

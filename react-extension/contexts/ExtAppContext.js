@@ -262,13 +262,7 @@ class ExtAppContextProvider extends React.Component {
    * Using ResourceTypesSettings
    */
   async getResourceTypes() {
-    let resourceTypes = [];
-    try {
-      resourceTypes = await this.props.port.request("passbolt.resource-type.get-all");
-    } catch (error) {
-      // @deprecated Catching this error will be removed with v4. Expected error with API < v3.0
-      console.error(error);
-    }
+    const resourceTypes = await this.props.port.request("passbolt.resource-type.get-or-find-all");
     const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
     this.setState({resourceTypesSettings});
   }

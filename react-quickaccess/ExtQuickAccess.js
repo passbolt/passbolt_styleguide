@@ -242,7 +242,7 @@ class ExtQuickAccess extends React.Component {
    * Using ResourceTypesSettings
    */
   async getResourceTypes() {
-    const resourceTypes = await this.props.port.request("passbolt.resource-type.get-all");
+    const resourceTypes = await this.props.port.request("passbolt.resource-type.get-or-find-all");
     const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
     this.setState({resourceTypesSettings});
   }

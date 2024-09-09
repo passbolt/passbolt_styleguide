@@ -12,53 +12,71 @@
  * @since         3.7.4
  */
 
-import resourcesFixture from "../../../react-extension/test/fixture/Resources/resources";
-import tagsFixture from "../../../react-extension/test/fixture/Tags/tags";
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import MockPort from "../../../react-extension/test/mock/MockPort";
+import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+/**
+ * Default component props
+ * @param props
+ * @return {Object}
+ */
+export const defaultProps = (data = {}) => ({
+  context: defaultAppContext(data.context),
+  resources: [
+    defaultResourceDto({}, {withTags: true})
+  ],
+  ...data
+});
 
 /**
  * Default component props
  * @param props
  * @return {Object}
  */
-export function defaultProps(props = {}) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.resources.find-all", () => new Promise(resolve => setTimeout(() => resolve([]), 4000)));
-  port.addRequestListener("passbolt.tags.find-all", () => new Promise(resolve => setTimeout(() => resolve([]), 4000)));
-  const defaultContext = {port};
-
-  const defaultProps = {
-    context: defaultAppContext(Object.assign(defaultContext, props?.context))
-  };
-  delete props.context; // Treated in the default
-
-  return Object.assign(defaultProps, props);
-}
+export const noResourcesProps = (data = {}) => ({
+  context: defaultAppContext(data.context),
+  resources: null,
+  ...data
+});
 
 /**
- * No tags props.
+ * Default component props
  * @param props
  * @return {Object}
  */
-export function noTagsProps(props) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.tags.find-all", () => []);
-  const defaultContext = {port};
-  const context = Object.assign(defaultContext, props?.context);
-  return defaultProps({context});
-}
+export const noTagsProps = (data = {}) => ({
+  context: defaultAppContext(data.context),
+  resources: [],
+  ...data
+});
 
 /**
  * Suggested resources props.
  * @param props
  * @return {Object}
  */
-export function withFilteredResourcesProps(props) {
-  const port = new MockPort();
-  port.addRequestListener("passbolt.resources.find-all", () => resourcesFixture);
-  port.addRequestListener("passbolt.tags.find-all", () => tagsFixture);
-  const defaultContext = {port};
-  const context = Object.assign(defaultContext, props?.context);
-  return defaultProps({context});
-}
+export const withFilteredResourcesProps = (data = {}) => {
+  const resource1 = defaultResourceDto({
+    metadata: {
+      name: "apache",
+      username: "www-data",
+      uris: ["http://www.apache.org/"],
+      description: "Apache is the world\u0027s most used web server software.",
+    }
+  }, {withTags: true});
+
+  const resource2 = defaultResourceDto({
+    metadata: {
+      name: "esaie",
+      username: "test",
+      uris: ["http://www.essaie.org/"],
+      description: "",
+    },
+    tags: resource1.tags
+  });
+
+  return {
+    context: defaultAppContext(data.context),
+    resources: [resource1, resource2],
+    ...data
+  };
+};

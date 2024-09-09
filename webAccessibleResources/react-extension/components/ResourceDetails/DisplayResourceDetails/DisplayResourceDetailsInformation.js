@@ -341,7 +341,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret(resourceId) {
-    return this.props.context.port.request("passbolt.secret.decrypt", resourceId);
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceId);
   }
 
   /**

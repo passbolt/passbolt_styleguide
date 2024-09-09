@@ -21,6 +21,7 @@ import {
 } from "../resourceType/resourceTypeEntity.test.data";
 import {defaultUserDto} from "../user/userEntity.test.data";
 import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
+import {defaultTagsDtos} from "../tag/tagCollection.test.data";
 
 /**
  * Build default resource dto.
@@ -30,6 +31,7 @@ import {defaultPermissionsDtos} from "../permission/permissionCollection.test.da
  * @param {boolean} [options.withCreator=false] Add creator default dto.
  * @param {boolean|integer} [options.withPermissions=0] Add permission default dtos.
  * @param {boolean|integer} [options.withFavorite=false] Add favorite default dto.
+ * @param {boolean|integer} [options.withTags=false] Add favorite default dto.
  * @returns {object}
  */
 export const defaultResourceDto = (data = {}, options = {}) => {
@@ -68,6 +70,10 @@ export const defaultResourceDto = (data = {}, options = {}) => {
 
   if (!data.favorite && options?.withFavorite) {
     defaultData.favorite = defaultFavoriteDto({foreign_key: id});
+  }
+
+  if (!data.tags && options?.withTags) {
+    defaultData.tags = defaultTagsDtos();
   }
 
   defaultData.metadata = {

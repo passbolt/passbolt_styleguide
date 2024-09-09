@@ -360,7 +360,7 @@ describe("See the Edit Resource", () => {
         digits: 7,
         algorithm: "SHA256"
       };
-      props.context.port.addRequestListener('passbolt.secret.decrypt', () => ({
+      props.context.port.addRequestListener('passbolt.secret.find-by-resource-id', () => ({
         password: "secret-decrypted",
         description: "",
         totp: defaultTotp
@@ -605,7 +605,7 @@ describe("See the Edit Resource", () => {
       const resource = props.context.resources[0];
 
       const mockRequests = jest.fn(async message => ({
-        "passbolt.secret.decrypt": {password: "secret-decrypted", description: "description"},
+        "passbolt.secret.find-by-resource-id": {password: "secret-decrypted", description: "description"},
         "passbolt.secrets.powned-password": 2
       }[message]));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
@@ -617,7 +617,7 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.click(page.passwordEdit.saveButton);
       await waitFor(() => {});
 
-      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.find-by-resource-id", resource.id);
       expect(props.context.port.request).toHaveBeenNthCalledWith(2, "passbolt.secrets.powned-password", "secret-decrypted");
       const confirmDialogProps = {
         resourceName: resource.name,
@@ -636,7 +636,7 @@ describe("See the Edit Resource", () => {
       const resource = props.context.resources[0];
 
       const mockRequests = jest.fn(async message => ({
-        "passbolt.secret.decrypt": {password: "azerty", description: "description"},
+        "passbolt.secret.find-by-resource-id": {password: "azerty", description: "description"},
         "passbolt.secrets.powned-password": 2
       }[message]));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
@@ -648,7 +648,7 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.click(page.passwordEdit.saveButton);
       await waitFor(() => {});
 
-      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.find-by-resource-id", resource.id);
       const confirmDialogProps = {
         resourceName: resource.name,
         operation: ConfirmEditCreateOperationVariations.EDIT,
