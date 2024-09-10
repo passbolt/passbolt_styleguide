@@ -16,7 +16,7 @@ import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../per
 import {defaultFavoriteDto} from "../favorite/favoriteEntity.test.data";
 import {
   TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP, TEST_RESOURCE_TYPE_PASSWORD_STRING,
   TEST_RESOURCE_TYPE_TOTP
 } from "../resourceType/resourceTypeEntity.test.data";
 import {defaultUserDto} from "../user/userEntity.test.data";
@@ -124,6 +124,11 @@ export const resourceWithFavoriteDto = (data = {}) => {
   });
 };
 
+export const resourceLegacyDto = (data = {}) => defaultResourceDto({
+  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+  ...data
+});
+
 export const resourceWithTotpDto = (data = {}) => defaultResourceDto({
   resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   ...data
@@ -131,7 +136,15 @@ export const resourceWithTotpDto = (data = {}) => defaultResourceDto({
 
 export const resourceStandaloneTotpDto = (data = {}) => defaultResourceDto({
   resource_type_id: TEST_RESOURCE_TYPE_TOTP,
-  metadata: defaultResourceMetadataDto({username: null, resource_type_id: TEST_RESOURCE_TYPE_TOTP}),
+  metadata: defaultResourceMetadataDto({
+    resource_type_id: TEST_RESOURCE_TYPE_TOTP,
+    username: null,
+  }),
+  ...data
+});
+
+export const resourceUnknownResourceTypeDto = (data = {}) => defaultResourceDto({
+  resource_type_id: uuidv4(),
   ...data
 });
 
