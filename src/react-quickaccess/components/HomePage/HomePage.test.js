@@ -17,6 +17,9 @@ import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import {defaultProps, denyUiActionProps} from "./HomePage.test.data";
 import HomePagePage from "./HomePage.test.page";
 import {createMemoryHistory} from "history";
+import {
+  defaultResourceMetadataDto
+} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -88,7 +91,7 @@ describe("HomePage", () => {
       expect.assertions(2);
       const props = defaultProps({
         resources: [
-          defaultResourceDto({metadata: {name: "apache", uris: ["http://www.apache.org"]}}),
+          defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org"]})}),
           defaultResourceDto(),
         ]
       });
@@ -121,8 +124,8 @@ describe("HomePage", () => {
       expect.assertions(2);
       const props = defaultProps({
         resources: [
-          defaultResourceDto({metadata: {name: "test"}}),
-          defaultResourceDto({metadata: {name: "other"}})
+          defaultResourceDto({metadata: defaultResourceMetadataDto({name: "test"})}),
+          defaultResourceDto({metadata: defaultResourceMetadataDto({name: "other"})})
         ],
       });
       props.context.getOpenerTabId = () => 1;

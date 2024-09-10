@@ -86,7 +86,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     it('As LU I can start to copy the username of a resource', async() => {
       expect.assertions(3);
       await page.copyUsername();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.metadata.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });

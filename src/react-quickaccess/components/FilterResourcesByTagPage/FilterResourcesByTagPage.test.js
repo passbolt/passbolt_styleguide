@@ -18,6 +18,9 @@ import FilterResourcesByTagPage from "./FilterResourcesByTagPage.test.page";
 import {createMemoryHistory} from "history";
 import {waitForTrue} from "../../../../test/utils/waitFor";
 import {defaultTagDto} from "../../../shared/models/entity/tag/tagEntity.test.data";
+import {
+  defaultResourceMetadataDto
+} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -126,9 +129,9 @@ describe("FilterResourcesByTagPage", () => {
       expect.assertions(3);
 
       const tag = defaultTagDto({slug: "tag 1"});
-      const resource1 = defaultResourceDto({metadata: {name: "Expected"}, tags: [tag]});
-      const resource2 = defaultResourceDto({metadata: {name: "No Match"}, tags: [tag]});
-      const resource3 = defaultResourceDto({metadata: {name: "Expected"}, tags: [tag]});
+      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Expected"}), tags: [tag]});
+      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "No Match"}), tags: [tag]});
+      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Expected"}), tags: [tag]});
 
       const props = defaultProps({
         context: defaultAppContext({

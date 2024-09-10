@@ -70,13 +70,13 @@ describe("DisplayResourceDetailsInformation", () => {
       expect.assertions(22);
       await waitFor(() => {});
       expect(page.displayInformationList.usernameLabel).toBe('Username');
-      expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.username);
+      expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.username);
       expect(page.displayInformationList.passwordLabel).toBe('Password');
       expect(page.displayInformationList.password.textContent).toBe("Copy password to clipboard");
       expect(page.displayInformationList.totpLabel).toBe('TOTP');
       expect(page.displayInformationList.totp.textContent).toBe("Copy TOTP to clipboard");
       expect(page.displayInformationList.uriLabel).toBe('URI');
-      expect(page.displayInformationList.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.uri);
+      expect(page.displayInformationList.uri.textContent).toBe(props.resourceWorkspaceContext.details.resource.metadata.uris[0]);
       expect(page.displayInformationList.modifiedLabel(1)).toBe('Modified');
       expect(page.displayInformationList.modified(1).textContent).toBe(modificationDate);
       expect(page.displayInformationList.modified(1).getAttribute("title")).toBe(absoluteModificationDate);
@@ -135,7 +135,7 @@ describe("DisplayResourceDetailsInformation", () => {
       await page.displayInformationList.click(page.displayInformationList.username);
 
       expect.assertions(2);
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.details.resource.username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resourceWorkspaceContext.details.resource.metadata.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The username has been copied to clipboard");
     });
   });
