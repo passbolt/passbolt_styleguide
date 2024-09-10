@@ -19,7 +19,7 @@ import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import {defaultAppContext, defaultProps, defaultResourceMeta} from "./CreateResource.test.data";
+import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {
@@ -39,6 +39,9 @@ import ConfirmCreateEdit, {
   ConfirmEditCreateOperationVariations,
   ConfirmEditCreateRuleVariations
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
+import {
+  defaultResourceMetadataDto
+} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 
 describe("See the Create Resource", () => {
   let page, props, context;
@@ -166,7 +169,7 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
       // create password
-      const resourceMeta = defaultResourceMeta();
+      const resourceMeta = defaultResourceMetadataDto();
       const resourcePassword = "RN9n8XuECN3";
 
       // Fill the form
@@ -212,7 +215,7 @@ describe("See the Create Resource", () => {
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
 
       // create password
-      const resourceMeta = defaultResourceMeta();
+      const resourceMeta = defaultResourceMetadataDto();
       const resourcePassword = "RN9n8XuECN3";
 
       // Fill the form
@@ -347,7 +350,7 @@ describe("See the Create Resource", () => {
 
         expect(page.passwordCreate.exists()).toBeTruthy();
         // create password
-        const resourceMeta = defaultResourceMeta({
+        const resourceMeta = defaultResourceMetadataDto({
           uris: [""],
           username: "",
           description: ""
@@ -509,7 +512,7 @@ describe("See the Create Resource", () => {
 
       expect(page.passwordCreate.exists()).toBeTruthy();
       // create password
-      const resourceMeta = defaultResourceMeta({
+      const resourceMeta = defaultResourceMetadataDto({
         uris: [""],
         username: "",
         description: ""

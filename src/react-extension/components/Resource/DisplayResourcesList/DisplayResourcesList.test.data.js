@@ -24,6 +24,13 @@ import {
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {
+  defaultResourceMetadataDto
+} from "../../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  TEST_RESOURCE_TYPE_TOTP
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Default props as when initializing the list with no content.
@@ -46,12 +53,12 @@ export function defaultProps(data = {}) {
  * @returns {array}
  */
 const getResources = () => [
-  resourceWithFavoriteDto({name: 'apache'}),
-  defaultResourceDto({name: 'bower'}),
-  defaultResourceDto({name: 'test'}),
-  resourceWithTotpDto({name: 'totp'}),
-  resourceStandaloneTotpDto({name: 'standalone totp'}),
-  defaultResourceDto({name: 'will-expire', expired: "3023-12-25T00:00:00.000Z"}),
+  resourceWithFavoriteDto({metadata: defaultResourceMetadataDto({name: 'apache'})}),
+  defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'bower'})}),
+  defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'test'})}),
+  resourceWithTotpDto({metadata: defaultResourceMetadataDto({name: 'totp', resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP})}),
+  resourceStandaloneTotpDto({metadata: defaultResourceMetadataDto({name: 'standalone totp', resource_type_id: TEST_RESOURCE_TYPE_TOTP})}),
+  defaultResourceDto({metadata: defaultResourceMetadataDto({name: 'will-expire'}), expired: "3023-12-25T00:00:00.000Z"}),
 ];
 
 /**
