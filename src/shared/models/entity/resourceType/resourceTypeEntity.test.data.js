@@ -122,12 +122,9 @@ export const resourceTypePasswordAndDescriptionDto = (data = {}) => ({
           "maxLength": 4096
         },
         "description": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 10000
-          }, {
-            "type": "null"
-          }]
+          "type": "string",
+          "maxLength": 10000,
+          "nullable": true,
         },
       },
     }
@@ -184,12 +181,9 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
           "maxLength": 4096
         },
         "description": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 10000
-          }, {
-            "type": "null"
-          }]
+          "type": "string",
+          "maxLength": 10000,
+          "nullable": true,
         },
         "totp": {
           "type": "object",
@@ -211,7 +205,7 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
             "digits": {
               "type": "number",
               "minimum": 6,
-              "exclusiveMaximum": 9
+              "maximum": 8,
             },
             "period": {
               "type": "number"
@@ -257,7 +251,7 @@ export const resourceTypeTotpDto = (data = {}) => ({
     "secret": {
       "type": "object",
       "required": [
-        "password"
+        "totp"
       ],
       "properties": {
         "totp": {
@@ -280,7 +274,7 @@ export const resourceTypeTotpDto = (data = {}) => ({
             "digits": {
               "type": "number",
               "minimum": 6,
-              "exclusiveMaximum": 9
+              "maximum": 8,
             },
             "period": {
               "type": "number"
@@ -289,6 +283,40 @@ export const resourceTypeTotpDto = (data = {}) => ({
         }
       },
     }
+  },
+  ...data
+});
+
+/**
+ * Resource type with secret definition DTO.
+ * @param {object} data The data to override
+ * @returns {object}
+ */
+export const resourceTypeWithoutSecretDefinitionDto = (data = {}) => ({
+  id: uuidv4(),
+  name: "Empty definition resource type",
+  slug: "password-string",
+  definition: {
+    "resource": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "uri": {
+          "anyOf": [{
+            "type": "string",
+            "maxLength": 1024
+          }, {
+            "type": "null"
+          }]
+        },
+      }
+    },
   },
   ...data
 });
