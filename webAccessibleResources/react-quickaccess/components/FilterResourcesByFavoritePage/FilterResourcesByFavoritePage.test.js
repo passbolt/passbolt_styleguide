@@ -18,6 +18,9 @@ import FilterResourcesByFavoritePagePage from "./FilterResourcesByFavoritePage.t
 import {createMemoryHistory} from "history";
 import {waitForTrue} from "../../../../test/utils/waitFor";
 import {noResourcesProps} from "../FilterResourcesByFavoritePage/FilterResourcesByFavoritePage.test.data";
+import {
+  defaultResourceMetadataDto
+} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -56,10 +59,10 @@ describe("FilterResourcesByFavoritePage", () => {
 
     it("should display favourite resources filtered by the search", () => {
       expect.assertions(1);
-      const resource1 = defaultResourceDto({metadata: {name: "Match search"}}, {withFavorite: true});
-      const resource2 = defaultResourceDto({metadata: {name: "No match"}}, {withFavorite: false});
-      const resource3 = defaultResourceDto({metadata: {name: "No match "}}, {withFavorite: true});
-      const resource4 = defaultResourceDto({metadata: {name: "Match search"}}, {withFavorite: false});
+      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Match search"})}, {withFavorite: true});
+      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "No match"})}, {withFavorite: false});
+      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "No match "})}, {withFavorite: true});
+      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Match search"})}, {withFavorite: false});
       const resources = [resource1, resource2, resource3, resource4];
 
       const props = defaultProps({

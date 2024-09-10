@@ -22,7 +22,9 @@ import {waitFor} from "@testing-library/react";
 import {defaultProps, defaultPropsLegacyResource} from "./EditResource.test.data";
 import EditResourcePage from "./EditResource.test.page";
 import {
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP, TEST_RESOURCE_TYPE_PASSWORD_STRING
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  TEST_RESOURCE_TYPE_PASSWORD_STRING
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
@@ -68,17 +70,17 @@ describe("See the Edit Resource", () => {
       // Dialog title exists and correct
       expect(page.passwordEdit.exists()).toBeTruthy();
       expect(page.title.header.textContent).toBe("Edit resource");
-      expect(page.title.subtitle.textContent).toBe(resource.name);
+      expect(page.title.subtitle.textContent).toBe(resource.metadata.name);
 
       // Close button exists
       expect(page.passwordEdit.dialogClose).not.toBeNull();
 
       // Name input field exists.
-      expect(page.passwordEdit.name.value).toBe(resource.name);
+      expect(page.passwordEdit.name.value).toBe(resource.metadata.name);
       // Uri input field exists.
-      expect(page.passwordEdit.uri.value).toBe(resource.uri);
+      expect(page.passwordEdit.uri.value).toBe(resource.metadata.uris[0]);
       // Username input field exists.
-      expect(page.passwordEdit.username.value).toBe(resource.username);
+      expect(page.passwordEdit.username.value).toBe(resource.metadata.username);
       // Password input field exists
       expect(page.passwordEdit.password).not.toBeNull();
       expect(page.passwordEdit.password.value).toBe("");
@@ -99,7 +101,7 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.passwordGenerateButton).not.toBeNull();
 
       // Description textarea field exists
-      expect(page.passwordEdit.description.value).toBe(resource.description);
+      expect(page.passwordEdit.description.value).toBe(resource.metadata.description);
 
       // Add totp button exists
       expect(page.passwordEdit.addTotpButton).not.toBeNull();
@@ -298,8 +300,8 @@ describe("See the Edit Resource", () => {
         metadata: {
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
           name: resourceMeta.name,
-          uris: [resource.uri],
-          username: resource.username,
+          uris: resource.metadata.uris,
+          username: resource.metadata.username,
           description: "",
         },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
@@ -334,8 +336,8 @@ describe("See the Edit Resource", () => {
         id: resource.id,
         metadata: {
           name: resourceMeta.name,
-          uris: [resource.uri],
-          username: resource.username,
+          uris: resource.metadata.uris,
+          username: resource.metadata.username,
           description: resourceMeta.description,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
         },
@@ -380,8 +382,8 @@ describe("See the Edit Resource", () => {
         id: resource.id,
         metadata: {
           name: resourceMeta.name,
-          uris: [resource.uri],
-          username: resource.username,
+          uris: resource.metadata.uris,
+          username: resource.metadata.username,
           description: "",
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP
         },
@@ -620,7 +622,7 @@ describe("See the Edit Resource", () => {
       expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.find-by-resource-id", resource.id);
       expect(props.context.port.request).toHaveBeenNthCalledWith(2, "passbolt.secrets.powned-password", "secret-decrypted");
       const confirmDialogProps = {
-        resourceName: resource.name,
+        resourceName: resource.metadata.name,
         operation: ConfirmEditCreateOperationVariations.EDIT,
         rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
         onConfirm: expect.any(Function),
@@ -650,7 +652,7 @@ describe("See the Edit Resource", () => {
 
       expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.find-by-resource-id", resource.id);
       const confirmDialogProps = {
-        resourceName: resource.name,
+        resourceName: resource.metadata.name,
         operation: ConfirmEditCreateOperationVariations.EDIT,
         rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
         onConfirm: expect.any(Function),

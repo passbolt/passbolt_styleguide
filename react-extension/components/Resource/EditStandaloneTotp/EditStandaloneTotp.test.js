@@ -47,9 +47,9 @@ describe("See the Edit Standalone TOTP", () => {
       expect(page.dialogClose).not.toBeNull();
 
       // Name input field exists.
-      expect(page.name.value).toBe(props.resource.name);
+      expect(page.name.value).toBe(props.resource.metadata.name);
       // Uri input field exists.
-      expect(page.uri.value).toBe(props.resource.uri);
+      expect(page.uri.value).toBe(props.resource.metadata.uris[0]);
       // Username input field exists.
       expect(page.secretKey.value).toBe(totp.secret_key);
 

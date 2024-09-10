@@ -59,11 +59,3 @@ export function defaultProps(data = {}) {
 
   return Object.assign(defaultData, data);
 }
-
-export const defaultResourceMeta = (data = {}) => ({
-  name: "Password name",
-  uris: ["https://uri.dev"],
-  username: "Password username",
-  description: "Password description",
-  ...data
-});

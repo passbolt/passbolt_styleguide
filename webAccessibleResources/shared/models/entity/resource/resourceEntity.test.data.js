@@ -22,6 +22,7 @@ import {
 import {defaultUserDto} from "../user/userEntity.test.data";
 import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
 import {defaultTagsDtos} from "../tag/tagCollection.test.data";
+import {defaultResourceMetadataDto} from "../resourceMetadata/resourceMetadataEntity.test.data";
 
 /**
  * Build default resource dto.
@@ -39,10 +40,6 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   const defaultData = {
     id: id,
     resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-    name: "Passbolt",
-    username: "admin@passbolt.com",
-    uri: "https://passbolt.com",
-    description: "",
     expired: null,
     deleted: false,
     created: "2022-03-04T13:59:11+00:00",
@@ -52,6 +49,8 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     folder_parent_id: null,
     personal: false,
     favorite: null,
+    metadata: defaultResourceMetadataDto({resource_type_id: data?.metadata?.resource_type_id
+        || data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION}),
     permission: ownerPermissionDto({aco_foreign_key: id}),
     ...data
   };
@@ -75,16 +74,6 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   if (!data.tags && options?.withTags) {
     defaultData.tags = defaultTagsDtos();
   }
-
-  defaultData.metadata = {
-    object_type: "PASSBOLT_METADATA_V5",
-    resource_type_id: defaultData.resource_type_id,
-    name: defaultData.name,
-    username: defaultData.username,
-    uris: typeof(defaultData.uri) === "string" ? [defaultData.uri] : [],
-    description: defaultData.description,
-    ...data.metadata,
-  };
 
   return defaultData;
 };
@@ -142,7 +131,7 @@ export const resourceWithTotpDto = (data = {}) => defaultResourceDto({
 
 export const resourceStandaloneTotpDto = (data = {}) => defaultResourceDto({
   resource_type_id: TEST_RESOURCE_TYPE_TOTP,
-  username: null,
+  metadata: defaultResourceMetadataDto({username: null, resource_type_id: TEST_RESOURCE_TYPE_TOTP}),
   ...data
 });
 
