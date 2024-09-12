@@ -52,3 +52,20 @@ export const defaultCommentCollectionDto = (data = {}) => ([
     withModifier: true,
   })
 ]);
+
+/**
+ * Build comments dtos.
+ * @param {number} [commentsCount=10] The number of comments.
+ * @param {Object} [options]
+ * @param {Object} [options.withCreator=false] Add creator default dto.
+ * @param {Object} [options.withModifier=false] Add modifier default dto.
+ * @returns {object}
+ */
+export const buildDefineNumberOfCommentsDtos = (commentsCount = 10, options = {}) => {
+  const dtos = [];
+  for (let i = 0; i < commentsCount; i++) {
+    const dto = defaultCommentDto({content: `comment${i}`}, options);
+    dtos.push(dto);
+  }
+  return dtos;
+};
