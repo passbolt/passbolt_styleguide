@@ -29,45 +29,34 @@ export const resourceTypePasswordStringDto = (data = {}) => ({
   name: "Simple password",
   slug: "password-string",
   definition: {
-    "resource": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 64
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
         },
-        "username": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 64
-          }, {
-            "type": "null"
-          }]
+        username: {
+          type: "string",
+          maxLength: 255,
+          nullable: true,
         },
-        "uri": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 1024
-          }, {
-            "type": "null"
-          }]
+        uri: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true,
         },
-        "description": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 10000
-          }, {
-            "type": "null"
-          }]
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
         },
       }
     },
-    "secret": {
-      "type": "string",
-      "maxLength": 4096
+    secret: {
+      type: "string",
+      maxLength: 4096
     }
   },
   ...data
@@ -83,48 +72,38 @@ export const resourceTypePasswordAndDescriptionDto = (data = {}) => ({
   name: "Password with description",
   slug: "password-and-description",
   definition: {
-    "resource": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 64
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
         },
-        "username": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 64
-          }, {
-            "type": "null"
-          }]
+        username: {
+          type: "string",
+          maxLength: 255,
+          nullable: true,
         },
-        "uri": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 1024
-          }, {
-            "type": "null"
-          }]
+        uri: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true,
         },
       }
     },
-    "secret": {
-      "type": "object",
-      "required": [
-        "password"
-      ],
-      "properties": {
-        "password": {
-          "type": "string",
-          "maxLength": 4096
+    secret: {
+      type: "object",
+      required: ["password"],
+      properties: {
+        password: {
+          type: "string",
+          maxLength: 4096
         },
-        "description": {
-          "type": "string",
-          "maxLength": 10000,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
         },
       },
     }
@@ -142,73 +121,63 @@ export const resourceTypePasswordDescriptionTotpDto = (data = {}) => ({
   name: "Password, Description and TOTP",
   slug: "password-description-totp",
   definition: {
-    "resource": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 64
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
         },
-        "username": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 64
-          }, {
-            "type": "null"
-          }]
+        username: {
+          type: "string",
+          maxLength: 255,
+          nullable: true,
         },
-        "uri": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 1024
-          }, {
-            "type": "null"
-          }]
+        uri: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true,
         },
       }
     },
-    "secret": {
-      "type": "object",
-      "required": [
-        "password"
-      ],
-      "properties": {
-        "password": {
-          "type": "string",
-          "maxLength": 4096
+    secret: {
+      type: "object",
+      required: ["password", "totp"],
+      properties: {
+        password: {
+          type: "string",
+          maxLength: 4096
         },
-        "description": {
-          "type": "string",
-          "maxLength": 10000,
-          "nullable": true,
+        description: {
+          type: "string",
+          maxLength: 10000,
+          nullable: true,
         },
-        "totp": {
-          "type": "object",
-          "required": [
+        totp: {
+          type: "object",
+          required: [
             "secret_key",
             "digits",
             "algorithm"
           ],
-          "properties": {
-            "algorithm": {
-              "type": "string",
-              "minLength": 4,
-              "maxLength": 6
+          properties: {
+            algorithm: {
+              type: "string",
+              minLength: 4,
+              maxLength: 6
             },
-            "secret_key": {
-              "type": "string",
-              "maxLength": 1024
+            secret_key: {
+              type: "string",
+              maxLength: 1024
             },
-            "digits": {
-              "type": "number",
-              "minimum": 6,
-              "maximum": 8,
+            digits: {
+              type: "number",
+              minimum: 6,
+              maximum: 8,
             },
-            "period": {
-              "type": "number"
+            period: {
+              type: "number"
             }
           }
         }
@@ -228,56 +197,49 @@ export const resourceTypeTotpDto = (data = {}) => ({
   name: "Standalone TOTP",
   slug: "totp",
   definition: {
-    "resource": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 64
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
         },
-        "uri": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 1024
-          }, {
-            "type": "null"
-          }]
+        uri: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true,
         },
       }
     },
-    "secret": {
-      "type": "object",
-      "required": [
-        "totp"
-      ],
-      "properties": {
-        "totp": {
-          "type": "object",
-          "required": [
+    secret: {
+      type: "object",
+      required: ["totp"],
+      properties: {
+        totp: {
+          type: "object",
+          required: [
             "secret_key",
             "digits",
             "algorithm"
           ],
-          "properties": {
-            "algorithm": {
-              "type": "string",
-              "minLength": 4,
-              "maxLength": 6
+          properties: {
+            algorithm: {
+              type: "string",
+              minLength: 4,
+              maxLength: 6
             },
-            "secret_key": {
-              "type": "string",
-              "maxLength": 1024
+            secret_key: {
+              type: "string",
+              maxLength: 1024
             },
-            "digits": {
-              "type": "number",
-              "minimum": 6,
-              "maximum": 8,
+            digits: {
+              type: "number",
+              minimum: 6,
+              maximum: 8,
             },
-            "period": {
-              "type": "number"
+            period: {
+              type: "number"
             }
           }
         }
@@ -297,23 +259,18 @@ export const resourceTypeWithoutSecretDefinitionDto = (data = {}) => ({
   name: "Empty definition resource type",
   slug: "password-string",
   definition: {
-    "resource": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "name": {
-          "type": "string",
-          "maxLength": 64
+    resource: {
+      type: "object",
+      required: ["name"],
+      properties: {
+        name: {
+          type: "string",
+          maxLength: 255
         },
-        "uri": {
-          "anyOf": [{
-            "type": "string",
-            "maxLength": 1024
-          }, {
-            "type": "null"
-          }]
+        uri: {
+          type: "string",
+          maxLength: 1024,
+          nullable: true,
         },
       }
     },
