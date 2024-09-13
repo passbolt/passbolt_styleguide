@@ -120,4 +120,41 @@ describe("EntityValidationError", () => {
       expect(eve.getError("non-set-field")).toBeNull();
     });
   });
+
+  describe("::getFirstRuleErrorByField", () => {
+    it("should return null if there is no error", () => {
+      expect.assertions(1);
+
+      const entityValidationError = new EntityValidationError();
+      expect(entityValidationError.getFirstRuleErrorByField("")).toBeNull();
+    });
+
+    it("should return null if there is an error but it is asked for a field that does not have errors", () => {
+      expect.assertions(1);
+
+      const entityValidationError = new EntityValidationError();
+      entityValidationError.addError("property1", "rule1", "There is an error");
+      entityValidationError.addError("property2", "rule2", "There is an error");
+      expect(entityValidationError.getFirstRuleErrorByField("wrong-props")).toBeNull();
+    });
+
+    it("should return an error message if the given props has an error", () => {
+      expect.assertions(1);
+
+      const expectedErrorMessage = "There is an error";
+      const entityValidationError = new EntityValidationError();
+      entityValidationError.addError("property", "rule", expectedErrorMessage);
+      expect(entityValidationError.getFirstRuleErrorByField("property")).toStrictEqual(expectedErrorMessage);
+    });
+
+    it("should return the first error message if there are many errors on the given field", () => {
+      expect.assertions(1);
+
+      const expectedErrorMessage = "The expected error message";
+      const entityValidationError = new EntityValidationError();
+      entityValidationError.addError("property", "rule1", expectedErrorMessage);
+      entityValidationError.addError("property", "rule2", "Another unexpected message");
+      expect(entityValidationError.getFirstRuleErrorByField("property")).toStrictEqual(expectedErrorMessage);
+    });
+  });
 });

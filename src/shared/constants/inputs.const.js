@@ -18,6 +18,8 @@ export const USER_INPUT_MAX_LENGTH = 128;
 export const RESOURCE_GROUP_NAME_MAX_LENGTH = 50;
 /** Resource name max length */
 export const RESOURCE_NAME_MAX_LENGTH = 255;
+/** Resource username max length */
+export const RESOURCE_USERNAME_MAX_LENGTH = 255;
 /** Resource folder name max length */
 export const RESOURCE_FOLDER_NAME_MAX_LENGTH = 256;
 /** Resource name max length */
