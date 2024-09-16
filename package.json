@@ -75,6 +75,9 @@
     "xregexp": "^5.1.1"
   },
   "overrides": {
+    "fetch-mock": {
+      "path-to-regexp": "3.3.0"
+    },
     "make-dir": {
       "semver": "7.5.4"
     },

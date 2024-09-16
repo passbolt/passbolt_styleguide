@@ -12,7 +12,7 @@
  * @since         3.0.0
  */
 import "./mocks/mockCrypto";
-
+import "./mocks/mockTextEncoder";
 import "./matchers/extendExpect";
 
 /*
