@@ -1367,7 +1367,7 @@
   "<0>{{numberResourceSuccess}} out of {{count}}</0> password has been imported._other": "<0>{{numberResourceSuccess}} mots de passe sur {{count}}</0> ont été importés.",
   "Delete resource?_one": "Supprimer la ressource?",
   "Delete resource?_other": "Supprimer les ressources ?",
-  "Set an expiry date_one": "Set an expiry date",
+  "Set an expiry date_one": "Définir la date d'expiration",
   "Set an expiry date_other": "Définir les dates d'expiration",
   "The expiry date of the selected resource has been updated._one": "La date d'expiration de la ressource sélectionnée a été mise à jour.",
   "The expiry date of the selected resource has been updated._other": "Les dates d’expiration des ressources sélectionnées ont été mises à jour.",
