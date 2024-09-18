@@ -56,7 +56,7 @@ export default class TableContextProvider extends Component {
    */
   get defaultState() {
     return {
-      columns: [...this.props.columns], // The columns to display
+      columns: this.sanitizeColumnsFromProps, // The columns to display
       tableWidth: null, // The table width
       tableviewWidth: null, // The tableview width
       isDraggingColumn: false, // Is the column dragging
@@ -96,12 +96,27 @@ export default class TableContextProvider extends Component {
   }
 
   /**
+   * Sanitize columns from props to prevent negative width due to wrong calculation
+   * If one column width is negative, fallback to default width for all columns
+   * @returns {*[]}
+   */
+  get sanitizeColumnsFromProps() {
+    const columns = [...this.props.columns];
+    const isNegativeWidth = column => column.width < 0;
+    if (columns.some(isNegativeWidth)) {
+      // Set default widths for all columns
+      columns.forEach(column => column.width = column.defaultWidth);
+    }
+    return columns;
+  }
+
+  /**
    * Prepare table columns
    */
   prepareTableColumns() {
     const tableWidth = this.getTableWidth(this.state.columns);
     const isNotDefaultWidth = column => column.width !== column.defaultWidth;
-    if (this.props.columns.some(isNotDefaultWidth)) {
+    if (this.state.columns.some(isNotDefaultWidth)) {
       const tableviewWidth = this.tableviewRef.current.clientWidth;
       this.setState({tableWidth, tableviewWidth});
     } else {
@@ -153,8 +168,8 @@ export default class TableContextProvider extends Component {
    * Handle window resize event
    */
   handleWindowResizeEvent() {
-    // Prevent wrong calculation if the tableviewWidth is not set
-    if (this.state.tableviewWidth !== null) {
+    // Prevent wrong calculation if the tableviewWidth is not set (null > 0 or undefined > 0 return false)
+    if (this.state.tableviewWidth > 0) {
       this.setColumnsWidthFromActualWidth(this.state.tableviewWidth);
       // Debounce the function to store the new columns width
       this.handleChangeColumnsDebounced();
@@ -237,20 +252,25 @@ export default class TableContextProvider extends Component {
    */
   setColumnsWidthFromActualWidth(actualWidth) {
     const tableviewWidth = this.tableviewRef.current.clientWidth;
-    // Subtract all constant widths that do not change with screen width
-    const columnsResizableWidth = actualWidth - this.columnWidthNoResizable - this.columnsPaddingWidth;
-    // Calculate the ratio between two widths
-    const ratio = (tableviewWidth - this.columnWidthNoResizable - this.columnsPaddingWidth) / columnsResizableWidth;
-    const columns = [...this.state.columns];
-    // Scale the widths with the ratio
-    columns.forEach(column => {
-      if (column.resizable) {
-        column.width = column.width * ratio;
-      }
-    });
-    // Get the table width from all columns
-    const tableWidth = this.getTableWidth(columns);
-    this.setState({columns, tableWidth, tableviewWidth});
+    // Fixed width not to be taken into account
+    const fixedWidth = this.columnWidthNoResizable + this.columnsPaddingWidth;
+    // Prevent wrong calculation if actual width or tableview width are null or negative
+    if (actualWidth > fixedWidth && tableviewWidth > fixedWidth) {
+      // Subtract all constant widths that do not change with screen width
+      const columnsResizableWidth = actualWidth - fixedWidth;
+      // Calculate the ratio between two widths
+      const ratio = (tableviewWidth - fixedWidth) / columnsResizableWidth;
+      const columns = [...this.state.columns];
+      // Scale the widths with the ratio
+      columns.forEach(column => {
+        if (column.resizable) {
+          column.width = column.width * ratio;
+        }
+      });
+      // Get the table width from all columns
+      const tableWidth = this.getTableWidth(columns);
+      this.setState({columns, tableWidth, tableviewWidth});
+    }
   }
 
   /**
