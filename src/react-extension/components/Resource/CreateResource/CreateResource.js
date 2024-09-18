@@ -67,6 +67,7 @@ class CreateResource extends Component {
       passwordInDictionary: false,
       passwordEntropy: null,
       generatorSettings: null,
+      processing: false,
     };
   }
 
@@ -491,8 +492,10 @@ class CreateResource extends Component {
     const password = SecretGenerator.generate(this.state.generatorSettings);
     const passwordEntropy = SecretGenerator.entropy(password);
 
+    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", password);
+
     this.setState({
-      password: password,
+      resourceViewModel,
       passwordError: "",
       passwordInDictionary: false,
       passwordEntropy

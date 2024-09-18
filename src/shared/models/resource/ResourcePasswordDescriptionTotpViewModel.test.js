@@ -17,7 +17,7 @@ import {defaultTotpViewModelDto} from "../totp/TotpDto.test.data";
 import ResourcePasswordDescriptionTotpViewModel from "./ResourcePasswordDescriptionTotpViewModel";
 import {v4 as uuid} from "uuid";
 import {defaultResourcePasswordDescriptionTotpViewModelDto, defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {resourceTypesCollectionDto} from "../entity/resourceType/resourceTypesCollection.test.data";
+import {TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP} from "../entity/resourceType/resourceTypeEntity.test.data";
 
 describe("ResourcePasswordDescriptionTotpViewModel", () => {
   describe("::getSchema", () => {
@@ -54,11 +54,12 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
 
   describe("::toResourceDto", () => {
     it("should return a DTO in the expected format and without unknown fields", () => {
-      expect.assertions(8);
+      expect.assertions(9);
       const dto = defaultResourceViewModelDto();
       const viewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
+      expect(resultDto.id).toBeUndefined();
       expect(resultDto.metadata.name).toStrictEqual(dto.name);
       expect(resultDto.metadata.uris).toStrictEqual([dto.uri]);
       expect(resultDto.metadata.username).toStrictEqual(dto.username);
@@ -70,7 +71,7 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
     });
 
     it("should return a DTO with the additional information provided", () => {
-      expect.assertions(5);
+      expect.assertions(9);
       const dto = defaultResourceViewModelDto({
         folder_parent_id: uuid(),
         expired: "2024-09-16T15:09:11.579Z",
@@ -79,9 +80,13 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
       const viewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
+      expect(resultDto.id).toBeUndefined();
       expect(resultDto.metadata.name).toStrictEqual(dto.name);
       expect(resultDto.metadata.uris).toStrictEqual([dto.uri]);
       expect(resultDto.metadata.username).toStrictEqual(dto.username);
+      expect(resultDto.metadata.description).toBeUndefined();
+      expect(resultDto.metadata.resource_type_id).toStrictEqual(dto.resource_type_id);
+      expect(resultDto.resource_type_id).toStrictEqual(dto.resource_type_id);
       expect(resultDto.folder_parent_id).toStrictEqual(dto.folder_parent_id);
       expect(resultDto.expired).toStrictEqual(dto.expired);
     });
@@ -90,30 +95,37 @@ describe("ResourcePasswordDescriptionTotpViewModel", () => {
       expect.assertions(2);
       const dto = minimalResourceViewModelDto();
       const viewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
-      const resultDto = viewModel.toResourceDto(resourceTypesCollectionDto());
+      const resultDto = viewModel.toResourceDto();
 
       expect(resultDto.metadata.uris).toStrictEqual([]);
       expect(resultDto.metadata.username).toStrictEqual("");
+    });
+
+    it("should return a dto with an id if it is set", () => {
+      expect.assertions(1);
+      const dto = minimalResourceViewModelDto({id: uuid()});
+      const viewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
+      const resultDto = viewModel.toResourceDto();
+
+      expect(resultDto.id).toStrictEqual(dto.id);
     });
   });
 
   describe("::toSecretDto", () => {
     it("should return the secret in the right format", () => {
       expect.assertions(1);
-      const resourceTypes = resourceTypesCollectionDto();
       const expectedTotp = defaultTotpViewModelDto({
         secret_key: "new totp key",
       });
 
-      const expectedResourceType = resourceTypes.find(resourceType => resourceType.slug === "password-description-totp");
       const expectedSecret = {
         password: "this is the expected password",
         description: "The description",
         totp: expectedTotp,
-        resource_type_id: expectedResourceType.id};
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP};
 
       const viewModel = new ResourcePasswordDescriptionTotpViewModel(expectedSecret);
-      const secretDto = viewModel.toSecretDto(resourceTypesCollectionDto());
+      const secretDto = viewModel.toSecretDto();
       expect(secretDto).toStrictEqual(expectedSecret);
     });
   });

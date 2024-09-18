@@ -16,7 +16,6 @@ import EntitySchema from "../entity/abstract/entitySchema";
 import ResourcePasswordDescriptionViewModel from "./ResourcePasswordDescriptionViewModel";
 import {v4 as uuid} from "uuid";
 import {defaultResourceViewModelDto, minimalResourceViewModelDto} from "./resourceViewModel.test.data";
-import {resourceTypesCollectionDto} from "../entity/resourceType/resourceTypesCollection.test.data";
 
 describe("ResourcePasswordDescriptionViewModel", () => {
   describe("::getSchema", () => {
@@ -53,21 +52,24 @@ describe("ResourcePasswordDescriptionViewModel", () => {
 
   describe("::toResourceDto", () => {
     it("should return a DTO in the expected format and without unknown fields", () => {
-      expect.assertions(6);
+      expect.assertions(9);
       const dto = defaultResourceViewModelDto();
       const viewModel = new ResourcePasswordDescriptionViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
+      expect(resultDto.id).toBeUndefined();
       expect(resultDto.metadata.name).toStrictEqual(dto.name);
       expect(resultDto.metadata.uris).toStrictEqual([dto.uri]);
       expect(resultDto.metadata.username).toStrictEqual(dto.username);
       expect(resultDto.metadata.description).toBeUndefined();
+      expect(resultDto.metadata.resource_type_id).toStrictEqual(dto.resource_type_id);
+      expect(resultDto.resource_type_id).toStrictEqual(dto.resource_type_id);
       expect(resultDto.folder_parent_id).toBeNull();
       expect(resultDto.expired).toBeUndefined();
     });
 
     it("should return a DTO with the additional information provided", () => {
-      expect.assertions(7);
+      expect.assertions(9);
       const dto = defaultResourceViewModelDto({
         folder_parent_id: uuid(),
         expired: "2024-09-16T15:09:11.579Z",
@@ -75,9 +77,11 @@ describe("ResourcePasswordDescriptionViewModel", () => {
       const viewModel = new ResourcePasswordDescriptionViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
+      expect(resultDto.id).toBeUndefined();
       expect(resultDto.metadata.name).toStrictEqual(dto.name);
       expect(resultDto.metadata.uris).toStrictEqual([dto.uri]);
       expect(resultDto.metadata.username).toStrictEqual(dto.username);
+      expect(resultDto.metadata.description).toBeUndefined();
       expect(resultDto.metadata.resource_type_id).toStrictEqual(dto.resource_type_id);
       expect(resultDto.resource_type_id).toStrictEqual(dto.resource_type_id);
       expect(resultDto.folder_parent_id).toStrictEqual(dto.folder_parent_id);
@@ -88,10 +92,19 @@ describe("ResourcePasswordDescriptionViewModel", () => {
       expect.assertions(2);
       const dto = minimalResourceViewModelDto();
       const viewModel = new ResourcePasswordDescriptionViewModel(dto);
-      const resultDto = viewModel.toResourceDto(resourceTypesCollectionDto());
+      const resultDto = viewModel.toResourceDto();
 
       expect(resultDto.metadata.uris).toStrictEqual([]);
       expect(resultDto.metadata.username).toStrictEqual("");
+    });
+
+    it("should return a dto with an id if it is set", () => {
+      expect.assertions(1);
+      const dto = minimalResourceViewModelDto({id: uuid()});
+      const viewModel = new ResourcePasswordDescriptionViewModel(dto);
+      const resultDto = viewModel.toResourceDto();
+
+      expect(resultDto.id).toStrictEqual(dto.id);
     });
   });
 

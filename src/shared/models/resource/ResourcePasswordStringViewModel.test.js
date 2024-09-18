@@ -52,11 +52,12 @@ describe("ResourcePasswordStringViewModel", () => {
 
   describe("::toResourceDto", () => {
     it("should return a DTO in the expected format and without unknown fields", () => {
-      expect.assertions(8);
+      expect.assertions(9);
       const dto = defaultResourceViewModelDto();
       const viewModel = new ResourcePasswordStringViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
+      expect(resultDto.id).toBeUndefined();
       expect(resultDto.metadata.name).toStrictEqual(dto.name);
       expect(resultDto.metadata.uris).toStrictEqual([dto.uri]);
       expect(resultDto.metadata.username).toStrictEqual(dto.username);
@@ -68,7 +69,7 @@ describe("ResourcePasswordStringViewModel", () => {
     });
 
     it("should return a DTO with the folder_parent_id and expired fields", () => {
-      expect.assertions(2);
+      expect.assertions(9);
       const dto = defaultResourceViewModelDto({
         folder_parent_id: uuid(),
         expired: "2024-09-16T15:09:11.579Z",
@@ -76,6 +77,13 @@ describe("ResourcePasswordStringViewModel", () => {
       const viewModel = new ResourcePasswordStringViewModel(dto);
       const resultDto = viewModel.toResourceDto();
 
+      expect(resultDto.id).toBeUndefined();
+      expect(resultDto.metadata.name).toStrictEqual(dto.name);
+      expect(resultDto.metadata.uris).toStrictEqual([dto.uri]);
+      expect(resultDto.metadata.username).toStrictEqual(dto.username);
+      expect(resultDto.metadata.description).toStrictEqual(dto.description);
+      expect(resultDto.metadata.resource_type_id).toStrictEqual(dto.resource_type_id);
+      expect(resultDto.resource_type_id).toStrictEqual(dto.resource_type_id);
       expect(resultDto.folder_parent_id).toStrictEqual(dto.folder_parent_id);
       expect(resultDto.expired).toStrictEqual(dto.expired);
     });
@@ -91,6 +99,15 @@ describe("ResourcePasswordStringViewModel", () => {
       expect(resultDto.metadata.description).toStrictEqual("");
       expect(resultDto.folder_parent_id).toBeNull();
       expect(resultDto.expired).toBeUndefined();
+    });
+
+    it("should return a dto with an id if it is set", () => {
+      expect.assertions(1);
+      const dto = minimalResourceViewModelDto({id: uuid()});
+      const viewModel = new ResourcePasswordStringViewModel(dto);
+      const resultDto = viewModel.toResourceDto();
+
+      expect(resultDto.id).toStrictEqual(dto.id);
     });
   });
 

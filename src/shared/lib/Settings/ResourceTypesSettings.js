@@ -70,24 +70,7 @@ export default class ResourceTypesSettings {
    * @returns {boolean}
    */
   isResourceTypeEnabled(slug) {
-    if (!this.areResourceTypesEnabled()) {
-      return false;
-    }
     return this.resourceTypes.some(type => type.slug === slug);
-  }
-
-  /**
-   * Are resource types supported?
-   * @returns {boolean}
-   */
-  areResourceTypesEnabled() {
-    if (!this.settings || !this.settings.canIUse('resourceTypes')) {
-      return false;
-    }
-    if (!Array.isArray(this.resourceTypes) || !this.resourceTypes) {
-      return false;
-    }
-    return this.resourceTypes.length > 0;
   }
 
   /**
@@ -97,10 +80,6 @@ export default class ResourceTypesSettings {
    * @returns {boolean}
    */
   mustEncryptDescription(resourceTypeId) {
-    // No content type present => legacy mode, keep in cleartext
-    if (!this.areResourceTypesEnabled() || typeof resourceTypeId === 'undefined') {
-      return false;
-    }
     // If only encrypted content type is present => always encrypt description
     if (!this.isLegacyResourceTypeEnabled() && this.isEncryptedDescriptionEnabled()) {
       return true;
@@ -125,14 +104,8 @@ export default class ResourceTypesSettings {
    * @returns {undefined|string}
    */
   findResourceTypeIdBySlug(slug) {
-    if (!this.areResourceTypesEnabled()) {
-      return undefined;
-    }
     const type = this.resourceTypes.find(type => type.slug === slug);
-    if (type && type.id) {
-      return type.id;
-    }
-    return undefined;
+    return type?.id;
   }
 
   /**
@@ -141,14 +114,8 @@ export default class ResourceTypesSettings {
    * @returns {undefined|string}
    */
   findResourceTypeSlugById(id) {
-    if (!this.areResourceTypesEnabled()) {
-      return undefined;
-    }
     const type = this.resourceTypes.find(type => type.id === id);
-    if (type && type.slug) {
-      return type.slug;
-    }
-    return undefined;
+    return type?.slug;
   }
 
   /*

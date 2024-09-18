@@ -29,16 +29,12 @@ import GenerateResourcePassword from "../../ResourcePassword/GenerateResourcePas
 import {withResourcePasswordGeneratorContext} from "../../../contexts/ResourcePasswordGeneratorContext";
 import Password from "../../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../../shared/components/PasswordComplexity/PasswordComplexity";
-import {maxSizeValidation} from "../../../lib/Error/InputValidator";
-import {RESOURCE_PASSWORD_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
-import {RESOURCE_NAME_MAX_LENGTH, RESOURCE_DESCRIPTION_MAX_LENGTH, RESOURCE_URI_MAX_LENGTH} from '../../../../shared/constants/inputs.const';
 import PownedService from '../../../../shared/services/api/secrets/pownedService';
 import {withPasswordPolicies} from "../../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import Totp from "../../../../shared/components/Totp/Totp";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
-import TotpViewModel from "../../../../shared/models/totp/TotpViewModel";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {DateTime} from "luxon";
 import ConfirmCreateEdit, {
@@ -46,6 +42,11 @@ import ConfirmCreateEdit, {
   ConfirmEditCreateRuleVariations
 } from "../ConfirmCreateEdit/ConfirmCreateEdit";
 import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
+import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
+import ResourceViewModel from "../../../../shared/models/resource/ResourceViewModel";
+import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
+import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
+import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
 
 class EditResource extends Component {
   constructor(props) {
@@ -55,56 +56,37 @@ class EditResource extends Component {
     this.createInputRef();
   }
 
+  /**
+   * Returns the component default state
+   * @return {object}
+   */
   get defaultState() {
-    const resource = this.props.context.resources.find(item => item.id === this.props.resourceId) || {};
-
     return {
-      nameOriginal: resource.metadata.name || "",
-      name: resource.metadata.name || "",
-      nameError: "",
-      nameWarning: "",
-      username: resource.metadata.username || "",
-      usernameError: "",
-      usernameWarning: "",
-      uri: resource.metadata.uris?.[0] || "",
-      uriError: "",
-      uriWarning: "",
-      passwordOriginal: null,
-      password: "",
-      passwordError: "",
-      passwordWarning: "",
-      description: resource.metadata.description || "",
-      descriptionError: "",
-      descriptionWarning: "",
-      totp: null, // The totp
-      isSecretDecrypting: true,
-      resourceTypeIdOriginal: resource.resource_type_id || "",
-      resourceTypeId: resource.resource_type_id || "",
+      resourceViewModel: null,
+      originalResourceViewModel: null,
+      errors: new EntityValidationError(), //the validation errors set
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
       isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
       isPasswordDictionaryCheckServiceAvailable: true, // Is the password dictionary check service available.
       passwordInDictionary: false,
       passwordEntropy: null,
+      generatorSettings: null,
+      isSecretDecrypting: true,
       processing: false,
-      originalDecryptedSecret: null,
     };
   }
 
+  /**
+   * Initialize the component event handlers
+   */
   initEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handlePasswordInputKeyUp = this.handlePasswordInputKeyUp.bind(this);
     this.handleOpenGenerator = this.handleOpenGenerator.bind(this);
     this.handleGeneratePasswordButtonClick = this.handleGeneratePasswordButtonClick.bind(this);
-    this.handleDescriptionInputFocus = this.handleDescriptionInputFocus.bind(this);
-    this.handleDescriptionInputBlur = this.handleDescriptionInputBlur.bind(this);
     this.handleDescriptionToggle = this.handleDescriptionToggle.bind(this);
-    this.handleDescriptionInputKeyUp = this.handleDescriptionInputKeyUp.bind(this);
-    this.handleUriInputKeyUp = this.handleUriInputKeyUp.bind(this);
-    this.handleUsernameInputKeyUp = this.handleUsernameInputKeyUp.bind(this);
-    this.handleNameInputKeyUp = this.handleNameInputKeyUp.bind(this);
-    this.handleAddTotpClick = this.handleAddTotpClick.bind(this);
-    this.handleEditTotpClick = this.handleEditTotpClick.bind(this);
+    this.handleTotpClick = this.handleTotpClick.bind(this);
     this.handleDeleteTotpClick = this.handleDeleteTotpClick.bind(this);
     this.applyTotp = this.applyTotp.bind(this);
     this.save = this.save.bind(this);
@@ -117,11 +99,11 @@ class EditResource extends Component {
   createInputRef() {
     this.nameInputRef = React.createRef();
     this.passwordInputRef = React.createRef();
-    this.descriptionInputRef = React.createRef();
   }
 
   /**
    * Whenever the component has been mounted
+   * @returns {Promise<void>}
    */
   async componentDidMount() {
     this.props.passwordExpiryContext.findSettings();
@@ -133,32 +115,14 @@ class EditResource extends Component {
 
   /**
    * Whenever the component has been changed (props)
-   * @param prevProps The previous component props
+   * @param {object} prevProps The previous component props
    */
   componentDidUpdate(prevProps) {
     this.handleLastGeneratedPasswordChanged(prevProps.resourcePasswordGeneratorContext.lastGeneratedPassword);
   }
 
   /**
-   * Initialize the resource type associate to the resource
-   */
-  initResourceType() {
-    if (this.isEncryptedDescriptionEnabled()) {
-      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
-        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-      );
-      this.setState({resourceTypeId});
-    } else if (this.areResourceTypesEnabled()) {
-      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
-        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
-      );
-      this.setState({resourceTypeId});
-    }
-  }
-
-  /**
    * Initialize the pwned password service
-   * @returns {void}
    */
   initPwnedPasswordService() {
     const isPasswordDictionaryCheckRequested = this.props.passwordPoliciesContext.shouldRunDictionaryCheck();
@@ -180,11 +144,63 @@ class EditResource extends Component {
   }
 
   /**
+   * Returns the corresponding ResourceViewModel type based on the given slug.
+   * @param {string} slug
+   * @returns {typeof ResourceViewModel}
+   * @throws {Error} if the slug is unknown
+   */
+  getViewModelTypeBySlug(slug) {
+    switch (slug) {
+      case ResourcePasswordStringViewModel.resourceTypeSlug:
+        return ResourcePasswordStringViewModel;
+      case ResourcePasswordDescriptionViewModel.resourceTypeSlug:
+        return ResourcePasswordDescriptionViewModel;
+      case ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug:
+        return ResourcePasswordDescriptionTotpViewModel;
+      default:
+        throw new Error("There is no ResourceViewModel mathching the given slug");
+    }
+  }
+
+  /**
    * initialize component
    * @returns {Promise<void>}
    */
   async initialize() {
-    await this.decryptSecret();
+    const resourceTypeSlug = this.props.context.resourceTypesSettings.findResourceTypeSlugById(this.props.resource.resource_type_id);
+    const resourceViewModelType = this.getViewModelTypeBySlug(resourceTypeSlug);
+
+    let decryptedSecret = await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resource.id);
+    if (resourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug) {
+      decryptedSecret = {password: decryptedSecret};
+    }
+
+    const description = resourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug
+      ? this.props.resource.metadata?.description
+      : decryptedSecret?.description;
+
+    const resourceViewModelDto = {
+      id: this.props.resource.id,
+      name: this.props.resource.metadata.name,
+      uri: this.props.resource.metadata.uris?.[0],
+      username: this.props.resource.metadata.username,
+      password: decryptedSecret.password,
+      description: description,
+      folder_parent_id: this.props.resource.folder_parent_id,
+      expired: this.props.resource.expired,
+      resource_type_id: this.props.resource.resource_type_id,
+      totp: decryptedSecret?.totp,
+    };
+
+    const resourceViewModel = new resourceViewModelType(resourceViewModelDto);
+    const passwordEntropy = SecretGenerator.entropy(resourceViewModel.password);
+
+    this.setState({
+      resourceViewModel: resourceViewModel,
+      originalResourceViewModel: resourceViewModel,
+      isSecretDecrypting: false,
+      passwordEntropy: passwordEntropy,
+    });
   }
 
   /**
@@ -205,8 +221,10 @@ class EditResource extends Component {
     const passwordEntropy = SecretGenerator.entropy(lastGeneratedPassword);
     const generatorSettings = this.props.resourcePasswordGeneratorContext.getSettings();
 
+    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", lastGeneratedPassword);
+
     this.setState({
-      password: lastGeneratedPassword,
+      resourceViewModel,
       generatorSettings,
       passwordEntropy,
       passwordInDictionary: false,
@@ -218,52 +236,13 @@ class EditResource extends Component {
    *  Resource type helpers
    * =============================================================
    */
-  isEncryptedDescriptionEnabled() {
-    return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
-  }
-
-  areResourceTypesEnabled() {
-    return this.resourceTypesSettings.areResourceTypesEnabled();
-  }
-
-  /**
-   * Get resources type settings
-   * @return {ResourceTypesSettings|*}
-   */
-  get resourceTypesSettings() {
-    return this.props.context.resourceTypesSettings;
-  }
 
   /**
    * Must encrypt the description
-   * @return {boolean}
+   * @returns {boolean}
    */
   get mustEncryptDescription() {
-    return this.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(this.state.resourceTypeId);
-  }
-
-  /**
-   * Has encrypted description
-   * @return {boolean}
-   */
-  get hasEncryptedDescription() {
-    return this.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(this.state.resourceTypeIdOriginal);
-  }
-
-  /**
-   * Is legacy resource
-   * @return {boolean}
-   */
-  get isLegacyResource() {
-    return this.resourceTypesSettings.assertResourceTypeIdIsLegacy(this.state.resourceTypeId);
-  }
-
-  /**
-   * Is TOTP resource
-   * @return {boolean}
-   */
-  get isTotpResources() {
-    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.state.resourceTypeId);
+    return !this.state.resourceViewModel.isDescriptionUnencrypted();
   }
 
   /*
@@ -274,7 +253,7 @@ class EditResource extends Component {
   /**
    * Handle form submit event.
    * @params {ReactEvent} The react event
-   * @return {Promise}
+   * @returns {Promise<void>}
    */
   async handleFormSubmit(event) {
     event.preventDefault();
@@ -285,9 +264,10 @@ class EditResource extends Component {
 
     await this.toggleProcessing();
 
-    if (!await this.validate()) {
+    const validationErrors = this.validate();
+    if (validationErrors.hasErrors()) {
       await this.toggleProcessing();
-      this.focusFirstFieldError();
+      this.focusFirstFieldError(validationErrors);
       return;
     }
 
@@ -309,7 +289,7 @@ class EditResource extends Component {
     const confirmCreationDialog = {
       operation: ConfirmEditCreateOperationVariations.EDIT,
       rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
-      resourceName: this.state.name,
+      resourceName: this.state.resourceViewModel.name,
       onConfirm: this.save,
       onReject: this.rejectEditionConfirmation
     };
@@ -327,7 +307,7 @@ class EditResource extends Component {
     const confirmCreationDialog = {
       operation: ConfirmEditCreateOperationVariations.EDIT,
       rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
-      resourceName: this.state.name,
+      resourceName: this.state.resourceViewModel.name,
       onConfirm: this.save,
       onReject: this.rejectEditionConfirmation
     };
@@ -336,6 +316,7 @@ class EditResource extends Component {
 
   /**
    * Reject the creation confirmation.
+   * @returns {Promise<void>}
    */
   async rejectEditionConfirmation() {
     await this.toggleProcessing();
@@ -374,58 +355,12 @@ class EditResource extends Component {
    */
   /**
    * Validate the form.
-   * @return {Promise<boolean>}
+   * @returns {EntityValidationError}
    */
-  async validate() {
-    // Reset the form errors.
-    this.setState({
-      error: "",
-      nameError: "",
-      uriError: "",
-      usernameError: "",
-      passwordError: "",
-      descriptionError: ""
-    });
-
-    // Validate the form inputs.
-    await Promise.all([
-      this.validateNameInput(),
-      this.validatePasswordInput()
-    ]);
-
-    return this.state.nameError === "" && this.state.passwordError === "";
-  }
-
-  /**
-   * Validate the name input.
-   * @return {Promise}
-   */
-  validateNameInput() {
-    const name = this.state.name.trim();
-    let nameError = "";
-    if (!name.length) {
-      nameError = this.translate("A name is required.");
-    }
-
-    return new Promise(resolve => {
-      this.setState({nameError: nameError}, resolve);
-    });
-  }
-
-  /**
-   * Validate the password input.
-   * @return {Promise}
-   */
-  validatePasswordInput() {
-    const password = this.state.password;
-    let passwordError = "";
-    if (!password.length) {
-      passwordError = this.translate("A password is required.");
-    }
-
-    return new Promise(resolve => {
-      this.setState({passwordError}, resolve);
-    });
+  validate() {
+    const errors = this.state.resourceViewModel.validate();
+    this.setState({errors});
+    return errors;
   }
 
   /**
@@ -439,14 +374,14 @@ class EditResource extends Component {
 
   /**
    * Check if the password is part of a dictionary.
-   * @return {Promise<boolean>}
+   * @returns {Promise<boolean>}
    */
   async isPasswordInDictionary() {
     if (!this.state.isPasswordDictionaryCheckRequested || !this.state.isPasswordDictionaryCheckServiceAvailable) {
       return false;
     }
 
-    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.password);
+    const {isPwnedServiceAvailable, inDictionary} = await this.pownedService.evaluateSecret(this.state.resourceViewModel.password);
 
     if (!isPwnedServiceAvailable) {
       this.setState({isPasswordDictionaryCheckServiceAvailable: false});
@@ -463,136 +398,56 @@ class EditResource extends Component {
    */
   /**
    * Update the resource
-   * @returns {Promise<Object>} updated resource
+   * @returns {Promise<void>}
    */
   async updateResource() {
-    const resourceDto = {
-      id: this.props.resourceId,
-      metadata: {
-        name: this.state.name,
-        username: this.state.username,
-        uris: [this.state.uri],
-      }
-    };
-
-    const isPasswordExpiryEnabled = this.props.passwordExpiryContext.isFeatureEnabled();
-    const hasPasswordChanged = this.state.password !== this.state.passwordOriginal;
-    if (isPasswordExpiryEnabled && hasPasswordChanged) {
-      this.setResourceExpirationDate(resourceDto);
+    const isSecretChanged = ResourceViewModel.areSecretsDifferent(this.state.resourceViewModel, this.state.originalResourceViewModel);
+    if (!isSecretChanged) {
+      await this.props.context.port.request("passbolt.resources.update", this.state.resourceViewModel.toResourceDto(), null);
+      return;
     }
 
-    if (!this.areResourceTypesEnabled()) {
-      return this.updateResourceLegacy(resourceDto);
+    let resourceViewModel = this.state.resourceViewModel;
+    if (this.shouldUpdateExpirationDate()) {
+      resourceViewModel = this.state.resourceViewModel.cloneWithMutation("expired", this.getResourceExpirationDate());
     }
 
-    // Resource types enabled but legacy type requested
-    if (this.isLegacyResource) {
-      return this.updateWithoutEncryptedDescription(resourceDto);
-    }
-
-    // Resource types with totp encrypted
-    if (this.isTotpResources) {
-      return this.updateWithEncryptedDescriptionAndTotp(resourceDto);
-    }
-
-    return this.updateWithEncryptedDescription(resourceDto);
+    const resourceDto = resourceViewModel.toResourceDto();
+    const secretDto = this.state.resourceViewModel.toSecretDto();
+    await this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
   }
 
   /**
-   * Sets the expiration date on the given resource according to the password expiry settings
-   * @param {object}
+   * Returns true if the expiration date of the resource should be updated.
+   * @returns {boolean}
    */
-  setResourceExpirationDate(resourceDto) {
+  shouldUpdateExpirationDate() {
     const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
-    if (!passwordExpirySettings) {
-      // no settings are defined, we don't process any expiration date
-      return;
+    if (!passwordExpirySettings?.automatic_update) {
+      return false;
     }
 
-    if (!passwordExpirySettings.automatic_update) {
-      // the settings are defined such that we don't do any update on a password change.
-      return;
-    }
+    return this.state.resourceViewModel.password !== this.state.originalResourceViewModel.password;
+  }
 
+  /**
+   * Get the expiration date on the given resource according to the password expiry settings
+   * @returns {DateTime|null}
+   */
+  getResourceExpirationDate() {
+    const passwordExpirySettings = this.props.passwordExpiryContext.getSettings();
     if (passwordExpirySettings.default_expiry_period == null) {
       // settings say we need to update the expiration date but the default_expiry_period is null so, we mark the resource as "not expired".
-      resourceDto.expired = null;
-      return;
+      return null;
     }
 
     // we have to update the expiration date in future based on the configuration.
-    const date = DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period});
-    resourceDto.expired = date.toISO();
-  }
-
-  /**
-   * Update the resource (LEGACY)
-   * @returns {Promise<Object>} updated resource
-   * @deprecated will be removed when v2 support is dropped
-   */
-  async updateResourceLegacy(resourceDto) {
-    resourceDto.metadata.description = this.state.description;
-    const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
-
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
-  }
-
-  /**
-   * Update the resource with non encrypted description content type
-   * @param resourceDto
-   */
-  async updateWithoutEncryptedDescription(resourceDto) {
-    resourceDto.metadata.description = this.state.description;
-    resourceDto.metadata.resource_type_id = this.state.resourceTypeId;
-    // @TODO E2EE resource_type_id duplicate for resource
-    resourceDto.resource_type_id = this.state.resourceTypeId;
-    const plaintextDto = this.hasSecretChanged() ? this.state.password : null;
-
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
-  }
-
-  /**
-   * Update the resource with encrypted description content type
-   * @param resourceDto
-   */
-  async updateWithEncryptedDescription(resourceDto) {
-    resourceDto.metadata.resource_type_id = this.state.resourceTypeId;
-    // @TODO E2EE resource_type_id duplicate for resource
-    resourceDto.resource_type_id = this.state.resourceTypeId;
-    resourceDto.metadata.description = '';
-    let plaintextDto = null;
-    if (this.hasSecretChanged()) {
-      plaintextDto = {
-        description: this.state.description,
-        password: this.state.password
-      };
-    }
-
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
-  }
-
-  /**
-   * Update the resource with encrypted description and totp content type
-   * @param resourceDto
-   */
-  async updateWithEncryptedDescriptionAndTotp(resourceDto) {
-    resourceDto.metadata.resource_type_id = this.state.resourceTypeId;
-    // @TODO E2EE resource_type_id duplicate for resource
-    resourceDto.resource_type_id = this.state.resourceTypeId;
-    resourceDto.metadata.description = '';
-
-    let plaintextDto = null;
-    if (this.hasSecretChanged()) {
-      plaintextDto = this.state.totp.toSecretDto();
-      plaintextDto.password = this.state.password;
-      plaintextDto.description = this.state.description;
-    }
-
-    return this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextDto);
+    return DateTime.utc().plus({days: passwordExpirySettings.default_expiry_period}).toISO();
   }
 
   /**
    * Handle save operation success.
+   * @returns {Promise<void>}
    */
   async handleSaveSuccess() {
     await this.props.actionFeedbackContext.displaySuccess(this.translate("The password has been updated successfully"));
@@ -608,13 +463,11 @@ class EditResource extends Component {
 
   /**
    * Handle save operation error.
-   * @param {object} error The returned error
+   * @param {Error} error The returned error
    */
   handleSaveError(error) {
     // It can happen when the user has closed the passphrase entry dialog by instance.
-    if (error.name === "UserAbortsOperationError") {
-      // Do nothing
-    } else {
+    if (error.name !== "UserAbortsOperationError") {
       // Unexpected error occurred.
       console.error(error);
       this.handleError(error);
@@ -623,22 +476,20 @@ class EditResource extends Component {
 
   /**
    * handle error to display the error dialog
-   * @param error
+   * @param {Error} error
    */
   handleError(error) {
-    const errorDialogProps = {
-      error: error
-    };
-    this.props.dialogContext.open(NotifyError, errorDialogProps);
+    this.props.dialogContext.open(NotifyError, {error});
   }
 
   /**
    * Focus the first field of the form which is in error state.
+   * @param {EntityValidationError} validationErrors
    */
-  focusFirstFieldError() {
-    if (this.state.nameError) {
+  focusFirstFieldError(validationErrors) {
+    if (validationErrors.hasError("name")) {
       this.nameInputRef.current.focus();
-    } else if (this.state.passwordError) {
+    } else if (validationErrors.hasError("password")) {
       this.passwordInputRef.current.focus();
     }
   }
@@ -654,56 +505,43 @@ class EditResource extends Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    const value = target.value;
     const name = target.name;
+    const value = target.value || null;
 
     const newState = {
-      [name]: value
+      resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
     };
 
     if (name === "password") {
       newState.passwordInDictionary = false;
-      if (value.length) {
-        newState.passwordEntropy = SecretGenerator.entropy(value);
-      } else {
-        newState.passwordEntropy = null;
-      }
+      newState.passwordEntropy = value?.length
+        ? SecretGenerator.entropy(value)
+        : newState.passwordEntropy = null;
     }
+
+    if (this.state.hasAlreadyBeenValidated) {
+      newState.errors = newState.resourceViewModel.validate();
+    }
+
     this.setState(newState);
   }
 
   /**
-   * Handle description input focus.
+   * Returns true if the `maxLength` property of the given field has been reached.
+   * @param {string} fieldName
+   * @returns {boolean}
    */
-  async handleDescriptionInputFocus() {
-    const descriptionHasFocus = true;
-    this.setState({passwordInputHasFocus: descriptionHasFocus});
-    this.descriptionInputRef.current.focus();
-  }
+  isFieldMaxSizeReached(fieldName) {
+    if (this.state.hasAlreadyBeenValidated) {
+      return false;
+    }
 
-  /**
-   * Handle description input blur.
-   */
-  handleDescriptionInputBlur() {
-    this.setState({descriptionInputHasFocus: false});
-  }
+    const schema = this.state.resourceViewModel.constructor.getSchema();
+    if (typeof(schema.properties[fieldName]?.maxLength) === "undefined") {
+      return false;
+    }
 
-  /**
-   * Handle name input keyUp event.
-   */
-  async handleNameInputKeyUp() {
-    await this.validateNameInput();
-    const nameWarning = maxSizeValidation(this.state.name, RESOURCE_NAME_MAX_LENGTH, this.translate);
-    this.setState({nameWarning});
-  }
-
-  /**
-   * Handle password input keyUp event.
-   */
-  async handlePasswordInputKeyUp() {
-    await this.validatePasswordInput();
-    const passwordWarning = maxSizeValidation(this.state.password, RESOURCE_PASSWORD_MAX_LENGTH, this.translate);
-    this.setState({passwordWarning});
+    return this.state.resourceViewModel[fieldName]?.length >= schema.properties[fieldName].maxLength;
   }
 
   /**
@@ -715,7 +553,8 @@ class EditResource extends Component {
     }
     const password = SecretGenerator.generate(this.state.generatorSettings);
     const passwordEntropy = SecretGenerator.entropy(password);
-    this.setState({password: password, passwordEntropy, passwordInDictionary: false});
+    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", password);
+    this.setState({resourceViewModel, passwordEntropy, passwordInDictionary: false});
     this.isPasswordInDictionary(password);
   }
 
@@ -727,25 +566,28 @@ class EditResource extends Component {
   }
 
   /**
-   * Handle add totp
+   * Handle click on totp button
    */
-  handleAddTotpClick() {
-    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.ADD_TOTP, onApply: this.applyTotp});
-  }
-
-  /**
-   * Handle edit totp
-   */
-  handleEditTotpClick() {
-    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_TOTP, totp: this.state.totp, onApply: this.applyTotp});
+  handleTotpClick() {
+    const totp = this.state.resourceViewModel.totp;
+    const mode = totp
+      ? TotpWorkflowMode.EDIT_TOTP
+      : TotpWorkflowMode.ADD_TOTP;
+    const onApply = this.applyTotp;
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode, totp, onApply});
   }
 
   /**
    * Handle delete totp
    */
   handleDeleteTotpClick() {
-    this.setState({totp: null});
-    this.initResourceType();
+    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    const dto = {
+      ...this.state.resourceViewModel,
+      resource_type_id: resourceTypeId,
+    };
+    const resourceViewModel = new ResourcePasswordDescriptionViewModel(dto);
+    this.setState({resourceViewModel});
   }
 
   /**
@@ -753,10 +595,14 @@ class EditResource extends Component {
    * @param {object} totp
    */
   applyTotp(totp) {
-    const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_DESCRIPTION_TOTP
-    );
-    this.setState({totp, resourceTypeId});
+    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
+    const dto = {
+      ...this.state.resourceViewModel,
+      resource_type_id: resourceTypeId,
+      totp: totp
+    };
+    const resourceViewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
+    this.setState({resourceViewModel});
   }
 
   /**
@@ -771,97 +617,28 @@ class EditResource extends Component {
 
   /**
    * Switch to toggle description field encryption
+   * @returns {Promise<void>}
    */
   async handleDescriptionToggle() {
-    // Description is not encrypted and encrypted description type is not supported => leave it alone
-    if (!this.isEncryptedDescriptionEnabled()) {
+    const isOriginalResourcePasswordString = this.state.originalResourceViewModel.constructor.resourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug;
+    const canToggleDescription = isOriginalResourcePasswordString && this.state.resourceViewModel.canToggleDescription();
+    if (!canToggleDescription) {
       return;
     }
 
-    // No obligation to keep description encrypted, allow toggle
-    if (!this.mustEncryptDescription) {
-      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
-        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-      );
-      this.setState({resourceTypeId});
-    } else if (!this.isTotpResources && !this.hasEncryptedDescription) {
-      const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(
-        this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_STRING
-      );
-      this.setState({resourceTypeId});
-    }
-  }
+    const resourceViewModel = this.state.resourceViewModel;
+    const newResourceViewModelType = resourceViewModel.isDescriptionUnencrypted()
+      ? ResourcePasswordDescriptionViewModel
+      : ResourcePasswordStringViewModel;
 
-  /**
-   * Whenever the user input keys in the description area
-   */
-  handleDescriptionInputKeyUp() {
-    const descriptionWarning = maxSizeValidation(this.state.description, RESOURCE_DESCRIPTION_MAX_LENGTH, this.translate);
-    this.setState({descriptionWarning});
-  }
+    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(newResourceViewModelType.resourceTypeSlug);
+    const dto = {
+      ...this.state.resourceViewModel,
+      resource_type_id: resourceTypeId
+    };
 
-
-  /**
-   * Whenever the user input keys in the name area
-   */
-  handleUriInputKeyUp() {
-    const uriWarning = maxSizeValidation(this.state.uri, RESOURCE_URI_MAX_LENGTH, this.translate);
-    this.setState({uriWarning});
-  }
-
-  /**
-   * Whenever the user input keys in the username area
-   */
-  handleUsernameInputKeyUp() {
-    const usernameWarning = maxSizeValidation(this.state.username, RESOURCE_NAME_MAX_LENGTH, this.translate);
-    this.setState({usernameWarning});
-  }
-
-
-  /*
-   * =============================================================
-   *  Decryption
-   * =============================================================
-   */
-  /**
-   * Decrypt the password secret
-   */
-  async decryptSecret() {
-    this.setState({
-      isSecretDecrypting: true
-    });
-
-    try {
-      const plaintextSecretDto = await this.getDecryptedSecret();
-      const password = plaintextSecretDto.password;
-      const newState = {
-        password: password,
-        passwordOriginal: password,
-        description: plaintextSecretDto.description || this.state.description,
-        totp: plaintextSecretDto.totp ? new TotpViewModel(plaintextSecretDto.totp) : null,
-        passwordEntropy: SecretGenerator.entropy(password),
-        isSecretDecrypting: false,
-      };
-      const originalDecryptedSecret = {
-        password: newState.password,
-        description: newState.description,
-        totp: newState.totp
-      };
-      this.setState({
-        ...newState,
-        originalDecryptedSecret
-      });
-    } catch (error) {
-      this.handleClose();
-    }
-  }
-
-  /**
-   * Get the decrypted password secret
-   * @return {Promise<Object>}
-   */
-  async getDecryptedSecret() {
-    return this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resourceId);
+    const newResourceViewModel = new newResourceViewModelType(dto);
+    this.setState({resourceViewModel: newResourceViewModel});
   }
 
   /*
@@ -875,12 +652,9 @@ class EditResource extends Component {
    * @returns {string}
    */
   getPasswordInputPlaceholder() {
-    let placeholder =  this.translate("Password");
-    if (this.state.isSecretDecrypting) {
-      placeholder = this.translate("Decrypting");
-    }
-
-    return placeholder;
+    return this.state.isSecretDecrypting
+      ? this.translate("Decrypting")
+      : this.translate("Password");
   }
 
   /**
@@ -888,10 +662,9 @@ class EditResource extends Component {
    * @returns {string}
    */
   getDescriptionPlaceholder() {
-    if (this.state.isSecretDecrypting && this.mustEncryptDescription) {
-      return this.translate("Decrypting");
-    }
-    return this.translate("Description");
+    return this.state.isSecretDecrypting && this.mustEncryptDescription
+      ? this.translate("Decrypting")
+      : this.translate("Description");
   }
 
   /**
@@ -903,6 +676,7 @@ class EditResource extends Component {
   }
 
   /**
+   * Returns true if the password input should be disabled.
    * @returns {boolean}
    */
   isPasswordDisabled() {
@@ -910,50 +684,11 @@ class EditResource extends Component {
   }
 
   /**
+   * Returns true if the description textarea should be disabeld.
    * @returns {boolean}
    */
   isDescriptionDisabled() {
-    return (this.state.isSecretDecrypting && this.mustEncryptDescription);
-  }
-
-  /**
-   * Returns true if the secret has changed
-   * The checks take into account the resource type as well to ensure that there is no false positive.
-   * E.g: resource type is password with description in clear, a change in the description shouldn't
-   * be considered as a "secret changed".
-   * @returns {boolean}
-   */
-  hasSecretChanged() {
-    const hasPasswordChanged = this.state.password !== this.state.originalDecryptedSecret.password;
-    // if there is no resource types, secret contains password and it's already checked.
-    if (!this.areResourceTypesEnabled()) {
-      return hasPasswordChanged;
-    }
-
-    // if the resource type has changed, the secret is changed as well
-    if (this.state.resourceTypeIdOriginal !== this.state.resourceTypeId) {
-      return true;
-    }
-
-    if (this.isTotpResources) {
-      // the resource type didn't changed then the original secret contains also a totp.
-      const originalTotp = this.state.originalDecryptedSecret.totp.toSecretDto().totp;
-      const newTotp = this.state.totp.toSecretDto().totp;
-
-      const hasTotpChanged = TotpViewModel.areSecretsDifferent(originalTotp, newTotp);
-
-      if (hasTotpChanged) {
-        return true;
-      }
-    }
-
-    if (!this.hasEncryptedDescription) {
-      // the secret contains only the password.
-      return hasPasswordChanged;
-    }
-
-    const hasDescriptionChanged = this.state.description !== this.state.originalDecryptedSecret.description;
-    return hasPasswordChanged || hasDescriptionChanged;
+    return (this.state.isSecretDecrypting && !this.state.resourceViewModel.isDescriptionUnencrypted());
   }
 
   /**
@@ -969,15 +704,15 @@ class EditResource extends Component {
    * @returns {boolean}
    */
   get canUseTotp() {
-    return this.areResourceTypesEnabled() && this.props.context.siteSettings.canIUse('totpResourceTypes');
+    return this.props.context.siteSettings.canIUse('totpResourceTypes');
   }
 
   /**
-   * Has a totp
-   * @return {boolean}
+   * Returns true if the current resourceViewModel has a totp set
+   * @returns {boolean}
    */
   get hasTotp() {
-    return Boolean(this.state.totp);
+    return Boolean(this.state.resourceViewModel.totp);
   }
 
 
@@ -995,73 +730,73 @@ class EditResource extends Component {
    * =============================================================
    */
   render() {
-    const passwordEntropy = this.state.passwordInDictionary  ? 0 : this.state.passwordEntropy;
+    const isReady = this.state.resourceViewModel !== null;
+    if (!isReady) {
+      return null;
+    }
+
     const passwordPlaceholder = this.getPasswordInputPlaceholder();
+    const nameError = this.state.errors.getFirstRuleErrorByField("name");
+    const passwordError = this.state.errors.getFirstRuleErrorByField("password");
+
+    const isMaxLengthNameWarning = this.isFieldMaxSizeReached("name");
+    const isMaxLengthUriWarning = this.isFieldMaxSizeReached("uri");
+    const isMaxLengthUsernameWarning = this.isFieldMaxSizeReached("username");
+    const isMaxLengthPasswordWarning = this.isFieldMaxSizeReached("password");
+    const isMaxLengthDescriptionWarning = this.isFieldMaxSizeReached("description");
+
+    const resourceViewModel = this.state.resourceViewModel;
+
+    const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     return (
-      <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.nameOriginal} className="edit-password-dialog"
+      <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.originalResourceViewModel.name} className="edit-password-dialog"
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${this.state.nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-name"><Trans>Name</Trans>{this.state.nameWarning &&
-                  <Icon name="exclamation"/>
-              }</label>
-              <input id="edit-password-form-name" name="name" type="text" value={this.state.name}
-                onKeyUp={this.handleNameInputKeyUp} onChange={this.handleInputChange}
+            <div className={`input text required ${nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label htmlFor="edit-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation"/>}</label>
+              <input id="edit-password-form-name" name="name" type="text" value={resourceViewModel.name} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true}/>
-              {this.state.nameError &&
-              <div className="name error-message">{this.state.nameError}</div>
+              {nameError &&
+              <div className="name error-message">{nameError}</div>
               }
-              {this.state.nameWarning && (
+              {isMaxLengthNameWarning && (
                 <div className="name warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.nameWarning}
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
                 </div>
               )}
             </div>
-            <div className={`input text ${this.state.uriError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans>{this.state.uriWarning &&
-                  <Icon name="exclamation"/>
-              }</label>
+            <div className={`input text} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label htmlFor="edit-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <Icon name="exclamation"/>}</label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                autoComplete="off" value={this.state.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
-                onKeyUp={this.handleUriInputKeyUp}
+                autoComplete="off" value={resourceViewModel.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.hasAllInputDisabled()}/>
-              {this.state.uriError &&
-              <div className="error-message">{this.state.uriError}</div>
-              }
-              {this.state.uriWarning && (
+              {isMaxLengthUriWarning && (
                 <div className="uri warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.uriWarning}
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
                 </div>
               )}
             </div>
-            <div className={`input text ${this.state.usernameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
-              <label htmlFor="edit-password-form-username"><Trans>Username</Trans>{this.state.usernameWarning &&
-                <Icon name="exclamation"/>
-              }</label>
+            <div className={`input text ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+              <label htmlFor="edit-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <Icon name="exclamation"/>}</label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="255"
-                autoComplete="off" value={this.state.username} onChange={this.handleInputChange}
-                onKeyUp={this.handleUsernameInputKeyUp}
+                autoComplete="off" value={resourceViewModel.username} onChange={this.handleInputChange}
                 placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
-              {this.state.usernameError &&
-              <div className="error-message">{this.state.usernameError}</div>
-              }
-              {this.state.usernameWarning && (
+              {isMaxLengthUsernameWarning && (
                 <div className="username warning-message">
-                  <strong><Trans>Warning:</Trans></strong> {this.state.usernameWarning}
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
                 </div>
               )}
             </div>
-            <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+            <div className={`input-password-wrapper input required ${passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">
                 <Trans>Password</Trans>
               </label>
               <div className="password-button-inline">
                 <Password id="edit-password-form-password" name="password"
-                  onKeyUp={this.handlePasswordInputKeyUp}
-                  value={this.state.password}
+                  value={resourceViewModel.password}
                   placeholder={passwordPlaceholder}
                   onChange={this.handleInputChange}
                   autoComplete="new-password"
@@ -1082,25 +817,22 @@ class EditResource extends Component {
                   </button>
                 }
               </div>
-              <PasswordComplexity entropy={passwordEntropy} error={Boolean(this.state.passwordError)}/>
-              {this.state.passwordError &&
-                <div className="password error-message">{this.state.passwordError}</div>
+              <PasswordComplexity entropy={passwordEntropy} error={Boolean(passwordError)}/>
+              {passwordError &&
+                <div className="password error-message">{passwordError}</div>
               }
-              {this.state.passwordWarning &&
-                <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.passwordWarning}</div>
+              {isMaxLengthPasswordWarning &&
+                <div className="password warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
+                </div>
               }
             </div>
             <div className={`input textarea ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-description"><Trans>Description</Trans>
-                {this.state.descriptionWarning &&
+                {isMaxLengthDescriptionWarning &&
                   <Icon name="exclamation"/>
                 }
-                {!this.areResourceTypesEnabled() &&
-                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
-                  <Icon name="info-circle"/>
-                </Tooltip>
-                }
-                {this.areResourceTypesEnabled() && !this.mustEncryptDescription &&
+                {!this.mustEncryptDescription &&
                 <button type="button" onClick={this.handleDescriptionToggle} className="link inline lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
@@ -1116,21 +848,18 @@ class EditResource extends Component {
                 }
               </label>
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
-                className="required" aria-required={true} placeholder={this.getDescriptionPlaceholder()} value={this.state.description}
-                disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange} ref={this.descriptionInputRef}
-                onFocus={this.handleDescriptionInputFocus} onBlur={this.handleDescriptionInputBlur}
-                onKeyUp={this.handleDescriptionInputKeyUp}>
+                className="required" aria-required={true} placeholder={this.getDescriptionPlaceholder()} value={resourceViewModel.description}
+                disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange}>
               </textarea>
-              {this.state.descriptionError &&
-              <div className="error-message">{this.state.descriptionError}</div>
-              }
-              {this.state.descriptionWarning &&
-                <div className="description warning-message"><strong><Trans>Warning:</Trans></strong> {this.state.descriptionWarning}</div>
+              {isMaxLengthDescriptionWarning &&
+                <div className="description warning-message">
+                  <strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans>
+                </div>
               }
             </div>
             {this.canUseTotp && !this.hasTotp &&
               <div className="input input-totp-wrapper">
-                <button type="button" className="add-totp link no-border link-icon" onClick={this.handleAddTotpClick} disabled={this.state.processing}>
+                <button type="button" className="add-totp link no-border link-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
                   <Icon name="plus-circle"/>
                   <span className="link-label"><Trans>Add TOTP</Trans></span>
                 </button>
@@ -1140,8 +869,8 @@ class EditResource extends Component {
               <div className={`input input-totp-wrapper ${this.state.processing ? 'disabled' : ''}`}>
                 <label htmlFor="create-password-form-totp"><Trans>TOTP</Trans></label>
                 <div className="input-wrapper-inline totp">
-                  <Totp totp={this.state.totp}/>
-                  <button type="button" className="edit-totp button-icon" onClick={this.handleEditTotpClick} disabled={this.state.processing}>
+                  <Totp totp={resourceViewModel.totp}/>
+                  <button type="button" className="edit-totp button-icon" onClick={this.handleTotpClick} disabled={this.state.processing}>
                     <Icon name='edit' big={true}/>
                   </button>
                   <button type="button" className="delete-totp button-icon" onClick={this.handleDeleteTotpClick} disabled={this.state.processing}>
@@ -1162,7 +891,7 @@ class EditResource extends Component {
 }
 
 EditResource.propTypes = {
-  resourceId: PropTypes.string, // The id of the resource
+  resource: PropTypes.object, // The resource to edit
   context: PropTypes.any, // The application context
   onClose: PropTypes.func,
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context

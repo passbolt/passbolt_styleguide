@@ -125,7 +125,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to edit a resource', async() => {
       await page.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resourceId: props.resource.id});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resource: props.resource});
       expect(props.hide).toHaveBeenCalled();
     });
 

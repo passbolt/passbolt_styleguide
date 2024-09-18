@@ -36,10 +36,13 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
     this.folder_parent_id = resourceViewModel.folder_parent_id || null;
     this.resource_type_id = resourceViewModel.resource_type_id;
 
-    if (typeof(resourceViewModel.name) !== "undefined") {
+    if (typeof(resourceViewModel.id) !== "undefined") {
+      this.id = resourceViewModel.id;
+    }
+    if (resourceViewModel.name) {
       this.name = resourceViewModel.name;
     }
-    if (typeof(resourceViewModel.password) !== "undefined") {
+    if (resourceViewModel.password) {
       this.password = resourceViewModel.password;
     }
     if (typeof(resourceViewModel.expired) !== "undefined") {
@@ -59,6 +62,10 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
         "resource_type_id",
       ],
       properties: {
+        id: {
+          type: "string",
+          format: "uuid",
+        },
         name: {
           type: "string",
           maxLength: RESOURCE_NAME_MAX_LENGTH,
@@ -138,6 +145,10 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
 
     if (typeof(this.expired) !== "undefined") {
       dto.expired = this.expired;
+    }
+
+    if (typeof(this.id) !== "undefined") {
+      dto.id = this.id;
     }
 
     return dto;
