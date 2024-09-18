@@ -64,7 +64,7 @@ describe("See permissions", () => {
       expect(page.displayPermissionList.name(1)).toBe('Ada Lovelace (ada@passbolt.com)');
       expect(page.displayPermissionList.name(2)).toBe('Admin User (admin@passbolt.com)');
       expect(page.displayPermissionList.name(3)).toBe('Marketing');
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.resource.id);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.permissions.find-aco-permissions-for-display", props.resourceWorkspaceContext.details.resource.id, "Resource");
     });
 
     it('I should be able to see each permission type', async() => {
