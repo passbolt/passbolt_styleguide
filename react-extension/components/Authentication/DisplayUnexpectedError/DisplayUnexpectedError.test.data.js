@@ -13,8 +13,7 @@
  */
 
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
-import EntityValidationError from "../../../../shared/lib/Error/EntityValidationError";
-
+import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
 /**
  * Default props
  * @param {Object} props The props to override

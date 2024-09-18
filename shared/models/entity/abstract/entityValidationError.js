@@ -92,6 +92,22 @@ class EntityValidationError extends Error {
   hasErrors() {
     return (Object.keys(this.details).length > 0);
   }
+
+  /**
+   * Returns the first error available on the given field if any.
+   * @param {string} property
+   * @returns {string|null}
+   */
+  getFirstRuleErrorByField(property) {
+    if (!this.hasError(property)) {
+      return null;
+    }
+
+    const errors = this.details[property];
+    const rules = Object.keys(errors);
+
+    return errors[rules[0]];
+  }
 }
 
 export default EntityValidationError;

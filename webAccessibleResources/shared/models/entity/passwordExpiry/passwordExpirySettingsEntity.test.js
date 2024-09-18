@@ -13,8 +13,8 @@
  */
 
 import each from "jest-each";
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
-import EntityValidationError from "passbolt-styleguide/src/shared/models/entity/abstract/entityValidationError";
+import EntitySchema from "../abstract/entitySchema";
+import EntityValidationError from "../abstract/entityValidationError";
 import PasswordExpirySettingsEntity from "./passwordExpirySettingsEntity";
 import {defaultPasswordExpirySettingsDto} from "./passwordExpirySettingsEntity.test.data";
 

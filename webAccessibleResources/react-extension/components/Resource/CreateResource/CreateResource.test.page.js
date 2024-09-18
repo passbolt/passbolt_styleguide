@@ -70,13 +70,6 @@ export default class CreateResourcePage {
   get passwordCreate() {
     return this._passwordCreate;
   }
-
-  /**
-   * REturns the password generator dialog element
-   */
-  get passwordGeneratorDialog() {
-    return this._page.container.querySelector('.password-generator-dialog');
-  }
 }
 
 /**
@@ -290,14 +283,6 @@ class PasswordCreatePageObject {
     return this._container.querySelector('.submit-wrapper .cancel');
   }
 
-  get errorDialog() {
-    return this._container.querySelector('.error-dialog');
-  }
-
-  get errorDialogMessage() {
-    return this._container.querySelector('.error-dialog .dialog .dialog-content .form-content');
-  }
-
   /**
    * Returns true if the page object exists in the container
    */
@@ -341,16 +326,6 @@ class PasswordCreatePageObject {
   /** focus the input element with data */
   focusInput(element)  {
     fireEvent.focus(element);
-  }
-
-  /** on keypup element */
-  keyUpInput(component)  {
-    fireEvent.keyUp(component, {keyCode: 38});
-  }
-
-  /** blur the input element with data */
-  blurInput(element)  {
-    fireEvent.blur(element);
   }
 
   /** Open the password generator*/

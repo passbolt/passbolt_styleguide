@@ -19,7 +19,7 @@ import "../../../test/lib/crypto/cryptoGetRandomvalues";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
 import {waitFor} from "@testing-library/react";
-import {defaultAppContext, defaultProps} from "./CreateResource.test.data";
+import {defaultAppContext, defaultProps, defaultSecretDto} from "./CreateResource.test.data";
 import CreateResourcePage from "./CreateResource.test.page";
 import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 import {
@@ -50,7 +50,7 @@ describe("See the Create Resource", () => {
     jest.resetModules();
     jest.clearAllMocks();
     context = defaultAppContext(); // The applicative context
-    props = defaultProps(); // The props to pass
+    props = defaultProps({context}); // The props to pass
     props.onClose = jest.fn();
     props.dialogContext.open = jest.fn();
 
@@ -144,7 +144,7 @@ describe("See the Create Resource", () => {
       expect.assertions(9);
 
       const totp = new TotpViewModel(defaultTotpViewModelDto());
-      jest.spyOn(props.workflowContext, "start").mockImplementationOnce((component, props) => props.onApply(totp));
+      jest.spyOn(props.workflowContext, "start").mockImplementationOnce((_, props) => props.onApply(totp));
 
       expect(page.passwordCreate.editTotpButton).toBeNull();
       expect(page.passwordCreate.deleteTotpButton).toBeNull();
@@ -168,8 +168,8 @@ describe("See the Create Resource", () => {
       expect.assertions(7);
       expect(page.passwordCreate.exists()).toBeTruthy();
       const createdResourceId = "f2b4047d-ab6d-4430-a1e2-3ab04a2f4fb9";
-      // create password
       const resourceMeta = defaultResourceMetadataDto();
+      // create password
       const resourcePassword = "RN9n8XuECN3";
 
       // Fill the form
@@ -236,10 +236,10 @@ describe("See the Create Resource", () => {
       jest.spyOn(context.port, 'emit').mockImplementation(jest.fn());
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      const onApiUpdateSecretDto = {
+      const onApiUpdateSecretDto = defaultSecretDto({
         password: resourcePassword,
-        description: resourceMeta.description,
-      };
+        description: resourceMeta.description
+      });
 
       delete resourceMeta.description;
 
@@ -289,18 +289,19 @@ describe("See the Create Resource", () => {
 
         expect(page.passwordCreate.exists()).toBeTruthy();
         // create password
-        const resourceMeta = {
+        const resourceMeta = defaultResourceMetadataDto({
           name: "Password name",
           uris: [""],
           username: "",
-          password: "RN9n8XuECN3",
-          description: "",
-          expired: formatDateForApi(expectedExpiryDate)
-        };
+          description: undefined
+        });
+        const description = "";
+        const expirationDate = formatDateForApi(expectedExpiryDate);
+        const password = "RN9n8XuECN3";
 
         // Fill the form
         page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
-        await page.passwordCreate.fillInputPassword(resourceMeta.password);
+        await page.passwordCreate.fillInputPassword(password);
 
         //Reset the system time at the desired one as filling input runs some jest timers.
         jest.setSystemTime(fakeNow);
@@ -308,19 +309,14 @@ describe("See the Create Resource", () => {
         const onApiUpdateResourceMeta = {
           folder_parent_id: null,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-          metadata: {
-            name: resourceMeta.name,
-            uris: resourceMeta.uris,
-            username: resourceMeta.username,
-            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-          },
-          expired: resourceMeta.expired,
+          metadata: defaultResourceMetadataDto({
+            ...resourceMeta,
+            uris: [],
+          }),
+          expired: expirationDate,
         };
 
-        const createResourceSecretDto = {
-          description: '',
-          password: resourceMeta.password
-        };
+        const createResourceSecretDto = defaultSecretDto({description, password});
 
         const mockRequests = jest.fn(async message => ({
           "passbolt.resources.create": jest.fn(),
@@ -351,7 +347,7 @@ describe("See the Create Resource", () => {
         expect(page.passwordCreate.exists()).toBeTruthy();
         // create password
         const resourceMeta = defaultResourceMetadataDto({
-          uris: [""],
+          uris: [],
           username: "",
           description: ""
         });
@@ -374,10 +370,10 @@ describe("See the Create Resource", () => {
 
         delete onApiUpdateResourceMeta.metadata.description;
 
-        const createResourceSecretDto = {
+        const createResourceSecretDto = defaultSecretDto({
           description: resourceMeta.description,
-          password: resourcePassword
-        };
+          password: resourcePassword,
+        });
 
         const mockRequests = jest.fn(async message => ({
           "passbolt.resources.create": jest.fn(),
@@ -405,33 +401,28 @@ describe("See the Create Resource", () => {
 
         expect(page.passwordCreate.exists()).toBeTruthy();
         // create password
-        const resourceMeta = {
+        const resourceMeta = defaultResourceMetadataDto({
           name: "Password name",
-          uris: [""],
+          uris: [],
           username: "",
-          password: "RN9n8XuECN3",
-          description: "",
-        };
+        });
+        //const expirationDate = formatDateForApi(expectedExpiryDate);
+        const password = "RN9n8XuECN3";
 
         // Fill the form
         page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
-        await page.passwordCreate.fillInputPassword(resourceMeta.password);
+        page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
+        await page.passwordCreate.fillInputPassword(password);
 
         const onApiUpdateResourceMeta = {
           folder_parent_id: null,
-          metadata: {
-            name: resourceMeta.name,
-            uris: resourceMeta.uris,
-            username: resourceMeta.username,
-            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-          },
+          metadata: resourceMeta,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         };
 
-        const createResourceSecretDto = {
-          description: '',
-          password: resourceMeta.password
-        };
+        const createResourceSecretDto = defaultSecretDto({description: resourceMeta.description, password});
+
+        delete onApiUpdateResourceMeta.metadata.description;
 
         const mockRequests = jest.fn(async message => ({
           "passbolt.resources.create": jest.fn(),
@@ -459,33 +450,30 @@ describe("See the Create Resource", () => {
 
         expect(page.passwordCreate.exists()).toBeTruthy();
         // create password
-        const resourceMeta = {
+        const resourceMeta = defaultResourceMetadataDto({
           name: "Password name",
-          uris: [""],
+          uris: [],
           username: "",
-          password: "RN9n8XuECN3",
-          description: "",
-        };
+        });
+        const password = "RN9n8XuECN3";
 
         // Fill the form
         page.passwordCreate.fillInput(page.passwordCreate.name, resourceMeta.name);
-        await page.passwordCreate.fillInputPassword(resourceMeta.password);
+        page.passwordCreate.fillInput(page.passwordCreate.description, resourceMeta.description);
+        await page.passwordCreate.fillInputPassword(password);
 
         const onApiUpdateResourceMeta = {
           folder_parent_id: null,
-          metadata: {
-            name: resourceMeta.name,
-            uris: resourceMeta.uris,
-            username: resourceMeta.username,
-            resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
-          },
+          metadata: resourceMeta,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         };
 
-        const createResourceSecretDto = {
-          description: '',
-          password: resourceMeta.password
-        };
+        const createResourceSecretDto = defaultSecretDto({
+          description: resourceMeta.description,
+          password: password
+        });
+
+        delete onApiUpdateResourceMeta.metadata.description;
 
         const mockRequests = jest.fn(async message => ({
           "passbolt.resources.create": jest.fn(),
@@ -513,7 +501,7 @@ describe("See the Create Resource", () => {
       expect(page.passwordCreate.exists()).toBeTruthy();
       // create password
       const resourceMeta = defaultResourceMetadataDto({
-        uris: [""],
+        uris: [],
         username: "",
         description: ""
       });
@@ -534,10 +522,10 @@ describe("See the Create Resource", () => {
       };
       delete onApiUpdateResourceMeta.metadata.description;
 
-      const createResourceSecretDto = {
+      const createResourceSecretDto = defaultSecretDto({
         description: '',
         password: resourcePassword
-      };
+      });
 
       const mockRequests = jest.fn(async message => ({
         "passbolt.resources.create": jest.fn(),
@@ -556,8 +544,8 @@ describe("See the Create Resource", () => {
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
       // Throw error message
-      expect(page.passwordCreate.nameErrorMessage.textContent).toBe("A name is required.");
-      expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("A password is required.");
+      expect(page.passwordCreate.nameErrorMessage.textContent).toBe("The name is required.");
+      expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("The password is required.");
     });
 
     it('As LU I can stop createing a password by clicking on the cancel button', async() => {
@@ -645,23 +633,17 @@ describe("See the Create Resource", () => {
 
     it("As a user I should see a feedback when the password, descriptions, name, username or uri fields content is truncated by a field limit", async() => {
       expect.assertions(5);
+      page.passwordCreate.fillInput(page.passwordCreate.name, 'a'.repeat(256));
+      page.passwordCreate.fillInput(page.passwordCreate.uri, 'a'.repeat(1025));
+      page.passwordCreate.fillInput(page.passwordCreate.username, 'a'.repeat(255));
       page.passwordCreate.fillInput(page.passwordCreate.password, 'a'.repeat(4097));
       page.passwordCreate.fillInput(page.passwordCreate.description, 'a'.repeat(10000));
-      page.passwordCreate.fillInput(page.passwordCreate.name, 'a'.repeat(256));
-      page.passwordCreate.fillInput(page.passwordCreate.username, 'a'.repeat(255));
-      page.passwordCreate.fillInput(page.passwordCreate.uri, 'a'.repeat(1025));
 
-      await page.passwordCreate.keyUpInput(page.passwordCreate.password);
-      await page.passwordCreate.keyUpInput(page.passwordCreate.description);
-      await page.passwordCreate.keyUpInput(page.passwordCreate.username);
-      await page.passwordCreate.keyUpInput(page.passwordCreate.name);
-      await page.passwordCreate.keyUpInput(page.passwordCreate.uri);
-
-      expect(page.passwordCreate.passwordWarningMessage.textContent).toEqual(truncatedWarningMessage);
-      expect(page.passwordCreate.descriptionWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordCreate.nameWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordCreate.uriWarningMessage.textContent).toEqual(truncatedWarningMessage);
       expect(page.passwordCreate.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordCreate.passwordWarningMessage.textContent).toEqual(truncatedWarningMessage);
+      expect(page.passwordCreate.descriptionWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
 
     it("As a signed-in user creating a password which part of a dictionary on the application, I should confirm the password creation in a separate dialog", async() => {
@@ -713,7 +695,6 @@ describe("See the Create Resource", () => {
       expect.assertions(2);
 
       page.passwordCreate.fillInput(page.passwordCreate.password, '');
-      await page.passwordCreate.keyUpInput(page.passwordCreate.password);
 
       expect(page.passwordCreate.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
       expect(page.passwordCreate.pwnedWarningMessage).toBeNull();

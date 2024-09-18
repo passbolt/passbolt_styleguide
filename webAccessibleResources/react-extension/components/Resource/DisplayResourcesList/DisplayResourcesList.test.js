@@ -29,9 +29,15 @@ import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultTotpViewModelDto} from "../../../../shared/models/totp/TotpDto.test.data";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {ColumnFields} from "../../../../shared/models/column/ColumnModel";
+import ColumnsResourceSettingCollection
+  from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
 
 beforeEach(() => {
   jest.resetModules();
+  // Need to mock client width value for column calculation
+  Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
+    configurable: true, value: 1416
+  });
 });
 
 describe("Display Resources", () => {
@@ -379,11 +385,7 @@ describe("Display Resources", () => {
       const assertionsCallCount = columnNameCheckAssertionsCount + resizeAssertionsCount + 2 * resizableColumnCount;
       expect.assertions(assertionsCallCount);
 
-      // Need to resize before to check due to the actual width is negative
       const columnCount = page.columnsCount;
-      for (let i = fixedSizeColumns; i < columnCount; i++) {
-        await page.columns(i + 1).resize(300);
-      }
 
       expect(page.columns(3).name).toStrictEqual("");
       expect(page.columns(4).name).toStrictEqual("Name");
@@ -413,7 +415,7 @@ describe("Display Resources", () => {
       }
 
       // onChangeColumnsSettings called
-      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(3 * resizableColumnCount);
+      expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(2 * resizableColumnCount);
     });
 
     it('As LU, I should be able to resize a column to its default with double click', async() => {
@@ -469,6 +471,39 @@ describe("Display Resources", () => {
       expect(page.columns(10).name).toStrictEqual("Modified");
       // onChangeColumnsSettings called
       expect(props.resourceWorkspaceContext.onChangeColumnsSettings).toHaveBeenCalledTimes(4);
+    });
+  });
+
+  describe('As LU, I should see columns of a resource with default value if at least one is negative.', () => {
+    it('As LU, I should see all columns width with default value value if one isnegative', async() => {
+      expect.assertions(10);
+      const columnsResourceSetting = new ColumnsResourceSettingCollection([
+        {id: "favorite", label: "Favorite", position: 1, show: true},
+        {id: "attentionRequired", label: "Attention", position: 2, show: true},
+        {id: "name", label: "Name", position: 3, show: true},
+        {id: "expired", label: "Expiry", position: 4, show: true},
+        {id: "username", label: "Username", position: 5, show: true, width: -100},
+        {id: "password", label: "Password", position: 6, show: true},
+        {id: "totp", label: "TOTP", position: 7, show: true},
+        {id: "uri", label: "URI", position: 8, show: true, width: 0},
+        {id: "modified", label: "Modified", position: 9, show: true},
+        {id: "location", label: "Location", position: 10, show: true}]);
+      const props = propsWithFilteredResources();
+      props.resourceWorkspaceContext.columnsResourceSetting = columnsResourceSetting;
+      const page = new DisplayResourcesListPage(props);
+      await waitFor(() => {});
+
+      // Width should be the default
+      expect(page.columns(2).width).toStrictEqual("20px");
+      expect(page.columns(3).width).toStrictEqual("20px");
+      expect(page.columns(4).width).toStrictEqual("145px");
+      expect(page.columns(5).width).toStrictEqual("145px");
+      expect(page.columns(6).width).toStrictEqual("145px");
+      expect(page.columns(7).width).toStrictEqual("145px");
+      expect(page.columns(8).width).toStrictEqual("145px");
+      expect(page.columns(9).width).toStrictEqual("210px");
+      expect(page.columns(10).width).toStrictEqual("145px");
+      expect(page.columns(11).width).toStrictEqual("210px");
     });
   });
 

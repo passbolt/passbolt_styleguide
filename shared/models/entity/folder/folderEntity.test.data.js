@@ -13,16 +13,24 @@
  */
 import {v4 as uuidv4} from "uuid";
 import {ownerPermissionDto, readPermissionDto, updatePermissionDto} from "../permission/permissionEntity.test.data";
+import {defaultPermissionsDtos} from "../permission/permissionCollection.test.data";
 
 export const minimalFolderDto = (data = {}) => ({
   name: 'Folder name',
   ...data
 });
 
-export const defaultFolderDto = (data = {}) => {
+/**
+ * Build default folder dto.
+ * @param {object} data The data to override the default dto.
+ * @param {Object} [options]
+ * @param {boolean|integer} [options.withPermissions=0] Add permission default dtos.
+ * @returns {object}
+ */
+export const defaultFolderDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
 
-  return {
+  const defaultData = {
     id: id,
     name: "Accounting",
     created: "2020-02-01T00:00:00+00:00",
@@ -33,14 +41,16 @@ export const defaultFolderDto = (data = {}) => {
       aco: 'Folder',
       aco_foreign_key: id
     }),
-    permissions: [ownerPermissionDto({
-      aco: 'Folder',
-      aco_foreign_key: id
-    })],
     folder_parent_id: null,
     personal: false,
     ...data
   };
+
+  if (!data.permissions && options.withPermissions) {
+    defaultData.permissions = defaultPermissionsDtos(options.withPermissions, {aco: 'Folder', aco_foreign_key: id});
+  }
+
+  return defaultData;
 };
 
 export const folderWithReadPermissionDto = (data = {}) => {
