@@ -53,14 +53,38 @@ class ResourcePasswordStringViewModel extends ResourceViewModel {
   /**
    * @inheritdoc
    */
-  static getSchema() {
+  static createFromEntity(resourceDto) {
+    const resourceViewModelDto = {
+      id: resourceDto.id,
+      name: resourceDto.metadata.name,
+      uri: resourceDto.metadata.uris[0],
+      username: resourceDto.metadata.username,
+      description: resourceDto.metadata.description,
+      folder_parent_id: resourceDto.folder_parent_id,
+      resource_type_id: resourceDto.resource_type_id,
+      expired: resourceDto.expired
+    };
+
+    return new ResourcePasswordStringViewModel(resourceViewModelDto);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  static getSchema(mode) {
+    const required = [
+      "name",
+      "password",
+      "resource_type_id",
+    ];
+
+    if (mode === ResourceViewModel.EDIT_MODE) {
+      required.push("id");
+    }
+
     return {
       type: "object",
-      required: [
-        "name",
-        "password",
-        "resource_type_id",
-      ],
+      required: required,
       properties: {
         id: {
           type: "string",
@@ -117,6 +141,13 @@ class ResourcePasswordStringViewModel extends ResourceViewModel {
   /**
    * @inheritdoc
    */
+  updateSecret(secretDto) {
+    return this.cloneWithMutation("password", secretDto.password);
+  }
+
+  /**
+   * @inheritdoc
+   */
   canToggleDescription() {
     return true;
   }
@@ -160,6 +191,19 @@ class ResourcePasswordStringViewModel extends ResourceViewModel {
    */
   toSecretDto() {
     return this.password;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  areSecretsDifferent(originalSecretDto) {
+    const secretBKeys = Object.keys(originalSecretDto);
+
+    const hasSameSecretStructure = secretBKeys.length === 1
+      && Object.hasOwn(originalSecretDto, "password");
+
+    return !hasSameSecretStructure
+      || this.password !== originalSecretDto.password;
   }
 }
 

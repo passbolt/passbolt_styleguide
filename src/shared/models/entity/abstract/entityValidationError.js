@@ -74,7 +74,12 @@ class EntityValidationError extends Error {
     if (typeof property !== 'string') {
       throw new TypeError('EntityValidationError hasError property should be a string.');
     }
+
     const hasError = (this.details && Object.prototype.hasOwnProperty.call(this.details, property));
+    if (!hasError) {
+      return false;
+    }
+
     if (!rule) {
       return hasError;
     }

@@ -170,9 +170,9 @@ class AddTotp extends Component {
     if (this.state.hasAlreadyBeenValidated) {
       const errors = this.state.totp.validateField(name);
       this.updateErrorsField(errors, name);
-    } else {
-      this.updateWarningsField(name);
     }
+
+    this.updateWarningsField(name);
   }
 
   /**

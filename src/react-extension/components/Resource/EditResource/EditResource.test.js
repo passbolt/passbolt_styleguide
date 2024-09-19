@@ -290,14 +290,14 @@ describe("See the Edit Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('should requests the addon without the secret if it hasn"t changed (with resource type PASSWORD_AND_DECRYPTION).', async() => {
+    it("should requests the addon without the secret if it hasn't changed (with resource type PASSWORD_AND_DECRYPTION).", async() => {
       expect.assertions(1);
       const props = defaultProps(); // The props to pass
       const resource = props.resource;
-      mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
+      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: ""}));
       const page = new EditResourcePage(props);
 
-      await waitForTrue(() => page.passwordEdit.exists());
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
 
       //Avoid to block with the beforeMount when checking current password
       jest.runAllTimers();
@@ -333,10 +333,10 @@ describe("See the Edit Resource", () => {
       const props = defaultProps(); // The props to pass
       const resource = props.resource;
       resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_STRING;
-      mockContextRequest(props.context, () => "secret-decrypted");
+      mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
       const page = new EditResourcePage(props);
 
-      await waitForTrue(() => page.passwordEdit.exists());
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
 
       //Avoid to block with the beforeMount when checking current password
       jest.runAllTimers();
@@ -498,8 +498,8 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.click(page.passwordEdit.saveButton);
 
       // Throw error message
-      expect(page.passwordEdit.nameErrorMessage.textContent).toBe("The name is required.");
-      expect(page.passwordEdit.passwordErrorMessage.textContent).toBe("The password is required.");
+      expect(page.passwordEdit.nameErrorMessage.textContent).toBe("A name is required.");
+      expect(page.passwordEdit.passwordErrorMessage.textContent).toBe("A password is required.");
     });
 
     it('As LU I can stop editing a password by clicking on the cancel button', async() => {

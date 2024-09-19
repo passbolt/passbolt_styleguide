@@ -63,7 +63,9 @@ class EditResource extends Component {
   get defaultState() {
     return {
       resourceViewModel: null,
-      originalResourceViewModel: null,
+      originalName: null,
+      originalResourceTypeSlug: null,
+      originalSecret: null,
       errors: new EntityValidationError(), //the validation errors set
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
       isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
@@ -107,7 +109,7 @@ class EditResource extends Component {
    */
   async componentDidMount() {
     this.props.passwordExpiryContext.findSettings();
-    await this.initialize();
+    this.initializeResourceViewModel();
     await this.props.passwordPoliciesContext.findPolicies();
     this.initPwnedPasswordService();
     this.initPasswordGeneratorConfiguration();
@@ -163,43 +165,41 @@ class EditResource extends Component {
   }
 
   /**
-   * initialize component
-   * @returns {Promise<void>}
+   * initialize the resource view model
    */
-  async initialize() {
+  initializeResourceViewModel() {
     const resourceTypeSlug = this.props.context.resourceTypesSettings.findResourceTypeSlugById(this.props.resource.resource_type_id);
     const resourceViewModelType = this.getViewModelTypeBySlug(resourceTypeSlug);
 
-    let decryptedSecret = await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resource.id);
-    if (resourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug) {
-      decryptedSecret = {password: decryptedSecret};
-    }
-
-    const description = resourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug
-      ? this.props.resource.metadata?.description
-      : decryptedSecret?.description;
-
-    const resourceViewModelDto = {
-      id: this.props.resource.id,
-      name: this.props.resource.metadata.name,
-      uri: this.props.resource.metadata.uris?.[0],
-      username: this.props.resource.metadata.username,
-      password: decryptedSecret.password,
-      description: description,
-      folder_parent_id: this.props.resource.folder_parent_id,
-      expired: this.props.resource.expired,
-      resource_type_id: this.props.resource.resource_type_id,
-      totp: decryptedSecret?.totp,
-    };
-
-    const resourceViewModel = new resourceViewModelType(resourceViewModelDto);
-    const passwordEntropy = SecretGenerator.entropy(resourceViewModel.password);
+    const resourceViewModel = resourceViewModelType.createFromEntity(this.props.resource);
 
     this.setState({
       resourceViewModel: resourceViewModel,
-      originalResourceViewModel: resourceViewModel,
+      originalName: resourceViewModel.name,
+      originalResourceTypeSlug: resourceTypeSlug,
+    }, this.initializeSecret);
+  }
+
+
+  /**
+   * Initialize the secret associated to the resource
+   * @returns {Promise<void>}
+   */
+  async initializeSecret() {
+    let decryptedSecret;
+    try {
+      decryptedSecret = await this.props.context.port.request("passbolt.secret.find-by-resource-id", this.props.resource.id);
+    } catch (error) {
+      this.handleClose();
+    }
+    const resourceViewModel = this.state.resourceViewModel.updateSecret(decryptedSecret);
+    const passwordEntropy = SecretGenerator.entropy(resourceViewModel.password);
+
+    this.setState({
       isSecretDecrypting: false,
+      originalSecret: decryptedSecret,
       passwordEntropy: passwordEntropy,
+      resourceViewModel: resourceViewModel,
     });
   }
 
@@ -262,6 +262,7 @@ class EditResource extends Component {
       return;
     }
 
+    this.setState({hasAlreadyBeenValidated: true});
     await this.toggleProcessing();
 
     const validationErrors = this.validate();
@@ -358,7 +359,7 @@ class EditResource extends Component {
    * @returns {EntityValidationError}
    */
   validate() {
-    const errors = this.state.resourceViewModel.validate();
+    const errors = this.state.resourceViewModel.validate(ResourceViewModel.EDIT_MODE);
     this.setState({errors});
     return errors;
   }
@@ -401,7 +402,7 @@ class EditResource extends Component {
    * @returns {Promise<void>}
    */
   async updateResource() {
-    const isSecretChanged = ResourceViewModel.areSecretsDifferent(this.state.resourceViewModel, this.state.originalResourceViewModel);
+    const isSecretChanged = this.state.resourceViewModel.areSecretsDifferent(this.state.originalSecret);
     if (!isSecretChanged) {
       await this.props.context.port.request("passbolt.resources.update", this.state.resourceViewModel.toResourceDto(), null);
       return;
@@ -427,7 +428,7 @@ class EditResource extends Component {
       return false;
     }
 
-    return this.state.resourceViewModel.password !== this.state.originalResourceViewModel.password;
+    return this.state.resourceViewModel.password !==  this.state.originalSecret.password;
   }
 
   /**
@@ -516,11 +517,11 @@ class EditResource extends Component {
       newState.passwordInDictionary = false;
       newState.passwordEntropy = value?.length
         ? SecretGenerator.entropy(value)
-        : newState.passwordEntropy = null;
+        : null;
     }
 
     if (this.state.hasAlreadyBeenValidated) {
-      newState.errors = newState.resourceViewModel.validate();
+      newState.errors = newState.resourceViewModel.validate(ResourceViewModel.EDIT_MODE);
     }
 
     this.setState(newState);
@@ -532,10 +533,6 @@ class EditResource extends Component {
    * @returns {boolean}
    */
   isFieldMaxSizeReached(fieldName) {
-    if (this.state.hasAlreadyBeenValidated) {
-      return false;
-    }
-
     const schema = this.state.resourceViewModel.constructor.getSchema();
     if (typeof(schema.properties[fieldName]?.maxLength) === "undefined") {
       return false;
@@ -620,8 +617,19 @@ class EditResource extends Component {
    * @returns {Promise<void>}
    */
   async handleDescriptionToggle() {
-    const isOriginalResourcePasswordString = this.state.originalResourceViewModel.constructor.resourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug;
-    const canToggleDescription = isOriginalResourcePasswordString && this.state.resourceViewModel.canToggleDescription();
+    const isOriginalResourceSlugInitialized = this.state.originalResourceTypeSlug !== null;
+    if (!isOriginalResourceSlugInitialized) {
+      //let's ensure we know the resource slug before running any checks.
+      return false;
+    }
+
+    //only a resource of type `password-string` can toggle its description field encryption state in the edit form.
+    const isOriginalResourcePasswordString =  this.state.originalResourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug;
+    if (!isOriginalResourcePasswordString) {
+      return false;
+    }
+
+    const canToggleDescription = this.state.resourceViewModel.canToggleDescription();
     if (!canToggleDescription) {
       return;
     }
@@ -735,9 +743,8 @@ class EditResource extends Component {
       return null;
     }
 
-    const passwordPlaceholder = this.getPasswordInputPlaceholder();
-    const nameError = this.state.errors.getFirstRuleErrorByField("name");
-    const passwordError = this.state.errors.getFirstRuleErrorByField("password");
+    const isNameError = this.state.errors.hasError("name", "required");
+    const isPasswordError = this.state.errors.hasError("password", "required");
 
     const isMaxLengthNameWarning = this.isFieldMaxSizeReached("name");
     const isMaxLengthUriWarning = this.isFieldMaxSizeReached("uri");
@@ -749,17 +756,17 @@ class EditResource extends Component {
 
     const passwordEntropy = this.state.passwordInDictionary ? 0 : this.state.passwordEntropy;
     return (
-      <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.originalResourceViewModel.name} className="edit-password-dialog"
+      <DialogWrapper title={this.translate("Edit resource")} subtitle={this.state.originalName} className="edit-password-dialog"
         disabled={this.hasAllInputDisabled()} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${nameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+            <div className={`input text required ${isNameError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation"/>}</label>
-              <input id="edit-password-form-name" name="name" type="text" value={resourceViewModel.name} onChange={this.handleInputChange}
+              <input id="edit-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
                 disabled={this.hasAllInputDisabled()} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true}/>
-              {nameError &&
-              <div className="name error-message">{nameError}</div>
+              {isNameError &&
+                <div className="name error-message"><Trans>A name is required.</Trans></div>
               }
               {isMaxLengthNameWarning && (
                 <div className="name warning-message">
@@ -770,7 +777,7 @@ class EditResource extends Component {
             <div className={`input text} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-uri"><Trans>URI</Trans>{isMaxLengthUriWarning && <Icon name="exclamation"/>}</label>
               <input id="edit-password-form-uri" name="uri" className="fluid" maxLength="1024" type="text"
-                autoComplete="off" value={resourceViewModel.uri} onChange={this.handleInputChange} placeholder={this.translate("URI")}
+                autoComplete="off" value={resourceViewModel.uri || ""} onChange={this.handleInputChange} placeholder={this.translate("URI")}
                 disabled={this.hasAllInputDisabled()}/>
               {isMaxLengthUriWarning && (
                 <div className="uri warning-message">
@@ -781,7 +788,7 @@ class EditResource extends Component {
             <div className={`input text ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-username"><Trans>Username</Trans>{isMaxLengthUsernameWarning && <Icon name="exclamation"/>}</label>
               <input id="edit-password-form-username" name="username" type="text" className="fluid" maxLength="255"
-                autoComplete="off" value={resourceViewModel.username} onChange={this.handleInputChange}
+                autoComplete="off" value={resourceViewModel.username || ""} onChange={this.handleInputChange}
                 placeholder={this.translate("Username")}
                 disabled={this.hasAllInputDisabled()}/>
               {isMaxLengthUsernameWarning && (
@@ -790,14 +797,14 @@ class EditResource extends Component {
                 </div>
               )}
             </div>
-            <div className={`input-password-wrapper input required ${passwordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
+            <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.hasAllInputDisabled() ? 'disabled' : ''}`}>
               <label htmlFor="edit-password-form-password">
-                <Trans>Password</Trans>
+                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <Icon name="exclamation"/>}
               </label>
               <div className="password-button-inline">
                 <Password id="edit-password-form-password" name="password"
-                  value={resourceViewModel.password}
-                  placeholder={passwordPlaceholder}
+                  value={resourceViewModel.password || ""}
+                  placeholder={this.getPasswordInputPlaceholder()}
                   onChange={this.handleInputChange}
                   autoComplete="new-password"
                   disabled={this.hasAllInputDisabled() || this.isPasswordDisabled()}
@@ -805,21 +812,21 @@ class EditResource extends Component {
                   inputRef={this.passwordInputRef}
                 />
                 <button type="button" onClick={this.handleGeneratePasswordButtonClick}
-                  className={`password-generate button-icon ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                  className={`password-generate button-icon ${this.hasAllInputDisabled() || this.isPasswordDisabled() ? "disabled" : ""}`}>
                   <Icon name='dice' big={true}/>
                   <span className="visually-hidden"><Trans>Generate</Trans></span>
                 </button>
                 {this.canUsePasswordGenerator &&
                   <button type="button" onClick={this.handleOpenGenerator}
-                    className={`password-generator button-icon ${this.hasAllInputDisabled() ? "disabled" : ""}`}>
+                    className={`password-generator button-icon ${this.hasAllInputDisabled() || this.isPasswordDisabled() ? "disabled" : ""}`}>
                     <Icon name='settings' big={true}/>
                     <span className="visually-hidden"><Trans>Open generator</Trans></span>
                   </button>
                 }
               </div>
-              <PasswordComplexity entropy={passwordEntropy} error={Boolean(passwordError)}/>
-              {passwordError &&
-                <div className="password error-message">{passwordError}</div>
+              <PasswordComplexity entropy={passwordEntropy} error={isPasswordError}/>
+              {isPasswordError &&
+                <div className="password error-message"><Trans>A password is required.</Trans></div>
               }
               {isMaxLengthPasswordWarning &&
                 <div className="password warning-message">
@@ -848,7 +855,7 @@ class EditResource extends Component {
                 }
               </label>
               <textarea id="edit-password-form-description" name="description" maxLength="10000"
-                className="required" aria-required={true} placeholder={this.getDescriptionPlaceholder()} value={resourceViewModel.description}
+                className="required" aria-required={true} placeholder={this.getDescriptionPlaceholder()} value={resourceViewModel.description || ""}
                 disabled={this.hasAllInputDisabled() || this.isDescriptionDisabled()} onChange={this.handleInputChange}>
               </textarea>
               {isMaxLengthDescriptionWarning &&

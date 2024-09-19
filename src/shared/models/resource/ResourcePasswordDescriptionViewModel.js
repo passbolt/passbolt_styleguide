@@ -53,14 +53,37 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
   /**
    * @inheritdoc
    */
-  static getSchema() {
+  static createFromEntity(resourceDto) {
+    const resourceViewModelDto = {
+      id: resourceDto.id,
+      name: resourceDto.metadata.name,
+      uri: resourceDto.metadata.uris[0],
+      username: resourceDto.metadata.username,
+      folder_parent_id: resourceDto.folder_parent_id,
+      resource_type_id: resourceDto.resource_type_id,
+      expired: resourceDto.expired
+    };
+
+    return new ResourcePasswordDescriptionViewModel(resourceViewModelDto);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  static getSchema(mode) {
+    const required = [
+      "name",
+      "password",
+      "resource_type_id",
+    ];
+
+    if (mode === ResourceViewModel.EDIT_MODE) {
+      required.push("id");
+    }
+
     return {
       type: "object",
-      required: [
-        "name",
-        "password",
-        "resource_type_id",
-      ],
+      required: required,
       properties: {
         id: {
           type: "string",
@@ -117,6 +140,15 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
   /**
    * @inheritdoc
    */
+  updateSecret(secretDto) {
+    const resourceViewModel = this.cloneWithMutation("password", secretDto.password);
+    resourceViewModel.description = secretDto.description;
+    return resourceViewModel;
+  }
+
+  /**
+   * @inheritdoc
+   */
   canToggleDescription() {
     return true;
   }
@@ -163,6 +195,21 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
       description: this.description,
       resource_type_id: this.resource_type_id,
     };
+  }
+
+  /**
+   * @inheritdoc
+   */
+  areSecretsDifferent(originalSecretDto) {
+    const secretBKeys = Object.keys(originalSecretDto);
+
+    const hasSameSecretStructure = secretBKeys.length === 2
+      && Object.hasOwn(originalSecretDto, "password")
+      && Object.hasOwn(originalSecretDto, "description");
+
+    return !hasSameSecretStructure
+      || this.password !== originalSecretDto.password
+      || this.description !== originalSecretDto.description;
   }
 }
 
