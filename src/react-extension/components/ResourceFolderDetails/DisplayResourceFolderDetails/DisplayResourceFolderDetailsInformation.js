@@ -59,7 +59,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
 
   /**
    * Whenever the component has updated in terms of props
-   * @param prevProps
+   * @param {object} prevProps The previous componentDidUpdate props
    */
   componentDidUpdate(prevProps) {
     this.handleFolderChange(prevProps.resourceWorkspaceContext.details.folder);
@@ -67,7 +67,7 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
 
   /**
    * Check if the folder has changed and fetch
-   * @param previousFolder
+   * @param {object} previousFolder The previously selected folder
    */
   handleFolderChange(previousFolder) {
     const hasModifierOrCreatorChanged = this.folder.created_by !== previousFolder.created_by
