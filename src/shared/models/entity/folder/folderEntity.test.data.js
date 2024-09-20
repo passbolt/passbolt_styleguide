@@ -26,8 +26,8 @@ export const minimalFolderDto = (data = {}) => ({
  * @param {object} data The data to override the default dto.
  * @param {Object} [options]
  * @param {boolean|integer} [options.withPermissions=0] Add permission default dtos.
- * @param {boolean|integer} [options.withCreator=0] Add creator default dtos.
- * @param {boolean|integer} [options.withModifier=0] Add modifier default dtos.
+ * @param {boolean|integer} [options.withCreator=0] Add creator default dto.
+ * @param {boolean|integer} [options.withModifier=0] Add modifier default dto.
  * @returns {object}
  */
 export const defaultFolderDto = (data = {}, options = {}) => {
