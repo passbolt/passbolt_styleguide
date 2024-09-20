@@ -22,7 +22,7 @@ import {
   defaultProps,
 } from "./DisplayResourceFolderDetailsInformation.test.data";
 import DisplayResourceFolderDetailsInformationPage from "./DisplayResourceFolderDetailsInformation.test.page";
-import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
+import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -32,8 +32,7 @@ describe("See information", () => {
   let page; // The page to test against
   const context = defaultAppContext(); // The applicative context
   const props = defaultProps(); // The props to pass
-  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementation(implementation);
-  const copyClipboardMockImpl = jest.fn((message, data) => data);
+  const mockContextRequest = implementation => jest.spyOn(context.port, 'request').mockImplementationOnce(implementation);
 
   describe(' As LU I can see information of a resource', () => {
     /**
@@ -45,6 +44,7 @@ describe("See information", () => {
      */
 
     beforeEach(() => {
+      mockContextRequest(() => defaultFolderDto(props.resourceWorkspaceContext.details.folder, {withCreator: true, withModifier: true}));
       page = new DisplayResourceFolderDetailsInformationPage(context, props);
     });
 
@@ -55,8 +55,6 @@ describe("See information", () => {
     });
 
     it('I should be able to identify each information name', async() => {
-      mockContextRequest(copyClipboardMockImpl);
-      jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
       expect.assertions(14);
       expect(page.displayInformationList.usernameLabel).toBe('Name');
       expect(page.displayInformationList.username.textContent).toBe(props.resourceWorkspaceContext.details.folder.name);
