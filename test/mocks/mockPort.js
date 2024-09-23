@@ -94,7 +94,6 @@ export default storage => {
   mockPort.addRequestListener("passbolt.actionlogs.find-all-for", mockRequestFindActivities);
   mockPort.addRequestListener("passbolt.addon.get-version", mockRequestGetVersion);
   mockPort.addRequestListener("passbolt.groups.update-local-storage", mockRequestGroupsUpdateLocalStorage);
-  mockPort.addRequestListener("passbolt.resources.find-all", mockRequestResources);
   mockPort.addRequestListener("passbolt.keyring.get-public-key-info-by-user", mockRequestGpgKeysFindByUserId);
   mockPort.addRequestListener("passbolt.keyring.get-private-key", mockRequestPrivateKeys);
   mockPort.addRequestListener("passbolt.users.delete-dry-run", mockRequestUserDeleteDryRun);

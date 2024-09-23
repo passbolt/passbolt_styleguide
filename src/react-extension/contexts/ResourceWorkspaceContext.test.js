@@ -161,7 +161,7 @@ describe("Resource Workspace Context", () => {
       const expectedResourcesCount = mockGroupResources.length;
       const leadershipTeamGroup = {group: {id: "516c2db6-0aed-52d8-854f-b3f3499995e7"}};
 
-      context.port.addRequestListener("passbolt.resources.find-all", async() => mockGroupResources);
+      context.port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", async() => mockGroupResources.map(group => group.id));
       context.port.addRequestListener("passbolt.resources.update-local-storage", async() => {
         if (page.filter.type === ResourceWorkspaceFilterTypes.GROUP) {
           throw new Error("'passbolt.resources.update-local-storage' should have been called after filtering by GROUP");
