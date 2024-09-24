@@ -34,6 +34,10 @@ import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel
 import {DateTime} from "luxon";
 
 class ResourceCreatePage extends React.Component {
+  /**
+   * @constructor
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
     this.initEventHandlers();
@@ -44,7 +48,7 @@ class ResourceCreatePage extends React.Component {
 
   /**
    * Get the default state
-   * @returns {void}
+   * @returns {object}
    */
   get defaultState() {
     return {
@@ -267,6 +271,11 @@ class ResourceCreatePage extends React.Component {
    * =============================================================
    *  Form submit
    * =============================================================
+   */
+  /**
+   * Handles the form submission
+   * @param {React.Event} event
+   * @returns {Promise<void>}
    */
   async handleFormSubmit(event) {
     event.preventDefault();
