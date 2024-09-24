@@ -125,14 +125,6 @@ class EditResourceDescription extends React.Component {
     return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
   }
 
-  /**
-   * Are resources types enabled.
-   * @returns {boolean}
-   */
-  areResourceTypesEnabled() {
-    return this.resourceTypesSettings.areResourceTypesEnabled();
-  }
-
   /*
    * =============================================================
    *  Save the description
@@ -392,19 +384,14 @@ class EditResourceDescription extends React.Component {
           }
           <div className="actions">
             <div className="description-lock">
-              {!this.areResourceTypesEnabled() &&
-                <Tooltip message={this.translate("Do not store sensitive data. Unlike the password, this data is not encrypted. Upgrade to version 3 to encrypt this information.")}>
-                  <Icon name="info-circle"/>
-                </Tooltip>
-              }
-              {this.areResourceTypesEnabled() && !this.state.encryptDescription &&
+              {!this.state.encryptDescription &&
                 <button type="button" onClick={event => this.handleDescriptionToggle(event)} className="link no-border lock-toggle">
                   <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
                     <Icon name="lock-open"/>
                   </Tooltip>
                 </button>
               }
-              {this.areResourceTypesEnabled() && this.state.encryptDescription &&
+              {this.state.encryptDescription &&
                 <button type="button" onClick={event => this.handleDescriptionToggle(event)} className="link no-border lock-toggle">
                   <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
                     <Icon name="lock"/>

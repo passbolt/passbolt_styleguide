@@ -73,7 +73,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     if (this.isStandaloneTotpResource) {
       this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
     } else {
-      this.props.dialogContext.open(EditResource, {resourceId: this.resource.id});
+      this.props.dialogContext.open(EditResource, {resource: this.resource});
     }
     this.props.hide();
   }

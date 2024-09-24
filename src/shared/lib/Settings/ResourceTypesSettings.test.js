@@ -23,7 +23,6 @@ import {
 describe("ResourceTypeSettings", () => {
   it("areResourceTypesEnabled is false if site settings is undefined", () => {
     const sut = new ResourceTypesSettings(undefined, []);
-    expect(sut.areResourceTypesEnabled()).toBe(false);
 
     expect(sut.isResourceTypeEnabled('password-string')).toBe(false);
     expect(sut.isResourceTypeEnabled('password-and-description')).toBe(false);
@@ -40,7 +39,6 @@ describe("ResourceTypeSettings", () => {
     const siteSettings = new SiteSettings(siteSettingsFixture);
     const sut = new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto());
 
-    expect(sut.areResourceTypesEnabled()).toBe(true);
     expect(sut.isResourceTypeEnabled('password-string')).toBe(true);
     expect(sut.isResourceTypeEnabled('password-and-description')).toBe(true);
     expect(sut.isResourceTypeEnabled('nope')).toBe(false);
@@ -68,8 +66,6 @@ describe("ResourceTypeSettings", () => {
     const siteSettings = new SiteSettings(siteSettingsFixture);
     const lessFixtures = [resourceTypesCollectionDto()[1]];
     const sut = new ResourceTypesSettings(siteSettings, lessFixtures);
-
-    expect(sut.areResourceTypesEnabled()).toBe(true);
 
     expect(sut.isResourceTypeEnabled('password-string')).toBe(false);
     expect(sut.isResourceTypeEnabled('password-and-description')).toBe(true);
