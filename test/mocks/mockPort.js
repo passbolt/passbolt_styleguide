@@ -77,7 +77,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.users.find-logged-in-user", mockRequestUsersFindLoggedInUser);
   mockPort.addRequestListener("passbolt.resources.create", mockRequestResourcesCreate);
   mockPort.addRequestListener("passbolt.resources.update", mockRequestResourcesUpdate);
-  mockPort.addRequestListener("passbolt.share.get-resources", mockRequestShareGetResources);
+  mockPort.addRequestListener("passbolt.share.find-resources-for-share", mockRequestShareGetResources);
   mockPort.addRequestListener("passbolt.share.search-aros", mockRequestShareSearchAros);
   mockPort.addRequestListener("passbolt.secret.find-by-resource-id", mockRequestSecretDecrypt);
   mockPort.addRequestListener("passbolt.comments.create", mockRequestCommentsCreate);
