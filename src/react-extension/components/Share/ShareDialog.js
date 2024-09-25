@@ -51,7 +51,7 @@ class ShareDialog extends Component {
    */
   async componentDidMount() {
     if (this.props.context.shareDialogProps.resourcesIds) {
-      this.resources = await this.props.context.port.request('passbolt.share.get-resources', this.props.context.shareDialogProps.resourcesIds);
+      this.resources = await this.props.context.port.request('passbolt.share.find-resources-for-share', this.props.context.shareDialogProps.resourcesIds);
     }
     if (this.props.context.shareDialogProps.foldersIds) {
       this.folders = await this.props.context.port.request('passbolt.share.get-folders', this.props.context.shareDialogProps.foldersIds);
