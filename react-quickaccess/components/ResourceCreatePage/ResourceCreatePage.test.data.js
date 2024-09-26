@@ -33,7 +33,8 @@ export const defaultProps = (props = {}) => ({
   passwordPoliciesContext: defaultPasswordPoliciesContext({
     getPolicies: jest.fn(() => defaultPasswordPoliciesDto())
   }),
-  ...props
+  context: defaultAppContext(),
+  ...props,
 });
 
 const mockTabInfo = {

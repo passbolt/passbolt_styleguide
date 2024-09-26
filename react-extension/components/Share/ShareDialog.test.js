@@ -64,7 +64,7 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I see a success toaster message after sharing resources to users and groups with success', async() => {
       expect.assertions(18);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.find-resources-for-share', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 3 resources');
       expect(page.count).toBe(11);
@@ -227,7 +227,7 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I see a success toaster message after sharing one resource to users and groups with success', async() => {
       expect.assertions(12);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.get-resources', shareDialogProps.resourcesIds);
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.find-resources-for-share', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share resource');
       expect(page.subtitle).toBe('apache');

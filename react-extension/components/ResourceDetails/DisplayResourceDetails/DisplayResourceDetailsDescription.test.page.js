@@ -19,7 +19,6 @@ import React from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
-import EditResourceDescriptionPageObject from "../../ResourceDescription/EditResourceDescription/EditResourceDescription.test.page";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
 
 /**
@@ -50,7 +49,6 @@ export default class PasswordSidebarDescriptionSectionPage {
   setupPageObjects() {
     this._titleHeader = new TitleHeaderPageObject(this._page.container);
     this._passwordSidebarDescriptionSection = new PasswordSidebarDescriptionSectionPageObject(this._page.container);
-    this._descriptionEditor = new EditResourceDescriptionPageObject(this._page.container);
   }
 
   /**
@@ -68,10 +66,38 @@ export default class PasswordSidebarDescriptionSectionPage {
   }
 
   /**
-   * Returns the page object of display groups filter contextual menu
+   * Returns the description editor element
    */
-  get descriptionEditor() {
-    return this._descriptionEditor;
+  get component() {
+    return this._page.container.querySelector('.description-editor');
+  }
+
+  /**
+   * Returns the textarea input element
+   */
+  get descriptionInput() {
+    return this._page.container.querySelector('.input.textarea.required textarea');
+  }
+
+  /**
+   * Returns the error message content
+   */
+  get errorMessage() {
+    return this._page.container.querySelector('.feedbacks.error-message').textContent;
+  }
+
+  /**
+   * Returns the save button element
+   */
+  get saveButton() {
+    return this._page.container.querySelector('.description-editor-submit');
+  }
+
+  /**
+   * Returns the cancel button element
+   */
+  get cancelButton() {
+    return this._page.container.querySelector('button.cancel');
   }
 }
 

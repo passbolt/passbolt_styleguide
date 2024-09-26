@@ -21,6 +21,15 @@ import EntityValidationError from "../entity/abstract/entityValidationError";
  */
 class ResourceViewModel {
   /**
+   * Returns a ResourceViewModel built from a ResourceEntity dto and its secret.
+   * @param {object} resourceDto
+   * @returns {ResourceViewModel}
+   */
+  static createFromEntity() {
+    throw new Error("The ViewModel class should declare how to create a ResourceViewModel from a resource entity.");
+  }
+
+  /**
    * Get current view model schema
    * @returns {Object} schema
    * @abstract
@@ -36,6 +45,15 @@ class ResourceViewModel {
    */
   static get resourceTypeSlug() {
     throw new Error("The ViewModel class should declare its resource type slug.");
+  }
+
+  /**
+   * Update the fields of the secret part of a resource.
+   * @param {object} secretDto
+   * @returns {ResourceViewModel}
+   */
+  updateSecret() {
+    throw new Error("The ViewModel class should declare how to update its secret fields.");
   }
 
   /**
@@ -76,24 +94,13 @@ class ResourceViewModel {
 
   /**
    * Returns true if both secrets are different or if the resource type is different
-   * @param {ResourceViewModel} a
-   * @param {ResourceViewModel} b
+   * @param {ResourceViewModel} resourceViewModel
+   * @param {object} originalSecretDto the original secret dto to compare with
    * @param {array<object>} resourceTypes
    * @returns {boolean}
    */
-  static areSecretsDifferent(a, b) {
-    if (a.constructor.resourceTypeSlug !== b.constructor.resourceTypeSlug) {
-      return true;
-    }
-
-    if (a.constructor.resourceTypeSlug === "password-string") {
-      return a.password !== b.password;
-    }
-
-    const secretA = a.toSecretDto();
-    const secretB = b.toSecretDto();
-
-    return Object.keys(secretA).some(key => secretA[key] !== secretB[key]);
+  areSecretsDifferent() {
+    throw new Error("The ViewModel class should declare how to compare secrets.");
   }
 
   /**
@@ -114,9 +121,9 @@ class ResourceViewModel {
    * Validates the current object state
    * @returns {EntityValidationError}
    */
-  validate() {
+  validate(mode = ResourceViewModel.CREATE_MODE) {
     try {
-      EntitySchema.validate(this.constructor.name, this, this.constructor.getSchema());
+      EntitySchema.validate(this.constructor.name, this, this.constructor.getSchema(mode));
     } catch (error) {
       return error;
     }
@@ -125,18 +132,19 @@ class ResourceViewModel {
   }
 
   /**
-   * Validate field
-   * @param field
-   * @return {EntityValidationError}
+   * Returns ResourceViewModel.CREATE_MODE
+   * @returns {string}
    */
-  validateField(field) {
-    try {
-      EntitySchema.validateProp(field, this[field], this.constructor.getSchema().properties[field]);
-    } catch (error) {
-      return error;
-    }
+  static get CREATE_MODE() {
+    return "CREATE_MODE";
+  }
 
-    return new EntityValidationError();
+  /**
+   * Returns ResourceViewModel.EDIT_MODE
+   * @returns {string}
+   */
+  static get EDIT_MODE() {
+    return "EDIT_MODE";
   }
 }
 

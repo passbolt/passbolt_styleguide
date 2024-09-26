@@ -18,6 +18,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import MockTranslationProvider from '../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider';
 import {fireEvent} from '@testing-library/react';
 import SaveResource from "./SaveResource";
+import {waitForTrue} from "../../../../test/utils/waitFor";
 
 /**
  * The SaveResource component represented as a page
@@ -66,6 +67,34 @@ export default class SaveResourcePage {
   }
 
   /**
+   * Returns the name input element
+   */
+  get nameError() {
+    return this._page.container.querySelector('#name + .error-message');
+  }
+
+  /**
+   * Returns the username input element
+   */
+  get usernameError() {
+    return this._page.container.querySelector('#username + .error-message');
+  }
+
+  /**
+   * Returns the uri input element
+   */
+  get uriError() {
+    return this._page.container.querySelector('#uri + .error-message');
+  }
+
+  /**
+   * Returns the password input element
+   */
+  get passwordError() {
+    return this._page.container.querySelector('.input-password-wrapper .error-message');
+  }
+
+  /**
    * Returns the save button element
    */
   get saveButton() {
@@ -82,5 +111,18 @@ export default class SaveResourcePage {
   /** Submit teh form */
   async save()  {
     await this.click(this.saveButton);
+  }
+
+  /**
+   * Set the current form with the given data (only work with the inputs (not our Select component for instance))
+   * @param {object} formData a key value pairs object that contains the field name as a key (must match a getter method on this page) and the desired value
+   * @returns {Promise<void>}
+   */
+  async setFormWith(formData) {
+    let key;
+    for (key in formData) {
+      fireEvent.input(this[key], {target: {value: formData[key]}});
+      await waitForTrue(() => this[key].value === formData[key].toString());
+    }
   }
 }

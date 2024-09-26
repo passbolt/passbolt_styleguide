@@ -33,14 +33,17 @@ class ResourcePasswordDescriptionTotpViewModel extends ResourceViewModel {
     this.username = resourceViewModel.username || "";
     this.uri = resourceViewModel.uri || "";
     this.description = resourceViewModel.description || "";
-    this.totp = resourceViewModel.totp || {};
+    this.totp = resourceViewModel.totp || null;
     this.folder_parent_id = resourceViewModel.folder_parent_id || null;
     this.resource_type_id = resourceViewModel.resource_type_id;
 
-    if (typeof(resourceViewModel.name) !== "undefined") {
+    if (typeof(resourceViewModel.id) !== "undefined") {
+      this.id = resourceViewModel.id;
+    }
+    if (resourceViewModel.name) {
       this.name = resourceViewModel.name;
     }
-    if (typeof(resourceViewModel.password) !== "undefined") {
+    if (resourceViewModel.password) {
       this.password = resourceViewModel.password;
     }
     if (typeof(resourceViewModel.expired) !== "undefined") {
@@ -51,15 +54,42 @@ class ResourcePasswordDescriptionTotpViewModel extends ResourceViewModel {
   /**
    * @inheritdoc
    */
-  static getSchema() {
+  static createFromEntity(resourceDto) {
+    const resourceViewModelDto = {
+      id: resourceDto.id,
+      name: resourceDto.metadata.name,
+      uri: resourceDto.metadata.uris[0],
+      username: resourceDto.metadata.username,
+      folder_parent_id: resourceDto.folder_parent_id,
+      resource_type_id: resourceDto.resource_type_id,
+      expired: resourceDto.expired,
+    };
+
+    return new ResourcePasswordDescriptionTotpViewModel(resourceViewModelDto);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  static getSchema(mode) {
+    const required = [
+      "name",
+      "password",
+      "resource_type_id",
+    ];
+
+    if (mode === ResourceViewModel.EDIT_MODE) {
+      required.push("id");
+    }
+
     return {
       type: "object",
-      required: [
-        "name",
-        "password",
-        "resource_type_id",
-      ],
+      required: required,
       properties: {
+        id: {
+          type: "string",
+          format: "uuid",
+        },
         name: {
           type: "string",
           maxLength: RESOURCE_NAME_MAX_LENGTH,
@@ -114,6 +144,16 @@ class ResourcePasswordDescriptionTotpViewModel extends ResourceViewModel {
   /**
    * @inheritdoc
    */
+  updateSecret(secretDto) {
+    const resourceViewModel = this.cloneWithMutation("password", secretDto.password);
+    resourceViewModel.description = secretDto.description;
+    resourceViewModel.totp = secretDto.totp;
+    return resourceViewModel;
+  }
+
+  /**
+   * @inheritdoc
+   */
   canToggleDescription() {
     return false;
   }
@@ -144,6 +184,10 @@ class ResourcePasswordDescriptionTotpViewModel extends ResourceViewModel {
       dto.expired = this.expired;
     }
 
+    if (typeof(this.id) !== "undefined") {
+      dto.id = this.id;
+    }
+
     return dto;
   }
 
@@ -157,6 +201,25 @@ class ResourcePasswordDescriptionTotpViewModel extends ResourceViewModel {
       totp: this.totp,
       resource_type_id: this.resource_type_id,
     };
+  }
+
+  /**
+   * @inheritdoc
+   */
+  areSecretsDifferent(originalSecretDto) {
+    const secretBKeys = Object.keys(originalSecretDto);
+
+    const hasSameSecretStructure = secretBKeys.length === 3
+      && Object.hasOwn(originalSecretDto, "password")
+      && Object.hasOwn(originalSecretDto, "description")
+      && Object.hasOwn(originalSecretDto, "totp");
+
+    const isTotpDifferent = Object.keys(this.totp).some(key => this.totp[key] !== originalSecretDto.totp?.[key]);
+
+    return !hasSameSecretStructure
+      || this.password !== originalSecretDto.password
+      || this.description !== originalSecretDto.description
+      || isTotpDifferent;
   }
 }
 

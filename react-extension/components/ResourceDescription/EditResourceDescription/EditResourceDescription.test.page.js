@@ -12,50 +12,100 @@
  * @since         2.11.0
  */
 
+import React from "react";
+import {fireEvent, render, waitFor} from "@testing-library/react";
+import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import EditResourceDescription from "./EditResourceDescription";
+import {waitForTrue} from "../../../../../test/utils/waitFor";
+
 /**
  * The EditResourceDescription component represented as a page
  */
-export default class EditResourceDescriptionPageObject {
+export default class EditResourceDescriptionPage {
   /**
    * Default constructor
-   * @param container The container which includes the DescriptionEditor Component
+   * @param props Props to attach
    */
-  constructor(container) {
-    this._container = container;
-  }
-
-  /**
-   * Returns the description editor element
-   */
-  get component() {
-    return this._container.querySelector('.description-editor');
+  constructor(props) {
+    this._page = render(
+      <MockTranslationProvider>
+        <EditResourceDescription {...props} />
+      </MockTranslationProvider>
+    );
   }
 
   /**
    * Returns the textarea input element
    */
-  get descriptionInput() {
-    return this._container.querySelector('.input.textarea.required textarea');
+  get description() {
+    return this._page.container.querySelector('.input.textarea.required textarea');
   }
 
   /**
    * Returns the error message content
    */
   get errorMessage() {
-    return this._container.querySelector('.feedbacks.error-message').textContent;
+    return this._page.container.querySelector('.feedbacks.error-message');
   }
 
   /**
    * Returns the save button element
    */
   get saveButton() {
-    return this._container.querySelector('.description-editor-submit');
+    return this._page.container.querySelector('.description-editor-submit');
   }
 
   /**
-   * Returns the cancel button element
+   * Returns the "Lock" icon element
+   * @returns {HTMLElement}
    */
-  get cancelButton() {
-    return this._container.querySelector('button.cancel');
+  get lockIcon() {
+    return this._page.container.querySelector("button.lock-toggle");
+  }
+
+  /**
+   * Returns true if the description is set to be encrypted
+   * @returns {boolean}
+   */
+  get isDescriptionEncrypted() {
+    return Boolean(this._page.container.querySelector("button.lock-toggle .lock"));
+  }
+
+  /**
+   * Returns true if the description is set to be encrypted
+   * @returns {boolean}
+   */
+  get isProcessing() {
+    return this.saveButton.hasAttribute("disabled");
+  }
+
+  /**
+   * Simulates a click on the "Lock" icon
+   * @returns {Promise<void>}
+   */
+  async clickOnLock() {
+    fireEvent.click(this.lockIcon, {button: 0});
+    await waitFor(() => {});
+  }
+
+  /**
+   * Simulates a click on the "Save" button
+   * @returns {Promise<void>}
+   */
+  clickOnSave() {
+    fireEvent.click(this.saveButton, {button: 0});
+  }
+
+  /**
+   * Set the current form with the given data (only work with the inputs (not our Select component for instance))
+   * @param {object} formData a key value pairs object that contains the field name as a key (must match a getter method on this page) and the desired value
+   * @returns {Promise<void>}
+   */
+  async setFormWith(formData) {
+    let key;
+    for (key in formData) {
+      fireEvent.input(this[key], {target: {value: formData[key]}});
+    }
+    await waitForTrue(() => this[key].value === formData[key].toString());
   }
 }

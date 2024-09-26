@@ -21,40 +21,174 @@ import Password from "../../../shared/components/Password/Password";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
+import ResourcePasswordDescriptionViewModel from "../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
+import EntityValidationError from "../../../shared/models/entity/abstract/entityValidationError";
+import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
 
 class SaveResource extends React.Component {
+  /**
+   * @constructor
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
+    this.state = this.defaultState;
     this.initEventHandlers();
-    this.state = this.getDefaultState();
   }
 
+  /**
+   * Get the default state
+   * @returns {object}
+   */
+  get defaultState() {
+    return {
+      resourceViewModel: null,
+      errors: null, //the validation errors set
+      unexpectedErrorMessage: "",
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
+      loaded: false,
+    };
+  }
+
+  /**
+   * when the component is mounted
+   * @returns {Promise<void>}
+   */
   async componentDidMount() {
-    this.props.passwordExpiryContext.findSettings();
+    await this.props.passwordExpiryContext.findSettings();
     this.loadPasswordMetaFromTabForm();
     await this.props.passwordPoliciesContext.findPolicies();
   }
 
+  /**
+   * initialize event handlers
+   */
   initEventHandlers() {
     this.handleClose = this.handleClose.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
-  getDefaultState() {
-    return {
-      loaded: false,
-      error: "",
-      name: "",
-      nameError: "",
-      username: "",
-      usernameError: "",
-      uri: "",
-      uriError: "",
-      password: "",
-      passwordError: "",
+  /**
+   * Loads the resource data from the information of the autosave preparation
+   * @returns {Promise<void>}
+   */
+  async loadPasswordMetaFromTabForm() {
+    const resourceDto = await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
+    resourceDto.password = resourceDto.secret_clear;
+
+    const resourceViewModel = new ResourcePasswordDescriptionViewModel(resourceDto);
+
+    this.setState({loaded: true, resourceViewModel: resourceViewModel});
+  }
+
+  /**
+   * Handles the "close" event
+   */
+  handleClose() {
+    window.close();
+  }
+
+  /**
+   * Validate the form data and returns true if it's valid
+   * @param {ResourcePasswordDescriptionViewModel} resourceViewModel
+   * @returns {EntityValidationError}
+   */
+  validate(resourceViewModel) {
+    const errors = resourceViewModel.validate(ResourceViewModel.CREATE_MODE);
+    this.setState({errors});
+    return errors;
+  }
+
+  /**
+   * Handles the form submission
+   * @param {React.Event} event
+   * @returns {Promise<void>}
+   */
+  async handleFormSubmit(event) {
+    event.preventDefault();
+    this.setState({processing: true, hasAlreadyBeenValidated: true});
+
+    const resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    const expired = this.props.passwordExpiryContext.getDefaultExpirationDate();
+
+    const resourceViewModel = this.state.resourceViewModel
+      .cloneWithMutation("resource_type_id", resource_type_id)
+      .cloneWithMutation("expired", expired);
+
+    const validationErrors = this.validate(resourceViewModel);
+
+    if (validationErrors.hasErrors()) {
+      this.setState({processing: false});
+      return;
+    }
+
+    const resourceDto = resourceViewModel.toResourceDto();
+    const secretDto = resourceViewModel.toSecretDto();
+
+    try {
+      await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
+      this.handleClose();
+    } catch (error) {
+      this.handleSubmitError(error);
+    }
+  }
+
+  /**
+   * Handles error during form submission
+   * @param {Error} error
+   */
+  handleSubmitError(error) {
+    const newState = {
+      processing: false,
     };
+
+    const isBadRequestError = error.name === "PassboltApiFetchError"
+      && error.data.code === 400
+      && (error.data.body?.name || error.data.body?.username || error.data.body?.uri);
+
+    if (isBadRequestError) {
+      newState.errors = this.formatApiErrors(error.data.body);
+    } else {
+      newState.unexpectedErrorMessage = error.message;
+    }
+
+    this.setState(newState);
+  }
+
+  /**
+   * Format the given BadRequest error invalid field information.
+   * @param {object} errorBody
+   * @returns {EntityValidationError}
+   */
+  formatApiErrors(errorBody) {
+    const errors = new EntityValidationError();
+    const fieldsInError = Object.keys(errorBody);
+
+    for (let i = 0; i < fieldsInError.length; i++) {
+      const prop = fieldsInError[i];
+      const errorMessages = errorBody[prop].join(', ');
+      errors.addError(prop, "api-validation", errorMessages);
+    }
+
+    return errors;
+  }
+
+  /**
+   * Handles form input changed
+   * @param {React.Event} event
+   */
+  handleInputChange(event) {
+    const {name, value} = event.target;
+    const newState = {
+      resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
+    };
+
+    if (this.state.hasAlreadyBeenValidated) {
+      newState.errors = newState.resourceViewModel.validate(ResourceViewModel.CREATE_MODE);
+    }
+
+    this.setState(newState);
   }
 
   /**
@@ -65,131 +199,10 @@ class SaveResource extends React.Component {
     return this.props.t;
   }
 
-  async loadPasswordMetaFromTabForm() {
-    const {name, uri, username, secret_clear} = await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
-    this.setState({name, uri, username, password: secret_clear});
-    this.loadPassword(secret_clear);
-    this.setState({loaded: true});
-  }
-
-  handleClose() {
-    window.close();
-  }
-
-  validateFields() {
-    const state = {
-      nameError: "",
-      passwordError: ""
-    };
-    let isValid = true;
-
-    if (this.state.name === "") {
-      state.nameError = this.translate("A name is required.");
-      isValid = false;
-    }
-
-    if (this.state.password === "") {
-      state.passwordError = this.translate("A password is required.");
-      isValid = false;
-    }
-
-    this.setState(state);
-    return isValid;
-  }
-
-  async handleFormSubmit(event) {
-    event.preventDefault();
-    this.setState({
-      processing: true,
-      error: "",
-      nameError: "",
-      usernameError: "",
-      uriError: "",
-    });
-
-    if (!this.validateFields()) {
-      this.setState({processing: false});
-      return;
-    }
-
-    const resourceTypeId = this.resourceTypesSettings.findResourceTypeIdBySlug(this.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
-    const resourceDto = {
-      metadata: {
-        name: this.state.name,
-        username: this.state.username,
-        uris: [this.state.uri],
-        resource_type_id: resourceTypeId,
-      },
-      resource_type_id: resourceTypeId,
-      expired: this.props.passwordExpiryContext.getDefaultExpirationDate(),
-    };
-
-    const secretDto = {
-      password: this.state.password,
-      description: ""
-    };
-
-    try {
-      await this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
-      this.handleClose();
-    } catch (error) {
-      this.handleSubmitError(error);
-    }
-  }
-
-  handleSubmitError(error) {
-    if (error.name === "PassboltApiFetchError"
-      && error.data.code === 400 && error.data.body
-      && (error.data.body.name || error.data.body.username || error.data.body.uri)) {
-      // Could not validate resource data.
-      this.setState({
-        nameError: this.formatValidationFieldError(error.data.body.name),
-        usernameError: this.formatValidationFieldError(error.data.body.username),
-        uriError: this.formatValidationFieldError(error.data.body.uri),
-        processing: false
-      });
-    } else {
-      // An unexpected error occured.
-      this.setState({
-        error: error.message,
-        processing: false
-      });
-    }
-  }
-
-  formatValidationFieldError(fieldErrors) {
-    if (!fieldErrors) {
-      return "";
-    }
-    return Object.values(fieldErrors).join(', ');
-  }
-
-  handlePasswordChange(event) {
-    this.loadPassword(event.target.value);
-  }
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  }
-
-  loadPassword(password) {
-    this.setState({password});
-  }
-
   /**
-   * Get resource types settings
-   * @return {*}
+   * Render the component
+   * @returns {JSX}
    */
-  get resourceTypesSettings() {
-    return this.props.context.resourceTypesSettings;
-  }
-
   render() {
     return (
       <div className="resource-auto-save">
@@ -197,42 +210,51 @@ class SaveResource extends React.Component {
         <form onSubmit={this.handleFormSubmit}>
           <div className="resource-auto-save-form">
             <div className="form-container">
-              <div className={`input text required ${this.state.nameError ? "error" : ""}`}>
+              <div className={`input text required ${this.state.errors?.hasError("name") ? "error" : ""}`}>
                 <label htmlFor="name"><Trans>Name</Trans></label>
-                <input name="name" value={this.state.name} onChange={this.handleInputChange} disabled={this.state.processing}
+                <input name="name" value={this.state.resourceViewModel?.name || ""} onChange={this.handleInputChange} disabled={this.state.processing}
                   className="required fluid" maxLength="255" type="text" id="name" autoComplete="off" />
-                {this.state.nameError &&
-                <div className="error-message">{this.state.nameError}</div>
+                {this.state.errors?.hasError("name", "required") &&
+                  <div className="error-message"><Trans>A name is required.</Trans></div>
+                }
+                {this.state.errors?.hasError("name", "api-validation") &&
+                  <div className="error-message">{this.state.errors.getError("name", "api-validation")}</div>
                 }
               </div>
-              <div className={`input text ${this.state.uriError ? "error" : ""}`}>
+              <div className={`input text ${this.state.errors?.hasError("uri") ? "error" : ""}`}>
                 <label htmlFor="uri"><Trans>URL</Trans></label>
-                <input name="uri" value={this.state.uri} onChange={this.handleInputChange} disabled={this.state.processing}
+                <input name="uri" value={this.state.resourceViewModel?.uri || ""} onChange={this.handleInputChange} disabled={this.state.processing}
                   className="fluid" maxLength="1024" type="text" id="uri" autoComplete="off" />
-                {this.state.uriError &&
-                <div className="error-message">{this.state.uriError}</div>
+                {this.state.errors?.hasError("uri", "maxLength") &&
+                  <div className="error-message"><Trans>The URI cannot exceed 1024 characters.</Trans></div>
+                }
+                {this.state.errors?.hasError("uri", "api-validation") &&
+                  <div className="error-message">{this.state.errors.getError("uri", "api-validation")}</div>
                 }
               </div>
-              <div className="input text">
+              <div className={`input text ${this.state.errors?.hasError("username") ? "error" : ""}`}>
                 <label htmlFor="username"><Trans>Username</Trans></label>
-                <input name="username" value={this.state.username} onChange={this.handleInputChange} disabled={this.state.processing}
+                <input name="username" value={this.state.resourceViewModel?.username || ""} onChange={this.handleInputChange} disabled={this.state.processing}
                   className="fluid" maxLength="255" type="text" id="username" autoComplete="off" />
-                {this.state.usernameError &&
-                <div className="error-message">{this.state.usernameError}</div>
+                {this.state.errors?.hasError("username", "api-validation") &&
+                  <div className="error-message">{this.state.errors.getError("username", "api-validation")}</div>
                 }
               </div>
-              <div className={`input-password-wrapper input required ${this.state.passwordError ? "error" : ""}`}>
+              <div className={`input-password-wrapper input required ${this.state.errors?.hasError("password") ? "error" : ""}`}>
                 <label htmlFor="password"><Trans>Password</Trans></label>
                 <div className="password-button-inline">
-                  <Password name="password" value={this.state.password} preview={true} onChange={this.handlePasswordChange} disabled={this.state.processing}
+                  <Password name="password" value={this.state.resourceViewModel?.password || ""} preview={true} onChange={this.handleInputChange} disabled={this.state.processing}
                     placeholder={this.translate('Password')} id="password" autoComplete="new-password"/>
                 </div>
-                {this.state.passwordError &&
-                  <div className="error-message">{this.state.passwordError}</div>
+                {this.state.errors?.hasError("password", "required") &&
+                  <div className="error-message"><Trans>A password is required.</Trans></div>
+                }
+                {this.state.errors?.hasError("password", "api-validation") &&
+                  <div className="error-message">{this.state.errors.getError("password", "api-validation")}</div>
                 }
               </div>
-              {this.state.error &&
-                <div className="error-message">{this.state.error}</div>
+              {this.state.unexpectedErrorMessage &&
+                <div className="error-message">{this.state.unexpectedErrorMessage}</div>
               }
             </div>
           </div>

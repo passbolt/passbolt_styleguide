@@ -19,7 +19,7 @@ const context = defaultAppContext({
   port: {
     request: (path, option) => {
       switch (path) {
-        case 'passbolt.share.get-resources':
+        case 'passbolt.share.find-resources-for-share':
           return resources;
         case 'passbolt.share.search-aros':
           return context.users.filter(user => user.username.indexOf(option) !== -1);

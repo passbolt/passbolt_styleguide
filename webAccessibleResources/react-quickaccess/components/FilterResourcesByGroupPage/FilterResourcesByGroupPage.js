@@ -7,54 +7,56 @@ import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import memoize from "memoize-one";
+import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 const BROWSED_GROUPS_LIMIT = 500;
 
 class FilterResourcesByGroupPage extends React.Component {
+  /**
+   * @inheritDoc
+   */
   constructor(props) {
     super(props);
-    this.state = this.initState();
+    this.state = this.defaultState;
     this.initEventHandlers();
   }
 
+  /**
+   * ComponentDidMount hook.
+   * Invoked immediately after component is inserted into the tree
+   */
   componentDidMount() {
     this.props.context.focusSearch();
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }
-
-    /*
-     * If a group is selected, the component aims to display the resources shared with this group.
-     * Load the resources
-     */
-    if (this.props.match.params.id) {
-      this.findAndLoadResources();
+    if (this.props.location?.state?.selectedGroup) {
+      this.findAndLoadGroupResourceIds();
     } else {
-      // Otherwise list the groups the user is member of.
       this.findAndLoadGroups();
     }
   }
 
+  /**
+   * Returns the component default state
+   * @return {object}
+   */
+  get defaultState() {
+    return {
+      groups: null,
+      groupResourceIds: null,
+    };
+  }
+
+  /**
+   * Initializes event handlers
+   */
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleSelectGroupClick = this.handleSelectGroupClick.bind(this);
     this.handleSelectResourceClick = this.handleSelectResourceClick.bind(this);
-  }
-
-  initState() {
-    let selectedGroup = null;
-
-    // The selected group to use to filter the resources shared on is passed via the history.push state option.
-    if (this.props.location.state && this.props.location.state.selectedGroup) {
-      selectedGroup = this.props.location.state.selectedGroup;
-    }
-
-    return {
-      selectedGroup: selectedGroup,
-      groups: null,
-      resources: null
-    };
   }
 
   /**
@@ -65,6 +67,10 @@ class FilterResourcesByGroupPage extends React.Component {
     return this.props.t;
   }
 
+  /**
+   * Handles the click event on the "Go back" button.
+   * @param {Event} ev
+   */
   handleGoBackClick(ev) {
     ev.preventDefault();
     // Clean the search and remove the search history related to this page.
@@ -73,15 +79,23 @@ class FilterResourcesByGroupPage extends React.Component {
     this.props.history.goBack();
   }
 
-  handleSelectGroupClick(ev, groupId) {
+  /**
+   * Handles the click event on a group from the list.
+   * @param {Event} ev
+   * @param {Object} selectedGroup
+   */
+  handleSelectGroupClick(ev, selectedGroup) {
     ev.preventDefault();
     this.props.context.searchHistory[this.props.location.pathname] = this.props.context.search;
     this.props.context.updateSearch("");
-    // Push the group as state of the component.
-    const selectedGroup = this.state.groups.find(group => group.id === groupId);
-    this.props.history.push(`/webAccessibleResources/quickaccess/resources/group/${groupId}`, {selectedGroup});
+    this.props.history.push(`/webAccessibleResources/quickaccess/resources/group/${selectedGroup.id}`, {selectedGroup});
   }
 
+  /**
+   * Handles the click event on a resource from the list.
+   * @param {Event} ev
+   * @param {string} resourceId
+   */
   handleSelectResourceClick(ev, resourceId) {
     ev.preventDefault();
     /*
@@ -94,6 +108,10 @@ class FilterResourcesByGroupPage extends React.Component {
     this.props.history.push(`/webAccessibleResources/quickaccess/resources/view/${resourceId}`);
   }
 
+  /**
+   * Find and load groups.
+   * @returns {Promise<void>}
+   */
   async findAndLoadGroups() {
     const filters = {'has-users': [this.props.context.userSettings.id]};
     const groups = await this.props.context.port.request("passbolt.groups.find-all", {filters});
@@ -101,13 +119,32 @@ class FilterResourcesByGroupPage extends React.Component {
     this.setState({groups});
   }
 
-  async findAndLoadResources() {
-    const filters = {'is-shared-with-group': this.props.match.params.id};
-    const resources = await this.props.context.port.request('passbolt.resources.find-all', {filters});
-    sortResourcesAlphabetically(resources);
-    this.setState({resources});
+  /**
+   * Find and load group resource ids.
+   * @returns {Promise<void>}
+   */
+  async findAndLoadGroupResourceIds() {
+    const groupResourceIds = await this.props.context.port.request('passbolt.resources.find-all-ids-by-is-shared-with-group', this.props.location.state.selectedGroup.id);
+    this.setState({groupResourceIds});
   }
 
+  /**
+   * Find resources by ids.
+   * @param {array} resources The list of resources to filter.
+   * @param {array} ids The list of ids to filter on.
+   * @return {Array<Object>} The list of resources filtered.
+   */
+  filterResourcesByIds = memoize((resources, ids) => {
+    const groupResources = resources.filter(resource => ids.includes(resource.id));
+
+    sortResourcesAlphabetically(groupResources);
+    return groupResources;
+  });
+
+  /**
+   * Sort an array of groups alphabetically
+   * @param {Array} groups The array of group to filter.
+   */
   sortGroupsAlphabetically(groups) {
     groups.sort((group1, group2) => {
       const group1Name = group1.name.toUpperCase();
@@ -122,81 +159,74 @@ class FilterResourcesByGroupPage extends React.Component {
   }
 
   /**
-   * Get the groups to display
-   * @return {array} The list of groups.
-   */
-  getBrowsedGroups() {
-    let groups = this.state.groups;
-
-    if (this.props.context.search.length) {
-      /*
-       * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
-       * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-       */
-      groups = this.filterGroupsBySearch(groups, this.props.context.search);
-    }
-
-    return groups.slice(0, BROWSED_GROUPS_LIMIT);
-  }
-
-  /**
    * Filter groups by keywords.
    * Search on the name
    * @param {array} groups The list of groups to filter.
    * @param {string} needle The needle to search.
+   * @param {number} [limit = Number.MAX_SAFE_INTEGER] the count limit of results.
    * @return {array} The filtered groups.
    */
-  filterGroupsBySearch(groups, needle) {
+  filterGroupsBySearch = memoize((groups, needle, limit = Number.MAX_SAFE_INTEGER) => {
     // Split the search by words
     const needles = needle.split(/\s+/);
     // Prepare the regexes for each word contained in the search.
     const regexes = needles.map(needle => new RegExp(escapeRegExp(needle), 'i'));
 
+    let filterCount = 0;
     return groups.filter(group => {
+      if (filterCount >= limit) {
+        return false;
+      }
+
       let match = true;
       for (const i in regexes) {
         // To match a resource would have to match all the words of the search.
         match &= regexes[i].test(group.name);
       }
-
+      filterCount++;
       return match;
     });
-  }
+  });
 
   /**
    * Get the resources to display
-   * @return {array} The list of resources.
+   * @param {Array<Object>} resources the resource list to filter from
+   * @param {Array} groupResourceIds The list of resources shared with the group
+   * @param {string} search the keyword to search for in the list if any
+   * @return {Array<Object>} The list of resources.
    */
-  getBrowsedResources() {
-    let resources = this.state.resources;
+  filterSearchedResources = memoize((resources, groupResourceIds, search) =>  {
+    const groupResources = this.filterResourcesByIds(resources, groupResourceIds);
 
-    if (this.props.context.search.length) {
-      /*
-       * @todo optimization. Memoize result to avoid filtering each time the component is rendered.
-       * @see reactjs doc https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html#what-about-memoization
-       */
-      resources = filterResourcesBySearch(resources, this.props.context.search);
-    }
+    return search
+      ? filterResourcesBySearch(groupResources, search, BROWSED_RESOURCES_LIMIT)
+      : groupResources.slice(0, BROWSED_RESOURCES_LIMIT);
+  });
 
-    return resources.slice(0, BROWSED_RESOURCES_LIMIT);
-  }
-
-  isReady() {
-    return this.state.groups !== null
-      || this.state.resources !== null;
-  }
+  /**
+   * Get the groups to display
+   * @param {Array<Object>} groups the group list to filter from
+   * @param {string} search the keyword to search for in the list if any
+   * @return {Array<Object>} The list of resources.
+   */
+  filterSearchedGroups = memoize((groups, search) => search
+    ? this.filterGroupsBySearch(groups, search, BROWSED_GROUPS_LIMIT)
+    : groups.slice(0, BROWSED_GROUPS_LIMIT));
 
   render() {
-    const isReady = this.isReady();
     const isSearching = this.props.context.search.length > 0;
-    const listGroupsOnly = this.state.selectedGroup === null;
-    let browsedGroups, browsedResources;
+    const listGroupsOnly = !this.props.location?.state?.selectedGroup;
+    let isReady, browsedGroups, browsedResources;
 
-    if (isReady) {
-      if (listGroupsOnly) {
-        browsedGroups = this.getBrowsedGroups();
-      } else {
-        browsedResources = this.getBrowsedResources();
+    if (listGroupsOnly) {
+      isReady = this.state.groups !== null;
+      if (isReady) {
+        browsedGroups = this.filterSearchedGroups(this.state.groups, this.props.context.search);
+      }
+    } else {
+      isReady = this.props.resources !== null && this.state.groupResourceIds !== null;
+      if (isReady) {
+        browsedResources = this.filterSearchedResources(this.props.resources, this.state.groupResourceIds, this.props.context.search);
       }
     }
 
@@ -239,7 +269,7 @@ class FilterResourcesByGroupPage extends React.Component {
                     {(browsedGroups.length > 0) &&
                       browsedGroups.map(group => (
                         <li key={group.id} className="filter-entry">
-                          <a href="#" onClick={ev => this.handleSelectGroupClick(ev, group.id)}>
+                          <a href="#" onClick={ev => this.handleSelectGroupClick(ev, group)}>
                             <span className="filter">{group.name}</span>
                           </a>
                         </li>
@@ -258,7 +288,7 @@ class FilterResourcesByGroupPage extends React.Component {
                         </p>
                       </li>
                     }
-                    {(browsedResources.length > 0) &&
+                    {(browsedResources?.length > 0) &&
                       browsedResources.map(resource =>
                         <li className="browse-resource-entry" key={resource.id}>
                           <a href="#" onClick={ev => this.handleSelectResourceClick(ev, resource.id)}>
@@ -290,11 +320,10 @@ class FilterResourcesByGroupPage extends React.Component {
 
 FilterResourcesByGroupPage.propTypes = {
   context: PropTypes.any, // The application context
-  // Match, location and history props are injected by the withRouter decoration call.
-  match: PropTypes.object,
   location: PropTypes.object,
   history: PropTypes.object,
+  resources: PropTypes.array,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(FilterResourcesByGroupPage)));
+export default withAppContext(withRouter(withResourcesLocalStorage(withTranslation('common')(FilterResourcesByGroupPage))));

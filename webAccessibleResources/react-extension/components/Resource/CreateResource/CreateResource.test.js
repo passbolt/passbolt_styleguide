@@ -544,8 +544,8 @@ describe("See the Create Resource", () => {
       await page.passwordCreate.click(page.passwordCreate.saveButton);
 
       // Throw error message
-      expect(page.passwordCreate.nameErrorMessage.textContent).toBe("The name is required.");
-      expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("The password is required.");
+      expect(page.passwordCreate.nameErrorMessage.textContent).toBe("A name is required.");
+      expect(page.passwordCreate.passwordErrorMessage.textContent).toBe("A password is required.");
     });
 
     it('As LU I can stop createing a password by clicking on the cancel button', async() => {

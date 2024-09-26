@@ -24,6 +24,7 @@ import {
 import DisplayResourceDetailsDescriptionPage from "./DisplayResourceDetailsDescription.test.page";
 import {ActionFeedbackContext} from "../../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -59,50 +60,50 @@ describe("See description", () => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
+      expect(page.component).not.toBeNull();
       //expect(page.descriptionEditor.descriptionInput.value).toBe(resourceWithDescriptionMock.metadata.description); @toto E2EE put back when editing description on the sidebar is migrated
-      expect(page.descriptionEditor.saveButton.textContent).toBe("Save");
-      expect(page.descriptionEditor.cancelButton.textContent).toBe("Cancel");
+      expect(page.saveButton.textContent).toBe("Save");
+      expect(page.cancelButton.textContent).toBe("Cancel");
     });
 
     it('Stop editing by clicking on the edit icon', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
+      expect(page.component).not.toBeNull();
 
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
-      expect(page.descriptionEditor.component).toBeNull();
+      expect(page.component).toBeNull();
     });
 
     it('Stop editing by clicking out of the edit zone', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
+      expect(page.component).not.toBeNull();
 
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.content);
-      expect(page.descriptionEditor.component).toBeNull();
+      expect(page.component).toBeNull();
     });
 
     it('Stop editing by cancelling the operation', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
+      expect(page.component).not.toBeNull();
 
-      await page.passwordSidebarDescriptionSection.click(page.descriptionEditor.cancelButton);
-      expect(page.descriptionEditor.component).toBeNull();
+      await page.passwordSidebarDescriptionSection.click(page.cancelButton);
+      expect(page.component).toBeNull();
     });
 
     it('Stop editing with keyboard', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
+      expect(page.component).not.toBeNull();
 
-      await page.passwordSidebarDescriptionSection.escapeKeyDown(page.descriptionEditor.component);
-      expect(page.descriptionEditor.component).toBeNull();
+      await page.passwordSidebarDescriptionSection.escapeKeyDown(page.component);
+      expect(page.component).toBeNull();
     });
   });
 
@@ -126,24 +127,37 @@ describe("See description", () => {
     it('Start editing by clicking on the empty message', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.emptyMessage);
-      expect(page.descriptionEditor.component).not.toBeNull();
-      expect(page.descriptionEditor.descriptionInput).not.toBeNull();
+      expect(page.component).not.toBeNull();
+      expect(page.descriptionInput).not.toBeNull();
     });
 
     it('Add a new description to a resource', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.emptyMessage);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
-      await page.passwordSidebarDescriptionSection.input(page.descriptionEditor.descriptionInput, "Updated description");
+      expect(page.component).not.toBeNull();
+      await page.passwordSidebarDescriptionSection.input(page.descriptionInput, "Updated description");
 
       jest.spyOn(ActionFeedbackContext._currentValue, 'displaySuccess').mockImplementation(() => {});
 
-      await page.passwordSidebarDescriptionSection.click(page.descriptionEditor.saveButton);
-      expect(page.descriptionEditor.component).toBeNull();
-      const resourceDto = resourceOwnedWithNoDescriptionMock;
-      resourceDto.metadata.description = "Updated description";
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, null);
+      await page.passwordSidebarDescriptionSection.click(page.saveButton);
+      expect(page.component).toBeNull();
+
+      const expectedResourceDto = {
+        id: resourceOwnedWithNoDescriptionMock.id,
+        folder_parent_id: resourceOwnedWithNoDescriptionMock.folder_parent_id,
+        expired: resourceOwnedWithNoDescriptionMock.expired,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
+        metadata: {
+          name: resourceOwnedWithNoDescriptionMock.metadata.name,
+          username: resourceOwnedWithNoDescriptionMock.metadata.username,
+          uris: resourceOwnedWithNoDescriptionMock.metadata.uris,
+          description: "Updated description",
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
+        }
+      };
+
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.resources.update", expectedResourceDto, null);
       // notification toaster called
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith("The description has been updated successfully");
     });
@@ -152,7 +166,7 @@ describe("See description", () => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
+      expect(page.component).not.toBeNull();
 
       let updateResolve;
       // Mock the request function to make it the expected result
@@ -161,15 +175,15 @@ describe("See description", () => {
       }));
       mockContextRequest(waitSaveMockImpl);
 
-      await page.passwordSidebarDescriptionSection.clickWithoutWaitFor(page.descriptionEditor.saveButton);
+      await page.passwordSidebarDescriptionSection.clickWithoutWaitFor(page.saveButton);
       // API calls are made on submit, wait they are resolved.
       await page.passwordSidebarDescriptionSection.waitForLoading(() => {
-        expect(page.descriptionEditor.component).not.toBeNull();
-        expect(page.descriptionEditor.descriptionInput.getAttribute("disabled")).not.toBeNull();
-        expect(page.descriptionEditor.saveButton.className).toBe("primary description-editor-submit processing");
-        expect(page.descriptionEditor.saveButton.hasAttribute("disabled")).toBeTruthy();
-        expect(page.descriptionEditor.cancelButton.className).toBe("cancel");
-        expect(page.descriptionEditor.cancelButton.hasAttribute("disabled")).toBeTruthy();
+        expect(page.component).not.toBeNull();
+        expect(page.descriptionInput.getAttribute("disabled")).not.toBeNull();
+        expect(page.saveButton.className).toBe("primary description-editor-submit processing");
+        expect(page.saveButton.hasAttribute("disabled")).toBeTruthy();
+        expect(page.cancelButton.className).toBe("cancel");
+        expect(page.cancelButton.hasAttribute("disabled")).toBeTruthy();
         updateResolve();
       });
     });
@@ -178,16 +192,16 @@ describe("See description", () => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.editIcon);
 
-      expect(page.descriptionEditor.component).not.toBeNull();
-      await page.passwordSidebarDescriptionSection.input(page.descriptionEditor.descriptionInput, "Updated description");
+      expect(page.component).not.toBeNull();
+      await page.passwordSidebarDescriptionSection.input(page.descriptionInput, "Updated description");
 
       const saveErrorDescriptionMockImpl = jest.spyOn(context.port, 'request').mockImplementationOnce(() => {
         throw new PassboltApiFetchError("Jest simulate API error.");
       });
       mockContextRequest(saveErrorDescriptionMockImpl);
 
-      await page.passwordSidebarDescriptionSection.click(page.descriptionEditor.saveButton);
-      expect(page.descriptionEditor.errorMessage).toBe("Jest simulate API error.");
+      await page.passwordSidebarDescriptionSection.click(page.saveButton);
+      expect(page.errorMessage).toBe("Jest simulate API error.");
     });
   });
 
@@ -210,8 +224,8 @@ describe("See description", () => {
     it('Cannot editing by clicking on edit icon or on description', async() => {
       await page.title.click();
       await page.passwordSidebarDescriptionSection.click(page.passwordSidebarDescriptionSection.emptyMessage);
-      expect(page.descriptionEditor.component).toBeNull();
-      expect(page.descriptionEditor.descriptionInput).toBeNull();
+      expect(page.component).toBeNull();
+      expect(page.descriptionInput).toBeNull();
     });
   });
 });

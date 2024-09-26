@@ -48,6 +48,7 @@ import ResourcePasswordDescriptionViewModel from "../../../../shared/models/reso
 import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
 import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
 import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
+import ResourceViewModel from "../../../../shared/models/resource/ResourceViewModel";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -67,6 +68,7 @@ class CreateResource extends Component {
       passwordInDictionary: false,
       passwordEntropy: null,
       generatorSettings: null,
+      processing: false,
     };
   }
 
@@ -308,7 +310,7 @@ class CreateResource extends Component {
    * @returns {EntityValidationError}
    */
   validate() {
-    const errors = this.state.resourceViewModel.validate();
+    const errors = this.state.resourceViewModel.validate(ResourceViewModel.CREATE_MODE);
     this.setState({errors});
     return errors;
   }
@@ -452,7 +454,7 @@ class CreateResource extends Component {
       newState.passwordInDictionary = false;
       newState.passwordEntropy = value?.length
         ? SecretGenerator.entropy(value)
-        : newState.passwordEntropy = null;
+        : null;
     }
 
     if (this.state.hasAlreadyBeenValidated) {
@@ -468,10 +470,6 @@ class CreateResource extends Component {
    * @returns {boolean}
    */
   isFieldMaxSizeReached(fieldName) {
-    if (this.state.hasAlreadyBeenValidated) {
-      return false;
-    }
-
     const schema = this.state.resourceViewModel.constructor.getSchema();
     if (typeof(schema.properties[fieldName]?.maxLength) === "undefined") {
       return false;
@@ -491,8 +489,10 @@ class CreateResource extends Component {
     const password = SecretGenerator.generate(this.state.generatorSettings);
     const passwordEntropy = SecretGenerator.entropy(password);
 
+    const resourceViewModel = this.state.resourceViewModel.cloneWithMutation("password", password);
+
     this.setState({
-      password: password,
+      resourceViewModel,
       passwordError: "",
       passwordInDictionary: false,
       passwordEntropy
@@ -622,8 +622,8 @@ class CreateResource extends Component {
       return null;
     }
 
-    const nameError = this.state.errors.getFirstRuleErrorByField("name");
-    const passwordError = this.state.errors.getFirstRuleErrorByField("password");
+    const isNameError = this.state.errors.hasError("name", "required");
+    const isPasswordError = this.state.errors.hasError("password", "required");
 
     const isMaxLengthNameWarning = this.isFieldMaxSizeReached("name");
     const isMaxLengthUriWarning = this.isFieldMaxSizeReached("uri");
@@ -639,13 +639,13 @@ class CreateResource extends Component {
         disabled={this.state.processing} onClose={this.handleClose}>
         <form onSubmit={this.handleFormSubmit} noValidate>
           <div className="form-content">
-            <div className={`input text required ${nameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+            <div className={`input text required ${isNameError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-name"><Trans>Name</Trans>{isMaxLengthNameWarning && <Icon name="exclamation" />}</label>
               <input id="create-password-form-name" name="name" type="text" value={resourceViewModel.name || ""} onChange={this.handleInputChange}
                 disabled={this.state.processing} ref={this.nameInputRef} className="required fluid" maxLength="255"
                 required="required" autoComplete="off" autoFocus={true} placeholder={this.translate("Name")}/>
-              {nameError &&
-                <div className="name error-message">{nameError}</div>
+              {isNameError &&
+                <div className="name error-message"><Trans>A name is required.</Trans></div>
               }
               {isMaxLengthNameWarning &&
                 <div className="name warning-message">
@@ -675,9 +675,9 @@ class CreateResource extends Component {
                 </div>
               }
             </div>
-            <div className={`input-password-wrapper input required ${passwordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
+            <div className={`input-password-wrapper input required ${isPasswordError ? "error" : ""} ${this.state.processing ? 'disabled' : ''}`}>
               <label htmlFor="create-password-form-password">
-                <Trans>Password</Trans>
+                <Trans>Password</Trans>{isMaxLengthPasswordWarning && <Icon name="exclamation"/>}
               </label>
               <div className="password-button-inline">
                 <Password id="create-password-form-password"
@@ -702,9 +702,9 @@ class CreateResource extends Component {
                   </button>
                 }
               </div>
-              <PasswordComplexity entropy={passwordEntropy} error={Boolean(passwordError)}/>
-              {passwordError &&
-                <div className="password error-message">{passwordError}</div>
+              <PasswordComplexity entropy={passwordEntropy} error={isPasswordError}/>
+              {isPasswordError &&
+                <div className="password error-message"><Trans>A password is required.</Trans></div>
               }
               {isMaxLengthPasswordWarning &&
                 <div className="password warning-message"><strong><Trans>Warning:</Trans></strong> <Trans>this is the maximum size for this field, make sure your data was not truncated</Trans></div>

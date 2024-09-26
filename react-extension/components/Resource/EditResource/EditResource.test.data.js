@@ -23,7 +23,7 @@ export const defaultProps = (props = {}) => {
     context: defaultUserAppContext({
       resources: [resource],
     }),
-    resourceId: resource.id,
+    resource: resource,
     onClose: jest.fn(),
     dialogContext: defaultDialogContext(),
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
@@ -37,5 +37,5 @@ export const defaultProps = (props = {}) => {
 export const defaultPropsLegacyResource = (props = {}) => {
   const resource = defaultResourceDto({resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING});
   const context = defaultUserAppContext({resources: [resource]});
-  return defaultProps({context, resourceId: resource.id, ...props});
+  return defaultProps({context, resource, ...props});
 };
