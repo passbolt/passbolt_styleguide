@@ -37,6 +37,7 @@ export const resourceWithDescriptionMock = defaultResourceDto({
   metadata: {
     resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
     description: "Apache is the world's most used web server software.",
+    uris: ["http://www.apache.org/"],
   },
   permission: updatePermissionDto()
 });
@@ -64,6 +65,7 @@ export const resourceOnlyReadWithNoDescriptionMock = {
   metadata: {
     resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
     description: "",
+    uris: ["http://www.apache.org/"],
   },
   permission: readPermissionDto()
 };

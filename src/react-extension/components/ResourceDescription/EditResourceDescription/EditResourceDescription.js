@@ -20,6 +20,9 @@ import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../../shared/components/Icons/Icon";
+import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
+import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
+import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -31,7 +34,7 @@ class EditResourceDescription extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.getDefaultState();
+    this.state = this.defaultState;
     this.bindCallbacks();
     this.createInputRef();
   }
@@ -40,12 +43,13 @@ class EditResourceDescription extends React.Component {
    * Get default state
    * @returns {object}
    */
-  getDefaultState() {
+  get defaultState() {
     return {
-      encryptDescription: this.mustEncryptDescription(),
-      description: this.props.plaintextSecretDto?.description || this.props.resource.metadata.description, // description of the resource
       processing: false, // component processing
-      error: "" // error to display
+      unexpectedError: null,
+      resourceViewModel: null,
+      originalResourceTypeSlug: null,
+      hasAlreadyBeenValidated: false, // True if the form has already been submitted once
     };
   }
 
@@ -76,6 +80,7 @@ class EditResourceDescription extends React.Component {
    */
   componentDidMount() {
     this.handleOutsideEditorClickEvent();
+    this.initializeResourceViewModel();
     this.setFocusOnDescriptionEditor();
   }
 
@@ -87,42 +92,40 @@ class EditResourceDescription extends React.Component {
     this.removeOutsideEditorClickEvent();
   }
 
-  /*
-   * =============================================================
-   *  Resource type helpers
-   * =============================================================
-   */
   /**
-   * Must the description be kept encrypted?
-   * @returns {boolean}
+   * initialize the resource view model
    */
-  mustEncryptDescription() {
-    return this.resourceTypesSettings.mustEncryptDescription(this.props.resource.resource_type_id);
+  initializeResourceViewModel() {
+    const originalResourceTypeSlug = this.props.context.resourceTypesSettings.findResourceTypeSlugById(this.props.resource.resource_type_id);
+    const resourceViewModelType = this.getViewModelTypeBySlug(originalResourceTypeSlug);
+
+    let resourceViewModel = resourceViewModelType
+      .createFromEntity(this.props.resource);
+
+    if (this.props.plaintextSecretDto) {
+      resourceViewModel = resourceViewModel.updateSecret(this.props.plaintextSecretDto);
+    }
+
+    this.setState({resourceViewModel, originalResourceTypeSlug});
   }
 
-  /*
-   * =============================================================
-   *  Getter helpers
-   * =============================================================
-   */
   /**
-   * @returns {ResourceTypesSettings}
+   * Returns the corresponding ResourceViewModel type based on the given slug.
+   * @param {string} slug
+   * @returns {typeof ResourceViewModel}
+   * @throws {Error} if the slug is unknown
    */
-  get resourceTypesSettings() {
-    return this.props.context.resourceTypesSettings;
-  }
-
-  /*
-   * =============================================================
-   *  Resource type helpers
-   * =============================================================
-   */
-  /**
-   * Is the encrypted description content type enabled.
-   * @returns {boolean}
-   */
-  isEncryptedDescriptionEnabled() {
-    return this.resourceTypesSettings.isEncryptedDescriptionEnabled();
+  getViewModelTypeBySlug(slug) {
+    switch (slug) {
+      case ResourcePasswordStringViewModel.resourceTypeSlug:
+        return ResourcePasswordStringViewModel;
+      case ResourcePasswordDescriptionViewModel.resourceTypeSlug:
+        return ResourcePasswordDescriptionViewModel;
+      case ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug:
+        return ResourcePasswordDescriptionTotpViewModel;
+      default:
+        throw new Error("There is no ResourceViewModel mathching the given slug");
+    }
   }
 
   /*
@@ -141,19 +144,20 @@ class EditResourceDescription extends React.Component {
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The description has been updated successfully"));
       await this.props.resourceWorkspaceContext.onResourceDescriptionEdited();
       this.props.onUpdate(updateDescriptionResult.description, updateDescriptionResult.plaintextSecretDto);
-      this.close(updateDescriptionResult);
+      this.close();
     } catch (error) {
       // It can happen when the user has closed the passphrase entry dialog by instance.
       if (error.name === "UserAbortsOperationError") {
         this.setState({processing: false});
-      } else {
-        // Unexpected error occurred.
-        console.error(error);
-        this.setState({
-          error: error.message,
-          processing: false
-        });
+        return;
       }
+
+      // Unexpected error occurred.
+      console.error(error);
+      this.setState({
+        unexpectedError: error.message,
+        processing: false
+      });
     }
   }
 
@@ -162,62 +166,30 @@ class EditResourceDescription extends React.Component {
    * @returns {Promise<Object>} updated resource
    */
   async updateResource() {
-    // Resource types enabled but legacy type requested
-    if (!this.state.encryptDescription) {
-      return this.updateCleartextDescription();
+    let resourceViewModel = this.state.resourceViewModel;
+    const resourceDto = resourceViewModel.toResourceDto();
+
+    const hasResourceTypeChange = this.state.originalResourceTypeSlug !== resourceViewModel.constructor.resourceTypeSlug;
+    const hasSecretChanged = this.props.plaintextSecretDto && resourceViewModel.areSecretsDifferent(this.props.plaintextSecretDto);
+    const shouldUpdateSecret = hasResourceTypeChange || hasSecretChanged;
+
+    if (hasResourceTypeChange) {
+      const description = resourceViewModel.description;
+      //if resource type has change, we need to find the entire secret of the resource to avoid removing fields like `password` for instance
+      const plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceViewModel.id);
+
+      resourceViewModel = resourceViewModel
+        .updateSecret(plaintextSecretDto)
+        .cloneWithMutation("description", description);
     }
 
-    return this.updateWithEncryptedDescription();
-  }
+    const secretDto = shouldUpdateSecret
+      ? resourceViewModel.toSecretDto()
+      : null;
 
-  /**
-   * Update the resource with clear description.
-   * @returns {Promise<Object>} updated resource
-   */
-  async updateCleartextDescription() {
-    const resourceDto = {
-      ...this.props.resource,
-      metadata: {
-        ...this.props.resource.metadata,
-        description: this.state.description,
-      }
-    };
+    await this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
 
-    await this.props.context.port.request("passbolt.resources.update", resourceDto, null);
-
-    return {description: this.state.description};
-  }
-
-  /**
-   * Update the resource with encrypted description content type
-   * @returns {Promise<Object>}
-   */
-  async updateWithEncryptedDescription() {
-    const description = this.state.description;
-    const resourceDto = {...this.props.resource};
-    resourceDto.description = '';
-
-    // If the resource has no encrypted description, change the resource type to "resource with encrypted description"
-    const isResourceTypeIdIsLegacy = this.resourceTypesSettings.assertResourceTypeIdIsLegacy(this.props.resource.resource_type_id);
-    if (isResourceTypeIdIsLegacy) {
-      resourceDto.resource_type_id = this.resourceTypesSettings.findResourceTypeIdBySlug(
-        this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION
-      );
-    }
-
-    let plaintextSecretDto = this.props.plaintextSecretDto;
-    // It happens if the description was previously not encrypted and the user decided to encrypt it.
-    if (!plaintextSecretDto) {
-      plaintextSecretDto = await this.props.context.port.request("passbolt.secret.find-by-resource-id", resourceDto.id);
-    }
-    const plaintextSecretToUpdateDto = {
-      ...plaintextSecretDto,
-      description
-    };
-
-    await this.props.context.port.request("passbolt.resources.update", resourceDto, plaintextSecretToUpdateDto);
-
-    return {description, plaintextSecretDto: plaintextSecretToUpdateDto};
+    return {description: this.state.resourceViewModel.description, plaintextSecretDto: this.state.resourceViewModel.toSecretDto()};
   }
 
   /*
@@ -255,7 +227,7 @@ class EditResourceDescription extends React.Component {
    * set the focus at the end of the description editor
    */
   setFocusOnDescriptionEditor() {
-    const descriptionLength = this.state.description ? this.state.description.length : 0;
+    const descriptionLength = this.state.resourceViewModel?.description?.length || 0;
     this.textareaRef.current.selectionStart = descriptionLength;
     this.textareaRef.current.selectionEnd = descriptionLength;
     this.textareaRef.current.focus();
@@ -307,10 +279,11 @@ class EditResourceDescription extends React.Component {
    */
   handleInputChange(event) {
     const target = event.target;
-    const value = target.value;
     const name = target.name;
+    const value = target.value || null;
+
     this.setState({
-      [name]: value
+      resourceViewModel: this.state.resourceViewModel.cloneWithMutation(name, value),
     });
   }
 
@@ -332,24 +305,31 @@ class EditResourceDescription extends React.Component {
   /**
    * Switch to toggle description field encryption
    */
-  async handleDescriptionToggle(event) {
-    /*
-     * When click on the lock button
-     * the click is detected out of the element and the editor close.
-     * To fix that an immediate stop propagation enable to avoid the editor close.
-     * Need absolutely an immediate propagation to stop other listeners.
-     */
-    event.nativeEvent.stopImmediatePropagation();
-    // Description is not encrypted and encrypted description type is not supported => leave it alone
-    if (!this.isEncryptedDescriptionEnabled() && !this.state.encryptDescription) {
+  async handleDescriptionToggle() {
+    //only a resource of type `password-string` can toggle its description field encryption state in the edit form.
+    const isOriginalResourcePasswordString =  this.state.originalResourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug;
+    if (!isOriginalResourcePasswordString) {
       return;
     }
 
-    // No obligation to keep description encrypted, allow toggle
-    if (!this.mustEncryptDescription()) {
-      const encrypt = !this.state.encryptDescription;
-      this.setState({encryptDescription: encrypt});
+    const canToggleDescription = this.state.resourceViewModel.canToggleDescription();
+    if (!canToggleDescription) {
+      return;
     }
+
+    const resourceViewModel = this.state.resourceViewModel;
+    const newResourceViewModelType = resourceViewModel.isDescriptionUnencrypted()
+      ? ResourcePasswordDescriptionViewModel
+      : ResourcePasswordStringViewModel;
+
+    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(newResourceViewModelType.resourceTypeSlug);
+    const dto = {
+      ...this.state.resourceViewModel,
+      resource_type_id: resourceTypeId
+    };
+
+    const newResourceViewModel = new newResourceViewModelType(dto);
+    this.setState({resourceViewModel: newResourceViewModel});
   }
 
   /**
@@ -370,34 +350,36 @@ class EditResourceDescription extends React.Component {
    * @returns {JSX}
    */
   render() {
+    const isReady = Boolean(this.state.resourceViewModel);
     return (
       <form onKeyDown={this.handleKeyDown} noValidate className="description-editor">
         <div className="form-content" ref={this.elementRef}>
           <div className="input textarea required">
             <textarea name="description" className="fluid" aria-required={true} ref={this.textareaRef}
-              maxLength="10000" placeholder={this.translate("Enter a description")} value={this.state.description}
+              maxLength="10000" placeholder={this.translate("Enter a description")} value={isReady ? this.state.resourceViewModel.description : ""}
               onChange={this.handleInputChange}
               disabled={this.hasAllInputDisabled()} autoComplete="off"/>
           </div>
-          {this.state.error &&
-          <div className="feedbacks error-message">{this.state.error}</div>
+          {this.state.unexpectedError &&
+            <div className="feedbacks error-message">{this.state.unexpectedError}</div>
           }
           <div className="actions">
             <div className="description-lock">
-              {!this.state.encryptDescription &&
-                <button type="button" onClick={event => this.handleDescriptionToggle(event)} className="link no-border lock-toggle">
-                  <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
-                    <Icon name="lock-open"/>
-                  </Tooltip>
-                </button>
-              }
-              {this.state.encryptDescription &&
-                <button type="button" onClick={event => this.handleDescriptionToggle(event)} className="link no-border lock-toggle">
-                  <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
-                    <Icon name="lock"/>
-                  </Tooltip>
-                </button>
-              }
+              <button type="button" onClick={this.handleDescriptionToggle} className="link no-border lock-toggle">
+                {isReady &&
+                  <>
+                    {this.state.resourceViewModel.isDescriptionUnencrypted()
+                      ? (
+                        <Tooltip message={this.translate("Do not store sensitive data or click here to enable encryption for the description field.")}>
+                          <Icon name="lock-open"/>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip message={this.translate("The description content will be encrypted.")} icon="">
+                          <Icon name="lock"/>
+                        </Tooltip>
+                      )}
+                  </>}
+              </button>
             </div>
             <button type="button" disabled={this.hasAllInputDisabled()} className="cancel"
               onClick={this.handleCancel}><Trans>Cancel</Trans>
