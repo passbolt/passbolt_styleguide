@@ -77,7 +77,7 @@ class DisplayResourceFolderDetailsPermissions extends React.Component {
    */
   async fetch() {
     this.setState({loading: true});
-    const permissions = await this.props.context.port.request('passbolt.folders.find-permissions', this.folder.id);
+    const permissions = await this.props.context.port.request('passbolt.permissions.find-aco-permissions-for-display', this.folder.id, "Folder");
     if (permissions) {
       permissions.sort((permissionA, permissionB) => this.sortPermissions(permissionA, permissionB));
     }

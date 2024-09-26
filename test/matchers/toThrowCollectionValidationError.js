@@ -18,22 +18,30 @@ const getNestedPropertyValue = (obj, path) =>
     , obj
   );
 
-exports.toThrowCollectionValidationError = function(callback, expectedErrorPath) {
+exports.toThrowCollectionValidationError = function(callback, expectedErrorPath, dto) {
   const {printExpected, printReceived, matcherHint} = this.utils;
 
-  const passMessage = errorDetails =>
+  let passMessage = errorDetails =>
     `${matcherHint('.not.toThrowCollectionValidationError')}\n\n` +
     `Expected collection validation to not fail on item property:\n` +
     `  ${printExpected(expectedErrorPath)}\n` +
     `Received:\n` +
     `  ${printReceived(errorDetails)}`;
 
-  const failMessage = errorDetails =>
+  let failMessage = errorDetails =>
     `${matcherHint('.toThrowCollectionValidationError')}\n\n` +
     `Expected collection validation to fail on item property:\n` +
     `  ${printExpected(expectedErrorPath)}\n` +
     `Received:\n` +
     `  ${printReceived(errorDetails)}`;
+
+
+  if (dto) {
+    passMessage += `\nDTO:\n` +
+      `  ${printReceived(dto)}\n`;
+    failMessage += `\nDTO:\n` +
+      `  ${printReceived(dto)}\n`;
+  }
 
   let pass = false;
   let errorDetails;

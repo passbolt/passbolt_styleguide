@@ -123,13 +123,13 @@ describe("Resource Workspace Context", () => {
     it.todo("AS LU I should have the most recent created resource when the filter is RECENTLY-MODIFIED");
 
     it("AS LU I should have resources shared with me when the filter is SHARED-WITH-ME", async() => {
-      const expectedResourcesCount = 17;
+      const expectedResourcesCount = 6;
       await page.goToShareWithMe();
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
 
     it("AS LU I should have my own resources when the filter is ITEMS-I-OWN", async() => {
-      const expectedResourcesCount = 1;
+      const expectedResourcesCount = 3;
       await page.goToItemsIOwn();
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
@@ -142,18 +142,18 @@ describe("Resource Workspace Context", () => {
 
     it("AS LU I should have resources matching a text when the filter is TEXT", async() => {
       const expectedResourcesCount = 1;
-      await page.goToText("docker");
+      await page.goToText("owned");
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
-      expect(page.filteredResources[0].metadata.name).toBe("Docker");
+      expect(page.filteredResources[0].metadata.name).toBe("Resource owned");
     });
 
     it("AS LU I should have resources matching a text when the filter is TEXT in folder name", async() => {
       const expectedResourcesCount = 1;
-      await page.goToText("Accounting");
+      await page.goToText("Folder searchable");
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
-      expect(page.filteredResources[0].metadata.name).toBe("Inside Bank Password");
+      expect(page.filteredResources[0].metadata.name).toBe("Resource in folder");
     });
 
     it("AS LU I should have resources belonged to a group when the filter is GROUP", async() => {
@@ -161,7 +161,7 @@ describe("Resource Workspace Context", () => {
       const expectedResourcesCount = mockGroupResources.length;
       const leadershipTeamGroup = {group: {id: "516c2db6-0aed-52d8-854f-b3f3499995e7"}};
 
-      context.port.addRequestListener("passbolt.resources.find-all", async() => mockGroupResources);
+      context.port.addRequestListener("passbolt.resources.find-all-ids-by-is-shared-with-group", async() => mockGroupResources.map(group => group.id));
       context.port.addRequestListener("passbolt.resources.update-local-storage", async() => {
         if (page.filter.type === ResourceWorkspaceFilterTypes.GROUP) {
           throw new Error("'passbolt.resources.update-local-storage' should have been called after filtering by GROUP");
@@ -174,24 +174,21 @@ describe("Resource Workspace Context", () => {
     });
 
     it("AS LU I should have resources with a specific tag when the filter is TAG", async() => {
-      const charlieTag = {tag: {id: '1c8afebc-7e23-51bd-a0b6-2e695afeb32f'}};
       const expectedResourcesCount = 1;
-      await page.goToTag(charlieTag);
+      await page.goToTag({tag: context.resources[2].tags[0]});
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
 
     it("AS LU I should have resources belonged to a folder if the filter is FOLDER", async() => {
-      const privateFolderId = "907c3f61-f416-5834-86d2-e721501ee493";
-      const privateFolder = context.folders.find(folder => folder.id === privateFolderId);
       const expectedResourcesCount = 1;
-      await page.goToFolder(privateFolder);
+      await page.goToFolder(context.folders[0]);
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
 
     it("AS LU I should have resources belonged to a root folder the filter is ROOT-FOLDER", async() => {
-      const expectedResourcesCount = 16;
+      const expectedResourcesCount = 8;
       await page.goToRootFolder();
       await waitForTrue(() => page.filteredResources.length !== totalResourcesCount);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
@@ -292,7 +289,7 @@ describe("Resource Workspace Context", () => {
       const resource = context.resources[0];
       jest.spyOn(window, 'open').mockImplementationOnce(() => {});
       page.goToResourceUri(resource.metadata.uris[0]);
-      expect(window.open).toHaveBeenCalledWith(resource.metadata.uris[0], "_blank", "noopener,noreferrer");
+      expect(window.open).toHaveBeenCalledWith("https://passbolt.com/", "_blank", "noopener,noreferrer");
     });
 
     it("As LU I not be able to follow an unsafe resource uri", () => {
@@ -409,8 +406,8 @@ describe("Resource Workspace Context", () => {
     it("As LU I should be able to show a resource column", async() => {
       expect.assertions(1);
       await page.goToAllItems();
-      const hierarchy = page.getHierarchyFolderCache(context.folders[1].id);
-      expect(hierarchy.length).toStrictEqual(2);
+      const hierarchy = page.getHierarchyFolderCache(context.folders[0].id);
+      expect(hierarchy.length).toStrictEqual(1);
     });
   });
 });

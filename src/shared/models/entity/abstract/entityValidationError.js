@@ -74,7 +74,12 @@ class EntityValidationError extends Error {
     if (typeof property !== 'string') {
       throw new TypeError('EntityValidationError hasError property should be a string.');
     }
+
     const hasError = (this.details && Object.prototype.hasOwnProperty.call(this.details, property));
+    if (!hasError) {
+      return false;
+    }
+
     if (!rule) {
       return hasError;
     }
@@ -91,6 +96,22 @@ class EntityValidationError extends Error {
    */
   hasErrors() {
     return (Object.keys(this.details).length > 0);
+  }
+
+  /**
+   * Returns the first error available on the given field if any.
+   * @param {string} property
+   * @returns {string|null}
+   */
+  getFirstRuleErrorByField(property) {
+    if (!this.hasError(property)) {
+      return null;
+    }
+
+    const errors = this.details[property];
+    const rules = Object.keys(errors);
+
+    return errors[rules[0]];
   }
 }
 

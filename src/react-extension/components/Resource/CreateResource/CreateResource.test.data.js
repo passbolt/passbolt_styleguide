@@ -13,6 +13,7 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -60,10 +61,9 @@ export function defaultProps(data = {}) {
   return Object.assign(defaultData, data);
 }
 
-export const defaultResourceMeta = (data = {}) => ({
-  name: "Password name",
-  uris: ["https://uri.dev"],
-  username: "Password username",
-  description: "Password description",
-  ...data
+export const defaultSecretDto = (data = {}) => ({
+  password: "",
+  description: "",
+  resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  ...data,
 });

@@ -837,7 +837,7 @@ export const folders = [{
 ];
 
 export const mockResultsResources = {
-  'passbolt.share.get-resources': resources,
+  'passbolt.share.find-resources-for-share': resources,
   'passbolt.keyring.get-public-key-info-by-user': gpgKey,
   "passbolt.share.resources.save": true,
 };
@@ -849,7 +849,7 @@ export const mockResultsFolders = {
 };
 
 export const mockResultsResourcesAndFolders = {
-  'passbolt.share.get-resources': resources,
+  'passbolt.share.find-resources-for-share': resources,
   'passbolt.share.get-folders': folders,
   'passbolt.keyring.get-public-key-info-by-user': gpgKey,
 };

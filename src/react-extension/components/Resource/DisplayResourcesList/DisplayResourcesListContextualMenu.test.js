@@ -86,7 +86,7 @@ describe("DisplayResourcesListContextualMenu", () => {
     it('As LU I can start to copy the username of a resource', async() => {
       expect.assertions(3);
       await page.copyUsername();
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.username);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(props.resource.metadata.username);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
@@ -95,7 +95,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect.assertions(4);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordStringDto());
       await page.copyPassword();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith('secret-password');
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
@@ -125,7 +125,7 @@ describe("DisplayResourcesListContextualMenu", () => {
 
     it('As LU I can start to edit a resource', async() => {
       await page.edit();
-      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resourceId: props.resource.id});
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditResource, {resource: props.resource});
       expect(props.hide).toHaveBeenCalled();
     });
 
@@ -218,7 +218,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect.assertions(4);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
       await page.copyTotp();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
@@ -262,7 +262,7 @@ describe("DisplayResourcesListContextualMenu", () => {
       expect.assertions(4);
       jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => plaintextSecretPasswordDescriptionTotpDto());
       await page.copyTotp();
-      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.decrypt', props.resource.id);
+      expect(props.context.port.request).toHaveBeenCalledWith('passbolt.secret.find-by-resource-id', props.resource.id);
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(expect.stringMatching(/^[0-9]{6}/));
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();

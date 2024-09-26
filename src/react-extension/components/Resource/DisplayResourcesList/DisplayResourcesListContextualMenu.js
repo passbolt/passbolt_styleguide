@@ -73,7 +73,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
     if (this.isStandaloneTotpResource) {
       this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
     } else {
-      this.props.dialogContext.open(EditResource, {resourceId: this.resource.id});
+      this.props.dialogContext.open(EditResource, {resource: this.resource});
     }
     this.props.hide();
   }
@@ -123,7 +123,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret() {
-    return this.props.context.port.request("passbolt.secret.decrypt", this.resource.id);
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", this.resource.id);
   }
 
   /**

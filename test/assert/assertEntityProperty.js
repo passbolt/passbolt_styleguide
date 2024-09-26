@@ -43,6 +43,17 @@ export const assert = (EntityClass, propertyName, successScenarios, failScenario
   });
 };
 
+export const assertAssociation = (EntityClass, propertyName, defaultValidDto, successScenarios, failScenarios) => {
+  successScenarios.forEach(test => {
+    const dto = Object.assign({}, defaultValidDto, {[propertyName]: test.value});
+    expect(() => new EntityClass(dto)).not.toThrow();
+  });
+  failScenarios.forEach(test => {
+    const dto = Object.assign({}, defaultValidDto, {[propertyName]: test.value});
+    expect(() => new EntityClass(dto)).toThrow();
+  });
+};
+
 export const assertArrayItem = (EntityClass, propertyName, successScenarios, failScenarios, rule) => {
   successScenarios.forEach(test => {
     const propertyPath = `${propertyName}.0`;
@@ -95,6 +106,18 @@ const SUCCESS_MAX_LENGTH_SCENARIO = maxLength => ([{scenario: "valid length", va
 const FAIL_MAX_LENGTH_SCENARIO = maxLength => ([{scenario: "too long", value: "a".repeat(maxLength + 1)}]);
 export const maxLength = (EntityClass, propertyName, maxLength) => {
   assert(EntityClass, propertyName, SUCCESS_MAX_LENGTH_SCENARIO(maxLength), FAIL_MAX_LENGTH_SCENARIO(maxLength), "maxLength");
+};
+
+const SUCCESS_MIN_SCENARIO = min => ([{scenario: "valid minimal value", value: min}]);
+const FAIL_MIN_SCENARIO = min => ([{scenario: "less than minimal value", value: min - 1}]);
+export const minimum = (EntityClass, propertyName, minimum) => {
+  assert(EntityClass, propertyName, SUCCESS_MIN_SCENARIO(minimum), FAIL_MIN_SCENARIO(minimum), "minimum");
+};
+
+const SUCCESS_MAX_SCENARIO = max => ([{scenario: "valid maximal value", value: max}]);
+const FAIL_MAX_SCENARIO = max => ([{scenario: "more than maximal value", value: max + 1}]);
+export const maximum = (EntityClass, propertyName, maximum) => {
+  assert(EntityClass, propertyName, SUCCESS_MAX_SCENARIO(maximum), FAIL_MAX_SCENARIO(maximum), "maximum");
 };
 
 export const SUCCESS_DATETIME_SCENARIO = [
@@ -229,7 +252,6 @@ export const assertArrayItemString = (EntityClass, propertyName) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_STRING_SCENARIOS, FAIL_STRING_SCENARIOS, "type");
 };
 
-
 export const FAIL_ARRAY_UUID_SCENARIOS = [SCENARIO_EMPTY, SCENARIO_STRING];
 export const assertArrayItemUuid = (EntityClass, propertyName) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_UUID_SCENARIOS, FAIL_ARRAY_UUID_SCENARIOS, "format");
@@ -237,4 +259,49 @@ export const assertArrayItemUuid = (EntityClass, propertyName) => {
 
 export const arrayStringMaxLength = (EntityClass, propertyName, maxLength) => {
   assertArrayItem(EntityClass, propertyName, SUCCESS_MAX_LENGTH_SCENARIO(maxLength), FAIL_MAX_LENGTH_SCENARIO(maxLength), "maxLength");
+};
+
+export const assertCollection = (CollectionClass, successScenarios, failScenarios, rule) => {
+  successScenarios.forEach(test => {
+    const dto = test.value;
+    expect(() => new CollectionClass(dto)).not.toThrowCollectionValidationError(rule, dto);
+  });
+  failScenarios.forEach(test => {
+    const dto = test.value;
+    expect(() => new CollectionClass(dto)).toThrowCollectionValidationError(rule, dto);
+  });
+};
+
+export const SCENARIO_COLLECTION_EMPTY = {scenario: "collection empty", value: []};
+export const SCENARIO_COLLECTION_STRING = {scenario: "collection of string", value: ["valid-string"]};
+export const SCENARIO_COLLECTION_INTEGER = {scenario: "collection of integer", value: [42]};
+export const SCENARIO_COLLECTION_FLOAT = {scenario: "collection of float", value: [42.2]};
+export const SCENARIO_COLLECTION_OBJECT = {scenario: "collection of object", value: [{str: "string"}]};
+export const SCENARIO_COLLECTION_BOOLEAN = {scenario: "collection of boolean", value: [true, false]};
+
+export const SUCCESS_COLLECTION_SCENARIO = [
+  SCENARIO_COLLECTION_EMPTY,
+  SCENARIO_COLLECTION_STRING,
+  SCENARIO_COLLECTION_INTEGER,
+  SCENARIO_COLLECTION_FLOAT,
+  SCENARIO_COLLECTION_OBJECT,
+  SCENARIO_COLLECTION_BOOLEAN
+];
+export const FAIL_COLLECTION_SCENARIOS = [
+  // SCENARIO_EMPTY, // @todo Empty string is not well handled by schema validator, it fails but due to an assertion of the function parameters.
+  SCENARIO_STRING,
+  SCENARIO_INTEGER,
+  SCENARIO_FLOAT,
+  SCENARIO_OBJECT,
+  SCENARIO_TRUE,
+  // SCENARIO_FALSE // @todo False is not well handled by schema validator, it fails but due to an assertion of the function parameters.
+];
+export const collection = CollectionClass => {
+  assertCollection(CollectionClass, SUCCESS_COLLECTION_SCENARIO, FAIL_COLLECTION_SCENARIOS, "items.type");
+};
+
+const SUCCESS_COLLECTION_MIN_ITEMS_SCENARIO = minLength => ([{scenario: "valid length", value: "a".repeat(minLength).split("")}]);
+const FAIL_COLLECTION_MIN_ITEMS_SCENARIO = minLength => (!minLength ? [] : [{scenario: "too short", value: "a".repeat(minLength - 1).split("")}]);
+export const collectionMinItems = (CollectionClass, minLength) => {
+  assertCollection(CollectionClass, SUCCESS_COLLECTION_MIN_ITEMS_SCENARIO(minLength), FAIL_COLLECTION_MIN_ITEMS_SCENARIO(minLength), "minItems");
 };

@@ -1,15 +1,30 @@
-import React from "react";
-import {render, fireEvent, cleanup} from '@testing-library/react';
-import {StaticRouter} from 'react-router-dom';
-import ResourceCreatePage from "./ResourceCreatePage";
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.2.0
+ */
+
+import {cleanup} from '@testing-library/react';
 import "../../../shared/lib/Secret/SecretComplexity";
 import {waitFor} from "@testing-library/dom";
-import MockTranslationProvider
-  from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
-import {defaultAppContext, defaultProps} from "./ResourceCreatePage.test.data";
-import PrepareResourceContextProvider from "../../contexts/PrepareResourceContext";
+import {defaultProps} from "./ResourceCreatePage.test.data";
 import {ConfirmCreatePageRuleVariations} from "../ConfirmCreatePage/ConfirmCreatePage";
+import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION} from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ResourceCreatePagePage from "./ResourceCreatePage.test.page";
+import {waitForTrue} from "../../../../test/utils/waitFor";
+import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {DateTime} from "luxon";
+import {createMemoryHistory} from "history";
+import {defaultPasswordExpirySettingsContext} from '../../../react-extension/contexts/PasswordExpirySettingsContext.test.data';
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -28,358 +43,460 @@ describe("ResourceCreatePage", () => {
   describe("Form initialization", () => {
     it("should intialize the name and uri input fields with the active tab metadata", async() => {
       expect.assertions(4);
-      const context = defaultAppContext();
-      // mock the passbolt messaging layer.
-      const expectedSecret = "AAAAAAAAAAAAAAAAAA";
-      context.port = {
-        request: event => new Promise(resolve => {
-          if (event === "passbolt.quickaccess.prepare-resource") {
-            resolve({
-              name: "Passbolt Browser Extension Test",
-              uri: "https://passbolt-browser-extension/test",
-              secret_clear: expectedSecret
-            });
-          }
-        })
-      };
-      const props = defaultProps();
-      delete props.prepareResourceContext;
 
-      const pageToRender = (
-        <MockTranslationProvider>
-          <StaticRouter context={context}>
-            <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
-              <ResourceCreatePage context={context} {...props} debug/>
-            </PrepareResourceContextProvider>
-          </StaticRouter>
-        </MockTranslationProvider>
-      );
-      const component = render(pageToRender);
-      await waitFor(() => {});
+      const expectedData = {
+        name: "Passbolt Browser Extension Test",
+        uri: "https://passbolt-browser-extension/test",
+        secret_clear: "AAAAAAAAAAAAAAAAAA",
+      };
+
+      const props = defaultProps();
+      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async() => expectedData);
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => Boolean(page.name.value));
 
       // Assert the form.
-      const nameInput = component.container.querySelector('[name="name"]');
-      expect(nameInput.value).toBe("Passbolt Browser Extension Test");
-      const uriInput = component.container.querySelector('[name="uri"]');
-      expect(uriInput.value).toBe("https://passbolt-browser-extension/test");
-      const usernameInput = component.container.querySelector('[name="username"]');
-      expect(usernameInput.value).toBe(context.userSettings.username);
-      const passwordInput = component.container.querySelector('[name="password"]');
-      expect(passwordInput.value).toBe("AAAAAAAAAAAAAAAAAA");
+      expect(page.name.value).toStrictEqual(expectedData.name);
+      expect(page.uri.value).toStrictEqual(expectedData.uri);
+      expect(page.username.value).toStrictEqual(props.context.userSettings.username);
+      expect(page.password.value).toStrictEqual(expectedData.secret_clear);
     });
 
     it("should not initialize with chrome new tab metadata", async() => {
-      // mock the passbolt messaging layer.
-      window.passbolt = {
-        request: event => new Promise(resolve => {
-          if (event === "passbolt.quickaccess.prepare-resource") {
-            resolve({
-              name: "newtab",
-              uri: "chrome://newtab/"
-            });
-          }
-        })
+      expect.assertions(2);
+
+      const expectedData = {
+        name: "newtab",
+        uri: "chrome://newtab/"
       };
 
-      const context = defaultAppContext();
       const props = defaultProps();
-
-      const component = render(
-        <MockTranslationProvider>
-          <StaticRouter context={context}>
-            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
-          </StaticRouter>
-        </MockTranslationProvider>
-      );
-      await waitFor(() => {});
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async() => expectedData);
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === "");
 
       // Assert the form.
-      expect.assertions(2);
-      const nameInput = component.container.querySelector('[name="name"]');
-      expect(nameInput.value).toBe("");
-      const uriInput = component.container.querySelector('[name="uri"]');
-      expect(uriInput.value).toBe("");
+      expect(page.name.value).toStrictEqual("");
+      expect(page.uri.value).toStrictEqual("");
     });
 
     it("should not initialize with firefox new tab metadata", async() => {
-      // mock the passbolt messaging layer.
-      window.passbolt = {
-        request: event => new Promise(resolve => {
-          if (event === "passbolt.quickaccess.prepare-resource") {
-            resolve({
-              name: "",
-              uri: "about:newtab"
-            });
-          }
-        })
+      const expectedData = {
+        name: "",
+        uri: "about:newtab"
       };
 
-      const context = defaultAppContext();
       const props = defaultProps();
-
-      const component = render(
-        <MockTranslationProvider>
-          <StaticRouter context={context}>
-            <ResourceCreatePage context={context} prepareResourceContext={props.prepareResourceContext} debug />
-          </StaticRouter>
-        </MockTranslationProvider>
-      );
-      await waitFor(() => {});
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async() => expectedData);
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === "");
 
       // Assert the form.
-      expect.assertions(2);
-      const nameInput = component.container.querySelector('[name="name"]');
-      expect(nameInput.value).toBe("");
-      const uriInput = component.container.querySelector('[name="uri"]');
-      expect(uriInput.value).toBe("");
+      expect(page.name.value).toStrictEqual("");
+      expect(page.uri.value).toStrictEqual("");
     });
   });
 
   describe("Form submission", () => {
     it("should create a new password on submit", async() => {
-      const fakeNow = new Date("2023-11-24T00:00:00.000Z");
-      expect.assertions(6);
-      jest
-        .useFakeTimers()
-        .setSystemTime(fakeNow);
+      expect.assertions(2);
 
-      const createPasswordEventMockCallback = jest.fn();
-      const context = defaultAppContext();
-      const props = defaultProps();
-      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
-      const inputPasswordChange = async password => {
-        const passwordInput = component.container.querySelector('[name="password"]');
-        const passwordInputEvent = {target: {value: password}};
-        fireEvent.change(passwordInput, passwordInputEvent);
-        jest.runAllTimers();
-      };
+      const fakeNow = DateTime.fromISO("2023-11-24T00:00:00.000Z");
+      jest.setSystemTime(fakeNow.toMillis());
 
-      // Mock the passbolt messaging layer.
-      context.port = {
-        request: function(event, value) {
-          return new Promise((resolve, reject) => {
-            if (event === "passbolt.quickaccess.prepare-resource") {
-              resolve({
-                name: "Passbolt Browser Extension Test",
-                uri: "https://passbolt-browser-extension/test",
-              });
-            } else if (event === "passbolt.resources.create") {
-              createPasswordEventMockCallback(arguments[1], arguments[2]);
-              resolve({
-                id: "newly-created-resource-id"
-              });
-            } else if (event === "passbolt.secrets.powned-password") {
-              if (value === "hello-world") {
-                resolve(3);
-              } else if (value === "unavailable") {
-                reject();
-              } else {
-                resolve(0);
-              }
-            }
-          });
-        }
-      };
-
-      delete props.prepareResourceContext;
-      const component = render(
-        <MockTranslationProvider>
-          <StaticRouter context={context}>
-            <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
-              <ResourceCreatePage context={context} passwordPoliciesContext={props.passwordPoliciesContext} passwordExpiryContext={props.passwordExpiryContext} debug />
-            </PrepareResourceContextProvider>
-          </StaticRouter>
-        </MockTranslationProvider>
-      );
-      await waitFor(() => {});
-
-      expect.assertions(1);
-
-      // Fill the form empty fields
-      const usernameInput = component.container.querySelector('[name="username"]');
-      const usernameInputEvent = {target: {value: "test@passbolt.com"}};
-      fireEvent.change(usernameInput, usernameInputEvent);
-
-      await inputPasswordChange("P4ssb0ltP4ssb0lt");
-      await waitFor(() => {});
-
-      //Reset the system time at the desired one as filling input runs some jest timers.
-      jest.setSystemTime(fakeNow);
-
-      // Submit the form.
-      const submitButton = component.container.querySelector('button[type="submit"]');
-      fireEvent.click(submitButton, {button: 0});
-
-      // Wait the passbolt.request that request the addon code to create the password is completed.
-      await waitFor(() => {});
-
-      // Assert the request to create a password has been called and contain the expected parameters.
-      const resourceTypeId = context.resourceTypesSettings.findResourceTypeIdBySlug(context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
-      const resourceMeta = {
+      const expectedResourceDto = {
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        folder_parent_id: null,
         metadata: {
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
           name: "Passbolt Browser Extension Test",
           uris: ["https://passbolt-browser-extension/test"],
           username: "test@passbolt.com",
-          resource_type_id: resourceTypeId,
         },
-        resource_type_id: resourceTypeId,
-        expired: "2023-12-24T00:00:00.000Z",
+        expired: fakeNow.plus({days: 30}).plus({milliseconds: 150}).toJSDate().toISOString(),
       };
 
-      const secretDto = {
+      const expectedSecretDto = {
         password: "P4ssb0ltP4ssb0lt",
-        description: ""
+        description: "",
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
       };
-      expect(createPasswordEventMockCallback).toHaveBeenCalledWith(resourceMeta, secretDto);
-    });
 
-    it.todo("should create a new password on submit when the dictionary service is unreachable");
-
-    it.todo("should request confirmation when password is part of an exposed data breach");
-
-
-    /**
-     * @todo: fix the text and make sur `history.push` is called with the right parameters
-     */
-    it.skip("should ask for password creation confirmation if the entropy is too low", async() => {
-      expect.assertions(4);
-
-      const context = defaultAppContext();
-      const props = defaultProps({
-        history: {
-          push: jest.fn(),
-        }
-      });
+      const props = defaultProps();
       props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
-      const inputPasswordChange = async password => {
-        const passwordInput = component.container.querySelector('[name="password"]');
-        const passwordInputEvent = {target: {value: password}};
-        fireEvent.change(passwordInput, passwordInputEvent);
-      };
 
-      const complexityText = () => component.container.querySelector('.complexity-text');
-      // Mock the passbolt messaging layer.
-      context.port = {
-        request: function(event) {
-          return new Promise(resolve => {
-            if (event === "passbolt.quickaccess.prepare-resource") {
-              resolve({
-                name: "Passbolt Browser Extension Test",
-                uri: "https://passbolt-browser-extension/test",
-              });
-            }
-          });
-        }
-      };
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
+        name: expectedResourceDto.metadata.name,
+        uri: expectedResourceDto.metadata.uris[0],
+      }));
 
-      delete props.prepareResourceContext;
-      const component = render(
-        <MockTranslationProvider>
-          <StaticRouter context={context}>
-            <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
-              <ResourceCreatePage context={context} passwordPoliciesContext={props.passwordPoliciesContext} passwordExpiryContext={props.passwordExpiryContext} history={props.history} debug />
-            </PrepareResourceContextProvider>
-          </StaticRouter>
-        </MockTranslationProvider>
-      );
-      await waitFor(() => {});
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", () => 0);
 
-      // Fill the form empty fields
-      const usernameInput = component.container.querySelector('[name="username"]');
-      const usernameInputEvent = {target: {value: "test@passbolt.com"}};
-      fireEvent.change(usernameInput, usernameInputEvent);
+      let resourceCreated = false;
+      props.context.port.addRequestListener("passbolt.resources.create", (resourceDto, secretDto) => {
+        expect(resourceDto).toStrictEqual(expectedResourceDto);
+        expect(secretDto).toStrictEqual(expectedSecretDto);
+        resourceCreated = true;
+        return defaultResourceDto();
+      });
 
-      expect(complexityText().textContent).toBe("Quality");
-      //Powned password should raise a warning and not block submit
-      await inputPasswordChange("test");
-      expect(complexityText().textContent).toContain("entropy: 18.8 bits");
+      const page = new ResourceCreatePagePage(props);
+      jest.setSystemTime(fakeNow.toMillis());
+      await waitForTrue(() => page.name.value === expectedResourceDto.metadata.name);
+
+      // Fill the form empty fields"
+      await page.setFormWith({
+        username: "test@passbolt.com",
+        password: "P4ssb0ltP4ssb0lt",
+      });
 
       // Submit the form.
-      const submitButton = component.container.querySelector('button[type="submit"]');
-      fireEvent.click(submitButton, {button: 0});
+      await page.submitForm();
+      await waitForTrue(() => resourceCreated);
+    });
 
-      // Wait the passbolt.request that request the addon code to create the password is completed.
+    it("should ask for password creation confirmation if the entropy is too low", async() => {
+      expect.assertions(4);
+
+      const props = defaultProps({history: createMemoryHistory()});
+
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+
+      const preparedResource = {
+        name: "Passbolt Browser Extension Test",
+        uri: "https://passbolt-browser-extension/test",
+      };
+
+      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async() => preparedResource);
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", async() => 0);
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === preparedResource.name);
+
+      expect(page.complexityText).toBe("Quality Entropy: 0.0 bits");
+
+      await page.setFormWith({
+        password: "test",
+        username: "test@passbolt.com",
+      });
+
+      expect(page.complexityText).toBe("Very weak Entropy: 18.8 bits");
+
+      await page.submitForm();
       await waitFor(() => {});
+      await waitForTrue(() => props.history.location.pathname.toString() !== "/");
 
       const expectedPageProps = {
         resourceName: "Passbolt Browser Extension Test",
-        rule: ConfirmCreatePageRuleVariations.MIMIMUM_ENTROPY
+        rule: ConfirmCreatePageRuleVariations.MINIMUM_ENTROPY
       };
-      expect(props.history.push).toHaveBeenCalledTimes(1);
-      expect(props.history.push).toHaveBeenCalledWith('/webAccessibleResources/quickaccess/resources/confirm-create', expectedPageProps);
+      expect(props.history.location.pathname.toString()).toStrictEqual('/webAccessibleResources/quickaccess/resources/confirm-create');
+      expect(props.history.location.state).toStrictEqual(expectedPageProps);
     });
 
-    /**
-     * @todo: fix the text and make sur `history.push` is called with the right parameters
-     */
-    it.skip("should ask for password creation confirmation if the passphrase is found in a data breach", async() => {
+    it("should ask for password creation confirmation if the passphrase is found in a data breach", async() => {
       expect.assertions(4);
 
-      const context = defaultAppContext();
-      const props = defaultProps({
-        history: {
-          push: jest.fn(),
-        }
-      });
+      const props = defaultProps({history: createMemoryHistory()});
+
       props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
-      const inputPasswordChange = async password => {
-        const passwordInput = component.container.querySelector('[name="password"]');
-        const passwordInputEvent = {target: {value: password}};
-        fireEvent.change(passwordInput, passwordInputEvent);
+
+      const preparedResource = {
+        name: "Passbolt Browser Extension Test",
+        uri: "https://passbolt-browser-extension/test",
       };
 
-      const complexityText = () => component.container.querySelector('.complexity-text');
-      // Mock the passbolt messaging layer.
-      context.port = {
-        request: function(event) {
-          return new Promise(resolve => {
-            if (event === "passbolt.quickaccess.prepare-resource") {
-              resolve({
-                name: "Passbolt Browser Extension Test",
-                uri: "https://passbolt-browser-extension/test",
-              });
-            } else if (event === "passbolt.secrets.powned-password") {
-              resolve(3);
-            }
-          });
-        }
-      };
+      props.prepareResourceContext.consumeLastGeneratedPassword.mockImplementation(() => null);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async() => preparedResource);
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", async() => 3);
 
-      delete props.prepareResourceContext;
-      const component = render(
-        <MockTranslationProvider>
-          <StaticRouter context={context}>
-            <PrepareResourceContextProvider context={context} passwordPoliciesContext={props.passwordPoliciesContext}>
-              <ResourceCreatePage context={context} passwordPoliciesContext={props.passwordPoliciesContext} passwordExpiryContext={props.passwordExpiryContext} history={props.history} debug />
-            </PrepareResourceContextProvider>
-          </StaticRouter>
-        </MockTranslationProvider>
-      );
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === preparedResource.name);
+
+      expect(page.complexityText).toBe("Quality Entropy: 0.0 bits");
+
+      await page.setFormWith({
+        password: "hello-world/hello-world",
+        username: "test@passbolt.com",
+      });
+
+      expect(page.complexityText).toBe("Strong Entropy: 112.9 bits");
+
+      await page.submitForm();
       await waitFor(() => {});
-
-      // Fill the form empty fields
-      const usernameInput = component.container.querySelector('[name="username"]');
-      const usernameInputEvent = {target: {value: "test@passbolt.com"}};
-      fireEvent.change(usernameInput, usernameInputEvent);
-
-      expect(complexityText().textContent).toBe("Quality");
-      //Powned password should raise a warning and not block submit
-      await inputPasswordChange("helloworldhelloworld");
-      expect(complexityText().textContent).toContain("entropy: 94.0 bits");
-
-      // Submit the form.
-      const submitButton = component.container.querySelector('button[type="submit"]');
-      fireEvent.click(submitButton, {button: 0});
-
-      // Wait the passbolt.request that request the addon code to create the password is completed.
-      await waitFor(() => {});
+      await waitForTrue(() => props.history.location.pathname.toString() !== "/");
 
       const expectedPageProps = {
         resourceName: "Passbolt Browser Extension Test",
         rule: ConfirmCreatePageRuleVariations.IN_DICTIONARY
       };
-      expect(props.history.push).toHaveBeenCalledTimes(1);
-      expect(props.history.push).toHaveBeenCalledWith('/webAccessibleResources/quickaccess/resources/confirm-create', expectedPageProps);
+      expect(props.history.location.pathname.toString()).toStrictEqual('/webAccessibleResources/quickaccess/resources/confirm-create');
+      expect(props.history.location.state).toStrictEqual(expectedPageProps);
+    });
+
+    it("should create a new password on submit when the dictionary service is unreachable", async() => {
+      expect.assertions(3);
+
+      const fakeNow = DateTime.fromISO("2023-11-24T00:00:00.000Z");
+      jest.setSystemTime(fakeNow.toMillis());
+
+      // Assert the request to create a password has been called and contain the expected parameters.
+      const expectedResourceDto = {
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+        folder_parent_id: null,
+        metadata: {
+          resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+          name: "Passbolt Browser Extension Test",
+          uris: ["https://passbolt-browser-extension/test"],
+          username: "test@passbolt.com",
+        },
+        expired: fakeNow.plus({days: 30}).plus({milliseconds: 150}).toJSDate().toISOString(),
+      };
+
+      const expectedSecretDto = {
+        password: "P4ssb0ltP4ssb0lt",
+        description: "",
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+      };
+
+      const props = defaultProps();
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+
+      let isPreparedResourceSet = false;
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", async() => {
+        isPreparedResourceSet = true;
+        return {
+          name: expectedResourceDto.metadata.name,
+          uri: expectedResourceDto.metadata.uris[0],
+        };
+      });
+
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", async password => {
+        expect(password).toStrictEqual(expectedSecretDto.password);
+        throw new Error();
+      });
+
+      props.context.port.addRequestListener("passbolt.resources.create", async(resourceDto, secretDto) => {
+        expect(resourceDto).toStrictEqual(expectedResourceDto);
+        expect(secretDto).toStrictEqual(expectedSecretDto);
+        return defaultResourceDto();
+      });
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === expectedResourceDto.metadata.name);
+
+      await waitForTrue(() => isPreparedResourceSet);
+
+      // Fill the form empty fields
+      await page.setFormWith({
+        username: "test@passbolt.com",
+        password: "P4ssb0ltP4ssb0lt",
+      });
+
+      // Submit the form.
+      await page.submitForm();
+    });
+  });
+
+  describe("Form validation", () => {
+    it("should not submit the form if there is an error", async() => {
+      expect.assertions(2);
+
+      const resourceData = {
+        name: "",
+        uri: 42,
+        username: 42
+      };
+
+      const props = defaultProps({
+        passwordExpiryContext: defaultPasswordExpirySettingsContext({automatic_update: false}),
+      });
+
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      props.prepareResourceContext.consumePreparedResource.mockImplementation(() => resourceData);
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === resourceData.name);
+
+      // Fill the form empty fields
+      await page.setFormWith({
+        password: "",
+      });
+
+      await page.submitForm();
+
+      expect(page.nameError.textContent).toStrictEqual('A name is required.');
+      expect(page.passwordError.textContent).toStrictEqual('A password is required.');
+    });
+
+    it("should display the error from the API", async() => {
+      expect.assertions(4);
+
+      const apiError = new Error();
+      apiError.name = "PassboltApiFetchError";
+      apiError.data = {
+        code: 400,
+        body: {
+          name: ["The name is invalid"],
+          uri: ["The uri is invalid", "The uri contains a forbidden scheme"],
+          username: ["The username is invalid"],
+          password: ["The password is too weak"],
+        }
+      };
+
+      const props = defaultProps({
+        passwordExpiryContext: defaultPasswordExpirySettingsContext({automatic_update: false}),
+      });
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
+      props.context.port.addRequestListener("passbolt.resources.create", () => { throw apiError; });
+      props.prepareResourceContext.consumePreparedResource.mockImplementation(() => ({
+        name: "Resource name",
+        uri: "resource uri",
+        username: "resource username",
+      }));
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === "Resource name");
+
+      // Fill the form empty fields
+      await page.setFormWith({
+        password: "Here's a password!",
+      });
+
+      await page.submitForm();
+
+      await waitForTrue(() => Boolean(page.nameError?.textContent));
+
+      expect(page.nameError.textContent).toStrictEqual('The name is invalid');
+      expect(page.uriError.textContent).toStrictEqual('The uri is invalid, The uri contains a forbidden scheme');
+      expect(page.usernameError.textContent).toStrictEqual('The username is invalid');
+      expect(page.passwordError.textContent).toStrictEqual('The password is too weak');
+    });
+
+    it("should do nothing if user aborted the operation", async() => {
+      expect.assertions(5);
+
+      const error = new Error();
+      error.name = "UserAbortsOperationError";
+
+      const props = defaultProps({
+        passwordExpiryContext: defaultPasswordExpirySettingsContext({automatic_update: false}),
+      });
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
+
+      let promiseRejecter;
+      props.context.port.addRequestListener("passbolt.resources.create", () => {
+        const promise = new Promise((_, reject) => {
+          promiseRejecter = reject;
+        });
+        return promise;
+      });
+
+      const expectedValues = {
+        name: "Resource name",
+        uri: "resource uri",
+        username: "resource username",
+        password: "Here's a password!"
+      };
+      props.prepareResourceContext.consumePreparedResource.mockImplementation(() => expectedValues);
+      props.prepareResourceContext.lastGeneratedPassword = expectedValues.password;
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === expectedValues.name);
+      await waitFor(() => {});
+
+      await page.submitForm();
+      await waitFor(() => {});
+
+      expect(page.isSubmitting).toStrictEqual(true);
+
+      await promiseRejecter(error);
+      await waitForTrue(() => !page.isSubmitting);
+
+      expect(page.name.value).toStrictEqual(expectedValues.name);
+      expect(page.uri.value).toStrictEqual(expectedValues.uri);
+      expect(page.username.value).toStrictEqual(expectedValues.username);
+      expect(page.password.value).toStrictEqual(expectedValues.password);
+    });
+
+    it("should display the unexpected error after submitting", async() => {
+      expect.assertions(6);
+
+      const errorMessage = "This is an unexpected error";
+      const error = new Error(errorMessage);
+      error.name = "UnexpectedError";
+
+      const props = defaultProps({
+        passwordExpiryContext: defaultPasswordExpirySettingsContext({automatic_update: false}),
+      });
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => false);
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => null);
+
+      let promiseRejecter;
+      props.context.port.addRequestListener("passbolt.resources.create", () => {
+        const promise = new Promise((_, reject) => {
+          promiseRejecter = reject;
+        });
+        return promise;
+      });
+
+      const expectedValues = {
+        name: "Resource name",
+        uri: "resource uri",
+        username: "resource username",
+        password: "Here's a password!"
+      };
+      props.prepareResourceContext.consumePreparedResource.mockImplementation(() => expectedValues);
+      props.prepareResourceContext.lastGeneratedPassword = expectedValues.password;
+
+      const page = new ResourceCreatePagePage(props);
+      await waitForTrue(() => page.name.value === expectedValues.name);
+      await waitFor(() => {});
+
+      await page.submitForm();
+      await waitFor(() => {});
+
+      expect(page.isSubmitting).toStrictEqual(true);
+
+      await promiseRejecter(error);
+      await waitForTrue(() => !page.isSubmitting);
+
+      expect(page.name.value).toStrictEqual(expectedValues.name);
+      expect(page.uri.value).toStrictEqual(expectedValues.uri);
+      expect(page.username.value).toStrictEqual(expectedValues.username);
+      expect(page.password.value).toStrictEqual(expectedValues.password);
+      expect(page.unexpectedError).toStrictEqual(errorMessage);
+    });
+  });
+
+  describe("As LU I can navigate from the 'Resource Create' page", () => {
+    it("should allow to go back on the previous page", async() => {
+      expect.assertions(1);
+
+      const props = defaultProps();
+      props.history = createMemoryHistory({
+        initialEntries: [
+          "/home",
+          "/test"
+        ],
+        initialIndex: 1,
+      });
+
+      const initialPath = props.history.location.pathname.toString();
+      props.history.goBack();
+
+      const page = new ResourceCreatePagePage(props);
+      await waitFor(() => {});
+
+      await page.clickOnBackButton();
+      await waitForTrue(() => props.history.location.pathname !== initialPath);
+
+      expect(props.history.location.pathname).toStrictEqual("/home");
     });
   });
 });

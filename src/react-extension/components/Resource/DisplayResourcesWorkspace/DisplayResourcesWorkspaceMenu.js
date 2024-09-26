@@ -188,7 +188,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     if (this.isStandaloneTotpResource) {
       this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP});
     } else {
-      this.props.dialogContext.open(EditResource, {resourceId: this.selectedResources[0].id});
+      this.props.dialogContext.open(EditResource, {resource: this.selectedResources[0]});
     }
   }
 
@@ -227,7 +227,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @throw UserAbortsOperationError If the user cancel the operation
    */
   decryptResourceSecret() {
-    return this.props.context.port.request("passbolt.secret.decrypt", this.selectedResources[0].id);
+    return this.props.context.port.request("passbolt.secret.find-by-resource-id", this.selectedResources[0].id);
   }
 
   /**

@@ -15,7 +15,6 @@
 /**
  * Sort an array of resources alphabetically
  * @param {Array<ResourceEntityDto>} resources
- * @returns {Array<ResourceEntityDto}
  */
 export const sortResourcesAlphabetically = resources => {
   resources?.sort((resource1, resource2) => {

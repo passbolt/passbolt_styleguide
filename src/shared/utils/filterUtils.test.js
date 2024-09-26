@@ -14,16 +14,16 @@
 
 import {defaultResourceDto} from "../models/entity/resource/resourceEntity.test.data";
 import {filterResourcesBySearch} from "./filterUtils";
+import {defaultResourceMetadataDto} from "../models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 
 describe("filterUtils", () => (
   describe("::filterResourcesBySearch", () => {
     it("should filter the resources with the given keyword on the resource name", () => {
       expect.assertions(2);
-      const field = "name";
-      const resource1 = defaultResourceDto({metadata: {[field]: "abc"}});
-      const resource2 = defaultResourceDto({metadata: {[field]: "def"}});
-      const resource3 = defaultResourceDto({metadata: {[field]: "ghi"}});
-      const resource4 = defaultResourceDto({metadata: {[field]: "jkl"}});
+      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "abc"})});
+      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "def"})});
+      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "ghi"})});
+      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "jkl"})});
 
       const allResources = [resource1, resource2, resource3, resource4];
 
@@ -34,11 +34,10 @@ describe("filterUtils", () => (
 
     it("should filter the resources with the given keyword on the resource username", () => {
       expect.assertions(2);
-      const field = "username";
-      const resource1 = defaultResourceDto({metadata: {[field]: "abc"}});
-      const resource2 = defaultResourceDto({metadata: {[field]: "def"}});
-      const resource3 = defaultResourceDto({metadata: {[field]: "ghi"}});
-      const resource4 = defaultResourceDto({metadata: {[field]: "jkl"}});
+      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({username: "abc"})});
+      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({username: "def"})});
+      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({username: "ghi"})});
+      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({username: "jkl"})});
 
       const allResources = [resource1, resource2, resource3, resource4];
 
@@ -49,11 +48,10 @@ describe("filterUtils", () => (
 
     it("should filter the resources with the given keyword on the resource primary uri", () => {
       expect.assertions(2);
-      const field = "uris";
-      const resource1 = defaultResourceDto({metadata: {[field]: ["abc"]}});
-      const resource2 = defaultResourceDto({metadata: {[field]: ["def"]}});
-      const resource3 = defaultResourceDto({metadata: {[field]: ["ghi"]}});
-      const resource4 = defaultResourceDto({metadata: {[field]: ["jkl"]}});
+      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({uris: ["abc"]})});
+      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({uris: ["def"]})});
+      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({uris: ["ghi"]})});
+      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({uris: ["jkl"]})});
 
       const allResources = [resource1, resource2, resource3, resource4];
 
@@ -64,11 +62,10 @@ describe("filterUtils", () => (
 
     it("should filter the resources with the given keyword on the resource description", () => {
       expect.assertions(2);
-      const field = "description";
-      const resource1 = defaultResourceDto({metadata: {[field]: "abc"}});
-      const resource2 = defaultResourceDto({metadata: {[field]: "def"}});
-      const resource3 = defaultResourceDto({metadata: {[field]: "ghi"}});
-      const resource4 = defaultResourceDto({metadata: {[field]: "jkl"}});
+      const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({description: "abc"})});
+      const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({description: "def"})});
+      const resource3 = defaultResourceDto({metadata: defaultResourceMetadataDto({description: "ghi"})});
+      const resource4 = defaultResourceDto({metadata: defaultResourceMetadataDto({description: "jkl"})});
 
       const allResources = [resource1, resource2, resource3, resource4];
 

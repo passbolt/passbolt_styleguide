@@ -37,7 +37,9 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    */
   getDefaultState() {
     return {
-      open: true
+      open: true,
+      creator: null, // the data of the folder creator
+      modifier: null, // the data of the folder modifier
     };
   }
 
@@ -47,6 +49,44 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
   bindCallbacks() {
     this.handleFolderParentClickEvent = this.handleFolderParentClickEvent.bind(this);
     this.handleTitleClickEvent = this.handleTitleClickEvent.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.state.open) {
+      this.loadUserInformation();
+    }
+  }
+
+  /**
+   * Whenever the component has updated in terms of props
+   * @param {object} prevProps The previous componentDidUpdate props
+   */
+  componentDidUpdate(prevProps) {
+    this.handleFolderChange(prevProps.resourceWorkspaceContext.details.folder);
+  }
+
+  /**
+   * Check if the folder has changed and fetch
+   * @param {object} previousFolder The previously selected folder
+   */
+  handleFolderChange(previousFolder) {
+    const hasModifierOrCreatorChanged = this.folder.created_by !== previousFolder.created_by
+      || this.folder.modified_by !== previousFolder.modified_by;
+    if (hasModifierOrCreatorChanged && this.state.open) {
+      this.loadUserInformation();
+    }
+  }
+
+  /**
+   * Loads the information about the creator and the modifier of the current selected folder.
+   * @returns {Promise<void>}
+   */
+  async loadUserInformation() {
+    const folderInformation = await this.props.context.port.request("passbolt.folders.find-details", this.folder.id);
+    this.setState({
+      creator: folderInformation?.creator,
+      modifier: folderInformation?.modifier,
+    });
   }
 
   /**
@@ -75,21 +115,6 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    */
   get folder() {
     return this.props.resourceWorkspaceContext.details.folder;
-  }
-
-  /**
-   * Get a user username
-   * @param {string} userId The user id
-   */
-  getUserUsername(userId) {
-    if (this.props.context.users) {
-      const user = this.props.context.users.find(item => item.id === userId);
-      if (user) {
-        return user.username;
-      }
-    }
-
-    return "";
   }
 
   /**
@@ -133,8 +158,8 @@ class DisplayResourceFolderDetailsInformation extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const creatorUsername = this.getUserUsername(this.folder.created_by);
-    const modifierUsername = this.getUserUsername(this.folder.modified_by);
+    const creatorUsername = this.state.creator?.username || "";
+    const modifierUsername = this.state.modifier?.username || "";
     const createdDateTimeAgo = formatDateTimeAgo(this.folder.created, this.props.t, this.props.context.locale);
     const modifiedDateTimeAgo = formatDateTimeAgo(this.folder.modified, this.props.t, this.props.context.locale);
     const folderParentName = this.getFolderName(this.folder.folder_parent_id);

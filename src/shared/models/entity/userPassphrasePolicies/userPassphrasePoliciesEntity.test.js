@@ -13,8 +13,8 @@
  */
 
 import each from "jest-each";
-import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
-import EntityValidationError from "passbolt-styleguide/src/shared/models/entity/abstract/entityValidationError";
+import EntitySchema from "../abstract/entitySchema";
+import EntityValidationError from "..//abstract/entityValidationError";
 import UserPassphrasePoliciesEntity from "./userPassphrasePoliciesEntity";
 import {defaultUserPassphrasePoliciesDto} from "./userPassphrasePoliciesEntity.test.data";
 
@@ -58,8 +58,8 @@ describe("UserPassphrasePolicies entity", () => {
 
     {dto: {entropy_minimum: true}, errorType: "type"},
     {dto: {entropy_minimum: "50"}, errorType: "type"},
-    {dto: {entropy_minimum: 30}, errorType: "gte"},
-    {dto: {entropy_minimum: 250}, errorType: "lte"},
+    {dto: {entropy_minimum: 30}, errorType: "minimum"},
+    {dto: {entropy_minimum: 250}, errorType: "maximum"},
 
     {dto: {created: "string but not a date"}, errorType: "format"},
     {dto: {created: -1}, errorType: "type"},

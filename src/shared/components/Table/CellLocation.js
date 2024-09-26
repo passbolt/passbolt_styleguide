@@ -65,6 +65,9 @@ class CellLocation extends Component {
    * @return {React.JSX.Element|null}
    */
   render() {
+    if (this.value === null) {
+      return null;
+    }
     // return empty array if a resource have no folder parent
     if (this.value.length === 0) {
       return (

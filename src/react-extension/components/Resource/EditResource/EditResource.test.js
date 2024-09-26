@@ -22,7 +22,9 @@ import {waitFor} from "@testing-library/react";
 import {defaultProps, defaultPropsLegacyResource} from "./EditResource.test.data";
 import EditResourcePage from "./EditResource.test.page";
 import {
-  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION, TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP, TEST_RESOURCE_TYPE_PASSWORD_STRING
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
+  TEST_RESOURCE_TYPE_PASSWORD_STRING
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {waitForTrue} from "../../../../../test/utils/waitFor";
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
@@ -53,6 +55,7 @@ describe("See the Edit Resource", () => {
     beforeEach(() => {
       jest.useFakeTimers();
       jest.resetModules();
+      jest.clearAllMocks();
     });
 
     afterEach(() => {
@@ -60,25 +63,28 @@ describe("See the Edit Resource", () => {
     });
 
     it('matches the styleguide', async() => {
-      expect.assertions(21);
+      expect.assertions(20);
       const props = defaultProps(); // The props to pass
-      const resource = props.context.resources[0];
+      props.resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_STRING;
+      mockContextRequest(props.context, () => "");
+      const resource = props.resource;
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       // Dialog title exists and correct
-      expect(page.passwordEdit.exists()).toBeTruthy();
       expect(page.title.header.textContent).toBe("Edit resource");
-      expect(page.title.subtitle.textContent).toBe(resource.name);
+      expect(page.title.subtitle.textContent).toBe(resource.metadata.name);
 
       // Close button exists
       expect(page.passwordEdit.dialogClose).not.toBeNull();
 
       // Name input field exists.
-      expect(page.passwordEdit.name.value).toBe(resource.name);
+      expect(page.passwordEdit.name.value).toBe(resource.metadata.name);
       // Uri input field exists.
-      expect(page.passwordEdit.uri.value).toBe(resource.uri);
+      expect(page.passwordEdit.uri.value).toBe(resource.metadata.uris[0]);
       // Username input field exists.
-      expect(page.passwordEdit.username.value).toBe(resource.username);
+      expect(page.passwordEdit.username.value).toBe(resource.metadata.username);
       // Password input field exists
       expect(page.passwordEdit.password).not.toBeNull();
       expect(page.passwordEdit.password.value).toBe("");
@@ -87,8 +93,7 @@ describe("See the Edit Resource", () => {
       expect(passwordInputStyle.background).toBe("white");
       expect(passwordInputStyle.color).toBe("");
 
-      // Complexity label exists but is not yet defined.
-      expect(page.passwordEdit.complexityText.textContent).toBe("Quality Entropy: 0.0 bits");
+      expect(page.passwordEdit.complexityText.textContent).toBe("n/a Entropy: 0.0 bits");
 
       // Password view button exists.
       expect(page.passwordEdit.passwordViewButton).not.toBeNull();
@@ -99,7 +104,7 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.passwordGenerateButton).not.toBeNull();
 
       // Description textarea field exists
-      expect(page.passwordEdit.description.value).toBe(resource.description);
+      expect(page.passwordEdit.description.value).toBe(resource.metadata.description);
 
       // Add totp button exists
       expect(page.passwordEdit.addTotpButton).not.toBeNull();
@@ -116,7 +121,8 @@ describe("See the Edit Resource", () => {
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
 
       page.passwordEdit.focusInput(page.passwordEdit.password);
       await waitForTrue(() => !page.passwordEdit.password.disabled);
@@ -134,7 +140,9 @@ describe("See the Edit Resource", () => {
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       const passwordValue = "secret-decrypted";
       // View password
       await waitFor(() => {
@@ -162,7 +170,8 @@ describe("See the Edit Resource", () => {
       const secretDto = {password: "secret-decrypted", description: "description"};
       mockContextRequest(props.context, () => secretDto);
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
 
       const totp = new TotpViewModel(defaultTotpViewModelDto());
       jest.spyOn(props.workflowContext, "start").mockImplementationOnce((component, props) => props.onApply(totp));
@@ -181,7 +190,7 @@ describe("See the Edit Resource", () => {
       expect.assertions(2);
       const resource = resourceWithTotpDto();
       const context = defaultUserAppContext({resources: [resource]});
-      const props = defaultProps({context, resourceId: resource.id}); // The props to pass
+      const props = defaultProps({context, resource}); // The props to pass
       const secretDto = {
         password: "secret-decrypted",
         description: "description",
@@ -189,7 +198,9 @@ describe("See the Edit Resource", () => {
       };
       mockContextRequest(props.context, () => secretDto);
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       await page.passwordEdit.click(page.passwordEdit.editTotpButton);
       expect(page.passwordEdit.addTotpButton).toBeNull();
       expect(props.workflowContext.start).toHaveBeenCalledWith(HandleTotpWorkflow, {mode: TotpWorkflowMode.EDIT_TOTP, totp: new TotpViewModel(secretDto.totp), onApply: expect.any(Function)});
@@ -198,7 +209,7 @@ describe("See the Edit Resource", () => {
     it('Delete totp when clicking on the delete totp button.', async() => {
       const resource = resourceWithTotpDto();
       const context = defaultUserAppContext({resources: [resource]});
-      const props = defaultProps({context, resourceId: resource.id}); // The props to pass
+      const props = defaultProps({context, resource}); // The props to pass
       const secretDto = {
         password: "secret-decrypted",
         description: "description",
@@ -206,7 +217,9 @@ describe("See the Edit Resource", () => {
       };
       mockContextRequest(props.context, () => secretDto);
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       await page.passwordEdit.click(page.passwordEdit.deleteTotpButton);
 
       expect(page.passwordEdit.addTotpButton).not.toBeNull();
@@ -218,10 +231,12 @@ describe("See the Edit Resource", () => {
       expect.assertions(5);
       const passwordExpiryContext = defaultPasswordExpirySettingsContext({default_expiry_period: 365});
       const props = defaultProps({passwordExpiryContext}); // The props to pass
-      const resource = props.context.resources[0];
+      const resource = props.resource;
       mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       //Avoid to block with the beforeMount when checking current password
       jest.runAllTimers();
       // edit password
@@ -253,19 +268,20 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
+        folder_parent_id: null,
         metadata: {
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
           name: resourceMeta.name,
           uris: [resourceMeta.uri],
           username: resourceMeta.username,
-          description: "",
         },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
         expired: date.toISO(),
       };
       const onApiUpdateSecretDto = {
         password: resourceMeta.password,
-        description: resourceMeta.description
+        description: resourceMeta.description,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
       };
 
       await page.passwordEdit.click(page.passwordEdit.saveButton);
@@ -274,13 +290,15 @@ describe("See the Edit Resource", () => {
       expect(props.onClose).toBeCalled();
     });
 
-    it('should requests the addon without the secret if it hasn"t changed (with resource type PASSWORD_AND_DECRYPTION).', async() => {
+    it("should requests the addon without the secret if it hasn't changed (with resource type PASSWORD_AND_DECRYPTION).", async() => {
       expect.assertions(1);
       const props = defaultProps(); // The props to pass
-      const resource = props.context.resources[0];
-      mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
+      const resource = props.resource;
+      mockContextRequest(props.context, () => ({password: "secret-decrypted", description: ""}));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
+
       //Avoid to block with the beforeMount when checking current password
       jest.runAllTimers();
       // edit password
@@ -295,12 +313,13 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
+        folder_parent_id: null,
+        expired: null,
         metadata: {
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
           name: resourceMeta.name,
-          uris: [resource.uri],
-          username: resource.username,
-          description: "",
+          uris: resource.metadata.uris,
+          username: resource.metadata.username,
         },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
       };
@@ -312,11 +331,13 @@ describe("See the Edit Resource", () => {
     it('should requests the addon without the secret if it hasn"t changed (with resource type PASSWORD_STRING).', async() => {
       expect.assertions(1);
       const props = defaultProps(); // The props to pass
-      const resource = props.context.resources[0];
+      const resource = props.resource;
       resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_STRING;
       mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
+
       //Avoid to block with the beforeMount when checking current password
       jest.runAllTimers();
       // edit password
@@ -332,10 +353,12 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
+        folder_parent_id: null,
+        expired: null,
         metadata: {
           name: resourceMeta.name,
-          uris: [resource.uri],
-          username: resource.username,
+          uris: resource.metadata.uris,
+          username: resource.metadata.username,
           description: resourceMeta.description,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING
         },
@@ -351,7 +374,7 @@ describe("See the Edit Resource", () => {
       const props = defaultProps(); // The props to pass
       props.context.port.addRequestListener('passbolt.secrets.powned-password', () => 0);
       jest.spyOn(props.context.port, 'request');
-      const resource = props.context.resources[0];
+      const resource = props.resource;
       resource.resource_type_id = TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP;
 
       const defaultTotp = {
@@ -360,13 +383,15 @@ describe("See the Edit Resource", () => {
         digits: 7,
         algorithm: "SHA256"
       };
-      props.context.port.addRequestListener('passbolt.secret.decrypt', () => ({
+      props.context.port.addRequestListener('passbolt.secret.find-by-resource-id', () => ({
         password: "secret-decrypted",
         description: "",
         totp: defaultTotp
       }));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => !page.passwordEdit.password.disabled);
+
       // edit password
       const resourceMeta = {
         name: "Password name",
@@ -378,11 +403,12 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceMeta = {
         id: resource.id,
+        folder_parent_id: null,
+        expired: null,
         metadata: {
           name: resourceMeta.name,
-          uris: [resource.uri],
-          username: resource.username,
-          description: "",
+          uris: resource.metadata.uris,
+          username: resource.metadata.username,
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP
         },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP
@@ -390,6 +416,7 @@ describe("See the Edit Resource", () => {
 
       await waitForTrue(() => !page.passwordEdit.saveButton.disabled);
       await page.passwordEdit.click(page.passwordEdit.saveButton);
+      await waitForTrue(() => page.passwordEdit.saveButton.disabled);
       expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", onApiUpdateResourceMeta, null);
     });
 
@@ -397,10 +424,12 @@ describe("See the Edit Resource", () => {
       expect.assertions(6);
       const passwordExpiryContext = defaultPasswordExpirySettingsContext(disabledPasswordExpirySettingsViewModelDto());
       const props = defaultPropsLegacyResource({passwordExpiryContext}); // The props to pass
-      const resource = props.context.resources[0];
-      mockContextRequest(props.context, () => ({password: "secret-decrypted"}));
+      const resource = props.resource;
+      mockContextRequest(props.context, () => "secret-decrypted");
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       expect(page.passwordEdit.exists()).toBeTruthy();
       // edit password
       const resourceMeta = {
@@ -428,18 +457,20 @@ describe("See the Edit Resource", () => {
 
       const onApiUpdateResourceDto = {
         id: resource.id,
+        folder_parent_id: null,
+        expired: null,
         metadata: {
           name: resourceMeta.name,
           uris: [resourceMeta.uri],
           username: resourceMeta.username,
-          description: '',
           resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
         },
         resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
       };
       const onApiUpdateSecretDto = {
         description: resourceMeta.description,
-        password: resourceMeta.password
+        password: resourceMeta.password,
+        resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
       };
 
       await page.passwordEdit.click(page.passwordEdit.saveButton);
@@ -454,7 +485,9 @@ describe("See the Edit Resource", () => {
       const props = defaultProps(); // The props to pass
       mockContextRequest(props.context, () => ({password: "secret-decrypted", description: "description"}));
       const page = new EditResourcePage(props);
-      await waitFor(() => {});
+
+      await waitForTrue(() => page.passwordEdit.exists());
+
       expect(page.passwordEdit.exists()).toBeTruthy();
       // empty the form
       page.passwordEdit.fillInput(page.passwordEdit.name, "");
@@ -598,14 +631,14 @@ describe("See the Edit Resource", () => {
       expect(page.passwordEdit.usernameWarningMessage.textContent).toEqual(truncatedWarningMessage);
     });
 
-    it("As a signed-in user editing a password which part of a dictionary on the application, I should confirm the password edition in a separate dialog", async() => {
+    it("As a signed-in user editing a password which is part of a dictionary on the application, I should confirm the password edition in a separate dialog", async() => {
       expect.assertions(3);
 
       const props = defaultProps();
-      const resource = props.context.resources[0];
+      const resource = props.resource;
 
       const mockRequests = jest.fn(async message => ({
-        "passbolt.secret.decrypt": {password: "secret-decrypted", description: "description"},
+        "passbolt.secret.find-by-resource-id": {password: "secret-decrypted", description: "description"},
         "passbolt.secrets.powned-password": 2
       }[message]));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
@@ -617,10 +650,10 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.click(page.passwordEdit.saveButton);
       await waitFor(() => {});
 
-      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.find-by-resource-id", resource.id);
       expect(props.context.port.request).toHaveBeenNthCalledWith(2, "passbolt.secrets.powned-password", "secret-decrypted");
       const confirmDialogProps = {
-        resourceName: resource.name,
+        resourceName: resource.metadata.name,
         operation: ConfirmEditCreateOperationVariations.EDIT,
         rule: ConfirmEditCreateRuleVariations.IN_DICTIONARY,
         onConfirm: expect.any(Function),
@@ -633,10 +666,10 @@ describe("See the Edit Resource", () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      const resource = props.context.resources[0];
+      const resource = props.resource;
 
       const mockRequests = jest.fn(async message => ({
-        "passbolt.secret.decrypt": {password: "azerty", description: "description"},
+        "passbolt.secret.find-by-resource-id": {password: "azerty", description: "description"},
         "passbolt.secrets.powned-password": 2
       }[message]));
       jest.spyOn(props.context.port, 'request').mockImplementation(mockRequests);
@@ -648,9 +681,9 @@ describe("See the Edit Resource", () => {
       await page.passwordEdit.click(page.passwordEdit.saveButton);
       await waitFor(() => {});
 
-      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.decrypt", resource.id);
+      expect(props.context.port.request).toHaveBeenNthCalledWith(1, "passbolt.secret.find-by-resource-id", resource.id);
       const confirmDialogProps = {
-        resourceName: resource.name,
+        resourceName: resource.metadata.name,
         operation: ConfirmEditCreateOperationVariations.EDIT,
         rule: ConfirmEditCreateRuleVariations.MINIMUM_ENTROPY,
         onConfirm: expect.any(Function),
