@@ -45,7 +45,7 @@ export default class LoadingContextProvider extends React.Component {
     return {
       counter: 0, // The number of loading processes
       add: () => { this.setState({counter: this.state.counter + 1}); }, // Add a loading process
-      remove: () => { this.setState({counter: Math.max(this.state.counter - 1, 0)}); } // Remove a loading process
+      remove: () => { this.setState({counter: Math.min(this.state.counter - 1, 0)}); } // Remove a loading process
     };
   }
 
