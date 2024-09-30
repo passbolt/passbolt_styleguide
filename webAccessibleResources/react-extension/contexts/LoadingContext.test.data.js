@@ -23,6 +23,6 @@ export const defaultLoadingContext = (data = {}) => {
   return {
     counter: _counter,
     add: jest.fn().mockImplementation(() => _counter++),
-    remove: jest.fn().mockImplementation(() => { _counter = Math.max(_counter - 1, 0); }),
+    remove: jest.fn().mockImplementation(() => { _counter = Math.min(_counter - 1, 0); }),
   };
 };
