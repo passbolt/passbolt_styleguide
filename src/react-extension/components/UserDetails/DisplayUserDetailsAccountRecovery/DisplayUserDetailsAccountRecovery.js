@@ -187,8 +187,8 @@ class DisplayUserDetailsAccountRecovery extends React.Component {
                 {this.isAccountRecoveryPending &&
                   <Icon name="exclamation" baseline={true}/>
                 }
-                {this.state.open && <Icon name="caret-down"/>}
               </span>
+              {this.state.open && <Icon name="caret-down"/>}
               {!this.state.open && <Icon name="caret-right"/>}
             </button>
           </h4>
