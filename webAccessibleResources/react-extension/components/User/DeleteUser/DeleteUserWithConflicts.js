@@ -529,7 +529,7 @@ class DeleteUserWithConflicts extends Component {
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:</label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.metadata.name} (<Trans>Resource</Trans>) <Trans>new owner</Trans>:</label>
                       <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
                     </div>
                   </li>
