@@ -157,7 +157,7 @@ describe("See Delete Group Dialog", () => {
       expect(page.displayDeleteGroupWithConflictsDialog.errorDialogMessage).not.toBeNull();
     });
 
-    it('As LU I want to see a long  resource/tag/folders name fitting its delete dialog', async() => {
+    it('As LU I want to see a long resource/tag/folders name fitting its delete dialog', async() => {
       expect(page.displayDeleteGroupWithConflictsDialog.tagName.classList.contains("dialog-variable")).toBeTruthy();
     });
   });

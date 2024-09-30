@@ -77,7 +77,7 @@ class DeleteUserGroupWithConflicts extends Component {
   getResourcesErrors() {
     const errors = this.props.context.deleteGroupWithConflictsDialogProps.errors;
     const resourcesErrors = errors.resources && errors.resources.sole_owner || [];
-    const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.name.localeCompare(resourcesB.name);
+    const resourcesSorterByName = (resourcesA, resourcesB) => resourcesA.metadata.name.localeCompare(resourcesB.name);
     return resourcesErrors.sort(resourcesSorterByName);
   }
 
@@ -397,7 +397,7 @@ class DeleteUserGroupWithConflicts extends Component {
                 {this.resourcesErrors.map(resourceError =>
                   <li key={resourceError.id}>
                     <div className={`select-wrapper input required ${this.state.processing ? 'disabled' : ''}`}>
-                      <label htmlFor="transfer_resource_owner">{resourceError.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
+                      <label htmlFor="transfer_resource_owner">{resourceError.metadata.name} (<Trans>Password</Trans>) <Trans>new owner</Trans>:</label>
                       <Select className="form-element" value={this.state.owners[resourceError.id]} items={this.getAcoPermissionsList(resourceError.id)} onChange={event => this.handleOnChangeOwner(event, resourceError.id)}/>
                     </div>
                   </li>
