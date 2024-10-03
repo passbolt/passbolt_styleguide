@@ -13,8 +13,6 @@
  */
 import EntityV2 from "../abstract/entityV2";
 
-const ENTITY_NAME = 'MetadataTypesSettings';
-
 export const RESOURCE_TYPE_VERSION_4 = "v4";
 export const RESOURCE_TYPE_VERSION_5 = "v5";
 
@@ -173,20 +171,6 @@ class MetadataTypesSettingsEntity extends EntityV2 {
    */
   get allowCreationOfV4Resources() {
     return this._props.allow_creation_of_v4_resources;
-  }
-
-  /*
-   * ==================================================
-   * Static properties getters
-   * ==================================================
-   */
-
-  /**
-   * MetadataTypesSettingsEntity.ENTITY_NAME
-   * @returns {string}
-   */
-  static get ENTITY_NAME() {
-    return ENTITY_NAME;
   }
 }
 
