@@ -123,10 +123,10 @@ describe("MetadataPrivateKeyEntity", () => {
       expect(entity._props.user_id).toStrictEqual(dto.user_id);
       expect(entity._props.data).toStrictEqual(dto.data);
       expect(entity._props.armored_key).toBeUndefined();
-      expect(entity.created).toBeUndefined();
-      expect(entity.created_by).toBeUndefined();
-      expect(entity.modified).toBeUndefined();
-      expect(entity.modified_by).toBeUndefined();
+      expect(entity._props.created).toBeUndefined();
+      expect(entity._props.created_by).toBeUndefined();
+      expect(entity._props.modified).toBeUndefined();
+      expect(entity._props.modified_by).toBeUndefined();
     });
 
     it("constructor works if valid DTO is provided: with data", () => {
@@ -179,6 +179,39 @@ describe("MetadataPrivateKeyEntity", () => {
   });
 
   describe("::getters", () => {
+    it("`created` should return the right value", () => {
+      expect.assertions(2);
+      const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      const entity1 = new MetadataPrivateKeyEntity(dto1);
+
+      const dto2 = defaultMetadataPrivateKeyDto({created: "2024-10-05T12:10:00+00:00"}, {withArmoredKey: true});
+      const entity2 = new MetadataPrivateKeyEntity(dto2);
+
+      expect(entity1.created).toBeNull();
+      expect(entity2.created).toStrictEqual(dto2.created);
+    });
+
+    it("`metadataKeyId` should return the right value", () => {
+      expect.assertions(2);
+      const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      const entity1 = new MetadataPrivateKeyEntity(dto1);
+
+      const dto2 = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      const entity2 = new MetadataPrivateKeyEntity(dto2);
+
+      expect(entity1.metadataKeyId).toBeNull();
+      expect(entity2.metadataKeyId).toStrictEqual(dto2.metadata_key_id);
+    });
+
+    it("`data` should return the right value", () => {
+      expect.assertions(2);
+      const dto = defaultMetadataPrivateKeyDto({}, {withData: true});
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      expect(entity.data).toStrictEqual(dto.data);
+      expect(entity.armoredKey).toBeNull();
+    });
+
     it("`armoredKey` should return the right value", () => {
       expect.assertions(2);
       const dto = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
