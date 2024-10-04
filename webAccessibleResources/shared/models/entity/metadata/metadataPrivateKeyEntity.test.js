@@ -53,15 +53,9 @@ describe("MetadataPrivateKeyEntity", () => {
       ];
       const failScenarios = [
         {value: defaultData({withCrc: false})},
-        {value: defaultData({withCrc: true, withWrongExtraCarriageReturn: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true, withWrongExtraCarriageReturn: true})},
         {value: defaultData({withCrc: false, withDuplicates: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCarriageReturn: true, withDuplicates: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true, withWrongExtraCarriageReturn: true, withDuplicates: true})}];
+        {value: defaultData({withCrc: true, withWrongExtraCharacters: true})},
+        {value: defaultData({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}];
       assertEntityProperty.assert(MetadataPrivateKeyEntity, "data", successScenarios, failScenarios, "pattern");
     });
 
@@ -78,13 +72,9 @@ describe("MetadataPrivateKeyEntity", () => {
       ];
       const failScenarios = [
         {value: defaultArmoredKey({withCrc: false})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCarriageReturn: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true, withWrongExtraCarriageReturn: true})},
         {value: defaultArmoredKey({withCrc: false, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCarriageReturn: true, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true, withWrongExtraCarriageReturn: true, withDuplicates: true})}
+        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true})},
+        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
       ];
       assertEntityProperty.assert(MetadataPrivateKeyEntity, "armored_key", successScenarios, failScenarios, "pattern");
     });

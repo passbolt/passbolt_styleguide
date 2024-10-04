@@ -47,13 +47,13 @@ class MetadataPrivateKeyEntity extends EntityV2 {
           "type": "string",
           "nullable": true,
           "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]{64}\n)*[a-zA-Z0-9/+=]{1,64}\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m,
+          "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m,
         },
         "armored_key": {
           "type": "string",
           "nullable": true,
           "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PRIVATE KEY BLOCK-----\n(.*\n)*\n([a-zA-Z0-9/+]{64}\n)*[a-zA-Z0-9/+=]{1,64}\n=[a-zA-Z0-9/+=]{4}\n-----END PGP PRIVATE KEY BLOCK-----$/m,
+          "pattern": /^-----BEGIN PGP PRIVATE KEY BLOCK-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP PRIVATE KEY BLOCK-----$/m,
         },
         "created": {
           "type": "string",

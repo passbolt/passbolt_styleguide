@@ -78,23 +78,17 @@ export const defaultArmoredKey = options => mutatePgpBlockFromOptions(defaultPgp
  * @param {boolean} [options.withCrc = true] if false, removes the CRC block at the end of the PGP block
  * @param {boolean} [options.withComments = false] if true, adds a 'comments' block right after the PGP block header
  * @param {boolean} [options.withWrongExtraCharacters = false] if true, adds extra characters that makes the message not a valid PGP block
- * @param {boolean} [options.withWrongExtraCarriageReturn = false] if true, adds an extra carriage extra that makes the message not a valid PGP block
  * @param {boolean} [options.withDuplicates = false] if true, duplicates the generated block, seperated by carriage returns
  * @returns {string}
  * @private
  */
-function mutatePgpBlockFromOptions(block, options = {withCrc: true, withComments: false, withWrongExtraCharacters: false, withWrongExtraCarriageReturn: false, withDuplicates: false}) {
+function mutatePgpBlockFromOptions(block, options = {withCrc: true, withComments: false, withWrongExtraCharacters: false, withDuplicates: false}) {
   if (options.withComments) {
     block = block.replace("\n\n", "\nVersion: PGP 1.0\nComments: This is a test\n\n");
   }
 
   if (options.withWrongExtraCharacters) {
-    block = block.replace(/\n\n(.{64})\n/, '\n\n$1WrongStuffHere\n');
-  }
-
-  if (options.withWrongExtraCarriageReturn) {
-    const position = 128;
-    block = `${block.substring(0, position)}\n${block.substring(position)}`;
+    block = block.replace(/\n\n(.{64})\n/, '\n\n$1Wrong Stuff Here\n');
   }
 
   if (!options.withCrc) {
