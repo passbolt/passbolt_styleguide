@@ -33,6 +33,10 @@ import Totp from "../../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../../shared/services/otp/TotpCodeGeneratorService";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateTimeAgo, formatExpirationDateTimeAgo} from "../../../../shared/utils/dateUtils";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class DisplayResourceDetailsInformation extends React.Component {
   /**
@@ -471,7 +475,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    */
   isPasswordResources() {
     // TODO: How to handle if resource type is not enabled or not loaded yet ?
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(this.resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasPassword();
   }
 
   /**
@@ -479,7 +483,7 @@ class DisplayResourceDetailsInformation extends React.Component {
    * @return {boolean}
    */
   isTotpResources() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasTotp();
   }
 
   /**
@@ -666,10 +670,11 @@ DisplayResourceDetailsInformation.propTypes = {
   onSelectRoot: PropTypes.func,
   history: PropTypes.object,
   resourceWorkspaceContext: PropTypes.object,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   progressContext: PropTypes.any, // The progress context
   passwordExpiryContext: PropTypes.object, // the passowrd expiry context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withPasswordExpiry(withProgress(withTranslation('common')(DisplayResourceDetailsInformation))))))));
+export default withAppContext(withRbac(withRouter(withActionFeedback(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withProgress(withTranslation('common')(DisplayResourceDetailsInformation)))))))));

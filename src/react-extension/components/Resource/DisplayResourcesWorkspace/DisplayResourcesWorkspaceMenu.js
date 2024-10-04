@@ -36,6 +36,10 @@ import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {DateTime} from "luxon";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -445,19 +449,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   }
 
   /**
-   * Get resources type settings
-   * @return {ResourceTypesSettings|*}
-   */
-  get resourceTypesSettings() {
-    return this.props.context.resourceTypesSettings;
-  }
-
-  /**
    * Is password resource
    * @return {boolean}
    */
   get isPasswordResources() {
-    return this.resourceTypesSettings.assertResourceTypeIdHasPassword(this.selectedResources[0].resource_type_id);
+    return this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id)?.hasPassword();
   }
 
   /**
@@ -473,7 +469,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   get isTotpResources() {
-    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.selectedResources[0].resource_type_id);
+    return this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id)?.hasTotp();
   }
 
   /**
@@ -481,7 +477,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @return {boolean}
    */
   get isStandaloneTotpResource() {
-    return this.resourceTypesSettings.assertResourceTypeIdIsStandaloneTotp(this.selectedResources[0].resource_type_id);
+    return this.props.resourceTypes.getFirstById(this.selectedResources[0].resource_type_id).isStandaloneTotp();
   }
 
   /**
@@ -761,6 +757,7 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   passwordExpiryContext: PropTypes.object, // the password expiry context
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
@@ -768,4 +765,4 @@ DisplayResourcesWorkspaceMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withWorkflow(withProgress(withPasswordExpiry(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu)))))))));
+export default withAppContext(withRbac(withDialog(withWorkflow(withProgress(withPasswordExpiry(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourcesWorkspaceMenu))))))))));

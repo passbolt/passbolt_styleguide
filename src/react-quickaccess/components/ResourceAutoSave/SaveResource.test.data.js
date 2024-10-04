@@ -3,7 +3,6 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 import {
   defaultPasswordExpirySettingsContext
 } from "../../../react-extension/contexts/PasswordExpirySettingsContext.test.data";
@@ -14,11 +13,7 @@ import {
   defaultPasswordPoliciesContext
 } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-
-export function defaultAppContext(appContext) {
-  const defaultAppContext = defaultUserAppContext();
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
 
 export function defaultProps(props = {}) {
   const defaultProps = {

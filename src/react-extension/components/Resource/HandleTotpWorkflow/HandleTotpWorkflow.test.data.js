@@ -20,6 +20,10 @@ import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspa
 import {
   resourceStandaloneTotpDto
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -32,6 +36,7 @@ export function defaultProps(data = {}) {
     actionFeedbackContext: defaultActionFeedbackContext(),
     context: defaultUserAppContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext({selectedResources: [resourceStandaloneTotpDto()]}),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     dialogContext: defaultDialogContext(),
     onStop: jest.fn(),
     history: {

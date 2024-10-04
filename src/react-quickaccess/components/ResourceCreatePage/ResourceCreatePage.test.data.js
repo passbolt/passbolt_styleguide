@@ -6,19 +6,9 @@
 import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
 import {defaultPasswordPoliciesContext} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../react-extension/contexts/PasswordExpirySettingsContext.test.data";
 import {overridenPasswordExpirySettingsEntityDto} from "../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
-
-export function defaultAppContext(appContext) {
-  const defaultAppContext = defaultUserAppContext({
-    isAuthenticated: true,
-    getOpenerTabId: () => null,
-    getBootstrapFeature: () => null,
-    getDetached: () => false,
-  });
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
 
 /**
  * Default props
@@ -33,7 +23,12 @@ export const defaultProps = (props = {}) => ({
   passwordPoliciesContext: defaultPasswordPoliciesContext({
     getPolicies: jest.fn(() => defaultPasswordPoliciesDto())
   }),
-  context: defaultAppContext(),
+  context: defaultAppContext({
+    isAuthenticated: true,
+    getOpenerTabId: () => null,
+    getBootstrapFeature: () => null,
+    getDetached: () => false,
+  }),
   ...props,
 });
 

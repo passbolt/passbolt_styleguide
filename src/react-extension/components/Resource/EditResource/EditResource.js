@@ -47,6 +47,10 @@ import ResourceViewModel from "../../../../shared/models/resource/ResourceViewMo
 import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
 import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class EditResource extends Component {
   constructor(props) {
@@ -168,15 +172,15 @@ class EditResource extends Component {
    * initialize the resource view model
    */
   initializeResourceViewModel() {
-    const resourceTypeSlug = this.props.context.resourceTypesSettings.findResourceTypeSlugById(this.props.resource.resource_type_id);
-    const resourceViewModelType = this.getViewModelTypeBySlug(resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id);
+    const resourceViewModelType = this.getViewModelTypeBySlug(resourceType.slug);
 
     const resourceViewModel = resourceViewModelType.createFromEntity(this.props.resource);
 
     this.setState({
       resourceViewModel: resourceViewModel,
       originalName: resourceViewModel.name,
-      originalResourceTypeSlug: resourceTypeSlug,
+      originalResourceTypeSlug: resourceType.slug,
     }, this.initializeSecret);
   }
 
@@ -578,10 +582,10 @@ class EditResource extends Component {
    * Handle delete totp
    */
   handleDeleteTotpClick() {
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId,
+      resource_type_id: resourceType.id,
     };
     const resourceViewModel = new ResourcePasswordDescriptionViewModel(dto);
     this.setState({resourceViewModel});
@@ -592,10 +596,10 @@ class EditResource extends Component {
    * @param {object} totp
    */
   applyTotp(totp) {
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId,
+      resource_type_id: resourceType.id,
       totp: totp
     };
     const resourceViewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
@@ -639,10 +643,10 @@ class EditResource extends Component {
       ? ResourcePasswordDescriptionViewModel
       : ResourcePasswordStringViewModel;
 
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(newResourceViewModelType.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(newResourceViewModelType.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId
+      resource_type_id: resourceType.id
     };
 
     const newResourceViewModel = new newResourceViewModelType(dto);
@@ -903,6 +907,7 @@ EditResource.propTypes = {
   onClose: PropTypes.func,
   resourcePasswordGeneratorContext: PropTypes.any, // The resource password generator context
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context,
   t: PropTypes.func, // The translation function
@@ -913,10 +918,11 @@ EditResource.propTypes = {
 
 export default withAppContext(
   withResourceWorkspace(
-    withResourcePasswordGeneratorContext(
-      withActionFeedback(
-        withPasswordPolicies(
-          withDialog(
-            withWorkflow(
-              withPasswordExpiry(
-                withTranslation('common')(EditResource)))))))));
+    withResourceTypesLocalStorage(
+      withResourcePasswordGeneratorContext(
+        withActionFeedback(
+          withPasswordPolicies(
+            withDialog(
+              withWorkflow(
+                withPasswordExpiry(
+                  withTranslation('common')(EditResource))))))))));

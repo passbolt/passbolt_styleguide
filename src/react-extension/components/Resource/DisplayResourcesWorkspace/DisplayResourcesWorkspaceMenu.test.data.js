@@ -19,10 +19,6 @@ import {defaultAdministratorRbacContext} from "../../../../shared/context/Rbac/R
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import ColumnsResourceSettingCollection
   from "../../../../shared/models/entity/resource/columnsResourceSettingCollection";
-import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
-import {
-  resourceTypesCollectionDto
-} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
 import {
@@ -31,6 +27,10 @@ import {
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -43,8 +43,7 @@ export function defaultAppContext(appContext = {}) {
     port: new MockPort(),
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: siteSettings,
-    setContext: () => jest.fn(),
-    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto())
+    setContext: () => jest.fn()
   };
   return Object.assign(defaultAppContext, appContext);
 }
@@ -72,6 +71,7 @@ export function defaultPropsOneResourceOwned() {
       onResourceCopied: () => jest.fn(),
       onChangeColumnView:  jest.fn()
     }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     dialogContext: defaultDialogContext(),
   };
 }
@@ -99,6 +99,7 @@ export function defaultPropsOneTotpResourceOwned() {
       onResourceCopied: () => jest.fn(),
       onChangeColumnView:  jest.fn()
     }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   };
 }
 
@@ -112,7 +113,8 @@ export function defaultPropsOneResourceNotOwned() {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: [resourcesMock[2]],
       lockDisplayDetail: false
-    })
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   };
 }
 
@@ -132,7 +134,8 @@ export function defaultPropsNoResource() {
         {id: "uri", label: "URI", position: 5, show: false},
         {id: "modified", label: "Modified", position: 6, show: true}]),
       lockDisplayDetail: true
-    })
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   };
 }
 
@@ -146,7 +149,8 @@ export function defaultPropsMultipleResource() {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({
       selectedResources: resourcesMock,
       lockDisplayDetail: true
-    })
+    }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   };
 }
 
@@ -163,6 +167,7 @@ export function defaultPropsMultipleResourceUpdateRights() {
       lockDisplayDetail: true
     }),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     dialogContext: defaultDialogContext(),
   };
 }
