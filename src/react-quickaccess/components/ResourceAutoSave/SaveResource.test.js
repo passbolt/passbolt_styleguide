@@ -15,6 +15,9 @@ import SaveResourcePage from "./SaveResource.test.page";
 import {defaultProps} from "./SaveResource.test.data";
 import {waitFor} from "@testing-library/react";
 import {waitForTrue} from "../../../../test/utils/waitFor";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 beforeEach(() => {
   jest.resetModules();
@@ -61,7 +64,7 @@ describe("See the Create Resource - save resource", () => {
     await waitFor(() => {});
     await page.save();
     // expected data
-    const resourceTypeId = props.context.resourceTypesSettings.findResourceTypeIdBySlug(props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
+    const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG).id;
     const resourceDto = {
       metadata: {
         name: resourceMetaFromTab.name,

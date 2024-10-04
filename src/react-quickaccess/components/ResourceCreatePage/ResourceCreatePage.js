@@ -32,6 +32,10 @@ import EntityValidationError from "../../../shared/models/entity/abstract/entity
 import ResourcePasswordDescriptionViewModel from "../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
 import {DateTime} from "luxon";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class ResourceCreatePage extends React.Component {
   /**
@@ -93,7 +97,7 @@ class ResourceCreatePage extends React.Component {
   async initResourceViewModel() {
     const resourceViewModelDto = await this.getPreparedResource();
 
-    const resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    const resource_type_id = this.props.resourceTypes?.getFirstBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug)?.id;
     resourceViewModelDto.resource_type_id = resource_type_id;
 
     const expired = this.getResourceExpirationDate();
@@ -632,6 +636,7 @@ class ResourceCreatePage extends React.Component {
 
 ResourceCreatePage.propTypes = {
   context: PropTypes.any, // The application context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   prepareResourceContext: PropTypes.any, // The password generator context
   history: PropTypes.object,
   location: PropTypes.any,
@@ -640,4 +645,4 @@ ResourceCreatePage.propTypes = {
   passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ResourceCreatePage))))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ResourceCreatePage)))))));

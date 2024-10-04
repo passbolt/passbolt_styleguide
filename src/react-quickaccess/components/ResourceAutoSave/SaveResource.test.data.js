@@ -14,10 +14,13 @@ import {
 } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 export function defaultProps(props = {}) {
   const defaultProps = {
     context: defaultAppContext(props?.appContext),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({
       getSettings: () => overridenPasswordExpirySettingsEntityDto()
     }),
