@@ -11,7 +11,7 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import EntityV2Collection from "passbolt-styleguide/src/shared/models/entity/abstract/entityV2Collection";
+import EntityV2Collection from "../abstract/entityV2Collection";
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 
