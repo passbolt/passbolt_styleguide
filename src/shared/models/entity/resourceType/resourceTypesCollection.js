@@ -105,7 +105,7 @@ class ResourceTypesCollection extends EntityV2Collection {
   /**
    * Get first by id
    * @param {string} id
-   * @returns {Entity}
+   * @returns {ResourceTypeEntity}
    */
   getFirstById(id) {
     return this.getFirst("id", id);
@@ -114,7 +114,7 @@ class ResourceTypesCollection extends EntityV2Collection {
   /**
    * Get first by slug
    * @param {string} slug
-   * @returns {Entity}
+   * @returns {ResourceTypeEntity}
    */
   getFirstBySlug(slug) {
     return this.getFirst("slug", slug);
