@@ -13,7 +13,7 @@
  */
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultArmoredKey, defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import MetadataKeyEntity from "./metadataKeyEntity";
 import {defaultMetadataKeyDto, minimalMetadataKeyDto} from "./metadataKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
@@ -31,13 +31,7 @@ describe("MetadataKeyEntity", () => {
     });
 
     it("validates fingerprint property", () => {
-      const successScenarios = [
-        {scenario: "with a valid fingerprint string", value: "ABCD".repeat(10)},
-      ];
-      const failingScenarios = [
-        {scenario: "with a invalid fingerprint string size", value: "ABCD".repeat(40)},
-      ];
-      assertEntityProperty.assert(MetadataKeyEntity, "fingerprint", successScenarios, failingScenarios, "pattern");
+      assertEntityProperty.fingerprint(MetadataKeyEntity, "fingerprint");
       assertEntityProperty.string(MetadataKeyEntity, "fingerprint");
       assertEntityProperty.required(MetadataKeyEntity, "fingerprint");
     });
@@ -46,20 +40,7 @@ describe("MetadataKeyEntity", () => {
       assertEntityProperty.string(MetadataKeyEntity, "armored_key");
       assertEntityProperty.required(MetadataKeyEntity, "armored_key");
       assertEntityProperty.maxLength(MetadataKeyEntity, "armored_key", 10_000);
-
-      const successScenarios = [
-        {value: defaultArmoredKey({withCrc: true, withComments: true})},
-        {value: defaultArmoredKey({withCrc: true, withComments: false})},
-        {value: defaultArmoredKey({withCrc: true, withComments: true, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withComments: false, withDuplicates: true})},
-      ];
-      const failScenarios = [
-        {value: defaultArmoredKey({withCrc: false})},
-        {value: defaultArmoredKey({withCrc: false, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
-      ];
-      assertEntityProperty.assert(MetadataKeyEntity, "armored_key", successScenarios, failScenarios, "pattern");
+      assertEntityProperty.armoredPrivateKey(MetadataKeyEntity, "armored_key");
     });
 
     it("validates created property", () => {
@@ -123,7 +104,24 @@ describe("MetadataKeyEntity", () => {
       expect(entity._props.metadata_private_keys).toBeUndefined();
     });
 
-    it("constructor works if valid DTO is provided: with data", () => {
+    it("constructor works if valid DTO is provided", () => {
+      expect.assertions(10);
+      const dto = defaultMetadataKeyDto({});
+      const entity = new MetadataKeyEntity(dto);
+
+      expect(entity._props.id).toStrictEqual(dto.id);
+      expect(entity._props.fingerprint).toStrictEqual(dto.fingerprint);
+      expect(entity._props.armored_key).toStrictEqual(dto.armored_key);
+      expect(entity._props.created).toStrictEqual(dto.created);
+      expect(entity._props.created_by).toStrictEqual(dto.created_by);
+      expect(entity._props.modified).toStrictEqual(dto.modified);
+      expect(entity._props.modified_by).toStrictEqual(dto.modified_by);
+      expect(entity._props.deleted).toStrictEqual(dto.deleted);
+      expect(entity._props.metadata_private_keys).toBeUndefined();
+      expect(entity._metadata_private_keys).toStrictEqual(new MetadataPrivateKeysCollection(dto.metadata_private_keys));
+    });
+
+    it("constructor throw an error if the id and the private metadata key ids are different", () => {
       expect.assertions(10);
       const dto = defaultMetadataKeyDto({});
       const entity = new MetadataKeyEntity(dto);

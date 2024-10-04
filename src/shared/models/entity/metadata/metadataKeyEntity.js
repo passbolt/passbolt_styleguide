@@ -12,6 +12,7 @@
  * @since         4.10.0
  */
 import EntityV2 from "../abstract/entityV2";
+import EntityValidationError from "../abstract/entityValidationError";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 
 const PGP_STRING_MAX_LENGTH = 10_000;
@@ -84,6 +85,34 @@ class MetadataKeyEntity extends EntityV2 {
         "metadata_private_keys": MetadataPrivateKeysCollection.getSchema(),
       }
     };
+  }
+
+  /**
+   * @inheritDoc
+   * @throws {EntityValidationError} if the collection of metadata private keys references a different metadata key id.
+   */
+  validateBuildRules() {
+    this.assertSameMetadataKeyId();
+  }
+
+  /**
+   * Asserts that only one of `data` and `armoredKey` is defined
+   * @throws {EntityValidationError} if the collection of metadata private keys references a different metadata key id.
+   */
+  assertSameMetadataKeyId() {
+    const privateMetadataKeysLength = this._metadata_private_keys?.length || 0;
+    if (privateMetadataKeysLength === 0) {
+      return;
+    }
+
+    const keyId = this._props.id;
+    const privateKeyId = this._metadata_private_keys.items[0].metadataKeyId;
+
+    if (keyId !== privateKeyId) {
+      const error = new EntityValidationError();
+      error.addError("id:metadata_private_keys", 'same_id', '`id` and the `metadata_private_keys.id` should be the same');
+      throw error;
+    }
   }
 
   /**
