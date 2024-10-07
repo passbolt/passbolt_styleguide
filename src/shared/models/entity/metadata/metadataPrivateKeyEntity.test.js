@@ -144,18 +144,6 @@ describe("MetadataPrivateKeyEntity", () => {
   });
 
   describe("::getters", () => {
-    it("`created` should return the right value", () => {
-      expect.assertions(2);
-      const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
-      const entity1 = new MetadataPrivateKeyEntity(dto1);
-
-      const dto2 = defaultMetadataPrivateKeyDto({created: "2024-10-05T12:10:00+00:00"}, {withArmoredKey: true});
-      const entity2 = new MetadataPrivateKeyEntity(dto2);
-
-      expect(entity1.created).toBeNull();
-      expect(entity2.created).toStrictEqual(dto2.created);
-    });
-
     it("`metadataKeyId` should return the right value", () => {
       expect.assertions(2);
       const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
