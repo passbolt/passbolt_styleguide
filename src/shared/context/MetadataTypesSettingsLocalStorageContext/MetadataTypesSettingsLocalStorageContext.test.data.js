@@ -18,9 +18,9 @@ export const defaultProps = (data = {}) => ({
   ...data
 });
 
-export const defaultResourceLocalStorageContext = (data = {}) => ({
+export const defaultMetadataTypesSettingsStorageContext = (data = {}) => ({
   get: jest.fn(),
-  resourceTypes: null,
+  metadataTypeSettings: null,
   updateLocalStorage: jest.fn(),
   ...data,
 });
