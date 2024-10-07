@@ -18,6 +18,8 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultResourceLocalStorageContext} from "../../contexts/ResourceLocalStorageContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default component props.
@@ -29,6 +31,7 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     resourcesLocalStorageContext: defaultResourceLocalStorageContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resources: null,
     getOpenerTabId: () => 1,
     ...data

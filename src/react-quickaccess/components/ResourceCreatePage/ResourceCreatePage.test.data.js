@@ -9,6 +9,8 @@ import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicie
 import {defaultPasswordExpirySettingsContext} from "../../../react-extension/contexts/PasswordExpirySettingsContext.test.data";
 import {overridenPasswordExpirySettingsEntityDto} from "../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -17,6 +19,7 @@ import {defaultAppContext} from "../../contexts/AppContext.test.data";
  */
 export const defaultProps = (props = {}) => ({
   prepareResourceContext: defaultPrepareResourceContext(),
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   passwordExpiryContext: defaultPasswordExpirySettingsContext({
     getSettings: () => overridenPasswordExpirySettingsEntityDto()
   }),
