@@ -20,6 +20,9 @@ import {BrowserRouter as Router} from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import DisplayResourceDetailsDescription from "./DisplayResourceDetailsDescription";
 import MockTranslationProvider from "../../../test/mock/components/Internationalisation/MockTranslationProvider";
+import {
+  ResourceTypesLocalStorageContext
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 
 /**
  * The PasswordSidebarDescriptionSection component represented as a page
@@ -34,9 +37,11 @@ export default class PasswordSidebarDescriptionSectionPage {
     this._page = render(
       <MockTranslationProvider>
         <AppContext.Provider value={appContext}>
-          <Router>
-            <DisplayResourceDetailsDescription  {...props}/>
-          </Router>
+          <ResourceTypesLocalStorageContext.Provider value={{get: () => props.resourceTypes}}>
+            <Router>
+              <DisplayResourceDetailsDescription  {...props}/>
+            </Router>
+          </ResourceTypesLocalStorageContext.Provider>
         </AppContext.Provider>
       </MockTranslationProvider>
     );

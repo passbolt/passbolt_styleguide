@@ -18,6 +18,10 @@ import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {defaultLoadingContext} from "../../../contexts/LoadingContext.test.data";
 import {defaultResourceWorkspaceContext} from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultSecretDto} from "../../Resource/CreateResource/CreateResource.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
@@ -25,6 +29,7 @@ export const defaultProps = (data = {}) => ({
   onClose: jest.fn(),
   onUpdate: jest.fn(),
   resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   actionFeedbackContext: defaultActionFeedbackContext(),
   loadingContext: defaultLoadingContext(),
   plaintextSecretDto: defaultSecretDto(),

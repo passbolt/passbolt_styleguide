@@ -2,8 +2,9 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import ResourceCreatePage from "./ResourceCreatePage";
-import {defaultAppContext, mockResults} from "./ResourceCreatePage.test.data";
+import {defaultProps, mockResults} from "./ResourceCreatePage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
 
 export default {
   title: 'Components/QuickAccess/ResourceCreate',
@@ -26,9 +27,7 @@ const parameters = {
 };
 
 export const Initial = Template.bind({});
-Initial.args = {
-  context: defaultAppContext(),
-};
+Initial.args = defaultProps();
 Initial.parameters = parameters;
 
 const contextMock = {
@@ -37,7 +36,5 @@ const contextMock = {
   },
 };
 export const CreateResourceFromTab = Template.bind({});
-CreateResourceFromTab.args = {
-  context: defaultAppContext(contextMock)
-};
+CreateResourceFromTab.args = defaultProps({context: defaultAppContext(contextMock)});
 CreateResourceFromTab.parameters = parameters;

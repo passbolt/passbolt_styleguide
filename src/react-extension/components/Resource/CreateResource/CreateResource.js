@@ -49,6 +49,13 @@ import ResourcePasswordStringViewModel from "../../../../shared/models/resource/
 import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
 import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
 import ResourceViewModel from "../../../../shared/models/resource/ResourceViewModel";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -122,15 +129,16 @@ class CreateResource extends Component {
    * Initialize the resource view model
    */
   initResourceViewModel() {
-    const resourceViewModelType = this.props.context.resourceTypesSettings.isEncryptedDescriptionEnabled()
+    // TODO Adapt when resource type slug will be determine in props
+    const resourceViewModelType = this.props.resourceTypes.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)
       ? ResourcePasswordDescriptionViewModel
       : ResourcePasswordStringViewModel;
 
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(resourceViewModelType.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(resourceViewModelType.resourceTypeSlug);
 
     const dto = {
       folder_parent_id: this.props.folderParentId,
-      resource_type_id: resourceTypeId
+      resource_type_id: resourceType.id
     };
 
     const expiryDate = this.getResourceExpirationDate();
@@ -522,10 +530,10 @@ class CreateResource extends Component {
    * Handle delete totp
    */
   handleDeleteTotpClick() {
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId,
+      resource_type_id: resourceType.id,
     };
     const resourceViewModel = new ResourcePasswordDescriptionViewModel(dto);
     this.setState({resourceViewModel});
@@ -536,10 +544,10 @@ class CreateResource extends Component {
    * @param {object} totp
    */
   applyTotp(totp) {
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId,
+      resource_type_id: resourceType.id,
       totp: totp
     };
     const resourceViewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
@@ -569,10 +577,10 @@ class CreateResource extends Component {
       ? ResourcePasswordDescriptionViewModel
       : ResourcePasswordStringViewModel;
 
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(newResourceViewModelType.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(newResourceViewModelType.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId
+      resource_type_id: resourceType.id
     };
 
     const newResourceViewModel = new newResourceViewModelType(dto);
@@ -777,10 +785,11 @@ CreateResource.propTypes = {
   passwordExpiryContext: PropTypes.object, // The password expiry context
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
   workflowContext: PropTypes.any, // The workflow context
 };
 
-export default  withRouter(withAppContext(withPasswordPolicies(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource)))))))));
+export default  withRouter(withAppContext(withPasswordPolicies(withResourceTypesLocalStorage(withPasswordExpiry(withActionFeedback(withResourcePasswordGeneratorContext(withDialog(withWorkflow(withTranslation('common')(CreateResource))))))))));
 

@@ -16,12 +16,10 @@ import UserSettings from "../../shared/lib/Settings/UserSettings";
 import userSettingsFixture from "../test/fixture/Settings/userSettings";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../test/fixture/Settings/siteSettings";
-import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettings";
 import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
 import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
 import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
-import {resourceTypesCollectionDto} from "../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Returns the default app context for the unit test
@@ -31,12 +29,10 @@ import {resourceTypesCollectionDto} from "../../shared/models/entity/resourceTyp
 export function defaultAppContext(appContext = {}) {
   const userSettings = new UserSettings(userSettingsFixture);
   const siteSettings = new SiteSettings(siteSettingsFixture);
-  const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto());
   const defaultAppContext = {
     locale: 'en-UK',
     userSettings,
     siteSettings,
-    resourceTypesSettings,
     port: new MockPort(),
     storage: new MockStorage(),
     loggedInUser: {
@@ -71,7 +67,6 @@ export const defaultUserAppContext = (data = {}) => {
     locale: 'en-UK',
     userSettings: new UserSettings(userSettingsFixture),
     siteSettings: siteSettings,
-    resourceTypesSettings: new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto()),
     port: new MockPort(),
     storage: new MockStorage(),
     loggedInUser: defaultUserDto({}, {withRole: true}),
