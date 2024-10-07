@@ -53,7 +53,8 @@ class MetadataKeysCollection extends EntityV2Collection {
    * @inheritDoc
    * @param {Set} [options.uniqueIdsSetCache] A set of unique ids.
    * @param {Set} [options.uniqueFingerprintsSetCache] A set of unique fingerprints.
-   * @throws {EntityValidationError} If a permission already exists with the same id.
+   * @throws {EntityValidationError} If a metadata key already exists with the same id.
+   * @throws {EntityValidationError} If a metadata key already exists with the same fingerprint.
    */
   validateBuildRules(item, options = {}) {
     this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
