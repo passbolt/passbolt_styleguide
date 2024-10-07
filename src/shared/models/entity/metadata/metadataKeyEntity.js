@@ -122,6 +122,14 @@ class MetadataKeyEntity extends EntityV2 {
   get metadataPrivateKeys() {
     return this._metadata_private_keys || null;
   }
+
+  /**
+   * Get the created date of the metadata key if any or null.
+   * @returns {string|null}
+   */
+  get created() {
+    return this._props.created || null;
+  }
 }
 
 export default MetadataKeyEntity;

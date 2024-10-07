@@ -13,7 +13,6 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 import {defaultMetadataPrivateKeysDtos, defaultMinimalMetadataPrivateKeysDtos} from "./metadataPrivateKeysCollection.test.data";
 import {v4 as uuidv4} from "uuid";
@@ -191,82 +190,6 @@ describe("MetadataPrivateKeysCollection", () => {
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
       expect(collection.items[1]._props.id).toEqual(dtos[1].id);
       expect(collection.items[2]._props.id).toEqual(dtos[3].id);
-    });
-  });
-
-  describe("::getFirstByLatestCreated", () => {
-    it("should return the sole element in the list", () => {
-      expect.assertions(1);
-
-      const dtos = [defaultMetadataPrivateKeyDto({}, {withData: true})];
-
-      const collection = new MetadataPrivateKeysCollection(dtos);
-
-      expect(collection.getFirstByLatestCreated()._props.id).toStrictEqual(dtos[0].id);
-    });
-
-    it("should return the latest created key from the collection", () => {
-      expect.assertions(1);
-
-      const dtos = defaultMetadataPrivateKeysDtos(4);
-      dtos[0].created = "2024-10-01T12:10:00+00:00";
-      dtos[1].created = "2024-10-05T12:10:00+00:00";
-      dtos[2].created = "2024-10-03T12:10:00+00:00";
-      dtos[3].created = "2024-10-04T12:10:00+00:00";
-
-      const collection = new MetadataPrivateKeysCollection(dtos);
-
-      expect(collection.getFirstByLatestCreated()._props.id).toStrictEqual(dtos[1].id);
-    });
-
-    it("should return the first key in the collection if its creation date is set to null", () => {
-      expect.assertions(1);
-
-      const dtos = defaultMetadataPrivateKeysDtos(4);
-      delete dtos[0].created;
-      dtos[1].created = "2024-10-05T12:10:00+00:00";
-      dtos[2].created = "2024-10-03T12:10:00+00:00";
-      dtos[3].created = "2024-10-04T12:10:00+00:00";
-
-      const collection = new MetadataPrivateKeysCollection(dtos);
-
-      expect(collection.getFirstByLatestCreated()._props.id).toStrictEqual(dtos[1].id);
-    });
-
-    it("should return the first key where the creation date is null", () => {
-      expect.assertions(1);
-
-      const dtos = defaultMetadataPrivateKeysDtos(4);
-      dtos[0].created = "2024-10-05T12:10:00+00:00";
-      dtos[1].created = "2024-10-03T12:10:00+00:00";
-      delete dtos[2].created;
-      dtos[3].created = "2024-10-04T12:10:00+00:00";
-
-      const collection = new MetadataPrivateKeysCollection(dtos);
-
-      expect(collection.getFirstByLatestCreated()._props.id).toStrictEqual(dtos[0].id);
-    });
-
-    it("should return the last key in the list if no creation date is available", () => {
-      expect.assertions(1);
-
-      const dtos = defaultMetadataPrivateKeysDtos(4);
-      delete dtos[0].created;
-      delete dtos[1].created;
-      delete dtos[2].created;
-      delete dtos[3].created;
-
-      const collection = new MetadataPrivateKeysCollection(dtos);
-
-      expect(collection.getFirstByLatestCreated()._props.id).toStrictEqual(dtos[3].id);
-    });
-
-    it("should return null if no key is in the collection", () => {
-      expect.assertions(1);
-
-      const collection = new MetadataPrivateKeysCollection([]);
-
-      expect(collection.getFirstByLatestCreated()).toBeNull();
     });
   });
 

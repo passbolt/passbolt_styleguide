@@ -12,22 +12,20 @@
  * @since         4.10.0
  */
 import EntityV2Collection from "../abstract/entityV2Collection";
-import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
-import EntityValidationError from "../abstract/entityValidationError";
+import MetadataKeyEntity from "./metadataKeyEntity";
 
-class MetadataPrivateKeysCollection extends EntityV2Collection {
+class MetadataKeysCollection extends EntityV2Collection {
   /**
    * @inheritDoc
    */
   get entityClass() {
-    return MetadataPrivateKeyEntity;
+    return MetadataKeyEntity;
   }
 
   /**
    * @inheritDoc
    * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by ID.
-   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by user ID.
-   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection share the same metadata key ID.
+   * @throws {EntityCollectionError} Build Rule: Ensure all items in the collection are unique by fingerprint.
    */
   constructor(dtos = [], options = {}) {
     super(dtos, options);
@@ -47,45 +45,43 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
   static getSchema() {
     return {
       "type": "array",
-      "items": MetadataPrivateKeyEntity.getSchema(),
+      "items": MetadataKeyEntity.getSchema(),
     };
   }
 
   /**
    * @inheritDoc
    * @param {Set} [options.uniqueIdsSetCache] A set of unique ids.
-   * @param {Set} [options.uniqueUserIdsSetCache] A set of unique user ids.
+   * @param {Set} [options.uniqueFingerprintsSetCache] A set of unique fingerprints.
    * @throws {EntityValidationError} If a permission already exists with the same id.
    */
   validateBuildRules(item, options = {}) {
     this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
-    this.assertNotExist("user_id", item._props.user_id, {haystackSet: options?.uniqueUserIdsSetCache});
-    this.assertSameMetadataKeyId(item);
+    this.assertNotExist("fingerprint", item._props.fingerprint, {haystackSet: options?.uniqueFingerprintsSetCache});
   }
 
   /**
-   * Assert the collection is about the same metadata key.
-   * @param {MetadataPrivateKeyEntity} item
-   * @throws {EntityValidationError} if a secret for another resource already exist
-   * @private
+   * Get the most recently created key in the collection if any.
+   * The key with a non null creation date and having the most recent date set is returned.
+   * If keys do not have creation date, the last one is returned.
+   * If no key is found in the collection, `null` is returned.
+   *
+   * @returns {MetadataKeyEntity|null}
    */
-  assertSameMetadataKeyId(item) {
-    if (!item.metadataKeyId) {
-      return;
+  getFirstByLatestCreated() {
+    if (!this.length) {
+      return null;
     }
 
-    const collectionMetadataKeyId = this._items.find(item => Boolean(item.metadataKeyId))?.metadataKeyId;
-    if (!collectionMetadataKeyId) {
-      return;
-    }
-
-    if (item.metadataKeyId === collectionMetadataKeyId) {
-      return;
-    }
-
-    const error = new EntityValidationError();
-    error.addError("metadata_key_id", "same_metadata_key", "The collection should not contain different metadata key ID.");
-    throw error;
+    return this._items.reduce((latestCreatedItem, item) => {
+      if (!latestCreatedItem.created) {
+        return item;
+      } else if (!item.created) {
+        return latestCreatedItem;
+      } else {
+        return item.created > latestCreatedItem.created ? item : latestCreatedItem;
+      }
+    });
   }
 
   /*
@@ -99,15 +95,15 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
    */
   pushMany(data, entityOptions = {}, options = {}) {
     const uniqueIdsSetCache = new Set(this.extract("id"));
-    const uniqueUserIdsSetCache = new Set(this.extract("user_id"));
+    const uniqueFingerprintsSetCache = new Set(this.extract("fingerprint"));
     const onItemPushed = item => {
       uniqueIdsSetCache.add(item._props.id);
-      uniqueUserIdsSetCache.add(item._props.user_id);
+      uniqueFingerprintsSetCache.add(item._props.fingerprint);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueUserIdsSetCache},
+      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache, uniqueFingerprintsSetCache},
       ...options
     };
 
@@ -115,4 +111,4 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
   }
 }
 
-export default MetadataPrivateKeysCollection;
+export default MetadataKeysCollection;
