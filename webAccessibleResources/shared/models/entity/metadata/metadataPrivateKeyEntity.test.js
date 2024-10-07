@@ -14,7 +14,7 @@
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultArmoredKey, defaultData, defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
 
 describe("MetadataPrivateKeyEntity", () => {
@@ -44,39 +44,14 @@ describe("MetadataPrivateKeyEntity", () => {
       assertEntityProperty.string(MetadataPrivateKeyEntity, "data");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "data");
       assertEntityProperty.maxLength(MetadataPrivateKeyEntity, "data", 10_000);
-
-      const successScenarios = [
-        {value: defaultData({withCrc: true, withComments: true})},
-        {value: defaultData({withCrc: true, withComments: false})},
-        {value: defaultData({withCrc: true, withComments: true, withDuplicates: true})},
-        {value: defaultData({withCrc: true, withComments: false, withDuplicates: true})},
-      ];
-      const failScenarios = [
-        {value: defaultData({withCrc: false})},
-        {value: defaultData({withCrc: false, withDuplicates: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true})},
-        {value: defaultData({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}];
-      assertEntityProperty.assert(MetadataPrivateKeyEntity, "data", successScenarios, failScenarios, "pattern");
+      assertEntityProperty.armoredPgpMessage(MetadataPrivateKeyEntity, "data");
     });
 
     it("validates armored_key property", () => {
       assertEntityProperty.string(MetadataPrivateKeyEntity, "armored_key");
       assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "armored_key");
       assertEntityProperty.maxLength(MetadataPrivateKeyEntity, "armored_key", 10_000);
-
-      const successScenarios = [
-        {value: defaultArmoredKey({withCrc: true, withComments: true})},
-        {value: defaultArmoredKey({withCrc: true, withComments: false})},
-        {value: defaultArmoredKey({withCrc: true, withComments: true, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withComments: false, withDuplicates: true})},
-      ];
-      const failScenarios = [
-        {value: defaultArmoredKey({withCrc: false})},
-        {value: defaultArmoredKey({withCrc: false, withDuplicates: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true})},
-        {value: defaultArmoredKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
-      ];
-      assertEntityProperty.assert(MetadataPrivateKeyEntity, "armored_key", successScenarios, failScenarios, "pattern");
+      assertEntityProperty.armoredPrivateKey(MetadataPrivateKeyEntity, "armored_key");
     });
 
     it("validates created property", () => {
@@ -169,18 +144,6 @@ describe("MetadataPrivateKeyEntity", () => {
   });
 
   describe("::getters", () => {
-    it("`created` should return the right value", () => {
-      expect.assertions(2);
-      const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
-      const entity1 = new MetadataPrivateKeyEntity(dto1);
-
-      const dto2 = defaultMetadataPrivateKeyDto({created: "2024-10-05T12:10:00+00:00"}, {withArmoredKey: true});
-      const entity2 = new MetadataPrivateKeyEntity(dto2);
-
-      expect(entity1.created).toBeNull();
-      expect(entity2.created).toStrictEqual(dto2.created);
-    });
-
     it("`metadataKeyId` should return the right value", () => {
       expect.assertions(2);
       const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
@@ -231,7 +194,7 @@ describe("MetadataPrivateKeyEntity", () => {
         expect(entity.data).toStrictEqual(dto.data);
         expect(entity.armoredKey).toBeNull();
 
-        const armoredKey = defaultArmoredKey();
+        const armoredKey = assertEntityProperty.defaultArmoredKey();
         entity.armoredKey = armoredKey;
 
         expect(entity.armoredKey).toStrictEqual(armoredKey);
@@ -258,7 +221,7 @@ describe("MetadataPrivateKeyEntity", () => {
         expect(entity.data).toBeNull();
         expect(entity.armoredKey).toStrictEqual(dto.armored_key);
 
-        const data = defaultData();
+        const data = assertEntityProperty.defaultPgpMessage();
         entity.data = data;
 
         expect(entity.data).toStrictEqual(data);

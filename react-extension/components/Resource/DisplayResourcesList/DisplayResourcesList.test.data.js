@@ -31,6 +31,10 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   TEST_RESOURCE_TYPE_TOTP
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props as when initializing the list with no content.
@@ -44,6 +48,7 @@ export function defaultProps(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     contextualMenuContext: defaultContextualMenuContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     ...data
   };
 }

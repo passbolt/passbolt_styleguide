@@ -22,6 +22,5 @@ export const defaultResourceLocalStorageContext = (data = {}) => ({
   get: jest.fn(),
   resourceTypes: null,
   updateLocalStorage: jest.fn(),
-  hasBeenInitialised: jest.fn(() => true),
   ...data,
 });

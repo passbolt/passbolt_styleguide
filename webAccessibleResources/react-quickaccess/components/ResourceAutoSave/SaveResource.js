@@ -24,6 +24,10 @@ import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpi
 import ResourcePasswordDescriptionViewModel from "../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import EntityValidationError from "../../../shared/models/entity/abstract/entityValidationError";
 import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class SaveResource extends React.Component {
   /**
@@ -109,7 +113,7 @@ class SaveResource extends React.Component {
     event.preventDefault();
     this.setState({processing: true, hasAlreadyBeenValidated: true});
 
-    const resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    const resource_type_id = this.props.resourceTypes?.getFirstBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug)?.id;
     const expired = this.props.passwordExpiryContext.getDefaultExpirationDate();
 
     const resourceViewModel = this.state.resourceViewModel
@@ -278,8 +282,9 @@ SaveResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   passwordPoliciesContext: PropTypes.object, // The password policy context
   passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withPasswordPolicies(withPasswordExpiry(withTranslation('common')(SaveResource)))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withPasswordPolicies(withPasswordExpiry(withTranslation('common')(SaveResource))))));

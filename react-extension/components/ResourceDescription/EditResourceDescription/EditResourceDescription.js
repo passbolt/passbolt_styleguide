@@ -23,6 +23,10 @@ import Icon from "../../../../shared/components/Icons/Icon";
 import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
 import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 /**
  * This component allows the current user to edit the description of a resource
@@ -96,8 +100,8 @@ class EditResourceDescription extends React.Component {
    * initialize the resource view model
    */
   initializeResourceViewModel() {
-    const originalResourceTypeSlug = this.props.context.resourceTypesSettings.findResourceTypeSlugById(this.props.resource.resource_type_id);
-    const resourceViewModelType = this.getViewModelTypeBySlug(originalResourceTypeSlug);
+    const originalResourceType = this.props.resourceTypes?.getFirstById(this.props.resource.resource_type_id);
+    const resourceViewModelType = this.getViewModelTypeBySlug(originalResourceType?.slug);
 
     let resourceViewModel = resourceViewModelType
       .createFromEntity(this.props.resource);
@@ -106,7 +110,7 @@ class EditResourceDescription extends React.Component {
       resourceViewModel = resourceViewModel.updateSecret(this.props.plaintextSecretDto);
     }
 
-    this.setState({resourceViewModel, originalResourceTypeSlug});
+    this.setState({resourceViewModel, originalResourceTypeSlug: originalResourceType?.slug});
   }
 
   /**
@@ -322,10 +326,10 @@ class EditResourceDescription extends React.Component {
       ? ResourcePasswordDescriptionViewModel
       : ResourcePasswordStringViewModel;
 
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(newResourceViewModelType.resourceTypeSlug);
+    const resourceType = this.props.resourceTypes.getFirstBySlug(newResourceViewModelType.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceTypeId
+      resource_type_id: resourceType.id
     };
 
     const newResourceViewModel = new newResourceViewModelType(dto);
@@ -402,9 +406,10 @@ EditResourceDescription.propTypes = {
   onClose: PropTypes.func, // toggle to display or not the editor
   onUpdate: PropTypes.func, // Whenever the description is updated
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   loadingContext: PropTypes.any, // The loading context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withLoading(withActionFeedback(withTranslation('common')(EditResourceDescription)))));
+export default withAppContext(withResourceWorkspace(withResourceTypesLocalStorage(withLoading(withActionFeedback(withTranslation('common')(EditResourceDescription))))));

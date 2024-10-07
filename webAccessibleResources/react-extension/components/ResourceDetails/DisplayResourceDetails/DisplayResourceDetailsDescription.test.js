@@ -16,7 +16,7 @@
  * Unit tests on DisplayResourceDetailsDescription in regard of specifications
  */
 import {
-  defaultAppContext,
+  defaultAppContext, defaultProps,
   resourceOnlyReadWithNoDescriptionMock,
   resourceOwnedWithNoDescriptionMock,
   resourceWithDescriptionMock,
@@ -38,7 +38,7 @@ describe("See description", () => {
   const saveDescriptionMockImpl = jest.fn((message, data) => data);
 
   describe('As LU I see the description of my resources', () => {
-    const props = {resourceWorkspaceContext: {details: {resource: resourceWithDescriptionMock}}};
+    const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceWithDescriptionMock}}});
 
     /**
      * Given a resource with description
@@ -108,7 +108,7 @@ describe("See description", () => {
   });
 
   describe('As LU I should see the description section empty', () => {
-    const props = {resourceWorkspaceContext: {details: {resource: resourceOwnedWithNoDescriptionMock}}};
+    const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceOwnedWithNoDescriptionMock}}});
     mockContextRequest(saveDescriptionMockImpl);
     /**
      * Given a resource owned with 0 description
@@ -206,7 +206,7 @@ describe("See description", () => {
   });
 
   describe('As LU with a resource only readable I should see the description section empty', () => {
-    const props = {resourceWorkspaceContext: {details: {resource: resourceOnlyReadWithNoDescriptionMock}}};
+    const props = defaultProps({resourceWorkspaceContext: {details: {resource: resourceOnlyReadWithNoDescriptionMock}}});
     /**
      * Given a resource owned with 0 description
      * Then I should see the description section empty

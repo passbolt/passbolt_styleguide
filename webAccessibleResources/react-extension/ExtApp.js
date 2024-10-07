@@ -73,6 +73,8 @@ import AdministrationUserPassphrasePoliciesContextProvider from "./contexts/Admi
 import UserPassphrasePoliciesContextProvider from "./contexts/UserPassphrasePoliciesContext";
 import AdministrationPasswordExpiryContextProvider from "./contexts/Administration/AdministrationPaswordExpiryContext/AdministrationPaswordExpiryContext";
 import PasswordExpirySettingsContextProvider from "./contexts/PasswordExpirySettingsContext";
+import ResourceTypesLocalStorageContextProvider from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 
 /**
  * The passbolt application served by the browser extension.
@@ -148,22 +150,26 @@ class ExtApp extends Component {
                                           ]}>
                                             <PasswordExpirySettingsContextProvider>
                                               <ResourceWorkspaceContextProvider>
-                                                <ResourcePasswordGeneratorContextProvider>
-                                                  <ManageDialogs/>
-                                                  <ManageWorkflows/>
-                                                  <ManageContextualMenu/>
-                                                  <ManageAnnouncements/>
-                                                  <DragContextProvider>
-                                                    <div id="container" className="page password">
-                                                      <div id="app" className="app ready" tabIndex="1000">
-                                                        <div className="header first">
-                                                          <DisplayMainMenu/>
+                                                <MetadataTypesSettingsLocalStorageContextProvider>
+                                                  <ResourceTypesLocalStorageContextProvider>
+                                                    <ResourcePasswordGeneratorContextProvider>
+                                                      <ManageDialogs/>
+                                                      <ManageWorkflows/>
+                                                      <ManageContextualMenu/>
+                                                      <ManageAnnouncements/>
+                                                      <DragContextProvider>
+                                                        <div id="container" className="page password">
+                                                          <div id="app" className="app ready" tabIndex="1000">
+                                                            <div className="header first">
+                                                              <DisplayMainMenu/>
+                                                            </div>
+                                                            <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                                                          </div>
                                                         </div>
-                                                        <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
-                                                      </div>
-                                                    </div>
-                                                  </DragContextProvider>
-                                                </ResourcePasswordGeneratorContextProvider>
+                                                      </DragContextProvider>
+                                                    </ResourcePasswordGeneratorContextProvider>
+                                                  </ResourceTypesLocalStorageContextProvider>
+                                                </MetadataTypesSettingsLocalStorageContextProvider>
                                               </ResourceWorkspaceContextProvider>
                                             </PasswordExpirySettingsContextProvider>
                                           </Route>

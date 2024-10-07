@@ -24,6 +24,10 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -171,7 +175,7 @@ class HomePage extends React.Component {
    * @returns {boolean}
    */
   isPasswordResource(resourceId) {
-    return this.props.context.resourceTypesSettings.assertResourceTypeIdHasPassword(resourceId);
+    return this.props.resourceTypes?.getFirstById(resourceId)?.hasPassword();
   }
 
   /**
@@ -179,7 +183,7 @@ class HomePage extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const isReady = this.props.resources !== null && this.props.context.resourceTypesSettings != null;
+    const isReady = this.props.resources !== null && this.props.resourceTypes != null;
     const hasSearch = this.props.context.search?.length > 0;
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
@@ -317,8 +321,9 @@ HomePage.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   resources: PropTypes.array, // The resources from the local storage
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourcesLocalStorageContext: PropTypes.object, // The resources local storage context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourcesLocalStorage(withTranslation('common')(HomePage)))));
+export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withTranslation('common')(HomePage))))));

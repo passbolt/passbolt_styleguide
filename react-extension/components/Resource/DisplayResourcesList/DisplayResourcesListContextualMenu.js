@@ -38,6 +38,10 @@ import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContex
 import {formatDateForApi} from "../../../../shared/utils/dateUtils";
 import {DateTime} from "luxon";
 import PasswordExpiryDialog from "../PasswordExpiryDialog/PasswordExpiryDialog";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class DisplayResourcesListContextualMenu extends React.Component {
   /**
@@ -304,7 +308,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @return {boolean}
    */
   get isPasswordResources() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(this.resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasPassword();
   }
 
   /**
@@ -316,19 +320,11 @@ class DisplayResourcesListContextualMenu extends React.Component {
   }
 
   /**
-   * Get resources type settings
-   * @return {ResourceTypesSettings|*}
-   */
-  get resourceTypesSettings() {
-    return this.props.context.resourceTypesSettings;
-  }
-
-  /**
    * Is TOTP resource
    * @return {boolean}
    */
   get isTotpResources() {
-    return this.resourceTypesSettings.assertResourceTypeIdHasTotp(this.resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasTotp();
   }
 
   /**
@@ -336,7 +332,7 @@ class DisplayResourcesListContextualMenu extends React.Component {
    * @return {boolean}
    */
   get isStandaloneTotpResource() {
-    return this.resourceTypesSettings.assertResourceTypeIdIsStandaloneTotp(this.resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.isStandaloneTotp();
   }
 
   /**
@@ -534,6 +530,7 @@ DisplayResourcesListContextualMenu.propTypes = {
   left: PropTypes.number, // left position in px of the page
   top: PropTypes.number, // top position in px of the page
   resourceWorkspaceContext: PropTypes.any, // Resource workspace context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   dialogContext: PropTypes.any, // the dialog context
   progressContext: PropTypes.any, // The progress context
   resource: PropTypes.object, // resource selected
@@ -543,4 +540,4 @@ DisplayResourcesListContextualMenu.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withPasswordExpiry(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu)))))))));
+export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDialog(withWorkflow(withProgress(withActionFeedback(withTranslation('common')(DisplayResourcesListContextualMenu))))))))));

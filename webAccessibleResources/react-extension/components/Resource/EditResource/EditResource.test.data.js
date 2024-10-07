@@ -10,6 +10,10 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_STRING
 } from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -29,6 +33,7 @@ export const defaultProps = (props = {}) => {
     resourcePasswordGeneratorContext: defaultResourcePasswordGeneratorContext(),
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     workflowContext: defaultWorkflowContext(),
     ...props
   };

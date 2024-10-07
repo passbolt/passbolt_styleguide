@@ -19,6 +19,10 @@ import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext"
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {Trans, withTranslation} from "react-i18next";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 /**
  * This component display the description section of a resource
@@ -102,9 +106,7 @@ class DisplayResourceDetailsDescription extends React.Component {
    * =============================================================
    */
   isResourceDescriptionEncrypted() {
-    return this.props.context.resourceTypesSettings.assertResourceTypeIdHasEncryptedDescription(
-      this.resource.resource_type_id
-    );
+    return this.props.resourceTypes?.getFirstById(this.resource.resource_type_id)?.hasSecretDescription();
   }
 
   /**
@@ -147,14 +149,6 @@ class DisplayResourceDetailsDescription extends React.Component {
    */
   get resource() {
     return this.props.resourceWorkspaceContext.details.resource;
-  }
-
-  /**
-   * Get the currently selected resource from workspace context
-   * @returns {object} resource dto
-   */
-  get resourceTypesSettings() {
-    return this.props.context.resourceTypesSettings.resourceTypesSettings;
   }
 
   /**
@@ -343,8 +337,9 @@ class DisplayResourceDetailsDescription extends React.Component {
 DisplayResourceDetailsDescription.propTypes = {
   context: PropTypes.any, // The application context
   resourceWorkspaceContext: PropTypes.any, // The resource
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.object, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetailsDescription))));
+export default withAppContext(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourceDetailsDescription)))));

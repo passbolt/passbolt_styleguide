@@ -2,23 +2,18 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import EditResourceDescription from "./EditResourceDescription";
-import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
-import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
-import ResourceTypesSettings from "../../../../shared/lib/Settings/ResourceTypesSettings";
 import MockPort from "../../../test/mock/MockPort";
 import {
   resourceTypesCollectionDto
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {TEST_RESOURCE_TYPE_PASSWORD_STRING} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 
 export default {
   title: 'Components/ResourceDescription/EditResourceDescription',
   component: EditResourceDescription
 };
-
-const siteSettings = new SiteSettings(siteSettingsFixture);
-const resourceTypesSettings = new ResourceTypesSettings(siteSettings, resourceTypesCollectionDto());
 
 const context = {
   siteSettings: {
@@ -29,7 +24,6 @@ const context = {
       }
     }
   },
-  resourceTypesSettings,
   port: new MockPort()
 };
 
@@ -58,5 +52,6 @@ Initial.args = {
       uris: ["https://passbolt.com"],
     }
   },
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   onClose: () => {}
 };

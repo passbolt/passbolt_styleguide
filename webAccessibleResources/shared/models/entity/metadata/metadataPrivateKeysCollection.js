@@ -54,6 +54,7 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
   /**
    * @inheritDoc
    * @param {Set} [options.uniqueIdsSetCache] A set of unique ids.
+   * @param {Set} [options.uniqueUserIdsSetCache] A set of unique user ids.
    * @throws {EntityValidationError} If a permission already exists with the same id.
    */
   validateBuildRules(item, options = {}) {
@@ -85,30 +86,6 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
     const error = new EntityValidationError();
     error.addError("metadata_key_id", "same_metadata_key", "The collection should not contain different metadata key ID.");
     throw error;
-  }
-
-  /**
-   * Get the most recently created key in the collection if any.
-   * The key with a non null creation date and having the most recent date set is returned.
-   * If keys do not have creation date, the last one is returned.
-   * If no key is found in the collection, `null` is returned.
-   *
-   * @returns {MetadataPrivateKeyEntity|null}
-   */
-  getFirstByLatestCreated() {
-    if (!this.length) {
-      return null;
-    }
-
-    return this._items.reduce((latestCreatedItem, item) => {
-      if (!latestCreatedItem.created) {
-        return item;
-      } else if (!item.created) {
-        return latestCreatedItem;
-      } else {
-        return item.created > latestCreatedItem.created ? item : latestCreatedItem;
-      }
-    });
   }
 
   /*

@@ -21,7 +21,6 @@ import {withRouter} from "react-router-dom";
 import DisplayResourcesListContextualMenu from "./DisplayResourcesListContextualMenu";
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {Trans, withTranslation} from "react-i18next";
-import {DateTime} from "luxon";
 import {withDrag} from "../../../contexts/DragContext";
 import DisplayDragResource from "./DisplayDragResource";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
@@ -56,6 +55,10 @@ import CellExpiryDate from "../../../../shared/components/Table/CellExpiryDate";
 import CellHeaderDefault from "../../../../shared/components/Table/CellHeaderDefault";
 import ColumnLocationModel from "../../../../shared/models/column/ColumnLocationModel";
 import CellLocation from "../../../../shared/components/Table/CellLocation";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -752,7 +755,7 @@ class DisplayResourcesList extends React.Component {
    */
   isPasswordResources(resource) {
     // TODO: How to handle if resource type is not enabled or not loaded yet ?
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasPassword(resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(resource.resource_type_id)?.hasPassword();
   }
 
   /**
@@ -761,18 +764,7 @@ class DisplayResourcesList extends React.Component {
    * @return {boolean}
    */
   isTotpResources(resource) {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(resource.resource_type_id);
-  }
-
-  /**
-   * Format date in time ago
-   * @param {string} date The date to format
-   * @return {string}
-   */
-  formatDateTimeAgo(date) {
-    const dateTime = DateTime.fromISO(date);
-    const duration = dateTime.diffNow().toMillis();
-    return duration > -1000 && duration < 0 ? this.translate('Just now') : dateTime.toRelative({locale: this.props.context.locale});
+    return this.props.resourceTypes?.getFirstById(resource.resource_type_id).hasTotp();
   }
 
   /**
@@ -912,6 +904,7 @@ DisplayResourcesList.propTypes = {
   context: PropTypes.any, // The app context
   rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.any,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   contextualMenuContext: PropTypes.any, // The contextual menu context
   passwordExpiryContext: PropTypes.object, // the password expiry context
@@ -920,4 +913,4 @@ DisplayResourcesList.propTypes = {
   dragContext: PropTypes.any,
   t: PropTypes.func, // The translation function
 };
-export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withPasswordExpiry(withDrag(withProgress(withTranslation('common')(DisplayResourcesList))))))))));
+export default withAppContext(withRouter(withRbac(withActionFeedback(withContextualMenu(withResourceWorkspace(withResourceTypesLocalStorage(withPasswordExpiry(withDrag(withProgress(withTranslation('common')(DisplayResourcesList)))))))))));

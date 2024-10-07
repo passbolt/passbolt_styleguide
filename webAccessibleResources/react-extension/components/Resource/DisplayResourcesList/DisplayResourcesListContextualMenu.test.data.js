@@ -22,6 +22,10 @@ import {
 } from "../../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default component props.
@@ -39,6 +43,7 @@ export function defaultProps(data = {}) {
     dialogContext: defaultDialogContext(),
     workflowContext: defaultWorkflowContext(),
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({policy_override: true}),
     ...data
   };

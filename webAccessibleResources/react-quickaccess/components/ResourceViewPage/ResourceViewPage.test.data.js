@@ -11,6 +11,8 @@ import {
   resourceStandaloneTotpDto,
   resourceWithTotpDto
 } from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default component props.
@@ -24,6 +26,7 @@ export function defaultProps(props = {}) {
 
   return {
     context: defaultAppContext({storage}),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     rbacContext: defaultAdministratorRbacContext(),
     initialEntries: `/${resources[0].id}`,
     ...props

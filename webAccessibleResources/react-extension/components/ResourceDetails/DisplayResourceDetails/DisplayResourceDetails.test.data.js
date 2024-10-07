@@ -14,6 +14,10 @@
 
 import {defaultUserAppContext} from "../../../contexts/ExtAppContext.test.data";
 import {resourceWorkspaceContextWithSelectedResourceIOwn} from "../../../contexts/ResourceWorkspaceContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 /**
  * Default props
@@ -23,5 +27,6 @@ export function defaultProps() {
   return {
     context: defaultUserAppContext(),
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedResourceIOwn(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   };
 }

@@ -133,14 +133,6 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
-   * Get the created date of the metadata key if any or null.
-   * @returns {string|null}
-   */
-  get created() {
-    return this._props.created || null;
-  }
-
-  /**
    * Set the key in its armored format.
    * The key should be the result of the decrypted data.
    * @param {string} armoredKey

@@ -26,6 +26,11 @@ import AddTotp from "../AddTotp/AddTotp";
 import EditTotp from "../EditTotp/EditTotp";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
 import EditStandaloneTotp from "../EditStandaloneTotp/EditStandaloneTotp";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {RESOURCE_TYPE_TOTP_SLUG} from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 /**
  * This component handle the TOTP workflow.
@@ -250,9 +255,8 @@ export class HandleTotpWorkflow extends React.Component {
    */
   async createStandaloneOtp(resourceDto, secretDto) {
     resourceDto.folder_parent_id = this.props.folderParentId;
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP
-    );
+    // TODO need to be adapted with v5 resource types
+    resourceDto.resource_type_id = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG)?.id;
     resourceDto.metadata.resource_type_id = resourceDto.resource_type_id;
 
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
@@ -267,10 +271,8 @@ export class HandleTotpWorkflow extends React.Component {
    */
   async updateStandaloneOtp(resourceDto, secretDto) {
     resourceDto.id = this.selectedResources[0].id;
-    resourceDto.resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.TOTP
-    );
-    // @TODO E2EE resource_type_id duplicate for resource
+    // TODO need to be adapted with v5 resource types
+    resourceDto.resource_type_id = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG)?.id;
     resourceDto.metadata.resource_type_id = resourceDto.resource_type_id;
 
     return this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
@@ -329,6 +331,7 @@ HandleTotpWorkflow.propTypes = {
   history: PropTypes.object, // Router history
   folderParentId: PropTypes.string, // The folder parent id
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   mode: PropTypes.oneOf([
     TotpWorkflowMode.ADD_TOTP,
     TotpWorkflowMode.EDIT_TOTP,
@@ -340,4 +343,4 @@ HandleTotpWorkflow.propTypes = {
   t: PropTypes.func // the translation function
 };
 
-export default withRouter(withAppContext(withDialog(withActionFeedback(withResourceWorkspace(withTranslation("common")(HandleTotpWorkflow))))));
+export default withRouter(withAppContext(withDialog(withActionFeedback(withResourceWorkspace(withResourceTypesLocalStorage(withTranslation("common")(HandleTotpWorkflow)))))));
