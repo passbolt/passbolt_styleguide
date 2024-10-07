@@ -12,7 +12,8 @@
  * @since         4.10.0
  */
 import {v4 as uuidv4} from "uuid";
-import {defaultArmoredKey, defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty";
+import {defaultArmoredKey} from "../../../../../test/assert/assertEntityProperty";
+import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
 /**
  * Returns a minimal DTO object suitable for the MetadataPrivateKeyEntity
@@ -22,10 +23,9 @@ import {defaultArmoredKey, defaultPgpMessage} from "../../../../../test/assert/a
  * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const minimalMetadataPrivateKeyDto = (data = {}, options = {withData: false, withArmoredKey: false}) => ({
-  user_id: uuidv4(),
-  data: options.withData ? defaultPgpMessage() : undefined,
-  armored_key: options.withArmoredKey ? defaultArmoredKey() : undefined,
+export const minimalMetadataKeyDto = (data = {}) => ({
+  fingerprint: "abcd".repeat(10),
+  armored_key: defaultArmoredKey(),
   ...data
 });
 
@@ -37,12 +37,16 @@ export const minimalMetadataPrivateKeyDto = (data = {}, options = {withData: fal
  * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const defaultMetadataPrivateKeyDto = (data = {}, options = {withData: false, withArmoredKey: false}) => minimalMetadataPrivateKeyDto({
-  id: uuidv4(),
-  metadata_key_id: uuidv4(),
-  modified: "2022-10-11T08:09:00+00:00",
-  created_by: uuidv4(),
-  created: "2022-10-11T08:09:00+00:00",
-  modified_by: uuidv4(),
-  ...data,
-}, options);
+export const defaultMetadataKeyDto = (data = {}) => {
+  const id = data.id || uuidv4();
+  return minimalMetadataKeyDto({
+    id: id,
+    modified: "2022-10-11T08:09:00+00:00",
+    created_by: uuidv4(),
+    created: "2022-10-11T08:09:00+00:00",
+    modified_by: uuidv4(),
+    deleted: null,
+    metadata_private_keys: [defaultMetadataPrivateKeyDto({metadata_key_id: id}, {withData: true})],
+    ...data,
+  });
+};
