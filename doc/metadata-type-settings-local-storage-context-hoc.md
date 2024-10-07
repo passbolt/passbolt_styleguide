@@ -3,7 +3,7 @@
 classDiagram
     class MetdataTypesSettingsLocalStorageContext{
         +State~function~ get() MetadataTypesSettingsEntity
-        +State~array~ resourceTypes
+        +State~array~ metadataTypeSettings
         +State~function~ updateLocalStorage() Promise
     }
 
