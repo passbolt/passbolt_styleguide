@@ -296,4 +296,31 @@ describe("MetadataTypesSettings", () => {
       expect(entity.allowCreationOfV4Resources).toBeFalsy();
     });
   });
+
+  describe("::isDefaultResourceTypeV5", () => {
+    it("is default_resource_types v5", () => {
+      expect.assertions(6);
+      let entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
+      expect(entity.isDefaultResourceTypeV5).toBeTruthy();
+      expect(entity.isDefaultResourceTypeV4).toBeFalsy();
+      entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
+      expect(entity.isDefaultResourceTypeV5).toBeTruthy();
+      expect(entity.isDefaultResourceTypeV4).toBeFalsy();
+      entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OMigratedFromV4WithSupportV4Dto());
+      expect(entity.isDefaultResourceTypeV5).toBeTruthy();
+      expect(entity.isDefaultResourceTypeV4).toBeFalsy();
+    });
+  });
+
+  describe("::isDefaultResourceTypeV4", () => {
+    it("is default_resource_types v4", () => {
+      expect.assertions(4);
+      let entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto());
+      expect(entity.isDefaultResourceTypeV5).toBeFalsy();
+      expect(entity.isDefaultResourceTypeV4).toBeTruthy();
+      entity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50OngoingMigrationFromV4Dto());
+      expect(entity.isDefaultResourceTypeV5).toBeFalsy();
+      expect(entity.isDefaultResourceTypeV4).toBeTruthy();
+    });
+  });
 });

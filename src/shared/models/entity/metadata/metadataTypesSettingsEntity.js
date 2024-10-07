@@ -172,6 +172,22 @@ class MetadataTypesSettingsEntity extends EntityV2 {
   get allowCreationOfV4Resources() {
     return this._props.allow_creation_of_v4_resources;
   }
+
+  /**
+   * Is default resource types version 5
+   * @returns {boolean}
+   */
+  get isDefaultResourceTypeV5() {
+    return this._props.default_resource_types === RESOURCE_TYPE_VERSION_5;
+  }
+
+  /**
+   * Is default resource types version 4
+   * @returns {boolean}
+   */
+  get isDefaultResourceTypeV4() {
+    return this._props.default_resource_types === RESOURCE_TYPE_VERSION_4;
+  }
 }
 
 export default MetadataTypesSettingsEntity;

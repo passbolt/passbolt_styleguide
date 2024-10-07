@@ -74,13 +74,14 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
     it("should update the current state with the changed metadata types settings", () => {
       expect.assertions(1);
 
-      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(defaultProps());
+      const props = defaultProps();
+      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
       const expectedMetadataTypesSettings = defaultMetadataTypesSettingsV4Dto();
 
       contextProvider.handleStorageChange({
-        metadata_types_settings: {
+        [contextProvider.storageKey]: {
           newValue: expectedMetadataTypesSettings,
         },
       });
@@ -106,13 +107,14 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
     it("should return the metadata types settings if the state have been initialised already", () => {
       expect.assertions(1);
 
-      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(defaultProps());
+      const props = defaultProps();
+      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
       const expectedMetadataTypesSettings = defaultMetadataTypesSettingsV4Dto();
 
       contextProvider.handleStorageChange({
-        metadata_types_settings: {
+        [contextProvider.storageKey]: {
           newValue: expectedMetadataTypesSettings,
         },
       });
@@ -124,9 +126,10 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
       expect.assertions(3);
 
       const props = defaultProps();
-      props.context.storage.local.set({metadata_types_settings: null});
-
       const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({[contextProvider.storageKey]: null});
+
       mockComponentSetState(contextProvider);
 
       expect(contextProvider.runningLocalStorageUpdatePromise).toBeNull();
@@ -161,9 +164,9 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
       const metadataTypeSettings = defaultMetadataTypesSettingsV4Dto();
 
       const props = defaultProps();
-      props.context.storage.local.set({metadata_types_settings: metadataTypeSettings});
-
       const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({[contextProvider.storageKey]: metadataTypeSettings});
       mockComponentSetState(contextProvider);
 
       await contextProvider.loadLocalStorage();
@@ -175,12 +178,13 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      props.context.storage.local.set({metadata_types_settings: null});
+      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({[contextProvider.storageKey]: null});
       props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-types-settings", async() => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
-      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
       await contextProvider.loadLocalStorage();
@@ -195,12 +199,13 @@ describe("MetadataTypesSettingsLocalStorageContext", () => {
       expect.assertions(2);
 
       const props = defaultProps();
-      props.context.storage.local.set({metadata_types_settings: null});
+      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
+
+      props.context.storage.local.set({[contextProvider.storageKey]: null});
       props.context.port.addRequestListener("passbolt.metadata.get-or-find-metadata-types-settings", async() => {});
 
       const spyOnRequest = jest.spyOn(props.context.port, "request");
 
-      const contextProvider = new MetadataTypesSettingsLocalStorageContextProvider(props);
       mockComponentSetState(contextProvider);
 
       contextProvider.updateLocalStorage();

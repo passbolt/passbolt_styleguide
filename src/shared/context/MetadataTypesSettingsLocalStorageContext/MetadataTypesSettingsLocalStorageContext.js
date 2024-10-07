@@ -15,12 +15,15 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../AppContext/AppContext";
 import MetadataTypesSettingsEntity from "../../models/entity/metadata/metadataTypesSettingsEntity";
+import {v5 as uuidv5} from "uuid";
 
 export const MetadataTypesSettingsLocalStorageContext = React.createContext({
   get: () => {}, // Get the metadata type settings from the local storage and/or init them if not the case already
   metadataTypeSettings: null, // the current metadata type settings loaded from the local storage
   updateLocalStorage: () => {}, // triggers an update of the local storage
 });
+
+const UUID_PASSBOLT_NAMESPACE = 'd5447ca1-950f-459d-8b20-86ddfdd0f922';
 
 /**
  * The metadata type settings local storage context provider
@@ -75,8 +78,8 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
    * Handles update of the metadata type settings in the local storage.
    */
   handleStorageChange(changes) {
-    if (changes.metadata_types_settings) {
-      this.set(changes.metadata_types_settings.newValue);
+    if (changes[this.storageKey]) {
+      this.set(changes[this.storageKey].newValue);
     }
   }
 
@@ -104,19 +107,30 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
   }
 
   /**
+   * Get the storage key.
+   * @returns {string}
+   */
+  get storageKey() {
+    const userId = this.props.context.loggedInUser.id;
+    const domain = this.props.context.userSettings.getTrustedDomain();
+    const accountId = uuidv5(`${domain}${userId}`, UUID_PASSBOLT_NAMESPACE);
+    return `metadata_types_settings-${accountId}`;
+  }
+
+  /**
    * Load the metadata type settings from the local storage if it is available.
    * If the local storage is not yet initialised, then it asks for its initialisation.
    * @returns {Promise<void>}
    * @private
    */
   async loadLocalStorage() {
-    const storageData = await this.props.context.storage.local.get(["metadata_types_settings"]);
-    if (!storageData.metadata_types_settings) {
+    const storageData = await this.props.context.storage.local.get([this.storageKey]);
+    if (!storageData[this.storageKey]) {
       this.updateLocalStorage();
       return;
     }
 
-    this.set(storageData.metadata_types_settings);
+    this.set(storageData[this.storageKey]);
   }
 
   /**
