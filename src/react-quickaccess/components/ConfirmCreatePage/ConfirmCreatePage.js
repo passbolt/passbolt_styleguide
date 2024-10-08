@@ -27,7 +27,7 @@ import {
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
-} from "../../../shared/models/entity/resourceType/resourceTypeEntity";
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 /**
  * The component display error variations.
