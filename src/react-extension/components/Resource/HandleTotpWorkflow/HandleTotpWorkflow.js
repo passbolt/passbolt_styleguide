@@ -30,7 +30,7 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
-import {RESOURCE_TYPE_TOTP_SLUG} from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {RESOURCE_TYPE_TOTP_SLUG} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 /**
  * This component handle the TOTP workflow.
