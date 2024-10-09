@@ -54,7 +54,7 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
-} from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class CreateResource extends Component {

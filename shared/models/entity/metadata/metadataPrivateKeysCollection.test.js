@@ -13,6 +13,7 @@
  */
 import EntitySchema from "../abstract/entitySchema";
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
+import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 import {defaultMetadataPrivateKeysDtos, defaultMinimalMetadataPrivateKeysDtos} from "./metadataPrivateKeysCollection.test.data";
 import {v4 as uuidv4} from "uuid";
@@ -190,6 +191,43 @@ describe("MetadataPrivateKeysCollection", () => {
       expect(collection.items[0]._props.id).toEqual(dtos[0].id);
       expect(collection.items[1]._props.id).toEqual(dtos[1].id);
       expect(collection.items[2]._props.id).toEqual(dtos[3].id);
+    });
+  });
+
+  describe("::hasDecryptedPrivateKeys", () => {
+    it("should return true if at least 1 key in the collection is decrypted", () => {
+      expect.assertions(1);
+
+      const metadata_key_id = uuidv4();
+      const dtos = [
+        defaultMetadataPrivateKeyDto({metadata_key_id}, {withData: true}),
+        defaultMetadataPrivateKeyDto({metadata_key_id}, {withArmoredKey: true}),
+      ];
+
+      const collection = new MetadataPrivateKeysCollection(dtos);
+
+      expect(collection.hasDecryptedPrivateKeys()).toStrictEqual(true);
+    });
+
+    it("should return false of none of the key in the collection is decrypted", () => {
+      expect.assertions(1);
+
+      const metadata_key_id = uuidv4();
+      const dtos = [
+        defaultMetadataPrivateKeyDto({metadata_key_id}, {withData: true}),
+        defaultMetadataPrivateKeyDto({metadata_key_id}, {withData: true}),
+      ];
+      const collection = new MetadataPrivateKeysCollection(dtos);
+
+      expect(collection.hasDecryptedPrivateKeys()).toStrictEqual(false);
+    });
+
+    it("should return false if the collection is empty", () => {
+      expect.assertions(1);
+
+      const collection = new MetadataPrivateKeysCollection([]);
+
+      expect(collection.hasDecryptedPrivateKeys()).toStrictEqual(false);
     });
   });
 

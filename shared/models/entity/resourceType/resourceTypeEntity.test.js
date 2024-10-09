@@ -19,6 +19,10 @@ import {
   resourceTypePasswordDescriptionTotpDto,
   resourceTypePasswordStringDto,
   resourceTypeTotpDto,
+  resourceTypeV5DefaultDto,
+  resourceTypeV5DefaultTotpDto,
+  resourceTypeV5PasswordStringDto,
+  resourceTypeV5TotpDto,
   resourceTypeWithoutSecretDefinitionDto
 } from "./resourceTypeEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
@@ -165,6 +169,54 @@ describe("ResourceTypeEntity", () => {
       expect(resourceTypeEntity.definition.secret).toBeTruthy();
       expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
     });
+
+    it("should set the right plaintext secret definition for: v5 default", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-default"});
+      const expectedSecretDefinition = resourceTypeV5DefaultDto().definition.secret;
+
+      const resourceTypeEntity = new ResourceTypeEntity(dto);
+
+      expect(resourceTypeEntity.definition.secret).toBeTruthy();
+      expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
+    });
+
+    it("should set the right plaintext secret definition for: v5 default totp", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-default-with-totp"});
+      const expectedSecretDefinition = resourceTypeV5DefaultTotpDto().definition.secret;
+
+      const resourceTypeEntity = new ResourceTypeEntity(dto);
+
+      expect(resourceTypeEntity.definition.secret).toBeTruthy();
+      expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
+    });
+
+    it("should set the right plaintext secret definition for: v5 password string", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-password-string"});
+      const expectedSecretDefinition = resourceTypeV5PasswordStringDto().definition.secret;
+
+      const resourceTypeEntity = new ResourceTypeEntity(dto);
+
+      expect(resourceTypeEntity.definition.secret).toBeTruthy();
+      expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
+    });
+
+    it("should set the right plaintext secret definition for: v5 totp", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeWithoutSecretDefinitionDto({slug: "v5-totp-standalone"});
+      const expectedSecretDefinition = resourceTypeV5TotpDto().definition.secret;
+
+      const resourceTypeEntity = new ResourceTypeEntity(dto);
+
+      expect(resourceTypeEntity.definition.secret).toBeTruthy();
+      expect(resourceTypeEntity.definition.secret).toStrictEqual(expectedSecretDefinition);
+    });
   });
 
   describe("::getters", () => {
@@ -218,6 +270,42 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasTotp()).toBeFalsy();
     });
+
+    it("v5 default should not have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeFalsy();
+    });
+
+    it("v5 default totp should have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeTruthy();
+    });
+
+    it("v5 password string should not have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeFalsy();
+    });
+
+    it("v5 totp should have totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasTotp()).toBeTruthy();
+    });
   });
 
   describe("::hasPassword", () => {
@@ -230,7 +318,7 @@ describe("ResourceTypeEntity", () => {
       expect(entity.hasPassword()).toBeFalsy();
     });
 
-    it("password totp should not have password", () => {
+    it("password totp should have password", () => {
       expect.assertions(1);
 
       const dto = resourceTypePasswordDescriptionTotpDto();
@@ -255,6 +343,42 @@ describe("ResourceTypeEntity", () => {
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasPassword()).toBeTruthy();
+    });
+
+    it("v5 default should have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeTruthy();
+    });
+
+    it("v5 default totp should have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeTruthy();
+    });
+
+    it("v5 password string should have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeTruthy();
+    });
+
+    it("v5 totp should not have password", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasPassword()).toBeFalsy();
     });
   });
 
@@ -294,6 +418,42 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.isStandaloneTotp()).toBeFalsy();
     });
+
+    it("default v5 should not be standalone totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneTotp()).toBeFalsy();
+    });
+
+    it("default v5 totp should not be standalone totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneTotp()).toBeFalsy();
+    });
+
+    it("v5 password string should not be standalone totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneTotp()).toBeFalsy();
+    });
+
+    it("v5 totp should be standalone totp", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isStandaloneTotp()).toBeTruthy();
+    });
   });
 
   describe("::hasSecretDescription", () => {
@@ -332,6 +492,42 @@ describe("ResourceTypeEntity", () => {
 
       expect(entity.hasSecretDescription()).toBeFalsy();
     });
+
+    it("v5 default should have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeTruthy();
+    });
+
+    it("v5 default totp should have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeTruthy();
+    });
+
+    it("v5 password string should not have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeFalsy();
+    });
+
+    it("v5 totp should not have secret description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasSecretDescription()).toBeFalsy();
+    });
   });
 
   describe("::hasMetadataDescription", () => {
@@ -366,6 +562,42 @@ describe("ResourceTypeEntity", () => {
       expect.assertions(1);
 
       const dto = resourceTypePasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+
+    it("v5 default should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+
+    it("v5 default totp should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+
+    it("v5 password string should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.hasMetadataDescription()).toBeTruthy();
+    });
+
+    it("v5 totp should have metadata description", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
       const entity = new ResourceTypeEntity(dto);
 
       expect(entity.hasMetadataDescription()).toBeTruthy();

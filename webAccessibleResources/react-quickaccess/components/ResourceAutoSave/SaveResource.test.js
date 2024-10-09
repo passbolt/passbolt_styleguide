@@ -17,7 +17,7 @@ import {waitFor} from "@testing-library/react";
 import {waitForTrue} from "../../../../test/utils/waitFor";
 import {
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
-} from "../../../shared/models/entity/resourceType/resourceTypeEntity";
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 beforeEach(() => {
   jest.resetModules();
