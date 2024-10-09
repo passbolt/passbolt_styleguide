@@ -16,6 +16,7 @@ import MetadataKeyEntity from "./metadataKeyEntity";
 import {defaultMetadataKeyDto} from "./metadataKeyEntity.test.data";
 import MetadataKeysCollection from "./metadataKeysCollection";
 import {defaultMetadataKeysDtos, defaultMinimalMetadataKeysDtos} from "./metadataKeysCollection.test.data";
+import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
 describe("MetadataKeysCollection", () => {
   describe("::getSchema", () => {
@@ -190,6 +191,29 @@ describe("MetadataKeysCollection", () => {
       const collection = new MetadataKeysCollection([]);
 
       expect(collection.getFirstByLatestCreated()).toBeNull();
+    });
+  });
+
+  describe("::hasDecryptedKeys", () => {
+    it("should return true if one of the items has an encrypted metadata private key", () => {
+      expect.assertions(1);
+
+      const dtos = [
+        defaultMetadataKeyDto({
+          metadata_private_keys: [defaultMetadataPrivateKeyDto({}, {withArmoredKey: true})],
+        }),
+      ];
+      const collection = new MetadataKeysCollection(dtos);
+
+      expect(collection.hasDecryptedKeys()).toStrictEqual(true);
+    });
+
+    it("should return false if none of the items has an encrypted metadata private key", () => {
+      expect.assertions(1);
+
+      const collection = new MetadataKeysCollection(defaultMetadataKeysDtos());
+
+      expect(collection.hasDecryptedKeys()).toStrictEqual(false);
     });
   });
 
