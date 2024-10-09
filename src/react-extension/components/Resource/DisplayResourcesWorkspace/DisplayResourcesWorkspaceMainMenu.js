@@ -27,6 +27,21 @@ import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withWorkflow} from "../../../contexts/WorkflowContext";
 import HandleTotpWorkflow from "../HandleTotpWorkflow/HandleTotpWorkflow";
 import {TotpWorkflowMode} from "../HandleTotpWorkflow/HandleTotpWorkflowMode";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import Tooltip from "../../Common/Tooltip/Tooltip";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_TOTP_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_TOTP_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
 
 /**
  * This component allows the current user to create a new resource
@@ -149,7 +164,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openPasswordCreateDialog() {
-    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected});
+    let resourceType;
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    }
+    this.props.dialogContext.open(CreateResource, {folderParentId: this.folderIdSelected, resourceType: resourceType});
   }
 
   /**
@@ -164,7 +185,13 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
    * Open create password dialog
    */
   openStandaloneTotpCreateDialog() {
-    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected});
+    let resourceType;
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_TOTP_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG);
+    }
+    this.props.workflowContext.start(HandleTotpWorkflow, {mode: TotpWorkflowMode.CREATE_STANDALONE_TOTP, folderParentId: this.folderIdSelected, resourceType: resourceType});
   }
 
   /**
@@ -219,6 +246,42 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
   }
 
   /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Can create standalone totp
+   * @returns {boolean}
+   */
+  canCreateStandaloneTotp() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_TOTP_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_TOTP_SLUG);
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Render the component
    * @returns {JSX}
    */
@@ -237,29 +300,67 @@ class DisplayResourcesWorkspaceMainMenu extends React.Component {
             <span><Trans>Create</Trans></span>
           </button>
           <ul className={`dropdown-content menu right ${this.state.createMenuOpen ? "visible" : ""}`}>
-            <li id="password_action">
-              <div className="row">
-                <div className="main-cell-wrapper">
-                  <div className="main-cell">
-                    <button type="button" className="link no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
-                      <span><Trans>New password</Trans></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            {canUseTotp &&
-              <li id="totp_action">
-                <div className="row">
-                  <div className="main-cell-wrapper">
-                    <div className="main-cell">
-                      <button type="button" className="link no-border" onClick={this.handleMenuCreateTotpClickEvent}>
-                        <span><Trans>New TOTP</Trans></span>
-                      </button>
+            {!this.hasMetadataTypesSettings() &&
+              <>
+                <li id="password_action">
+                  <div className="row">
+                    <div className="main-cell-wrapper">
+                      <div className="main-cell">
+                        <Tooltip message={this.props.t("Loading metadata types settings")}>
+                          <button type="button" className="link no-border" disabled={true}>
+                            <span><Trans>New password</Trans></span>
+                          </button>
+                        </Tooltip>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
+                </li>
+                {canUseTotp &&
+                  <li id="totp_action">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <Tooltip message={this.props.t("Loading metadata types settings")}>
+                            <button type="button" className="link no-border" disabled={true}>
+                              <span><Trans>New TOTP</Trans></span>
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                }
+              </>
+            }
+            {this.hasMetadataTypesSettings() &&
+              <>
+                {this.canCreatePassword() &&
+                  <li id="password_action">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <button type="button" className="link no-border" onClick={this.handleCreateMenuPasswordClickEvent}>
+                            <span><Trans>New password</Trans></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                }
+                {canUseTotp && this.canCreateStandaloneTotp() &&
+                  <li id="totp_action">
+                    <div className="row">
+                      <div className="main-cell-wrapper">
+                        <div className="main-cell">
+                          <button type="button" className="link no-border" onClick={this.handleMenuCreateTotpClickEvent}>
+                            <span><Trans>New TOTP</Trans></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                }
+              </>
             }
             {canUseFolders &&
               <li id="folder_action">
@@ -294,7 +395,10 @@ DisplayResourcesWorkspaceMainMenu.propTypes = {
   rbacContext: PropTypes.any, // The role based access control context
   dialogContext: PropTypes.any, // the dialog context
   resourceWorkspaceContext: PropTypes.any, // the resource workspace context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   workflowContext: PropTypes.any, // The workflow context
+  t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withDialog(withWorkflow(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))));
+export default withAppContext(withRbac(withDialog(withWorkflow(withMetadataTypesSettingsLocalStorage(withResourceTypesLocalStorage(withResourceWorkspace(withTranslation("common")(DisplayResourcesWorkspaceMainMenu))))))));

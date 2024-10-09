@@ -20,6 +20,14 @@ import {
 } from "../../../contexts/ResourceWorkspaceContext.test.data";
 import {defaultDialogContext} from "../../../contexts/DialogContext.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesCollectionDto
+} from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -33,6 +41,8 @@ export function defaultProps(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext(),
     dialogContext: defaultDialogContext(),
     workflowContext: defaultWorkflowContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data
   };
 }
@@ -49,6 +59,8 @@ export function defaultPropsFolderOwned(data = {}) {
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderIOwn(),
     dialogContext: defaultDialogContext(),
     workflowContext: defaultWorkflowContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data
   };
 }
@@ -65,6 +77,8 @@ export function defaultPropsFolderNotOwned(data = {}) {
     resourceWorkspaceContext: resourceWorkspaceContextWithSelectedFolderICanRead(),
     dialogContext: defaultDialogContext(),
     workflowContext: defaultWorkflowContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data
   };
 }
