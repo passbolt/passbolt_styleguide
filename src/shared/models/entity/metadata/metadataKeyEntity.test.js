@@ -40,7 +40,7 @@ describe("MetadataKeyEntity", () => {
       assertEntityProperty.string(MetadataKeyEntity, "armored_key");
       assertEntityProperty.required(MetadataKeyEntity, "armored_key");
       assertEntityProperty.maxLength(MetadataKeyEntity, "armored_key", 10_000);
-      assertEntityProperty.armoredPrivateKey(MetadataKeyEntity, "armored_key");
+      assertEntityProperty.armoredPublicKey(MetadataKeyEntity, "armored_key");
     });
 
     it("validates created property", () => {
