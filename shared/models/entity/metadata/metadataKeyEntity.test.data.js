@@ -18,32 +18,42 @@ import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data
 /**
  * Returns a minimal DTO object suitable for the MetadataPrivateKeyEntity
  * @param {object} data
+ * @param {object} options
+ * @param {object} [options.withMetadataPrivateKeys = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const minimalMetadataKeyDto = (data = {}) => ({
-  fingerprint: "abcd".repeat(10),
-  armored_key: defaultArmoredPublicKey(),
-  ...data
-});
+export const minimalMetadataKeyDto = (data = {}, options = {}) => {
+  const defaultData = {
+    fingerprint: "abcd".repeat(10),
+    armored_key: defaultArmoredPublicKey(),
+    ...data
+  };
+
+  if (!defaultData.metadata_private_keys && options?.withMetadataPrivateKeys) {
+    defaultData.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: defaultData.id}, {withData: true})];
+  }
+
+  return defaultData;
+};
 
 /**
  * Returns a DTO object suitable for the MetadataPrivateKeyEntity
  * @param {object} data
  * @param {object} options
- * @param {object} [options.withData = false] if true, set the data field with `defaultData()`
- * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
+ * @param {object} [options.withMetadataPrivateKeys = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const defaultMetadataKeyDto = (data = {}, options = {withData: true, withArmoredKey: false}) => {
+export const defaultMetadataKeyDto = (data = {}, options = {}) => {
   const id = data.id || uuidv4();
-  return minimalMetadataKeyDto({
+  const defaultData = {
     id: id,
     modified: "2022-10-11T08:09:00+00:00",
     created_by: uuidv4(),
     created: "2022-10-11T08:09:00+00:00",
     modified_by: uuidv4(),
     deleted: null,
-    metadata_private_keys: [defaultMetadataPrivateKeyDto({metadata_key_id: id}, options)],
     ...data,
-  });
+  };
+
+  return minimalMetadataKeyDto(defaultData, options);
 };

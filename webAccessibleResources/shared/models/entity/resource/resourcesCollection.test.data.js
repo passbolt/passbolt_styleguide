@@ -20,7 +20,6 @@ import {
 } from "../resourceType/resourceTypeEntity.test.data";
 import {v4 as uuidv4} from "uuid";
 import {metadata} from "../../../../../test/fixture/encryptedMetadata/metadata.js";
-import ResourceEntity from "../../../../../../passbolt-browser-extension/src/all/background_page/model/entity/resource/resourceEntity.js";
 
 export const defaultResourceDtosCollection = () => {
   const resource1 = defaultResourceDto({name: "Resource1"});
@@ -99,7 +98,7 @@ export const defaultSharedResourcesWithEncryptedMetadataDtos = (count = 10, data
       ...data,
       metadata_key_id: metadata_key_id,
       metadata: encryptedMetadata,
-      metadata_key_type: ResourceEntity.METADATA_KEY_TYPE_METADATA_KEY
+      metadata_key_type: "metadata_key"
     };
     const dto = defaultResourceDto(defaultData, options);
     dtos.push(dto);
@@ -123,7 +122,7 @@ export const defaultPrivateResourcesWithEncryptedMetadataDtos = (count = 10, dat
       ...data,
       metadata_key_id: null,
       metadata: encryptedMetadata,
-      metadata_key_type: ResourceEntity.METADATA_KEY_TYPE_USER_KEY
+      metadata_key_type: "user_key"
     };
     const dto = defaultResourceDto(defaultData, options);
     dtos.push(dto);

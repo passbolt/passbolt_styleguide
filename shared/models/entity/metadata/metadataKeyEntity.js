@@ -28,6 +28,7 @@ class MetadataKeyEntity extends EntityV2 {
     if (this._props.metadata_private_keys) {
       this._metadata_private_keys = new MetadataPrivateKeysCollection(this._props.metadata_private_keys, {...options, clone: false});
       delete this._props.metadata_private_keys;
+      this.assertSameMetadataKeyId();
     }
   }
 
@@ -92,7 +93,10 @@ class MetadataKeyEntity extends EntityV2 {
    * @throws {EntityValidationError} if the collection of metadata private keys references a different metadata key id.
    */
   validateBuildRules() {
-    this.assertSameMetadataKeyId();
+    /*
+     * The following assetion cannot be executed as the build rules validation is executed prior to the association initialization.
+     * this.assertSameMetadataKeyId();
+     */
   }
 
   /**

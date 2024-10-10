@@ -77,13 +77,14 @@ describe("MetadataKeyEntity", () => {
     });
 
     it("validates metadata_private_keys property", () => {
+      const metadataKeyDto = defaultMetadataKeyDto();
       const successScenarios = [
-        {scenario: "a valid option", value: [defaultMetadataPrivateKeyDto({}, {withData: true})]},
+        {scenario: "a valid option", value: [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id}, {withData: true})]},
       ];
       const failScenarios = [
         {scenario: "with invalid metadata private key build rule", value: defaultMetadataPrivateKeyDto()},
       ];
-      assertEntityProperty.assertAssociation(MetadataKeyEntity, "metadata_private_keys", defaultMetadataKeyDto(), successScenarios, failScenarios);
+      assertEntityProperty.assertAssociation(MetadataKeyEntity, "metadata_private_keys", metadataKeyDto, successScenarios, failScenarios);
     });
   });
 
@@ -106,7 +107,7 @@ describe("MetadataKeyEntity", () => {
 
     it("constructor works if valid DTO is provided", () => {
       expect.assertions(10);
-      const dto = defaultMetadataKeyDto({});
+      const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
       const entity = new MetadataKeyEntity(dto);
 
       expect(entity._props.id).toStrictEqual(dto.id);
@@ -122,20 +123,9 @@ describe("MetadataKeyEntity", () => {
     });
 
     it("constructor throw an error if the id and the private metadata key ids are different", () => {
-      expect.assertions(10);
-      const dto = defaultMetadataKeyDto({});
-      const entity = new MetadataKeyEntity(dto);
-
-      expect(entity._props.id).toStrictEqual(dto.id);
-      expect(entity._props.fingerprint).toStrictEqual(dto.fingerprint);
-      expect(entity._props.armored_key).toStrictEqual(dto.armored_key);
-      expect(entity._props.created).toStrictEqual(dto.created);
-      expect(entity._props.created_by).toStrictEqual(dto.created_by);
-      expect(entity._props.modified).toStrictEqual(dto.modified);
-      expect(entity._props.modified_by).toStrictEqual(dto.modified_by);
-      expect(entity._props.deleted).toStrictEqual(dto.deleted);
-      expect(entity._props.metadata_private_keys).toBeUndefined();
-      expect(entity._metadata_private_keys).toStrictEqual(new MetadataPrivateKeysCollection(dto.metadata_private_keys));
+      expect.assertions(1);
+      const dto = defaultMetadataKeyDto({metadata_private_keys: [defaultMetadataPrivateKeyDto({}, {withData: true})]});
+      expect(() => new MetadataKeyEntity(dto)).toThrowEntityValidationError("id:metadata_private_keys", "same_id");
     });
   });
 
@@ -157,7 +147,7 @@ describe("MetadataKeyEntity", () => {
       const dto1 = minimalMetadataKeyDto();
       const entity1 = new MetadataKeyEntity(dto1);
 
-      const dto2 = defaultMetadataKeyDto();
+      const dto2 = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
       const entity2 = new MetadataKeyEntity(dto2);
 
       expect(entity1.metadataPrivateKeys).toBeNull();
