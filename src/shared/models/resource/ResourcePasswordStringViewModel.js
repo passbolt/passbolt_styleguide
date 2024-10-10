@@ -20,6 +20,7 @@ import {
   RESOURCE_USERNAME_MAX_LENGTH
 } from "../../constants/inputs.const";
 import ResourceViewModel from "./ResourceViewModel";
+import {RESOURCE_TYPE_PASSWORD_STRING_SLUG} from "../entity/resourceType/resourceTypeSchemasDefinition";
 
 /**
  * ResourcePasswordString ViewModel
@@ -135,7 +136,7 @@ class ResourcePasswordStringViewModel extends ResourceViewModel {
    * @inheritdoc
    */
   static get resourceTypeSlug() {
-    return "password-string";
+    return RESOURCE_TYPE_PASSWORD_STRING_SLUG;
   }
 
   /**

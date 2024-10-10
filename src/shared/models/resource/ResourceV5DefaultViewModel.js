@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.9.4
+ * @since         4.10.0
  */
 
 import {
@@ -20,12 +20,12 @@ import {
   RESOURCE_USERNAME_MAX_LENGTH
 } from "../../constants/inputs.const";
 import ResourceViewModel from "./ResourceViewModel";
-import {RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG} from "../entity/resourceType/resourceTypeSchemasDefinition";
+import {RESOURCE_TYPE_V5_DEFAULT_SLUG} from "../entity/resourceType/resourceTypeSchemasDefinition";
 
 /**
- * ResourcePasswordDescription ViewModel
+ * ResourceV5Default ViewModel
  */
-class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
+class ResourceV5DefaultViewModel extends ResourceViewModel {
   /**
    * @constructor
    */
@@ -60,12 +60,13 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
       name: resourceDto.metadata.name,
       uri: resourceDto.metadata.uris[0],
       username: resourceDto.metadata.username,
+      description: resourceDto.metadata.description,
       folder_parent_id: resourceDto.folder_parent_id,
       resource_type_id: resourceDto.resource_type_id,
       expired: resourceDto.expired
     };
 
-    return new ResourcePasswordDescriptionViewModel(resourceViewModelDto);
+    return new ResourceV5DefaultViewModel(resourceViewModelDto);
   }
 
   /**
@@ -135,7 +136,7 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
    * @inheritdoc
    */
   static get resourceTypeSlug() {
-    return RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG;
+    return RESOURCE_TYPE_V5_DEFAULT_SLUG;
   }
 
   /**
@@ -151,7 +152,7 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
    * @inheritdoc
    */
   canToggleDescription() {
-    return true;
+    return false;
   }
 
   /**
@@ -214,4 +215,4 @@ class ResourcePasswordDescriptionViewModel extends ResourceViewModel {
   }
 }
 
-export default ResourcePasswordDescriptionViewModel;
+export default ResourceV5DefaultViewModel;
