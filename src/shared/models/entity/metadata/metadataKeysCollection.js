@@ -90,7 +90,7 @@ class MetadataKeysCollection extends EntityV2Collection {
    * @returns {boolean}
    */
   hasDecryptedKeys() {
-    return this._items.some(metadataKey => metadataKey.metadataPrivateKeys.hasDecryptedPrivateKeys());
+    return this._items.some(metadataKey => metadataKey.metadataPrivateKeys?.hasDecryptedPrivateKeys());
   }
 
   /*

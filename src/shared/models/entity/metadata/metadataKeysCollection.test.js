@@ -195,14 +195,23 @@ describe("MetadataKeysCollection", () => {
   });
 
   describe("::hasDecryptedKeys", () => {
-    it("should return true if one of the items has an encrypted metadata private key", () => {
+    it("should return false if the collection has not metadata private keys", () => {
       expect.assertions(1);
 
       const dtos = [
-        defaultMetadataKeyDto({
-          metadata_private_keys: [defaultMetadataPrivateKeyDto({}, {withArmoredKey: true})],
-        }),
+        defaultMetadataKeyDto(),
       ];
+      const collection = new MetadataKeysCollection(dtos);
+
+      expect(collection.hasDecryptedKeys()).toStrictEqual(false);
+    });
+
+    it("should return true if none of the items has an encrypted metadata private key", () => {
+      expect.assertions(1);
+
+      const metadataKeyDto = defaultMetadataKeyDto();
+      metadataKeyDto.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id}, {withArmoredKey: true})];
+      const dtos = [metadataKeyDto];
       const collection = new MetadataKeysCollection(dtos);
 
       expect(collection.hasDecryptedKeys()).toStrictEqual(true);
@@ -211,7 +220,7 @@ describe("MetadataKeysCollection", () => {
     it("should return false if none of the items has an encrypted metadata private key", () => {
       expect.assertions(1);
 
-      const collection = new MetadataKeysCollection(defaultMetadataKeysDtos());
+      const collection = new MetadataKeysCollection(defaultMetadataKeysDtos({}, {withMetadataPrivateKeys: true}));
 
       expect(collection.hasDecryptedKeys()).toStrictEqual(false);
     });
