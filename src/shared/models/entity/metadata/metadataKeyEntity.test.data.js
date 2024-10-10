@@ -12,20 +12,17 @@
  * @since         4.10.0
  */
 import {v4 as uuidv4} from "uuid";
-import {defaultArmoredKey} from "../../../../../test/assert/assertEntityProperty";
+import {defaultArmoredPublicKey} from "../../../../../test/assert/assertEntityProperty.test.data";
 import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
 /**
  * Returns a minimal DTO object suitable for the MetadataPrivateKeyEntity
  * @param {object} data
- * @param {object} options
- * @param {object} [options.withData = false] if true, set the data field with `defaultData()`
- * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
 export const minimalMetadataKeyDto = (data = {}) => ({
   fingerprint: "abcd".repeat(10),
-  armored_key: defaultArmoredKey(),
+  armored_key: defaultArmoredPublicKey(),
   ...data
 });
 
@@ -37,7 +34,7 @@ export const minimalMetadataKeyDto = (data = {}) => ({
  * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const defaultMetadataKeyDto = (data = {}) => {
+export const defaultMetadataKeyDto = (data = {}, options = {withData: true, withArmoredKey: false}) => {
   const id = data.id || uuidv4();
   return minimalMetadataKeyDto({
     id: id,
@@ -46,7 +43,7 @@ export const defaultMetadataKeyDto = (data = {}) => {
     created: "2022-10-11T08:09:00+00:00",
     modified_by: uuidv4(),
     deleted: null,
-    metadata_private_keys: [defaultMetadataPrivateKeyDto({metadata_key_id: id}, {withData: true})],
+    metadata_private_keys: [defaultMetadataPrivateKeyDto({metadata_key_id: id}, options)],
     ...data,
   });
 };
