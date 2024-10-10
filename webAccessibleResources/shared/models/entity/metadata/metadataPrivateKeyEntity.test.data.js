@@ -12,7 +12,7 @@
  * @since         4.10.0
  */
 import {v4 as uuidv4} from "uuid";
-import {defaultArmoredKey, defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty";
+import {defaultArmoredPrivateKey, defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
 
 /**
  * Returns a minimal DTO object suitable for the MetadataPrivateKeyEntity
@@ -25,7 +25,7 @@ import {defaultArmoredKey, defaultPgpMessage} from "../../../../../test/assert/a
 export const minimalMetadataPrivateKeyDto = (data = {}, options = {withData: false, withArmoredKey: false}) => ({
   user_id: uuidv4(),
   data: options.withData ? defaultPgpMessage() : undefined,
-  armored_key: options.withArmoredKey ? defaultArmoredKey() : undefined,
+  armored_key: options.withArmoredKey ? defaultArmoredPrivateKey() : undefined,
   ...data
 });
 

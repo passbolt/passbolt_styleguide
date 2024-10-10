@@ -16,6 +16,7 @@ import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import {defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
+import {defaultArmoredPrivateKey, defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
 
 describe("MetadataPrivateKeyEntity", () => {
   describe("::getSchema", () => {
@@ -194,7 +195,7 @@ describe("MetadataPrivateKeyEntity", () => {
         expect(entity.data).toStrictEqual(dto.data);
         expect(entity.armoredKey).toBeNull();
 
-        const armoredKey = assertEntityProperty.defaultArmoredKey();
+        const armoredKey = defaultArmoredPrivateKey();
         entity.armoredKey = armoredKey;
 
         expect(entity.armoredKey).toStrictEqual(armoredKey);
@@ -221,7 +222,7 @@ describe("MetadataPrivateKeyEntity", () => {
         expect(entity.data).toBeNull();
         expect(entity.armoredKey).toStrictEqual(dto.armored_key);
 
-        const data = assertEntityProperty.defaultPgpMessage();
+        const data = defaultPgpMessage();
         entity.data = data;
 
         expect(entity.data).toStrictEqual(data);
