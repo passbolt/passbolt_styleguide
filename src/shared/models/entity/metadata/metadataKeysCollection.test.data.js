@@ -27,30 +27,27 @@ export const defaultMetadataKeysDtos = (count = 2, data = {}) => {
   return dtos;
 };
 
-export const defaultDecryptedSharedMetadataKeysDtos = (data = {}) => {
+export const defaultDecryptedSharedMetadataKeysDtos = (data = {}, options = {}) => {
   const id = uuidv4();
   const sharedMetadataPrivateKey = defaultMetadataPrivateKeyDto({
     metadata_key_id: id,
     armored_key: pgpKeys.metadataKey.private_decrypted,
   });
 
-  const dtos = [
+  return [
     defaultMetadataKeyDto({
       id: id,
-      fingerprint: "abcd".repeat(10),
       metadata_private_keys: [sharedMetadataPrivateKey],
       ...data,
-    }, {withArmoredKey: false, withData: false}),
+    }, options),
   ];
-
-  return dtos;
 };
 
-export const defaultMinimalMetadataKeysDtos = (count = 2, data = {}) => {
+export const defaultMinimalMetadataKeysDtos = (count = 2, data = {}, options = {}) => {
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = minimalMetadataKeyDto({fingerprint: generateFingerprint(i), ...data});
-    const dto2 = minimalMetadataKeyDto({fingerprint: generateFingerprint(i + 1), ...data});
+    const dto1 = minimalMetadataKeyDto({fingerprint: generateFingerprint(i), ...data}, options);
+    const dto2 = minimalMetadataKeyDto({fingerprint: generateFingerprint(i + 1), ...data}, options);
     dtos.push(dto1, dto2);
   }
 
