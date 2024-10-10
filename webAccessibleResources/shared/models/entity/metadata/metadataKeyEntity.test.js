@@ -154,4 +154,30 @@ describe("MetadataKeyEntity", () => {
       expect(entity2.metadataPrivateKeys).toStrictEqual(new MetadataPrivateKeysCollection(dto2.metadata_private_keys));
     });
   });
+  describe("::dtDto", () => {
+    it("minimal to dto", () => {
+      expect.assertions(6);
+      // minimal set with the data property
+      const dto1 = minimalMetadataKeyDto({}, {withData: true});
+      const entity1 = new MetadataKeyEntity(dto1);
+      expect(entity1.toDto()).toEqual(dto1);
+      // minimal set with the armoredKey property
+      const dto2 = minimalMetadataKeyDto({}, {withArmoredKey: true});
+      const entity2 = new MetadataKeyEntity(dto2);
+      expect(entity2.toDto()).toEqual(dto2);
+      // all properties but no association
+      const dto3 = defaultMetadataKeyDto();
+      const entity3 = new MetadataKeyEntity(dto3);
+      expect(entity3.toDto()).toEqual(dto3);
+      // all properties and all associations
+      const dto4 = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const entity4 = new MetadataKeyEntity(dto4);
+      expect(entity4.toDto()).not.toEqual(dto4);
+      expect(entity4.toDto()).toEqual({...dto4, "metadata_private_keys": undefined});
+      // all properties and all associations with contain metdata private keys
+      const dto5 = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const entity5 = new MetadataKeyEntity(dto5);
+      expect(entity5.toDto({metadata_private_keys: true})).toEqual(dto5);
+    });
+  });
 });

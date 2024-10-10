@@ -603,4 +603,86 @@ describe("ResourceTypeEntity", () => {
       expect(entity.hasMetadataDescription()).toBeTruthy();
     });
   });
+
+  describe("::is V5 or V4", () => {
+    it("standalone totp should be v4 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeFalsy();
+      expect(entity.isV4()).toBeTruthy();
+    });
+
+    it("password totp should be v4 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypePasswordDescriptionTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeFalsy();
+      expect(entity.isV4()).toBeTruthy();
+    });
+
+    it("password and description should be v4 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeFalsy();
+      expect(entity.isV4()).toBeTruthy();
+    });
+
+    it("password string should be v4 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypePasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeFalsy();
+      expect(entity.isV4()).toBeTruthy();
+    });
+
+    it("v5 default should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
+
+    it("v5 default totp should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
+
+    it("v5 password string should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
+
+    it("v5 totp should be v5 version", () => {
+      expect.assertions(2);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isV5()).toBeTruthy();
+      expect(entity.isV4()).toBeFalsy();
+    });
+  });
 });

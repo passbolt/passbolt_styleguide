@@ -12,8 +12,12 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import {defaultWorkflowContext} from "../../../contexts/WorkflowContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
-import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {
+  resourceTypePasswordAndDescriptionDto,
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION
+} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 /**
  * Returns the default app context for the unit test
@@ -48,15 +52,15 @@ export function defaultProps(data = {}) {
     passwordPoliciesContext: defaultPasswordPoliciesContext(),
     passwordExpiryContext: defaultPasswordExpirySettingsContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
-    onClose: () => {},
+    resourceType: new ResourceTypeEntity(resourceTypePasswordAndDescriptionDto()),
+    onClose: jest.fn(),
     dialogContext: {
-      open: () => {},
+      open: jest.fn(),
     },
     workflowContext: defaultWorkflowContext()
   };
 
   delete data.passwordPoliciesContext;
-
   return Object.assign(defaultData, data);
 }
 

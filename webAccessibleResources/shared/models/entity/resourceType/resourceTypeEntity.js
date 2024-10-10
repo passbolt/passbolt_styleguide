@@ -202,6 +202,22 @@ class ResourceTypeEntity extends EntityV2 {
   get version() {
     return this.slug.startsWith("v5") ? RESOURCE_TYPE_VERSION_5 : RESOURCE_TYPE_VERSION_4;
   }
+
+  /**
+   * Is v5 version
+   * @returns {boolean}
+   */
+  isV5() {
+    return this.version === RESOURCE_TYPE_VERSION_5;
+  }
+
+  /**
+   * Is v4 version
+   * @returns {boolean}
+   */
+  isV4() {
+    return this.version === RESOURCE_TYPE_VERSION_4;
+  }
 }
 
 export default ResourceTypeEntity;

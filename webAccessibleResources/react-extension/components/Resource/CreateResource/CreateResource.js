@@ -46,16 +46,18 @@ import ConfirmCreateEdit, {
 import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
-import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
 import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
 import ResourceViewModel from "../../../../shared/models/resource/ResourceViewModel";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {
-  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
-} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
+import {
+  RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import ResourceViewModelFactory from "../../../../shared/models/resource/ResourceViewModelFactory";
 
 class CreateResource extends Component {
   constructor(props) {
@@ -129,16 +131,9 @@ class CreateResource extends Component {
    * Initialize the resource view model
    */
   initResourceViewModel() {
-    // TODO Adapt when resource type slug will be determine in props
-    const resourceViewModelType = this.props.resourceTypes.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)
-      ? ResourcePasswordDescriptionViewModel
-      : ResourcePasswordStringViewModel;
-
-    const resourceType = this.props.resourceTypes.getFirstBySlug(resourceViewModelType.resourceTypeSlug);
-
     const dto = {
       folder_parent_id: this.props.folderParentId,
-      resource_type_id: resourceType.id
+      resource_type_id: this.props.resourceType.id
     };
 
     const expiryDate = this.getResourceExpirationDate();
@@ -146,7 +141,7 @@ class CreateResource extends Component {
       dto.expired = expiryDate;
     }
 
-    const resourceViewModel = new resourceViewModelType(dto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(this.props.resourceType, dto);
     this.setState({resourceViewModel});
   }
 
@@ -363,7 +358,6 @@ class CreateResource extends Component {
   createResource() {
     const resourceDto = this.state.resourceViewModel.toResourceDto();
     const secretDto = this.state.resourceViewModel.toSecretDto();
-
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
   }
 
@@ -530,12 +524,11 @@ class CreateResource extends Component {
    * Handle delete totp
    */
   handleDeleteTotpClick() {
-    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
-      resource_type_id: resourceType.id,
+      resource_type_id: this.props.resourceType.id,
     };
-    const resourceViewModel = new ResourcePasswordDescriptionViewModel(dto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(this.props.resourceType, dto);
     this.setState({resourceViewModel});
   }
 
@@ -544,13 +537,18 @@ class CreateResource extends Component {
    * @param {object} totp
    */
   applyTotp(totp) {
-    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
+    let resourceType;
+    if (this.props.resourceType.isV5()) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
+    } else if (this.props.resourceType.isV4()) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG);
+    }
     const dto = {
       ...this.state.resourceViewModel,
       resource_type_id: resourceType.id,
       totp: totp
     };
-    const resourceViewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(resourceType, dto);
     this.setState({resourceViewModel});
   }
 
@@ -786,6 +784,7 @@ CreateResource.propTypes = {
   actionFeedbackContext: PropTypes.any, // The action feedback context
   dialogContext: PropTypes.any, // The dialog context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource types collection
   t: PropTypes.func, // The translation function
   passwordPoliciesContext: PropTypes.object, // The password policy context
   workflowContext: PropTypes.any, // The workflow context
