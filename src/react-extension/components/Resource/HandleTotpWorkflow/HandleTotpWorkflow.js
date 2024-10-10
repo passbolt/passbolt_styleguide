@@ -31,6 +31,7 @@ import {
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {RESOURCE_TYPE_TOTP_SLUG} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 
 /**
  * This component handle the TOTP workflow.
@@ -255,8 +256,7 @@ export class HandleTotpWorkflow extends React.Component {
    */
   async createStandaloneOtp(resourceDto, secretDto) {
     resourceDto.folder_parent_id = this.props.folderParentId;
-    // TODO need to be adapted with v5 resource types
-    resourceDto.resource_type_id = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_TOTP_SLUG)?.id;
+    resourceDto.resource_type_id = this.props.resourceType.id;
     resourceDto.metadata.resource_type_id = resourceDto.resource_type_id;
 
     return this.props.context.port.request("passbolt.resources.create", resourceDto, secretDto);
@@ -332,6 +332,7 @@ HandleTotpWorkflow.propTypes = {
   folderParentId: PropTypes.string, // The folder parent id
   resourceWorkspaceContext: PropTypes.any, // The resource workspace context
   resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  resourceType: PropTypes.instanceOf(ResourceTypeEntity), // The resource type entity
   mode: PropTypes.oneOf([
     TotpWorkflowMode.ADD_TOTP,
     TotpWorkflowMode.EDIT_TOTP,
