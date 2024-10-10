@@ -119,6 +119,35 @@ class MetadataKeyEntity extends EntityV2 {
     }
   }
 
+  /*
+   * ==================================================
+   * Serialization
+   * ==================================================
+   */
+  /**
+   * Return a DTO ready to be sent to API
+   *
+   * @param {object} [contain] optional
+   * @returns {object}
+   */
+  toDto(contain) {
+    const result = Object.assign({}, this._props);
+    if (!contain) {
+      return result;
+    }
+    if (this._metadata_private_keys && contain.metadata_private_keys) {
+      result.metadata_private_keys = this._metadata_private_keys.toDto();
+    }
+
+    return result;
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+
   /**
    * Returns the metadataPrivateKeys collection
    * @returns {MetadataPrivateKeysCollection|null}
