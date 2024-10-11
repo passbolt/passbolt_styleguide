@@ -149,6 +149,22 @@ class MetadataKeyEntity extends EntityV2 {
    */
 
   /**
+   * Returns the armored key
+   * @returns {string}
+   */
+  get armoredKey() {
+    return this._props.armored_key;
+  }
+
+  /**
+   * Returns the id
+   * @returns {string|null}
+   */
+  get id() {
+    return this._props.id || null;
+  }
+
+  /**
    * Returns the metadataPrivateKeys collection
    * @returns {MetadataPrivateKeysCollection|null}
    */
