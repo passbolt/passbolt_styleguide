@@ -17,6 +17,8 @@ import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data
 import MetadataKeyEntity from "./metadataKeyEntity";
 import {defaultMetadataKeyDto, minimalMetadataKeyDto} from "./metadataKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
+import {v4 as uuidv4} from "uuid";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 describe("MetadataKeyEntity", () => {
   describe("::getSchema", () => {
@@ -152,6 +154,24 @@ describe("MetadataKeyEntity", () => {
 
       expect(entity1.metadataPrivateKeys).toBeNull();
       expect(entity2.metadataPrivateKeys).toStrictEqual(new MetadataPrivateKeysCollection(dto2.metadata_private_keys));
+    });
+
+    it("`id` should return the right value", () => {
+      expect.assertions(1);
+      const id = uuidv4();
+      const dto1 = minimalMetadataKeyDto({id: id});
+      const entity1 = new MetadataKeyEntity(dto1);
+
+      expect(entity1.id).toStrictEqual(id);
+    });
+
+    it("`armoredKey` should return the right value", () => {
+      expect.assertions(1);
+      const armoredKey = pgpKeys.metadataKey.public;
+      const dto1 = minimalMetadataKeyDto({armored_key: armoredKey});
+      const entity1 = new MetadataKeyEntity(dto1);
+
+      expect(entity1.armoredKey).toStrictEqual(armoredKey);
     });
   });
   describe("::dtDto", () => {
