@@ -44,13 +44,19 @@ import ConfirmCreateEdit, {
 import {ENTROPY_THRESHOLDS} from "../../../../shared/lib/SecretGenerator/SecretGeneratorComplexity";
 import EntityValidationError from "../../../../shared/models/entity/abstract/entityValidationError";
 import ResourceViewModel from "../../../../shared/models/resource/ResourceViewModel";
-import ResourcePasswordStringViewModel from "../../../../shared/models/resource/ResourcePasswordStringViewModel";
-import ResourcePasswordDescriptionViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
-import ResourcePasswordDescriptionTotpViewModel from "../../../../shared/models/resource/ResourcePasswordDescriptionTotpViewModel";
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import ResourceViewModelFactory from "../../../../shared/models/resource/ResourceViewModelFactory";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG,
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG
+} from "../../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class EditResource extends Component {
   constructor(props) {
@@ -67,9 +73,10 @@ class EditResource extends Component {
   get defaultState() {
     return {
       resourceViewModel: null,
-      originalName: null,
-      originalResourceTypeSlug: null,
-      originalSecret: null,
+      originalName: null, // The original name of the resource
+      originalResourceType: null, // The original resource type of the resource
+      originalSecret: null, // The original secret of the resource
+      ResourceType: null, // The actual resource type of the resource when editing
       errors: new EntityValidationError(), //the validation errors set
       hasAlreadyBeenValidated: false, // True if the form has already been submitted once
       isPasswordDictionaryCheckRequested: true, // Is the password check against a dictionary request.
@@ -150,37 +157,18 @@ class EditResource extends Component {
   }
 
   /**
-   * Returns the corresponding ResourceViewModel type based on the given slug.
-   * @param {string} slug
-   * @returns {typeof ResourceViewModel}
-   * @throws {Error} if the slug is unknown
-   */
-  getViewModelTypeBySlug(slug) {
-    switch (slug) {
-      case ResourcePasswordStringViewModel.resourceTypeSlug:
-        return ResourcePasswordStringViewModel;
-      case ResourcePasswordDescriptionViewModel.resourceTypeSlug:
-        return ResourcePasswordDescriptionViewModel;
-      case ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug:
-        return ResourcePasswordDescriptionTotpViewModel;
-      default:
-        throw new Error("There is no ResourceViewModel mathching the given slug");
-    }
-  }
-
-  /**
    * initialize the resource view model
    */
   initializeResourceViewModel() {
     const resourceType = this.props.resourceTypes.getFirstById(this.props.resource.resource_type_id);
-    const resourceViewModelType = this.getViewModelTypeBySlug(resourceType.slug);
 
-    const resourceViewModel = resourceViewModelType.createFromEntity(this.props.resource);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndEntityDto(resourceType, this.props.resource);
 
     this.setState({
       resourceViewModel: resourceViewModel,
       originalName: resourceViewModel.name,
-      originalResourceTypeSlug: resourceType.slug,
+      originalResourceType: resourceType,
+      resourceType: resourceType,
     }, this.initializeSecret);
   }
 
@@ -582,13 +570,18 @@ class EditResource extends Component {
    * Handle delete totp
    */
   handleDeleteTotpClick() {
-    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
+    let resourceType;
+    if (this.state.resourceType.isV5()) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.state.resourceType.isV4()) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    }
     const dto = {
       ...this.state.resourceViewModel,
       resource_type_id: resourceType.id,
     };
-    const resourceViewModel = new ResourcePasswordDescriptionViewModel(dto);
-    this.setState({resourceViewModel});
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+    this.setState({resourceViewModel, resourceType});
   }
 
   /**
@@ -596,14 +589,19 @@ class EditResource extends Component {
    * @param {object} totp
    */
   applyTotp(totp) {
-    const resourceType = this.props.resourceTypes.getFirstBySlug(ResourcePasswordDescriptionTotpViewModel.resourceTypeSlug);
+    let resourceType;
+    if (this.state.resourceType.isV5()) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_TOTP_SLUG);
+    } else if (this.state.resourceType.isV4()) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG);
+    }
     const dto = {
       ...this.state.resourceViewModel,
       resource_type_id: resourceType.id,
       totp: totp
     };
-    const resourceViewModel = new ResourcePasswordDescriptionTotpViewModel(dto);
-    this.setState({resourceViewModel});
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+    this.setState({resourceViewModel, resourceType});
   }
 
   /**
@@ -621,14 +619,14 @@ class EditResource extends Component {
    * @returns {Promise<void>}
    */
   async handleDescriptionToggle() {
-    const isOriginalResourceSlugInitialized = this.state.originalResourceTypeSlug !== null;
+    const isOriginalResourceSlugInitialized = this.state.originalResourceType !== null;
     if (!isOriginalResourceSlugInitialized) {
       //let's ensure we know the resource slug before running any checks.
       return false;
     }
 
     //only a resource of type `password-string` can toggle its description field encryption state in the edit form.
-    const isOriginalResourcePasswordString =  this.state.originalResourceTypeSlug === ResourcePasswordStringViewModel.resourceTypeSlug;
+    const isOriginalResourcePasswordString =  this.state.originalResourceType.isPasswordString();
     if (!isOriginalResourcePasswordString) {
       return false;
     }
@@ -638,19 +636,25 @@ class EditResource extends Component {
       return;
     }
 
-    const resourceViewModel = this.state.resourceViewModel;
-    const newResourceViewModelType = resourceViewModel.isDescriptionUnencrypted()
-      ? ResourcePasswordDescriptionViewModel
-      : ResourcePasswordStringViewModel;
+    // Get the resource type associated to the version
+    let resourceType;
+    if (this.state.originalResourceType.isV5()) {
+      resourceType = this.state.resourceViewModel.isDescriptionUnencrypted()
+        ? this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG)
+        : this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG);
+    } else if (this.state.originalResourceType.isV4()) {
+      resourceType = this.state.resourceViewModel.isDescriptionUnencrypted()
+        ? this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)
+        : this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_STRING_SLUG);
+    }
 
-    const resourceType = this.props.resourceTypes.getFirstBySlug(newResourceViewModelType.resourceTypeSlug);
     const dto = {
       ...this.state.resourceViewModel,
       resource_type_id: resourceType.id
     };
 
-    const newResourceViewModel = new newResourceViewModelType(dto);
-    this.setState({resourceViewModel: newResourceViewModel});
+    const newResourceViewModel = new ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
+    this.setState({resourceViewModel: newResourceViewModel, resourceType: resourceType});
   }
 
   /*
