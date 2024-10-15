@@ -12,32 +12,25 @@
  * @since         4.10.0
  */
 import {v4 as uuidv4} from "uuid";
-import {defaultArmoredPrivateKey, defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 /**
  * Returns a minimal DTO object suitable for the MetadataPrivateKeyEntity
  * @param {object} data
- * @param {object} options
- * @param {object} [options.withData = false] if true, set the data field with `defaultData()`
- * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const minimalMetadataPrivateKeyDto = (data = {}, options = {withData: false, withArmoredKey: false}) => ({
+export const minimalMetadataPrivateKeyDto = (data = {}) => ({
   user_id: uuidv4(),
-  data: options.withData ? defaultPgpMessage() : undefined,
-  armored_key: options.withArmoredKey ? defaultArmoredPrivateKey() : undefined,
+  data: pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage,
   ...data
 });
 
 /**
  * Returns a DTO object suitable for the MetadataPrivateKeyEntity
  * @param {object} data
- * @param {object} options
- * @param {object} [options.withData = false] if true, set the data field with `defaultData()`
- * @param {object} [options.withArmoredKey = false] if true, set the armored_key field with `defaultArmoredKey()`
  * @returns {object}
  */
-export const defaultMetadataPrivateKeyDto = (data = {}, options = {withData: false, withArmoredKey: false}) => minimalMetadataPrivateKeyDto({
+export const defaultMetadataPrivateKeyDto = (data = {}) => minimalMetadataPrivateKeyDto({
   id: uuidv4(),
   metadata_key_id: uuidv4(),
   modified: "2022-10-11T08:09:00+00:00",
@@ -45,4 +38,15 @@ export const defaultMetadataPrivateKeyDto = (data = {}, options = {withData: fal
   created: "2022-10-11T08:09:00+00:00",
   modified_by: uuidv4(),
   ...data,
-}, options);
+});
+
+
+/**
+ * Returns a DTO object suitable for the MetadataPrivateKeyEntity with decrypted data field
+ * @param {object} data
+ * @returns {object}
+ */
+export const decryptedMetadataPrivateKeyDto = (data = {}) => defaultMetadataPrivateKeyDto({
+  data: JSON.parse(pgpKeys.metadataKey.decryptedMetadataPrivateKeyData),
+  ...data,
+});

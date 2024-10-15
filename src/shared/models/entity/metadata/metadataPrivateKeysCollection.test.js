@@ -12,6 +12,7 @@
  * @since         4.10.0
  */
 import EntitySchema from "../abstract/entitySchema";
+import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
 import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
@@ -75,17 +76,6 @@ describe("MetadataPrivateKeysCollection", () => {
 
       expect(() => new MetadataPrivateKeysCollection({}))
         .toThrowEntityValidationError("items");
-    });
-
-    it("should throw if one of data item does not validate the collection entity schema", () => {
-      expect.assertions(1);
-
-      const dtos = defaultMetadataPrivateKeysDtos();
-      delete dtos[1].data;
-      delete dtos[1].armored_key;
-
-      expect(() => new MetadataPrivateKeysCollection(dtos))
-        .toThrowCollectionValidationError("1.data:armored_key.at-least-one-defined");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate their schema", () => {
@@ -199,9 +189,10 @@ describe("MetadataPrivateKeysCollection", () => {
       expect.assertions(1);
 
       const metadata_key_id = uuidv4();
+      const data = defaultMetadataPrivateKeyDataDto();
       const dtos = [
-        defaultMetadataPrivateKeyDto({metadata_key_id}, {withData: true}),
-        defaultMetadataPrivateKeyDto({metadata_key_id}, {withArmoredKey: true}),
+        defaultMetadataPrivateKeyDto({metadata_key_id}),
+        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
       ];
 
       const collection = new MetadataPrivateKeysCollection(dtos);
@@ -214,8 +205,8 @@ describe("MetadataPrivateKeysCollection", () => {
 
       const metadata_key_id = uuidv4();
       const dtos = [
-        defaultMetadataPrivateKeyDto({metadata_key_id}, {withData: true}),
-        defaultMetadataPrivateKeyDto({metadata_key_id}, {withData: true}),
+        defaultMetadataPrivateKeyDto({metadata_key_id}),
+        defaultMetadataPrivateKeyDto({metadata_key_id}),
       ];
       const collection = new MetadataPrivateKeysCollection(dtos);
 
