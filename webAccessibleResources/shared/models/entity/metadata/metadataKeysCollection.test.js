@@ -16,6 +16,7 @@ import MetadataKeyEntity from "./metadataKeyEntity";
 import {defaultMetadataKeyDto} from "./metadataKeyEntity.test.data";
 import MetadataKeysCollection from "./metadataKeysCollection";
 import {defaultMetadataKeysDtos, defaultMinimalMetadataKeysDtos} from "./metadataKeysCollection.test.data";
+import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
 import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
 describe("MetadataKeysCollection", () => {
@@ -210,7 +211,8 @@ describe("MetadataKeysCollection", () => {
       expect.assertions(1);
 
       const metadataKeyDto = defaultMetadataKeyDto();
-      metadataKeyDto.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id}, {withArmoredKey: true})];
+      const keyData = defaultMetadataPrivateKeyDataDto();
+      metadataKeyDto.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id, data: keyData})];
       const dtos = [metadataKeyDto];
       const collection = new MetadataKeysCollection(dtos);
 

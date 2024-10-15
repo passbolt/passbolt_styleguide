@@ -14,9 +14,11 @@
 import MetadataPrivateKeyEntity from "./metadataPrivateKeyEntity";
 import EntitySchema from "passbolt-styleguide/src/shared/models/entity/abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
-import {defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {decryptedMetadataPrivateKeyDto, defaultMetadataPrivateKeyDto, minimalMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import EntityValidationError from "../abstract/entityValidationError";
-import {defaultArmoredPrivateKey, defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
+import {defaultPgpMessage} from "../../../../../test/assert/assertEntityProperty.test.data";
+import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
+import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
 
 describe("MetadataPrivateKeyEntity", () => {
   describe("::getSchema", () => {
@@ -42,17 +44,55 @@ describe("MetadataPrivateKeyEntity", () => {
     });
 
     it("validates data property", () => {
-      assertEntityProperty.string(MetadataPrivateKeyEntity, "data");
-      assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "data");
-      assertEntityProperty.maxLength(MetadataPrivateKeyEntity, "data", 10_000);
-      assertEntityProperty.armoredPgpMessage(MetadataPrivateKeyEntity, "data");
-    });
+      assertEntityProperty.required(MetadataPrivateKeyEntity, "data");
 
-    it("validates armored_key property", () => {
-      assertEntityProperty.string(MetadataPrivateKeyEntity, "armored_key");
-      assertEntityProperty.notRequired(MetadataPrivateKeyEntity, "armored_key");
-      assertEntityProperty.maxLength(MetadataPrivateKeyEntity, "armored_key", 10_000);
-      assertEntityProperty.armoredPrivateKey(MetadataPrivateKeyEntity, "armored_key");
+      const dataStringSuccessScenarios = [
+        {scenario: "PGP Message with comments in the header", value: defaultPgpMessage({withCrc: true, withComments: true})},
+        {scenario: "PGP Message without comments in the header", value: defaultPgpMessage({withCrc: true, withComments: false})},
+        {scenario: "PGP Message with comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: true, withDuplicates: true})},
+        {scenario: "PGP Message without comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: false, withDuplicates: true})},
+      ];
+      for (let i = 0; i < dataStringSuccessScenarios.length; i++) {
+        const scenario = dataStringSuccessScenarios[i];
+        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+
+        expect(() => new MetadataPrivateKeyEntity(dto)).not.toThrow();
+      }
+
+      const dataStringFailScenarios = [
+        {scenario: "PGP Message without CRC", value: defaultPgpMessage({withCrc: false})},
+        {scenario: "PGP Message without CRC and multiple blocks", value: defaultPgpMessage({withCrc: false, withDuplicates: true})},
+        {scenario: "PGP Message with wrong extra characters", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true})},
+        {scenario: "PGP Message with wrong extra characters and multiple blocks", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+      ];
+      for (let i = 0; i < dataStringFailScenarios.length; i++) {
+        const scenario = dataStringFailScenarios[i];
+        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+
+        expect(() => new MetadataPrivateKeyEntity(dto)).toThrow(EntityValidationError);
+      }
+
+      const dataObjectSuccessScenarios = [
+        {scenario: "valid entity dto", value: defaultMetadataPrivateKeyDataDto()},
+      ];
+      for (let i = 0; i < dataObjectSuccessScenarios.length; i++) {
+        const scenario = dataObjectSuccessScenarios[i];
+        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+
+        expect(() => new MetadataPrivateKeyEntity(dto)).not.toThrow();
+      }
+
+      const dataObjectFailScenarios = [
+        {scenario: "invalid entity object", value: {}},
+        {scenario: "integer", value: 42},
+        {scenario: "boolean", value: false},
+      ];
+      for (let i = 0; i < dataObjectFailScenarios.length; i++) {
+        const scenario = dataObjectFailScenarios[i];
+        const dto = defaultMetadataPrivateKeyDto({data: scenario.value});
+
+        expect(() => new MetadataPrivateKeyEntity(dto)).toThrow(EntityValidationError);
+      }
     });
 
     it("validates created property", () => {
@@ -80,15 +120,14 @@ describe("MetadataPrivateKeyEntity", () => {
 
   describe("::constructor", () => {
     it("constructor works if valid minimal DTO is provided", () => {
-      expect.assertions(9);
-      const dto = minimalMetadataPrivateKeyDto({}, {withData: true});
+      expect.assertions(8);
+      const dto = minimalMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
       expect(entity._props.id).toBeUndefined();
       expect(entity._props.metadata_key_id).toBeUndefined();
       expect(entity._props.user_id).toStrictEqual(dto.user_id);
       expect(entity._props.data).toStrictEqual(dto.data);
-      expect(entity._props.armored_key).toBeUndefined();
       expect(entity._props.created).toBeUndefined();
       expect(entity._props.created_by).toBeUndefined();
       expect(entity._props.modified).toBeUndefined();
@@ -96,15 +135,14 @@ describe("MetadataPrivateKeyEntity", () => {
     });
 
     it("constructor works if valid DTO is provided: with data", () => {
-      expect.assertions(9);
-      const dto = defaultMetadataPrivateKeyDto({}, {withData: true});
+      expect.assertions(8);
+      const dto = defaultMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
       expect(entity._props.id).toStrictEqual(dto.id);
       expect(entity._props.metadata_key_id).toStrictEqual(dto.metadata_key_id);
       expect(entity._props.user_id).toStrictEqual(dto.user_id);
       expect(entity._props.data).toStrictEqual(dto.data);
-      expect(entity._props.armored_key).toBeUndefined();
       expect(entity._props.created).toStrictEqual(dto.created);
       expect(entity._props.created_by).toStrictEqual(dto.created_by);
       expect(entity._props.modified).toStrictEqual(dto.modified);
@@ -112,132 +150,152 @@ describe("MetadataPrivateKeyEntity", () => {
     });
 
     it("constructor works if valid DTO is provided: with armored_key", () => {
-      expect.assertions(9);
-      const dto = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      expect.assertions(8);
+      const dto = defaultMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
       expect(entity._props.id).toStrictEqual(dto.id);
       expect(entity._props.metadata_key_id).toStrictEqual(dto.metadata_key_id);
       expect(entity._props.user_id).toStrictEqual(dto.user_id);
-      expect(entity._props.data).toBeUndefined();
-      expect(entity._props.armored_key).toStrictEqual(dto.armored_key);
+      expect(entity._props.data).toStrictEqual(dto.data);
       expect(entity._props.created).toStrictEqual(dto.created);
       expect(entity._props.created_by).toStrictEqual(dto.created_by);
       expect(entity._props.modified).toStrictEqual(dto.modified);
       expect(entity._props.modified_by).toStrictEqual(dto.modified_by);
     });
 
-    it("constructor fails if no data and no armored_key is given", () => {
+    it("constructor fails if both data and the decrypted data (_data) are given", () => {
       expect.assertions(1);
-      const dto = defaultMetadataPrivateKeyDto();
-      delete dto.data;
-      delete dto.armored_key;
+      const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
+      entity._data = defaultMetadataPrivateKeyDataDto();
 
-      expect(() => new MetadataPrivateKeyEntity(dto)).toThrowEntityValidationError("data:armored_key", "at-least-one-defined");
-    });
-
-    it("constructor fails if both data and armored_key are given", () => {
-      expect.assertions(1);
-      const dto = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true, withData: true});
-
-      expect(() => new MetadataPrivateKeyEntity(dto)).toThrowEntityValidationError("data:armored_key", "only-one-defined");
+      expect(() => entity.validateBuildRules()).toThrowEntityValidationError("data", "only-one-defined");
     });
   });
 
   describe("::getters", () => {
     it("`metadataKeyId` should return the right value", () => {
       expect.assertions(2);
-      const dto1 = minimalMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      const dto1 = minimalMetadataPrivateKeyDto();
       const entity1 = new MetadataPrivateKeyEntity(dto1);
 
-      const dto2 = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      const dto2 = defaultMetadataPrivateKeyDto();
       const entity2 = new MetadataPrivateKeyEntity(dto2);
 
       expect(entity1.metadataKeyId).toBeNull();
       expect(entity2.metadataKeyId).toStrictEqual(dto2.metadata_key_id);
     });
 
-    it("`data` should return the right value", () => {
-      expect.assertions(2);
-      const dto = defaultMetadataPrivateKeyDto({}, {withData: true});
+    it("`data` should return the right value: with string", () => {
+      expect.assertions(1);
+      const dto = defaultMetadataPrivateKeyDto();
       const entity = new MetadataPrivateKeyEntity(dto);
 
       expect(entity.data).toStrictEqual(dto.data);
-      expect(entity.armoredKey).toBeNull();
     });
 
-    it("`armoredKey` should return the right value", () => {
+    it("`data` should return the right value: with a MetadataPrivateKeyDataEntity", () => {
       expect.assertions(2);
-      const dto = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
+      const dto = defaultMetadataPrivateKeyDto({
+        data: defaultMetadataPrivateKeyDataDto()
+      });
       const entity = new MetadataPrivateKeyEntity(dto);
 
-      expect(entity.data).toBeNull();
-      expect(entity.armoredKey).toStrictEqual(dto.armored_key);
-    });
-
-    it("`data` should return the right value", () => {
-      expect.assertions(2);
-      const dto = defaultMetadataPrivateKeyDto({}, {withData: true});
-      const entity = new MetadataPrivateKeyEntity(dto);
-
-      expect(entity.data).toStrictEqual(dto.data);
-      expect(entity.armoredKey).toBeNull();
+      expect(entity.data).toBeInstanceOf(MetadataPrivateKeyDataEntity);
+      expect(entity.data.toDto()).toStrictEqual(dto.data);
     });
   });
 
   describe("::setters", () => {
-    describe("::armoredKey", () => {
-      it("`armoredKey` should set the value and erase `data`", () => {
-        expect.assertions(4);
-        const dto = defaultMetadataPrivateKeyDto({}, {withData: true});
+    describe("::data", () => {
+      it("`data` could be set with a string", () => {
+        expect.assertions(6);
+        const dto = defaultMetadataPrivateKeyDto();
         const entity = new MetadataPrivateKeyEntity(dto);
 
         expect(entity.data).toStrictEqual(dto.data);
-        expect(entity.armoredKey).toBeNull();
+        expect(entity._data).toBeUndefined();
 
-        const armoredKey = defaultArmoredPrivateKey();
-        entity.armoredKey = armoredKey;
+        entity.data = new MetadataPrivateKeyDataEntity(defaultMetadataPrivateKeyDataDto());
+        expect(entity._data).toBeInstanceOf(MetadataPrivateKeyDataEntity);
+        expect(entity._props.data).toBeUndefined();
 
-        expect(entity.armoredKey).toStrictEqual(armoredKey);
-        expect(entity.data).toBeNull();
+        const pgpMessage = defaultPgpMessage();
+        entity.data = pgpMessage;
+        expect(entity._props.data).toStrictEqual(pgpMessage);
+        expect(entity._data).toBeUndefined();
       });
 
-      it("should validate `armoredKey` propery", () => {
+      it("`data` should assert the parameter", () => {
         expect.assertions(1);
-        const dto = defaultMetadataPrivateKeyDto({}, {withData: true});
-        const entity = new MetadataPrivateKeyEntity(dto);
+        const entity = new MetadataPrivateKeyEntity(defaultMetadataPrivateKeyDto());
 
-        const expectedError = new EntityValidationError("Could not validate property armored_key.");
-
-        expect(() => { entity.armoredKey = "Wrong value in there!"; }).toThrowError(expectedError);
+        expect(() => { entity.data = "test"; }).toThrow(EntityValidationError);
       });
     });
+  });
 
-    describe("::data", () => {
-      it("`data` should set the value and erase `armorkedKey`", () => {
-        expect.assertions(4);
-        const dto = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
-        const entity = new MetadataPrivateKeyEntity(dto);
+  describe("::isDecrypted", () => {
+    it("should return true if the data is decrypted", () => {
+      expect.assertions(1);
 
-        expect(entity.data).toBeNull();
-        expect(entity.armoredKey).toStrictEqual(dto.armored_key);
+      const dto = decryptedMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
 
-        const data = defaultPgpMessage();
-        entity.data = data;
+      expect(entity.isDecrypted).toStrictEqual(true);
+    });
 
-        expect(entity.data).toStrictEqual(data);
-        expect(entity.armoredKey).toBeNull();
-      });
+    it("should return false if the data is encrypted", () => {
+      expect.assertions(1);
 
-      it("should validate `data` propery", () => {
-        expect.assertions(1);
-        const dto = defaultMetadataPrivateKeyDto({}, {withArmoredKey: true});
-        const entity = new MetadataPrivateKeyEntity(dto);
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
 
-        const expectedError = new EntityValidationError("Could not validate property data.");
+      expect(entity.isDecrypted).toStrictEqual(false);
+    });
+  });
 
-        expect(() => { entity.data = "Wrong value in there!"; }).toThrowError(expectedError);
-      });
+  describe("::toDto", () => {
+    it("should export all fields from props: with data encrypted", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      expect(entity.toDto()).toStrictEqual(dto);
+    });
+
+    it("should export all fields from props: with data decrypted", () => {
+      expect.assertions(1);
+
+      const dto = decryptedMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      expect(entity.toDto()).toStrictEqual(dto);
+    });
+  });
+
+  describe("::toJSON", () => {
+    it("should export all fields from props: with data encrypted", () => {
+      expect.assertions(1);
+
+      const dto = defaultMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      const parsedData = JSON.parse(JSON.stringify(entity));
+
+      expect(parsedData).toStrictEqual(dto);
+    });
+
+    it("should export all fields from props: with data decrypted", () => {
+      expect.assertions(1);
+
+      const dto = decryptedMetadataPrivateKeyDto();
+      const entity = new MetadataPrivateKeyEntity(dto);
+
+      const parsedData = JSON.parse(JSON.stringify(entity));
+
+      expect(parsedData).toStrictEqual(dto);
     });
   });
 });

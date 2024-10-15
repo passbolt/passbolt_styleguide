@@ -81,7 +81,7 @@ describe("MetadataKeyEntity", () => {
     it("validates metadata_private_keys property", () => {
       const metadataKeyDto = defaultMetadataKeyDto();
       const successScenarios = [
-        {scenario: "a valid option", value: [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id}, {withData: true})]},
+        {scenario: "a valid option", value: [defaultMetadataPrivateKeyDto({metadata_key_id: metadataKeyDto.id})]},
       ];
       const failScenarios = [
         {scenario: "with invalid metadata private key build rule", value: defaultMetadataPrivateKeyDto()},
@@ -126,7 +126,7 @@ describe("MetadataKeyEntity", () => {
 
     it("constructor throw an error if the id and the private metadata key ids are different", () => {
       expect.assertions(1);
-      const dto = defaultMetadataKeyDto({metadata_private_keys: [defaultMetadataPrivateKeyDto({}, {withData: true})]});
+      const dto = defaultMetadataKeyDto({metadata_private_keys: [defaultMetadataPrivateKeyDto()]});
       expect(() => new MetadataKeyEntity(dto)).toThrowEntityValidationError("id:metadata_private_keys", "same_id");
     });
   });
@@ -134,10 +134,10 @@ describe("MetadataKeyEntity", () => {
   describe("::getters", () => {
     it("`created` should return the right value", () => {
       expect.assertions(2);
-      const dto1 = minimalMetadataKeyDto({}, {withArmoredKey: true});
+      const dto1 = minimalMetadataKeyDto();
       const entity1 = new MetadataKeyEntity(dto1);
 
-      const dto2 = defaultMetadataKeyDto({created: "2024-10-05T12:10:00+00:00"}, {withArmoredKey: true});
+      const dto2 = defaultMetadataKeyDto({created: "2024-10-05T12:10:00+00:00"});
       const entity2 = new MetadataKeyEntity(dto2);
 
       expect(entity1.created).toBeNull();
@@ -176,15 +176,11 @@ describe("MetadataKeyEntity", () => {
   });
   describe("::dtDto", () => {
     it("minimal to dto", () => {
-      expect.assertions(6);
+      expect.assertions(5);
       // minimal set with the data property
-      const dto1 = minimalMetadataKeyDto({}, {withData: true});
+      const dto1 = minimalMetadataKeyDto({});
       const entity1 = new MetadataKeyEntity(dto1);
       expect(entity1.toDto()).toEqual(dto1);
-      // minimal set with the armoredKey property
-      const dto2 = minimalMetadataKeyDto({}, {withArmoredKey: true});
-      const entity2 = new MetadataKeyEntity(dto2);
-      expect(entity2.toDto()).toEqual(dto2);
       // all properties but no association
       const dto3 = defaultMetadataKeyDto();
       const entity3 = new MetadataKeyEntity(dto3);

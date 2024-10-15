@@ -14,10 +14,24 @@
 import EntitySchema from "../abstract/entitySchema";
 import EntityV2 from "../abstract/entityV2";
 import EntityValidationError from "../abstract/entityValidationError";
+import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
 
 const PGP_STRING_MAX_LENGTH = 10_000;
 
 class MetadataPrivateKeyEntity extends EntityV2 {
+  /**
+   * @constructor
+   * @param {object} dto
+   */
+  constructor(dto, options) {
+    super(dto);
+
+    if (this._props.data && typeof this._props.data !== 'string') {
+      this._data = new MetadataPrivateKeyDataEntity(this._props.data, {...options, clone: false});
+      delete this._props.data;
+    }
+  }
+
   /**
    * Get metadata private key entity schema
    * @returns {Object} schema
@@ -27,6 +41,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
       "type": "object",
       "required": [
         "user_id",
+        "data",
       ],
       "properties": {
         "id": {
@@ -44,16 +59,13 @@ class MetadataPrivateKeyEntity extends EntityV2 {
           "format": "uuid",
         },
         "data": {
-          "type": "string",
-          "nullable": true,
-          "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m,
-        },
-        "armored_key": {
-          "type": "string",
-          "nullable": true,
-          "maxLength": PGP_STRING_MAX_LENGTH,
-          "pattern": /^-----BEGIN PGP PRIVATE KEY BLOCK-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP PRIVATE KEY BLOCK-----$/m,
+          "anyOf": [{
+            "type": "string",
+            "maxLength": PGP_STRING_MAX_LENGTH,
+            "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m,
+          }, {
+            "type": "object",
+          }],
         },
         "created": {
           "type": "string",
@@ -77,30 +89,37 @@ class MetadataPrivateKeyEntity extends EntityV2 {
 
   /**
    * @inheritDoc
-   * @throws {EntityValidationError} if both `data` and `armoredKey` are defined or if none is defined.
    */
   validateBuildRules() {
-    this.assertNoConflictBetweenDataAndArmoredKey();
+    if (Boolean(this._props.data) && Boolean(this._data)) {
+      const error = new EntityValidationError();
+      const message = "The property data and _data cannot be set at the same time";
+      error.addError("data", "only-one-defined", message);
+      throw error;
+    }
   }
 
   /**
-   * Asserts that only one of `data` and `armoredKey` is defined
-   * @throws {EntityValidationError} if both `data` and `armoredKey` are defined or if none is defined.
+   * Customizes JSON stringification behavior
+   * @returns {object}
    */
-  assertNoConflictBetweenDataAndArmoredKey() {
-    const isDataDefined = Boolean(this._props.data);
-    const isArmoredKeyDefined = Boolean(this._props.armored_key);
-    if (isDataDefined && isArmoredKeyDefined) {
-      const error = new EntityValidationError();
-      error.addError("data:armored_key", 'only-one-defined', '`data` and `armored_key` cannot be both defined at the same time');
-      throw error;
-    }
+  toDto() {
+    const result = Object.assign({}, this._props);
 
-    if (!isDataDefined && !isArmoredKeyDefined) {
-      const error = new EntityValidationError();
-      error.addError("data:armored_key", 'at-least-one-defined', '`data` and `armored_key` cannot be both undefined at the same time');
-      throw error;
-    }
+    const data = this.data;
+    result.data = data instanceof MetadataPrivateKeyDataEntity
+      ? data.toDto()
+      : data;
+
+    return result;
+  }
+
+  /**
+   * Customizes JSON stringification behavior
+   * @returns {object}
+   */
+  toJSON() {
+    return this.toDto();
   }
 
   /*
@@ -109,19 +128,13 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * ==================================================
    */
   /**
-   * Get the key in its armored format if it has been decrypted from the data.
-   * @returns {string|null}
-   */
-  get armoredKey() {
-    return this._props.armored_key || null;
-  }
-
-  /**
    * Get the raw data unencrypted if it hasn't been decrypted already.
-   * @returns {string|null}
+   * @returns {string}
    */
   get data() {
-    return this._props.data || null;
+    return this.isDecrypted
+      ? this._data
+      : this._props.data;
   }
 
   /**
@@ -133,27 +146,21 @@ class MetadataPrivateKeyEntity extends EntityV2 {
   }
 
   /**
-   * Set the key in its armored format.
-   * The key should be the result of the decrypted data.
-   * @param {string} armoredKey
-   * @throws {EntityValidationError} if the `armoredKey` is not valid
-   */
-  set armoredKey(armoredKey) {
-    EntitySchema.validateProp("armored_key", armoredKey, this.cachedSchema.properties.armored_key);
-    this._props.armored_key = armoredKey;
-    delete this._props.data;
-  }
-
-  /**
    * Set the data.
-   * The data should be the key encrypted.
-   * @param {string} armoredKey
+   * The data should be a MetadataPrivateKeyData or a string containing an encrypted MetadataPrivateKeyData.
+   * @param {string|MetadataPrivateKeyDataEntity} data
    * @throws {EntityValidationError} if the `data` is not valid
    */
   set data(data) {
     EntitySchema.validateProp("data", data, this.cachedSchema.properties.data);
-    this._props.data = data;
-    delete this._props.armored_key;
+
+    if (typeof data === "string") {
+      this._props.data = data;
+      delete this._data;
+    } else {
+      this._data = new MetadataPrivateKeyDataEntity(data.toDto(), {clone: true, validate: false});
+      delete this._props.data;
+    }
   }
 
   /**
@@ -161,7 +168,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
    * @returns {boolean}
    */
   get isDecrypted() {
-    return Boolean(this._props.armored_key);
+    return Boolean(this._data);
   }
 }
 

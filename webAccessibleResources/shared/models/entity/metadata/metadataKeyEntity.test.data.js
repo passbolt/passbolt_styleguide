@@ -30,7 +30,7 @@ export const minimalMetadataKeyDto = (data = {}, options = {}) => {
   };
 
   if (!defaultData.metadata_private_keys && options?.withMetadataPrivateKeys) {
-    defaultData.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: defaultData.id}, {withData: true})];
+    defaultData.metadata_private_keys = [defaultMetadataPrivateKeyDto({metadata_key_id: defaultData.id})];
   }
 
   return defaultData;
