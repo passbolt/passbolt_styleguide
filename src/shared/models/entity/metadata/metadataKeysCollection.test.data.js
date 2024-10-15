@@ -11,10 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         4.10.0
  */
-import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 import {defaultMetadataKeyDto, minimalMetadataKeyDto} from "./metadataKeyEntity.test.data";
-import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 import {v4 as uuidv4} from "uuid";
+import {decryptedMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
 export const defaultMetadataKeysDtos = (count = 2, data = {}) => {
   const dtos = [];
@@ -29,9 +28,8 @@ export const defaultMetadataKeysDtos = (count = 2, data = {}) => {
 
 export const defaultDecryptedSharedMetadataKeysDtos = (data = {}, options = {}) => {
   const id = uuidv4();
-  const sharedMetadataPrivateKey = defaultMetadataPrivateKeyDto({
+  const sharedMetadataPrivateKey = decryptedMetadataPrivateKeyDto({
     metadata_key_id: id,
-    armored_key: pgpKeys.metadataKey.private_decrypted,
   });
 
   return [

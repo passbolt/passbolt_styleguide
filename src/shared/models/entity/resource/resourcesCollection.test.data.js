@@ -98,7 +98,7 @@ export const defaultSharedResourcesWithEncryptedMetadataDtos = (count = 10, data
       ...data,
       metadata_key_id: metadata_key_id,
       metadata: encryptedMetadata,
-      metadata_key_type: "metadata_key"
+      metadata_key_type: "shared_key"
     };
     const dto = defaultResourceDto(defaultData, options);
     dtos.push(dto);
