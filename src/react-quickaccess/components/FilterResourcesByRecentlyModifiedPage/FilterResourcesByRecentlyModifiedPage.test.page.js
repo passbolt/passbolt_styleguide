@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.9.4
+ * @since         4.10.0
  */
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
@@ -18,12 +18,12 @@ import {Router} from "react-router-dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import {createMemoryHistory} from "history";
-import FilterResourcesByGroupPage from "./FilterResourcesByGroupPage";
+import FilterResourcesByRecentlyModifiedPage from "./FilterResourcesByRecentlyModifiedPage";
 
 /**
- * The FilterResourcesByItemsIOwnPage component represented as a page
+ * The FilterResourcesByRecentlyModifiedPage component represented as a page
  */
-export default class FilterResourcesByGroupPagePage {
+export default class FilterResourcesByRecentlyModifiedPagePage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -32,43 +32,18 @@ export default class FilterResourcesByGroupPagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <FilterResourcesByGroupPage {...props}/>
+          <FilterResourcesByRecentlyModifiedPage {...props}/>
         </Router>
       </MockTranslationProvider>
     );
   }
 
   /**
-   * Returns true if the page object exists in the container
-   * @returns {boolean}
-   */
-  isReady() {
-    return this.processingText === null;
-  }
-
-  /**
-   * Returns the displayed groups if any
-   * @returns {NodeListOf<HTLMElement>}
-   */
-  get groups() {
-    return this._page.container.querySelectorAll(".list-items .filter-entry");
-  }
-
-  /**
-   * Returns the displayed groups if any
+   * Returns the displayed resources if any
    * @returns {NodeListOf<HTLMElement>}
    */
   get resources() {
     return this._page.container.querySelectorAll(".list-items .browse-resource-entry");
-  }
-
-  /**
-   * Returns a group by its index if any
-   * @param {number} index
-   * @returns {HTLMElement|null}
-   */
-  getGroup(index) {
-    return this.groups[index] ?? null;
   }
 
   /**
@@ -96,10 +71,6 @@ export default class FilterResourcesByGroupPagePage {
     return this._page.container.querySelector('.submit-wrapper #popupAction');
   }
 
-  get processingText() {
-    return this._page.container.querySelector(".processing-text");
-  }
-
   /**
    * Returns the main message currently displayed
    * @returns {string|null}
@@ -114,16 +85,6 @@ export default class FilterResourcesByGroupPagePage {
    */
   async clickOnResource(index) {
     const element = this.getResource(index)?.querySelector(".inline-resource-entry");
-    fireEvent.click(element, {button: 0});
-    await waitFor(() => {});
-  }
-
-  /**
-   * Simulates a click on the nth group given by the index
-   * @returns {Promise<void>}
-   */
-  async clickOnGroup(index) {
-    const element = this.getGroup(index)?.querySelector(".filter");
     fireEvent.click(element, {button: 0});
     await waitFor(() => {});
   }

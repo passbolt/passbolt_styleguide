@@ -5,13 +5,25 @@ import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 
 class FilterResourcesByRecentlyModifiedPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = this.initState();
     this.initEventHandlers();
   }
 
@@ -20,18 +32,11 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
     if (this.props.context.searchHistory[this.props.location.pathname]) {
       this.props.context.updateSearch(this.props.context.searchHistory[this.props.location.pathname]);
     }
-    this.findAndLoadResources();
   }
 
   initEventHandlers() {
     this.handleGoBackClick = this.handleGoBackClick.bind(this);
     this.handleSelectResourceClick = this.handleSelectResourceClick.bind(this);
-  }
-
-  initState() {
-    return {
-      resources: null
-    };
   }
 
   /**
@@ -71,8 +76,12 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
     }
   }
 
-  sortResourcesByModifiedDesc(resources) {
-    resources.sort((resource1, resource2) => new Date(resource2.modified) - new Date(resource1.modified));
+  /**
+   * Sort resources by recently modified
+   * @returns {Array}
+   */
+  sortResourcesByModifiedDesc() {
+    return this.props.resources.sort((resource1, resource2) => new Date(resource2.modified) - new Date(resource1.modified));
   }
 
   /**
@@ -80,7 +89,7 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
    * @return {array} The list of resources.
    */
   getBrowsedResources() {
-    let resources = this.state.resources;
+    let resources = this.sortResourcesByModifiedDesc();
 
     if (this.props.context.search.length) {
       /*
@@ -94,7 +103,29 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
   }
 
   isReady() {
-    return this.state.resources != null;
+    return this.props.resources != null;
+  }
+
+  /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
   }
 
   render() {
@@ -161,11 +192,13 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
             }
           </ul>
         </div>
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper">
           <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
+        }
       </div>
     );
   }
@@ -173,6 +206,9 @@ class FilterResourcesByRecentlyModifiedPage extends React.Component {
 
 FilterResourcesByRecentlyModifiedPage.propTypes = {
   context: PropTypes.any, // The application context
+  resources: PropTypes.array, // the available resources
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -180,4 +216,4 @@ FilterResourcesByRecentlyModifiedPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withTranslation('common')(FilterResourcesByRecentlyModifiedPage)));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(FilterResourcesByRecentlyModifiedPage))))));

@@ -20,6 +20,10 @@ import {defaultResourceDto} from "../../../shared/models/entity/resource/resourc
 import {defaultResourceLocalStorageContext} from "../../contexts/ResourceLocalStorageContext.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 /**
  * Default component props.
@@ -32,6 +36,7 @@ export function defaultProps(data = {}) {
     rbacContext: defaultAdministratorRbacContext(),
     resourcesLocalStorageContext: defaultResourceLocalStorageContext(),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     resources: null,
     getOpenerTabId: () => 1,
     ...data

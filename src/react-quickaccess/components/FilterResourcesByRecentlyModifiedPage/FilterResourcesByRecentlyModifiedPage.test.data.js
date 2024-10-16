@@ -1,18 +1,18 @@
 /**
  * Passbolt ~ Open source password manager for teams
- * Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
  *
  * Licensed under GNU Affero General Public License version 3 of the or any later version.
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) 2022 Passbolt SA (https://www.passbolt.com)
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         3.7.4
+ * @since         4.10.0
  */
-import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
@@ -26,20 +26,20 @@ import {
  * @return {Object}
  */
 export const defaultProps = (data = {}) => ({
-  context: defaultAppContext(data.context),
+  context: defaultAppContext(),
   resources: null,
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
-  ...data,
+  ...data
 });
 
 /**
- * No resources props.
+ * No filtered resources props.
  * @param props
  * @return {Object}
  */
-export const noResourcesProps = (data = {}) => ({
-  context: defaultAppContext(data.context),
+export const noFilteredResourcesProps = (data = {}) => ({
+  context: defaultAppContext(),
   resources: [],
   resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
@@ -75,3 +75,4 @@ export const withFilteredResourcesProps = (data = {}) => ({
   metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data,
 });
+

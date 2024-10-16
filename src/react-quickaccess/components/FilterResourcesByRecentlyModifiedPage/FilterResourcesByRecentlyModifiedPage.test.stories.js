@@ -16,8 +16,12 @@ import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import PropTypes from "prop-types";
 import FilterResourcesByRecentlyModifiedPage from "./FilterResourcesByRecentlyModifiedPage";
-import {defaultProps, noResourcesProps, suggestedResourcesProps} from "../HomePage/HomePage.test.data";
 import AppContext from "../../../shared/context/AppContext/AppContext";
+import {
+  defaultProps,
+  noFilteredResourcesProps,
+  withFilteredResourcesProps
+} from "./FilterResourcesByRecentlyModifiedPage.test.data";
 
 export default {
   title: 'Components/QuickAccess/FilterResourcesByRecentlyModified',
@@ -44,9 +48,9 @@ InitialLoad.args = defaultProps();
 InitialLoad.parameters = parameters;
 
 export const NoRecentlyModifiedResource = Template.bind({});
-NoRecentlyModifiedResource.args = noResourcesProps();
+NoRecentlyModifiedResource.args = noFilteredResourcesProps();
 NoRecentlyModifiedResource.parameters = parameters;
 
 export const RecentlyModifiedResources = Template.bind({});
-RecentlyModifiedResources.args = suggestedResourcesProps();
+RecentlyModifiedResources.args = withFilteredResourcesProps();
 RecentlyModifiedResources.parameters = parameters;

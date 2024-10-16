@@ -73,6 +73,14 @@ export default class FilterResourcesByTagPagePage {
   }
 
   /**
+   * Returns the create button
+   * @returns {HTMLElement}
+   */
+  get createButton() {
+    return this._page.container.querySelector('.submit-wrapper #popupAction');
+  }
+
+  /**
    * Returns the back button element
    * @returns {HTLMElement}
    */

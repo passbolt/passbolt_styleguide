@@ -14,6 +14,12 @@
 
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 /**
  * Default component props
  * @param props
@@ -24,6 +30,8 @@ export const defaultProps = (data = {}) => ({
   resources: [
     defaultResourceDto({}, {withTags: true})
   ],
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data
 });
 
@@ -35,6 +43,8 @@ export const defaultProps = (data = {}) => ({
 export const noResourcesProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: null,
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data
 });
 
@@ -46,6 +56,8 @@ export const noResourcesProps = (data = {}) => ({
 export const noTagsProps = (data = {}) => ({
   context: defaultAppContext(data.context),
   resources: [],
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data
 });
 
@@ -77,6 +89,8 @@ export const withFilteredResourcesProps = (data = {}) => {
   return {
     context: defaultAppContext(data.context),
     resources: [resource1, resource2],
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     ...data
   };
 };
