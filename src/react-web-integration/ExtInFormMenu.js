@@ -18,6 +18,12 @@ import AppContext from "./contexts/AppContext";
 import DisplayInFormMenu from "./components/DisplayInFormMenu/DisplayInFormMenu";
 import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
 import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {
+  ResourceTypesLocalStorageContextProvider
+} from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {
+  MetadataTypesSettingsLocalStorageContextProvider
+} from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 
 /**
  * Entry point of the in-form menu
@@ -55,11 +61,15 @@ class ExtInForm extends React.Component {
     return (
       <AppContext.Provider value={this.state}>
         <TranslationProvider loadingPath="/webAccessibleResources/locales/{{lng}}/{{ns}}.json" locale={this.state.locale}>
-          <PasswordPoliciesContext>
-            <div className="web-integration">
-              <DisplayInFormMenu/>
-            </div>
-          </PasswordPoliciesContext>
+          <ResourceTypesLocalStorageContextProvider>
+            <MetadataTypesSettingsLocalStorageContextProvider>
+              <PasswordPoliciesContext>
+                <div className="web-integration">
+                  <DisplayInFormMenu/>
+                </div>
+              </PasswordPoliciesContext>
+            </MetadataTypesSettingsLocalStorageContextProvider>
+          </ResourceTypesLocalStorageContextProvider>
         </TranslationProvider>
       </AppContext.Provider>
     );
