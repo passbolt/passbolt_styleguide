@@ -88,6 +88,14 @@ export default class FilterResourcesByGroupPagePage {
     return this._page.container.querySelector(".back-link a");
   }
 
+  /**
+   * Returns the create button
+   * @returns {HTMLElement}
+   */
+  get createButton() {
+    return this._page.container.querySelector('.submit-wrapper #popupAction');
+  }
+
   get processingText() {
     return this._page.container.querySelector(".processing-text");
   }

@@ -15,9 +15,14 @@ import EntitySchema from "../abstract/entitySchema";
 import MetadataKeyEntity from "./metadataKeyEntity";
 import {defaultMetadataKeyDto} from "./metadataKeyEntity.test.data";
 import MetadataKeysCollection from "./metadataKeysCollection";
-import {defaultMetadataKeysDtos, defaultMinimalMetadataKeysDtos} from "./metadataKeysCollection.test.data";
+import {
+  defaultDecryptedSharedMetadataKeysDtos,
+  defaultMetadataKeysDtos,
+  defaultMinimalMetadataKeysDtos
+} from "./metadataKeysCollection.test.data";
 import {defaultMetadataPrivateKeyDataDto} from "./metadataPrivateKeyDataEntity.test.data";
 import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 describe("MetadataKeysCollection", () => {
   describe("::getSchema", () => {
@@ -225,6 +230,38 @@ describe("MetadataKeysCollection", () => {
       const collection = new MetadataKeysCollection(defaultMetadataKeysDtos({}, {withMetadataPrivateKeys: true}));
 
       expect(collection.hasDecryptedKeys()).toStrictEqual(false);
+    });
+  });
+
+  describe("::hasEncryptedKeys", () => {
+    it("should return false if the collection has not metadata private keys", () => {
+      expect.assertions(1);
+
+      const dtos = [
+        defaultMetadataKeyDto(),
+      ];
+      const collection = new MetadataKeysCollection(dtos);
+
+      expect(collection.hasEncryptedKeys()).toStrictEqual(false);
+    });
+
+    it("should return false if none of the items has an encrypted metadata private key", () => {
+      expect.assertions(1);
+
+      const dtos = defaultMetadataKeysDtos();
+      const collection = new MetadataKeysCollection(dtos);
+
+      expect(collection.hasEncryptedKeys()).toStrictEqual(false);
+    });
+
+    it("should return true if one of the items has an encrypted metadata private key", () => {
+      expect.assertions(1);
+
+      const dtos = defaultDecryptedSharedMetadataKeysDtos();
+      dtos[0].metadata_private_keys[0].data = pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage;
+      const collection = new MetadataKeysCollection(dtos);
+
+      expect(collection.hasEncryptedKeys()).toStrictEqual(true);
     });
   });
 

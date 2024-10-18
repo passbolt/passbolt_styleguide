@@ -64,6 +64,14 @@ export default class FilterResourcesByFavoritePagePage {
   }
 
   /**
+   * Returns the create button
+   * @returns {HTMLElement}
+   */
+  get createButton() {
+    return this._page.container.querySelector('.submit-wrapper #popupAction');
+  }
+
+  /**
    * Returns the main message currently displayed
    * @returns {string|null}
    */

@@ -86,11 +86,27 @@ class MetadataKeysCollection extends EntityV2Collection {
   }
 
   /**
+   * Transform into dto.
+   * @returns {array}
+   */
+  toDto(contains = {}) {
+    return this._items.map(entity => entity.toDto(contains));
+  }
+
+  /**
    * Returns true if at least one of the Metadata key has a decrypted private key.
    * @returns {boolean}
    */
   hasDecryptedKeys() {
     return this._items.some(metadataKey => metadataKey.metadataPrivateKeys?.hasDecryptedPrivateKeys());
+  }
+
+  /**
+   * Returns true if at least one of the Metadata key has an encrypted private key.
+   * @returns {boolean}
+   */
+  hasEncryptedKeys() {
+    return this._items.some(metadataKey => metadataKey.metadataPrivateKeys?.hasEncryptedPrivateKeys());
   }
 
   /*

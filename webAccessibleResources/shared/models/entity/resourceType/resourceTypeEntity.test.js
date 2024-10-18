@@ -685,4 +685,78 @@ describe("ResourceTypeEntity", () => {
       expect(entity.isV4()).toBeFalsy();
     });
   });
+
+  describe("::isPasswordString", () => {
+    it("standalone totp should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("password totp should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordDescriptionTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("password and description should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordAndDescriptionDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("password string should be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypePasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeTruthy();
+    });
+
+    it("default v5 should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("default v5 totp should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5DefaultTotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+
+    it("v5 password string should be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5PasswordStringDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeTruthy();
+    });
+
+    it("v5 totp should not be a password string", () => {
+      expect.assertions(1);
+
+      const dto = resourceTypeV5TotpDto();
+      const entity = new ResourceTypeEntity(dto);
+
+      expect(entity.isPasswordString()).toBeFalsy();
+    });
+  });
 });

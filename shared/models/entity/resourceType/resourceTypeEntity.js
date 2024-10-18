@@ -47,6 +47,11 @@ export const STANDALONE_TOTP_RESOURCE_TYPES = [
   RESOURCE_TYPE_V5_TOTP_SLUG
 ];
 
+export const PASSWORD_STRING_RESOURCE_TYPES = [
+  RESOURCE_TYPE_PASSWORD_STRING_SLUG,
+  RESOURCE_TYPE_V5_PASSWORD_STRING_SLUG
+];
+
 export const SECRET_DESCRIPTION_RESOURCE_TYPES = [
   RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
   RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG,
@@ -177,6 +182,14 @@ class ResourceTypeEntity extends EntityV2 {
    */
   isStandaloneTotp() {
     return STANDALONE_TOTP_RESOURCE_TYPES.includes(this.slug);
+  }
+
+  /**
+   * Is password string
+   * @returns {boolean}
+   */
+  isPasswordString() {
+    return PASSWORD_STRING_RESOURCE_TYPES.includes(this.slug);
   }
 
   /**

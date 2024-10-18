@@ -3,6 +3,18 @@ import {Link, withRouter} from "react-router-dom";
 import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import Icon from "../../../shared/components/Icons/Icon";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class MoreFiltersPage extends React.Component {
   constructor(props) {
@@ -25,6 +37,28 @@ class MoreFiltersPage extends React.Component {
   handleGoBackClick(ev) {
     ev.preventDefault();
     this.props.history.goBack();
+  }
+
+  /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
   }
 
   render() {
@@ -74,11 +108,13 @@ class MoreFiltersPage extends React.Component {
             </li>
           </ul>
         </div>
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper">
           <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
+        }
       </div>
     );
   }
@@ -86,7 +122,9 @@ class MoreFiltersPage extends React.Component {
 
 MoreFiltersPage.propTypes = {
   history: PropTypes.object,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   t: PropTypes.func, // The translation function
 };
 
-export default withRouter(withTranslation('common')(MoreFiltersPage));
+export default withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(MoreFiltersPage))));

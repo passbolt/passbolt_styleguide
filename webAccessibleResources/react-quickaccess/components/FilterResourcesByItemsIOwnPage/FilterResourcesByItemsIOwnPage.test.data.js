@@ -13,6 +13,12 @@
  */
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 /**
  * Default component props
@@ -22,6 +28,8 @@ import {defaultAppContext} from "../../contexts/AppContext.test.data";
 export const defaultProps = (data = {}) => ({
   context: defaultAppContext(),
   resources: null,
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data
 });
 
@@ -33,6 +41,8 @@ export const defaultProps = (data = {}) => ({
 export const noFilteredResourcesProps = (data = {}) => ({
   context: defaultAppContext(),
   resources: [],
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data,
 });
 
@@ -61,6 +71,8 @@ export const withFilteredResourcesProps = (data = {}) => ({
       }
     }, {withFavorite: true}),
   ],
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   ...data,
 });
 

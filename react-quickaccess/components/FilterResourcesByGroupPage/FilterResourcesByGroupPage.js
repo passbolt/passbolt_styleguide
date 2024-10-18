@@ -9,6 +9,18 @@ import {sortResourcesAlphabetically} from "../../../shared/utils/sortUtils";
 import {escapeRegExp, filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 import memoize from "memoize-one";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 const BROWSED_RESOURCES_LIMIT = 500;
 const BROWSED_GROUPS_LIMIT = 500;
@@ -213,6 +225,28 @@ class FilterResourcesByGroupPage extends React.Component {
     ? this.filterGroupsBySearch(groups, search, BROWSED_GROUPS_LIMIT)
     : groups.slice(0, BROWSED_GROUPS_LIMIT));
 
+  /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
+  }
+
   render() {
     const isSearching = this.props.context.search.length > 0;
     const listGroupsOnly = !this.props.location?.state?.selectedGroup;
@@ -308,11 +342,13 @@ class FilterResourcesByGroupPage extends React.Component {
             }
           </ul>
         </div>
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper">
           <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
+        }
       </div>
     );
   }
@@ -320,10 +356,12 @@ class FilterResourcesByGroupPage extends React.Component {
 
 FilterResourcesByGroupPage.propTypes = {
   context: PropTypes.any, // The application context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   location: PropTypes.object,
   history: PropTypes.object,
   resources: PropTypes.array,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourcesLocalStorage(withTranslation('common')(FilterResourcesByGroupPage))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(FilterResourcesByGroupPage))))));

@@ -15,11 +15,11 @@ import {defaultMetadataKeyDto, minimalMetadataKeyDto} from "./metadataKeyEntity.
 import {v4 as uuidv4} from "uuid";
 import {decryptedMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data";
 
-export const defaultMetadataKeysDtos = (count = 2, data = {}) => {
+export const defaultMetadataKeysDtos = (count = 2, data = {}, options = {}) => {
   const dtos = [];
   for (let i = 0; i < count; i += 2) {
-    const dto1 = defaultMetadataKeyDto({fingerprint: generateFingerprint(i), ...data});
-    const dto2 = defaultMetadataKeyDto({fingerprint: generateFingerprint(i + 1), ...data});
+    const dto1 = defaultMetadataKeyDto({fingerprint: generateFingerprint(i), ...data}, options);
+    const dto2 = defaultMetadataKeyDto({fingerprint: generateFingerprint(i + 1), ...data}, options);
     dtos.push(dto1, dto2);
   }
 
