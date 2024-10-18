@@ -19,6 +19,18 @@ import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
 import {withAppContext} from "../../contexts/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 /** The maximum length of visibility of a generated password */
 const TRUNCATED_GENERATED_PASSWORD_MAX_LENGTH = 15;
@@ -164,11 +176,12 @@ class DisplayInFormMenu extends React.Component {
    * @return {JSX.Element[]}
    */
   get filledUsernameMenuItems() {
-    return [
-      ...this.suggestedResourcesItems,
-      this.saveAsNewCredentialItem,
-      this.browseCredentialsItem
-    ];
+    const usernameMenuItems = this.suggestedResourcesItems;
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
+      usernameMenuItems.push(this.saveAsNewCredentialItem);
+    }
+    usernameMenuItems.push(this.browseCredentialsItem);
+    return usernameMenuItems;
   }
 
   /**
@@ -176,11 +189,12 @@ class DisplayInFormMenu extends React.Component {
    * @return {JSX.Element[]}
    */
   get emptyUsernameMenuItems() {
-    return [
-      ...this.suggestedResourcesItems,
-      this.createNewCredentialItem,
-      this.browseCredentialsItem
-    ];
+    const usernameMenuItems = this.suggestedResourcesItems;
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
+      usernameMenuItems.push(this.createNewCredentialItem);
+    }
+    usernameMenuItems.push(this.browseCredentialsItem);
+    return usernameMenuItems;
   }
 
   /**
@@ -188,11 +202,12 @@ class DisplayInFormMenu extends React.Component {
    * @return {JSX.Element[]}
    */
   get filledPasswordMenuItems() {
-    return [
-      ...this.suggestedResourcesItems,
-      this.saveAsNewCredentialItem,
-      this.browseCredentialsItem
-    ];
+    const passwordMenuItems = this.suggestedResourcesItems;
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
+      passwordMenuItems.push(this.saveAsNewCredentialItem);
+    }
+    passwordMenuItems.push(this.browseCredentialsItem);
+    return passwordMenuItems;
   }
 
   /**
@@ -200,12 +215,13 @@ class DisplayInFormMenu extends React.Component {
    * @return {JSX.Element[]}
    */
   get emptyPasswordMenuItems() {
-    return [
-      ...this.suggestedResourcesItems,
-      this.generateNewPasswordItem,
-      this.createNewCredentialItem,
-      this.browseCredentialsItem
-    ];
+    const passwordMenuItems = this.suggestedResourcesItems;
+    if (this.hasMetadataTypesSettings() && this.canCreatePassword()) {
+      passwordMenuItems.push(this.generateNewPasswordItem);
+      passwordMenuItems.push(this.createNewCredentialItem);
+    }
+    passwordMenuItems.push(this.browseCredentialsItem);
+    return passwordMenuItems;
   }
 
   /**
@@ -346,6 +362,28 @@ class DisplayInFormMenu extends React.Component {
   }
 
   /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Render the component
    */
   render() {
@@ -365,7 +403,9 @@ class DisplayInFormMenu extends React.Component {
 DisplayInFormMenu.propTypes = {
   context: PropTypes.any, // The application context
   t: PropTypes.func, // The translation function
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   passwordPoliciesContext: PropTypes.object, // The password policy context
 };
 
-export default withAppContext(withPasswordPolicies(withTranslation('common')(DisplayInFormMenu)));
+export default withAppContext(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPasswordPolicies(withTranslation('common')(DisplayInFormMenu)))));
