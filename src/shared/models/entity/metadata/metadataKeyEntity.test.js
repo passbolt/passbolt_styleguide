@@ -195,5 +195,12 @@ describe("MetadataKeyEntity", () => {
       const entity5 = new MetadataKeyEntity(dto5);
       expect(entity5.toDto({metadata_private_keys: true})).toEqual(dto5);
     });
+
+    it("contains metadata private keys", () => {
+      expect.assertions(1);
+      const dto = defaultMetadataKeyDto({}, {withMetadataPrivateKeys: true});
+      const entity = new MetadataKeyEntity(dto);
+      expect(entity.toDto({metadata_private_keys: true})).toEqual(dto);
+    });
   });
 });

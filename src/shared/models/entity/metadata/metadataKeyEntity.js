@@ -179,6 +179,19 @@ class MetadataKeyEntity extends EntityV2 {
   get created() {
     return this._props.created || null;
   }
+
+  /*
+   * ==================================================
+   * Static properties getters
+   * ==================================================
+   */
+  /**
+   * MetadataKeyEntity.ALL_CONTAIN_OPTIONS
+   * @returns {object} all contain options that can be used in toDto()
+   */
+  static get ALL_CONTAIN_OPTIONS() {
+    return {metadata_private_keys: true};
+  }
 }
 
 export default MetadataKeyEntity;
