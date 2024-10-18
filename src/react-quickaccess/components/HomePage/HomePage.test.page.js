@@ -135,6 +135,14 @@ export default class HomePagePage {
   }
 
   /**
+   * Returns the create button
+   * @returns {HTMLElement}
+   */
+  get createButton() {
+    return this._page.container.querySelector('.submit-wrapper #popupAction');
+  }
+
+  /**
    * Returns error message if any
    * @returns {HTMLElement}
    */

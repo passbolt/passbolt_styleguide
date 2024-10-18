@@ -9,15 +9,15 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.9.4
+ * @since         4.10.0
  */
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import {defaultProps, noFilteredResourcesProps} from "./FilterResourcesBySharedWithMePage.test.data";
-import FilterResourcesBySharedWithMePagePage from "./FilterResourcesBySharedWithMePage.test.page";
+import {defaultProps, noFilteredResourcesProps} from "./FilterResourcesByRecentlyModifiedPage.test.data";
+import FilterResourcesByRecentlyModifiedPagePage from "./FilterResourcesByRecentlyModifiedPage.test.page";
 import {createMemoryHistory} from "history";
 import {waitForTrue} from "../../../../test/utils/waitFor";
-import {readPermissionDto, updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";
+import {updatePermissionDto} from "../../../shared/models/entity/permission/permissionEntity.test.data";
 import {
   defaultResourceMetadataDto
 } from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
@@ -37,38 +37,36 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-describe("FilterResourcesBySharedWithMePage", () => {
-  describe("As LU I should see resources I've been shared with", () => {
+describe("FilterResourcesByRecentlyModifiedPage", () => {
+  describe("As LU I should see resources I own", () => {
     it("should display a loading message", () => {
       expect.assertions(1);
 
-      const page = new FilterResourcesBySharedWithMePagePage(defaultProps());
+      const page = new FilterResourcesByRecentlyModifiedPagePage(defaultProps());
       expect(page.displayedMainMessage).toStrictEqual("Retrieving your passwords");
     });
 
-    it("should display all the resources I've been shared with if there is no search", () => {
-      expect.assertions(3);
+    it("should display all the resources if there is no search", () => {
+      expect.assertions(1);
       const resource1 = defaultResourceDto();
       const resource2 = defaultResourceDto({permission: updatePermissionDto()});
       const resource3 = defaultResourceDto();
       const resource4 = defaultResourceDto({permission: updatePermissionDto()});
       const resources = [resource1, resource2, resource3, resource4];
 
-      const page = new FilterResourcesBySharedWithMePagePage(defaultProps({resources}));
+      const page = new FilterResourcesByRecentlyModifiedPagePage(defaultProps({resources}));
 
-      expect(page.resources?.length).toStrictEqual(2);
-      expect(page.getResource(0).textContent).toStrictEqual(`${resource1.metadata.name} (${resource1.metadata.username})${resource1.metadata.uris[0]}`);
-      expect(page.getResource(0).textContent).toStrictEqual(`${resource2.metadata.name} (${resource2.metadata.username})${resource2.metadata.uris[0]}`);
+      expect(page.resources?.length).toStrictEqual(4);
     });
 
-    it("should display a message saying that there is no shared resources yet", () => {
+    it("should display a message saying that there is no resources yet", () => {
       expect.assertions(1);
-      const page = new FilterResourcesBySharedWithMePagePage(noFilteredResourcesProps());
 
-      expect(page.displayedMainMessage).toStrictEqual("No passwords are shared with you yet. It does feel a bit empty here, wait for a team member to share a password with you.");
+      const page = new FilterResourcesByRecentlyModifiedPagePage(noFilteredResourcesProps());
+      expect(page.displayedMainMessage).toStrictEqual("It does feel a bit empty here. Create your first password or wait for a team member to share one with you.");
     });
 
-    it("should display shared resources filtered by the search", () => {
+    it("should display resources filtered by the search", () => {
       expect.assertions(1);
       const resource1 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "Match search"})});
       const resource2 = defaultResourceDto({metadata: defaultResourceMetadataDto({name: "No match"}), permission: updatePermissionDto()});
@@ -82,8 +80,7 @@ describe("FilterResourcesBySharedWithMePage", () => {
         }),
         resources: resources,
       });
-      const page = new FilterResourcesBySharedWithMePagePage(props);
-
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.getResource(0).textContent).toStrictEqual(`${resource1.metadata.name} (${resource1.metadata.username})${resource1.metadata.uris[0]}`);
     });
 
@@ -99,13 +96,12 @@ describe("FilterResourcesBySharedWithMePage", () => {
         }),
         resources: resources,
       });
-      const page = new FilterResourcesBySharedWithMePagePage(props);
-
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.displayedMainMessage).toStrictEqual("No result match your search. Try with another search term.");
     });
   });
 
-  describe("As LU I can navigate from the 'Shared with me' page", () => {
+  describe("As LU I can navigate from the 'resources recently modified' page", () => {
     it("should allow to go back on the previous page", async() => {
       expect.assertions(3);
 
@@ -126,7 +122,7 @@ describe("FilterResourcesBySharedWithMePage", () => {
       const initialPath = props.history.location.pathname.toString();
       props.history.goBack();
 
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
 
       await page.clickOnBackButton();
       await waitForTrue(() => props.history.location.pathname !== initialPath);
@@ -139,9 +135,7 @@ describe("FilterResourcesBySharedWithMePage", () => {
     it("should allow to navigate to a selected resource page", async() => {
       expect.assertions(4);
 
-      const resource = defaultResourceDto({
-        permission: readPermissionDto(),
-      });
+      const resource = defaultResourceDto();
       const resources = [resource];
 
       const props = defaultProps({
@@ -156,7 +150,7 @@ describe("FilterResourcesBySharedWithMePage", () => {
 
       const initialPath = props.history.location.pathname;
 
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
 
       await page.clickOnResource(0);
       await waitForTrue(() => props.history.location.pathname !== initialPath);
@@ -174,21 +168,20 @@ describe("FilterResourcesBySharedWithMePage", () => {
         context: defaultAppContext({
           updateSearch: jest.fn(),
           searchHistory: {
-            "/webAccessibleResources/quickaccess/resources/shared-with-me": "test",
+            "/webAccessibleResources/quickaccess/resources/recently-modified": "test",
           }
         }),
       });
 
       props.history = createMemoryHistory({
         initialEntries: [
-          "/webAccessibleResources/quickaccess/resources/shared-with-me",
+          "/webAccessibleResources/quickaccess/resources/recently-modified",
         ],
       });
 
       props.history.goBack();
 
-      const page = new FilterResourcesBySharedWithMePagePage(props);
-
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       await page.clickOnBackButton();
 
       expect(props.context.updateSearch).toHaveBeenCalledTimes(2);
@@ -199,26 +192,26 @@ describe("FilterResourcesBySharedWithMePage", () => {
   describe("As LU I can create resource from the button", () => {
     it("should display the button if metadata type settings and resource types are loaded", () => {
       const props = defaultProps();
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeDefined();
     });
 
     it("should display the button if metadata type settings and resource types are loaded for v5", () => {
       const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
       const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeDefined();
     });
 
     it("should not display the button if metadata type settings are not loaded", () => {
       const props = defaultProps({metadataTypeSettings: null});
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeNull();
     });
 
     it("should not display the button if resource types are not loaded", () => {
       const props = defaultProps({resourceTypes: null});
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeNull();
     });
 
@@ -226,14 +219,14 @@ describe("FilterResourcesBySharedWithMePage", () => {
       const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV4CollectionDto());
       const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity, resourceTypes: resourceTypesCollection});
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeNull();
     });
 
     it("should not display the button if metadata type settings default is v4 and only v5 resource types is available", () => {
       const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV5CollectionDto());
       const props = defaultProps({resourceTypes: resourceTypesCollection});
-      const page = new FilterResourcesBySharedWithMePagePage(props);
+      const page = new FilterResourcesByRecentlyModifiedPagePage(props);
       expect(page.createButton).toBeNull();
     });
   });

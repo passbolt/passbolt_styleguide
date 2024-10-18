@@ -9,7 +9,7 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.9.4
+ * @since         4.10.0
  */
 
 import {fireEvent, render, waitFor} from "@testing-library/react";
@@ -18,12 +18,12 @@ import {Router} from "react-router-dom";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
 import {createMemoryHistory} from "history";
-import FilterResourcesByFavoritePage from "./FilterResourcesByFavoritePage";
+import MoreFiltersPage from "./MoreFiltersPage";
 
 /**
- * The FilterResourcesByFavoritePage component represented as a page
+ * The MoreFiltersPage component represented as a page
  */
-export default class FilterResourcesByFavoritePagePage {
+export default class MoreFiltersPagePage {
   /**
    * Default constructor
    * @param props Props to attach
@@ -32,35 +32,10 @@ export default class FilterResourcesByFavoritePagePage {
     this._page = render(
       <MockTranslationProvider>
         <Router history={props.history || createMemoryHistory()}>
-          <FilterResourcesByFavoritePage {...props}/>
+          <MoreFiltersPage {...props}/>
         </Router>
       </MockTranslationProvider>
     );
-  }
-
-  /**
-   * Returns the displayed resources if any
-   * @returns {NodeListOf<HTLMElement>}
-   */
-  get resources() {
-    return this._page.container.querySelectorAll(".list-items .browse-resource-entry");
-  }
-
-  /**
-   * Returns a resource by its index if any
-   * @param {number} index
-   * @returns {HTLMElement|null}
-   */
-  getResource(index) {
-    return this.resources[index] ?? null;
-  }
-
-  /**
-   * Returns the back button element
-   * @returns {HTLMElement}
-   */
-  get backButton() {
-    return this._page.container.querySelector(".back-link a");
   }
 
   /**
@@ -72,21 +47,11 @@ export default class FilterResourcesByFavoritePagePage {
   }
 
   /**
-   * Returns the main message currently displayed
-   * @returns {string|null}
+   * Returns the back button element
+   * @returns {HTLMElement}
    */
-  get displayedMainMessage() {
-    return this._page.container.querySelector(".empty-entry")?.textContent || null;
-  }
-
-  /**
-   * Simulates a click on the nth resource given by the index
-   * @returns {Promise<void>}
-   */
-  async clickOnResource(index) {
-    const element = this.getResource(index)?.querySelector(".inline-resource-entry");
-    fireEvent.click(element, {button: 0});
-    await waitFor(() => {});
+  get backButton() {
+    return this._page.container.querySelector(".back-link a");
   }
 
   /**
