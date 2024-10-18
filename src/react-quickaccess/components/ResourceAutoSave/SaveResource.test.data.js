@@ -16,11 +16,16 @@ import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicie
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
 import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 export function defaultProps(props = {}) {
   const defaultProps = {
     context: defaultAppContext(props?.appContext),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({
       getSettings: () => overridenPasswordExpirySettingsEntityDto()
     }),

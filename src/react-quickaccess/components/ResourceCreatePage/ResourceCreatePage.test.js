@@ -18,13 +18,20 @@ import {waitFor} from "@testing-library/dom";
 import "../../../react-extension/test/lib/crypto/cryptoGetRandomvalues";
 import {defaultProps} from "./ResourceCreatePage.test.data";
 import {ConfirmCreatePageRuleVariations} from "../ConfirmCreatePage/ConfirmCreatePage";
-import {TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION} from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import {
+  TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION,
+  TEST_RESOURCE_TYPE_V5_DEFAULT
+} from "../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
 import ResourceCreatePagePage from "./ResourceCreatePage.test.page";
 import {waitForTrue} from "../../../../test/utils/waitFor";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {DateTime} from "luxon";
 import {createMemoryHistory} from "history";
 import {defaultPasswordExpirySettingsContext} from '../../../react-extension/contexts/PasswordExpirySettingsContext.test.data';
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV6Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 // Reset the modules before each test.
 beforeEach(() => {
@@ -100,7 +107,7 @@ describe("ResourceCreatePage", () => {
   });
 
   describe("Form submission", () => {
-    it("should create a new password on submit", async() => {
+    it("should create a new password v4 on submit", async() => {
       expect.assertions(2);
 
       const fakeNow = DateTime.fromISO("2023-11-24T00:00:00.000Z");
@@ -125,6 +132,63 @@ describe("ResourceCreatePage", () => {
       };
 
       const props = defaultProps();
+      props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
+
+      props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
+        name: expectedResourceDto.metadata.name,
+        uri: expectedResourceDto.metadata.uris[0],
+      }));
+
+      props.context.port.addRequestListener("passbolt.secrets.powned-password", () => 0);
+
+      let resourceCreated = false;
+      props.context.port.addRequestListener("passbolt.resources.create", (resourceDto, secretDto) => {
+        expect(resourceDto).toStrictEqual(expectedResourceDto);
+        expect(secretDto).toStrictEqual(expectedSecretDto);
+        resourceCreated = true;
+        return defaultResourceDto();
+      });
+
+      const page = new ResourceCreatePagePage(props);
+      jest.setSystemTime(fakeNow.toMillis());
+      await waitForTrue(() => page.name.value === expectedResourceDto.metadata.name);
+
+      // Fill the form empty fields"
+      await page.setFormWith({
+        username: "test@passbolt.com",
+        password: "P4ssb0ltP4ssb0lt",
+      });
+
+      // Submit the form.
+      await page.submitForm();
+      await waitForTrue(() => resourceCreated);
+    });
+
+    it("should create a new password v5 on submit", async() => {
+      expect.assertions(2);
+
+      const fakeNow = DateTime.fromISO("2023-11-24T00:00:00.000Z");
+      jest.setSystemTime(fakeNow.toMillis());
+
+      const expectedResourceDto = {
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+        folder_parent_id: null,
+        metadata: {
+          resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+          name: "Passbolt Browser Extension Test",
+          uris: ["https://passbolt-browser-extension/test"],
+          username: "test@passbolt.com",
+        },
+        expired: fakeNow.plus({days: 30}).plus({milliseconds: 150}).toJSDate().toISOString(),
+      };
+
+      const expectedSecretDto = {
+        password: "P4ssb0ltP4ssb0lt",
+        description: "",
+        resource_type_id: TEST_RESOURCE_TYPE_V5_DEFAULT,
+      };
+      const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
+      const props = defaultProps({metadataTypeSettings});
       props.passwordPoliciesContext.shouldRunDictionaryCheck.mockImplementation(() => true);
 
       props.context.port.addRequestListener("passbolt.quickaccess.prepare-resource", () => ({
