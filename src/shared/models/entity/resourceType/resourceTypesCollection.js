@@ -103,6 +103,15 @@ class ResourceTypesCollection extends EntityV2Collection {
     this.filterByPropertyValueIn("slug", PASSWORD_RESOURCE_TYPES);
   }
 
+  /**
+   * Filter by resource type version.
+   * @param {string} version the version used to filter the resource types
+   * @return {void} The function alters the collection itself.
+   */
+  filterByResourceTypeVersion(version) {
+    this.filterByCallback(resourceType => resourceType.version === version);
+  }
+
   /*
    * ==================================================
    * Getters
