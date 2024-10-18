@@ -140,6 +140,43 @@ describe("ResourceTypesCollection", () => {
     });
   });
 
+
+  describe("::filterByResourceTypeVersion", () => {
+    it("should filter the collection by resources types by the version 4.", () => {
+      expect.assertions(9);
+
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+
+      resourceTypes.filterByResourceTypeVersion("v4");
+      expect(resourceTypes).toHaveLength(4);
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSWORD_STRING)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeFalsy();
+    });
+
+    it("should filter the collection by resources types by the version 5.", () => {
+      expect.assertions(9);
+      const resourceTypes = new ResourceTypesCollection(resourceTypesCollectionDto());
+      resourceTypes.filterByResourceTypeVersion("v5");
+
+      expect(resourceTypes).toHaveLength(4);
+
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_STRING)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_PASSWORD_STRING)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP)).toBeTruthy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_TOTP)).toBeFalsy();
+      expect(resourceTypes.getFirstById(TEST_RESOURCE_TYPE_V5_TOTP)).toBeTruthy();
+    });
+  });
+
   describe("::getFirstById", () => {
     it("should get first resource types entity by id.", () => {
       expect.assertions(9);
