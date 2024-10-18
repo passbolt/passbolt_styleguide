@@ -141,7 +141,7 @@ class CreateResource extends Component {
       dto.expired = expiryDate;
     }
 
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(this.props.resourceType, dto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(this.props.resourceType, dto);
     this.setState({resourceViewModel});
   }
 
@@ -528,7 +528,7 @@ class CreateResource extends Component {
       ...this.state.resourceViewModel,
       resource_type_id: this.props.resourceType.id,
     };
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(this.props.resourceType, dto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(this.props.resourceType, dto);
     this.setState({resourceViewModel});
   }
 
@@ -548,7 +548,7 @@ class CreateResource extends Component {
       resource_type_id: resourceType.id,
       totp: totp
     };
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(resourceType, dto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, dto);
     this.setState({resourceViewModel});
   }
 
