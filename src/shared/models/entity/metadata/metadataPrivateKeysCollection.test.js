@@ -18,6 +18,7 @@ import {defaultMetadataPrivateKeyDto} from "./metadataPrivateKeyEntity.test.data
 import MetadataPrivateKeysCollection from "./metadataPrivateKeysCollection";
 import {defaultMetadataPrivateKeysDtos, defaultMinimalMetadataPrivateKeysDtos} from "./metadataPrivateKeysCollection.test.data";
 import {v4 as uuidv4} from "uuid";
+import {pgpKeys} from "../../../../../test/fixture/pgpKeys/keys";
 
 describe("MetadataPrivateKeysCollection", () => {
   describe("::getSchema", () => {
@@ -219,6 +220,45 @@ describe("MetadataPrivateKeysCollection", () => {
       const collection = new MetadataPrivateKeysCollection([]);
 
       expect(collection.hasDecryptedPrivateKeys()).toStrictEqual(false);
+    });
+  });
+
+  describe("::hasEncryptedPrivateKeys", () => {
+    it("should return true if at least 1 key in the collection is encrypted", () => {
+      expect.assertions(1);
+
+      const metadata_key_id = uuidv4();
+      const data = pgpKeys.metadataKey.encryptedMetadataPrivateKeyDataMessage;
+      const dtos = [
+        defaultMetadataPrivateKeyDto({metadata_key_id}),
+        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
+      ];
+
+      const collection = new MetadataPrivateKeysCollection(dtos);
+
+      expect(collection.hasEncryptedPrivateKeys()).toStrictEqual(true);
+    });
+
+    it("should return false of none of the key in the collection is encrypted", () => {
+      expect.assertions(1);
+
+      const metadata_key_id = uuidv4();
+      const data = defaultMetadataPrivateKeyDataDto();
+      const dtos = [
+        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
+        defaultMetadataPrivateKeyDto({metadata_key_id, data}),
+      ];
+      const collection = new MetadataPrivateKeysCollection(dtos);
+
+      expect(collection.hasEncryptedPrivateKeys()).toStrictEqual(false);
+    });
+
+    it("should return false if the collection is empty", () => {
+      expect.assertions(1);
+
+      const collection = new MetadataPrivateKeysCollection([]);
+
+      expect(collection.hasEncryptedPrivateKeys()).toStrictEqual(false);
     });
   });
 

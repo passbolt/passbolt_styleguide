@@ -96,6 +96,14 @@ class MetadataPrivateKeysCollection extends EntityV2Collection {
     return this._items.some(item => item.isDecrypted);
   }
 
+  /**
+   * Returns true if the collection has at least 1 encrypted metadata private key.
+   * @returns {boolean}
+   */
+  hasEncryptedPrivateKeys() {
+    return this._items.some(item => !item.isDecrypted);
+  }
+
   /*
    * ==================================================
    * Setters
