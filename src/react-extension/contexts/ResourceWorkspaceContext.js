@@ -723,7 +723,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Filter the resources which belongs to the filter group
    */
   async searchByGroup(filter) {
-    if (this.isFilterEqual(this.state.filter, filter)) {
+    if (this.isFilterEqual(this.state.filter, filter) && Boolean(this.state.filteredResources)) {
       return;
     }
 

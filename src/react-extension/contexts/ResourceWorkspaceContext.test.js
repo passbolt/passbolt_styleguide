@@ -169,7 +169,9 @@ describe("Resource Workspace Context", () => {
       });
 
       await page.goToAllItems();
+      await waitForTrue(() => page.filter.type === ResourceWorkspaceFilterTypes.ALL);
       await page.goToGroup(leadershipTeamGroup);
+      await waitForTrue(() => page.filter.type === ResourceWorkspaceFilterTypes.GROUP);
       expect(page.filteredResources).toHaveLength(expectedResourcesCount);
     });
 
