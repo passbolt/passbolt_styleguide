@@ -117,7 +117,7 @@ class ResourceCreatePage extends React.Component {
     const expired = this.getResourceExpirationDate();
     resourceViewModelDto.expired = expired;
 
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(resourceType, resourceViewModelDto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, resourceViewModelDto);
     const passwordEntropy = resourceViewModel.password ? SecretGenerator.entropy(resourceViewModel.password) : null;
 
     await this.focusFirstEmptyField(resourceViewModel);

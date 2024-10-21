@@ -96,7 +96,7 @@ class SaveResource extends React.Component {
       resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
     }
     resourceDto.resource_type_id = resourceType.id;
-    const resourceViewModel = ResourceViewModelFactory.createFromResourceType(resourceType, resourceDto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, resourceDto);
 
     this.setState({loaded: true, resourceViewModel: resourceViewModel});
   }
