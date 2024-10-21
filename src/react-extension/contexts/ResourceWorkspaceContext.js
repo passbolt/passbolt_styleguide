@@ -370,7 +370,7 @@ export class ResourceWorkspaceContextProvider extends React.Component {
       return;
     }
 
-    const filter = (this.props.location.state && this.props.location.state.filter) || {type: ResourceWorkspaceFilterTypes.ALL};
+    const filter = this.props.location.state?.filter || {type: ResourceWorkspaceFilterTypes.ALL};
     const isSameFilter = this.state.filter === filter;
     await this.detailNothing();
     if (!isSameFilter) {
@@ -723,12 +723,28 @@ export class ResourceWorkspaceContextProvider extends React.Component {
    * Filter the resources which belongs to the filter group
    */
   async searchByGroup(filter) {
+    if (this.isFilterEqual(this.state.filter, filter) && Boolean(this.state.filteredResources)) {
+      return;
+    }
+
     this.props.loadingContext.add();
-    const resourceIds = await this.props.context.port.request('passbolt.resources.find-all-ids-by-is-shared-with-group', filter.payload.group.id) || [];
-    // keep only the resource with the group
-    const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
-    await this.setState({filter, filteredResources: groupResources, selectedResources: []});
-    this.props.loadingContext.remove();
+
+    /*
+     * Resources filtering is applied after having set the configuration of the filter in the state.
+     * It allows Firefox not to loop infinitely because of the local storage update induced by the call of the background page.
+     *
+     * What seem to happen on Firefox is that the state is not updated on the right time but the local storage onChanged callback is executed.
+     * This creates a confusion in the filtering system where we expect resources to be filtered by group but the filter is still on "ALL".
+     * The execution order of the callback from the local storage and the state change (that calls componentDidUpdate)
+     * produces an infinite loop in Firefox.
+     */
+    this.setState({filter, selectedResources: []}, async() => {
+      const resourceIds = await this.props.context.port.request('passbolt.resources.find-all-ids-by-is-shared-with-group', filter.payload.group.id) || [];
+      // keep only the resource with the group
+      const groupResources = this.resources.filter(resource => resourceIds.includes(resource.id));
+      this.setState({filteredResources: groupResources});
+      this.props.loadingContext.remove();
+    });
   }
 
   /**
