@@ -18,39 +18,40 @@
 import {
   defaultAppContext,
   defaultProps,
-  defaultResourceWorkspaceContext, resource,
+  defaultResourceWorkspaceContext,
   tagsMock
 } from "./FilterResourcesByTags.test.data";
 import FilterResourcesByTags from "./FilterResourcesByTags.test.page";
 import MockPort from "../../../test/mock/MockPort";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import PassboltApiFetchError from "../../../../shared/lib/Error/PassboltApiFetchError";
+import {defaultResourceDto} from "../../../../shared/models/entity/resource/resourceEntity.test.data";
+import expect from "expect";
 
 beforeEach(() => {
   jest.resetModules();
 });
 
 describe("See tags", () => {
-  let page; // The page to test against
-  const props = defaultProps(); // The props to pass
+  let page, // The page to test against
+    resources, // The resources handled
+    props; // The props to pass
 
   describe('As LU I see the tags of my resources', () => {
+    resources = [
+      defaultResourceDto({tags: tagsMock}),
+    ];
+    props = defaultProps(resources);
     const appContext = {
       port: new MockPort(),
-      resources: [
-        {
-          tags: tagsMock
-        },
-        {
-          tags: tagsMock
-        }
-      ],
+      resources: resources,
     };
     const context = defaultAppContext(appContext); // The applicative context
     const resourceWorkspaceContext = defaultResourceWorkspaceContext();
     const requestMockImpl = jest.fn((message, data) => data);
     const mockContextRequest = (context, implementation) => jest.spyOn(context.port, 'request').mockImplementation(implementation);
     mockContextRequest(context, requestMockImpl);
+
     /**
      * Given an organization with 5 tags
      * Then I should see the 5 tags on the left sidebar
@@ -77,10 +78,11 @@ describe("See tags", () => {
 
     it('As LU I should be able to drop a resource on tag', async() => {
       await page.sidebarTagFilterSection.onDropTag(3);
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {"resources": [resource.id], "tag": tagsMock[1]});
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.tags.add-resources-tag", {"resources": [resources[0].id], "tag": tagsMock[1]});
     });
 
-    it('As LU I should see tags disabled if a resource is dragging', async() => {
+    it('As LU I should see tags disabled if a resource I am not owner is dragging on a shared tag', async() => {
+      resources[0].permission.type = 1;
       await page.sidebarTagFilterSection.onDropTag(3);
       expect(page.sidebarTagFilterSection.tagClassname(1)).toBe('row  disabled');
       expect(page.sidebarTagFilterSection.tagClassname(2)).toBe('row');
