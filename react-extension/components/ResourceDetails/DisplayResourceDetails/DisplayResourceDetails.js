@@ -54,7 +54,6 @@ class DisplayResourceDetails extends React.Component {
    * Get the sidebar subtitle
    */
   get subtitle() {
-    const defaultSubtitle = this.translate("Resource");
     const resource = this.props.resourceWorkspaceContext.details.resource;
 
     // Resources types might not be yet initialized at the moment this component is rendered.
@@ -63,7 +62,18 @@ class DisplayResourceDetails extends React.Component {
     }
 
     const resourceType = this.props.resourceTypes.getFirstById(resource.resource_type_id);
-    return resourceType?.hasSecretDescription ? this.translate("Resource with encrypted description") : defaultSubtitle;
+    switch (resourceType.slug) {
+      case "password-string":
+        return this.translate("Password");
+      case "password-and-description":
+        return this.translate("Password and Encrypted description");
+      case "password-description-totp":
+        return this.translate("Password, Encrypted description and TOTP");
+      case "totp":
+        return this.translate("TOTP");
+      default:
+        return this.translate("Resource");
+    }
   }
 
   /**

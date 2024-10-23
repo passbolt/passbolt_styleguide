@@ -12,7 +12,7 @@
  * @since         3.3.0
  */
 import React from "react";
-import {withAppContext} from "../../contexts/AppContext";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 
 /**

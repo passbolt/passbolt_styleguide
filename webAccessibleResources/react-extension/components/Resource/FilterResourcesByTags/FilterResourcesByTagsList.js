@@ -257,12 +257,16 @@ class FilterResourcesByTagsList extends React.Component {
   isDisabled(tag) {
     /*
      * If the user is dragging content, disable the component if:
-     * - The user is not allowed to drop content in the shared tag.
+     * - The user is not allowed to drop content he has no owner permission for on shared tag..
      * - The user is not allowed to drop dragged items except resources;
      */
     if (this.isDragging()) {
       if (tag.is_shared) {
-        return true;
+        const isOwnerOfAllResources = this.draggedItems.resources
+          .some(resource => resource.permission?.type !== 15);
+        if (isOwnerOfAllResources) {
+          return true;
+        }
       }
       if (!this.canDropInto()) {
         return true;
@@ -314,7 +318,7 @@ class FilterResourcesByTagsList extends React.Component {
         <em className="empty-content"><Trans>empty</Trans></em>
         }
         {!this.isLoading() && this.filteredTags.length > 0 &&
-        <ul className="tree ready">
+        <ul className="navigation-secondary-tree ready">
           {this.filteredTags.map(tag =>
             <li className="open node root tag-item" key={tag.id}>
               <div className={`row ${this.isSelected(tag.id) ? "selected" : ""} ${this.isDisabled(tag) ? "disabled" : ""} ${this.showDropFocus(tag) ? "drop-focus" : ""}`}

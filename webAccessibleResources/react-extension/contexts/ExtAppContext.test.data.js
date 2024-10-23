@@ -20,6 +20,8 @@ import MockPort from "../test/mock/MockPort";
 import MockStorage from "../test/mock/MockStorage";
 import {defaultAdminUserDto, defaultUserDto} from "../../shared/models/entity/user/userEntity.test.data";
 import {adminRoleDto, TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID, userRoleDto} from "../../shared/models/entity/role/role.test.data";
+import {defaultAccountDto} from "../../shared/models/entity/account/accountEntity.test.data";
+import AccountEntity from "../../shared/models/entity/account/accountEntity";
 
 /**
  * Returns the default app context for the unit test
@@ -35,6 +37,7 @@ export function defaultAppContext(appContext = {}) {
     siteSettings,
     port: new MockPort(),
     storage: new MockStorage(),
+    account: new AccountEntity(defaultAccountDto()),
     loggedInUser: {
       id: userSettings.id,
       role: {

@@ -15,9 +15,10 @@
 import React, {useEffect} from "react";
 import AskInFormMenuDisplay from "./AskInFormMenuDisplay";
 import ReactDOM from "react-dom";
-import AppContext from "../../contexts/AppContext";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import PropTypes from "prop-types";
+import {defaultAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 
 export default {
   title: 'Components/WebIntegration/AskInFormMenuDisplay',
@@ -74,9 +75,7 @@ const inactiveMockedPort = new MockPort();
 inactiveMockedPort.addRequestListener('passbolt.in-form-cta.check-status', () => ({isAuthenticated: false, isMfaRequired: false}));
 export const Inactive = Template.bind({});
 Inactive.args = {
-  context: {
-    port: inactiveMockedPort
-  }
+  context: defaultAppContext({port: inactiveMockedPort})
 };
 Inactive.parameters = parameters;
 
@@ -85,9 +84,7 @@ activeWithNoSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.check-
 activeWithNoSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.suggested-resources', () => 0);
 export const ActiveWithNoSuggestion = Template.bind({});
 ActiveWithNoSuggestion.args = {
-  context: {
-    port: activeWithNoSuggestionMockedPort
-  }
+  context: defaultAppContext({port: activeWithNoSuggestionMockedPort})
 };
 ActiveWithNoSuggestion.parameters = parameters;
 
@@ -96,8 +93,6 @@ activeWithOneSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.check
 activeWithOneSuggestionMockedPort.addRequestListener('passbolt.in-form-cta.suggested-resources', () => 1);
 export const ActiveWithOneSuggestion = Template.bind({});
 ActiveWithOneSuggestion.args = {
-  context: {
-    port: activeWithOneSuggestionMockedPort
-  }
+  context: defaultAppContext({port: activeWithOneSuggestionMockedPort})
 };
 ActiveWithOneSuggestion.parameters = parameters;

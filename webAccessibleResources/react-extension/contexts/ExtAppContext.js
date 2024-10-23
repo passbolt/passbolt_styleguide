@@ -18,6 +18,7 @@ import PropTypes from "prop-types";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
+import AccountEntity from "../../shared/models/entity/account/accountEntity";
 
 /**
  * The ExtApp context provider
@@ -45,6 +46,7 @@ class ExtAppContextProvider extends React.Component {
     this.getGroups();
     this.getUsers();
     this.getRoles();
+    this.getAccount();
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
@@ -73,6 +75,7 @@ class ExtAppContextProvider extends React.Component {
       groups: null,
 
       loggedInUser: null,
+      account: null, // The account
       rbacs: null,
       siteSettings: null,
       userSettings: null,
@@ -271,6 +274,16 @@ class ExtAppContextProvider extends React.Component {
   async initLocale() {
     const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
+  }
+
+  /**
+   * Get the account
+   * @returns {Promise<void>}
+   */
+  async getAccount() {
+    const accountDto = await this.props.port.request("passbolt.account.get");
+    const account = new AccountEntity(accountDto);
+    this.setState({account});
   }
 
   /*

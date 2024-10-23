@@ -76,3 +76,23 @@ export const buildDefineNumberOfResourceTypesDtos = (count = 10) => {
   }
   return dtos;
 };
+
+/**
+ * Resource types collection v5 and v4 dto without Password field.
+ * @returns {object}
+ */
+export const resourceTypesCollectionWithoutPassword = () => [
+  resourceTypeTotpDto(),
+  resourceTypeV5TotpDto()
+];
+
+/**
+ * Resource types collection v5 and v4 dto without Totp field.
+ * @returns {object}
+ */
+export const resourceTypesCollectionWithoutTOTP = () => [
+  resourceTypePasswordStringDto(),
+  resourceTypePasswordAndDescriptionDto(),
+  resourceTypeV5DefaultDto(),
+  resourceTypeV5PasswordStringDto(),
+];

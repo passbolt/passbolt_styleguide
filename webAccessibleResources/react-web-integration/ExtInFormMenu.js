@@ -14,16 +14,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import DisplayInFormMenu from "./components/DisplayInFormMenu/DisplayInFormMenu";
 import TranslationProvider from "../shared/components/Internationalisation/TranslationProvider";
 import PasswordPoliciesContext from "../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
-import {
-  ResourceTypesLocalStorageContextProvider
-} from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
-import {
-  MetadataTypesSettingsLocalStorageContextProvider
-} from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import ResourceTypesLocalStorageContextProvider from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import AccountEntity from "../shared/models/entity/account/accountEntity";
 
 /**
  * Entry point of the in-form menu
@@ -33,6 +30,7 @@ class ExtInForm extends React.Component {
     super(props);
     this.state = this.defaultState;
     this.initLocale();
+    this.getAccount();
   }
 
   /**
@@ -41,7 +39,9 @@ class ExtInForm extends React.Component {
   get defaultState() {
     return {
       locale: "en-UK",
-      port: this.props.port
+      port: this.props.port,
+      storage: this.props.storage,
+      account: null,
     };
   }
 
@@ -52,6 +52,16 @@ class ExtInForm extends React.Component {
   async initLocale() {
     const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
+  }
+
+  /**
+   * Get the account
+   * @returns {Promise<void>}
+   */
+  async getAccount() {
+    const accountDto = await this.props.port.request("passbolt.account.get");
+    const account = new AccountEntity(accountDto);
+    this.setState({account});
   }
 
   /**
@@ -77,7 +87,8 @@ class ExtInForm extends React.Component {
 }
 
 ExtInForm.propTypes = {
-  port: PropTypes.object
+  port: PropTypes.object,
+  storage: PropTypes.object
 };
 
 export default ExtInForm;

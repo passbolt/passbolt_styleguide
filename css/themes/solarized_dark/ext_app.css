@@ -4858,6 +4858,7 @@ form.search label {
   cursor: default;
   pointer-events: none;
 }
+.navigation-secondary-tree .row.disabled .main-cell span.tag-name,
 .navigation-secondary-tree .row.disabled .main-cell span.folder-name {
   color: hsl(194, 14%, 51%);
   text-shadow: none;
