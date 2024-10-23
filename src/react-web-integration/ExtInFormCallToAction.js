@@ -14,7 +14,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import AppContext from "./contexts/AppContext";
+import AppContext from "../shared/context/AppContext/AppContext";
 import AskInFormMenuDisplay from "./components/AskInFormMenuDisplay/AskInFormMenuDisplay";
 
 /**

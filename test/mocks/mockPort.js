@@ -39,7 +39,6 @@ import mockRequestResourcesDelete from "./request/mockRequestResourcesDelete";
 import mockRequestGetVersion from "./request/mockRequestGetVersion";
 import mockRequestUsersUpdateLocalStorage from "./request/mockRequestUsersUpdateLocalStorage";
 import mockRequestGroupsUpdateLocalStorage from "./request/mockRequestGroupsUpdateLocalStorage";
-import mockRequestResources from "./request/mockRequestResources";
 import mockRequestUsersFindLoggedInUser from "./request/mockRequestUsersFindLoggedInUser";
 import mockRequestGpgKeysFindByUserId from "./request/mockRequestGpgKeysFindByUserId";
 import mockRequestPrivateKeys from "./request/mockRequestPrivateKey";
@@ -60,6 +59,7 @@ import mockRequestMobileTransferUpdate from "./request/mockRequestMobileTransfer
 import mockRequestAccountRecoveryGetAccount from "./request/mockRequestAccountRecoveryGetAccount";
 import mockRequestHasUserEnabledAccountRecovery from "./request/mockRequestHasUserEnabledAccountRecovery";
 import mockRequestRbacsFindMe from "./request/mockRequestRbacsFindMe";
+import mockRequestAccountGet from "./request/mockRequestAccountGet";
 
 export default storage => {
   const mockPort = new MockPort(storage);
@@ -111,6 +111,7 @@ export default storage => {
   mockPort.addRequestListener("passbolt.account-recovery.get-account", mockRequestAccountRecoveryGetAccount);
   mockPort.addRequestListener("passbolt.recover.has-user-enabled-account-recovery", mockRequestHasUserEnabledAccountRecovery);
   mockPort.addRequestListener("passbolt.rbacs.find-me", mockRequestRbacsFindMe);
+  mockPort.addRequestListener("passbolt.account.get", mockRequestAccountGet);
 
   // Deprecated events
   const deprecatedEvent = () => { throw new Error(`This event is deprecated.`); };

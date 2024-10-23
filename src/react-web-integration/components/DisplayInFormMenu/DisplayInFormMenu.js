@@ -16,7 +16,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withTranslation} from "react-i18next";
 import DisplayInFormMenuItem from "./DisplayInFormMenuItem";
-import {withAppContext} from "../../contexts/AppContext";
+import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import {

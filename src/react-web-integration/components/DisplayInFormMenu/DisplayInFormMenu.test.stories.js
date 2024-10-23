@@ -16,6 +16,8 @@ import React from "react";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import DisplayInFormMenu from "./DisplayInFormMenu";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {defaultAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
+import {defaultProps} from "./DisplayInformMenu.test.data";
 
 export default {
   title: 'Components/WebIntegration/InFormMenu',
@@ -78,36 +80,32 @@ export const OnPasswordFieldWithEmptyValue = Template.bind({});
 export const OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies = Template.bind({});
 export const OnPasswordFieldWithValue = Template.bind({});
 
-OnUsernameFieldWithEmptyValue.args = {
-  context: {
-    port: mockPortUsernameEmpty
-  },
-};
-OnUsernameFieldWithValue.args = {
-  context: {
-    port: mockPortUsernameFilled
-  },
-};
-OnPasswordFieldWithoutSuggestion.args = {
-  context: {
+OnUsernameFieldWithEmptyValue.args = defaultProps({
+  context: defaultAppContext({port: mockPortUsernameEmpty})
+});
+OnUsernameFieldWithValue.args = defaultProps({
+  context: defaultAppContext({port: mockPortUsernameFilled})
+});
+OnPasswordFieldWithoutSuggestion.args = defaultProps({
+  context: defaultAppContext({
     port: mockPortPasswordNoSuggestion
-  },
-};
-OnPasswordFieldWithEmptyValue.args = {
-  context: {
+  })
+});
+OnPasswordFieldWithEmptyValue.args = defaultProps({
+  context: defaultAppContext({
     port: mockPortPasswordEmpty
-  },
-};
-OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies.args = {
-  context: {
+  })
+});
+OnPasswordFieldWithEmptyValueAndCustomPasswordPolicies.args = defaultProps({
+  context: defaultAppContext({
     port: mockPortPasswordEmptyWitCustomPasswordPolicies
-  },
-};
-OnPasswordFieldWithValue.args = {
-  context: {
+  })
+});
+OnPasswordFieldWithValue.args = defaultProps({
+  context: defaultAppContext({
     port: mockPortPasswordFilled
-  },
-};
+  })
+});
 
 const inFormMenuCss = {css: "ext_in_form_menu"};
 OnUsernameFieldWithEmptyValue.parameters = inFormMenuCss;
