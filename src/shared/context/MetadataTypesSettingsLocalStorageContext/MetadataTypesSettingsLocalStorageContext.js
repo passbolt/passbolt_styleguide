@@ -15,7 +15,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withAppContext} from "../AppContext/AppContext";
 import MetadataTypesSettingsEntity from "../../models/entity/metadata/metadataTypesSettingsEntity";
-import {v5 as uuidv5} from "uuid";
 
 export const MetadataTypesSettingsLocalStorageContext = React.createContext({
   get: () => {}, // Get the metadata type settings from the local storage and/or init them if not the case already
@@ -23,7 +22,6 @@ export const MetadataTypesSettingsLocalStorageContext = React.createContext({
   updateLocalStorage: () => {}, // triggers an update of the local storage
 });
 
-const UUID_PASSBOLT_NAMESPACE = 'd5447ca1-950f-459d-8b20-86ddfdd0f922';
 
 /**
  * The metadata type settings local storage context provider
@@ -111,10 +109,7 @@ export class MetadataTypesSettingsLocalStorageContextProvider extends React.Comp
    * @returns {string}
    */
   get storageKey() {
-    const userId = this.props.context.loggedInUser.id;
-    const domain = this.props.context.userSettings.getTrustedDomain();
-    const accountId = uuidv5(`${domain}${userId}`, UUID_PASSBOLT_NAMESPACE);
-    return `metadata_types_settings-${accountId}`;
+    return `metadata_types_settings-${this.props.context.account?.id}`;
   }
 
   /**

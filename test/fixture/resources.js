@@ -1,12 +1,17 @@
+import {
+  TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP
+} from "../../src/shared/models/entity/resourceType/resourceTypeEntity.test.data";
 
 
 const createResource = index => {
   return  {
     "id": index,
-    "name": "password-" + index,
-    "username": "www-data",
-    "uri": "http:\/\/www.apache.org\/",
-    "description": "Apache is the world\u0027s most used web server software.",
+    metadata: {
+      "name": `password-${index}`,
+      "username": "www-data",
+      "uris": ["http:\/\/www.apache.org\/"],
+      "description": "Apache is the world\u0027s most used web server software.",
+    },
     "deleted": false,
     "created": "2020-08-25T08:35:19+00:00",
     "modified": "2020-08-26T08:35:19+00:00",
@@ -44,14 +49,14 @@ const createResource = index => {
     ],
     "folder_parent_id": null,
     "personal": false,
-    "resource_type_id": "669f8c64-242a-59fb-92fc-81f660975fd3"
+    "resource_type_id": TEST_RESOURCE_TYPE_V5_DEFAULT_TOTP
   };
 }
 
 export default (() => {
-  let resources = [];
-  for(let i = 0; i < 100; i++) {
-    resources.push(createResource("" + i));
+  const resources = [];
+  for (let i = 0; i < 100; i++) {
+    resources.push(createResource(i));
   }
   return resources;
 })();

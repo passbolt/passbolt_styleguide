@@ -38,6 +38,7 @@ import ConfirmCreatePage from "./components/ConfirmCreatePage/ConfirmCreatePage"
 import ResourceLocalStorageProvider from "./contexts/ResourceLocalStorageContext";
 import ResourceTypesLocalStorageContextProvider from "../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import AccountEntity from "../shared/models/entity/account/accountEntity";
 
 
 const SEARCH_VISIBLE_ROUTES = [
@@ -67,6 +68,7 @@ class ExtQuickAccess extends React.Component {
     this.createRefs();
     this.bindCallbacks();
     this.state = this.getDefaultState(props);
+    this.getAccount();
   }
 
   /**
@@ -142,6 +144,7 @@ class ExtQuickAccess extends React.Component {
       userSettings: null,
       siteSettings: null,
       loggedInUser: null,
+      account: null, // The account
       rbacs: null, // The role based access control
       hasError: false,
       errorMessage: "",
@@ -240,6 +243,16 @@ class ExtQuickAccess extends React.Component {
   async getLocale() {
     const {locale} = await this.state.port.request("passbolt.locale.get");
     this.setState({locale});
+  }
+
+  /**
+   * Get the account
+   * @returns {Promise<void>}
+   */
+  async getAccount() {
+    const accountDto = await this.state.port.request("passbolt.account.get");
+    const account = new AccountEntity(accountDto);
+    this.setState({account});
   }
 
   /**

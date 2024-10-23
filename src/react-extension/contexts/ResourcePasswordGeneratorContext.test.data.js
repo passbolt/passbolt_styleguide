@@ -9,7 +9,7 @@ import {defaultPasswordPoliciesDto} from "../../shared/models/passwordPolicies/P
 
 export const defaultResourcePasswordGeneratorContext = (data = {}) => ({
   lastGeneratedPassword: "This is the last generated password",
-  getSettings: jest.fn(() => defaultPasswordPoliciesDto({
+  getSettings: () => defaultPasswordPoliciesDto({
     password_generator_settings: defaultPasswordGeneratorSettingsDto({
       min_length: 8,
       max_length: 128
@@ -18,7 +18,7 @@ export const defaultResourcePasswordGeneratorContext = (data = {}) => ({
       min_words: 4,
       max_words: 40
     })
-  })),
+  }),
   onPasswordGenerated: jest.fn(),
   resetSecretGeneratorSettings: jest.fn(),
   consumeLastGeneratedPassword: () => "This is the last generated password",

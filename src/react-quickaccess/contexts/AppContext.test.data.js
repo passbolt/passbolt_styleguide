@@ -39,6 +39,7 @@ export function defaultAppContext(data = {}) {
     resources: [],
     focusSearch: jest.fn(),
     updateSearch: jest.fn(),
+    getOpenerTabId: () => 1,
     search: "",
     searchHistory: {},
     ...data

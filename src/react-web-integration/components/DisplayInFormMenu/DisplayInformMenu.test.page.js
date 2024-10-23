@@ -14,7 +14,7 @@
 
 import {render} from "@testing-library/react";
 import React from "react";
-import AppContext from "../../contexts/AppContext";
+import AppContext from "../../../shared/context/AppContext/AppContext";
 import DisplayInFormMenu from "./DisplayInFormMenu";
 import MockTranslationProvider
   from "../../../react-extension/test/mock/components/Internationalisation/MockTranslationProvider";
