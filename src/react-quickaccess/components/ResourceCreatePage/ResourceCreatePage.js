@@ -32,6 +32,19 @@ import EntityValidationError from "../../../shared/models/entity/abstract/entity
 import ResourcePasswordDescriptionViewModel from "../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
 import {DateTime} from "luxon";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import ResourceViewModelFactory from "../../../shared/models/resource/ResourceViewModelFactory";
 
 class ResourceCreatePage extends React.Component {
   /**
@@ -92,14 +105,19 @@ class ResourceCreatePage extends React.Component {
 
   async initResourceViewModel() {
     const resourceViewModelDto = await this.getPreparedResource();
+    let resourceType;
 
-    const resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
-    resourceViewModelDto.resource_type_id = resource_type_id;
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    }
+    resourceViewModelDto.resource_type_id = resourceType.id;
 
     const expired = this.getResourceExpirationDate();
     resourceViewModelDto.expired = expired;
 
-    const resourceViewModel = new ResourcePasswordDescriptionViewModel(resourceViewModelDto);
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, resourceViewModelDto);
     const passwordEntropy = resourceViewModel.password ? SecretGenerator.entropy(resourceViewModel.password) : null;
 
     await this.focusFirstEmptyField(resourceViewModel);
@@ -632,6 +650,8 @@ class ResourceCreatePage extends React.Component {
 
 ResourceCreatePage.propTypes = {
   context: PropTypes.any, // The application context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   prepareResourceContext: PropTypes.any, // The password generator context
   history: PropTypes.object,
   location: PropTypes.any,
@@ -640,4 +660,4 @@ ResourceCreatePage.propTypes = {
   passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ResourceCreatePage))))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ResourceCreatePage))))))));

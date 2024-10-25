@@ -3,7 +3,6 @@
  * @param appContext An existing app context
  * @returns {any}
  */
-import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 import {
   defaultPasswordExpirySettingsContext
 } from "../../../react-extension/contexts/PasswordExpirySettingsContext.test.data";
@@ -14,15 +13,19 @@ import {
   defaultPasswordPoliciesContext
 } from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-
-export function defaultAppContext(appContext) {
-  const defaultAppContext = defaultUserAppContext();
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 export function defaultProps(props = {}) {
   const defaultProps = {
     context: defaultAppContext(props?.appContext),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     passwordExpiryContext: defaultPasswordExpirySettingsContext({
       getSettings: () => overridenPasswordExpirySettingsEntityDto()
     }),

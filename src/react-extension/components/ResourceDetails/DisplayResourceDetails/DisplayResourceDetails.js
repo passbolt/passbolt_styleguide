@@ -27,6 +27,10 @@ import {withTranslation, Trans} from "react-i18next";
 import ClipBoard from '../../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 class DisplayResourceDetails extends React.Component {
   /**
@@ -50,21 +54,26 @@ class DisplayResourceDetails extends React.Component {
    * Get the sidebar subtitle
    */
   get subtitle() {
-    const defaultSubtitle = this.translate("Resource");
     const resource = this.props.resourceWorkspaceContext.details.resource;
 
     // Resources types might not be yet initialized at the moment this component is rendered.
-    if (!this.props.context.resourceTypesSettings) {
+    if (!this.props.resourceTypes) {
       return "";
     }
 
-    const resourceType = this.props.context.resourceTypesSettings.findResourceTypeSlugById(resource.resource_type_id);
-    switch (resourceType) {
-      case this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION:
-        return this.translate("Resource with encrypted description");
+    const resourceType = this.props.resourceTypes.getFirstById(resource.resource_type_id);
+    switch (resourceType.slug) {
+      case "password-string":
+        return this.translate("Password");
+      case "password-and-description":
+        return this.translate("Password and Encrypted description");
+      case "password-description-totp":
+        return this.translate("Password, Encrypted description and TOTP");
+      case "totp":
+        return this.translate("TOTP");
+      default:
+        return this.translate("Resource");
     }
-
-    return defaultSubtitle;
   }
 
   /**
@@ -89,7 +98,7 @@ class DisplayResourceDetails extends React.Component {
    * @return {boolean}
    */
   get isStandaloneTotpResource() {
-    return this.props.context.resourceTypesSettings.assertResourceTypeIdIsStandaloneTotp(this.props.resourceWorkspaceContext.details.resource.resource_type_id);
+    return this.props.resourceTypes?.getFirstById(this.props.resourceWorkspaceContext.details.resource.resource_type_id)?.isStandaloneTotp();
   }
 
   /**
@@ -161,8 +170,9 @@ DisplayResourceDetails.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   resourceWorkspaceContext: PropTypes.object,
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   actionFeedbackContext: PropTypes.any, // The action feedback context
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withResourceWorkspace(withActionFeedback(withTranslation('common')(DisplayResourceDetails)))));
+export default withAppContext(withRbac(withResourceWorkspace(withResourceTypesLocalStorage(withActionFeedback(withTranslation('common')(DisplayResourceDetails))))));

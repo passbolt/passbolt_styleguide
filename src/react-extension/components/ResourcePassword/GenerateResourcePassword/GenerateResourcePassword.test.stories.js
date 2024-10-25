@@ -16,8 +16,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import {MemoryRouter, Route} from "react-router-dom";
 import React from "react";
 import GenerateResourcePassword from "./GenerateResourcePassword";
-import MockPort from "../../../test/mock/MockPort";
-import {defaultPasswordPoliciesDto} from "../../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
+import {defaultProps} from "./GenerateResourcePassword.test.data";
 
 
 export default {
@@ -27,19 +26,11 @@ export default {
 
 
 const Template = args =>
-  <AppContext.Provider>
+  <AppContext.Provider value={args.context}>
     <MemoryRouter initialEntries={['/']}>
       <Route component={routerProps => <GenerateResourcePassword {...args} {...routerProps}/>}></Route>
     </MemoryRouter>
   </AppContext.Provider>;
 
 export const Initial = Template.bind({});
-Initial.args = {
-  resourcePasswordGeneratorContext: {
-    settings: defaultPasswordPoliciesDto()
-  },
-  onClose: () => {},
-  context: {
-    port: new MockPort()
-  }
-};
+Initial.args = defaultProps();

@@ -4,6 +4,7 @@ import InputPassphrase from "./InputPassphrase";
 import AppContext from "../../../../shared/context/AppContext/AppContext";
 import SiteSettings from "../../../../shared/lib/Settings/SiteSettings";
 import siteSettingsFixture from "../../../test/fixture/Settings/siteSettings";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 
 export default {
@@ -11,13 +12,13 @@ export default {
   component: InputPassphrase
 };
 
-const context = {
+const context = defaultAppContext({
   userSettings: {
     getTrustedDomain: () => (new URL(window.location.href)).origin,
     getSecurityToken: () => ({backgroundColor: '#a85632', code: "ABC", textColor: '#ffffff'}),
   },
   siteSettings: new SiteSettings(siteSettingsFixture)
-};
+});
 
 
 const Template = args =>

@@ -1,0 +1,175 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         4.10.0
+ */
+import EntitySchema from "../abstract/entitySchema";
+import EntityV2 from "../abstract/entityV2";
+import EntityValidationError from "../abstract/entityValidationError";
+import MetadataPrivateKeyDataEntity from "./metadataPrivateKeyDataEntity";
+
+const PGP_STRING_MAX_LENGTH = 10_000;
+
+class MetadataPrivateKeyEntity extends EntityV2 {
+  /**
+   * @constructor
+   * @param {object} dto
+   */
+  constructor(dto, options) {
+    super(dto);
+
+    if (this._props.data && typeof this._props.data !== 'string') {
+      this._data = new MetadataPrivateKeyDataEntity(this._props.data, {...options, clone: false});
+      delete this._props.data;
+    }
+  }
+
+  /**
+   * Get metadata private key entity schema
+   * @returns {Object} schema
+   */
+  static getSchema() {
+    return {
+      "type": "object",
+      "required": [
+        "user_id",
+        "data",
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid",
+          "nullable": true,
+        },
+        "metadata_key_id": {
+          "type": "string",
+          "format": "uuid",
+          "nullable": true,
+        },
+        "user_id": {
+          "type": "string",
+          "format": "uuid",
+        },
+        "data": {
+          "anyOf": [{
+            "type": "string",
+            "maxLength": PGP_STRING_MAX_LENGTH,
+            "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m,
+          }, {
+            "type": "object",
+          }],
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "created_by": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified_by": {
+          "type": "string",
+          "format": "uuid"
+        },
+      }
+    };
+  }
+
+  /**
+   * @inheritDoc
+   */
+  validateBuildRules() {
+    if (Boolean(this._props.data) && Boolean(this._data)) {
+      const error = new EntityValidationError();
+      const message = "The property data and _data cannot be set at the same time";
+      error.addError("data", "only-one-defined", message);
+      throw error;
+    }
+  }
+
+  /**
+   * Customizes JSON stringification behavior
+   * @returns {object}
+   */
+  toDto() {
+    const result = Object.assign({}, this._props);
+
+    const data = this.data;
+    result.data = data instanceof MetadataPrivateKeyDataEntity
+      ? data.toDto()
+      : data;
+
+    return result;
+  }
+
+  /**
+   * Customizes JSON stringification behavior
+   * @returns {object}
+   */
+  toJSON() {
+    return this.toDto();
+  }
+
+  /*
+   * ==================================================
+   * Dynamic properties getters
+   * ==================================================
+   */
+  /**
+   * Get the raw data unencrypted if it hasn't been decrypted already.
+   * @returns {string}
+   */
+  get data() {
+    return this.isDecrypted
+      ? this._data
+      : this._props.data;
+  }
+
+  /**
+   * Get the metadata key id if any or null.
+   * @returns {string|null}
+   */
+  get metadataKeyId() {
+    return this._props.metadata_key_id || null;
+  }
+
+  /**
+   * Set the data.
+   * The data should be a MetadataPrivateKeyData or a string containing an encrypted MetadataPrivateKeyData.
+   * @param {string|MetadataPrivateKeyDataEntity} data
+   * @throws {EntityValidationError} if the `data` is not valid
+   */
+  set data(data) {
+    EntitySchema.validateProp("data", data, this.cachedSchema.properties.data);
+
+    if (typeof data === "string") {
+      this._props.data = data;
+      delete this._data;
+    } else {
+      this._data = new MetadataPrivateKeyDataEntity(data.toDto(), {clone: true, validate: false});
+      delete this._props.data;
+    }
+  }
+
+  /**
+   * Returns true if the data has been decrypted already.
+   * @returns {boolean}
+   */
+  get isDecrypted() {
+    return Boolean(this._data);
+  }
+}
+
+export default MetadataPrivateKeyEntity;

@@ -21,6 +21,18 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 const BROWSED_RESOURCES_LIMIT = 100;
 
@@ -111,6 +123,28 @@ class FilterResourcesByItemsIOwnPage extends React.Component {
   });
 
   /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
+  }
+
+  /**
    * Component renderer.
    * @returns {JSX}
    */
@@ -176,11 +210,13 @@ class FilterResourcesByItemsIOwnPage extends React.Component {
             }
           </ul>
         </div>
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper">
           <Link to="/webAccessibleResources/quickaccess/resources/create" id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
           </Link>
         </div>
+        }
       </div>
     );
   }
@@ -189,10 +225,12 @@ class FilterResourcesByItemsIOwnPage extends React.Component {
 FilterResourcesByItemsIOwnPage.propTypes = {
   context: PropTypes.any, // The application context
   resources: PropTypes.array, // the available resources
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   // Match, location and history props are injected by the withRouter decoration call.
   location: PropTypes.object,
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withResourcesLocalStorage(withTranslation('common')(FilterResourcesByItemsIOwnPage))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(FilterResourcesByItemsIOwnPage))))));

@@ -26,6 +26,10 @@ import Totp from "../../../shared/components/Totp/Totp";
 import {TotpCodeGeneratorService} from "../../../shared/services/otp/TotpCodeGeneratorService";
 import sanitizeUrl, {urlProtocols} from "../../../react-extension/lib/Sanitize/sanitizeUrl";
 import {resourceLinkAuthorizedProtocols} from "../../../react-extension/contexts/ResourceWorkspaceContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
 
 /**
  * Default display time of error message in ms.
@@ -402,7 +406,7 @@ class ResourceViewPage extends React.Component {
    * @return {boolean}
    */
   get isTotpResources() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdHasTotp(this.state.resource.resource_type_id);
+    return Boolean(this.state.resource.resource_type_id) && this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.hasTotp();
   }
 
   /**
@@ -410,7 +414,7 @@ class ResourceViewPage extends React.Component {
    * @return {boolean}
    */
   get isStandaloneTotpResource() {
-    return this.props.context.resourceTypesSettings?.assertResourceTypeIdIsStandaloneTotp(this.state.resource.resource_type_id);
+    return Boolean(this.state.resource.resource_type_id) && this.props.resourceTypes?.getFirstById(this.state.resource.resource_type_id)?.isStandaloneTotp();
   }
 
   render() {
@@ -651,6 +655,7 @@ class ResourceViewPage extends React.Component {
 ResourceViewPage.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -658,4 +663,4 @@ ResourceViewPage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withTranslation('common')(ResourceViewPage))));
+export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withTranslation('common')(ResourceViewPage)))));

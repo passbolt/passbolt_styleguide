@@ -17,6 +17,12 @@ import MockPort from "../../../react-extension/test/mock/MockPort";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {createMemoryHistory} from "history";
 import {defaultGroupDto} from "../../../shared/models/entity/group/groupEntity.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 /**
  * Default component props
@@ -34,6 +40,8 @@ export function defaultProps(props = {}) {
         ...defaultContext,
         ...props?.context
       }),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   };
 
   delete props.context; // Treated in the default

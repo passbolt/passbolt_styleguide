@@ -1,6 +1,7 @@
 import React from "react";
 import {MemoryRouter, Route} from "react-router-dom";
 import MoreFiltersPage from "./MoreFiltersPage";
+import {defaultProps} from "./MoreFiltersPage.test.data";
 
 export default {
   title: 'Components/QuickAccess/MoreFilters',
@@ -14,8 +15,7 @@ const Template = () =>
 
 
 export const Initial = Template.bind({});
-Initial.args = {
-};
+Initial.args = defaultProps();
 Initial.parameters = {
   css: "ext_quickaccess"
 };

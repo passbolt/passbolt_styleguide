@@ -16,9 +16,9 @@ import React from "react";
 import AppContext from "../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import SiteSettings from "../../shared/lib/Settings/SiteSettings";
-import ResourceTypesSettings from "../../shared/lib/Settings/ResourceTypesSettings";
 import UserSettings from "../../shared/lib/Settings/UserSettings";
 import RbacsCollection from "../../shared/models/entity/rbac/rbacsCollection";
+import AccountEntity from "../../shared/models/entity/account/accountEntity";
 
 /**
  * The ExtApp context provider
@@ -42,11 +42,11 @@ class ExtAppContextProvider extends React.Component {
     this.getLoggedInUser();
     this.initLocale();
     this.getResources();
-    this.getResourceTypes();
     this.getFolders();
     this.getGroups();
     this.getUsers();
     this.getRoles();
+    this.getAccount();
     const skeleton = document.getElementById("temporary-skeleton");
     if (skeleton) {
       skeleton.remove();
@@ -75,6 +75,7 @@ class ExtAppContextProvider extends React.Component {
       groups: null,
 
       loggedInUser: null,
+      account: null, // The account
       rbacs: null,
       siteSettings: null,
       userSettings: null,
@@ -258,16 +259,6 @@ class ExtAppContextProvider extends React.Component {
   }
 
   /**
-   * Get the list of resource types from local storage and set it in the state
-   * Using ResourceTypesSettings
-   */
-  async getResourceTypes() {
-    const resourceTypes = await this.props.port.request("passbolt.resource-type.get-or-find-all");
-    const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
-    this.setState({resourceTypesSettings});
-  }
-
-  /**
    * Get the list of user settings from local storage and set it in the state
    * Using UserSettings
    */
@@ -283,6 +274,16 @@ class ExtAppContextProvider extends React.Component {
   async initLocale() {
     const {locale} = await this.props.port.request("passbolt.locale.get");
     this.setState({locale});
+  }
+
+  /**
+   * Get the account
+   * @returns {Promise<void>}
+   */
+  async getAccount() {
+    const accountDto = await this.props.port.request("passbolt.account.get");
+    const account = new AccountEntity(accountDto);
+    this.setState({account});
   }
 
   /*
@@ -303,11 +304,6 @@ class ExtAppContextProvider extends React.Component {
       const userData = changes._passbolt_data.newValue;
       const userSettings = new UserSettings(userData.config);
       this.setState({userSettings});
-    }
-    if (changes.resourceTypes && changes.resourceTypes.newValue) {
-      const resourceTypes = changes.resourceTypes.newValue;
-      const resourceTypesSettings = new ResourceTypesSettings(this.state.siteSettings, resourceTypes);
-      this.setState({resourceTypesSettings});
     }
     if (changes.folders && changes.folders.newValue) {
       const folders = changes.folders.newValue;

@@ -24,6 +24,18 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {filterResourcesBySearch} from "../../../shared/utils/filterUtils";
 import {withResourcesLocalStorage} from "../../contexts/ResourceLocalStorageContext";
 import memoize from "memoize-one";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 const SUGGESTED_RESOURCES_LIMIT = 20;
 const BROWSED_RESOURCES_LIMIT = 100;
@@ -171,7 +183,29 @@ class HomePage extends React.Component {
    * @returns {boolean}
    */
   isPasswordResource(resourceId) {
-    return this.props.context.resourceTypesSettings.assertResourceTypeIdHasPassword(resourceId);
+    return this.props.resourceTypes?.getFirstById(resourceId)?.hasPassword();
+  }
+
+  /**
+   * Has metadata types settings
+   * @returns {boolean}
+   */
+  hasMetadataTypesSettings() {
+    return Boolean(this.props.metadataTypeSettings);
+  }
+
+  /**
+   * Can create password
+   * @returns {boolean}
+   */
+  canCreatePassword() {
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      return this.props.resourceTypes?.hasOneWithSlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -179,7 +213,7 @@ class HomePage extends React.Component {
    * @returns {JSX}
    */
   render() {
-    const isReady = this.props.resources !== null && this.props.context.resourceTypesSettings != null;
+    const isReady = this.props.resources !== null && this.props.resourceTypes != null;
     const hasSearch = this.props.context.search?.length > 0;
     const showSuggestedSection = !hasSearch;
     const showBrowsedResourcesSection = hasSearch;
@@ -300,6 +334,7 @@ class HomePage extends React.Component {
             </div>
           }
         </div>
+        {this.hasMetadataTypesSettings() && this.canCreatePassword() &&
         <div className="submit-wrapper button-after-list input">
           <Link to={`/webAccessibleResources/quickaccess/resources/create`} id="popupAction" className="button primary big full-width" role="button">
             <Trans>Create new</Trans>
@@ -308,6 +343,7 @@ class HomePage extends React.Component {
           <div className="error-message">{this.state.useOnThisTabError}</div>
           }
         </div>
+        }
       </div>
     );
   }
@@ -317,8 +353,10 @@ HomePage.propTypes = {
   context: PropTypes.any, // The application context
   rbacContext: PropTypes.any, // The role based access control context
   resources: PropTypes.array, // The resources from the local storage
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   resourcesLocalStorageContext: PropTypes.object, // The resources local storage context
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRbac(withRouter(withResourcesLocalStorage(withTranslation('common')(HomePage)))));
+export default withAppContext(withRbac(withRouter(withResourceTypesLocalStorage(withResourcesLocalStorage(withMetadataTypesSettingsLocalStorage(withTranslation('common')(HomePage)))))));

@@ -1,21 +1,21 @@
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 classDiagram
-    class ResourceTypesLSContext{
+    class ResourceTypesLocalStorageContext{
         +State~function~ get() ResourceTypesCollection
-        +State~array~ resourceTypes
+        +State~ResourceTypesCollection~ resourceTypes
         +State~function~ updateLocalStorage() Promise
     }
 
     class Global{
-        +withResourceTypesLS(): ResourceTypesLSHOC
+        +withResourceTypesLocalStorage(): ResourceTypesLocalStorageHOC
     }
 
-    note for ResourceTypesLSHOC "The render should inject the resource types <br>LS context as well as the resource types <br> held by the context"
-    class ResourceTypesLSHOC{
+    note for ResourceTypesLocalStorageHOC "The render should inject the context <br>LS context as well as the resource types <br> held by the context"
+    class ResourceTypesLocalStorageHOC{
         +render() JSX
     }
 
-    Global-->ResourceTypesLSHOC
-    ResourceTypesLSHOC-->ResourceTypesLSContext
+    Global-->ResourceTypesLocalStorageHOC
+    ResourceTypesLocalStorageHOC-->ResourceTypesLocalStorageContext
 ```

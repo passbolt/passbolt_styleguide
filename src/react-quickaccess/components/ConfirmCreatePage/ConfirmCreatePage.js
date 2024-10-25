@@ -21,6 +21,13 @@ import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 /**
  * The component display error variations.
@@ -86,8 +93,7 @@ class ConfirmCreatePage extends React.PureComponent {
    * @returns {Promise<void>}
    */
   async save() {
-    const resourceTypeId = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(
-      this.props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
+    const resourceTypeId = this.props.resourceTypes?.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG)?.id;
 
     const preparedResource = this.props.prepareResourceContext.consumePreparedResource();
     const resourceDto = {
@@ -195,6 +201,7 @@ ConfirmCreatePage.propTypes = {
   context: PropTypes.any, // The application context
   prepareResourceContext: PropTypes.any, // The password generator context
   passwordExpiryContext: PropTypes.object, // The password expiry context
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
   // Match, location and history props are injected by the withRouter decoration call.
   match: PropTypes.object,
   location: PropTypes.object,
@@ -202,4 +209,4 @@ ConfirmCreatePage.propTypes = {
   t: PropTypes.func, // The translation function
 };
 
-export default withAppContext(withRouter(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ConfirmCreatePage))))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withPrepareResourceContext(withPasswordExpiry(withPasswordPolicies(withTranslation('common')(ConfirmCreatePage)))))));

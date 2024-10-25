@@ -21,6 +21,17 @@ import {readPermissionDto, updatePermissionDto} from "../../../shared/models/ent
 import {
   defaultResourceMetadataDto
 } from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
+import expect from "expect";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV50FreshDto,
+  defaultMetadataTypesSettingsV6Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  resourceTypesV4CollectionDto,
+  resourceTypesV5CollectionDto
+} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -182,6 +193,48 @@ describe("FilterResourcesBySharedWithMePage", () => {
 
       expect(props.context.updateSearch).toHaveBeenCalledTimes(2);
       expect(props.context.updateSearch).toHaveBeenCalledWith("test");
+    });
+  });
+
+  describe("As LU I can create resource from the button", () => {
+    it("should display the button if metadata type settings and resource types are loaded", () => {
+      const props = defaultProps();
+      const page = new FilterResourcesBySharedWithMePagePage(props);
+      expect(page.createButton).toBeDefined();
+    });
+
+    it("should display the button if metadata type settings and resource types are loaded for v5", () => {
+      const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
+      const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity});
+      const page = new FilterResourcesBySharedWithMePagePage(props);
+      expect(page.createButton).toBeDefined();
+    });
+
+    it("should not display the button if metadata type settings are not loaded", () => {
+      const props = defaultProps({metadataTypeSettings: null});
+      const page = new FilterResourcesBySharedWithMePagePage(props);
+      expect(page.createButton).toBeNull();
+    });
+
+    it("should not display the button if resource types are not loaded", () => {
+      const props = defaultProps({resourceTypes: null});
+      const page = new FilterResourcesBySharedWithMePagePage(props);
+      expect(page.createButton).toBeNull();
+    });
+
+    it("should not display the button if metadata type settings default is v5 and only v4 resource types is available", () => {
+      const metadataTypeSettingEntity = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV50FreshDto());
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV4CollectionDto());
+      const props = defaultProps({metadataTypeSettings: metadataTypeSettingEntity, resourceTypes: resourceTypesCollection});
+      const page = new FilterResourcesBySharedWithMePagePage(props);
+      expect(page.createButton).toBeNull();
+    });
+
+    it("should not display the button if metadata type settings default is v4 and only v5 resource types is available", () => {
+      const resourceTypesCollection = new ResourceTypesCollection(resourceTypesV5CollectionDto());
+      const props = defaultProps({resourceTypes: resourceTypesCollection});
+      const page = new FilterResourcesBySharedWithMePagePage(props);
+      expect(page.createButton).toBeNull();
     });
   });
 });

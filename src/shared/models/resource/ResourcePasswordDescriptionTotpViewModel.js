@@ -20,6 +20,7 @@ import {
   RESOURCE_USERNAME_MAX_LENGTH
 } from "../../constants/inputs.const";
 import ResourceViewModel from "./ResourceViewModel";
+import {RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG} from "../entity/resourceType/resourceTypeSchemasDefinition";
 
 /**
  * ResourcePasswordDescriptionTotp ViewModel
@@ -138,7 +139,7 @@ class ResourcePasswordDescriptionTotpViewModel extends ResourceViewModel {
    * @inheritdoc
    */
   static get resourceTypeSlug() {
-    return "password-description-totp";
+    return RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP_SLUG;
   }
 
   /**

@@ -17,6 +17,11 @@ import {TEST_ROLE_ADMIN_ID, TEST_ROLE_USER_ID} from "../../src/shared/models/ent
 import {
   resourceTypesCollectionDto
 } from "../../src/shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../src/shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import AccountEntity from "../../src/shared/models/entity/account/accountEntity";
+import {defaultAccountDto} from "../../src/shared/models/entity/account/accountEntity.test.data";
 
 const baseURL = new URL(window.location.href).origin;
 
@@ -67,9 +72,14 @@ const roles = [{
 export default () => {
   const storage = new MockStorage();
   const resourceTypes = resourceTypesCollectionDto();
+  const account = new AccountEntity(defaultAccountDto());
+  const metadataTypeSettings = {
+    [`metadata_types_settings-${account.id}`]: defaultMetadataTypesSettingsV4Dto()
+  };
   storage.local.set({_passbolt_data});
   storage.local.set({resourceTypes});
   storage.local.set({roles});
+  storage.local.set(metadataTypeSettings);
 
   return storage;
 };

@@ -6,19 +6,15 @@
 import {defaultPrepareResourceContext} from "../../contexts/PrepareResourceContext.test.data";
 import {defaultPasswordPoliciesContext} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext.test.data";
 import {defaultPasswordPoliciesDto} from "../../../shared/models/passwordPolicies/PasswordPoliciesDto.test.data";
-import {defaultUserAppContext} from "../../../react-extension/contexts/ExtAppContext.test.data";
 import {defaultPasswordExpirySettingsContext} from "../../../react-extension/contexts/PasswordExpirySettingsContext.test.data";
 import {overridenPasswordExpirySettingsEntityDto} from "../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
-
-export function defaultAppContext(appContext) {
-  const defaultAppContext = defaultUserAppContext({
-    isAuthenticated: true,
-    getOpenerTabId: () => null,
-    getBootstrapFeature: () => null,
-    getDetached: () => false,
-  });
-  return Object.assign(defaultAppContext, appContext || {});
-}
+import {defaultAppContext} from "../../contexts/AppContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 /**
  * Default props
@@ -27,13 +23,20 @@ export function defaultAppContext(appContext) {
  */
 export const defaultProps = (props = {}) => ({
   prepareResourceContext: defaultPrepareResourceContext(),
+  resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+  metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
   passwordExpiryContext: defaultPasswordExpirySettingsContext({
     getSettings: () => overridenPasswordExpirySettingsEntityDto()
   }),
   passwordPoliciesContext: defaultPasswordPoliciesContext({
     getPolicies: jest.fn(() => defaultPasswordPoliciesDto())
   }),
-  context: defaultAppContext(),
+  context: defaultAppContext({
+    isAuthenticated: true,
+    getOpenerTabId: () => null,
+    getBootstrapFeature: () => null,
+    getDetached: () => false,
+  }),
   ...props,
 });
 

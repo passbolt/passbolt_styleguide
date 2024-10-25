@@ -4,6 +4,7 @@ import AppContext from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import DefineResourceFolderMoveStrategy from "./DefineResourceFolderMoveStrategy";
 import MockPort from "../../../test/mock/MockPort";
+import {defaultAppContext} from "../../../contexts/ExtAppContext.test.data";
 
 
 export default {
@@ -16,9 +17,7 @@ const defaultContext = {
     {id: 1, name: "My folder"}
   ],
   folderMoveStrategyProps: {
-    folders: [
-      {id: 1}
-    ]
+    folders: [1]
   },
   port: new MockPort(),
   setContext: () => {}
@@ -37,7 +36,7 @@ Template.propTypes = {
 
 export const Initial = Template.bind({});
 Initial.args = {
-  context: defaultContext,
+  context: defaultAppContext(defaultContext),
   onClose: () => {}
 };
 

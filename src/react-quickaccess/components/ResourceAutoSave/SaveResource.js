@@ -21,9 +21,21 @@ import Password from "../../../shared/components/Password/Password";
 import {withAppContext} from "../../../shared/context/AppContext/AppContext";
 import {withPasswordPolicies} from "../../../shared/context/PasswordPoliciesContext/PasswordPoliciesContext";
 import {withPasswordExpiry} from "../../../react-extension/contexts/PasswordExpirySettingsContext";
-import ResourcePasswordDescriptionViewModel from "../../../shared/models/resource/ResourcePasswordDescriptionViewModel";
 import EntityValidationError from "../../../shared/models/entity/abstract/entityValidationError";
 import ResourceViewModel from "../../../shared/models/resource/ResourceViewModel";
+import {
+  withResourceTypesLocalStorage
+} from "../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {
+  withMetadataTypesSettingsLocalStorage
+} from "../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import ResourceViewModelFactory from "../../../shared/models/resource/ResourceViewModelFactory";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG,
+  RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
 
 class SaveResource extends React.Component {
   /**
@@ -76,8 +88,15 @@ class SaveResource extends React.Component {
   async loadPasswordMetaFromTabForm() {
     const resourceDto = await this.props.context.port.request("passbolt.quickaccess.prepare-autosave");
     resourceDto.password = resourceDto.secret_clear;
+    let resourceType;
 
-    const resourceViewModel = new ResourcePasswordDescriptionViewModel(resourceDto);
+    if (this.props.metadataTypeSettings.isDefaultResourceTypeV5) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG);
+    } else if (this.props.metadataTypeSettings.isDefaultResourceTypeV4) {
+      resourceType = this.props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG);
+    }
+    resourceDto.resource_type_id = resourceType.id;
+    const resourceViewModel = ResourceViewModelFactory.createFromResourceTypeAndResourceViewModelDto(resourceType, resourceDto);
 
     this.setState({loaded: true, resourceViewModel: resourceViewModel});
   }
@@ -109,11 +128,9 @@ class SaveResource extends React.Component {
     event.preventDefault();
     this.setState({processing: true, hasAlreadyBeenValidated: true});
 
-    const resource_type_id = this.props.context.resourceTypesSettings.findResourceTypeIdBySlug(ResourcePasswordDescriptionViewModel.resourceTypeSlug);
     const expired = this.props.passwordExpiryContext.getDefaultExpirationDate();
 
     const resourceViewModel = this.state.resourceViewModel
-      .cloneWithMutation("resource_type_id", resource_type_id)
       .cloneWithMutation("expired", expired);
 
     const validationErrors = this.validate(resourceViewModel);
@@ -278,8 +295,10 @@ SaveResource.propTypes = {
   context: PropTypes.any, // The application context
   history: PropTypes.object,
   t: PropTypes.func, // The translation function
+  resourceTypes: PropTypes.instanceOf(ResourceTypesCollection), // The resource types collection
+  metadataTypeSettings: PropTypes.instanceOf(MetadataTypesSettingsEntity), // The metadata type settings
   passwordPoliciesContext: PropTypes.object, // The password policy context
   passwordExpiryContext: PropTypes.object, // The password expiry context
 };
 
-export default withAppContext(withRouter(withPasswordPolicies(withPasswordExpiry(withTranslation('common')(SaveResource)))));
+export default withAppContext(withRouter(withResourceTypesLocalStorage(withMetadataTypesSettingsLocalStorage(withPasswordPolicies(withPasswordExpiry(withTranslation('common')(SaveResource)))))));

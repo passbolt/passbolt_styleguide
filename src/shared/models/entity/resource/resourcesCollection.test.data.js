@@ -19,6 +19,7 @@ import {
   TEST_RESOURCE_TYPE_PASSWORD_STRING, TEST_RESOURCE_TYPE_TOTP
 } from "../resourceType/resourceTypeEntity.test.data";
 import {v4 as uuidv4} from "uuid";
+import {metadata} from "../../../../../test/fixture/encryptedMetadata/metadata.js";
 
 export const defaultResourceDtosCollection = () => {
   const resource1 = defaultResourceDto({name: "Resource1"});
@@ -75,6 +76,55 @@ export const defaultResourcesDtos = (count = 10, data = {}, options = {}) => {
   const dtos = [];
   for (let i = 0; i < count; i++) {
     const dto = defaultResourceDto(data, options);
+    dtos.push(dto);
+  }
+  return dtos;
+};
+
+/**
+ * Returns a collection of dtos where entities' metadata is encrypted with the test shared key (from pgpKeys.metadata.private).
+ * @param {number} [count = 10]
+ * @param {object} [data = {}]
+ * @param {object} [options = {}]
+ * @returns {Array<Object>}
+ */
+export const defaultSharedResourcesWithEncryptedMetadataDtos = (count = 10, data = {}, options = {}) => {
+  const dtos = [];
+  const fixtureCount = metadata.withSharedKey.encryptedMetadata.length;
+  const metadata_key_id = data.metadata_key_id || uuidv4();
+  for (let i = 0; i < count; i++) {
+    const encryptedMetadata = metadata.withSharedKey.encryptedMetadata[i % fixtureCount];
+    const defaultData = {
+      ...data,
+      metadata_key_id: metadata_key_id,
+      metadata: encryptedMetadata,
+      metadata_key_type: "shared_key"
+    };
+    const dto = defaultResourceDto(defaultData, options);
+    dtos.push(dto);
+  }
+  return dtos;
+};
+
+/**
+ * Returns a collection of dtos where entities' metadata is encrypted with Ada's key (frompgpKeys.ada.private).
+ * @param {number} [count = 10]
+ * @param {object} [data = {}]
+ * @param {object} [options = {}]
+ * @returns {Array<Object>}
+ */
+export const defaultPrivateResourcesWithEncryptedMetadataDtos = (count = 10, data = {}, options = {}) => {
+  const dtos = [];
+  const fixtureCount = metadata.withAdaKey.encryptedMetadata.length;
+  for (let i = 0; i < count; i++) {
+    const encryptedMetadata = metadata.withAdaKey.encryptedMetadata[i % fixtureCount];
+    const defaultData = {
+      ...data,
+      metadata_key_id: null,
+      metadata: encryptedMetadata,
+      metadata_key_type: "user_key"
+    };
+    const dto = defaultResourceDto(defaultData, options);
     dtos.push(dto);
   }
   return dtos;

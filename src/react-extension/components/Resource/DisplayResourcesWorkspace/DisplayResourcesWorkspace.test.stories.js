@@ -30,6 +30,8 @@ import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import DisplayMainMenu from "../../Common/Menu/DisplayMainMenu";
 import Footer from "../../Common/Footer/Footer";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
+import MetadataTypesSettingsLocalStorageContextProvider from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
+import ResourceTypesLocalStorageContextProvider from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 
 /**
  * DisplayResourcesWorkspace stories
@@ -47,21 +49,25 @@ const Template = ({...args}) =>
           <NavigationContextProvider>
             <ContextualMenuContextProvider>
               <ResourceWorkspaceContextProvider>
-                <ResourcePasswordGeneratorContextProvider>
-                  <ManageContextualMenu/>
-                  <ManageDialogs/>
-                  <DragContextProvider>
-                    <div id="container" className="page password">
-                      <div id="app" className="app ready" tabIndex="1000">
-                        <div className="header first">
-                          <DisplayMainMenu/>
+                <MetadataTypesSettingsLocalStorageContextProvider>
+                  <ResourceTypesLocalStorageContextProvider>
+                    <ResourcePasswordGeneratorContextProvider>
+                      <ManageContextualMenu/>
+                      <ManageDialogs/>
+                      <DragContextProvider>
+                        <div id="container" className="page password">
+                          <div id="app" className="app ready" tabIndex="1000">
+                            <div className="header first">
+                              <DisplayMainMenu/>
+                            </div>
+                            <DisplayResourcesWorkspace {...args}/>
+                          </div>
+                          <Footer/>
                         </div>
-                        <DisplayResourcesWorkspace {...args}/>
-                      </div>
-                      <Footer/>
-                    </div>
-                  </DragContextProvider>
-                </ResourcePasswordGeneratorContextProvider>
+                      </DragContextProvider>
+                    </ResourcePasswordGeneratorContextProvider>
+                  </ResourceTypesLocalStorageContextProvider>
+                </MetadataTypesSettingsLocalStorageContextProvider>
               </ResourceWorkspaceContextProvider>
             </ContextualMenuContextProvider>
           </NavigationContextProvider>

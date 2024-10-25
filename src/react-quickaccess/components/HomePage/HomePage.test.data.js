@@ -13,11 +13,19 @@
  */
 
 import {defaultAppContext} from "../../contexts/AppContext.test.data";
-import MockStorage from "../../../react-extension/test/mock/MockStorage";
 import MockPort from "../../../react-extension/test/mock/MockPort";
 import {defaultAdministratorRbacContext, denyRbacContext} from "../../../shared/context/Rbac/RbacContext.test.data";
 import {defaultResourceDto} from "../../../shared/models/entity/resource/resourceEntity.test.data";
 import {defaultResourceLocalStorageContext} from "../../contexts/ResourceLocalStorageContext.test.data";
+import ResourceTypesCollection from "../../../shared/models/entity/resourceType/resourceTypesCollection";
+import {resourceTypesCollectionDto} from "../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV4Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
+import {
+  defaultResourceMetadataDto
+} from "../../../shared/models/entity/resourceMetadata/resourceMetadataEntity.test.data";
 
 /**
  * Default component props.
@@ -29,6 +37,8 @@ export function defaultProps(data = {}) {
     context: defaultAppContext(),
     rbacContext: defaultAdministratorRbacContext(),
     resourcesLocalStorageContext: defaultResourceLocalStorageContext(),
+    resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     resources: null,
     getOpenerTabId: () => 1,
     ...data
@@ -40,7 +50,7 @@ export function defaultProps(data = {}) {
  * @return {Object}
  */
 export function loadingProps() {
-  const context = new defaultAppContext();
+  const context = defaultAppContext();
   return defaultProps({context});
 }
 
@@ -49,12 +59,8 @@ export function loadingProps() {
  * @return {Object}
  */
 export function noResourcesProps() {
-  const mockStorage = new MockStorage();
-  mockStorage.local.set({resources: []});
-  const context = new defaultAppContext({
-    storage: mockStorage
-  });
-  return defaultProps({context});
+  const context = defaultAppContext();
+  return defaultProps({context, resources: []});
 }
 
 /**
@@ -62,13 +68,10 @@ export function noResourcesProps() {
  * @return {Object}
  */
 export function searchNoResultProps() {
-  const mockStorage = new MockStorage();
-  mockStorage.local.set({resources: []});
-  const context = new defaultAppContext({
-    storage: mockStorage,
+  const context = defaultAppContext({
     search: "apache",
   });
-  return defaultProps({context});
+  return defaultProps({context, resources: []});
 }
 
 /**
@@ -76,13 +79,10 @@ export function searchNoResultProps() {
  * @return {Object}
  */
 export function searchWithResultProps() {
-  const mockStorage = new MockStorage();
-  mockStorage.local.set({resources: [defaultResourceDto({name: "apache", uri: "http://www.apache.org"}), defaultResourceDto()]});
-  const context = new defaultAppContext({
-    storage: mockStorage,
+  const context = defaultAppContext({
     search: "apache",
   });
-  return defaultProps({context});
+  return defaultProps({context, resources: [defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org"]})}), defaultResourceDto()]});
 }
 
 /**
@@ -92,13 +92,10 @@ export function searchWithResultProps() {
 export function suggestedResourcesProps() {
   const port = new MockPort();
   port.addRequestListener("passbolt.active-tab.get-url", () => "http:\/\/www.apache.org\/");
-  const mockStorage = new MockStorage();
-  mockStorage.local.set({resources: [defaultResourceDto({name: "apache", uri: "http://www.apache.org"}), defaultResourceDto()]});
-  const context = new defaultAppContext({
-    storage: mockStorage,
+  const context = defaultAppContext({
     port: port,
   });
-  return defaultProps({context});
+  return defaultProps({context, resources: [defaultResourceDto({metadata: defaultResourceMetadataDto({name: "apache", uris: ["http://www.apache.org"]})}), defaultResourceDto()]});
 }
 
 /**

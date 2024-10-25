@@ -15,6 +15,13 @@ import SaveResourcePage from "./SaveResource.test.page";
 import {defaultProps} from "./SaveResource.test.data";
 import {waitFor} from "@testing-library/react";
 import {waitForTrue} from "../../../../test/utils/waitFor";
+import {
+  RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG, RESOURCE_TYPE_V5_DEFAULT_SLUG
+} from "../../../shared/models/entity/resourceType/resourceTypeSchemasDefinition";
+import MetadataTypesSettingsEntity from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {
+  defaultMetadataTypesSettingsV6Dto
+} from "../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -43,7 +50,7 @@ describe("See the Create Resource - save resource", () => {
     expect(page.password.value).toBe(resourceMetaFromTab.secret_clear);
   });
 
-  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource", async() => {
+  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v4", async() => {
     expect.assertions(2);
     // data mocked
     const props = defaultProps(); // The props to pass
@@ -61,7 +68,48 @@ describe("See the Create Resource - save resource", () => {
     await waitFor(() => {});
     await page.save();
     // expected data
-    const resourceTypeId = props.context.resourceTypesSettings.findResourceTypeIdBySlug(props.context.resourceTypesSettings.DEFAULT_RESOURCE_TYPES_SLUGS.PASSWORD_AND_DESCRIPTION);
+    const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION_SLUG).id;
+    const resourceDto = {
+      metadata: {
+        name: resourceMetaFromTab.name,
+        username: resourceMetaFromTab.username,
+        uris: [resourceMetaFromTab.uri],
+        resource_type_id: resourceTypeId,
+      },
+      resource_type_id: resourceTypeId,
+      folder_parent_id: null,
+      expired: props.passwordExpiryContext.getDefaultExpirationDate(),
+    };
+    const secretDto = {
+      password: resourceMetaFromTab.secret_clear,
+      description: "",
+      resource_type_id: resourceTypeId,
+    };
+    // expectations
+    expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.create", resourceDto, secretDto);
+    expect(window.close).toHaveBeenCalled();
+  });
+
+  it("As a signed-in user creating a password on the quickaccess, I should be able to save resource v5", async() => {
+    expect.assertions(2);
+    // data mocked
+    const metadataTypeSettings = new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto());
+    const props = defaultProps({metadataTypeSettings}); // The props to pass
+    const resourceMetaFromTab = {
+      name: "Passbolt",
+      uri: "https://passbolt.com",
+      username: "username",
+      secret_clear: "secret"
+    };
+    // functions mocked
+    jest.spyOn(props.context.port, 'request').mockImplementationOnce(() => resourceMetaFromTab);
+    jest.spyOn(window, 'close').mockImplementation(jest.fn());
+    // process
+    const page = new SaveResourcePage(props);
+    await waitFor(() => {});
+    await page.save();
+    // expected data
+    const resourceTypeId = props.resourceTypes.getFirstBySlug(RESOURCE_TYPE_V5_DEFAULT_SLUG).id;
     const resourceDto = {
       metadata: {
         name: resourceMetaFromTab.name,

@@ -12,6 +12,11 @@
  * @since         4.7.0
  */
 import {v4 as uuidv4} from "uuid";
+import {
+  defaultArmoredPrivateKey,
+  defaultArmoredPublicKey,
+  defaultPgpMessage
+} from "./assertEntityProperty.test.data";
 
 export const SCENARIO_EMPTY = {scenario: "empty", value: ""};
 export const SCENARIO_STRING = {scenario: "a string", value: "valid-string"};
@@ -304,4 +309,63 @@ const SUCCESS_COLLECTION_MIN_ITEMS_SCENARIO = minLength => ([{scenario: "valid l
 const FAIL_COLLECTION_MIN_ITEMS_SCENARIO = minLength => (!minLength ? [] : [{scenario: "too short", value: "a".repeat(minLength - 1).split("")}]);
 export const collectionMinItems = (CollectionClass, minLength) => {
   assertCollection(CollectionClass, SUCCESS_COLLECTION_MIN_ITEMS_SCENARIO(minLength), FAIL_COLLECTION_MIN_ITEMS_SCENARIO(minLength), "minItems");
+};
+
+const SUCCESS_FINGERPRINT_SCENARIO = [
+  {scenario: "with a valid fingerprint string", value: "ABCD".repeat(10)},
+];
+const FAIL_FINGERPRINT_SCENARIO = [
+  {scenario: "with a invalid fingerprint string size", value: "ABCD".repeat(40)},
+];
+export const fingerprint = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_FINGERPRINT_SCENARIO, FAIL_FINGERPRINT_SCENARIO, "pattern");
+};
+
+const SUCCESS_ARMORED_PRIVATE_KEY_SCENARIO = [
+  {scenario: "with comments in the header", value: defaultArmoredPrivateKey({withCrc: true, withComments: true})},
+  {scenario: "without comment in the header", value: defaultArmoredPrivateKey({withCrc: true, withComments: false})},
+  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: false, withDuplicates: true})},
+];
+const FAIL_ARMORED_PRIVATE_KEY_SCENARIO = [
+  {scenario: "without CRC", value: defaultArmoredPrivateKey({withCrc: false})},
+  {scenario: "without CRC and with multiple blocks", value: defaultArmoredPrivateKey({withCrc: false, withDuplicates: true})},
+  {scenario: "with wrong extra characters", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true})},
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+];
+
+export const armoredPrivateKey = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_ARMORED_PRIVATE_KEY_SCENARIO, FAIL_ARMORED_PRIVATE_KEY_SCENARIO, "pattern");
+};
+
+const SUCCESS_ARMORED_PUBLIC_KEY_SCENARIO = [
+  {scenario: "with comments in the header", value: defaultArmoredPublicKey({withCrc: true, withComments: true})},
+  {scenario: "without comment in the header", value: defaultArmoredPublicKey({withCrc: true, withComments: false})},
+  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: false, withDuplicates: true})},
+];
+const FAIL_ARMORED_PUBLIC_KEY_SCENARIO = [
+  {scenario: "without CRC", value: defaultArmoredPublicKey({withCrc: false})},
+  {scenario: "without CRC and with multiple blocks", value: defaultArmoredPublicKey({withCrc: false, withDuplicates: true})},
+  {scenario: "with wrong extra characters", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true})},
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+];
+
+export const armoredPublicKey = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_ARMORED_PUBLIC_KEY_SCENARIO, FAIL_ARMORED_PUBLIC_KEY_SCENARIO, "pattern");
+};
+
+const successScenarios = [
+  {scenario: "with comments in the header", value: defaultPgpMessage({withCrc: true, withComments: true})},
+  {scenario: "without comments in the header", value: defaultPgpMessage({withCrc: true, withComments: false})},
+  {scenario: "with comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "without comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: false, withDuplicates: true})},
+];
+const failScenarios = [
+  {scenario: "without CRC", value: defaultPgpMessage({withCrc: false})},
+  {scenario: "without CRC and multiple blocks", value: defaultPgpMessage({withCrc: false, withDuplicates: true})},
+  {scenario: "with wrong extra characters", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true})},
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}];
+export const armoredPgpMessage = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, successScenarios, failScenarios, "pattern");
 };
