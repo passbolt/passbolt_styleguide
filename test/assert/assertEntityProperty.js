@@ -355,6 +355,18 @@ export const armoredPublicKey = (EntityClass, propertyName) => {
   assert(EntityClass, propertyName, SUCCESS_ARMORED_PUBLIC_KEY_SCENARIO, FAIL_ARMORED_PUBLIC_KEY_SCENARIO, "pattern");
 };
 
+const SUCCESS_SESSION_KEY_SCENARIO = [
+  {scenario: "success session key", value: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC"},
+];
+const FAIL_SESSION_KEY_SCENARIO = [
+  {scenario: "with empty session key", value: ""},
+  {scenario: "with wrong characters", value: "string"},
+];
+
+export const sessionKey = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_SESSION_KEY_SCENARIO, FAIL_SESSION_KEY_SCENARIO, "pattern");
+};
+
 const successScenarios = [
   {scenario: "with comments in the header", value: defaultPgpMessage({withCrc: true, withComments: true})},
   {scenario: "without comments in the header", value: defaultPgpMessage({withCrc: true, withComments: false})},
