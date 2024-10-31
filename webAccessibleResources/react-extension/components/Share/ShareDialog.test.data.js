@@ -837,7 +837,7 @@ export const folders = [{
 ];
 
 export const mockResultsResources = {
-  'passbolt.share.find-resources-for-share': resources,
+  'passbolt.resources.find-all-by-ids-for-display-permissions': resources,
   'passbolt.keyring.get-public-key-info-by-user': gpgKey,
   "passbolt.share.resources.save": true,
 };

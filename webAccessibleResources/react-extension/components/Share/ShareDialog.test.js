@@ -20,7 +20,7 @@ import {
   defaultAppContext,
   defaultProps, folders,
   mockResultsFolders,
-  mockResultsResources, mockResultsResourcesAndFolders, resources
+  mockResultsResources, mockResultsResourcesAndFolders
 } from "./ShareDialog.test.data";
 import {ActionFeedbackContext} from "../../contexts/ActionFeedbackContext";
 import PassboltApiFetchError from "../../../shared/lib/Error/PassboltApiFetchError";
@@ -64,7 +64,7 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I see a success toaster message after sharing resources to users and groups with success', async() => {
       expect.assertions(18);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.find-resources-for-share', shareDialogProps.resourcesIds);
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.find-all-by-ids-for-display-permissions', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share 3 resources');
       expect(page.count).toBe(11);
@@ -108,7 +108,7 @@ describe("As Lu I should see the share dialog", () => {
         {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
         {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", resources, permissionDto);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", shareDialogProps.resourcesIds, permissionDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
       expect(props.onClose).toBeCalled();
     });
@@ -227,7 +227,7 @@ describe("As Lu I should see the share dialog", () => {
 
     it('As LU I see a success toaster message after sharing one resource to users and groups with success', async() => {
       expect.assertions(12);
-      expect(context.port.request).toHaveBeenCalledWith('passbolt.share.find-resources-for-share', shareDialogProps.resourcesIds);
+      expect(context.port.request).toHaveBeenCalledWith('passbolt.resources.find-all-by-ids-for-display-permissions', shareDialogProps.resourcesIds);
       expect(page.exists()).toBeTruthy();
       expect(page.title).toBe('Share resource');
       expect(page.subtitle).toBe('apache');
@@ -261,7 +261,7 @@ describe("As Lu I should see the share dialog", () => {
         {"aco": "Resource", "aco_foreign_key": "690b6e40-f371-579c-b0c6-86e8ef383adc", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1},
         {"aco": "Resource", "aco_foreign_key": "ecf0ed85-3bfc-5f45-b11d-74e9a86aa313", "aro": "User", "aro_foreign_key": "d57c10f5-639d-5160-9c81-8a0c6c4ec856", "is_new": true, "type": 1}];
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", resources, permissionDto);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.resources.save", shareDialogProps.resourcesIds, permissionDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
       expect(props.onClose).toBeCalled();
     });
