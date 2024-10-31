@@ -18,34 +18,46 @@ import {defaultSessionKeysBundleDataDto} from "./sessionKeysBundleDataEntity.tes
 /**
  * Returns a minimal DTO object suitable for the SessionKeysBundleEntity
  * @param {object} data
+ * @param {object} options
+ * @param {object} [options.withDecryptedSessionKeysBundle = false] if true, set the data with `defaultSessionKeysBundleDataDto()`
  * @returns {object}
  */
-export const minimalSessionKeysBundleDto = (data = {}) => ({
-  user_id: uuidv4(),
-  data: pgpKeys.metadataKey.encryptedSessionKeysDataMessage,
-  ...data
-});
+export const minimalSessionKeysBundleDto = (data = {}, options = {}) => {
+  const defaultData = {
+    user_id: uuidv4(),
+    data: pgpKeys.metadataKey.encryptedSessionKeysDataMessage,
+    ...data
+  };
+
+  if (options?.withDecryptedSessionKeysBundle) {
+    defaultData.data = defaultSessionKeysBundleDataDto();
+  }
+
+  return defaultData;
+};
 
 /**
  * Returns a DTO object suitable for the SessionKeysBundleEntity
  * @param {object} data
+ * @param {object} options
  * @returns {object}
  */
-export const defaultSessionKeysBundleDto = (data = {}) => minimalSessionKeysBundleDto({
+export const defaultSessionKeysBundleDto = (data = {}, options = {}) => minimalSessionKeysBundleDto({
   id: uuidv4(),
   modified: "2022-10-11T08:09:00+00:00",
   created_by: uuidv4(),
   created: "2022-10-11T08:09:00+00:00",
   ...data,
-});
+}, options);
 
 
 /**
  * Returns a DTO object suitable for the SessionKeysBundleEntity with decrypted data field
  * @param {object} data
+ * @param {object} options
  * @returns {object}
  */
-export const decryptedSessionKeysBundleDto = (data = {}) => defaultSessionKeysBundleDto({
+export const decryptedSessionKeysBundleDto = (data = {}, options = {}) => defaultSessionKeysBundleDto({
   data: defaultSessionKeysBundleDataDto(),
   ...data,
-});
+}, options);
