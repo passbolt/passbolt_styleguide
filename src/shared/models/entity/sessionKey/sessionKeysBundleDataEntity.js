@@ -57,6 +57,17 @@ class SessionKeysBundleDataEntity extends EntityV2 {
   get sessionKeys() {
     return this._session_keys;
   }
+
+  /**
+   * Return a DTO ready to be sent to API
+   *
+   * @returns {object}
+   */
+  toDto() {
+    const result = Object.assign({}, this._props);
+    result.session_keys = this.sessionKeys.toDto();
+    return result;
+  }
 }
 
 export default SessionKeysBundleDataEntity;
