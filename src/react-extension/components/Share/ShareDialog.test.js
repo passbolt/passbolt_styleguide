@@ -18,7 +18,7 @@
 import ShareDialogPage from "./ShareDialog.test.page";
 import {
   defaultAppContext,
-  defaultProps, folders,
+  defaultProps,
   mockResultsFolders,
   mockResultsResources, mockResultsResourcesAndFolders
 } from "./ShareDialog.test.data";
@@ -322,7 +322,7 @@ describe("As Lu I should see the share dialog", () => {
 
       const permissionDto = [{"aco": "Folder", "aco_foreign_key": shareDialogProps.foldersIds[0], "aro": "User", "aro_foreign_key": "af5e1f70-a0ee-5b76-935b-c846f8a6a190", "is_new": true, "type": 1}];
 
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.folders.save", folders, permissionDto);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.share.folders.save", shareDialogProps.foldersIds[0], permissionDto);
       expect(ActionFeedbackContext._currentValue.displaySuccess).toHaveBeenCalledWith('The permissions have been changed successfully.');
       expect(props.onClose).toBeCalled();
     });
