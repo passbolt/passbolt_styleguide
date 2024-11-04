@@ -51,7 +51,7 @@ class ShareDialog extends Component {
    */
   async componentDidMount() {
     if (this.props.context.shareDialogProps.resourcesIds) {
-      this.resources = await this.props.context.port.request('passbolt.share.find-resources-for-share', this.props.context.shareDialogProps.resourcesIds);
+      this.resources = await this.props.context.port.request('passbolt.resources.find-all-by-ids-for-display-permissions', this.props.context.shareDialogProps.resourcesIds);
     }
     if (this.props.context.shareDialogProps.foldersIds) {
       this.folders = await this.props.context.port.request('passbolt.share.get-folders', this.props.context.shareDialogProps.foldersIds);
@@ -257,7 +257,7 @@ class ShareDialog extends Component {
       throw new Error(this.translate("Multi resource and folder share is not implemented."));
     }
     if (this.props.context.shareDialogProps.resourcesIds) {
-      await this.props.context.port.request("passbolt.share.resources.save", this.resources, this.shareChanges.getResourcesChanges());
+      await this.props.context.port.request("passbolt.share.resources.save", this.props.context.shareDialogProps.resourcesIds, this.shareChanges.getResourcesChanges());
       return;
     }
     if (this.props.context.shareDialogProps.foldersIds) {
