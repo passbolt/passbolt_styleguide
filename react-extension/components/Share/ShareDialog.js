@@ -261,7 +261,7 @@ class ShareDialog extends Component {
       return;
     }
     if (this.props.context.shareDialogProps.foldersIds) {
-      await this.props.context.port.request("passbolt.share.folders.save", this.folders, this.shareChanges.getFoldersChanges());
+      await this.props.context.port.request("passbolt.share.folders.save", this.props.context.shareDialogProps.foldersIds[0], this.shareChanges.getFoldersChanges());
     }
   }
 
