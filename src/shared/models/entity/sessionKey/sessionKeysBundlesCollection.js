@@ -12,14 +12,14 @@
  * @since         4.10.1
  */
 import EntityV2Collection from "../abstract/entityV2Collection";
-import SessionKeyEntity from "./sessionKeyEntity";
+import SessionKeysBundleEntity from "./sessionKeysBundleEntity";
 
-class SessionKeysCollection extends EntityV2Collection {
+class SessionKeysBundlesCollection extends EntityV2Collection {
   /**
    * @inheritDoc
    */
   get entityClass() {
-    return SessionKeyEntity;
+    return SessionKeysBundleEntity;
   }
 
   /*
@@ -29,30 +29,26 @@ class SessionKeysCollection extends EntityV2Collection {
    */
 
   /**
-   * Get session keys collection schema
+   * Get session keys bundle collection schema
    *
    * @returns {Object} schema
    */
   static getSchema() {
     return {
       "type": "array",
-      "items": SessionKeyEntity.getSchema(),
+      "items": SessionKeysBundleEntity.getSchema(),
     };
   }
 
   /**
    * @inheritDoc
-   * @param {Set} [options.uniqueForeignIdsSetCache] A set of unique foreign ids.
-   * @param {Set} [options.uniqueSessionKeysSetCache] A set of unique session keys.
+   * @param {Set} [options.uniqueIdsSetCache] A set of unique session keys bundle ids.
+   * @param {Set} [options.uniqueUserIdsSetCache] A set of unique session keys bundle user id.
    * @throws {EntityValidationError} If a session key already exists with the same foreign_id.
    */
   validateBuildRules(item, options = {}) {
-    this.assertNotExist("foreign_id", item._props.foreign_id, {haystackSet: options?.uniqueForeignIdsSetCache});
-    /*
-     * Do not validate session keys yet to not impact performance
-     * TODO enable it when performance is under control
-     * this.assertNotExist("session_key", item._props.session_key, {haystackSet: options?.uniqueSessionKeysSetCache});
-     */
+    this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
+    this.assertNotExist("user_id", item._props.user_id, {haystackSet: options?.uniqueUserIdsSetCache});
   }
 
   /**
@@ -73,17 +69,12 @@ class SessionKeysCollection extends EntityV2Collection {
    * @inheritDoc
    */
   pushMany(data, entityOptions = {}, options = {}) {
-    const uniqueForeignIdsSetCache = new Set(this.extract("foreign_id"));
-    /*
-     * TODO enable it when performance is under control
-     * const uniqueSessionKeysSetCache = new Set(this.extract("session_key"));
-     */
+    const uniqueForeignIdsSetCache = new Set(this.extract("id"));
+    const uniqueSessionKeysBundleSetCache = new Set(this.extract("user_id"));
+
     const onItemPushed = item => {
-      uniqueForeignIdsSetCache.add(item._props.foreign_id);
-      /*
-       * TODO enable it when performance is under control
-       * uniqueSessionKeysSetCache.add(item._props.session_key);
-       */
+      uniqueForeignIdsSetCache.add(item._props.id);
+      uniqueSessionKeysBundleSetCache.add(item._props.user_id);
     };
 
     options = {
@@ -94,6 +85,14 @@ class SessionKeysCollection extends EntityV2Collection {
 
     super.pushMany(data, entityOptions, options);
   }
+
+  /**
+   * Has some decrypted session keys bundles
+   * @returns {boolean}
+   */
+  hasSomeDecryptedSessionKeysBundles() {
+    return this.items.some(sessionKeysBundleEntity => sessionKeysBundleEntity.isDecrypted);
+  }
 }
 
-export default SessionKeysCollection;
+export default SessionKeysBundlesCollection;
