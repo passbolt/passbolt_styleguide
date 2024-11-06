@@ -126,6 +126,25 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
   hasSomeEncryptedSessionKeysBundles() {
     return this.items.some(sessionKeysBundleEntity => !sessionKeysBundleEntity.isDecrypted);
   }
+
+  /**
+   * Order by the most recently modified session key in the collection if any.
+   * The key with a non null modified date and having the most recent date will be the first.
+   * If keys do not have modified date, the last one will be the first.
+   * If no session key bundle is found in the collection, do nothing.
+   *
+   */
+  sortByModified() {
+    this._items.sort((sessionKeysBundleEntityA, sessionKeysBundleEntityB) => {
+      if (!sessionKeysBundleEntityA.modified) {
+        return 1;
+      } else if (!sessionKeysBundleEntityB.modified) {
+        return -1;
+      } else {
+        return sessionKeysBundleEntityB.modified > sessionKeysBundleEntityA.modified ? 1 : -1;
+      }
+    });
+  }
 }
 
 export default SessionKeysBundlesCollection;

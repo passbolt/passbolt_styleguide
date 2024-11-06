@@ -162,6 +162,22 @@ describe("SessionKeysBundleEntity", () => {
       expect(entity.data).toBeInstanceOf(SessionKeysBundleDataEntity);
       expect(entity.data.toDto()).toStrictEqual(dto.data);
     });
+
+    it("`userId` should return the right value: with string", () => {
+      expect.assertions(1);
+      const dto = defaultSessionKeysBundleDto();
+      const entity = new SessionKeysBundleEntity(dto);
+
+      expect(entity.userId).toStrictEqual(dto.user_id);
+    });
+
+    it("`modified` should return the right value: with string", () => {
+      expect.assertions(1);
+      const dto = defaultSessionKeysBundleDto();
+      const entity = new SessionKeysBundleEntity(dto);
+
+      expect(entity.modified).toStrictEqual(dto.modified);
+    });
   });
 
   describe("::setters", () => {
