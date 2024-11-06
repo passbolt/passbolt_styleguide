@@ -13,6 +13,9 @@
  */
 import EntityV2Collection from "../abstract/entityV2Collection";
 import SessionKeysBundleEntity from "./sessionKeysBundleEntity";
+import EntityValidationError from "../abstract/entityValidationError";
+
+const BUILD_RULE_DIFFERENT_USER_ID = "different_user_id";
 
 class SessionKeysBundlesCollection extends EntityV2Collection {
   /**
@@ -48,7 +51,31 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    */
   validateBuildRules(item, options = {}) {
     this.assertNotExist("id", item._props.id, {haystackSet: options?.uniqueIdsSetCache});
-    this.assertNotExist("user_id", item._props.user_id, {haystackSet: options?.uniqueUserIdsSetCache});
+    this.assertSameUserId(item);
+  }
+
+  /**
+   * Assert the collection has the same user_id.
+   *
+   * @param {SessionKeysBundleEntity} sessionKeysBundle The session keys bundle
+   * @throws {EntityValidationError} if a user id is not the same in the collection
+   * @private
+   */
+  assertSameUserId(sessionKeysBundle) {
+    if (!this.items.length) {
+      return;
+    }
+    if (typeof sessionKeysBundle._props.user_id === "undefined") {
+      return;
+    }
+
+    const collectionUserId = this.items[0].userId;
+    if (sessionKeysBundle._props.user_id !== collectionUserId) {
+      const error = new EntityValidationError();
+      const message = `The collection has different user id: ${collectionUserId} != ${sessionKeysBundle._props.user_id}.`;
+      error.addError("user_id", BUILD_RULE_DIFFERENT_USER_ID, message);
+      throw error;
+    }
   }
 
   /**
@@ -69,17 +96,15 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    * @inheritDoc
    */
   pushMany(data, entityOptions = {}, options = {}) {
-    const uniqueForeignIdsSetCache = new Set(this.extract("id"));
-    const uniqueSessionKeysBundleSetCache = new Set(this.extract("user_id"));
+    const uniqueIdsSetCache = new Set(this.extract("id"));
 
     const onItemPushed = item => {
-      uniqueForeignIdsSetCache.add(item._props.id);
-      uniqueSessionKeysBundleSetCache.add(item._props.user_id);
+      uniqueIdsSetCache.add(item._props.id);
     };
 
     options = {
       onItemPushed: onItemPushed,
-      validateBuildRules: {...options?.validateBuildRules, uniqueForeignIdsSetCache},
+      validateBuildRules: {...options?.validateBuildRules, uniqueIdsSetCache},
       ...options
     };
 
@@ -92,6 +117,14 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
    */
   hasSomeDecryptedSessionKeysBundles() {
     return this.items.some(sessionKeysBundleEntity => sessionKeysBundleEntity.isDecrypted);
+  }
+
+  /**
+   * Has some encrypted session keys bundles
+   * @returns {boolean}
+   */
+  hasSomeEncryptedSessionKeysBundles() {
+    return this.items.some(sessionKeysBundleEntity => !sessionKeysBundleEntity.isDecrypted);
   }
 }
 
