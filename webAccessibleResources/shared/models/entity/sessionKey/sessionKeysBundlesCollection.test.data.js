@@ -12,6 +12,7 @@
  * @since         4.10.1
  */
 import {defaultSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
+import {v4 as uuidv4} from "uuid";
 
 /**
  * Default session keys bundles dtos
@@ -21,6 +22,7 @@ import {defaultSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
  */
 export const defaultSessionKeysBundlesDtos = (data = {}, options = {}) => {
   const count = options?.count || 10;
+  data.user_id = data.user_id || uuidv4(); // Validate same user id build rules
   const dtos = [];
   for (let i = 0; i < count; i++) {
     const dto = defaultSessionKeysBundleDto(data, options);

@@ -76,16 +76,18 @@ describe("SessionKeysBundlesCollection", () => {
     it("should throw if one of user_id does not validate the collection entity schema", () => {
       expect.assertions(1);
 
-      const dtos = defaultSessionKeysBundlesDtos({user_id: uuidv4()}, {count: 2});
+      const dtos = defaultSessionKeysBundlesDtos({}, {count: 2});
+      dtos[1].user_id = uuidv4();
 
       expect(() => new SessionKeysBundlesCollection(dtos))
-        .toThrowCollectionValidationError("1.user_id.unique");
+        .toThrowCollectionValidationError("1.user_id.different_user_id");
     });
 
     it("should, with enabling the ignore invalid option, ignore items which do not validate user id schema", () => {
       expect.assertions(2);
 
-      const dtos = defaultSessionKeysBundlesDtos({user_id: uuidv4()}, {count: 2});
+      const dtos = defaultSessionKeysBundlesDtos({}, {count: 2});
+      dtos[1].id = dtos[0].id;
 
       const collection = new SessionKeysBundlesCollection(dtos, {ignoreInvalidEntity: true});
 
@@ -96,9 +98,10 @@ describe("SessionKeysBundlesCollection", () => {
 
   describe("::hasSomeDecryptedSessionKeysBundles", () => {
     it("should have some decrypted session keys bundles", async() => {
-      const dtos = defaultSessionKeysBundlesDtos();
+      const user_id = uuidv4();
+      const dtos = defaultSessionKeysBundlesDtos({user_id});
       // Add a decrypted session keys bundle dto
-      dtos.push(decryptedSessionKeysBundleDto());
+      dtos.push(decryptedSessionKeysBundleDto({user_id}));
       const collection = new SessionKeysBundlesCollection(dtos);
       expect(collection.hasSomeDecryptedSessionKeysBundles()).toBeTruthy();
     });
@@ -110,13 +113,25 @@ describe("SessionKeysBundlesCollection", () => {
     });
   });
 
+  describe("::hasSomeEncryptedSessionKeysBundles", () => {
+    it("should have some encrypted session keys bundles", async() => {
+      const dtos = [];
+      // Add a decrypted session keys bundle dto
+      dtos.push(decryptedSessionKeysBundleDto());
+      const collection = new SessionKeysBundlesCollection(dtos);
+      expect(collection.hasSomeEncryptedSessionKeysBundles()).toBeFalsy();
+    });
+
+    it("should not have some encrypted session keys bundles", async() => {
+      const dtos = defaultSessionKeysBundlesDtos();
+      const collection = new SessionKeysBundlesCollection(dtos);
+      expect(collection.hasSomeEncryptedSessionKeysBundles()).toBeTruthy();
+    });
+  });
+
   describe("::pushMany", () => {
     it("[performance] should ensure performance adding large dataset remains effective.", async() => {
-      /*
-       * Force 1000 for test
-       * TODO Improve performance for 10_000 is very slow (build rules takes time to verify duplicate uuid)
-       */
-      const count = 1_000;
+      const count = 10_000;
       const dtos = defaultSessionKeysBundlesDtos({}, {count});
 
       const start = performance.now();

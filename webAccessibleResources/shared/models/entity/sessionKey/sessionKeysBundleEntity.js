@@ -105,6 +105,14 @@ class SessionKeysBundleEntity extends EntityV2 {
     return this.isDecrypted ? this._data : this._props.data;
   }
 
+  /**
+   * Get user id
+   * @returns {string}
+   */
+  get userId() {
+    return this._props.user_id;
+  }
+
   /*
    * ==================================================
    * Setters
