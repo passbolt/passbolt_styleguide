@@ -14,6 +14,8 @@
 import EntitySchema from "../abstract/entitySchema";
 import SessionKeysCollection from "./sessionKeysCollection";
 import {defaultSessionKeysDtos} from "./sessionKeysCollection.test.data";
+import {defaultSessionKeyDto} from "./sessionKeyEntity.test.data";
+import {v4 as uuidv4} from "uuid";
 
 describe("SessionKeysCollection", () => {
   describe("::getSchema", () => {
@@ -91,6 +93,24 @@ describe("SessionKeysCollection", () => {
 
       expect(collection.items).toHaveLength(1);
       expect(collection.items[0].toDto()).toEqual(dtos[0]);
+    });
+  });
+
+  describe("::filterOutMetadataEncrypted", () => {
+    it("should filter out the resource which have metadata key type different than user_key.", async() => {
+      expect.assertions(3);
+
+      const foreignId1 = uuidv4();
+      const foreignId2 = uuidv4();
+      const foreignId3 = uuidv4();
+      const dtos = [defaultSessionKeyDto({foreign_id: foreignId1}), defaultSessionKeyDto({foreign_id: foreignId2}), defaultSessionKeyDto({foreign_id: foreignId3})];
+      const collection = new SessionKeysCollection(dtos);
+
+      collection.filterOutSessionKeysNotMatchingForeignModelAndForeignIds("Resource", [foreignId1, foreignId3]);
+
+      expect(collection).toHaveLength(2);
+      expect(collection.items[0].toDto()).toEqual(dtos[0]);
+      expect(collection.items[1].toDto()).toEqual(dtos[2]);
     });
   });
 

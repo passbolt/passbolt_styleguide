@@ -94,6 +94,19 @@ class SessionKeysCollection extends EntityV2Collection {
 
     super.pushMany(data, entityOptions, options);
   }
+
+  /*
+   * ==================================================
+   * Filters
+   * ==================================================
+   */
+
+  /**
+   * Filter out the session keys not matching the given foreign model and foreignIds.
+   */
+  filterOutSessionKeysNotMatchingForeignModelAndForeignIds(foreignModel, foreignIds) {
+    this.filterByCallback(sessionKey => sessionKey.foreignModel === foreignModel && foreignIds.includes(sessionKey.foreignId));
+  }
 }
 
 export default SessionKeysCollection;

@@ -15,7 +15,7 @@ import EntitySchema from "../abstract/entitySchema";
 import SessionKeysBundlesCollection from "./sessionKeysBundlesCollection";
 import {defaultSessionKeysBundlesDtos} from "./sessionKeysBundlesCollection.test.data";
 import {v4 as uuidv4} from "uuid";
-import {decryptedSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
+import {decryptedSessionKeysBundleDto, defaultSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
 
 describe("SessionKeysBundlesCollection", () => {
   describe("::getSchema", () => {
@@ -126,6 +126,38 @@ describe("SessionKeysBundlesCollection", () => {
       const dtos = defaultSessionKeysBundlesDtos();
       const collection = new SessionKeysBundlesCollection(dtos);
       expect(collection.hasSomeEncryptedSessionKeysBundles()).toBeTruthy();
+    });
+  });
+
+  describe("::sortByMostRecent", () => {
+    it("should sort by most recent by modified if property is defined", async() => {
+      const user_id = uuidv4();
+      const recentSessionKeysBundleRecent = defaultSessionKeysBundleDto({user_id: user_id, modified: "2024-10-11T08:09:00+00:00"});
+      const oldSessionKeysBundle = defaultSessionKeysBundleDto({user_id});
+      const dtos =  [oldSessionKeysBundle, recentSessionKeysBundleRecent];
+      const collection = new SessionKeysBundlesCollection(dtos);
+      collection.sortByModified();
+      expect(collection.toDto()).toEqual([recentSessionKeysBundleRecent, oldSessionKeysBundle]);
+    });
+
+    it("should sort by most recent by modified and let at the last position if property is not defined", async() => {
+      const user_id = uuidv4();
+      const noModifiedSessionKeysBundleRecent = defaultSessionKeysBundleDto({user_id: user_id, modified: undefined});
+      const sessionKeysBundle = defaultSessionKeysBundleDto({user_id});
+      const dtos =  [sessionKeysBundle, noModifiedSessionKeysBundleRecent];
+      const collection = new SessionKeysBundlesCollection(dtos);
+      collection.sortByModified();
+      expect(collection.toDto()).toEqual([sessionKeysBundle, noModifiedSessionKeysBundleRecent]);
+    });
+
+    it("should sort by most recent by modified and put the first one at the last position cause modified property is not defined", async() => {
+      const user_id = uuidv4();
+      const recentSessionKeysBundleRecent = defaultSessionKeysBundleDto({user_id: user_id});
+      const oldSessionKeysBundle = defaultSessionKeysBundleDto({user_id: user_id, modified: undefined});
+      const dtos =  [oldSessionKeysBundle, recentSessionKeysBundleRecent];
+      const collection = new SessionKeysBundlesCollection(dtos);
+      collection.sortByModified();
+      expect(collection.toDto()).toEqual([recentSessionKeysBundleRecent, oldSessionKeysBundle]);
     });
   });
 
