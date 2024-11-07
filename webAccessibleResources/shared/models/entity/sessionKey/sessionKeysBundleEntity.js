@@ -107,10 +107,18 @@ class SessionKeysBundleEntity extends EntityV2 {
 
   /**
    * Get user id
-   * @returns {string}
+   * @returns {string | null}
    */
   get userId() {
-    return this._props.user_id;
+    return this._props.user_id || null;
+  }
+
+  /**
+   * Get modified
+   * @returns {string | null}
+   */
+  get modified() {
+    return this._props.modified || null;
   }
 
   /*
