@@ -30,6 +30,10 @@ class StandaloneTotpViewModel extends TotpViewModel {
     super(totpViewModelDto);
     this.name = totpViewModelDto.name || "";
     this.uri = totpViewModelDto.uri || "";
+
+    if (totpViewModelDto.resource_type_id) {
+      this.resource_type_id = totpViewModelDto.resource_type_id;
+    }
   }
 
   /**
@@ -56,6 +60,10 @@ class StandaloneTotpViewModel extends TotpViewModel {
           type: "string",
           maxLength: RESOURCE_URI_MAX_LENGTH
         },
+        resource_type_id: {
+          type: "string",
+          format: "uuid",
+        },
         secret_key: super.getSchema().properties.secret_key,
         period: super.getSchema().properties.period,
         digits: super.getSchema().properties.digits,
@@ -69,11 +77,18 @@ class StandaloneTotpViewModel extends TotpViewModel {
    * @returns {object}
    */
   toResourceDto() {
-    const metadata = {
-      name: this.name,
-      uris: [this.uri],
+    const dto = {
+      metadata: {
+        name: this.name,
+        uris: [this.uri],
+      },
     };
-    return {metadata};
+
+    if (this.resource_type_id) {
+      dto.resource_type_id = this.resource_type_id;
+      dto.metadata.resource_type_id = this.resource_type_id;
+    }
+    return dto;
   }
 
   /**
