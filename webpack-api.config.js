@@ -20,7 +20,13 @@ const config = {
           presets: ["@babel/react"],
         }
       },
-      {test: /\.json$/, loader: 'json-loader'}
+      {test: /\.json$/, loader: 'json-loader'},
+      // Transform SVG as react component
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
+      }
     ]
   },
   optimization: {

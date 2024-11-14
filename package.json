@@ -18,6 +18,7 @@
     "@babel/preset-env": "^7.22.9",
     "@babel/preset-react": "^7.22.5",
     "@babel/runtime": "^7.22.6",
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^8.11.3",
     "@testing-library/react": "^12.1.4",
     "babel-jest": "^29.6.2",
