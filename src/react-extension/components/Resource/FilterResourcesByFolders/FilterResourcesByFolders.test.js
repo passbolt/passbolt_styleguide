@@ -77,7 +77,7 @@ describe("See Folders", () => {
       await page.filterResourcesByFolders.onDragOver;
       await page.filterResourcesByFolders.onDrop;
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951db"], resources: [], folderParentId: null});
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", null);
       expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
 
@@ -87,7 +87,7 @@ describe("See Folders", () => {
       await page.filterResourcesByFoldersItem.dragEndOnFolder(3);
       await page.filterResourcesByFoldersItem.onDropFolder(1);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.open-move-confirmation-dialog", {folders: ["3ed65efd-7c41-5906-9c02-71e2d95951db"], resources: [], folderParentId: null});
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", null);
     });
 
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
