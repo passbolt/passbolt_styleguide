@@ -1,28 +1,32 @@
-module.exports = {
-  "stories": [
-    "./stories/**/*.stories.mdx",
+/** @type { import('@storybook/react-webpack5').StorybookConfig } */
+const config = {
+  stories: [
+    "./stories/**/*.mdx",
     "./stories/**/*.stories.@(js|jsx|ts|tsx)",
-    "../src/**/*.stories.mdx",
+    "../src/**/*.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
-  "addons": [
-    { name: "@storybook/addon-links" },
-    {
-      name: "@storybook/addon-essentials",
-      options: {
-        backgrounds: false
-      }
+  addons: ["@storybook/addon-links", {
+    name: "@storybook/addon-essentials",
+    options: {
+      backgrounds: false
     }
-  ],
-  "core": {
-    "builder": "webpack5",
-    "disableTelemetry": true,
+  }, "@storybook/addon-webpack5-compiler-swc"],
+  core: {
+    "disableTelemetry": true
   },
+
   "staticDirs": ['../src', {from: '../src', to: '/webAccessibleResources' }],
+
   "env": (config) => ({
     ...config,
     ORIGIN_URL: 'https://passbolt.github.io/passbolt_styleguide',
   }),
+
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {fastRefresh: true}
+  },
   webpackFinal: async (config) => {
     const fileLoaderRule = config.module?.rules?.find((rule) => {
       if (rule instanceof Object && "test" in rule) {
@@ -52,3 +56,5 @@ module.exports = {
     return config;
   },
 }
+
+export default config;

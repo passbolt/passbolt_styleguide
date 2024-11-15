@@ -1,14 +1,14 @@
 #!/bin/sh
 
 npm install \
-    @storybook/addon-actions@6.5.16 \
-    @storybook/addon-essentials@6.5.16 \
-    @storybook/addon-links@6.5.16 \
-    @storybook/builder-webpack5@6.5.16 \
-    @storybook/manager-webpack5@6.5.16 \
-    @storybook/react@6.5.16 \
-    @storybook/addon-docs@6.5.16 \
-    @storybook/theming@6.5.16 \
+    @storybook/addon-actions@8.4.2 \
+    @storybook/addon-essentials@8.4.2 \
+    @storybook/addon-links@8.4.2 \
+    @storybook/react@8.4.2 \
+    @storybook/react-webpack5@8.4.2 \
+    @storybook/addon-docs@8.4.2 \
+    @storybook/theming@8.4.2 \
+    @storybook/addon-webpack5-compiler-swc@1.0.5 \
     @storybook/storybook-deployer@2.8.16 \
-    @storybook/test-runner@0.9.4 \
+    @storybook/test-runner@0.19.1 \
     --no-save

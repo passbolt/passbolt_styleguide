@@ -66,8 +66,8 @@ const Template = ({...args}) =>
     </ExtAppContextProvider>
   </MemoryRouter>;
 
-const storage = new mockStorage();
-const port = new mockPort(storage);
+const storage = mockStorage();
+const port = mockPort(storage);
 
 export const proVersion = Template.bind({});
 proVersion.args = {
@@ -75,8 +75,8 @@ proVersion.args = {
   storage: storage
 };
 
-const ceStorage = new mockStorage();
-const cePort = new mockPort(ceStorage);
+const ceStorage = mockStorage();
+const cePort = mockPort(ceStorage);
 cePort.addRequestListener("passbolt.organization-settings.get", () => siteSettingsCe);
 export const ceVersion = Template.bind({});
 ceVersion.args = {
