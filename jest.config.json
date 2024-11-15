@@ -28,5 +28,8 @@
     "!src/**/*.test.js",
     "!src/**/*.test.stories.js",
     "!src/**/*.test.data.js"
-  ]
+  ],
+  "moduleNameMapper": {
+    "\\.svg$": "<rootDir>/test/mocks/svg.js"
+  }
 }
