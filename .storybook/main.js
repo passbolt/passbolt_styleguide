@@ -46,7 +46,7 @@ const config = {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
         resourceQuery: { not: [/url/] }, // exclude if *.svg?url
-        use: ["@svgr/webpack"],
+        use: [{loader: "@svgr/webpack", options: {icon: "1.6rem"}}],
       },
     );
 
