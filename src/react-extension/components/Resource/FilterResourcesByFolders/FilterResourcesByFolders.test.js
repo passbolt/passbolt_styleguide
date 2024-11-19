@@ -19,6 +19,8 @@ import {defaultAppContext, defaultProps} from "./FilterResourcesByFolders.test.d
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import FilterResourcesByRootFolderContextualMenu from "./FilterResourcesByRootFolderContextualMenu";
 import FilterResourcesByFoldersPage from "./FilterResourcesByFolders.test.page";
+import {defaultResourcesDtos} from "../../../../shared/models/entity/resource/resourcesCollection.test.data";
+import {foldersMock} from "./FilterResourcesByFolders.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -82,12 +84,13 @@ describe("See Folders", () => {
     });
 
     it('As LU I should be able to drag and drop a folder on another folder', async() => {
+      expect.assertions(2);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
-      await page.filterResourcesByFoldersItem.dragStartOnFolder(3);
-      await page.filterResourcesByFoldersItem.dragEndOnFolder(3);
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
       await page.filterResourcesByFoldersItem.onDropFolder(1);
       expect(props.dragContext.onDragStart).toHaveBeenCalled();
-      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", null);
+      expect(context.port.request).toHaveBeenCalledWith("passbolt.folders.move-by-id", "3ed65efd-7c41-5906-9c02-71e2d95951db", foldersMock[0].id);
     });
 
     it('As LU I should be able to open and close folder to see or not the child folders', async() => {
@@ -96,6 +99,74 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFoldersItem.count).toBe(3);
       await page.filterResourcesByFoldersItem.toggleDisplayChildFolders(2);
       expect(page.filterResourcesByFoldersItem.count).toBe(2);
+    });
+  });
+
+  describe('As LU I should be able to drag and drop resources on folders', () => {
+    it('As LU I should be able to drag and drop resources on the root folder', async() => {
+      expect.assertions(2);
+      const context = defaultAppContext(); // The applicative context
+      const resources = defaultResourcesDtos();
+      const props = defaultProps({
+        dragContext: {
+          dragging: true,
+          draggedItems: {
+            folders: [],
+            resources: resources
+          },
+          onDragStart: jest.fn(),
+          onDragEnd: jest.fn(),
+        }
+      });
+
+      context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
+        expect(destinationFolder).toBeNull();
+        expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
+      });
+
+      const page = new FilterResourcesByFoldersPage(context, props);
+
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(1);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(1);
+      await page.filterResourcesByFolders.onDragOver;
+      await page.filterResourcesByFolders.onDragLeave;
+      await page.filterResourcesByFolders.onDragOver;
+      await page.filterResourcesByFolders.onDrop;
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
+    });
+
+    it('As LU I should be able to drag and drop resources on another folder', async() => {
+      expect.assertions(2);
+      const context = defaultAppContext(); // The applicative context
+      const resources = defaultResourcesDtos();
+      const props = defaultProps({
+        dragContext: {
+          dragging: true,
+          draggedItems: {
+            folders: [],
+            resources: resources
+          },
+          onDragStart: jest.fn(),
+          onDragEnd: jest.fn(),
+        }
+      });
+
+      context.port.addRequestListener("passbolt.resources.move-by-ids", async(resourcesIds, destinationFolder) => {
+        expect(destinationFolder).toStrictEqual(foldersMock[3].id);
+        expect(resourcesIds).toStrictEqual(resources.map(r => r.id));
+      });
+
+      const page = new FilterResourcesByFoldersPage(context, props);
+
+      await page.filterResourcesByFoldersItem.dragStartOnFolder(2);
+      await page.filterResourcesByFoldersItem.dragEndOnFolder(2);
+      await page.filterResourcesByFolders.onDragOver;
+      await page.filterResourcesByFolders.onDragLeave;
+      await page.filterResourcesByFolders.onDragOver;
+      await page.filterResourcesByFolders.onDrop;
+      expect(props.dragContext.onDragStart).toHaveBeenCalled();
+      expect(props.dragContext.onDragEnd).toHaveBeenCalled();
     });
   });
 
