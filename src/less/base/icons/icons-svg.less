@@ -1,8 +1,8 @@
 // Css variable declaration as root to enable the possibility of override it
 :root {
   // default icon color, background color and stroke width
-  --icon-color: @icon-color;
-  --icon-background-color: @icon-background-color;
+  --icon-color: var(--Text-and-icons-Main-text);
+  --icon-background-color: var(--Resource-icon-Resource-icon-color);
   --icon-stroke-width: .15rem;
   // default icon exclamation color and background color
   --icon-exclamation-color: @icon-exclamation-color;
@@ -14,8 +14,8 @@
   // default icon success color
   --icon-success-color: @icon-success-color;
   // default icon spinner color, background color and stroke width
-  --spinner-color: @icon-spinner-color;
-  --spinner-background: @icon-spinner-background;
+  --spinner-color: var(--Spinner-Spinner-foreground);
+  --spinner-background: var(--Spinner-Spinner-background);
   --spinner-stroke-width: .15rem;
   // default icon timer color, background color and stroke width
   --timer-color: @icon-timer-color;
@@ -28,6 +28,10 @@
 .svg-baseline() {
     top:.125em;
     position: relative;
+}
+
+svg {
+  vector-effect: non-scaling-stroke;
 }
 
 .svg-icon {
@@ -92,5 +96,4 @@
 }
 
 @import "icons-svg-links.less";
-@import "icons-svg-buttons.less";
 @import "icons-feedback.less";

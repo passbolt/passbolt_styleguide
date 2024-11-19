@@ -490,8 +490,8 @@ class ResourceViewPage extends React.Component {
                         onClick={this.handleCopyPasswordClick} />
                     </div>
                     {this.canPreviewSecret &&
-                      <a onClick={this.handleViewPasswordButtonClick}
-                        className={`password-view button button-transparent ${this.state.isPasswordDecrypting ? "disabled" : ""}`}>
+                      <button onClick={this.handleViewPasswordButtonClick}
+                        className="password-view inline button-transparent" disabled={this.state.isPasswordDecrypting}>
                         <Transition in={!this.state.isPasswordDecrypting} appear={false} timeout={500}>
                           {status => (
                             <span className={`transition fade-${status} ${this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
@@ -507,7 +507,7 @@ class ResourceViewPage extends React.Component {
                           )}
                         </Transition>
                         <span className="visually-hidden"><Trans>View</Trans></span>
-                      </a>
+                      </button>
                     }
                   </div>
                 </div>
@@ -559,8 +559,8 @@ class ResourceViewPage extends React.Component {
                     }
                   </div>
                   {this.canPreviewSecret &&
-                    <a onClick={this.handlePreviewTotpButtonClick}
-                      className={`totp-view button button-transparent ${this.state.isTotpDecrypting ? "disabled" : ""}`}>
+                    <button onClick={this.handlePreviewTotpButtonClick}
+                      className="totp-view inline button-transparent" disabled={this.state.isTotpDecrypting}>
                       <Transition in={!this.state.isTotpDecrypting} appear={false} timeout={500}>
                         {status => (
                           <span className={`transition fade-${status} ${this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
@@ -576,7 +576,7 @@ class ResourceViewPage extends React.Component {
                         )}
                       </Transition>
                       <span className="visually-hidden"><Trans>View</Trans></span>
-                    </a>
+                    </button>
                   }
                 </div>
               </div>
