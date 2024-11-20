@@ -14,7 +14,6 @@
 import EntityV2 from "../abstract/entityV2";
 import SessionKeysCollection from "./sessionKeysCollection";
 
-
 class SessionKeysBundleDataEntity extends EntityV2 {
   /**
    * @inheritDoc
@@ -48,6 +47,23 @@ class SessionKeysBundleDataEntity extends EntityV2 {
         "session_keys": SessionKeysCollection.getSchema(),
       }
     };
+  }
+
+  /**
+   * Create new bundle from session keys.
+   * @param {SessionKeysCollection} sessionKeys The session keys
+   * @return {SessionKeysBundleDataEntity}
+   */
+  static createFromSessionKeys(sessionKeys) {
+    if (!(sessionKeys instanceof SessionKeysCollection)) {
+      throw new TypeError("The parameter \"sessionKey\" should be a SessionKeysCollection.");
+    }
+    const dto = {
+      object_type: "PASSBOLT_SESSION_KEYS",
+      session_keys: sessionKeys
+    };
+
+    return new SessionKeysBundleDataEntity(dto);
   }
 
   /**
