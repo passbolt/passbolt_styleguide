@@ -46,7 +46,26 @@ const config = {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
         resourceQuery: { not: [/url/] }, // exclude if *.svg?url
-        use: [{loader: "@svgr/webpack", options: {icon: "1.6rem"}}],
+        use: [
+          {
+            loader: "@svgr/webpack",
+              options: {
+                svgoConfig: {
+                  plugins: [
+                    {
+                      name: 'preset-default',
+                      params: {
+                        overrides: {
+                          removeViewBox: false,
+                          cleanupIds: false
+                        },
+                      },
+                    },
+                  ],
+                }
+              }
+          }
+        ],
       },
     );
 

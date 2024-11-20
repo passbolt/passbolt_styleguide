@@ -1,8 +1,8 @@
 // Css variable declaration as root to enable the possibility of override it
 :root {
   // default icon color, background color and stroke width
-  --icon-color: var(--Text-and-icons-Main-text);
-  --icon-background-color: var(--Resource-icon-Resource-icon-color);
+  --icon-color: var(--Text-and-icons-Icons);
+  --icon-background-color: var(--Workspace-Workspace-background);
   --icon-stroke-width: .15rem;
   // default icon exclamation color and background color
   --icon-exclamation-color: @icon-exclamation-color;
@@ -32,6 +32,8 @@
 
 svg {
   vector-effect: non-scaling-stroke;
+  display: inline-flex;
+  align-self: center;
 }
 
 .svg-icon {
