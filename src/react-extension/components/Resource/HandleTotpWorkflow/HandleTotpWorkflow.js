@@ -274,6 +274,10 @@ export class HandleTotpWorkflow extends React.Component {
   async updateStandaloneOtp(resourceDto, secretDto) {
     resourceDto.id = this.selectedResources[0].id;
 
+    /**
+     * In case of an edit of a standalone totp, the resource_type_id is defined
+     * and therefore there is no need to compute it based on settings.
+     */
     if (resourceDto.resource_type_id) {
       return this.props.context.port.request("passbolt.resources.update", resourceDto, secretDto);
     }
