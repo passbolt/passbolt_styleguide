@@ -161,6 +161,38 @@ describe("SessionKeysBundlesCollection", () => {
     });
   });
 
+  describe("::getByLatestModified", () => {
+    it("returns nothing if the collection is empty", async() => {
+      const collection = new SessionKeysBundlesCollection();
+      expect(collection.getByLatestModified()).toBeUndefined();
+    });
+
+    it("returns the only entity contained in the collection", async() => {
+      const sessionKeysBundleDto = defaultSessionKeysBundleDto();
+      const collection = new SessionKeysBundlesCollection([sessionKeysBundleDto]);
+      const entity = collection.getByLatestModified();
+      expect(entity.toDto()).toEqual(sessionKeysBundleDto);
+    });
+
+    it("returns the only entity contained in the collection, even if the modified property is not defined", async() => {
+      const sessionKeysBundleDto = defaultSessionKeysBundleDto({modified: undefined});
+      const collection = new SessionKeysBundlesCollection([sessionKeysBundleDto]);
+      const entity = collection.getByLatestModified();
+      expect(entity.toDto()).toEqual(sessionKeysBundleDto);
+    });
+
+    it("returns the entity with the most recent modified date", async() => {
+      const userId = uuidv4();
+      const sessionKeysBundleDto1 = defaultSessionKeysBundleDto({user_id: userId, modified: "2023-11-17T18:55:00+00:00"});
+      const sessionKeysBundleDto2 = defaultSessionKeysBundleDto({user_id: userId, modified: "2024-11-17T18:56:00+00:00"});
+      const sessionKeysBundleDto3 = defaultSessionKeysBundleDto({user_id: userId, modified: "2024-11-17T18:53:00+00:00"});
+      const sessionKeysBundleDto4 = defaultSessionKeysBundleDto({user_id: userId, modified: undefined});
+      const collection = new SessionKeysBundlesCollection([sessionKeysBundleDto1, sessionKeysBundleDto2, sessionKeysBundleDto3, sessionKeysBundleDto4]);
+      const entity = collection.getByLatestModified();
+      expect(entity.toDto()).toEqual(sessionKeysBundleDto2);
+    });
+  });
+
   describe("::pushMany", () => {
     it("[performance] should ensure performance adding large dataset remains effective.", async() => {
       const count = 10_000;

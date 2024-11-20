@@ -25,12 +25,6 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
     return SessionKeysBundleEntity;
   }
 
-  /*
-   * ==================================================
-   * Validation
-   * ==================================================
-   */
-
   /**
    * Get session keys bundle collection schema
    *
@@ -86,12 +80,6 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
     return this._items.map(entity => entity.toDto(contains));
   }
 
-  /*
-   * ==================================================
-   * Setters
-   * ==================================================
-   */
-
   /**
    * @inheritDoc
    */
@@ -144,6 +132,17 @@ class SessionKeysBundlesCollection extends EntityV2Collection {
         return sessionKeysBundleEntityB.modified > sessionKeysBundleEntityA.modified ? 1 : -1;
       }
     });
+  }
+
+  /**
+   * Get the session key modified most recently.
+   * @return {SessionKeysBundleEntity|void}
+   */
+  getByLatestModified() {
+    if (!this.length) {
+      return;
+    }
+    return this.items.reduce((result, currentItem) => currentItem.modified > result.modified ? currentItem : result);
   }
 }
 
