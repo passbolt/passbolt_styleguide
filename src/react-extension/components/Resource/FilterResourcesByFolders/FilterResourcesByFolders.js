@@ -183,7 +183,12 @@ class FilterResourcesByFolders extends React.Component {
    */
   handleDropTitle() {
     const folders = this.props.dragContext.draggedItems.folders.map(folder => folder.id);
-    this.props.context.port.request("passbolt.folders.move-by-id", folders[0], null);
+    const resources = this.props.dragContext.draggedItems.resources.map(resource => resource.id);
+    if (folders?.length > 0) {
+      this.props.context.port.request("passbolt.folders.move-by-id", folders[0], null);
+    } else if (resources?.length > 0) {
+      this.props.context.port.request("passbolt.resources.move-by-ids", resources, null);
+    }
 
     // The dragLeave event is not fired when a drop is happening. Cancel the state manually.
     const draggingOverTitle = false;
