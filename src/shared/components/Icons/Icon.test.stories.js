@@ -346,7 +346,7 @@ export const Icons = {
     <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
       {iconsSVGs.map((Icon, index) =>
         <div key={index} style={{marginTop: "1rem"}}>
-          <Icon/>
+          <Icon className="svg-icon"/>
         </div>
       )}
     </div>
@@ -357,7 +357,7 @@ export const SettingsIcons = {
     <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
       {settingIconsSVGs.map((Icon, index) =>
         <div key={index} style={{marginTop: "1rem"}}>
-          <Icon/>
+          <Icon className="svg-icon"/>
         </div>
       )}
     </div>
