@@ -324,14 +324,14 @@ export const fingerprint = (EntityClass, propertyName) => {
 const SUCCESS_ARMORED_PRIVATE_KEY_SCENARIO = [
   {scenario: "with comments in the header", value: defaultArmoredPrivateKey({withCrc: true, withComments: true})},
   {scenario: "without comment in the header", value: defaultArmoredPrivateKey({withCrc: true, withComments: false})},
-  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: true, withDuplicates: true})},
-  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 const FAIL_ARMORED_PRIVATE_KEY_SCENARIO = [
   {scenario: "without CRC", value: defaultArmoredPrivateKey({withCrc: false})},
   {scenario: "without CRC and with multiple blocks", value: defaultArmoredPrivateKey({withCrc: false, withDuplicates: true})},
   {scenario: "with wrong extra characters", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true})},
-  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
+  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 
 export const armoredPrivateKey = (EntityClass, propertyName) => {
@@ -341,14 +341,14 @@ export const armoredPrivateKey = (EntityClass, propertyName) => {
 const SUCCESS_ARMORED_PUBLIC_KEY_SCENARIO = [
   {scenario: "with comments in the header", value: defaultArmoredPublicKey({withCrc: true, withComments: true})},
   {scenario: "without comment in the header", value: defaultArmoredPublicKey({withCrc: true, withComments: false})},
-  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: true, withDuplicates: true})},
-  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 const FAIL_ARMORED_PUBLIC_KEY_SCENARIO = [
   {scenario: "without CRC", value: defaultArmoredPublicKey({withCrc: false})},
   {scenario: "without CRC and with multiple blocks", value: defaultArmoredPublicKey({withCrc: false, withDuplicates: true})},
   {scenario: "with wrong extra characters", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true})},
-  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
+  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 
 export const armoredPublicKey = (EntityClass, propertyName) => {
