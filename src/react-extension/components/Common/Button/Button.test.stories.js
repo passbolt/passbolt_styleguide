@@ -12,12 +12,22 @@
  * @since         3.6.0
  */
 import React from "react";
-import Icon from "../../../../shared/components/Icons/Icon";
 import {Trans} from "react-i18next";
 import EyeOpenSVG from "../../../../img/svg/eye_open.svg";
 import EyeCloseSVG from "../../../../img/svg/eye_close.svg";
 import MoreVerticalSVG from "../../../../img/svg/more_vertical.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import AddSVG from "../../../../img/svg/add.svg";
+import SettingSVG from "../../../../img/svg/settings.svg";
+import DiceSVG from "../../../../img/svg/dice.svg";
+import CloseSVG from "../../../../img/svg/close.svg";
+import InfoSVG from "../../../../img/svg/info.svg";
+import CopySVG from "../../../../img/svg/copy.svg";
+import EditSVG from "../../../../img/svg/edit.svg";
+import ShareSVG from "../../../../img/svg/share.svg";
+import ColumnsSVG from "../../../../img/svg/columns.svg";
 
 export default {
   title: 'Foundations/Button',
@@ -36,22 +46,22 @@ export const PrimaryButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button type="submit" className="button primary primary-form processing" disabled={true}>
         Save
-        <Icon name="spinner"/>
+        <SpinnerSVG/>
       </button>
     </div>
     <span style={{width: "100%", marginTop: "3rem"}}>Primary Create button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button primary primary-create">
-        <Icon name="add"/>
+        <AddSVG/>
         <Trans>Create</Trans>
-        <Icon name="caret-down"/>
+        <CaretDownSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button primary primary-create" disabled={true}>
-        <Icon name="add"/>
+        <AddSVG/>
         <Trans>Create</Trans>
-        <Icon name="caret-down"/>
+        <CaretDownSVG/>
       </button>
     </div>
   </div>
@@ -69,7 +79,7 @@ export const WarningButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button warning processing" disabled={true}>
         Delete
-        <Icon name="spinner"/>
+        <SpinnerSVG/>
       </button>
     </div>
   </div>
@@ -87,7 +97,7 @@ export const AttentionButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button attention processing" disabled={true}>
         Proceed
-        <Icon name="spinner"/>
+        <SpinnerSVG/>
       </button>
     </div>
   </div>
@@ -98,13 +108,13 @@ export const SecondaryButton = {
     <span style={{width: "100%"}}>Secondary button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button" type="button">
-        <Icon name="info-circle" />
+        <InfoSVG/>
         <Trans>Read the documentation</Trans>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button" disabled={true} type="button">
-        <Icon name="info-circle" />
+        <InfoSVG/>
         <Trans>Read the documentation</Trans>
       </button>
     </div>
@@ -117,25 +127,25 @@ export const ActionButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button button-action-contextual">
-          <Icon name="copy-to-clipboard"/>
+          <CopySVG/>
           <Trans>Copy</Trans>
-          <Icon name="caret-down"/>
+          <CaretDownSVG/>
         </button>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button button-action-contextual" disabled={true}>
-          <Icon name="copy-to-clipboard"/>
+          <CopySVG/>
           <Trans>Copy</Trans>
-          <Icon name="caret-down"/>
+          <CaretDownSVG/>
         </button>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button button-action-contextual">
-          <Icon name="edit"/>
+          <EditSVG/>
           <Trans>Edit</Trans>
         </button>
       </div>
@@ -143,7 +153,7 @@ export const ActionButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button button-action-contextual" disabled={true}>
-          <Icon name="edit"/>
+          <EditSVG/>
           <Trans>Edit</Trans>
         </button>
       </div>
@@ -151,7 +161,7 @@ export const ActionButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button button-action-contextual">
-          <Icon name="share"/>
+          <ShareSVG/>
           <Trans>Share</Trans>
         </button>
       </div>
@@ -159,7 +169,7 @@ export const ActionButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button button-action-contextual" disabled={true}>
-          <Icon name="share"/>
+          <ShareSVG/>
           <Trans>Share</Trans>
         </button>
       </div>
@@ -167,43 +177,43 @@ export const ActionButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button">
-          <Icon name="add"/>
+          <AddSVG/>
           <Trans>More</Trans>
-          <Icon name="caret-down"/>
+          <CaretDownSVG/>
         </button>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="button" disabled={true}>
-          <Icon name="add"/>
+          <AddSVG/>
           <Trans>More</Trans>
-          <Icon name="caret-down"/>
+          <CaretDownSVG/>
         </button>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button type="button" className="button">
-        <Icon name="columns"/>
+        <ColumnsSVG/>
         <Trans>Columns</Trans>
-        <Icon name="caret-down"/>
+        <CaretDownSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button type="button" className="button" disabled={true}>
-        <Icon name="columns"/>
+        <ColumnsSVG/>
         <Trans>Columns</Trans>
-        <Icon name="caret-down"/>
+        <CaretDownSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button button-action button-action-icon info">
-        <Icon name="info-circle"/>
+        <InfoSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button button-action button-action-icon info active">
-        <Icon name="info-circle"/>
+        <InfoSVG/>
       </button>
     </div>
   </div>
@@ -214,22 +224,22 @@ export const FormButton = {
     <span style={{width: "100%"}}>Form button</span>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button button-icon">
-        <Icon name='settings'/>
+        <SettingSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button button-icon" disabled={true}>
-        <Icon name='settings'/>
+        <SettingSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button button-icon">
-        <Icon name='dice'/>
+        <DiceSVG/>
       </button>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <button className="button button-icon" disabled={true}>
-        <Icon name='dice'/>
+        <DiceSVG/>
       </button>
     </div>
     <span style={{width: "100%",  marginTop: "3rem"}}>Eye in field button</span>
@@ -291,7 +301,7 @@ export const BoxLessButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="dialog-close button button-transparent" role="button">
-          <Icon name='close'/>
+          <CloseSVG className="svg-icon close"/>
           <span className="visually-hidden">Close</span>
         </button>
       </div>
@@ -299,7 +309,7 @@ export const BoxLessButton = {
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
         <button className="dialog-close button button-transparent disabled" role="button">
-          <Icon name='close'/>
+          <CloseSVG className="svg-icon close"/>
           <span className="visually-hidden">Close</span>
         </button>
       </div>

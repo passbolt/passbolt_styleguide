@@ -137,6 +137,7 @@ import ShareWithSVG from "../../../img/svg/share_with.svg";
 import ShieldCheckSVG from "../../../img/svg/shield_check.svg";
 import SlidersSVG from "../../../img/svg/sliders.svg";
 import SlidersHorizontalSVG from "../../../img/svg/sliders_horizontal.svg";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import SsoSVG from "../../../img/svg/sso.svg";
 import SubscriptionSVG from "../../../img/svg/subscription.svg";
 import SwordsSVG from "../../../img/svg/swords.svg";
@@ -148,6 +149,7 @@ import TerminalSVG from "../../../img/svg/terminal.svg";
 import TestSVG from "../../../img/svg/test.svg";
 import TextLockSVG from "../../../img/svg/text-lock.svg";
 import TextCursorInputSVG from "../../../img/svg/text_cursor_input.svg";
+import TimerSVG from "../../../img/svg/timer.svg";
 import TotpSVG from "../../../img/svg/totp.svg";
 import TriangleAlertSVG from "../../../img/svg/triangle_alert.svg";
 import UnfavoriteSVG from "../../../img/svg/unfavorite.svg";
@@ -349,6 +351,12 @@ export const Icons = {
           <Icon className="svg-icon"/>
         </div>
       )}
+      <div style={{marginTop: "1rem"}}>
+        <SpinnerSVG/>
+      </div>
+      <div style={{marginTop: "1rem"}}>
+        <TimerSVG/>
+      </div>
     </div>
 };
 

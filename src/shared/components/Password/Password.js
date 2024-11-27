@@ -13,7 +13,8 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import EyeOpenSVG from "../../../img/svg/eye_open.svg";
+import EyeCloseSVG from "../../../img/svg/eye_close.svg";
 import {Trans, withTranslation} from "react-i18next";
 
 /**
@@ -186,10 +187,10 @@ class Password extends Component {
             <button type="button" onClick={this.handleViewPasswordButtonClick} style={this.props.securityToken ? this.previewStyle : undefined}
               className={`password-view infield button-transparent ${this.props.disabled ? "disabled" : ""}`}>
               {!this.state.viewPassword &&
-                <Icon name='eye-open' />
+                <EyeOpenSVG className='svg-icon eye-open'/>
               }
               {this.state.viewPassword &&
-                <Icon name='eye-close' />
+                <EyeCloseSVG className='svg-icon eye-close'/>
               }
               <span className="visually-hidden"><Trans>View</Trans></span>
             </button>
