@@ -30,23 +30,48 @@
       }
 
       // Dot animation
-      &:checked:before {
-        transform: scale(1);
+      &:checked {
+        &:before {
+          transform: scale(1);
+          box-shadow: none;
+        }
+
+        &:hover, &:active {
+          box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+
+          &:before {
+            box-shadow: none;
+          }
+        }
+
+        cursor: default;
+        box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+
+        & + label {
+          cursor: default;
+        }
       }
 
       // Radio hover
       &:hover {
-        box-shadow: inset .1rem .1rem 0 var(--States-Hover-Highlight), .1rem .1rem 0 var(--States-Hover-Shadow), inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+        box-shadow:
+          inset .1rem .1rem 0 var(--States-Hover-Highlight),
+          .1rem .1rem 0 var(--States-Hover-Shadow),
+          inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
 
         // Radio dot hover
         &:before {
-          box-shadow: inset .1rem .1rem 0 var(--States-Hover-Highlight), .1rem .1rem 0 var(--States-Hover-Shadow);
+          box-shadow:
+            inset .1rem .1rem 0 var(--States-Hover-Highlight),
+            .1rem .1rem 0 var(--States-Hover-Shadow);
         }
       }
 
       // Radio focus-visible
       &:focus-visible {
-        box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+        box-shadow:
+          0 0 .4rem var(--States-Focus),
+          inset 0 0 0 .1rem var(--States-Focus);
         border: none;
         outline: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
 
@@ -57,17 +82,21 @@
 
       // Radio pressed
       &:active {
-        box-shadow: inset -.1rem -.1rem 0 var(--States-Active-Highlight), inset .1rem .1rem 0 var(--States-Active-Shadow), inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+        box-shadow:
+          inset -.1rem -.1rem 0 var(--States-Active-Highlight),
+          inset .1rem .1rem 0 var(--States-Active-Shadow),
+          inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
         border: none;
 
         // Radio dot pressed
         &:before {
-          box-shadow: inset -.1rem -.1rem 0 var(--States-Active-Highlight), inset .1rem .1rem 0 var(--States-Active-Shadow);
+          box-shadow:
+            inset -.1rem -.1rem 0 var(--States-Active-Highlight),
+            inset .1rem .1rem 0 var(--States-Active-Shadow);
           border: none;
         }
 
         &+label {
-          background: var(--States-Active-Highlight);
           color: var(--Text-and-icons-Main-text);
         }
       }
@@ -85,13 +114,13 @@
           background: var(--Checkbox-Checkbox-border);
         }
 
-        &+label {
+        & + label {
           opacity: .5;
           cursor: auto;
         }
       }
 
-      &+label {
+      & + label {
         flex: 1;
         font-weight: 400;
         margin: 0 0 0 1.2rem;
@@ -107,32 +136,67 @@
 /** Premimum Radio button */
 .radiolist-alt {
   .input.radio {
-    border: 1px solid @input-radio-list-border;
-    border-radius: 3px;
-    background-color: @input-radio-list-background;
-    padding: 1.6rem;
-    margin-top: 1.6rem;
+    ._field-borders();
+    position: relative;
+    border-radius: var(--Button-border-radius);
+    background-color: var(--Workspace-Panels-background);
     margin-right: 0;
 
     &.checked {
-      border: 1px solid @input-radio-list-focus-border;
+      box-shadow:
+        inset -.1rem -.1rem 0 0 var(--States-Active-Highlight),
+        inset .1rem .1rem 0 0 var(--States-Active-Shadow);
+      background: var(--Action-button-Active-action-button-background);
 
-      &:hover {
-        border: 1px solid @input-radio-list-focus-border;
+      input[type="radio"]:hover, input[type="radio"]:active {
+        box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+
+        &:before {
+          box-shadow: none;
+        }
       }
     }
 
-    &:hover {
-      border: 1px solid @input-radio-list-hover-border;
+    input[type="radio"]:hover, input[type="radio"]:active {
+      box-shadow: inset 0 0 0 .1rem var(--Checkbox-Checkbox-border);
+    }
+
+    &.disabled {
+      ._field-border-disabled();
+      opacity: .5;
+
+      input[type="radio"] + label {
+        opacity: 1;
+      }
+
+      &.checked {
+        background-color: var(--Workspace-Panels-background);
+      }
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      left: 1.6rem;
+
+      &:active + label {
+        background: transparent;
+      }
+
+      + label {
+        margin: 0;
+      }
     }
 
     label {
-      margin-left: 1.6rem;
+      border-radius: var(--Button-border-radius);
+      padding: 1.6rem 1.6rem 1.6rem 4.8rem;
 
       .name {
         margin: 0;
+        margin-bottom: 0.4rem;
         display: block;
-        font-size: 1.6rem;
+        font-size: 1.5rem;
+        font-weight: 700;
       }
 
       .info {
