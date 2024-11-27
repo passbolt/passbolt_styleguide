@@ -62,7 +62,7 @@ class MetadataPrivateKeyEntity extends EntityV2 {
           "anyOf": [{
             "type": "string",
             "maxLength": PGP_STRING_MAX_LENGTH,
-            "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m,
+            "pattern": /^-----BEGIN PGP MESSAGE-----([\r\n])([ -9;-~]{1,76}: [ -~]{1,76}([\r\n]))*\n([a-zA-Z0-9\/+=]{1,76}([\r\n]))*=[a-zA-Z0-9\/+=]{4}([\r\n])-----END PGP MESSAGE-----([\r\n]*)$/,
           }, {
             "type": "object",
           }],
