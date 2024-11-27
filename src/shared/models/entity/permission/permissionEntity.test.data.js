@@ -24,6 +24,21 @@ export const minimumPermissionDto = (data = {}) => ({
   ...data
 });
 
+export const ownerMinimalPermissionDto = (data = {}) => minimumPermissionDto({
+  type: 15,
+  ...data
+});
+
+export const updateMinimalPermissionDto = (data = {}) => minimumPermissionDto({
+  type: 7,
+  ...data
+});
+
+export const readMinimalPermissionDto = (data = {}) => minimumPermissionDto({
+  type: 1,
+  ...data
+});
+
 export const ownerMinimalFolderPermissionDto = (data = {}) => minimumPermissionDto({
   aco: "Folder",
   ...data
