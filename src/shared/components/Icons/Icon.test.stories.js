@@ -77,7 +77,7 @@ import FolderV2SVG from "../../../img/svg/folder_v2.svg";
 import GhostSVG from "../../../img/svg/ghost.svg";
 import GlobeSVG from "../../../img/svg/globe.svg";
 import GoSVG from "../../../img/svg/go.svg";
-import GroupOwnedByMeSVG from "../../../img/svg/group_owned_by_me.svg";
+import GroupOwnedByMeSVG from "../../../img/svg/owned_by_me.svg";
 import HealthcheckErrorSVG from "../../../img/svg/healthcheck_error.svg";
 import HealthcheckInfoSVG from "../../../img/svg/healthcheck_info.svg";
 import HealthcheckSuccessSVG from "../../../img/svg/healthcheck_success.svg";

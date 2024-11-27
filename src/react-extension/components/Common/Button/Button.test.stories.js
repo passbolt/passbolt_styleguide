@@ -176,19 +176,15 @@ export const ActionButton = {
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
-        <button className="button">
-          <AddSVG/>
-          <Trans>More</Trans>
-          <CaretDownSVG/>
+        <button className="button button-action-contextual button-action-icon">
+          <MoreHorizontalSVG/>
         </button>
       </div>
     </div>
     <div style={{width: "25%", marginTop: ".5rem"}}>
       <div style={{display: "flex"}}>
-        <button className="button" disabled={true}>
-          <AddSVG/>
-          <Trans>More</Trans>
-          <CaretDownSVG/>
+        <button className="button button-action-contextual button-action-icon" disabled={true}>
+          <MoreHorizontalSVG/>
         </button>
       </div>
     </div>
