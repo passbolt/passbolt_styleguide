@@ -20,7 +20,7 @@ import EditIcon from "../../../../img/svg/edit.svg";
 import ClockIcon from "../../../../img/svg/clock.svg";
 import CalendarIcon from "../../../../img/svg/calendar.svg";
 import KeyIcon from "../../../../img/svg/key.svg";
-import GroupOwnedByMeIcon from "../../../../img/svg/group_owned_by_me.svg";
+import OwnedByMeIcon from "../../../../img/svg/owned_by_me.svg";
 
 export default {
   title: 'Components/Common/ContextualMenu',
@@ -34,7 +34,7 @@ const Template = () =>
       <div className="row">
         <div className="main-cell-wrapper">
           <div className="main-cell">
-            <button type="button" className="link no-border" id="username"><GroupOwnedByMeIcon/><span><Trans>Copy username</Trans></span></button>
+            <button type="button" className="link no-border" id="username"><OwnedByMeIcon/><span><Trans>Copy username</Trans></span></button>
           </div>
         </div>
       </div>

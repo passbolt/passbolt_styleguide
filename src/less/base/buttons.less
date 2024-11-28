@@ -25,6 +25,11 @@ button,
     box-sizing: border-box;
     min-width: 7rem;
 
+    svg:first-child {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
     /* hover */
     &:hover {
         box-shadow: inset .1rem .1rem 0 0 var(--States-Hover-Highlight), inset -.1rem -.1rem 0 0 var(--States-Hover-Shadow), inset 0 0 0 1px var(--Action-button-Action-button-border);
@@ -105,6 +110,7 @@ button,
         min-width: inherit;
         width: 4.8rem;
         height: 3.6rem;
+        padding: .8rem var(--Icon-action-button-padding);
         // info button
         &.info {
           &:active, &.active {
@@ -245,8 +251,6 @@ button,
 
         .svg-icon.spinner {
             position: absolute;
-            --Spinner-Spinner-foreground: var(--Spinner-Button-spinner-foreground);
-            --Spinner-Spinner-background: var(--Spinner-Button-spinner-background);
             --spinner-color: var(--Spinner-Button-spinner-foreground);
             --spinner-background: var(--Spinner-Button-spinner-background);
 
@@ -276,8 +280,6 @@ button,
         }
 
         svg {
-          --Text-and-icons-Icons: var(--Primary-button-Primary-button-text);
-          --Workspace-Workspace-background: var(--Primary-button-Primary-button-text);
           --icon-color: var(--Primary-button-Primary-button-text);
           --icon-background-color: var(--Primary-button-Primary-button-text);
         }
