@@ -23,20 +23,18 @@
             display: flex;
         }
     }
-    .dropdown {
-        margin-right: 0;
-        .dropdown-content.left {
-            margin-right: 1rem;
-        }
-    }
     button {
         margin-right: 1rem;
     }
     .secondary {
-        button {
-            &:last-child {
+        .dropdown {
+          margin-right: 1rem;
+          button {
+            margin-right: 0;
+          }
+        }
+        li:last-child button {
                 margin-right: 0;
-            }
         }
     }
 }
