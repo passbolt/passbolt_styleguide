@@ -15,13 +15,7 @@ import React from "react";
 import FormSubmitButton from "../../Inputs/FormSubmitButton/FormSubmitButton";
 import {Trans} from "react-i18next";
 
-export default {
-  title: 'Components/Common/DialogFooter',
-  component: "DialogFooter"
-};
-
-
-const Template = args =>
+const DialogFooter = args =>
   <div className="dialog-wrapper">
     <div className="dialog">
       <div className="dialog-content">
@@ -32,20 +26,38 @@ const Template = args =>
           </button>
           <FormSubmitButton
             disabled={args.disabled}
-            processing={args.processing}/>
+            processing={args.processing}
+            warning={args.warning}/>
         </div>
       </div>
     </div>
   </div>;
 
-export const Default = Template.bind({});
-Default.args = {
-  disabled: false,
-  processing: false
+export default {
+  title: 'Components/Common/DialogFooter',
+  component: DialogFooter
 };
 
-export const Disabled = Template.bind({});
-Disabled.args = {
-  disabled: true,
-  processing: true
+export const Default = {
+  args: {
+    disabled: false,
+    processing: false,
+    warning: false
+  }
+};
+
+export const Disabled = {
+  args: {
+    disabled: true,
+    processing: true,
+    warning: false
+  }
+};
+
+export const Warning = {
+  args: {
+    disabled: false,
+    processing: false,
+    warning: true
+  }
 };
