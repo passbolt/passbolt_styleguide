@@ -36,9 +36,15 @@ const config = {
                     params: {
                       overrides: {
                         removeViewBox: false,
-                        cleanupIds: false,
-                        prefixClassNames: false
+                        cleanupIds: false
                       },
+                    },
+                  },
+                  {
+                    name: 'prefixIds',
+                    params: {
+                      prefixIds: false,
+                      prefixClassNames: false
                     },
                   },
                 ],
