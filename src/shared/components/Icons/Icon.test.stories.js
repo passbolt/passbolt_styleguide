@@ -166,6 +166,7 @@ import UserXSVG from "../../../img/svg/user_x.svg";
 import UsersSVG from "../../../img/svg/users.svg";
 import VenetianMaskSVG from "../../../img/svg/venetian_mask.svg";
 import WalletSVG from "../../../img/svg/wallet.svg";
+import AnimatedFeedback from "./AnimatedFeedback";
 
 export default {
   title: 'Foundations/Icon',
@@ -368,5 +369,15 @@ export const SettingsIcons = {
           <Icon className="svg-icon"/>
         </div>
       )}
+    </div>
+};
+
+export const AnimatedFeedbackIcons = {
+  render: () =>
+    <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
+      <AnimatedFeedback name="success"/>
+      <AnimatedFeedback name="warning"/>
+      <AnimatedFeedback name="attention"/>
+      <AnimatedFeedback name="error"/>
     </div>
 };
