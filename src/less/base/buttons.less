@@ -241,16 +241,19 @@ button,
         &.disabled, &:disabled {
             opacity: 1;
             box-shadow: inset 0 0 0 1px var(--Action-button-Action-button-border); // use box shadow to have correct size instead of border (border is not inside the element)
-            // Add opacity to the SVG
-            .svg-icon.spinner svg circle {
-              opacity: .25;
-            }
         }
 
         .svg-icon.spinner {
             position: absolute;
+            --Spinner-Spinner-foreground: var(--Spinner-Button-spinner-foreground);
+            --Spinner-Spinner-background: var(--Spinner-Button-spinner-background);
             --spinner-color: var(--Spinner-Button-spinner-foreground);
             --spinner-background: var(--Spinner-Button-spinner-background);
+
+            // Add opacity to the SVG
+            circle:first-child {
+              opacity: .25;
+            }
         }
     }
 
@@ -273,6 +276,8 @@ button,
         }
 
         svg {
+          --Text-and-icons-Icons: var(--Primary-button-Primary-button-text);
+          --Workspace-Workspace-background: var(--Primary-button-Primary-button-text);
           --icon-color: var(--Primary-button-Primary-button-text);
           --icon-background-color: var(--Primary-button-Primary-button-text);
         }

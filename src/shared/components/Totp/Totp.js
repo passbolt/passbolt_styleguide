@@ -13,7 +13,7 @@
  */
 import React, {Component} from "react";
 import PropTypes from "prop-types";
-import Icon from "../Icons/Icon";
+import TimerSVG from "../../../img/svg/timer.svg";
 import {TotpCodeGeneratorService} from "../../services/otp/TotpCodeGeneratorService";
 import {withTranslation} from "react-i18next";
 import {withActionFeedback} from "../../../react-extension/contexts/ActionFeedbackContext";
@@ -187,7 +187,7 @@ class Totp extends Component {
     return (
       <button type="button" className="link no-border" onClick={this.onClick} disabled={!this.props.canClick}>
         <span className="totp-code"><span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span></span>
-        <Icon name="timer" style={{
+        <TimerSVG style={{
           "--timer-duration": `${this.period}s`,
           "--timer-delay": `-${this.state.delay}s`
         }}/>
