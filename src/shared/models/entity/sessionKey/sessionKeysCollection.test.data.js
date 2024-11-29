@@ -12,24 +12,48 @@
  * @since         4.10.1
  */
 import {defaultSessionKeyDto} from "./sessionKeyEntity.test.data";
+import {metadata} from "../../../../../test/fixture/encryptedMetadata/metadata";
 
-export const defaultSessionKeysDtos = (count = 2, data = {}) => {
+/**
+ * Build session keys dtos used to encrypt shared resources.
+ * @param {object} data The data to override the default dto.
+ * @param {object} options Options to pass to the entity dto factory.
+ * @param {integer} [options.count=10] The number of items to create
+ * @returns {object}
+ */
+export const sharedResourcesSessionKeys = (data = {}, options = {}) => {
   const dtos = [];
-  for (let i = 0; i < count; i += 2) {
-    const dto1 = defaultSessionKeyDto({session_key: generateSessionKey(i), ...data});
-    const dto2 = defaultSessionKeyDto({session_key: generateSessionKey(i + 1), ...data});
-    dtos.push(dto1, dto2);
+  const count = options?.count || 2;
+  const fixtureCount = metadata.withSharedKey.sessionKeys.length;
+  for (let i = 0; i < count; i++) {
+    const defaultData = {
+      session_key: metadata.withSharedKey.sessionKeys[i % fixtureCount],
+      ... Array.isArray(data) ? data[i] : data,
+    };
+    const dto = defaultSessionKeyDto(defaultData);
+    dtos.push(dto);
   }
-
   return dtos;
 };
 
 /**
- * Given an index, generates a string that is matching the session key regular expression
- * @param {number} index
- * @returns {string}
+ * Build session keys dtos used to encrypt private resources.
+ * @param {object} data The data to override the default dto.
+ * @param {object} options Options to pass to the entity dto factory.
+ * @param {integer} [options.count=10] The number of items to create
+ * @returns {object}
  */
-function generateSessionKey(index) {
-  const indexString = index.toString();
-  return `9:${indexString.padStart(64, "0")}`;
-}
+export const privateResourcesSessionKeys = (data = {}, options = {}) => {
+  const dtos = [];
+  const count = options?.count || 2;
+  const fixtureCount = metadata.withAdaKey.sessionKeys.length;
+  for (let i = 0; i < count; i++) {
+    const defaultData = {
+      session_key: metadata.withAdaKey.sessionKeys[i % fixtureCount],
+      ...data,
+    };
+    const dto = defaultSessionKeyDto(defaultData);
+    dtos.push(dto);
+  }
+  return dtos;
+};
