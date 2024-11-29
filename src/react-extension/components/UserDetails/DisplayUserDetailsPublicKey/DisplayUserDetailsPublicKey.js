@@ -15,6 +15,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withActionFeedback} from "../../../contexts/ActionFeedbackContext";
@@ -214,7 +215,7 @@ class DisplayUserDetailsPublicKey extends React.Component {
           {isLoading &&
           <ul>
             <li className="processing-wrapper">
-              <Icon name="spinner"/>
+              <SpinnerSVG/>
               <span className="processing-text"><Trans>Retrieving public key</Trans></span>
             </li>
           </ul>

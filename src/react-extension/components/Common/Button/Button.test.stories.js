@@ -345,3 +345,53 @@ export const BoxLessButton = {
     </div>
   </div>
 };
+
+export const SpinnerButton = {
+  render: () =>
+    <>
+      <div style={{display: "flex", flexWrap: "wrap", flexDirection: "column"}}>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button className="button primary primary-form processing" type="button">
+            <SpinnerSVG/>
+          </button>
+        </div>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button className="button warning processing" type="button">
+            <SpinnerSVG/>
+          </button>
+        </div>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button className="button attention processing" type="button">
+            <SpinnerSVG/>
+          </button>
+        </div>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button className="button processing" type="button">
+            <SpinnerSVG/>
+          </button>
+        </div>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button className="button button-action-contextual processing" type="button">
+            <SpinnerSVG/>
+          </button>
+        </div>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button disabled className="processing" type="button">Submit
+            <SpinnerSVG/>
+          </button>
+        </div>
+      </div>
+      <div style={{display: "flex", flexWrap: "wrap", flexDirection: "column"}}>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button className="button processing large-spinner" type="submit">
+            <SpinnerSVG/>
+          </button>
+        </div>
+        <div style={{width: "25%", marginTop: ".5rem"}}>
+          <button disabled className="processing large-spinner" type="submit">Submit
+            <SpinnerSVG/>
+          </button>
+        </div>
+      </div>
+    </>
+};

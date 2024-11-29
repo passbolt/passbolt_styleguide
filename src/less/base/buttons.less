@@ -221,6 +221,7 @@ button,
     /* processing state */
     &.processing {
         color: transparent;
+        min-height: 3rem; //1.4rem (svg default height) + 1.6rem (total default vertical padding)
 
         /* hover */
         &:hover {
@@ -251,13 +252,22 @@ button,
 
         .svg-icon.spinner {
             position: absolute;
-            --spinner-color: var(--Spinner-Button-spinner-foreground);
-            --spinner-background: var(--Spinner-Button-spinner-background);
+            --spinner-color: var(--Spinner-Spinner-foreground);
+            --spinner-background: var(--Spinner-Spinner-background);
 
             // Add opacity to the SVG
-            circle:first-child {
-              opacity: .25;
+            #background {
+              opacity: 1;
             }
+        }
+
+        &.large-spinner {
+          background: var(--Workspace-Workspace-button-background);
+
+          .svg-icon.spinner {
+            width: 2.4rem;
+            height: 2.4rem;
+          }
         }
     }
 
@@ -281,11 +291,20 @@ button,
 
         svg {
           --icon-color: var(--Primary-button-Primary-button-text);
-          --icon-background-color: var(--Primary-button-Primary-button-text);
+          --icon-background: var(--Primary-button-Primary-button-text);
+
+          &.spinner.svg-icon #background {
+            opacity: .25;
+          }
         }
 
         &.processing {
             color: transparent;
+
+            .svg-icon.spinner {
+              --spinner-color: var(--Spinner-Button-spinner-foreground);
+              --spinner-background: var(--Spinner-Button-spinner-background);
+            }
         }
 
         &:hover {
@@ -319,11 +338,22 @@ button,
 
         svg {
           --icon-color: var(--Primary-button-Primary-button-text);
-          --icon-background-color: var(--Primary-button-Primary-button-text);
+          --icon-background: var(--Primary-button-Primary-button-text);
+          --spinner-color: var(--Spinner-Button-spinner-foreground);
+          --spinner-background: var(--Spinner-Button-spinner-background);
+
+          &.spinner.svg-icon #background {
+            opacity: .25;
+          }
         }
 
         &.processing {
             color: transparent;
+
+            .svg-icon.spinner {
+              --spinner-color: var(--Spinner-Button-spinner-foreground);
+              --spinner-background: var(--Spinner-Button-spinner-background);
+            }
         }
 
         &:hover {
@@ -356,12 +386,23 @@ button,
       box-shadow: none;
 
       svg {
-        --icon-color: @icon-warning-color;
-        --icon-background-color: @icon-warning-background-color;
+        --icon-color: var(--Primary-button-Primary-button-text);
+        --icon-background: var(--Primary-button-Primary-button-text);
+        --spinner-color: var(--Spinner-Button-spinner-foreground);
+        --spinner-background: var(--Spinner-Button-spinner-background);
+
+        &.spinner.svg-icon #background {
+          opacity: .25;
+        }
       }
 
       &.processing {
         color: transparent;
+
+        .svg-icon.spinner {
+          --spinner-color: var(--Spinner-Button-spinner-foreground);
+          --spinner-background: var(--Spinner-Button-spinner-background);
+        }
       }
 
       &:hover {
