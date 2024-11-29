@@ -52,33 +52,41 @@ class Workspace extends Component {
       && this.props.rbacContext.canIUseUiAction(uiActions.TAGS_USE);
 
     return (
-      <div>
-        <div className="header second">
-          <Logo/>
-          <FilterResourcesByText
-            placeholder={this.props.t("Search passwords")}/>
-          <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
-        </div>
-        <div className="header third">
-          <div className="col1 main-action-wrapper">
-            <DisplayResourcesWorkspaceMainMenu/>
+      <div className="panel main">
+        <div className="panel left">
+          <div className="sidebar-content">
+            <Logo/>
+            <div className="main-action-wrapper">
+              <DisplayResourcesWorkspaceMainMenu/>
+            </div>
+            <div className="sidebar-content-left">
+              <FilterResourcesByShortcuts/>
+              {canUseFolders &&
+                <FilterResourcesByFolders/>
+              }
+              <FilterResourcesByGroups/>
+              {canUseTags &&
+                <FilterResourcesByTags/>
+              }
+            </div>
           </div>
-          <DisplayResourcesWorkspaceMenu/>
         </div>
-        <div className="panel main">
-          <div className="panel left">
-            <FilterResourcesByShortcuts/>
-            {canUseFolders &&
-            <FilterResourcesByFolders/>
-            }
-            <FilterResourcesByGroups/>
-            {canUseTags &&
-            <FilterResourcesByTags/>
-            }
+        <div className="panel middle">
+          <div className="header">
+            <FilterResourcesByText
+              placeholder={this.props.t("Search passwords")}/>
+            <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
           </div>
-          <div className="panel middle">
-            <FilterResourcesByBreadcrumb/>
-            <DisplayResourcesList/>
+          <div className="middle-right">
+            <div className="breadcrumbs-and-grid">
+              <div className="top-bar">
+                <FilterResourcesByBreadcrumb/>
+                <div className="action-bar">
+                  <DisplayResourcesWorkspaceMenu/>
+                </div>
+              </div>
+              <DisplayResourcesList/>
+            </div>
             {this.props.resourceWorkspaceContext.details.folder && this.hasLockDetail() &&
               <DisplayResourceFolderDetails/>
             }

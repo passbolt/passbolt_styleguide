@@ -1,42 +1,55 @@
 /* actions */
-.header.third .main-action-wrapper {
-    margin: .4rem 0 0 1.6rem;
-    .dropdown {
-      margin-right: 0;
-    }
-    button {
-        margin-right: .8rem;
-    }
-
+.panel.left .main-action-wrapper {
+  margin: .4rem 0 0 1.6rem;
+  .dropdown {
+    margin-right: 0;
+  }
+  button {
+    margin-right: .8rem;
+  }
 }
-
-.header.third .actions-wrapper {
+.panel.middle .middle-right .top-bar {
+  .action-bar {
     display: flex;
-    justify-content: space-between;
-    margin: .4rem 1.6rem 0 0;
-    .actions {
+    padding: .8rem 1.6rem;
+    align-items: flex-start;
+    gap: .8rem;
+    align-self: stretch;
+
+    .actions-wrapper {
+      display: flex;
+      justify-content: space-between;
+      margin: .4rem 1.6rem 0 0;
+
+      .actions {
         flex: 1;
+
         &.secondary {
-            flex: 0;
+          flex: 0;
         }
+
         > ul {
-            display: flex;
+          display: flex;
         }
-    }
-    button {
+      }
+
+      button {
         margin-right: 1rem;
-    }
-    .secondary {
+      }
+
+      .secondary {
         .dropdown {
-          margin-right: 1rem;
-          button {
-            margin-right: 0;
+          margin-right: 1rem;button {
+          margin-right: 0;
           }
         }
-        li:last-child button {
-                margin-right: 0;
+        li:last-child button{
+            margin-right: 0;
+
         }
+      }
     }
+  }
 }
 
 /* hide icons if there is no space */

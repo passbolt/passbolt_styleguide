@@ -66,20 +66,6 @@ class DisplayResourceWorkspacePageObject {
   }
 
   /**
-   * Returns the header second element of password workspace
-   */
-  get headerSecond() {
-    return this._container.querySelector('.header.second');
-  }
-
-  /**
-   * Returns the header third element of password workspace
-   */
-  get headerThird() {
-    return this._container.querySelector('.header.third');
-  }
-
-  /**
    * Returns the panel main element of password workspace
    */
   get panelMain() {
@@ -132,7 +118,7 @@ class DisplayResourceWorkspacePageObject {
    * Returns true if the page object exists in the container
    */
   exists() {
-    return this.headerSecond !== null && this.headerThird !== null && this.panelMain !== null
+    return this.panelMain !== null
       && this.panelLeft !== null && this.panelMiddle !== null;
   }
 }
