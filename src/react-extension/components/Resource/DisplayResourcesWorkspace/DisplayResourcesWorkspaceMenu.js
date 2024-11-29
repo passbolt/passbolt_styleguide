@@ -40,6 +40,10 @@ import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
 import ResourceTypesCollection from "../../../../shared/models/entity/resourceType/resourceTypesCollection";
+import DropdownButton from "../../Common/Dropdown/DropdownButton";
+import ColumnsSVG from "../../../../img/svg/columns.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import DropdownItem from "../../Common/Dropdown/DropdownItem";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -63,7 +67,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   get defaultState() {
     return {
       moreMenuOpen: false, // more menu open or not
-      viewColumnsMenuOpen: false, // view column menu open or not
     };
   }
 
@@ -72,7 +75,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   createRefs() {
     this.moreMenuRef = React.createRef();
-    this.viewColumnsMenuRef = React.createRef();
   }
 
   /**
@@ -92,7 +94,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleCopyTotpClickEvent = this.handleCopyTotpClickEvent.bind(this);
     this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
     this.handleExportClickEvent = this.handleExportClickEvent.bind(this);
-    this.handleViewColumnsClickEvent = this.handleViewColumnsClickEvent.bind(this);
     this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
     this.handleMarkAsExpiredClick = this.handleMarkAsExpiredClick.bind(this);
     this.handleSetExpiryDateClickEvent = this.handleSetExpiryDateClickEvent.bind(this);
@@ -117,14 +118,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   handleDocumentClickEvent(event) {
     // Prevent closing when the user click on an element of the menu
     if (this.moreMenuRef.current.contains(event.target)) {
-      this.handleCloseViewColumnsMenu();
-      return;
-    } else if (this.viewColumnsMenuRef.current.contains(event.target)) { // Prevent closing when the user click on an element of the view columns menu
-      this.handleCloseMoreMenu();
       return;
     }
     this.handleCloseMoreMenu();
-    this.handleCloseViewColumnsMenu();
   }
 
   /**
@@ -134,14 +130,9 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
   handleDocumentContextualMenuEvent(event) {
     // Prevent closing when the user click on an element of the menu
     if (this.moreMenuRef.current.contains(event.target)) {
-      this.handleCloseViewColumnsMenu();
-      return;
-    } else if (this.viewColumnsMenuRef.current.contains(event.target)) { // Prevent closing when the user click on an element of the view columns menu
-      this.handleCloseMoreMenu();
       return;
     }
     this.handleCloseMoreMenu();
-    this.handleCloseViewColumnsMenu();
   }
 
   /**
@@ -149,7 +140,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleDocumentDragStartEvent() {
     this.handleCloseMoreMenu();
-    this.handleCloseViewColumnsMenu();
   }
 
   /**
@@ -331,14 +321,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.export();
   }
 
-  /**
-   * open or close the more menu
-   */
-  handleViewColumnsClickEvent() {
-    const viewColumnsMenuOpen = !this.state.viewColumnsMenuOpen;
-    this.setState({viewColumnsMenuOpen});
-  }
-
   handleOnChangeColumnView(event) {
     const target = event.target;
     this.props.resourceWorkspaceContext.onChangeColumnView(target.id, target.checked);
@@ -357,13 +339,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   handleCloseMoreMenu() {
     this.setState({moreMenuOpen: false});
-  }
-
-  /**
-   * Close the more menu
-   */
-  handleCloseViewColumnsMenu() {
-    this.setState({viewColumnsMenuOpen: false});
   }
 
   /**
@@ -554,6 +529,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     return this.props.t;
   }
 
+  get columnsContent() {
+    return <>
+      <ColumnsSVG/>
+      <Trans>Columns</Trans>
+      <CaretDownSVG/>
+    </>;
+  }
+
   /**
    * Render the component
    * @returns {JSX}
@@ -715,28 +698,16 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
         <div className="actions secondary">
           <ul>
             <li>
-              <div className="dropdown" ref={this.viewColumnsMenuRef}>
-                <button type="button" className={`button-action-icon ${this.state.viewColumnsMenuOpen ? "open" : ""}`} onClick={this.handleViewColumnsClickEvent}>
-                  <Icon name="columns"/>
-                  <Icon name="caret-down"/>
-                </button>
-                <ul className={`dropdown-content menu left ${this.state.viewColumnsMenuOpen ? "visible" : ""}`}>
-                  {this.columnsResourceSetting?.map(column =>
-                    <li key={column.id} className={`${column.id === 'uri' ? "separator-after" : ""}`}>
-                      <div className="row">
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <div className="input checkbox">
-                              <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
-                              <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  )}
-                </ul>
-              </div>
+              <DropdownButton direction="left" content={this.columnsContent}>
+                {this.columnsResourceSetting?.map(column =>
+                  <DropdownItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
+                    <div className="input checkbox">
+                      <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
+                      <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
+                    </div>
+                  </DropdownItem>
+                )}
+              </DropdownButton>
             </li>
             <li>
               <button type="button" className={`button-toggle button-action-icon info ${this.hasLockDetail() ? "selected" : ""}`}

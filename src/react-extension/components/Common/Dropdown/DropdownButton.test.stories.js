@@ -45,6 +45,7 @@ import OwnedByMeSVG from "../../../../img/svg/owned_by_me.svg";
 import GlobeSVG from "../../../../img/svg/globe.svg";
 import LinkSVG from "../../../../img/svg/link.svg";
 import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import RevertSVG from "../../../../img/svg/revert.svg";
 import {Trans} from "react-i18next";
 
 export default {
@@ -211,7 +212,7 @@ export const DropdownMore = {
 };
 
 const columnsContent = <>
-  <ColumnsSVG height="1.6rem" width="1.6rem"/>
+  <ColumnsSVG/>
   <Trans>Columns</Trans>
   <CaretDownSVG/>
 </>;
@@ -298,7 +299,7 @@ export const DropdownColumns = {
       </DropdownItem>
       <DropdownItem>
         <button type="button" style={{margin: ".8rem 1.6rem .4rem 1.6rem"}}>
-          <AlarmClockSVG/>
+          <RevertSVG/>
           <span><Trans>Reset columns</Trans></span>
         </button>
       </DropdownItem>
