@@ -18,12 +18,13 @@
   background: var(--Dialog-Dialog-header-and-footer);
   border-radius: var(--Section-border-radius);
   box-sizing: border-box;
+  padding: 0px 16px;
 
   /* header */
   .dialog-header {
     display: flex;
     align-items: center;
-    padding: 1.6rem;
+    padding: 1.2rem 0 1.2rem 1.6rem;
 
     .dialog-title-wrapper {
       flex: 1;
@@ -32,8 +33,10 @@
       width: 90%;
       h2 {
         margin: 0;
-        font-size: 1.9rem;
-        line-height: 2.6rem;
+        font-size: 1.8rem;
+        color: var(--Text-and-icons-Main-text);
+        line-height:normal;
+        font-weight: 400;
         .ellipsis();
       }
 
@@ -41,7 +44,9 @@
         padding-top: .4rem;
         padding-left: .8rem;
         font-size: 1.4rem;
-        line-height: 2rem;
+        line-height: normal;
+        font-weight: 400;
+        color: var(--Text-and-icons-Secondary-text);
       }
 
       .tooltip {
@@ -109,7 +114,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 1.6rem;
+    padding: 1.6rem 0;
 
     .button-left {
       background: var(--Workspace-Workspace-button-background);
@@ -132,8 +137,9 @@
 
 /* can also be used outside a dialog, like the sidebar */
 .dialog-close {
-  margin-left: 1rem;
-  padding: 0;
+  display: flex;
+  padding: 4px;
+  align-items: center;
   &, &:hover {
     display: block;
     border: none;

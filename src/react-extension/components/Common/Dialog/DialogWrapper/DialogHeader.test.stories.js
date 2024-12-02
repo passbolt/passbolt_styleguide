@@ -14,25 +14,27 @@
 import React from "react";
 import DialogWrapper from "./DialogWrapper";
 
+const DialogHeader = args =>  <DialogWrapper {...args}/>;
+
 export default {
-  title: 'Components/Common/DialogWrapper',
-  component: "DialogWrapper"
+  title: 'Components/Common/DialogHeader',
+  component: DialogHeader
 };
 
-
-const Template = args => <DialogWrapper {...args}/>;
-
-export const Default = Template.bind({});
-Default.args = {
-  title: "Title",
-  subtitle: "Subtitle",
-  onClose: () => {}
+export const Default = {
+  args: {
+    title: "Title",
+    subtitle: "Subtitle",
+    onClose: () => {}
+  }
 };
 
-export const Tooltip = Template.bind({});
-Tooltip.args = {
-  title: "Title",
-  subtitle: "Subtitle",
-  tooltip: "Tool tip placeholder",
-  onClose: () => {}
+export const Tooltip = {
+  args: {
+    title: "Title",
+    subtitle: "Subtitle",
+    tooltip: "Tool tip placeholder",
+    onClose: () => {}
+  }
 };
+
