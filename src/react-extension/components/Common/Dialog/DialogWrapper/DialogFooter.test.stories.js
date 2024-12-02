@@ -19,16 +19,17 @@ const DialogFooter = args =>
   <div className="dialog-wrapper">
     <div className="dialog">
       <div className="dialog-content">
-        <div className="dialog-footer">
-          <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn more</Trans></button>
-          <button disabled={args.disabled} className="link cancel">
-            <Trans>Cancel</Trans>
-          </button>
-          <FormSubmitButton
-            disabled={args.disabled}
-            processing={args.processing}
-            warning={args.warning}/>
-        </div>
+
+      </div>
+      <div className="dialog-footer">
+        <button className="button button-left" disabled={args.disabled} type="button"><Trans>Learn more</Trans></button>
+        <button disabled={args.disabled} className="link cancel">
+          <Trans>Cancel</Trans>
+        </button>
+        <FormSubmitButton
+          disabled={args.disabled}
+          processing={args.processing}
+          warning={args.warning}/>
       </div>
     </div>
   </div>;

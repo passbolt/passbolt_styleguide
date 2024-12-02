@@ -60,21 +60,25 @@
     .dialog-variable{
       overflow-wrap: break-word;
     }
+
+    .warning.message {
+      padding: .8rem 1.6rem;
+      border-bottom-left-radius: var(--Section-border-radius);
+      border-bottom-right-radius: var(--Section-border-radius);
+    }
   }
 
   /* inputs */
   .form-content,
   .dialog-body {
-    background: @default-background;
     padding: 1.6rem;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: var(--Section-border-radius);
+    background: var(--Dialog-Dialog-fill);
     // Remove padding
     &.no-padding {
       padding: 0;
-    }
-
-    // all direct child element
-    & > * {
-      margin-bottom: 1.6rem;
     }
   }
 
