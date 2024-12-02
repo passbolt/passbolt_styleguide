@@ -18,39 +18,46 @@
 import React from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
 import Tooltip from "./Tooltip";
+import TooltipPortal from "./TooltipPortal";
 
 export default {
   title: 'Foundations/Tooltip',
   component: Tooltip
 };
 
-
-
-const Template = () =>
-  <div style={{marginLeft: "auto", marginTop: "20rem", textAlign: "center"}}>
-    <div>Put the mouse below</div>
-    <Tooltip message="Tool tip placeholder" direction="top">
-      <Tooltip message="Tool tip placeholder" direction="right">
-        <Tooltip message="Tool tip placeholder" direction="bottom">
-          <Tooltip message="Tool tip placeholder" direction="left">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+export const DefaultTooltip = {
+  render: () =>
+    <div style={{marginLeft: "auto", marginTop: "20rem", textAlign: "center"}}>
+      <div>Put the mouse below</div>
+      <Tooltip message="Tool tip placeholder" direction="top">
+        <Tooltip message="Tool tip placeholder" direction="right">
+          <Tooltip message="Tool tip placeholder" direction="bottom">
+            <Tooltip message="Tool tip placeholder" direction="left">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </Tooltip>
           </Tooltip>
         </Tooltip>
       </Tooltip>
-    </Tooltip>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <Tooltip message="Tool tip placeholder" direction="top">
-      <Tooltip message="Tool tip placeholder" direction="right">
-        <Tooltip message="Tool tip placeholder" direction="bottom">
-          <Tooltip message="Tool tip placeholder" direction="left">
-            <Icon name="info-circle"/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <Tooltip message="Tool tip placeholder" direction="top">
+        <Tooltip message="Tool tip placeholder" direction="right">
+          <Tooltip message="Tool tip placeholder" direction="bottom">
+            <Tooltip message="Tool tip placeholder" direction="left">
+              <Icon name="info-circle"/>
+            </Tooltip>
           </Tooltip>
         </Tooltip>
       </Tooltip>
-    </Tooltip>
-  </div>;
+    </div>
+};
 
-export const Initial = Template.bind({});
+
+export const PortalTooltip = {
+  render: () =>
+    <TooltipPortal message="Tool tip placeholder">
+      <Icon name="info-circle"/>
+    </TooltipPortal>
+};
