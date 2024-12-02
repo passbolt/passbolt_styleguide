@@ -32,7 +32,6 @@ import HandleRouteFallback from "./components/Common/Route/HandleRouteFallback";
 import DisplayUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayUserSettingsWorkspace";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
-import Footer from "./components/Common/Footer/Footer";
 import HandleExtAppRouteChanged from "./components/Common/Route/HandleExtAppRouteChanged";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import AdministrationWorkspaceContextProvider from "./contexts/AdministrationWorkspaceContext";
@@ -160,10 +159,8 @@ class ExtApp extends Component {
                                                       <DragContextProvider>
                                                         <div id="container" className="page password">
                                                           <div id="app" className="app ready" tabIndex="1000">
-                                                            <div className="header first">
-                                                              <DisplayMainMenu/>
-                                                            </div>
-                                                            <DisplayResourcesWorkspace onMenuItemClick={this.handleWorkspaceSelect}/>
+                                                            {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
+                                                            <DisplayResourcesWorkspace/>
                                                           </div>
                                                         </div>
                                                       </DragContextProvider>
@@ -248,7 +245,7 @@ class ExtApp extends Component {
                                       </NavigationContextProvider>
                                     </Router>
                                     <ManageLoading/>
-                                    <Footer/>
+                                    {/* TODO To be moved into information panel <Footer/> */}
                                   </ProgressContextProvider>
                                 </LoadingContextProvider>
                               </ContextualMenuContextProvider>

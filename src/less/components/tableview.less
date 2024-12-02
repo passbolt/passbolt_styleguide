@@ -2,77 +2,87 @@
  * Main Workspace - Table View
  */
 .tableview {
+  display: flex;
   background: @tableview-background;
   position: relative;
-  margin-right: 1.6rem;
   font-size: 1.5rem; /* 15px */
-  height: calc(100% - 4rem); // 100% - breadcrumb height - border
+  height: 100%; // force height to use 100% for flex child
+  width: 100%; // force width to use 100% for flex child
   border-radius: 0.3rem 0.3rem 0 0;
   border: 1px solid @default-border;
   border-bottom: none;
   box-shadow: 0 -.1rem 0 @tableview-shadow-color;
-  overflow: auto;
 
-  /* header */
-  .tableview-header {
-    height: 3.2rem;background: @tableview-header-background;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+  /* wrapper */
+  .tableview-wrapper {
+    position: absolute; // important point to have 100% width height in flexbox
+    height: 100%; // 100%
+    width: 100%; // 100%
+    overflow: auto;
 
-    table {
-      width: 100%;
-      height: 100%;
-      background: @tableview-header-background;
-      color: @tableview-header-text-color;
-      table-layout: fixed;
+    /* header */
+    .tableview-header {
+      height: 3.2rem;background: @tableview-header-background;
+      position: sticky;
+      top: 0;
+      z-index: 1;
 
-      .input.checkbox input[type=checkbox] {
-        background: @tableview-header-checkbox-background;
-
-        &:before {
-          background: @tableview-header-checkbox-control-check-color;
-        }
-      }
-
-      button {
+      table {
+        width: 100%;
+        height: 100%;
+        background: @tableview-header-background;
         color: @tableview-header-text-color;
-        max-width: 100%;
-      }
-    }
-  }
+        table-layout: fixed;
 
-  /* main content */
-  .tableview-content {
-    top: 3.1rem;
-    bottom: 0;
-    padding: 0;
-    border-top: 1px solid @default-border;
-    position: absolute;
+        .input.checkbox input[type=checkbox] {
+          background: @tableview-header-checkbox-background;
 
-    table {
-      width: 100%;
-      color: @tableview-content-text-color;
-      table-layout: fixed;
+          &:before {
+            background: @tableview-header-checkbox-control-check-color;
+          }
+        }
 
-      .input.checkbox input[type=checkbox] {
-        background: @tableview-content-checkbox-background;
-        &:before {
-          background: @tableview-content-checkbox-control-check-color;
+        button {
+          color: @tableview-header-text-color;
+          max-width: 100%;
         }
       }
+    }
 
-      button {
+    /* main content */
+    .tableview-content {
+      top: 3.1rem;
+      bottom: 0;
+      padding: 0;
+      border-top: .1rem solid @default-border;
+      position: absolute;
+
+      table {
+        width: 100%;
         color: @tableview-content-text-color;
-        max-width: 100%;
-        span {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        table-layout: fixed;
+
+        .input.checkbox input[type=checkbox] {
+          background: @tableview-content-checkbox-background;
+          &:before {
+            background: @tableview-content-checkbox-control-check-color;
+          }
+        }
+
+        button {
+          color: @tableview-content-text-color;
+          max-width: 100%;
+          span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
     }
   }
+
+
 
   /* rows */
   table {

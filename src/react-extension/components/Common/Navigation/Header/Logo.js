@@ -21,7 +21,7 @@ class Logo extends Component {
    */
   render() {
     return (
-      <div className="col1">
+      <div className="top-bar-left">
         <div className="logo-svg no-img" title="Passbolt logo">
           <SVGLogo width="100%" height="2.5rem"/>
           <h1><span>Passbolt</span></h1>
