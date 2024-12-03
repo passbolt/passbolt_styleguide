@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.9.0
  */
-import React from "react";
 import ExtAuthenticationLogin from "./ExtAuthenticationLogin";
 import MockPort from "./test/mock/MockPort";
 import siteSettingsFixture from "./test/fixture/Settings/siteSettings";
@@ -19,7 +18,10 @@ import mockStorage from "../../test/mocks/mockStorage";
 
 export default {
   title: 'Components/ExtAuthenticationLogin/ExtAuthenticationLogin',
-  component: ExtAuthenticationLogin
+  component: ExtAuthenticationLogin,
+  parameters: {
+    css: "ext_authentication"
+  }
 };
 
 function getMockedPort() {
@@ -32,28 +34,20 @@ function getMockedPort() {
   return mockedPort;
 }
 
-const mockedStorage = new mockStorage();
-
-const Template = args => <ExtAuthenticationLogin {...args}/>;
-
-const defaultParameters = {
-  css: "ext_authentication"
+export const Initial = {
+  args: {
+    port: getMockedPort(),
+    storage: mockStorage()
+  },
 };
-
-export const Initial = Template.bind({});
-Initial.args = {
-  port: getMockedPort(),
-  storage: mockedStorage
-};
-Initial.parameters = defaultParameters;
 
 const mockedPortWithSso = getMockedPort();
 const ssoLocalConfiguredProvider = "azure";
 mockedPortWithSso.addRequestListener("passbolt.sso.get-local-configured-provider", () => ssoLocalConfiguredProvider);
 
-export const WithSsoKitAvailable = Template.bind({});
-WithSsoKitAvailable.args = {
-  port: mockedPortWithSso,
-  storage: mockedStorage
+export const WithSsoKitAvailable = {
+  args: {
+    port: mockedPortWithSso,
+    storage: mockStorage()
+  },
 };
-WithSsoKitAvailable.parameters = defaultParameters;

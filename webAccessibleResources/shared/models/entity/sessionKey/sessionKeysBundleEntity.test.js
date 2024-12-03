@@ -44,8 +44,6 @@ describe("SessionKeysBundleEntity", () => {
       const dataStringSuccessScenarios = [
         {scenario: "PGP Message with comments in the header", value: defaultPgpMessage({withCrc: true, withComments: true})},
         {scenario: "PGP Message without comments in the header", value: defaultPgpMessage({withCrc: true, withComments: false})},
-        {scenario: "PGP Message with comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: true, withDuplicates: true})},
-        {scenario: "PGP Message without comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: false, withDuplicates: true})},
       ];
       for (let i = 0; i < dataStringSuccessScenarios.length; i++) {
         const scenario = dataStringSuccessScenarios[i];
@@ -57,7 +55,9 @@ describe("SessionKeysBundleEntity", () => {
         {scenario: "PGP Message without CRC", value: defaultPgpMessage({withCrc: false})},
         {scenario: "PGP Message without CRC and multiple blocks", value: defaultPgpMessage({withCrc: false, withDuplicates: true})},
         {scenario: "PGP Message with wrong extra characters", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true})},
-        {scenario: "PGP Message with wrong extra characters and multiple blocks", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+        {scenario: "PGP Message with wrong extra characters and multiple blocks", value: defaultPgpMessage({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
+        {scenario: "PGP Message with comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: true, withDuplicates: true})},
+        {scenario: "PGP Message without comments in the header and multiple blocks", value: defaultPgpMessage({withCrc: true, withComments: false, withDuplicates: true})},
       ];
       for (let i = 0; i < dataStringFailScenarios.length; i++) {
         const scenario = dataStringFailScenarios[i];
@@ -144,6 +144,20 @@ describe("SessionKeysBundleEntity", () => {
   });
 
   describe("::getters", () => {
+    it("`id` should return the populated value", () => {
+      expect.assertions(1);
+      const dto = defaultSessionKeysBundleDto();
+      const entity = new SessionKeysBundleEntity(dto);
+      expect(entity.id).toStrictEqual(dto.id);
+    });
+
+    it("`id` should return null if no value is populated", () => {
+      expect.assertions(1);
+      const dto = minimalSessionKeysBundleDto();
+      const entity = new SessionKeysBundleEntity(dto);
+      expect(entity.id).toBeNull();
+    });
+
     it("`data` should return the right value: with string", () => {
       expect.assertions(1);
       const dto = defaultSessionKeysBundleDto();

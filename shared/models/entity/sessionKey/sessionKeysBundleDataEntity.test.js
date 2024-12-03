@@ -15,7 +15,8 @@ import EntitySchema from "../abstract/entitySchema";
 import * as assertEntityProperty from "../../../../../test/assert/assertEntityProperty";
 import SessionKeysBundleDataEntity from "./sessionKeysBundleDataEntity";
 import {defaultSessionKeysBundleDataDto} from "./sessionKeysBundleDataEntity.test.data";
-import {defaultSessionKeysDtos} from "./sessionKeysCollection.test.data";
+import {sharedResourcesSessionKeys} from "./sessionKeysCollection.test.data";
+import SessionKeysCollection from "./sessionKeysCollection";
 
 describe("SessionKeysBundleDataEntity", () => {
   describe("::getSchema", () => {
@@ -32,10 +33,10 @@ describe("SessionKeysBundleDataEntity", () => {
     it("validates session_keys property", () => {
       const sessionKeysBundleDto = defaultSessionKeysBundleDataDto();
       const successScenarios = [
-        {scenario: "a valid option", value: defaultSessionKeysDtos()},
+        {scenario: "a valid option", value: sharedResourcesSessionKeys()},
       ];
       const failScenarios = [
-        {scenario: "with invalid session private key build rule", value: defaultSessionKeysDtos(2, {session_key: "fail"})},
+        {scenario: "with invalid session private key build rule", value: sharedResourcesSessionKeys({session_key: "fail"})},
       ];
       assertEntityProperty.assertAssociation(SessionKeysBundleDataEntity, "session_keys", sessionKeysBundleDto, successScenarios, failScenarios);
     });
@@ -58,6 +59,25 @@ describe("SessionKeysBundleDataEntity", () => {
 
       expect(entity._props.object_type).toStrictEqual("PASSBOLT_SESSION_KEYS");
       expect(entity._session_keys.toDto()).toStrictEqual(dto.session_keys);
+    });
+  });
+
+  describe("::createFromSessionKeys", () => {
+    it("create from a session keys collection", () => {
+      expect.assertions(2);
+      const sessionKeysDto = sharedResourcesSessionKeys();
+      const sessionKeys = new SessionKeysCollection(sessionKeysDto);
+      const entity = SessionKeysBundleDataEntity.createFromSessionKeys(sessionKeys);
+
+      expect(entity._props.object_type).toStrictEqual("PASSBOLT_SESSION_KEYS");
+      expect(entity._session_keys.toDto()).toStrictEqual(sessionKeysDto);
+    });
+
+    it("throws if sessionKeys parameter is not valid", () => {
+      expect.assertions(3);
+      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys(42)).toThrow("The parameter \"sessionKey\" should be a SessionKeysCollection.");
+      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys()).toThrow("The parameter \"sessionKey\" should be a SessionKeysCollection.");
+      expect(() => SessionKeysBundleDataEntity.createFromSessionKeys(null)).toThrow("The parameter \"sessionKey\" should be a SessionKeysCollection.");
     });
   });
 

@@ -13,7 +13,7 @@
  * @since         4.10.1
  */
 
-import {defaultSessionKeysDtos} from "./sessionKeysCollection.test.data";
+import {sharedResourcesSessionKeys} from "./sessionKeysCollection.test.data";
 
 /**
  * Returns a default DTO object suitable for the SessionKeysBundleDataEntity
@@ -22,6 +22,6 @@ import {defaultSessionKeysDtos} from "./sessionKeysCollection.test.data";
  */
 export const defaultSessionKeysBundleDataDto = (data = {}) => ({
   object_type: "PASSBOLT_SESSION_KEYS",
-  session_keys: defaultSessionKeysDtos(),
+  session_keys: sharedResourcesSessionKeys(),
   ...data,
 });
