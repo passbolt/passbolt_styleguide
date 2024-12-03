@@ -126,4 +126,22 @@ describe("SessionKeysCollection", () => {
       expect(time).toBeLessThan(10_000);
     });
   });
+
+  describe("::remove", () => {
+    it("should remove a given sessionKey.", async() => {
+      expect.assertions(3);
+
+      const foreignId1 = uuidv4();
+      const foreignId2 = uuidv4();
+      const foreignId3 = uuidv4();
+      const dtos = [defaultSessionKeyDto({foreign_id: foreignId1}), defaultSessionKeyDto({foreign_id: foreignId2}), defaultSessionKeyDto({foreign_id: foreignId3})];
+      const collection = new SessionKeysCollection(dtos);
+
+      collection.remove(collection._items[1]);
+
+      expect(collection).toHaveLength(2);
+      expect(collection.items[0].toDto()).toEqual(dtos[0]);
+      expect(collection.items[1].toDto()).toEqual(dtos[2]);
+    });
+  });
 });
