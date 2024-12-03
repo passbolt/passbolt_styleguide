@@ -392,7 +392,7 @@ class DisplayUserWorkspaceActions extends React.Component {
    */
   render() {
     return (
-      <div className="col2_3 actions-wrapper">
+      <div className="actions-wrapper">
         <div className="actions">
           {this.isLoggedInUserAdmin() &&
           <ul>

@@ -185,9 +185,7 @@ class ExtApp extends Component {
                                               <ManageAnnouncements/>
                                               <div id="container" className="page user">
                                                 <div id="app" className="app ready" tabIndex="1000">
-                                                  <div className="header first">
-                                                    <DisplayMainMenu/>
-                                                  </div>
+                                                  {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                   <DisplayUserWorkspace/>
                                                 </div>
                                               </div>

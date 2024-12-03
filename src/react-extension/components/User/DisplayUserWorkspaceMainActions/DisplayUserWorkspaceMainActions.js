@@ -175,7 +175,7 @@ class DisplayUserWorkspaceMainActions extends React.Component {
    */
   render() {
     return (
-      <div className="col1 main-action-wrapper">
+      <div className="main-action-wrapper">
         {this.canIUseCreate() &&
         <div className="dropdown" ref={this.createMenuRef}>
           <button type="button" className={`create primary ${this.state.createMenuOpen ? "open" : ""}`} onClick={this.handleCreateClickEvent}>
