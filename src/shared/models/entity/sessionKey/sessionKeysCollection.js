@@ -107,6 +107,14 @@ class SessionKeysCollection extends EntityV2Collection {
   filterOutSessionKeysNotMatchingForeignModelAndForeignIds(foreignModel, foreignIds) {
     this.filterByCallback(sessionKey => sessionKey.foreignModel === foreignModel && foreignIds.includes(sessionKey.foreignId));
   }
+
+  /**
+   * Removes the given session from the collection.
+   * @param {SessionKeyEntity} sessionKeyToRemove
+   */
+  remove(sessionKeyToRemove) {
+    this.filterByCallback(sessionKey => sessionKey !== sessionKeyToRemove);
+  }
 }
 
 export default SessionKeysCollection;
