@@ -49,6 +49,11 @@ export const defaultResourceDto = (data = {}, options = {}) => {
     folder_parent_id: null,
     personal: false,
     favorite: null,
+    /*
+     * @todo there should be default metadata properties for v5 resource types.
+     * metadata_key_id: uuidv4(),
+     * metadata_key_type: METADATA_KEY_TYPE_METADATA_KEY,
+     */
     metadata: defaultResourceMetadataDto({resource_type_id: data?.metadata?.resource_type_id
         || data?.resource_type_id || TEST_RESOURCE_TYPE_PASSWORD_AND_DESCRIPTION}),
     permission: ownerPermissionDto({aco_foreign_key: id}),
@@ -56,7 +61,7 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   };
 
   if (!data.permissions && options.withPermissions) {
-    defaultData.permissions = defaultPermissionsDtos(options.withPermissions, {aco_foreign_key: id});
+    defaultData.permissions = defaultPermissionsDtos({aco_foreign_key: id}, options.withPermissions);
   }
 
   if (!data.creator && options?.withCreator) {
@@ -78,13 +83,16 @@ export const defaultResourceDto = (data = {}, options = {}) => {
   return defaultData;
 };
 
-export const defaultResourceV4Dto = (options = {}) => {
+export const defaultResourceV4Dto = (data = {}, options = {}) => {
   const defaultData = defaultResourceDto(
     {
       name: "Passbolt",
       username: "admin@passbolt.com",
       uri: "https://passbolt.com",
       description: "",
+      metadata_key_id: null,
+      metadata_key_type: null,
+      ...data
     },
     options
   );
@@ -94,61 +102,61 @@ export const defaultResourceV4Dto = (options = {}) => {
   return defaultData;
 };
 
-export const resourceWithUpdatePermissionDto = (data = {}) => {
+export const resourceWithUpdatePermissionDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
 
   return defaultResourceDto({
     id: id,
     permission: updatePermissionDto({aco_foreign_key: id}),
     ...data
-  });
+  }, options);
 };
 
-export const resourceWithReadPermissionDto = (data = {}) => {
+export const resourceWithReadPermissionDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
 
   return defaultResourceDto({
     id: id,
     permission: readPermissionDto({aco_foreign_key: id}),
     ...data
-  });
+  }, options);
 };
 
-export const resourceWithFavoriteDto = (data = {}) => {
+export const resourceWithFavoriteDto = (data = {}, options = {}) => {
   const id = data?.id || uuidv4();
 
   return defaultResourceDto({
     id: id,
     favorite: defaultFavoriteDto({foreign_key: id}),
     ...data
-  });
+  }, options);
 };
 
-export const resourceLegacyDto = (data = {}) => defaultResourceDto({
+export const resourceLegacyDto = (data = {}, options = {}) => defaultResourceDto({
   resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_STRING,
   ...data
-});
+}, options);
 
-export const resourceWithTotpDto = (data = {}) => defaultResourceDto({
+export const resourceWithTotpDto = (data = {}, options = {}) => defaultResourceDto({
   resource_type_id: TEST_RESOURCE_TYPE_PASSWORD_DESCRIPTION_TOTP,
   ...data
-});
+}, options);
 
-export const resourceStandaloneTotpDto = (data = {}) => defaultResourceDto({
+export const resourceStandaloneTotpDto = (data = {}, options = {}) => defaultResourceDto({
   resource_type_id: TEST_RESOURCE_TYPE_TOTP,
   metadata: defaultResourceMetadataDto({
     resource_type_id: TEST_RESOURCE_TYPE_TOTP,
     username: null,
   }),
   ...data
-});
+}, options);
 
-export const resourceUnknownResourceTypeDto = (data = {}) => defaultResourceDto({
+export const resourceUnknownResourceTypeDto = (data = {}, options = {}) => defaultResourceDto({
   resource_type_id: uuidv4(),
   ...data
-});
+}, options);
 
-export const resourceExpiredDto = (data = {}) => defaultResourceDto({
+export const resourceExpiredDto = (data = {}, options = {}) => defaultResourceDto({
   expired: "2022-03-04T13:59:11+00:00",
   ...data
-});
+}, options);

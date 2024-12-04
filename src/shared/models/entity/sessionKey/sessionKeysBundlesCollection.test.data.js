@@ -9,27 +9,25 @@
  * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
  * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
  * @link          https://www.passbolt.com Passbolt(tm)
- * @since         4.8.0
+ * @since         4.10.1
  */
-
-
-import {defaultPermissionDto} from "./permissionEntity.test.data";
+import {defaultSessionKeysBundleDto} from "./sessionKeysBundleEntity.test.data";
+import {v4 as uuidv4} from "uuid";
 
 /**
- * Build dtos.
- * @param {object} data The data to override the default dto.
- * @param {object} options Options to pass to the permission factory.
- * @param {integer} [options.count=10] The number of permissions to create
- * @returns {object}
+ * Default session keys bundles dtos
+ * @param {object} data
+ * @param {object} options
+ * @returns {*[]}
  */
-export const defaultPermissionsDtos = (data = {}, options = {}) => {
+export const defaultSessionKeysBundlesDtos = (data = {}, options = {}) => {
+  const count = options?.count || 10;
+  data.user_id = data.user_id || uuidv4(); // Validate same user id build rules
   const dtos = [];
-  const count = options.count || 10;
-  const acoForeignKey = crypto.randomUUID();
   for (let i = 0; i < count; i++) {
-    const dto = defaultPermissionDto({aco_foreign_key: acoForeignKey, ...data}, options);
+    const dto = defaultSessionKeysBundleDto(data, options);
     dtos.push(dto);
   }
+
   return dtos;
 };
-

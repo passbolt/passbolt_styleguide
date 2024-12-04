@@ -27,7 +27,7 @@ export default class CanUse {
     // Desktop action should always be driven by rbac
     if (window.chrome?.webview) {
       const rbac = rbacs.findRbacByActionName(actionName);
-      return this.getByRbacOrDefault(rbac, actionName);
+      return this.getByRbacOrDefault(rbac, actionName, user);
     }
 
     const role =  new RoleEntity(user.role);

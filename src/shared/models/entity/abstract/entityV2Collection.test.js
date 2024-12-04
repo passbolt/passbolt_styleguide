@@ -280,7 +280,99 @@ describe("EntityV2Collection", () => {
     });
   });
 
-  describe("GroupsCollection:pushMany", () => {
+  describe(":pushOrReplace", () => {
+    it("push new item to empty collection.", () => {
+      expect.assertions(4);
+      const collection = new TestEntityV2Collection();
+      const entityDto1 = defaultTestEntityDto();
+      collection.pushOrReplace(entityDto1);
+      expect(collection.items).toHaveLength(1);
+      expect(collection.items[0]).toBeInstanceOf(TestEntity);
+      expect(collection.items[0].id).toEqual(entityDto1.id);
+      expect(collection.items[0].name).toEqual(entityDto1.name);
+    });
+
+    it("push new item in collection already containing items.", () => {
+      expect.assertions(4);
+      const entityDto1 = defaultTestEntityDto();
+      const collection = new TestEntityV2Collection([entityDto1]);
+      const entityDto2 = defaultTestEntityDto();
+      collection.pushOrReplace(entityDto2);
+      expect(collection.items).toHaveLength(2);
+      expect(collection.items[1]).toBeInstanceOf(TestEntity);
+      expect(collection.items[1].id).toEqual(entityDto2.id);
+      expect(collection.items[1].name).toEqual(entityDto2.name);
+    });
+
+    it("replaces the first item matching the default property id when found in the collection.", () => {
+      expect.assertions(4);
+      const entityDto1 = defaultTestEntityDto();
+      const collection = new TestEntityV2Collection([entityDto1]);
+      const entityDto2 = defaultTestEntityDto({id: entityDto1.id, name: "test name updated"});
+      collection.pushOrReplace(entityDto2);
+      expect(collection.items).toHaveLength(1);
+      expect(collection.items[0]).toBeInstanceOf(TestEntity);
+      expect(collection.items[0].id).toEqual(entityDto1.id);
+      expect(collection.items[0].name).toEqual("test name updated");
+    });
+
+    it("replaces the first item matching the given property when found in the collection.", () => {
+      expect.assertions(4);
+      const entityDto1 = defaultTestEntityDto();
+      const entityDto2 = defaultTestEntityDto();
+      const collection = new TestEntityV2Collection([entityDto1, entityDto2]);
+      const entityDto3 = defaultTestEntityDto({name: entityDto1.name});
+      collection.pushOrReplace(entityDto3, {}, {replacePropertyName: "name"});
+      expect(collection.items).toHaveLength(2);
+      expect(collection.items[0]).toBeInstanceOf(TestEntity);
+      expect(collection.items[0].id).toEqual(entityDto3.id);
+      expect(collection.items[0].name).toEqual(entityDto3.name);
+    });
+
+    it("replaces the first item matching the given property when found in the collection.", () => {
+      expect.assertions(4);
+      const entityDto1 = defaultTestEntityDto();
+      const collection = new TestEntityV2Collection([entityDto1]);
+      const entityDto2 = defaultTestEntityDto({name: entityDto1.name});
+      collection.pushOrReplace(entityDto2, {}, {replacePropertyName: "name"});
+      expect(collection.items).toHaveLength(1);
+      expect(collection.items[0]).toBeInstanceOf(TestEntity);
+      expect(collection.items[0].id).toEqual(entityDto2.id);
+      expect(collection.items[0].name).toEqual(entityDto2.name);
+    });
+
+    it("should pass along validateBuildRules options when pushing to the collection", () => {
+      expect.assertions(1);
+      const collection = new TestEntityV2Collection([]);
+      const entity = new TestEntity(defaultTestEntityDto());
+      const validateBuildRules = {opt1: "value1"};
+      jest.spyOn(collection, "validateBuildRules");
+
+      collection.pushOrReplace(entity, {}, {validateBuildRules});
+      expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity, validateBuildRules);
+    });
+
+    it("passes along validateBuildRules options when replacing an item", () => {
+      expect.assertions(1);
+      const entity1 = new TestEntity(defaultTestEntityDto());
+      const collection = new TestEntityV2Collection([entity1]);
+      const entity2 = new TestEntity(defaultTestEntityDto({id: entity1.id}));
+      const validateBuildRules = {opt1: "value1"};
+      jest.spyOn(collection, "validateBuildRules");
+
+      collection.pushOrReplace(entity2, {}, {validateBuildRules});
+      expect(collection.validateBuildRules).toHaveBeenLastCalledWith(entity2, validateBuildRules);
+    });
+
+    it("throws if the data does not validate the collection entity schema", () => {
+      expect.assertions(1);
+      const collection = new TestEntityV2Collection([]);
+      const dto = defaultTestEntityDto({id: 42});
+      expect(() => collection.push(dto)).toThrowEntityValidationError("id", "type");
+    });
+  });
+
+  describe(":pushMany", () => {
     it("should throw an exception if the data parameter is not an array.", () => {
       const collection = new TestEntityV2Collection([]);
       expect.assertions(1);
