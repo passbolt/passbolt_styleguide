@@ -28,6 +28,7 @@ import CopySVG from "../../../../img/svg/copy.svg";
 import EditSVG from "../../../../img/svg/edit.svg";
 import ShareSVG from "../../../../img/svg/share.svg";
 import ColumnsSVG from "../../../../img/svg/columns.svg";
+import ArrowLeftSVG from "../../../../img/svg/arrow_left.svg";
 
 export default {
   title: 'Foundations/Button',
@@ -340,6 +341,14 @@ export const BoxLessButton = {
         <button className="button-transparent inline-menu-horizontal disabled">
           <MoreHorizontalSVG/>
           <span className="visually-hidden">More</span>
+        </button>
+      </div>
+    </div>
+    <span style={{width: "100%", marginTop: "3rem"}}>Back button</span>
+    <div style={{width: "25%", marginTop: ".5rem"}}>
+      <div style={{display: "flex"}}>
+        <button className="button-transparent back">
+          <ArrowLeftSVG/>
         </button>
       </div>
     </div>
