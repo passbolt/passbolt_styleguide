@@ -17,11 +17,14 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import Icon from "../../../../shared/components/Icons/Icon";
-import {Trans, withTranslation} from "react-i18next";
+import {withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import ProfileIcon from "../../../../img/svg/profile.svg";
+import LogoutIcon from "../../../../img/svg/logout.svg";
+import CloseSVG from "../../../../img/svg/close.svg";
+import AttentionSVG from "../../../../img/svg/attention.svg";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -211,49 +214,36 @@ class DisplayUserBadgeMenu extends Component {
    */
   render() {
     return (
-      <div className="col3 profile-wrapper">
+      <div className="profile-wrapper">
         <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
-          <div className={`avatar-with-name button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
-            <UserAvatar user={this.props.user} className="avatar picture left-cell" baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired}/>
-            <div className="details center-cell">
-              <span className="name">{this.getUserFullName()}</span>
-              <span className="email">{this.getUserUsername()}</span>
-            </div>
-            <div className="more right-cell">
-              <button type="button" className="link no-border">
-                <Icon name="caret-down"/>
-              </button>
-            </div>
+          <div className={`avatar-with-name button avatar-button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
+            <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired} />
           </div>
           {this.state.open &&
-          <ul className="dropdown-content right visible">
-            <li key="profile">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleProfileClick}>
-                  <span><Trans>Profile</Trans></span>{this.attentionRequired && <Icon name="exclamation" baseline={true}/>}
+            <div className="dropdown-content left visible">
+              <button className="button button-transparent user-profile-close" role="button" onClick={this.handleToggleMenuClick}>
+                <CloseSVG className="svg-icon close" />
+                <span className="visually-hidden">Close</span>
+              </button>
+              <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} />
+              <div className="informations">
+                <div className="name">{this.getUserFullName()}</div>
+                <div className="email">{this.getUserUsername()}</div>
+              </div>
+              <div className="manage-account">
+                <button className="button primary">
+                  <ProfileIcon /> Manage account
+                  {this.attentionRequired &&
+                    <div className="exclamation">
+                      <AttentionSVG />
+                    </div>
+                  }
                 </button>
               </div>
-            </li>
-            {this.canIUseThemeCapability &&
-            <li key="theme">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleThemeClick}>
-                  <span><Trans>Theme</Trans></span>
-                </button>
+              <div className="sign-out">
+                <LogoutIcon /> Sign out
               </div>
-            </li>
-            }
-            {this.canIUseMobileCapability &&
-            <li id="user-badge-menu-mobile" key="mobile">
-              <div className="row">
-                <button type="button" className="link no-border" onClick={this.handleMobileAppsClick}>
-                  <span><Trans>Mobile Apps</Trans></span>
-                  <span className="chips new">new</span>
-                </button>
-              </div>
-            </li>
-            }
-          </ul>
+            </div>
           }
         </div>
       </div>
