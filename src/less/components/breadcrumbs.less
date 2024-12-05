@@ -2,23 +2,27 @@
  * Breadcrumbs
  */
 .breadcrumbs {
-    display: flex;
-    padding: 1.2rem 1.6rem 0 1.6rem;
-    align-items: flex-start;
+    display: inline-flex;    
+    align-items: baseline; 
     align-self: stretch;
 
     ul {
-        padding-top: 1rem;
-        margin-left: 1rem;
+        display: inline-flex;
         li {
             display: flex;
-            margin-left: .5rem;
-            max-width: 25%;
-            float: left;
+            justify-content: center;
+            align-items: center;
             &:before {
                 content: "\203A"; /* unicode character › */
-                margin-right: 0.5rem;
-                font-size: 1.4rem;
+                padding: 0rem .4rem;
+                font-size: 1.8rem;
+                font-weight: 400;   
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                color: var(--Text-and-icons-Main-text);
+                align-items: center;
+                font-style: normal;
             }
             &:first-child {
                 margin-left: 0;
@@ -30,9 +34,22 @@
         }
         button {
             border: 0;
-            font-size: 1.4rem;
-            line-height: 1.9rem;
+            font-size: 1.8rem;
+            line-height: normal;
             max-width: 100%;
+            padding: .0rem .6rem;
+            border-radius: var(--Button-border-radius);
+
+            &:hover {
+                background: var(--Action-button-Active-action-button-background);
+            }
+
+            /* focus visible (display with keyboard navigation) */
+            &:focus-visible {
+                box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+                text-decoration: none;
+                border: none;
+            }
         }
     }
     span.chips {
