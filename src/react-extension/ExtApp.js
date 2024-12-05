@@ -15,7 +15,6 @@
 import React, {Component} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
-import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import ActionFeedbackContextProvider from "./contexts/ActionFeedbackContext";
 import DisplayActionFeedbacks from "./components/Common/ActionFeedback/DisplayActionFeedbacks";
 import DialogContextProvider from "./contexts/DialogContext";
@@ -158,7 +157,7 @@ class ExtApp extends Component {
                                                       <ManageAnnouncements/>
                                                       <DragContextProvider>
                                                         <div id="container" className="page password">
-                                                          <div id="app" className="app ready" tabIndex="1000">
+                                                          <div id="app" className="app" tabIndex="1000">
                                                             {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                             <DisplayResourcesWorkspace/>
                                                           </div>
@@ -184,7 +183,7 @@ class ExtApp extends Component {
                                               <ManageContextualMenu/>
                                               <ManageAnnouncements/>
                                               <div id="container" className="page user">
-                                                <div id="app" className="app ready" tabIndex="1000">
+                                                <div id="app" className="app" tabIndex="1000">
                                                   {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                   <DisplayUserWorkspace/>
                                                 </div>
@@ -198,10 +197,8 @@ class ExtApp extends Component {
                                                 <ManageDialogs/>
                                                 <ManageAnnouncements/>
                                                 <div id="container" className="page settings">
-                                                  <div id="app" className="app ready" tabIndex="1000">
-                                                    <div className="header first">
-                                                      <DisplayMainMenu/>
-                                                    </div>
+                                                  <div id="app" className="app" tabIndex="1000">
+                                                    {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                                     <DisplayUserSettingsWorkspace/>
                                                   </div>
                                                 </div>
