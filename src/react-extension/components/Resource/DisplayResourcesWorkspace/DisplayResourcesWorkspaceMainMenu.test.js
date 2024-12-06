@@ -293,6 +293,7 @@ describe("DisplayResourcesWorkspaceMainMenu", () => {
       const page = new DisplayResourcesWorkspaceMainMenuPage(props);
 
       expect(page.displayMenu.exists()).toBeTruthy();
+      await page.displayMenu.clickOnMenu(page.displayMenu.createMenu);
       expect(page.displayMenu.importMenu).not.toBeNull();
     });
 

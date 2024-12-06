@@ -11,7 +11,6 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React from "react";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import {
   defaultAppContext,
@@ -20,41 +19,58 @@ import {
   defaultPropsOneResourceNotOwned,
   defaultPropsOneResourceOwned
 } from "./DisplayResourcesWorkspaceMenu.test.data";
+import React from "react";
 
 /**
  * DisplayResourcesWorkspaceMenu stories
  */
 export default {
   title: 'Components/Resource/DisplayResourcesWorkspaceMenu',
+  decorators: [
+    Story => (
+      <div id="container" className="page password">
+        <div id="app" className="app">
+          <div className="panel main">
+            <div className="panel middle">
+              <div className="middle-right">
+                <div className="breadcrumbs-and-grid">
+                  <div className="top-bar">
+                    <div className="action-bar">
+                      <Story/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  ],
   component: DisplayResourcesWorkspaceMenu
 };
-
-const Template = ({...args}) =>
-  <div className="page">
-    <div className="header third">
-      <div className="col1 main-action-wrapper">
-      </div>
-      <DisplayResourcesWorkspaceMenu {...args}/>
-    </div>
-  </div>;
 
 const props = defaultPropsOneResourceOwned();
 props.context = defaultAppContext();
 
-export const OneResourceOwned = Template.bind({});
-OneResourceOwned.args = {...props};
+export const OneResourceOwned = {
+  args: {...props}
+};
 
 const propsResourcesNotOwned = defaultPropsOneResourceNotOwned();
 propsResourcesNotOwned.context = defaultAppContext();
-export const ResourceNotOwned = Template.bind({});
-ResourceNotOwned.args = {...propsResourcesNotOwned};
+export const ResourceNotOwned = {
+  args: {...propsResourcesNotOwned}
+};
 
 const propsNoResource = defaultPropsNoResource();
 propsNoResource.context = defaultAppContext();
-export const NoResource = Template.bind({});
-NoResource.args = {...propsNoResource};
+export const NoResource = {
+  args: {...propsNoResource}
+};
 
 const propsMultipleResource = defaultPropsMultipleResourceUpdateRights();
 propsMultipleResource.context = defaultAppContext();
-export const MultipleResource = Template.bind({});
-MultipleResource.args = {...propsMultipleResource};
+export const MultipleResource = {
+  args: {...propsMultipleResource}
+};

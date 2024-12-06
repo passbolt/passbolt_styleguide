@@ -16,10 +16,6 @@
                 --icon-color: var(--Text-and-icons-Icons);
                 --icon-background-color: var(--Workspace-Workspace-background);
             }
-
-            & + .dropdown-content {
-                top: calc(100% - .1rem);
-            }
         }
     }
 
@@ -27,6 +23,7 @@
     .dropdown-content {
         float: left;
         position: absolute;
+        top: calc(100% - .1rem);
         z-index: 3;
         display: none;
         border: 1px solid var(--Action-button-Action-button-border);
@@ -54,7 +51,7 @@
             border-radius: 0 var(--Menu-radius) var(--Menu-radius) var(--Menu-radius);
         }
 
-        &.visible.over {
+        &.over {
             right: -.1rem;
             top: -.4rem;
             z-index: 10;
@@ -78,7 +75,6 @@
                 flex-direction: row-reverse;
                 align-items: center;
                 padding: 1rem var(--Workspace-selection-button-padding);
-                align-items: center;
                 gap: 1.6rem;
             }
 

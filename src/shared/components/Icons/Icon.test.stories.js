@@ -73,6 +73,7 @@ import FilterSVG from "../../../img/svg/filter.svg";
 import FingerprintSVG from "../../../img/svg/fingerprint.svg";
 import FingerprintDisabledSVG from "../../../img/svg/fingerprint_disabled.svg";
 import FolderSVG from "../../../img/svg/folder.svg";
+import FolderPlusSVG from "../../../img/svg/folder_plus.svg";
 import FolderV2SVG from "../../../img/svg/folder_v2.svg";
 import GhostSVG from "../../../img/svg/ghost.svg";
 import GlobeSVG from "../../../img/svg/globe.svg";
@@ -240,6 +241,7 @@ const iconsSVGs = [
   FingerprintSVG,
   FingerprintDisabledSVG,
   FolderSVG,
+  FolderPlusSVG,
   FolderV2SVG,
   GhostSVG,
   GlobeSVG,

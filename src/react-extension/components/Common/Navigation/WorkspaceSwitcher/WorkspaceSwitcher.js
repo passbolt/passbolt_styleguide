@@ -17,9 +17,11 @@ import SettingsSVG from "../../../../../img/svg/settings.svg";
 import UsersSVG from "../../../../../img/svg/users.svg";
 import {Trans} from "react-i18next";
 import DropdownButton from "../../Dropdown/DropdownButton";
-import DropdownItem from "../../Dropdown/DropdownItem";
 import {withRbac} from "../../../../../shared/context/Rbac/RbacContext";
 import PropTypes from "prop-types";
+import Dropdown from "../../Dropdown/Dropdown";
+import DropdownMenu from "../../Dropdown/DropdownMenu";
+import DropdownMenuItem from "../../Dropdown/DropdownMenuItem";
 
 class WorkspaceSwitcher extends React.PureComponent {
   render() {
@@ -30,20 +32,25 @@ class WorkspaceSwitcher extends React.PureComponent {
     return (
       <div id="workspace-switcher">
         {this.props.isUserAdmin ?
-          <DropdownButton content={(<SettingsSVG/>)} direction="over" className="button-transparent">
-            <DropdownItem>
-              <button type="button" className="no-border">
-                <SettingsSVG/>
-                <span><Trans>Organisation Settings</Trans></span>
-              </button>
-            </DropdownItem>
-            <DropdownItem>
-              <button type="button" className="no-border">
-                <UsersSVG/>
-                <span><Trans>Manage Users & Groups</Trans></span>
-              </button>
-            </DropdownItem>
-          </DropdownButton>
+          <Dropdown>
+            <DropdownButton className="button-transparent">
+              <SettingsSVG/>
+            </DropdownButton>
+            <DropdownMenu direction="over">
+              <DropdownMenuItem>
+                <button type="button" className="no-border">
+                  <SettingsSVG/>
+                  <span><Trans>Organisation Settings</Trans></span>
+                </button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button type="button" className="no-border">
+                  <UsersSVG/>
+                  <span><Trans>Manage Users & Groups</Trans></span>
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenu>
+          </Dropdown>
           :
           <button type="button" className="no-border button-transparent">
             <UsersSVG/>

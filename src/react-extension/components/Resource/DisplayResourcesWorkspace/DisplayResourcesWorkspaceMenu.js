@@ -43,7 +43,9 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import DropdownButton from "../../Common/Dropdown/DropdownButton";
 import ColumnsSVG from "../../../../img/svg/columns.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
-import DropdownItem from "../../Common/Dropdown/DropdownItem";
+import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
+import Dropdown from "../../Common/Dropdown/Dropdown";
+import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -529,14 +531,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     return this.props.t;
   }
 
-  get columnsContent() {
-    return <>
-      <ColumnsSVG/>
-      <Trans>Columns</Trans>
-      <CaretDownSVG/>
-    </>;
-  }
-
   /**
    * Render the component
    * @returns {JSX}
@@ -698,16 +692,23 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
         <div className="actions secondary">
           <ul>
             <li>
-              <DropdownButton direction="left" content={this.columnsContent}>
-                {this.columnsResourceSetting?.map(column =>
-                  <DropdownItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
-                    <div className="input checkbox">
-                      <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
-                      <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
-                    </div>
-                  </DropdownItem>
-                )}
-              </DropdownButton>
+              <Dropdown>
+                <DropdownButton>
+                  <ColumnsSVG/>
+                  <Trans>Columns</Trans>
+                  <CaretDownSVG/>
+                </DropdownButton>
+                <DropdownMenu direction="left">
+                  {this.columnsResourceSetting?.map(column =>
+                    <DropdownItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
+                      <div className="input checkbox">
+                        <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
+                        <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
+                      </div>
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
             </li>
             <li>
               <button type="button" className={`button-toggle button-action-icon info ${this.hasLockDetail() ? "selected" : ""}`}
