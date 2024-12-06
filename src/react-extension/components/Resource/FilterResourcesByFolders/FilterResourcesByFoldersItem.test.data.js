@@ -1,3 +1,19 @@
+/**
+ * Passbolt ~ Open source password manager for teams
+ * Copyright (c) Passbolt SA (https://www.passbolt.com)
+ *
+ * Licensed under GNU Affero General Public License version 3 of the or any later version.
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Passbolt SA (https://www.passbolt.com)
+ * @license       https://opensource.org/licenses/AGPL-3.0 AGPL License
+ * @link          https://www.passbolt.com Passbolt(tm)
+ * @since         3.3.3
+ */
+
+import {defaultFolderDto} from "../../../../shared/models/entity/folder/folderEntity.test.data";
+import {ownerFolderPermissionDto} from "../../../../shared/models/entity/permission/permissionEntity.test.data";
 import {ResourceWorkspaceFilterTypes} from "../../../contexts/ResourceWorkspaceContext";
 import MockPort from "../../../test/mock/MockPort";
 
@@ -84,81 +100,39 @@ export function defaultPropsCloseFolders() {
  * Mocked list of resources
  */
 export const foldersMock = [
-  {
-    "id": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-    "name": "Certificates",
-    "created": "2020-02-01T00:00:00+00:00",
-    "modified": "2020-02-01T00:00:00+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "permission": {
-      "id": "3a2611ed-cbcb-523f-b095-a130187173ae",
-      "aco": "Folder",
-      "aco_foreign_key": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 15,
-      "created": "2020-05-11T10:11:13+00:00",
-      "modified": "2020-05-11T10:11:13+00:00"
-    },
-    "folder_parent_id": null,
-    "personal": false
-  }, {
-    "id": "3ed65efd-7c41-5906-9c02-71e2d95951db",
-    "name": "ChildCertificates2",
-    "created": "2020-02-01T00:00:00+00:00",
-    "modified": "2020-02-01T00:00:00+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "permission": {
-      "id": "3a2611ed-cbcb-523f-b095-a130187173ae",
-      "aco": "Folder",
-      "aco_foreign_key": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 15,
-      "created": "2020-05-11T10:11:13+00:00",
-      "modified": "2020-05-11T10:11:13+00:00"
-    },
-    "folder_parent_id": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-    "personal": false
-  }, {
-    "id": "3ed65efd-7c41-5906-9c02-71e2d95951dc",
-    "name": "ChildCertificates1",
-    "created": "2020-02-01T00:00:00+00:00",
-    "modified": "2020-02-01T00:00:00+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "permission": {
-      "id": "3a2611ed-cbcb-523f-b095-a130187173ae",
-      "aco": "Folder",
-      "aco_foreign_key": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 15,
-      "created": "2020-05-11T10:11:13+00:00",
-      "modified": "2020-05-11T10:11:13+00:00"
-    },
-    "folder_parent_id": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-    "personal": false
-  }, {
-    "id": "3ed65efd-7c41-5906-9c02-71e2d95951dg",
-    "name": "ChildCertificates3",
-    "created": "2020-02-01T00:00:00+00:00",
-    "modified": "2020-02-01T00:00:00+00:00",
-    "created_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "modified_by": "d57c10f5-639d-5160-9c81-8a0c6c4ec856",
-    "permission": {
-      "id": "3a2611ed-cbcb-523f-b095-a130187173ae",
-      "aco": "Folder",
-      "aco_foreign_key": "3ed65efd-7c41-5906-9c02-71e2d95951da",
-      "aro": "User",
-      "aro_foreign_key": "f848277c-5398-58f8-a82a-72397af2d450",
-      "type": 15,
-      "created": "2020-05-11T10:11:13+00:00",
-      "modified": "2020-05-11T10:11:13+00:00"
-    },
-    "folder_parent_id": "3ed65efd-7c41-5906-9c02-71e2d95951dc",
-    "personal": false
-  }
+  defaultFolderDto({
+    id: "3ed65efd-7c41-5906-9c02-71e2d95951da",
+    name: "Certificates",
+    permission: ownerFolderPermissionDto({
+      aco_foreign_key: "3ed65efd-7c41-5906-9c02-71e2d95951da",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+  }),
+  defaultFolderDto({
+    id: "3ed65efd-7c41-5906-9c02-71e2d95951db",
+    name: "ChildCertificates2",
+    permission: ownerFolderPermissionDto({
+      aco_foreign_key: "3ed65efd-7c41-5906-9c02-71e2d95951db",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+    folder_parent_id: "3ed65efd-7c41-5906-9c02-71e2d95951da",
+  }),
+  defaultFolderDto({
+    id: "3ed65efd-7c41-5906-9c02-71e2d95951dc",
+    name: "ChildCertificates1",
+    permission: ownerFolderPermissionDto({
+      aco_foreign_key: "3ed65efd-7c41-5906-9c02-71e2d95951dc",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+    folder_parent_id: "3ed65efd-7c41-5906-9c02-71e2d95951da",
+  }),
+  defaultFolderDto({
+    id: "3ed65efd-7c41-5906-9c02-71e2d95951dd",
+    name: "ChildCertificates3",
+    permission: ownerFolderPermissionDto({
+      aco_foreign_key: "3ed65efd-7c41-5906-9c02-71e2d95951dd",
+      aro_foreign_key: "f848277c-5398-58f8-a82a-72397af2d450",
+    }),
+    folder_parent_id: "3ed65efd-7c41-5906-9c02-71e2d95951dc",
+  })
 ];

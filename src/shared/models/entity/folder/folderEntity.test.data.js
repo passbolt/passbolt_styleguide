@@ -50,7 +50,7 @@ export const defaultFolderDto = (data = {}, options = {}) => {
   };
 
   if (!data.permissions && options.withPermissions) {
-    defaultData.permissions = defaultPermissionsDtos(options.withPermissions, {aco: 'Folder', aco_foreign_key: id});
+    defaultData.permissions = defaultPermissionsDtos({aco: 'Folder', aco_foreign_key: id}, options.withPermissions);
   }
 
   if (!data.creator && options?.withCreator) {

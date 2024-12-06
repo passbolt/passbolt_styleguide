@@ -324,14 +324,14 @@ export const fingerprint = (EntityClass, propertyName) => {
 const SUCCESS_ARMORED_PRIVATE_KEY_SCENARIO = [
   {scenario: "with comments in the header", value: defaultArmoredPrivateKey({withCrc: true, withComments: true})},
   {scenario: "without comment in the header", value: defaultArmoredPrivateKey({withCrc: true, withComments: false})},
-  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: true, withDuplicates: true})},
-  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 const FAIL_ARMORED_PRIVATE_KEY_SCENARIO = [
   {scenario: "without CRC", value: defaultArmoredPrivateKey({withCrc: false})},
   {scenario: "without CRC and with multiple blocks", value: defaultArmoredPrivateKey({withCrc: false, withDuplicates: true})},
   {scenario: "with wrong extra characters", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true})},
-  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
+  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPrivateKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 
 export const armoredPrivateKey = (EntityClass, propertyName) => {
@@ -341,18 +341,30 @@ export const armoredPrivateKey = (EntityClass, propertyName) => {
 const SUCCESS_ARMORED_PUBLIC_KEY_SCENARIO = [
   {scenario: "with comments in the header", value: defaultArmoredPublicKey({withCrc: true, withComments: true})},
   {scenario: "without comment in the header", value: defaultArmoredPublicKey({withCrc: true, withComments: false})},
-  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: true, withDuplicates: true})},
-  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 const FAIL_ARMORED_PUBLIC_KEY_SCENARIO = [
   {scenario: "without CRC", value: defaultArmoredPublicKey({withCrc: false})},
   {scenario: "without CRC and with multiple blocks", value: defaultArmoredPublicKey({withCrc: false, withDuplicates: true})},
   {scenario: "with wrong extra characters", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true})},
-  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})}
+  {scenario: "with wrong extra characters and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withWrongExtraCharacters: true, withDuplicates: true})},
+  {scenario: "with comments in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: true, withDuplicates: true})},
+  {scenario: "without comment in the header and multiple blocks", value: defaultArmoredPublicKey({withCrc: true, withComments: false, withDuplicates: true})},
 ];
 
 export const armoredPublicKey = (EntityClass, propertyName) => {
   assert(EntityClass, propertyName, SUCCESS_ARMORED_PUBLIC_KEY_SCENARIO, FAIL_ARMORED_PUBLIC_KEY_SCENARIO, "pattern");
+};
+
+const SUCCESS_SESSION_KEY_SCENARIO = [
+  {scenario: "success session key", value: "9:901D6ED579AFF935F9F157A5198BCE48B50AD87345DEADBA06F42C5D018C78CC"},
+];
+const FAIL_SESSION_KEY_SCENARIO = [
+  {scenario: "with empty session key", value: ""},
+  {scenario: "with wrong characters", value: "string"},
+];
+
+export const sessionKey = (EntityClass, propertyName) => {
+  assert(EntityClass, propertyName, SUCCESS_SESSION_KEY_SCENARIO, FAIL_SESSION_KEY_SCENARIO, "pattern");
 };
 
 const successScenarios = [

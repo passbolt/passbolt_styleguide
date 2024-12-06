@@ -29,6 +29,8 @@ import EditTotp from "../EditTotp/EditTotp";
 import EditStandaloneTotp from "../EditStandaloneTotp/EditStandaloneTotp";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {resourceTypeV5TotpDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {defaultMetadataTypesSettingsV6Dto} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 beforeEach(() => {
   jest.resetModules();
@@ -271,6 +273,98 @@ describe("HandleReviewAccountRecoveryRequestWorkflow", () => {
     it('As a signed-in user I should start to upload a QR code', async() => {
       expect.assertions(1);
       const props = defaultProps();
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const uploadQrCodeProps = {
+        title: "Edit standalone TOTP",
+        action: "Save",
+        onSubmit: page._instance.handleUpdate
+      };
+
+      await page._instance.displayUploadQrCodeDialog(uploadQrCodeProps);
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(UploadQrCode, uploadQrCodeProps);
+    });
+  });
+
+  describe('As a signed-in user I should edit a standalone totp v5', () => {
+    it('As a signed-in user I should start to edit a standalone totp v5', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        mode: TotpWorkflowMode.EDIT_STANDALONE_TOTP,
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto())
+      });
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const standaloneTotpProps = {
+        resource: props.resourceWorkspaceContext.selectedResources[0],
+        onCancel: page._instance.handleCancelDialog,
+        onOpenUploadQrCode: expect.any(Function),
+        onSubmit: page._instance.handleUpdate
+      };
+
+      expect(props.dialogContext.open).toHaveBeenCalledWith(EditStandaloneTotp, standaloneTotpProps);
+    });
+
+    it('As a signed-in user I can update a standalone totp', async() => {
+      const props = defaultProps({
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto())
+      });
+      jest.spyOn(props.context.port, 'request');
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
+      await page._instance.handleUpdate(totp.toResourceDto(), totp.toSecretDto());
+
+      const expectedResourceType = props.resourceTypes.getFirstBySlug("v5-totp-standalone");
+      const resourceDto = {
+        id: props.resourceWorkspaceContext.selectedResources[0].id,
+        resource_type_id: expectedResourceType.id,
+        ...totp.toResourceDto()
+      };
+      resourceDto.metadata.resource_type_id = expectedResourceType.id;
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
+      expect(props.actionFeedbackContext.displaySuccess).toHaveBeenCalledWith("The TOTP has been updated successfully");
+      expect(props.resourceWorkspaceContext.onResourceEdited).toHaveBeenCalled();
+      expect(props.dialogContext.close).toHaveBeenCalled();
+      expect(props.onStop).toHaveBeenCalled();
+    });
+
+    it('As a signed-in user I can not save a standalone totp if there is an error', async() => {
+      const props = defaultProps({
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto())
+      });
+      const error = new Error("error");
+      jest.spyOn(props.context.port, 'request').mockImplementation(() => { throw error; });
+      const page = new HandleTotpWorkflowTestPage(props);
+      await waitFor(() => {});
+
+      const totp = new StandaloneTotpViewModel(defaultStandaloneTotpViewModelDto());
+      await page._instance.handleUpdate(totp.toResourceDto(), totp.toSecretDto());
+
+      const expectedResourceType = props.resourceTypes.getFirstBySlug("v5-totp-standalone");
+      const resourceDto = {
+        id: props.resourceWorkspaceContext.selectedResources[0].id,
+        resource_type_id: expectedResourceType.id,
+        ...totp.toResourceDto()
+      };
+      resourceDto.metadata.resource_type_id = expectedResourceType.id;
+
+      expect(props.context.port.request).toHaveBeenCalledWith("passbolt.resources.update", resourceDto, totp.toSecretDto());
+      expect(props.dialogContext.open).toHaveBeenCalledWith(NotifyError, {error});
+      expect(props.dialogContext.close).toHaveBeenCalled();
+      expect(props.onStop).toHaveBeenCalled();
+    });
+
+    it('As a signed-in user I should start to upload a QR code', async() => {
+      expect.assertions(1);
+      const props = defaultProps({
+        metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV6Dto())
+      });
       const page = new HandleTotpWorkflowTestPage(props);
       await waitFor(() => {});
 
