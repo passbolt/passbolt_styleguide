@@ -20,7 +20,6 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
-import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
 import ProfileIcon from "../../../../img/svg/profile.svg";
 import LogoutIcon from "../../../../img/svg/logout.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
@@ -83,23 +82,6 @@ class DisplayUserBadgeMenu extends Component {
    */
   createRefs() {
     this.userBadgeMenuRef = React.createRef();
-  }
-
-  /**
-   * Can the user access the theme capability.
-   * @returns {bool}
-   */
-  get canIUseThemeCapability() {
-    return this.props.context.siteSettings && this.props.context.siteSettings.canIUse('accountSettings');
-  }
-
-  /**
-   * Can the user access the mobile capability.
-   * @returns {bool}
-   */
-  get canIUseMobileCapability() {
-    const canViewMobileTransfer = this.props.rbacContext.canIUseUiAction(uiActions.MOBILE_TRANSFER);
-    return canViewMobileTransfer && this.props.context.siteSettings && this.props.context.siteSettings.canIUse('mobile');
   }
 
   /**
@@ -200,7 +182,7 @@ class DisplayUserBadgeMenu extends Component {
 
   /**
    * Returns true if the account recovery needs to be configured.
-   * @return {bool}
+   * @return {boolean}
    */
   get attentionRequired() {
     return this.props.accountRecoveryContext.isAccountRecoveryChoiceRequired()
@@ -234,15 +216,13 @@ class DisplayUserBadgeMenu extends Component {
                 <button className="button primary">
                   <ProfileIcon /> Manage account
                   {this.attentionRequired &&
-                    <div className="exclamation">
-                      <AttentionSVG />
-                    </div>
+                    <AttentionSVG className="attention-required"/>
                   }
                 </button>
               </div>
-              <div className="sign-out">
+              <button type="button" className="no-border sign-out">
                 <LogoutIcon /> Sign out
-              </div>
+              </button>
             </div>
           }
         </div>
