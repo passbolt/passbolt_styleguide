@@ -19,6 +19,8 @@
   "{{count}} group member_other": "{{count}} group members",
   "{{count}} group will be synchronized._one": "{{count}} group will be synchronized.",
   "{{count}} group will be synchronized._other": "{{count}} groups will be synchronized.",
+  "{{count}} items_one": "{{count}} item",
+  "{{count}} items_other": "{{count}} items",
   "{{count}} password has been imported successfully._one": "{{count}} password has been imported successfully.",
   "{{count}} password has been imported successfully._other": "{{count}} passwords have been imported successfully.",
   "{{count}} password is going to be exported._one": "{{count}} password is going to be exported.",
