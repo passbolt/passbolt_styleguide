@@ -17,13 +17,15 @@ import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
 import {withAccountRecovery} from "../../../contexts/AccountRecoveryUserContext";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import {withMfa} from "../../../contexts/MFAContext";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import ProfileIcon from "../../../../img/svg/profile.svg";
 import LogoutIcon from "../../../../img/svg/logout.svg";
 import CloseSVG from "../../../../img/svg/close.svg";
 import AttentionSVG from "../../../../img/svg/attention.svg";
+import {withDialog} from "../../../contexts/DialogContext";
+import NotifyError from "../../Common/Error/NotifyError/NotifyError";
 
 class DisplayUserBadgeMenu extends Component {
   /**
@@ -44,7 +46,6 @@ class DisplayUserBadgeMenu extends Component {
   getDefaultState() {
     return {
       open: false,
-      loading: true,
     };
   }
 
@@ -58,8 +59,7 @@ class DisplayUserBadgeMenu extends Component {
     this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
     this.handleToggleMenuClick = this.handleToggleMenuClick.bind(this);
     this.handleProfileClick = this.handleProfileClick.bind(this);
-    this.handleThemeClick = this.handleThemeClick.bind(this);
-    this.handleMobileAppsClick = this.handleMobileAppsClick.bind(this);
+    this.handleSignOutClick = this.handleSignOutClick.bind(this);
   }
 
   componentDidMount() {
@@ -164,20 +164,17 @@ class DisplayUserBadgeMenu extends Component {
   }
 
   /**
-   * Whenever the user wants to navigate to the users settings workspace theme section.
+   * Handles the click on Sign out button
+   * @returns {Promise<void>}
    */
-  handleThemeClick() {
-    this.props.navigationContext.onGoToUserSettingsThemeRequested();
-    this.closeUserBadgeMenu();
-  }
-
-  /**
-   * Handle mobile apps click
-   * @return {void}
-   */
-  handleMobileAppsClick() {
-    this.props.navigationContext.onGoToUserSettingsMobileRequested();
-    this.closeUserBadgeMenu();
+  async handleSignOutClick() {
+    try {
+      await this.props.context.onLogoutRequested();
+    } catch (error) {
+      this.props.dialogContext.open(NotifyError, {error});
+    } finally {
+      this.closeUserBadgeMenu();
+    }
   }
 
   /**
@@ -213,15 +210,18 @@ class DisplayUserBadgeMenu extends Component {
                 <div className="email">{this.getUserUsername()}</div>
               </div>
               <div className="manage-account">
-                <button className="button primary">
+                <button className="button primary" onClick={this.handleProfileClick}>
                   <ProfileIcon /> Manage account
                   {this.attentionRequired &&
                     <AttentionSVG className="attention-required"/>
                   }
                 </button>
               </div>
-              <button type="button" className="no-border sign-out">
-                <LogoutIcon /> Sign out
+              <button type="button" className="no-border sign-out" onClick={this.handleSignOutClick}>
+                <LogoutIcon/>
+                <Trans>
+                  Sign out
+                </Trans>
               </button>
             </div>
           }
@@ -239,6 +239,7 @@ DisplayUserBadgeMenu.propTypes = {
   baseUrl: PropTypes.string,
   user: PropTypes.object,
   rbacContext: PropTypes.any, // The role based access control context
+  dialogContext: PropTypes.object, // the dialog context prop
 };
 
-export default withAppContext(withRbac(withNavigationContext(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu))))));
+export default withAppContext(withRbac(withNavigationContext(withDialog(withAccountRecovery(withMfa(withTranslation("common")(DisplayUserBadgeMenu)))))));
