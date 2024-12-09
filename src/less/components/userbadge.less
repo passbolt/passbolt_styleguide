@@ -13,22 +13,15 @@
       padding: 0;
       min-width: 0;
 
-      .exclamation {
-        svg {
-          width: 1.2rem;
-          height: 1.2rem
-        }
-      }
-
       .default-avatar {
         &:hover {
           background: transparent;
-          box-shadow: .1rem .1rem 0 0 var(--States-Hover-Highlight, rgba(255, 255, 255, 0.75)) inset, -.1rem -.1rem 0 0 var(--States-Hover-Shadow, rgba(0, 0, 0, 0.10)) inset;          
+          box-shadow: .1rem .1rem 0 0 var(--States-Hover-Highlight, rgba(255, 255, 255, 0.75)) inset, -.1rem -.1rem 0 0 var(--States-Hover-Shadow, rgba(0, 0, 0, 0.10)) inset;
             text-decoration: none;
           border: none;
           img, svg  {
               z-index:-1;
-              position: relative;          
+              position: relative;
           }
         }
 
@@ -41,24 +34,27 @@
           border: none;
           img, svg  {
             z-index:-1;
-            position: relative;          
+            position: relative;
         }
         }
       }
-
-
     }
 
     &.open {
+      .avatar {
+        svg.attention-required {
+          display: none;
+        }
+      }
       +.dropdown-content {
-        top: -10%;
+        top: calc(100% - 3.2rem);
         min-width: 100%;
         width: 25rem;
         background: var(--Workspace-Workspace-button-background);
         border-radius: var(--Menu-radius);
         border: none;
         z-index: 10;
-        padding: 2.4rem 0rem .4rem 0rem;
+        padding: 2.4rem 0 .4rem 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -123,20 +119,15 @@
           border-bottom: .1rem solid var(--Workspace-Dividers);
           margin-bottom: 0.4rem;
 
-          .exclamation {
-            svg {
+          svg.attention-required {
               position: absolute;
-              top: -3.2rem;
-              right: -.5rem;
-              width: 1.2rem;
-              height: 1.2rem;
-              margin-top: 2.6rem;
-              margin-left: 3rem;
+              top: -1rem;
+              right: -1rem;
+              width: 2rem;
+              height: 2rem;
               --icon-exclamation-color: var(--Alert-Alert-icon);
               --icon-exclamation-background-color: var(--Alert-Alert-background);
               --icon-exclamation-border-color: var(--Alert-Alert-background);
-
-            }
           }
         }
 
@@ -150,6 +141,7 @@
 
         .sign-out {
           display: flex;
+          background-color: inherit;
           padding: .8rem 1.6rem;
           justify-content: center;
           align-items: center;
@@ -176,13 +168,24 @@
     }
 
     .avatar {
+      .default-avatar {
+        img,
+        svg {
+          width: 3.2rem;
+          height: 3.2rem;
+          border-radius: 50%;
+        }
+      }
 
-      img,
-      svg {
-        width: 3.2rem;
-        height: 3.2rem;
-        border-radius: 50%;
-        gap: 1.0rem;
+      svg.attention-required {
+        position: absolute;
+        width: 1.6rem;
+        height: 1.6rem;
+        left: 1.9rem;
+        top: -.2rem;
+        --icon-exclamation-color: var(--Alert-Alert-icon);
+        --icon-exclamation-background-color: var(--Alert-Alert-background);
+        --icon-exclamation-border-color: var(--Alert-Alert-background);
       }
     }
   }
