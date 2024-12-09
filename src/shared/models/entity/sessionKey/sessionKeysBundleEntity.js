@@ -16,7 +16,7 @@ import SessionKeysBundleDataEntity from "./sessionKeysBundleDataEntity";
 import EntityValidationError from "../abstract/entityValidationError";
 import EntitySchema from "../abstract/entitySchema";
 
-const PGP_STRING_MAX_LENGTH = 10_000;
+const PGP_STRING_MAX_LENGTH = 10_000_000;
 
 class SessionKeysBundleEntity extends EntityV2 {
   /**
@@ -72,7 +72,7 @@ class SessionKeysBundleEntity extends EntityV2 {
           {
             "type": "string",
             "maxLength": PGP_STRING_MAX_LENGTH,
-            "pattern": /^-----BEGIN PGP MESSAGE-----\n(.*\n)*\n([a-zA-Z0-9/+]*\n)*[a-zA-Z0-9/+=]*\n=[a-zA-Z0-9/+=]{4}\n-----END PGP MESSAGE-----$/m
+            "pattern": /^-----BEGIN PGP MESSAGE-----([\r\n])([ -9;-~]{1,76}: [ -~]{1,76}([\r\n]))*\n([a-zA-Z0-9\/+=]{1,76}([\r\n]))*=[a-zA-Z0-9\/+=]{4}([\r\n])-----END PGP MESSAGE-----([\r\n]*)$/
           },
           SessionKeysBundleDataEntity.getSchema()
         ]},
@@ -97,6 +97,14 @@ class SessionKeysBundleEntity extends EntityV2 {
    * Getters
    * ==================================================
    */
+  /**
+   * Get session keys bundle id
+   * @returns {(string|null)} uuid
+   */
+  get id() {
+    return this._props.id || null;
+  }
+
   /**
    * Get session keys bundle data
    * @returns {(SessionKeysBundleDataEntity|string)}
