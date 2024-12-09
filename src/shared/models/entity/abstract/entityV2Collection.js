@@ -142,16 +142,40 @@ class EntityV2Collection extends EntityCollection {
    * @param {object|Entity} data The data of the item to push
    * @param {object} [entityOptions] Options for constructing the entity, identical to those accepted by the Entity
    *   constructor that will be utilized for its creation.
-   * @throws {EntityValidationError} If the item doesn't validate.
    * @param {object} [options] Options.
    * @param {object} [options.validateBuildRules] Options to pass to validate build rules function @see EntityV2Collection::validateBuildRules
    * @param {function} [options.onItemPushed] Callback to execute after the item has been pushed to the collection.
+   * @throws {EntityValidationError} If the item doesn't validate.
    */
   push(data, entityOptions = {}, options = {}) {
     const entity = this.buildOrCloneEntity(data, entityOptions);
     this.validateBuildRules(entity, options?.validateBuildRules);
     this._items.push(entity);
     options?.onItemPushed?.(entity);
+  }
+
+  /**
+   * Push or replace an element from the collection.
+   * @param {object|Entity} data The data of the item to push
+   * @param {object} [entityOptions] Options for constructing the entity, identical to those accepted by the Entity
+   *   constructor that will be utilized for its creation.
+   * @param {object} [options] Options.
+   * @param {object} [options.validateBuildRules] Options to pass to validate build rules function @see EntityV2Collection::validateBuildRules
+   * @param {object} [options.replacePropertyCompare] Property name to find the element to replace.
+   * @throws {EntityValidationError} If the item doesn't validate.
+   */
+  pushOrReplace(data, entityOptions = {}, options = {}) {
+    const replacePropertyName = options?.replacePropertyName || "id";
+    const foundIndex = this.items.findIndex(entity => entity[replacePropertyName] === data[replacePropertyName]);
+
+    if (foundIndex !== -1) {
+      this.items.splice(foundIndex, 1);
+      const entity = this.buildOrCloneEntity(data, entityOptions);
+      this.validateBuildRules(entity, options?.validateBuildRules);
+      this.items.splice(foundIndex, 0, entity);
+    } else {
+      this.push(data, entityOptions, options);
+    }
   }
 
   /**

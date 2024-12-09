@@ -26,6 +26,8 @@ import {
 } from "../../../../shared/models/entity/resourceType/resourceTypesCollection.test.data";
 import ResourceTypeEntity from "../../../../shared/models/entity/resourceType/resourceTypeEntity";
 import {resourceTypeTotpDto} from "../../../../shared/models/entity/resourceType/resourceTypeEntity.test.data";
+import MetadataTypesSettingsEntity from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity";
+import {defaultMetadataTypesSettingsV4Dto} from "../../../../shared/models/entity/metadata/metadataTypesSettingsEntity.test.data";
 
 /**
  * Default props
@@ -40,6 +42,7 @@ export function defaultProps(data = {}) {
     resourceWorkspaceContext: defaultResourceWorkspaceContext({selectedResources: [resourceStandaloneTotpDto()]}),
     resourceTypes: new ResourceTypesCollection(resourceTypesCollectionDto()),
     resourceType: new ResourceTypeEntity(resourceTypeTotpDto()),
+    metadataTypeSettings: new MetadataTypesSettingsEntity(defaultMetadataTypesSettingsV4Dto()),
     dialogContext: defaultDialogContext(),
     onStop: jest.fn(),
     history: {

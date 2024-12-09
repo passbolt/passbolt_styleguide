@@ -57,7 +57,9 @@ const config = {
                       params: {
                         overrides: {
                           removeViewBox: false,
-                          cleanupIds: false
+                          cleanupIds: false,
+                          removeTitle: false,
+                          removeDesc: false,
                         },
                       },
                     },
@@ -67,7 +69,7 @@ const config = {
                         prefixIds: false,
                         prefixClassNames: false
                       },
-                    },
+                    }
                   ],
                 }
               }

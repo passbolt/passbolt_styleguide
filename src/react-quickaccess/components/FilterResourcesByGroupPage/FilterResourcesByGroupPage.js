@@ -158,16 +158,9 @@ class FilterResourcesByGroupPage extends React.Component {
    * @param {Array} groups The array of group to filter.
    */
   sortGroupsAlphabetically(groups) {
-    groups.sort((group1, group2) => {
-      const group1Name = group1.name.toUpperCase();
-      const group2Name = group2.name.toUpperCase();
-      if (group1Name > group2Name) {
-        return 1;
-      } else if (group2Name > group1Name) {
-        return -1;
-      }
-      return 0;
-    });
+    groups.sort((group1, group2) =>
+      group1.name.localeCompare(group2.name, undefined, {sensitivity: 'base'})
+    );
   }
 
   /**
