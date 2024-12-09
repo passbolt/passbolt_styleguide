@@ -64,51 +64,49 @@
             }
         }
 
-        li {
-            // Dropdown menu item
-            button.no-border {
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                background: none;
-                border: none;
-                padding: .8rem 1.6rem;
-                float: inherit;
-                margin-right: inherit;
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
+        // Dropdown menu item
+        button.no-border {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: none;
+            border: none;
+            padding: .8rem 1.6rem;
+            float: inherit;
+            margin-right: inherit;
+            width: 100%;
+            border-radius: 0;
+            box-shadow: none;
 
-                // Dropdown menu item hover and focus
-                &:hover, &:focus, &:focus-visible {
-                    background: var(--Sections-Filter-selected);
-                }
-
-                // Dropdown menu item pressed
-                &:active {
-                  box-shadow: inset 0 -0.1rem 0 0 var(--States-Active-Highlight), inset 0 .1rem 0 0 var(--States-Active-Shadow);
-                }
-            }
-
-            .checkbox {
-              padding: .8rem 1.6rem;
-              margin: 0;
-
-              // Dropdown menu item hover
-              &:hover {
+            // Dropdown menu item hover and focus
+            &:hover, &:focus, &:focus-visible {
                 background: var(--Sections-Filter-selected);
-              }
             }
 
-            .radio {
-              padding: .8rem 1.6rem;
-              margin: 0;
-
-              // Dropdown menu item hover
-              &:hover {
-                background: var(--Sections-Filter-selected);
-              }
+            // Dropdown menu item pressed
+            &:active {
+              box-shadow: inset 0 -0.1rem 0 0 var(--States-Active-Highlight), inset 0 .1rem 0 0 var(--States-Active-Shadow);
             }
+        }
+
+        .checkbox {
+          padding: .8rem 1.6rem;
+          margin: 0;
+
+          // Dropdown menu item hover
+          &:hover {
+            background: var(--Sections-Filter-selected);
+          }
+        }
+
+        .radio {
+          padding: .8rem 1.6rem;
+          margin: 0;
+
+          // Dropdown menu item hover
+          &:hover {
+            background: var(--Sections-Filter-selected);
+          }
         }
     }
 }

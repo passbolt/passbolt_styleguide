@@ -136,23 +136,20 @@ class UserAvatar extends Component {
     const shouldDisplayDefaultAvatar = this.state.error || this.isDefaultAvatarUrlFromApi() || !srcAvatar;
 
     return (
-      <div className={`${this.props.className} ${this.props.attentionRequired ? 'attention-required' : ''}`}>
+      <div className={`${this.props.className}`}>
         {shouldDisplayDefaultAvatar &&
           <div className="default-avatar">
-            <UserAvatarSVG />
+            <UserAvatarSVG/>
           </div>
         }
         {!shouldDisplayDefaultAvatar &&
           <div className="default-avatar">
-
             <img src={srcAvatar} onError={this.handleError} alt={this.getAltText()} />
           </div>
 
         }
         {this.props.attentionRequired &&
-          <div className="exclamation">
-            <AttentionSVG />
-          </div>
+          <AttentionSVG className="attention-required"/>
         }
       </div>
     );
