@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 
 import AutocompleteItem from "./AutocompleteItem";
-import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 class Autocomplete extends Component {
   /**
@@ -210,7 +210,7 @@ class Autocomplete extends Component {
             )}
             {this.state.processing &&
               <li className="autocomplete-suggestion row">
-                <Icon name="spinner"/>
+                <SpinnerSVG/>
               </li>
             }
           </ul>

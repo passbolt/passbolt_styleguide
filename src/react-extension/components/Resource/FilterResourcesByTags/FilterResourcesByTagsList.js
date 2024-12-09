@@ -18,6 +18,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import {withContextualMenu} from "../../../contexts/ContextualMenuContext";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {withDrag} from "../../../contexts/DragContext";
 import {withDialog} from "../../../contexts/DialogContext";
@@ -310,7 +311,7 @@ class FilterResourcesByTagsList extends React.Component {
       <div className="accordion-content">
         {this.isLoading() &&
         <div className="processing-wrapper">
-          <Icon name="spinner"/>
+          <SpinnerSVG/>
           <span className="processing-text"><Trans>Retrieving tags</Trans></span>
         </div>
         }

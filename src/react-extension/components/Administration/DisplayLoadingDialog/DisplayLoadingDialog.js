@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import PropTypes from "prop-types";
 import DialogWrapper from "../../Common/Dialog/DialogWrapper/DialogWrapper";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 
 class DisplayLoadingDialog extends Component {
   /**
@@ -109,7 +109,7 @@ class DisplayLoadingDialog extends Component {
           </div>
         </div>
         <div className="submit-wrapper clearfix">
-          <button type="submit" disabled className="processing">Submit<Icon name="spinner"/></button>
+          <button type="submit" disabled className="processing">Submit<SpinnerSVG/></button>
         </div>
       </DialogWrapper>
     );

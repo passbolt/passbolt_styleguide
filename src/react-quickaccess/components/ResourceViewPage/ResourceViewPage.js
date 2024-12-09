@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {Trans, withTranslation} from "react-i18next";
 import {withRouter} from "react-router-dom";
 import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import ClipBoard from '../../../shared/lib/Browser/clipBoard';
 import {uiActions} from "../../../shared/services/rbacs/uiActionEnumeration";
 import {withRbac} from "../../../shared/context/Rbac/RbacContext";
@@ -464,7 +465,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyLoginState === "processing"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyLoginState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
+                        <SpinnerSVG/>
                       </span>
                     )}
                   </Transition>
@@ -502,7 +503,7 @@ class ResourceViewPage extends React.Component {
                         <Transition in={this.state.isPasswordDecrypting} appear={true} timeout={500}>
                           {status => (
                             <span className={`transition fade-${status} ${!this.state.isPasswordDecrypting ? "visually-hidden" : ""}`}>
-                              <Icon name="spinner"/>
+                              <SpinnerSVG/>
                             </span>
                           )}
                         </Transition>
@@ -523,7 +524,7 @@ class ResourceViewPage extends React.Component {
                     <Transition in={this.state.copyPasswordState === "processing"} appear={true} timeout={500}>
                       {status => (
                         <span className={`transition fade-${status} ${this.state.copyPasswordState !== "processing" ? "visually-hidden" : ""}`}>
-                          <Icon name="spinner"/>
+                          <SpinnerSVG/>
                         </span>
                       )}
                     </Transition>
@@ -571,7 +572,7 @@ class ResourceViewPage extends React.Component {
                       <Transition in={this.state.isTotpDecrypting} appear={true} timeout={500}>
                         {status => (
                           <span className={`transition fade-${status} ${!this.state.isTotpDecrypting ? "visually-hidden" : ""}`}>
-                            <Icon name="spinner"/>
+                            <SpinnerSVG/>
                           </span>
                         )}
                       </Transition>
@@ -592,7 +593,7 @@ class ResourceViewPage extends React.Component {
                   <Transition in={this.state.copyTotpState === "processing"} appear={true} timeout={500}>
                     {status => (
                       <span className={`transition fade-${status} ${this.state.copyTotpState !== "processing" ? "visually-hidden" : ""}`}>
-                        <Icon name="spinner"/>
+                        <SpinnerSVG/>
                       </span>
                     )}
                   </Transition>
@@ -637,7 +638,7 @@ class ResourceViewPage extends React.Component {
         <div className="submit-wrapper input">
           <a href="#" id="popupAction" className={`button primary big full-width ${this.state.usingOnThisTab ? "disabled" : ""}`} role="button" onClick={this.handleUseOnThisTabClick}>
             {this.state.usingOnThisTab &&
-              <Icon name="spinner"/>
+              <SpinnerSVG/>
             }
             {!this.state.usingOnThisTab &&
               <Trans>use on this page</Trans>

@@ -20,6 +20,7 @@ import {Trans, withTranslation} from "react-i18next";
 import {SecretGenerator} from "../../../shared/lib/SecretGenerator/SecretGenerator";
 import {withPrepareResourceContext} from "../../contexts/PrepareResourceContext";
 import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import PasswordComplexity from "../../../shared/components/PasswordComplexity/PasswordComplexity";
 import PownedService from "../../../shared/services/api/secrets/pownedService";
@@ -635,7 +636,7 @@ class ResourceCreatePage extends React.Component {
               disabled={this.state.processing}>
               <Trans>Save</Trans>
               {this.state.processing &&
-                <Icon name="spinner"/>
+                <SpinnerSVG/>
               }
             </button>
             {this.state.unexpectedErrorMessage &&
