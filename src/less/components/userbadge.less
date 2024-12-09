@@ -11,7 +11,8 @@
       background: none;
       box-shadow: none;
       padding: 0;
-      min-width: 0;
+      min-width: inherit;
+      isolation: isolate;
 
       .default-avatar {
         &:hover {
@@ -49,7 +50,7 @@
       +.dropdown-content {
         top: calc(100% - 3.2rem);
         min-width: 100%;
-        width: 25rem;
+        width: 25.1rem;
         background: var(--Workspace-Workspace-button-background);
         border-radius: var(--Menu-radius);
         border: none;
@@ -100,6 +101,7 @@
             font-size: 1.6rem;
             font-weight: 700;
             margin-bottom: .8rem;
+            height: 1.9rem;
           }
 
           .email {
@@ -110,14 +112,14 @@
 
         .manage-account {
           display: flex;
-          padding: .8rem 1.6rem 1.6rem 1.6rem;
+          padding: .8rem 1.6rem 1.5rem 1.6rem;
           flex-direction: column;
           justify-content: center;
           align-items: center;
           gap: 1.6rem;
           align-self: stretch;
           border-bottom: .1rem solid var(--Workspace-Dividers);
-          margin-bottom: 0.4rem;
+          margin-bottom: 0.3rem;
 
           svg.attention-required {
               position: absolute;
@@ -141,28 +143,11 @@
 
         .sign-out {
           display: flex;
-          background-color: inherit;
           padding: .8rem 1.6rem;
           justify-content: center;
           align-items: center;
           gap: .8rem;
           align-self: stretch;
-
-          &:hover {
-            cursor: pointer;
-          }
-
-          &:hover,
-          &:focus-visible,
-          &:active {
-            background: var(--Sections-Filter-selected);
-            color: var(--Text-and-icons-Main-text);
-          }
-        }
-
-        .chips {
-          margin-left: 0.8rem;
-          padding-bottom: .1rem;
         }
       }
     }
