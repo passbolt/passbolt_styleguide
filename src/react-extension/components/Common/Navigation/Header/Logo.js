@@ -23,7 +23,7 @@ class Logo extends Component {
     return (
       <div className="top-bar-left">
         <div className="logo-svg no-img" title="Passbolt logo">
-          <SVGLogo width="100%" height="2.5rem"/>
+          <SVGLogo width="15rem" height="2.6rem" role="img"/>
           <h1><span>Passbolt</span></h1>
         </div>
       </div>
