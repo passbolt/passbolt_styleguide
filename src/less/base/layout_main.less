@@ -21,6 +21,7 @@
         flex: 1 0 0;
         align-self: stretch;
         background: var(--Workspace-Workspace-background);
+        min-width: 0; // important to keep the container size for ellipsis
 
         .panel.left {
           display: flex;
@@ -66,6 +67,8 @@
           align-items: center;
           flex: 1 0 0;
           align-self: stretch;
+          min-height: 0; // important to keep the container size for ellipsis
+          min-width: 0; // important to keep the container size for ellipsis
 
           .header {
             display: flex;
@@ -73,6 +76,7 @@
             justify-content: flex-end;
             align-items: center;
             align-self: stretch;
+            min-width: 0; // important to keep the container size for ellipsis
 
             .header-left {
               display: flex;
@@ -97,6 +101,7 @@
             gap: 1.6rem;
             flex: 1 0 0;
             align-self: stretch;
+            min-width: 0; // important to keep the container size for ellipsis
 
             .breadcrumbs-and-grid {
               display: flex;
@@ -106,6 +111,8 @@
               align-self: stretch;
               border-radius: var(--Section-border-radius) var(--Section-border-radius) 0 0;
               background: var(--Grid-Grid-background);
+              min-height: 0; // important to keep the container size for ellipsis
+              min-width: 0; // important to keep the container size for ellipsis
 
               .top-bar {
                 display: flex;
@@ -114,6 +121,7 @@
                 align-items: center;
                 gap: .8rem;
                 align-self: stretch;
+                min-width: 0; // important to keep the container size for ellipsis
               }
 
               .grid {
@@ -122,6 +130,7 @@
                 flex: 1 0 0;
                 align-self: stretch;
                 position: relative;
+                min-width: 0; // important to keep the container size for ellipsis
 
                 // TODO when action button will be in the administration component item
                 .action-bar {
