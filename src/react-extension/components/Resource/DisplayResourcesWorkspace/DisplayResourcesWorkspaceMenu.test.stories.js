@@ -28,17 +28,13 @@ export default {
   title: 'Components/Resource/DisplayResourcesWorkspaceMenu',
   decorators: [
     Story => (
-      <div id="container" className="page password">
-        <div id="app" className="app">
-          <div className="panel main">
-            <div className="panel middle">
-              <div className="middle-right">
-                <div className="breadcrumbs-and-grid">
-                  <div className="top-bar">
-                    <div className="action-bar">
-                      <Story/>
-                    </div>
-                  </div>
+      <div className="panel main">
+        <div className="panel middle">
+          <div className="middle-right">
+            <div className="breadcrumbs-and-grid">
+              <div className="top-bar">
+                <div className="action-bar">
+                  <Story/>
                 </div>
               </div>
             </div>

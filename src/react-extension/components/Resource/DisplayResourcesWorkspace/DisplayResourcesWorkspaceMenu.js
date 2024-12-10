@@ -46,6 +46,20 @@ import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import DropdownItem from "../../Common/Dropdown/DropdownMenuItem";
 import Dropdown from "../../Common/Dropdown/Dropdown";
 import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
+import MoreHorizontalSVG from "../../../../img/svg/more_horizontal.svg";
+import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
+import DownloadFileSVG from "../../../../img/svg/download_file.svg";
+import CalendarCogSVG from "../../../../img/svg/calendar_cog.svg";
+import AlarmClockSVG from "../../../../img/svg/alarm_clock.svg";
+import CopySVG from "../../../../img/svg/copy.svg";
+import OwnedByMeSVG from "../../../../img/svg/owned_by_me.svg";
+import KeySVG from "../../../../img/svg/key.svg";
+import TotpSVG from "../../../../img/svg/totp.svg";
+import GlobeSVG from "../../../../img/svg/globe.svg";
+import LinkSVG from "../../../../img/svg/link.svg";
+import DeleteSVG from "../../../../img/svg/delete.svg";
+import EditSVG from "../../../../img/svg/edit.svg";
+import ShareSVG from "../../../../img/svg/share.svg";
 
 /**
  * This component allows the current user to add a new comment on a resource
@@ -57,40 +71,18 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.state = this.defaultState;
-    this.createRefs();
     this.bindCallbacks();
-  }
-
-  /**
-   * Get default state
-   * @returns {*}
-   */
-  get defaultState() {
-    return {
-      moreMenuOpen: false, // more menu open or not
-    };
-  }
-
-  /**
-   * Create DOM nodes or React elements references in order to be able to access them programmatically.
-   */
-  createRefs() {
-    this.moreMenuRef = React.createRef();
   }
 
   /**
    * Bind callbacks methods
    */
   bindCallbacks() {
-    this.handleDocumentClickEvent = this.handleDocumentClickEvent.bind(this);
-    this.handleDocumentContextualMenuEvent = this.handleDocumentContextualMenuEvent.bind(this);
-    this.handleDocumentDragStartEvent = this.handleDocumentDragStartEvent.bind(this);
-    this.handleMoreClickEvent = this.handleMoreClickEvent.bind(this);
     this.handleDeleteClickEvent = this.handleDeleteClickEvent.bind(this);
     this.handleEditClickEvent = this.handleEditClickEvent.bind(this);
     this.handleCopyPermalinkClickEvent = this.handleCopyPermalinkClickEvent.bind(this);
     this.handleCopyUsernameClickEvent = this.handleCopyUsernameClickEvent.bind(this);
+    this.handleCopyUriClickEvent = this.handleCopyUriClickEvent.bind(this);
     this.handleShareClickEvent = this.handleShareClickEvent.bind(this);
     this.handleCopySecretClickEvent = this.handleCopySecretClickEvent.bind(this);
     this.handleCopyTotpClickEvent = this.handleCopyTotpClickEvent.bind(this);
@@ -101,63 +93,11 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
     this.handleSetExpiryDateClickEvent = this.handleSetExpiryDateClickEvent.bind(this);
   }
 
-  componentDidMount() {
-    document.addEventListener('click', this.handleDocumentClickEvent);
-    document.addEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.addEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.handleDocumentClickEvent);
-    document.removeEventListener('contextmenu', this.handleDocumentContextualMenuEvent, {capture: true});
-    document.removeEventListener('dragstart', this.handleDocumentDragStartEvent, {capture: true});
-  }
-
-  /**
-   * Handle click events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentClickEvent(event) {
-    // Prevent closing when the user click on an element of the menu
-    if (this.moreMenuRef.current.contains(event.target)) {
-      return;
-    }
-    this.handleCloseMoreMenu();
-  }
-
-  /**
-   * Handle contextual menu events on document. Hide the component if the click occurred outside of the component.
-   * @param {ReactEvent} event The event
-   */
-  handleDocumentContextualMenuEvent(event) {
-    // Prevent closing when the user click on an element of the menu
-    if (this.moreMenuRef.current.contains(event.target)) {
-      return;
-    }
-    this.handleCloseMoreMenu();
-  }
-
-  /**
-   * Handle drag start event on document. Hide the component if any.
-   */
-  handleDocumentDragStartEvent() {
-    this.handleCloseMoreMenu();
-  }
-
-  /**
-   * open or close the more menu
-   */
-  handleMoreClickEvent() {
-    const moreMenuOpen = !this.state.moreMenuOpen;
-    this.setState({moreMenuOpen});
-  }
-
   /**
    * handle delete one or more resources
    */
   handleDeleteClickEvent() {
     this.props.dialogContext.open(DeleteResource, {resources: this.selectedResources});
-    this.handleCloseMoreMenu();
   }
 
   /**
@@ -165,15 +105,12 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * @returns {Promise<void>}
    */
   async handleMarkAsExpiredClick() {
-    this.handleCloseMoreMenu();
     const resourcesExpiryDateToUpdate = this.selectedResources.map(resource => ({id: resource.id, expired: formatDateForApi(DateTime.utc())}));
     try {
       await this.props.context.port.request("passbolt.resources.set-expiration-date", resourcesExpiryDateToUpdate);
       await this.props.actionFeedbackContext.displaySuccess(this.translate("The resource has been marked as expired.", {count: resourcesExpiryDateToUpdate.length}));
     } catch (error) {
       await this.props.actionFeedbackContext.displayError(this.translate("Unable to mark the resource as expired.", {count: resourcesExpiryDateToUpdate.length}));
-    } finally {
-      this.handleCloseMoreMenu();
     }
   }
 
@@ -201,7 +138,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle copy permalink of one resource
    */
   async handleCopyPermalinkClickEvent() {
-    this.handleCloseMoreMenu();
     const baseUrl = this.props.context.userSettings.getTrustedDomain();
     const permalink = `${baseUrl}/app/passwords/view/${this.selectedResources[0].id}`;
     await ClipBoard.copy(permalink, this.props.context.port);
@@ -212,9 +148,16 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * handle copy username of one resource
    */
   async handleCopyUsernameClickEvent() {
-    this.handleCloseMoreMenu();
     await ClipBoard.copy(this.selectedResources[0].metadata.username, this.props.context.port);
     this.displaySuccessNotification(this.translate("The username has been copied to clipboard"));
+  }
+
+  /**
+   * handle copy uri of one resource
+   */
+  async handleCopyUriClickEvent() {
+    await ClipBoard.copy(this.selectedResources[0].metadata.uris[0], this.props.context.port);
+    this.displaySuccessNotification(this.translate("The uri has been copied to clipboard"));
   }
 
   /**
@@ -246,7 +189,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopySecretClickEvent() {
     let plaintextSecretDto;
-    this.handleCloseMoreMenu();
 
     this.props.progressContext.open(this.props.t('Decrypting secret'));
     try {
@@ -273,7 +215,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   async handleCopyTotpClickEvent() {
     let plaintextSecretDto, code;
-    this.handleCloseMoreMenu();
 
     this.props.progressContext.open(this.props.t('Decrypting secret'));
     try {
@@ -310,7 +251,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    * Whenever the user intends to set the expiration date on the selected resources
    */
   handleSetExpiryDateClickEvent() {
-    this.handleCloseMoreMenu();
     this.props.dialogContext.open(PasswordExpiryDialog, {
       resources: this.selectedResources
     });
@@ -334,13 +274,6 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   displaySuccessNotification(message) {
     this.props.actionFeedbackContext.displaySuccess(message);
-  }
-
-  /**
-   * Close the more menu
-   */
-  handleCloseMoreMenu() {
-    this.setState({moreMenuOpen: false});
   }
 
   /**
@@ -415,6 +348,14 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
    */
   canCopyUsername() {
     return this.hasOneResourceSelected() && this.selectedResources[0].metadata?.username;
+  }
+
+  /**
+   * Can copy uri
+   * @returns {boolean}
+   */
+  canCopyUri() {
+    return this.hasOneResourceSelected() && this.selectedResources[0].metadata?.uris[0];
   }
 
   /**
@@ -543,149 +484,115 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
       <div className="col2_3 actions-wrapper">
         <div className="actions">
           <ul>
-            {canCopySecret &&
-              <li id="password_action">
-                <button type="button" disabled={!this.hasOneResourceSelected()}
-                  onClick={this.handleCopySecretClickEvent}>
-                  <Icon name="copy-to-clipboard"/>
-                  <span><Trans>Copy</Trans></span>
-                </button>
-              </li>
-            }
-            <li id="edit_action">
-              <button type="button" disabled={!this.hasOneResourceSelected() || !this.canUpdate()}
-                onClick={this.handleEditClickEvent}>
-                <Icon name="edit"/>
-                <span><Trans>Edit</Trans></span>
-              </button>
-            </li>
             {canViewShare &&
               <li id="share_action">
-                <button type="button" disabled={!this.hasResourceSelected() || !this.canShare()}
+                <button type="button" className="button-action-contextual" disabled={!this.hasResourceSelected() || !this.canShare()}
                   onClick={this.handleShareClickEvent}>
-                  <Icon name="share"/>
+                  <ShareSVG/>
                   <span><Trans>Share</Trans></span>
                 </button>
               </li>
             }
-            {this.canExport() &&
-              <li id="export_action">
-                <button
-                  type="button"
-                  disabled={!this.hasResourceSelected()}
-                  onClick={this.handleExportClickEvent}>
-                  <Icon name="download"/>
-                  <span><Trans>Export</Trans></span>
-                </button>
-              </li>
-            }
-            <li>
-              <div className="dropdown" ref={this.moreMenuRef}>
-                <button type="button" className={`more ${this.state.moreMenuOpen ? "open" : ""}`}
-                  disabled={!this.hasMoreActionAllowed()}
-                  onClick={this.handleMoreClickEvent}>
-                  <span><Trans>More</Trans></span>
-                  <Icon name="caret-down"/>
-                </button>
-                <ul className={`dropdown-content menu right ${this.state.moreMenuOpen ? "visible" : ""}`}>
-                  <li id="username_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button
-                            type="button"
-                            disabled={!this.canCopyUsername()}
-                            className="link no-border"
-                            onClick={this.handleCopyUsernameClickEvent}>
-                            <span><Trans>Copy username to clipboard</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+            <li id="copy_action">
+              <Dropdown>
+                <DropdownButton className="button-action-contextual" disabled={!this.hasOneResourceSelected()}>
+                  <CopySVG/>
+                  <Trans>Copy</Trans>
+                  <CaretDownSVG/>
+                </DropdownButton>
+                <DropdownMenu>
+                  <DropdownMenuItem>
+                    <button id="username_action" type="button" className="no-border" disabled={!this.canCopyUsername()}
+                      onClick={this.handleCopyUsernameClickEvent}>
+                      <OwnedByMeSVG/>
+                      <span><Trans>Copy username</Trans></span>
+                    </button>
+                  </DropdownMenuItem>
                   {canCopySecret &&
-                    <li id="secret_action">
-                      <div className="row">
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button type="button" disabled={!this.canCopyPassword()} className="link no-border"
-                              onClick={this.handleCopySecretClickEvent}>
-                              <span><Trans>Copy password to clipboard</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
+                    <DropdownMenuItem>
+                      <button id="secret_action" type="button" className="no-border" disabled={!this.canCopyPassword()}
+                        onClick={this.handleCopySecretClickEvent}>
+                        <KeySVG/>
+                        <span><Trans>Copy password</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
                   }
                   {this.canUseTotp &&
-                    <li id="totp_action">
-                      <div className="row">
-                        <div className="main-cell-wrapper">
-                          <div className="main-cell">
-                            <button type="button" disabled={!this.canCopyTotp()} className="link no-border"
-                              onClick={this.handleCopyTotpClickEvent}>
-                              <span><Trans>Copy TOTP to clipboard</Trans></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
+                    <DropdownMenuItem>
+                      <button id="totp_action" type="button" className="no-border" disabled={!this.canCopyTotp()}
+                        onClick={this.handleCopyTotpClickEvent}>
+                        <TotpSVG/>
+                        <span><Trans>Copy TOTP</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
                   }
-                  <li id="permalink_action" className="separator-after">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.hasOneResourceSelected()} className="link no-border"
-                            onClick={this.handleCopyPermalinkClickEvent}>
-                            <span><Trans>Copy permalink to clipboard</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                  <DropdownMenuItem>
+                    <button id="uri_action" type="button" className="no-border" disabled={!this.canCopyUri()}
+                      onClick={this.handleCopyUriClickEvent}>
+                      <GlobeSVG/>
+                      <span><Trans>Copy URI</Trans></span>
+                    </button>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <button id="permalink_action" type="button" className="no-border"
+                      disabled={!this.hasOneResourceSelected()} onClick={this.handleCopyPermalinkClickEvent}>
+                      <LinkSVG/>
+                      <span><Trans>Copy permalink</Trans></span>
+                    </button>
+                  </DropdownMenuItem>
+                </DropdownMenu>
+              </Dropdown>
+            </li>
+            <li id="edit_action">
+              <button type="button" className="button-action-contextual" disabled={!this.hasOneResourceSelected() || !this.canUpdate()}
+                onClick={this.handleDeleteClickEvent}>
+                <EditSVG/>
+                <span><Trans>Edit</Trans></span>
+              </button>
+            </li>
+            <li id="delete_action">
+              <button type="button" className="button-action-contextual" disabled={!this.canUpdate()}
+                onClick={this.handleEditClickEvent}>
+                <DeleteSVG/>
+                <span><Trans>Delete</Trans></span>
+              </button>
+            </li>
+            <li>
+              <Dropdown>
+                <DropdownButton className="more button-action-contextual button-action-icon"
+                  disabled={!this.hasMoreActionAllowed()}>
+                  <MoreHorizontalSVG/>
+                </DropdownButton>
+                <DropdownMenu>
+                  {this.canExport() &&
+                    <DropdownMenuItem>
+                      <button id="export_action" type="button" className="no-border"
+                        disabled={!this.hasResourceSelected()} onClick={this.handleExportClickEvent}>
+                        <DownloadFileSVG/>
+                        <span><Trans>Export</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
+                  }
                   {this.canOverridePasswordExpiry &&
                     <>
-                      <li id="set_expiry_date_action">
-                        <div className="row">
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button type="button" disabled={!this.canUpdate()} className="link no-border"
-                                onClick={this.handleSetExpiryDateClickEvent}>
-                                <span><Trans>Set expiry date</Trans></span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li id="mark_as_expired_action" className="ready separator-after">
-                        <div className="row">
-                          <div className="main-cell-wrapper">
-                            <div className="main-cell">
-                              <button
-                                type="button"
-                                disabled={!this.canUpdate()}
-                                className="link no-border"
-                                onClick={this.handleMarkAsExpiredClick}><span><Trans>Mark as expired</Trans></span></button>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                      <DropdownMenuItem>
+                        <button id="set_expiry_date_action" type="button" className="no-border"
+                          disabled={!this.canUpdate()} onClick={this.handleSetExpiryDateClickEvent}>
+                          <CalendarCogSVG/>
+                          <span><Trans>Set expiry date</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <button id="mark_as_expired_action" type="button" className="no-border"
+                          disabled={!this.canUpdate()} onClick={this.handleMarkAsExpiredClick}>
+                          <AlarmClockSVG/>
+                          <span><Trans>Mark as expired</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
                     </>
                   }
-                  <li id="delete_action">
-                    <div className="row">
-                      <div className="main-cell-wrapper">
-                        <div className="main-cell">
-                          <button type="button" disabled={!this.canUpdate()} className="link no-border"
-                            onClick={this.handleDeleteClickEvent}>
-                            <span><Trans>Delete</Trans></span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
+                </DropdownMenu>
+              </Dropdown>
             </li>
           </ul>
         </div>
@@ -711,7 +618,7 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
               </Dropdown>
             </li>
             <li>
-              <button type="button" className={`button-toggle button-action-icon info ${this.hasLockDetail() ? "selected" : ""}`}
+              <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
                 onClick={this.handleViewDetailClickEvent}>
                 <Icon name="info-circle" big={true}/>
                 <span className="visuallyhidden"><Trans>View detail</Trans></span>

@@ -39,14 +39,14 @@ class WorkspaceSwitcher extends React.PureComponent {
             <DropdownMenu direction="over">
               <DropdownMenuItem>
                 <button type="button" className="no-border">
-                  <SettingsSVG/>
                   <span><Trans>Organisation Settings</Trans></span>
+                  <SettingsSVG/>
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <button type="button" className="no-border">
-                  <UsersSVG/>
                   <span><Trans>Manage Users & Groups</Trans></span>
+                  <UsersSVG/>
                 </button>
               </DropdownMenuItem>
             </DropdownMenu>

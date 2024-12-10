@@ -70,10 +70,9 @@
                 box-shadow: var(--Menu-drop-shadow-Menu-drop-shadow-X) var(--Menu-drop-shadow-Menu-drop-shadow-Y) var(--Menu-drop-shadow-Menu-drop-shadow-blur) 0 var(--Menu-drop-shadow-Menu-drop-shadow);
             }
 
-            button {
+            button.no-border {
                 display: flex;
-                flex-direction: row-reverse;
-                align-items: center;
+                justify-content: flex-end;
                 padding: 1rem var(--Workspace-selection-button-padding);
                 gap: 1.6rem;
             }
@@ -119,6 +118,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
+            align-self: stretch;
             background: none;
             border: none;
             padding: .8rem 1.6rem;

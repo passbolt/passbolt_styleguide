@@ -107,99 +107,113 @@ class DisplayMenuPageObject {
   /**
    * Returns the share menu elements of password workspace menu
    */
-  get copyMenu() {
-    return this._container.querySelector('#password_action button');
+  get copyMenuDropdown() {
+    return this._container.querySelector('#copy_action button');
   }
 
   /**
    * Returns true if the copy menu elements of password workspace menu is disabled
    */
   hasCopyMenuDisabled() {
-    return this.copyMenu.hasAttribute("disabled");
+    return this.copyMenuDropdown.hasAttribute("disabled");
   }
 
   /**
    * Returns the more menu elements of password workspace menu
    */
   get moreMenu() {
-    return this._container.querySelector('.dropdown button');
+    return this._container.querySelector('button.more');
   }
 
   /**
    * Returns true if the more menu elements of password workspace menu is disabled
    */
   hasMoreMenuDisabled() {
-    return this._container.querySelector('.dropdown .button.disabled');
+    return this._container.querySelector('button.more').hasAttribute("disabled");
   }
 
   /**
    * Returns the delete menu elements of password workspace menu
    */
-  get dropdownMenuDelete() {
-    return this._container.querySelector('#delete_action .row .main-cell-wrapper .main-cell button');
+  get deleteMenu() {
+    return this._container.querySelector('#delete_action button');
   }
 
   /**
    * Returns true if the delete menu elements of password workspace menu is disabled
    */
-  hasDropdownMenuDeleteDisabled() {
-    return this.dropdownMenuDelete.hasAttribute("disabled");
+  hasDeleteMenuDisabled() {
+    return this.deleteMenu.hasAttribute("disabled");
   }
 
   /**
    * Returns the mark as expired menu elements of password workspace menu
    */
   get dropdownMenuMarkAsExpired() {
-    return this._container.querySelector('#mark_as_expired_action .row .main-cell-wrapper .main-cell button');
+    return this._container.querySelector('#mark_as_expired_action');
   }
 
   /**
    * Returns the "set expiry date" menu element of the password workspace menu
    */
   get dropdownMenuSetExpiryDate() {
-    return this._container.querySelector('#set_expiry_date_action .row .main-cell-wrapper .main-cell button');
+    return this._container.querySelector('#set_expiry_date_action');
   }
 
   /**
    * Returns the permalink menu elements of password workspace menu
    */
-  get dropdownMenuPermalink() {
-    return this._container.querySelector('#permalink_action .row .main-cell-wrapper .main-cell button');
+  get permalinkMenu() {
+    return this._container.querySelector('#permalink_action');
   }
 
   /**
    * Returns true if the permalink menu elements of password workspace menu is disabled
    */
   hasDropdownMenuPermalinkDisabled() {
-    return this.dropdownMenuPermalink.hasAttribute("disabled");
+    return this.permalinkMenu.hasAttribute("disabled");
   }
 
   /**
    * Returns the username menu elements of password workspace menu
    */
-  get dropdownMenuUsername() {
-    return this._container.querySelector('#username_action .row .main-cell-wrapper .main-cell button');
+  get usernameMenu() {
+    return this._container.querySelector('#username_action');
   }
 
   /**
    * Returns true if the username menu elements of password workspace menu is disabled
    */
   hasDropdownMenuUsernameDisabled() {
-    return this.dropdownMenuUsername.hasAttribute("disabled");
+    return this.usernameMenu.hasAttribute("disabled");
+  }
+
+  /**
+   * Returns the uriMenu menu elements of password workspace menu
+   */
+  get uriMenu() {
+    return this._container.querySelector('#uri_action');
+  }
+
+  /**
+   * Returns true if the uriMenu menu elements of password workspace menu is disabled
+   */
+  hasDropdownMenuUriDisabled() {
+    return this.uriMenu.hasAttribute("disabled");
   }
 
   /**
    * Returns the password menu elements of password workspace menu
    */
   get dropdownMenuSecret() {
-    return this._container.querySelector('#secret_action .row .main-cell-wrapper .main-cell button');
+    return this._container.querySelector('#secret_action');
   }
 
   /**
    * Returns the totp menu elements of password workspace menu
    */
   get dropdownMenuTotp() {
-    return this._container.querySelector('#totp_action .row .main-cell-wrapper .main-cell button');
+    return this._container.querySelector('#totp_action');
   }
 
   /**
@@ -234,7 +248,7 @@ class DisplayMenuPageObject {
    * Returns the detail information button menu elements of password workspace menu
    */
   get menuDetailInformationSelected() {
-    return this._container.querySelector('.actions.secondary button.button-toggle.selected');
+    return this._container.querySelector('.actions.secondary button.button-toggle.active');
   }
 
   /**
@@ -248,6 +262,12 @@ class DisplayMenuPageObject {
   clickOnMoreMenu()  {
     const leftClick = {button: 0};
     fireEvent.click(this.moreMenu, leftClick);
+  }
+
+  /** Click on the more menu */
+  clickOnCopyMenu()  {
+    const leftClick = {button: 0};
+    fireEvent.click(this.copyMenuDropdown, leftClick);
   }
 
   /** Click on the action menu */
