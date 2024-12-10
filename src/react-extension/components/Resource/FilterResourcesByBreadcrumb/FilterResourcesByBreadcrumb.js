@@ -18,7 +18,7 @@ import {ResourceWorkspaceFilterTypes, withResourceWorkspace} from "../../../cont
 import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied resources filter
@@ -119,10 +119,11 @@ class FilterResourcesByBreadcrumb extends Component {
    * @returns {JSX}
    */
   render() {
+    const count = this.props.resourceWorkspaceContext.filteredResources?.length;
     return (
       <Breadcrumbs items={this.items}>
         {this.isResourceNotNull &&
-          <span className="chips">{this.props.resourceWorkspaceContext.filteredResources.length}</span>
+          <span className="counter"><Trans count={count}>{{count}} items</Trans></span>
         }
       </Breadcrumbs>
     );
