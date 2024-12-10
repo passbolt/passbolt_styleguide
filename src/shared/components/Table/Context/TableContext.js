@@ -340,9 +340,7 @@ export default class TableContextProvider extends Component {
     return (
       <TableContext.Provider value={this.state}>
         <div ref={this.tableviewRef} className="tableview">
-          <div className="tableview-wrapper">
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
       </TableContext.Provider>
     );
