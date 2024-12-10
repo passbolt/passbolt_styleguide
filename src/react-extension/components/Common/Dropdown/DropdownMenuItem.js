@@ -14,12 +14,13 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import {withDropdown} from "./DropdownContext";
 
 
 /**
  * This component acts as a dropdown item.
  */
-class DropdownItem extends React.Component {
+class DropdownMenuItem extends React.Component {
   /**
    * Default constructor
    * @param props The component props
@@ -43,7 +44,7 @@ class DropdownItem extends React.Component {
     if (this.props.keepOpenOnClick) {
       return;
     }
-    this.props.onClose();
+    this.props.dropdownContext.onClose();
   }
 
   /**
@@ -65,15 +66,15 @@ class DropdownItem extends React.Component {
   }
 }
 
-DropdownItem.defaultProps = {
+DropdownMenuItem.defaultProps = {
   keepOpenOnClick: false,
 };
 
-DropdownItem.propTypes = {
-  onClose: PropTypes.func,
+DropdownMenuItem.propTypes = {
   separator: PropTypes.bool,
   keepOpenOnClick: PropTypes.bool,
+  dropdownContext: PropTypes.any, // The dropdown context
   children: PropTypes.any
 };
 
-export default DropdownItem;
+export default withDropdown(DropdownMenuItem);

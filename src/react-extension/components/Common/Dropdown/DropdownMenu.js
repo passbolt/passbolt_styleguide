@@ -18,37 +18,13 @@ import {withDropdown} from "./DropdownContext";
 
 
 /**
- * This component acts as an anchor for the dropdown button.
+ * This component acts as a dropdown item.
  */
-class DropdownButton extends React.Component {
+class DropdownMenu extends React.Component {
   /**
-   * Constructor
-   * @param {Object} props
+   * Dropdown must show menu
    */
-  constructor(props) {
-    super(props);
-    this.bindCallbacks();
-  }
-
-  /**
-   * Bind callbacks methods
-   */
-  bindCallbacks() {
-    this.handleDropdownMenuClickEvent = this.handleDropdownMenuClickEvent.bind(this);
-  }
-
-  /**
-   * Handle create click event
-   */
-  handleDropdownMenuClickEvent() {
-    this.props.dropdownContext.onOpen();
-  }
-
-  /**
-   * Dropdown open
-   * @returns {boolean}
-   */
-  get dropdownOpen() {
+  get dropdownMenuMustShow() {
     return this.props.dropdownContext.dropdownOpen;
   }
 
@@ -58,25 +34,22 @@ class DropdownButton extends React.Component {
    */
   render() {
     return (
-      <button type="button" className={`${this.props.className} ${this.dropdownOpen ? "open" : ""}`} disabled={this.props.disabled} onClick={this.handleDropdownMenuClickEvent}>
-        {this.props.children}
-      </button>
+      this.dropdownMenuMustShow &&
+          <ul className={`dropdown-content menu visible ${this.props.direction}`}>
+            {this.props.children}
+          </ul>
     );
   }
 }
 
-DropdownButton.defaultProps = {
-  disabled: false,
+DropdownMenu.defaultProps = {
   direction: "right",
-  className: "button-dropdown"
 };
 
-DropdownButton.propTypes = {
-  className: PropTypes.string, // The className property
-  disabled: PropTypes.bool, // The disabled property
+DropdownMenu.propTypes = {
   direction: PropTypes.string, // The direction property
   dropdownContext: PropTypes.any, // The dropdown context
   children: PropTypes.any // The children property
 };
 
-export default withDropdown(DropdownButton);
+export default withDropdown(DropdownMenu);
