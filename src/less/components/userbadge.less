@@ -3,7 +3,7 @@
  */
 .user.profile {
   float: right;
-  margin: .8rem 1.6rem 0 0;
+  margin: 0;
 
   .button {
     &.avatar-button {
@@ -178,26 +178,5 @@
   .center-cell {
     width: 14.5rem;
     margin-right: .5rem;
-  }
-
-  .more a {
-    border: 0;
-  }
-}
-
-/* hide left column when there is no space */
-@media all and (max-width: 1024px) {
-  .user.profile {
-    display: block;
-    width: auto;
-    padding: .8rem;
-
-    .center-cell {
-      display: none;
-    }
-
-    .right-cell {
-      display: none;
-    }
   }
 }

@@ -73,9 +73,13 @@ class Workspace extends Component {
         </div>
         <div className="panel middle">
           <div className="header">
-            <FilterResourcesByText
-              placeholder={this.props.t("Search passwords")}/>
-            <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            <div className="header-left">
+              <FilterResourcesByText
+                placeholder={this.props.t("Search resource")}/>
+            </div>
+            <div className="header-right">
+              <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
+            </div>
           </div>
           <div className="middle-right">
             <div className="breadcrumbs-and-grid">

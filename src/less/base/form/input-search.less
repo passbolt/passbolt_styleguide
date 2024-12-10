@@ -1,15 +1,14 @@
+.search-wrapper {
+  width: 100%;
+}
+
 .input.search {
-  position: relative;
+    position: relative;
     display: flex;
     align-items: center;
     background: var(--Workspace-Main-search-field);
     color: var(--Text-and-icons-Main-text);
     border-radius: var(--Button-border-radius);
-
-    // Focus within input search
-    &:focus-within {
-      box-shadow: 0 0 .4rem var(--States-Focus);
-    }
 
     // Focus within button search
     &.no-focus:focus-within {
@@ -24,7 +23,7 @@
     input[type=search] {
         flex: 1;
         height: 3.6rem; // For firefox to avoid line height 21px
-        padding: .8rem;
+        padding: .3rem .3rem .3rem var(--Search-field-padding);
         max-width: none;
         margin: 0;
 
