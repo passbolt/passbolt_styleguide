@@ -71,6 +71,7 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get actionMenu() {
     return this._container.querySelector('.actions');
@@ -78,76 +79,47 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the edit menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get editMenu() {
     return this._container.querySelector('#edit_action button');
   }
 
   /**
-   * Returns true if the edit menu elements of password workspace menu is disabled
-   */
-  hasEditMenuDisabled() {
-    return this.editMenu.hasAttribute("disabled");
-  }
-
-  /**
    * Returns the share menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get shareMenu() {
     return this._container.querySelector('#share_action button');
   }
 
   /**
-   * Returns true if the share menu elements of password workspace menu is disabled
-   */
-  hasShareMenuDisabled() {
-    return this.shareMenu.hasAttribute("disabled");
-  }
-
-  /**
    * Returns the share menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get copyMenuDropdown() {
     return this._container.querySelector('#copy_action button');
   }
 
   /**
-   * Returns true if the copy menu elements of password workspace menu is disabled
-   */
-  hasCopyMenuDisabled() {
-    return this.copyMenuDropdown.hasAttribute("disabled");
-  }
-
-  /**
    * Returns the more menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get moreMenu() {
     return this._container.querySelector('button.more');
   }
 
   /**
-   * Returns true if the more menu elements of password workspace menu is disabled
-   */
-  hasMoreMenuDisabled() {
-    return this._container.querySelector('button.more').hasAttribute("disabled");
-  }
-
-  /**
    * Returns the delete menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get deleteMenu() {
     return this._container.querySelector('#delete_action button');
   }
 
   /**
-   * Returns true if the delete menu elements of password workspace menu is disabled
-   */
-  hasDeleteMenuDisabled() {
-    return this.deleteMenu.hasAttribute("disabled");
-  }
-
-  /**
    * Returns the mark as expired menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get dropdownMenuMarkAsExpired() {
     return this._container.querySelector('#mark_as_expired_action');
@@ -155,6 +127,7 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the "set expiry date" menu element of the password workspace menu
+   * @returns {HTMLElement}
    */
   get dropdownMenuSetExpiryDate() {
     return this._container.querySelector('#set_expiry_date_action');
@@ -162,20 +135,15 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the permalink menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get permalinkMenu() {
     return this._container.querySelector('#permalink_action');
   }
 
   /**
-   * Returns true if the permalink menu elements of password workspace menu is disabled
-   */
-  hasDropdownMenuPermalinkDisabled() {
-    return this.permalinkMenu.hasAttribute("disabled");
-  }
-
-  /**
    * Returns the username menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get usernameMenu() {
     return this._container.querySelector('#username_action');
@@ -183,6 +151,7 @@ class DisplayMenuPageObject {
 
   /**
    * Returns true if the username menu elements of password workspace menu is disabled
+   * @returns {boolean}
    */
   hasDropdownMenuUsernameDisabled() {
     return this.usernameMenu.hasAttribute("disabled");
@@ -190,6 +159,7 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the uriMenu menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get uriMenu() {
     return this._container.querySelector('#uri_action');
@@ -197,6 +167,7 @@ class DisplayMenuPageObject {
 
   /**
    * Returns true if the uriMenu menu elements of password workspace menu is disabled
+   * @returns {boolean}
    */
   hasDropdownMenuUriDisabled() {
     return this.uriMenu.hasAttribute("disabled");
@@ -204,6 +175,7 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the password menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get dropdownMenuSecret() {
     return this._container.querySelector('#secret_action');
@@ -211,48 +183,23 @@ class DisplayMenuPageObject {
 
   /**
    * Returns the totp menu elements of password workspace menu
+   * @returns {HTMLElement}
    */
   get dropdownMenuTotp() {
     return this._container.querySelector('#totp_action');
   }
 
   /**
-   * Returns true if the username menu elements of password workspace menu is disabled
+   * Returns the clear current selection button from the action bar
+   * @returns {HTMLElement}
    */
-  hasDropdownMenuSecretDisabled() {
-    return this.dropdownMenuSecret.hasAttribute("disabled");
-  }
-
-  /**
-   * Returns the column view button menu elements of password workspace menu
-   */
-  get menuColumnView() {
-    return this._container.querySelector('.actions.secondary .dropdown button');
-  }
-
-  /**
-   * Returns the column view item checkbox elements of password workspace menu
-   */
-  menuColumnViewItem(index) {
-    return this._container.querySelectorAll('.actions.secondary .dropdown-content li')[index - 1].querySelector('input[type=\"checkbox\"]');
-  }
-
-  /**
-   * Returns the detail information button menu elements of password workspace menu
-   */
-  get menuDetailInformation() {
-    return this._container.querySelector('.actions.secondary button.button-toggle');
-  }
-
-  /**
-   * Returns the detail information button menu elements of password workspace menu
-   */
-  get menuDetailInformationSelected() {
-    return this._container.querySelector('.actions.secondary button.button-toggle.active');
+  get clearSelectionButton() {
+    return this._container.querySelector('.actions > button.button-transparent.inline');
   }
 
   /**
    * Returns true if the page object exists in the container
+   * @returns {boolean}
    */
   exists() {
     return this.actionMenu !== null;
@@ -268,6 +215,12 @@ class DisplayMenuPageObject {
   clickOnCopyMenu()  {
     const leftClick = {button: 0};
     fireEvent.click(this.copyMenuDropdown, leftClick);
+  }
+
+  /** Click on the more menu */
+  clickOnClearSelection()  {
+    const leftClick = {button: 0};
+    fireEvent.click(this.clearSelectionButton, leftClick);
   }
 
   /** Click on the action menu */

@@ -26,19 +26,67 @@ import FilterResourcesByBreadcrumb from "../FilterResourcesByBreadcrumb/FilterRe
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import Logo from "../../Common/Navigation/Header/Logo";
 import DisplayResourcesWorkspaceMainMenu from "./DisplayResourcesWorkspaceMainMenu";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 import FilterResourcesByGroups from "../FilterResourcesByGroups/FilterResourcesByGroups";
 import DisplayResourcesList from "../DisplayResourcesList/DisplayResourcesList";
 import {withRbac} from "../../../../shared/context/Rbac/RbacContext";
 import {uiActions} from "../../../../shared/services/rbacs/uiActionEnumeration";
+import Dropdown from "../../Common/Dropdown/Dropdown";
+import DropdownButton from "../../Common/Dropdown/DropdownButton";
+import DropdownMenu from "../../Common/Dropdown/DropdownMenu";
+import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
+import ColumnsSVG from "../../../../img/svg/columns.svg";
+import CaretDownSVG from "../../../../img/svg/caret_down.svg";
+import InfoSVG from "../../../../img/svg/info.svg";
 
 class Workspace extends Component {
+  /**
+   * Constructor
+   * @param {Object} props
+   */
+  constructor(props) {
+    super(props);
+    this.bindCallbacks();
+  }
+
+  /**
+   * Bind callbacks methods
+   */
+  bindCallbacks() {
+    this.handleOnChangeColumnView = this.handleOnChangeColumnView.bind(this);
+    this.handleViewDetailClickEvent = this.handleViewDetailClickEvent.bind(this);
+  }
   /**
    * Has lock for the detail display
    * @returns {boolean}
    */
   hasLockDetail() {
     return this.props.resourceWorkspaceContext.lockDisplayDetail;
+  }
+
+  /**
+   * Get the columns list of resource
+   * @return {[Object]}
+   */
+  get columnsResourceSetting() {
+    return this.props.resourceWorkspaceContext.columnsResourceSetting?.items;
+  }
+
+  /**
+   * Handle the event on when the column view is changing.
+   * @param {React.Event} event
+   */
+  handleOnChangeColumnView(event) {
+    const target = event.target;
+    this.props.resourceWorkspaceContext.onChangeColumnView(target.id, target.checked);
+  }
+
+  /**
+   * handle view detail click event
+   */
+  handleViewDetailClickEvent() {
+    // lock or unlock the detail resource or folder
+    this.props.resourceWorkspaceContext.onLockDetail();
   }
 
   /**
@@ -86,7 +134,42 @@ class Workspace extends Component {
               <div className="top-bar">
                 <FilterResourcesByBreadcrumb/>
                 <div className="action-bar">
-                  <DisplayResourcesWorkspaceMenu/>
+                  <div className="col2_3 actions-wrapper">
+                    {this.props.resourceWorkspaceContext.selectedResources?.length > 0
+                      ? <DisplayResourcesWorkspaceMenu/>
+                      : /* todo: create a dedicated component for displaying filters when no resources is selected */ <></>
+                    }
+                    <div className="actions secondary">
+                      <ul>
+                        <li>
+                          <Dropdown>
+                            <DropdownButton>
+                              <ColumnsSVG/>
+                              <Trans>Columns</Trans>
+                              <CaretDownSVG/>
+                            </DropdownButton>
+                            <DropdownMenu direction="left">
+                              {this.columnsResourceSetting?.map(column =>
+                                <DropdownMenuItem keepOpenOnClick={true} key={column.id} separator={column.id === 'uri'}>
+                                  <div className="input checkbox">
+                                    <input type="checkbox" checked={column.show} id={column.id} name={column.id} onChange={this.handleOnChangeColumnView}/>
+                                    <label htmlFor={column.id}><Trans>{column.label}</Trans></label>
+                                  </div>
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenu>
+                          </Dropdown>
+                        </li>
+                        <li>
+                          <button type="button" className={`button-toggle button-action button-action-icon info ${this.hasLockDetail() ? "active" : ""}`}
+                            onClick={this.handleViewDetailClickEvent}>
+                            <InfoSVG />
+                            <span className="visuallyhidden"><Trans>View detail</Trans></span>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
               <DisplayResourcesList/>
