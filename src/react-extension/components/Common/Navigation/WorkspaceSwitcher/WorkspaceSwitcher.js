@@ -22,6 +22,7 @@ import PropTypes from "prop-types";
 import Dropdown from "../../Dropdown/Dropdown";
 import DropdownMenu from "../../Dropdown/DropdownMenu";
 import DropdownMenuItem from "../../Dropdown/DropdownMenuItem";
+import {withNavigationContext} from "../../../../contexts/NavigationContext";
 
 class WorkspaceSwitcher extends React.PureComponent {
   render() {
@@ -38,13 +39,13 @@ class WorkspaceSwitcher extends React.PureComponent {
             </DropdownButton>
             <DropdownMenu direction="over">
               <DropdownMenuItem>
-                <button type="button" className="no-border">
+                <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToAdministrationRequested}>
                   <span><Trans>Organisation Settings</Trans></span>
                   <SettingsSVG/>
                 </button>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <button type="button" className="no-border">
+                <button type="button" className="no-border" onClick={this.props.navigationContext.onGoToUsersRequested}>
                   <span><Trans>Manage Users & Groups</Trans></span>
                   <UsersSVG/>
                 </button>
@@ -65,6 +66,7 @@ class WorkspaceSwitcher extends React.PureComponent {
 WorkspaceSwitcher.propTypes = {
   isUserAdmin: PropTypes.bool, // true if the current user is an admin
   isUserWorkspaceVisible: PropTypes.bool, // true if the user is not admin but access to the user workspace
+  navigationContext: PropTypes.object, // the navigation context
 };
 
-export default withRbac(WorkspaceSwitcher);
+export default withNavigationContext(withRbac(WorkspaceSwitcher));
