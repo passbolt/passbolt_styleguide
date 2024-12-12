@@ -2,14 +2,12 @@
  * Profile user card
  */
 .user.profile {
-  float: right;
-  margin: 0;
-
   .button {
     &.avatar-button {
       text-align: left;
       background: none;
       box-shadow: none;
+      border-radius: 50%;
       padding: 0;
       min-width: inherit;
       isolation: isolate;
@@ -25,18 +23,21 @@
               position: relative;
           }
         }
+      }
 
-        /* focus visible (display with keyboard navigation) */
-        &:focus-visible {
+      /* focus visible (display with keyboard navigation) */
+      &:focus-visible {
+        .default-avatar {
           background: transparent;
           box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
           color: var(--Text-and-icons-Main-text);
           text-decoration: none;
           border: none;
+
           img, svg  {
             z-index:-1;
             position: relative;
-        }
+          }
         }
       }
     }
@@ -45,6 +46,10 @@
       .avatar {
         svg.attention-required {
           display: none;
+        }
+
+        .default-avatar {
+          box-shadow: none
         }
       }
       +.dropdown-content {
