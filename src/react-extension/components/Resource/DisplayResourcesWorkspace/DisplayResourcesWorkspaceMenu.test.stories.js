@@ -11,13 +11,17 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
+import {denyRbacContext} from "../../../../shared/context/Rbac/RbacContext.test.data";
+import {overridenPasswordExpirySettingsEntityDto} from "../../../../shared/models/passwordExpirySettings/PasswordExpirySettingsDto.test.data";
+import {defaultPasswordExpirySettingsContext} from "../../../contexts/PasswordExpirySettingsContext.test.data";
 import DisplayResourcesWorkspaceMenu from "./DisplayResourcesWorkspaceMenu";
 import {
-  defaultAppContext,
+  defaultPropsMultipleResource,
   defaultPropsMultipleResourceUpdateRights,
-  defaultPropsNoResource,
   defaultPropsOneResourceNotOwned,
-  defaultPropsOneResourceOwned
+  defaultPropsOneResourceOwned,
+  defaultPropsOneStandaloneTotpResourceOwned,
+  defaultPropsOneTotpResourceOwned,
 } from "./DisplayResourcesWorkspaceMenu.test.data";
 import React from "react";
 
@@ -34,7 +38,9 @@ export default {
             <div className="breadcrumbs-and-grid">
               <div className="top-bar">
                 <div className="action-bar">
-                  <Story/>
+                  <div className="col2_3 actions-wrapper">
+                    <Story/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -46,27 +52,41 @@ export default {
   component: DisplayResourcesWorkspaceMenu
 };
 
-const props = defaultPropsOneResourceOwned();
-props.context = defaultAppContext();
-
 export const OneResourceOwned = {
-  args: {...props}
+  args: defaultPropsOneResourceOwned(),
 };
 
-const propsResourcesNotOwned = defaultPropsOneResourceNotOwned();
-propsResourcesNotOwned.context = defaultAppContext();
+export const ResourceWithTotpOwned = {
+  args: defaultPropsOneTotpResourceOwned(),
+};
+
+export const ResourceStandaloneTotpOwned = {
+  args: defaultPropsOneStandaloneTotpResourceOwned(),
+};
+
 export const ResourceNotOwned = {
-  args: {...propsResourcesNotOwned}
+  args: defaultPropsOneResourceNotOwned(),
 };
 
-const propsNoResource = defaultPropsNoResource();
-propsNoResource.context = defaultAppContext();
-export const NoResource = {
-  args: {...propsNoResource}
+export const MultipleResourcesNotOwnedWithAllDenyOnRBAC = {
+  args: defaultPropsMultipleResource({
+    rbacContext: denyRbacContext(),
+  }),
 };
 
-const propsMultipleResource = defaultPropsMultipleResourceUpdateRights();
-propsMultipleResource.context = defaultAppContext();
 export const MultipleResource = {
-  args: {...propsMultipleResource}
+  args:  defaultPropsMultipleResourceUpdateRights(),
+};
+
+export const MultipleResourceNotOwned = {
+  args:  defaultPropsMultipleResource(),
+};
+
+const propsResourcesWithAllFeatures = defaultPropsOneTotpResourceOwned({
+  passwordExpiryContext: defaultPasswordExpirySettingsContext({
+    getSettings: overridenPasswordExpirySettingsEntityDto,
+  })
+});
+export const WithAllFeatureDisplayed = {
+  args: propsResourcesWithAllFeatures
 };
