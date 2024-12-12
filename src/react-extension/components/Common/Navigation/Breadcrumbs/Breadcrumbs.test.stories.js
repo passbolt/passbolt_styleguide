@@ -14,9 +14,17 @@
 
 import {defaultBreadcrumbs} from "./Breadcrumb.test.data";
 import Breadcrumbs from "./Breadcrumbs";
+import React from "react";
 
 export default {
   title: 'Components/Common/Breadcrumbs',
+  decorators: [
+    Story => (
+      <div style={{display: "flex", minWidth: 0}}>
+        <Story/>
+      </div>
+    ),
+  ],
   component: Breadcrumbs
 };
 

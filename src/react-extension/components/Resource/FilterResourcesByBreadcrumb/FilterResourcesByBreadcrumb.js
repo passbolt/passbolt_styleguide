@@ -55,12 +55,12 @@ class FilterResourcesByBreadcrumb extends Component {
         return [...items, this.getLastBreadcrumb(`${filteredTagName} ${this.translate("(tag)")}`)];
       }
       case ResourceWorkspaceFilterTypes.ROOT_FOLDER: {
-        return [...items, this.getLastBreadcrumb(this.translate("root (folder)"))];
+        return [this.getLastBreadcrumb(this.translate("My workspace"))];
       }
       case ResourceWorkspaceFilterTypes.FOLDER: {
         const folder = this.props.resourceWorkspaceContext.filter.payload.folder;
         const currentFolderName = (folder && folder.name) || this.translate("N/A");
-        return [...items, this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
+        return [this.getLastBreadcrumb(this.translate("My workspace")), this.getLastBreadcrumb(`${currentFolderName} ${this.translate("(folder)")}`)];
       }
       case ResourceWorkspaceFilterTypes.GROUP: {
         const group = this.props.resourceWorkspaceContext.filter.payload.group;
@@ -73,11 +73,11 @@ class FilterResourcesByBreadcrumb extends Component {
   }
 
   /**
-   * Returns the all items breadcrumb items
+   * Returns the home breadcrumb items
    * @return {JSX.Element}
    */
   get allItemsBreadcrumb() {
-    return <Breadcrumb name={this.translate("All items")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
+    return <Breadcrumb name={this.translate("Home")} onClick={this.props.navigationContext.onGoToPasswordsRequested}/>;
   }
 
   /**
