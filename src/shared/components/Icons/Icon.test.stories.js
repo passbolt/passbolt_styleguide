@@ -346,11 +346,15 @@ const settingIconsSVGs = [
   FileUpSVG,
 ];
 
+function getSvgName(SVGIcon) {
+  return SVGIcon.name.substr(3);
+}
+
 export const Icons = {
   render: () =>
     <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
       {iconsSVGs.map((Icon, index) =>
-        <div key={index} style={{marginTop: "1rem"}}>
+        <div key={index} style={{marginTop: "1rem"}} title={getSvgName(Icon)}>
           <Icon className="svg-icon"/>
         </div>
       )}
@@ -367,7 +371,7 @@ export const SettingsIcons = {
   render: () =>
     <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, 10%)"}}>
       {settingIconsSVGs.map((Icon, index) =>
-        <div key={index} style={{marginTop: "1rem"}}>
+        <div key={index} style={{marginTop: "1rem"}} title={getSvgName(Icon)}>
           <Icon className="svg-icon"/>
         </div>
       )}

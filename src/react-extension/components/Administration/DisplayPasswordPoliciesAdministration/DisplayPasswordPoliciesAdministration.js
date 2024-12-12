@@ -252,7 +252,7 @@ class DisplayPasswordPoliciesAdministration extends React.Component {
               <Icon name={this.state.showPasswordSection ? "caret-down" : "caret-right"}/><Trans>Passwords settings</Trans>
             </button>
           </div>
-          { this.state.showPasswordSection && <div className="passwords-settings">
+          {this.state.showPasswordSection && <div className="passwords-settings">
             <div className="estimated-entropy input">
               <label><Trans>Estimated entropy</Trans></label>
               <PasswordComplexity entropy={passwordEntropy}/>

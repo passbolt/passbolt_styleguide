@@ -14,6 +14,6 @@
 
 import foldersFixture from "../../fixture/folders";
 
-export default (storage) => {
+export default storage => {
   storage.local.set({folders: foldersFixture});
 };
