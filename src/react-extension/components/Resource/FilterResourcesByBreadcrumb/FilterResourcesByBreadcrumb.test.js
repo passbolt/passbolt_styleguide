@@ -47,12 +47,12 @@ describe("As LU I can see a Breadcrumb", () => {
     expect(page.displayBreadcrumb.itemNumberDisplayed).toBeUndefined();
   });
 
-  it('As LU I should see a breadcrumb for all items', () => {
+  it('As LU I should see a breadcrumb for home', () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ALL, null, 10); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(1);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("10");
   });
 
@@ -61,7 +61,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("tag (tag)");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("5");
   });
@@ -71,7 +71,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Shared with me");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
@@ -81,7 +81,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Expired");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
@@ -91,7 +91,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Recently modified");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
@@ -101,7 +101,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Favorite");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
@@ -111,7 +111,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Items I own");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
@@ -121,7 +121,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("My workspace");
     expect(page.displayBreadcrumb.item(2)).toBe("folder (folder)");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("1");
   });
@@ -131,7 +131,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("group (group)");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("100");
   });
@@ -148,9 +148,8 @@ describe("As LU I can see a Breadcrumb", () => {
     const props = defaultResourceWorkspaceContext(ResourceWorkspaceFilterTypes.ROOT_FOLDER); // The props to pass
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
-    expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
-    expect(page.displayBreadcrumb.item(2)).toBe("root (folder)");
+    expect(page.displayBreadcrumb.count).toBe(1);
+    expect(page.displayBreadcrumb.item(1)).toBe("My workspace");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("0");
   });
 
@@ -159,7 +158,7 @@ describe("As LU I can see a Breadcrumb", () => {
     page = new FilterResourcesByBreadcrumbPage(context, props);
     expect(page.displayBreadcrumb.exists()).toBeTruthy();
     expect(page.displayBreadcrumb.count).toBe(2);
-    expect(page.displayBreadcrumb.item(1)).toBe("All items");
+    expect(page.displayBreadcrumb.item(1)).toBe("Home");
     expect(page.displayBreadcrumb.item(2)).toBe("Search: text");
     expect(page.displayBreadcrumb.itemNumberDisplayed).toContain("3");
   });
