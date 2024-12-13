@@ -32,18 +32,10 @@ export default {
   title: 'Components/Resource/DisplayResourcesWorkspaceMenu',
   decorators: [
     Story => (
-      <div className="panel main">
-        <div className="panel middle">
-          <div className="middle-right">
-            <div className="breadcrumbs-and-grid">
-              <div className="top-bar">
-                <div className="action-bar">
-                  <div className="col2_3 actions-wrapper">
-                    <Story/>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div className="top-bar">
+        <div className="action-bar">
+          <div className="actions-wrapper">
+            <Story/>
           </div>
         </div>
       </div>

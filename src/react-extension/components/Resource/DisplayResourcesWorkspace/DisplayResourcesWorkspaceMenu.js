@@ -435,123 +435,132 @@ class DisplayResourcesWorkspaceMenu extends React.Component {
 
     return (
       <div className="actions">
-        <ul>
-          {canViewShare &&
-            <li id="share_action">
-              <button type="button" className="button-action-contextual" onClick={this.handleShareClickEvent}>
-                <ShareSVG/>
-                <span><Trans>Share</Trans></span>
-              </button>
-            </li>
-          }
-          {canViewCopy &&
-            <li id="copy_action">
-              <Dropdown>
-                <DropdownButton className="button-action-contextual">
-                  <CopySVG/>
-                  <Trans>Copy</Trans>
-                  <CaretDownSVG/>
-                </DropdownButton>
-                <DropdownMenu>
-                  {this.hasResourceUsername &&
-                    <DropdownMenuItem>
-                      <button id="username_action" type="button" className="no-border" disabled={!this.canCopyUsername()}
-                        onClick={this.handleCopyUsernameClickEvent}>
-                        <OwnedByMeSVG/>
-                        <span><Trans>Copy username</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {canCopySecret && this.canCopyPassword() &&
-                    <DropdownMenuItem>
-                      <button id="secret_action" type="button" className="no-border" onClick={this.handleCopySecretClickEvent}>
-                        <KeySVG/>
-                        <span><Trans>Copy password</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {this.canUseTotp && this.canCopyTotp() &&
-                    <DropdownMenuItem>
-                      <button id="totp_action" type="button" className="no-border" onClick={this.handleCopyTotpClickEvent}>
-                        <TotpSVG/>
-                        <span><Trans>Copy TOTP</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  <DropdownMenuItem>
-                    <button id="uri_action" type="button" className="no-border" disabled={!this.canCopyUri()}
-                      onClick={this.handleCopyUriClickEvent}>
-                      <GlobeSVG/>
-                      <span><Trans>Copy URI</Trans></span>
-                    </button>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button id="permalink_action" type="button" className="no-border" onClick={this.handleCopyPermalinkClickEvent}>
-                      <LinkSVG/>
-                      <span><Trans>Copy permalink</Trans></span>
-                    </button>
-                  </DropdownMenuItem>
-                </DropdownMenu>
-              </Dropdown>
-            </li>
-          }
-          {canViewEdit &&
-            <li id="edit_action">
-              <button type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
-                <EditSVG/>
-                <span><Trans>Edit</Trans></span>
-              </button>
-            </li>
-          }
-          {canViewDelete &&
-            <li id="delete_action">
-              <button type="button" className="button-action-contextual" onClick={this.handleDeleteClickEvent}>
-                <DeleteSVG/>
-                <span><Trans>Delete</Trans></span>
-              </button>
-            </li>
-          }
-          {this.hasMoreActionAllowed() &&
-            <li>
-              <Dropdown>
-                <DropdownButton className="more button-action-contextual button-action-icon">
-                  <MoreHorizontalSVG/>
-                </DropdownButton>
-                <DropdownMenu>
-                  {this.canExport() &&
-                    <DropdownMenuItem>
-                      <button id="export_action" type="button" className="no-border" onClick={this.handleExportClickEvent}>
-                        <DownloadFileSVG/>
-                        <span><Trans>Export</Trans></span>
-                      </button>
-                    </DropdownMenuItem>
-                  }
-                  {this.canOverridePasswordExpiry && canUpdate &&
-                    <>
+        <div className="actions-wrapper">
+          <ul>
+            {canViewShare &&
+              <li id="share_action">
+                <button type="button" className="button-action-contextual" onClick={this.handleShareClickEvent}>
+                  <ShareSVG/>
+                  <span><Trans>Share</Trans></span>
+                </button>
+              </li>
+            }
+            {canViewCopy &&
+              <li id="copy_action">
+                <Dropdown>
+                  <DropdownButton className="button-action-contextual">
+                    <CopySVG/>
+                    <Trans>Copy</Trans>
+                    <CaretDownSVG/>
+                  </DropdownButton>
+                  <DropdownMenu>
+                    {this.hasResourceUsername &&
                       <DropdownMenuItem>
-                        <button id="set_expiry_date_action" type="button" className="no-border" onClick={this.handleSetExpiryDateClickEvent}>
-                          <CalendarCogSVG/>
-                          <span><Trans>Set expiry date</Trans></span>
+                        <button id="username_action" type="button" className="no-border"
+                          disabled={!this.canCopyUsername()}
+                          onClick={this.handleCopyUsernameClickEvent}>
+                          <OwnedByMeSVG/>
+                          <span><Trans>Copy username</Trans></span>
                         </button>
                       </DropdownMenuItem>
+                    }
+                    {canCopySecret && this.canCopyPassword() &&
                       <DropdownMenuItem>
-                        <button id="mark_as_expired_action" type="button" className="no-border" onClick={this.handleMarkAsExpiredClick}>
-                          <AlarmClockSVG/>
-                          <span><Trans>Mark as expired</Trans></span>
+                        <button id="secret_action" type="button" className="no-border"
+                          onClick={this.handleCopySecretClickEvent}>
+                          <KeySVG/>
+                          <span><Trans>Copy password</Trans></span>
                         </button>
                       </DropdownMenuItem>
-                    </>
-                  }
-                </DropdownMenu>
-              </Dropdown>
-            </li>
-          }
-        </ul>
-        <span className="counter"><Trans count={count}>{{count}} selected</Trans></span>
-        <button type="button" className="button-transparent inline" onClick={this.handleClearSelectionClick}>
-          <CloseSVG />
-          <span className="visuallyhidden"><Trans>Clear selection</Trans></span>
-        </button>
+                    }
+                    {this.canUseTotp && this.canCopyTotp() &&
+                      <DropdownMenuItem>
+                        <button id="totp_action" type="button" className="no-border"
+                          onClick={this.handleCopyTotpClickEvent}>
+                          <TotpSVG/>
+                          <span><Trans>Copy TOTP</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                    }
+                    <DropdownMenuItem>
+                      <button id="uri_action" type="button" className="no-border" disabled={!this.canCopyUri()}
+                        onClick={this.handleCopyUriClickEvent}>
+                        <GlobeSVG/>
+                        <span><Trans>Copy URI</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <button id="permalink_action" type="button" className="no-border"
+                        onClick={this.handleCopyPermalinkClickEvent}>
+                        <LinkSVG/>
+                        <span><Trans>Copy permalink</Trans></span>
+                      </button>
+                    </DropdownMenuItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </li>
+            }
+            {canViewEdit &&
+              <li id="edit_action">
+                <button type="button" className="button-action-contextual" onClick={this.handleEditClickEvent}>
+                  <EditSVG/>
+                  <span><Trans>Edit</Trans></span>
+                </button>
+              </li>
+            }
+            {canViewDelete &&
+              <li id="delete_action">
+                <button type="button" className="button-action-contextual" onClick={this.handleDeleteClickEvent}>
+                  <DeleteSVG/>
+                  <span><Trans>Delete</Trans></span>
+                </button>
+              </li>
+            }
+            {this.hasMoreActionAllowed() &&
+              <li>
+                <Dropdown>
+                  <DropdownButton className="more button-action-contextual button-action-icon">
+                    <MoreHorizontalSVG/>
+                  </DropdownButton>
+                  <DropdownMenu>
+                    {this.canExport() &&
+                      <DropdownMenuItem>
+                        <button id="export_action" type="button" className="no-border"
+                          onClick={this.handleExportClickEvent}>
+                          <DownloadFileSVG/>
+                          <span><Trans>Export</Trans></span>
+                        </button>
+                      </DropdownMenuItem>
+                    }
+                    {this.canOverridePasswordExpiry && canUpdate &&
+                      <>
+                        <DropdownMenuItem>
+                          <button id="set_expiry_date_action" type="button" className="no-border"
+                            onClick={this.handleSetExpiryDateClickEvent}>
+                            <CalendarCogSVG/>
+                            <span><Trans>Set expiry date</Trans></span>
+                          </button>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <button id="mark_as_expired_action" type="button" className="no-border"
+                            onClick={this.handleMarkAsExpiredClick}>
+                            <AlarmClockSVG/>
+                            <span><Trans>Mark as expired</Trans></span>
+                          </button>
+                        </DropdownMenuItem>
+                      </>
+                    }
+                  </DropdownMenu>
+                </Dropdown>
+              </li>
+            }
+          </ul>
+          <span className="counter"><Trans count={count}>{{count}} selected</Trans></span>
+          <button type="button" className="button-transparent inline" onClick={this.handleClearSelectionClick}>
+            <CloseSVG/>
+            <span className="visuallyhidden"><Trans>Clear selection</Trans></span>
+          </button>
+        </div>
       </div>
     );
   }

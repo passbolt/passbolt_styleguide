@@ -115,12 +115,36 @@ button,
         &.info {
           &:active, &.active {
             box-shadow: inset -.1rem -.1rem 0 0 var(--States-Active-Highlight), inset .1rem .1rem 0 0 var(--States-Active-Shadow), inset 0 0 0 1px var(--Action-button-Active-action-button-border);
-            background: var(--Palette-Select);
+            background: var(--Action-button-Active-action-button-background);
           }
 
           /* focus visible (display with keyboard navigation) */
           &:focus-visible {
             box-shadow: 0 0 .4rem var(--States-Focus), inset 0 0 0 .1rem var(--States-Focus);
+          }
+        }
+      }
+
+      /* button-action-filtered */
+      &-filtered.button {
+        background: var(--Action-button-Active-action-button-background);
+        box-shadow: inset 0 0 0 .1rem var(--Action-button-Active-action-button-border);
+        padding: .8rem .8rem .8rem 1.6rem;
+        cursor: inherit;
+
+        .divider {
+          display: flex;
+          height: 2rem;
+          box-shadow: inset .1rem 0 0 var(--Action-button-Active-action-button-border), -.1rem 0 0 var(--Action-button-Active-action-button-border);
+
+          button {
+            margin-left: .8rem;
+            padding: 0;
+
+            svg {
+              width: 1.8rem;
+              height: 1.8rem;
+            }
           }
         }
       }

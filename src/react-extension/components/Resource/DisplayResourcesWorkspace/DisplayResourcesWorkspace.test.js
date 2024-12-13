@@ -39,6 +39,7 @@ jest.mock("./DisplayResourcesWorkspaceMenu", () => () => <></>);
 jest.mock("./DisplayResourcesWorkspaceMainMenu", () => () => <></>);
 jest.mock("../../Common/Navigation/Header/Logo");
 jest.mock("../../User/DisplayUserBadgeMenu/DisplayUserBadgeMenu", () => () => <></>);
+jest.mock("./DisplayResourcesWorkspaceFilters", () => () => <span className="actions-filter"></span>);
 
 beforeEach(() => {
   jest.resetModules();
@@ -79,6 +80,12 @@ describe("DisplayResourcesWorkspace", () => {
       const props = propsWithDenyUiAction();
       page = new DisplayResourceWorkspacePage(props);
       expect(page.displayResourceWorkspacePageObject.folderTree).toBeFalsy();
+    });
+
+    it('As LU I can see the workspace filter button.', () => {
+      const props = defaultProps();
+      page = new DisplayResourceWorkspacePage(props);
+      expect(page.displayResourceWorkspacePageObject.filterButton).toBeTruthy();
     });
   });
 
