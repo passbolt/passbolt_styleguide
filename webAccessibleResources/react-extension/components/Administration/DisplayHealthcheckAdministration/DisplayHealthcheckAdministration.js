@@ -24,6 +24,7 @@ import DisplayAdministrationHealthcheckActions
   from "../DisplayAdministrationWorkspaceActions/DisplayAdministrationHealthcheckActions/DisplayAdministrationHealthcheckActions";
 import Tooltip from "../../Common/Tooltip/Tooltip";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
+import {SpinnerSVG} from "../../../../img/svg/spinner.svg";
 
 class DisplayHealthcheckAdministration extends Component {
   /**
@@ -1184,7 +1185,7 @@ class DisplayHealthcheckAdministration extends Component {
 
     const renderHealthcheck = () => {
       if (!healthcheckData || this.props.adminHealthcheckContext.isProcessing())  {
-        return (<Icon name="spinner" />);
+        return (<SpinnerSVG/>);
       } else {
         return (
           <>

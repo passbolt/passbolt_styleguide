@@ -15,7 +15,7 @@ import React, {Component} from "react";
 import {withProgress} from "../../../../contexts/ProgressContext";
 import {Trans, withTranslation} from "react-i18next";
 import PropTypes from "prop-types";
-import Icon from "../../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../../img/svg/spinner.svg";
 
 class DisplayProgress extends Component {
   /**
@@ -160,7 +160,7 @@ class DisplayProgress extends Component {
               </div>
             </div>
             <div className="submit-wrapper clearfix">
-              <button type="submit" className="disabled processing">Submit<Icon name="spinner"/></button>
+              <button type="submit" className="disabled processing">Submit<SpinnerSVG/></button>
             </div>
           </div>
         </div>

@@ -11,8 +11,9 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         2.13.0
  */
-import React, {Fragment} from "react";
+import React from "react";
 import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
@@ -335,7 +336,7 @@ class FilterUsersByGroup extends React.Component {
         <div className="accordion-content">
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <Icon name="spinner"/>
+            <SpinnerSVG/>
             <span className="processing-text"><Trans>Retrieving groups</Trans></span>
           </div>
           }

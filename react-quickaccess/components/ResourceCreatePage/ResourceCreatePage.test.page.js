@@ -133,7 +133,7 @@ export default class ResourceCreatePagePage {
    * @returns {boolean}
    */
   get isSubmitting() {
-    return Boolean(this.submitButton.querySelector(".spinner"));
+    return this.submitButton.classList.contains("processing");
   }
 
   /**

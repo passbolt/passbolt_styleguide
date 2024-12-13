@@ -17,9 +17,6 @@ import {defaultAppContext} from '../../../contexts/ExtAppContext.test.data';
 import {defaultProps} from './DisplayUserBadgeMenu.test.data';
 import DisplayUserBadgeMenuPage from './DisplayUserBadgeMenu.test.page';
 import {waitFor} from '@testing-library/react';
-import {defaultUserRbacContext, denyRbacContext} from '../../../../shared/context/Rbac/RbacContext.test.data';
-import {uiActions} from '../../../../shared/services/rbacs/uiActionEnumeration';
-import each from 'jest-each';
 
 describe("DisplayUserBadgeMenu", () => {
   let page; // The page to test against
@@ -70,37 +67,5 @@ describe("DisplayUserBadgeMenu", () => {
     jest.spyOn(props.mfaContext, "isMfaChoiceRequired").mockImplementation(() => true);
     await waitFor(() => {});
     expect(page.attentionRequired).toBeFalsy();
-  });
-
-  each([
-    {uiAction: uiActions.MOBILE_TRANSFER, pageProperty: 'mobileTransferMenuItem'},
-  ]).describe("rbac controls", scenario => {
-    it(`should allow access: ${scenario.uiAction}`, async() => {
-      expect.assertions(1);
-
-      const props = defaultProps({
-        rbacContext: defaultUserRbacContext()
-      });
-
-      const page = new DisplayUserBadgeMenuPage(context, props);
-      await waitFor(() => {});
-      await page.openMenu();
-
-      expect(page[scenario.pageProperty]).not.toBeNull();
-    });
-
-    it(`should deny access: ${scenario.uiAction}`, async() => {
-      expect.assertions(1);
-
-      const props = defaultProps({
-        rbacContext: denyRbacContext()
-      });
-
-      const page = new DisplayUserBadgeMenuPage(context, props);
-      await waitFor(() => {});
-      await page.openMenu();
-
-      expect(page[scenario.pageProperty]).toBeNull();
-    });
   });
 });

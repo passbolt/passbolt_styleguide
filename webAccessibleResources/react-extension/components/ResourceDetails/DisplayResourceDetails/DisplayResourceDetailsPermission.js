@@ -15,6 +15,7 @@ import React from "react";
 import UserAvatar from "../../Common/Avatar/UserAvatar";
 import GroupAvatar from "../../Common/Avatar/GroupAvatar";
 import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import PropTypes from "prop-types";
 import {withResourceWorkspace} from "../../../contexts/ResourceWorkspaceContext";
@@ -223,7 +224,7 @@ class DisplayResourceDetailsPermission extends React.Component {
           }
           {this.isLoading() &&
           <div className="processing-wrapper">
-            <Icon name="spinner"/>
+            <SpinnerSVG/>
             <span className="processing-text"><Trans>Retrieving permissions</Trans></span>
           </div>
           }

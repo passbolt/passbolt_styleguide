@@ -18,6 +18,7 @@ import UserAvatar from "../../Common/Avatar/UserAvatar";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import Icon from "../../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../../img/svg/spinner.svg";
 import {Trans, withTranslation} from "react-i18next";
 import {formatDateTimeAgo} from "../../../../shared/utils/dateUtils";
 
@@ -424,7 +425,7 @@ class DisplayUserDetailsActivity extends React.Component {
         <div className="accordion-content">
           {this.state.loading &&
           <div className="processing-wrapper">
-            <Icon name="spinner"/>
+            <SpinnerSVG/>
             <span className="processing-text"><Trans>Retrieving activities</Trans></span>
           </div>
           }

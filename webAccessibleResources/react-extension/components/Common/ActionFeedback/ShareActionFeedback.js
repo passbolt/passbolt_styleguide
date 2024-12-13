@@ -152,6 +152,7 @@ class ShareActionFeedback extends React.Component {
               <strong>
                 {this.props.feedback.type === "success" && <><Trans>Success</Trans>: </>}
                 {this.props.feedback.type === "error" && <><Trans>Error</Trans>: </>}
+                {this.props.feedback.type === "warning" && <><Trans>Warning</Trans>: </>}
               </strong>
               {this.props.feedback.message}
             </span>

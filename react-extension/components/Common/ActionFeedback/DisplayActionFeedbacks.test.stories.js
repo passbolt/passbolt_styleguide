@@ -11,20 +11,23 @@
  * @link          https://www.passbolt.com Passbolt(tm)
  * @since         3.6.0
  */
-import React from "react";
-import {propsWithOneErrorMessage, propsWithOneSuccessMessage} from "./DisplayActionFeedbacks.test.data";
+import {propsWithOneErrorMessage, propsWithOneSuccessMessage, propsWithOneWarningMessage} from "./DisplayActionFeedbacks.test.data";
 import DisplayActionFeedbacks from "./DisplayActionFeedbacks";
 
 export default {
   title: 'Components/Common/ActionFeedback',
-  component: "DisplayActionFeedbacks"
+  component: DisplayActionFeedbacks
 };
 
 
-const Template = args => <DisplayActionFeedbacks {...args}/>;
+export const Success = {
+  args: propsWithOneSuccessMessage
+};
 
-export const Success = Template.bind({});
-Success.args = propsWithOneSuccessMessage;
+export const Error = {
+  args: propsWithOneErrorMessage
+};
 
-export const Error = Template.bind({});
-Error.args = propsWithOneErrorMessage;
+export const Warning = {
+  args: propsWithOneWarningMessage
+};

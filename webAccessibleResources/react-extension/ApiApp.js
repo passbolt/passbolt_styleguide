@@ -23,7 +23,6 @@ import AdministrationWorkspace from "./components/Administration/AdministrationW
 import Footer from "./components/Common/Footer/Footer";
 import DisplayApiUserSettingsWorkspace
   from "./components/UserSetting/DisplayUserSettingsWorkspace/DisplayApiUserSettingsWorkspace";
-import DisplayMainMenu from "./components/Common/Menu/DisplayMainMenu";
 import NavigationContextProvider from "./contexts/NavigationContext";
 import HandleSessionExpired from "./components/Authentication/HandleSessionExpired/HandleSessionExpired";
 import AnnouncementContextProvider from "./contexts/AnnouncementContext";
@@ -122,9 +121,7 @@ class ApiApp extends Component {
                                     <ManageAnnouncements/>
                                     <div id="container" className="page settings">
                                       <div id="app" className="app" tabIndex="1000">
-                                        <div className="header first">
-                                          <DisplayMainMenu/>
-                                        </div>
+                                        {/* TODO Display Main Menu will be changed and removed later <div className="header first"><DisplayMainMenu/></div>  */}
                                         <DisplayApiUserSettingsWorkspace/>
                                       </div>
                                     </div>

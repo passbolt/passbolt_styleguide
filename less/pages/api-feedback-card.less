@@ -8,15 +8,39 @@
             align-items: center;
             flex-direction: column;
 
-            p {
-                font-size: 1.6rem;
-                margin-top: 3.6rem;
+            h1 {
+                font-size: 2.4rem;
+                color: var(--Text-and-icons-Secondary-text);
+                margin-bottom: 1.6rem;
                 text-align: center;
             }
 
-            .icon-feedback .attention {
-                height: 12.6rem;
-                width: 12.6rem;
+            p {
+                font-size: 1.6rem;
+                text-align: center;
+                line-height: normal;
+            }
+
+            .icon-feedback {
+                margin-bottom: 2.4rem;
+
+                .attention {
+                    height: 12.6rem;
+                    width: 12.6rem;
+                }
+            }
+
+            button, button:focus {
+                display: flex;
+                font-size: 1.5rem;
+                font-weight: 700;
+                line-height: normal;
+                gap: .6rem;
+
+                svg {
+                    width: 1rem;
+                    height: 1rem;
+                }
             }
         }
 
@@ -34,16 +58,24 @@
             width: 100%;
 
             textarea {
-                opacity: .5;
+                margin: 0;
+                color: rgb(from var(--Text-and-icons-Main-text) r g b / 50%);
+                ._field-border-disabled();
+                border-radius: var(--Menu-radius);
             }
         }
+    }
+
+    .logo {
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
 
 @media only screen and (min-width: 42rem) {
     body {
-        background:@authentication-background;
+        background: var(--Palette-Gradient-3);
     }
 
     .page.api-feedback {
@@ -64,13 +96,12 @@
             }
 
             .api-feedback-card {
-                box-shadow: 0 0 1rem @dialog-box-shadow-color;
-                border-radius: 0.3rem;
+                border-radius: var(--Section-border-radius);
                 max-width: 37.2rem;
                 margin: auto;
-                padding: 4.8rem 4rem;
-                background: @default-background;
-            } 
+                padding: 3.2rem;
+                background: var(--Dialog-Dialog-fill);
+            }
         }
     }
 }

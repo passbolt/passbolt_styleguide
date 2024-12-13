@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
-import Icon from "../../../shared/components/Icons/Icon";
+import SpinnerSVG from "../../../img/svg/spinner.svg";
 import Password from "../../../shared/components/Password/Password";
 import SsoProviders from "../../../react-extension/components/Administration/ManageSsoSettings/SsoProviders.data";
 import {withSso} from "../../contexts/SsoContext";
@@ -219,7 +219,7 @@ class LoginPage extends React.Component {
               <button type="submit" className={`button primary big full-width ${this.state.processing ? "processing" : ""}`} role="button" disabled={this.state.processing}>
                 <Trans>login</Trans>
                 {this.state.processing &&
-                  <Icon name="spinner"/>
+                  <SpinnerSVG/>
                 }
               </button>
               {this.state.isSsoAvailable &&

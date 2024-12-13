@@ -18,7 +18,7 @@ import Breadcrumbs from "../../Common/Navigation/Breadcrumbs/Breadcrumbs";
 import {UserWorkspaceFilterTypes, withUserWorkspace} from "../../../contexts/UserWorkspaceContext";
 import Breadcrumb from "../../Common/Navigation/Breadcrumbs/Breadcrumb";
 import {withNavigationContext} from "../../../contexts/NavigationContext";
-import {withTranslation} from "react-i18next";
+import {Trans, withTranslation} from "react-i18next";
 
 /**
  * The component displays a navigation breadcrumb given the applied users filter
@@ -93,9 +93,10 @@ class FilterUsersByBreadcrumb extends Component {
    * @returns {JSX}
    */
   render() {
+    const count = this.props.userWorkspaceContext.filteredUsers.length;
     return (
       <Breadcrumbs items={this.items}>
-        <span className="chips">{this.props.userWorkspaceContext.filteredUsers.length}</span>
+        <span className="counter"><Trans count={count}>{{count}} items</Trans></span>
       </Breadcrumbs>
     );
   }
