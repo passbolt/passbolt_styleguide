@@ -53,7 +53,7 @@ describe("See Folders", () => {
       expect(page.filterResourcesByFolders.displayFolderList).toBeFalsy();
       await page.filterResourcesByFolders.toggleExpanded();
       expect(page.filterResourcesByFolders.displayFolderList).toBeTruthy();
-      expect(page.filterResourcesByFolders.rootFolderName).toBe('Folders');
+      expect(page.filterResourcesByFolders.rootFolderName).toBe('My workspace');
     });
 
     it('As LU I should be able to filter by root folder', async() => {
