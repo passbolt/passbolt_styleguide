@@ -30,6 +30,8 @@ import {siteSettingsCe} from "../../../test/fixture/Settings/siteSettings";
 import RbacContextProvider from "../../../../shared/context/Rbac/RbacContext";
 import MetadataTypesSettingsLocalStorageContextProvider from "../../../../shared/context/MetadataTypesSettingsLocalStorageContext/MetadataTypesSettingsLocalStorageContext";
 import ResourceTypesLocalStorageContextProvider from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import WorkflowContextProvider from "../../../contexts/WorkflowContext";
+import ManageWorkflows from "../../Common/Workflow/ManageWorkflows/ManageWorkflows";
 
 /**
  * DisplayResourcesWorkspace stories
@@ -43,29 +45,32 @@ const ExtApp = ({...args}) =>
   <MemoryRouter initialEntries={['/app/passwords']}>
     <ExtAppContextProvider storage={args.storage} port={args.port}>
       <RbacContextProvider>
-        <DialogContextProvider>
-          <NavigationContextProvider>
-            <ContextualMenuContextProvider>
-              <ResourceWorkspaceContextProvider>
-                <MetadataTypesSettingsLocalStorageContextProvider>
-                  <ResourceTypesLocalStorageContextProvider>
-                    <ResourcePasswordGeneratorContextProvider>
-                      <ManageContextualMenu/>
-                      <ManageDialogs/>
-                      <DragContextProvider>
-                        <div id="container" className="page password">
-                          <div id="app" className="app ready" tabIndex="1000">
-                            <DisplayResourcesWorkspace {...args}/>
+        <WorkflowContextProvider>
+          <DialogContextProvider>
+            <NavigationContextProvider>
+              <ContextualMenuContextProvider>
+                <ResourceWorkspaceContextProvider>
+                  <MetadataTypesSettingsLocalStorageContextProvider>
+                    <ResourceTypesLocalStorageContextProvider>
+                      <ResourcePasswordGeneratorContextProvider>
+                        <ManageContextualMenu/>
+                        <ManageDialogs/>
+                        <ManageWorkflows/>
+                        <DragContextProvider>
+                          <div id="container" className="page password">
+                            <div id="app" className="app ready" tabIndex="1000">
+                              <DisplayResourcesWorkspace {...args}/>
+                            </div>
                           </div>
-                        </div>
-                      </DragContextProvider>
-                    </ResourcePasswordGeneratorContextProvider>
-                  </ResourceTypesLocalStorageContextProvider>
-                </MetadataTypesSettingsLocalStorageContextProvider>
-              </ResourceWorkspaceContextProvider>
-            </ContextualMenuContextProvider>
-          </NavigationContextProvider>
-        </DialogContextProvider>
+                        </DragContextProvider>
+                      </ResourcePasswordGeneratorContextProvider>
+                    </ResourceTypesLocalStorageContextProvider>
+                  </MetadataTypesSettingsLocalStorageContextProvider>
+                </ResourceWorkspaceContextProvider>
+              </ContextualMenuContextProvider>
+            </NavigationContextProvider>
+          </DialogContextProvider>
+        </WorkflowContextProvider>
       </RbacContextProvider>
     </ExtAppContextProvider>
   </MemoryRouter>;
