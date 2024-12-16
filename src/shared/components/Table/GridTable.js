@@ -35,7 +35,6 @@ class GridTable extends Component {
     return <Row
       key={key}
       item={item}
-      className={index % 2 === 0 ? "even" : "odd"}
       onClick={this.props.onRowClick}
       onContextMenu={this.props.onRowContextMenu}
       onDragStart={this.props.onRowDragStart}

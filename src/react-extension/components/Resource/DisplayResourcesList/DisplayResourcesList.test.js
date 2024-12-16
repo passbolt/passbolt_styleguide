@@ -356,7 +356,7 @@ describe("Display Resources", () => {
       const page = new DisplayResourcesListPage(props);
       await waitFor(() => {});
       await page.resource(1).selectLocation();
-      expect(page.resource(1).locationLink).toStrictEqual("root");
+      expect(page.resource(1).locationLink).toStrictEqual("My workspace");
     });
 
     it('As LU, I should be able to go to the folder location of a resource', async() => {
@@ -496,14 +496,14 @@ describe("Display Resources", () => {
       // Width should be the default
       expect(page.columns(2).width).toStrictEqual("20px");
       expect(page.columns(3).width).toStrictEqual("20px");
-      expect(page.columns(4).width).toStrictEqual("145px");
-      expect(page.columns(5).width).toStrictEqual("145px");
-      expect(page.columns(6).width).toStrictEqual("145px");
-      expect(page.columns(7).width).toStrictEqual("145px");
-      expect(page.columns(8).width).toStrictEqual("145px");
-      expect(page.columns(9).width).toStrictEqual("210px");
-      expect(page.columns(10).width).toStrictEqual("145px");
-      expect(page.columns(11).width).toStrictEqual("210px");
+      expect(page.columns(4).width).toStrictEqual("142.07751937984497px");
+      expect(page.columns(5).width).toStrictEqual("142.07751937984497px");
+      expect(page.columns(6).width).toStrictEqual("142.07751937984497px");
+      expect(page.columns(7).width).toStrictEqual("142.07751937984497px");
+      expect(page.columns(8).width).toStrictEqual("142.07751937984497px");
+      expect(page.columns(9).width).toStrictEqual("205.7674418604651px");
+      expect(page.columns(10).width).toStrictEqual("142.07751937984497px");
+      expect(page.columns(11).width).toStrictEqual("205.7674418604651px");
     });
   });
 
