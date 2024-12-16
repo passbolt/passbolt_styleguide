@@ -38,6 +38,8 @@ import DropdownMenuItem from "../../Common/Dropdown/DropdownMenuItem";
 import ColumnsSVG from "../../../../img/svg/columns.svg";
 import CaretDownSVG from "../../../../img/svg/caret_down.svg";
 import InfoSVG from "../../../../img/svg/info.svg";
+import WorkspaceSwitcher from "../../Common/Navigation/WorkspaceSwitcher/WorkspaceSwitcher";
+import RoleEntity from "../../../../shared/models/entity/role/roleEntity";
 
 class Workspace extends Component {
   /**
@@ -90,6 +92,23 @@ class Workspace extends Component {
   }
 
   /**
+   * Returns true if the current user is an admin.
+   * @returns {boolean}
+   */
+  get isUserAdmin() {
+    const loggedInUser = this.props.context.loggedInUser;
+    return loggedInUser.role.name === RoleEntity.ROLE_ADMIN;
+  }
+
+  /**
+   * Returns true if the current user is an admin.
+   * @returns {boolean}
+   */
+  get isUserWorkspaceVisible() {
+    return this.props.rbacContext.canIUseUiAction(uiActions.USERS_VIEW_WORKSPACE);
+  }
+
+  /**
    * Render the component
    * @return {JSX}
    */
@@ -126,6 +145,7 @@ class Workspace extends Component {
                 placeholder={this.props.t("Search resource")}/>
             </div>
             <div className="header-right">
+              <WorkspaceSwitcher isUserAdmin={this.isUserAdmin} isUserWorkspaceVisible={this.isUserWorkspaceVisible}/>
               <DisplayUserBadgeMenu baseUrl={this.props.context.userSettings.getTrustedDomain()} user={this.props.context.loggedInUser}/>
             </div>
           </div>
