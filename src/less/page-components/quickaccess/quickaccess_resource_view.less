@@ -62,7 +62,7 @@
                     }
 
                     &:before, &:after {
-                      font-family: 'Passbolt', sans-serif;
+                      font-family: 'Obfuscation', sans-serif;
                       font-style: normal;
                       font-weight: 400;
                       font-size: 1.8rem;
@@ -72,18 +72,18 @@
 
                   &.secret-password {
                     > button:before {
-                      content: 'BBBBBBBBB';
+                      content: '00000000';
                     }
                   }
 
                   &.secret-totp {
                     > button {
                       &:before {
-                        content: 'BBB';
+                        content: '000';
                       }
                       &:after {
                         margin-left: .5rem;
-                        content: 'BBB';
+                        content: '000';
                       }
                     }
                   }
