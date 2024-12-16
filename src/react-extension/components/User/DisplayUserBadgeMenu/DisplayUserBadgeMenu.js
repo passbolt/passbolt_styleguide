@@ -195,9 +195,9 @@ class DisplayUserBadgeMenu extends Component {
     return (
       <div className="profile-wrapper">
         <div className="user profile dropdown" ref={this.userBadgeMenuRef}>
-          <div className={`avatar-with-name button avatar-button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
+          <button type="button" className={`avatar-with-name button avatar-button ${this.state.open ? "open" : ""}`} onClick={this.handleToggleMenuClick}>
             <UserAvatar user={this.props.user} baseUrl={this.props.baseUrl} attentionRequired={this.attentionRequired} />
-          </div>
+          </button>
           {this.state.open &&
             <div className="dropdown-content left visible">
               <button className="button button-transparent user-profile-close" role="button" onClick={this.handleToggleMenuClick}>
