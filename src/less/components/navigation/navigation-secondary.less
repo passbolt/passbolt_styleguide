@@ -140,13 +140,7 @@
             margin-right: .5rem;
 
             button {
-                display:none;
-                padding: .8rem;
-                --icon-color: @workspace-left-menu-hover-text-color;
-                --icon-background-color: @workspace-left-menu-hover-background;
-                box-shadow: none;
-                border: none;
-                background: none;
+                display: none;
                 min-width: inherit;
 
                 // dropdown open
@@ -154,37 +148,18 @@
                     display: flex;
                     align-items: center;
                     z-index: 10;
-                    background: @button-background;
-                    --icon-color: @icon-color;
-                    --icon-background-color: @icon-background-color;
-                    box-shadow: inset .1rem 0 0 0 @button-border, inset -.1rem 0 0 0 @button-border, inset 0 .1rem 0 0 @button-border;
+                    background: var(--Action-button-Action-button-background);
+                    box-shadow:
+                        inset .1rem 0 0 0 var(--Action-button-Action-button-border),
+                        inset -.1rem 0 0 0 var(--Action-button-Action-button-border),
+                        inset 0 .1rem 0 0 var(--Action-button-Action-button-border);
 
                     &:hover {
-                      box-shadow: inset .1rem 0 0 0 @button-border, inset -.1rem 0 0 0 @button-border, inset 0 .1rem 0 0 @button-border;
+                      box-shadow:
+                        inset .1rem 0 0 0 var(--Action-button-Action-button-border),
+                        inset -.1rem 0 0 0 var(--Action-button-Action-button-border),
+                        inset 0 .1rem 0 0 var(--Action-button-Action-button-border);
                     }
-                }
-
-                // hover
-                &:hover {
-                    background: @button-background;
-                    --icon-color: @icon-color;
-                    --icon-background-color: @icon-background-color;
-                    box-shadow: inset .1rem .1rem 0 rgba(255, 255, 255, @shadow-opacity-hover-white), .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-hover-black), inset 0 0 0 1px @button-border;
-                }
-
-                // focus
-                &:focus {
-                  --icon-color: @icon-color;
-                  --icon-background-color: @icon-background-color;
-                }
-
-                &:focus-visible {
-                    box-shadow: 0 0 .4rem @shadow-focus-color, inset 0 0 0 1px @button-focus-border;
-                }
-
-                // pressed
-                &:active {
-                    box-shadow: inset -.1rem -.1rem 0 rgba(255, 255, 255, @shadow-opacity-active-white), inset .1rem .1rem 0 rgba(0, 0, 0, @shadow-opacity-active-black), inset 0 0 0 1px @button-border;
                 }
             }
         }

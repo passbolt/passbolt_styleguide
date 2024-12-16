@@ -1,14 +1,14 @@
 .contextual-menu {
     position: absolute;
-    background: var(--Primary-button-Primary-button-menu-background);
-    box-shadow: inset 0 0 0 .1rem var(--Field-Field-border), var(--Menu-drop-shadow-Menu-drop-shadow-X, .2rem) var(--Menu-drop-shadow-Menu-drop-shadow-Y, .4rem) var(--Menu-drop-shadow-Menu-drop-shadow-blur, 2rem) 0rem var(--Menu-drop-shadow-Menu-drop-shadow, rgba(0, 0, 0, 0.10));
+    background: var(--Action-button-Action-button-background);
+    box-shadow: inset 0 0 0 .1rem var(--Action-button-Action-button-border), var(--Menu-drop-shadow-Menu-drop-shadow-X, .2rem) var(--Menu-drop-shadow-Menu-drop-shadow-Y, .4rem) var(--Menu-drop-shadow-Menu-drop-shadow-blur, 2rem) 0rem var(--Menu-drop-shadow-Menu-drop-shadow, rgba(0, 0, 0, 0.10));
     border-radius: .4rem;
     z-index: 10;
     display: none;
-    padding: 0.8rem 0.1rem; 
+    padding: 0.8rem 0.1rem;
     font-size: 1.5rem;
     line-height: normal;
-    
+
 
     &.right {
       border-radius: 0 .4rem .4rem .4rem;
@@ -38,7 +38,7 @@
         width: 100%;
         display: flex;
         border: 0;
-        padding: .8rem 3.6rem .8rem 1.6rem; // padding right very important to keep space for the caret down
+        padding: .8rem 1.6rem;
 
         // Contextual menu item focus visible
         &:focus, &:focus-visible, &:hover {
@@ -52,13 +52,13 @@
             //Remove after from link
             display: none;
           }
-        }       
+        }
 
           // Select item pressed
           &:active {
             box-shadow:
               inset 0 -0.1rem 0 0 var(--States-Active-Highlight),
-              inset 0px .1rem 0 0rem var(--States-Active-Shadow);   
+              inset 0px .1rem 0 0rem var(--States-Active-Shadow);
           }
     }
 }
