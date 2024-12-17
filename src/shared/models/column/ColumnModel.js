@@ -38,7 +38,6 @@ class ColumnModel {
 export default ColumnModel;
 
 export const ColumnModelTypes = {
-  ATTENTION_REQUIRED: 'attentionRequired',
   CHECKBOX: 'checkbox',
   EXPIRED: 'expired',
   FAVORITE: 'favorite',
@@ -53,7 +52,6 @@ export const ColumnModelTypes = {
 
 
 export const ColumnFields = {
-  ATTENTION_REQUIRED: 'attentionRequired',
   CHECKBOX: 'checkbox',
   EXPIRED: 'expired',
   FAVORITE: 'favorite',

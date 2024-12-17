@@ -185,7 +185,7 @@ class Totp extends Component {
     const secondHalfCode = this.state.code.substring(halfLength);
 
     return (
-      <button type="button" className="link no-border" onClick={this.onClick} disabled={!this.props.canClick}>
+      <button type="button" className="no-border" onClick={this.onClick} disabled={!this.props.canClick}>
         <span className="totp-code"><span>{firstHalfCode}</span>&nbsp;<span>{secondHalfCode}</span></span>
         <TimerSVG style={{
           "--timer-duration": `${this.period}s`,

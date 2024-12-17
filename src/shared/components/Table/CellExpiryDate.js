@@ -33,7 +33,7 @@ class CellExpiryDate extends Component {
     const displayedDate = formatExpirationDateTimeAgo(this.props.value, this.props.t, this.props.locale);
     return (
       <div title={this.props.value || displayedDate}>
-        {displayedDate}
+        <span>{displayedDate}</span>
       </div>
     );
   }

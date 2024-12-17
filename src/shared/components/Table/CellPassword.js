@@ -14,7 +14,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import HiddenPassword from "../Password/HiddenPassword";
-import Icon from "../Icons/Icon";
+import EyeOpenSVG from "../../../img/svg/eye_open.svg";
+import EyeCloseSVG from "../../../img/svg/eye_close.svg";
 
 /**
  * This component represents a table cell password
@@ -81,7 +82,7 @@ class CellPassword extends Component {
            </div>
            {this.props.canPreview &&
              <button type="button" onClick={this.handlePreviewPasswordButtonClick} className="password-view inline button-transparent">
-               <Icon name={previewedPassword ? 'eye-close' : 'eye-open'}/>
+               {previewedPassword ? <EyeCloseSVG/> : <EyeOpenSVG/>}
              </button>
            }
          </>

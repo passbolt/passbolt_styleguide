@@ -11,6 +11,42 @@
   overflow: auto;
   min-width: 0; // important to keep the container size for ellipsis
 
+  &.users {
+    .tableview-header {
+      height: 3.2rem;
+      width: inherit; // important users is not customizable for now
+      min-width: inherit; // important users is not customizable for now
+      border: none;
+
+      table {
+        border-top: .1rem solid var(--Workspace-Dividers);
+        border-bottom: .1rem solid var(--Workspace-Dividers);
+        background: var(--Grid-Grid-background);
+      }
+    }
+
+    .tableview-content {
+      width: inherit; // important users is not customizable for now
+      min-width: inherit; // important users is not customizable for now
+    }
+
+    tbody tr {
+      border-bottom: .1rem solid var(--Workspace-Dividers);
+
+      &:before {
+        content: none;
+      }
+
+      &.selected {
+        background: var(--Grid-Grid-selected-row);
+      }
+
+      &:hover {
+        background: var(--Grid-Grid-hover-row);
+      }
+    }
+  }
+
   /* header */
   .tableview-header {
     height: 3rem;
@@ -60,8 +96,8 @@
 
   /* rows */
   table {
-    button {
-      border: 0;
+    button:hover {
+      color: var(--Palette-Contrast-1);
     }
 
     th, td {
@@ -101,11 +137,33 @@
     }
 
     td div {
+      display: flex;
+      gap: .8rem;
       font-weight: 400;
-      .ellipsis();
+
+      svg {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+
+      span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
       button {
         font-weight: 400;
+      }
+
+      svg {
+        flex-shrink: 0;
+
+        &.attention-required {
+          --icon-exclamation-color: var(--Alert-Alert-icon);
+          --icon-exclamation-background-color: var(--Alert-Alert-background);
+          --icon-exclamation-border-color: var(--Alert-Alert-background);
+        }
       }
     }
 
@@ -113,12 +171,6 @@
       width: 2rem;
       max-width: 2rem;
       min-width: 2rem;
-
-      &.attention-required {
-        width: 3.3rem;
-        max-width: 3.3rem;
-        min-width: 3.3rem;
-      }
     }
 
     .m-cell {
@@ -245,47 +297,27 @@
       }
     }
 
-    th.attention-required {
-      .cell-header {
-        margin: 0;
-        overflow: inherit;
-
-        .svg-icon.exclamation {
-          svg {
-            margin-left: .25rem;
-          }
-        }
-      }
-    }
-
-    td.attention-required {
-      .svg-icon.exclamation {
-        svg {
-          margin-left: .25rem;
-        }
-      }
-    }
-
-    td {
-      .svg-icon.exclamation {
-        svg {
-          --icon-exclamation-background-color: @icon-exclamation-required-color;
-        }
-      }
-    }
-
     td.cell-password, td.cell-totp {
       .secret {
         float: left;
-        max-width: calc(100% - 3rem); // secret field - secret preview button
+        max-width: 100%;
+
+        button{
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
       .password-view, .totp-view {
         display: none;
         align-items: center;
-        margin: 0 0 0 .8rem;
+        margin: .1rem 0 0 .6rem;
         float: left;
       }
       &:hover {
+        .secret {
+          max-width: calc(100% - 2.6rem); // secret field - secret preview button
+        }
         .password-view, .totp-view {
           display: flex;
         }
@@ -293,9 +325,6 @@
     }
 
     td.cell-location {
-      svg {
-        flex-shrink: 0;
-      }
       span.caret {
         flex-shrink: 0;
       }
