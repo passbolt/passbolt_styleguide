@@ -59,6 +59,7 @@ import ResourceTypesCollection from "../../../../shared/models/entity/resourceTy
 import {
   withResourceTypesLocalStorage
 } from "../../../../shared/context/ResourceTypesLocalStorageContext/ResourceTypesLocalStorageContext";
+import FavoriteSVG from "../../../../img/svg/favorite.svg";
 
 /**
  * This component allows to display the filtered resources into a grid
@@ -127,7 +128,7 @@ class DisplayResourcesList extends React.Component {
    */
   initColumns() {
     this.defaultColumns.push(new ColumnCheckboxModel({cellRenderer: {component: CellCheckbox, props: {onClick: this.handleCheckboxWrapperClick}}, headerCellRenderer: {component: CellHeaderCheckbox, props: {onChange: this.handleSelectAllChange}}}));
-    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "star"}}}));
+    this.defaultColumns.push(new ColumnFavoriteModel({cellRenderer: {component: CellFavorite, props: {onClick: this.handleFavoriteClick}}, headerCellRenderer: {component: FavoriteSVG}}));
     if (this.hasAttentionRequiredFeature) {
       this.defaultColumns.push(new ColumnAttentionRequiredModel({cellRenderer: {component: CellAttentionRequired}, headerCellRenderer: {component: CellHeaderIcon, props: {name: "exclamation"}}}));
     }
