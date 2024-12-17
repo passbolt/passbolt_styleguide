@@ -19,6 +19,7 @@ import {withRouter} from "react-router-dom";
 import {Trans, withTranslation} from "react-i18next";
 import {withAppContext} from "../../../../shared/context/AppContext/AppContext";
 import {withPasswordExpiry} from "../../../contexts/PasswordExpirySettingsContext";
+import HomeSVG from "../../../../img/svg/home.svg";
 
 /**
  * This component allows to select shortcut filters applied on resources
@@ -148,6 +149,7 @@ class FilterResourcesByShortcuts extends React.Component {
               <div className="main-cell-wrapper">
                 <div className="main-cell">
                   <button type="button" className="link no-border">
+                    <HomeSVG />
                     <span><Trans>Home</Trans></span>
                   </button>
                 </div>
